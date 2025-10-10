@@ -7,7 +7,8 @@ import {
   forwardRef,
   OnDestroy,
   inject,
-  OnInit
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { uuid } from '../../../utils/util';
@@ -61,7 +62,7 @@ const providers = [
   providers,
   standalone: false
 })
-export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy, OnInit {
+export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, OnDestroy, OnChanges {
   id = `po-email[${uuid()}]`;
   icon = 'ICON_MAIL';
 
@@ -102,8 +103,10 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
     this.maxlength = 254;
   }
 
-  ngOnInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
   }
 
   ngAfterViewInit() {

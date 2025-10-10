@@ -146,6 +146,16 @@ describe('PoSwitchComponent', () => {
   });
 
   describe('Methods:', () => {
+    it(`ngOnChanges: should set displayAdditionalHelp false when label changes`, () => {
+      const changes: any = {
+        label: 'new label'
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.displayAdditionalHelp).toBeFalse();
+    });
+
     it('focus: should call `focus` of switch', () => {
       component.switchContainer = {
         nativeElement: {
@@ -281,12 +291,6 @@ describe('PoSwitchComponent', () => {
         expect(fnError).not.toThrow();
       });
 
-      it('should call showAdditionalHelp when the tooltip is displayed', () => {
-        setupTest('Mensagem de apoio adicional.', true, { observed: false });
-        component.onBlur();
-        expect(component.showAdditionalHelp).toHaveBeenCalled();
-      });
-
       it('should not call showAdditionalHelp when tooltip is not displayed', () => {
         setupTest('Mensagem de apoio adicional.', false, { observed: false });
         component.onBlur();
@@ -306,6 +310,37 @@ describe('PoSwitchComponent', () => {
         const result = component.setHelper('label', 'tooltip');
 
         expect(result).toBeDefined();
+      });
+
+      it('should call super.showAdditionalHelp when tooltip exists and displayAdditionalHelp is true', () => {
+        const helperEl = {} as any;
+        const helperCmp = {} as any;
+
+        (component as any).helperEl = helperEl;
+        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
+        spyOn(component as any, 'getAdditionalHelpTooltip').and.returnValue('getAdditionalHelpTooltip');
+        component.displayAdditionalHelp = true;
+        const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
+        const superSpy = spyOn(superProto, 'showAdditionalHelp').and.returnValue(true);
+
+        component.onBlur();
+        expect((component as any).poHelperComponent).toHaveBeenCalled();
+        expect(superSpy).toHaveBeenCalledWith(helperEl, helperCmp);
+      });
+
+      it('should not call super.showAdditionalHelp when tooltip is empty even if displayAdditionalHelp is true', () => {
+        const helperEl = {} as any;
+        const helperCmp = {} as any;
+
+        (component as any).helperEl = helperEl;
+        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
+        spyOn(component as any, 'getAdditionalHelpTooltip').and.returnValue('');
+        component.displayAdditionalHelp = true;
+        const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
+        const superSpy = spyOn(superProto, 'showAdditionalHelp').and.returnValue(true);
+
+        component.onBlur();
+        expect(superSpy).not.toHaveBeenCalled();
       });
     });
 
@@ -561,6 +596,34 @@ describe('PoSwitchComponent', () => {
 
         const result = component.hasInvalidClass();
 
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe('showAdditionalHelp:', () => {
+      it('should call super.showAdditionalHelp with (helperEl, poHelperComponent()) and return true', () => {
+        const helperEl = {} as any;
+        const helperCmp = {} as any;
+
+        (component as any).helperEl = helperEl;
+        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
+        const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
+        const superSpy = spyOn(superProto, 'showAdditionalHelp').and.returnValue(true);
+        const result = component.showAdditionalHelp();
+
+        expect((component as any).poHelperComponent).toHaveBeenCalled();
+        expect(superSpy).toHaveBeenCalledWith(helperEl, helperCmp);
+        expect(result).toBeTrue();
+      });
+
+      it('should return false when super.showAdditionalHelp returns false', () => {
+        const helperEl = {} as any;
+        const helperCmp = {} as any;
+        (component as any).helperEl = helperEl;
+        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
+        const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
+        spyOn(superProto, 'showAdditionalHelp').and.returnValue(false);
+        const result = component.showAdditionalHelp();
         expect(result).toBeFalse();
       });
     });

@@ -49,6 +49,15 @@ describe('PoLoginComponent:', () => {
   });
 
   describe('Methods:', () => {
+    it(`ngOnChanges: should set displayAdditionalHelp false when label changes`, () => {
+      const changes: any = {
+        label: 'new label'
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.displayAdditionalHelp).toBeFalse();
+    });
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 

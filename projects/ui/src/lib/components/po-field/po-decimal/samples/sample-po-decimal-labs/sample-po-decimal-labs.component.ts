@@ -8,7 +8,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption } from '@po-u
   standalone: false
 })
 export class SamplePoDecimalLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   decimal: number;
   decimalsLength: number;
   event: string;
@@ -72,7 +72,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.decimal = undefined;
     this.decimalsLength = undefined;
     this.event = '';

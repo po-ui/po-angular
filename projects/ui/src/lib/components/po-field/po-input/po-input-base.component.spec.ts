@@ -502,7 +502,7 @@ describe('PoInputBase:', async () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         spyOn(component.additionalHelp, 'emit');
         spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-
+        (component as any).label = 'this.label';
         component.emitAdditionalHelp();
 
         expect(component.additionalHelp.emit).toHaveBeenCalled();
@@ -515,6 +515,29 @@ describe('PoInputBase:', async () => {
         component.emitAdditionalHelp();
 
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('showAdditionalHelpIcon:', () => {
+      it('should return true when additionalHelpTooltip is truthy', () => {
+        (component as any).additionalHelpTooltip = 'additionalHelpTooltip';
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        expect(component.showAdditionalHelpIcon()).toBeTrue();
+      });
+
+      it('should return true when additionalHelpTooltip is falsy but event is triggered', () => {
+        (component as any).additionalHelpTooltip = null;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+
+        expect(component.showAdditionalHelpIcon()).toBeTrue();
+      });
+
+      it('should return false when additionalHelpTooltip is falsy and event not triggered', () => {
+        (component as any).additionalHelpTooltip = null;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+
+        expect(component.showAdditionalHelpIcon()).toBeFalse();
       });
     });
 
@@ -595,6 +618,70 @@ describe('PoInputBase:', async () => {
     });
 
     describe('showAdditionalHelp:', () => {
+      beforeEach(() => {
+        (component as any).label = undefined;
+        (component as any).helperEl = {
+          helperIsVisible: jasmine.createSpy('helperIsVisible'),
+          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
+          openHelperPopover: jasmine.createSpy('openHelperPopover')
+        };
+      });
+
+      it('should emit additionalHelp and call helper.eventOnClick when isHelpEvt=true and helper has eventOnClick', () => {
+        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
+        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        spyOn(component.additionalHelp, 'emit');
+
+        const result = component.showAdditionalHelp();
+
+        expect(component.additionalHelp.emit).toHaveBeenCalled();
+        expect(helperMock.eventOnClick).toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
+        expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();
+        expect(result).toBeUndefined();
+      });
+
+      it('should close the popover when helperEl.helperIsVisible() is true (without event and without clickable helper)', () => {
+        component.additionalHelpTooltip = undefined;
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        spyOn(component as any, 'poHelperComponent').and.returnValue('qualquer-coisa');
+
+        (component as any).helperEl.helperIsVisible.and.returnValue(true);
+
+        const result = component.showAdditionalHelp();
+
+        expect((component as any).helperEl.closeHelperPopover).toHaveBeenCalled();
+        expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();
+        expect(result).toBeUndefined();
+      });
+
+      it('should open the popover when helperEl.helperIsVisible() is false and there is additionalHelpTooltip', () => {
+        component.additionalHelpTooltip = 'Ajuda extra';
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+
+        (component as any).helperEl.helperIsVisible.and.returnValue(false);
+
+        const result = component.showAdditionalHelp();
+
+        expect((component as any).helperEl.openHelperPopover).toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
+        expect(result).toBeUndefined();
+      });
+
+      it('should not call eventOnClick when helper is string; should follow popover logic', () => {
+        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        spyOn(component as any, 'poHelperComponent').and.returnValue('helper-em-string');
+
+        (component as any).helperEl.helperIsVisible.and.returnValue(false);
+
+        const result = component.showAdditionalHelp();
+
+        expect((component as any).helperEl.openHelperPopover).toHaveBeenCalled();
+        expect(result).toBeUndefined();
+      });
+
       it('should toggle `displayAdditionalHelp` from false to true', () => {
         component.displayAdditionalHelp = false;
 

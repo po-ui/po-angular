@@ -13,7 +13,7 @@ import {
   standalone: false
 })
 export class SamplePoRichTextLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   errorMessage: string;
   event: string;
   help: string;
@@ -57,7 +57,7 @@ export class SamplePoRichTextLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.errorMessage = '';
     this.help = '';
     this.label = '';

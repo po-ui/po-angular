@@ -34,7 +34,7 @@ import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
 const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
@@ -132,6 +132,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   private _iconToken: { [key: string]: string };
 
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /**
    * @optional
@@ -335,10 +336,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    *
    * @description
    *
-   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label quando a propriedade `p-label` for definida, ou, ao lado do componente na ausência da propriedade `p-label`.
+   * > Para mais informações acesse: https://po-ui.io/documentation/po-helper.
    *
-   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
-   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   * > Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
    */
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
@@ -370,6 +371,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
+
     if (changes.options?.currentValue) {
       this.options = changes.options.currentValue;
     }
@@ -420,10 +425,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
 
   onBlur(event: any) {
     this.onModelTouched?.();
-
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
 
     if (event.type === 'blur') {
       this.blur.emit();
@@ -503,19 +504,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```html
-   * <po-select
-   *  #select
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, select)"
-   * ></po-select>
-   * ```
    * ```
    * //Exemplo com p-label e p-helper
    * <po-select
@@ -535,7 +528,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    * ```
    */
   override showAdditionalHelp(): boolean {
-    return super.showAdditionalHelp();
+    return super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {

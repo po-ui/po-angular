@@ -23,6 +23,10 @@ describe('PoPopoverComponent:', () => {
     fixture = TestBed.createComponent(PoPopoverComponent);
     component = fixture.componentInstance;
 
+    const target = document.createElement('button');
+    document.body.appendChild(target);
+    component.target = target;
+
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
 
@@ -51,6 +55,21 @@ describe('PoPopoverComponent:', () => {
 
     expect(component['removeListeners']).toHaveBeenCalled();
     expect(component['initEvents']).toHaveBeenCalled();
+  });
+
+  it('ngOnChanges: should call attachPopoverKeydown when appendBox is changed', () => {
+    spyOn(component, <any>'attachPopoverKeydown');
+    component.afterViewInitWasCalled = true;
+    component.ngOnChanges({
+      appendBox: {
+        currentValue: true,
+        previousValue: undefined,
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+
+    expect(component['attachPopoverKeydown']).toHaveBeenCalled();
   });
 
   it('should call setElement and setRendererListenInit in ngAfterViewInit', () => {
@@ -147,6 +166,96 @@ describe('PoPopoverComponent:', () => {
       window.dispatchEvent(new Event('resize'));
 
       expect(fakeThis.debounceResize).toHaveBeenCalled();
+    });
+
+    it('should intercept TAB and focus first focusable when appendBox=true and popover is open', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: true,
+        isHidden: false,
+        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
+        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+      };
+
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true
+      });
+      const defaultPreventedBefore = ev.defaultPrevented;
+      fakeThis.targetElement.dispatchEvent(ev);
+
+      expect(defaultPreventedBefore).toBeFalse();
+      expect(fakeThis.focusOnFirstFocusable).toHaveBeenCalled();
+      expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
+    });
+
+    it('should intercept SHIFT+TAB and focus previous before target when appendBox=true and popover is open', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: true,
+        isHidden: false,
+        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
+        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+      };
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true
+      });
+      fakeThis.targetElement.dispatchEvent(ev);
+
+      expect(fakeThis.focusPrevBeforeTarget).toHaveBeenCalled();
+      expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
+    });
+
+    it('should NOT intercept TAB when appendBox=false', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: false,
+        isHidden: false,
+        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
+        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+      };
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true
+      });
+      fakeThis.targetElement.dispatchEvent(ev);
+
+      expect(ev.defaultPrevented).toBeFalse();
+      expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
+      expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
+    });
+
+    it('should NOT intercept TAB when popover is hidden', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: true,
+        isHidden: true,
+        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
+        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+      };
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true
+      });
+
+      fakeThis.targetElement.dispatchEvent(ev);
+      expect(ev.defaultPrevented).toBeFalse();
+      expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
+      expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
     });
   });
 
@@ -409,6 +518,544 @@ describe('PoPopoverComponent:', () => {
       );
     });
   });
+
+  describe('Focus utilities:', () => {
+    let host: HTMLElement;
+    let targetBtn: HTMLButtonElement;
+
+    beforeEach(() => {
+      host = document.createElement('div');
+      document.body.appendChild(host);
+
+      (component.popoverElement as any) = { nativeElement: host };
+
+      targetBtn = document.createElement('button');
+      targetBtn.id = 'target-btn';
+      document.body.appendChild(targetBtn);
+
+      component.targetElement = targetBtn;
+    });
+
+    afterEach(() => {
+      host?.remove();
+      targetBtn?.remove();
+    });
+
+    // ---------------- focusOnTarget ----------------
+    it('focusOnTarget: should focus the target element safely', () => {
+      const fakeThis = {
+        targetElement: targetBtn
+      } as any;
+
+      spyOn(targetBtn, 'focus');
+      (component as any).focusOnTarget.call(fakeThis);
+      expect(targetBtn.focus).toHaveBeenCalled();
+    });
+
+    // ---------------- focusOnFirstFocusable ----------------
+    it('focusOnFirstFocusable: should fallback to focusOnTarget when host does not exist', () => {
+      const fakeThis = {
+        popoverElement: undefined,
+        targetElement: targetBtn,
+        focusOnTarget: jasmine.createSpy('focusOnTarget')
+      } as any;
+
+      (component as any).focusOnFirstFocusable.call(fakeThis);
+
+      expect(fakeThis.focusOnTarget).toHaveBeenCalled();
+    });
+
+    it('focusOnFirstFocusable: should focus action button inside .po-helper-footer-action-link', () => {
+      const footer = document.createElement('div');
+      footer.className = 'po-helper-footer-action-link';
+      const innerBtn = document.createElement('button');
+      footer.appendChild(innerBtn);
+      host.appendChild(footer);
+
+      spyOn(innerBtn, 'focus');
+
+      (component as any).focusOnFirstFocusable.call(component);
+
+      expect(innerBtn.focus).toHaveBeenCalled();
+    });
+
+    it('focusOnFirstFocusable: should close and move focusNextAfterTarget when [role="dialog"] exists', () => {
+      const dialog = document.createElement('div');
+      dialog.setAttribute('role', 'dialog');
+      host.appendChild(dialog);
+
+      const closeSpy = spyOn(component, 'close');
+      const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+
+      (component as any).focusOnFirstFocusable.call(component);
+
+      expect(closeSpy).toHaveBeenCalled();
+      expect(focusNextAfterTargetSpy).toHaveBeenCalled();
+    });
+
+    it('focusOnFirstFocusable: should set temporary tabindex and focus host as fallback, removing tabindex on blur', () => {
+      expect(host.hasAttribute('tabindex')).toBeFalse();
+
+      const focusSpy = spyOn(host, 'focus').and.callFake(() => {
+        setTimeout(() => host.dispatchEvent(new Event('blur')), 0);
+      });
+
+      (component as any).focusOnFirstFocusable.call(component);
+
+      expect(host.getAttribute('tabindex')).toBe('-1');
+      expect(focusSpy).toHaveBeenCalled();
+      host.dispatchEvent(new Event('blur'));
+
+      expect(host.hasAttribute('tabindex')).toBeFalse();
+    });
+
+    // ---------------- attachPopoverKeydown ----------------
+    describe('attachPopoverKeydown (Tab trapping inside popover with appendBox):', () => {
+      let firstEl: HTMLInputElement;
+      let lastEl: HTMLButtonElement;
+
+      beforeEach(() => {
+        firstEl = document.createElement('input');
+        firstEl.id = 'first';
+        host.appendChild(firstEl);
+
+        const midEl = document.createElement('a');
+        midEl.href = '#';
+        midEl.id = 'mid';
+        host.appendChild(midEl);
+
+        lastEl = document.createElement('button');
+        lastEl.id = 'last';
+        host.appendChild(lastEl);
+
+        (component as any).appendBox = true;
+        (component as any).isHidden = false;
+      });
+
+      it('should call preventDefault and focusNextAfterTarget when active id includes "popover-content"', () => {
+        const host = document.createElement('div');
+        document.body.appendChild(host);
+
+        const btn = document.createElement('button');
+        btn.id = 'my-popover-content-btn';
+        host.appendChild(btn);
+
+        (component as any).appendBox = true;
+        (component as any).isHidden = false;
+        (component as any).popoverElement = { nativeElement: host };
+
+        spyOn<any>(component, 'getTabbablesIn').and.returnValue([btn, document.createElement('button')]);
+
+        const spyFocusNext = spyOn<any>(component, 'focusNextAfterTarget');
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        btn.focus();
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        const spyPrevent = spyOn(ev, 'preventDefault').and.callThrough();
+
+        host.dispatchEvent(ev);
+
+        expect(spyPrevent).toHaveBeenCalled();
+        expect(spyFocusNext).toHaveBeenCalled();
+      });
+
+      it('Shift+Tab on first should preventDefault and focus target', () => {
+        const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
+        (component as any).attachPopoverKeydown.call(component);
+
+        firstEl.focus();
+        expect(document.activeElement).toBe(firstEl);
+
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+        const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
+
+        host.dispatchEvent(ev);
+        expect(preventedSpy).toHaveBeenCalled();
+        expect(focusOnTargetSpy).toHaveBeenCalled();
+      });
+
+      it('Tab on last should preventDefault and call focusNextAfterTarget', () => {
+        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        lastEl.focus();
+        expect(document.activeElement).toBe(lastEl);
+
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
+
+        host.dispatchEvent(ev);
+
+        expect(preventedSpy).toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).toHaveBeenCalled();
+      });
+
+      it('Tab when active element id includes "popover-content" should forward focusNextAfterTarget', () => {
+        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        const special = document.createElement('button');
+        special.id = 'popover-content-action';
+        host.appendChild(special);
+
+        special.focus();
+        expect(document.activeElement).toBe(special);
+
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
+
+        host.dispatchEvent(ev);
+
+        expect(preventedSpy).toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).toHaveBeenCalled();
+      });
+
+      it('should NOT intercept when key is not Tab', () => {
+        const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
+        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        const ev = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+        host.dispatchEvent(ev);
+
+        expect(focusOnTargetSpy).not.toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).not.toHaveBeenCalled();
+      });
+
+      it('should do nothing if appendBox=false', () => {
+        (component as any).appendBox = false;
+
+        const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
+        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        lastEl.focus();
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        host.dispatchEvent(ev);
+
+        expect(focusOnTargetSpy).not.toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).not.toHaveBeenCalled();
+      });
+
+      it('should do nothing if host is undefined', () => {
+        (component as any).appendBox = true;
+
+        const fakeThis = {
+          popoverElement: undefined,
+          renderer: component['renderer']
+        } as any;
+
+        expect(() => (component as any).attachPopoverKeydown.call(fakeThis)).not.toThrow();
+      });
+    });
+
+    // ---------------- isVisible ----------------
+    describe('isVisible:', () => {
+      let originalGetComputed: typeof window.getComputedStyle;
+
+      beforeEach(() => {
+        originalGetComputed = window.getComputedStyle;
+      });
+
+      afterEach(() => {
+        (window as any).getComputedStyle = originalGetComputed;
+      });
+
+      it('should return false when element or any ancestor is display:none / visibility:hidden', () => {
+        const parent = document.createElement('div');
+        document.body.appendChild(parent);
+
+        const child = document.createElement('button');
+        parent.appendChild(child);
+
+        spyOn(window, 'getComputedStyle').and.callFake((el: Element) => {
+          if (el === parent) {
+            return { display: 'none', visibility: 'visible' } as any;
+          }
+          return { display: 'block', visibility: 'visible' } as any;
+        });
+
+        const res = (component as any).isVisible(child);
+        expect(res).toBeFalse();
+        parent.remove();
+      });
+
+      it('should return true when element has size and is visible', () => {
+        const el = document.createElement('button');
+        document.body.appendChild(el);
+
+        spyOn(window, 'getComputedStyle').and.returnValue({ display: 'block', visibility: 'visible' } as any);
+        spyOn(el, 'getBoundingClientRect').and.returnValue({ width: 10, height: 10 } as any);
+        spyOn(el, 'getClientRects').and.returnValue({ length: 1 } as any);
+
+        const res = (component as any).isVisible(el);
+
+        expect(res).toBeTrue();
+        el.remove();
+      });
+
+      it('should return false when the element itself has visibility:hidden', () => {
+        const el = document.createElement('button');
+        document.body.appendChild(el);
+        spyOn(window, 'getComputedStyle').and.callFake((node: Element) => {
+          if (node === el) {
+            return { display: 'block', visibility: 'hidden' } as any;
+          }
+          return { display: 'block', visibility: 'visible' } as any;
+        });
+
+        spyOn(el, 'getBoundingClientRect').and.returnValue({ width: 10, height: 10 } as any);
+        spyOn(el, 'getClientRects').and.returnValue({ length: 1 } as any);
+        const res = (component as any).isVisible(el);
+        expect(res).toBeFalse();
+        el.remove();
+      });
+
+      it('should return false when any ancestor has visibility:hidden', () => {
+        const parent = document.createElement('div');
+        const child = document.createElement('button');
+        parent.appendChild(child);
+        document.body.appendChild(parent);
+
+        spyOn(window, 'getComputedStyle').and.callFake((node: Element) => {
+          if (node === parent) {
+            return { display: 'block', visibility: 'hidden' } as any;
+          }
+          return { display: 'block', visibility: 'visible' } as any;
+        });
+
+        const res = (component as any).isVisible(child);
+        expect(res).toBeFalse();
+
+        parent.remove();
+      });
+
+      it('should return true when width/height are 0 but getClientRects().length > 0', () => {
+        const el = document.createElement('button');
+        document.body.appendChild(el);
+        spyOn(window, 'getComputedStyle').and.returnValue({ display: 'block', visibility: 'visible' } as any);
+        spyOn(el, 'getBoundingClientRect').and.returnValue({ width: 0, height: 0 } as any);
+        spyOn(el, 'getClientRects').and.returnValue({ length: 1 } as any);
+
+        const res = (component as any).isVisible(el);
+        expect(res).toBeTrue();
+        el.remove();
+      });
+    });
+
+    // ---------------- getTabbablesIn / getDocumentTabbables ----------------
+    it('getTabbablesIn: should return only visible and enabled tabbables in the container', () => {
+      const btn1 = document.createElement('button');
+      const btn2 = document.createElement('button');
+      btn2.setAttribute('disabled', 'true');
+      const link = document.createElement('a');
+      link.href = '#';
+
+      host.appendChild(btn1);
+      host.appendChild(btn2);
+      host.appendChild(link);
+
+      spyOn<any>(component, 'isVisible').and.returnValue(true);
+
+      const items = (component as any).getTabbablesIn(host);
+      expect(items).toContain(btn1);
+      expect(items).toContain(link);
+      expect(items).not.toContain(btn2);
+    });
+
+    it('getDocumentTabbables: should return visible and enabled tabbables from document', () => {
+      const docBtn = document.createElement('button');
+      const docDisabled = document.createElement('button');
+      docDisabled.disabled = true;
+      const docLink = document.createElement('a');
+      docLink.href = '#';
+
+      document.body.appendChild(docBtn);
+      document.body.appendChild(docDisabled);
+      document.body.appendChild(docLink);
+
+      spyOn<any>(component, 'isVisible').and.returnValue(true);
+
+      const all = (component as any).getDocumentTabbables();
+
+      expect(all).toContain(docBtn);
+      expect(all).toContain(docLink);
+      expect(all).not.toContain(docDisabled);
+
+      docBtn.remove();
+      docDisabled.remove();
+      docLink.remove();
+    });
+
+    // ---------------- focusNextAfterTarget ----------------
+    describe('focusNextAfterTarget:', () => {
+      it('should focus the next tabbable after target; wrap to first if target is last', () => {
+        const first = document.createElement('button');
+        const second = document.createElement('button');
+        const third = document.createElement('button');
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+        document.body.appendChild(third);
+
+        const focusSpySecond = spyOn(second, 'focus');
+        const focusSpyFirst = spyOn(first, 'focus');
+
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([first, second, third]);
+        (component as any).targetElement = first;
+        (component as any).focusNextAfterTarget();
+
+        expect(focusSpySecond).toHaveBeenCalled();
+        (focusSpySecond as jasmine.Spy).calls.reset();
+        (component as any).targetElement = third;
+        (component as any).focusNextAfterTarget();
+
+        expect(focusSpyFirst).toHaveBeenCalled();
+        first.remove();
+        second.remove();
+        third.remove();
+      });
+
+      it('should fallback using last tabbable inside popover if target not found in doc list', () => {
+        const a = document.createElement('button');
+        const b = document.createElement('button');
+        const c = document.createElement('button');
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+        document.body.appendChild(c);
+
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([a, b, c]);
+        spyOn<any>(component, 'getTabbablesIn').and.returnValue([b, c]);
+
+        (component.popoverElement as any) = { nativeElement: host };
+
+        (component as any).targetElement = document.createElement('button');
+
+        const focusSpy = spyOn(a, 'focus');
+        (component as any).focusNextAfterTarget();
+        expect(focusSpy).toHaveBeenCalled();
+        a.remove();
+        b.remove();
+        c.remove();
+      });
+
+      it('should early-return when there are no document tabbables', () => {
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([]);
+        const getTabbablesInSpy = spyOn<any>(component, 'getTabbablesIn');
+
+        const fakeTarget = document.createElement('button');
+        const focusSpy = spyOn(fakeTarget, 'focus');
+        (component as any).targetElement = fakeTarget;
+
+        expect(() => (component as any).focusNextAfterTarget()).not.toThrow();
+        expect(getTabbablesInSpy).not.toHaveBeenCalled();
+        expect(focusSpy).not.toHaveBeenCalled();
+
+        fakeTarget.remove();
+      });
+
+      it('should set startIndex to -1 when target is null', () => {
+        const a = document.createElement('button');
+        const b = document.createElement('button');
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([a, b]);
+
+        (component as any).targetElement = null;
+        const focusSpy = spyOn(a, 'focus');
+
+        (component as any).focusNextAfterTarget();
+        expect(focusSpy).toHaveBeenCalled();
+        a.remove();
+        b.remove();
+      });
+    });
+
+    // ---------------- focusPrevBeforeTarget ----------------
+    describe('focusPrevBeforeTarget:', () => {
+      it('should focus previous tabbable before target; wrap to last when target is first', () => {
+        const first = document.createElement('button');
+        const second = document.createElement('button');
+        const third = document.createElement('button');
+
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+        document.body.appendChild(third);
+
+        const focusSpyFirst = spyOn(first, 'focus');
+        const focusSpyThird = spyOn(third, 'focus');
+
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([first, second, third]);
+        (component as any).targetElement = second;
+
+        (component as any).focusPrevBeforeTarget();
+
+        expect(focusSpyFirst).toHaveBeenCalled();
+
+        (focusSpyFirst as jasmine.Spy).calls.reset();
+        (component as any).targetElement = first;
+
+        (component as any).focusPrevBeforeTarget();
+        expect(focusSpyThird).toHaveBeenCalled();
+
+        first.remove();
+        second.remove();
+        third.remove();
+      });
+      it('should early-return when there are no document tabbables', () => {
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([]);
+
+        const fakeTarget = document.createElement('button');
+        const focusSpy = spyOn(fakeTarget, 'focus');
+        (component as any).targetElement = fakeTarget;
+
+        expect(() => (component as any).focusPrevBeforeTarget()).not.toThrow();
+        expect(focusSpy).not.toHaveBeenCalled();
+
+        fakeTarget.remove();
+      });
+
+      it('should fallback to last when target is null (idx = -1)', () => {
+        const first = document.createElement('button');
+        const second = document.createElement('button');
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([first, second]);
+
+        (component as any).targetElement = null;
+        const focusSpy = spyOn(second, 'focus');
+
+        (component as any).focusPrevBeforeTarget();
+
+        expect(focusSpy).toHaveBeenCalled();
+
+        first.remove();
+        second.remove();
+      });
+
+      it('should fallback to last when target is not found in docTabs (idx = -1)', () => {
+        const a = document.createElement('button');
+        const b = document.createElement('button');
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+
+        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([a, b]);
+        (component as any).targetElement = document.createElement('button');
+        const focusSpy = spyOn(b, 'focus');
+        (component as any).focusPrevBeforeTarget();
+        expect(focusSpy).toHaveBeenCalled();
+
+        a.remove();
+        b.remove();
+      });
+    });
+  });
 });
 
 function getFakeToSetRendererListenInit(trigger, component) {
@@ -423,6 +1070,7 @@ function getFakeToSetRendererListenInit(trigger, component) {
     close: () => {},
     togglePopup: () => {},
     debounceResize: () => {},
-    setPopoverPosition: () => {}
+    setPopoverPosition: () => {},
+    attachPopoverKeydown: () => {}
   };
 }

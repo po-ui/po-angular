@@ -20,6 +20,7 @@ import { PoRichTextBodyComponent } from './po-rich-text-body/po-rich-text-body.c
 import { PoRichTextToolbarComponent } from './po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoRichTextService } from './po-rich-text.service';
 import { setHelperSettings } from '../../../utils/util';
+import { PoHelperComponent } from '../../po-helper';
 
 /* istanbul ignore next */
 const providers = [
@@ -76,6 +77,7 @@ export class PoRichTextComponent
 
   @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
   @ViewChild(PoRichTextToolbarComponent, { static: false }) richTextToolbar: PoRichTextToolbarComponent;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   private listener = this.validateClassesForRequired.bind(this);
   private modelLastUpdate: any;
@@ -99,6 +101,9 @@ export class PoRichTextComponent
     if (changes.hideToolbarActions || changes.disabledTextAlign) {
       this.toolbarActions = [...this.hideToolbarActions];
       this.updateAlignOnHideToolbarActionsList();
+    }
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
     }
   }
 
@@ -142,10 +147,6 @@ export class PoRichTextComponent
 
   onBlur() {
     this.onTouched?.();
-
-    if (this.additionalHelp.observed ? null : this.additionalHelpTooltip && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
   }
 
   onChangeValue(value: any) {
@@ -157,19 +158,11 @@ export class PoRichTextComponent
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-rich-text
-   *  #richtext
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, richtext)"
-   * ></po-rich-text>
-   * ```
    * ```
    * // Exemplo com p-label e p-helper
    * <po-rich-text
@@ -191,6 +184,23 @@ export class PoRichTextComponent
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.additionalHelp.observed;
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

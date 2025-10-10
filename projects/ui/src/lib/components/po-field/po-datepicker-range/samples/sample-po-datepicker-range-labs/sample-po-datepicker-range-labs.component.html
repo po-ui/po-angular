@@ -2,7 +2,7 @@
   class="po-sm-12"
   name="datepickerRange"
   [(ngModel)]="datepickerRange"
-  [p-additional-help-tooltip]="additionalHelpTooltip"
+  [p-helper]="helperText"
   [p-clean]="properties.includes('clean')"
   [p-disabled]="properties.includes('disabled')"
   [p-end-date]="endDate"
@@ -42,14 +42,7 @@
 
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-  <po-input
-    class="po-md-6"
-    name="additionalHelpTooltip"
-    [(ngModel)]="additionalHelpTooltip"
-    p-clean
-    p-label="Additional Help"
-  >
-  </po-input>
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
   <po-datepicker class="po-md-6" name="minDate" [(ngModel)]="minDate" p-clean p-label="Min date" [p-max-date]="maxDate">
   </po-datepicker>

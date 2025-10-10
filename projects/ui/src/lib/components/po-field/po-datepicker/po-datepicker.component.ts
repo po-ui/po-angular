@@ -10,7 +10,9 @@ import {
   OnDestroy,
   Renderer2,
   ViewChild,
-  inject
+  inject,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -32,7 +34,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent } from '../../po-helper';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -81,7 +83,7 @@ const poCalendarPositionDefault = 'bottom-left';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy {
+export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
   private controlPosition = inject(PoControlPositionService);
   private renderer = inject(Renderer2);
 
@@ -89,6 +91,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
@@ -102,7 +105,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   id = `po-datepicker[${uuid()}]`;
   visible: boolean = false;
   literals: any;
-  helperSettings: PoHelperOptions;
 
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
@@ -186,7 +188,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   ngAfterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.setDialogPickerStyleDisplay('none');
     if (this.autoFocus) {
       this.focus();
@@ -202,13 +203,19 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
+  }
+
   ngOnDestroy() {
     this.subscriptionValidator?.unsubscribe();
     this.removeListeners();
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -311,10 +318,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   eventOnBlur($event: any) {
     this.onTouchedModel?.();
 
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
-
     const date = this.inputEl.nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
     this.objMask.blur($event);
@@ -389,19 +392,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
    *
-   * ```
-   * <po-datepicker
-   *  #datepicker
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, datepicker)"
-   * ></po-datepicker>
-   * ```
    * ```
    * // Exemplo com p-label e p-helper
    * <po-datepicker
@@ -423,6 +418,23 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

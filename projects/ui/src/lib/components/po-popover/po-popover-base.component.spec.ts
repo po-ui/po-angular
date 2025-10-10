@@ -1,9 +1,26 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
 import { PoPopoverBaseComponent } from './po-popover-base.component';
+import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PoPopoverBaseComponent:', () => {
-  const component = new PoPopoverBaseComponent();
+  let component: PoPopoverBaseComponent;
+  let fixture: ComponentFixture<PoPopoverBaseComponent>;
+
+  beforeEach(async () => {
+    (PoPopoverBaseComponent as any).instances = [];
+
+    await TestBed.configureTestingModule({
+      declarations: [PoPopoverBaseComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [ChangeDetectorRef]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoPopoverBaseComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should be created', () => {
     expect(component instanceof PoPopoverBaseComponent).toBeTruthy();

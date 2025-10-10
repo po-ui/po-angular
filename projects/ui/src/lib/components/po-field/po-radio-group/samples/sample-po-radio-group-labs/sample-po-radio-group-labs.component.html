@@ -1,7 +1,7 @@
 <po-radio-group
   name="radioGroupLabs"
   [(ngModel)]="radioGroup"
-  [p-additional-help-tooltip]="additionalHelpTooltip"
+  [p-helper]="helperText"
   [p-columns]="columns"
   [p-disabled]="properties.includes('disabled')"
   [p-help]="help"
@@ -59,14 +59,7 @@
 
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
-  <po-input
-    class="po-md-6"
-    name="additionalHelpTooltip"
-    [(ngModel)]="additionalHelpTooltip"
-    p-clean
-    p-label="Additional Help"
-  >
-  </po-input>
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
   <po-input
     class="po-md-6"

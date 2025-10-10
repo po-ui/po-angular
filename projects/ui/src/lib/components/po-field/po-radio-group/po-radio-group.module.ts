@@ -6,6 +6,7 @@ import { PoFieldContainerModule } from '../po-field-container/po-field-container
 
 import { PoRadioGroupComponent } from './po-radio-group.component';
 import { PoRadioModule } from '../po-radio/po-radio.module';
+import { PoHelperModule } from '../../po-helper';
 
 /**
  * @description
@@ -13,7 +14,7 @@ import { PoRadioModule } from '../po-radio/po-radio.module';
  * Módulo do componente `po-radio-group`.
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, PoFieldContainerModule, PoRadioModule],
+  imports: [CommonModule, FormsModule, PoFieldContainerModule, PoRadioModule, PoHelperModule],
   exports: [PoRadioGroupComponent],
   declarations: [PoRadioGroupComponent]
 })

@@ -17,7 +17,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../uti
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 import { PoFieldContainerComponent } from '../po-field-container';
 
 /**
@@ -71,6 +71,7 @@ import { PoFieldContainerComponent } from '../po-field-container';
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
   @ViewChild('fieldContainer', { read: PoFieldContainerComponent, static: false })
   fieldContainer?: PoFieldContainerComponent;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
@@ -81,8 +82,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @optional
    *
    * @description
-   * Exibe um ícone de ajuda adicional ao `p-help`, com o texto desta propriedade no tooltip.
-   * Se o evento `p-additional-help` estiver definido, o tooltip não será exibido.
+   * Exibe um ícone de ajuda adicional, com o texto desta propriedade sendo passado para o popover do componente `po-helper`.
    * **Como boa prática, indica-se utilizar um texto com até 140 caracteres.**
    * > Requer um recuo mínimo de 8px se o componente estiver próximo à lateral da tela.
    *
@@ -95,11 +95,11 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @description
    *
-   * Define que o tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) será incluído no body da página e não
+   * Define que o popover (`p-helper` e/ou `p-error-limit`) será incluído no body da página e não
    * dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou overflow
    * escondido, garantindo o posicionamento correto do tooltip próximo ao elemento.
    *
-   * > Quando utilizado com `p-additional-help-tooltip`, leitores de tela como o NVDA podem não ler o conteúdo do tooltip.
+   * > Quando utilizado com `p-helper`, leitores de tela como o NVDA podem não ler o conteúdo do popover.
    *
    * @default `false`
    */
@@ -278,7 +278,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @description
    * Evento disparado ao clicar no ícone de ajuda adicional.
-   * Este evento ativa automaticamente a exibição do ícone de ajuda adicional ao `p-help`.
    *
    * > Essa propriedade está **depreciada** e será removida na versão `23.x.x`. Recomendamos utilizar a propriedade `p-helper` que oferece mais recursos e flexibilidade.
    */
@@ -568,10 +567,10 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @description
    *
-   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label quando a propriedade `p-label` for definida, ou, ao lado do componente na ausência da propriedade `p-label`.
+   * > Para mais informações acesse: https://po-ui.io/documentation/po-helper.
    *
-   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
-   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   * > Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
    */
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
@@ -616,7 +615,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -653,18 +652,11 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
-   * ```
-   * <po-nome-component
-   *  #component
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, component)"
-   * ></po-nome-component>
-   * ```
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
+   *
    * ```
    * // Exemplo com p-label e p-helper
    * <po-nome-component
@@ -675,6 +667,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *  (p-keydown)="onKeyDown($event, component)"
    * ></po-nome-component>
    * ```
+   *
    * ```
    * ...
    * onKeyDown(event: KeyboardEvent, inp: PoNomeDoComponente): void {
@@ -686,6 +679,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

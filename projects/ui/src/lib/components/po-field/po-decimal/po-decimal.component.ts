@@ -10,7 +10,9 @@ import {
   OnInit,
   ViewChild,
   inject,
-  input
+  input,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -20,7 +22,6 @@ import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { convertToInt, setHelperSettings, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
-import { PoHelperOptions } from '../../po-helper';
 
 const poDecimalDefaultDecimalsLength = 2;
 const poDecimalDefaultThousandMaxlength = 13;
@@ -84,7 +85,7 @@ const poDecimalTotalLengthLimit = 16;
   ],
   standalone: false
 })
-export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy {
+export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy, OnChanges {
   private el = inject(ElementRef);
   private poLanguageService = inject(PoLanguageService);
 
@@ -105,8 +106,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private thousandSeparator: string;
   private valueBeforeChange: any;
   private subscriptionValidator: Subscription = new Subscription();
-
-  helperSettings: PoHelperOptions;
 
   private regex = {
     thousand: new RegExp('\\' + ',', 'g'),
@@ -259,6 +258,12 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.setNumbersSeparators();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
+  }
+
   setNumbersSeparators() {
     const { decimalSeparator, thousandSeparator } = this.poLanguageService.getNumberSeparators(this._locale);
     this.decimalSeparator = decimalSeparator;
@@ -270,7 +275,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   ngAfterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
 
     if (this.inputEl?.nativeElement?.closest('.components-form-custom-template')) {
@@ -370,10 +374,6 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   // função responsável por adicionar os zeros com as casa decimais ao sair do campo.
   onBlur(event: any) {
     this.onTouched?.();
-
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
 
     const value = event.target.value;
 
