@@ -96,16 +96,16 @@ export interface PoTableColumn {
   disabled?: Function;
 
   /**
-   * Formato de exibição do valor da coluna:
-   * - Formato para moeda (currency). Exemplos: 'BRL', 'USD'.
-   * - Formato para data (date): aceita apenas os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy),
-   * caso não seja informado um formato o mesmo será 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
-   * - Formato para horário (time): aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e
-   *  milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será
-   * 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff', 'mm:ss.fff'.
-   * - Formato para números (number): aceita um valor seguindo o padrão [**DecimalPipe**](https://angular.io/api/common/DecimalPipe)
-   *  para formatação, e caso não seja informado, o número será exibido na sua forma original. Exemplo:
-   *   - Com o valor de entrada: `50` e a valor para formatação: `'1.2-5'` o resultado será: `50.00`
+   * Formato de exibição do valor da coluna.
+   *
+   * | Formatação | Type da Coluna  | Descrição | Exemplos |
+   * |------------|-----------------|-----------|----------|
+   * | Monetário  | `currency`      | Formato para valores monetários. Informe o código da moeda (ISO 4217). | `'BRL'`, `'USD'`, `'EUR'`, `'RUB'` |
+   * | Data       | `date`          | Aceita apenas os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy), caso não seja informado um formato o mesmo será 'dd/MM/yyyy' | `'dd/MM/yyyy'`, `'dd-MM-yy'`, `'mm/dd/yyyy'` |
+   * | Hora       | `time`          | Aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será 'HH:mm:ss' | `'HH:mm'`, `'HH:mm:ss.ffffff'`, `'HH:mm:ss.ff'`, `'mm:ss.fff'` |
+   * | Número     | `number`        | Aceita um valor seguindo o padrão [**DecimalPipe**](https://angular.dev/api/common/DecimalPipe) para formatação, e caso não seja informado, o número será exibido na sua forma original. | `'1.2-5'` (ex.: `50` → `50.00`) |
+   *
+   * Observação: caso não seja informado um formato, o valor será exibido em sua forma original.
    */
   format?: string;
 
