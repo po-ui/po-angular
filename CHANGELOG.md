@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.31.0](https://github.com/po-ui/po-angular/compare/v19.30.0...v19.31.0) (2025-10-13)
+
+
+### Features
+
+* **icons:** atualiza AnimaliaIcons para v1.0.5 ([08d52cb](https://github.com/po-ui/po-angular/commit/08d52cbed86aa36fa53528dd781a18d9918839f9))
+
 ## [19.30.0](https://github.com/po-ui/po-angular/compare/v19.29.0...v19.30.0) (2025-10-06)
 
 
