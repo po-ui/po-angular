@@ -376,11 +376,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      if (this.selectElement?.nativeElement?.classList?.contains('enable-append-box')) {
-        this.appendBox = true;
-      }
-    }, 300);
+    if (this.selectElement?.nativeElement?.closest('.components-form-custom-template')) {
+      setTimeout(() => {
+        if (this.selectElement?.nativeElement?.classList?.contains('enable-append-box')) {
+          this.appendBox = true;
+        }
+      }, 300);
+    }
   }
 
   /**

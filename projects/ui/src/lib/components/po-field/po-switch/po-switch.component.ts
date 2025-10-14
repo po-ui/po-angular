@@ -422,11 +422,13 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   ngAfterViewInit(): void {
     this.setControl();
 
-    setTimeout(() => {
-      if (this.switchContainer?.nativeElement?.classList?.contains('enable-append-box')) {
-        this.appendBox = true;
-      }
-    }, 300);
+    if (this.switchContainer?.nativeElement?.closest('.components-form-custom-template')) {
+      setTimeout(() => {
+        if (this.switchContainer?.nativeElement?.classList?.contains('enable-append-box')) {
+          this.appendBox = true;
+        }
+      }, 300);
+    }
   }
 
   private setControl(): void {

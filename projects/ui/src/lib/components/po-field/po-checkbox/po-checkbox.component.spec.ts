@@ -34,12 +34,13 @@ describe('PoCheckboxComponent:', () => {
     expect(labelField).toBeTruthy();
   });
 
-  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box'", fakeAsync(() => {
+  it("ngAfterViewInit: should set appendBox true if contains class 'enable-append-box' and is inside components-form-custom-template", fakeAsync(() => {
     component.checkboxLabel = {
       nativeElement: {
         classList: {
           contains: (cls: string) => cls === 'enable-append-box'
-        }
+        },
+        closest: (selector: string) => (selector === '.components-form-custom-template' ? {} : null)
       }
     };
     component.ngAfterViewInit();
@@ -47,6 +48,23 @@ describe('PoCheckboxComponent:', () => {
     tick(300);
 
     expect(component.appendBox).toBeTrue();
+  }));
+
+  it('ngAfterViewInit: should not set appendBox if not inside components-form-custom-template', fakeAsync(() => {
+    component.checkboxLabel = {
+      nativeElement: {
+        classList: {
+          contains: (cls: string) => cls === 'enable-append-box'
+        },
+        closest: (selector: string) => null
+      }
+    };
+    component.appendBox = false;
+    component.ngAfterViewInit();
+
+    tick(300);
+
+    expect(component.appendBox).toBeFalse();
   }));
 
   describe('Methods:', () => {

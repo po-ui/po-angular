@@ -67,11 +67,13 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
     this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
 
-    setTimeout(() => {
-      if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
-        this.appendBox = true;
-      }
-    }, 300);
+    if (this.inputEl?.nativeElement?.closest('.components-form-custom-template')) {
+      setTimeout(() => {
+        if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
+          this.appendBox = true;
+        }
+      }, 300);
+    }
   }
 
   ngOnDestroy(): void {
