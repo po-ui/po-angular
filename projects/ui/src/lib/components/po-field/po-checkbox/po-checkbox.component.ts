@@ -116,11 +116,13 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
       this.focus();
     }
 
-    setTimeout(() => {
-      if (this.checkboxLabel?.nativeElement?.classList?.contains('enable-append-box')) {
-        this.appendBox = true;
-      }
-    }, 300);
+    if (this.checkboxLabel?.nativeElement?.closest('.components-form-custom-template')) {
+      setTimeout(() => {
+        if (this.checkboxLabel?.nativeElement?.classList?.contains('enable-append-box')) {
+          this.appendBox = true;
+        }
+      }, 300);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
