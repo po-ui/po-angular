@@ -273,11 +273,13 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
 
-    setTimeout(() => {
-      if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
-        this.appendBox = true;
-      }
-    }, 300);
+    if (this.inputEl?.nativeElement?.closest('.thf-grid-edit-template')) {
+      setTimeout(() => {
+        if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
+          this.appendBox = true;
+        }
+      }, 300);
+    }
   }
 
   ngOnDestroy(): void {
