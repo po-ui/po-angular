@@ -16,17 +16,20 @@
 >
   <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
   <po-popover
+    class="po-helper-popover"
     (click)="$event.stopPropagation()"
     #popover
     [p-position]="popoverPosition"
     [p-target]="target"
     [p-title]="helper()?.title"
+    [p-append-in-body]="appendBox()"
   >
     <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
       {{ helper()?.content }}
       @if (helper()?.type === 'help' && helper()?.footerAction) {
         <po-divider></po-divider>
         <po-link
+          class="po-helper-footer-action-link"
           (keydown.enter)="$event.stopPropagation()"
           (keydown.space)="$event.stopPropagation()"
           (p-action)="helper()?.footerAction?.action()"

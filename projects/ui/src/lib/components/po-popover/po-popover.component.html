@@ -1,5 +1,10 @@
 @if (appendBox) {
-  <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="target" [cdkConnectedOverlayOpen]="true">
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="target"
+    [cdkConnectedOverlayOpen]="true"
+    [cdkConnectedOverlayDisableClose]="true"
+  >
     <ng-container *ngTemplateOutlet="sharedPopoverContent"></ng-container>
   </ng-template>
 } @else {

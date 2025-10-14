@@ -49,8 +49,20 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   timeoutResize;
   targetElement;
   afterViewInitWasCalled = false;
+  private keydownTargetListener?: () => void;
+  private keydownPopoverListener?: () => void;
   eventListenerFunction: () => void;
-
+  private tabbableSelector = [
+    'a[href]:not([tabindex="-1"])',
+    'area[href]:not([tabindex="-1"])',
+    'input:not([disabled]):not([type="hidden"]):not([tabindex="-1"])',
+    'select:not([disabled]):not([tabindex="-1"])',
+    'textarea:not([disabled]):not([tabindex="-1"])',
+    'button:not([disabled]):not([tabindex="-1"])',
+    'iframe:not([tabindex="-1"])',
+    '[contenteditable="true"]:not([tabindex="-1"])',
+    '[tabindex]:not([tabindex="-1"])'
+  ].join(',');
   constructor(
     private renderer: Renderer2,
     private readonly poControlPosition: PoControlPositionService,
@@ -147,6 +159,24 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
         this.togglePopup(event);
       });
     }
+
+    // 1) No alvo (trigger): TAB/ArrowDown devem focar o conteúdo do popover quando aberto
+    this.keydownTargetListener = this.renderer.listen(this.targetElement, 'keydown', (event: KeyboardEvent) => {
+      // Se overlay está aberto e appendado no body, intercepta TAB para ir ao popover
+      if (this.appendBox && !this.isHidden && event.key === 'Tab') {
+        event.preventDefault();
+
+        if (event.shiftKey) {
+          // SHIFT+TAB => voltar para o componente anterior
+          this.focusPrevBeforeTarget();
+        } else {
+          // TAB normal => comportamento atual (ir para o popover)
+          this.focusOnFirstFocusable();
+        }
+      }
+    });
+
+    this.attachPopoverKeydown();
   }
 
   togglePopup(event): void {
@@ -155,7 +185,9 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       !this.popoverElement.nativeElement.contains(event.target) &&
       !this.targetElement.contains(event.target)
     ) {
-      this.close();
+      if (!this.appendBox) {
+        this.close();
+      }
     } else if (this.targetElement.contains(event.target)) {
       this.popoverElement.nativeElement.hidden ? this.open() : this.close();
     }
@@ -185,10 +217,152 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     this.resizeListener();
 
     window.removeEventListener('scroll', this.eventListenerFunction, true);
+    this.keydownTargetListener?.();
+    this.keydownPopoverListener?.();
   }
 
   private setElementsControlPosition() {
     const popoverOffset = 8;
     this.poControlPosition.setElements(this.popoverElement.nativeElement, popoverOffset, this.target);
+  }
+
+  // [NOVO] utilitários de foco
+  /** Foca o elemento alvo (trigger) com segurança */
+  private focusOnTarget(): void {
+    const el = this.targetElement as HTMLElement | undefined;
+    el?.focus?.();
+  }
+
+  /**
+   * Tenta focar o primeiro elemento focável dentro do popover.
+   * Fallback: foca o contêiner do popover com tabindex temporário.
+   */
+  private focusOnFirstFocusable(): void {
+    console.log('>>>> focusOnFirstFocusable()');
+    const host = this.popoverElement?.nativeElement as HTMLElement | undefined;
+    if (!host) {
+      this.focusOnTarget();
+      return;
+    }
+
+    // 1) Ação principal: botão/link dentro do conteúdo
+    // - cobre <po-link><button>...</button></po-link>
+    // - cobre eventual <a href="...">
+    const action = host.querySelector<HTMLElement>('.po-helper-footer-action-link button');
+    if (action) {
+      action.focus();
+      return;
+    }
+
+    // 2) Conteúdo do popover: role="dialog" (já tem tabindex="-1")
+    const dialog = host.querySelector<HTMLElement>('[role="dialog"]');
+    if (dialog) {
+      this.close();
+      this.focusNextAfterTarget();
+      return;
+    }
+
+    // 3) Fallback: focar o contêiner do popover (adiciona tabindex só se precisar)
+    const hadTabindex = host.hasAttribute('tabindex');
+    if (!hadTabindex) host.setAttribute('tabindex', '-1');
+    host.focus();
+    if (!hadTabindex) {
+      host.addEventListener('blur', () => host.removeAttribute('tabindex'), { once: true });
+    }
+  }
+
+  private attachPopoverKeydown(): void {
+    // remova anterior se houver
+    this.keydownPopoverListener?.();
+
+    const host = this.popoverElement?.nativeElement as HTMLElement | undefined;
+    if (!host) return;
+
+    this.keydownPopoverListener = this.renderer.listen(host, 'keydown', (event: KeyboardEvent) => {
+      if (this.appendBox) {
+        if (event.key !== 'Tab') return;
+        // elementos focáveis dentro do popover
+        const innerTabbables = this.getTabbablesIn(host);
+        const first = innerTabbables[0];
+        const last = innerTabbables[innerTabbables.length - 1];
+
+        const isShift = event.shiftKey;
+        const active = document.activeElement as HTMLElement | null;
+        if (isShift && (!active || active === first)) {
+          event.preventDefault();
+          this.focusOnTarget();
+          return;
+        }
+
+        // TAB no último: vai para o próximo tabbable DEPOIS do target (fora do popover)
+        if ((!isShift && (!active || active === last)) || active.id.includes('popover-content')) {
+          event.preventDefault();
+          this.focusNextAfterTarget();
+          return;
+        }
+      }
+    });
+  }
+
+  /** Verifica se o elemento é visível para foco (sem display:none, visibility:hidden, detached etc.) */
+  private isVisible(element: HTMLElement): boolean {
+    const cs = window.getComputedStyle(element);
+    if (cs.visibility === 'hidden' || cs.display === 'none') return false;
+    let currentElement: HTMLElement | null = element;
+    while (currentElement) {
+      const style = window.getComputedStyle(currentElement);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      currentElement = currentElement.parentElement;
+    }
+    const rect = element.getBoundingClientRect();
+    return !!(rect.width || rect.height || element.getClientRects().length);
+  }
+
+  /** Lista de tabbables dentro de um contêiner */
+  private getTabbablesIn(container: HTMLElement): Array<HTMLElement> {
+    return Array.from(container.querySelectorAll<HTMLElement>(this.tabbableSelector)).filter(
+      el => this.isVisible(el) && !el.hasAttribute('disabled')
+    );
+  }
+
+  /** Lista de tabbables no documento inteiro (ordem de leitura) */
+  private getDocumentTabbables(): Array<HTMLElement> {
+    const all = Array.from(document.querySelectorAll<HTMLElement>(this.tabbableSelector));
+    return all.filter(el => this.isVisible(el) && !el.hasAttribute('disabled'));
+  }
+
+  /** Foca o próximo tabbable depois do target; fallback para o primeiro tabbable do documento */
+  private focusNextAfterTarget(): void {
+    console.log('>>>> focusNextAfterTarget()');
+    const docTabs = this.getDocumentTabbables();
+    if (!docTabs.length) return;
+
+    // Se existir um "helper" imediatamente após o target que faça parte do popover,
+    // ainda assim consideramos o PRÓXIMO após o target no documento (fora do popover).
+    const target = this.targetElement as HTMLElement | null;
+    let startIndex = target ? docTabs.indexOf(target) : -1;
+
+    // se não achar o target na lista (por tabindex=-1 ou algo assim), tenta pelo primeiro do popover
+    if (startIndex < 0 && this.popoverElement?.nativeElement) {
+      const inner = this.getTabbablesIn(this.popoverElement.nativeElement);
+      if (inner.length) {
+        const idxByInner = docTabs.indexOf(inner[inner.length - 1]);
+        if (idxByInner >= 0) startIndex = idxByInner; // assume que popover veio logo após
+      }
+    }
+
+    // próximo após o target
+    const next = docTabs[startIndex + 1] || docTabs[0]; // wrap para o primeiro se target for o último
+    next?.focus?.();
+  }
+
+  private focusPrevBeforeTarget(): void {
+    const docTabs = this.getDocumentTabbables();
+    if (!docTabs.length) return;
+
+    const target = this.targetElement as HTMLElement | null;
+    const idx = target ? docTabs.indexOf(target) : -1;
+    const prev = docTabs[idx - 1] || docTabs[docTabs.length - 1];
+    prev?.focus?.();
   }
 }
