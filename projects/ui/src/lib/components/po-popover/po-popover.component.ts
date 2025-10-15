@@ -72,6 +72,10 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['appendBox']) {
+      this.cd.detectChanges();
+      this.attachPopoverKeydown();
+    }
     if (this.afterViewInitWasCalled && changes['target']) {
       this.removeListeners();
       this.initEvents();
@@ -226,7 +230,6 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     this.poControlPosition.setElements(this.popoverElement.nativeElement, popoverOffset, this.target);
   }
 
-  // [NOVO] utilitários de foco
   /** Foca o elemento alvo (trigger) com segurança */
   private focusOnTarget(): void {
     const el = this.targetElement as HTMLElement | undefined;
@@ -238,16 +241,12 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
    * Fallback: foca o contêiner do popover com tabindex temporário.
    */
   private focusOnFirstFocusable(): void {
-    console.log('>>>> focusOnFirstFocusable()');
     const host = this.popoverElement?.nativeElement as HTMLElement | undefined;
     if (!host) {
       this.focusOnTarget();
       return;
     }
 
-    // 1) Ação principal: botão/link dentro do conteúdo
-    // - cobre <po-link><button>...</button></po-link>
-    // - cobre eventual <a href="...">
     const action = host.querySelector<HTMLElement>('.po-helper-footer-action-link button');
     if (action) {
       action.focus();
@@ -267,12 +266,11 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     if (!hadTabindex) host.setAttribute('tabindex', '-1');
     host.focus();
     if (!hadTabindex) {
-      host.addEventListener('blur', () => host.removeAttribute('tabindex'), { once: true });
+      host?.addEventListener('blur', () => host.removeAttribute('tabindex'), { once: true });
     }
   }
 
   private attachPopoverKeydown(): void {
-    // remova anterior se houver
     this.keydownPopoverListener?.();
 
     const host = this.popoverElement?.nativeElement as HTMLElement | undefined;
@@ -333,7 +331,6 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   /** Foca o próximo tabbable depois do target; fallback para o primeiro tabbable do documento */
   private focusNextAfterTarget(): void {
-    console.log('>>>> focusNextAfterTarget()');
     const docTabs = this.getDocumentTabbables();
     if (!docTabs.length) return;
 
@@ -350,8 +347,6 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
         if (idxByInner >= 0) startIndex = idxByInner; // assume que popover veio logo após
       }
     }
-
-    // próximo após o target
     const next = docTabs[startIndex + 1] || docTabs[0]; // wrap para o primeiro se target for o último
     next?.focus?.();
   }

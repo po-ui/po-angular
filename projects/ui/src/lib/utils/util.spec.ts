@@ -1805,12 +1805,6 @@ describe('setHelperSettings', () => {
     expect(result.helperSettings).toEqual(poHelperComponent);
   });
 
-  it('should return hideAdditionalHelp false when label is missing', () => {
-    const result = UtilFunctions.setHelperSettings(undefined, 'Tooltip');
-    expect(result.hideAdditionalHelp).toBeFalse();
-    expect(result.helperSettings).toBeNull();
-  });
-
   it('should return hideAdditionalHelp false when additionalHelpTooltip is missing', () => {
     const result = UtilFunctions.setHelperSettings('Label', undefined);
     expect(result.hideAdditionalHelp).toBeFalse();

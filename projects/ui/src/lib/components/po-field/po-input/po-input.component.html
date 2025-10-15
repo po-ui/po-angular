@@ -7,8 +7,8 @@
   [p-optional]="optional"
   [p-required]="required"
   [p-show-required]="showRequired"
-  [p-helper]="poHelper.helperSettings"
-  [p-show-helper]="displayAdditionalHelp"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
   [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content">
@@ -60,6 +60,7 @@
     </div>
     @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
       <po-helper
+        #helperEl
         class="po-input-helper-button"
         [p-size]="size"
         [p-helper]="poHelper.helperSettings"

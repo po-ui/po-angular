@@ -17,7 +17,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../uti
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 import { PoFieldContainerComponent } from '../po-field-container';
 
 /**
@@ -71,6 +71,7 @@ import { PoFieldContainerComponent } from '../po-field-container';
 export abstract class PoInputBaseComponent implements ControlValueAccessor, Validator, OnDestroy {
   @ViewChild('fieldContainer', { read: PoFieldContainerComponent, static: false })
   fieldContainer?: PoFieldContainerComponent;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
@@ -686,6 +687,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

@@ -115,6 +115,10 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     });
   }
 
+  public helperIsVisible(): boolean {
+    return this.popover && !this.popover.isHidden;
+  }
+
   closeHelperPopover(): void {
     requestAnimationFrame(() => {
       if (!this.popover.isHidden) {

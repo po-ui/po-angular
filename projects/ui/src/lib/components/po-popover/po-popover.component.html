@@ -12,7 +12,7 @@
 }
 
 <ng-template #sharedPopoverContent>
-  <div [hidden]="isHidden" class="po-popover" #popoverElement>
+  <div #popoverElement [hidden]="isHidden" class="po-popover" [ngClass]="customClasses()">
     @if (!hideArrow) {
       <div class="po-popover-arrow po-arrow-{{ arrowDirection }}"></div>
     }
