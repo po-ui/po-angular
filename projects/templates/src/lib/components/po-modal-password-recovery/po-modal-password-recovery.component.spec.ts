@@ -1058,7 +1058,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       expect(expectedContent.innerHTML).not.toContain(component.emailModalPhrases.firstPhrase);
     });
 
-    it('should contain `po-field-container-error-text` class if `invalidEmail` and control are true', () => {
+    it('should contain `po-field-error-message` class if `invalidEmail` and control are true', () => {
       component.control = <any>{
         dirty: true
       };
@@ -1067,10 +1067,10 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.recoveryModalElement.open();
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-field-container-error-text')).toBeTruthy();
+      expect(debugElement.querySelector('.po-field-error-message')).toBeTruthy();
     });
 
-    it('shouldn`t contain `po-field-container-error-text` class if `invalidEmail` is false', () => {
+    it('shouldn`t contain `po-field-error-message` class if `invalidEmail` is false', () => {
       component.control = <any>{
         dirty: true
       };
@@ -1079,10 +1079,10 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.recoveryModalElement.open();
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-field-container-error-text')).toBeFalsy();
+      expect(debugElement.querySelector('.po-field-error-message')).toBeFalsy();
     });
 
-    it('shouldn`t contain `po-field-container-error-text` class if `showCustomCodeError` is false', () => {
+    it('shouldn`t contain `po-field-error-message` class if `showCustomCodeError` is false', () => {
       component.modalType = PoModalPasswordRecoveryModalContent.SMSCode;
       component.type = PoModalPasswordRecoveryType.Email;
       component.showCustomCodeError = false;
@@ -1090,10 +1090,10 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.recoveryModalElement.open();
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-field-container-error-text')).toBeFalsy();
+      expect(debugElement.querySelector('.po-field-error-message')).toBeFalsy();
     });
 
-    it('should contain `po-field-container-error-text` class if `showCustomCodeError` is true', () => {
+    it('should contain `po-field-error-message` class if `showCustomCodeError` is true', () => {
       component.modalType = PoModalPasswordRecoveryModalContent.SMSCode;
       component.type = PoModalPasswordRecoveryType.Email;
       component.showCustomCodeError = true;
@@ -1101,7 +1101,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       component.recoveryModalElement.open();
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-field-container-error-text')).toBeTruthy();
+      expect(debugElement.querySelector('.po-field-error-message')).toBeTruthy();
     });
   });
 });

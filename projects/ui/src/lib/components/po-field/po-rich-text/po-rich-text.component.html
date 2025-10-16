@@ -5,9 +5,10 @@
   [p-show-required]="showRequired"
   [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
   [p-show-helper]="displayAdditionalHelp"
+  [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content">
+  <div class="po-field-container-content" [attr.p-size]="size">
     <po-rich-text-body
       #richTextBody
       [p-height]="height"
@@ -49,6 +50,7 @@
       [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
       [p-show-additional-help]="displayAdditionalHelp"
       [p-show-additional-help-icon]="!!additionalHelpTooltip || additionalHelp.observed"
+      [p-size]="size"
       (p-additional-help)="additionalHelp.emit()"
     ></po-field-container-bottom>
   }

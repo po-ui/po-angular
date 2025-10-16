@@ -27,7 +27,7 @@
       </div>
     }
   } @else {
-    <po-widget>
+    <po-widget [p-size]="componentsSize">
       <po-icon p-icon="ICON_INFO"></po-icon>
       <span class="po-font-text-large">
         {{ literals.registerNotFound }}

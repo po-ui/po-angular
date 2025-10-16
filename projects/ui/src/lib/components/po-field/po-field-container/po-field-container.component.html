@@ -1,4 +1,4 @@
-<div class="po-field-container" (mouseenter)="handleLabelTooltip()">
+<div class="po-field-container" (mouseenter)="handleLabelTooltip()" [attr.p-size]="size">
   <div class="po-field-container-title">
     @if (label || help) {
       <po-label

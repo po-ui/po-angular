@@ -52,6 +52,7 @@ export const PoTagLiteralsDefault = {
  * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-sm)`                           |
  * | `--line-height`                        | Tamanho da label                                      | `var(---line-height-sm)`                        |
  * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-pill)`                     |
+ * | `--gap`                                | Espaçamento entre o label e o value                   | `var(--spacing-xs)`                             |
  * | **Neutral**                            |                                                       |                                                 |
  * | `--color-neutral`                      | Cor principal no estado neutral                       | `var(--color-neutral-light-10)`                 |
  * | `--text-color-positive`                | Cor do texto no estado neutral                        | `var(--color-neutral-dark-80)`                  |
