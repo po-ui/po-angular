@@ -32,7 +32,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 const poCalendarContentOffset = 8;
 const poCalendarPositionDefault = 'bottom-left';
@@ -89,6 +89,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
@@ -207,7 +208,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -422,6 +423,23 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

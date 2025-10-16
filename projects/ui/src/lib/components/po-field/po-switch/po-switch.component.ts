@@ -30,7 +30,7 @@ import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { Subscription } from 'rxjs';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoFieldModel
@@ -133,6 +133,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   private readonly injector = inject<Injector>(Injector);
 
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   id = `po-switch[${uuid()}]`;
 
@@ -347,7 +348,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     this.onTouched?.();
 
     if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
+      super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
     }
   }
 
@@ -461,5 +462,41 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  /**
+   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
+   *
+   * ```html
+   * <po-switch
+   *  #switch
+   *  ...
+   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
+   *  (p-keydown)="onKeyDown($event, switch)"
+   * ></po-switch>
+   * ```
+   * ```
+   * //Exemplo com p-label e p-helper
+   * <po-switch
+   *  #switch
+   *  ...
+   *  p-label="Label do switch"
+   *  [p-helper]="helperOptions"
+   *  (p-keydown)="onKeyDown($event, switch)"
+   * ></po-switch>
+   * ```
+   * ```typescript
+   * onKeyDown(event: KeyboardEvent, inp: PoSwitchComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  override showAdditionalHelp(): boolean {
+    return super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
   }
 }

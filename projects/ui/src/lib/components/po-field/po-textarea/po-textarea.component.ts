@@ -74,7 +74,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }

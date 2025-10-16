@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Directive, EventEmitter, Input, Output } from '@angu
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean } from '../../utils/util';
+import { PoHelperComponent, PoHelperOptions } from '../po-helper';
 
 @Directive()
 export abstract class PoFieldModel<T> implements ControlValueAccessor {
@@ -120,7 +121,7 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -165,8 +166,25 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
    * }
    * ```
    */
-  showAdditionalHelp(): boolean {
+  showAdditionalHelp(helperHtmlElement?: PoHelperComponent, poHelperComponent?: string | PoHelperOptions): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = poHelperComponent;
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt || helperHtmlElement)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (helperHtmlElement?.helperIsVisible()) {
+        helperHtmlElement?.closeHelperPopover();
+        return;
+      }
+      helperHtmlElement?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

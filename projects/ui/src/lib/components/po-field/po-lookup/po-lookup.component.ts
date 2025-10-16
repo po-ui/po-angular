@@ -236,7 +236,7 @@ export class PoLookupComponent extends PoLookupBaseComponent implements AfterVie
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }

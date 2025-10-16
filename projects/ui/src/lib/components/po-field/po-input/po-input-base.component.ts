@@ -617,7 +617,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }

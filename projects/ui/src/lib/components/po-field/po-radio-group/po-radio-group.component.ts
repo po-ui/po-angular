@@ -101,7 +101,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }

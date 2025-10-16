@@ -194,7 +194,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }

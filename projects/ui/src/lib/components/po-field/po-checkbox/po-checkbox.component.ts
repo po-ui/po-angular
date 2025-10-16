@@ -136,7 +136,7 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }

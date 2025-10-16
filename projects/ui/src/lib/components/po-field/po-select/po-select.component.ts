@@ -34,7 +34,7 @@ import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 const PO_SELECT_FIELD_LABEL_DEFAULT = 'label';
 const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
@@ -132,6 +132,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   private _iconToken: { [key: string]: string };
 
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /**
    * @optional
@@ -533,7 +534,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
    * ```
    */
   override showAdditionalHelp(): boolean {
-    return super.showAdditionalHelp();
+    return super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
