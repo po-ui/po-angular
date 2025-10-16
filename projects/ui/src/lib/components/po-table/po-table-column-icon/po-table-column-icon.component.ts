@@ -67,10 +67,6 @@ export class PoTableColumnIconComponent {
     return column.disabled ? column.disabled(this.row) : false;
   }
 
-  trackByFunction(index) {
-    return index;
-  }
-
   private convertToColumnIcon(rowIcons: Array<PoTableColumnIcon> | Array<string> | string): Array<PoTableColumnIcon> {
     if (Array.isArray(rowIcons)) {
       return (<any>rowIcons).map(rowIcon => (typeof rowIcon === 'string' ? { value: rowIcon } : rowIcon));

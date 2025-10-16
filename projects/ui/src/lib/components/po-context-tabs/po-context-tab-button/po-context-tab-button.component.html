@@ -19,19 +19,16 @@
     <span [ngClass]="!hideClose ? 'po-context-tab-button-label' : 'po-tab-button-label'" class="po-text-ellipsis">
       {{ label }}
     </span>
-    <div
-      class="po-tab-button-content-close-icon"
-      *ngIf="!hideClose"
-      (click)="closeTab($event)"
-      (keydown)="closeTab($event)"
-    >
-      <po-icon
-        [tabIndex]="activeCloseIcon ? 0 : -1"
-        [attr.aria-label]="literals.close"
-        p-icon="ICON_CLOSE"
-        class="po-tab-button-icon-close"
-      ></po-icon>
-    </div>
+    @if (!hideClose) {
+      <div class="po-tab-button-content-close-icon" (click)="closeTab($event)" (keydown)="closeTab($event)">
+        <po-icon
+          [tabIndex]="activeCloseIcon ? 0 : -1"
+          [attr.aria-label]="literals.close"
+          p-icon="ICON_CLOSE"
+          class="po-tab-button-icon-close"
+        ></po-icon>
+      </div>
+    }
   </div>
 </div>
 <div [ngClass]="{ 'po-tab-border-active': active, 'po-tab-border-disabled': !active }"></div>

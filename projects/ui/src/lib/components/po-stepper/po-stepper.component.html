@@ -1,18 +1,18 @@
 <div class="po-stepper-{{ orientation }}">
   <div role="tablist" class="po-stepper-container-{{ orientation }}">
-    <ng-container *ngFor="let step of stepList; let index = index; trackBy: trackByFn">
+    @for (step of stepList; track trackByFn($any(step)); let index = $index) {
       <div class="po-stepper-step-wrapper">
-        <div
-          *ngIf="index > 0"
-          [class.po-stepper-step-bar-top]="alignCenter && isVerticalOrientation"
-          [class.po-stepper-step-dashed-border-vertical]="
-            alignCenter && isVerticalOrientation && isDashedBorderTop(step, index)
-          "
-          [style.left.px]="
-            isVerticalOrientation ? (!stepSizeCircle || stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null
-          "
-        ></div>
-
+        @if (index > 0) {
+          <div
+            [class.po-stepper-step-bar-top]="alignCenter && isVerticalOrientation"
+            [class.po-stepper-step-dashed-border-vertical]="
+              alignCenter && isVerticalOrientation && isDashedBorderTop($any(step), index)
+            "
+            [style.left.px]="
+              isVerticalOrientation ? (!stepSizeCircle || stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null
+            "
+          ></div>
+        }
         <po-stepper-step
           [class.po-stepper-step-position-center]="alignCenter"
           [p-align-center]="alignCenter"
@@ -28,30 +28,32 @@
           [p-step-icon-done]="iconDone"
           [p-vertical-orientation]="isVerticalOrientation"
           [p-disable-click]="disabledClick"
-          (p-activated)="onStepActive(step)"
-          (p-click)="changeStep(index, step)"
-          (p-enter)="changeStep(index, step)"
+          (p-activated)="onStepActive($any(step))"
+          (p-click)="changeStep(index, $any(step))"
+          (p-enter)="changeStep(index, $any(step))"
         >
         </po-stepper-step>
-
-        <div
-          *ngIf="index < stepList.length - 1"
-          [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
-          [class.po-stepper-step-bar-bottom-center]="alignCenter && isVerticalOrientation"
-          [class.po-stepper-step-bar-right]="!isVerticalOrientation"
-          [class.po-stepper-step-bar-center]="alignCenter && !isVerticalOrientation"
-          [class.po-stepper-step-dashed-border]="!isVerticalOrientation && isDashedBorder(step, index)"
-          [class.po-stepper-step-dashed-border-vertical]="isVerticalOrientation && isDashedBorder(step, index)"
-          [style.top.px]="!isVerticalOrientation ? (stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null"
-          [style.left.px]="
-            isVerticalOrientation ? (!stepSizeCircle || stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null
-          "
-        ></div>
+        @if (index < stepList.length - 1) {
+          <div
+            [class.po-stepper-step-bar-bottom]="isVerticalOrientation"
+            [class.po-stepper-step-bar-bottom-center]="alignCenter && isVerticalOrientation"
+            [class.po-stepper-step-bar-right]="!isVerticalOrientation"
+            [class.po-stepper-step-bar-center]="alignCenter && !isVerticalOrientation"
+            [class.po-stepper-step-dashed-border]="!isVerticalOrientation && isDashedBorder($any(step), index)"
+            [class.po-stepper-step-dashed-border-vertical]="isVerticalOrientation && isDashedBorder($any(step), index)"
+            [style.top.px]="!isVerticalOrientation ? (stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null"
+            [style.left.px]="
+              isVerticalOrientation ? (!stepSizeCircle || stepSizeCircle === 24 ? 16 : stepSizeCircle / 2) : null
+            "
+          ></div>
+        }
       </div>
-    </ng-container>
+    }
   </div>
 
-  <div *ngIf="usePoSteps" class="po-stepper-content">
-    <ng-content></ng-content>
-  </div>
+  @if (usePoSteps) {
+    <div class="po-stepper-content">
+      <ng-content></ng-content>
+    </div>
+  }
 </div>
