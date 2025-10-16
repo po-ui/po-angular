@@ -195,6 +195,9 @@ describe('PoPageDynamicTableComponent:', () => {
       expectPropertiesValues(component, 'hideCloseDisclaimers', validValues, validValues);
     });
 
+    it('p-single-select: should update property `p-single-select` with false.', () => {
+      expectPropertiesValues(component, 'singleSelect', booleanInvalidValues, false);
+
     it('hideColumnsManager: should set property `p-hide-columns-manager` to `false` if invalid value', () => {
       component.hideColumnsManager = utilsFunctions.convertToBoolean(3);
 
