@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EventEmitter } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
@@ -399,6 +399,79 @@ describe('PoUploadComponent:', () => {
   });
 
   describe('Methods:', () => {
+    it('ngOnChanges: should set modalPrimaryAction and modalSecondaryAction when customModalActions has items', () => {
+      const action1 = { label: 'Action 1', action: () => {} };
+      const action2 = { label: 'Action 2', action: () => {} };
+      component.customModalActions = [action1, action2];
+
+      const changes = {
+        customModalActions: {
+          currentValue: component.customModalActions,
+          previousValue: undefined,
+          firstChange: true,
+          isFirstChange: () => true
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['modalPrimaryAction']).toEqual(action1);
+      expect(component['modalSecondaryAction']).toEqual(action2);
+    });
+
+    it('ngOnChanges: should set modalPrimaryAction and modalSecondaryAction set undefined when customModalActions has items', () => {
+      const action1 = { label: 'Action 1', action: () => {} };
+      component.customModalActions = [action1];
+
+      const changes = {
+        customModalActions: {
+          currentValue: component.customModalActions,
+          previousValue: undefined,
+          firstChange: true,
+          isFirstChange: () => true
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component['modalPrimaryAction']).toEqual(action1);
+      expect(component['modalSecondaryAction']).toEqual(undefined);
+    });
+
+    it('ngOnChanges: should call setPrimaryActionModal when customModalActions is empty', () => {
+      component.customModalActions = [];
+
+      const spySetPrimary = spyOn(component, <any>'setPrimaryActionModal');
+
+      const changes = {
+        customModalActions: {
+          currentValue: [],
+          previousValue: undefined,
+          firstChange: true,
+          isFirstChange: () => true
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(spySetPrimary).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should revoke all thumbnail URLs', () => {
+      const spyRevoke = spyOn(URL, 'revokeObjectURL');
+      component.currentFiles = [
+        { thumbnailUrl: 'blob:url1' },
+        { thumbnailUrl: 'blob:url2' },
+        { thumbnailUrl: undefined }
+      ] as any;
+
+      component.ngOnDestroy();
+
+      expect(spyRevoke).toHaveBeenCalledTimes(2);
+      expect(spyRevoke).toHaveBeenCalledWith('blob:url1');
+      expect(spyRevoke).toHaveBeenCalledWith('blob:url2');
+    });
+
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 
@@ -590,6 +663,69 @@ describe('PoUploadComponent:', () => {
       });
     });
 
+    describe('open and close modal:', () => {
+      beforeEach(() => {
+        component.modalComponent = {
+          open: () => {},
+          close: () => {}
+        } as any;
+      });
+
+      it('closeModal: should call modalComponent.close and reset modalImageUrl', () => {
+        const spyClose = spyOn(component.modalComponent, 'close');
+        component['modalImageUrl'] = 'some-url';
+
+        component.closeModal();
+
+        expect(spyClose).toHaveBeenCalled();
+        expect(component['modalImageUrl']).toBe('');
+      });
+
+      it('openModal: should not open modal if keydown code is not Enter or Space', () => {
+        const file = { thumbnailUrl: 'url.jpg' } as any;
+        const spyOpen = spyOn(component.modalComponent, 'open');
+        const spyEmit = spyOn(component.onOpenModalPreview, 'emit');
+
+        const event = new KeyboardEvent('keydown', { code: 'Escape' });
+        component.openModal(file, event);
+
+        expect(spyOpen).not.toHaveBeenCalled();
+        expect(spyEmit).not.toHaveBeenCalled();
+      });
+
+      it('openModal: should not open modal if file is undefined', () => {
+        const spyOpen = spyOn(component.modalComponent, 'open');
+        component.openModal(undefined as any);
+        expect(spyOpen).not.toHaveBeenCalled();
+      });
+
+      it('openModal: should not open modal if file has no thumbnailUrl', () => {
+        const file = {} as any;
+        const spyOpen = spyOn(component.modalComponent, 'open');
+        component.openModal(file);
+        expect(spyOpen).not.toHaveBeenCalled();
+      });
+
+      it('openModal: should not open modal if file has errorMessage', () => {
+        const file = { thumbnailUrl: 'url.jpg', errorMessage: 'error' } as any;
+        const spyOpen = spyOn(component.modalComponent, 'open');
+        component.openModal(file);
+        expect(spyOpen).not.toHaveBeenCalled();
+      });
+
+      it('openModal: should open modal, set modalImageUrl and emit event when valid file', () => {
+        const file = { thumbnailUrl: 'url.jpg' } as any;
+        const spyOpen = spyOn(component.modalComponent, 'open');
+        const spyEmit = spyOn(component.onOpenModalPreview, 'emit');
+
+        component.openModal(file);
+
+        expect(spyOpen).toHaveBeenCalled();
+        expect(component['modalImageUrl']).toBe('url.jpg');
+        expect(spyEmit).toHaveBeenCalledWith(file);
+      });
+    });
+
     it('removeFile: should be remove file from currentFiles', () => {
       const fakeThis = {
         currentFiles: [file],
@@ -744,38 +880,70 @@ describe('PoUploadComponent:', () => {
         expect(component['cleanInputValue']).toHaveBeenCalled();
       });
 
-      it('should call uploadingHandler function when upload files', () => {
-        const fakeThis = {
-          uploadService: {
-            upload: function (url, filez, headers, tUpload, uploadCallback, successCallback, errorCallback) {
-              return uploadCallback(file, 100);
+      describe('uploadFiles', () => {
+        it('uploadFiles: should return if files lenght is 0', () => {
+          component['uploadService'] = { upload: () => {} } as any;
+          const detectChangesSpy = spyOn(component['cd'], 'detectChanges');
+
+          component['uploadFiles']([]);
+
+          expect(detectChangesSpy).not.toHaveBeenCalled();
+        });
+
+        it('uploadFiles: should call uploadingHandler when progress callback is triggered', () => {
+          const mockFile: any = { uid: 1, status: PoUploadStatus.None };
+          const mockFiles = [mockFile];
+
+          const spyUpload = spyOn(component['uploadService'], 'upload').and.callFake(
+            (url, files, headers, onUpload, onProgress, onSuccess, onError) => {
+              onProgress(mockFile, 75);
             }
-          },
-          uploadingHandler: function () {}
-        };
-        spyOn(fakeThis, 'uploadingHandler');
+          );
 
-        component.uploadFiles.call(fakeThis, [file]);
+          const spyUploadingHandler = spyOn(component as any, 'uploadingHandler');
 
-        expect(fakeThis.uploadingHandler).toHaveBeenCalled();
-      });
+          component['uploadFiles'](mockFiles);
 
-      it('should call responseHandler function when upload files', () => {
-        const fakeThis = {
-          uploadService: {
-            upload: function (url, filez, headers, tUpload, uploadCallback, successCallback, errorCallback) {
-              return successCallback(file, 100);
+          expect(spyUpload).toHaveBeenCalled();
+          expect(spyUploadingHandler).toHaveBeenCalledWith(mockFile, 75);
+        });
+
+        it('should call responseHandler, emit onSuccess, and hide done content after 500ms on success', fakeAsync(() => {
+          const mockFile = {
+            uid: '1',
+            status: PoUploadStatus.Uploading,
+            name: '',
+            rawFile: {} as any,
+            extension: '',
+            size: 1000,
+            hideDoneContent: false
+          };
+          const eventResponse = { success: true };
+
+          component.url = 'fake-url';
+          component.headers = {};
+          component.currentFiles = [{ uid: '1', hideDoneContent: false } as any];
+
+          const responseHandlerSpy = spyOn(component, <any>'responseHandler');
+          const detectChangesSpy = spyOn(component['cd'], 'detectChanges');
+          const emitSuccessSpy = spyOn(component.onSuccess, 'emit');
+
+          const uploadSpy = spyOn(component['uploadService'], 'upload').and.callFake(
+            (url, files, headers, onUpload, onProgress, onSuccess, onError) => {
+              onSuccess(mockFile as any, eventResponse);
             }
-          },
-          responseHandler: function () {},
-          onSuccess: new EventEmitter<any>()
-        };
+          );
 
-        spyOn(fakeThis, 'responseHandler');
+          component.uploadFiles([mockFile as any]);
 
-        component.uploadFiles.call(fakeThis, [file]);
+          expect(uploadSpy).toHaveBeenCalled();
+          expect(responseHandlerSpy).toHaveBeenCalledWith(mockFile, PoUploadStatus.Uploaded);
+          expect(emitSuccessSpy).toHaveBeenCalledWith(eventResponse);
 
-        expect(fakeThis.responseHandler).toHaveBeenCalled();
+          tick(500);
+
+          expect(detectChangesSpy).toHaveBeenCalled();
+        }));
       });
 
       it('should call responseHandler function when upload files', () => {
@@ -957,11 +1125,11 @@ describe('PoUploadComponent:', () => {
 
       component['sendFeedback']();
 
-      expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [
-        expectedValueSizeNotAllowed,
-        expectedValueMinFileSize,
-        expectedValueMaxFileSize
-      ]);
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(
+        literalAttr,
+        [expectedValueSizeNotAllowed, expectedValueMinFileSize, expectedValueMaxFileSize],
+        undefined
+      );
     });
 
     it('sendFeedback: should call `setPipeArguments` if `extensionNotAllowed`', () => {
@@ -980,10 +1148,11 @@ describe('PoUploadComponent:', () => {
 
       component['sendFeedback']();
 
-      expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [
-        expectedValueExtensionNotAllowed,
-        expectedValueAllowedExtensionsFormatted
-      ]);
+      expect(component['setPipeArguments']).toHaveBeenCalledWith(
+        literalAttr,
+        [expectedValueExtensionNotAllowed, expectedValueAllowedExtensionsFormatted],
+        undefined
+      );
     });
 
     it('sendFeedback: should call `setPipeArguments` if `quantityNotAllowed`', () => {
@@ -1003,6 +1172,36 @@ describe('PoUploadComponent:', () => {
       expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [expectedValueQuantityNotAllowed]);
     });
 
+    it('sendFeedback: should call `setPipeArguments` if `quantityNotAllowed`, `extensionNotAllowed ` and `sizeNotAllowed `', () => {
+      component['quantityNotAllowed'] = 1;
+      component.fileRestrictions = {
+        minFileSize: 1,
+        maxFiles: 2,
+        maxFileSize: 31457,
+        allowedExtensions: ['.png', '.zip']
+      };
+
+      spyOn(component, <any>'setPipeArguments');
+
+      component['sendFeedback']({ sizeNotAllowed: 1, extensionNotAllowed: 1, quantityNotAllowed: 1 });
+      expect(component['setPipeArguments']).toHaveBeenCalled();
+    });
+
+    it('setPipeArguments: should call `notification.information`', () => {
+      const arg = 'invalidAmount';
+      const literalAttr = 'invalidAmount';
+
+      component['notification'] = {
+        information: () => {}
+      } as any;
+
+      spyOn(component['notification'], 'information').and.callThrough();
+      const file = { uui: 1234, errorMessage: '' };
+      component['setPipeArguments'](literalAttr, arg, file);
+
+      expect(component['notification'].information).toHaveBeenCalled();
+    });
+
     it('setPipeArguments: should call `i18nPipe.transform`', () => {
       const arg = '';
       const literalAttr = '';
@@ -1012,6 +1211,26 @@ describe('PoUploadComponent:', () => {
       component['setPipeArguments'](literalAttr, arg);
 
       expect(component['i18nPipe'].transform).toHaveBeenCalled();
+    });
+
+    describe('actionIsDisabled', () => {
+      it('should call action.disabled function and return its result when it is a function', () => {
+        const disabledFn = jasmine.createSpy().and.returnValue(true);
+        const action = { disabled: disabledFn };
+
+        const result = component['actionIsDisabled'](action);
+
+        expect(disabledFn).toHaveBeenCalledWith(action);
+        expect(result).toBeTrue();
+      });
+
+      it('should return action.disabled when it is not a function', () => {
+        const action = { disabled: false };
+
+        const result = component['actionIsDisabled'](action);
+
+        expect(result).toBeFalse();
+      });
     });
 
     it('uploadingHandler: should set file.status and file.percent with respectives params', () => {
@@ -1031,6 +1250,64 @@ describe('PoUploadComponent:', () => {
 
       expect(testFile.status).toEqual(PoUploadStatus.Error);
       expect(testFile.percent).toBe(100);
+    });
+
+    it('showTooltipText: should show tooltip only when content overflows', () => {
+      const event: any = {
+        target: document.createElement('div')
+      };
+
+      const element = event.target as HTMLElement;
+
+      // Simula overflow
+      Object.defineProperty(element, 'scrollWidth', { value: 150, configurable: true });
+      Object.defineProperty(element, 'offsetWidth', { value: 100, configurable: true });
+
+      component['showTooltipText'](event, 'Long Title');
+      expect(component['tooltipTitle']).toBe('Long Title');
+
+      // Simula conteúdo sem overflow
+      Object.defineProperty(element, 'scrollWidth', { value: 80 });
+      Object.defineProperty(element, 'offsetWidth', { value: 100 });
+
+      component['showTooltipText'](event, '');
+      expect(component['tooltipTitle']).toBeUndefined();
+    });
+
+    describe('isActionVisible', () => {
+      it('should return false if action is undefined', () => {
+        expect(component['isActionVisible'](undefined)).toBeFalse();
+      });
+
+      it('should return false if action has no label and no icon', () => {
+        const action = {};
+        expect(component['isActionVisible'](action)).toBeFalse();
+      });
+
+      it('should return true if visible is undefined', () => {
+        const action = { label: 'Action' };
+        expect(component['isActionVisible'](action)).toBeTrue();
+      });
+
+      it('should return result of visible() if visible is a function', () => {
+        const visibleFn = jasmine.createSpy().and.returnValue(true);
+        const action = { label: 'Action', visible: visibleFn };
+        expect(component['isActionVisible'](action)).toBeTrue();
+        expect(visibleFn).toHaveBeenCalled();
+      });
+
+      it('should return boolean value of visible if it is not a function', () => {
+        const action = { label: 'Action', visible: 0 };
+        expect(component['isActionVisible'](action)).toBeFalse();
+      });
+    });
+
+    describe('onImageError', () => {
+      it('should set file.imageError to true', () => {
+        const file: any = { imageError: false };
+        component['onImageError'](file);
+        expect(file.imageError).toBeTrue();
+      });
     });
 
     it('updateModel: should call onModelChange with cleanFiles', () => {
@@ -1106,6 +1383,58 @@ describe('PoUploadComponent:', () => {
 
       expect(spyRemoveFile).toHaveBeenCalledWith(localFile);
       expect(spyStopUpload).not.toHaveBeenCalled();
+    });
+
+    it('cancel: should not call removeFile or stopUpload if disabledRemoveFile is true', () => {
+      const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploaded };
+      component.disabledRemoveFile = true;
+
+      const spyStopUpload = spyOn(component, 'stopUpload');
+      const spyRemoveFile = spyOn(component, 'removeFile');
+
+      component.cancel(localFile);
+
+      expect(spyStopUpload).not.toHaveBeenCalled();
+      expect(spyRemoveFile).not.toHaveBeenCalled();
+    });
+
+    it('cancel: should not call removeFile or stopUpload if keydown is not Enter or Space', () => {
+      const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploaded };
+      const event = new KeyboardEvent('keydown', { code: 'Escape' });
+
+      const spyStopUpload = spyOn(component, 'stopUpload');
+      const spyRemoveFile = spyOn(component, 'removeFile');
+
+      component.cancel(localFile, event);
+
+      expect(spyStopUpload).not.toHaveBeenCalled();
+      expect(spyRemoveFile).not.toHaveBeenCalled();
+    });
+
+    it('cancel: should emit onCancel if file.status is not Uploaded', () => {
+      const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Error };
+      const spyEmitCancel = spyOn(component.onCancel, 'emit');
+      const spyEmitRemove = spyOn(component.onRemove, 'emit');
+      const spyRemoveFile = spyOn(component, 'removeFile');
+
+      component.cancel(localFile);
+
+      expect(spyRemoveFile).toHaveBeenCalledWith(localFile);
+      expect(spyEmitCancel).toHaveBeenCalledWith(localFile);
+      expect(spyEmitRemove).not.toHaveBeenCalled();
+    });
+
+    it('cancel: should emit onRemove if file.status is Uploaded', () => {
+      const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploaded };
+      const spyEmitCancel = spyOn(component.onCancel, 'emit');
+      const spyEmitRemove = spyOn(component.onRemove, 'emit');
+      const spyRemoveFile = spyOn(component, 'removeFile');
+
+      component.cancel(localFile);
+
+      expect(spyRemoveFile).toHaveBeenCalledWith(localFile);
+      expect(spyEmitRemove).toHaveBeenCalledWith(localFile);
+      expect(spyEmitCancel).not.toHaveBeenCalled();
     });
 
     it('isAllowCancelEvent: should return true if `status` is different than Uploaded', () => {
@@ -1246,15 +1575,6 @@ describe('PoUploadComponent:', () => {
       expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container')).toBeNull();
     });
 
-    it('should add `po-upload-progress-container-area` class if `hasMoreThanFourItems` is true', () => {
-      component.currentFiles = [file];
-      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container-area')).toBeTruthy();
-    });
-
     it('shouldn`t add `po-upload-progress-container-area` class if `hasMoreThanFourItems` is false', () => {
       component.currentFiles = [file];
       spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(false);
@@ -1262,15 +1582,6 @@ describe('PoUploadComponent:', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-upload-progress-container-area')).toBeFalsy();
-    });
-
-    it('should fix the height of `po-container` to `280px` if `hasMoreThanFourItems` is true', () => {
-      component.currentFiles = [file];
-      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(true);
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('.po-container-content').style.height).toBe('280px');
     });
 
     it('should fix the height of `po-container` to `auto` if `hasMoreThanFourItems` is false', () => {

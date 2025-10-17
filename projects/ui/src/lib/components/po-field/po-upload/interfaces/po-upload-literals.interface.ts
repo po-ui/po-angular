@@ -56,4 +56,25 @@ export interface PoUploadLiterals {
 
   /** Texto a ser exibido quando o envio do arquivo for realizado com sucesso. */
   sentWithSuccess?: string;
+
+  /** Texto a ser exibido no container de informação quando o estado for de sucesso. */
+  doneText?: string;
+
+  /** Texto a ser exibido no container de informação quando o estado for enviando. */
+  uploadingText?: string;
+
+  /** Texto de Tente novamente ao ocorrer erro ao enviar. */
+  tryAgain?: string;
+
+  /** Texto do leitor de tela ao focar no ícone de fechar. */
+  close?: string;
+
+  /** Título do modal de pré-visualizar. */
+  preview?: string;
+
+  /** Texto do leitor da miniatura da imagem. */
+  thumbnail?: string;
+
+  /** Texto do botão padrão do modal de pré-visualizar. */
+  continue?: string;
 }
