@@ -116,7 +116,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   jobSchedulerActions: Array<PoPageAction> = [...this.nextPageActions];
 
   protected stepExecution = 1;
-  protected stepParameters = 2;
+  private stepParameters = 2;
   protected stepSummary = 3;
   protected _stepExecutionLast: boolean;
 

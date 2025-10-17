@@ -81,7 +81,7 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
   languageService: PoLanguageService;
   protected renderer = inject(Renderer2);
   protected changeDetector = inject(ChangeDetectorRef);
-  protected controlPosition = inject(PoControlPositionService);
+  private controlPosition = inject(PoControlPositionService);
 
   private clickoutListener: () => void;
   private eventResizeListener: () => void;
