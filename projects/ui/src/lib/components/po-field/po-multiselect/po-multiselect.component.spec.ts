@@ -611,6 +611,7 @@ describe('PoMultiselectComponent:', () => {
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
+        (component as any).label = 'this.label';
         spyOn(component.additionalHelp, 'emit');
         spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
 

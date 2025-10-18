@@ -31,7 +31,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 const poComboContainerOffset = 8;
 
@@ -116,6 +116,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('poListbox') poListbox: PoListBoxComponent;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   comboIcon: string = 'ICON_ARROW_DOWN';
   comboOpen: boolean = false;
@@ -605,6 +606,23 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

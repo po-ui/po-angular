@@ -194,16 +194,22 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
-
-    if (this.displayAdditionalHelp && this.helperEl) {
+    if (this.helperEl?.helperIsVisible()) {
+      this.helperEl?.closeHelperPopover();
+      return;
+    }
+    if (this.helperEl) {
       const helper = this.poHelperComponent();
+      const isHelpEvt = this.isAdditionalHelpEventTriggered();
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+        return;
+      }
       if (helper && typeof helper !== 'string' && helper.eventOnClick) {
         helper.eventOnClick();
         return;
       }
       this.helperEl?.openHelperPopover();
-    } else if (!this.displayAdditionalHelp && this.helperEl) {
-      this.helperEl?.closeHelperPopover();
     }
     return this.displayAdditionalHelp;
   }
