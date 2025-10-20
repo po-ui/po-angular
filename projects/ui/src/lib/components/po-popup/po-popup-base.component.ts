@@ -90,6 +90,9 @@ export class PoPopupBaseComponent {
   // Indica se há um listbox com subitens
   @Input('p-listbox-subitems') listboxSubitems = false;
 
+  // template-icon
+  @Input('p-template-icon') templateIcon = false;
+
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoPopupAction>) {
     this._actions = Array.isArray(value) ? value : [];

@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, Inject, Input, Optional, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostBinding,
+  Inject,
+  Input,
+  Optional,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ICONS_DICTIONARY, AnimaliaIconDictionary } from './po-icon-dictionary';
 /**
  * @docsPrivate
@@ -16,9 +26,12 @@ import { ICONS_DICTIONARY, AnimaliaIconDictionary } from './po-icon-dictionary';
   standalone: false
 })
 export class PoIconComponent {
+  @ViewChild('iconElement', { static: false }) iconElement: ElementRef;
   class: string;
   private _icon: string | TemplateRef<void>;
   private _iconToken: { [key: string]: string };
+
+  @HostBinding('attr.p-icon') hostPIcon: string | null = null;
 
   constructor(@Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }) {
     this._iconToken = value ?? AnimaliaIconDictionary;
@@ -47,9 +60,11 @@ export class PoIconComponent {
    */
   @Input('p-icon') set icon(value: string | TemplateRef<void>) {
     if (typeof value === 'string') {
+      this.hostPIcon = value;
       this.processIcon(value);
     } else if (value instanceof TemplateRef) {
       this._icon = value;
+      this.hostPIcon = null;
     }
   }
 
