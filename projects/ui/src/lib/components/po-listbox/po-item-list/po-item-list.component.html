@@ -12,7 +12,7 @@
         [class.po-item-list__danger]="danger"
         class="po-item-list po-item-list__action"
       >
-        @if (icon && iconPosition === 'left') {
+        @if (icon) {
           <po-icon
             class="po-popup-icon-item po-field-icon"
             [class.po-field-icon-aa]="size === 'small'"
@@ -21,8 +21,8 @@
         }
         <span class="po-item-list-label">{{ label }}</span>
 
-        @if (icon && iconPosition === 'right') {
-          <po-icon class="po-popup-icon-item-right po-field-icon" [p-icon]="icon"></po-icon>
+        @if (iconArrowRight) {
+          <po-icon class="po-popup-icon-item-right po-field-icon" [p-icon]="iconArrowRight"></po-icon>
         }
       </div>
     }
