@@ -6,6 +6,9 @@
  * Interface para definição de literais utilizadas no `po-listbox`
  */
 export interface PoListBoxLiterals {
+  /** Texto do botão para voltar ao agrupador anterior. */
+  backToPreviousGroup?: string;
+
   /** Texto exibido quando não houver itens na lista */
   noItems?: string;
 
