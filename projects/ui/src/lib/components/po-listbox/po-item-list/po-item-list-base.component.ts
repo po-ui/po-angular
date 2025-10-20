@@ -120,6 +120,15 @@ export class PoItemListBaseComponent {
    */
   @Input('p-icon') icon: string | TemplateRef<void>;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se deve ser exibido o ícone indicando subnível.
+   */
+  @Input('p-icon-arrow-right') iconArrowRight: string;
+
   // Define a posição do ícone: 'left' (padrão) ou 'right'.
   @Input('p-icon-position') iconPosition: 'left' | 'right' = 'left';
 

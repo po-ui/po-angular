@@ -78,6 +78,18 @@ describe('PoPopupComponent:', () => {
       event = { target: {} };
     });
 
+    it('ngAfterViewInit: should set target if templateIcon is true', () => {
+      component.templateIcon = true;
+      component.target = {
+        iconElement: {
+          nativeElement: 'test'
+        }
+      };
+      component.ngAfterViewInit();
+
+      expect(component.target).toBe('test');
+    });
+
     it('clickoutListener: should call `closePopupOnClickout` on click in document', () => {
       component.open();
       fixture.detectChanges();

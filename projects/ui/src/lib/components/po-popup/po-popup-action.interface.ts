@@ -139,4 +139,7 @@ export interface PoPopupAction {
 
   // id interno
   $id?: string;
+
+  // template interno
+  $subItemTemplate?: TemplateRef<any>;
 }
