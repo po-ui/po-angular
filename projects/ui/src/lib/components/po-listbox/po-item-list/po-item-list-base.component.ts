@@ -118,6 +118,9 @@ export class PoItemListBaseComponent {
    */
   @Input('p-icon') icon: string | TemplateRef<void>;
 
+  // Define a posição do ícone: 'left' (padrão) ou 'right'.
+  @Input('p-icon-position') iconPosition: 'left' | 'right' = 'left';
+
   /**
    * @optional
    *

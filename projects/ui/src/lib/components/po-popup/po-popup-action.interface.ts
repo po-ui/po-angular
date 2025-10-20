@@ -8,11 +8,21 @@ import { TemplateRef } from '@angular/core';
  * Interface para lista de ações do componente.
  */
 export interface PoPopupAction {
-  /** Rótulo da ação. */
+  /**
+   * @description
+   *
+   * Rótulo da ação.
+   *
+   * No componente `po-dropdown`, a label também pode representar o agrupador de subitens.
+   */
   label: string;
 
   /**
+   * @description
+   *
    * Ação que será executada, sendo possível passar o nome ou a referência da função.
+   *
+   * No componente `po-dropdown`, a action também pode ser executada para o agrupador de subitens.
    *
    * > Para que a função seja executada no contexto do elemento filho o mesmo deve ser passado utilizando *bind*.
    *
@@ -62,13 +72,21 @@ export interface PoPopupAction {
    */
   icon?: string | TemplateRef<void>;
 
-  /** Atribui uma linha separadora acima do item. */
+  /**
+   * @description
+   *
+   * Atribui uma linha separadora acima do item.
+   *
+   * */
   separator?: boolean;
 
   /**
+   * @description
+   *
    * Função que deve retornar um booleano para habilitar ou desabilitar a ação para o registro selecionado.
    *
    * Também é possível informar diretamente um valor booleano que vai habilitar ou desabilitar a ação para todos os registros.
+   *
    */
   disabled?: boolean | Function;
 
@@ -83,10 +101,24 @@ export interface PoPopupAction {
    */
   type?: string;
 
-  /** URL utilizada no redirecionamento das páginas. */
+  /**
+   * @description
+   *
+   * URL utilizada para redirecionamento das páginas.
+   *
+   * No componente `po-dropdown`, a url também pode ser configurada para o agrupador de subitens.
+   * Entretanto, quando a `url` é informada em um agrupador, o clique **não abrirá os subitens**, pois o item será
+   * tratado como um link e o redirecionamento terá prioridade sobre a exibição da lista.
+   *
+   */
   url?: string;
 
-  /** Define se a ação está selecionada. */
+  /**
+   * @description
+   *
+   * Define se a ação está selecionada.
+   *
+   */
   selected?: boolean;
 
   /**
