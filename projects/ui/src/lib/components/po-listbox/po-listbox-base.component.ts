@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -14,15 +14,19 @@ import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.
 
 export const poListBoxLiteralsDefault = {
   en: <PoListBoxLiterals>{
+    backToPreviousGroup: 'Go back to the previous list',
     noItems: 'No items found'
   },
   es: <PoListBoxLiterals>{
+    backToPreviousGroup: 'Volver a la lista anterior',
     noItems: 'No se encontraron artículos'
   },
   pt: <PoListBoxLiterals>{
+    backToPreviousGroup: 'Voltar para a lista anterior',
     noItems: 'Nenhum item encontrado'
   },
   ru: <PoListBoxLiterals>{
+    backToPreviousGroup: 'Вернуться к предыдущему списку',
     noItems: 'ничего не найдено'
   }
 };
@@ -38,6 +42,8 @@ export class PoListBoxBaseComponent {
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
   private _size?: string = undefined;
+
+  @Input('p-listbox-subitems') listboxSubitems = false;
 
   @Input({ alias: 'p-visible', transform: convertToBoolean }) visible: boolean = false;
 
@@ -82,22 +88,6 @@ export class PoListBoxBaseComponent {
   // parâmetro que pode ser passado para o popup ao clicar em um item
   @Input('p-param') param?;
 
-  @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
-
-  @Output('p-close') closeEvent = new EventEmitter<any>();
-  // MULTISELECT PROPERTIES
-
-  //output para evento do checkbox
-  @Output('p-change') change = new EventEmitter();
-
-  //output para evento do checkbox
-  @Output('p-selectcombo-item') selectCombo = new EventEmitter();
-
-  //output para evento do checkbox de selecionar todos
-  @Output('p-change-all') changeAll = new EventEmitter();
-
-  @Output('p-update-infinite-scroll') UpdateInfiniteScroll = new EventEmitter();
-
   //valor do checkbox de selecionar todos
   @Input('p-checkboxAllValue') checkboxAllValue: any;
 
@@ -110,9 +100,6 @@ export class PoListBoxBaseComponent {
   @Input('p-field-value') fieldValue: string = 'value';
 
   @Input('p-field-label') fieldLabel: string = 'label';
-
-  // Evento disparado a cada tecla digitada na pesquisa.
-  @Output('p-change-search') changeSearch = new EventEmitter();
 
   // Propriedade que recebe as literais definidas no componente `po-multiselect`.
   @Input('p-literal-search') literalSearch?: any;
@@ -151,7 +138,9 @@ export class PoListBoxBaseComponent {
 
   @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
 
-  @Input('p-size') set size(value: string) {
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
     this._size = validateSizeFn(value, PoFieldSize);
   }
 
@@ -176,6 +165,25 @@ export class PoListBoxBaseComponent {
 
   // Define se haverá ou não um separador entre todos os itens do listbox
   @Input('p-separator') separator: boolean = false;
+
+  // Evento disparado a cada tecla digitada na pesquisa.
+  @Output('p-change-search') changeSearch = new EventEmitter();
+
+  @Output('p-select-item') selectItem = new EventEmitter<PoItemListOption | PoItemListOptionGroup | any>();
+
+  @Output('p-close') closeEvent = new EventEmitter<any>();
+  // MULTISELECT PROPERTIES
+
+  //output para evento do checkbox
+  @Output('p-change') change = new EventEmitter();
+
+  //output para evento do checkbox
+  @Output('p-selectcombo-item') selectCombo = new EventEmitter();
+
+  //output para evento do checkbox de selecionar todos
+  @Output('p-change-all') changeAll = new EventEmitter();
+
+  @Output('p-update-infinite-scroll') UpdateInfiniteScroll = new EventEmitter();
 
   // Evento disparado quando uma tab é ativada
   @Output('p-activated-tabs') activatedTab = new EventEmitter();

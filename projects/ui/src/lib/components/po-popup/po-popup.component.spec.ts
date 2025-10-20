@@ -448,12 +448,41 @@ describe('PoPopupComponent:', () => {
       expect(component['elementContains'](element, 'po-popup-item-disabled')).toBeFalsy();
     });
 
-    it('onClickItem: should emit clickItem', () => {
-      spyOn(component.clickItem, 'emit');
+    it('onClickItem: should emit clickItem when item has no goBack', () => {
+      const spyEmit = spyOn(component.clickItem, 'emit');
+      const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
+      const spyValidate = spyOn(component as any, 'validateInitialContent');
 
       component.onClickItem({ label: 'test' });
 
-      expect(component.clickItem.emit).toHaveBeenCalled();
+      expect(spyEmit).toHaveBeenCalledWith({ label: 'test' });
+      expect(spyDetect).not.toHaveBeenCalled();
+      expect(spyValidate).not.toHaveBeenCalled();
+    });
+
+    it('onClickItem: should NOT emit clickItem when goBack is true, but should call detectChanges and validateInitialContent', () => {
+      const spyEmit = spyOn(component.clickItem, 'emit');
+      const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
+      const spyValidate = spyOn(component as any, 'validateInitialContent');
+
+      component.onClickItem({ goBack: true });
+
+      expect(spyEmit).not.toHaveBeenCalled();
+      expect(spyDetect).toHaveBeenCalled();
+      expect(spyValidate).toHaveBeenCalled();
+    });
+
+    it('onClickItem: should emit and also call detectChanges and validateInitialContent when item has subItems', () => {
+      const spyEmit = spyOn(component.clickItem, 'emit');
+      const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
+      const spyValidate = spyOn(component as any, 'validateInitialContent');
+
+      const item = { subItems: [{ label: 'child' }] };
+      component.onClickItem(item);
+
+      expect(spyEmit).toHaveBeenCalledWith(item);
+      expect(spyDetect).toHaveBeenCalled();
+      expect(spyValidate).toHaveBeenCalled();
     });
 
     describe('checkBooleanValue:', () => {
