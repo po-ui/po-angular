@@ -21,7 +21,7 @@
     ></po-search-list>
   }
 
-  @if (checkTemplate()) {
+  @if (checkTemplate() && !listboxSubitems) {
     <ul #listboxItemList cdkListbox [cdkListboxMultiple]="type === 'check'" class="po-listbox-list">
       @if (type === 'check' && items.length && !searchElement?.inputValue && !hideSelectAll) {
         <li
@@ -60,7 +60,7 @@
               {{ item.label }}
             </label>
           }
-          @if (returnBooleanValue(item, 'visible') !== false && !item.options) {
+          @if (returnBooleanValue(item, 'visible') !== false) {
             <po-item-list
               [p-disabled]="returnBooleanValue(item, 'disabled')"
               [p-visible]="returnBooleanValue(item, 'visible')"
@@ -127,6 +127,100 @@
         <span> {{ literals.noItems }}</span>
       </div>
     }
+  }
+
+  @if (listboxSubitems) {
+    <ul cdkListbox class="po-listbox-list po-listbox-dropdown">
+      @if (!currentGroup) {
+        @for (item of currentItems; track item) {
+          <li
+            #listboxItem
+            [class.po-listbox-item]="visible"
+            [cdkOption]="item[fieldLabel]"
+            [cdkOptionDisabled]="returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false"
+            [attr.aria-selected]="isSelectedItem(item) || item.selected"
+            (click)="onSelectItem(item, $event)"
+            (keydown)="onKeyDown(item, $event)"
+          >
+            @if (item.subItems?.length) {
+              <po-item-list
+                [p-label]="item.label"
+                [p-item]="item"
+                [p-separator]="item.separator || separator"
+                [p-icon]="'po-icon-arrow-right'"
+                [p-icon-position]="'right'"
+              >
+              </po-item-list>
+            } @else if (!item.subItems?.length && returnBooleanValue(item, 'visible') !== false) {
+              <po-item-list
+                class="po-listbox-item-sub"
+                [p-disabled]="returnBooleanValue(item, 'disabled')"
+                [p-visible]="returnBooleanValue(item, 'visible')"
+                [p-label]="item[fieldLabel]"
+                [p-item]="item"
+                [p-icon]="item.icon"
+                [p-separator]="item.separator || separator"
+                [p-danger]="item.type === 'danger'"
+                [p-selected]="isSelectedItem(item) || item.selected"
+              >
+              </po-item-list>
+            }
+          </li>
+        }
+      }
+
+      @if (currentGroup) {
+        <li
+          #listboxGroupHeader
+          class="po-listbox-group-header"
+          [cdkOption]="'back-option'"
+          [attr.aria-label]="literals?.backToPreviousGroup"
+          (click)="goBack($event)"
+          (keydown)="onKeydownGoBack($event)"
+        >
+          <po-icon class="po-field-icon" [p-icon]="'po-icon-arrow-left'"></po-icon>
+          <po-tag [p-value]="currentGroup.label"></po-tag>
+        </li>
+
+        @for (subItem of currentItems; track subItem.label) {
+          @if (subItem.subItems?.length) {
+            <li
+              [cdkOption]="subItem[fieldLabel]"
+              (click)="onSelectItem(subItem, $event)"
+              (keydown)="onKeyDown(subItem, $event)"
+            >
+              <po-item-list
+                [p-label]="subItem.label"
+                [p-item]="subItem"
+                [p-separator]="subItem.separator || separator"
+                [p-icon]="'po-icon-arrow-right'"
+                [p-icon-position]="'right'"
+              >
+              </po-item-list>
+            </li>
+          } @else if (!subItem.subItems?.length && returnBooleanValue(subItem, 'visible') !== false) {
+            <li
+              [cdkOption]="subItem[fieldLabel]"
+              (click)="onSelectItem(subItem, $event)"
+              (keydown)="onKeyDown(subItem, $event)"
+            >
+              <po-item-list
+                class="po-listbox-item-sub"
+                [p-disabled]="returnBooleanValue(subItem, 'disabled')"
+                [p-visible]="returnBooleanValue(subItem, 'visible')"
+                [p-label]="subItem[fieldLabel]"
+                [p-item]="subItem"
+                [p-icon]="subItem.icon"
+                [p-separator]="subItem.separator || separator"
+                [p-danger]="subItem.type === 'danger'"
+                [p-selected]="isSelectedItem(subItem) || subItem.selected"
+              >
+              </po-item-list>
+            </li>
+          }
+        }
+      }
+    </ul>
   }
 
   @if (isServerSearching && type !== 'action') {

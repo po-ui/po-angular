@@ -22,6 +22,11 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
  *  <file name="sample-po-dropdown-basic/sample-po-dropdown-basic.component.ts"> </file>
  * </example>
  *
+ * <example name="po-dropdown-subitems" title="PO Dropdown Subitems" >
+ *  <file name="sample-po-dropdown-subitems/sample-po-dropdown-subitems.component.html"> </file>
+ *  <file name="sample-po-dropdown-subitems/sample-po-dropdown-subitems.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-dropdown-labs" title="PO Dropdown Labs" >
  *  <file name="sample-po-dropdown-labs/sample-po-dropdown-labs.component.html"> </file>
  *  <file name="sample-po-dropdown-labs/sample-po-dropdown-labs.component.ts"> </file>
@@ -59,7 +64,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   }
 
   private checkClickArea(event: MouseEvent) {
-    return this.dropdownRef && this.dropdownRef.nativeElement.contains(event.target);
+    return this.dropdownRef?.nativeElement.contains(event.target);
   }
 
   private hideDropdown() {

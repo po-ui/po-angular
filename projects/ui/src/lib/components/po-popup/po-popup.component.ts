@@ -71,12 +71,12 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   onActionClick(popupAction: PoPopupAction) {
     const actionNoDisabled = popupAction && !this.returnBooleanValue(popupAction, 'disabled');
 
-    if (popupAction && popupAction.action && actionNoDisabled) {
+    if (popupAction?.action && actionNoDisabled) {
       this.close();
       popupAction.action(this.param || popupAction);
     }
 
-    if (popupAction && popupAction.url && actionNoDisabled) {
+    if (popupAction?.url && actionNoDisabled) {
       this.close();
       return this.openUrl(popupAction.url);
     }
@@ -113,7 +113,14 @@ export class PoPopupComponent extends PoPopupBaseComponent {
   }
 
   onClickItem(item: any) {
-    this.clickItem.emit(item);
+    if (!item.goBack) {
+      this.clickItem.emit(item);
+    }
+
+    if (item.subItems || item.goBack) {
+      this.changeDetector.detectChanges();
+      this.validateInitialContent();
+    }
   }
 
   protected checkAllActionIsInvisible() {
