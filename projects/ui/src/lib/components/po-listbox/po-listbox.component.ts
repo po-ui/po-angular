@@ -148,12 +148,25 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     });
   }
 
-  public onKeydownGoBack(event: KeyboardEvent): void {
+  public onKeydownGoBack(event: KeyboardEvent, currentGroup?: PoDropdownAction): void {
     if (event.key === 'Enter') {
       this.goBack(event);
     }
 
     if (event?.code === 'Escape' || event.code === 'Tab') {
+      if (event.code === 'Tab' && !event.shiftKey && currentGroup?.$subItemTemplate) {
+        return;
+      }
+      this.closeEvent.emit();
+    }
+  }
+
+  protected onKeydownTemplate(event: KeyboardEvent): void {
+    if (event.code === 'Tab') {
+      if ((event.target as HTMLElement)?.closest('.po-listbox-dropdown')) {
+        event.stopPropagation();
+        return;
+      }
       this.closeEvent.emit();
     }
   }
@@ -184,7 +197,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
       return this.openUrl(itemListAction.url);
     }
 
-    if (itemListAction?.subItems?.length) {
+    if (itemListAction?.subItems?.length || itemListAction?.$subItemTemplate) {
       this.openGroup(itemListAction, event);
     } else if (this.listboxSubitems) {
       this.closeEvent.emit();

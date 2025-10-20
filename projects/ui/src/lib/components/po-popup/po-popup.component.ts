@@ -1,16 +1,8 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Renderer2,
-  ViewChild,
-  ViewContainerRef,
-  inject
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
-import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
+import { isExternalLink, isTypeof, openExternalLink, uuid } from '../../utils/util';
 
 import { PoListBoxComponent } from '../po-listbox';
 import { PoPopupAction } from './po-popup-action.interface';
@@ -44,7 +36,8 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
   providers: [PoControlPositionService],
   standalone: false
 })
-export class PoPopupComponent extends PoPopupBaseComponent {
+export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewInit {
+  id = `po-popup[${uuid()}]`;
   private renderer = inject(Renderer2);
   private router = inject(Router);
   private poControlPosition = inject(PoControlPositionService);
@@ -55,6 +48,12 @@ export class PoPopupComponent extends PoPopupBaseComponent {
 
   //utilizado apenas no theme builder
   @ViewChild('poListBoxRef') poListBoxRef: PoListBoxComponent;
+
+  ngAfterViewInit() {
+    if (this.templateIcon && this.target) {
+      this.target = this.target?.iconElement?.nativeElement;
+    }
+  }
 
   /**
    * Fecha o componente *popup*.
@@ -92,6 +91,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
     this.param = param;
     this.showPopup = true;
     this.changeDetector.detectChanges();
+
     this.validateInitialContent();
   }
 
@@ -117,7 +117,7 @@ export class PoPopupComponent extends PoPopupBaseComponent {
       this.clickItem.emit(item);
     }
 
-    if (item.subItems || item.goBack) {
+    if (item.subItems || item.$subItemTemplate || item.goBack) {
       this.changeDetector.detectChanges();
       this.validateInitialContent();
     }

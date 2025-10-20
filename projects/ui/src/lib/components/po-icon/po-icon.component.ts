@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Inject, Input, Optional, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  Optional,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ICONS_DICTIONARY, AnimaliaIconDictionary } from './po-icon-dictionary';
 /**
  * @docsPrivate
@@ -16,6 +25,7 @@ import { ICONS_DICTIONARY, AnimaliaIconDictionary } from './po-icon-dictionary';
   standalone: false
 })
 export class PoIconComponent {
+  @ViewChild('iconElement', { static: false }) iconElement: ElementRef;
   class: string;
   private _icon: string | TemplateRef<void>;
   private _iconToken: { [key: string]: string };
