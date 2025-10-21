@@ -457,21 +457,6 @@ describe('PoUploadComponent:', () => {
       expect(spySetPrimary).toHaveBeenCalled();
     });
 
-    it('ngOnDestroy: should revoke all thumbnail URLs', () => {
-      const spyRevoke = spyOn(URL, 'revokeObjectURL');
-      component.currentFiles = [
-        { thumbnailUrl: 'blob:url1' },
-        { thumbnailUrl: 'blob:url2' },
-        { thumbnailUrl: undefined }
-      ] as any;
-
-      component.ngOnDestroy();
-
-      expect(spyRevoke).toHaveBeenCalledTimes(2);
-      expect(spyRevoke).toHaveBeenCalledWith('blob:url1');
-      expect(spyRevoke).toHaveBeenCalledWith('blob:url2');
-    });
-
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
 

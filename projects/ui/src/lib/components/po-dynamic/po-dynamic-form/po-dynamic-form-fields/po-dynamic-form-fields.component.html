@@ -539,6 +539,7 @@
         [p-optional]="field.optional"
         [p-required]="field.required"
         [p-show-required]="field.showRequired"
+        [p-show-thumbnail]="field.showThumbnail ?? true"
         [p-size]="field.size || componentsSize"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
