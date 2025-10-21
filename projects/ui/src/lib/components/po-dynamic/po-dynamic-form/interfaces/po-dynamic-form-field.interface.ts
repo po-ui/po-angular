@@ -751,6 +751,15 @@ export interface PoDynamicFormField extends PoDynamicField {
   showRequired?: boolean;
 
   /**
+   * Exibe a pré-visualização de imagens ao anexá-las.
+   *
+   * > Propriedade funciona apenas em arquivos de formato de imagem (`.png`, `.jpg`, `.jpeg` e `.gif`).
+   *
+   * **Componente compatível**: `po-upload`
+   */
+  showThumbnail?: boolean;
+
+  /**
    * Define uma ação personalizada no componente `po-upload`, adicionando um botão no canto inferior direito
    * de cada barra de progresso associada aos arquivos enviados ou em envio.
    *

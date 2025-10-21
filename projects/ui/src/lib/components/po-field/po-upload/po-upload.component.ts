@@ -5,7 +5,6 @@ import {
   Component,
   ElementRef,
   OnChanges,
-  OnDestroy,
   Renderer2,
   SimpleChanges,
   ViewChild,
@@ -17,7 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { formatBytes, isMobile, setHelperSettings, isTypeof, uuid } from '../../../utils/util';
+import { formatBytes, isMobile, isTypeof, setHelperSettings, uuid } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
@@ -83,7 +82,7 @@ import { PoUploadService } from './po-upload.service';
   ],
   standalone: false
 })
-export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit, OnChanges {
   renderer = inject(Renderer2);
   private i18nPipe = inject(PoI18nPipe);
   private notification = inject(PoNotificationService);
@@ -225,14 +224,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     if (this.autoFocus) {
       this.focus();
     }
-  }
-
-  ngOnDestroy() {
-    this.currentFiles?.forEach(file => {
-      if (file.thumbnailUrl) {
-        URL.revokeObjectURL(file.thumbnailUrl);
-      }
-    });
   }
 
   /** Método responsável por **limpar** o(s) arquivo(s) selecionado(s). */
