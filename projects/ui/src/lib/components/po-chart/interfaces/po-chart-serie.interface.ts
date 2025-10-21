@@ -12,9 +12,10 @@ export interface PoChartSerie {
    * @description
    *
    * Determina a cor da série. As maneiras de customizar o *preset* padrão de cores são:
-   * * Hexadeximal, por exemplo `#c64840`;
-   * * RGB, como `rgb(0, 0, 165)`
+   * * Hexadecimal, por exemplo `#c64840`;
+   * * RGB, por exemplo `rgb(0, 0, 165)`
    * * O nome da cor, por exemplo `blue`;
+   * * Variáveis CSS, por exemplo `var(--color-01)`;
    * * Usando uma das cores do tema do PO:
    *   Valores válidos:
    *     - <span class="dot po-color-01"></span> `color-01`

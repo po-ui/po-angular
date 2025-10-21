@@ -1350,6 +1350,24 @@ describe('PoChartComponent', () => {
       expect(result[0].name).toBe('Serie 1');
     });
 
+    it('should call getComputedStyle with document.documentElement and use its value for var(...) color', () => {
+      const spyGetComputed = spyOn(window, 'getComputedStyle').and.returnValue({
+        getPropertyValue: (prop: string) => '#112233'
+      } as unknown as CSSStyleDeclaration);
+
+      component.series = [{ label: 'Serie Var2', data: [1, 2], color: 'var(--color-test)' }];
+      component.type = PoChartType.Column;
+      component.options = {};
+
+      const result = component['setSeries']();
+
+      expect(spyGetComputed).toHaveBeenCalledWith(document.documentElement);
+
+      const resolvedColor = result[0]?.emphasis?.itemStyle?.color || result[0]?.itemStyle?.color;
+      expect(resolvedColor).toBe('#112233');
+      expect(result[0]?.name).toBe('Serie Var2');
+    });
+
     it('should transform series correctly with default configurations if not set type and data is not Array', () => {
       component.series = [
         { label: 'Serie 1', data: 90, color: 'po-color-01' },

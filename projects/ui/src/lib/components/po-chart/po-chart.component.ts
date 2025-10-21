@@ -597,9 +597,18 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       serie.name = serie.name || (serie.label && typeof serie.label === 'string') ? (serie.name ?? serie.label) : ' ';
       !serie.type ? this.setTypeSerie(serie, this.type || typeDefault) : this.setTypeSerie(serie, serie.type);
 
-      const colorVariable: string = serie.color?.includes('color')
-        ? this.getCSSVariable(`--${serie.color.replace('po-', '')}`)
-        : serie.color;
+      let colorVariable: string;
+
+      if (serie.color?.startsWith('var(--')) {
+        colorVariable = getComputedStyle(document.documentElement)
+          .getPropertyValue(serie.color.replace(/^var\((--[^)]+)\)$/, '$1'))
+          .trim();
+      } else if (serie.color?.includes('color')) {
+        colorVariable = this.getCSSVariable(`--${serie.color.replace('po-', '')}`);
+      } else {
+        colorVariable = serie.color;
+      }
+
       this.chartGridUtils.setSerieTypeDonutPie(serie, colorVariable);
       this.chartGaugeUtils.setSerieTypeGauge(serie, colorVariable);
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
