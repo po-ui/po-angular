@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.32.0](https://github.com/po-ui/po-angular/compare/v19.31.0...v19.32.0) (2025-10-21)
+
+
+### Features
+
+* **upload:** implementa definições do AnimaliaDS ([cc66ea6](https://github.com/po-ui/po-angular/commit/cc66ea6a5567907e516f013434ec5bbfc03bc00a))
+* **upload:** repassa propriedade showThumbnail ao dynamic-form ([e5eeee6](https://github.com/po-ui/po-angular/commit/e5eeee6683d25a202112e2859560da5842bf2043))
+
 ## [19.31.0](https://github.com/po-ui/po-angular/compare/v19.30.0...v19.31.0) (2025-10-13)
 
 
