@@ -140,10 +140,20 @@ export class PoChartGridUtils {
 
   setSerieTypeArea(serie: any, index: number) {
     if (serie.isTypeArea) {
+      let colorVariable: string;
+
+      if (serie.color?.startsWith('var(--')) {
+        colorVariable = getComputedStyle(document.documentElement)
+          .getPropertyValue(serie.color.replace(/^var\((--[^)]+)\)$/, '$1'))
+          .trim();
+      } else if (serie.color?.includes('color')) {
+        colorVariable = this.component.getCSSVariable(`--${serie.color.replace('po-', '')}`);
+      } else {
+        colorVariable = serie.color ?? serie.overlayColor;
+      }
+
       serie.areaStyle = {
-        color: serie.color?.includes('color')
-          ? this.component.getCSSVariable(`--${serie.color.replace('po-', '')}`)
-          : serie.overlayColor
+        color: colorVariable
       };
 
       if (index > 7 || serie.isNotTokenColor) {

@@ -59,6 +59,23 @@ describe('PoChartGridUtils', () => {
 
       expect(serie.areaStyle.opacity).toBe(0.5);
     });
+
+    it('should set areaStyle.color using computedStyle when serie.color is var(...)', () => {
+      const spyGetComputed = spyOn(globalThis, 'getComputedStyle').and.returnValue({
+        getPropertyValue: () => '#445566'
+      } as unknown as CSSStyleDeclaration);
+
+      const serie: any = {
+        isTypeArea: true,
+        color: 'var(--color-test)',
+        overlayColor: 'rgba(255,255,255,0.5)'
+      };
+
+      utils.setSerieTypeArea(serie, 1);
+
+      expect(spyGetComputed).toHaveBeenCalledWith(document.documentElement);
+      expect(serie.areaStyle.color).toBe('#445566');
+    });
   });
 
   describe('setSerieTypeBarColumn', () => {
