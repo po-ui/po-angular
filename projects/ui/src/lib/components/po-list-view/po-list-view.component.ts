@@ -136,10 +136,6 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
       : listViewAction[property];
   }
 
-  trackBy(index) {
-    return index;
-  }
-
   togglePopup(item, targetRef: HTMLElement) {
     this.popupTarget = targetRef;
     this.changeDetector.detectChanges();
