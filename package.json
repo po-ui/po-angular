@@ -123,6 +123,7 @@
     "eslint-plugin-prefer-arrow": "latest",
     "eslint-plugin-react": "latest",
     "eslint-plugin-sonarjs": "^0.23.0",
+    "fs-extra": "^11.3.2",
     "gulp": "^5.0.0",
     "gulp-tap": "^2.0.0",
     "husky": "^8.0.0",
