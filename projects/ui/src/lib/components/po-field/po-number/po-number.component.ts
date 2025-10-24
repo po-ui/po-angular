@@ -7,7 +7,9 @@ import {
   HostListener,
   Input,
   inject,
-  AfterViewInit
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -61,7 +63,7 @@ import { uuid } from '../../../utils/util';
   ],
   standalone: false
 })
-export class PoNumberComponent extends PoNumberBaseComponent implements AfterViewInit {
+export class PoNumberComponent extends PoNumberBaseComponent implements AfterViewInit, OnChanges {
   /**
    * @optional
    *
@@ -115,6 +117,12 @@ export class PoNumberComponent extends PoNumberBaseComponent implements AfterVie
           this.appendBox = true;
         }
       }, 300);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
     }
   }
 

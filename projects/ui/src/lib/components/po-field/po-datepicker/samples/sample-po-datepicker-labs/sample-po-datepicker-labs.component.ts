@@ -8,7 +8,7 @@ import { PoCheckboxGroupOption, PoDatepickerIsoFormat, PoRadioGroupOption } from
   standalone: false
 })
 export class SamplePoDatepickerLabsComponent implements OnInit {
-  additionalHelpTooltip: string;
+  helperText: string;
   datepicker: string | Date;
   maxDate: string | Date;
   errorPattern: string;
@@ -68,7 +68,7 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
   }
 
   restore() {
-    this.additionalHelpTooltip = '';
+    this.helperText = '';
     this.datepicker = undefined;
     this.maxDate = undefined;
     this.event = undefined;

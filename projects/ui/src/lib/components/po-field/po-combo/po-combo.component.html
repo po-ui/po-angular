@@ -1,158 +1,175 @@
-<div #outerContainer>
-  <po-field-container
-    [p-disabled]="disabled"
-    [p-id]="id"
-    [p-label]="label"
-    [p-optional]="optional"
-    [p-required]="required"
-    [p-show-required]="showRequired"
-    [p-helper]="setHelper(this.label, this.additionalHelpTooltip).helperSettings"
-    [p-show-helper]="displayAdditionalHelp"
-    [p-text-wrap]="labelTextWrap()"
-  >
-    <div
-      #searchContainer
-      cdkOverlayOrigin
-      #trigger="cdkOverlayOrigin"
-      class="po-field-container-content po-combo-container-content"
-    >
-      <div class="po-combo-container-wrapper">
-        @if (icon) {
-          <div class="po-field-icon-container-left">
-            <po-icon
-              class="po-field-icon po-icon-input"
-              [class.po-field-icon-disabled]="disabled"
-              [class.po-field-icon-aa]="size === 'small'"
-              [p-icon]="icon"
-            ></po-icon>
-          </div>
-        }
+@let poHelper = setHelper(label, additionalHelpTooltip);
+@let needsHelper = !label && (poHelperComponent() || poHelper.hideAdditionalHelp);
+<div class="po-combo-field-wrapper" [class._active]="needsHelper">
+  <div class="po-combo-flex-item">
+    <div #outerContainer>
+      <po-field-container
+        [p-disabled]="disabled"
+        [p-id]="id"
+        [p-label]="label"
+        [p-optional]="optional"
+        [p-required]="required"
+        [p-show-required]="showRequired"
+        [p-helper]="label ? poHelper.helperSettings : undefined"
+        [p-show-helper]="label ? displayAdditionalHelp : undefined"
+        [p-text-wrap]="labelTextWrap()"
+      >
+        <div
+          #searchContainer
+          cdkOverlayOrigin
+          #trigger="cdkOverlayOrigin"
+          class="po-field-container-content po-combo-container-content"
+        >
+          <div class="po-combo-container-wrapper">
+            @if (icon) {
+              <div class="po-field-icon-container-left">
+                <po-icon
+                  class="po-field-icon po-icon-input"
+                  [class.po-field-icon-disabled]="disabled"
+                  [class.po-field-icon-aa]="size === 'small'"
+                  [p-icon]="icon"
+                ></po-icon>
+              </div>
+            }
 
-        <input
-          #inp
-          class="po-combo-input"
-          [ngClass]="
-            clean && inp.value
-              ? size === 'small'
-                ? 'po-input-double-icon-right-aa'
-                : 'po-input-double-icon-right'
-              : size === 'small'
-                ? 'po-input-icon-right-aa'
-                : 'po-input-icon-right'
-          "
-          [class.po-combo-input-aa]="size === 'small'"
-          [class.po-input-icon-left]="icon"
-          [class.po-input-icon-left-aa]="icon && size === 'small'"
-          autocomplete="off"
-          type="text"
-          [attr.data-focused-element]="!disabled"
-          [attr.data-inactive-component]="disabled"
-          [attr.name]="name"
-          [disabled]="disabled"
-          [id]="id"
-          [placeholder]="disabled ? '' : placeholder"
-          [required]="required"
-          [attr.data-append-in-body]="appendBox"
-          (click)="toggleComboVisibility()"
-          (keyup)="onKeyUp($event)"
-          (blur)="onBlur($event)"
-          (keyup)="searchOnEnterOrArrow($event, $event.target.value)"
-          (keydown)="onKeyDown($event)"
-        />
+            <input
+              #inp
+              class="po-combo-input"
+              [ngClass]="
+                clean && inp.value
+                  ? size === 'small'
+                    ? 'po-input-double-icon-right-aa'
+                    : 'po-input-double-icon-right'
+                  : size === 'small'
+                    ? 'po-input-icon-right-aa'
+                    : 'po-input-icon-right'
+              "
+              [class.po-combo-input-aa]="size === 'small'"
+              [class.po-input-icon-left]="icon"
+              [class.po-input-icon-left-aa]="icon && size === 'small'"
+              autocomplete="off"
+              type="text"
+              [attr.data-focused-element]="!disabled"
+              [attr.data-inactive-component]="disabled"
+              [attr.name]="name"
+              [disabled]="disabled"
+              [id]="id"
+              [placeholder]="disabled ? '' : placeholder"
+              [required]="required"
+              [attr.data-append-in-body]="appendBox"
+              (click)="toggleComboVisibility()"
+              (keyup)="onKeyUp($event)"
+              (blur)="onBlur($event)"
+              (keyup)="searchOnEnterOrArrow($event, $event.target.value)"
+              (keydown)="onKeyDown($event)"
+            />
 
-        <div class="po-field-icon-container-right">
-          @if (isCleanVisible()) {
-            <po-clean
-              tabindex="0"
-              role="button"
-              [attr.aria-label]="literals.clean"
-              class="po-combo-clean po-icon-input"
-              [class.po-combo-clean-aa]="size === 'small'"
-              [p-element-ref]="inputEl"
-              [p-size]="size"
-              (p-change-event)="clear($event)"
-              (click)="clear(null); $event.preventDefault()"
-              (keydown.enter)="clearAndFocus(); $event.preventDefault()"
-              (keydown.tab)="handleCleanKeyboardTab($event)"
-            >
-            </po-clean>
-          }
+            <div class="po-field-icon-container-right">
+              @if (isCleanVisible()) {
+                <po-clean
+                  tabindex="0"
+                  role="button"
+                  [attr.aria-label]="literals.clean"
+                  class="po-combo-clean po-icon-input"
+                  [class.po-combo-clean-aa]="size === 'small'"
+                  [p-element-ref]="inputEl"
+                  [p-size]="size"
+                  (p-change-event)="clear($event)"
+                  (click)="clear(null); $event.preventDefault()"
+                  (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+                  (keydown.tab)="handleCleanKeyboardTab($event)"
+                >
+                </po-clean>
+              }
 
-          <div
-            #iconArrow
-            class="po-combo-arrow po-field-icon"
-            [class.po-field-icon-disabled]="disabled"
-            [class.po-field-icon-disabled-aa]="disabled && size === 'small'"
-            (click)="toggleComboVisibility(true)"
-          >
-            <po-icon
-              [p-icon]="comboOpen ? 'ICON_ARROW_UP po-icon-input' : 'ICON_ARROW_DOWN po-icon-input'"
-              [class.po-field-icon]="!disabled"
-              [class.po-field-icon-aa]="size === 'small'"
-              [class.po-combo-default-border]="!disabled && inp.value"
-              [class.po-combo-background-arrow-up]="!disabled && comboOpen"
-            ></po-icon>
+              <div
+                #iconArrow
+                class="po-combo-arrow po-field-icon"
+                [class.po-field-icon-disabled]="disabled"
+                [class.po-field-icon-disabled-aa]="disabled && size === 'small'"
+                (click)="toggleComboVisibility(true)"
+              >
+                <po-icon
+                  [p-icon]="comboOpen ? 'ICON_ARROW_UP po-icon-input' : 'ICON_ARROW_DOWN po-icon-input'"
+                  [class.po-field-icon]="!disabled"
+                  [class.po-field-icon-aa]="size === 'small'"
+                  [class.po-combo-default-border]="!disabled && inp.value"
+                  [class.po-combo-background-arrow-up]="!disabled && comboOpen"
+                ></po-icon>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    @if (appendBox) {
-      <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayOpen]="true"
-        [cdkConnectedOverlayDisableClose]="true"
-      >
-        <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+        @if (appendBox) {
+          <ng-template
+            cdkConnectedOverlay
+            [cdkConnectedOverlayOrigin]="trigger"
+            [cdkConnectedOverlayOpen]="true"
+            [cdkConnectedOverlayDisableClose]="true"
+          >
+            <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+          </ng-template>
+        } @else {
+          <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
+        }
+
+        <po-field-container-bottom
+          [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
+          [p-append-in-body]="appendBox"
+          [p-help]="help"
+          [p-disabled]="disabled"
+          [p-error-pattern]="getErrorPattern()"
+          [p-error-limit]="errorLimit"
+          [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
+          [p-show-additional-help]="displayAdditionalHelp"
+          [p-show-additional-help-icon]="showAdditionalHelpIcon()"
+          (p-additional-help)="emitAdditionalHelp()"
+        ></po-field-container-bottom>
+      </po-field-container>
+
+      <ng-template #dropdownListbox>
+        <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
+          <po-listbox
+            #poListbox
+            #contentElement
+            p-type="option"
+            [p-items]="visibleOptions"
+            [p-field-value]="dynamicValue"
+            [p-field-label]="dynamicLabel"
+            [p-template]="comboOptionTemplate"
+            [p-search-value]="getInputValue()"
+            [p-infinite-loading]="infiniteLoading"
+            [p-infinite-scroll]="infiniteScroll"
+            [p-filtering]="isFiltering"
+            [p-cache]="cache"
+            [p-filter-mode]="filterMode"
+            [p-visible]="comboOpen"
+            [p-is-searching]="isServerSearching"
+            [p-should-mark-letter]="shouldMarkLetters"
+            [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
+            [p-combo-service]="service"
+            [p-infinite-scroll-distance]="infiniteScrollDistance"
+            [p-size]="size"
+            [p-container-width]="containerWidth"
+            (p-selectcombo-item)="onOptionClick($event, $event.event)"
+            (p-update-infinite-scroll)="showMoreInfiniteScroll()"
+            (p-close)="onCloseCombo()"
+            (keydown)="onListboxKeyDown($event)"
+          ></po-listbox>
+        </div>
       </ng-template>
-    } @else {
-      <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
-    }
-
-    <po-field-container-bottom
-      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-      [p-append-in-body]="appendBox"
-      [p-help]="help"
-      [p-disabled]="disabled"
-      [p-error-pattern]="getErrorPattern()"
-      [p-error-limit]="errorLimit"
-      [p-hide-additional-help-by-label]="setHelper(this.label, this.additionalHelpTooltip).hideAdditionalHelp"
-      [p-show-additional-help]="displayAdditionalHelp"
-      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-      (p-additional-help)="emitAdditionalHelp()"
-    ></po-field-container-bottom>
-  </po-field-container>
-
-  <ng-template #dropdownListbox>
-    <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
-      <po-listbox
-        #poListbox
-        #contentElement
-        p-type="option"
-        [p-items]="visibleOptions"
-        [p-field-value]="dynamicValue"
-        [p-field-label]="dynamicLabel"
-        [p-template]="comboOptionTemplate"
-        [p-search-value]="getInputValue()"
-        [p-infinite-loading]="infiniteLoading"
-        [p-infinite-scroll]="infiniteScroll"
-        [p-filtering]="isFiltering"
-        [p-cache]="cache"
-        [p-filter-mode]="filterMode"
-        [p-visible]="comboOpen"
-        [p-is-searching]="isServerSearching"
-        [p-should-mark-letter]="shouldMarkLetters"
-        [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
-        [p-combo-service]="service"
-        [p-infinite-scroll-distance]="infiniteScrollDistance"
-        [p-size]="size"
-        [p-container-width]="containerWidth"
-        (p-selectcombo-item)="onOptionClick($event, $event.event)"
-        (p-update-infinite-scroll)="showMoreInfiniteScroll()"
-        (p-close)="onCloseCombo()"
-        (keydown)="onListboxKeyDown($event)"
-      ></po-listbox>
     </div>
-  </ng-template>
+  </div>
+  @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+    <po-helper
+      #helperEl
+      class="po-field-helper-button"
+      [p-size]="size"
+      [p-helper]="poHelper.helperSettings"
+      [p-disabled]="disabled"
+      [p-append-in-body]="appendBox"
+    >
+    </po-helper>
+  }
 </div>

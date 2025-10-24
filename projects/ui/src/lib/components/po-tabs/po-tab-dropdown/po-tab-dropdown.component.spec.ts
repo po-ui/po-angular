@@ -64,7 +64,13 @@ describe('PoTabDropdownComponent:', () => {
     component.tabs = tabs;
     component.button = buttom.componentInstance;
     component.button.buttonElement = buttonElementRefMock as ElementRef;
-    component.popover = new PoPopoverComponent(null, null, null);
+    const popoverStub = {
+      open: jasmine.createSpy('open'),
+      close: jasmine.createSpy('close'),
+      isOpen: false
+    } as any;
+
+    component.popover = popoverStub;
     fixture.detectChanges();
   });
 

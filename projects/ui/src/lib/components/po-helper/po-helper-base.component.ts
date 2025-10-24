@@ -1,6 +1,5 @@
 import { Component, input } from '@angular/core';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
-import { PoFieldSize } from '../../enums/po-field-size.enum';
 /**
  * @description
  *
@@ -118,7 +117,20 @@ export class PoHelperBaseComponent {
    */
   disabled = input<boolean>(false, { alias: 'p-disabled' });
 
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   * Define que o popover será inserido no body da página em vez do elemento definido em `p-target`. Essa opção pode
+   * ser necessária em cenários com containers que possuem scroll ou overflow escondido, garantindo o posicionamento
+   * correto do conteúdo próximo ao elemento.
+   */
+  appendBox = input<boolean>(false, { alias: 'p-append-in-body' });
+
   private transformHelper(value: PoHelperOptions | string): PoHelperOptions {
+    if (!value) return;
     if (typeof value === 'string') {
       return {
         title: '',

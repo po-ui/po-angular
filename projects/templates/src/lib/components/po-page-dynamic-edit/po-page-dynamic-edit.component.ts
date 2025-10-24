@@ -544,7 +544,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Método que exibe `additionalHelpTooltip` ou executa a ação definida em `additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `keydown`.
    *
    * ```
@@ -557,7 +557,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    *    property: 'name',
    *    ...
    *    help: 'Mensagem de ajuda.',
-   *    additionalHelpTooltip: 'Mensagem de ajuda complementar.',
+   *    helper: 'Mensagem de ajuda complementar com o componente po-helper implementado.',
    *    keydown: this.onKeyDown.bind(this, 'name')
    *  },
    * ]

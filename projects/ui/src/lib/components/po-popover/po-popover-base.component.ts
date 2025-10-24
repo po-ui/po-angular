@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Input, Directive, Output } from '@angular/core';
+import { ElementRef, EventEmitter, Input, Output, input, Component } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -26,7 +26,11 @@ const PO_POPOVER_TRIGGERS = ['click', 'hover'];
  * Os eventos permitidos são: `click` e `hover`.
  *
  */
-@Directive()
+@Component({
+  selector: 'po-popover-base',
+  template: '',
+  standalone: false
+})
 export class PoPopoverBaseComponent {
   /**
    * @optional
@@ -174,4 +178,17 @@ export class PoPopoverBaseComponent {
   get trigger(): string {
     return this._trigger;
   }
+
+  /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   * Permite a inclusão de classes CSS customizadas ao componente.
+   *
+   * Exemplo: `p-custom-classes="minha-classe-1 minha-classe-2"`.
+   *
+   */
+  customClasses = input<string>(undefined, { alias: 'p-custom-classes' });
 }

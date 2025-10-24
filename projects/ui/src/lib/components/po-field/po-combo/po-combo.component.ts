@@ -31,7 +31,7 @@ import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
 import { PoComboFilterService } from './po-combo-filter.service';
 import { PoComboOptionTemplateDirective } from './po-combo-option-template/po-combo-option-template.directive';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent } from '../../po-helper';
 
 const poComboContainerOffset = 8;
 
@@ -116,6 +116,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('poListbox') poListbox: PoListBoxComponent;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   comboIcon: string = 'ICON_ARROW_DOWN';
   comboOpen: boolean = false;
@@ -126,7 +127,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   shouldMarkLetters: boolean = true;
   infiniteLoading: boolean = false;
   containerWidth: number;
-  helperSettings: PoHelperOptions;
 
   private _isServerSearching: boolean = false;
   private lastKey;
@@ -168,7 +168,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   ngAfterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     if (this.autoFocus) {
       this.focus();
     }
@@ -193,6 +192,10 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     if (changes.filterService) {
       this.configAfterSetFilterService(this.filterService);
     }
+
+    if (changes.label) {
+      this.displayAdditionalHelp = false;
+    }
   }
 
   ngOnDestroy() {
@@ -212,7 +215,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   emitAdditionalHelp() {
-    if (this.isAdditionalHelpEventTriggered()) {
+    if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
     }
   }
@@ -246,9 +249,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   onBlur(event: any) {
     this.onModelTouched?.();
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
 
     if (event.type === 'blur') {
       this.blur.emit();
@@ -573,18 +573,11 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   /**
-   * Método que exibe `p-additionalHelpTooltip` ou executa a ação definida em `p-additionalHelp`.
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
    *
-   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco e com label visível.
-   * ```
-   * <po-combo
-   *  #combo
-   *  ...
-   *  p-additional-help-tooltip="Mensagem de ajuda complementar"
-   *  (p-keydown)="onKeyDown($event, combo)"
-   * ></po-combo>
-   * ```
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
+   *
    * ```
    * // Exemplo com p-label e p-helper
    * <po-combo
@@ -606,6 +599,23 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
    */
   showAdditionalHelp(): boolean {
     this.displayAdditionalHelp = !this.displayAdditionalHelp;
+    const helper = this.poHelperComponent();
+    const isHelpEvt = this.isAdditionalHelpEventTriggered();
+    if (!this.label && (helper || this.additionalHelpTooltip || isHelpEvt)) {
+      if (isHelpEvt) {
+        this.additionalHelp.emit();
+      }
+      if (typeof helper !== 'string' && typeof helper?.eventOnClick === 'function') {
+        helper.eventOnClick();
+        return;
+      }
+      if (this.helperEl?.helperIsVisible()) {
+        this.helperEl?.closeHelperPopover();
+        return;
+      }
+      this.helperEl?.openHelperPopover();
+      return;
+    }
     return this.displayAdditionalHelp;
   }
 

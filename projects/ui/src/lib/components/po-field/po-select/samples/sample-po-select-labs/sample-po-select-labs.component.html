@@ -2,7 +2,7 @@
   class="po-md-12"
   name="select"
   [(ngModel)]="select"
-  [p-additional-help-tooltip]="additionalHelpTooltip"
+  [p-helper]="helperText"
   [p-disabled]="properties.includes('disabled')"
   [p-help]="help"
   [p-label]="label"
@@ -91,14 +91,7 @@
 
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-label="Help"> </po-input>
 
-  <po-input
-    class="po-md-6"
-    name="additionalHelpTooltip"
-    [(ngModel)]="additionalHelpTooltip"
-    p-clean
-    p-label="Additional Help"
-  >
-  </po-input>
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
   <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-label="Placeholder"> </po-input>
 

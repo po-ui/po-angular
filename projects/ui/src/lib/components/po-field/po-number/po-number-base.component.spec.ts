@@ -84,12 +84,6 @@ describe('PoNumberBaseComponent', () => {
       fakeEvent.target.validity.valid = true;
     });
 
-    it('should call showAdditionalHelp when the tooltip is displayed', () => {
-      setupTest('Mensagem de apoio adicional.', true, { observed: false });
-      component.onBlur(fakeEvent);
-      expect(component.showAdditionalHelp).toHaveBeenCalled();
-    });
-
     it('should not call showAdditionalHelp when tooltip is not displayed', () => {
       setupTest('Mensagem de apoio adicional.', false, { observed: false });
       component.onBlur(fakeEvent);

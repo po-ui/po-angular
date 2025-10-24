@@ -11,7 +11,6 @@ import { AbstractControl } from '@angular/forms';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
-import { PoHelperOptions } from '../../po-helper';
 import { setHelperSettings } from '../../../utils/util';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
@@ -24,7 +23,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   el: ElementRef;
   valueBeforeChange: any;
   timeoutChange: any;
-  helperSettings: PoHelperOptions;
 
   private subscriptionValidator: Subscription = new Subscription();
 
@@ -64,7 +62,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   afterViewInit() {
-    this.helperSettings = this.setHelper(this.label, this.additionalHelpTooltip).helperSettings;
     this.verifyAutoFocus();
 
     if (this.inputEl?.nativeElement?.closest('.components-form-custom-template')) {
@@ -137,10 +134,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   eventOnBlur(e: any) {
     this.onTouched?.();
-
-    if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
-    }
 
     if (this.mask) {
       this.objMask.blur(e);

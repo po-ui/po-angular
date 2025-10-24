@@ -30,7 +30,7 @@ import { PoFieldModel } from '../po-field.model';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoSwitchLabelPosition } from './po-switch-label-position.enum';
 import { Subscription } from 'rxjs';
-import { PoHelperOptions } from '../../po-helper';
+import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
 
 /**
  * @docsExtends PoFieldModel
@@ -133,6 +133,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   private readonly injector = inject<Injector>(Injector);
 
   @ViewChild('switchContainer', { static: true }) switchContainer: ElementRef;
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   id = `po-switch[${uuid()}]`;
 
@@ -289,10 +290,10 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    *
    * @description
    *
-   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label.
+   * Define as opções do componente de ajuda (po-helper) que será exibido ao lado do label quando a propriedade `p-label` for definida, ou, ao lado do componente na ausência da propriedade `p-label`.
+   * > Para mais informações acesse: https://po-ui.io/documentation/po-helper.
    *
-   * > Caso o `p-label` não esteja definido, o componente po-helper não será exibido.
-   * Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
+   * > Ao configurar esta propriedade, o antigo ícone de ajuda adicional (`p-additional-help-tooltip` e `p-additional-help`) será ignorado.
    */
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
@@ -347,7 +348,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     this.onTouched?.();
 
     if (this.getAdditionalHelpTooltip() && this.displayAdditionalHelp) {
-      this.showAdditionalHelp();
+      super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
     }
   }
 
@@ -463,5 +464,33 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  /**
+   * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
+   * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.
+   *
+   * > Exibe ou oculta o conteúdo do componente `po-helper` quando o componente estiver com foco.
+   *
+   * ```
+   * //Exemplo com p-label e p-helper
+   * <po-switch
+   *  #switch
+   *  ...
+   *  p-label="Label do switch"
+   *  [p-helper]="helperOptions"
+   *  (p-keydown)="onKeyDown($event, switch)"
+   * ></po-switch>
+   * ```
+   * ```typescript
+   * onKeyDown(event: KeyboardEvent, inp: PoSwitchComponent): void {
+   *  if (event.code === 'F9') {
+   *    inp.showAdditionalHelp();
+   *  }
+   * }
+   * ```
+   */
+  override showAdditionalHelp(): boolean {
+    return super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
   }
 }
