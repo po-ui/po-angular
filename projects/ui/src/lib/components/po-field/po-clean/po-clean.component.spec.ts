@@ -30,6 +30,34 @@ describe('PoCleanComponent', () => {
     expect(fixture.nativeElement.querySelector('.po-icon.po-field-icon.po-icon-close')).toBeDefined();
   });
 
+  it('focus: should call `focus` of input', () => {
+    component.inputRef = {
+      nativeElement: {
+        focus: () => {}
+      }
+    };
+
+    spyOn(component.inputRef.nativeElement, 'focus');
+
+    component.focus();
+
+    expect(component.inputRef.nativeElement.focus).toHaveBeenCalled();
+  });
+
+  it('focus: should call `blur` of input', () => {
+    component.inputRef = {
+      nativeElement: {
+        blur: () => {}
+      }
+    };
+
+    spyOn(component.inputRef.nativeElement, 'blur');
+
+    component.blur();
+
+    expect(component.inputRef.nativeElement.blur).toHaveBeenCalled();
+  });
+
   it('should set value to input', () => {
     const fakeThis = {
       inputRef: {
