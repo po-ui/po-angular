@@ -1,103 +1,86 @@
-<div class="po-row">
-  <po-widget
-    class="po-lg-6 po-mt-2"
-    p-title="Days to Payment"
-    p-tag="Sales"
-    p-tag-icon="an an-arrow-circle-up"
-    p-help="https://github.com/po-ui/po-angular/stargazers"
-    [p-height]="200"
-    [p-size]="a11Level === 'AAA' ? 'medium' : 'small'"
-  >
-    <div>Sales order</div>
-    <div>Scheduled to: <strong>05/04/2018</strong></div>
-    <div
-      [style.padding-top]="a11Level === 'AA' ? '2.5rem' : '1rem'"
-      style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-right: 0.5rem"
+<div class="po-row" style="row-gap: 1rem">
+  <div class="po-row" style="row-gap: 1rem">
+    <po-widget
+      class="po-lg-6"
+      p-help="https://github.com/po-ui/po-angular/stargazers"
+      p-title="Days to Payment"
+      p-tag="Sales"
+      p-tag-icon="an an-arrow-circle-up"
+      [p-height]="190"
     >
-      <po-button p-size="" p-label="Cancel" p-danger></po-button>
-      <po-button
-        p-size=""
-        p-label="Confirm"
-        (p-click)="openExternalLink('https://github.com/po-ui/po-angular/stargazers')"
-      ></po-button>
-    </div>
-  </po-widget>
-
-  <po-widget
-    class="po-lg-3 po-mt-2"
-    p-primary-label="Details"
-    p-title="Total savings"
-    (p-primary-action)="openModal('savings')"
-    [p-height]="200"
-    [p-size]="a11Level === 'AAA' ? 'medium' : 'small'"
-  >
-    <div class="po-font-subtitle po-text-center">$5.000,00</div>
-    <div class="po-text-center">Last updated at 18:34</div>
-  </po-widget>
-
-  <po-widget
-    class="po-lg-3 po-mt-2"
-    p-primary-label="Details"
-    p-secondary-label="Edit"
-    p-title="Total checking account"
-    (p-primary-action)="openModal('account')"
-    p-disabled
-    [p-height]="200"
-    [p-size]="a11Level === 'AAA' ? 'medium' : 'small'"
-  >
-    <div class="po-text-center" style="font-size: 2rem; margin-bottom: 0.5rem">$2.818,29</div>
-    <div class="po-text-center">Last updated at 08:20</div>
-  </po-widget>
-</div>
-
-<div class="po-row">
-  <po-widget
-    [p-height]="200"
-    p-background="../../../assets/graphics/sales-statistics.png"
-    class="po-md-12 po-lg-4 po-mt-2"
-    [p-size]="a11Level === 'AAA' ? 'medium' : 'small'"
-  >
-    <div class="po-text-center" style="padding-inline: 0.5rem">
-      <div
-        style="
-          margin-bottom: 0.5rem;
-          display: inline-block;
-          background-color: black;
-          padding: 0.5rem;
-          border-radius: 3px;
-          opacity: 0.85;
-        "
-      >
-        <strong style="color: white">Enter the user routine</strong>
+      <div>Sales order</div>
+      <div>Scheduled to: <strong>05/04/2018</strong></div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
+        <po-button p-label="Cancel" p-danger></po-button>
+        <po-button
+          p-label="Confirm"
+          (p-click)="openExternalLink('https://github.com/po-ui/po-angular/stargazers')"
+        ></po-button>
       </div>
-    </div>
-    <div style="padding-inline: 0.5rem">
-      <po-multiselect [p-size]="a11Level === 'AAA' ? 'medium' : 'small'" name="multiselect" [p-options]="options">
-      </po-multiselect>
-    </div>
-  </po-widget>
+    </po-widget>
 
-  <po-widget
-    [p-size]="a11Level === 'AAA' ? 'medium' : 'small'"
-    [p-height]="200"
-    class="po-md-12 po-lg-4 po-mt-2"
-    p-title="Most used payment type"
-    [p-actions]="myActions"
-  >
-    <div class="po-font-subtitle po-text-center">Credit card</div>
-    <div class="po-text-center">MasterCard - 5500 0000 0000 0004</div>
-  </po-widget>
+    <po-widget
+      class="po-lg-3"
+      p-primary-label="Details"
+      p-title="Total savings"
+      [p-height]="190"
+      (p-primary-action)="openModal('savings')"
+    >
+      <div class="po-font-subtitle po-text-center">$5.000,00</div>
+      <div class="po-text-center">Last updated at 18:34</div>
+    </po-widget>
 
-  <po-widget
-    p-tag="Revenue"
-    p-tag-icon="an an-money"
-    class="po-md-12 po-lg-4 po-mt-2"
-    p-title="Highest revenue in the month considering Marketing and Sales"
-    [p-height]="200"
-  >
-    <div class="po-font-subtitle po-text-center">$2.000,00</div>
-    <div class="po-text-center">05/03/2018</div>
-  </po-widget>
+    <po-widget
+      class="po-lg-3"
+      p-disabled
+      p-primary-label="Details"
+      p-secondary-label="Edit"
+      p-title="Total checking account"
+      [p-height]="190"
+      (p-primary-action)="openModal('account')"
+    >
+      <div class="po-text-center" style="font-size: 2rem; margin-bottom: 0.5rem">$2.818,29</div>
+      <div class="po-text-center">Last updated at 08:20</div>
+    </po-widget>
+  </div>
+
+  <div class="po-row" style="row-gap: 1rem">
+    <po-widget class="po-lg-4" p-background="../../../assets/graphics/sales-statistics.png" [p-height]="160">
+      <div class="po-text-center" style="padding-inline: 0.5rem">
+        <div
+          style="
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            background-color: black;
+            padding: 0.5rem;
+            border-radius: 3px;
+            opacity: 0.85;
+          "
+        >
+          <strong style="color: white">Enter the user routine</strong>
+        </div>
+      </div>
+      <div style="padding-inline: 0.5rem">
+        <po-multiselect name="multiselect" [p-options]="options"> </po-multiselect>
+      </div>
+    </po-widget>
+
+    <po-widget class="po-lg-4" p-title="Most used payment type" [p-actions]="myActions" [p-height]="160">
+      <div class="po-font-subtitle po-text-center">Credit card</div>
+      <div class="po-text-center">MasterCard - 5500 0000 0000 0004</div>
+    </po-widget>
+
+    <po-widget
+      class="po-lg-4"
+      p-tag="Revenue"
+      p-tag-icon="an an-money"
+      p-title="Highest revenue in the month considering Marketing and Sales"
+      [p-height]="160"
+    >
+      <div class="po-font-subtitle po-text-center">$2.000,00</div>
+      <div class="po-text-center">05/03/2018</div>
+    </po-widget>
+  </div>
 </div>
 
 <po-modal #detailsModal [p-title]="titleDetailsModal">

@@ -1,12 +1,6 @@
 import { Component, ViewChild, inject } from '@angular/core';
 
-import {
-  PoModalComponent,
-  PoMultiselectOption,
-  PoNotificationService,
-  PoTableColumn,
-  PoThemeService
-} from '@po-ui/ng-components';
+import { PoModalComponent, PoMultiselectOption, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-widget-finance-dashboard',
@@ -14,8 +8,7 @@ import {
   standalone: false
 })
 export class SamplePoWidgetFinanceDashboardComponent {
-  private poNotification = inject(PoNotificationService);
-  private poTheme = inject(PoThemeService);
+  private readonly poNotification = inject(PoNotificationService);
 
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
 
@@ -52,10 +45,6 @@ export class SamplePoWidgetFinanceDashboardComponent {
     { dateUpdate: '02-05-2018', statement: '-200' },
     { dateUpdate: '12-05-2017', statement: '2000' }
   ];
-
-  get a11Level() {
-    return this.poTheme.getA11yLevel();
-  }
 
   openModal(type) {
     switch (type) {

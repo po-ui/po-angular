@@ -1,5 +1,3 @@
-import { PoDynamicViewField } from './po-dynamic-view/po-dynamic-view-field.interface';
-
 export function getGridColumnsClasses(gridColumns, offsetColumns, grid, offset, pull) {
   const systemGrid = {
     gridSm: grid?.smGrid || gridColumns || 12,

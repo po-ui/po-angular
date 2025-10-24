@@ -1,4 +1,4 @@
-<div class="po-progress" [ngClass]="statusClass">
+<div class="po-progress" [ngClass]="statusClass" [attr.p-size-actions]="sizeActions">
   @if (text) {
     <div class="po-progress-description">
       <po-label [p-label]="text"></po-label>

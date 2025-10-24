@@ -2,11 +2,15 @@ import { DOCUMENT } from '@angular/common';
 import { Renderer2, RendererFactory2, RendererStyleFlags2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon';
+import { PoDensityMode } from '../../enums/po-density-mode.enum';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
+import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
+import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { PoThemeService } from './po-theme.service';
+import * as UtilFunctions from '../../utils/util';
 
 class MockRenderer2 implements Renderer2 {
   data = {};
@@ -369,6 +373,14 @@ describe('PoThemeService:', () => {
         spyOn(document.documentElement, 'getAttribute').and.callThrough();
       });
 
+      it('should return false when isValidA11yLevel returns false', () => {
+        spyOn(service as any, 'isValidA11yLevel').and.returnValue(false);
+
+        const result = service.setA11yDefaultSizeSmall(true);
+
+        expect(result).toBeFalse();
+      });
+
       it('should set enableSmallSizeForComponents to false if data-a11y is not AA or not set', () => {
         (document.documentElement.getAttribute as jasmine.Spy).and.returnValue(null);
         const resultNull = service.setA11yDefaultSizeSmall(true);
@@ -395,6 +407,65 @@ describe('PoThemeService:', () => {
         (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
         expect(service.setA11yDefaultSizeSmall(true)).toBeFalse();
         expect(service.setA11yDefaultSizeSmall(false)).toBeFalse();
+      });
+    });
+
+    describe('getDensityMode', () => {
+      it('should return the density mode', () => {
+        spyOn(UtilFunctions, 'getDensityMode').and.returnValue(PoDensityMode.Small);
+
+        expect(service.getDensityMode()).toBe(PoDensityMode.Small);
+        expect(UtilFunctions.getDensityMode).toHaveBeenCalled();
+      });
+    });
+
+    describe('setDensityMode:', () => {
+      let styleElement: HTMLStyleElement;
+
+      beforeEach(() => {
+        spyOn(service as any, 'setPerComponentAndOnRoot');
+        spyOn(service as any, 'setDefaultBaseStyle');
+        spyOn(localStorage, 'setItem');
+
+        styleElement = document.createElement('style');
+        styleElement.id = 'baseStyle';
+        styleElement.textContent = `
+          :root {
+            density-token-1: 4px;
+            density-token-2: 8px;
+          }
+        `;
+        document.head.appendChild(styleElement);
+      });
+
+      afterEach(() => {
+        document.head.removeChild(styleElement);
+      });
+
+      it('should apply small mode when `small` is passed', () => {
+        service.setDensityMode('small');
+
+        expect(localStorage.setItem).toHaveBeenCalledWith('po-density-mode', 'small');
+        expect((service as any).setPerComponentAndOnRoot).toHaveBeenCalledWith(
+          undefined,
+          poThemeDefaultAA.perComponent,
+          jasmine.objectContaining(poThemeDensity.small)
+        );
+        expect((service as any).setDefaultBaseStyle).not.toHaveBeenCalled();
+      });
+
+      it('should apply medium mode when `medium` is passed', () => {
+        service.setDensityMode('medium');
+
+        expect(localStorage.setItem).toHaveBeenCalledWith('po-density-mode', 'medium');
+        expect((service as any).setDefaultBaseStyle).toHaveBeenCalled();
+      });
+
+      it('should fallback to `medium` when invalid value is passed', () => {
+        service.setDensityMode('invalid');
+
+        expect(localStorage.setItem).toHaveBeenCalledWith('po-density-mode', 'medium');
+        expect((service as any).setDefaultBaseStyle).toHaveBeenCalled();
       });
     });
 
