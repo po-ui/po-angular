@@ -194,12 +194,6 @@ describe('PoListViewComponent:', () => {
       expect(component.showDetail.emit).toHaveBeenCalledWith(detail);
     });
 
-    it('trackBy: should return `index`', () => {
-      const index = 1;
-
-      expect(component.trackBy(index)).toBe(index);
-    });
-
     it('visibleActions: should be `false` if doesn`t have action.', () => {
       component.actions = undefined;
 

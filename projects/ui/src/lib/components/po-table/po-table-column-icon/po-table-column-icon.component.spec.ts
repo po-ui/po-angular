@@ -258,13 +258,6 @@ describe('PoTableColumnIconComponent:', () => {
       expect(fakeColumnIcon.action).toBeUndefined();
     });
 
-    it('trackByFunction: should return index', () => {
-      const fakeIndex = 'teste';
-      const trackBy = component.trackByFunction(fakeIndex);
-
-      expect(trackBy).toBe(fakeIndex);
-    });
-
     it('convertToColumnIcon: should convert to columnIcon pattern if pass string', () => {
       const icon = 'po-icon-copy';
       const columnIcons: Array<PoTableColumnIcon> = [{ value: icon }];

@@ -1,7 +1,7 @@
 @if (existedFixedItem()) {
   <section class="po-table-list-manager-section">
     <p class="po-table-list-manager-title-group-items">{{ literals.fixedColumns }}</p>
-    @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
+    @for (option of checkboxGroupOptionsView; track $index) {
       @if (isFixed(option)) {
         <li
           class="po-table-list-manager-container"
@@ -16,7 +16,7 @@
 
 <section class="po-table-list-manager-section">
   <p class="po-table-list-manager-title-group-items">{{ literals.otherColumns }}</p>
-  @for (option of checkboxGroupOptionsView; track trackByFn($index)) {
+  @for (option of checkboxGroupOptionsView; track $index) {
     @if (!isFixed(option)) {
       <li class="po-table-list-manager-container" [class.po-checkbox-group-item-disabled]="option.disabled || disabled">
         @if (!isFixed(option)) {
