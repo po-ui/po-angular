@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.33.0](https://github.com/po-ui/po-angular/compare/v19.32.0...v19.33.0) (2025-10-29)
+
+
+### Features
+
+* **chart:** implementa compatibilidade com variáveis css ([5f6cd68](https://github.com/po-ui/po-angular/commit/5f6cd6807d0d1cdf1ec6e3edbe5475485d2f8e26))
+* **components:** reduz espaçamentos e adensa layout de componentes ([38ad525](https://github.com/po-ui/po-angular/commit/38ad52540f30029f525f5fc0723cf4fce4e9b2df))
+* **components:** reduz tamanhos de fonte ([b547474](https://github.com/po-ui/po-angular/commit/b547474bcc42da9decd1ce0d48bc94e0807e9bb4))
+* **fields:** adiciona po-helper quando não há label definida ([185cfeb](https://github.com/po-ui/po-angular/commit/185cfeb3bb41bfd58fcb73172edde286e94897a7))
+* **search:** adiciona eventos p-focus e p-keydown ([2658b6f](https://github.com/po-ui/po-angular/commit/2658b6fc8e1a8ef4880498c989d4efde321b63fd))
+
 ## [19.32.0](https://github.com/po-ui/po-angular/compare/v19.31.0...v19.32.0) (2025-10-21)
 
 
