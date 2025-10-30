@@ -129,7 +129,13 @@ describe('PoDropdownComponent: ', () => {
         icon: undefined,
         removeListeners: jasmine.createSpy('removeListeners'),
         popupRef: {
-          close: jasmine.createSpy('close')
+          close: jasmine.createSpy('close'),
+          showPopup: true
+        },
+        dropdownRef: {
+          nativeElement: {
+            focus: jasmine.createSpy('focus')
+          }
         },
         open: undefined,
         changeDetector: {
@@ -142,6 +148,7 @@ describe('PoDropdownComponent: ', () => {
       expect(fakeThis.icon).toBe('ICON_ARROW_DOWN');
       expect(fakeThis.removeListeners).toHaveBeenCalled();
       expect(fakeThis.popupRef.close).toHaveBeenCalled();
+      expect(fakeThis.dropdownRef.nativeElement.focus).toHaveBeenCalled();
       expect(fakeThis.open).toBe(false);
       expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
     });

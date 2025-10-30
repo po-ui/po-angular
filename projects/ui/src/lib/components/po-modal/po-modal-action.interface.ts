@@ -19,6 +19,9 @@ export interface PoModalAction {
   /** Desabilita o botão impossibilitando que sua ação seja executada. */
   disabled?: boolean;
 
+  /** Define o ícone do botão. */
+  icon?: string;
+
   /** Rótulo do botão. */
   label: string;
 

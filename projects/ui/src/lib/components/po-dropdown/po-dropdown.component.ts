@@ -62,10 +62,13 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
     return this.dropdownRef && this.dropdownRef.nativeElement.contains(event.target);
   }
 
-  private hideDropdown() {
+  protected hideDropdown() {
     this.icon = 'ICON_ARROW_DOWN';
     this.removeListeners();
-    this.popupRef.close();
+    if (this.popupRef.showPopup) {
+      this.popupRef.close();
+    }
+    this.dropdownRef.nativeElement.focus();
     this.open = false;
     this.changeDetector.detectChanges();
   }
