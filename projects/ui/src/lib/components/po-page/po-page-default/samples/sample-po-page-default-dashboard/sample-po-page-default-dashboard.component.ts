@@ -40,6 +40,15 @@ export class SamplePoPageDefaultDashboardComponent implements OnInit {
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen.bind(this), icon: 'an an-share' },
     { label: 'GitHub', url: 'https://github.com/po-ui/po-angular' },
+    {
+      label: 'More info',
+      subItems: [
+        {
+          label: 'po-dropdown documentation',
+          url: 'https://po-ui.io/documentation/po-dropdown'
+        }
+      ]
+    },
     { label: 'Components', url: '/documentation' },
     { label: 'Disable notification', action: this.disableNotification.bind(this), disabled: () => this.isSubscribed }
   ];

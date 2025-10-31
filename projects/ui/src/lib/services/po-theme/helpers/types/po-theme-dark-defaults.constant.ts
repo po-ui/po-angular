@@ -199,6 +199,11 @@ const poThemeDefaultDarkValues = {
     /** SELECT */
     'po-select': {
       '--color-hover': 'var(--color-action-hover);'
+    },
+    /** DROPDOWN */
+    '.po-listbox-group-header .po-tag': {
+      'color': 'var(--color-neutral-light-00);',
+      'background-color': 'var(--color-action-default);'
     }
   },
   onRoot: {

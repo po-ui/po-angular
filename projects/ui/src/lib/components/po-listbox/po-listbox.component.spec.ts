@@ -1,7 +1,8 @@
-import { ElementRef, NO_ERRORS_SCHEMA, SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ElementRef, NO_ERRORS_SCHEMA, QueryList, SimpleChange } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { PoListBoxComponent } from './po-listbox.component';
+import { PoDropdownAction } from '../po-dropdown';
 import * as UtilFunctions from './../../utils/util';
 import { Subscription, debounceTime, fromEvent, of } from 'rxjs';
 
@@ -173,6 +174,30 @@ describe('PoListBoxComponent', () => {
     });
 
     describe('ngAfterViewInit:', () => {
+      it('should focus the first item and dispatch focus event when listboxSubitems is defined', fakeAsync(() => {
+        component.listboxSubitems = true;
+
+        const mockElement = document.createElement('div');
+        spyOn(mockElement, 'focus');
+        spyOn(mockElement, 'dispatchEvent');
+
+        component.listboxItems = {
+          first: new ElementRef(mockElement)
+        } as QueryList<ElementRef>;
+
+        spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+          cb(0);
+          return 0;
+        });
+
+        component.ngAfterViewInit();
+
+        tick();
+
+        expect(mockElement.focus).toHaveBeenCalled();
+        expect(mockElement.dispatchEvent).toHaveBeenCalledWith(jasmine.any(FocusEvent));
+      }));
+
       it('should have been called', () => {
         spyOn(component, <any>'setListBoxMaxHeight');
 
@@ -388,7 +413,138 @@ describe('PoListBoxComponent', () => {
           expect(item.action).toHaveBeenCalled();
           expect(component['openUrl']).not.toHaveBeenCalled();
         });
+
+        it('should call openGroup when item has subItems', () => {
+          const item = {
+            label: 'Group',
+            value: 'group1',
+            subItems: [{ label: 'SubItem 1', value: 1 }]
+          };
+          const event = new MouseEvent('click');
+
+          spyOn(component, 'openGroup');
+
+          component.onSelectItem(item, event);
+
+          expect(component.openGroup).toHaveBeenCalledWith(item, event);
+        });
+
+        it('should emit closeEvent when there are no subItems and listboxSubitems is defined', () => {
+          const mockItem = { label: 'Item sem subitems' } as any;
+          component.listboxSubitems = true;
+
+          const emitSpy = spyOn(component.closeEvent, 'emit');
+
+          component.onSelectItem(mockItem);
+
+          expect(emitSpy).toHaveBeenCalled();
+        });
       });
+    });
+
+    describe('openGroup and goBack:', () => {
+      beforeEach(() => {
+        spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+          cb(0);
+          return 0;
+        });
+      });
+
+      it('openGroup should set currentGroup/currentItems and focus first item', done => {
+        component.listboxGroupHeader = new ElementRef(document.createElement('div'));
+        component.currentGroup = null;
+        component.currentItems = [];
+
+        const group = { label: 'Group', subItems: [{ label: 'Sub' }] } as PoDropdownAction;
+
+        spyOn(component.listboxGroupHeader.nativeElement, 'focus');
+
+        component.openGroup(group, new MouseEvent('click'));
+
+        expect(component.currentGroup).toBe(group);
+        expect(component.currentItems).toEqual(group.subItems);
+
+        setTimeout(() => {
+          expect(component.listboxGroupHeader.nativeElement.focus).toHaveBeenCalled();
+          done();
+        }, 20);
+      });
+
+      it('goBack should restore previous group/items or default items and focus first item', done => {
+        const firstItemEl = document.createElement('li');
+        component.listboxItems = {
+          first: { nativeElement: firstItemEl }
+        } as any;
+        component.items = [{ label: 'Item1' }];
+
+        spyOn(firstItemEl, 'focus');
+
+        component.goBack(new MouseEvent('click'));
+        expect(component.currentGroup).toBeNull();
+        expect(component.currentItems).toEqual(component.items);
+
+        setTimeout(() => {
+          expect(firstItemEl.focus).toHaveBeenCalled();
+          done();
+        }, 20);
+      });
+
+      it('should handle openGroup and goBack correctly even with multiple groups and empty subItems', () => {
+        component.listboxGroupHeader = new ElementRef(document.createElement('div'));
+        spyOn(component.listboxGroupHeader.nativeElement, 'focus');
+
+        const group1 = { label: 'Group1', subItems: [{ label: 'Sub1' }] } as PoDropdownAction;
+        component.openGroup(group1);
+
+        expect(component.currentGroup).toEqual(group1);
+        expect(component.currentItems).toEqual(group1.subItems);
+        expect((component as any).navigationStack.length).toBe(1);
+
+        const group2 = { label: 'Group2', subItems: [{ label: 'Sub2' }] } as PoDropdownAction;
+        component.openGroup(group2);
+
+        expect(component.currentGroup).toEqual(group2);
+        expect(component.currentItems).toEqual(group2.subItems);
+        expect((component as any).navigationStack.length).toBe(2);
+
+        component.goBack(new KeyboardEvent('keydown', { key: 'Enter' }));
+        expect(component.currentGroup).toEqual(group1);
+        expect(component.currentItems).toEqual(group1.subItems);
+        expect((component as any).navigationStack.length).toBe(1);
+
+        const groupWithoutSubItems = { label: 'EmptyGroup' } as PoDropdownAction;
+        component.openGroup(groupWithoutSubItems);
+
+        expect(component.currentGroup).toEqual(groupWithoutSubItems);
+        expect(component.currentItems).toEqual([]);
+        expect((component as any).navigationStack.length).toBe(2);
+      });
+
+      it('onKeydownGoBack should call goBack on Enter, emit closeEvent on Escape or Tab', () => {
+        const eventEnter = new KeyboardEvent('keydown', { key: 'Enter' });
+        const eventEscape = new KeyboardEvent('keydown', { code: 'Escape' });
+        const eventTab = new KeyboardEvent('keydown', { code: 'Tab' });
+
+        spyOn(component, 'goBack');
+        spyOn(component.closeEvent, 'emit');
+
+        component.onKeydownGoBack(eventEnter);
+        expect(component.goBack).toHaveBeenCalledWith(eventEnter);
+
+        component.onKeydownGoBack(eventEscape);
+        expect(component.closeEvent.emit).toHaveBeenCalled();
+
+        component.onKeydownGoBack(eventTab);
+        expect(component.closeEvent.emit).toHaveBeenCalledTimes(2);
+      });
+    });
+    it('ngOnInit should set currentItems to items if listboxSubitems is true', () => {
+      component.listboxSubitems = true;
+      component.items = [{ label: 'Item 1', value: 1 }];
+
+      component.ngOnInit();
+
+      expect(component.currentItems).toEqual(component.items);
     });
 
     describe('onSelectTabs:', () => {
@@ -566,6 +722,38 @@ describe('PoListBoxComponent', () => {
           'maxHeight'
         );
       });
+
+      it('should set maxHeight to dropdownMaxHeight when listboxSubitems is true', () => {
+        spyOn<any>(component['renderer'], 'setStyle');
+
+        component.listboxSubitems = true;
+        component.listbox = new ElementRef(document.createElement('div'));
+
+        component['setListBoxMaxHeight']();
+
+        expect(component['renderer'].setStyle).toHaveBeenCalledWith(
+          component.listbox.nativeElement,
+          'maxHeight',
+          '400px'
+        );
+      });
+    });
+
+    it('should set minWidth and maxWidth when listboxSubitems is true and items exist', () => {
+      spyOn<any>(component['renderer'], 'setStyle');
+
+      component.listboxSubitems = true;
+      component.items = [
+        { label: 'Item 1', value: 1 },
+        { label: 'Item 2', value: 2 }
+      ];
+      component.listbox = new ElementRef(document.createElement('div'));
+
+      component['setListBoxWidth']();
+
+      expect(component['renderer'].setStyle).toHaveBeenCalledWith(component.listbox.nativeElement, 'minWidth', '240px');
+
+      expect(component['renderer'].setStyle).toHaveBeenCalledWith(component.listbox.nativeElement, 'maxWidth', '340px');
     });
 
     describe('checkboxClicked:', () => {

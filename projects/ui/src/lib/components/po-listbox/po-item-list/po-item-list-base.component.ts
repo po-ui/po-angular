@@ -58,7 +58,9 @@ export class PoItemListBaseComponent {
   @Input('p-label') label: string;
 
   /** Tamanho do texto exibido. */
-  @Input('p-size') size: string;
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  size: string;
 
   /** Valor do item. */
   @Input('p-value') value: string;
@@ -117,6 +119,9 @@ export class PoItemListBaseComponent {
    * Define um ícone que será exibido ao lado esquerdo do rótulo.
    */
   @Input('p-icon') icon: string | TemplateRef<void>;
+
+  // Define a posição do ícone: 'left' (padrão) ou 'right'.
+  @Input('p-icon-position') iconPosition: 'left' | 'right' = 'left';
 
   /**
    * @optional

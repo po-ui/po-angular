@@ -5,20 +5,23 @@ import {
   ElementRef,
   OnChanges,
   OnDestroy,
+  OnInit,
+  QueryList,
   Renderer2,
   SimpleChanges,
   ViewChild,
+  ViewChildren,
   inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoListBoxBaseComponent } from './po-listbox-base.component';
-
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
+import { PoDropdownAction } from '../po-dropdown/po-dropdown-action.interface';
 import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 
@@ -27,16 +30,22 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
   templateUrl: './po-listbox.component.html',
   standalone: false
 })
-export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   element = inject(ElementRef);
+  public currentItems: Array<PoDropdownAction> = [];
+  public currentGroup: PoDropdownAction | null = null;
+
+  private readonly navigationStack: Array<{ group: PoDropdownAction | null; items: Array<PoDropdownAction> }> = [];
   private readonly renderer = inject(Renderer2);
   private readonly router = inject(Router);
   private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild('listbox', { static: true }) listbox: ElementRef;
   @ViewChild('listboxItemList', { static: false }) listboxItemList: ElementRef;
+  @ViewChild('listboxGroupHeader') listboxGroupHeader: ElementRef;
   @ViewChild('searchElement') searchElement: PoSearchListComponent;
   @ViewChild('popupHeaderContainer') popupHeaderContainer: ElementRef;
+  @ViewChildren('listboxItem') listboxItems!: QueryList<ElementRef>;
 
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
@@ -47,15 +56,35 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     super(languageService);
   }
 
+  ngOnInit(): void {
+    if (this.listboxSubitems) {
+      this.currentItems = this.items;
+    }
+  }
+
   ngAfterViewInit(): void {
     this.setListBoxMaxHeight();
+    this.setListBoxWidth();
     this.listboxItemList?.nativeElement.focus();
+    if (this.listboxSubitems) {
+      requestAnimationFrame(() => {
+        const firstItem = this.listboxItems?.first.nativeElement;
+        if (firstItem) {
+          firstItem.focus();
+
+          setTimeout(() => {
+            firstItem.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+          }, 0);
+        }
+      });
+    }
     this.changeDetector.detectChanges();
   }
 
   ngOnChanges(changes?: SimpleChanges): void {
     if (changes?.items) {
       this.setListBoxMaxHeight();
+      this.setListBoxWidth();
     }
 
     if (this.visible && this.infiniteScroll) {
@@ -69,7 +98,67 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
     }
   }
 
-  onSelectItem(itemListAction: PoItemListOption | PoItemListOptionGroup | any) {
+  public openGroup(group: PoDropdownAction, event?: MouseEvent | KeyboardEvent): void {
+    event?.stopPropagation();
+
+    this.navigationStack.push({
+      group: this.currentGroup,
+      items: this.currentItems
+    });
+
+    this.currentGroup = group;
+    this.currentItems = group.subItems || [];
+
+    requestAnimationFrame(() => {
+      const firstItem = this.listboxGroupHeader?.nativeElement;
+      if (firstItem) {
+        firstItem.focus();
+
+        setTimeout(() => {
+          firstItem.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+        }, 0);
+      }
+    });
+  }
+
+  public goBack(event: MouseEvent | KeyboardEvent): void {
+    event?.stopPropagation();
+
+    const previous = this.navigationStack.pop();
+
+    if (previous) {
+      this.currentGroup = previous.group;
+      this.currentItems = previous.items;
+    } else {
+      this.currentGroup = null;
+      this.currentItems = this.items;
+    }
+
+    this.clickItem.emit({ goBack: true });
+
+    requestAnimationFrame(() => {
+      const firstItem = this.listboxItems?.first?.nativeElement;
+      if (firstItem) {
+        firstItem.focus();
+
+        setTimeout(() => {
+          firstItem.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+        }, 0);
+      }
+    });
+  }
+
+  public onKeydownGoBack(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.goBack(event);
+    }
+
+    if (event?.code === 'Escape' || event.code === 'Tab') {
+      this.closeEvent.emit();
+    }
+  }
+
+  onSelectItem(itemListAction: PoItemListOption | PoItemListOptionGroup | any, event?: MouseEvent | KeyboardEvent) {
     const isDisabled =
       itemListAction.hasOwnProperty('disabled') &&
       itemListAction.disabled !== null &&
@@ -87,12 +176,19 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
       this.onClickTabs(itemListAction);
     }
 
-    if (itemListAction && itemListAction.action && !isDisabled && isVisible) {
+    if (itemListAction?.action && !isDisabled && isVisible) {
+      console.log('oi');
       itemListAction.action(this.param || itemListAction);
     }
 
-    if (itemListAction && itemListAction.url && !isDisabled && isVisible) {
+    if (itemListAction?.url && !isDisabled && isVisible) {
       return this.openUrl(itemListAction.url);
+    }
+
+    if (itemListAction?.subItems?.length) {
+      this.openGroup(itemListAction, event);
+    } else if (this.listboxSubitems) {
+      this.closeEvent.emit();
     }
 
     if (!isDisabled) {
@@ -107,7 +203,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   onKeyDown(itemListAction: PoItemListOption | PoItemListOptionGroup | any, event?: KeyboardEvent) {
-    event.preventDefault();
+    event?.preventDefault();
 
     if ((event && event.code === 'Enter') || event.code === 'Space') {
       if (itemListAction.type === 'footerAction') {
@@ -253,10 +349,11 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
   }
 
   private setListBoxMaxHeight(): void {
+    const dropdownMaxHeight = 400;
     const itemsLength = this.items.length;
     const hasPopupHeaderContainer = this.popupHeaderContainer?.nativeElement?.children?.length > 0;
 
-    if (itemsLength > 6) {
+    if (!this.listboxSubitems && itemsLength > 6) {
       if (this.type === 'check' && !this.hideSearch) {
         this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3 + 60}px`);
       } else if (hasPopupHeaderContainer) {
@@ -269,6 +366,20 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements AfterV
       } else {
         this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${44 * 6 - 44 / 3}px`);
       }
+    }
+
+    if (this.listboxSubitems) {
+      this.renderer.setStyle(this.listbox.nativeElement, 'maxHeight', `${dropdownMaxHeight}px`);
+    }
+  }
+
+  private setListBoxWidth(): void {
+    const dropdownMinWidth = 240;
+    const dropdownMaxWidth = 340;
+
+    if (this.listboxSubitems && this.items) {
+      this.renderer.setStyle(this.listbox.nativeElement, 'minWidth', `${dropdownMinWidth}px`);
+      this.renderer.setStyle(this.listbox.nativeElement, 'maxWidth', `${dropdownMaxWidth}px`);
     }
   }
 
