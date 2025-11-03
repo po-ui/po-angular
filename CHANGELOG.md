@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.34.0](https://github.com/po-ui/po-angular/compare/v19.33.0...v19.34.0) (2025-11-03)
+
+
+### Features
+
+* **dropdown:** implementa criação de subníveis ([d124f81](https://github.com/po-ui/po-angular/commit/d124f81fd080b7e285edff724e307775e3d36667))
+* **page-default:** implementa suporte a subníveis no dropdown ([7be0942](https://github.com/po-ui/po-angular/commit/7be09427fc7160eeb707907e0c69e549345953e7))
+
 ## [19.33.0](https://github.com/po-ui/po-angular/compare/v19.32.0...v19.33.0) (2025-10-29)
 
 
