@@ -319,10 +319,6 @@ export class PoDatepickerRangeComponent
     this.isDateRangeInputFormatValid = true;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   /**
    * Método que exibe `p-helper` ou executa a ação definida em `p-helper{eventOnClick}` ou em `p-additionalHelp`.
    * Para isso, será necessário configurar uma tecla de atalho utilizando o evento `p-keydown`.

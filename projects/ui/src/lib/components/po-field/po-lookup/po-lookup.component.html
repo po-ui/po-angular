@@ -92,6 +92,7 @@
               [class.po-lookup-input-padding-button-clean-aa]="clean && size === 'small'"
               [class.po-lookup-input-disabled]="disabled"
               [class.po-lookup-input-aa]="size === 'small'"
+              [class.po-lookup-input-auto-dynamic-height]="isExpandedHeight"
               (blur)="onBlur()"
               (keydown)="onKeyDown($event)"
             >
@@ -147,17 +148,12 @@
       }
 
       <po-field-container-bottom
-        [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
         [p-append-in-body]="appendBox"
         [p-help]="help"
         [p-disabled]="disabled"
         [p-error-pattern]="getErrorPattern()"
         [p-error-limit]="errorLimit"
-        [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
-        [p-show-additional-help]="label ? displayAdditionalHelp : undefined"
-        [p-show-additional-help-icon]="showAdditionalHelpIcon()"
         [p-size]="size"
-        (p-additional-help)="emitAdditionalHelp()"
       ></po-field-container-bottom>
     </po-field-container>
   </div>

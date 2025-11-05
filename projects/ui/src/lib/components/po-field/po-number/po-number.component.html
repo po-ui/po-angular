@@ -77,17 +77,12 @@
 
   @if (!readonly) {
     <po-field-container-bottom
-      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
       [p-append-in-body]="appendBox"
       [p-help]="help"
       [p-disabled]="disabled"
       [p-error-limit]="errorLimit"
       [p-error-pattern]="getErrorPatternMessage()"
-      [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
-      [p-show-additional-help]="displayAdditionalHelp"
-      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
       [p-size]="size"
-      (p-additional-help)="emitAdditionalHelp()"
     >
     </po-field-container-bottom>
   }

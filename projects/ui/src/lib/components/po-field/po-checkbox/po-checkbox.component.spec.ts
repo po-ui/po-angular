@@ -512,28 +512,6 @@ describe('PoCheckboxComponent:', () => {
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
       });
     });
-    describe('showAdditionalHelpIcon:', () => {
-      it('should return true when additionalHelpTooltip is truthy', () => {
-        (component as any).additionalHelpTooltip = 'additionalHelpTooltip';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-
-        expect(component.showAdditionalHelpIcon()).toBeTrue();
-      });
-
-      it('should return true when additionalHelpTooltip is falsy but event is triggered', () => {
-        (component as any).additionalHelpTooltip = null;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-
-        expect(component.showAdditionalHelpIcon()).toBeTrue();
-      });
-
-      it('should return false when additionalHelpTooltip is falsy and event not triggered', () => {
-        (component as any).additionalHelpTooltip = null;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-
-        expect(component.showAdditionalHelpIcon()).toBeFalse();
-      });
-    });
   });
 
   describe('Templates:', () => {

@@ -178,10 +178,6 @@ export abstract class PoFieldModel<T> implements ControlValueAccessor {
     return this.displayAdditionalHelp;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   protected isAdditionalHelpEventTriggered(): boolean {
     return (
       this.additionalHelpEventTrigger === 'event' ||

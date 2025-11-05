@@ -40,21 +40,15 @@
       </po-rich-text-toolbar>
     }
   </div>
-  <div class="po-row po-footer-group">
-    @if (!readonly) {
-      <po-field-container-bottom
-        [p-additional-help-tooltip]="additionalHelp.observed ? null : additionalHelpTooltip"
-        [p-append-in-body]="appendBox"
-        [p-help]="help"
-        [p-error-limit]="errorLimit"
-        [p-error-pattern]="errorMsg"
-        [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
-        [p-size]="size"
-      ></po-field-container-bottom>
-    }
-    @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {
-      <po-helper #helperEl [p-size]="size" [p-helper]="poHelper.helperSettings" [p-append-in-body]="appendBox">
-      </po-helper>
-    }
-  </div>
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-error-limit]="errorLimit"
+      [p-error-pattern]="errorMsg"
+      [p-size]="size"
+      [p-helper]="!label ? poHelper.helperSettings : undefined"
+      [p-show-helper]="!label ? displayAdditionalHelp : undefined"
+    ></po-field-container-bottom>
+  }
 </po-field-container>

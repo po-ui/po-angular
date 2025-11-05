@@ -239,10 +239,6 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     return this.displayAdditionalHelp;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   private isAdditionalHelpEventTriggered(): boolean {
     return (
       this.additionalHelpEventTrigger === 'event' ||

@@ -304,6 +304,26 @@ describe('PoLookupBaseComponent:', () => {
     expect(component.change.emit).toHaveBeenCalledWith(1495832652942);
   });
 
+  it('callOnChange: should call `updateLookupInputHeight` when `autoHeight` is true', fakeAsync(() => {
+    spyOn(component as any, 'updateLookupInputHeight');
+    (component as any).autoHeight = true;
+
+    component.callOnChange('value');
+    tick();
+
+    expect((component as any).updateLookupInputHeight).toHaveBeenCalled();
+  }));
+
+  it('callOnChange: should not call `updateLookupInputHeight` when `autoHeight` is false', fakeAsync(() => {
+    spyOn(component as any, 'updateLookupInputHeight');
+    (component as any).autoHeight = false;
+
+    component.callOnChange('value');
+    tick();
+
+    expect((component as any).updateLookupInputHeight).not.toHaveBeenCalled();
+  }));
+
   it('call initialize columns in the ngOnInit method', () => {
     spyOn(component, <any>'initializeColumn');
 
@@ -931,6 +951,79 @@ describe('PoLookupBaseComponent:', () => {
 
       expect(component.service).toEqual(service);
       expect(component['defaultService'].setConfig).not.toHaveBeenCalled();
+    });
+
+    it('updateLookupInputHeight: should not change `isExpandedHeight` if `inputEl` is undefined', () => {
+      component['isExpandedHeight'] = false;
+      component['inputEl'] = undefined;
+
+      component['updateLookupInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(false);
+    });
+
+    it('updateLookupInputHeight: should set `isExpandedHeight` to true when size is small and height is greater than 32', () => {
+      const inputElMock: any = {
+        nativeElement: {
+          offsetHeight: 40
+        }
+      };
+
+      (component as any)['_size'] = 'small';
+      component['inputEl'] = inputElMock;
+      component['isExpandedHeight'] = false;
+
+      component['updateLookupInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(true);
+    });
+
+    it('updateLookupInputHeight: should set `isExpandedHeight` to false when size is small and height is less or equal than 32', () => {
+      const inputElMock: any = {
+        nativeElement: {
+          offsetHeight: 32
+        }
+      };
+
+      component.size = 'small' as any;
+      component['inputEl'] = inputElMock;
+      component['isExpandedHeight'] = true;
+
+      component['updateLookupInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(false);
+    });
+
+    it('updateLookupInputHeight: should set `isExpandedHeight` to true when size is not small and height is greater than 44', () => {
+      const inputElMock: any = {
+        nativeElement: {
+          offsetHeight: 50
+        }
+      };
+
+      component.size = 'medium' as any;
+      component['inputEl'] = inputElMock;
+      component['isExpandedHeight'] = false;
+
+      component['updateLookupInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(true);
+    });
+
+    it('updateLookupInputHeight: should set `isExpandedHeight` to false when size is not small and height is less or equal than 44', () => {
+      const inputElMock: any = {
+        nativeElement: {
+          offsetHeight: 44
+        }
+      };
+
+      component.size = 'medium' as any;
+      component['inputEl'] = inputElMock;
+      component['isExpandedHeight'] = true;
+
+      component['updateLookupInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(false);
     });
   });
 

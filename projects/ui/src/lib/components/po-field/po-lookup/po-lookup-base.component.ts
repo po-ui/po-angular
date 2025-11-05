@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Directive,
+  ElementRef,
   EventEmitter,
   Inject,
   InjectOptions,
@@ -11,7 +12,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NgControl, UntypedFormControl, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -76,6 +78,7 @@ export abstract class PoLookupBaseComponent
   private _size?: string = undefined;
   private _spacing: PoTableColumnSpacing;
 
+  @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
@@ -587,6 +590,7 @@ export abstract class PoLookupBaseComponent
   // eslint-disable-next-line
   protected onTouched: any = null;
   protected resizeListener: () => void;
+  protected isExpandedHeight: boolean = false;
 
   private _disabled?: boolean = false;
   private _fieldLabel: string;
@@ -818,6 +822,12 @@ export abstract class PoLookupBaseComponent
 
     // Armazenar o valor antigo do model
     this.oldValueToModel = this.valueToModel;
+
+    setTimeout(() => {
+      if (this.autoHeight) {
+        this.updateLookupInputHeight();
+      }
+    });
   }
 
   searchById(value) {
@@ -959,6 +969,17 @@ export abstract class PoLookupBaseComponent
       this.keysDescription = [];
 
       this.keysDescription = this.columns.filter(element => element.fieldLabel).map(element => element.property);
+    }
+  }
+
+  private updateLookupInputHeight(): void {
+    if (!this.inputEl) return;
+
+    const height = this.inputEl.nativeElement.offsetHeight;
+    if (this.size === PoFieldSize.Small) {
+      this.isExpandedHeight = height > 32;
+    } else {
+      this.isExpandedHeight = height > 44;
     }
   }
 

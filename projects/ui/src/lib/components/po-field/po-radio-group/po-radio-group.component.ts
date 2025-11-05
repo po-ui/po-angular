@@ -236,10 +236,6 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
     return this.displayAdditionalHelp;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   setHelper(label?: string, additionalHelpTooltip?: string) {
     return setHelperSettings(
       label,
