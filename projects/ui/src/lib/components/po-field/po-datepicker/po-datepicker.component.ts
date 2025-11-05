@@ -495,10 +495,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return element.classList.contains('po-datepicker-calendar-overlay');
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   verifyErrorAsync(value) {
     if (this.errorPattern !== '' && this.errorAsync) {
       const errorAsync = this.errorAsync(value);

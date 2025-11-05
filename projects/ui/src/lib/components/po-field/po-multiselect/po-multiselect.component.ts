@@ -133,7 +133,6 @@ export class PoMultiselectComponent
   @ViewChild('dropdownElement', { read: ElementRef }) dropdownElement: ElementRef;
   @ViewChild('dropdownElement') dropdown;
   @ViewChild('iconElement', { read: ElementRef, static: true }) iconElement: ElementRef;
-  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
   @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
@@ -561,10 +560,6 @@ export class PoMultiselectComponent
       return;
     }
     return this.displayAdditionalHelp;
-  }
-
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   wasClickedOnToggle(event: MouseEvent): void {

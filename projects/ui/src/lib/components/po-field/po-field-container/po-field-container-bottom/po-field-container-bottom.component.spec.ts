@@ -34,37 +34,75 @@ describe('PoFieldContainerBottomComponent', () => {
 
     beforeEach(() => {
       changes = {
-        showAdditionalHelp: new SimpleChange(false, true, true)
+        showHelperComponent: new SimpleChange(false, true, false)
       };
 
-      component.poTooltip = { toggleTooltipVisibility: jasmine.createSpy() } as any;
-      spyOn(component.additionalHelp, 'emit');
+      (component as any).helperEl = {
+        openHelperPopover: jasmine.createSpy('openHelperPopover'),
+        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+      } as any;
+
+      spyOn(component as any, 'poHelperComponent').and.returnValue({});
+      spyOn(component as any, 'showHelperComponent').and.returnValue(false);
     });
 
     describe('ngOnChanges', () => {
-      it('should emit `p-additional-help` event if `p-additional-help-tooltip` is not defined', () => {
-        (component as any).isInitialChange = false;
-        component.additionalHelpTooltip = null;
+      it('should call `eventOnClick` when `showHelperComponent()` is true and `eventOnClick` is a function', () => {
+        const eventOnClickSpy = jasmine.createSpy('eventOnClick');
+        (component as any).poHelperComponent.and.returnValue({ eventOnClick: eventOnClickSpy });
+        (component as any).showHelperComponent.and.returnValue(true);
         component.ngOnChanges(changes);
 
-        expect(component.additionalHelp.emit).toHaveBeenCalled();
+        expect(eventOnClickSpy).toHaveBeenCalled();
+        expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
       });
 
-      it('should toggle the visibility of `p-additional-help-tooltip` is defined', () => {
-        (component as any).isInitialChange = false;
-        component.additionalHelpTooltip = 'Mensagem de apoio complementar.';
-        component.showAdditionalHelp = true;
+      it('should open the popover when `showHelperComponent()` is true and `eventOnClick` is not a function', () => {
+        (component as any).poHelperComponent.and.returnValue({ eventOnClick: undefined });
+        (component as any).showHelperComponent.and.returnValue(true);
         component.ngOnChanges(changes);
 
-        expect(component.poTooltip.toggleTooltipVisibility).toHaveBeenCalledWith(true);
+        expect((component as any).helperEl.openHelperPopover).toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
       });
 
-      it('should not emit the `p-additional-help` event or display `p-additional-help-tooltip` at initialization', () => {
-        (component as any).isInitialChange = true;
+      it('should open the popover when `showHelperComponent()` is true and `poHelperComponent()` returns null/undefined', () => {
+        (component as any).poHelperComponent.and.returnValue(undefined);
+        (component as any).showHelperComponent.and.returnValue(true);
         component.ngOnChanges(changes);
 
-        expect(component.additionalHelp.emit).not.toHaveBeenCalled();
-        expect(component.poTooltip.toggleTooltipVisibility).not.toHaveBeenCalled();
+        expect((component as any).helperEl.openHelperPopover).toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
+      });
+
+      it('should close the popover when `showHelperComponent()` is false', () => {
+        (component as any).showHelperComponent.and.returnValue(false);
+        component.ngOnChanges(changes);
+
+        expect((component as any).helperEl.closeHelperPopover).toHaveBeenCalled();
+        expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();
+      });
+
+      it('should do nothing when `changes` does not contain `showHelperComponent`', () => {
+        const otherChanges: SimpleChanges = {
+          someOtherInput: new SimpleChange(undefined, 'x', false)
+        } as any;
+        component.ngOnChanges(otherChanges);
+
+        expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
+      });
+
+      it('should not open/close the popover when `eventOnClick` is a function (since it returns after calling the function)', () => {
+        const eventOnClickSpy = jasmine.createSpy('eventOnClick');
+        (component as any).poHelperComponent.and.returnValue({ eventOnClick: eventOnClickSpy });
+        (component as any).showHelperComponent.and.returnValue(true);
+        component.ngOnChanges(changes);
+
+        expect(eventOnClickSpy).toHaveBeenCalled();
+        expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();
+        expect((component as any).helperEl.closeHelperPopover).not.toHaveBeenCalled();
       });
     });
   });

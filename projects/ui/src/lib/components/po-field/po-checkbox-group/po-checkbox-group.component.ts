@@ -199,10 +199,6 @@ export class PoCheckboxGroupComponent
     return this.displayAdditionalHelp;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   trackByFn(index) {
     return index;
   }

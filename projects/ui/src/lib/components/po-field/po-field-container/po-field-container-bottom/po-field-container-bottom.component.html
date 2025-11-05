@@ -1,5 +1,5 @@
 <div
-  class="po-field-container-bottom"
+  class="po-field-container-bottom po-footer-group"
   [class.po-field-container-bottom-disabled]="disabled"
   [attr.aria-label]="errorPattern && errorLimit ? errorPattern : null"
   [attr.p-size]="size"
@@ -21,25 +21,23 @@
       </span>
     </div>
   }
-  @if (!errorPattern && (help || showAdditionalHelpIcon)) {
+  @if (!errorPattern && help) {
     <div class="po-field-container-bottom-help-text">
       @if (help) {
         <span>
           {{ help }}
         </span>
       }
-      @if (showAdditionalHelpIcon && !hideAdditionalHelpByLabel()) {
-        <div class="po-icon-container">
-          <po-icon
-            class="po-icon-additional-help"
-            [class.po-clickable]="!additionalHelpTooltip"
-            p-icon="an an-fill an an-info"
-            [p-append-in-body]="appendBox"
-            [p-tooltip]="additionalHelpTooltip"
-            (click)="additionalHelp.emit()"
-          ></po-icon>
-        </div>
-      }
     </div>
+  }
+  @if (poHelperComponent()) {
+    <po-helper
+      #helperEl
+      [p-size]="size"
+      [p-helper]="poHelperComponent()"
+      [p-disabled]="disabled"
+      [p-append-in-body]="appendBox"
+    >
+    </po-helper>
   }
 </div>

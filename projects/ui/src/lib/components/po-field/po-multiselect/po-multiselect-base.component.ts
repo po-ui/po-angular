@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  input,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -115,6 +125,7 @@ export const poMultiselectLiteralsDefault = {
  */
 @Directive()
 export abstract class PoMultiselectBaseComponent implements ControlValueAccessor, OnInit, Validator {
+  @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
@@ -342,6 +353,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   protected clickOutListener: () => void;
   protected resizeListener: () => void;
   protected getObjectsByValuesSubscription: Subscription;
+  protected isExpandedHeight: boolean = false;
 
   private _filterService?: PoMultiselectFilter | string;
   private _debounceTime?: number = 400;
@@ -785,6 +797,11 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       this.onModelChange(this.getValueUpdate(selectedOptions));
       this.eventChange(selectedOptions);
     }
+    setTimeout(() => {
+      if (this.autoHeight) {
+        this.updateInputHeight();
+      }
+    });
   }
 
   eventChange(selectedOptions) {
@@ -939,6 +956,17 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private validateModel() {
     if (this.validatorChange) {
       this.validatorChange();
+    }
+  }
+
+  private updateInputHeight(): void {
+    if (!this.inputElement) return;
+
+    const height = this.inputElement.nativeElement.offsetHeight;
+    if (this.size === PoFieldSize.Small) {
+      this.isExpandedHeight = height > 32;
+    } else {
+      this.isExpandedHeight = height > 44;
     }
   }
 

@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { PoTooltipDirective } from '../../../../directives';
 import { convertToBoolean } from '../../../../utils/util';
+import { PoHelperComponent, PoHelperOptions } from '../../../po-helper';
 
 /**
  * @docsPrivate
@@ -29,10 +30,7 @@ import { convertToBoolean } from '../../../../utils/util';
 })
 export class PoFieldContainerBottomComponent implements OnChanges {
   @ViewChild(PoTooltipDirective) poTooltip: PoTooltipDirective;
-
-  /** Texto exibido no tooltip do ícone de ajuda adicional. */
-  /** @deprecated v23.x.x */
-  @Input('p-additional-help-tooltip') additionalHelpTooltip?: string = '';
+  @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /** Define se o tooltip será inserido no `body` em vez do componente. */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
@@ -50,39 +48,29 @@ export class PoFieldContainerBottomComponent implements OnChanges {
    */
   @Input('p-error-limit') errorLimit: boolean = false;
 
+  /** Texto de apoio do campo. */
   @Input('p-help') help?: string;
-
-  /** Ativa a exibição da ajuda adicional. */
-  @Input('p-show-additional-help') showAdditionalHelp: boolean = false;
-
-  /** Exibe o ícone de ajuda adicional. */
-  @Input('p-show-additional-help-icon') showAdditionalHelpIcon: boolean = false;
 
   /** Define o tamanho do componente. */
   @Input('p-size') size?: string;
 
-  /** Evento disparado ao clicar no ícone de ajuda adicional. */
-  /** @deprecated v23.x.x */
-  @Output('p-additional-help') additionalHelp = new EventEmitter<any>();
+  /** Configurações do ícone de ajuda adicional vínculado ao label. */
+  poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });
 
-  /** Propriedade para controlar a visibilidade do additionalHelp de acordo com a visibilidade do p-label do field.
-   * Caso o p-label esteja visível, o additionalHelp não será exibido.
-   **/
-  hideAdditionalHelpByLabel = input(false, { transform: booleanAttribute, alias: 'p-hide-additional-help-by-label' });
+  /** Define se o componente helper estará visível através das ações customizadas */
+  showHelperComponent = input<boolean>(false, { alias: 'p-show-helper' });
 
   private isInitialChange: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.showAdditionalHelp) {
-      if (!this.isInitialChange) {
-        if (this.additionalHelpTooltip && this.poTooltip) {
-          this.poTooltip.toggleTooltipVisibility(this.showAdditionalHelp);
-        } else {
-          this.additionalHelp.emit();
-        }
-      } else {
-        this.isInitialChange = false;
+    if (changes.showHelperComponent && this.showHelperComponent()) {
+      if (typeof this.poHelperComponent()?.eventOnClick === 'function') {
+        this.poHelperComponent()?.eventOnClick();
+        return;
       }
+      this.helperEl?.openHelperPopover();
+    } else if (changes.showHelperComponent && !this.showHelperComponent()) {
+      this.helperEl?.closeHelperPopover();
     }
   }
 }

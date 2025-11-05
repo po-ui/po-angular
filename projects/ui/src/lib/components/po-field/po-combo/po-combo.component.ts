@@ -668,10 +668,6 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     }
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   showMoreInfiniteScroll(): void {
     if (this.defaultService.hasNext) {
       this.infiniteLoading = true;

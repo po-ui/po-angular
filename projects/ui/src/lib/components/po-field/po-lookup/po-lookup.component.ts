@@ -155,8 +155,6 @@ export class PoLookupComponent
   private cd = inject(ChangeDetectorRef);
   private el = inject(ElementRef);
 
-  @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
-
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   initialized = false;
   timeoutResize;
@@ -509,10 +507,6 @@ export class PoLookupComponent
       return;
     }
     return this.displayAdditionalHelp;
-  }
-
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {

@@ -445,10 +445,6 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
     return this.displayAdditionalHelp;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   stopUpload(file: PoUploadFile) {
     this.uploadService.stopRequestByFile(file, () => {
       if (this.autoUpload) {

@@ -203,10 +203,6 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
     return this.displayAdditionalHelp;
   }
 
-  showAdditionalHelpIcon() {
-    return !!this.additionalHelpTooltip || this.isAdditionalHelpEventTriggered();
-  }
-
   setHelper(label?: string, additionalHelpTooltip?: string) {
     return setHelperSettings(
       label,

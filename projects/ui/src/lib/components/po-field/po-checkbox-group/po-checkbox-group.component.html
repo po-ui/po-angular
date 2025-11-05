@@ -36,29 +36,14 @@
       </ul>
     </div>
   </div>
-  <div class="po-row po-footer-group">
-    <po-field-container-bottom
-      [p-additional-help-tooltip]="getAdditionalHelpTooltip()"
-      [p-append-in-body]="appendBox"
-      [p-help]="help"
-      [p-disabled]="disabled"
-      [p-error-limit]="errorLimit"
-      [p-error-pattern]="getErrorPattern()"
-      [p-hide-additional-help-by-label]="poHelper.hideAdditionalHelp"
-      [p-show-additional-help]="displayAdditionalHelp"
-      [p-show-additional-help-icon]="showAdditionalHelpIcon()"
-      [p-size]="size"
-      (p-additional-help)="emitAdditionalHelp()"
-    ></po-field-container-bottom>
-    @if ((!label && poHelperComponent()) || (!label && poHelper.hideAdditionalHelp)) {
-      <po-helper
-        #helperEl
-        [p-size]="size"
-        [p-helper]="poHelper.helperSettings"
-        [p-disabled]="disabled"
-        [p-append-in-body]="appendBox"
-      >
-      </po-helper>
-    }
-  </div>
+  <po-field-container-bottom
+    [p-append-in-body]="appendBox"
+    [p-help]="help"
+    [p-disabled]="disabled"
+    [p-error-limit]="errorLimit"
+    [p-error-pattern]="getErrorPattern()"
+    [p-size]="size"
+    [p-helper]="!label ? poHelper.helperSettings : undefined"
+    [p-show-helper]="!label ? displayAdditionalHelp : undefined"
+  ></po-field-container-bottom>
 </po-field-container>

@@ -19,6 +19,7 @@ import { PoMultiselectFilterMode } from './enums/po-multiselect-filter-mode.enum
 import { PoMultiselectFilter } from './interfaces/po-multiselect-filter.interface';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
 import { PoMultiselectBaseComponent, poMultiselectLiteralsDefault } from './po-multiselect-base.component';
+import { PoFieldSize } from '../../../enums/po-field-size.enum';
 
 const poMultiselectFilterServiceStub: PoMultiselectFilter = {
   getFilteredData: function (params: { property: string; value: string }): Observable<Array<PoMultiselectOption>> {
@@ -603,6 +604,75 @@ describe('PoMultiselectBaseComponent:', () => {
       component.searchByLabel('', component.options, PoMultiselectFilterMode.startsWith);
 
       expect(component.visibleOptionsDropdown).toEqual(component.options);
+    });
+    it('updateInputHeight: should not change `isExpandedHeight` if `inputElement` is undefined', () => {
+      component['isExpandedHeight'] = false;
+      component['inputElement'] = undefined;
+
+      component['updateInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(false);
+    });
+
+    it('updateInputHeight: should set `isExpandedHeight` to true when size is small and height is greater than 32', () => {
+      const inputElementMock: any = { nativeElement: { offsetHeight: 40 } };
+
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      component['_size'] = PoFieldSize.Small;
+      component['inputElement'] = inputElementMock;
+      component['isExpandedHeight'] = false;
+
+      component['updateInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(true);
+    });
+
+    it('updateInputHeight: should set `isExpandedHeight` to false when size is small and height is less or equal than 32', () => {
+      const inputElementMock: any = {
+        nativeElement: {
+          offsetHeight: 32
+        }
+      };
+
+      component.size = 'small' as any;
+      component['inputElement'] = inputElementMock;
+      component['isExpandedHeight'] = true;
+
+      component['updateInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(false);
+    });
+
+    it('updateInputHeight: should set `isExpandedHeight` to true when size is not small and height is greater than 44', () => {
+      const inputElementMock: any = {
+        nativeElement: {
+          offsetHeight: 50
+        }
+      };
+
+      component.size = 'medium' as any;
+      component['inputElement'] = inputElementMock;
+      component['isExpandedHeight'] = false;
+
+      component['updateInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(true);
+    });
+
+    it('updateInputHeight: should set `isExpandedHeight` to false when size is not small and height is less or equal than 44', () => {
+      const inputElementMock: any = {
+        nativeElement: {
+          offsetHeight: 44
+        }
+      };
+
+      component.size = 'medium' as any;
+      component['inputElement'] = inputElementMock;
+      component['isExpandedHeight'] = true;
+
+      component['updateInputHeight']();
+
+      expect(component['isExpandedHeight']).toBe(false);
     });
   });
 
