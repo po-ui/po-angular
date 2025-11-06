@@ -177,7 +177,6 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     }
 
     if (itemListAction?.action && !isDisabled && isVisible) {
-      console.log('oi');
       itemListAction.action(this.param || itemListAction);
     }
 
