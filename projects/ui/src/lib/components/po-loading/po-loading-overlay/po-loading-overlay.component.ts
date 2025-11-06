@@ -3,6 +3,7 @@ import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoLoadingOverlayBaseComponent } from './po-loading-overlay-base.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 /**
  *
