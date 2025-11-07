@@ -1,10 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import * as THREE from 'three';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-loading-spinner',
   standalone: false,
-  imports: [],
   templateUrl: './loading-spinner.component.html',
   styleUrl: './loading-spinner.component.css'
 })
