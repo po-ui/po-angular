@@ -75,26 +75,26 @@
         }
 
         .sequence.normal {
-          animation: normalLayerVisibility 3s steps(1) infinite;
+          animation: normalLayerVisibility 2s steps(1) infinite;
         }
 
         .sequence.rotated {
-          animation: rotatedLayerVisibility 3s steps(1) infinite;
+          animation: rotatedLayerVisibility 2s steps(1) infinite;
         }
 
         /* === Frames de brilho/opacidade (16 → 7, 7 → 16) === */
-        /* Transições suaves com crossfade */
+        /* Transições suaves com crossfade ampliado */
 
         @keyframes frame16 {
           0%,
-          5% {
+          4.5% {
             opacity: 1;
           }
-          5.5%,
-          93% {
+          6%,
+          92.5% {
             opacity: 0;
           }
-          93.5%,
+          94%,
           100% {
             opacity: 1;
           }
@@ -103,22 +103,22 @@
         /* FRAME 15: ida 6.25..12.5 ; volta 87.5..93.75 */
         @keyframes frame15 {
           0%,
-          5.5% {
+          5% {
             opacity: 0;
           }
-          6%,
-          11.5% {
+          6.5%,
+          11% {
             opacity: 1;
           }
-          12%,
-          86.5% {
+          12.5%,
+          86% {
             opacity: 0;
           }
-          87%,
-          93% {
+          87.5%,
+          92.5% {
             opacity: 1;
           }
-          93.5%,
+          94%,
           100% {
             opacity: 0;
           }
@@ -127,22 +127,22 @@
         /* FRAME 14: ida 12.5..18.75 ; volta 81.25..87.5 */
         @keyframes frame14 {
           0%,
-          11.5% {
+          11% {
             opacity: 0;
           }
-          12%,
-          18% {
+          12.5%,
+          17.5% {
             opacity: 1;
           }
-          18.5%,
-          80% {
+          19%,
+          79.5% {
             opacity: 0;
           }
-          80.5%,
-          87% {
+          81%,
+          86.5% {
             opacity: 1;
           }
-          87.5%,
+          88%,
           100% {
             opacity: 0;
           }
@@ -151,22 +151,22 @@
         /* FRAME 13: ida 18.75..25 ; volta 75..81.25 */
         @keyframes frame13 {
           0%,
-          18% {
+          17.5% {
             opacity: 0;
           }
-          18.5%,
-          24.5% {
+          19%,
+          24% {
             opacity: 1;
           }
-          25%,
-          74% {
+          25.5%,
+          73.5% {
             opacity: 0;
           }
-          74.5%,
-          81% {
+          75%,
+          80.5% {
             opacity: 1;
           }
-          81.5%,
+          82%,
           100% {
             opacity: 0;
           }
@@ -175,22 +175,22 @@
         /* FRAME 12: ida 25..31.25 ; volta 68.75..75 */
         @keyframes frame12 {
           0%,
-          24.5% {
+          24% {
             opacity: 0;
           }
-          25%,
-          30.5% {
+          25.5%,
+          30% {
             opacity: 1;
           }
-          31%,
-          68% {
+          31.5%,
+          67.5% {
             opacity: 0;
           }
-          68.5%,
-          74.5% {
+          69%,
+          74% {
             opacity: 1;
           }
-          75%,
+          75.5%,
           100% {
             opacity: 0;
           }
@@ -199,22 +199,22 @@
         /* FRAME 11: ida 31.25..37.5 ; volta 62.5..68.75 */
         @keyframes frame11 {
           0%,
-          30.5% {
+          30% {
             opacity: 0;
           }
-          31%,
-          37% {
+          31.5%,
+          36.5% {
             opacity: 1;
           }
-          37.5%,
-          62% {
+          38%,
+          61.5% {
             opacity: 0;
           }
-          62.5%,
-          68.5% {
+          63%,
+          68% {
             opacity: 1;
           }
-          69%,
+          69.5%,
           100% {
             opacity: 0;
           }
@@ -223,22 +223,22 @@
         /* FRAME 10: ida 37.5..43.75 ; volta 56.25..62.5 */
         @keyframes frame10 {
           0%,
-          37% {
+          36.5% {
             opacity: 0;
           }
-          37.5%,
-          43.5% {
+          38%,
+          43% {
             opacity: 1;
           }
-          44%,
-          55.5% {
+          44.5%,
+          55% {
             opacity: 0;
           }
-          56%,
-          62% {
+          56.5%,
+          61.5% {
             opacity: 1;
           }
-          62.5%,
+          63%,
           100% {
             opacity: 0;
           }
@@ -247,22 +247,22 @@
         /* FRAME 9: ida 43.75..50 ; volta 50..56.25 */
         @keyframes frame9 {
           0%,
-          43.5% {
+          43% {
             opacity: 0;
           }
-          44%,
-          49.5% {
+          44.5%,
+          49% {
             opacity: 1;
-          }
-          50%,
-          50% {
-            opacity: 0;
           }
           50.5%,
-          56% {
+          50.5% {
+            opacity: 0;
+          }
+          51%,
+          55.5% {
             opacity: 1;
           }
-          56.5%,
+          57%,
           100% {
             opacity: 0;
           }
@@ -270,52 +270,52 @@
 
         /* === Aplicação das animações === */
         #frame16 {
-          animation: frame16 3s linear infinite;
+          animation: frame16 2s ease-in-out infinite;
           display: block;
         }
 
         #frame15 {
-          animation: frame15 3s linear infinite;
+          animation: frame15 2s ease-in-out infinite;
           display: block;
         }
 
         #frame14 {
-          animation: frame14 3s linear infinite;
+          animation: frame14 2s ease-in-out infinite;
           display: block;
         }
 
         #frame13 {
-          animation: frame13 3s linear infinite;
+          animation: frame13 2s ease-in-out infinite;
           display: block;
         }
 
         #frame12 {
-          animation: frame12 3s linear infinite;
+          animation: frame12 2s ease-in-out infinite;
           display: block;
         }
 
         #frame11 {
-          animation: frame11 3s linear infinite;
+          animation: frame11 2s ease-in-out infinite;
           display: block;
         }
 
         #frame10 {
-          animation: frame10 3s linear infinite;
+          animation: frame10 2s ease-in-out infinite;
           display: block;
         }
 
         #frame9 {
-          animation: frame9 3s linear infinite;
+          animation: frame9 2s ease-in-out infinite;
           display: block;
         }
 
         #frame8 {
-          animation: frame8 3s linear infinite;
+          animation: frame8 2s ease-in-out infinite;
           display: block;
         }
 
         #frame7 {
-          animation: frame7 3s linear infinite;
+          animation: frame7 2s ease-in-out infinite;
           display: block;
         }
 
