@@ -1,1 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+po-overlay {
+  --color-overlay: var(--color-neutral-light-00);
+  --opacity-overlay: 0.7;
+}
