@@ -83,186 +83,182 @@
         }
 
         /* === Frames de brilho/opacidade (16 → 7, 7 → 16) === */
-        /* Transições suaves com crossfade ampliado */
+        /* Frame 16 tem pausa mais longa, outros mais rápidos */
 
         @keyframes frame16 {
           0%,
-          4.5% {
+          13% {
             opacity: 1;
           }
-          6%,
-          92.5% {
+          14.5%,
+          85.5% {
             opacity: 0;
           }
-          94%,
+          87%,
           100% {
             opacity: 1;
           }
         }
 
-        /* FRAME 15: ida 6.25..12.5 ; volta 87.5..93.75 */
+        /* FRAME 15 */
         @keyframes frame15 {
           0%,
-          5% {
+          13% {
             opacity: 0;
           }
-          6.5%,
-          11% {
+          14.5%,
+          18.5% {
             opacity: 1;
           }
-          12.5%,
-          86% {
+          20%,
+          80% {
             opacity: 0;
           }
-          87.5%,
-          92.5% {
+          81.5%,
+          85.5% {
             opacity: 1;
           }
-          94%,
+          87%,
           100% {
             opacity: 0;
           }
         }
 
-        /* FRAME 14: ida 12.5..18.75 ; volta 81.25..87.5 */
+        /* FRAME 14 */
         @keyframes frame14 {
           0%,
-          11% {
+          18.5% {
             opacity: 0;
           }
-          12.5%,
-          17.5% {
+          20%,
+          24% {
             opacity: 1;
           }
-          19%,
-          79.5% {
+          25.5%,
+          74.5% {
             opacity: 0;
           }
-          81%,
-          86.5% {
+          76%,
+          80% {
             opacity: 1;
           }
-          88%,
+          81.5%,
           100% {
             opacity: 0;
           }
         }
 
-        /* FRAME 13: ida 18.75..25 ; volta 75..81.25 */
+        /* FRAME 13 */
         @keyframes frame13 {
           0%,
-          17.5% {
-            opacity: 0;
-          }
-          19%,
           24% {
-            opacity: 1;
+            opacity: 0;
           }
           25.5%,
-          73.5% {
-            opacity: 0;
-          }
-          75%,
-          80.5% {
+          29.5% {
             opacity: 1;
           }
-          82%,
+          31%,
+          69% {
+            opacity: 0;
+          }
+          70.5%,
+          74.5% {
+            opacity: 1;
+          }
+          76%,
           100% {
             opacity: 0;
           }
         }
 
-        /* FRAME 12: ida 25..31.25 ; volta 68.75..75 */
+        /* FRAME 12 */
         @keyframes frame12 {
           0%,
-          24% {
+          29.5% {
             opacity: 0;
           }
-          25.5%,
-          30% {
+          31%,
+          35% {
             opacity: 1;
           }
-          31.5%,
-          67.5% {
+          36.5%,
+          63.5% {
             opacity: 0;
           }
-          69%,
-          74% {
+          65%,
+          69% {
             opacity: 1;
           }
-          75.5%,
+          70.5%,
           100% {
             opacity: 0;
           }
         }
 
-        /* FRAME 11: ida 31.25..37.5 ; volta 62.5..68.75 */
+        /* FRAME 11 */
         @keyframes frame11 {
           0%,
-          30% {
+          35% {
             opacity: 0;
           }
-          31.5%,
-          36.5% {
+          36.5%,
+          40.5% {
             opacity: 1;
           }
-          38%,
-          61.5% {
+          42%,
+          58% {
             opacity: 0;
           }
-          63%,
-          68% {
+          59.5%,
+          63.5% {
             opacity: 1;
           }
-          69.5%,
+          65%,
           100% {
             opacity: 0;
           }
         }
 
-        /* FRAME 10: ida 37.5..43.75 ; volta 56.25..62.5 */
+        /* FRAME 10 */
         @keyframes frame10 {
           0%,
-          36.5% {
+          40.5% {
             opacity: 0;
           }
-          38%,
-          43% {
+          42%,
+          46% {
             opacity: 1;
           }
-          44.5%,
-          55% {
+          47.5%,
+          52.5% {
             opacity: 0;
           }
-          56.5%,
-          61.5% {
+          54%,
+          58% {
             opacity: 1;
           }
-          63%,
+          59.5%,
           100% {
             opacity: 0;
           }
         }
 
-        /* FRAME 9: ida 43.75..50 ; volta 50..56.25 */
+        /* FRAME 9 - ponto de virada */
         @keyframes frame9 {
           0%,
-          43% {
+          46% {
             opacity: 0;
           }
-          44.5%,
-          49% {
+          47.5%,
+          50% {
             opacity: 1;
           }
-          50.5%,
-          50.5% {
-            opacity: 0;
-          }
-          51%,
-          55.5% {
+          50%,
+          52.5% {
             opacity: 1;
           }
-          57%,
+          54%,
           100% {
             opacity: 0;
           }
