@@ -29,7 +29,6 @@ import {
 } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoFieldValidateModel } from '../po-field-validate.model';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
@@ -127,8 +126,6 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
 export class PoSelectComponent extends PoFieldValidateModel<any> implements AfterViewInit, OnChanges {
   private el = inject(ElementRef);
   renderer = inject(Renderer2);
-
-  private _iconToken: { [key: string]: string };
 
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
@@ -302,10 +299,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
     return this._fieldValue;
   }
 
-  get iconNameLib() {
-    return this._iconToken.NAME_LIB;
-  }
-
   /**
    * @optional
    *
@@ -359,14 +352,9 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
 
   /* istanbul ignore next */
   constructor() {
-    const value = inject<{
-      [key: string]: string;
-    }>(ICONS_DICTIONARY, { optional: true });
     const changeDetector = inject(ChangeDetectorRef);
 
     super(changeDetector);
-
-    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

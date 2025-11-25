@@ -561,24 +561,24 @@ describe('PoMenuItemComponent:', () => {
 
   describe('Templates:', () => {
     it('should not show icon if level is bigger than 1', () => {
-      component.icon = 'po-icon-star';
+      component.icon = 'an-star';
       component.level = 2;
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelectorAll('.po-menu-icon-container').length).toBe(0);
-      expect(nativeElement.querySelectorAll('.po-icon-star').length).toBe(0);
+      expect(nativeElement.querySelectorAll('.an-star').length).toBe(0);
       expect(nativeElement.querySelectorAll('.po-menu-icon-item').length).toBe(0);
     });
 
     it('should show icon if it`s first level', () => {
-      component.icon = 'po-icon-star';
+      component.icon = 'an-star';
       component.level = 1;
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelectorAll('.po-menu-icon-container').length).toBe(1);
-      expect(nativeElement.querySelectorAll('.po-icon-star').length).toBe(1);
+      expect(nativeElement.querySelectorAll('.an-star').length).toBe(1);
       expect(nativeElement.querySelectorAll('.po-menu-icon-item').length).toBe(1);
       expect(nativeElement.querySelectorAll('.po-menu-icon-label').length).toBe(1);
     });
@@ -589,16 +589,16 @@ describe('PoMenuItemComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelectorAll('.po-icon-star').length).toBe(0);
+      expect(nativeElement.querySelectorAll('.an-star').length).toBe(0);
     });
 
-    it('should show icon class if icon is `po-icon-star`.', () => {
-      component.icon = 'po-icon-star';
+    it('should show icon class if icon is `an-star`.', () => {
+      component.icon = 'an-star';
       component.level = 1;
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelectorAll('.po-icon-star').length).toBe(1);
+      expect(nativeElement.querySelectorAll('.an-star').length).toBe(1);
     });
 
     it('should hide `po-menu-sub-item` if menu is collapsed', () => {

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { PoNavbarActionPopupComponent } from './po-navbar-action-popup.component';
 import { PoPopupModule } from '../../../po-popup';
+import { PoIconComponent } from '../../../po-icon';
 
 describe('PoNavbarActionPopupComponent:', () => {
   let component: PoNavbarActionPopupComponent;
@@ -11,7 +12,7 @@ describe('PoNavbarActionPopupComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PoNavbarActionPopupComponent],
+      declarations: [PoNavbarActionPopupComponent, PoIconComponent],
       imports: [PoPopupModule, RouterModule.forRoot([], {})]
     }).compileComponents();
 
@@ -29,13 +30,13 @@ describe('PoNavbarActionPopupComponent:', () => {
   describe('Methods:', () => {
     it('getLastIconAction: should return the last icon', () => {
       component.iconActions = [
-        { label: 'eye', icon: 'po-icon-eye' },
-        { label: 'gas', icon: 'po-icon-gas' },
-        { label: 'mail', icon: 'po-icon-mail' },
-        { label: 'menu', icon: 'po-icon-menu' }
+        { label: 'eye', icon: 'an-eye' },
+        { label: 'gas', icon: 'an-gas-pump' },
+        { label: 'mail', icon: 'an-envelope-simple' },
+        { label: 'menu', icon: 'an-list' }
       ];
 
-      expect(component.getLastIconAction()).toEqual('po-icon-menu');
+      expect(component.getLastIconAction()).toEqual('an-list');
     });
 
     it('getLastIconAction: should return `undefined` if `iconActions` is undefined', () => {
@@ -54,16 +55,19 @@ describe('PoNavbarActionPopupComponent:', () => {
   describe('Templates:', () => {
     it('should contain the last icon', () => {
       component.iconActions = [
-        { label: 'eye', icon: 'po-icon-eye' },
-        { label: 'gas', icon: 'po-icon-gas' },
-        { label: 'mail', icon: 'po-icon-mail' },
-        { label: 'menu', icon: 'po-icon-menu' }
+        { label: 'eye', icon: 'an-eye' },
+        { label: 'gas', icon: 'an-gas-pump' },
+        { label: 'mail', icon: 'an-envelope-simple' },
+        { label: 'menu', icon: 'an-list' }
       ];
 
       fixture.detectChanges();
 
-      const icon = nativeElement.querySelector('span.po-icon');
-      expect(icon.classList).toContain('po-icon-menu');
+      const icon = nativeElement.querySelector('po-icon i');
+
+      expect(icon).toBeTruthy();
+      expect(icon.classList).toContain('po-fonts-icon');
+      expect(icon.classList).toContain('an-list');
     });
   });
 });

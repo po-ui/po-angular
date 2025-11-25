@@ -491,7 +491,7 @@ describe('PoDynamicViewComponent:', () => {
     });
 
     it(`should create 'po-tag' with icon if properties 'tag' and 'icon' contain values.`, () => {
-      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, icon: 'po-icon-ok' }];
+      component.fields = [{ property: 'cpf', label: 'CPF', tag: true, icon: 'an-check' }];
 
       component.ngOnChanges({
         fields: new SimpleChange(null, component.fields, true)
@@ -499,7 +499,7 @@ describe('PoDynamicViewComponent:', () => {
 
       fixture.detectChanges();
       expect(nativeElement.querySelector('po-tag')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-ok')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-check')).toBeTruthy();
     });
 
     it(`should create 'po-tag' without icon if 'tag' is true but 'icon' is not defined.`, () => {
@@ -512,7 +512,7 @@ describe('PoDynamicViewComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-tag')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-ok')).toBeFalsy();
+      expect(nativeElement.querySelector('.an-check')).toBeFalsy();
     });
 
     it(`should create 'po-tag' with a custom color if 'tag' and 'color' properties contain values.`, () => {
