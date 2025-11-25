@@ -69,6 +69,18 @@ export class PoNumberComponent extends PoNumberBaseComponent implements AfterVie
    *
    * @description
    *
+   * Indica uma máscara para o campo, porém é incompatível com o `po-number`.
+   * > **Componentes compatíveis:** `po-input`,`po-decimal`.
+   *
+   * @override
+   */
+  override mask?: string = '';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Intervalo.
    *
    * @default 1
