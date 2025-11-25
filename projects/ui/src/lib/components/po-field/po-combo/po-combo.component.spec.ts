@@ -1905,7 +1905,7 @@ describe('PoComboComponent:', () => {
       component.icon = 'ICON_NEWS';
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-news')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-newspaper')).toBeTruthy();
     });
 
     it('should attribute `po-field-icon-disabled` class when input is disabled.', () => {
@@ -1917,7 +1917,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t attribute `po-field-icon-disabled` class when input is not disabled.', () => {
-      component.icon = 'po-icon-news';
+      component.icon = 'an-newspaper';
       component.disabled = false;
       fixture.detectChanges();
 

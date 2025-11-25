@@ -76,14 +76,14 @@ describe('PoInputComponent: ', () => {
     });
 
     it('should includes an icon.', () => {
-      component.icon = 'po-icon-settings';
+      component.icon = 'an-gear-six';
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-settings')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-gear-six')).toBeTruthy();
     });
 
     it('should attribute `po-field-icon-disabled` class when input is disabled.', () => {
-      component.icon = 'po-icon-settings';
+      component.icon = 'an-gear-six';
       component.disabled = true;
       fixture.detectChanges();
 
@@ -91,7 +91,7 @@ describe('PoInputComponent: ', () => {
     });
 
     it('shouldn`t attribute `po-field-icon-disabled` class when input is not disabled.', () => {
-      component.icon = 'po-icon-settings';
+      component.icon = 'an-gear-six';
       component.disabled = false;
       fixture.detectChanges();
 

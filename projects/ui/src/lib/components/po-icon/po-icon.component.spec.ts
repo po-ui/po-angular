@@ -2,7 +2,6 @@ import { TemplateRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PoIconComponent } from './po-icon.component';
-import { ICONS_DICTIONARY, PoIconDictionary } from './po-icon-dictionary';
 
 class TemplateA extends TemplateRef<void> {
   declare elementRef;
@@ -19,8 +18,7 @@ describe('PoIconComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PoIconComponent],
-      providers: [{ provide: ICONS_DICTIONARY, useValue: PoIconDictionary }]
+      declarations: [PoIconComponent]
     }).compileComponents();
   }));
 
@@ -92,21 +90,41 @@ describe('PoIconComponent: ', () => {
         expect(component.class).toEqual('po-fonts-icon my-icon');
       });
 
+      it('should add classes for po-icon prefixed icons via processIcon', () => {
+        component['processIcon']('po-icon-star');
+
+        expect(component.class).toBe('po-icon po-icon-star');
+      });
+
       it('should add classes correctly for tokenized icons', () => {
         component['processIcon']('ICON_OK');
-        expect(component.class).toEqual('po-icon po-icon-ok');
+
+        const classes = component.class.split(/\s+/).filter(Boolean);
+
+        expect(classes).toContain('po-fonts-icon');
+        expect(classes).toContain('an');
+        expect(classes).toContain('an-check');
       });
     });
 
     describe('processIconTokens', () => {
       it('should return a string for single icon token', () => {
         const result = component['processIconTokens']('ICON_OK');
-        expect(result).toEqual('po-icon po-icon-ok');
+
+        const classes = result.split(/\s+/).filter(Boolean);
+        expect(classes).toContain('po-fonts-icon');
+        expect(classes).toContain('an');
+        expect(classes).toContain('an-check');
       });
 
       it('should return a string for multiple icon tokens', () => {
         const result = component['processIconTokens']('ICON_ARROW_RIGHT po-breadcrumb-icon-arrow');
-        expect(result).toEqual('po-icon po-icon-arrow-right po-breadcrumb-icon-arrow');
+
+        const classes = result.split(/\s+/).filter(Boolean);
+        expect(classes).toContain('po-fonts-icon');
+        expect(classes).toContain('an');
+        expect(classes).toContain('an-caret-right');
+        expect(classes).toContain('po-breadcrumb-icon-arrow');
       });
     });
 
@@ -123,10 +141,17 @@ describe('PoIconComponent: ', () => {
     });
 
     describe('getIcon', () => {
-      it('should return the icon name if it exists in the service', () => {
-        const iconName = 'ICON_BOOK';
-        const result = component['getIcon'](iconName);
-        expect(result).toEqual('po-icon po-icon-book');
+      it('should return empty string when icon does not exist in AnimaliaIconDictionary', () => {
+        const result = component['getIcon']('ICON_BOOK');
+        expect(result).toEqual('');
+      });
+
+      it('should return po-icon prefixed icon when dictionary value starts with po-icon', () => {
+        (component as any)._iconToken = {
+          ICON_PO: 'po-icon po-icon-car'
+        };
+        const result = component['getIcon']('ICON_PO');
+        expect(result).toBe('po-icon po-icon-car');
       });
 
       it('should return an empty string if the icon does not exist in the service', () => {
@@ -135,24 +160,25 @@ describe('PoIconComponent: ', () => {
         expect(result).toEqual('');
       });
 
-      it(`should concatenate 'po-fonts-icon' if it does not exist in the service`, () => {
-        const iconName = 'ICON_BOOK';
-        const mockIconService = { ICON_BOOK: 'book' };
-        component = new PoIconComponent(mockIconService as any);
-        const result = component['getIcon'](iconName);
-        expect(result).toEqual('po-fonts-icon book');
+      it(`should return empty string when icon does not exist in AnimaliaIconDictionary`, () => {
+        const comp = new PoIconComponent();
+        const result = (comp as any).getIcon('ICON_BOOK');
+        expect(result).toEqual('');
       });
     });
   });
 
   describe('Template:', () => {
-    it('should contain the `po-icon` selector.', () => {
-      const iconString = 'po-icon-user';
+    it('should render the icon element', () => {
+      const iconString = 'an-user';
       component.icon = iconString;
+
       fixture.detectChanges();
-      const icon = nativeElement.querySelector('i.po-icon');
+
+      const icon = nativeElement.querySelector('i');
 
       expect(icon).toBeTruthy();
+      expect(icon.classList).toContain('an-user');
     });
 
     it('shouldn`t contain the `po-icon` selector.', () => {
@@ -161,7 +187,7 @@ describe('PoIconComponent: ', () => {
 
       fixture.detectChanges();
 
-      const poClass = nativeElement.querySelector('i.po-icon');
+      const poClass = nativeElement.querySelector('i.an');
       const fontClass = nativeElement.querySelector('i.fa');
 
       expect(poClass).toBeFalsy();

@@ -244,7 +244,7 @@ describe('PoStepperCircleComponent:', () => {
 
       fixture.detectChanges();
 
-      const poIcon = nativeElement.querySelector('.po-icon');
+      const poIcon = nativeElement.querySelector('i.an');
       expect(poIcon).toBeTruthy();
     });
 
@@ -254,7 +254,7 @@ describe('PoStepperCircleComponent:', () => {
 
       fixture.detectChanges();
 
-      const poIcon = nativeElement.querySelector('.po-icon');
+      const poIcon = nativeElement.querySelector('i.an');
       expect(poIcon).toBeNull();
     });
 

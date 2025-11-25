@@ -27,7 +27,7 @@ describe('PoCleanComponent', () => {
   });
 
   it('should be created component html with icon', () => {
-    expect(fixture.nativeElement.querySelector('.po-icon.po-field-icon.po-icon-close')).toBeDefined();
+    expect(fixture.nativeElement.querySelector('po-icon.po-field-icon i.an.an-x')).toBeDefined();
   });
 
   it('should set value to input', () => {
