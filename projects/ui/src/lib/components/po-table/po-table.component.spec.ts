@@ -2227,7 +2227,7 @@ describe('PoTableComponent:', () => {
 
       const actionColumn = tableElement.querySelector('.po-table-column-single-action');
       const actionItem = actionColumn.querySelectorAll('.po-table-single-action');
-      const iconActionItem = actionColumn.querySelector('.po-icon');
+      const iconActionItem = actionColumn.querySelector('po-icon');
 
       expect(actionItem.length).toBe(1);
       expect(iconActionItem).toBeNull();
@@ -2244,7 +2244,7 @@ describe('PoTableComponent:', () => {
 
       const actionColumn = tableElement.querySelector('.po-table-column-single-action');
       const actionItem = actionColumn.querySelectorAll('.po-table-single-action');
-      const iconActionItem = actionColumn.querySelector('.po-icon');
+      const iconActionItem = actionColumn.querySelector('po-icon');
 
       expect(actionItem.length).toBe(1);
       expect(iconActionItem).toBeTruthy();

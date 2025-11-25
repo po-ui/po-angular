@@ -3,5 +3,5 @@
   tabindex="0"
   (click)="disabled ? undefined : click.emit(icon)"
 >
-  <po-icon p-icon="ICON_ARROW_{{ icon }}"></po-icon>
+  <po-icon [p-icon]="icon"></po-icon>
 </div>

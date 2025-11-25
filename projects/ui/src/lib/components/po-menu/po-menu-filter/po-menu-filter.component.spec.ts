@@ -38,7 +38,7 @@ describe('PoMenuFilterComponent:', () => {
       inputFilterElement.nativeElement.dispatchEvent(new Event('input')); // Dispare o evento de input
       fixture.detectChanges();
 
-      const iconElement = fixture.debugElement.nativeElement.querySelector('.po-icon-close');
+      const iconElement = fixture.debugElement.nativeElement.querySelector('.an-x-circle');
       expect(iconElement).not.toBeNull();
     }
   });
@@ -47,7 +47,7 @@ describe('PoMenuFilterComponent:', () => {
     component.inputFilterElement.nativeElement.value = '';
     fixture.detectChanges();
 
-    expect(fixture.debugElement.nativeElement.querySelector('.po-icon-close')).toBeNull();
+    expect(fixture.debugElement.nativeElement.querySelector('.an-x-circle')).toBeNull();
   });
 
   describe('Methods:', () => {
@@ -75,12 +75,12 @@ describe('PoMenuFilterComponent:', () => {
       expect(loadingIcon).toBeFalsy();
     });
 
-    it('shouldn`t contain `po-icon-search` and contain `po-loading-icon` if `loading` is true', () => {
+    it('shouldn`t contain `an-magnifying-glas` and contain `po-loading-icon` if `loading` is true', () => {
       component.loading = true;
 
       fixture.detectChanges();
 
-      const searchIcon = fixture.debugElement.nativeElement.querySelector('.po-icon-search');
+      const searchIcon = fixture.debugElement.nativeElement.querySelector('.an-magnifying-glas');
       const loadingIcon = fixture.debugElement.nativeElement.querySelector('.po-loading-icon');
 
       expect(loadingIcon).toBeTruthy();

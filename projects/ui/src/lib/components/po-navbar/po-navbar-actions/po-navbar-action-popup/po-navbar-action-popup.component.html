@@ -1,5 +1,5 @@
 <div tabindex="0" #target class="po-navbar-action-popup-content po-clickable" (click)="popup.toggle()">
-  <span class="po-icon {{ getLastIconAction() }}"></span>
+  <po-icon [p-icon]="getLastIconAction()"></po-icon>
 </div>
 
 <po-popup #popup p-size="medium" [p-actions]="iconActions" [p-target]="target"> </po-popup>
