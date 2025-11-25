@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.36.0](https://github.com/po-ui/po-angular/compare/v19.35.0...v19.36.0) (2025-11-25)
+
+
+### Features
+
+* **modal:** adiciona suporte a ícone nas ações do modal ([a0cd705](https://github.com/po-ui/po-angular/commit/a0cd705d3cc6cd77327df023d537dae68985b212))
+
+
+### Bug Fixes
+
+* **fields:** corrige autoheight e alinha ícones ([669e87e](https://github.com/po-ui/po-angular/commit/669e87ee5b959025d3337ad0dff04c0efba3f22f))
+
 ### [19.35.0](https://github.com/po-ui/po-angular/compare/v19.34.0...v19.35.0) (2025-11-10)
 
 Compatibilidade com @totvs/thf-components@19.35.0
