@@ -1,6 +1,5 @@
 import { Renderer2, RendererFactory2, RendererStyleFlags2, DOCUMENT } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon';
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
@@ -107,8 +106,7 @@ describe('PoThemeService:', () => {
         PoThemeService,
         { provide: DOCUMENT, useValue: document },
         { provide: RendererFactory2, useClass: MockRendererFactory2 },
-        { provide: 'poThemeDefault', useValue: poThemeDefault },
-        { provide: ICONS_DICTIONARY, useValue: PoIconDictionary }
+        { provide: 'poThemeDefault', useValue: poThemeDefault }
       ]
     });
 
@@ -959,8 +957,7 @@ describe('PoThemeService private setDataDefaultSizeHTML:', () => {
         PoThemeService,
         { provide: DOCUMENT, useValue: document },
         { provide: RendererFactory2, useClass: MockRendererFactory2 },
-        { provide: 'poThemeDefault', useValue: poThemeDefault },
-        { provide: ICONS_DICTIONARY, useValue: PoIconDictionary }
+        { provide: 'poThemeDefault', useValue: poThemeDefault }
       ]
     });
     service = TestBed.inject(PoThemeService);

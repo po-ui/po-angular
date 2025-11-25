@@ -105,15 +105,15 @@ describe('PoTableIconComponent:', () => {
       expect(getNativeElement('.po-table-icon-content')).toBeTruthy();
     });
 
-    it('Should have `po-icon-copy`.', () => {
-      component.icon = 'po-icon-copy';
+    it('Should have `an-copy`.', () => {
+      component.icon = 'an-copy';
 
       fixture.detectChanges();
-      expect(getNativeElement('.po-icon-copy')).toBeTruthy();
+      expect(getNativeElement('.an-copy')).toBeTruthy();
     });
 
     it('Should have `po-text-color-11`.', () => {
-      component.icon = 'po-icon-copy';
+      component.icon = 'an-copy';
       component.color = 'po-text-color-11';
       fixture.detectChanges();
       expect(getNativeElement('.po-text-color-11')).toBeTruthy();

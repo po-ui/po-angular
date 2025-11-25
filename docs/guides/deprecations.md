@@ -6,7 +6,7 @@
 
 ## Descontinuidade
 
-Anunciamos os recursos obsoletos no nosso [CHANGELOG](https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md). Esses recursos obsoletos aparecem na documentação com uma marcação de *`Deprecated`* e não são mais exemplificados nos *samples* do portal. Quando anunciamos uma suspensão de uso, sempre anunciamos também um caminho de atualização recomendado. Neste documento teremos um resumo dessses recursos depreciados.
+Anunciamos os recursos obsoletos no nosso [CHANGELOG](https://github.com/po-ui/po-angular/blob/master/CHANGELOG.md). Esses recursos obsoletos aparecem na documentação com uma marcação de *`Deprecated`* e não são mais exemplificados nos *samples* do portal. Quando anunciamos uma suspensão de uso, sempre anunciamos também um caminho de atualização recomendado. Neste documento teremos um resumo desses recursos depreciados.
 
 Quando um recurso é descontinuado ele ainda se mantém presente geralmente pelas próximas `duas` versões principais. Depois disso esses recursos serão removidos. Uma descontinuação pode ser anunciada em qualquer versão, mas a sua remoção acontecerá apenas na versão principal. Até um recurso depreciado ser removido, manteremos o suporte a problemas críticos e de segurança e também temos ferramentas de migração que geralmente automatizam a maior parte das atualizações.
 
@@ -192,6 +192,22 @@ export class AppModule { }
 
 ```
 
+### Remoção da biblioteca POIcon
+A partir da v20, a biblioteca de ícones POIcon foi removida. O conjunto padrão de ícones passa a ser a lib Animalia Icons.
+
+Antes - PO Icon (legado)
+```
+//html
+<i class="po-icon po-icon-user"></i>
+```
+
+Depois - Animalia Icons (atual)
+```
+//html
+<i class="an an-user"></i>
+```
+> Para saber como utilizar, veja em [Biblioteca de ícones](/icons) do PO UI.
+
 ## Breaking Changes
 
 <div class="po-row">
@@ -223,6 +239,12 @@ export class AppModule { }
           <td class="po-table-column">p-additional-help-tooltip</td>
           <td class="po-table-column">p-helper</td>
           <td class="po-table-column" style="text-align: center;">v23</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="/icons">POIcon</a></th>
+          <td class="po-table-column">Biblioteca de ícones</td>
+          <td class="po-table-column">Animalia Icons</td>
+          <td class="po-table-column" style="text-align: center;">v20</td>
         </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
