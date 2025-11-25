@@ -139,7 +139,7 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Máscara para o campo.
    *
-   * **Componentes compatíveis:** `po-input`.
+   * **Componente compatível:** `po-input`.
    * > também é atribuído ao utilizar a propriedade `type: time`.
    */
   mask?: string;
@@ -147,10 +147,38 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Define que o valor do componente será conforme especificado na mascára. O valor padrão é `false`.
    *
-   * **Componentes compatíveis:** `po-input`.
+   * **Componente compatível:** `po-input`.
    * > também é atribuído ao utilizar a propriedade `type: time`.
    * */
   maskFormatModel?: boolean;
+
+  /**
+   * Controla como o componente aplica as validações de comprimento mínimo (`minLength`) e máximo (`maxLength`) quando há uma máscara (`p-mask`) definida.
+   *
+   * - Quando `true`, apenas os caracteres alfanuméricos serão contabilizados para a validação dos comprimentos.
+   * - Quando `false`, todos os caracteres, incluindo os especiais da máscara, serão considerados na validação.
+   *
+   * **Componentes compatíveis:** `po-input`, `po-decimal`.
+   *
+   * > Esta propriedade é ignorada quando utilizada em conjunto com `p-mask-format-model`.
+   *
+   * Exemplo:
+   * ```
+   * fields:Array<PoDynamicFormField> = [
+   * {
+   *   property: 'CNPJ maskNoLengthValidation TRUE',
+   *   required: true,
+   *   showRequired: true,
+   *   mask: '99.999.999/9999-99',
+   *   pattern: '([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])',
+   *   maskNoLengthValidation: true,
+   *   maxLength: 14,
+   *   minLength: 0
+   * }
+   * ```
+   * - Entrada: `11.111.111/1111-11` → Validação será aplicada somente aos números, ignorando os caracteres especiais.
+   */
+  maskNoLengthValidation?: boolean;
 
   /** Define o ícone que será exibido no início do campo.
    * > Esta propriedade só pode ser utilizado nos campos:
@@ -466,7 +494,7 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Permite a seleção de múltiplos itens.
    *
-   * **Componente compatível:** `po-lookup`, `po-upload`
+   * **Componentes compatíveis:** `po-lookup`, `po-upload`
    */
   multiple?: boolean;
 
@@ -544,7 +572,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Define o modo de pesquisa utilizado no filtro da lista de seleção: `startsWith`, `contains` ou `endsWith`.
    * > Quando utilizar a propriedade p-filter-service esta propriedade será ignorada.
    *
-   * **Componentes compatíveis:** `po-multiselect`.
+   * **Componente compatível:** `po-multiselect`.
    */
   filterMode?: PoMultiselectFilterMode;
 
@@ -639,7 +667,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    *
-   * **Componentes compatíveis**: `po-lookup`
+   * **Componente compatível**: `po-lookup`
    */
   changeVisibleColumns?: Function;
 
@@ -649,7 +677,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    *
-   * **Componentes compatíveis**: `po-lookup`
+   * **Componente compatível**: `po-lookup`
    */
   columnRestoreManager?: Function;
 

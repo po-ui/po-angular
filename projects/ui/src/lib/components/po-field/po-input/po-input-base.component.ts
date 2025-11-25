@@ -240,12 +240,12 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   /**
    * @description
    *
-   * Define se os caracteres especiais da máscara devem ser ignorados ao validar os comprimentos mínimo (`minLength`) e máximo (`maxLength`) do campo.
+   * Controla como o componente aplica as validações de comprimento mínimo (`minLength`) e máximo (`maxLength`) quando há uma máscara (`p-mask`) definida.
    *
    * - Quando `true`, apenas os caracteres alfanuméricos serão contabilizados para a validação dos comprimentos.
    * - Quando `false`, todos os caracteres, incluindo os especiais da máscara, serão considerados na validação.
    *
-   * > Será ignorado essa propriedade , caso esteja utilizando junto com a propriedade `p-mask-format-model`.
+   * > Esta propriedade é ignorada quando utilizada em conjunto com `p-mask-format-model`.
    *
    * Exemplo:
    * ```
