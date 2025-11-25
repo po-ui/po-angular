@@ -92,14 +92,14 @@ describe('PoToolbarComponent:', () => {
       expect(nativeElement.querySelector('.an-dots-three')).toBeTruthy();
     });
 
-    it('should show actions with `po-icon-cart` if has an action and `actionsIcon` is `po-icon-cart`', () => {
+    it('should show actions with `an-shopping-cart` if has an action and `actionsIcon` is `an-shopping-cart`', () => {
       component.actions = [{ label: 'teste' }];
-      component.actionsIcon = 'po-icon-cart';
+      component.actionsIcon = 'an-shopping-cart';
 
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-toolbar-actions')).toBeTruthy();
-      expect(nativeElement.querySelector('.po-icon-cart')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-shopping-cart')).toBeTruthy();
     });
 
     it('shouldn`t show `po-actions` and `icon` if doesn`t have an action', () => {
@@ -109,7 +109,7 @@ describe('PoToolbarComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('po-toolbar-actions')).toBeNull();
-      expect(nativeElement.querySelector('.po-icon-cart')).toBeNull();
+      expect(nativeElement.querySelector('.an-shopping-cart')).toBeNull();
     });
   });
 });

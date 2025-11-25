@@ -9,7 +9,6 @@
     <div class="po-stepper-circle-active">
       <po-icon
         class="po-stepper-circle-content"
-        [class.po-icon]="true"
         [p-icon]="iconActive ? iconActive : 'ICON_EDIT'"
         [class.po-stepper-circle-content-lg]="isLargeStep"
         [class.po-stepper-circle-content-md]="isMediumStep"
@@ -19,7 +18,6 @@
     @if (!isActive) {
       <po-icon
         class="po-stepper-circle-content"
-        [class.po-icon]="icons || isDone"
         [p-icon]="isDone ? iconDone || 'ICON_OK' : iconDefault ? iconDefault : icons ? 'ICON_INFO' : ''"
         [class.po-stepper-circle-content-lg]="isLargeStep"
         [class.po-stepper-circle-content-md]="isMediumStep"

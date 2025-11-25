@@ -37,7 +37,7 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('.po-button-danger')).toBeFalsy();
     expect(nativeElement.querySelector('.po-button-link')).toBeFalsy();
 
-    expect(nativeElement.querySelector('span.po-icon')).toBeFalsy();
+    expect(nativeElement.querySelector('po-icon i.an')).toBeFalsy();
   });
 
   it('should update `p-label`', () => {
@@ -47,11 +47,12 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('.po-button-label').innerHTML).toContain('Po Button');
   });
 
-  it('should add i with an icon when `p-icon` is defined', () => {
-    fixture.componentRef.setInput('p-icon', 'po-icon-news');
+  it('should render an icon element when p-icon is defined', () => {
+    fixture.componentRef.setInput('p-icon', 'an-newspaper');
     fixture.detectChanges();
 
-    expect(nativeElement.querySelector('i.po-icon.po-icon-news')).toBeTruthy();
+    const icon = nativeElement.querySelector('po-icon i');
+    expect(icon).toBeTruthy();
   });
 
   it('should simulate button blur.', () => {
