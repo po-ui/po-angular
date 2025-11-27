@@ -1976,3 +1976,196 @@ describe('density mode: ', () => {
     expect(getDensityMode()).toBe(PoDensityMode.Medium);
   });
 });
+
+describe('getTextColor:', () => {
+  let getComputedStyleSpy: jasmine.Spy;
+
+  beforeEach(() => {
+    getComputedStyleSpy = spyOn(window, 'getComputedStyle').and.returnValue({
+      getPropertyValue: (token: string) => {
+        const tokens = {
+          '--color-neutral-light-00': '#ffffff',
+          '--color-neutral-dark-95': '#1a1a1a'
+        };
+        return tokens[token] || '';
+      }
+    } as CSSStyleDeclaration);
+  });
+
+  afterEach(() => {
+    document.documentElement.className = '';
+  });
+
+  it('should return lightest color token for light theme when type is "lightest"', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColor('lightest');
+
+    expect(result).toBe('#ffffff');
+    expect(getComputedStyleSpy).toHaveBeenCalledWith(document.documentElement);
+  });
+
+  it('should return darkest color token for light theme when type is "darkest"', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColor('darkest');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should return darkest color token for dark theme when type is "darkest"', () => {
+    document.documentElement.className = 'potheme-dark-AA';
+
+    const result = UtilFunctions.getTextColor('darkest');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should return lightest color token for dark theme when type is "lightest"', () => {
+    document.documentElement.className = 'potheme-dark-AA';
+
+    const result = UtilFunctions.getTextColor('lightest');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should detect light theme when className does not include "-dark-"', () => {
+    document.documentElement.className = 'po-theme-default';
+
+    const result = UtilFunctions.getTextColor('lightest');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should detect dark theme when className includes "-dark-"', () => {
+    document.documentElement.className = 'potheme-dark-AA';
+
+    const result = UtilFunctions.getTextColor('lightest');
+
+    expect(result).toBe('#1a1a1a');
+  });
+});
+
+describe('getTextColorFromBackgroundColor:', () => {
+  beforeEach(() => {
+    spyOn(window, 'getComputedStyle').and.returnValue({
+      getPropertyValue: (token: string) => {
+        const tokens = {
+          '--color-neutral-light-00': '#ffffff',
+          '--color-neutral-dark-95': '#1a1a1a'
+        };
+        return tokens[token] || '';
+      }
+    } as CSSStyleDeclaration);
+  });
+
+  afterEach(() => {
+    document.documentElement.className = '';
+  });
+
+  it('should return darkest color for light background (white)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(255, 255, 255)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should return lightest color for dark background (black)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(0, 0, 0)');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should return darkest color for light gray background', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(200, 200, 200)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should return lightest color for dark gray background', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(50, 50, 50)');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should return darkest color for yellow background (high luminance)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(255, 255, 0)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should return lightest color for blue background (low luminance)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(0, 0, 255)');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should return darkest color for cyan background (high luminance)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(0, 255, 255)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should return lightest color for red background (low luminance)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(255, 0, 0)');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should handle rgba format ignoring alpha channel', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgba(255, 255, 255, 0.5)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should handle rgb format with spaces', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb( 255 , 255 , 255 )');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should return lightest color for background at YIQ threshold (127)', () => {
+    document.documentElement.className = 'po-theme-light';
+    // YIQ = (127 * 299 + 127 * 587 + 127 * 114) / 1000 = 127
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(127, 127, 127)');
+
+    expect(result).toBe('#ffffff');
+  });
+
+  it('should return darkest color for background just above YIQ threshold (128)', () => {
+    document.documentElement.className = 'po-theme-light';
+    // YIQ = (128 * 299 + 128 * 587 + 128 * 114) / 1000 = 128
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(128, 128, 128)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+
+  it('should handle green background correctly (high YIQ due to green weight)', () => {
+    document.documentElement.className = 'po-theme-light';
+
+    const result = UtilFunctions.getTextColorFromBackgroundColor('rgb(0, 255, 0)');
+
+    expect(result).toBe('#1a1a1a');
+  });
+});

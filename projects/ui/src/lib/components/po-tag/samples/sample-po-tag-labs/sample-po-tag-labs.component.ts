@@ -36,10 +36,7 @@ export class SamplePoTagLabsComponent implements OnInit {
   value: string;
   properties: Array<string>;
 
-  propertiesOptions: Array<PoCheckboxGroupOption> = [
-    { value: 'disabled', label: 'Disabled' },
-    { value: 'removable', label: 'Removable' }
-  ];
+  propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'removable', label: 'Removable' }];
 
   public readonly iconList: Array<PoSelectOption> = [
     { label: 'an an-bluetooth', value: 'an an-bluetooth' },
@@ -78,11 +75,10 @@ export class SamplePoTagLabsComponent implements OnInit {
     const value = [...this.propertiesOptions];
 
     if (event.includes('removable')) {
-      value[0] = { value: 'disabled', label: 'Disabled', disabled: false };
+      value[1] = { value: 'disabled', label: 'Disabled', disabled: false };
       this.propertiesOptions = value;
     } else {
-      value[0] = { value: 'disabled', label: 'Disabled', disabled: true };
-      this.propertiesOptions = value;
+      this.propertiesOptions = value.filter(option => option.value !== 'disabled');
     }
   }
 
