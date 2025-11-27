@@ -178,7 +178,8 @@ export class PoTagBaseComponent {
    *   - <span class="dot po-color-11"></span> `color-11`
    *   - <span class="dot po-color-12"></span> `color-12`
    *
-   * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background.
+   * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background;
+   * - O componente ajusta automaticamente a cor do texto para garantir legibilidade, escolhendo dinamicamente entre texto claro ou escuro conforme o contraste necessário.
    *
    * > **Atenção:** A propriedade `p-type` sobrepõe esta definição.
    */

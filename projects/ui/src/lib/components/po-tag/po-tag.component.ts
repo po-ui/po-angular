@@ -4,7 +4,7 @@ import { PoLanguageService } from './../../services/po-language/po-language.serv
 import { PoTagIcon } from './enums/po-tag-icon.enum';
 import { PoTagType } from './enums/po-tag-type.enum';
 import { PoTagBaseComponent } from './po-tag-base.component';
-import { PoTagLiterals } from './interfaces/po-tag-literals.interface';
+import { getTextColorFromBackgroundColor } from '../../utils/util';
 
 const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
 
@@ -111,8 +111,25 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   }
 
   styleTag() {
+    // Ajusta a cor do texto com base na cor de fundo computada do elemento
+    requestAnimationFrame(() => {
+      const computedStyle = getComputedStyle(this.poTag.nativeElement);
+
+      if (
+        (!this.tagColor || this.tagColor?.startsWith('po-color-')) &&
+        !this.removable &&
+        !this.textColor &&
+        computedStyle?.backgroundColor
+      ) {
+        const textColor = getTextColorFromBackgroundColor(computedStyle.backgroundColor);
+        this.poTag.nativeElement.style.color = textColor;
+      } else {
+        this.poTag.nativeElement.style.color = '';
+      }
+    });
+
     if (!this.tagColor && !this.removable) {
-      return { 'background-color': this.customColor, 'color': 'white' };
+      return { 'background-color': this.customColor };
     } else {
       return {};
     }

@@ -850,3 +850,41 @@ export function getMeasurableEl(labelElement: ElementRef<HTMLElement>): Element 
   const inner = host.querySelector('.po-label, label, .po-label-title, .po-field-title .po-checkbox-label');
   return inner ?? host;
 }
+
+/**
+ * Retorna a cor do texto baseada no tema atual.
+ * @param type Tipo de cor do texto, pode ser 'lightest' ou 'darkest'.
+ * @returns Valor da cor no formato definido pela propriedade customizada CSS (por exemplo, '#ffffff', 'rgb(255,255,255)').
+ */
+export function getTextColor(type: 'lightest' | 'darkest') {
+  const isLightTheme = !document.documentElement.className.includes('-dark-');
+  let token = '';
+
+  if (type === 'lightest') {
+    token = isLightTheme ? '--color-neutral-light-00' : '--color-neutral-dark-95';
+  } else {
+    token = isLightTheme ? '--color-neutral-dark-95' : '--color-neutral-light-00';
+  }
+
+  return getComputedStyle(document.documentElement).getPropertyValue(token);
+}
+
+/**
+ * Retorna a cor do texto baseada na cor de fundo informada.
+ * @param backgroundColor Cor de fundo em formato 'rgb(r,g,b)' ou 'rgba(r,g,b,a)'.
+ * @returns Valor da cor do texto (por exemplo, '#ffffff', 'rgb(255,255,255)') baseado no brilho percebido da cor de fundo usando a fórmula do espaço de cor YIQ.
+ */
+export function getTextColorFromBackgroundColor(backgroundColor: string): string {
+  const rgbValues = backgroundColor
+    .replaceAll(/(?:^rgba?\(|\s+|\)$)/g, '')
+    .split(',')
+    .map(value => Number.parseInt(value, 10));
+
+  const r = rgbValues[0];
+  const g = rgbValues[1];
+  const b = rgbValues[2];
+
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return yiq >= 128 ? getTextColor('darkest') : getTextColor('lightest');
+}
