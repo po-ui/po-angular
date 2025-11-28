@@ -148,7 +148,7 @@
                 [p-item]="item"
                 [p-separator]="item.separator || separator"
                 [p-icon]="item.icon"
-                [p-icon-arrow-right]="'po-icon-arrow-right'"
+                [p-icon-arrow-right]="'ICON_ARROW_RIGHT'"
                 [p-selected]="isSelectedItem(item) || item.selected"
               >
               </po-item-list>
@@ -179,12 +179,16 @@
           (click)="goBack($event)"
           (keydown)="onKeydownGoBack($event, currentGroup)"
         >
-          <po-icon class="po-field-icon" [p-icon]="'po-icon-arrow-left'"></po-icon>
+          <po-icon class="po-field-icon" [p-icon]="'ICON_ARROW_LEFT'"></po-icon>
           <po-tag [p-value]="currentGroup.label"></po-tag>
         </li>
 
         @if (currentGroup.$subItemTemplate) {
-          <div (click)="$event.stopPropagation()" (keydown)="onKeydownTemplate($event)">
+          <div
+            (click)="$event.stopPropagation()"
+            (keydown)="onKeydownTemplate($event)"
+            (keydown.space)="$event.stopPropagation()"
+          >
             <ng-container
               *ngTemplateOutlet="currentGroup.$subItemTemplate; context: { $implicit: currentGroup }"
             ></ng-container>
@@ -201,7 +205,7 @@
                   [p-label]="subItem.label"
                   [p-item]="subItem"
                   [p-separator]="subItem.separator || separator"
-                  [p-icon]="'po-icon-arrow-right'"
+                  [p-icon]="'ICON_ARROW_RIGHT'"
                   [p-icon-position]="'right'"
                 >
                 </po-item-list>
