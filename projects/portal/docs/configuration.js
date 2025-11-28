@@ -58,6 +58,7 @@ module.exports = {
     { name: 'default' },
     { name: "Output" },
     { name: "Input" },
+    { name: 'override' }
   ],
 
   protractorWebBaseUrl: `browser.baseUrl + '/documentation/{component}?view=web'`

@@ -41,7 +41,30 @@ module.exports = {
 
     // Resolve all methods and properties from the classDoc. Includes inherited docs.
     classDoc.methods = classDoc.methods.concat(this.resolveMethods(classDoc));
-    classDoc.properties = classDoc.properties.concat(this.resolveProperties(classDoc)).sort((a, b) => {
+    
+    // Concatena propriedades da classe atual
+    const currentProperties = this.resolveProperties(classDoc);
+    classDoc.properties = classDoc.properties.concat(currentProperties);
+
+    // Remove propriedades duplicadas dando prioridade às que têm @override
+    const propertyMap = new Map();
+    for (const prop of classDoc.properties) {
+      const existing = propertyMap.get(prop.name);
+
+      if (!existing) {
+        propertyMap.set(prop.name, prop);
+        continue;
+      }
+      
+      const hasOverrideTag = (prop.tags?.tags || []).some(tag => tag.tagName === 'override');
+
+      if (hasOverrideTag) {
+        propertyMap.set(prop.name, prop);
+      }
+    }
+    
+    // Converte o Map de volta para array e ordena
+    classDoc.properties = Array.from(propertyMap.values()).sort((a, b) => {
       return a.name > b.name ? 1 : -1;
     });
 
