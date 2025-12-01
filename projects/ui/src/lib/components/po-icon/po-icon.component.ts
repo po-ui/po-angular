@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, Optional, TemplateRef } from '@angular/core';
-import { ICONS_DICTIONARY, AnimaliaIconDictionary } from './po-icon-dictionary';
+import { AnimaliaIconDictionary } from './po-icon-dictionary';
 /**
  * @docsPrivate
  *
@@ -20,8 +20,8 @@ export class PoIconComponent {
   private _icon: string | TemplateRef<void>;
   private _iconToken: { [key: string]: string };
 
-  constructor(@Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }) {
-    this._iconToken = value ?? AnimaliaIconDictionary;
+  constructor() {
+    this._iconToken = AnimaliaIconDictionary;
   }
 
   /**

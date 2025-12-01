@@ -49,17 +49,7 @@
     </div>
 
     <div class="po-table-list-manager-item-buttons">
-      @if (!hideActionFixedColumns && iconNameLib === 'PoIcon') {
-        <po-button
-          [p-icon]="isFixed(option) ? templateIconFixed : templateIconNotFixed"
-          (p-click)="emitFixed(option)"
-          [p-disabled]="!option.visible || checksIfHasFiveFixed(option)"
-          [p-size]="componentsSize"
-        >
-        </po-button>
-      }
-
-      @if (!hideActionFixedColumns && iconNameLib === 'AnimaliaIcon') {
+      @if (!hideActionFixedColumns) {
         <po-button
           [p-icon]="isFixed(option) ? 'ICON_PUSH_PIN_SLASH' : 'ICON_PUSH_PIN'"
           (p-click)="emitFixed(option)"
@@ -90,36 +80,4 @@
       </po-button>
     </div>
   </div>
-</ng-template>
-
-<ng-template #templateIconNotFixed>
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <g clip-path="url(#clip0_12562_15948)">
-      <path
-        d="M13.7143 5.71429V10C13.7143 10.96 14.0314 11.8514 14.5714 12.5714H9.42857C9.98571 11.8343 10.2857 10.9429 10.2857 10V5.71429H13.7143ZM16.2857 4H7.71429C7.24286 4 6.85714 4.38571 6.85714 4.85714C6.85714 5.32857 7.24286 5.71429 7.71429 5.71429H8.57143V10C8.57143 11.4229 7.42286 12.5714 6 12.5714V14.2857H11.1171V20.2857L11.9743 21.1429L12.8314 20.2857V14.2857H18V12.5714C16.5771 12.5714 15.4286 11.4229 15.4286 10V5.71429H16.2857C16.7571 5.71429 17.1429 5.32857 17.1429 4.85714C17.1429 4.38571 16.7571 4 16.2857 4Z"
-        fill="black"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_12562_15948">
-        <rect width="24" height="24" fill="white" />
-      </clipPath>
-    </defs>
-  </svg>
-</ng-template>
-
-<ng-template #templateIconFixed>
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <g clip-path="url(#clip0_12562_17487)">
-      <path
-        d="M16.2857 4H7.71429C7.24286 4 6.85714 4.38571 6.85714 4.85714C6.85714 5.32857 7.24286 5.71429 7.71429 5.71429H8.57143V10C8.57143 11.4229 7.42286 12.5714 6 12.5714V14.2857H11.1171V20.2857L11.9743 21.1429L12.8314 20.2857V14.2857H18V12.5714C16.5771 12.5714 15.4286 11.4229 15.4286 10V5.71429H16.2857C16.7571 5.71429 17.1429 5.32857 17.1429 4.85714C17.1429 4.38571 16.7571 4 16.2857 4Z"
-        fill="#B4B4C0"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_12562_17487">
-        <rect width="24" height="24" fill="black" />
-      </clipPath>
-    </defs>
-  </svg>
 </ng-template>

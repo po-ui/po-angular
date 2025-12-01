@@ -448,13 +448,13 @@ describe('PoPageListComponent - Desktop:', () => {
     });
 
     it('should show only one icon in button actions.', () => {
-      component.actions[0].icon = 'po-icon-news';
-      component.actions[1].icon = 'po-icon-news';
-      component.actions[2].icon = 'po-icon-news';
+      component.actions[0].icon = 'an-newspaper';
+      component.actions[1].icon = 'an-newspaper';
+      component.actions[2].icon = 'an-newspaper';
 
       fixture.detectChanges();
 
-      const icons = nativeElement.querySelectorAll('.po-icon-news');
+      const icons = nativeElement.querySelectorAll('.an-newspaper');
 
       expect(icons.length).toBe(1);
     });

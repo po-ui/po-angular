@@ -232,8 +232,8 @@ describe('PoNumberComponent:', () => {
       component.hidePasswordPeek = true;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-eye')).toBeNull();
-      expect(nativeElement.querySelector('.po-icon-eye-off')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye-closed')).toBeNull();
       expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeNull();
     });
 
@@ -243,8 +243,8 @@ describe('PoNumberComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-eye')).toBeNull();
-      expect(nativeElement.querySelector('.po-icon-eye-off')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye-closed')).toBeNull();
     });
 
     it('should update the value of type to password', () => {
@@ -257,8 +257,8 @@ describe('PoNumberComponent:', () => {
 
       expect(component.inputEl.nativeElement.type).toBe(expectedValue);
       expect(component.visiblePassword).toBeFalsy();
-      expect(nativeElement.querySelector('.po-icon-eye')).toBeNull();
-      expect(nativeElement.querySelector('.po-icon-eye-off')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye')).toBeNull();
+      expect(nativeElement.querySelector('.an-eye-closed')).toBeNull();
     });
 
     it('should show po-clean if `clean` is true and `disabled` and `readonly` are false', () => {

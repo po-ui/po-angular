@@ -33,7 +33,6 @@ import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
 import { uuid } from '../../utils/util';
-import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -164,7 +163,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
-  private _iconToken: { [key: string]: string };
   private differ;
   private footerHeight;
   private headerHeight;
@@ -195,10 +193,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this._columnManagerTargetFixed;
   }
 
-  get iconNameLib() {
-    return this._iconToken.NAME_LIB;
-  }
-
   /* eslint-disable max-params */
 
   constructor(
@@ -208,8 +202,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    private defaultService: PoTableService,
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
+    private readonly defaultService: PoTableService
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
@@ -222,8 +215,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.resizeListener = renderer.listen('window', 'resize', (event: any) => {
       this.debounceResize();
     });
-
-    this._iconToken = value ?? AnimaliaIconDictionary;
   }
   /* eslint-enable max-params */
 

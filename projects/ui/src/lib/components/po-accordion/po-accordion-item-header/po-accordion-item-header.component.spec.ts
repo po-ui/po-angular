@@ -93,8 +93,12 @@ describe('PoAccordionItemHeaderComponent:', () => {
       expect(button.querySelector('po-icon')).toBeTruthy();
     });
 
-    it('should have a icon with class po-icon', () => {
-      expect(icon.classList.contains('po-icon')).toBeTruthy();
+    it('should render the accordion icon using Animalia classes', () => {
+      component.label = 'Accordion 1';
+      fixture.detectChanges();
+
+      const icon = nativeElement.querySelector('po-icon i.an');
+      expect(icon).toBeTruthy();
     });
 
     it('should have a icon with class po-accordion-item-header-icon', () => {

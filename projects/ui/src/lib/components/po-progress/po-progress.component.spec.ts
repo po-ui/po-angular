@@ -223,12 +223,12 @@ describe('PoProgressComponent:', () => {
       expect(text).toBe(component.text);
     });
 
-    it('should contain `po-icon-agro-business` if `p-info-icon` is `po-icon-agro-business`', () => {
-      component.infoIcon = 'po-icon-agro-business';
+    it('should contain `an-tractor` if `p-info-icon` is `an-tractor`', () => {
+      component.infoIcon = 'an-tractor';
 
       fixture.detectChanges();
 
-      const infoIcon = nativeElement.querySelector('.po-icon-agro-business');
+      const infoIcon = nativeElement.querySelector('.an-tractor');
 
       expect(infoIcon).toBeTruthy();
     });

@@ -14,9 +14,8 @@
   <div class="po-field-container-content" [attr.p-size]="size">
     <select
       #select
-      class="po-select"
+      class="po-select po-select-phosphor"
       [class.po-select-aa]="size === 'small'"
-      [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-select-phosphor' : 'po-select-poicon'"
       [attr.data-focused-element]="!disabled"
       [attr.data-inactive-component]="disabled || readonly"
       [attr.name]="name"

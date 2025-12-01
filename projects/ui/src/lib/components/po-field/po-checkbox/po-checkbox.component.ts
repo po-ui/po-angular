@@ -13,7 +13,6 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 
 import { PoCheckboxBaseComponent } from './po-checkbox-base.component';
@@ -56,23 +55,15 @@ import { PoHelperComponent } from '../../po-helper';
 export class PoCheckboxComponent extends PoCheckboxBaseComponent implements AfterViewInit, OnChanges, OnInit {
   private readonly changeDetector = inject(ChangeDetectorRef);
 
-  private _iconToken: { [key: string]: string };
-
   showTip = false;
 
   @ViewChild('checkboxLabel', { static: false }) checkboxLabel: ElementRef;
   @ViewChild('labelEl', { read: ElementRef }) labelEl!: ElementRef<HTMLElement>;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   constructor() {
-    const value = inject<{
-      [key: string]: string;
-    }>(ICONS_DICTIONARY, { optional: true });
-
     const changeDetector = inject(ChangeDetectorRef);
     super(changeDetector);
     this.changeDetector = changeDetector;
-
-    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   /**
@@ -232,9 +223,5 @@ export class PoCheckboxComponent extends PoCheckboxBaseComponent implements Afte
   public handleLabelTooltip(): void {
     this.showTip = updateTooltip(this.showTip, this.labelEl);
     this.changeDetector.markForCheck();
-  }
-
-  get iconNameLib() {
-    return this._iconToken.NAME_LIB;
   }
 }

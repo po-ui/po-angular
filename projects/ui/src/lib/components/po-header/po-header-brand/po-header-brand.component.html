@@ -4,13 +4,13 @@
       #target
       class="po-nav-header-medium"
       p-size="medium"
-      p-icon="an an-list"
+      p-icon="ICON_MENU"
       p-kind="tertiary"
       (p-click)="clickMenu.emit()"
     >
     </po-button>
   } @else if (menuCollapse.length && !hideButtonMenu) {
-    <po-button p-size="medium" #target p-icon="an an-list" p-kind="tertiary" (p-click)="clickMenu.emit()"> </po-button>
+    <po-button p-size="medium" #target p-icon="ICON_MENU" p-kind="tertiary" (p-click)="clickMenu.emit()"> </po-button>
   }
 
   @if (brand?.logo && !smallLogo) {

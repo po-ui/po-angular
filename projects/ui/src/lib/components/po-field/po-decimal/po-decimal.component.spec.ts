@@ -1695,14 +1695,14 @@ describe('PoDecimalComponent:', () => {
     });
 
     it('should includes an icon.', () => {
-      component.icon = 'po-icon-settings';
+      component.icon = 'an-gear-six';
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-icon-settings')).toBeTruthy();
+      expect(nativeElement.querySelector('.an-gear-six')).toBeTruthy();
     });
 
     it('should attribute `po-field-icon-disabled` class if input is disabled.', () => {
-      component.icon = 'po-icon-settings';
+      component.icon = 'an-gear-six';
       component.disabled = true;
       fixture.detectChanges();
 
@@ -1710,7 +1710,7 @@ describe('PoDecimalComponent:', () => {
     });
 
     it('shouldn`t attribute `po-field-icon-disabled` class if input is not disabled.', () => {
-      component.icon = 'po-icon-settings';
+      component.icon = 'an-gear-six';
       component.disabled = false;
       fixture.detectChanges();
 

@@ -6,7 +6,6 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoCheckboxGroupComponent } from '../../po-field/po-checkbox-group/po-checkbox-group.component';
-import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../po-icon';
 import { PoTableColumn } from '../interfaces/po-table-column.interface';
 
 export const poTableListManagerLiterals = {
@@ -52,7 +51,6 @@ type Direction = 'up' | 'down';
 })
 export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   private _componentsSize?: string = undefined;
-  private _iconToken: { [key: string]: string };
 
   @Output('p-change-position')
   private changePosition = new EventEmitter<any>();
@@ -88,15 +86,7 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
 
   literals;
 
-  get iconNameLib() {
-    return this._iconToken.NAME_LIB;
-  }
-
-  constructor(
-    languageService: PoLanguageService,
-    changeDetector: ChangeDetectorRef,
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
-  ) {
+  constructor(languageService: PoLanguageService, changeDetector: ChangeDetectorRef) {
     super();
 
     const language = languageService.getShortLanguage();
@@ -105,8 +95,6 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
       ...poTableListManagerLiterals[poLocaleDefault],
       ...poTableListManagerLiterals[language]
     };
-
-    this._iconToken = value ?? AnimaliaIconDictionary;
   }
 
   emitChangePosition(option, direction: Direction) {
