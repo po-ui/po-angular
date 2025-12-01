@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.37.0](https://github.com/po-ui/po-angular/compare/v19.36.0...v19.37.0) (2025-12-01)
+
+### Features
+
+* **dynamic-form:** adiciona propriede maskNoLengthValidation ([34b6dc4](https://github.com/po-ui/po-angular/commit/34b6dc4d5eb65e04d2134465c4af94c4e8ffe643))
+
 ## [19.36.0](https://github.com/po-ui/po-angular/compare/v19.35.0...v19.36.0) (2025-11-25)
 
 
