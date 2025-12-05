@@ -520,6 +520,56 @@ describe('PoListBoxComponent', () => {
         expect((component as any).navigationStack.length).toBe(2);
       });
 
+      it('onKeydownTemplate: should emit closeEvent if press Tab out .po-listbox-dropdown', () => {
+        const emitSpy = spyOn(component.closeEvent, 'emit');
+        const stopSpy = jasmine.createSpy('stopPropagation');
+
+        const event = {
+          code: 'Tab',
+          target: document.createElement('div'),
+          stopPropagation: stopSpy
+        } as unknown as KeyboardEvent;
+
+        component['onKeydownTemplate'](event);
+
+        expect(stopSpy).not.toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalled();
+      });
+
+      it('onKeydownTemplate: should call stopPropagation and not emit closeEvent when press Tab in .po-listbox-dropdown', () => {
+        const emitSpy = spyOn(component.closeEvent, 'emit');
+        const stopSpy = jasmine.createSpy('stopPropagation');
+
+        const dropdown = document.createElement('div');
+        dropdown.classList.add('po-listbox-dropdown');
+
+        const child = document.createElement('div');
+        dropdown.appendChild(child);
+        document.body.appendChild(dropdown);
+
+        const event = {
+          code: 'Tab',
+          target: child,
+          stopPropagation: stopSpy
+        } as unknown as KeyboardEvent;
+
+        component['onKeydownTemplate'](event);
+
+        expect(stopSpy).toHaveBeenCalled();
+        expect(emitSpy).not.toHaveBeenCalled();
+
+        dropdown.remove();
+      });
+
+      it('onKeydownGoBack: should not emit closeEvent if subItemTemplate is true', () => {
+        const eventTab = new KeyboardEvent('keydown', { code: 'Tab' });
+
+        spyOn(component.closeEvent, 'emit');
+
+        component.onKeydownGoBack(eventTab, { label: 'item', $subItemTemplate: true as any });
+        expect(component.closeEvent.emit).not.toHaveBeenCalled();
+      });
+
       it('onKeydownGoBack should call goBack on Enter, emit closeEvent on Escape or Tab', () => {
         const eventEnter = new KeyboardEvent('keydown', { key: 'Enter' });
         const eventEscape = new KeyboardEvent('keydown', { code: 'Escape' });

@@ -142,13 +142,14 @@
             (click)="onSelectItem(item, $event)"
             (keydown)="onKeyDown(item, $event)"
           >
-            @if (item.subItems?.length) {
+            @if (item.subItems?.length || item.$subItemTemplate) {
               <po-item-list
                 [p-label]="item.label"
                 [p-item]="item"
                 [p-separator]="item.separator || separator"
-                [p-icon]="'po-icon-arrow-right'"
-                [p-icon-position]="'right'"
+                [p-icon]="item.icon"
+                [p-icon-arrow-right]="'ICON_ARROW_RIGHT'"
+                [p-selected]="isSelectedItem(item) || item.selected"
               >
               </po-item-list>
             } @else if (!item.subItems?.length && returnBooleanValue(item, 'visible') !== false) {
@@ -176,47 +177,59 @@
           [cdkOption]="'back-option'"
           [attr.aria-label]="literals?.backToPreviousGroup"
           (click)="goBack($event)"
-          (keydown)="onKeydownGoBack($event)"
+          (keydown)="onKeydownGoBack($event, currentGroup)"
         >
-          <po-icon class="po-field-icon" [p-icon]="'po-icon-arrow-left'"></po-icon>
+          <po-icon class="po-field-icon" [p-icon]="'ICON_ARROW_LEFT'"></po-icon>
           <po-tag [p-value]="currentGroup.label"></po-tag>
         </li>
 
-        @for (subItem of currentItems; track subItem.label) {
-          @if (subItem.subItems?.length) {
-            <li
-              [cdkOption]="subItem[fieldLabel]"
-              (click)="onSelectItem(subItem, $event)"
-              (keydown)="onKeyDown(subItem, $event)"
-            >
-              <po-item-list
-                [p-label]="subItem.label"
-                [p-item]="subItem"
-                [p-separator]="subItem.separator || separator"
-                [p-icon]="'po-icon-arrow-right'"
-                [p-icon-position]="'right'"
+        @if (currentGroup.$subItemTemplate) {
+          <div
+            (click)="$event.stopPropagation()"
+            (keydown)="onKeydownTemplate($event)"
+            (keydown.space)="$event.stopPropagation()"
+          >
+            <ng-container
+              *ngTemplateOutlet="currentGroup.$subItemTemplate; context: { $implicit: currentGroup }"
+            ></ng-container>
+          </div>
+        } @else {
+          @for (subItem of currentItems; track subItem.label) {
+            @if (subItem.subItems?.length) {
+              <li
+                [cdkOption]="subItem[fieldLabel]"
+                (click)="onSelectItem(subItem, $event)"
+                (keydown)="onKeyDown(subItem, $event)"
               >
-              </po-item-list>
-            </li>
-          } @else if (!subItem.subItems?.length && returnBooleanValue(subItem, 'visible') !== false) {
-            <li
-              [cdkOption]="subItem[fieldLabel]"
-              (click)="onSelectItem(subItem, $event)"
-              (keydown)="onKeyDown(subItem, $event)"
-            >
-              <po-item-list
-                class="po-listbox-item-sub"
-                [p-disabled]="returnBooleanValue(subItem, 'disabled')"
-                [p-visible]="returnBooleanValue(subItem, 'visible')"
-                [p-label]="subItem[fieldLabel]"
-                [p-item]="subItem"
-                [p-icon]="subItem.icon"
-                [p-separator]="subItem.separator || separator"
-                [p-danger]="subItem.type === 'danger'"
-                [p-selected]="isSelectedItem(subItem) || subItem.selected"
+                <po-item-list
+                  [p-label]="subItem.label"
+                  [p-item]="subItem"
+                  [p-separator]="subItem.separator || separator"
+                  [p-icon]="'ICON_ARROW_RIGHT'"
+                  [p-icon-position]="'right'"
+                >
+                </po-item-list>
+              </li>
+            } @else if (!subItem.subItems?.length && returnBooleanValue(subItem, 'visible') !== false) {
+              <li
+                [cdkOption]="subItem[fieldLabel]"
+                (click)="onSelectItem(subItem, $event)"
+                (keydown)="onKeyDown(subItem, $event)"
               >
-              </po-item-list>
-            </li>
+                <po-item-list
+                  class="po-listbox-item-sub"
+                  [p-disabled]="returnBooleanValue(subItem, 'disabled')"
+                  [p-visible]="returnBooleanValue(subItem, 'visible')"
+                  [p-label]="subItem[fieldLabel]"
+                  [p-item]="subItem"
+                  [p-icon]="subItem.icon"
+                  [p-separator]="subItem.separator || separator"
+                  [p-danger]="subItem.type === 'danger'"
+                  [p-selected]="isSelectedItem(subItem) || subItem.selected"
+                >
+                </po-item-list>
+              </li>
+            }
           }
         }
       }
