@@ -1,4 +1,5 @@
-import { Inject, Injectable, Optional, Renderer2, RendererFactory2, DOCUMENT } from '@angular/core';
+import { Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
