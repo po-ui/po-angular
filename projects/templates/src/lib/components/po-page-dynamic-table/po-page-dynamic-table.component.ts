@@ -855,7 +855,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       tap(response => {
         let newArray;
         if (fullParams.page === 1) {
-          newArray = removeDuplicateItemsWithArrayKey(response.items, response.items, this.keys);
+          newArray = response.items;
         } else {
           newArray = removeDuplicateItemsWithArrayKey(this.items, response.items, this.keys);
         }
