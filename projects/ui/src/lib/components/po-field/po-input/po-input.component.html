@@ -33,8 +33,8 @@
       [autocomplete]="autocomplete"
       [class.po-input-icon-left]="icon"
       [class.po-input-icon-left-aa]="icon && size === 'small'"
-      [class.po-input-icon-right]="clean"
-      [class.po-input-icon-right-aa]="clean && size === 'small'"
+      [class.po-input-icon-right]="clean || loading"
+      [class.po-input-icon-right-aa]="(clean || loading) && size === 'small'"
       [class.po-input-aa]="size === 'small'"
       [disabled]="disabled"
       [id]="id"
@@ -49,7 +49,11 @@
       (keydown)="onKeyDown($event)"
     />
     <div class="po-field-icon-container-right">
-      @if (clean && !disabled && !readonly) {
+      @if (loading) {
+        <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+      }
+
+      @if (!loading && clean && !disabled && !readonly) {
         <po-clean
           class="{{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
           [p-element-ref]="inputEl"

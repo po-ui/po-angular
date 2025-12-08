@@ -204,6 +204,23 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @optional
    *
    * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Define se a indicação de campo opcional será exibida.
    *
@@ -342,6 +359,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   protected passedWriteValue: boolean = false;
   protected validatorChange: any;
 
+  private _loading = false;
   private _maxlength?: number;
   private _minlength?: number;
   private _noAutocomplete?: boolean = false;
@@ -788,6 +806,15 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
       this.additionalHelpEventTrigger === 'event' ||
       (this.additionalHelpEventTrigger === undefined && this.additionalHelp.observed)
     );
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  public mapSizeToIcon(size: string): string {
+    const sizeMap: { [key: string]: string } = {
+      small: 'xs',
+      medium: 'sm'
+    };
+    return sizeMap[size] || 'sm';
   }
 
   // utilizado para validar o pattern na inicializacao, fazendo dessa forma o campo fica sujo (dirty).

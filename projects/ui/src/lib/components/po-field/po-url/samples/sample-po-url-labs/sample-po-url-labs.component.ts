@@ -23,14 +23,15 @@ export class SamplePoUrlLabsComponent implements OnInit {
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
     { value: 'disabled', label: 'Disabled' },
+    { value: 'errorLimit', label: 'Limit Error Message' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'loading', label: 'Loading' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
-    { value: 'required', label: 'Required' },
-    { value: 'errorLimit', label: 'Limit Error Message' },
-    { value: 'labelTextWrap', label: 'Label Text Wrap' }
+    { value: 'required', label: 'Required' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [
