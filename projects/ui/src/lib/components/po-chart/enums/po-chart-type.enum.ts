@@ -44,5 +44,10 @@ export enum PoChartType {
    * - É possível demonstrar um dado percentual simples em conjunto com uma descrição resumida em seu interior;
    * - Para um demonstrativo mais elaborado, consegue-se definir alcances em cores, um breve texto descritivo e um ponteiro indicando o valor desejado.
    */
-  Gauge = 'gauge'
+  Gauge = 'gauge',
+
+  /**
+   * Tipo de gráfico utilizado para visualizar e comparar o desempenho de diferentes itens em múltiplas categorias.
+   */
+  Radar = 'radar'
 }

@@ -988,6 +988,36 @@ describe('PoChartComponent', () => {
 
       expect(result).toBe('Custom <b>tooltip</b><br>Value: <i>100</i>');
     });
+
+    it('should call buildRadarTooltip when seriesType is radar', () => {
+      const params = {
+        name: 'Indicator A',
+        seriesName: 'Serie Radar',
+        value: [10, 20, 30],
+        seriesIndex: 0,
+        dataIndex: 0,
+        seriesType: 'radar'
+      };
+
+      component.series = [{ label: 'Serie Radar', data: [10, 20, 30] }];
+
+      const radarTooltipSpy = spyOn(component['chartGridUtils'], 'buildRadarTooltip').and.returnValue(
+        'Radar Tooltip Gerado'
+      );
+
+      const parseSpy = spyOn(component as any, 'parseTooltipText').and.callFake(text => text);
+
+      const result = (component as any).resolveCustomTooltip(
+        params,
+        params.name,
+        params.seriesName,
+        String(params.value)
+      );
+
+      expect(radarTooltipSpy).toHaveBeenCalledWith(params);
+      expect(parseSpy).toHaveBeenCalledWith('Radar Tooltip Gerado');
+      expect(result).toBe('Radar Tooltip Gerado');
+    });
   });
 
   describe('setTooltipProperties', () => {
@@ -1259,6 +1289,17 @@ describe('PoChartComponent', () => {
       expect(component['chartGridUtils'].resolvePx).toHaveBeenCalledWith('--font-size-grid', '.po-chart');
       expect(component['chartGaugeUtils'].setGaugeOptions).toHaveBeenCalledWith(result, mockFontSize);
     });
+
+    it('should set radar options when isTypeRadar is true', () => {
+      component['isTypeRadar'] = true;
+
+      const radarConfig = { indicator: [{ name: 'A', max: 100 }] };
+      component.options = { radar: radarConfig };
+
+      const result = component['setOptions']();
+
+      expect(result.radar).toEqual(radarConfig);
+    });
   });
 
   describe('setShowAxisDetails: ', () => {
@@ -1527,6 +1568,35 @@ describe('PoChartComponent', () => {
       expect(finalizeSerieTypeGaugeSpy).toHaveBeenCalledWith({ processed: true });
       expect(result).toEqual([{ name: 'Gauge' }]);
     });
+
+    it('should call setListTypeRadar and return finalizeSerieTypeRadar when verifyType is radar', () => {
+      component.series = [{ label: 'Serie Radar', data: [10, 20, 30], type: PoChartType.Radar, color: '#ff0000' }];
+
+      component.type = PoChartType.Radar;
+      component.options = {};
+
+      const spySetListTypeRadar = spyOn(component['chartGridUtils'], 'setListTypeRadar');
+
+      const spyFinalizeRadar = spyOn(component['chartGridUtils'], 'finalizeSerieTypeRadar').and.callFake(series => [
+        {
+          type: 'radar',
+          data: series,
+          _testFlag: true
+        } as any
+      ]);
+
+      const result = component['setSeries']();
+
+      expect(spySetListTypeRadar).toHaveBeenCalled();
+      expect(spyFinalizeRadar).toHaveBeenCalledWith(component.series);
+      expect(result).toEqual([
+        {
+          type: 'radar',
+          data: component.series,
+          _testFlag: true
+        }
+      ]);
+    });
   });
 
   describe('getPaddingBottomGrid', () => {
@@ -1753,6 +1823,111 @@ describe('PoChartComponent', () => {
       component['setTableProperties']();
 
       expect(spySetTypeGauge).toHaveBeenCalled();
+    });
+  });
+
+  describe('setTablePropertiesTypeRadar', () => {
+    it('should call setTablePropertiesTypeRadar and return when isTypeRadar is true', () => {
+      component['chartInstance'] = {
+        getOption: jasmine.createSpy('getOption').and.returnValue({
+          xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }],
+          series: [{ name: 'Radar 1', data: [5, 10, 15] }]
+        })
+      } as any;
+
+      component['isTypeRadar'] = true;
+
+      const spyRadar = spyOn(component as any, 'setTablePropertiesTypeRadar');
+      const spyColumns = spyOn(component as any, 'setTableColumns');
+
+      component['setTableProperties']();
+
+      expect(spyRadar).toHaveBeenCalled();
+      expect(spyColumns).not.toHaveBeenCalled();
+
+      expect(component['itemsTable']).toEqual([]);
+    });
+
+    it('should correctly build columnsTable and itemsTable for radar type with array categories', () => {
+      component.categories = ['Qualidade', 'Velocidade', 'Precisão'];
+
+      component.options = {
+        firstColumnName: 'Série'
+      };
+
+      component.series = [
+        {
+          label: 'Equipe A',
+          data: [80, 70, 90]
+        },
+        {
+          label: 'Equipe B',
+          data: [60, 85, 75]
+        }
+      ];
+
+      (component as any).setTablePropertiesTypeRadar();
+
+      expect(component['columnsTable']).toEqual([
+        {
+          property: 'serie',
+          label: 'Série'
+        },
+        { property: 'Qualidade', label: 'Qualidade' },
+        { property: 'Velocidade', label: 'Velocidade' },
+        { property: 'Precisão', label: 'Precisão' }
+      ]);
+
+      expect(component['itemsTable']).toEqual([
+        {
+          serie: 'Equipe A',
+          Qualidade: 80,
+          Velocidade: 70,
+          Precisão: 90
+        },
+        {
+          serie: 'Equipe B',
+          Qualidade: 60,
+          Velocidade: 85,
+          Precisão: 75
+        }
+      ]);
+    });
+
+    it('should use literals.serie when firstColumnName is not provided', () => {
+      component.literals = { serie: 'Série Literal' } as any;
+
+      component.categories = {
+        indicator: [{ name: 'Qualidade' }, { name: 'Velocidade' }, { name: 'Precisão' }]
+      };
+
+      component.series = [
+        {
+          label: 'Equipe X',
+          data: [50, 60, 70]
+        }
+      ];
+
+      (component as any).setTablePropertiesTypeRadar();
+
+      expect(component['columnsTable']).toEqual([
+        {
+          property: 'serie',
+          label: 'Série Literal'
+        },
+        { property: 'Qualidade', label: 'Qualidade' },
+        { property: 'Velocidade', label: 'Velocidade' },
+        { property: 'Precisão', label: 'Precisão' }
+      ]);
+
+      expect(component['itemsTable']).toEqual([
+        {
+          serie: 'Equipe X',
+          Qualidade: 50,
+          Velocidade: 60,
+          Precisão: 70
+        }
+      ]);
     });
   });
 

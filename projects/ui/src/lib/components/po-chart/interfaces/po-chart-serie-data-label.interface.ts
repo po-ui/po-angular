@@ -5,7 +5,6 @@
  *
  * Interface que define as propriedades de exibição dos rótulos das séries no `po-chart`.
  *
- * > Aplicável apenas para gráficos do tipo `line`.
  */
 export interface PoChartDataLabel {
   /**
@@ -19,7 +18,7 @@ export interface PoChartDataLabel {
    *   - O *tooltip* não será exibido.
    *   - As outras séries ficarão com opacidade reduzida ao passar o mouse sobre a série ativa.
    *
-   * > Disponível para os tipo de gráfico `PoChartType.Line`, `PoChartType.Area`, `PoChartType.Column` e `PoChartType.Bar`.
+   * > Disponível para os tipo de gráfico `PoChartType.Line`, `PoChartType.Area`, `PoChartType.Column`, `PoChartType.Bar e PoChartType.Radar`.
    */
   fixed?: boolean;
 }

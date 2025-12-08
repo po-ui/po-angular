@@ -1,6 +1,7 @@
 import { PoChartComponent } from './po-chart.component';
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
+import { PoChartRadarOptions } from './interfaces/po-chart-radar-options.interface';
 
 const gridPaddingValues = {
   paddingBottomWithTopLegend: 48,
@@ -82,6 +83,10 @@ export class PoChartGridUtils {
         }
       }
     };
+
+    if (this.component.isTypeRadar) {
+      return;
+    }
 
     if (this.component.isTypeBar) {
       options.yAxis.data = this.component.categories;
@@ -311,7 +316,8 @@ export class PoChartGridUtils {
     } else if (
       (options?.dataZoom && !options?.bottomDataZoom && options.legend === false) ||
       (!options?.dataZoom && options?.legend === false) ||
-      (!options?.dataZoom && options?.legendVerticalPosition === 'top')
+      (!options?.dataZoom && options?.legendVerticalPosition === 'top') ||
+      (this.component.isTypeRadar && options.legendVerticalPosition !== 'top')
     ) {
       return gridPaddingValues.paddingBottomNoLegend;
     }
@@ -347,5 +353,156 @@ export class PoChartGridUtils {
         ? gridPaddingValues.paddingTopWithDataLabelFixedBottomLegend
         : gridPaddingValues.paddingTopDefaultWithBottomLegend;
     }
+  }
+
+  private isRadarOptions(value: any): value is PoChartRadarOptions {
+    return value && typeof value === 'object' && !Array.isArray(value) && 'indicator' in value;
+  }
+
+  convertRadarConfig(indicators: Array<string>) {
+    return {
+      shape: 'polygon',
+      splitArea: false,
+      indicator: indicators.map(item => ({ name: item }))
+    };
+  }
+
+  setListTypeRadar() {
+    const radar = this.isRadarOptions(this.component.categories)
+      ? this.component.categories
+      : this.convertRadarConfig(this.component.categories);
+
+    const radarConfig = {
+      shape: radar?.shape ?? 'polygon',
+      radius: '60%',
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: [this.component.getCSSVariable('--border-color-radar', 'po-chart .po-chart')],
+          width: this.resolvePx('--border-width-sm')
+        }
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: this.component.getCSSVariable('--border-color-radar', 'po-chart .po-chart'),
+          width: this.resolvePx('--border-width-sm')
+        }
+      },
+      splitArea: {
+        show: radar?.splitArea ?? false,
+        areaStyle: {
+          color: [
+            this.component.getCSSVariable('--color-background-line', 'po-chart .po-chart'),
+            this.component.getCSSVariable('--color-background-zebra', 'po-chart .po-chart')
+          ]
+        }
+      },
+      indicator: Array.isArray(radar?.indicator)
+        ? radar.indicator.map(ind => ({
+            name: ind.name,
+            max: ind.max ?? undefined,
+            min: ind.min ?? 0,
+            color: ind.color ?? this.component.getCSSVariable('--color-neutral-dark-90')
+          }))
+        : []
+    };
+
+    const currentOptions = this.component.options ?? {};
+    const hasGlobalAreaStyle = this.component.options?.areaStyle === true;
+    const hasSeriesAreaStyle =
+      Array.isArray(this.component.series) && this.component.series.some(serie => !!serie?.areaStyle);
+
+    this.component.options = {
+      ...this.component.options,
+      fillPoints: hasGlobalAreaStyle || hasSeriesAreaStyle ? true : (currentOptions.fillPoints ?? true),
+      radar: radarConfig
+    };
+
+    return radarConfig;
+  }
+
+  setSerieTypeRadar(serie: any, tokenBorderWidthMd: number, color: string) {
+    if (serie.type === 'radar') {
+      serie.type = 'radar';
+      serie.symbol = 'circle';
+      serie.symbolSize = 6;
+      if (this.component.dataLabel?.fixed) {
+        serie.label = {
+          show: true
+        };
+      }
+      serie.itemStyle = {
+        color:
+          this.component.options?.fillPoints === false
+            ? this.component.getCSSVariable('--color-chart-line-point-fill', 'po-chart .po-chart')
+            : color,
+        borderColor: color,
+        borderWidth: tokenBorderWidthMd
+      };
+
+      serie.lineStyle = { color, width: tokenBorderWidthMd };
+
+      return serie;
+    }
+  }
+
+  setTooltipRadar(params) {
+    const indicators = this.component.options.radar?.indicator ?? [];
+    const values = params.value ?? [];
+
+    values.map((val, i) => {
+      const indicatorName = indicators[i]?.name ?? `Indicador ${i + 1}`;
+      return `${indicatorName}: <b>${val}</b>`;
+    });
+  }
+
+  buildRadarTooltip(params: any): string {
+    const indicators = this.component.options.radar?.indicator ?? [];
+    const values = params.value ?? [];
+
+    let tooltip = `<b>${params.name}</b><br>`;
+
+    values.map((val, index) => {
+      const indicatorName = indicators[index]?.name ?? `Indicator ${index + 1}`;
+      tooltip += `${indicatorName}: <b>${val}</b><br>`;
+    });
+
+    return tooltip;
+  }
+
+  finalizeSerieTypeRadar(seriesUpdated) {
+    const hasGlobalAreaStyle = this.component.options?.areaStyle === true;
+
+    return [
+      {
+        type: 'radar',
+        data: seriesUpdated.map(item => {
+          const name = item?.name ?? '';
+          const value = Array.isArray(item?.data) ? item.data : [];
+
+          let areaStyle: any;
+
+          if (hasGlobalAreaStyle || item.areaStyle === true) {
+            areaStyle = {
+              opacity: 0.5
+            };
+          } else {
+            areaStyle = undefined;
+          }
+
+          return {
+            name,
+            value,
+            areaStyle,
+            symbol: item.symbol,
+            symbolSize: item.symbolSize,
+            itemStyle: item.itemStyle,
+            lineStyle: item.lineStyle,
+            label: { show: item?.label?.show }
+          };
+        })
+      }
+    ];
   }
 }

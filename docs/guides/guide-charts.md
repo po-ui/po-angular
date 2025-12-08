@@ -15,6 +15,7 @@ Gráficos em geral têm a função de garantir que as pessoas de qualquer cultur
 - [Gráfico de linha](guides/guide-charts#line)
 - [Gráfico de pizza](guides/guide-charts#pie)
 - [Gráfico de rosca](guides/guide-charts#donut)
+- [Gráfico de radar](guides/guide-charts#radar)
 - [Guia de cores](guides/guide-charts#guide-colors)
 
 <br>
@@ -141,6 +142,17 @@ O gráfico de rosca é adequado para mostrar partes de um todo, pois representa 
 #### Boas práticas:
 
 O valor mínimo de visualização deve ser de 10% do total para demonstrar as informações no gráfico, caso tenha mais de um item abaixo do valor de 10%, junte-os em uma sessão agrupada "Outros" e especifique o conteúdo que o compõe na legenda.
+
+<br>
+
+<a id="radar"></a>
+## Gráfico de radar (Radar Chart)
+
+O gráfico de radar é utilizado para visualizar e comparar o desempenho de diferentes itens em múltiplas categorias.
+
+#### Quando usar?
+
+- Para demonstrar cenários onde é preciso avaliar e apresentar um "perfil" de desempenho de algo/alguém.
 
 <br>
 
