@@ -26,15 +26,25 @@ export class SamplePoChartLabsComponent implements OnInit {
   fromGauge: number;
   toGauge: number;
   allCategories: Array<string> = [];
+  radarConfig: any = {
+    indicator: []
+  };
+
   categories: string;
+  min: number;
+  max: number;
+  colorIndicator: string;
   event: string;
   height: number;
   series: Array<PoChartSerie>;
   title: string;
   dataLabel: PoChartDataLabel;
   isTypeGauge = false;
+  isTypeRadar = false;
   disabledTooltip = false;
   disabledType = false;
+  selectedSplitArea = false;
+  selectedAreaStyle = false;
   options: PoChartOptions = {
     axis: {
       minRange: undefined,
@@ -87,6 +97,9 @@ export class SamplePoChartLabsComponent implements OnInit {
   selectedLegendVerticalPosition: PoChartOptions['legendVerticalPosition'] = 'bottom';
   selectedLegendPosition: PoChartOptions['legendPosition'] = 'center';
   selectedRendererOption: PoChartOptions['rendererOption'] = 'canvas';
+  selectedShapeOption = 'polygon';
+  helpRadar = 'Example: ["Bold", "Keen", "Calm", "Wise"]';
+  helpGeneric = 'Example: ["Jan", "Feb", "Mar", "Apr"]';
 
   optionsAxis = [
     { value: 'showXAxis', label: 'showXAxis' },
@@ -122,6 +135,11 @@ export class SamplePoChartLabsComponent implements OnInit {
     { value: 'svg', label: 'svg' }
   ];
 
+  optionsShapeOption = [
+    { value: 'polygon', label: 'polygon' },
+    { value: 'circle', label: 'circle' }
+  ];
+
   readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Line', value: PoChartType.Line },
     { label: 'Area', value: PoChartType.Area },
@@ -129,7 +147,8 @@ export class SamplePoChartLabsComponent implements OnInit {
     { label: 'Column', value: PoChartType.Column },
     { label: 'Donut', value: PoChartType.Donut },
     { label: 'Pie', value: PoChartType.Pie },
-    { label: 'Gauge', value: PoChartType.Gauge }
+    { label: 'Gauge', value: PoChartType.Gauge },
+    { label: 'Radar', value: PoChartType.Radar }
   ];
 
   readonly labelTypeOptions: Array<PoSelectOption> = [
@@ -249,6 +268,10 @@ export class SamplePoChartLabsComponent implements OnInit {
       this.isTypeGauge = true;
       this.changeSwitchGauge(true);
     }
+    if (event === PoChartType.Radar) {
+      this.isTypeRadar = true;
+      this.changeSwitchRadar(true);
+    }
   }
 
   changeSwitchGauge(event) {
@@ -258,6 +281,20 @@ export class SamplePoChartLabsComponent implements OnInit {
     if (event) {
       this.serieType = PoChartType.Gauge;
       this.type = PoChartType.Gauge;
+      this.isTypeRadar = false;
+    } else {
+      this.serieType = undefined;
+      this.type = undefined;
+    }
+  }
+
+  changeSwitchRadar(event) {
+    this.restore(true, true);
+    this.disabledType = event;
+    if (event) {
+      this.serieType = PoChartType.Radar;
+      this.type = PoChartType.Radar;
+      this.isTypeGauge = false;
     } else {
       this.serieType = undefined;
       this.type = undefined;
@@ -283,36 +320,56 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.allCategories = this.convertToArray(this.categories);
   }
 
-  addData() {
-    let data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
-    const type = this.serieType ?? this.type;
-    const color = this.color;
-    const stackGroupName = this.stackGroupName;
-    if (this.isTypeGauge && !this.series?.length && !this.toGauge) {
-      data = this.valueGauge;
+  addIndicators() {
+    if (!this.categories) {
+      this.radarConfig = { indicator: [] };
+      return;
     }
 
-    this.series = [
-      ...this.series,
-      {
-        label: this.label,
-        data,
-        tooltip: this.tooltip,
-        ...(color ? { color } : {}),
-        type,
-        stackGroupName,
-        from: this.fromGauge,
-        to: this.toGauge
-      }
-    ];
+    const arr = this.convertToArray(this.categories);
+
+    this.radarConfig = {
+      indicator: arr.map(item => ({ name: item, min: this.min, max: this.max, color: this.colorIndicator })),
+      shape: this.selectedShapeOption,
+      splitArea: this.selectedSplitArea
+    };
+  }
+
+  addData() {
+    const type = this.serieType ?? this.type;
+
+    let data;
+
+    if (type === 'radar') {
+      const arr = this.convertToArray(this.data);
+      data = arr.map(v => Number(v));
+      this.addIndicators();
+    } else {
+      data = isNaN(this.data) ? this.convertToArray(this.data) : Math.floor(this.data);
+    }
+
+    const serie = {
+      label: this.label,
+      data,
+      tooltip: this.tooltip,
+      ...(this.color ? { color: this.color } : {}),
+      type,
+      stackGroupName: this.stackGroupName,
+      from: this.fromGauge,
+      to: this.toGauge,
+      areaStyle: this.selectedAreaStyle ?? undefined
+    };
+
+    this.series = [...this.series, serie];
 
     this.label = undefined;
     this.color = undefined;
     this.data = undefined;
     this.tooltip = undefined;
+    this.stackGroupName = undefined;
     this.fromGauge = undefined;
     this.toGauge = undefined;
-    this.stackGroupName = undefined;
+
     if (!this.isTypeGauge) {
       this.type = undefined;
     }
@@ -323,7 +380,8 @@ export class SamplePoChartLabsComponent implements OnInit {
       this.type === PoChartType.Line ||
       this.type === PoChartType.Area ||
       this.type === PoChartType.Column ||
-      this.type === PoChartType.Bar
+      this.type === PoChartType.Bar ||
+      this.type === PoChartType.Radar
     );
   }
 
@@ -331,7 +389,7 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.event = `${eventName}: ${JSON.stringify(serieEvent)}`;
   }
 
-  restore(fromGauge = false) {
+  restore(fromGauge = false, keepRadar = false) {
     this.color = undefined;
     this.data = undefined;
     this.label = undefined;
@@ -349,9 +407,9 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.title = undefined;
     this.disabledTooltip = false;
     this.disabledType = false;
-    this.dataLabel = {
-      fixed: false
-    };
+
+    this.dataLabel = { fixed: false };
+
     this.options = {
       ...this.options,
       axis: {
@@ -391,6 +449,7 @@ export class SamplePoChartLabsComponent implements OnInit {
       roseType: undefined,
       showFromToLegend: undefined
     };
+
     this.selectedValuesDataLabel = [];
     this.selectedValuesAxis = [];
     this.selectedValuesHeader = [];
@@ -403,6 +462,12 @@ export class SamplePoChartLabsComponent implements OnInit {
       this.selectedFromToLegend = [];
       this.selectedPointer = [];
       this.isTypeGauge = false;
+    }
+
+    if (!keepRadar) {
+      this.isTypeRadar = false;
+      this.categories = undefined;
+      this.radarConfig = [];
     }
   }
 

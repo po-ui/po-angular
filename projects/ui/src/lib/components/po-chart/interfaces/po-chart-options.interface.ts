@@ -9,6 +9,8 @@ import { PoChartHeaderOptions } from './po-chart-header-options.interface';
  * *Interface* para configurações dos elementos do gráfico.
  */
 export interface PoChartOptions {
+  [key: string]: any;
+
   /**
    * @optional
    *
@@ -46,11 +48,25 @@ export interface PoChartOptions {
    * Define se os pontos do gráfico serão preenchidos.
    * Quando true, os pontos são totalmente coloridos. Quando false, apenas a borda dos pontos será exibida, mantendo o interior transparente.
    *
-   * > Esta propriedade é utilizável para os gráficos dos tipos `Area` e `Line`.
+   * > Esta propriedade é utilizável para os gráficos dos tipos `Area`, `Line` e `Radar`.
+   * > Para o tipo `Radar`, o valor padrão é `true`.
    *
    * @default `false`
    */
   fillPoints?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se as séries terão sua área preenchida.
+   *
+   * > Esta propriedade tem precedência sobre a definição de `areaStyle` em cada série, `fillpoints` não funciona quando `areaStyle` está definido como `true`.
+   *
+   * @default `false`
+   */
+  areaStyle?: boolean;
 
   /**
    * @optional
@@ -101,6 +117,8 @@ export interface PoChartOptions {
    * @description
    *
    * Define a exibição da legenda do gráfico. Valor padrão é `true`
+   *
+   * @default `true`
    */
   legend?: boolean;
 

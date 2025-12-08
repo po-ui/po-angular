@@ -159,12 +159,10 @@ export class PoChartGaugeUtils {
     let center: [string, string] = ['50%', '80%'];
     let widthSubtitle = height < 450 ? 400 : 500;
 
-    // 👇 Regras para telas pequenas
     const isSmallScreen = divWidth < 480;
     const isMediumScreen = divWidth >= 480 && divWidth < 960;
     const isLargeScreen = divWidth >= 960;
 
-    // 👇 Ajustes por largura
     if (isSmallScreen) {
       radius = height > 480 ? '100%' : '120%';
       lengthPointer = '25%';
@@ -178,7 +176,6 @@ export class PoChartGaugeUtils {
       radius = '100%';
     }
 
-    // 👇 Ajuste específico para altura muito pequena
     if (height < 400) {
       return this.setPropertiesDefaultHeight(center);
     }

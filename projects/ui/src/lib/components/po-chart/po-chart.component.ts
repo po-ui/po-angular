@@ -29,7 +29,7 @@ import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartGridUtils } from './po-chart-grid-utils';
 
-import { BarChart, CustomChart, GaugeChart, LineChart, PieChart } from 'echarts/charts';
+import { BarChart, CustomChart, GaugeChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
 import {
   BrushComponent,
   DataZoomComponent,
@@ -51,6 +51,7 @@ use([
   GraphicComponent,
   LineChart,
   PieChart,
+  RadarChart,
   BrushComponent,
   DataZoomComponent,
   GridComponent,
@@ -96,6 +97,11 @@ use([
  *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.html"> </file>
  *  <file name="sample-po-chart-world-exports/sample-po-chart-world-exports.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-chart-technology-skill" title="PO Chart - Radar">
+ *  <file name="sample-po-chart-technology-skill/sample-po-chart-technology-skill.component.html"> </file>
+ *  <file name="sample-po-chart-technology-skill/sample-po-chart-technology-skill.component.ts"> </file>
+ * </example>
  */
 
 @Component({
@@ -115,11 +121,11 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   @ViewChild('chartContainer') chartContainer: ElementRef;
 
   tooltipText = ``;
-
   originalHeight: number;
   originalRadiusGauge;
   chartMarginTop = '0px';
   isTypeBar = false;
+  isTypeRadar = false;
   boundaryGap = false;
   listTypePieDonut: Array<any>;
   itemsTypeDonut: Array<any> = [];
@@ -444,7 +450,10 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   private resolveCustomTooltip(params: any, name: string, seriesName: string, valueLabel: string): string {
     let text: string | undefined;
 
-    const serie = params.seriesType === 'pie' ? this.series[params.dataIndex] : this.series[params.seriesIndex];
+    const serie =
+      params.seriesType === 'pie' || params.seriesType === 'radar'
+        ? this.series[params.dataIndex]
+        : this.series[params.seriesIndex];
 
     if (serie?.tooltip) {
       if (typeof serie.tooltip === 'function') {
@@ -459,6 +468,10 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
         seriesName && !seriesName.includes('\u00000')
           ? `<b>${name}</b><br>${seriesName}: <b>${valueLabel}</b>`
           : `${name}: <b>${valueLabel}</b>`;
+
+      if (params.seriesType === 'radar') {
+        text = this.chartGridUtils.buildRadarTooltip(params);
+      }
     }
 
     return this.parseTooltipText(text);
@@ -490,7 +503,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     this.listTypePieDonut = [];
     this.itemsTypeDonut = [];
     let option = {};
-    if (!this.categories?.length && this.categories !== undefined) {
+    if (Array.isArray(this.categories) && !this.categories?.length && this.categories !== undefined) {
       this.categories = undefined;
     }
     if (!this.series?.length) {
@@ -529,6 +542,10 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
 
     if (this.isTypeGauge) {
       this.chartGaugeUtils.setGaugeOptions(options, this.chartGridUtils.resolvePx('--font-size-grid', '.po-chart'));
+    }
+
+    if (this.isTypeRadar) {
+      options.radar = this.options?.radar;
     }
     return options;
   }
@@ -570,7 +587,11 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   }
 
   private setSeries() {
-    const hasArea = this.type === 'area' || this.series.some(serie => serie.type === 'area');
+    const hasArea =
+      this.type === 'area' ||
+      this.series.some(serie => serie.type === 'area') ||
+      this.options?.areaStyle ||
+      this.series.some(serie => serie.areaStyle === true);
     const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
     const tokenBorderWidthMd = this.chartGridUtils.resolvePx('--border-width-md');
     const findType = this.series.find(serie => serie.type)?.type;
@@ -591,6 +612,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
         fontSizeSubtitle: this.chartGridUtils.resolvePx('--font-size-description-chart', 'po-chart')
       };
       serieGauge = this.chartGaugeUtils.setListTypeGauge(serie, fontSizes);
+    } else if (verifyType === 'radar') {
+      this.chartGridUtils.setListTypeRadar();
     }
 
     const seriesUpdated = newSeries.map((serie, index) => {
@@ -615,6 +638,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       this.chartGridUtils.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
       this.chartGridUtils.setSerieTypeArea(serie, index);
       this.chartGridUtils.setSerieTypeBarColumn(serie, colorVariable);
+      this.chartGridUtils.setSerieTypeRadar(serie, tokenBorderWidthMd, colorVariable);
 
       return serie;
     });
@@ -623,7 +647,10 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       return this.listTypePieDonut;
     } else if (verifyType === 'gauge') {
       return this.chartGaugeUtils.finalizeSerieTypeGauge(serieGauge);
+    } else if (verifyType === 'radar') {
+      return this.chartGridUtils.finalizeSerieTypeRadar(seriesUpdated);
     }
+
     return seriesUpdated;
   }
 
@@ -655,8 +682,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   private setTypeSerie(serie, type: PoChartType) {
     switch (type) {
       case PoChartType.Area:
-        serie.type = 'line';
         serie.isTypeArea = true;
+        serie.type = 'line';
         break;
       case PoChartType.Bar:
         this.isTypeBar = true;
@@ -672,6 +699,10 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       case PoChartType.Gauge:
         this.isTypeGauge = true;
         serie.type = 'gauge';
+        break;
+      case PoChartType.Radar:
+        this.isTypeRadar = true;
+        serie.type = 'radar';
         break;
     }
   }
@@ -697,6 +728,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       return;
     } else if (this.isTypeGauge) {
       this.setTablePropertiesTypeGauge();
+      return;
+    } else if (this.isTypeRadar) {
+      this.setTablePropertiesTypeRadar();
       return;
     }
 
@@ -745,6 +779,40 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
         this.itemsTable = [{ ...item }];
       });
     }
+  }
+
+  private setTablePropertiesTypeRadar() {
+    let indicators;
+
+    if (!Array.isArray(this.categories) && this.categories?.indicator) {
+      indicators = this.categories.indicator;
+    } else if (Array.isArray(this.categories)) {
+      indicators = this.categories.map(item => ({ name: item }));
+    }
+
+    const series = this.series;
+
+    this.columnsTable = [
+      {
+        property: 'serie',
+        label: this.options?.firstColumnName || this.literals.serie
+      },
+      ...indicators.map((indicator: any) => ({
+        property: indicator.name,
+        label: indicator.name
+      }))
+    ];
+
+    this.itemsTable = series.map((serie: any) => {
+      const row: any = { serie: serie.label };
+
+      indicators.forEach((indicator: any, idx: number) => {
+        const value = serie.data[idx]?.value ?? serie.data[idx];
+        row[indicator.name] = value;
+      });
+
+      return row;
+    });
   }
 
   private setTableColumns(option, categories) {

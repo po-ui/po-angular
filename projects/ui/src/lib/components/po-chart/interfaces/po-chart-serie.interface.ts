@@ -5,7 +5,7 @@ import { PoChartType } from '../enums/po-chart-type.enum';
  *
  * @description
  *
- * Interface das series dinâmicas do `po-chart` que possibilita desenhar gráficos dos tipos `area`, `bar`, `column`, `line`, `donut` e `pie`
+ * Interface das series dinâmicas do `po-chart` que possibilita desenhar gráficos dos tipos `area`, `bar`, `column`, `line`, `donut`, `pie` e `radar`
  */
 export interface PoChartSerie {
   /**
@@ -41,13 +41,24 @@ export interface PoChartSerie {
    *
    * Define a lista de valores para a série. Os tipos esperados são de acordo com o tipo de gráfico:
    * - Para gráficos dos tipos `donut` e `pie`, espera-se *number*;
-   * - Para gráficos dos tipos `area`, `bar`, `column` e `line`, espera-se um *array* de `data`.
+   * - Para gráficos dos tipos `area`, `bar`, `column`, `line` e `radar`, espera-se um *array* de `data`.
    *
    * > Se passado valor `null` em determinado item da lista, a iteração irá ignorá-lo.
    */
   data?: number | Array<number>;
 
-  /** Rótulo referência da série;. */
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define se a série terá sua área preenchida.
+   *
+   * > Propriedade válida para gráficos do tipo `Radar`, `fillpoints` não funciona quando `areaStyle` está definido como `true`.
+   */
+  areaStyle?: boolean;
+
+  /** Rótulo referência da série. */
   label?: string;
 
   /**
@@ -75,7 +86,8 @@ export interface PoChartSerie {
    * - `__texto__` → itálico (`<i>`).
    *
    * > Caso não seja informado um valor para o *tooltip*, será exibido da seguinte forma:
-   * - `donut`: `label`: valor proporcional ao total em porcentagem.
+   * - `donut`, `label`: valor proporcional ao total em porcentagem.
+   * - `radar`: nome da série, o nome do indicator e os valores correspondentes.
    * - `area`, `bar`, `column`, `line` e `pie`: `label`: `data`.
    *
    * ### Exemplos:
@@ -142,7 +154,6 @@ export interface PoChartSerie {
    * > Válido para gráfico do tipo `Column` e `Bar`. Essa propriedade é ignorada caso a propriedade `stacked` da interface `PoChartOptions` esteja como `true`.
    *
    * > Essa propriedade habilita a propriedade `p-data-label` por padrão, podendo ser desabilitada passando `[p-data-label]={ fixed: false }`.
-   *
    */
   stackGroupName?: string;
 }

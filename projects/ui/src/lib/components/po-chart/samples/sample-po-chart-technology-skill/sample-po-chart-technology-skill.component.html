@@ -1,0 +1,20 @@
+<div class="po-row">
+  <po-chart
+    class="po-md-6"
+    p-title="Technology Skill Assessment"
+    [p-categories]="radarConfig"
+    [p-type]="type"
+    [p-series]="series"
+  >
+  </po-chart>
+
+  <po-chart
+    class="po-md-6"
+    p-title="Genre Popularity"
+    p-type="radar"
+    [p-categories]="radarConfigMovies"
+    [p-series]="seriesMovies"
+    [p-options]="radarOptions"
+  >
+  </po-chart>
+</div>

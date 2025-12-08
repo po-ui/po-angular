@@ -1,12 +1,14 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { poLocaleDefault } from '../../services/po-language/po-language.constant';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
+
 import { poChartLiteralsDefault } from '../po-chart/interfaces/po-chart-literals-default.interface';
-import { PoChartLiterals } from '../po-chart/interfaces/po-chart-literals.interface';
-import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interface';
 import { PoChartDataLabel } from '../po-chart/interfaces/po-chart-serie-data-label.interface';
+import { PoChartLiterals } from '../po-chart/interfaces/po-chart-literals.interface';
+import { PoChartRadarOptions } from './interfaces/po-chart-radar-options.interface';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interface';
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
+import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoPopupAction } from '../po-popup';
 
 const poChartMinHeight = 200;
@@ -65,6 +67,9 @@ const poChartDefaultHeight = 400;
  * | `--color-base-gauge`                     | Cor da base do gráfico `Gauge`                                          | `var(--color-neutral-light-20)`                   |
  * | `--color-gauge-pointer-color`            | Cor do ponteiro do gráfico `Gauge`                                      | `var(--color-neutral-dark-70)`                    |
  * | `--color-chart-line-point-fill`          | Cor de dentro do círculo dos gráficos `Line` e `Area`                   | `var(--color-neutral-light-00)`                   |
+ * | `--border-color-radar`                   | Cor do eixo da grid do gráfico `Radar`                                  | `var(--color-neutral-light-30)`                   |
+ * | `--color-background-zebra`               | Cor das áreas alternadas (efeito zebrado) da grid do gráfico `Radar`    | `var(--color-neutral-light-10)`                   |
+ * | `--color-background-line`                | Cor das áreas entre as faixas zebradas da grade do `Radar`              | `none`                                            |
  * | **Wrapper (.po-chart-container-gauge)**  |                                                                         |                                                   |
  * | `--background-color-container-gauge`     | Cor de background do container do gauge                                 | `var(--color-neutral-light-00)`                   |
  */
@@ -98,13 +103,20 @@ export abstract class PoChartBaseComponent implements OnInit {
    *
    * @description
    *
-   * Define os nomes das categorias que serão plotadas no eixo X do gráfico caso seja do tipo `bar`, ou então nos eixos Y do grid de gráficos dos tipos `area`, `columnn` e `line`.
+   * Define os valores utilizados na construção das categorias do gráfico.
    *
-   * > Gráficos do tipo `bar` dimensionam a área do gráfico de acordo com a largura do maior texto de categorias. No entanto, é uma boa prática optar por palavras curtas para que a leitura do gráfico não seja prejudicada.
+   * Para gráficos dos tipos *bar*, *area*, *column* e *line*, representa os nomes das categorias exibidas no eixo.
    *
-   * > Caso não seja especificado um valor para a categoria, será plotado um hífen na categoria referente a cada série.
+   * Para gráficos do tipo *radar*, representa a configuração dos indicadores, formato (shape), áreas de divisão (splitArea)
+   * e demais opções específicas do gráfico `Radar`.
+   *
+   * > Caso nenhum valor seja informado, será utilizado um hífen como categoria
+   *   correspondente para cada série.
+   *
+   * > Gráficos do tipo bar dimensionam sua área considerando a largura do maior texto
+   *   da categoria, sendo recomendável utilizar rótulos curtos para facilitar a leitura.
    */
-  @Input('p-categories') categories?: Array<string>;
+  @Input('p-categories') categories?: Array<string> | PoChartRadarOptions;
 
   /**
    * @optional
@@ -123,7 +135,7 @@ export abstract class PoChartBaseComponent implements OnInit {
    * Objeto com as configurações usadas no `po-chart`.
    *
    * É possível, por exemplo, definir as configurações de exibição das legendas,
-   * configurar os eixos(*axis*) para os gráficos dos tipos `area`, `line`, `column` e `bar` da seguinte forma:
+   * configurar os eixos(*axis*) para os gráficos dos tipos `area`, `line`, `column`, `bar` e `radar` da seguinte forma:
    *
    * ```
    *  chartOptions: PoChartOptions = {
@@ -151,7 +163,7 @@ export abstract class PoChartBaseComponent implements OnInit {
    * - Os marcadores (*bullets*) terão seu estilo ajustado.
    * - As outras séries ficarão com opacidade reduzida ao passar o mouse sobre a série ativa.
    *
-   * > Disponível apenas para gráficos do tipo `line`.
+   * > Disponível para gráficos do tipo `line` e `radar`.
    *
    * #### Exemplo de utilização:
    * ```typescript
@@ -259,6 +271,7 @@ export abstract class PoChartBaseComponent implements OnInit {
    *
    * O evento emitirá o seguinte parâmetro:
    * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *radar*: um objeto contendo o nome da série e os valores.
    * - *area*, *line*, *column* e *bar*: um objeto contendo o nome da série, valor e categoria do eixo do gráfico.
    */
   @Output('p-series-click')
@@ -273,6 +286,7 @@ export abstract class PoChartBaseComponent implements OnInit {
    *
    * O evento emitirá o seguinte parâmetro de acordo com o tipo de gráfico:
    * - *donut* e *pie*: um objeto contendo a categoria e valor da série.
+   * - *radar*: um objeto contendo o nome da série e os valores.
    * - *area*, *line*, *column* e *bar*: um objeto contendo a categoria, valor da série e categoria do eixo do gráfico.
    */
   @Output('p-series-hover')

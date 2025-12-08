@@ -1,5 +1,5 @@
 <po-chart
-  [p-categories]="allCategories"
+  [p-categories]="isTypeRadar ? radarConfig : allCategories"
   [p-height]="height"
   [p-data-label]="dataLabel"
   [p-options]="options"
@@ -55,11 +55,20 @@
 <form #chartSeries="ngForm">
   <div class="po-row">
     <po-switch
-      class="po-md-4"
+      class="po-md-3"
       name="switch"
       p-label="Gauge Type"
       [(ngModel)]="isTypeGauge"
       (p-change)="changeSwitchGauge($event)"
+    >
+    </po-switch>
+
+    <po-switch
+      class="po-md-3"
+      name="radar"
+      p-label="Radar Type"
+      [(ngModel)]="isTypeRadar"
+      (p-change)="changeSwitchRadar($event)"
     >
     </po-switch>
 
@@ -72,7 +81,23 @@
         (p-change)="changeValueGauge($event)"
       ></po-number>
     }
+
+    @if (isTypeRadar) {
+      <po-radio-group
+        class="po-md-3"
+        name="radioShapeOption"
+        p-label="ShapeOption"
+        [p-options]="optionsShapeOption"
+        [(ngModel)]="selectedShapeOption"
+      >
+      </po-radio-group>
+
+      <po-switch name="splitArea" class="po-md-1" p-label="splitArea" [(ngModel)]="selectedSplitArea"> </po-switch>
+
+      <po-switch name="areaStyle" class="po-md-1" p-label="areaStyle" [(ngModel)]="selectedAreaStyle"> </po-switch>
+    }
   </div>
+
   <div class="po-row">
     <po-input class="po-md-4" name="label" p-label="Label" [(ngModel)]="label"></po-input>
 
@@ -89,6 +114,7 @@
       p-label="Type"
       [p-disabled]="disabledType"
       [p-options]="typeOptions"
+      (p-change)="changeType($event)"
     >
     </po-select>
 
@@ -121,22 +147,37 @@
       <po-number class="po-md-4" p-label="To" name="from" [(ngModel)]="toGauge"></po-number>
     }
 
-    <div class="po-row">
-      <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData()"> </po-button>
-    </div>
+    @if (!isTypeRadar) {
+      <div class="po-row">
+        <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData()"> </po-button>
+      </div>
+    }
   </div>
 </form>
 <div class="po-row">
-  <po-divider class="po-md-12"></po-divider>
+  <po-divider class="po-md-12" p-label="Chart categories"></po-divider>
   <po-input
-    class="po-md-4"
     name="categories"
-    p-label="Categories"
-    p-help='Example: ["Jan", "Feb", "Mar", "Apr"]'
+    [class]="isTypeRadar ? 'po-md-3' : 'po-md-4'"
+    [p-label]="isTypeRadar ? 'Indicators' : 'Categories'"
+    [p-help]="isTypeRadar ? helpRadar : helpGeneric"
     [(ngModel)]="categories"
     (p-blur)="addCategories()"
   >
   </po-input>
+
+  @if (isTypeRadar) {
+    <po-number name="min" class="po-md-3" p-label="Min" [(ngModel)]="min"> </po-number>
+
+    <po-number name="max" class="po-md-3" p-label="Max" [(ngModel)]="max"> </po-number>
+
+    <po-input name="colorIndicator" class="po-md-3" p-label="Color" [(ngModel)]="colorIndicator"> </po-input>
+
+    <div class="po-row">
+      <po-button class="po-md-4" p-label="Add Serie" (p-click)="addData()" [p-disabled]="isTypeRadar && !categories">
+      </po-button>
+    </div>
+  }
 </div>
 <form>
   <div class="po-row">
