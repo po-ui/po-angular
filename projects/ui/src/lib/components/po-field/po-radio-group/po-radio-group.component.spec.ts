@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import * as UtilsFunctions from '../../../utils/util';
-import { removeDuplicatedOptions } from '../../../utils/util';
+import { PoUtils as UtilsFunctions } from '../../../utils/util';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
@@ -98,7 +97,7 @@ describe('PoRadioGroupComponent:', () => {
     };
     spyOn(UtilsFunctions, 'removeDuplicatedOptions');
     component.ngDoCheck.call(fakeThis);
-    expect(removeDuplicatedOptions).not.toHaveBeenCalled();
+    expect(UtilsFunctions.removeDuplicatedOptions).not.toHaveBeenCalled();
   });
 
   describe('Methods:', () => {

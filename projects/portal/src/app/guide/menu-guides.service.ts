@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MenuGuidesService {
   constructor() {}
 
@@ -21,7 +23,13 @@ export class MenuGuidesService {
       { label: 'Releases', link: 'guides/releases' },
       { label: 'Schematics', link: 'guides/schematics' },
       { label: 'Fundamentos do PO Sync', link: 'guides/sync-fundamentals' },
-      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' }
+      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' },
+      { label: 'Customização de Temas usando o serviço PO-UI', link: 'guides/theme-service' },
+      { label: 'Criando um tema para o PO UI', link: 'guides/create-theme-customization' },
+      { label: 'Grid System', link: 'guides/grid-system' },
+      { label: 'Espaçamento', link: 'guides/spacing' },
+      { label: 'Personalizando o Tema Padrão com Tokens CSS', link: 'guides/theme-customization' },
+      { label: 'Tipografia', link: 'guides/typography' }
     );
   }
 }

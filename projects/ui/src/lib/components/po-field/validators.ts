@@ -74,3 +74,7 @@ export function maxFailed(max: number, value: number) {
 export function dateFailed(value: string) {
   return value && isNaN(Date.parse(value));
 }
+
+export const PoValidators = {
+  requiredFailed
+};

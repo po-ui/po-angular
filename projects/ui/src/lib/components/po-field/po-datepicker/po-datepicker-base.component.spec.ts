@@ -3,9 +3,8 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import * as UtilsFunctions from '../../../utils/util';
-import { convertDateToISOExtended, convertIsoToDate, formatYear, setYearFrom0To100 } from '../../../utils/util';
-import * as ValidatorsFunctions from './../validators';
+import { convertIsoToDate, PoUtils as UtilsFunctions } from '../../../utils/util';
+import { PoValidators as ValidatorsFunctions } from './../validators';
 
 import { Subject } from 'rxjs';
 import { PoThemeA11yEnum } from '../../../services';
@@ -51,7 +50,7 @@ describe('PoDatepickerBaseComponent:', () => {
     expectSettersMethod(component, 'setDisabled', 'false', 'disabled', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
-    expect(convertDateToISOExtended).toHaveBeenCalled();
+    expect(UtilsFunctions.convertDateToISOExtended).toHaveBeenCalled();
   });
 
   it('should update property p-required', () => {
@@ -63,7 +62,7 @@ describe('PoDatepickerBaseComponent:', () => {
     expectSettersMethod(component, 'setRequired', 'false', 'required', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
-    expect(convertDateToISOExtended).toHaveBeenCalled();
+    expect(UtilsFunctions.convertDateToISOExtended).toHaveBeenCalled();
   });
 
   it('should update property p-readonly', () => {
@@ -342,7 +341,7 @@ describe('PoDatepickerBaseComponent:', () => {
 
       component.formatToDate(date);
 
-      expect(formatYear).toHaveBeenCalledWith(date.getFullYear());
+      expect(UtilsFunctions.formatYear).toHaveBeenCalledWith(date.getFullYear());
     });
 
     it('getDateFromString: should call `setYearFrom0To100`', () => {
@@ -351,7 +350,7 @@ describe('PoDatepickerBaseComponent:', () => {
 
       component.getDateFromString(date);
 
-      expect(setYearFrom0To100).toHaveBeenCalled();
+      expect(UtilsFunctions.setYearFrom0To100).toHaveBeenCalled();
     });
 
     describe('validate:', () => {
@@ -643,7 +642,7 @@ describe('PoDatepickerBaseComponent:', () => {
       spyOn(UtilsFunctions, 'setYearFrom0To100');
 
       component.minDate = new Date();
-      expect(setYearFrom0To100).toHaveBeenCalled();
+      expect(UtilsFunctions.setYearFrom0To100).toHaveBeenCalled();
     });
 
     it('p-max-date: should set end date with year 1', () => {
@@ -660,7 +659,7 @@ describe('PoDatepickerBaseComponent:', () => {
 
       component.maxDate = new Date();
 
-      expect(setYearFrom0To100).toHaveBeenCalled();
+      expect(UtilsFunctions.setYearFrom0To100).toHaveBeenCalled();
     });
 
     it('p-iso-format: should update with valid value', () => {

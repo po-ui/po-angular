@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { configureTestSuite, expectPropertiesValues } from './../../util-test/util-expect.spec';
 
-import * as UtilsFunctions from '../../utils/util';
+import { PoUtils as UtilsFunctions } from '../../utils/util';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 
 import { PoPopupAction } from './po-popup-action.interface';

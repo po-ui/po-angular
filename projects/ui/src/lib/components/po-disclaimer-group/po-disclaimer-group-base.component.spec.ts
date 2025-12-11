@@ -1,7 +1,7 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { expectSettersMethod } from './../../util-test/util-expect.spec';
 
-import * as UtilsFunction from '../../utils/util';
+import { PoUtils as UtilsFunction } from '../../utils/util';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 

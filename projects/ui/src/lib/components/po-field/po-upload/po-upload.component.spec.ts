@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
-import * as utilsFunctions from '../../../utils/util';
+import { PoUtils as utilsFunctions } from '../../../utils/util';
 import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoContainerModule } from '../../po-container/po-container.module';
 import { PoProgressModule } from '../../po-progress/po-progress.module';

@@ -1,8 +1,8 @@
 import { Directive, EventEmitter, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { requiredFailed } from '../validators';
-import { convertToBoolean, convertToInt, getDefaultSizeFn, uuid, validateSizeFn } from './../../../utils/util';
+import { PoValidators } from '../validators';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn, PoUtils } from './../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoCheckboxGroupOptionView } from './interfaces/po-checkbox-group-option-view.interface';
@@ -245,7 +245,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    */
   @Input('p-columns') set columns(value: number) {
-    const columns = convertToInt(value, poCheckboxGroupColumnsDefaultLength);
+    const columns = PoUtils.convertToInt(value, poCheckboxGroupColumnsDefaultLength);
 
     this._columns = this.getGridSystemColumns(columns, 4);
     this.mdColumns = this.getGridSystemColumns(columns, 2);
@@ -412,7 +412,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
     if (
-      (!this.indeterminate && requiredFailed(this.required, this.disabled, abstractControl.value)) ||
+      (!this.indeterminate && PoValidators.requiredFailed(this.required, this.disabled, abstractControl.value)) ||
       this.isInvalidIndeterminate()
     ) {
       return {
@@ -485,6 +485,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   }
 
   private setCheckboxGroupOptionsView(optionsList: Array<PoCheckboxGroupOption>) {
-    this.checkboxGroupOptionsView = optionsList.map(option => ({ ...option, id: uuid() }));
+    this.checkboxGroupOptionsView = optionsList.map(option => ({ ...option, id: PoUtils.uuid() }));
   }
 }

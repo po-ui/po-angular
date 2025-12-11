@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 
 import { PoRichTextService } from '../po-rich-text.service';
 import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
-import { isFirefox, isIE, isIEOrEdge, openExternalLink } from './../../../../utils/util';
+import { PoUtils } from './../../../../utils/util';
 
 const poRichTextBodyCommands = [
   'bold',
@@ -185,7 +185,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     const rgbColor = document.queryCommandValue('ForeColor');
 
     let hexColor;
-    if (!isIE()) {
+    if (!PoUtils.isIE()) {
       hexColor = this.rgbToHex(rgbColor);
     }
 
@@ -217,12 +217,12 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   }
 
   private handleCommandLink(linkCommand: string, urlLink: string, urlLinkText: string) {
-    if (isIE()) {
+    if (PoUtils.isIE()) {
       this.insertHtmlLinkElement(urlLink, urlLinkText);
     } else {
       // '&nbsp;' necessário para o cursor não ficar preso dentro do link no Firefox.
       const linkValue =
-        isFirefox() && !this.isLinkEditing
+        PoUtils.isFirefox() && !this.isLinkEditing
           ? `&nbsp;${this.makeLinkTag(urlLink, urlLinkText)}&nbsp;`
           : this.makeLinkTag(urlLink, urlLinkText);
 
@@ -257,7 +257,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     if (textSelection && textSelection.node && textSelection.tagName === 'A') {
       this.linkElement = textSelection.node;
       isLink = true;
-    } else if ((isFirefox() || isIEOrEdge()) && this.verifyCursorPositionInFirefoxIEEdge()) {
+    } else if ((PoUtils.isFirefox() || PoUtils.isIEOrEdge()) && this.verifyCursorPositionInFirefoxIEEdge()) {
       isLink = true;
     } else {
       isLink = textSelection ? this.isParentNodeAnchor(textSelection) : false;
@@ -303,7 +303,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
         url = target.attributes.href.value;
         elementLink = target;
       }
-      openExternalLink(url);
+      PoUtils.openExternalLink(url);
       elementLink.classList.remove('po-clickable');
     }
   };

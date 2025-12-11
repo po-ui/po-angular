@@ -30,8 +30,9 @@ export default function (options: any): Rule {
   return chain([
     addModuleImportToRootModule(options, poModuleName, poModuleSourcePath),
     addImportOnly(options, [httpProvideHttpClientName, httpWithInterceptorsFromDiName], httpClientModuleSourcePath),
-    addProviderToAppModule(options, 'provideHttpClient(withInterceptorsFromDi()),'),
+    addProviderToAppModule(options, 'provideHttpClient(withInterceptorsFromDi())'),
     addThemeToAppStyles(options),
+    addPolyfillsZoneJS(options),
     updateAppConfigFileRule(options),
     configureSideMenu(options)
   ]);
@@ -77,7 +78,6 @@ function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
     const themePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
     addThemeStyleToTarget(project, 'build', tree, themePath, workspace);
-    addThemeStyleToTarget(project, 'test', tree, themePath, workspace);
 
     return tree;
   };
@@ -191,8 +191,8 @@ import { PoHttpRequestModule } from '@po-ui/ng-components';
 
   const providersBlock = `
   providers: [
+    provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(),
     importProvidersFrom([PoHttpRequestModule]),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(withInterceptorsFromDi())
@@ -207,9 +207,38 @@ import { PoHttpRequestModule } from '@po-ui/ng-components';
   // Adiciona os novos imports e providers
   modifiedContent = modifiedContent.replace(
     /export const appConfig: ApplicationConfig = {/,
-    `import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';${importBlock}
+    `import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';${importBlock}
 export const appConfig: ApplicationConfig = {${providersBlock}`
   );
 
   return modifiedContent.trim();
+}
+
+// Adiciona zone.js ao polyfills, caso não exista
+function addPolyfillsZoneJS(options: any): (tree: Tree) => Tree {
+  return function (tree: Tree): Tree {
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
+    const project = getProjectFromWorkspace(workspace, options.project);
+
+    const targetOptions = getProjectTargetOptions(project, 'build');
+    const zoneJs = 'zone.js';
+
+    if (!targetOptions.polyfills) {
+      targetOptions.polyfills = [zoneJs];
+    } else {
+      const existingZoneJs = targetOptions.polyfills.map((s: any) => (typeof s === 'string' ? s : s.input));
+
+      for (const [, polyfillsName] of existingZoneJs.entries()) {
+        if (polyfillsName === zoneJs) {
+          return tree;
+        }
+      }
+
+      targetOptions.polyfills.unshift(zoneJs);
+    }
+
+    tree.overwrite('angular.json', JSON.stringify(workspace, null, 2));
+
+    return tree;
+  };
 }

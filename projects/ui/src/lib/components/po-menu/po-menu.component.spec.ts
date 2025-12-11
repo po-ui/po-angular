@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
 
-import * as utilsFunctions from '../../utils/util';
+import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 
 import { PoIconModule } from '../po-icon/po-icon.module';

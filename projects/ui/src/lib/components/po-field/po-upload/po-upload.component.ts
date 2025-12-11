@@ -16,7 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoI18nPipe } from '../../../services/po-i18n/po-i18n.pipe';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../../services/po-notification/po-notification.service';
-import { formatBytes, isMobile, isTypeof, setHelperSettings, uuid } from '../../../utils/util';
+import { formatBytes, isTypeof, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
 import { PoProgressStatus } from '../../po-progress/enums/po-progress-status.enum';
 import { PoButtonComponent } from './../../po-button/po-button.component';
 
@@ -132,7 +132,7 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
   }
 
   get displayDragDrop(): boolean {
-    return this.dragDrop && !isMobile();
+    return this.dragDrop && !PoUtils.isMobile();
   }
 
   get displaySendButton(): boolean {

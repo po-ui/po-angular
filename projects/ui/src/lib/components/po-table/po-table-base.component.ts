@@ -18,8 +18,8 @@ import {
   convertToBoolean,
   getDefaultSizeFn,
   isTypeof,
-  sortValues,
-  validateSizeFn
+  validateSizeFn,
+  PoUtils
 } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
@@ -1225,7 +1225,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       itemsList = this.height ? [...this.filteredItems] : this.filteredItems;
     }
     itemsList.sort((leftSide, rightSide): number =>
-      sortValues(leftSide[column.property], rightSide[column.property], ascending)
+      PoUtils.sortValues(leftSide[column.property], rightSide[column.property], ascending)
     );
     this.filteredItems = itemsList;
   }

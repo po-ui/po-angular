@@ -21,7 +21,7 @@ import {
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { isExternalLink, isTypeof } from '../../utils/util';
+import { isTypeof, PoUtils } from '../../utils/util';
 
 import { PoModalPasswordRecoveryType } from '../po-modal-password-recovery/enums/po-modal-password-recovery-type.enum';
 import { PoModalPasswordRecoveryComponent } from '../po-modal-password-recovery/po-modal-password-recovery.component';
@@ -139,7 +139,7 @@ export class PoPageChangePasswordComponent
   }
 
   navigateTo(url: string) {
-    isExternalLink(url) ? window.open(url) : this.router.navigate([url || '/']);
+    PoUtils.isExternalLink(url) ? window.open(url) : this.router.navigate([url || '/']);
   }
 
   onForgotPasswordClick(recovery): void {

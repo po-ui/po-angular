@@ -11,7 +11,7 @@ import {
   PoRadioGroupOption
 } from '@po-ui/ng-components';
 
-import { isExternalLink } from '../../utils/util';
+import { PoUtils } from '../../utils/util';
 
 import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-recovery-modal-content.enum';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
@@ -238,7 +238,7 @@ export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBas
   private redirectToChangePassword(recoveryToken: PoModalPasswordRecovery) {
     const urlChangePassword = recoveryToken.urlChangePassword;
     if (urlChangePassword) {
-      isExternalLink(urlChangePassword)
+      PoUtils.isExternalLink(urlChangePassword)
         ? this.openExternalLink(urlChangePassword, recoveryToken.token)
         : this.openInternalLink(this.urlRecovery, urlChangePassword, recoveryToken.token);
     } else {

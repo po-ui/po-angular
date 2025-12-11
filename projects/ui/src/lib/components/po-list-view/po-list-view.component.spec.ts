@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
-import * as UtilsFunctions from '../../utils/util';
+import { PoUtils as UtilsFunctions } from '../../utils/util';
 import { PoButtonModule } from '../po-button';
 import { PoPopupModule } from '../po-popup';
 

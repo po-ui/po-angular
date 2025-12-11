@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~20.0.0):
+- [Angular CLI](https://cli.angular.io/) (~21.0.0):
   - ```shell
-    npm install -g @angular/cli@20
+    npm install -g @angular/cli@21
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
   - ```shell
@@ -49,14 +49,14 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~20.0.0",
-    "@angular/common": "~20.0.0",
-    "@angular/compiler": "~20.0.0",
-    "@angular/core": "~20.0.0",
-    "@angular/forms": "~20.0.0",
-    "@angular/platform-browser": "~20.0.0",
-    "@angular/platform-browser-dynamic": "~20.0.0",
-    "@angular/router": "~20.0.0",
+    "@angular/animations": "~21.0.3",
+    "@angular/common": "~21.0.3",
+    "@angular/compiler": "~21.0.3",
+    "@angular/core": "~21.0.3",
+    "@angular/forms": "~21.0.3",
+    "@angular/platform-browser": "~21.0.3",
+    "@angular/platform-browser-dynamic": "~21.0.3",
+    "@angular/router": "~21.0.3",
     "@capacitor/app": "7.0.2",
     "@capacitor/core": "7.4.2",
     "@capacitor/haptics": "7.0.2",
@@ -65,21 +65,21 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     "@capacitor/status-bar": "7.0.2",
     "@ionic/angular": "~8.0.0",
     "ionicons": "^7.0.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
+    "rxjs": "~7.8.1",
+    "tslib": "^2.6.2",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~20.0.0",
-    "@angular-devkit/schematics": "~20.0.0",
+    "@angular-devkit/build-angular": "~21.0.3",
+    "@angular-devkit/schematics": "~21.0.0",
     ...
-    "@angular/cli": "~20.0.0",
-    "@angular/compiler-cli": "~20.0.0",
-    "@angular/language-service": "~20.0.0",
+    "@angular/cli": "~21.0.3",
+    "@angular/compiler-cli": "~21.0.0",
+    "@angular/language-service": "~21.0.0",
     "@capacitor/cli": "7.4.2",
     "@ionic/angular-toolkit": "^12.0.0",
     ...
-    "typescript": "~5.8.0"
+    "typescript": "~5.9.3"
   },
   ...
 ```
@@ -97,7 +97,7 @@ npm install
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
 ```shell
-ng add @po-ui/ng-sync@v20-ng
+ng add @po-ui/ng-sync@next
 ```
 
 ### Passo 4 - Utilizando o po-sync

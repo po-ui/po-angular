@@ -29,7 +29,7 @@
       </po-container>
     }
 
-    @for (item of items; track trackBy; let index = $index) {
+    @for (item of items; track trackBy($index); let index = $index) {
       <po-container [p-no-padding]="true">
         <div class="po-list-view-container">
           <div class="po-list-view-header">

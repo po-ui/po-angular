@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { removeDuplicatedOptions, setHelperSettings } from '../../../utils/util';
+import { setHelperSettings, PoUtils } from '../../../utils/util';
 
 import { PoRadioComponent } from '../po-radio/po-radio.component';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';
@@ -99,7 +99,7 @@ export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements 
   ngDoCheck() {
     const change = this.differ.diff(this.options);
     if (change) {
-      removeDuplicatedOptions(this.options);
+      PoUtils.removeDuplicatedOptions(this.options);
     }
     this.cd.markForCheck();
   }
