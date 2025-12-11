@@ -2,15 +2,7 @@ import { Directive, EventEmitter, HostBinding, Input, OnDestroy, Output } from '
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import {
-  convertToBoolean,
-  convertToInt,
-  getDefaultSizeFn,
-  getShortBrowserLanguage,
-  isExternalLink,
-  isTypeof,
-  validateSizeFn
-} from './../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from './../../utils/util';
 
 import { PoLanguage, poLanguageDefault, PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
@@ -539,7 +531,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    * @default `0`
    */
   @Input('p-exceeded-attempts-warning') set exceededAttemptsWarning(value: number) {
-    this._exceededAttemptsWarning = convertToInt(value);
+    this._exceededAttemptsWarning = PoUtils.convertToInt(value);
     this.showExceededAttemptsWarning = this.exceededAttemptsWarning > 0;
   }
 
@@ -1002,7 +994,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   get language(): string {
-    return this.selectedLanguage || getShortBrowserLanguage();
+    return this.selectedLanguage || PoUtils.getShortBrowserLanguage();
   }
 
   get pageLoginLiterals(): PoPageLoginLiterals {
@@ -1087,7 +1079,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private redirectBlockedUrl(attempts: number, blockedUrl: string) {
     if (attempts === 0 && blockedUrl) {
       this.showExceededAttemptsWarning = false;
-      isExternalLink(blockedUrl) ? this.openExternalLink(blockedUrl) : this.openInternalLink(blockedUrl);
+      PoUtils.isExternalLink(blockedUrl) ? this.openExternalLink(blockedUrl) : this.openInternalLink(blockedUrl);
     }
   }
 

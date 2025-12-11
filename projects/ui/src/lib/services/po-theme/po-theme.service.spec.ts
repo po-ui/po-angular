@@ -9,7 +9,7 @@ import { poThemeDensity } from './helpers/accessibilities/po-theme-density.const
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { PoThemeService } from './po-theme.service';
-import * as UtilFunctions from '../../utils/util';
+import { PoUtils as UtilFunctions } from '../../utils/util';
 
 class MockRenderer2 implements Renderer2 {
   data = {};

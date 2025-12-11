@@ -5,15 +5,14 @@ import { Observable, of, throwError } from 'rxjs';
 import { PoThemeA11yEnum } from '../../../services';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import { convertToBoolean } from '../../../utils/util';
-import * as ValidatorsFunctions from '../validators';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
 import { PoLookupLiterals } from './interfaces/po-lookup-literals.interface';
 import { PoLookupBaseComponent, poLookupLiteralsDefault } from './po-lookup-base.component';
 import { PoLookupFilterService } from './services/po-lookup-filter.service';
 import { PoLookupModalService } from './services/po-lookup-modal.service';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
-import * as functions from '../../../utils/util';
+import { convertToBoolean, PoUtils as functions } from '../../../utils/util';
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
     return of({ value: 123, label: 'teste' });

@@ -1,4 +1,4 @@
-import * as utils from '../../utils/util';
+import { PoUtils as utils } from '../../utils/util';
 
 import { PoLanguageService } from './po-language.service';
 

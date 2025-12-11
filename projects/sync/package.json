@@ -23,16 +23,16 @@
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.3.0",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/core": "^20",
-    "@angular-devkit/schematics": "^20",
+    "@angular/core": "^21",
+    "@angular-devkit/schematics": "^21",
     "@capacitor/core": "^6.2.0",
     "@capacitor/network": "^6.0.1",
     "@po-ui/ng-storage": "0.0.0-PLACEHOLDER",
     "http-status-codes": "^2.3.0",
-    "rxjs": "~7.8.0",
+    "rxjs": "~7.8.1",
     "rxjs-compat": "~6.6.0",
     "zone.js": "~0.15.0"
   }

@@ -18,7 +18,7 @@ import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { getFormattedLink, isMobile, openExternalLink, uuid } from '../../utils/util';
+import { getFormattedLink, uuid, PoUtils } from '../../utils/util';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoMenuBaseComponent } from './po-menu-base.component';
@@ -308,7 +308,7 @@ export class PoMenuComponent
 
     this.validateCollapseClass(this.collapsedMobile);
 
-    if (isMobile()) {
+    if (PoUtils.isMobile()) {
       return;
     }
 
@@ -382,7 +382,7 @@ export class PoMenuComponent
     }
 
     if (menu['type'] === 'externalLink') {
-      openExternalLink(menu.link);
+      PoUtils.openExternalLink(menu.link);
     } else if (menu['type'] === 'internalLink') {
       this.activateMenuItem(menu);
     } else if (menu['type'] === 'subItems') {

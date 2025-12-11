@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { convertImageToBase64 } from '../../../../utils/util';
+import { PoUtils } from '../../../../utils/util';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 
 import { PoModalAction, PoModalComponent } from '../../../po-modal';
@@ -86,7 +86,7 @@ export class PoRichTextImageModalComponent {
   private async convertToBase64() {
     if (this.isUploadValid) {
       const uploadImage = this.uploadModel[0].rawFile;
-      return await convertImageToBase64(uploadImage);
+      return await PoUtils.convertImageToBase64(uploadImage);
     }
   }
 

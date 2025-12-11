@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
-import * as UtilsFunction from '../../../utils/util';
-import * as ValidatorsFunctions from '../validators';
+import { PoUtils as UtilsFunction } from '../../../utils/util';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoRadioGroupBaseComponent } from './po-radio-group-base.component';

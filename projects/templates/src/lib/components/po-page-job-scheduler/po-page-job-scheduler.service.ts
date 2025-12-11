@@ -4,7 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { addZero, convertDateToISOExtended } from '../../utils/util';
+import { addZero, PoUtils } from '../../utils/util';
 import { PoDynamicFormField } from '@po-ui/ng-components';
 
 import { PoJobScheduler } from './interfaces/po-job-scheduler.interface';
@@ -259,7 +259,7 @@ export class PoPageJobSchedulerService {
         return date;
       }
 
-      return convertDateToISOExtended(firstExecutionDate);
+      return PoUtils.convertDateToISOExtended(firstExecutionDate);
     } catch {
       return date;
     }

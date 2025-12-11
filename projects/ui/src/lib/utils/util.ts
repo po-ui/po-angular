@@ -888,3 +888,37 @@ export function getTextColorFromBackgroundColor(backgroundColor: string): string
 
   return yiq >= 128 ? getTextColor('darkest') : getTextColor('lightest');
 }
+
+export const PoUtils = {
+  capitalizeFirstLetter,
+  convertDateToISODate,
+  convertDateToISOExtended,
+  convertImageToBase64,
+  convertToBoolean,
+  convertToInt,
+  formatYear,
+  getA11yLevel,
+  getBrowserLanguage,
+  getDensityMode,
+  getShortBrowserLanguage,
+  isExternalLink,
+  isFirefox,
+  isIE,
+  isIEOrEdge,
+  isKeyCodeEnter,
+  isLanguage,
+  isMobile,
+  isTypeof,
+  openExternalLink,
+  reloadCurrentPage,
+  removeDuplicatedOptions,
+  removeDuplicatedOptionsWithFieldValue,
+  removeUndefinedAndNullOptions,
+  removeUndefinedAndNullOptionsWithFieldValue,
+  replaceFormatSeparator,
+  setYearFrom0To100,
+  sortOptionsByProperty,
+  sortValues,
+  uuid,
+  validateDateRange
+};

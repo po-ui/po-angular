@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
-import * as UtilsFunctions from '../../../utils/util';
+import { PoUtils as UtilsFunctions } from '../../../utils/util';
 import { expectSettersMethod } from './../../../util-test/util-expect.spec';
 
 import { PoThemeA11yEnum } from '../../../services';
@@ -297,8 +297,8 @@ describe('PoSelectComponent:', () => {
 
       component.options = options;
 
-      expect(removeUndefinedAndNullOptions).toHaveBeenCalledWith(options);
-      expect(removeDuplicatedOptions).toHaveBeenCalledWith(options);
+      expect(UtilsFunctions.removeUndefinedAndNullOptions).toHaveBeenCalledWith(options);
+      expect(UtilsFunctions.removeDuplicatedOptions).toHaveBeenCalledWith(options);
       expect(component.onUpdateOptions).toHaveBeenCalled();
     });
 

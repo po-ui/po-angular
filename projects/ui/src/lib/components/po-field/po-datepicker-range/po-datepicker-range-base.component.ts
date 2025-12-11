@@ -5,7 +5,7 @@ import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMask } from '../po-input/po-mask';
-import { requiredFailed } from '../validators';
+import { PoValidators } from '../validators';
 import { PoDateService } from './../../../services/po-date/po-date.service';
 import {
   convertIsoToDate,
@@ -759,8 +759,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private requiredDateRangeFailed(startDate: string, endDate: string): boolean {
     return (
       this.isDateRangeInputValid &&
-      requiredFailed(this.required || this.hasValidatorRequired, this.disabled, startDate) &&
-      requiredFailed(this.required || this.hasValidatorRequired, this.disabled, endDate)
+      PoValidators.requiredFailed(this.required || this.hasValidatorRequired, this.disabled, startDate) &&
+      PoValidators.requiredFailed(this.required || this.hasValidatorRequired, this.disabled, endDate)
     );
   }
 

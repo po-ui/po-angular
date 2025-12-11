@@ -22,9 +22,9 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { convertToBoolean, getA11yLevel, getDefaultSizeFn, isTypeof, validateSizeFn } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from '../../../utils/util';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
-import { requiredFailed } from '../validators';
+import { PoValidators } from '../validators';
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupColumn } from './interfaces/po-lookup-column.interface';
 import { PoLookupFilter } from './interfaces/po-lookup-filter.interface';
@@ -431,7 +431,7 @@ export abstract class PoLookupBaseComponent
    */
   @Input('p-spacing') set spacing(value: string) {
     const isExtraSmall = value === PoTableColumnSpacing.ExtraSmall;
-    const isA11yAAA = getA11yLevel() === PoThemeA11yEnum.AAA;
+    const isA11yAAA = PoUtils.getA11yLevel() === PoThemeA11yEnum.AAA;
 
     if (Object.values(PoTableColumnSpacing).includes(value as PoTableColumnSpacing)) {
       if (isA11yAAA && isExtraSmall) {
@@ -883,7 +883,7 @@ export abstract class PoLookupBaseComponent
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
           valid: false

@@ -4,7 +4,7 @@ import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular
 
 import { of } from 'rxjs';
 
-import * as utils from '../../utils/util';
+import { PoUtils as utils } from '../../utils/util';
 
 import { PoI18nModule, PoI18nService } from '../po-i18n';
 import { PoLanguageModule } from '../po-language';

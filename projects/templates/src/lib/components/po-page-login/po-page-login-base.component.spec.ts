@@ -2,7 +2,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 
 import { expectPropertiesValues, getObservable } from '../../util-test/util-expect.spec';
-import * as UtilFunctions from './../../utils/util';
+import { PoUtils as UtilFunctions } from './../../utils/util';
 
 import {
   PoLanguage,

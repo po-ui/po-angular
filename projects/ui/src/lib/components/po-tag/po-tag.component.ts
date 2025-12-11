@@ -112,21 +112,7 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
 
   styleTag() {
     // Ajusta a cor do texto com base na cor de fundo computada do elemento
-    requestAnimationFrame(() => {
-      const computedStyle = getComputedStyle(this.poTag.nativeElement);
-
-      if (
-        (!this.tagColor || this.tagColor?.startsWith('po-color-')) &&
-        !this.removable &&
-        !this.textColor &&
-        computedStyle?.backgroundColor
-      ) {
-        const textColor = getTextColorFromBackgroundColor(computedStyle.backgroundColor);
-        this.poTag.nativeElement.style.color = textColor;
-      } else {
-        this.poTag.nativeElement.style.color = '';
-      }
-    });
+    requestAnimationFrame(this.applyTextColorByContrast);
 
     if (!this.tagColor && !this.removable) {
       return { 'background-color': this.customColor };
@@ -134,6 +120,22 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
       return {};
     }
   }
+
+  private applyTextColorByContrast = () => {
+    const computedStyle = getComputedStyle(this.poTag.nativeElement);
+
+    if (
+      (!this.tagColor || this.tagColor?.startsWith('po-color-')) &&
+      !this.removable &&
+      !this.textColor &&
+      computedStyle?.backgroundColor
+    ) {
+      const textColor = getTextColorFromBackgroundColor(computedStyle.backgroundColor);
+      this.poTag.nativeElement.style.color = textColor;
+    } else {
+      this.poTag.nativeElement.style.color = '';
+    }
+  };
 
   getWidthTag() {
     return this.tagContainer.nativeElement.offsetWidth > 155;

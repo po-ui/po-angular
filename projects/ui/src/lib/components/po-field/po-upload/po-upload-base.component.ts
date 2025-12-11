@@ -1,16 +1,8 @@
 import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import {
-  convertImageToBase64,
-  convertToBoolean,
-  getDefaultSizeFn,
-  isEquals,
-  isIE,
-  isMobile,
-  validateSizeFn
-} from '../../../utils/util';
-import { requiredFailed } from '../validators';
+import { convertToBoolean, getDefaultSizeFn, isEquals, validateSizeFn, PoUtils } from '../../../utils/util';
+import { PoValidators } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
@@ -661,7 +653,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @Input('p-directory') set directory(value: boolean) {
     this._directory = convertToBoolean(value);
 
-    this.canHandleDirectory = this._directory && !isIE() && !isMobile();
+    this.canHandleDirectory = this._directory && !PoUtils.isIE() && !PoUtils.isMobile();
     this.setDirectoryAttribute(this.canHandleDirectory);
   }
 
@@ -936,7 +928,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
           valid: false
@@ -992,7 +984,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
       }
 
       if (this.showThumbnail && currentFile.rawFile?.type?.startsWith('image/')) {
-        convertImageToBase64(currentFile.rawFile).then(base64 => {
+        PoUtils.convertImageToBase64(currentFile.rawFile).then(base64 => {
           currentFile.thumbnailUrl = base64;
           this.cd.detectChanges();
         });

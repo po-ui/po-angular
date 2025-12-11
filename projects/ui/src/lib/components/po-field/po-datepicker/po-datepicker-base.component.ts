@@ -2,20 +2,16 @@ import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnDestroy, On
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import {
-  convertDateToISODate,
-  convertDateToISOExtended,
   convertIsoToDate,
   convertToBoolean,
-  formatYear,
   getDefaultSizeFn,
   isTypeof,
   replaceFormatSeparator,
-  setYearFrom0To100,
-  validateDateRange,
-  validateSizeFn
+  validateSizeFn,
+  PoUtils
 } from '../../../utils/util';
 import { PoMask } from '../po-input/po-mask';
-import { dateFailed, requiredFailed } from './../validators';
+import { dateFailed, PoValidators } from './../validators';
 
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -327,7 +323,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Input('p-disabled') set setDisabled(disabled: string) {
     this.disabled = disabled === '' ? true : convertToBoolean(disabled);
 
-    this.validateModel(convertDateToISOExtended(this.date, this.hour));
+    this.validateModel(PoUtils.convertDateToISOExtended(this.date, this.hour));
   }
 
   /** Torna o elemento somente leitura. */
@@ -351,7 +347,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Input('p-required') set setRequired(required: string) {
     this.required = required === '' ? true : convertToBoolean(required);
 
-    this.validateModel(convertDateToISOExtended(this.date, this.hour));
+    this.validateModel(PoUtils.convertDateToISOExtended(this.date, this.hour));
   }
 
   /**
@@ -403,14 +399,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       const year = value.getFullYear();
 
       const date = new Date(year, value.getMonth(), value.getDate(), 0, 0, 0);
-      setYearFrom0To100(date, year);
+      PoUtils.setYearFrom0To100(date, year);
 
       this._minDate = date;
     } else {
       this._minDate = convertIsoToDate(value, true, false);
     }
 
-    this.validateModel(convertDateToISOExtended(this.date, this.hour));
+    this.validateModel(PoUtils.convertDateToISOExtended(this.date, this.hour));
   }
 
   get minDate() {
@@ -429,14 +425,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       const year = value.getFullYear();
 
       const date = new Date(year, value.getMonth(), value.getDate(), 23, 59, 59);
-      setYearFrom0To100(date, year);
+      PoUtils.setYearFrom0To100(date, year);
 
       this._maxDate = date;
     } else {
       this._maxDate = convertIsoToDate(value, false, true);
     }
 
-    this.validateModel(convertDateToISOExtended(this.date, this.hour));
+    this.validateModel(PoUtils.convertDateToISOExtended(this.date, this.hour));
   }
 
   get maxDate() {
@@ -577,7 +573,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     const date = new Date(year, month, day);
 
-    setYearFrom0To100(date, year);
+    PoUtils.setYearFrom0To100(date, year);
 
     return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day ? date : null;
   }
@@ -588,7 +584,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     dateFormatted = dateFormatted.replace('dd', ('0' + value.getDate()).slice(-2));
     dateFormatted = dateFormatted.replace('mm', ('0' + (value.getMonth() + 1)).slice(-2));
-    dateFormatted = dateFormatted.replace('yyyy', formatYear(value.getFullYear()));
+    dateFormatted = dateFormatted.replace('yyyy', PoUtils.formatYear(value.getFullYear()));
 
     return dateFormatted;
   }
@@ -597,9 +593,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   controlModel(date: Date) {
     this.date = date;
     if (date && this.isExtendedISO) {
-      this.callOnChange(convertDateToISOExtended(this.date, this.hour));
+      this.callOnChange(PoUtils.convertDateToISOExtended(this.date, this.hour));
     } else if (date && !this.isExtendedISO) {
-      this.callOnChange(convertDateToISODate(this.date));
+      this.callOnChange(PoUtils.convertDateToISODate(this.date));
     } else {
       date === undefined ? this.callOnChange('') : this.callOnChange('Data inválida');
     }
@@ -658,7 +654,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       };
     }
 
-    if (requiredFailed(this.required, this.disabled, c.value)) {
+    if (PoValidators.requiredFailed(this.required, this.disabled, c.value)) {
       this.cd?.markForCheck();
       return {
         required: {
@@ -667,7 +663,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       };
     }
 
-    if (this.date && !validateDateRange(this.date, this._minDate, this._maxDate)) {
+    if (this.date && !PoUtils.validateDateRange(this.date, this._minDate, this._maxDate)) {
       this.errorPattern = this.errorPattern || 'Data fora do período';
 
       this.cd?.markForCheck();

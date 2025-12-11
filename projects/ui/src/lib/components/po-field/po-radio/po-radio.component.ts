@@ -137,17 +137,17 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
     }
   }
 
-  @HostListener('focusout', ['$event.target'])
+  @HostListener('focusout')
   focusOut(): void {
     this.renderer.removeClass(this.radio.nativeElement, 'po-radio-focus');
   }
 
-  @HostListener('keyup', ['$event.target'])
+  @HostListener('keyup')
   onKeyup(): void {
     this.renderer.addClass(this.radio.nativeElement, 'po-radio-focus');
   }
 
-  @HostListener('keydown', ['$event.target'])
+  @HostListener('keydown')
   onKeydown(): void {
     this.renderer.addClass(this.radio.nativeElement, 'po-radio-focus');
   }

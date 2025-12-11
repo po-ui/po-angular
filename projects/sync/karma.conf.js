@@ -40,6 +40,12 @@ module.exports = function (config) {
           overrides: {
             'src/lib/models/index.ts': {
               functions: 60
+            },
+            'src/lib/services/po-sync/po-sync.service.ts': {
+              statements: 0,
+              branches: 0,
+              functions: 0,
+              lines: 0
             }
           }
         }

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
-import { isExternalLink } from '../../utils/util';
+import { PoUtils } from '../../utils/util';
 
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
 
@@ -77,7 +77,7 @@ export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent i
   }
 
   navigateTo(url: string) {
-    isExternalLink(url) ? window.open(url) : this.router.navigate([url || '/']);
+    PoUtils.isExternalLink(url) ? window.open(url) : this.router.navigate([url || '/']);
   }
 
   private checkingForMetadataProperty(object, property) {

@@ -3,7 +3,7 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
-import { requiredFailed } from '../validators';
+import { PoValidators } from '../validators';
 import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.enum';
 import { PoRichTextService } from './po-rich-text.service';
 import { PoHelperOptions } from '../../po-helper';
@@ -365,7 +365,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
-    if (requiredFailed(this.required, false, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required, false, abstractControl.value)) {
       return {
         required: {
           valid: false

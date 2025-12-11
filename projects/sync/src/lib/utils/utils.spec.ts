@@ -1,4 +1,4 @@
-import * as utilsFunctions from './utils';
+import { PoUtils as utilsFunctions } from './utils';
 
 describe('Utils:', () => {
   it('validateParameter: should return throw error if param value is undefined', () => {

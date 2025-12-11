@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import * as ValidatorsFunctions from '../validators';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';

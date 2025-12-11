@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { getBrowserLanguage, getShortLanguage, isLanguage } from '../../utils/util';
+import { getShortLanguage, PoUtils } from '../../utils/util';
 import {
   poLocaleDecimalSeparatorList,
   poLocaleDefault,
@@ -26,7 +26,7 @@ export class PoLanguageService {
   constructor() {}
 
   set languageDefault(language: string) {
-    if (language && isLanguage(language)) {
+    if (language && PoUtils.isLanguage(language)) {
       localStorage.setItem(poDefaultLanguage, language);
     }
   }
@@ -54,7 +54,7 @@ export class PoLanguageService {
    * **Retorno:** `string` com a sigla do idioma ativo.
    */
   getLanguage(): string {
-    const language = localStorage.getItem(poLocaleKey) || this.languageDefault || getBrowserLanguage();
+    const language = localStorage.getItem(poLocaleKey) || this.languageDefault || PoUtils.getBrowserLanguage();
     return language && language.toLowerCase();
   }
 
@@ -101,7 +101,7 @@ export class PoLanguageService {
    * > Caso seja informado um valor diferente deste padrão, o mesmo será ignorado.
    */
   setLanguage(language: string): void {
-    if (!isLanguage(language)) {
+    if (!PoUtils.isLanguage(language)) {
       return;
     }
 

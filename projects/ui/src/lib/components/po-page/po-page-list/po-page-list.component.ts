@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
+import { callFunction, isExternalLink, isTypeof, PoUtils } from '../../../utils/util';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoDisclaimerGroupRemoveAction } from '../../po-disclaimer-group/po-disclaimer-group-remove-action.interface';
@@ -100,7 +100,7 @@ export class PoPageListComponent
 
   callAction(item: PoPageAction): void {
     if (item.url) {
-      isExternalLink(item.url) ? openExternalLink(item.url) : this.router.navigate([item.url]);
+      isExternalLink(item.url) ? PoUtils.openExternalLink(item.url) : this.router.navigate([item.url]);
     } else if (item.action) {
       item.action();
     }

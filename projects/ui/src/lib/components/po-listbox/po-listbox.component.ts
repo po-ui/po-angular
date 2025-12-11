@@ -19,7 +19,7 @@ import { PoListBoxBaseComponent } from './po-listbox-base.component';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
 import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { isExternalLink, isTypeof, openExternalLink } from '../../utils/util';
+import { isTypeof, PoUtils } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
 import { PoDropdownAction } from '../po-dropdown/po-dropdown-action.interface';
 import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
@@ -396,8 +396,8 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
   }
 
   private openUrl(url: string) {
-    if (isExternalLink(url)) {
-      return openExternalLink(url);
+    if (PoUtils.isExternalLink(url)) {
+      return PoUtils.openExternalLink(url);
     }
 
     if (url) {

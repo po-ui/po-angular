@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 
 import { configureTestSuite } from '../../../../util-test/util-expect.spec';
 
-import * as UtilsFunction from '../../../../utils/util';
+import { PoUtils as UtilsFunction } from '../../../../utils/util';
 import { PoFieldModule } from '../../po-field.module';
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoModalModule } from '../../../po-modal/po-modal.module';

@@ -6,17 +6,17 @@ O **PO Sync** é uma biblioteca para aplicações Angular que possibilita armaze
 
 Instalando com schematic(recomendado):
 ```
-ng add @po-ui/ng-sync
+ng add @po-ui/ng-sync@next
 ```
 
 Instalando com npm:
 ```
-npm install @po-ui/ng-sync
+npm install @po-ui/ng-sync@next
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn add @po-ui/ng-sync
+yarn add @po-ui/ng-sync@next
 ```
 
 Para informações complementares sobre instalação, acesse **[começando com o PO Sync](https://po-ui.io/guides/sync-get-started)** e **[fundamentos do PO Sync](https://po-ui.io/guides/sync-fundamentals)**.

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import * as util from '../../../utils/util';
+import { PoUtils as util } from '../../../utils/util';
 import { PoHeaderbrandComponent } from './po-header-brand.component';
 
 describe('PoHeaderbrandComponent', () => {

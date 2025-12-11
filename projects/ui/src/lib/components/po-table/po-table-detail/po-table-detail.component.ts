@@ -1,7 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { capitalizeFirstLetter, getDefaultSizeFn, isTypeof, validateSizeFn } from '../../../utils/util';
+import { getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoTableDetailColumn } from './po-table-detail-column.interface';
@@ -105,7 +105,7 @@ export class PoTableDetailComponent {
   }
 
   getColumnTitleLabel(detail: PoTableDetailColumn) {
-    return detail.label || capitalizeFirstLetter(detail.property);
+    return detail.label || PoUtils.capitalizeFirstLetter(detail.property);
   }
 
   getDetailData(item: any, detail: PoTableDetailColumn) {

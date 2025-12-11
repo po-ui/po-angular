@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 
 import { of } from 'rxjs';
 
-import * as UtilsFunction from '../../../../utils/util';
+import { PoUtils as UtilsFunction } from '../../../../utils/util';
 
 import { PoRichTextBodyComponent } from './po-rich-text-body.component';
 import { PoRichTextService } from '../po-rich-text.service';

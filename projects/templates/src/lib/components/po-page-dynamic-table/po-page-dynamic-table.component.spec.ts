@@ -16,7 +16,7 @@ import {
 } from '@po-ui/ng-components';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import * as utilsFunctions from '../../utils/util';
+import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';

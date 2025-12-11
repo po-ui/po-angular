@@ -1,10 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
     "outDir": "../../out-tsc/spec",
-    "skipLibCheck": true,
-    "types": ["jasmine", "node"]
+    "types": ["jasmine", "node"],
+    "skipLibCheck": true
   },
   "files": ["src/test.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]

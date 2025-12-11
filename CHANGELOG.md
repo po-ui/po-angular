@@ -2,61 +2,193 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v20.13.0...v21.0.0) (2026-01-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **angular:** deve ser utilizado o Angular v21
+
+Atualize seu projeto para utilizar a versão 21 do Angular, acesse a documentação [Guia de Atualização do Angular](https://angular.dev/update-guide) para fazer a migração completa.
+
+Consulte nossa documentação de migração (https://po-ui.io/guides/migration-poui) para mais detalhes sobre a atualização com o PO-UI.
+
+* **icon:** as classes po-icon e an foram removidas.
+
+Todos os componentes devem implementar Animalia Icons como fonte padrão.
+
+Antes:
+`<po-input p-icon='po-icon po-icon-anchor' p-label='PO input'></po-input>`
+
+Depois:
+`<po-input p-icon='an an-anchor' p-label='PO input'></po-input>`
+
+### Code Refactoring
+
+* **icon:** remove ícones depreciados ([c7f3df2](https://github.com/po-ui/po-angular/commit/c7f3df26b886c2e39ad3a25aa6072d24a13be66c))
+
+### Features
+* **theme:** compatibiliza tokens para novo tema ([b6c551d](https://github.com/po-ui/po-angular/commit/b6c551d630ae02e78d66c9ad00807dbc183d73cd))
+
 ## [20.13.0](https://github.com/po-ui/po-angular/compare/v20.12.0...v20.13.0) (2026-01-12)
 
 [Compatibilidade com @po-ui/ng-components@19.39.0](https://github.com/po-ui/po-angular/compare/v19.38.0...v19.39.0)
+
+
+### Features
+
+* **accordion:** adiciona AA no accordion ([f2b9666](https://github.com/po-ui/po-angular/commit/f2b966670ccf64d74e922be8941fe92b416f9cff))
+* **search:** implementa nova propriedade p-no-autocomplete ([e9ca238](https://github.com/po-ui/po-angular/commit/e9ca238cb3cbe87bca6da491a1f4870ae89b504a))
+
+
+### Bug Fixes
+
+* **menu-item:** remove aria-hidden invalido ([e055206](https://github.com/po-ui/po-angular/commit/e055206aa9cd8d7b245aca3b6fedbbd39150142d))
 
 ## [20.12.0](https://github.com/po-ui/po-angular/compare/v20.11.0...v20.12.0) (2025-12-18)
 
 [Compatibilidade com @po-ui/ng-components@19.38.0](https://github.com/po-ui/po-angular/compare/v19.37.0...v19.38.0)
 
+
+### Features
+
+* **chart:** implementa nova variação de tipo radar ([4b0ba4a](https://github.com/po-ui/po-angular/commit/4b0ba4abf1bab72e921f7725a190c6532557df9d))
+* **fields:** inclui estado de loading ([98c0342](https://github.com/po-ui/po-angular/commit/98c0342d7c98132be0daed10de35cf972bfd7f9d))
+* **popup:** customiza popup e listbox para recebimento de template ([93685f7](https://github.com/po-ui/po-angular/commit/93685f7e9e8585f047391ed7f55e7c49f5aea8c7))
+* **tag:** calcula dinamicamente a cor do texto a partir do fundo ([0cffdf3](https://github.com/po-ui/po-angular/commit/0cffdf3796cc86cb500d52665f1b3ccea2dac649))
+
 ## [20.11.0](https://github.com/po-ui/po-angular/compare/v20.10.0...v20.11.0) (2025-12-01)
 
 [Compatibilidade com @po-ui/ng-components@19.37.0](https://github.com/po-ui/po-angular/compare/v19.36.0...v19.37.0)
+
+### Features
+
+* **dynamic-form:** adiciona propriede maskNoLengthValidation ([34b6dc4](https://github.com/po-ui/po-angular/commit/34b6dc4d5eb65e04d2134465c4af94c4e8ffe643))
+
 
 ## [20.10.0](https://github.com/po-ui/po-angular/compare/v20.9.0...v20.10.0) (2025-11-25)
 
 [Compatibilidade com @po-ui/ng-components@19.36.0](https://github.com/po-ui/po-angular/compare/v19.35.0...v19.36.0)
 
+
+### Features
+
+* **modal:** adiciona suporte a ícone nas ações do modal ([a0cd705](https://github.com/po-ui/po-angular/commit/a0cd705d3cc6cd77327df023d537dae68985b212))
+
+
+### Bug Fixes
+
+* **fields:** corrige autoheight e alinha ícones ([669e87e](https://github.com/po-ui/po-angular/commit/669e87ee5b959025d3337ad0dff04c0efba3f22f))
+
 ## [20.9.0](https://github.com/po-ui/po-angular/compare/20.8.0...v20.9.0) (2025-11-10)
 
 [Compatibilidade com @po-ui/ng-components@19.35.0](https://github.com/po-ui/po-angular/compare/v19.34.0...v19.35.0)
+
+Compatibilidade com @totvs/thf-components@19.35.0
 
 ## [20.8.0](https://github.com/po-ui/po-angular/compare/v20.7.0...v20.8.0) (2025-11-03)
 
 [Compatibilidade com @po-ui/ng-components@19.34.0](https://github.com/po-ui/po-angular/compare/v19.33.0...v19.34.0)
 
+
+### Features
+
+* **dropdown:** implementa criação de subníveis ([d124f81](https://github.com/po-ui/po-angular/commit/d124f81fd080b7e285edff724e307775e3d36667))
+* **page-default:** implementa suporte a subníveis no dropdown ([7be0942](https://github.com/po-ui/po-angular/commit/7be09427fc7160eeb707907e0c69e549345953e7))
+
 ## [20.7.0](https://github.com/po-ui/po-angular/compare/v20.6.0...v20.7.0) (2025-10-29)
 
 [Compatibilidade com @po-ui/ng-components@19.33.0](https://github.com/po-ui/po-angular/compare/v19.32.0...v19.33.0)
+
+
+### Features
+
+* **chart:** implementa compatibilidade com variáveis css ([5f6cd68](https://github.com/po-ui/po-angular/commit/5f6cd6807d0d1cdf1ec6e3edbe5475485d2f8e26))
+* **components:** reduz espaçamentos e adensa layout de componentes ([38ad525](https://github.com/po-ui/po-angular/commit/38ad52540f30029f525f5fc0723cf4fce4e9b2df))
+* **components:** reduz tamanhos de fonte ([b547474](https://github.com/po-ui/po-angular/commit/b547474bcc42da9decd1ce0d48bc94e0807e9bb4))
+* **fields:** adiciona po-helper quando não há label definida ([185cfeb](https://github.com/po-ui/po-angular/commit/185cfeb3bb41bfd58fcb73172edde286e94897a7))
+* **search:** adiciona eventos p-focus e p-keydown ([2658b6f](https://github.com/po-ui/po-angular/commit/2658b6fc8e1a8ef4880498c989d4efde321b63fd))
 
 ## [20.6.0](https://github.com/po-ui/po-angular/compare/v20.5.0...v20.6.0) (2025-10-21)
 
 [Compatibilidade com @po-ui/ng-components@19.32.0](https://github.com/po-ui/po-angular/compare/v19.31.0...v19.32.0)
 
+
+### Features
+
+* **upload:** implementa definições do AnimaliaDS ([cc66ea6](https://github.com/po-ui/po-angular/commit/cc66ea6a5567907e516f013434ec5bbfc03bc00a))
+* **upload:** repassa propriedade showThumbnail ao dynamic-form ([e5eeee6](https://github.com/po-ui/po-angular/commit/e5eeee6683d25a202112e2859560da5842bf2043))
+
 ## [20.5.0](https://github.com/po-ui/po-angular/compare/v20.4.0...v20.5.0) (2025-10-13)
 
 [Compatibilidade com @po-ui/ng-components@19.31.0](https://github.com/po-ui/po-angular/compare/v19.30.0...v19.31.0)
+
+
+### Features
+
+* **icons:** atualiza AnimaliaIcons para v1.0.5 ([08d52cb](https://github.com/po-ui/po-angular/commit/08d52cbed86aa36fa53528dd781a18d9918839f9))
 
 ## [20.4.0](https://github.com/po-ui/po-angular/compare/v20.3.0...v20.4.0) (2025-10-06)
 
 [Compatibilidade com @po-ui/ng-components@19.30.0](https://github.com/po-ui/po-angular/compare/v19.29.0...v19.30.0)
 
+
+### Features
+
+* **components:** cria atributos para compatibilidade com edição fluída ([f783554](https://github.com/po-ui/po-angular/commit/f783554493194c53082facb36ade92a331326c65))
+* **helper:** implementa novo componente de ajuda ([cbbe272](https://github.com/po-ui/po-angular/commit/cbbe272e695f3269243bdb604bd1803d7d448a8a))
+
 ## [20.3.0](https://github.com/po-ui/po-angular/compare/v20.2.1...v20.3.0) (2025-09-30)
 
 [Compatibilidade com @po-ui/ng-components@19.29.0](https://github.com/po-ui/po-angular/compare/v19.28.1...v19.29.0)
+
+### Features
+
+* **scroll:** implementa definições do AnimaliaDS ([2f82142](https://github.com/po-ui/po-angular/commit/2f82142303dcaa00580bfcf7610c7f8bbe27d142))
+
+
+### Bug Fixes
+
+* **components:** ajusta detecção do estado disable via `FormControl` ([34bbb55](https://github.com/po-ui/po-angular/commit/34bbb557f5c6b2546087d41617dbc7cbbd5ed349))
 
 ## [20.2.1](https://github.com/po-ui/po-angular/compare/v20.2.0...v20.2.1) (2025-09-22)
 
 [Compatibilidade com @po-ui/ng-components@19.28.1](https://github.com/po-ui/po-angular/compare/v19.28.0...v19.28.1)
 
+### Bug Fixes
+
+* **context-tabs:** ajusta adição dinâmica de tabs ([1eb2085](https://github.com/po-ui/po-angular/commit/1eb20857b5dc3108067a131ff23f79b4ffc638af))
+
 ## [20.2.0](https://github.com/po-ui/po-angular/compare/v20.1.0...v20.2.0) (2025-09-15)
 
 [Compatibilidade com @po-ui/ng-components@19.28.0](https://github.com/po-ui/po-angular/compare/v19.27.0...v19.28.0)
 
+### Bug Fixes
+
+* **input-generic:** reseta modelLastUpdate ([ceba0b0](https://github.com/po-ui/po-angular/commit/ceba0b0f305baf84e0cdb177c3a2582094361c3e))
+* **page-dynamic-search:** ajusta o GET request com atributo `range` ([6d97f4d](https://github.com/po-ui/po-angular/commit/6d97f4d9151fac4e17d607e8a6ffbcdc0279b11b)), closes [#1211](https://github.com/po-ui/po-angular/issues/1211)
+
 ## [20.1.0](https://github.com/po-ui/po-angular/compare/v20.0.0...v20.1.0) (2025-09-09)
 
 [Compatibilidade com @po-ui/ng-components@19.27.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v19.27.0)
+
+### Code Refactoring
+
+* **navbar:** marca componente po-navbar como depreciado ([05a8b5a](https://github.com/po-ui/po-angular/commit/05a8b5a93dcf5387d6f94858fe4f061d552b7d4d))
+
+
+### ⚠ BREAKING CHANGES
+
+* **navbar:** marca componente `po-navbar` como @deprecated
+
+O componente `po-navbar` não será mais mantido e
+será removido em versões futuras.
+A alternativa recomendada é utilizar o `po-header`.
+
+
+### Features
+
+* **chart:** adiciona customização da tooltip via innerHtml ([44a26b5](https://github.com/po-ui/po-angular/commit/44a26b50e8b5a023f2bf0fd62a11b682a41ee3b3))
 
 ## [20.0.0](https://github.com/po-ui/po-angular/compare/v19.26.0...v20.0.0) (2025-09-03)
 
@@ -65,7 +197,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **angular:** deve ser utilizado o Angular v20
 
 Atualize seu projeto para utilizar a versão 20 do Angular, acesse a documentação [Guia de Atualização do Angular](https://update.angular.io/) para fazer a migração completa.
-
 
 
 ## [19.26.0](https://github.com/po-ui/po-angular/compare/v19.25.0...v19.26.0) (2025-09-01)
