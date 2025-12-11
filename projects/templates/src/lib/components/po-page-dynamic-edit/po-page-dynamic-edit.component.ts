@@ -19,10 +19,10 @@ import {
 import {
   convertToBoolean,
   getDefaultSizeFn,
-  mapObjectByProperties,
   removeKeysProperties,
   validateSizeFn,
-  valuesFromObject
+  valuesFromObject,
+  PoUtils
 } from './../../utils/util';
 
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
@@ -639,7 +639,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   }
 
   private formatUniqueKey(item) {
-    const keys = mapObjectByProperties(item, this.keys);
+    const keys = PoUtils.mapObjectByProperties(item, this.keys);
 
     return valuesFromObject(keys).join('|');
   }

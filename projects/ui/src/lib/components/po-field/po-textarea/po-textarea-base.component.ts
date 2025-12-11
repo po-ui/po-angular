@@ -3,7 +3,7 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
-import { maxlengpoailed, minlengpoailed, requiredFailed } from '../validators';
+import { PoValidators } from '../validators';
 import { PoHelperOptions } from '../../po-helper';
 
 /**
@@ -438,7 +438,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
       this.hasValidatorRequired = true;
     }
 
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
           valid: false
@@ -446,7 +446,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
       };
     }
 
-    if (minlengpoailed(this.minlength, abstractControl.value)) {
+    if (PoValidators.minlengpoailed(this.minlength, abstractControl.value)) {
       return {
         minlength: {
           valid: false
@@ -454,7 +454,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
       };
     }
 
-    if (maxlengpoailed(this.maxlength, abstractControl.value)) {
+    if (PoValidators.maxlengpoailed(this.maxlength, abstractControl.value)) {
       return {
         maxlength: {
           valid: false

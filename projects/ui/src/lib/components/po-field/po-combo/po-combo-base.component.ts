@@ -4,7 +4,7 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, validValue } from '../../../utils/util';
-import { requiredFailed } from '../validators';
+import { PoValidators } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
@@ -1081,7 +1081,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       this.hasValidatorRequired = true;
     }
 
-    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
       this.changeDetector.markForCheck();
       return {
         required: {

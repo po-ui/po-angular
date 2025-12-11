@@ -46,7 +46,6 @@ function addThemeToAppStyles(options: any): (tree: Tree) => Tree {
     const themePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
     addThemeStyleToTarget(project, 'build', tree, themePath, workspace);
-    addThemeStyleToTarget(project, 'test', tree, themePath, workspace);
 
     return tree;
   };

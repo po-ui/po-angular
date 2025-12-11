@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { debounceTime, fromEvent, map, startWith, Subscription } from 'rxjs';
-import { isExternalLink } from '../../../utils/util';
+import { PoUtils } from '../../../utils/util';
 import { PoMenuItem } from '../../po-menu';
 import { PoHeaderBrand } from '../interfaces/po-header-brand.interface';
 
@@ -73,7 +73,7 @@ export class PoHeaderbrandComponent implements AfterViewInit, OnChanges, OnDestr
   onClickLogo() {
     this.brand?.action?.();
     if (this.brand.link) {
-      if (isExternalLink(this.brand.link)) {
+      if (PoUtils.isExternalLink(this.brand.link)) {
         window.open(this.brand.link, '_blank');
       } else {
         this.router.navigateByUrl(this.brand.link);

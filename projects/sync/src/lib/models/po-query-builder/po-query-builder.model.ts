@@ -1,4 +1,4 @@
-import { validateParameter } from '../../utils/utils';
+import { PoUtils } from '../../utils/utils';
 
 import { PoResponseApi } from './../../services/po-http-client/interfaces/po-response-api.interface';
 import { PoSchemaService } from './../../services/po-schema';
@@ -119,7 +119,7 @@ export class PoQueryBuilder {
    * @returns {PoQueryBuilder} Objeto que possibilita encadear um novo método do `PoQueryBuilder`.
    */
   page(page: number): PoQueryBuilder {
-    validateParameter({ page });
+    PoUtils.validateParameter({ page });
 
     this._page = page;
     return this;
@@ -132,7 +132,7 @@ export class PoQueryBuilder {
    * @returns {PoQueryBuilder} Objeto que possibilita encadear um novo método do `PoQueryBuilder`.
    */
   pageSize(pageSize: number): PoQueryBuilder {
-    validateParameter({ pageSize });
+    PoUtils.validateParameter({ pageSize });
 
     this._pageSize = pageSize;
     return this;
@@ -157,7 +157,7 @@ export class PoQueryBuilder {
    * @returns {PoQueryBuilder} Objeto que possibilita encadear um novo método do `PoQueryBuilder`.
    */
   select(fields: string): PoQueryBuilder {
-    validateParameter({ fields });
+    PoUtils.validateParameter({ fields });
 
     this.fields = fields;
     return this;
@@ -175,7 +175,7 @@ export class PoQueryBuilder {
    * @returns {PoQueryBuilder} Objeto que possibilita encadear um novo método do `PoQueryBuilder`.
    */
   sort(field: string): PoQueryBuilder {
-    validateParameter({ field });
+    PoUtils.validateParameter({ field });
 
     this._sort = field;
     return this;

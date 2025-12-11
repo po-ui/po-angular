@@ -2,7 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NavigationCancel, NavigationEnd, provideRouter, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as util from '../../../utils/util';
+import { PoUtils as util } from '../../../utils/util';
 import { PoHeaderActions } from '../interfaces/po-header-actions.interface';
 import { PoHeaderMenuItemComponent } from './po-header-menu-item.component';
 

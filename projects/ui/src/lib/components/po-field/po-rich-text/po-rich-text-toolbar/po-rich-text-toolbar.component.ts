@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
-import { isIE } from '../../../../utils/util';
+import { PoUtils } from '../../../../utils/util';
 
 import { PoButtonGroupItem } from '../../../po-button-group';
 import { PoRichTextToolbarActions } from '../enum/po-rich-text-toolbar-actions.enum';
@@ -99,7 +99,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
   }
 
   get isInternetExplorer() {
-    return isIE();
+    return PoUtils.isIE();
   }
 
   @Input('p-size') size: string;

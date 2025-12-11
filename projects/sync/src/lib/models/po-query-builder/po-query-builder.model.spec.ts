@@ -1,5 +1,5 @@
 import { PoStorageService } from '@po-ui/ng-storage';
-import * as utilsFunctions from '../../utils/utils';
+import { PoUtils as utilsFunctions } from '../../utils/utils';
 
 import { PoQueryBuilder } from './po-query-builder.model';
 import { PoSchemaDefinitionService, PoSchemaService } from '../../services/po-schema';

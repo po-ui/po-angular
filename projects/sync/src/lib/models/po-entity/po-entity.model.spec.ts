@@ -1,5 +1,5 @@
 import { PoStorageService } from '@po-ui/ng-storage';
-import * as utilsFunctions from '../../utils/utils';
+import { PoUtils as utilsFunctions } from '../../utils/utils';
 
 import { PoEntity } from './po-entity.model';
 import { PoEventSourcingOperation, PoEventSourcingService } from './../../services/po-event-sourcing';

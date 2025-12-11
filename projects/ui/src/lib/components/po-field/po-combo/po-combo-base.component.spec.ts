@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
 import * as Utils from '../../../utils/util';
-import * as ValidatorsFunctions from '../validators';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';

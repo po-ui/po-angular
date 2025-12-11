@@ -6,7 +6,7 @@ import { TestBed } from '@angular/core/testing';
 import { Observable, of, Subscriber } from 'rxjs';
 import { PoStorageService } from '@po-ui/ng-storage';
 
-import * as utilsFunctions from '../../utils/utils';
+import { PoUtils as utilsFunctions } from '../../utils/utils';
 
 import { PoDataMessage, PoDataTransform } from '../../models';
 import { PoEventSourcingErrorResponse } from '../../models/po-event-sourcing-error-response.model';

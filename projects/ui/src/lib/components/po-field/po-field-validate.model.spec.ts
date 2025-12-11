@@ -1,7 +1,7 @@
 import { AbstractControl, FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { PoFieldValidateModel } from './po-field-validate.model';
-import * as ValidatorsFunctions from './validators';
+import { PoValidators as ValidatorsFunctions } from './validators';
 
 class FieldValidate extends PoFieldValidateModel<any> {
   extraValidation(c: AbstractControl): { [key: string]: any } {

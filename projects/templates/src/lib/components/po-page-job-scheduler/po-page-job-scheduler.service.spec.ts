@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { PoDynamicFormField } from '@po-ui/ng-components';
-import * as utilsFunctions from '../../utils/util';
+import { PoUtils as utilsFunctions } from '../../utils/util';
 
 import { PoJobScheduler } from './interfaces/po-job-scheduler.interface';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';

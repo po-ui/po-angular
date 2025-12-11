@@ -8,7 +8,7 @@ import {
   inject
 } from '@angular/core';
 
-import { isKeyCodeEnter } from './../../utils/util';
+import { PoUtils } from './../../utils/util';
 
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
@@ -54,7 +54,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
   private resizeListener: () => void;
 
   onKeyDown(event: any) {
-    if (isKeyCodeEnter(event)) {
+    if (PoUtils.isKeyCodeEnter(event)) {
       this.toggleDropdown();
     }
   }

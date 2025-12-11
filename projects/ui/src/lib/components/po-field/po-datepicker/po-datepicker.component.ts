@@ -16,16 +16,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import {
-  formatYear,
-  isKeyCodeEnter,
-  isKeyCodeSpace,
-  isMobile,
-  replaceFormatSeparator,
-  setHelperSettings,
-  setYearFrom0To100,
-  uuid
-} from '../../../utils/util';
+import { isKeyCodeEnter, isKeyCodeSpace, isMobile, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
@@ -376,11 +367,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return undefined;
     }
 
-    let dateFormatted = replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale));
+    let dateFormatted = PoUtils.replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale));
 
     dateFormatted = dateFormatted.replace('dd', ('0' + value.getDate()).slice(-2));
     dateFormatted = dateFormatted.replace('mm', ('0' + (value.getMonth() + 1)).slice(-2));
-    dateFormatted = dateFormatted.replace('yyyy', formatYear(value.getFullYear()));
+    dateFormatted = dateFormatted.replace('yyyy', PoUtils.formatYear(value.getFullYear()));
 
     return dateFormatted;
   }
@@ -462,7 +453,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
         const dateTemp = new Date(year, month, day);
 
-        setYearFrom0To100(dateTemp, year);
+        PoUtils.setYearFrom0To100(dateTemp, year);
 
         this.date = dateTemp;
         this.inputEl.nativeElement.value = this.formatToDate(dateTemp);

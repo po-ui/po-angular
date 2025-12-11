@@ -79,7 +79,7 @@ Pode ser utilizado o verdaccio para publicar os pacotes locais, como `@po-ui/ng-
 
 Se você precisar executar isso várias vezes, desfaça as alterações feitas pelo `ng update` para que o `package.json` volte ao número da versão original e execute `npm install` novamente antes de tentar outra atualização.
 
-# ng add @po-ui/ng-sync
+# ng add @po-ui/ng-sync@next
 
 Esse *schematic* é executado através do Angular CLI para adicionar o sync em projetos Ionic.
 
@@ -165,5 +165,5 @@ Para testarmos o pacote, devemos incrementar a versão do mesmo e ter o npm regi
 Por fim, execute os comando abaixo no seu projeto Angular:
 
 ```
-> ng add @po-ui/ng-sync
+> ng add @po-ui/ng-sync@next
 ```

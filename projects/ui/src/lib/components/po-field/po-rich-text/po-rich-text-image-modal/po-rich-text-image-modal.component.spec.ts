@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import * as UtilsFunction from '../../../../utils/util';
+import { PoUtils as UtilsFunction } from '../../../../utils/util';
 
 import { PoFieldModule } from '../../po-field.module';
 import { PoButtonGroupModule } from '../../../po-button-group';

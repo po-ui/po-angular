@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import * as UtilsFunction from '../../utils/util';
+import { PoUtils as UtilsFunction } from '../../utils/util';
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 import { PoTooltipModule } from '../../directives/po-tooltip/index';
 

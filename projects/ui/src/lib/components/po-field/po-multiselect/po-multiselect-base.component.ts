@@ -16,15 +16,7 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operato
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import {
-  convertToBoolean,
-  getDefaultSizeFn,
-  isTypeof,
-  removeDuplicatedOptionsWithFieldValue,
-  removeUndefinedAndNullOptionsWithFieldValue,
-  sortOptionsByProperty,
-  validateSizeFn
-} from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -768,12 +760,12 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   validAndSortOptions() {
     if (this.options && this.options.length) {
-      removeUndefinedAndNullOptionsWithFieldValue(this.options, this.fieldValue);
-      removeDuplicatedOptionsWithFieldValue(this.options, this.fieldValue);
+      PoUtils.removeUndefinedAndNullOptionsWithFieldValue(this.options, this.fieldValue);
+      PoUtils.removeDuplicatedOptionsWithFieldValue(this.options, this.fieldValue);
       this.setUndefinedLabels(this.options);
 
       if (this.sort) {
-        sortOptionsByProperty(this.options, this.fieldLabel);
+        PoUtils.sortOptionsByProperty(this.options, this.fieldLabel);
       }
     }
   }

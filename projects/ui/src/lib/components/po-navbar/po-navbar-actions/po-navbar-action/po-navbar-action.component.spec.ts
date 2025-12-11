@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
-import * as utils from '../../../../utils/util';
+import { PoUtils as utils } from '../../../../utils/util';
 
 import { PoNavbarActionComponent } from './po-navbar-action.component';
 import { PoTooltipModule } from 'projects/ui/src/lib/directives';

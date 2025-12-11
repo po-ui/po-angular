@@ -21,12 +21,11 @@ import {
   convertToBoolean,
   getDefaultSizeFn,
   isSafari,
-  removeDuplicatedOptions,
-  removeUndefinedAndNullOptions,
   setHelperSettings,
   uuid,
   validateSizeFn,
-  validValue
+  validValue,
+  PoUtils
 } from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -603,7 +602,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   }
 
   private validateOptions(options: Array<any>) {
-    removeDuplicatedOptions(options);
-    removeUndefinedAndNullOptions(options);
+    PoUtils.removeDuplicatedOptions(options);
+    PoUtils.removeUndefinedAndNullOptions(options);
   }
 }

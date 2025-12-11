@@ -7,7 +7,7 @@ import { expand, map, reduce } from 'rxjs/operators';
 
 import { PoStorageService } from '@po-ui/ng-storage';
 
-import { toBase64, toFile } from '../../utils/utils';
+import { PoUtils } from '../../utils/utils';
 
 import { PoEventSourcingErrorResponse } from '../../models/po-event-sourcing-error-response.model';
 import { PoEventSourcingItem } from './interfaces/po-event-sourcing-item.interface';
@@ -190,7 +190,7 @@ export class PoEventSourcingService {
       bodyType = 'File';
       mimeType = body.type;
       fileName = body.name;
-      body = await toBase64(body);
+      body = await PoUtils.toBase64(body);
     }
 
     return { ...requestData, body, mimeType, bodyType, fileName };
@@ -478,7 +478,7 @@ export class PoEventSourcingService {
     mimeType: string,
     formField: string = 'file'
   ): Promise<FormData> {
-    const file = await toFile(body, fileName, mimeType);
+    const file = await PoUtils.toFile(body, fileName, mimeType);
     const formData: FormData = new FormData();
 
     formData.append(formField, file, fileName);

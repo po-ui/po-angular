@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, Vie
 import { Router } from '@angular/router';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
-import { isExternalLink, isTypeof, openExternalLink, uuid } from '../../utils/util';
+import { isExternalLink, uuid, PoUtils } from '../../utils/util';
 
 import { PoListBoxComponent } from '../po-listbox';
 import { PoPopupAction } from './po-popup-action.interface';
@@ -96,7 +96,7 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
   }
 
   returnBooleanValue(popupAction: any, property: string) {
-    return isTypeof(popupAction[property], 'function')
+    return PoUtils.isTypeof(popupAction[property], 'function')
       ? popupAction[property](this.param || popupAction)
       : popupAction[property];
   }
@@ -183,7 +183,7 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
 
   private openUrl(url: string) {
     if (isExternalLink(url)) {
-      return openExternalLink(url);
+      return PoUtils.openExternalLink(url);
     }
 
     if (url) {

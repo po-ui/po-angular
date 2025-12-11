@@ -1,8 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Component, ElementRef, EventEmitter } from '@angular/core';
 
-import * as UtilsFunctions from '../../../utils/util';
-import { formatYear, setYearFrom0To100 } from '../../../utils/util';
+import { PoUtils as UtilsFunctions } from '../../../utils/util';
 
 import { PoCalendarService } from '../../po-calendar/services/po-calendar.service';
 import { PoCalendarLangService } from '../../po-calendar/services/po-calendar.lang.service';
@@ -984,7 +983,7 @@ describe('PoDatepickerComponent:', () => {
 
       component.formatToDate(date);
 
-      expect(formatYear).toHaveBeenCalledWith(date.getFullYear());
+      expect(UtilsFunctions.formatYear).toHaveBeenCalledWith(date.getFullYear());
     });
 
     it('formatToDate: shouldn`t call `formatYear` with date year', () => {
@@ -1147,7 +1146,7 @@ describe('PoDatepickerComponent:', () => {
 
       component.writeValue(date);
 
-      expect(setYearFrom0To100).toHaveBeenCalled();
+      expect(UtilsFunctions.setYearFrom0To100).toHaveBeenCalled();
     });
 
     it(`writeValue: should update 'valueBeforeChange' with 'formatToDate' return and call 'formatToDate'

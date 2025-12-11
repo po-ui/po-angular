@@ -535,3 +535,18 @@ export function getA11yLevel(): PoThemeA11yEnum {
 
   return a11yLevel === 'AA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA;
 }
+
+export const PoUtils = {
+  convertDateToISOExtended,
+  convertToBoolean,
+  convertToInt,
+  getShortBrowserLanguage,
+  isExternalLink,
+  mapArrayByProperties,
+  mapObjectByProperties,
+  openExternalLink,
+  removeDuplicateItemsWithArrayKey,
+  removeKeysProperties,
+  sortArrayOfObjects,
+  valuesFromObject
+};
