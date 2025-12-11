@@ -15,13 +15,7 @@ import {
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import {
-  capitalizeFirstLetter,
-  convertToBoolean,
-  convertToInt,
-  getDefaultSizeFn,
-  validateSizeFn
-} from '../../../utils/util';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn, PoUtils } from '../../../utils/util';
 import { PoCheckboxGroupOption } from '../../po-field/po-checkbox-group/interfaces/po-checkbox-group-option.interface';
 import { PoPageSlideComponent } from '../../po-page/po-page-slide';
 import { PoPopoverComponent } from '../../po-popover/po-popover.component';
@@ -324,7 +318,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   }
 
   private getColumnTitleLabel(column: PoTableColumn) {
-    return column.label || capitalizeFirstLetter(column.property);
+    return column.label || PoUtils.capitalizeFirstLetter(column.property);
   }
 
   /** Retorna um Array de column.property das colunas que são visiveis. */

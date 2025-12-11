@@ -3,12 +3,12 @@ import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms
 
 import {
   convertToBoolean,
-  convertToInt,
   getDefaultSizeFn,
   removeDuplicatedOptions,
-  validateSizeFn
+  validateSizeFn,
+  PoUtils
 } from '../../../utils/util';
-import { requiredFailed } from '../validators';
+import { PoValidators } from '../validators';
 
 import { PoRadioSize } from '../po-radio/enums/po-radio-size.enum';
 import { PoRadioGroupOption } from './po-radio-group-option.interface';
@@ -248,7 +248,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    * @default `2`
    */
   @Input('p-columns') set columns(value: number) {
-    const columns = convertToInt(value, poRadioGroupColumnsDefaultLength);
+    const columns = PoUtils.convertToInt(value, poRadioGroupColumnsDefaultLength);
 
     this._columns = this.getGridSystemColumns(columns, 4);
     this.mdColumns = this.getGridSystemColumns(columns, 2);
@@ -371,7 +371,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
-    if (requiredFailed(this.required, this.disabled, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
           valid: false

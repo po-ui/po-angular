@@ -6,12 +6,12 @@ O **PO Storage** é uma biblioteca para aplicações Angular que fornece um serv
 
 Instalando com npm:
 ```
-npm install @po-ui/ng-storage
+npm install @po-ui/ng-storage@next
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn add @po-ui/ng-storage
+yarn add @po-ui/ng-storage@next
 ```
 
 Para informações complementares sobre instalação, acesse **[documentação do PO Storage](https://po-ui.io/documentation/po-storage)**.

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import * as utilsFunctions from './../../utils/util';
+import { PoUtils as utilsFunctions } from './../../utils/util';
 
 import { PoPageBlockedUserBaseComponent } from './po-page-blocked-user-base.component';
 import { PoPageBlockedUserComponent } from './po-page-blocked-user.component';

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
-import * as utilsFunctions from '../../../utils/util';
+import { PoUtils as utilsFunctions } from '../../../utils/util';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoTableModule } from '../po-table.module';

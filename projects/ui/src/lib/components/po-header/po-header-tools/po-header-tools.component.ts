@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
-import { isExternalLink } from '../../../utils/util';
+import { PoUtils } from '../../../utils/util';
 import { PoButtonComponent } from '../../po-button';
 import { PoPopoverComponent } from '../../po-popover';
 import { PoPopupComponent } from '../../po-popup';
@@ -92,7 +92,7 @@ export class PoHeaderToolsComponent {
 
   private checkLink(item: PoHeaderActionTool) {
     if (item.link) {
-      if (isExternalLink(item.link)) {
+      if (PoUtils.isExternalLink(item.link)) {
         window.open(item.link, '_blank');
       } else {
         this.router.navigateByUrl(item.link);

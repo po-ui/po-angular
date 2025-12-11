@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Directive, DoCheck, EventEmitter, Input, IterableDif
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { convertToBoolean, isKeyCodeEnter, uuid } from '../../utils/util';
+import { convertToBoolean, uuid, PoUtils } from '../../utils/util';
 
 import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 
@@ -145,7 +145,7 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   }
 
   onKeyPress(event: any) {
-    if (isKeyCodeEnter(event)) {
+    if (PoUtils.isKeyCodeEnter(event)) {
       this.removeAllItems();
     }
   }

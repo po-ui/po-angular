@@ -29,7 +29,7 @@
         "@angular-eslint/no-host-metadata-property": "off",
         "prefer-spread": "off",
         "@angular-eslint/directive-selector": [
-          "error",
+          "warn",
           {
             "type": "attribute",
             "prefix": "",

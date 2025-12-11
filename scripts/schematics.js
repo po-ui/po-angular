@@ -1,6 +1,8 @@
 const { dest, series, task, src } = require('gulp');
 const fs = require('fs-extra');
-const argv = require('yargs').argv;
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const argv = yargs(hideBin(process.argv)).argv;
 const clean = require('gulp-clean');
 const { exec } = require('child_process');
 

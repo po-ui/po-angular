@@ -9,7 +9,7 @@ import { of, throwError } from 'rxjs';
 import { PoDialogService, PoThemeA11yEnum } from '@po-ui/ng-components';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
-import * as util from '../../utils/util';
+import { PoUtils as util } from '../../utils/util';
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';

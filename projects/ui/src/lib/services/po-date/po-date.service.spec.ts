@@ -1,5 +1,3 @@
-import * as utilsFunctions from '../../utils/util';
-
 import { PoDateService } from './po-date.service';
 
 describe('PoDateTimeService:', () => {

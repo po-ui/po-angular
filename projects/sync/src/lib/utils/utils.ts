@@ -35,9 +35,9 @@ export const validateParameter = (parameter: object) => {
  * @param value Objeto contento o nome da propriedade que está sendo validada e o seu valor.
  */
 export const validateArray = (value: object) => {
-  validateParameter(value);
+  PoUtils.validateParameter(value);
 
-  const [paramName, paramValue] = getObjectEntries(value);
+  const [paramName, paramValue] = PoUtils.getObjectEntries(value);
 
   if (!(paramValue instanceof Array)) {
     throw new Error(`${paramName} is not an Array instance`);
@@ -71,3 +71,11 @@ export const toFile = (url: string, fileName: string, mimeType: string) =>
   fetch(url)
     .then(result => result.arrayBuffer())
     .then(buffer => new File([buffer], fileName, { type: mimeType }));
+
+export const PoUtils = {
+  getObjectEntries,
+  toBase64,
+  toFile,
+  validateArray,
+  validateParameter
+};

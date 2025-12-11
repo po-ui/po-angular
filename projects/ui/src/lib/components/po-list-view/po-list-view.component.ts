@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { isTypeof } from '../../utils/util';
+import { PoUtils } from '../../utils/util';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
@@ -131,7 +131,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   }
 
   returnBooleanValue(listViewAction: PoListViewAction, item: any, property: string) {
-    return isTypeof(listViewAction[property], 'function')
+    return PoUtils.isTypeof(listViewAction[property], 'function')
       ? (<any>listViewAction)[property](item)
       : listViewAction[property];
   }

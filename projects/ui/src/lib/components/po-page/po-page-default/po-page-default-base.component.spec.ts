@@ -4,7 +4,6 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
-import * as UtilFunctions from './../../../utils/util';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoPageDefaultBaseComponent, poPageDefaultLiteralsDefault } from './po-page-default-base.component';
@@ -73,8 +72,6 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
 
       it('should accept custom literals.', () => {
-        spyOn(UtilFunctions, <any>'getShortBrowserLanguage').and.returnValue(poLocaleDefault);
-
         const customLiterals = poPageDefaultLiteralsDefault[poLocaleDefault];
 
         // Custom some literals

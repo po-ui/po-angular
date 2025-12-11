@@ -4,7 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
 
-import * as UtilsFunction from '../../../utils/util';
+import { PoUtils as UtilsFunction } from '../../../utils/util';
 
 import { EventEmitter, Renderer2 } from '@angular/core';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';

@@ -7,8 +7,7 @@
     "declaration": true,
     "inlineSources": true,
     "skipLibCheck": true,
-    "types": [],
-    "lib": ["dom", "es2022"]
+    "types": []
   },
   "angularCompilerOptions": {
     "strictMetadataEmit": true,

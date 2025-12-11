@@ -7,8 +7,8 @@ import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import * as utilsFunctions from '../../../utils/util';
-import * as ValidatorsFunctions from '../validators';
+import { PoUtils as utilsFunctions } from '../../../utils/util';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { PoProgressAction } from '../../po-progress';

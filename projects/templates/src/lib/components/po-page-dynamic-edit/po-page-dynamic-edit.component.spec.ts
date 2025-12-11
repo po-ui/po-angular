@@ -10,7 +10,7 @@ import { of, throwError } from 'rxjs';
 import { PoDialogModule, PoThemeA11yEnum } from '@po-ui/ng-components';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
-import * as util from './../../utils/util';
+import { PoUtils as util } from './../../utils/util';
 
 import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-language/po-language.constant';
 

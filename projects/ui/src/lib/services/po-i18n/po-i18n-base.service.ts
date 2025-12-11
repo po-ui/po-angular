@@ -3,7 +3,7 @@ import { Directive, Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { isLanguage, reloadCurrentPage } from '../../utils/util';
+import { PoUtils } from '../../utils/util';
 import { PoLanguageService } from '../po-language/po-language.service';
 
 import { PoI18nConfig } from './interfaces/po-i18n-config.interface';
@@ -253,14 +253,14 @@ export class PoI18nBaseService {
    * buscar novamente as literais no novo idioma configurado.
    */
   setLanguage(language: string, reload: boolean = false): void {
-    if (!isLanguage(language)) {
+    if (!PoUtils.isLanguage(language)) {
       return;
     }
 
     this.languageService.setLanguage(language);
 
     if (reload) {
-      reloadCurrentPage();
+      PoUtils.reloadCurrentPage();
     }
   }
 

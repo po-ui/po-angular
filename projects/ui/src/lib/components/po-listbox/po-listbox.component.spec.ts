@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 
 import { PoListBoxComponent } from './po-listbox.component';
 import { PoDropdownAction } from '../po-dropdown';
-import * as UtilFunctions from './../../utils/util';
+import { PoUtils as UtilFunctions } from './../../utils/util';
 import { Subscription, debounceTime, fromEvent, of } from 'rxjs';
 
 describe('PoListBoxComponent', () => {

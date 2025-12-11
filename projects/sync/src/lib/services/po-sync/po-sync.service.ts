@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { forkJoin, Observable, of, Subject, Subscription, timer } from 'rxjs';
 import { expand, map, mergeMap, reduce } from 'rxjs/operators';
-import { validateParameter, validateArray } from '../../utils/utils';
+import { PoUtils } from '../../utils/utils';
 
 import { PoDataMessage, PoEntity } from '../../models';
 import { PoEventSourcingService } from '../po-event-sourcing/po-event-sourcing.service';
@@ -133,7 +133,7 @@ export class PoSyncService {
    * @returns {Promise<number>} Promessa com o identificador da requisição HTTP criada.
    */
   insertHttpCommand(requestData: PoHttpRequestData, customRequestId?: string): Promise<number> {
-    validateParameter({ requestData });
+    PoUtils.validateParameter({ requestData });
 
     return this.poEventSourcingService.httpCommand(requestData, customRequestId);
   }
@@ -179,7 +179,7 @@ export class PoSyncService {
    * @returns {Promise<any>} Promessa que é resolvida quando a aplicação estiver preparada para a utilização do `po-sync`.
    */
   prepare(schemas: Array<PoSyncSchema>, config?: PoSyncConfig): Promise<any> {
-    validateArray({ schemas });
+    PoUtils.validateArray({ schemas });
 
     const defaultSyncConfig: PoSyncConfig = {
       type: this.poNetworkService.getConnectionStatus().type,

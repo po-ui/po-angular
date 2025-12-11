@@ -30,7 +30,7 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * Para instalar o `po-storage` em sua aplicação execute o seguinte comando:
  *
  * ```shell
- * ng add @po-ui/ng-storage
+ * `ng add @po-ui/ng-storage@next`
  * ```
  * Será instalado o pacote `@po-ui/ng-storage` e também já importará `PoStorageModule` no módulo principal da sua aplicação, conforme abaixo:
  *

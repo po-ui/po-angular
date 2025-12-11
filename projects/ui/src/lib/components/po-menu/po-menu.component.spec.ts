@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
 
-import * as utilsFunctions from '../../utils/util';
+import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 
 import { PoIconModule } from '../po-icon/po-icon.module';
@@ -202,6 +202,9 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should set activeMenuItem.link to `redirectTo` if link is empty', () => {
+    component['clickMenuItem'](component.menus[0]);
+    fixture.detectChanges();
+
     spyOn(component, <any>'activateMenuItem');
     const menuItem = {
       link: '/',
@@ -1553,6 +1556,8 @@ describe('PoMenuComponent:', () => {
     });
 
     it('checkingRouterChildrenFragments: should return the route that is in the value of redirectTo', () => {
+      Object.defineProperty(router, 'url', { get: () => '/home' });
+
       const result = component['checkingRouterChildrenFragments']();
       expect(result).toEqual('/home');
     });

@@ -27,3 +27,8 @@ export function isVisibleField(field: { visible?: boolean }): boolean {
 
   return containsVisible ? field.visible : true;
 }
+
+export const PoDynamicUtil = {
+  isVisibleField,
+  getGridColumnsClasses
+};

@@ -5,12 +5,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import * as UtilsFunctions from '../../../utils/util';
-import {
-  removeDuplicatedOptionsWithFieldValue,
-  removeUndefinedAndNullOptionsWithFieldValue,
-  sortOptionsByProperty
-} from '../../../utils/util';
+import { PoUtils as UtilsFunctions } from '../../../utils/util';
 
 import { PoThemeA11yEnum } from '../../../services';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
@@ -216,10 +211,10 @@ describe('PoMultiselectBaseComponent:', () => {
     spyOn(component, 'setUndefinedLabels');
     spyOn(UtilsFunctions, 'sortOptionsByProperty');
     component.validAndSortOptions();
-    expect(removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
-    expect(removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
+    expect(UtilsFunctions.removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
+    expect(UtilsFunctions.removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
     expect(component.setUndefinedLabels).toHaveBeenCalled();
-    expect(sortOptionsByProperty).toHaveBeenCalled();
+    expect(UtilsFunctions.sortOptionsByProperty).toHaveBeenCalled();
   });
 
   it('should call validation functions but not sort function', () => {
@@ -231,10 +226,10 @@ describe('PoMultiselectBaseComponent:', () => {
     spyOn(component, 'setUndefinedLabels');
     spyOn(UtilsFunctions, 'sortOptionsByProperty');
     component.validAndSortOptions();
-    expect(removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
-    expect(removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
+    expect(UtilsFunctions.removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
+    expect(UtilsFunctions.removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
     expect(component.setUndefinedLabels).toHaveBeenCalled();
-    expect(sortOptionsByProperty).not.toHaveBeenCalled();
+    expect(UtilsFunctions.sortOptionsByProperty).not.toHaveBeenCalled();
   });
 
   it('shouldn`t call validation functions and sort function', () => {
@@ -246,10 +241,10 @@ describe('PoMultiselectBaseComponent:', () => {
     spyOn(component, 'setUndefinedLabels');
     spyOn(UtilsFunctions, 'sortOptionsByProperty');
     component.validAndSortOptions();
-    expect(removeUndefinedAndNullOptionsWithFieldValue).not.toHaveBeenCalled();
-    expect(removeDuplicatedOptionsWithFieldValue).not.toHaveBeenCalled();
+    expect(UtilsFunctions.removeUndefinedAndNullOptionsWithFieldValue).not.toHaveBeenCalled();
+    expect(UtilsFunctions.removeDuplicatedOptionsWithFieldValue).not.toHaveBeenCalled();
     expect(component.setUndefinedLabels).not.toHaveBeenCalled();
-    expect(sortOptionsByProperty).not.toHaveBeenCalled();
+    expect(UtilsFunctions.sortOptionsByProperty).not.toHaveBeenCalled();
   });
 
   it('should set undefined labels to value', () => {

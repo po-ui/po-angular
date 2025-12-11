@@ -12,7 +12,7 @@ import { PoComboFilter } from '../../po-field/po-combo/interfaces/po-combo-filte
 import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
 import { PoMultiselectFilter } from '../../po-field/po-multiselect/interfaces/po-multiselect-filter.interface';
 import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-multiselect-filter.service';
-import * as PoDynamicUtil from '../po-dynamic.util';
+import { PoDynamicUtil } from '../po-dynamic.util';
 import { PoDynamicViewRequest } from './interfaces/po-dynamic-view-request.interface';
 import { PoDynamicViewBaseComponent } from './po-dynamic-view-base.component';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';

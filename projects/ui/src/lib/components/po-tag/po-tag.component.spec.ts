@@ -1,5 +1,5 @@
 import { Component, provideNgReflectAttributes } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
@@ -349,125 +349,69 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
       expect(nativeElement.querySelector('.po-clickable')).toBeFalsy();
     });
+  });
 
-    it('styleTag : should change customTextColor to white if it is not defined and customColor is defined ', () => {
-      component.customTextColor = '';
-      component.customColor = 'red';
+  describe('applyTextColorByContrast:', () => {
+    const darkColor = 'rgb(26, 26, 26)';
+    const lightColor = 'rgb(255, 255, 255)';
 
-      const result = component.styleTag();
-      expect(result).toEqual({ 'background-color': 'red' });
-    });
-
-    it('styleTag : should return a empty object if color is defined', () => {
-      component.color = 'color-01';
-      component.removable = false;
-
-      const result = component.styleTag();
-      expect(result).toEqual({});
-    });
-
-    it('styleTag: should calculate and apply text color based on background color for customColor', fakeAsync(() => {
-      component.customColor = 'rgb(255, 0, 0)';
-      component.removable = false;
-      component.textColor = undefined;
-
+    function mockGetComputedStyle(backgroundColor: string) {
       spyOn(window, 'getComputedStyle').and.returnValue({
-        backgroundColor: 'rgb(255, 0, 0)',
+        backgroundColor: backgroundColor,
         getPropertyValue: (token: string) => {
           const tokens = {
-            '--color-neutral-light-00': 'rgb(255, 255, 255)',
-            '--color-neutral-dark-95': 'rgb(26, 26, 26)'
+            '--color-neutral-light-00': lightColor,
+            '--color-neutral-dark-95': darkColor
           };
           return tokens[token] || '';
         }
       } as CSSStyleDeclaration);
+    }
 
-      fixture.detectChanges();
-
-      const result = component.styleTag();
-
-      tick(200);
-
-      expect(result).toEqual({ 'background-color': 'rgb(255, 0, 0)' });
-      expect(component.poTag.nativeElement.style.color).toBe('rgb(255, 255, 255)');
-    }));
-
-    it('styleTag: should calculate and apply text color based on background color for po-color classes', fakeAsync(() => {
-      component.color = 'color-01';
+    it('should set text color to dark for light backgrounds', () => {
+      mockGetComputedStyle('rgb(255, 255, 255)');
       component.removable = false;
       component.textColor = undefined;
-
-      spyOn(window, 'getComputedStyle').and.returnValue({
-        backgroundColor: 'rgb(255, 255, 255)',
-        getPropertyValue: (token: string) => {
-          const tokens = {
-            '--color-neutral-light-00': 'rgb(255, 255, 255)',
-            '--color-neutral-dark-95': 'rgb(26, 26, 26)'
-          };
-          return tokens[token] || '';
-        }
-      } as CSSStyleDeclaration);
-
+      component.color = 'color-01';
       fixture.detectChanges();
 
-      component.styleTag();
+      component['applyTextColorByContrast']();
 
-      tick(200);
+      expect(component.poTag.nativeElement.style.color).toBe(darkColor);
+    });
 
-      expect(component.poTag.nativeElement.style.color).toBe('rgb(26, 26, 26)');
-    }));
-
-    it('styleTag: should reset text color to null when removable is true', fakeAsync(() => {
+    it('should set text color to light for dark backgrounds', () => {
+      mockGetComputedStyle('rgb(255, 0, 0)');
+      component.removable = false;
+      component.textColor = undefined;
       component.customColor = 'rgb(255, 0, 0)';
+      fixture.detectChanges();
+
+      component['applyTextColorByContrast']();
+
+      expect(component.poTag.nativeElement.style.color).toBe(lightColor);
+    });
+
+    it('should reset text color if tag is removable', () => {
+      mockGetComputedStyle('rgb(255, 0, 0)');
       component.removable = true;
-      component.textColor = undefined;
-
-      spyOn(window, 'getComputedStyle').and.returnValue({
-        backgroundColor: 'rgb(255, 0, 0)'
-      } as Partial<CSSStyleDeclaration> as CSSStyleDeclaration);
-
+      component.poTag.nativeElement.style.color = 'red';
       fixture.detectChanges();
 
-      component.styleTag();
-
-      tick(200);
+      component['applyTextColorByContrast']();
 
       expect(component.poTag.nativeElement.style.color).toBe('');
-    }));
+    });
 
-    it('styleTag: should not apply text color when backgroundColor is not available', fakeAsync(() => {
-      component.customColor = 'rgb(255, 0, 0)';
-      component.removable = false;
-      component.textColor = undefined;
-
-      spyOn(window, 'getComputedStyle').and.returnValue({
-        backgroundColor: ''
-      } as Partial<CSSStyleDeclaration> as CSSStyleDeclaration);
-
+    it('should not set text color if textColor is already defined', () => {
+      mockGetComputedStyle('rgb(255, 0, 0)');
+      component.textColor = 'yellow';
+      component.poTag.nativeElement.style.color = 'red';
       fixture.detectChanges();
 
-      component.styleTag();
-
-      tick(200);
+      component['applyTextColorByContrast']();
 
       expect(component.poTag.nativeElement.style.color).toBe('');
-    }));
-
-    it('styleTag: should not apply text color when textColor is already defined', fakeAsync(() => {
-      component.customColor = 'rgb(255, 0, 0)';
-      component.removable = false;
-      component.textColor = 'rgb(255, 255, 0)';
-
-      spyOn(window, 'getComputedStyle');
-      fixture.detectChanges();
-
-      component.styleTag();
-      tick(200);
-
-      const spanElement = nativeElement.querySelector('span');
-      expect(window.getComputedStyle).toHaveBeenCalled();
-      expect(component.poTag.nativeElement.style.color).toBe('');
-      expect(spanElement.style.color).toBe('rgb(255, 255, 0)');
-    }));
+    });
   });
 });

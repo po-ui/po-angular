@@ -4,7 +4,7 @@ import { AbstractControl, ValidationErrors, Validator, Validators } from '@angul
 import { Subscription } from 'rxjs';
 import { convertToBoolean } from '../..//utils/util';
 import { PoFieldModel } from './po-field.model';
-import { requiredFailed } from './validators';
+import { PoValidators } from './validators';
 
 /**
  * @docsExtends PoFieldModel
@@ -83,7 +83,7 @@ export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements
       this.hasValidatorRequired = true;
     }
 
-    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
       this.changeDetector.markForCheck();
       return {
         required: {

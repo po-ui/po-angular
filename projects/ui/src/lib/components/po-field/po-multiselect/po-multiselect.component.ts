@@ -22,7 +22,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoKeyCodeEnum } from './../../../enums/po-key-code.enum';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
-import { isMobile, setHelperSettings } from './../../../utils/util';
+import { setHelperSettings, PoUtils } from './../../../utils/util';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoMultiselectOption } from './interfaces/po-multiselect-option.interface';
@@ -729,7 +729,7 @@ export class PoMultiselectComponent
     this.resizeListener = this.renderer.listen('window', 'resize', () => {
       this.updateVisibleItems();
 
-      isMobile() ? this.adjustContainerPosition() : this.close();
+      PoUtils.isMobile() ? this.adjustContainerPosition() : this.close();
     });
 
     window.addEventListener('scroll', this.onScroll, true);

@@ -2,7 +2,7 @@ import { Inject, Injectable, Optional, Renderer2, RendererFactory2, DOCUMENT } f
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../../components/po-icon/index';
 
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
-import { getA11yDefaultSize, getA11yLevel, getDensityMode } from '../../utils/util';
+import { getA11yDefaultSize, getA11yLevel, PoUtils } from '../../utils/util';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
@@ -184,7 +184,7 @@ export class PoThemeService {
    * @returns {PoDensityMode} O modo de adensamento, que pode ser `small` ou `medium`.
    */
   getDensityMode(): PoDensityMode {
-    return getDensityMode();
+    return PoUtils.getDensityMode();
   }
 
   /**

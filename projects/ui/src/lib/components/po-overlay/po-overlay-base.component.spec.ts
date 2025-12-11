@@ -1,5 +1,5 @@
 import { PoOverlayBaseComponent } from './po-overlay-base.component';
-import * as utilsFunctions from '../../utils/util';
+import { PoUtils as utilsFunctions } from '../../utils/util';
 
 describe('PoOverlayBaseComponent', () => {
   const component = new PoOverlayBaseComponent();

@@ -15,7 +15,6 @@ export function configuringBuildTargets(
     const project = getProjectFromWorkspace(workspace, options.project);
 
     addOptionToTarget(project, 'build', tree, optionsProperty, buildTargetElement, workspace);
-    addOptionToTarget(project, 'test', tree, optionsProperty, buildTargetElement, workspace);
 
     return tree;
   };

@@ -1,7 +1,7 @@
 import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import * as util from '../../../utils/util';
+import { PoUtils as util } from '../../../utils/util';
 import { PoPopoverComponent } from '../../po-popover';
 import { PoPopupComponent } from '../../po-popup';
 import { PoHeaderActionTool } from '../interfaces/po-header-action-tool.interface';
