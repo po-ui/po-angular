@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 import { changeBrowserInnerWidth } from '../../../util-test/util-expect.spec';
 
-import * as UtilsFunction from '../../../utils/util';
+import { PoUtils as UtilsFunction } from '../../../utils/util';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from '../../po-button';

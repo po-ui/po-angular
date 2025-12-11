@@ -13,17 +13,17 @@
   "dependencies": {
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/animations": "^20",
-    "@angular/common": "^20",
-    "@angular/compiler": "^20",
-    "@angular/core": "^20",
-    "@angular/forms": "^20",
-    "@angular/platform-browser": "^20",
-    "@angular/platform-browser-dynamic": "^20",
-    "@angular/router": "^20",
+    "@angular/animations": "^21",
+    "@angular/common": "^21",
+    "@angular/compiler": "^21",
+    "@angular/core": "^21",
+    "@angular/forms": "^21",
+    "@angular/platform-browser": "^21",
+    "@angular/platform-browser-dynamic": "^21",
+    "@angular/router": "^21",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "rxjs": "~7.8.1",
     "zone.js": "~0.15.0"

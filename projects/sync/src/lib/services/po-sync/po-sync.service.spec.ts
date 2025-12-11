@@ -4,7 +4,7 @@ import { of, Subscriber } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import * as TypeMoq from 'typemoq';
 import { PoNetworkType } from '../../models/po-network-type.enum';
-import * as utilsFunctions from '../../utils/utils';
+import { PoUtils as utilsFunctions } from '../../utils/utils';
 import { PoEventSourcingService } from '../po-event-sourcing/po-event-sourcing.service';
 import { PoHttpRequestData } from '../po-http-client/interfaces/po-http-request-data.interface';
 import { PoHttpClientService } from '../po-http-client/po-http-client.service';

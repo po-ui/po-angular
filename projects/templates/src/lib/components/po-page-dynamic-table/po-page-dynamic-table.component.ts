@@ -17,13 +17,12 @@ import {
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import * as util from '../../utils/util';
-import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn, PoUtils as util } from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { isExternalLink, openExternalLink, removeDuplicateItemsWithArrayKey } from '../../utils/util';
+import { isExternalLink, removeDuplicateItemsWithArrayKey, PoUtils } from '../../utils/util';
 import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/interfaces/po-page-dynamic-search-literals.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
@@ -899,7 +898,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     forceStopAutoRouter: boolean = false
   ) {
     if (isExternalLink(route.path)) {
-      return openExternalLink(route.path);
+      return PoUtils.openExternalLink(route.path);
     }
 
     this.router.navigate([route.url || route.path], { queryParams: route.params }).catch(() => {
@@ -1266,7 +1265,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       this.subscriptions.add(sendCustomActionSubscription);
     } else if (customAction.url) {
       if (isExternalLink(customAction.url)) {
-        openExternalLink(this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem));
+        PoUtils.openExternalLink(this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem));
       } else {
         this.navigateTo({
           path: this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem)

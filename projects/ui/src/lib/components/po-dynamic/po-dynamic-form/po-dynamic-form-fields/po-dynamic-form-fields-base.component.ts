@@ -7,7 +7,7 @@ import { PoFieldSize } from '../../../../enums/po-field-size.enum';
 import { PoComboFilter } from '../../../po-field/po-combo/interfaces/po-combo-filter.interface';
 import { PoLookupFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
-import { getGridColumnsClasses, isVisibleField } from '../../po-dynamic.util';
+import { PoDynamicUtil } from '../../po-dynamic.util';
 import { PoDynamicSharedBase } from '../../shared/po-dynamic-shared-base';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldInternal } from './po-dynamic-form-field-internal.interface';
@@ -94,7 +94,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
         return;
       }
 
-      if (isVisibleField(field)) {
+      if (PoDynamicUtil.isVisibleField(field)) {
         visibleFields.push(this.createField(field));
       }
     });
@@ -123,7 +123,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
     const focus = this.hasFocus(field);
     const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
 
-    const componentClass = getGridColumnsClasses(
+    const componentClass = PoDynamicUtil.getGridColumnsClasses(
       field.gridColumns,
       field.offsetColumns,
       {

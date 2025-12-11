@@ -14,13 +14,7 @@ import {
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import {
-  convertToBoolean,
-  getDefaultSizeFn,
-  mapObjectByProperties,
-  validateSizeFn,
-  valuesFromObject
-} from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn, valuesFromObject, PoUtils } from '../../utils/util';
 
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
@@ -427,7 +421,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   }
 
   private formatUniqueKey(item) {
-    const keys = mapObjectByProperties(item, this.keys);
+    const keys = PoUtils.mapObjectByProperties(item, this.keys);
 
     return valuesFromObject(keys).join('|');
   }

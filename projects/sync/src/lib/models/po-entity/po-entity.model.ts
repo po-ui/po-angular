@@ -1,4 +1,4 @@
-import { validateParameter } from '../../utils/utils';
+import { PoUtils } from '../../utils/utils';
 
 import {
   PoEventSourcingOperation,
@@ -120,7 +120,7 @@ export class PoEntity {
    * @returns {Promise} Promessa que é concluída após o registro ser removido.
    */
   async remove(record: object, customRequestId?: string): Promise<any> {
-    validateParameter({ record });
+    PoUtils.validateParameter({ record });
 
     const remove = async () => {
       const idField = record[this.schema.idField] ? this.schema.idField : PoSchemaUtil.syncInternalIdFieldName;
@@ -143,7 +143,7 @@ export class PoEntity {
    * @returns {Promise} Promessa que é concluída após o registro ser alterado ou incluído.
    */
   async save(record: object, customRequestId?: string): Promise<any> {
-    validateParameter({ record });
+    PoUtils.validateParameter({ record });
 
     return this.poSchemaService.limitedCallWrap(this.selectSaveType.bind(this, record, true, customRequestId));
   }
@@ -162,7 +162,7 @@ export class PoEntity {
    * @returns {Promise<any>} Promessa que é concluída após os registros serem alterados ou incluídos.
    */
   async saveAll(records: Array<object>, customRequestIds?: Array<string> | string): Promise<any> {
-    validateParameter({ records });
+    PoUtils.validateParameter({ records });
 
     const saveAll = async () => {
       const batchEvents = [];

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
-import { isExternalLink, isIE } from '../../../../utils/util';
+import { isExternalLink, PoUtils } from '../../../../utils/util';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 
 import { PoModalAction, PoModalComponent } from '../../../po-modal';
@@ -165,7 +165,7 @@ export class PoRichTextLinkModalComponent implements OnInit {
   }
 
   private toEditLink() {
-    if (isIE()) {
+    if (PoUtils.isIE()) {
       this.linkElement.parentNode.removeChild(this.linkElement);
     } else {
       this.linkElement.remove();

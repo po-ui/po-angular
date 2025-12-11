@@ -5,7 +5,7 @@ import { expectArraysSameOrdering, expectPropertiesValues } from '../../../../ut
 
 import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
 import { PoDynamicFieldType } from '../../enums/po-dynamic-field-type.enum';
-import * as PoDynamicUtil from '../../po-dynamic.util';
+import { PoDynamicUtil } from '../../po-dynamic.util';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.component';
 

@@ -27,7 +27,7 @@ import { Observable, Subscription } from 'rxjs';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../services/po-notification/po-notification.service';
-import { convertToBoolean, getDefaultSizeFn } from '../../utils/util';
+import { getDefaultSizeFn, PoUtils } from '../../utils/util';
 import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
@@ -524,7 +524,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   getBooleanLabel(rowValue: any, columnBoolean: PoTableColumn): string {
     if (rowValue || rowValue === false || rowValue === 0) {
-      rowValue = convertToBoolean(rowValue);
+      rowValue = PoUtils.convertToBoolean(rowValue);
 
       if (columnBoolean.boolean) {
         return rowValue ? columnBoolean.boolean.trueLabel || 'Sim' : columnBoolean.boolean.falseLabel || 'Não';

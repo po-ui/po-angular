@@ -14,7 +14,7 @@ import {
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { PoLanguageService, poLocaleDefault } from '../../../services';
-import { isExternalLink } from '../../../utils/util';
+import { PoUtils } from '../../../utils/util';
 import { PoPopupComponent } from '../../po-popup';
 import { PoHeaderActions } from '../interfaces/po-header-actions.interface';
 
@@ -122,7 +122,7 @@ export class PoHeaderMenuItemComponent implements OnChanges, OnInit, OnDestroy {
       this.itemClick.emit({ item });
     }
     if (item.link) {
-      if (isExternalLink(item.link)) {
+      if (PoUtils.isExternalLink(item.link)) {
         window.open(item.link, '_blank');
       } else {
         this.router.navigateByUrl(item.link);

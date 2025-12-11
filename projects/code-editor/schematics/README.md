@@ -94,5 +94,5 @@ Feito isso, podemos realizar o build e a publicação local dos pacotes do `po-c
 4 - Por fim, execute o comando abaixo no seu projeto Angular:
 
 ```
-> ng add @po-ui/ng-code-editor
+> ng add @po-ui/ng-code-editor@next
 ```

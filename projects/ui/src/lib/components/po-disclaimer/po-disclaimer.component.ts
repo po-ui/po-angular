@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { isKeyCodeEnter } from '../../utils/util';
+import { PoUtils } from '../../utils/util';
 
 import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
 
@@ -25,7 +25,7 @@ export class PoDisclaimerComponent extends PoDisclaimerBaseComponent {
   @ViewChild('disclaimerContainer', { static: true }) disclaimerContainer: ElementRef;
 
   onKeyPress(event: any) {
-    if (isKeyCodeEnter(event)) {
+    if (PoUtils.isKeyCodeEnter(event)) {
       this.close();
     }
   }

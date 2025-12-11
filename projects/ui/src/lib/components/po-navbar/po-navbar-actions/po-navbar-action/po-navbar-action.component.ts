@@ -1,7 +1,7 @@
 import { Component, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { callFunction, isExternalLink, openExternalLink } from '../../../../utils/util';
+import { isExternalLink, PoUtils } from '../../../../utils/util';
 
 @Component({
   selector: 'po-navbar-action',
@@ -22,19 +22,19 @@ export class PoNavbarActionComponent {
   @Input('p-tooltip-text') tooltip?: string;
 
   click() {
-    if (this.action) {
+    if (this?.action) {
       this.action();
       return;
     }
 
-    if (this.link) {
+    if (this?.link) {
       return this.openUrl(this.link);
     }
   }
 
   private openUrl(url: string) {
     if (isExternalLink(url)) {
-      return openExternalLink(url);
+      return PoUtils.openExternalLink(url);
     }
 
     if (url) {

@@ -1,4 +1,4 @@
-name: PO-UI Publish Angular@17
+name: PO-UI Publish Angular@19
 
 # URL para os pacotes po-ui no npm
 env:
@@ -16,11 +16,11 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/17.x.x'
+    if: github.ref == 'refs/heads/19.x.x'
     steps:
     - uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
+        node-version: '24.x'
         registry-url: 'https://registry.npmjs.org'
 
     - name: Check out po-angular
@@ -69,14 +69,14 @@ jobs:
     # PUBLISH NG-SCHEMATICS
     - name: ng-schematics - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --tag "v17-lts" --ignore-scripts
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --tag "v19-lts" --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-schematics - add "v17-lts" tag
+    - name: ng-schematics - add "v19-lts" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.SCHEMATICS_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v17-lts"
+      run: npm dist-tags add @${{ env.SCHEMATICS_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v19-lts"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
@@ -85,14 +85,14 @@ jobs:
     # PUBLISH NG-STORAGE
     - name: ng-storage - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --tag "v17-lts" --ignore-scripts
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --tag "v19-lts" --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-storage - add "v17-lts" tag
+    - name: ng-storage - add "v19-lts" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.STORAGE_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v17-lts"
+      run: npm dist-tags add @${{ env.STORAGE_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v19-lts"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
@@ -101,14 +101,14 @@ jobs:
     # PUBLISH NG-SYNC
     - name: ng-sync - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --tag "v17-lts" --ignore-scripts
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --tag "v19-lts" --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-sync - add "v17-lts" tag
+    - name: ng-sync - add "v19-lts" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.SYNC_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v17-lts"
+      run: npm dist-tags add @${{ env.SYNC_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v19-lts"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
@@ -117,14 +117,14 @@ jobs:
     # PUBLISH NG-COMPONENTS
     - name: ng-components - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag "v17-lts" --ignore-scripts
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag "v19-lts" --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-components - add "v17-lts" tag
+    - name: ng-components - add "v19-lts" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.COMPONENTS_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v17-lts"
+      run: npm dist-tags add @${{ env.COMPONENTS_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v19-lts"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
@@ -133,14 +133,14 @@ jobs:
     # PUBLISH NG-TEMPLATES
     - name: ng-templates - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --tag "v17-lts" --ignore-scripts
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --tag "v19-lts" --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-templates - add "v17-lts" tag
+    - name: ng-templates - add "v19-lts" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.TEMPLATES_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v17-lts"
+      run: npm dist-tags add @${{ env.TEMPLATES_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v19-lts"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
@@ -149,14 +149,14 @@ jobs:
     # PUBLISH NG-CODE-EDITOR
     - name: ng-code-editor - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --tag "v17-lts" --ignore-scripts
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --tag "v19-lts" --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: ng-code-editor - add "v17-lts" tag
+    - name: ng-code-editor - add "v19-lts" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.CODE_EDITOR_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v17-lts"
+      run: npm dist-tags add @${{ env.CODE_EDITOR_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "v19-lts"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}

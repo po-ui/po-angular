@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
-import { isExternalLink, isTypeof, openExternalLink } from '../../../utils/util';
+import { isExternalLink, isTypeof, PoUtils } from '../../../utils/util';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
@@ -81,7 +81,7 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
 
   callAction(item: PoPageAction): void {
     if (item.url) {
-      isExternalLink(item.url) ? openExternalLink(item.url) : this.router.navigate([item.url]);
+      isExternalLink(item.url) ? PoUtils.openExternalLink(item.url) : this.router.navigate([item.url]);
     } else if (item.action) {
       item.action();
     }

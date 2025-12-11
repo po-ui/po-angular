@@ -9,7 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
-import * as utilsFunctions from '../../utils/util';
+import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';

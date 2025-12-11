@@ -3,7 +3,7 @@ import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
-import * as ValidatorsFunctions from '../validators';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';

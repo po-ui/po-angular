@@ -1,7 +1,7 @@
 import { UntypedFormControl } from '@angular/forms';
 
-import * as UtilsFunction from '../../../utils/util';
-import * as ValidatorsFunctions from '../validators';
+import { PoUtils as UtilsFunction } from '../../../utils/util';
+import { PoValidators as ValidatorsFunctions } from '../validators';
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 
 import { PoThemeA11yEnum } from '../../../services';

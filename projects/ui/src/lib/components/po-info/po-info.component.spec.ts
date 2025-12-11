@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
-import * as UtilsFunctions from './../../utils/util';
+import { PoUtils as UtilsFunctions } from './../../utils/util';
 
 import { PoInfoBaseComponent } from './po-info-base.component';
 import { PoInfoOrientation } from './po-info-orietation.enum';

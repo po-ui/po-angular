@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import * as utilsFunctions from '../../../utils/util';
+import { PoUtils as utilsFunctions } from '../../../utils/util';
 
 import { PoCheckboxGroupModule } from '../../po-field/po-checkbox-group/po-checkbox-group.module';
 import { PoFieldContainerModule } from '../../po-field/po-field-container/po-field-container.module';

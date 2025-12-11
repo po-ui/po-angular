@@ -5,7 +5,7 @@ import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { convertToBoolean, getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../utils/util';
 
 import { Observable, catchError, map, of } from 'rxjs';
-import { getGridColumnsClasses, isVisibleField } from '../po-dynamic.util';
+import { getGridColumnsClasses, PoDynamicUtil } from '../po-dynamic.util';
 import { PoDynamicViewField } from './po-dynamic-view-field.interface';
 import { PoDynamicViewService } from './services/po-dynamic-view.service';
 import { PoComboFilterService } from '../../po-field/po-combo/po-combo-filter.service';
@@ -205,7 +205,7 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     this.fields.forEach((field, index) => {
       field.order = field.order || this.getFieldOrder(field, index);
 
-      if (!isVisibleField(field)) {
+      if (!PoDynamicUtil.isVisibleField(field)) {
         return;
       }
 
