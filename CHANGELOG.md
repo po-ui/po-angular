@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.38.0](https://github.com/po-ui/po-angular/compare/v19.37.0...v19.38.0) (2025-12-18)
+
+
+### Features
+
+* **chart:** implementa nova variação de tipo radar ([4b0ba4a](https://github.com/po-ui/po-angular/commit/4b0ba4abf1bab72e921f7725a190c6532557df9d))
+* **fields:** inclui estado de loading ([98c0342](https://github.com/po-ui/po-angular/commit/98c0342d7c98132be0daed10de35cf972bfd7f9d))
+* **popup:** customiza popup e listbox para recebimento de template ([93685f7](https://github.com/po-ui/po-angular/commit/93685f7e9e8585f047391ed7f55e7c49f5aea8c7))
+* **tag:** calcula dinamicamente a cor do texto a partir do fundo ([0cffdf3](https://github.com/po-ui/po-angular/commit/0cffdf3796cc86cb500d52665f1b3ccea2dac649))
+
 ## [19.37.0](https://github.com/po-ui/po-angular/compare/v19.36.0...v19.37.0) (2025-12-01)
 
 ### Features
