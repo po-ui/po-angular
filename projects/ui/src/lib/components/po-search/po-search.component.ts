@@ -320,6 +320,10 @@ export class PoSearchComponent extends PoSearchBaseComponent implements OnInit, 
       .filter((obj, index, self) => index === self.findIndex(o => o.label === obj.label && o.value === obj.value));
   }
 
+  get autocomplete(): string {
+    return this.noAutocomplete ? 'off' : 'on';
+  }
+
   onCloseListbox() {
     this.poSearchInput.nativeElement.focus();
     this.closeListbox();
