@@ -27,6 +27,9 @@
     #poSearchInput
     class="po-search-input"
     type="text"
+    [attr.id]="id || null"
+    [autocomplete]="autocomplete"
+    [attr.name]="name"
     [ariaLabel]="ariaLabel"
     [class.po-search-input-clean]="!!poSearchInput.value && !disabled && type !== 'locate'"
     [class.po-search-input-trigger]="type === 'trigger'"

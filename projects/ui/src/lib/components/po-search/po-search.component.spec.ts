@@ -443,6 +443,20 @@ describe('PoSearchComponent', () => {
     });
   });
 
+  describe('Getter: autocomplete', () => {
+    it('should return "off" when noAutocomplete is true', () => {
+      component.noAutocomplete = true;
+
+      expect(component.autocomplete).toBe('off');
+    });
+
+    it('should return "on" when noAutocomplete is false', () => {
+      component.noAutocomplete = false;
+
+      expect(component.autocomplete).toBe('on');
+    });
+  });
+
   describe('showListbox: when searching with listbox', () => {
     const eventClick = document.createEvent('MouseEvents');
     eventClick.initEvent('click', false, true);

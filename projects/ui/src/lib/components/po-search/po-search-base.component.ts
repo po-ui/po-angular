@@ -82,9 +82,9 @@ export type searchMode = 'action' | 'trigger' | 'locate' | 'execute';
  */
 @Directive()
 export class PoSearchBaseComponent {
+  protected language: string;
   private _literals?: PoSearchLiterals;
   private _ariaLabel?: string;
-  protected language: string;
   private _filterSelect?: Array<PoSearchFilterSelect>;
   private _size?: string = undefined;
   private _keysLabel? = [];
@@ -219,6 +219,9 @@ export class PoSearchBaseComponent {
    */
   @Input('p-icon') icon: string | TemplateRef<void>;
 
+  // Propriedade de uso interno.
+  @Input('p-id') id: string;
+
   /**
    * @optional
    *
@@ -297,6 +300,26 @@ export class PoSearchBaseComponent {
    * > Compatível com a propriedade `p-search-type` do tipo `locate`.
    */
   @Input('p-locate-summary') locateSummary: PoSearchLocateSummary = { currentIndex: 0, total: 0 };
+
+  /**
+   * @optional
+   *
+   * @description
+   * Nome e identificador do campo.
+   *
+   */
+  @Input('name') name: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a propriedade nativa `autocomplete` do campo como `off`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) noAutocomplete: boolean = false;
 
   /**
    * @optional
