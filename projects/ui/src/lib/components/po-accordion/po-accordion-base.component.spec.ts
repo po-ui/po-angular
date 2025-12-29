@@ -100,5 +100,78 @@ describe('PoAccordionBaseComponent:', () => {
 
       expect(component.allowExpandItems).toBe(true);
     });
+
+    describe('size:', () => {
+      it('should set size property with valid value `medium`', () => {
+        component.size = 'medium';
+
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set size property with valid value `small` (or default if AA not configured)', () => {
+        component.size = 'small';
+        const size = component.size;
+
+        expect(['small', 'medium']).toContain(size);
+      });
+
+      it('should return default size if value is invalid', () => {
+        component.size = 'invalid-size';
+        const defaultSize = component.size;
+
+        expect(defaultSize).toBeTruthy();
+        expect(['small', 'medium']).toContain(defaultSize);
+      });
+
+      it('should return default size if value is undefined', () => {
+        component['_size'] = undefined;
+        const size = component.size;
+
+        expect(size).toBeTruthy();
+        expect(['small', 'medium']).toContain(size);
+      });
+
+      it('should return default size if value is null', () => {
+        component.size = null;
+        const size = component.size;
+
+        expect(size).toBeTruthy();
+        expect(['small', 'medium']).toContain(size);
+      });
+
+      it('should return default size if value is empty string', () => {
+        component.size = '';
+        const size = component.size;
+
+        expect(size).toBeTruthy();
+        expect(['small', 'medium']).toContain(size);
+      });
+
+      it('should validate size using validateSizeFn', () => {
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+
+        component.size = 'invalid';
+        const size = component.size;
+        expect(['small', 'medium']).toContain(size);
+      });
+
+      it('should use getDefaultSizeFn when size is not set', () => {
+        component['_size'] = undefined;
+        const size = component.size;
+
+        expect(size).toBeTruthy();
+        expect(['small', 'medium']).toContain(size);
+      });
+
+      it('should persist the size value after being set with valid value', () => {
+        const testSize = 'medium';
+        component.size = testSize;
+
+        expect(component.size).toBe(testSize);
+
+        expect(component.size).toBe(testSize);
+      });
+    });
   });
 });

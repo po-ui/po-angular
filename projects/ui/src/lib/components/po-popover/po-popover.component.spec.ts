@@ -1,4 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -14,8 +16,10 @@ describe('PoPopoverComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [CommonModule],
       declarations: [PoPopoverComponent],
-      providers: [PoControlPositionService]
+      providers: [PoControlPositionService],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 

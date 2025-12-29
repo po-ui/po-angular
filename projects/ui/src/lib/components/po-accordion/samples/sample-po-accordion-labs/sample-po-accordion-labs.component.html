@@ -2,6 +2,7 @@
   [p-literals]="customLiterals"
   [p-show-manager-accordion]="propertiesAccordion.includes('showManager')"
   [p-allow-expand-all-items]="propertiesAccordion.includes('expandItems')"
+  [p-size]="size"
 >
   @for (accordionItem of accordionItems; track accordionItem; let i = $index) {
     <po-accordion-item
@@ -53,6 +54,15 @@
 </div>
 
 <div class="po-row po-mt-1">
+  <po-radio-group
+    class="po-md-12 po-lg-6"
+    name="size"
+    [(ngModel)]="size"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
   <po-button
     class="po-md-6"
     p-label="Add Accordion"

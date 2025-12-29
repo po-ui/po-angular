@@ -32,17 +32,22 @@ export class SamplePoAccordionLabsComponent implements OnInit {
     { value: 'info', label: 'Info' }
   ];
 
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
+  ];
+
   disabledOption: Array<PoRadioGroupOption> = [{ value: 'disabled', label: 'Disabled' }];
 
   properties: Array<string> = [];
   propertiesAccordion: Array<string> = [];
   disabledItem: Array<string> = [];
-
   accordionItemIndex: number;
   customLiterals: PoAccordionLiterals;
   literals: string;
   typeTag: PoTagType;
   accordionItems: Array<PoAccordionItemComponent> = [];
+  size: string;
 
   ngOnInit() {
     this.restore();
@@ -76,5 +81,6 @@ export class SamplePoAccordionLabsComponent implements OnInit {
     this.properties = [];
     this.propertiesAccordion = [];
     this.typeTag = undefined;
+    this.size = 'medium';
   }
 }
