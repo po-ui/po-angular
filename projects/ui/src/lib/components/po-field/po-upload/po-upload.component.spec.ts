@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import * as utilsFunctions from '../../../utils/util';
@@ -50,13 +50,15 @@ describe('PoUploadComponent:', () => {
         PoUploadDragDropDirective,
         PoUploadFileRestrictionsComponent
       ],
-      providers: [HttpClient, HttpHandler, PoNotificationService, PoUploadService, PoLanguageService]
+      providers: [HttpClient, HttpHandler, PoNotificationService, PoUploadService, PoLanguageService],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     file = new PoUploadFile(fileMock);
 
     fixture = TestBed.createComponent(PoUploadComponent);
     component = fixture.componentInstance;
+    spyOn(utilsFunctions, 'convertImageToBase64').and.callFake(() => Promise.resolve('data:image/png;base64,TEST'));
   });
 
   it('should be created', () => {

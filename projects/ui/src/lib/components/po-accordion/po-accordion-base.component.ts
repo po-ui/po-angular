@@ -1,8 +1,9 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, HostBinding, Output } from '@angular/core';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { convertToBoolean } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoAccordionLiterals } from './interfaces/po-accordion-literals.interface';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 export const poAccordionLiteralsDefault = {
   en: <PoAccordionLiterals>{
@@ -98,7 +99,7 @@ export const poAccordionLiteralsDefault = {
 export class PoAccordionBaseComponent {
   private language: string = poLocaleDefault;
   private _literals;
-
+  private _size?: string = undefined;
   /**
    * @optional
    *
@@ -172,6 +173,30 @@ export class PoAccordionBaseComponent {
    * @default `false`
    */
   @Input({ alias: 'p-allow-expand-all-items', transform: convertToBoolean }) allowExpandItems: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura de 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
+    this._size = validateSizeFn(value, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
 
   /**
    * @optional
