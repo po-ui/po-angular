@@ -558,8 +558,8 @@ export class PoMultiselectComponent
     if (
       this.dropdownOpen &&
       !this.inputElement.nativeElement.contains(event.target) &&
-      !this.iconElement.nativeElement.contains(event.target) &&
-      !this.dropdownElement.nativeElement.contains(event.target)
+      !this.iconElement?.nativeElement?.contains(event.target) &&
+      !this.dropdownElement?.nativeElement?.contains(event.target)
     ) {
       this.controlDropdownVisibility(false);
     }

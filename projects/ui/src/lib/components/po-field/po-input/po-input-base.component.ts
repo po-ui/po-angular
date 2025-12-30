@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Directive,
   EventEmitter,
+  HostBinding,
   input,
   Input,
   OnDestroy,
@@ -13,7 +14,7 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, mapInputSizeToLoadingIcon, validateSizeFn } from '../../../utils/util';
 import { ErrorAsyncProperties } from '../shared/interfaces/error-async-properties.interface';
 import { maxlengpoailed, minlengpoailed, patternFailed, requiredFailed } from './../validators';
 import { PoMask } from './po-mask';
@@ -199,23 +200,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @default `false`
    */
   @Input('p-error-limit') errorLimit: boolean = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
-   *
-   * @default `false`
-   */
-  @Input('p-loading') set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
-    this.cd?.markForCheck();
-  }
-
-  get loading(): boolean {
-    return this._loading;
-  }
 
   /**
    * @optional
@@ -416,6 +400,29 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
     this.disabled = disabled === '' ? true : convertToBoolean(disabled);
 
     this.validateModel();
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @HostBinding('attr.p-loading')
+  @Input('p-loading')
+  set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /** Indica que o campo será somente leitura. */
@@ -809,12 +816,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
-  public mapSizeToIcon(size: string): string {
-    const sizeMap: { [key: string]: string } = {
-      small: 'xs',
-      medium: 'sm'
-    };
-    return sizeMap[size] || 'sm';
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   // utilizado para validar o pattern na inicializacao, fazendo dessa forma o campo fica sujo (dirty).

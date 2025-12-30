@@ -13,7 +13,8 @@ import {
   ViewChild,
   inject,
   AfterViewInit,
-  input
+  input,
+  HostBinding
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -21,6 +22,7 @@ import {
   convertToBoolean,
   getDefaultSizeFn,
   isSafari,
+  mapInputSizeToLoadingIcon,
   setHelperSettings,
   uuid,
   validateSizeFn,
@@ -182,6 +184,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
   private _fieldLabel?: string = PO_SELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_SELECT_FIELD_VALUE_DEFAULT;
+  private _loading: boolean = false;
   private _options: Array<PoSelectOption> | Array<PoSelectOptionGroup> | Array<any>;
   private _size?: string = undefined;
 
@@ -303,6 +306,29 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    * @optional
    *
    * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @HostBinding('attr.p-loading')
+  @Input('p-loading')
+  set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.changeDetector?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Define o tamanho do componente:
    * - `small`: altura do input como 32px (disponível apenas para acessibilidade AA).
@@ -398,6 +424,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     return (
       this.el.nativeElement.classList.contains('ng-invalid') && this.el.nativeElement.classList.contains('ng-dirty')
     );
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   onBlur(event: any) {

@@ -23,7 +23,14 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from '../../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSizeFn,
+  isTypeof,
+  mapInputSizeToLoadingIcon,
+  validateSizeFn,
+  PoUtils
+} from '../../../utils/util';
 import { PoTableColumnSpacing } from '../../po-table/enums/po-table-spacing.enum';
 import { PoValidators } from '../validators';
 import { PoLookupAdvancedFilter } from './interfaces/po-lookup-advanced-filter.interface';
@@ -596,6 +603,7 @@ export abstract class PoLookupBaseComponent
   private _disabled?: boolean = false;
   private _fieldLabel: string;
   private _filterService: PoLookupFilter | string;
+  private _loading: boolean = false;
   private _noAutocomplete: boolean;
   private _placeholder: string = '';
   private _required?: boolean = false;
@@ -739,6 +747,28 @@ export abstract class PoLookupBaseComponent
     return this._disabled;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @HostBinding('attr.p-loading')
+  @Input('p-loading')
+  set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
+  }
+
   constructor(
     private readonly defaultService: PoLookupFilterService,
     @Inject(Injector) private readonly injector: Injector,
@@ -831,6 +861,11 @@ export abstract class PoLookupBaseComponent
         this.updateLookupInputHeight();
       }
     });
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   searchById(value) {

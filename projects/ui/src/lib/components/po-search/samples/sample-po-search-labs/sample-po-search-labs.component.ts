@@ -47,7 +47,7 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
   tooltip?: string;
   icon?: string;
   filterMode: PoSearchFilterMode = PoSearchFilterMode.startsWith;
-  searchMode: 'action' | 'trigger' | 'locate' = 'action';
+  searchMode: 'action' | 'trigger' | 'locate' | 'execute' = 'action';
   fieldKey?: any;
   itemsModel?: any;
   filterModel: any = '["name"]';
@@ -58,7 +58,8 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
-    { value: 'showListbox', label: 'Show Listbox' }
+    { value: 'showListbox', label: 'Show Listbox' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   public readonly iconsOptions: Array<PoRadioGroupOption> = [
@@ -75,8 +76,9 @@ export class SamplePoSearchLabsComponent implements OnInit, OnChanges {
 
   public readonly searchModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Action', value: 'action' },
-    { label: 'Trigger', value: 'trigger' },
-    { label: 'Locate', value: 'locate' }
+    { label: 'Execute', value: 'execute' },
+    { label: 'Locate', value: 'locate' },
+    { label: 'Trigger', value: 'trigger' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

@@ -3,7 +3,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, mapInputSizeToLoadingIcon, validateSizeFn } from '../../utils/util';
 import { PoSearchFilterMode } from './enums/po-search-filter-mode.enum';
 import { PoSearchFilterSelect } from './interfaces/po-search-filter-select.interface';
 import { PoSearchLiterals } from './literals/po-search-literals.interface';
@@ -88,6 +88,8 @@ export class PoSearchBaseComponent {
   private _filterSelect?: Array<PoSearchFilterSelect>;
   private _size?: string = undefined;
   private _keysLabel? = [];
+  private _disabled?: boolean = false;
+  private _loading: boolean = false;
 
   /**
    * @optional
@@ -120,7 +122,39 @@ export class PoSearchBaseComponent {
    *
    * @default `false`
    */
-  @Input({ alias: 'p-disabled', transform: convertToBoolean }) disabled?: boolean;
+  @Input('p-disabled') set disabled(disabled: boolean) {
+    this._disabled = convertToBoolean(disabled);
+  }
+
+  get disabled() {
+    return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * > Incompatível com a propriedade `p-search-type` do tipo `locate`.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    if (this.type === 'locate') {
+      return this.disabled;
+    }
+
+    return this.disabled || this.loading;
+  }
 
   /**
    * @description
@@ -508,5 +542,10 @@ export class PoSearchBaseComponent {
   ensureFilterSelectOption(values: any) {
     const _values = Array.isArray(values) ? values : Array.of(values);
     return _values.map(value => (typeof value === 'object' ? value : { label: value, value }));
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 }

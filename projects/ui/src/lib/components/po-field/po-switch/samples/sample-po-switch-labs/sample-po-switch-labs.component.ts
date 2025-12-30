@@ -31,7 +31,8 @@ export class SamplePoSwitchLabsComponent implements OnInit {
     { value: 'hideLabelStatus', label: 'Hide label status' },
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'invalidValue', label: 'Invalid Value is On/True' },
-    { value: 'labelTextWrap', label: 'Label Text Wrap' }
+    { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

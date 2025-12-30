@@ -110,6 +110,23 @@ describe('PoSwitchComponent', () => {
         expect(component.size).toBe('medium');
       });
     });
+
+    describe('p-loading:', () => {
+      it('should set loading value and call markForCheck', () => {
+        const markForCheckSpy = spyOn(component['changeDetector'], 'markForCheck');
+
+        component.loading = true;
+
+        expect(component.loading).toBeTrue();
+        expect(markForCheckSpy).toHaveBeenCalled();
+      });
+
+      it('should set loading false correctly', () => {
+        component.loading = false;
+
+        expect(component.loading).toBeFalse();
+      });
+    });
   });
 
   describe('Methods:', () => {
@@ -161,6 +178,14 @@ describe('PoSwitchComponent', () => {
           which: 32,
           preventDefault: () => {}
         };
+
+        component.loading = false;
+
+        component.switchContainer = {
+          nativeElement: {}
+        } as any;
+
+        fixture.detectChanges();
       });
 
       it('should call preventDefault and eventClick when keycode and which equal to 32', () => {
@@ -522,6 +547,7 @@ describe('PoSwitchComponent', () => {
         expect(result).toBe('');
       });
     });
+
     describe('hasInvalidClass:', () => {
       let nativeEl: HTMLElement;
 
@@ -594,6 +620,14 @@ describe('PoSwitchComponent', () => {
         expect(result).toBeFalse();
       });
     });
+
+    describe('mapSizeToIcon:', () => {
+      it('should return mapped icon size based on input size', () => {
+        const result = component.mapSizeToIcon('small');
+
+        expect(result).toBe('xs');
+      });
+    });
   });
 
   describe('Template:', () => {
@@ -651,6 +685,41 @@ describe('PoSwitchComponent', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('[data-label-position="right"]')).toBeTruthy();
+    });
+
+    describe('p-loading:', () => {
+      it('should display loading icon and hide switch when loading is true', () => {
+        component.loading = true;
+        fixture.detectChanges();
+
+        const loadingContainer = nativeElement.querySelector('.po-switch-loading-container');
+
+        const loadingIcon = nativeElement.querySelector('po-loading-icon');
+
+        const switchContainer = nativeElement.querySelector('.po-switch-container');
+
+        const label = nativeElement.querySelector('.po-switch-label');
+
+        expect(loadingContainer).toBeTruthy();
+        expect(loadingIcon).toBeTruthy();
+        expect(switchContainer).toBeFalsy();
+        expect(label).toBeFalsy();
+      });
+
+      it('should display switch and hide loading icon when loading is false', () => {
+        component.loading = false;
+        fixture.detectChanges();
+
+        const loadingContainer = nativeElement.querySelector('.po-switch-loading-container');
+
+        const switchContainer = nativeElement.querySelector('.po-switch-container');
+
+        const label = nativeElement.querySelector('.po-switch-label');
+
+        expect(loadingContainer).toBeFalsy();
+        expect(switchContainer).toBeTruthy();
+        expect(label).toBeTruthy();
+      });
     });
   });
 });
