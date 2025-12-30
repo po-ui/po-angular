@@ -1,7 +1,7 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
   #fieldContainer
-  [p-disabled]="disabled"
+  [p-disabled]="isDisabled"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -17,7 +17,7 @@
       <div class="po-field-icon-container-left">
         <po-icon
           class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-          [class.po-field-icon-disabled]="disabled"
+          [class.po-field-icon-disabled]="isDisabled"
           [class.po-field-icon-aa]="size === 'small'"
           [p-icon]="icon"
         ></po-icon>
@@ -28,17 +28,17 @@
       #inp
       class="po-input"
       [attr.name]="name"
-      [attr.data-focused-element]="!disabled"
-      [attr.data-inactive-component]="disabled || readonly"
+      [attr.data-focused-element]="!isDisabled"
+      [attr.data-inactive-component]="isDisabled || readonly"
       [autocomplete]="autocomplete"
       [class.po-input-icon-left]="icon"
       [class.po-input-icon-left-aa]="icon && size === 'small'"
       [class.po-input-icon-right]="clean || loading"
       [class.po-input-icon-right-aa]="(clean || loading) && size === 'small'"
       [class.po-input-aa]="size === 'small'"
-      [disabled]="disabled"
+      [disabled]="isDisabled"
       [id]="id"
-      [placeholder]="disabled ? '' : placeholder"
+      [placeholder]="isDisabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"
       [type]="type"
@@ -53,7 +53,7 @@
         <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
       }
 
-      @if (!loading && clean && !disabled && !readonly) {
+      @if (!loading && clean && !isDisabled && !readonly) {
         <po-clean
           class="{{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
           [p-element-ref]="inputEl"
@@ -69,7 +69,7 @@
         class="po-field-helper-button"
         [p-size]="size"
         [p-helper]="poHelper.helperSettings"
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-append-in-body]="appendBox"
       >
       </po-helper>
@@ -80,7 +80,7 @@
     <po-field-container-bottom
       [p-append-in-body]="appendBox"
       [p-help]="help"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
       [p-size]="size"

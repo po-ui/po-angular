@@ -3,6 +3,7 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  HostBinding,
   input,
   Input,
   OnInit,
@@ -16,7 +17,14 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operato
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from '../../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSizeFn,
+  isTypeof,
+  mapInputSizeToLoadingIcon,
+  validateSizeFn,
+  PoUtils
+} from '../../../utils/util';
 import { requiredFailed } from './../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -353,6 +361,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
   private _hideSearch?: boolean = false;
   private _literals: PoMultiselectLiterals;
+  private _loading: boolean = false;
   private _options: Array<PoMultiselectOption | any>;
   private _required?: boolean = false;
   private _sort?: boolean = false;
@@ -568,6 +577,29 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   get disabled() {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @HostBinding('attr.p-loading')
+  @Input('p-loading')
+  set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -810,6 +842,11 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   getLabelByValue(value) {
     const index = this.options.findIndex(option => option[this.fieldValue] === value);
     return this.options[index].label;
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   searchByLabel(search: string, options: Array<PoMultiselectOption | any>, filterMode: PoMultiselectFilterMode) {

@@ -1,6 +1,6 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
-  [p-disabled]="disabled"
+  [p-disabled]="isDisabled"
   [p-id]="id"
   [p-label]="label"
   [p-helper]="label ? poHelper.helperSettings : undefined"
@@ -10,43 +10,49 @@
 >
   <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
     <div class="po-switch" [class.po-switch-aa]="size === 'small'" [attr.data-label-position]="getLabelPosition()">
-      <div
-        #switchContainer
-        class="po-switch-container"
-        [class.po-switch-container-aa]="size === 'small'"
-        role="switch"
-        [attr.aria-checked]="value"
-        [attr.aria-disabled]="disabled"
-        [attr.data-focused-element]="!disabled"
-        [attr.data-inactive-component]="disabled"
-        [id]="id"
-        [tabindex]="disabled ? -1 : 0"
-        (blur)="onBlur()"
-        (click)="eventClick()"
-        (keydown)="onKeyDown($event)"
-      >
-        <div class="po-switch-track" [class.po-switch-track-aa]="size === 'small'">
-          <div
-            class="po-switch-toggle"
-            [class.po-switch-toggle-aa]="size === 'small'"
-            [attr.aria-label]="value === true ? labelOn : labelOff"
-          >
-            @if (value === true) {
-              <po-icon class="po-switch-icon" [class.po-switch-icon-aa]="size === 'small'" p-icon="ICON_OK"></po-icon>
-            }
+      @if (loading) {
+        <div class="po-switch-loading-container">
+          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+        </div>
+      } @else {
+        <div
+          #switchContainer
+          class="po-switch-container"
+          [class.po-switch-container-aa]="size === 'small'"
+          role="switch"
+          [attr.aria-checked]="value"
+          [attr.aria-disabled]="isDisabled"
+          [attr.data-focused-element]="!isDisabled"
+          [attr.data-inactive-component]="isDisabled"
+          [id]="id"
+          [tabindex]="isDisabled ? -1 : 0"
+          (blur)="onBlur()"
+          (click)="eventClick()"
+          (keydown)="onKeyDown($event)"
+        >
+          <div class="po-switch-track" [class.po-switch-track-aa]="size === 'small'">
+            <div
+              class="po-switch-toggle"
+              [class.po-switch-toggle-aa]="size === 'small'"
+              [attr.aria-label]="value === true ? labelOn : labelOff"
+            >
+              @if (value === true) {
+                <po-icon class="po-switch-icon" [class.po-switch-icon-aa]="size === 'small'" p-icon="ICON_OK"></po-icon>
+              }
+            </div>
           </div>
         </div>
-      </div>
 
-      @if (!hideLabelStatus) {
-        <po-label
-          class="po-switch-label"
-          [class.po-switch-label-aa]="size === 'small'"
-          [p-disabled]="disabled"
-          [p-label]="value === true ? labelOn : labelOff"
-          (click)="eventClick()"
-        >
-        </po-label>
+        @if (!hideLabelStatus) {
+          <po-label
+            class="po-switch-label"
+            [class.po-switch-label-aa]="size === 'small'"
+            [p-disabled]="isDisabled"
+            [p-label]="value === true ? labelOn : labelOff"
+            (click)="eventClick()"
+          >
+          </po-label>
+        }
       }
     </div>
     @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
@@ -54,7 +60,7 @@
         #helperEl
         [p-size]="size"
         [p-helper]="poHelper.helperSettings"
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-append-in-body]="appendBox"
       >
       </po-helper>
@@ -63,7 +69,7 @@
   <po-field-container-bottom
     [p-append-in-body]="appendBox"
     [p-help]="help"
-    [p-disabled]="disabled"
+    [p-disabled]="isDisabled"
     [p-error-limit]="errorLimit"
     [p-error-pattern]="getErrorPattern()"
     [p-size]="size"

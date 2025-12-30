@@ -889,6 +889,24 @@ export function getTextColorFromBackgroundColor(backgroundColor: string): string
   return yiq >= 128 ? getTextColor('darkest') : getTextColor('lightest');
 }
 
+/**
+ * Retorna o tamanho do ícone de loading baseado no tamanho do field.
+ *
+ * @param size Tamanho do campo (`small`, `medium` ou outros valores).
+ * @returns Tamanho do ícone de loading correspondente:
+ * - `small` → `xs`
+ * - `medium` → `sm`
+ * - qualquer outro valor → `sm`
+ */
+export function mapInputSizeToLoadingIcon(size?: string): string {
+  const sizeMap: Record<string, string> = {
+    small: 'xs',
+    medium: 'sm'
+  };
+
+  return sizeMap[size ?? ''] || 'sm';
+}
+
 export const PoUtils = {
   capitalizeFirstLetter,
   convertDateToISODate,
