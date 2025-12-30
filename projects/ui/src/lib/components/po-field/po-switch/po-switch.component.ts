@@ -25,7 +25,14 @@ import {
   NG_VALIDATORS
 } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSizeFn, setHelperSettings, uuid, validateSizeFn } from '../../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSizeFn,
+  mapInputSizeToLoadingIcon,
+  setHelperSettings,
+  uuid,
+  validateSizeFn
+} from '../../../utils/util';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoFieldModel } from '../po-field.model';
@@ -145,6 +152,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   private _labelOff: string = 'false';
   private _labelOn: string = 'true';
   private _labelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Right;
+  private _loading: boolean = false;
   private _formatModel: boolean = false;
   private _size?: string = undefined;
   private statusChangesSubscription: Subscription;
@@ -222,6 +230,28 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
 
   get labelOn() {
     return this._labelOn;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento substituindo o switch para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
+  set loading(value: boolean) {
+    this._loading = value;
+    this.changeDetector.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -444,6 +474,11 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
         });
       }
     }
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  public mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   getErrorPattern(): string {
