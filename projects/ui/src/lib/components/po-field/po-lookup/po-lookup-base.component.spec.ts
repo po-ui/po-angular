@@ -1061,6 +1061,98 @@ describe('PoLookupBaseComponent:', () => {
       expectPropertiesValues(component, 'placeholder', invalidValues, '');
     });
 
+    describe('p-loading:', () => {
+      it('should set loading to true', () => {
+        component.loading = true;
+        expect(component.loading).toBeTrue();
+      });
+
+      it('should set loading to false', () => {
+        component.loading = false;
+        expect(component.loading).toBeFalse();
+      });
+
+      it('loading should not affect disabled state', () => {
+        component.disabled = false;
+
+        component.loading = true;
+        expect(component.disabled).toBeFalse();
+
+        component.disabled = true;
+        component.loading = false;
+        expect(component.disabled).toBeTrue();
+      });
+
+      it('should set loading=true when input receives empty string', () => {
+        component.loading = '' as any;
+        expect(component.loading).toBeTrue();
+      });
+
+      it('should set loading=false when input receives string "false"', () => {
+        component.loading = 'false' as any;
+        expect(component.loading).toBeFalse();
+      });
+
+      it('should set loading=true when input receives string "true"', () => {
+        component.loading = 'true' as any;
+        expect(component.loading).toBeTrue();
+      });
+
+      it('should not throw when cd is undefined', () => {
+        component['cd'] = undefined;
+        expect(() => (component.loading = true)).not.toThrow();
+      });
+
+      it('mapSizeToIcon: should map sizes to icon sizes', () => {
+        expect(component.mapSizeToIcon('small')).toBe('xs');
+        expect(component.mapSizeToIcon('medium')).toBe('sm');
+        expect(component.mapSizeToIcon('large')).toBe('sm');
+        expect(component.mapSizeToIcon(undefined)).toBe('sm');
+        expect(component.mapSizeToIcon('invalid')).toBe('sm');
+      });
+    });
+
+    describe('isDisabled:', () => {
+      it('should return false when disabled and loading are false', () => {
+        component.disabled = false;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeFalse();
+      });
+
+      it('should return true when disabled is true and loading is false', () => {
+        component.disabled = true;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when disabled is false and loading is true', () => {
+        component.disabled = false;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when disabled and loading are true', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should keep disabled true after loading toggles from true to false', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+    });
+
     describe('p-size', () => {
       beforeEach(() => {
         document.documentElement.removeAttribute('data-a11y');

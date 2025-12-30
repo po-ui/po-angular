@@ -1,6 +1,6 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
-  [p-disabled]="disabled"
+  [p-disabled]="isDisabled"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -15,13 +15,14 @@
     <select
       #select
       class="po-select"
+      [class.po-select-loading]="loading"
       [class.po-select-aa]="size === 'small'"
       [ngClass]="iconNameLib === 'AnimaliaIcon' ? 'po-select-phosphor' : 'po-select-poicon'"
-      [attr.data-focused-element]="!disabled"
-      [attr.data-inactive-component]="disabled || readonly"
+      [attr.data-focused-element]="!isDisabled"
+      [attr.data-inactive-component]="disabled || readonly || loading"
       [attr.name]="name"
       [class.po-select-placeholder]="!selectedValue?.toString() && !!placeholder"
-      [disabled]="disabled"
+      [disabled]="isDisabled"
       [id]="id"
       [required]="required"
       (blur)="onBlur($event)"
@@ -67,13 +68,25 @@
         }
       }
     </select>
+
+    @if (loading) {
+      <div
+        class="po-select-loading-container"
+        [class.po-select-loading-with-helper]="
+          (!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)
+        "
+      >
+        <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+      </div>
+    }
+
     @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
       <po-helper
         #helperEl
         class="po-field-helper-button"
         [p-size]="size"
         [p-helper]="poHelper.helperSettings"
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-append-in-body]="appendBox"
       >
       </po-helper>
@@ -84,7 +97,7 @@
     <po-field-container-bottom
       [p-append-in-body]="appendBox"
       [p-help]="help"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
       [p-size]="size"

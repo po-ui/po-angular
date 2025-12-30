@@ -1,6 +1,7 @@
 <div
   class="po-search"
   [class.po-search-disabled]="disabled"
+  [class.po-search-loading]="loading && type !== 'locate'"
   [class.po-search-filter-locate]="type === 'locate'"
   [attr.p-search-type]="type === 'locate'"
   [attr.p-size]="size"
@@ -9,7 +10,7 @@
     <div class="po-search-select">
       <po-dropdown
         [p-label]="searchFilterSelectLabel"
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-actions]="searchFilterSelectActions"
         [p-size]="size"
       >
@@ -34,7 +35,7 @@
     [class.po-search-input-clean]="!!poSearchInput.value && !disabled && type !== 'locate'"
     [class.po-search-input-trigger]="type === 'trigger'"
     [style.padding-right.px]="dynamicPaddingRight"
-    [disabled]="disabled"
+    [disabled]="isDisabled"
     [placeholder]="literals.search"
     (input)="onInputHandler($event.target.value)"
     (keyup.enter)="onEnterKey($event)"
@@ -63,8 +64,12 @@
       </span>
     }
 
-    @if (!!poSearchInput.value && !disabled) {
-      <div [id]="idSearchButtonClean">
+    <div [id]="idSearchButtonClean">
+      @if (loading && type !== 'locate') {
+        <div class="po-search-button po-search-button-loading">
+          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+        </div>
+      } @else if (!!poSearchInput.value) {
         <button
           class="po-search-button po-search-button-clean"
           type="button"
@@ -75,15 +80,15 @@
         >
           <po-clean class="po-icon-input" [p-size]="size"></po-clean>
         </button>
-      </div>
-    }
+      }
+    </div>
 
     @if (type === 'trigger') {
       <button
         class="po-search-button po-search-button-trigger"
         type="button"
         [ariaLabel]="literals.search"
-        [disabled]="disabled"
+        [disabled]="isDisabled"
         (click)="onSearchChange(poSearchInput.value, true, true)"
         (keydown.enter)="onSearchChange(poSearchInput.value, true, true)"
       >
