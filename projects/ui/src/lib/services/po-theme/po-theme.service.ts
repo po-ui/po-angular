@@ -78,7 +78,7 @@ export class PoThemeService {
     themeType: PoThemeTypeEnum = PoThemeTypeEnum.light,
     a11yLevel: PoThemeA11yEnum = PoThemeA11yEnum.AAA,
     persistPreference: boolean = true
-  ): void {
+  ): Promise<void> {
     if (themeConfig === poThemeDefault) {
       this.resetBaseTheme();
     }
@@ -155,10 +155,10 @@ export class PoThemeService {
 
     if (!this.isValidA11yLevel(a11yLevel)) return false;
 
-    if (a11yLevel === PoThemeA11yEnum.AA && enable) {
-      const defaultSize = 'small';
+    const defaultSize = 'small';
+    document.documentElement.setAttribute('data-default-size', defaultSize);
 
-      document.documentElement.setAttribute('data-default-size', defaultSize);
+    if (a11yLevel === PoThemeA11yEnum.AA && enable) {
       if (localStorage.getItem('po-default-size') !== defaultSize) {
         localStorage.setItem('po-default-size', defaultSize);
       }
@@ -166,7 +166,6 @@ export class PoThemeService {
     }
 
     localStorage.removeItem('po-default-size');
-    document.documentElement.removeAttribute('data-default-size');
 
     return false;
   }

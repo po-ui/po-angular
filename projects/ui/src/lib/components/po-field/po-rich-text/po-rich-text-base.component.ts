@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, input, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -282,6 +282,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   private _readonly: boolean;
   private _required: boolean;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private validatorChange: any;
   // eslint-disable-next-line
   protected onTouched: any = null;
@@ -370,10 +371,13 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -387,6 +391,11 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   @Input('p-show-required') showRequired: boolean = false;
 
   constructor(private richTextService: PoRichTextService) {}
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model
@@ -432,5 +441,10 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
     if (this.validatorChange) {
       this.validatorChange(value);
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }
