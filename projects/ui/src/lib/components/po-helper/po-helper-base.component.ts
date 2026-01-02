@@ -1,5 +1,7 @@
 import { Component, HostBinding, input } from '@angular/core';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
+import { validateSizeFn } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 /**
  * @description
  *
@@ -102,8 +104,12 @@ export class PoHelperBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size')
   size = input<string>(undefined, { alias: 'p-size' });
+
+  @HostBinding('attr.p-size')
+  get hostSize(): string {
+    return validateSizeFn(this.size(), PoFieldSize);
+  }
 
   /**
    * @Input

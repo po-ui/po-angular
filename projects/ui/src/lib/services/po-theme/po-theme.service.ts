@@ -78,7 +78,7 @@ export class PoThemeService {
     themeType: PoThemeTypeEnum = PoThemeTypeEnum.light,
     a11yLevel: PoThemeA11yEnum = PoThemeA11yEnum.AAA,
     persistPreference: boolean = true
-  ): void {
+  ): Promise<void> {
     if (themeConfig === poThemeDefault) {
       this.resetBaseTheme();
     }
@@ -137,14 +137,26 @@ export class PoThemeService {
   }
 
   /**
-   * Define o tamanho `small` como padrão para componentes de formulário que não possuem um tamanho definido. Essa
-   * configuração é aplicada globalmente apenas quando o nível de acessibilidade for `AA`. O valor definido é salvo no
-   * `localStorage` sob a chave `po-default-size`.
+   * Define o tamanho `small` como padrão para componentes que não possuem um tamanho definido. Essa configuração é
+   * aplicada globalmente apenas quando o nível de acessibilidade for `AA`. O valor definido é salvo no
+   * `localStorage` sob a chave `po-default-size` e o atributo `data-default-size` é adicionado ao elemento HTML
+   * para que os componentes possam aplicar o tamanho
+   *
+   * Exemplo de uso:
+   *
+   * ```typescript
+   * import { poThemeDefault, PoThemeService, PoThemeTypeEnum, PoThemeA11yEnum } from '@po-ui/ng-components';
+   *
+   * private themeService = inject(PoThemeService);
+   *
+   * constructor() {
+   *  this.themeService.setA11yDefaultSizeSmall(true);
+   *  this.themeService.setTheme(poThemeDefault, PoThemeTypeEnum.light, PoThemeA11yEnum.AA);
+   * }
+   * ```
    *
    * > Para garantir que o tamanho `small` seja aplicado corretamente a todos os componentes, recomendamos
    * definir esta configuração **junto com o nível de acessibilidade `AA` na inicialização da aplicação**.
-   * Se for aplicada em tempo de execução, será necessário recarregar a aplicação (`reload`)
-   * para que os estilos sejam aplicados corretamente.
    * > Para ajustar a densidade visual dos componentes agrupadores (como pages, container, etc.), utilize também
    * o método `setDensityMode` conforme necessário.
    *
@@ -155,10 +167,10 @@ export class PoThemeService {
 
     if (!this.isValidA11yLevel(a11yLevel)) return false;
 
-    if (a11yLevel === PoThemeA11yEnum.AA && enable) {
-      const defaultSize = 'small';
+    const defaultSize = 'small';
+    document.documentElement.setAttribute('data-default-size', defaultSize);
 
-      document.documentElement.setAttribute('data-default-size', defaultSize);
+    if (a11yLevel === PoThemeA11yEnum.AA && enable) {
       if (localStorage.getItem('po-default-size') !== defaultSize) {
         localStorage.setItem('po-default-size', defaultSize);
       }
@@ -166,7 +178,6 @@ export class PoThemeService {
     }
 
     localStorage.removeItem('po-default-size');
-    document.documentElement.removeAttribute('data-default-size');
 
     return false;
   }

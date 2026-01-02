@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoPageBlockedUserReason } from './enums/po-page-blocked-user-reason.enum';
@@ -103,6 +103,7 @@ export class PoPageBlockedUserBaseComponent {
   @Input('p-secondary-logo') secondaryLogo?: string;
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _params: PoPageBlockedUserReasonParams = { ...PoPageBlockedUserParamsDefault };
   private _reason: PoPageBlockedUserReason = PoPageBlockedUserReason.None;
   private _urlBack: string = '/';
@@ -121,12 +122,20 @@ export class PoPageBlockedUserBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   /**
@@ -205,5 +214,9 @@ export class PoPageBlockedUserBaseComponent {
 
   get urlBack() {
     return this._urlBack;
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 }

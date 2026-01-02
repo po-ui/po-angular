@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, ViewChild } from '@angular/core';
 
 import {
   PoComboOption,
@@ -79,6 +79,7 @@ export class PoAdvancedFilterBaseComponent {
   protected optionsServiceChosenOptions: Array<PoComboOption> = [];
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _filters: Array<PoDynamicFormField> = [];
   private _literals: PoAdvancedFilterLiterals;
 
@@ -96,10 +97,13 @@ export class PoAdvancedFilterBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -138,6 +142,15 @@ export class PoAdvancedFilterBaseComponent {
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 
   // Retorna os models dos campos preenchidos

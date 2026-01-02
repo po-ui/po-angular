@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import {
   PoBreadcrumb,
@@ -228,6 +228,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
   advancedFilterLiterals: PoAdvancedFilterLiterals;
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _filters: Array<PoDynamicFormField> = [];
   private _hideCloseDisclaimers: Array<string> = [];
   private _literals: PoPageDynamicSearchLiterals;
@@ -250,10 +251,13 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -379,6 +383,11 @@ export abstract class PoPageDynamicSearchBaseComponent {
     };
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   stringify(columns: Array<PoPageDynamicSearchFilters>) {
     // não faz o stringify da propriedade searchService, pois pode conter objeto complexo e disparar um erro.
     return JSON.stringify(columns, (key, value) => {
@@ -386,6 +395,10 @@ export abstract class PoPageDynamicSearchBaseComponent {
         return value;
       }
     });
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 
   abstract onChangeFilters(filters: Array<PoPageDynamicSearchFilters>);

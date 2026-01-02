@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -204,6 +204,7 @@ export class PoProgressBaseComponent {
   private _value?: number = 0;
   private _size: string = 'large';
   private _sizeActions: string = undefined;
+  private _initialSizeActions: string = undefined;
 
   /**
    * @optional
@@ -283,12 +284,13 @@ export class PoProgressBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size-actions')
-  @Input('p-size-actions')
   set sizeActions(value: string) {
-    this._sizeActions = validateSizeFn(value, PoFieldSize);
+    this._initialSizeActions = value;
+    this.applySizeActionsBasedOnA11y();
   }
 
+  @Input('p-size-actions')
+  @HostBinding('attr.p-size-actions')
   get sizeActions(): string {
     return this._sizeActions ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -303,6 +305,15 @@ export class PoProgressBaseComponent {
    * @default `false`
    */
   @Input({ alias: 'p-show-percentage', transform: convertToBoolean }) showPercentage: boolean = false;
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeActionsBasedOnA11y();
+  }
+
+  private applySizeActionsBasedOnA11y(): void {
+    this._sizeActions = validateSizeFn(this._initialSizeActions, PoFieldSize);
+  }
 
   private isProgressRangeValue(value: number): boolean {
     return value >= poProgressMinValue && value <= poProgressMaxValue;

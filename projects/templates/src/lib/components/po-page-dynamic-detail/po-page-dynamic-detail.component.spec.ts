@@ -120,6 +120,12 @@ describe('PoPageDynamicDetailComponent:', () => {
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
     });
 
     it('p-fields: should call `getKeysByFields` and `getDuplicatesByFields` and set property with valid values', () => {

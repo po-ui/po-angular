@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, Output, TemplateRef, input } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, input } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -139,6 +139,7 @@ export class PoButtonBaseComponent {
   private _loading?: boolean = false;
   private _kind?: string = PoButtonKind.secondary;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   protected hasSize?: boolean = false;
 
   /**
@@ -250,11 +251,24 @@ export class PoButtonBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoButtonSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoButtonSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoButtonSize);
+    this._size = size;
   }
 }

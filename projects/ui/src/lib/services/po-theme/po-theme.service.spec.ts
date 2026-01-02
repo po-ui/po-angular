@@ -467,19 +467,30 @@ describe('PoThemeService:', () => {
     });
 
     describe('getA11yDefaultSize:', () => {
-      beforeEach(() => {
-        spyOn(document.documentElement, 'getAttribute').and.callThrough();
-      });
-
       it('should return "small" if data-a11y is AA and po-default-size in localStorage is set small', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AA');
-        spyOn(localStorage, 'getItem').and.returnValue('small');
+        spyOn(document.documentElement, 'getAttribute').and.callFake((attr: string) => {
+          if (attr === 'data-a11y') {
+            return 'AA';
+          }
+          return null;
+        });
+
+        spyOn(localStorage, 'getItem').and.callFake((key: string) => (key === 'po-default-size' ? 'small' : null));
 
         expect(service.getA11yDefaultSize()).toBe('small');
       });
 
       it('should return "medium" if data-a11y is not AA', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
+        spyOn(document.documentElement, 'getAttribute').and.callFake((attr: string) => {
+          if (attr === 'data-a11y') {
+            return 'AAA';
+          }
+          if (attr === 'data-default-size') {
+            return 'small';
+          }
+          return null;
+        });
+
         spyOn(localStorage, 'getItem').and.returnValue('small');
 
         expect(service.getA11yDefaultSize()).toBe('medium');

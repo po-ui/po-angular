@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoToasterMode } from './enum/po-toaster-mode.enum';
@@ -57,6 +57,7 @@ import { PoToaster } from './interface/po-toaster.interface';
 export abstract class PoToasterBaseComponent {
   private _isHide: boolean;
   private _sizeActions: string = undefined;
+  private _initialSizeActions: string = undefined;
 
   /**
    * @optional
@@ -131,12 +132,13 @@ export abstract class PoToasterBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size-actions')
-  @Input('p-size-actions')
   set sizeActions(value: string) {
-    this._sizeActions = validateSizeFn(value, PoFieldSize);
+    this._initialSizeActions = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size-actions')
+  @HostBinding('attr.p-size-actions')
   get sizeActions(): string {
     return this._sizeActions ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -175,6 +177,20 @@ export abstract class PoToasterBaseComponent {
 
   // Posição para notificação aparecer na tela.
   position: number;
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSizeActions, PoFieldSize);
+    this._sizeActions = size;
+  }
+
+  protected getInitialSizeActions(): string {
+    return this._initialSizeActions;
+  }
 
   // Fecha a notificação.
   abstract close(): void;

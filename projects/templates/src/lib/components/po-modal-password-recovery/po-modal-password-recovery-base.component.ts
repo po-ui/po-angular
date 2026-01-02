@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
@@ -239,6 +239,7 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
   } = poModalPasswordRecoveryLiterals[poLocaleDefault];
 
   private _componentsSize?: string;
+  private _initialComponentsSize?: string;
   private _contactEmail: string;
   private _phoneMask = PoModalPasswordRecoveryDefaultPhone;
   private _type: PoModalPasswordRecoveryType = PoModalPasswordRecoveryTypeDefault;
@@ -257,10 +258,13 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -325,6 +329,15 @@ export abstract class PoModalPasswordRecoveryBaseComponent {
       ...this.literals,
       ...poModalPasswordRecoveryLiterals[languageService.getShortLanguage()]
     };
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 
   private concatenateSMSErrorMessage(value: string) {

@@ -1,4 +1,4 @@
-import { Input, Directive } from '@angular/core';
+import { Input, Directive, HostBinding, HostListener } from '@angular/core';
 
 import { PoInfoOrientation } from './po-info-orietation.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
@@ -28,6 +28,7 @@ export class PoInfoBaseComponent {
   private _labelSize: number;
   private _orientation: PoInfoOrientation = poInfoOrientationDefault;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * @optional
@@ -87,11 +88,24 @@ export class PoInfoBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }

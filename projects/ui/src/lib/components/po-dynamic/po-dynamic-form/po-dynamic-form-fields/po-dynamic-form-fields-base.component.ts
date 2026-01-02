@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../../utils/util';
 
@@ -30,15 +30,19 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
   @Input('p-validate-on-input') validateOnInput: boolean;
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;
   private _value?: any = {};
 
   // Define o tamanho dos componentes de formulário.
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -75,6 +79,11 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   compareTo(value, compareTo) {
     return value === compareTo;
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   // retorna um array com os objetos configurados e visíveis.
@@ -301,5 +310,10 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   private printError(error: string) {
     console.error(error);
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 }

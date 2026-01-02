@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { PoBreadcrumb, PoDynamicFormField, PoStepperOrientation } from '@po-ui/ng-components';
@@ -37,6 +37,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 @Directive()
 export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
 
   /** Objeto com as propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
@@ -55,10 +56,13 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -299,6 +303,11 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
     this._subscription.unsubscribe();
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   protected loadData(id: string | number) {
     if (!id) {
       this.model = this.model || new PoPageJobSchedulerInternal();
@@ -327,5 +336,9 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
         }
       }
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 }

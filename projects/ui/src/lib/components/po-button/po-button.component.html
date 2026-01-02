@@ -2,8 +2,6 @@
   #button
   class="po-button"
   [type]="type()"
-  [class.po-button-aa]="size === 'small'"
-  [class.po-button-large]="size === 'large'"
   [attr.p-kind]="kind"
   [attr.p-danger]="danger"
   [disabled]="disabled || loading"
@@ -20,7 +18,7 @@
 
   <div class="po-button-container">
     @if (icon()) {
-      <po-icon class="po-button-icon" [class.po-button-icon-aa]="size === 'small'" [p-icon]="icon()"></po-icon>
+      <po-icon class="po-button-icon" [p-icon]="icon()"></po-icon>
     }
     @if (label()) {
       <span class="po-button-label">{{ label() }}</span>

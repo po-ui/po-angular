@@ -3,6 +3,7 @@ import {
   Directive,
   EventEmitter,
   HostBinding,
+  HostListener,
   input,
   Input,
   OnDestroy,
@@ -391,6 +392,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * @optional
@@ -506,10 +508,13 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -662,6 +667,11 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   callOnChange(value: any) {
@@ -871,6 +881,11 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
 
       this.passedWriteValue = false;
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   /**

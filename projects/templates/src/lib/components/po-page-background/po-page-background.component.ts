@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, inject } from '@angular/core';
 
 import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
 
@@ -46,6 +46,7 @@ export class PoPageBackgroundComponent implements OnInit {
   selectedLanguageOption: string;
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _showSelectLanguage?: boolean = false;
   private _languagesList: Array<PoLanguage>;
   private _selectLanguageOptions: Array<PoSelectOption>;
@@ -64,10 +65,13 @@ export class PoPageBackgroundComponent implements OnInit {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -120,10 +124,19 @@ export class PoPageBackgroundComponent implements OnInit {
     return this._selectLanguageOptions;
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   private setLanguageOptions() {
     this._selectLanguageOptions = this.languagesList.map<PoSelectOption>(language => ({
       label: language.description,
       value: language.language
     }));
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 }

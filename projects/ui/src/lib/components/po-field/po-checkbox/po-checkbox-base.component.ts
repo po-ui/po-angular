@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, EventEmitter, input, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  input,
+  Input,
+  Output
+} from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { convertToBoolean, getDefaultSizeFn, uuid, validateSizeFn } from './../../../utils/util';
@@ -209,6 +218,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
 
   private _disabled?: boolean = false;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * @optional
@@ -243,8 +253,15 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    * @default `medium`
    *
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoCheckboxSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
+  }
+
+  @Input('p-size')
+  @HostBinding('attr.p-size')
+  get size(): string {
+    return this._size ?? getDefaultSizeFn(PoCheckboxSize);
   }
 
   /**
@@ -276,11 +293,12 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    */
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
-  get size(): string {
-    return this._size ?? getDefaultSizeFn(PoCheckboxSize);
-  }
-
   constructor(private readonly cd: ChangeDetectorRef) {}
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
 
   changeValue() {
     if (this.propagateChange) {
@@ -322,6 +340,11 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
     if (value !== this.checkboxValue) {
       this.changeModelValue(value);
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoCheckboxSize);
+    this._size = size;
   }
 
   protected abstract changeModelValue(value: boolean | null);

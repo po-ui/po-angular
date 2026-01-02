@@ -140,6 +140,12 @@ describe('PoPageDynamicTableComponent:', () => {
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
     });
 
     it('p-quick-search-width: should update property p-quick-search-width with valid values.', () => {
