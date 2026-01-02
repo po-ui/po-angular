@@ -10,7 +10,8 @@ import {
   Output,
   Renderer2,
   ViewChild,
-  inject
+  inject,
+  HostBinding
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -42,15 +43,19 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
 
   value = false;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /** Define o valor do *radio* */
   @Input('p-value') radioValue: string;
 
   /** Define o tamanho do radio. */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoRadioSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoRadioSize);
   }
@@ -150,5 +155,15 @@ export class PoRadioComponent extends PoFieldModel<boolean> {
   @HostListener('keydown')
   onKeydown(): void {
     this.renderer.addClass(this.radio.nativeElement, 'po-radio-focus');
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoRadioSize);
+    this._size = size;
   }
 }

@@ -69,7 +69,6 @@ import { PoHelperComponent } from '../../po-helper';
 })
 export class PoRadioGroupComponent extends PoRadioGroupBaseComponent implements AfterViewInit, DoCheck, OnChanges {
   private el = inject(ElementRef);
-  private cd = inject(ChangeDetectorRef);
 
   /** Label do campo. */
   @Input('p-label') label?: string;

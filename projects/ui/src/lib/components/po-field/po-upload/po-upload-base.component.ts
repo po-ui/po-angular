@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  input,
+  Input,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { convertToBoolean, getDefaultSizeFn, isEquals, validateSizeFn, PoUtils } from '../../../utils/util';
@@ -634,6 +643,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _literals?: any;
   private _required?: boolean;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private language: string;
   private validatorChange: any;
 
@@ -892,10 +902,13 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -906,6 +919,11 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     protected cd: ChangeDetectorRef
   ) {
     this.language = languageService.getShortLanguage();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   // Função implementada do ControlValueAccessor
@@ -1091,6 +1109,11 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     }
 
     return files;
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   abstract sendFeedback(file?): void;

@@ -14,6 +14,7 @@ import {
   inject,
   AfterViewInit,
   input,
+  HostListener,
   HostBinding
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -187,6 +188,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   private _loading: boolean = false;
   private _options: Array<PoSelectOption> | Array<PoSelectOptionGroup> | Array<any>;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * Nesta propriedade deve ser definido uma coleção de objetos que implementam a interface `PoSelectOption`,
@@ -339,10 +341,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -391,6 +396,11 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     if (changes.options?.currentValue) {
       this.options = changes.options.currentValue;
     }
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   /**
@@ -617,5 +627,10 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   private validateOptions(options: Array<any>) {
     PoUtils.removeDuplicatedOptions(options);
     PoUtils.removeUndefinedAndNullOptions(options);
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }

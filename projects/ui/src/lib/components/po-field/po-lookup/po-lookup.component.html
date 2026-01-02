@@ -25,17 +25,7 @@
             <input
               #inp
               class="po-lookup-input po-lookup-input-trigger"
-              [class.po-lookup-input-aa]="size === 'small'"
-              [class.po-lookup-input-trigger-aa]="size === 'small'"
-              [ngClass]="
-                clean && inp.value
-                  ? size === 'small'
-                    ? 'po-input-double-icon-right-aa'
-                    : 'po-input-double-icon-right'
-                  : size === 'small'
-                    ? 'po-input-icon-right-aa'
-                    : 'po-input-icon-right'
-              "
+              [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
               [id]="id"
               type="text"
               [autocomplete]="autocomplete"
@@ -72,7 +62,6 @@
                 role="button"
                 class="po-lookup-button po-lookup-button-trigger po-field-icon"
                 [class.po-field-icon-disabled]="isDisabled"
-                [class.po-lookup-button-aa]="size === 'small'"
                 [ariaLabel]="literals.search"
                 (p-change-event)="openLookup()"
                 (click)="!isDisabled && openLookup(); $event.preventDefault()"
@@ -101,13 +90,9 @@
               class="po-lookup-input po-input-icon-right po-icon-input"
               [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
               [class.po-lookup-input-auto]="autoHeight"
-              [class.po-lookup-input-auto-aa]="autoHeight && size === 'small'"
               [class.po-lookup-input-static]="!autoHeight"
-              [class.po-lookup-input-static-aa]="!autoHeight && size === 'small'"
               [class.po-lookup-input-padding-button-clean]="clean || loading"
-              [class.po-lookup-input-padding-button-clean-aa]="(clean || loading) && size === 'small'"
               [class.po-lookup-input-disabled]="isDisabled"
-              [class.po-lookup-input-aa]="size === 'small'"
               [class.po-lookup-input-auto-dynamic-height]="isExpandedHeight"
               (blur)="onBlur()"
               (keydown)="onKeyDown($event)"
@@ -152,7 +137,6 @@
                 role="button"
                 class="po-lookup-button po-lookup-button-trigger po-field-icon"
                 [class.po-field-icon-disabled]="isDisabled"
-                [class.po-lookup-button-aa]="size === 'small'"
                 [ariaLabel]="literals.search"
                 (p-change-event)="openLookup()"
                 (click)="!isDisabled && openLookup(); $event.preventDefault()"

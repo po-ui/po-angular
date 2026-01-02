@@ -23,9 +23,10 @@
 
     <input
       #inp
-      class="po-input {{ size === 'small' ? 'po-input-aa' : '' }} po-input-icon-left"
+      class="po-input po-input-icon-left"
       [class.po-input-icon-left-aa]="size === 'small'"
       [attr.name]="name"
+      [attr.p-size]="size"
       [autocomplete]="autocomplete"
       [class.po-input-icon-right]="clean || loading"
       [class.po-input-icon-right-aa]="(clean || loading) && size === 'small'"
