@@ -519,7 +519,8 @@ export function validateSizeFn(value: string): string {
  * @returns `'small'` ou `'medium'`.
  */
 export function getA11yDefaultSize(): string {
-  const defaultSize = localStorage.getItem('po-default-size');
+  const defaultSize =
+    document.documentElement.getAttribute('data-default-size') || localStorage.getItem('po-default-size');
   const a11yLevel = document.documentElement.getAttribute('data-a11y');
 
   return defaultSize === 'small' && a11yLevel === 'AA' ? 'small' : 'medium';

@@ -1,4 +1,4 @@
-import { Directive, HostBinding, Input, ViewChild } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, ViewChild } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -57,6 +57,7 @@ export abstract class PoPageDefaultBaseComponent {
 
   private _actions?: Array<PoPageAction> = [];
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
   private _title: string;
 
@@ -92,12 +93,13 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-components-size')
-  @Input('p-components-size')
   set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -172,6 +174,16 @@ export abstract class PoPageDefaultBaseComponent {
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 
   // Seta a lista de ações no dropdown.

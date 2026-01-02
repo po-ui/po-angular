@@ -3,6 +3,7 @@ import {
   Directive,
   EventEmitter,
   HostBinding,
+  HostListener,
   input,
   Input,
   OnDestroy,
@@ -331,6 +332,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _startDate?;
   private _locale?: string;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private _placeholder: PoDatepickerRange = { start: '', end: '' };
 
   private language;
@@ -594,12 +596,13 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size')
-  @Input('p-size')
   set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -660,6 +663,11 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   // Função implementada do ControlValueAccessor
@@ -889,6 +897,11 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
         return day < 1 || day > 28 ? false : true;
       }
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   protected abstract resetDateRangeInputValidation(): void;

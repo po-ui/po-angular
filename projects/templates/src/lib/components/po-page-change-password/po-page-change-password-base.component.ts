@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { PoModalAction } from '@po-ui/ng-components';
 
@@ -180,6 +180,7 @@ export abstract class PoPageChangePasswordBaseComponent {
   protected validatorChange: any;
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _hideCurrentPassword: boolean = false;
   private _recovery: string | PoPageChangePasswordRecovery | Function;
   private _requirements: Array<PoPageChangePasswordRequirement> = [];
@@ -199,10 +200,13 @@ export abstract class PoPageChangePasswordBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -304,6 +308,15 @@ export abstract class PoPageChangePasswordBaseComponent {
    * @default `true`
    */
   @Input('p-no-autocomplete-password') noAutocompletePassword: boolean = true;
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
+  }
 
   abstract navigateTo(url: string): void;
 }

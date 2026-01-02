@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
@@ -71,6 +71,7 @@ export class PoModalBaseComponent {
   // Event emmiter para quando a modal é fechada pelo 'X'.
   public onXClosed = new EventEmitter<boolean>();
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _hideClose?: boolean = false;
   private _size?: string = 'md';
 
@@ -121,10 +122,13 @@ export class PoModalBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -212,5 +216,15 @@ export class PoModalBaseComponent {
     if (!this.primaryAction['label']) {
       this.primaryAction['label'] = this.literals.close;
     }
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 }

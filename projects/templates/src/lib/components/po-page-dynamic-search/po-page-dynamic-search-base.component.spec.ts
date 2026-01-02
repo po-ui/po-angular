@@ -87,6 +87,12 @@ describe('PoPageDynamicSearchBaseComponent:', () => {
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect(component.applySizeBasedOnA11y).toHaveBeenCalled();
+      });
     });
 
     it('filters: should set `filters` to `[]` if not Array value', () => {

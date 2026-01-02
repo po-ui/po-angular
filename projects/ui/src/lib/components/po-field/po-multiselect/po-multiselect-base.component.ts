@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  HostListener,
   input,
   Input,
   OnInit,
@@ -411,6 +412,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _fieldLabel?: string = PO_MULTISELECT_FIELD_LABEL_DEFAULT;
   private _fieldValue?: string = PO_MULTISELECT_FIELD_VALUE_DEFAULT;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private language: string;
 
   private lastLengthModel;
@@ -593,10 +595,13 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -819,6 +824,11 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     this.setLabelsAndValuesOptions();
     this.validAndSortOptions();
     this.updateList(this.options);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   setService(service: PoMultiselectFilter | string) {
@@ -1053,6 +1063,11 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     } else {
       this.isExpandedHeight = height > 44;
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   abstract applyFilter(value?: string): Observable<Array<PoMultiselectOption | any>>;

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, of } from 'rxjs';
@@ -313,6 +313,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private hasCustomActionWithSelectable = false;
 
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _customPageListActions: Array<PoPageAction> = [];
   private _customTableActions: Array<PoTableAction> = [];
   private _defaultPageActions: Array<PoPageAction> = [];
@@ -375,10 +376,13 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -730,6 +734,11 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
 
   showMore() {
     this.subscriptions.add(this.loadData({ page: ++this.page, ...this.params }).subscribe());
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   get enableSelectionTable() {
@@ -1483,5 +1492,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     }
 
     this.tableActions = newTableActions;
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 }

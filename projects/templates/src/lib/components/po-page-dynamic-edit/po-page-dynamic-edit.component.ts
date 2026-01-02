@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { concat, EMPTY, Observable, of, Subscription, throwError } from 'rxjs';
@@ -368,6 +368,7 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   private subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDynamicEditLiterals;
   private _autoRouter: boolean = false;
   private _controlFields: Array<any> = [];
@@ -523,10 +524,13 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -599,12 +603,21 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
     return [...this._pageActions];
   }
 
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
+  }
+
   get controlFields() {
     return this._controlFields;
   }
 
   get detailFields() {
     return this._detailFields;
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   private loadDataFromAPI() {

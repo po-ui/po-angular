@@ -138,6 +138,8 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
 
   /* Configura o Toaster com os atributos passados para ele */
   configToaster(poToaster: PoToaster) {
+    const sizeActions = poToaster === this ? this.getInitialSizeActions() : poToaster.sizeActions;
+
     this.type = poToaster.type;
     this.message = poToaster.message;
     this.orientation = poToaster.orientation;
@@ -146,7 +148,7 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
     this.actionLabel = poToaster.actionLabel;
     this.componentRef = poToaster.componentRef;
     this.mode = poToaster.mode;
-    this.sizeActions = poToaster.sizeActions;
+    this.sizeActions = sizeActions;
     this.showClose = poToaster.showClose;
     this.supportMessage = poToaster.supportMessage;
 

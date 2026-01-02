@@ -514,6 +514,16 @@ describe('PoRichTextComponent:', () => {
     });
   });
 
+  describe('Properties:', () => {
+    describe('p-size', () => {
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('Template:', () => {
     it('should display `po-rich-text-toolbar` when `isAllActionsHidden` returns false', () => {
       spyOn(component, 'isAllActionsHidden').and.returnValue(false);

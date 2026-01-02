@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, OnDestroy, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -347,6 +347,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   private _authenticationUrl: string;
   private _blockedUrl: string;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _contactEmail: string;
   private _customField: string | PoPageLoginCustomField;
   private _environment?: string;
@@ -377,12 +378,13 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-components-size')
-  @Input('p-components-size')
   set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value);
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn();
   }
@@ -1064,6 +1066,11 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
     }
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   private getDefaultCustomFieldObject(property): PoPageLoginCustomField {
     return { property };
   }
@@ -1095,6 +1102,10 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
       this.passwordErrors = [];
       this.blockedUrl = '';
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    this._componentsSize = validateSizeFn(this._initialComponentsSize);
   }
 
   protected abstract concatenateLoginHintWithContactEmail(contactEmail: string);

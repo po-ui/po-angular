@@ -543,6 +543,21 @@ describe('PoToasterComponent', () => {
         component['_sizeActions'] = undefined;
         expect(component.sizeActions).toBe('medium');
       });
+
+      it('should keep sizeActions dynamic after configToaster when initial value is undefined', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component.sizeActions = undefined;
+        expect(component.sizeActions).toBe('small');
+
+        component.configToaster(component as any);
+
+        localStorage.setItem('po-default-size', 'medium');
+        component['onThemeChange']();
+
+        expect(component.sizeActions).toBe('medium');
+      });
     });
   });
 });

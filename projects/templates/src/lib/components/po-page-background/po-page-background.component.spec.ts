@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
-import { PoLanguage, poLanguageDefault, PoLanguageService } from '@po-ui/ng-components';
+import { PoLanguage, poLanguageDefault, PoLanguageService, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { PoPageBackgroundComponent } from './po-page-background.component';
 
 describe('PoPageBackgroundComponent:', () => {
@@ -37,6 +37,44 @@ describe('PoPageBackgroundComponent:', () => {
   });
 
   describe('Properties:', () => {
+    describe('p-components-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
+    });
+
     it('p-logo: shoud be undefined.', () => {
       expect(component.logo).toBeUndefined();
     });

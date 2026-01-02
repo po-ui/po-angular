@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, HostBinding, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, HostBinding, Output, HostListener } from '@angular/core';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
@@ -100,6 +100,7 @@ export class PoAccordionBaseComponent {
   private language: string = poLocaleDefault;
   private _literals;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   /**
    * @optional
    *
@@ -188,12 +189,13 @@ export class PoAccordionBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size')
-  @Input('p-size')
   set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -220,5 +222,15 @@ export class PoAccordionBaseComponent {
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }

@@ -92,6 +92,12 @@ describe('PoProgressBaseComponent:', () => {
         component['_sizeActions'] = undefined;
         expect(component.sizeActions).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeActionsBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeActionsBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeActionsBasedOnA11y).toHaveBeenCalled();
+      });
     });
     it('p-value: should update property with valid values', () => {
       const validValues = ['1', 25, 100, '50'];

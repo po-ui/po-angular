@@ -2,6 +2,7 @@ import {
   Directive,
   EventEmitter,
   HostBinding,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -500,7 +501,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   fixedLayout: boolean = false;
   private initialVisibleColumns: boolean = false;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _spacing: PoTableColumnSpacing;
+  private _initialSpacing?: string = undefined;
   private _filteredColumns: Array<string>;
   private _actions?: Array<PoTableAction> = [];
   private _columns: Array<PoTableColumn> = [];
@@ -545,12 +548,13 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-components-size')
-  @Input('p-components-size')
   set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -934,14 +938,13 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    *
    * @default `medium`
    */
-  @Input('p-spacing') set spacing(value: string) {
-    if (Object.values(PoTableColumnSpacing).includes(value as PoTableColumnSpacing)) {
-      this._spacing = value as PoTableColumnSpacing;
-    } else {
-      this._spacing = this.getDefaultSpacing();
-    }
+  set spacing(value: string) {
+    this._initialSpacing = value;
+    this.applySpacingBasedOnA11y();
   }
 
+  @Input('p-spacing')
+  @HostBinding('attr.p-spacing')
   get spacing() {
     return this._spacing ?? this.getDefaultSpacing();
   }
@@ -1065,6 +1068,12 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       this.changeHeaderWidth();
     }
     this.changeSizeLoading();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+    this.applySpacingBasedOnA11y();
   }
 
   selectAllRows() {
@@ -1398,6 +1407,20 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       }
       return obj;
     });
+  }
+  
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
+    this.calculateHeightTableContainer(this.height);
+  }
+
+  private applySpacingBasedOnA11y(): void {
+    if (Object.values(PoTableColumnSpacing).includes(this._initialSpacing as PoTableColumnSpacing)) {
+      this._spacing = this._initialSpacing as PoTableColumnSpacing;
+    } else {
+      this._spacing = this.getDefaultSpacing();
+    }
   }
 
   protected abstract calculateHeightTableContainer(height);

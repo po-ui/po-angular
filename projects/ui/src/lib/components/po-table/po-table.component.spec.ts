@@ -627,7 +627,8 @@ describe('PoTableComponent:', () => {
       heightTableContainer: 0,
       setTableOpacity: () => {},
       changeDetector: {
-        detectChanges: () => {}
+        detectChanges: () => {},
+        markForCheck: () => {}
       }
     };
 
@@ -1319,17 +1320,18 @@ describe('PoTableComponent:', () => {
         heightTableContainer: 400,
         setTableOpacity: () => {},
         changeDetector: {
-          detectChanges: () => {}
+          detectChanges: () => {},
+          markForCheck: () => {}
         },
         getHeightTableFooter: () => {},
         getHeightTableHeader: () => {}
       };
 
-      spyOn(fakeThis.changeDetector, 'detectChanges');
+      spyOn(fakeThis.changeDetector, 'markForCheck');
 
       component['calculateHeightTableContainer'].call(fakeThis, 400);
 
-      expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
+      expect(fakeThis.changeDetector.markForCheck).toHaveBeenCalled();
     });
 
     describe('calculateHeightTableContainer - itemSize: ', () => {

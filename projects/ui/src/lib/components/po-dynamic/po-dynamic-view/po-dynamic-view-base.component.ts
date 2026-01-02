@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
-import { Directive, HostBinding, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
 import { convertToBoolean, getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../utils/util';
@@ -60,6 +60,7 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
 
   service: any;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _fields: Array<PoDynamicViewField> = [];
   private _showAllValue: boolean = false;
   private _value = {};
@@ -76,12 +77,13 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-components-size')
-  @Input('p-components-size')
   set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -183,6 +185,11 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     protected multiselectFilterService: PoMultiselectFilterService
   ) {
     super();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   protected getFieldOrderRetroactive(position: number, index: number = 1): number {
@@ -454,5 +461,10 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
       }
     }
     return formattedField;
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 }
