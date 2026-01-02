@@ -1,4 +1,14 @@
-import { Directive, EventEmitter, input, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  inject,
+  input,
+  Input,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import {
@@ -222,6 +232,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   mdColumns: number = poRadioGroupColumnsDefaultLength;
   value: any;
 
+  protected cd = inject(ChangeDetectorRef);
   protected onTouched: any = null;
 
   private _columns: number = poRadioGroupColumnsDefaultLength;
@@ -229,6 +240,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   private _options: Array<PoRadioGroupOption>;
   private _required?: boolean = false;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private onChangePropagate: any = null;
   private validatorChange;
 
@@ -331,12 +343,20 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    * @default `medium`
    *
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoRadioSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoRadioSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   // Função que controla quando deve ser emitido onChange e atualiza o Model
@@ -407,6 +427,11 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     if (this.validatorChange) {
       this.validatorChange();
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoRadioSize);
+    this._size = size;
   }
 
   // Deve retornar o valor elemento que contém o valor passado por parâmetro

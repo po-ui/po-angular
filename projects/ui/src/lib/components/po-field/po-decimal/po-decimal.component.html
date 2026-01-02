@@ -31,6 +31,7 @@
       [attr.max]="max"
       [attr.min]="min"
       [attr.name]="name"
+      [attr.p-size]="size"
       [autocomplete]="autocomplete"
       [ngClass]="{
         'po-input-icon-left': icon && size !== 'small',
@@ -38,7 +39,6 @@
         'po-input-icon-right': (clean || loading) && size !== 'small',
         'po-input-icon-right-aa': (clean || loading) && size === 'small'
       }"
-      [class.po-input-aa]="size === 'small'"
       [disabled]="isDisabled"
       [id]="id"
       [placeholder]="isDisabled ? '' : placeholder"

@@ -80,8 +80,8 @@
                 <input
                   #filterInput
                   class="po-input po-input-icon-right"
-                  [class.po-input-aa]="componentsSize === 'small'"
                   [class.po-input-icon-right-aa]="componentsSize === 'small'"
+                  [attr.p-size]="componentsSize"
                   name="model"
                   type="text"
                   [placeholder]="filter.placeholder || ''"

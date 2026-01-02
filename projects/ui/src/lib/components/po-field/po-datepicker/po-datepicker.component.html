@@ -23,12 +23,11 @@
           #inp
           class="po-input po-datepicker"
           [class.po-input-icon-right]="clean && inp.value"
-          [class.po-input-icon-right-aa]="clean && inp.value && size === 'small'"
-          [class.po-input-aa]="size === 'small'"
           type="text"
           [attr.data-focused-element]="!disabled"
           [attr.data-inactive-component]="disabled || readonly"
           [attr.name]="name"
+          [attr.p-size]="size"
           [autocomplete]="autocomplete"
           [disabled]="disabled"
           [id]="id"
@@ -51,7 +50,6 @@
       <po-button
         #iconDatepicker
         class="po-datepicker-button"
-        [class.po-datepicker-button-aa]="size === 'small'"
         p-icon="ICON_CALENDAR"
         p-kind="tertiary"
         [p-disabled]="disabled || readonly"

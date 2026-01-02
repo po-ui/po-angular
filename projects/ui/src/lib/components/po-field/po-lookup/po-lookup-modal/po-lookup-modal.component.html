@@ -24,7 +24,7 @@
         <input
           #inpsearch
           class="po-input po-input-icon-right"
-          [class.po-input-aa]="size === 'small'"
+          [attr.p-size]="size"
           name="contentSearch"
           [(ngModel)]="searchValue"
           [placeholder]="literals.modalPlaceholder"

@@ -853,6 +853,14 @@ describe('PoMultiselectBaseComponent:', () => {
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        const spy = spyOn<any>(component, 'applySizeBasedOnA11y');
+
+        component['onThemeChange']();
+
+        expect(spy).toHaveBeenCalled();
+      });
     });
   });
 

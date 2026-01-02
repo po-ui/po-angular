@@ -29,12 +29,12 @@
             [attr.aria-label]="label"
             [attr.data-focused-element]="!isDisabled"
             [attr.data-inactive-component]="isDisabled"
+            [attr.p-size]="size"
             class="po-input-icon-right po-multiselect-input"
             [class.po-multiselect-input-auto]="autoHeight"
             [class.po-multiselect-input-static]="!autoHeight"
             [class.po-multiselect-input-disabled]="isDisabled"
             [class.po-multiselect-input-font]="!disabled && !visibleTags?.length"
-            [class.po-multiselect-input-aa]="size === 'small'"
             [class.po-multiselect-input-auto-dynamic-height]="isExpandedHeight"
             (keydown)="onKeyDown($event)"
             (click)="!isDisabled && toggleDropdownVisibility()"
@@ -43,7 +43,6 @@
             @if (!disabled && !loading && !visibleTags?.length) {
               <span
                 class="po-multiselect-input-placeholder"
-                [class.po-multiselect-input-placeholder-aa]="size === 'small'"
                 ria-hidden="true"
               >
                 {{ placeholder ? placeholder : literals.selectItem }}

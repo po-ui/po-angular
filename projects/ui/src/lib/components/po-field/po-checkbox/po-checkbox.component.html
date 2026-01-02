@@ -21,8 +21,6 @@
       #checkboxLabel
       role="checkbox"
       class="po-checkbox-outline"
-      [class.po-checkbox-outline-aa]="size === 'small'"
-      [class.po-checkbox-outline-large]="size === 'large'"
       [tabindex]="disabled || disabladTabindex ? -1 : 0"
       [attr.aria-checked]="checkboxValue"
       [attr.data-focused-element]="!disabled"
@@ -34,8 +32,6 @@
         aria-label=" "
         [id]="id"
         class="po-checkbox po-checkbox-phosphor"
-        [class.po-checkbox-aa]="size === 'small'"
-        [class.po-checkbox-large]="size === 'large'"
         [attr.aria-disabled]="disabled"
         [attr.required]="checkBoxRequired"
       >
@@ -45,7 +41,6 @@
         <po-label
           #labelEl
           class="po-checkbox-label"
-          [class.po-checkbox-label-aa]="size === 'small'"
           tabindex="-1"
           [p-disabled]="disabled"
           [p-for]="id"

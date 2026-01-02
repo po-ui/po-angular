@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -19,10 +19,12 @@ export abstract class PoCleanBaseComponent {
   @Input('p-default-value') defaultValue?: string = '';
 
   // Tamanho do componente.
-  @Input('p-size') set size(value: string) {
+  set size(value: string) {
     this._size = value;
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size;
   }

@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, input, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { PoValidators } from '../validators';
@@ -228,6 +228,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   private _options?: Array<PoCheckboxGroupOption>;
   private _required?: boolean = false;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * @optional
@@ -354,12 +355,20 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    * @default `medium`
    *
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   changeValue() {
@@ -486,5 +495,10 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
 
   private setCheckboxGroupOptionsView(optionsList: Array<PoCheckboxGroupOption>) {
     this.checkboxGroupOptionsView = optionsList.map(option => ({ ...option, id: PoUtils.uuid() }));
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }

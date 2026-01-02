@@ -1,4 +1,15 @@
-import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  input,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import {
@@ -282,6 +293,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _placeholder?: string = '';
   private previousValue: any;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private subscription: Subscription = new Subscription();
   private _date: Date;
 
@@ -372,10 +384,13 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -565,6 +580,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.subscription?.unsubscribe();
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   // Converte um objeto string em Date
   getDateFromString(dateString: string) {
     const day = parseInt(dateString.substring(this.format.indexOf('d'), this.format.indexOf('d') + 2), 10);
@@ -716,6 +736,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       ':' +
       ('00' + (offsetAbsolute % 60)).slice(-2);
     this.hour = 'T00:00:00' + timezone;
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   abstract writeValue(value: any): void;

@@ -3,6 +3,7 @@ import {
   Directive,
   EventEmitter,
   HostBinding,
+  HostListener,
   input,
   Input,
   OnInit,
@@ -460,6 +461,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _placeholder: string = '';
   private _required?: boolean = false;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private _sort?: boolean = false;
   private language: string;
   private _infiniteScrollDistance?: number = 100;
@@ -630,10 +632,13 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -863,6 +868,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     this.dynamicLabel = this.checkIfService('label');
 
     this.updateComboList();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
   }
 
   onInitService() {
@@ -1378,6 +1388,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     if (this.service && this.infiniteScroll) {
       this.defaultService.hasNext = true;
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   abstract setInputValue(value: any): void;

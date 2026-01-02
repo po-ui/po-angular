@@ -105,6 +105,12 @@ describe('PoCheckboxBaseComponent:', () => {
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
     });
   });
 

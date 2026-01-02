@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  HostListener,
   Inject,
   InjectOptions,
   Injector,
@@ -84,6 +85,7 @@ export abstract class PoLookupBaseComponent
   private _literals?: PoLookupLiterals;
   private readonly language: string;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private _spacing: PoTableColumnSpacing;
 
   @ViewChild('inp', { read: ElementRef, static: false }) inputEl: ElementRef;
@@ -413,10 +415,13 @@ export abstract class PoLookupBaseComponent
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -808,6 +813,11 @@ export abstract class PoLookupBaseComponent
     }
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   // Função implementada do ControlValueAccessor
   // Usada para interceptar os estados de habilitado via forms api
   setDisabledState(isDisabled: boolean) {
@@ -1019,6 +1029,11 @@ export abstract class PoLookupBaseComponent
     } else {
       this.isExpandedHeight = height > 44;
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   // Atribui um ou mais valores ao campo.
