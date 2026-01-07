@@ -1,5 +1,4 @@
 <div
-  (mouseenter)="setPopoverPositionByScreen()"
   class="po-helper-container po-helper-target"
   [attr.p-size]="this.size()"
   #target
@@ -23,6 +22,8 @@
     [p-title]="helper()?.title"
     [p-append-in-body]="appendBox()"
     p-custom-classes="po-helper-popover"
+    (p-close)="handleClose()"
+    (p-open)="handleOpen()"
   >
     <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
       {{ helper()?.content }}

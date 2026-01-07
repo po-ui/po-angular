@@ -121,6 +121,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.setElementsControlPosition();
       this.setPopoverPosition();
       this.setOpacity(1);
+      this.openPopover.emit();
       this.cd.detectChanges();
     });
     this.cd.detectChanges();
