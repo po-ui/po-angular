@@ -5,7 +5,7 @@ import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-co
 
 const PO_POPOVER_DEFAULT_POSITION = 'right';
 const PO_POPOVER_DEFAULT_TRIGGER = 'click';
-const PO_POPOVER_TRIGGERS = ['click', 'hover'];
+const PO_POPOVER_TRIGGERS = ['click', 'hover', 'function'];
 
 /**
  * @description
