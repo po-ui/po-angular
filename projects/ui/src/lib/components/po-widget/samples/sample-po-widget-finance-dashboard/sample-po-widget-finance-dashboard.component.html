@@ -19,14 +19,8 @@
       </div>
     </po-widget>
 
-    <po-widget
-      class="po-lg-3"
-      p-primary-label="Details"
-      p-title="Total savings"
-      [p-height]="190"
-      (p-primary-action)="openModal('savings')"
-    >
-      <div class="po-font-subtitle po-text-center">$5.000,00</div>
+    <po-widget class="po-lg-3" p-title="Total savings" [p-height]="190" (p-click)="openModal('account')">
+      <div class="po-font-subtitle po-text-center">$2.818,29</div>
       <div class="po-text-center">Last updated at 18:34</div>
     </po-widget>
 
@@ -39,7 +33,7 @@
       [p-height]="190"
       (p-primary-action)="openModal('account')"
     >
-      <div class="po-text-center" style="font-size: 2rem; margin-bottom: 0.5rem">$2.818,29</div>
+      <div class="po-text-center" style="font-size: 2rem; margin-bottom: 0.5rem">$5.000,00</div>
       <div class="po-text-center">Last updated at 08:20</div>
     </po-widget>
   </div>
@@ -72,10 +66,13 @@
 
     <po-widget
       class="po-lg-4"
+      p-primary-label="Details"
       p-tag="Revenue"
       p-tag-icon="an an-money"
       p-title="Highest revenue in the month considering Marketing and Sales"
       [p-height]="160"
+      [p-primary]="true"
+      (p-primary-action)="openModal('savings')"
     >
       <div class="po-font-subtitle po-text-center">$2.000,00</div>
       <div class="po-text-center">05/03/2018</div>

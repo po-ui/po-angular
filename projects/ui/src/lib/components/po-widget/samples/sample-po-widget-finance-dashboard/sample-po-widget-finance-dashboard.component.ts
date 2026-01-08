@@ -49,12 +49,12 @@ export class SamplePoWidgetFinanceDashboardComponent {
   openModal(type) {
     switch (type) {
       case 'savings':
-        this.titleDetailsModal = 'Total savings - Details';
+        this.titleDetailsModal = 'Revenue - Details';
         this.itemsDetails = this.itemsSavingsDetails;
         this.detailsModalElement.open();
         break;
       case 'account':
-        this.titleDetailsModal = 'Total checking account - Details';
+        this.titleDetailsModal = 'Total savings - Details';
         this.itemsDetails = this.itemsAccountDetails;
         this.detailsModalElement.open();
         break;
