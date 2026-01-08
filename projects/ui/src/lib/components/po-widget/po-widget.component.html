@@ -81,7 +81,7 @@
             [p-label]="primaryLabel"
             (p-click)="runPrimaryAction()"
             [p-danger]="dangerPrimaryAction"
-            [p-kind]="primary ? 'primary' : kindPrimaryAction || 'tertiary'"
+            [p-kind]="kindPrimaryAction || 'tertiary'"
             [p-disabled]="disabled"
             [p-size]="size"
           ></po-button>
@@ -95,7 +95,7 @@
             [p-label]="primaryLabel"
             (p-click)="runPrimaryAction()"
             [p-danger]="dangerPrimaryAction"
-            [p-kind]="primary ? 'primary' : kindPrimaryAction || 'tertiary'"
+            [p-kind]="kindPrimaryAction || 'tertiary'"
             [p-disabled]="disabled"
             [p-size]="size"
           ></po-button>
@@ -109,7 +109,7 @@
             [p-label]="secondaryLabel"
             (p-click)="runSecondaryAction()"
             [p-danger]="dangerSecondaryAction"
-            [p-kind]="primary ? 'primary' : kindSecondaryAction || 'tertiary'"
+            [p-kind]="kindSecondaryAction || 'tertiary'"
             [p-disabled]="disabled"
             [p-size]="size"
           ></po-button>
