@@ -717,10 +717,8 @@ export class PoThemeService {
   public resetBaseTheme() {
     const styleElement = this.document.head.querySelector('#baseStyle');
     if (styleElement) {
-      this.renderer.removeChild(this.document.head, styleElement);
+      styleElement.textContent = '';
     }
-
-    this.setDefaultBaseStyle();
   }
 
   private setDefaultBaseStyle() {

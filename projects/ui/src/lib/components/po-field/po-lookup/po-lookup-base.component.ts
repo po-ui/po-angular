@@ -3,6 +3,7 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Inject,
   InjectOptions,
   Injector,
@@ -728,7 +729,9 @@ export abstract class PoLookupBaseComponent
    * @default false
    * @optional
    */
-  @Input('p-disabled') set disabled(disabled: boolean) {
+  @HostBinding('attr.p-disabled')
+  @Input('p-disabled')
+  set disabled(disabled: boolean) {
     this._disabled = <any>disabled === '' ? true : convertToBoolean(disabled);
   }
 

@@ -53,7 +53,7 @@ import { PoTagType } from '../po-tag';
  * | `--background`                               | Cor de background                                                | `var(--color-neutral-light-00)`                                             |
  * | `--shadow`                                   | Contém o valor da sombra do elemento                             | `var(--shadow-md)`                                                          |
  * | **Hover**                                    |                                                                  |                                                                             |
- * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-brand-01-dark)`                                                |
+ * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-action-hover)`                                                |
  * | **Focused**                                  |                                                                  |                                                                             |
  * | `--color-focused`                            | Cor principal no estado de focus                                 | `var(--color-action-default)`                                               |
  * | `--outline-color-focused` &nbsp;             | Cor do outline do estado de focus                                | `var(--color-action-focus)`                                                 |

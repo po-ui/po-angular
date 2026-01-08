@@ -91,7 +91,7 @@ const providers = [
  * | **Icon**                               |                                                       |                                                  |
  * | `--color-icon`                         | Cor principal do icone pesquisar                      | `var(--color-action-default)`                    |
  * | **Hover**                              |                                                       |                                                  |
- * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                      |
+ * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-dark)`                             |
  * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                 |
  * | **Focused**                            |                                                       |                                                  |
  * | `--color-focused`                      | Cor principal no estado de focus                      | `var(--color-action-default)`                    |
