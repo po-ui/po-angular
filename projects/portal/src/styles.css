@@ -2,10 +2,6 @@
   --color-portal-highlight: var(--color-action-default);
   --color-portal-background-color-highlight: #e6f1f5;
   --color-portal-titles: var(--color-neutral-dark-70);
-
-  --font-family-po-ui: Roboto;
-  --font-family-po-ui-light: Roboto-Condensed-Light;
-  --font-family-po-ui-bold: Roboto-Bold;
 }
 
 body {
@@ -38,7 +34,6 @@ html.potheme-light-AAA #logo-totvs {
 .docs-api-property-type {
   border-radius: 3px;
   color: var(--color-neutral-light-00);
-  font-family: Roboto, sans-serif;
   font-size: 12px;
   line-height: 1.4;
   padding: 3px;
@@ -94,21 +89,8 @@ pre {
 }
 
 .docs-api h4 {
-  font-family: Roboto-Bold;
   font-size: 16px;
   line-height: 24px;
-}
-
-.app-portal strong,
-.app-portal b,
-.docs-api-properties-table strong,
-.docs-api-properties-th,
-.docs-api-properties-row strong,
-.docs-api-properties-row strong,
-.docs-api-input-alias,
-.docs-api-output-alias,
-.docs-api b {
-  font-family: Roboto-Bold;
 }
 
 .docs-api-properties-row ul {
@@ -161,7 +143,6 @@ pre code {
 
 .app-home-title {
   color: var(--color-portal-titles);
-  font-family: Roboto-Bold;
 }
 
 .app-home-title .po-row {
@@ -644,7 +625,6 @@ blockquote {
 .guides-grid-system-containers div {
   border-right: 2px solid var(--color-neutral-light-00);
   color: white;
-  font-family: Roboto-Bold;
   height: 30px;
   margin-bottom: 10px;
   padding: 6px;
@@ -666,7 +646,6 @@ blockquote {
 .guides-spacing div {
   background: rgba(12, 154, 190, 0.5);
   color: var(--color-neutral-light-00);
-  font-family: Roboto-Bold;
   height: 30px;
   padding: 5px;
 }
