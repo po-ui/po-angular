@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.39.0](https://github.com/po-ui/po-angular/compare/v19.38.0...v19.39.0) (2026-01-12)
+
+
+### Features
+
+* **accordion:** adiciona AA no accordion ([f2b9666](https://github.com/po-ui/po-angular/commit/f2b966670ccf64d74e922be8941fe92b416f9cff))
+* **search:** implementa nova propriedade p-no-autocomplete ([e9ca238](https://github.com/po-ui/po-angular/commit/e9ca238cb3cbe87bca6da491a1f4870ae89b504a))
+
+
+### Bug Fixes
+
+* **menu-item:** remove aria-hidden invalido ([e055206](https://github.com/po-ui/po-angular/commit/e055206aa9cd8d7b245aca3b6fedbbd39150142d))
+
 ## [19.38.0](https://github.com/po-ui/po-angular/compare/v19.37.0...v19.38.0) (2025-12-18)
 
 
