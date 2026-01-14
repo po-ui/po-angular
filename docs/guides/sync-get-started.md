@@ -1,7 +1,7 @@
 [comment]: # (@label Começando com o PO Sync)
 [comment]: # (@link guides/sync-get-started)
 
-Esse guia servirá para criar e configurar uma aplicação em [Ionic 7](https://ionicframework.com/docs) com o uso do PO Sync.
+Esse guia servirá para criar e configurar uma aplicação em [Ionic](https://ionicframework.com/docs) com o uso do PO Sync.
 
 Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, consulte a documentação de
 [Fundamentos do PO Sync](/guides/sync-fundamentals) e a documentação de referência de [API do PO Sync](/documentation/po-sync).
@@ -23,19 +23,17 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 
 ### Passo 1 - Criando o aplicativo
 
+> Atualmente, a Ionic CLI cria novos projetos utilizando Angular 20 como versão base, independentemente da versão final desejada do Angular.
+
 Para a aplicação de exemplo usaremos o template *blank* do Ionic. Para isso, execute o seguinte comando:
 
 ```shell
-ionic start po-sync-getting-started blank --no-deps
+ionic start po-sync-getting-started blank
 ```
-
-> `--no-deps`: pula a instalação das dependências do `package.json`.
 
 Caso surja a questão relacionada ao framework desejado, opte por `Angular`.
 
 ### Passo 2 - Instalando as dependências
-
-> É importante verificar se no passo anterior foram criados o arquivo `package-lock.json` e a pasta `node_modules`, caso tenham sido criados vai ser necessário apagar ambos antes de prosseguir.
 
 É necessário realizar alguns ajustes de compatibilidade do PO para o projeto criado.
 
@@ -44,39 +42,46 @@ Navegue até a pasta do aplicativo:
 cd po-sync-getting-started
 ```
 
-Antes de executar a instalação, é necessário que todas as dependências do projeto estejam declaradas de acordo com a versão do PO no arquivo `package.json`, localizado na raiz da aplicação:
+Antes de instalar o po-sync, é necessário atualizar o projeto para o Angular 21, garantindo compatibilidade com o PO UI.
+
+```shell
+ng update @angular/core@21 @angular/cli@21
+```
+
+> Esse passo é necessário porque o projeto foi inicialmente criado com Angular 20, e o upgrade garante compatibilidade com as versões utilizadas pelo PO UI.
+
+Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser conferidas e se necessário, ajustadas no seu projeto.
 
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~21.0.3",
-    "@angular/common": "~21.0.3",
-    "@angular/compiler": "~21.0.3",
-    "@angular/core": "~21.0.3",
-    "@angular/forms": "~21.0.3",
-    "@angular/platform-browser": "~21.0.3",
-    "@angular/platform-browser-dynamic": "~21.0.3",
-    "@angular/router": "~21.0.3",
-    "@capacitor/app": "7.0.2",
-    "@capacitor/core": "7.4.2",
-    "@capacitor/haptics": "7.0.2",
-    "@capacitor/keyboard": "7.0.2",
-    "@capacitor/splash-screen": "^7.0.2",
-    "@capacitor/status-bar": "7.0.2",
-    "@ionic/angular": "~8.0.0",
+    "@angular/animations": "~21.0.8",
+    "@angular/common": "~21.0.8",
+    "@angular/compiler": "~21.0.8",
+    "@angular/core": "~21.0.8",
+    "@angular/forms": "~21.0.8",
+    "@angular/platform-browser": "~21.0.8",
+    "@angular/platform-browser-dynamic": "~21.0.8",
+    "@angular/router": "~21.0.8",
+    "@capacitor/app": "8.0.0",
+    "@capacitor/core": "8.0.1",
+    "@capacitor/haptics": "8.0.0",
+    "@capacitor/keyboard": "8.0.0",
+    "@capacitor/splash-screen": "8.0.0",
+    "@capacitor/status-bar": "8.0.0",
+    "@ionic/angular": "~8.7.16",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~21.0.3",
     "@angular-devkit/schematics": "~21.0.0",
     ...
-    "@angular/cli": "~21.0.3",
-    "@angular/compiler-cli": "~21.0.0",
-    "@angular/language-service": "~21.0.0",
-    "@capacitor/cli": "7.4.2",
+    "@angular/cli": "~21.0.5",
+    "@angular/compiler-cli": "~21.0.8",
+    "@angular/language-service": "~21.0.8",
+    "@capacitor/cli": "8.0.1",
     "@ionic/angular-toolkit": "^12.0.0",
     ...
     "typescript": "~5.9.3"
