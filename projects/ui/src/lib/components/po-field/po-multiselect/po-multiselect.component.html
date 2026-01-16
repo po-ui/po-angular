@@ -5,7 +5,7 @@
   <div class="po-multiselect-flex-item">
     <div #outerContainer>
       <po-field-container
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-label]="label"
         [p-optional]="optional"
         [p-required]="required"
@@ -24,23 +24,23 @@
         >
           <div
             #inputElement
-            [tabindex]="disabled ? -1 : 0"
-            [attr.disabled]="disabled"
+            [tabindex]="isDisabled ? -1 : 0"
+            [attr.disabled]="isDisabled"
             [attr.aria-label]="label"
-            [attr.data-focused-element]="!disabled"
-            [attr.data-inactive-component]="disabled"
+            [attr.data-focused-element]="!isDisabled"
+            [attr.data-inactive-component]="isDisabled"
             class="po-input-icon-right po-multiselect-input"
             [class.po-multiselect-input-auto]="autoHeight"
             [class.po-multiselect-input-static]="!autoHeight"
-            [class.po-multiselect-input-disabled]="disabled"
+            [class.po-multiselect-input-disabled]="isDisabled"
             [class.po-multiselect-input-font]="!disabled && !visibleTags?.length"
             [class.po-multiselect-input-aa]="size === 'small'"
             [class.po-multiselect-input-auto-dynamic-height]="isExpandedHeight"
             (keydown)="onKeyDown($event)"
-            (click)="toggleDropdownVisibility()"
+            (click)="!isDisabled && toggleDropdownVisibility()"
             (blur)="onBlur($event)"
           >
-            @if (!disabled && !visibleTags?.length) {
+            @if (!disabled && !loading && !visibleTags?.length) {
               <span
                 class="po-multiselect-input-placeholder"
                 [class.po-multiselect-input-placeholder-aa]="size === 'small'"
@@ -56,21 +56,25 @@
                 [p-literals]="i + 1 === visibleTags.length && hasMoreTag ? literalsTag : undefined"
                 [p-removable]="true"
                 [class.po-clickable]="tag[fieldValue] === '' && !disabled"
-                [p-disabled]="disabled"
+                [p-disabled]="isDisabled"
                 (p-close)="closeTag(tag[fieldValue], $event)"
                 [p-append-in-body]="appendBox"
               ></po-tag>
             }
 
             <div class="po-field-icon-container-right">
-              <po-icon
-                p-icon="{{ dropdownIcon }}"
-                #iconElement
-                class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-                [class.po-field-icon-aa]="size === 'small'"
-                [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
-              >
-              </po-icon>
+              @if (loading) {
+                <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+              } @else {
+                <po-icon
+                  p-icon="{{ dropdownIcon }}"
+                  #iconElement
+                  class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+                  [class.po-field-icon-aa]="size === 'small'"
+                  [ngClass]="disabled ? 'po-field-icon-disabled' : ''"
+                >
+                </po-icon>
+              }
             </div>
           </div>
         </div>
@@ -91,7 +95,7 @@
         <po-field-container-bottom
           [p-append-in-body]="appendBox"
           [p-help]="help"
-          [p-disabled]="disabled"
+          [p-disabled]="isDisabled"
           [p-error-pattern]="getErrorPattern()"
           [p-error-limit]="errorLimit"
           [p-size]="size"
@@ -130,7 +134,7 @@
       class="po-field-helper-button"
       [p-size]="size"
       [p-helper]="poHelper.helperSettings"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-append-in-body]="appendBox"
     >
     </po-helper>

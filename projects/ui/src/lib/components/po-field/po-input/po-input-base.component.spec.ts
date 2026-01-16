@@ -649,6 +649,47 @@ describe('PoInputBase:', async () => {
       });
     });
 
+    describe('isDisabled:', () => {
+      it('should return false when disabled and loading are false', () => {
+        component.disabled = false;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeFalse();
+      });
+
+      it('should return true when disabled is true and loading is false', () => {
+        component.disabled = true;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when disabled is false and loading is true', () => {
+        component.disabled = false;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when disabled and loading are true', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should keep disabled true after loading toggles from true to false', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+    });
+
     describe('showAdditionalHelp:', () => {
       beforeEach(() => {
         (component as any).label = undefined;

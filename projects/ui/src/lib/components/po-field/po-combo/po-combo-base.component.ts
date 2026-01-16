@@ -3,7 +3,14 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, validValue } from '../../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSizeFn,
+  isTypeof,
+  mapInputSizeToLoadingIcon,
+  validateSizeFn,
+  validValue
+} from '../../../utils/util';
 import { requiredFailed } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -419,7 +426,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   visibleOptions: Array<any> = [];
   page: number = 1;
   pageSize: number = 10;
-  loading: boolean = false;
   displayAdditionalHelp: boolean = false;
   dynamicLabel: string = 'label';
   dynamicValue: string = 'value';
@@ -440,6 +446,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _filterMode?: PoComboFilterMode = PoComboFilterMode.startsWith;
   private _filterParams?: any;
   private _literals?: PoComboLiterals;
+  private _loading: boolean = false;
   private _options: Array<PoComboOption | PoComboOptionGroup | any> = [];
   private _placeholder: string = '';
   private _required?: boolean = false;
@@ -654,6 +661,27 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   get disabled() {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.changeDetector?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this._disabled || this._loading;
   }
 
   /** Indica que a lista definida na propriedade p-options será ordenada pela descrição. */
@@ -915,6 +943,11 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
 
     return value === inputValue;
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   searchForLabel(search: string, options: Array<any>, filterMode: PoComboFilterMode) {

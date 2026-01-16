@@ -4,7 +4,7 @@
   <div class="po-combo-flex-item">
     <div #outerContainer>
       <po-field-container
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-id]="id"
         [p-label]="label"
         [p-optional]="optional"
@@ -27,7 +27,7 @@
               <div class="po-field-icon-container-left">
                 <po-icon
                   class="po-field-icon po-icon-input"
-                  [class.po-field-icon-disabled]="disabled"
+                  [class.po-field-icon-disabled]="isDisabled"
                   [class.po-field-icon-aa]="size === 'small'"
                   [p-icon]="icon"
                 ></po-icon>
@@ -51,16 +51,16 @@
               [class.po-input-icon-left-aa]="icon && size === 'small'"
               autocomplete="off"
               type="text"
-              [attr.data-focused-element]="!disabled"
-              [attr.data-inactive-component]="disabled"
+              [attr.data-focused-element]="!isDisabled"
+              [attr.data-inactive-component]="isDisabled"
               [attr.name]="name"
-              [disabled]="disabled"
+              [disabled]="isDisabled"
               [id]="id"
-              [placeholder]="disabled ? '' : placeholder"
+              [placeholder]="isDisabled ? '' : placeholder"
               [required]="required"
               [attr.data-append-in-body]="appendBox"
               [attr.p-size]="size"
-              (click)="toggleComboVisibility()"
+              (click)="!isDisabled && toggleComboVisibility()"
               (keyup)="onKeyUp($event)"
               (blur)="onBlur($event)"
               (keyup)="searchOnEnterOrArrow($event, $event.target.value)"
@@ -68,36 +68,39 @@
             />
 
             <div class="po-field-icon-container-right">
-              @if (isCleanVisible()) {
-                <po-clean
-                  tabindex="0"
-                  role="button"
-                  [attr.aria-label]="literals.clean"
-                  class="po-combo-clean po-icon-input"
-                  [class.po-combo-clean-aa]="size === 'small'"
-                  [p-element-ref]="inputEl"
-                  [p-size]="size"
-                  (p-change-event)="clear($event)"
-                  (click)="clear(null); $event.preventDefault()"
-                  (keydown.enter)="clearAndFocus(); $event.preventDefault()"
-                  (keydown.tab)="handleCleanKeyboardTab($event)"
-                >
-                </po-clean>
+              @if (loading) {
+                <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+              } @else {
+                @if (!loading && isCleanVisible()) {
+                  <po-clean
+                    tabindex="0"
+                    role="button"
+                    [attr.aria-label]="literals.clean"
+                    class="po-combo-clean po-icon-input"
+                    [class.po-combo-clean-aa]="size === 'small'"
+                    [p-element-ref]="inputEl"
+                    [p-size]="size"
+                    (p-change-event)="clear($event)"
+                    (click)="clear(null); $event.preventDefault()"
+                    (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+                    (keydown.tab)="handleCleanKeyboardTab($event)"
+                  >
+                  </po-clean>
+                }
               }
-
               <div
                 #iconArrow
                 class="po-combo-arrow po-field-icon"
-                [class.po-field-icon-disabled]="disabled"
-                [class.po-field-icon-disabled-aa]="disabled && size === 'small'"
-                (click)="toggleComboVisibility(true)"
+                [class.po-field-icon-disabled]="isDisabled"
+                [class.po-field-icon-disabled-aa]="isDisabled && size === 'small'"
+                (click)="!isDisabled && toggleComboVisibility(true)"
               >
                 <po-icon
                   [p-icon]="comboOpen ? 'ICON_ARROW_UP po-icon-input' : 'ICON_ARROW_DOWN po-icon-input'"
-                  [class.po-field-icon]="!disabled"
+                  [class.po-field-icon]="!isDisabled"
                   [class.po-field-icon-aa]="size === 'small'"
-                  [class.po-combo-default-border]="!disabled && inp.value"
-                  [class.po-combo-background-arrow-up]="!disabled && comboOpen"
+                  [class.po-combo-default-border]="!isDisabled && inp.value"
+                  [class.po-combo-background-arrow-up]="!isDisabled && comboOpen"
                 ></po-icon>
               </div>
             </div>
@@ -120,7 +123,7 @@
         <po-field-container-bottom
           [p-append-in-body]="appendBox"
           [p-help]="help"
-          [p-disabled]="disabled"
+          [p-disabled]="isDisabled"
           [p-error-pattern]="getErrorPattern()"
           [p-error-limit]="errorLimit"
           [p-size]="size"
@@ -166,7 +169,7 @@
       class="po-field-helper-button"
       [p-size]="size"
       [p-helper]="poHelper.helperSettings"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-append-in-body]="appendBox"
     >
     </po-helper>
