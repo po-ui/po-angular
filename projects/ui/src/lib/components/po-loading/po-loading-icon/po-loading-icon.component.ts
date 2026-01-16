@@ -1,7 +1,20 @@
-import { Component, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentRef,
+  Inject,
+  Input,
+  OnDestroy,
+  Optional,
+  Type,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 import { PoLoadingIconSize } from '../enums/po-loading-icon-size-enum';
+import { LOADING_ICON_COMPONENT } from './po-loading-icon-component-injection-token';
+import { LoadingIconComponent } from '../interfaces/po-loading-icon-component';
 
 /**
  * @docsPrivate
@@ -16,10 +29,13 @@ import { PoLoadingIconSize } from '../enums/po-loading-icon-size-enum';
   templateUrl: 'po-loading-icon.component.html',
   standalone: false
 })
-export class PoLoadingIconComponent {
+export class PoLoadingIconComponent implements AfterViewInit, OnDestroy {
   private _neutralColor: boolean;
   private _size: string = 'md';
+  private createdRef: ComponentRef<LoadingIconComponent>;
   id = uuid();
+
+  @ViewChild('loadingContainer', { read: ViewContainerRef, static: false }) loadingContainer: ViewContainerRef;
 
   /**
    * @optional
@@ -55,9 +71,30 @@ export class PoLoadingIconComponent {
    */
   @Input('p-size') set size(value: string) {
     this._size = PoLoadingIconSize[value] ? PoLoadingIconSize[value] : PoLoadingIconSize.md;
+    if (this.createdRef) {
+      this.createdRef.instance.size = this.size;
+    }
   }
 
   get size(): string {
     return this._size;
+  }
+
+  @Input('p-in-overlay') inOverlay: boolean = false;
+
+  constructor(@Optional() @Inject(LOADING_ICON_COMPONENT) public loadingIconComponent?: Type<LoadingIconComponent>) {}
+
+  ngOnDestroy() {
+    if (this.createdRef) {
+      this.createdRef.destroy();
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.loadingIconComponent && this.loadingContainer && this.inOverlay) {
+      this.loadingContainer.clear();
+      this.createdRef = this.loadingContainer.createComponent(this.loadingIconComponent);
+      this.createdRef.instance.size = this.size;
+    }
   }
 }
