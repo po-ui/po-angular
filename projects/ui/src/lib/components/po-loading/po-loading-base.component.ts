@@ -71,6 +71,8 @@ export class PoLoadingBaseComponent {
     return this._size;
   }
 
+  @Input('p-in-overlay') inOverlay: boolean = false;
+
   constructor(protected languageService: PoLanguageService) {
     this.text = this.getTextDefault();
   }
