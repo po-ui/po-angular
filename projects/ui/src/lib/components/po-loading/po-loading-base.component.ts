@@ -52,24 +52,21 @@ export class PoLoadingBaseComponent {
    *  - `md`: 32px
    *  - `lg`: 80px
    *
-   * > Em nível de acessibilidade **AA**, caso o valor de `p-size` não seja definido, o valor padrão será `sm`
-   * > quando o valor padrão dos componentes for configurado como `small` no
-   * > [serviço de tema](https://po-ui.io/documentation/po-theme).
-   *
    * @default `lg`
    */
   @Input('p-size') set size(value: string) {
     if (value && PoLoadingIconSize[value]) {
       this._size = PoLoadingIconSize[value];
     } else {
-      const a11yPref = getDefaultSizeFn(PoFieldSize);
-      this._size = a11yPref === PoFieldSize.Small ? PoLoadingIconSize.sm : PoLoadingIconSize.lg;
+      this._size = PoLoadingIconSize.lg;
     }
   }
 
   get size(): string {
     return this._size;
   }
+
+  @Input('p-in-overlay') inOverlay: boolean = false;
 
   constructor(protected languageService: PoLanguageService) {
     this.text = this.getTextDefault();
