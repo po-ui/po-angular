@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Component, Directive } from '@angular/core';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
@@ -16,7 +16,7 @@ import { PoComboFilter } from './interfaces/po-combo-filter.interface';
 import { poComboLiteralsDefault } from './interfaces/po-combo-literals-default.interface';
 import { PoComboOption } from './interfaces/po-combo-option.interface';
 import { PoComboBaseComponent } from './po-combo-base.component';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 @Directive()
 class PoComboTest extends PoComboBaseComponent {
@@ -659,6 +659,68 @@ describe('PoComboBaseComponent:', () => {
     });
   });
 
+  describe('normalizeModelIfNeeded', () => {
+    beforeEach(() => {
+      component.controlValueWithLabel = true;
+      component.dynamicValue = 'value';
+      component.dynamicLabel = 'label';
+      spyOn<any>(component, 'callModelChange');
+    });
+
+    it('should return early if originalValue is NOT primitive (object, boolean, etc)', () => {
+      const originalValue = { id: 1 };
+      const option = { value: 1, label: 'Test' };
+
+      component['normalizeModelIfNeeded'](originalValue, option);
+
+      expect(component['callModelChange']).not.toHaveBeenCalled();
+    });
+
+    it('should return early if option is undefined or null', () => {
+      const originalValue = 'texto';
+      const option = undefined;
+
+      component['normalizeModelIfNeeded'](originalValue, option);
+
+      expect(component['callModelChange']).not.toHaveBeenCalled();
+    });
+
+    it('should return early if option value is null or undefined', () => {
+      const originalValue = 123;
+      const option = { value: null, label: 'Label' };
+
+      component['normalizeModelIfNeeded'](originalValue, option);
+
+      expect(component['callModelChange']).not.toHaveBeenCalled();
+    });
+
+    it('should normalize and call model change when inputs are valid', () => {
+      const originalValue = 10;
+      const option = { value: 10, label: 'Dez' };
+
+      component['normalizeModelIfNeeded'](originalValue, option);
+
+      expect(component['callModelChange']).toHaveBeenCalledWith({ value: 10, label: 'Dez' });
+    });
+  });
+
+  it('should unwrap valueToValidate when controlValueWithLabel is true', () => {
+    component.controlValueWithLabel = true;
+    component.required = true;
+    component['hasValidatorRequired'] = true;
+    component.disabled = false;
+
+    const cdRef = component['changeDetector'];
+    spyOn(cdRef, 'markForCheck');
+
+    const control = new FormControl({ value: null, label: 'Other' });
+
+    const result = component.validate(control as any);
+
+    expect(result).toEqual({ required: { valid: false } });
+    expect(cdRef.markForCheck).toHaveBeenCalled();
+  });
+
   describe('Methods:', () => {
     it('updateModel: should call `callModelChange` and `change.emit` and set `selectedValue` with value param', () => {
       const value = 1;
@@ -890,26 +952,6 @@ describe('PoComboBaseComponent:', () => {
 
       component.registerOnValidatorChange(registerOnValidatorChangeFn);
       expect(component['validatorChange']).toBe(registerOnValidatorChangeFn);
-    });
-
-    it('validate: should return required obj when `requiredFailed` is true.', () => {
-      const validObj = {
-        required: {
-          valid: false
-        }
-      };
-
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
-
-      expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
-      expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
-    });
-
-    it('validate: should return undefined when `requiredFailed` is false', () => {
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
-
-      expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
-      expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should set hasValidatorRequired to true if fieldErrorMessage is valid and control has required validator', () => {

@@ -4,7 +4,7 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean, getDefaultSizeFn, isTypeof, validateSizeFn, validValue } from '../../../utils/util';
-import { PoValidators } from '../validators';
+import { PoValidators } from './../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoComboFilterMode } from './enums/po-combo-filter-mode.enum';
@@ -895,7 +895,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
     if (isUpdateModel) {
       const optionValue = option?.[this.dynamicValue] !== undefined ? option[this.dynamicValue] : undefined;
-
       this.updateModel(optionValue);
     }
   }
@@ -1028,20 +1027,20 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   // Recebe as alterações do model
   writeValue(value: any) {
+    const originalValue = value;
     value = this.getValueWrite(value);
     this.fromWriteValue = true;
 
     if (validValue(value) && !this.service && this.comboOptionsList && this.comboOptionsList.length) {
       const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
-
+      this.normalizeModelIfNeeded(originalValue, option);
       this.comboOptionsList = this.comboOptionsList.map((option: any) => {
         if (this.isEqual(option[this.dynamicValue], value)) {
           return { ...option, selected: true };
         }
         return option;
       });
-
       this.updateComboList();
       this.removeInitialFilter = false;
       return;
@@ -1081,14 +1080,18 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       this.hasValidatorRequired = true;
     }
 
-    if (PoValidators.requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
-      this.changeDetector.markForCheck();
-      return {
-        required: {
-          valid: false
-        }
-      };
+    let valueToValidate = abstractControl.value;
+
+    if (this.controlValueWithLabel && valueToValidate && typeof valueToValidate === 'object') {
+      valueToValidate = valueToValidate.value;
     }
+
+    if (PoValidators.requiredFailed(this.required || this.hasValidatorRequired, this.disabled, valueToValidate)) {
+      this.changeDetector.markForCheck();
+      return { required: { valid: false } };
+    }
+
+    return {};
   }
 
   clear(value) {
@@ -1164,22 +1167,36 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private getValueUpdate(data: any, selectedOption: any) {
     const { [this.dynamicValue]: value, [this.dynamicLabel]: label } = selectedOption || {};
 
-    if (this.controlValueWithLabel && value) {
-      return {
-        value,
-        label
-      };
+    if (this.controlValueWithLabel && value !== null && value !== undefined) {
+      return { value, label };
     }
-
     return data;
   }
 
   private getValueWrite(data: any) {
-    if (this.controlValueWithLabel && data?.value) {
+    if (this.controlValueWithLabel && data?.value !== null && data?.value !== undefined) {
       return data?.value;
     }
-
     return data;
+  }
+
+  private normalizeModelIfNeeded(originalValue: any, option: any): void {
+    if (!this.controlValueWithLabel) {
+      return;
+    }
+    const isPrimitive = typeof originalValue === 'number' || typeof originalValue === 'string';
+    if (!isPrimitive || !option) {
+      return;
+    }
+
+    const value = option[this.dynamicValue];
+    const label = option[this.dynamicLabel];
+
+    if (value === null) {
+      return;
+    }
+
+    this.callModelChange({ value, label });
   }
 
   private hasDuplicatedOption(options: Array<any>, currentOption: string, accumulatedGroupOptions?: Array<any>) {

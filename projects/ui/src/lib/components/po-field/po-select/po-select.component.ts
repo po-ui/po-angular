@@ -558,8 +558,12 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
   }
 
   private getValueWrite(data: any) {
-    if (this.controlValueWithLabel && data?.value) {
-      return data?.value;
+    if (!this.controlValueWithLabel || data == null) {
+      return data;
+    }
+
+    if (data?.value !== undefined) {
+      return data.value;
     }
 
     return data;
