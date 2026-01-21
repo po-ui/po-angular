@@ -4,6 +4,7 @@
   <div class="po-loading-icon-container po-loading-svg-{{ size }}">
     <svg
       [ngClass]="neutralColor ? 'po-loading-icon-neutral' : 'po-loading-icon'"
+      class="po-loading-icon-animated"
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -23,15 +24,6 @@
         <path [attr.stroke]="'url(#' + 'first' + id + ')'" d="M 196 100 A 96 96 0 0 1 4 100" />
         <path stroke="currentColor" d="M 4 100 A 96 96 0 0 1 4 98" />
       </g>
-
-      <animateTransform
-        from="0 0 0"
-        to="360 0 0"
-        attributeName="transform"
-        type="rotate"
-        repeatCount="indefinite"
-        dur="1200ms"
-      />
     </svg>
   </div>
 }
