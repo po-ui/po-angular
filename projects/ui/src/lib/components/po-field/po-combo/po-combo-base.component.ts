@@ -1077,11 +1077,16 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
+    let { value } = abstractControl;
+    if (this.controlValueWithLabel && value?.value) {
+      value = value.value;
+    }
+
     if (!this.hasValidatorRequired && this.fieldErrorMessage && abstractControl.hasValidator(Validators.required)) {
       this.hasValidatorRequired = true;
     }
 
-    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, abstractControl.value)) {
+    if (requiredFailed(this.required || this.hasValidatorRequired, this.disabled, value)) {
       this.changeDetector.markForCheck();
       return {
         required: {
