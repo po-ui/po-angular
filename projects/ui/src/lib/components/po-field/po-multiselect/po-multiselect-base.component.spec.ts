@@ -537,6 +537,32 @@ describe('PoMultiselectBaseComponent:', () => {
       expect(component.updateSelectedOptions).toHaveBeenCalledWith([]);
     });
 
+    it('should return data.value when data has value property', () => {
+      component.controlValueWithLabel = true;
+
+      const data = { label: 'Option 1', value: 123 };
+
+      const result = component.getValueWrite(data);
+
+      expect(result).toBe(123);
+    });
+
+    it('should return primitive data when controlValueWithLabel is false', () => {
+      component.controlValueWithLabel = false;
+
+      const result = component.getValueWrite('abc');
+
+      expect(result).toBe('abc');
+    });
+
+    it('should not break when writeValue receives primitive value', () => {
+      component.options = [];
+      component.visibleItems = [];
+      component.selectedItems = [];
+
+      expect(() => component.writeValue(1)).not.toThrow();
+    });
+
     it('applyFilters: should be called with valid value', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;
       component.debounceTime = 50;
