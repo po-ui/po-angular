@@ -47,15 +47,6 @@ describe('PoLoadingBaseComponent', () => {
       expect(component.size).toBe('lg');
     });
 
-    it('should return sm when a11y is AA and default size is small', () => {
-      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
-      localStorage.setItem('po-default-size', 'small');
-
-      component['_size'] = undefined;
-      component.size = undefined;
-      expect(component.size).toBe('sm');
-    });
-
     it('should return lg when a11y is AA regardless of default size', () => {
       document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
