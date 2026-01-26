@@ -327,6 +327,7 @@ describe('PoPopoverComponent:', () => {
       addScrollEventListener: () => {},
       isHidden: true,
       position: 'top',
+      openPopover: { emit: () => {} },
       setPopoverPosition: () => {},
       setElementsControlPosition: () => {},
       setOpacity: arg => {},
@@ -348,6 +349,34 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
   }));
 
+  it('open: should set clickoutListener when trigger is function', () => {
+    const fakeListener = jasmine.createSpy('listener');
+
+    const fakeThis: any = {
+      trigger: 'function',
+      renderer: {
+        listen: jasmine.createSpy('listen').and.callFake((_target, _event, callback) => {
+          callback({} as MouseEvent);
+          return fakeListener;
+        })
+      },
+      togglePopup: jasmine.createSpy('togglePopup'),
+      addScrollEventListener: () => {},
+      setOpacity: () => {},
+      setElementsControlPosition: () => {},
+      setPopoverPosition: () => {},
+      openPopover: { emit: () => {} },
+      cd: { detectChanges: () => {} },
+      isHidden: true
+    };
+
+    component.open.call(fakeThis);
+
+    expect(fakeThis.renderer.listen).toHaveBeenCalledWith('document', 'click', jasmine.any(Function));
+    expect(fakeThis.togglePopup).toHaveBeenCalled();
+    expect(fakeThis.clickoutListener).toBe(fakeListener);
+  });
+
   it('should close popover and call `closePopover.emit`', () => {
     spyOn(component.closePopover, 'emit');
     component.isHidden = false;
@@ -356,6 +385,27 @@ describe('PoPopoverComponent:', () => {
 
     expect(component.isHidden).toBeTruthy();
     expect(component.closePopover.emit).toHaveBeenCalled();
+  });
+
+  it('close: should call clickoutListener when trigger is function and clickoutListener exists', () => {
+    const fakeThis = {
+      isHidden: false,
+      trigger: 'function',
+      closePopover: { emit: () => {} },
+      clickoutListener: () => {},
+      cd: { detectChanges: () => {} }
+    };
+
+    spyOn(fakeThis.closePopover, 'emit');
+    spyOn(fakeThis, 'clickoutListener');
+    spyOn(fakeThis.cd, 'detectChanges');
+
+    component.close.call(fakeThis);
+
+    expect(fakeThis.isHidden).toBeTruthy();
+    expect(fakeThis.closePopover.emit).toHaveBeenCalled();
+    expect(fakeThis.clickoutListener).toHaveBeenCalled();
+    expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
   });
 
   it('should set opacity', () => {

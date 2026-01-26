@@ -5,7 +5,7 @@ import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-co
 
 const PO_POPOVER_DEFAULT_POSITION = 'right';
 const PO_POPOVER_DEFAULT_TRIGGER = 'click';
-const PO_POPOVER_TRIGGERS = ['click', 'hover'];
+const PO_POPOVER_TRIGGERS = ['click', 'hover', 'function'];
 
 /**
  * @description
@@ -96,6 +96,9 @@ export class PoPopoverBaseComponent {
   /** Evento disparado ao fechar o popover. */
   @Output('p-close') closePopover = new EventEmitter<any>();
 
+  /** Evento disparado ao abrir o popover. */
+  @Output('p-open') openPopover = new EventEmitter<any>();
+
   // Controla se o popover fica oculto ou visível, por padrão é oculto.
   isHidden: boolean = true;
 
@@ -167,6 +170,7 @@ export class PoPopoverBaseComponent {
    * Valores válidos:
    *  - `click`: Abre ao clicar no componente alvo.
    *  - `hover`: Abre ao passar o mouse sobre o componente alvo.
+   *  - `function`: Abre através de funções públicas do componente.
    *
    * @default click
    * @optional

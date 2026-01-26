@@ -171,14 +171,6 @@ export class PoMultiselectComponent
       this.focus();
     }
     this.initialized = true;
-
-    if (this.inputElement?.nativeElement?.closest('.components-form-custom-template')) {
-      setTimeout(() => {
-        if (this.inputElement?.nativeElement?.classList?.contains('enable-append-box')) {
-          this.appendBox = true;
-        }
-      }, 300);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -30,13 +30,6 @@ describe('PoHelperComponent', () => {
     expect(component.id).toContain('po-helper-');
   });
 
-  it('should remove event listener on destroy', () => {
-    component.ngAfterViewInit();
-    const spy = spyOn(window, 'removeEventListener').and.callThrough();
-    component.ngOnDestroy();
-    expect(spy).toHaveBeenCalledWith('focusin', jasmine.any(Function), true);
-  });
-
   describe('emitClick', () => {
     it('should prevent default if disabled', () => {
       spyOn(component, 'disabled').and.returnValue(true);
@@ -577,6 +570,43 @@ describe('PoHelperComponent', () => {
       component.popover = { isHidden: false } as any;
       const visible = (component as any).helperIsVisible();
       expect(visible).toBeTrue();
+    });
+  });
+
+  describe('handleOpen', () => {
+    afterEach(() => {
+      (component as any).boundFocusIn = undefined;
+    });
+
+    it('should add focusin listener and store bound function', () => {
+      const addSpy = spyOn(window, 'addEventListener');
+
+      (component as any).handleOpen();
+
+      expect((component as any).boundFocusIn).toEqual(jasmine.any(Function));
+      expect(addSpy).toHaveBeenCalledWith('focusin', (component as any).boundFocusIn, true);
+    });
+  });
+
+  describe('handleClose', () => {
+    it('should remove focusin listener when boundFocusIn is defined', () => {
+      const removeSpy = spyOn(window, 'removeEventListener');
+      const boundFn = () => {};
+
+      (component as any).boundFocusIn = boundFn;
+
+      (component as any).handleClose();
+
+      expect(removeSpy).toHaveBeenCalledWith('focusin', boundFn, true);
+    });
+
+    it('should not remove focusin listener when boundFocusIn is undefined', () => {
+      const removeSpy = spyOn(window, 'removeEventListener');
+
+      (component as any).boundFocusIn = undefined;
+
+      expect(() => (component as any).handleClose()).not.toThrow();
+      expect(removeSpy).not.toHaveBeenCalled();
     });
   });
 });
