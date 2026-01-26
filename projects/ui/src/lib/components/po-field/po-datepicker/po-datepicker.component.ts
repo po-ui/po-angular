@@ -184,14 +184,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.focus();
     }
     this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
-
-    if (this.inputEl?.nativeElement?.closest('.components-form-custom-template')) {
-      setTimeout(() => {
-        if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
-          this.appendBox = true;
-        }
-      }, 300);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

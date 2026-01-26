@@ -103,6 +103,11 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   close(): void {
     this.isHidden = true;
     this.closePopover.emit();
+
+    if (this.trigger === 'function' && this.clickoutListener) {
+      this.clickoutListener();
+    }
+
     this.cd.detectChanges();
   }
 
@@ -121,8 +126,16 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.setElementsControlPosition();
       this.setPopoverPosition();
       this.setOpacity(1);
+      this.openPopover.emit();
       this.cd.detectChanges();
     });
+
+    if (this.trigger === 'function') {
+      this.clickoutListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
+        this.togglePopup(event);
+      });
+    }
+
     this.cd.detectChanges();
   }
 
@@ -158,7 +171,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.mouseLeaveListener = this.renderer.listen(this.targetElement, 'mouseleave', (event: MouseEvent) => {
         this.close();
       });
-    } else {
+    } else if (this.trigger === 'click') {
       this.clickoutListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
         this.togglePopup(event);
       });
@@ -190,7 +203,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       if (!this.appendBox) {
         this.close();
       }
-    } else if (this.targetElement?.contains(event.target)) {
+    } else if (this.targetElement?.contains(event.target) && this.trigger !== 'function') {
       this.popoverElement.nativeElement.hidden ? this.open() : this.close();
     }
   }
