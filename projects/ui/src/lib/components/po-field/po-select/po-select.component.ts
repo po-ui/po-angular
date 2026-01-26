@@ -123,7 +123,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
   ],
   standalone: false
 })
-export class PoSelectComponent extends PoFieldValidateModel<any> implements AfterViewInit, OnChanges {
+export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
   private el = inject(ElementRef);
   renderer = inject(Renderer2);
 
@@ -364,16 +364,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements Afte
 
     if (changes.options?.currentValue) {
       this.options = changes.options.currentValue;
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.selectElement?.nativeElement?.closest('.components-form-custom-template')) {
-      setTimeout(() => {
-        if (this.selectElement?.nativeElement?.classList?.contains('enable-append-box')) {
-          this.appendBox = true;
-        }
-      }, 300);
     }
   }
 
