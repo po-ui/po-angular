@@ -621,39 +621,6 @@ describe('PoMultiselectComponent:', () => {
         component.ngAfterViewInit();
         expect(inputFocus).not.toHaveBeenCalled();
       });
-
-      it("should set appendBox true if contains class 'enable-append-box' and is inside components-form-custom-template", fakeAsync(() => {
-        component.inputElement = {
-          nativeElement: {
-            classList: {
-              contains: (cls: string) => cls === 'enable-append-box'
-            },
-            closest: (selector: string) => (selector === '.components-form-custom-template' ? {} : null)
-          }
-        };
-        component.ngAfterViewInit();
-
-        tick(300);
-
-        expect(component.appendBox).toBeTrue();
-      }));
-
-      it('should not set appendBox if not inside components-form-custom-template', fakeAsync(() => {
-        component.inputElement = {
-          nativeElement: {
-            classList: {
-              contains: (cls: string) => cls === 'enable-append-box'
-            },
-            closest: (selector: string) => null
-          }
-        };
-        component.appendBox = false;
-        component.ngAfterViewInit();
-
-        tick(300);
-
-        expect(component.appendBox).toBeFalse();
-      }));
     });
 
     it(`ngOnChanges: should set displayAdditionalHelp false when label changes`, () => {

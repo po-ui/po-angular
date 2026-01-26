@@ -7,7 +7,6 @@ import {
   HostListener,
   Input,
   inject,
-  AfterViewInit,
   OnChanges,
   SimpleChanges
 } from '@angular/core';
@@ -63,7 +62,7 @@ import { uuid } from '../../../utils/util';
   ],
   standalone: false
 })
-export class PoNumberComponent extends PoNumberBaseComponent implements AfterViewInit, OnChanges {
+export class PoNumberComponent extends PoNumberBaseComponent implements OnChanges {
   /**
    * @optional
    *
@@ -120,16 +119,6 @@ export class PoNumberComponent extends PoNumberBaseComponent implements AfterVie
   @HostListener('wheel', ['$event'])
   onWheel(event: Event) {
     event.preventDefault();
-  }
-
-  ngAfterViewInit() {
-    if (this.inputEl?.nativeElement?.closest('.components-form-custom-template')) {
-      setTimeout(() => {
-        if (this.inputEl?.nativeElement?.classList?.contains('enable-append-box')) {
-          this.appendBox = true;
-        }
-      }, 300);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
