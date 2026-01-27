@@ -73,8 +73,6 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
   }
   ngAfterViewInit(): void {
     PoHelperComponent.instances.push(this);
-    this.boundFocusIn = this.closePopoverOnFocusOut.bind(this);
-    window.addEventListener('focusin', this.boundFocusIn, true);
     queueMicrotask(() => {
       this.setPopoverPositionByScreen();
     });
@@ -99,9 +97,6 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
   ngOnDestroy(): void {
     PoHelperComponent.instances = PoHelperComponent.instances.filter(i => i !== this);
-    if (this.boundFocusIn) {
-      window.removeEventListener('focusin', this.boundFocusIn, true);
-    }
   }
 
   openHelperPopover(): void {
@@ -213,5 +208,16 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     const lang = (navigator.language || 'en').substring(0, 2).toLowerCase();
     const literals = this.poHelperLiterals[lang] || this.poHelperLiterals['en'];
     return literals[type];
+  }
+
+  protected handleOpen(): void {
+    this.boundFocusIn = this.closePopoverOnFocusOut.bind(this);
+    window.addEventListener('focusin', this.boundFocusIn, true);
+  }
+
+  protected handleClose(): void {
+    if (this.boundFocusIn) {
+      window.removeEventListener('focusin', this.boundFocusIn, true);
+    }
   }
 }
