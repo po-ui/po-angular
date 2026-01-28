@@ -10,12 +10,12 @@ Tem dependência das bibliotecas:
 
 Instalando com npm:
 ```
-npm install @po-ui/ng-code-editor@next
+npm install @po-ui/ng-code-editor
 ```
 
 Caso prefira instalar com o yarn:
 ```
-yarn add @po-ui/ng-code-editor@next
+yarn add @po-ui/ng-code-editor
 ```
 
 Para maiores informações, acesse **[documentação do PO Code Editor](https://po-ui.io/documentation/po-code-editor)**.
