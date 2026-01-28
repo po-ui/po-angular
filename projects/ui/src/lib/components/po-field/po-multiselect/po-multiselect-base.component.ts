@@ -893,7 +893,13 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   writeValue(values: any): void {
-    values = this.getValueWrite(values) || [];
+    values = this.getValueWrite(values);
+
+    if (values !== null && values !== undefined && !Array.isArray(values)) {
+      values = [values];
+    }
+
+    values = values ?? [];
 
     if (this.service && values.length) {
       this.getObjectsByValuesSubscription = this.service.getObjectsByValues(values).subscribe(options => {
@@ -937,8 +943,16 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   private getValueWrite(data: any) {
-    if (this.controlValueWithLabel && data?.length && data.every(x => x?.value !== undefined)) {
+    if (!this.controlValueWithLabel || data == null) {
+      return data;
+    }
+
+    if (Array.isArray(data) && data.every(item => item?.value !== undefined)) {
       return data.map(option => option.value);
+    }
+
+    if (data?.value !== undefined) {
+      return data.value;
     }
 
     return data;
