@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [21.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v20.13.0...v21.0.0) (2026-01-20)
+## [21.0.0](https://github.com/po-ui/po-angular/compare/v20.13.1...v21.0.0) (2026-01-28)
 
 
 ### ⚠ BREAKING CHANGES
@@ -25,10 +25,19 @@ Depois:
 
 ### Code Refactoring
 
-* **icon:** remove ícones depreciados ([c7f3df2](https://github.com/po-ui/po-angular/commit/c7f3df26b886c2e39ad3a25aa6072d24a13be66c))
+* **icon:** remove ícones depreciados ([ff30eee](https://github.com/po-ui/po-angular/commit/ff30eee0a9eb07b266e322a040b98b481bd25db3))
 
 ### Features
-* **theme:** compatibiliza tokens para novo tema ([b6c551d](https://github.com/po-ui/po-angular/commit/b6c551d630ae02e78d66c9ad00807dbc183d73cd))
+
+* **angular:** deve ser utilizado o Angular v21 ([5e664bf](https://github.com/po-ui/po-angular/commit/5e664bf632bf7a34ae7348a942b266c3a2a2a2d6))
+* **theme:** compatibiliza tokens para novo tema ([5354f57
+](https://github.com/po-ui/po-angular/commit/5354f575ee0300901f0844db2ab09431308ce92b))
+
+
+### Bug Fixes
+
+* **loading-icon:** otimiza animação via CSS ([61c34a9](https://github.com/po-ui/po-angular/commit/61c34a9f016dde9331f0ea7c624487b66b7cda84))
+
 
 ## [20.13.1](https://github.com/po-ui/po-angular/compare/v20.13.0...v20.13.1) (2026-01-26)
 

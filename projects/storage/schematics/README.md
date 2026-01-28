@@ -87,5 +87,5 @@ Para testarmos o pacote, devemos incrementar a versão do mesmo e ter o npm regi
 Por fim, execute os comando abaixo no seu projeto Angular:
 
 ```
-> ng add @po-ui/ng-storage@next
+> ng add @po-ui/ng-storage
 ```
