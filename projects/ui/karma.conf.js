@@ -31,16 +31,16 @@ module.exports = function (config) {
       reporters: [{ type: 'html' }, { type: 'lcovonly' }, { type: 'text-summary' }, { type: 'cobertura' }],
       check: {
         global: {
-          statements: 0,
-          branches: 0,
-          functions: 0,
-          lines: 0
+          statements: 99,
+          branches: 99,
+          functions: 99,
+          lines: 99
         },
         each: {
-          branches: 0,
-          statements: 0,
-          lines: 0,
-          functions: 0
+          branches: 99,
+          statements: 99,
+          lines: 99,
+          functions: 99
         }
       }
     },

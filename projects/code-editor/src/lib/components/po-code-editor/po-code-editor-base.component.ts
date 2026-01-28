@@ -27,7 +27,7 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * Para instalar o pacote `po-code-editor` em sua aplicação execute:
  *
  * ```shell
- * `ng add @po-ui/ng-code-editor@next`
+ * `ng add @po-ui/ng-code-editor`
  * ```
  *
  * O comando `ng add` do `Angular CLI`:
