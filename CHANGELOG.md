@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.0.1](https://github.com/po-ui/po-angular/compare/v21.0.0...v21.0.1) (2026-01-29)
+
+Compatibilidade com @po-ui/style@21.0.1
+
 ## [21.0.0](https://github.com/po-ui/po-angular/compare/v20.13.1...v21.0.0) (2026-01-28)
 
 
