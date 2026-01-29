@@ -592,6 +592,28 @@ describe('PoCalendarComponent:', () => {
 
       expect(component.hoverValue).toBe(expectedValue);
     });
+
+    it('onSelectDate: should clear value and emit empty string when selectedDate is empty or undefined', () => {
+      spyOn(component as any, 'updateModel');
+      spyOn(component.change, 'emit');
+      spyOn(component['changeDetector'], 'markForCheck');
+
+      component.value = new Date();
+
+      component.onSelectDate('');
+      expect(component.value).toBeNull();
+      expect(component['updateModel']).toHaveBeenCalledWith('');
+      expect(component.change.emit).toHaveBeenCalledWith('');
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+
+      component.value = new Date();
+
+      component.onSelectDate(undefined);
+      expect(component.value).toBeNull();
+      expect(component['updateModel']).toHaveBeenCalledWith('');
+      expect(component.change.emit).toHaveBeenCalledWith('');
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+    });
   });
 
   describe('Templates:', () => {

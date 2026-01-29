@@ -18,29 +18,32 @@
 
       <div class="po-calendar-content">
         <div class="po-calendar-labels">
-          <div class="po-calendar-label" *ngFor="let weekDay of displayWeekDays; trackBy: trackByWeekDay">
-            {{ weekDay }}
-          </div>
+          @for (weekDay of displayWeekDays; track trackByWeekDay($index, weekDay)) {
+            <div class="po-calendar-label">
+              {{ weekDay }}
+            </div>
+          }
         </div>
 
         <div class="po-calendar-content-list-day">
-          <div
-            *ngFor="let day of displayDays; let i = index; trackBy: trackByDay"
-            class="po-calendar-day"
-            [ngClass]="getDayBackgroundColor(day)"
-            (click)="onSelectDate(day)"
-            (mouseenter)="onMouseEnter(day)"
-            (mouseleave)="onMouseLeave()"
-            (keydown)="onDayKeydown($event, day, i)"
-            [tabindex]="i === focusedDayIndex ? 0 : -1"
-            attr-calendar
-            [attr.data-other-month]="day.getMonth() !== displayMonthNumber"
-            [attr.data-day-index]="i"
-          >
-            <span [ngClass]="getDayForegroundColor(day)">
-              {{ day.getDate() }}
-            </span>
-          </div>
+          @for (day of displayDays; track trackByDay($index, day); let i = $index) {
+            <div
+              class="po-calendar-day"
+              [ngClass]="getDayBackgroundColor(day)"
+              (click)="onSelectDate(day)"
+              (mouseenter)="onMouseEnter(day)"
+              (mouseleave)="onMouseLeave()"
+              (keydown)="onDayKeydown($event, day, i)"
+              [tabindex]="i === focusedDayIndex ? 0 : -1"
+              attr-calendar
+              [attr.data-other-month]="day.getMonth() !== displayMonthNumber"
+              [attr.data-day-index]="i"
+            >
+              <span [ngClass]="getDayForegroundColor(day)">
+                {{ day.getDate() }}
+              </span>
+            </div>
+          }
         </div>
       </div>
     </ng-container>
@@ -64,17 +67,18 @@
           </div>
         </div>
         <div class="po-calendar-content-list-month">
-          <div
-            *ngFor="let month of displayMonths; let i = index; trackBy: trackByMonth"
-            class="po-calendar-month"
-            [ngClass]="getBackgroundColor(i, displayMonthNumber)"
-            (click)="onSelectMonth(displayYear, i)"
-            attr-calendar
-          >
-            <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
-              {{ month }}
-            </span>
-          </div>
+          @for (month of displayMonths; track trackByMonth($index, month); let i = $index) {
+            <div
+              class="po-calendar-month"
+              [ngClass]="getBackgroundColor(i, displayMonthNumber)"
+              (click)="onSelectMonth(displayYear, i)"
+              attr-calendar
+            >
+              <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
+                {{ month }}
+              </span>
+            </div>
+          }
         </div>
       </div>
     </ng-container>
@@ -99,48 +103,47 @@
         </div>
 
         <div class="po-calendar-content-list-year">
-          <div
-            *ngFor="let year of displayDecade; let i = index; trackBy: trackByYear"
-            class="po-calendar-year"
-            [ngClass]="getBackgroundColor(year, currentYear)"
-            (click)="onSelectYear(year, displayMonthNumber)"
-            attr-calendar
-          >
-            <span [ngClass]="getForegroundColor(year, currentYear)">
-              {{ year }}
-            </span>
-          </div>
+          @for (year of displayDecade; track trackByYear($index, year)) {
+            <div
+              class="po-calendar-year"
+              [ngClass]="getBackgroundColor(year, currentYear)"
+              (click)="onSelectYear(year, displayMonthNumber)"
+              attr-calendar
+            >
+              <span [ngClass]="getForegroundColor(year, currentYear)">
+                {{ year }}
+              </span>
+            </div>
+          }
         </div>
       </div>
     </ng-container>
   }
 
   @if (!range) {
-    <ng-container>
-      <div class="po-calendar-footer">
-        <po-button
-          p-kind="tertiary"
-          type="button"
-          [p-label]="displayToClean"
-          (click)="onClear()"
-          (keydown.enter)="onClear()"
-          (keydown.space)="onClear()"
-          [p-size]="size"
-        >
-        </po-button>
-        <po-button
-          p-kind="tertiary"
-          type="button"
-          [p-label]="displayToday"
-          (click)="onSelectDate(today)"
-          (keydown.enter)="onSelectDate(today)"
-          (keydown.space)="onSelectDate(today)"
-          [p-disabled]="isTodayUnavailable()"
-          [p-size]="size"
-        >
-        </po-button>
-      </div>
-    </ng-container>
+    <div class="po-calendar-footer">
+      <po-button
+        p-kind="tertiary"
+        type="button"
+        [p-label]="displayToClean"
+        (click)="onClear()"
+        (keydown.enter)="onClear()"
+        (keydown.space)="onClear()"
+        [p-size]="size"
+      >
+      </po-button>
+      <po-button
+        p-kind="tertiary"
+        type="button"
+        [p-label]="displayToday"
+        (click)="onSelectDate(today)"
+        (keydown.enter)="onSelectDate(today)"
+        (keydown.space)="onSelectDate(today)"
+        [p-disabled]="isTodayUnavailable()"
+        [p-size]="size"
+      >
+      </po-button>
+    </div>
   }
 </div>
 
@@ -158,6 +161,7 @@
   </po-combo>
 
   <po-combo
+    class="po-combo-last"
     [name]="'year-' + comboKey"
     [p-clean]="false"
     [p-remove-initial-filter]="true"

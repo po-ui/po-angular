@@ -9,7 +9,8 @@ import {
   inject,
   TemplateRef,
   ChangeDetectorRef,
-  SimpleChanges
+  SimpleChanges,
+  ElementRef
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -29,7 +30,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   private poCalendarService = inject(PoCalendarService);
   private poCalendarLangService = inject(PoCalendarLangService);
   private poDate = inject(PoDateService);
-  private cdr = inject(ChangeDetectorRef);
+  readonly cdr = inject(ChangeDetectorRef);
+  readonly elementRef = inject(ElementRef<HTMLElement>);
 
   @Input('p-value') value: any;
   @Input('p-mode') mode: 'day' | 'month' | 'year' = 'day';
@@ -56,7 +58,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Output('p-header-change') headerChange = new EventEmitter<any>();
   @Output('p-select-date') selectDate = new EventEmitter<any>();
 
-  private hoverDateSource = new Subject<Date>();
+  readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
 
   currentYear: number;
@@ -64,7 +66,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   displayMonthNumber: number;
   displayMonth: string;
 
-  displayDays: Array<Date | number> = [];
+  displayDays: Array<Date> = [];
   displayWeekDays: Array<string> = [];
   displayMonths: Array<string> = [];
 
@@ -114,6 +116,10 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     return this.partType === 'end';
   }
 
+  private get date() {
+    return this.value;
+  }
+
   ngOnInit() {
     this.initializeData();
   }
@@ -127,7 +133,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       this.cdr.markForCheck();
     }
 
-    if (locale && !locale.firstChange) {
+    if (locale && !locale.firstChange && locale.previousValue !== locale.currentValue) {
       this.comboKey++;
       this.updateTemplateContext();
       this.cdr.detectChanges();
@@ -205,7 +211,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.displayMonth = this.displayMonths[month];
 
     const calendarArray = this.poCalendarService.monthDays(year, month);
-    this.displayDays = [].concat.apply([], calendarArray);
+    this.displayDays = [].concat(...calendarArray);
 
     this.getDecadeArray(year);
 
@@ -273,25 +279,34 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
-    let newIndex = index;
-    let newYear = this.displayYear;
-    let newMonth = this.displayMonthNumber;
-    let focusedDayOfMonth = day.getDate();
-    let preventDefault = true;
+    const key = event.key;
+    const dayOfMonth = day.getDate();
 
-    switch (event.key) {
-      case 'Enter':
-      case ' ':
-        this.onSelectDate(day);
-        this.focusedDayIndex = index;
-        this.cdr.detectChanges();
-        setTimeout(() => {
-          const element = document.querySelector(`[data-day-index="${index}"]`) as HTMLElement;
-          if (element) {
-            element.focus();
-          }
-        }, 0);
-        break;
+    if (this.isSelectionKey(key)) {
+      this.handleSelectKey(day, index);
+      event.preventDefault();
+    } else if (this.handleNavigationKey(key, index)) {
+      event.preventDefault();
+    } else if (this.handlePageNavigation(key, event.shiftKey, dayOfMonth, index)) {
+      event.preventDefault();
+    } else if (key === 'Escape') {
+      event.preventDefault();
+    }
+  }
+
+  private isSelectionKey(key: string): boolean {
+    return key === 'Enter' || key === ' ';
+  }
+
+  private handleSelectKey(day: Date, index: number): void {
+    this.onSelectDate(day);
+    this.focusElement(index);
+  }
+
+  private handleNavigationKey(key: string, index: number): boolean {
+    let newIndex = -1;
+
+    switch (key) {
       case 'ArrowUp':
         newIndex = Math.max(0, index - 7);
         break;
@@ -310,110 +325,118 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       case 'End':
         newIndex = Math.floor(index / 7) * 7 + 6;
         break;
-      case 'PageUp':
-        if (event.shiftKey) {
-          newYear = newYear - 1;
-        } else {
-          newMonth = newMonth === 0 ? 11 : newMonth - 1;
-          if (newMonth === 11) newYear--;
-        }
-        this.updateDisplay(newYear, newMonth);
-        this.focusOnSameDayAndWeek(focusedDayOfMonth, index);
-        break;
-      case 'PageDown':
-        if (event.shiftKey) {
-          newYear = newYear + 1;
-        } else {
-          newMonth = newMonth === 11 ? 0 : newMonth + 1;
-          if (newMonth === 0) newYear++;
-        }
-        this.updateDisplay(newYear, newMonth);
-        this.focusOnSameDayAndWeek(focusedDayOfMonth, index);
-        break;
-      case 'Escape':
-        preventDefault = true;
-        break;
-      default:
-        preventDefault = false;
     }
 
-    if (preventDefault && !['PageUp', 'PageDown'].includes(event.key)) {
-      event.preventDefault();
-    } else if (['PageUp', 'PageDown'].includes(event.key)) {
-      event.preventDefault();
-    }
-
-    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) {
+    if (newIndex !== -1) {
       this.focusedDayIndex = newIndex;
       this.cdr.detectChanges();
-      setTimeout(() => {
-        const element = document.querySelector(`[data-day-index="${newIndex}"]`) as HTMLElement;
-        if (element) {
-          element.focus();
-        }
-      }, 0);
+      this.focusElement(newIndex);
+      return true;
     }
+
+    return false;
   }
 
-  private focusOnSameDayAndWeek(dayOfMonth: number, currentIndex: number) {
+  private handlePageNavigation(key: string, isShiftKey: boolean, dayOfMonth: number, index: number): boolean {
+    const directionMap: Record<string, 'up' | 'down'> = {
+      PageUp: 'up',
+      PageDown: 'down'
+    };
+
+    const direction = directionMap[key];
+
+    if (!direction) {
+      return false;
+    }
+
+    this.applyPageNavigation(direction, isShiftKey);
+    this.focusOnSameDayAndWeek(dayOfMonth, index);
+    return true;
+  }
+
+  private applyPageNavigation(direction: 'up' | 'down', isShiftKey: boolean): void {
+    const step = direction === 'up' ? -1 : 1;
+
+    if (isShiftKey) {
+      this.displayYear += step;
+    } else {
+      this.displayMonthNumber += step;
+      if (this.displayMonthNumber < 0) {
+        this.displayMonthNumber = 11;
+        this.displayYear -= 1;
+      } else if (this.displayMonthNumber > 11) {
+        this.displayMonthNumber = 0;
+        this.displayYear += 1;
+      }
+    }
+    this.updateDisplay(this.displayYear, this.displayMonthNumber);
+  }
+
+  private focusElement(index: number): void {
+    this.focusedDayIndex = index;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      const element = this.queryDayElement(index);
+      if (element instanceof HTMLElement) {
+        element.focus();
+      }
+    }, 0);
+  }
+
+  private focusOnSameDayAndWeek(dayOfMonth: number, currentIndex: number): void {
     const currentWeekRow = Math.floor(currentIndex / 7);
-    const currentDayOfWeek = currentIndex % 7;
+    const dayOfWeek = currentIndex % 7;
 
     setTimeout(() => {
-      let focusIndex = -1;
-
-      for (let row = 0; row < Math.ceil(this.displayDays.length / 7); row++) {
-        const checkIndex = row * 7 + currentDayOfWeek;
-        if (checkIndex < this.displayDays.length) {
-          const dateAtIndex = this.displayDays[checkIndex];
-          if (
-            dateAtIndex instanceof Date &&
-            dateAtIndex.getDate() === dayOfMonth &&
-            dateAtIndex.getMonth() === this.displayMonthNumber
-          ) {
-            focusIndex = checkIndex;
-            break;
-          }
-        }
-      }
-
-      if (focusIndex === -1) {
-        const weekUp = currentWeekRow - 1;
-        for (let row = weekUp; row >= 0; row--) {
-          const checkIndex = row * 7 + currentDayOfWeek;
-          if (checkIndex < this.displayDays.length) {
-            const dateAtCheckIndex = this.displayDays[checkIndex];
-            if (dateAtCheckIndex instanceof Date && dateAtCheckIndex.getMonth() === this.displayMonthNumber) {
-              focusIndex = checkIndex;
-              break;
-            }
-          }
-        }
-      }
-
-      if (focusIndex === -1) {
-        const weekDown = currentWeekRow + 1;
-        for (let row = weekDown; row < Math.ceil(this.displayDays.length / 7); row++) {
-          const checkIndex = row * 7 + currentDayOfWeek;
-          if (checkIndex < this.displayDays.length) {
-            const dateAtCheckIndex = this.displayDays[checkIndex];
-            if (dateAtCheckIndex instanceof Date && dateAtCheckIndex.getMonth() === this.displayMonthNumber) {
-              focusIndex = checkIndex;
-              break;
-            }
-          }
-        }
-      }
+      const focusIndex = this.findTargetDayIndex(dayOfMonth, dayOfWeek, currentWeekRow);
 
       if (focusIndex !== -1) {
         this.focusedDayIndex = focusIndex;
         this.cdr.detectChanges();
-        const element = document.querySelector(`[data-day-index="${focusIndex}"]`) as HTMLElement;
-        if (element) {
+
+        const element = this.queryDayElement(focusIndex);
+        if (element instanceof HTMLElement) {
           element.focus();
         }
       }
     }, 0);
+  }
+
+  private queryDayElement(index: number): Element | null {
+    return this.elementRef.nativeElement.querySelector(`[data-day-index="${index}"]`);
+  }
+
+  private findTargetDayIndex(dayOfMonth: number, dayOfWeek: number, startWeekRow: number): number {
+    const totalRows = Math.ceil(this.displayDays.length / 7);
+
+    for (let row = 0; row < totalRows; row++) {
+      const checkIndex = row * 7 + dayOfWeek;
+      if (this.isValidCalendarDate(checkIndex, dayOfMonth)) return checkIndex;
+    }
+
+    for (let row = startWeekRow - 1; row >= 0; row--) {
+      const checkIndex = row * 7 + dayOfWeek;
+      if (this.isValidCalendarDate(checkIndex)) return checkIndex;
+    }
+
+    for (let row = startWeekRow + 1; row < totalRows; row++) {
+      const checkIndex = row * 7 + dayOfWeek;
+      if (this.isValidCalendarDate(checkIndex)) return checkIndex;
+    }
+
+    return -1;
+  }
+
+  private isValidCalendarDate(index: number, requiredDayOfMonth?: number): boolean {
+    if (index >= this.displayDays.length) return false;
+
+    const date = this.displayDays[index];
+
+    if (!(date instanceof Date) || date.getMonth() !== this.displayMonthNumber) {
+      return false;
+    }
+
+    return requiredDayOfMonth === undefined || date.getDate() === requiredDayOfMonth;
   }
 
   onClear() {
@@ -443,42 +466,76 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     return !this.poDate.validateDateRange(date, this.minDate, this.maxDate);
   }
 
-  private getDayColor(date: Date, type: 'background' | 'foreground') {
+  private getDayColor(date: Date, type: 'background' | 'foreground'): string {
     if (!date) return '';
     const prefix = `po-calendar-box-${type}`;
-    const isOtherMonth = date.getMonth() !== this.displayMonthNumber;
 
-    if (isOtherMonth) {
+    if (date.getMonth() !== this.displayMonthNumber) {
       const isDisabled = !this.poDate.validateDateRange(date, this.minDate, this.maxDate);
       return isDisabled ? `${prefix}-other-month-disabled` : `${prefix}-other-month`;
     }
 
     if (this.range && this.selectedValue) {
-      const { start, end } = this.selectedValue;
-      if ((start && this.equalsDate(date, start)) || (end && this.equalsDate(date, end))) {
-        return this.getColorState(date, prefix, 'selected');
-      }
-      if (start && end && date > start && date < end) {
-        return this.getColorState(date, prefix, 'in-range');
-      }
-      if (start && !end && date > start && date < this.hoverValue) {
-        return `${prefix}-hover`;
-      }
-    } else if (!this.range && this.equalsDate(date, this.value)) {
-      if (this.equalsDate(date, this.today)) {
-        return this.getColorState(date, prefix, 'today-selected');
-      }
-      return this.getColorState(date, prefix, 'selected');
+      const rangeColor = this.getRangeColor(date, prefix, type);
+      if (rangeColor) return rangeColor;
+    }
+
+    if (!this.range && this.equalsDate(date, this.date)) {
+      return this.getColorForDate(date, type);
     }
 
     if (this.equalsDate(date, this.today)) {
-      return this.getColorState(date, prefix, 'today');
+      return this.getColorForToday(date, type);
     }
 
+    return this.getColorForDefaultDate(date, type);
+  }
+
+  private getRangeColor(date: Date, prefix: string, type: 'background' | 'foreground'): string | void {
+    const { start, end } = this.selectedValue;
+
+    if ((start && this.equalsDate(date, start)) || (end && this.equalsDate(date, end))) {
+      return this.getColorForDate(date, type);
+    }
+
+    if (!start) return;
+
+    if (end && date > start && date < end) {
+      return this.getColorForDateRange(date, type);
+    }
+
+    if (!end && date > start && date < this.hoverValue) {
+      return `${prefix}-hover`;
+    }
+  }
+
+  getColorForDate(date: Date, type: 'background' | 'foreground') {
+    const prefix = `po-calendar-box-${type}`;
+    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
+      ? `${prefix}-selected`
+      : `${prefix}-selected-disabled`;
+  }
+
+  getColorForDefaultDate(date: Date, type: 'background' | 'foreground') {
+    const prefix = `po-calendar-box-${type}`;
     return this.poDate.validateDateRange(date, this.minDate, this.maxDate) ? prefix : `${prefix}-disabled`;
   }
 
-  private getColorState(date: Date, prefix: string, state: string) {
+  getColorForToday(date: Date, type: 'background' | 'foreground') {
+    const prefix = `po-calendar-box-${type}`;
+    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
+      ? `${prefix}-today`
+      : `${prefix}-today-disabled`;
+  }
+
+  getColorForDateRange(date: Date, type: 'background' | 'foreground') {
+    const prefix = `po-calendar-box-${type}`;
+    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
+      ? `${prefix}-in-range`
+      : `${prefix}-in-range-disabled`;
+  }
+
+  getColorState(date: Date, prefix: string, state: string) {
     const isValid = this.poDate.validateDateRange(date, this.minDate, this.maxDate);
     return isValid ? `${prefix}-${state}` : `${prefix}-${state}-disabled`;
   }
@@ -504,11 +561,37 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       while (startYear % 10 !== 0) startYear--;
     }
 
+    this.updateDecade(startYear);
+  }
+
+  private updateDecade(startYear: number) {
+    this.displayStartDecade = startYear;
+    this.displayFinalDecade = startYear + 9;
+    this.addAllYearsInDecade(startYear);
+  }
+
+  private addAllYearsInDecade(startYear: number) {
     for (let i = startYear; i < startYear + 10; i++) {
       this.displayDecade.push(i);
     }
+  }
 
-    this.displayStartDecade = startYear;
-    this.displayFinalDecade = startYear + 9;
+  trackByYear(index: number, year: number): number {
+    return year;
+  }
+
+  trackByMonth(index: number, month: string): number {
+    return index;
+  }
+
+  trackByDay(index: number, day: Date): string {
+    if (!day || !(day instanceof Date)) {
+      return `invalid-${index}`;
+    }
+    return `${index}:${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`;
+  }
+
+  trackByWeekDay(index: number, weekDay: string): string {
+    return `${index}:${weekDay}`;
   }
 }
