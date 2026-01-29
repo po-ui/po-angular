@@ -1,10 +1,12 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from '@angular/core';
 
 import { PoDateService } from '../../services/po-date';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { poLocales } from '../../services/po-language/po-language.constant';
 
 import { PoCalendarMode } from './po-calendar-mode.enum';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 /**
  * @description
@@ -37,7 +39,54 @@ import { PoCalendarMode } from './po-calendar-mode.enum';
  * - Caso seja definida uma data fora do range da data mínima e data máxima via *ngModel* o componente mostrará
  * a data desabilitada porém o *model* não será alterado.
  * - Caso seja definida uma data inválida a mesma não será atribuída ao calendário porém o *model* manterá a data inválida.
+ *
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
+ * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
+ * | `--font-size`                            | Tamanho da fonte                                      | `var(--font-size-default)`                        |
+ * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-bold)`                         |
+ * | `--line-height`                          | Tamanho da label                                      | `var(--line-height-none)`                         |
+ * | `--border-radius`                        | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
+ * | `--border-width`                         | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                          |
+ * | `--padding`                              | Preenchimento                                         | `0 1em`                                           |                                                                        | ---                                             |
+ * | **Danger**                               |                                                       |                                                   |
+ * | `--text-color-danger`                    | Cor do texto no estado danger                         | `var(--color-neutral-light-00)`                   |
+ * | `--color-button-danger`                  | Cor do botão no estado danger                         | `var(--color-feedback-negative-dark)`             |
+ * | `--color-danger-hover`                   | Cor de hover no estado danger                         | `var(--color-feedback-negative-darker)`           |
+ * | `--color-danger-pressed`                 | Cor pressionada no estado danger                      | `var(--color-feedback-negative-darkest)`          |
+ * | `--background-danger-hover`              | Cor de background de hover no estado danger           | `var(--color-feedback-negative-lighter)`          |
+ * | `--border-color-danger-hover`            | Cor da borda de hover no estado danger                | `var(--color-feedback-negative-darkest)`          |
+ * | `--background-danger-pressed`            | Cor de background pressionado no estado danger        | `var(--color-feedback-negative-light)`            |
+ * | `--background-color-button-danger`&nbsp; | Cor de background do botão no estado danger           | `var(--color-transparent)`                        |
+ * | **Default Values**                       |                                                       |                                                   |
+ * | `--text-color`                           | Cor do texto                                          | `var(--color-neutral-light-00)`                   |
+ * | `--color`                                | Cor principal do botão                                | `var(--color-action-default)`                     |
+ * | `--background-color`                     | Cor de background                                     | `var(--color-transparent)`                        |
+ * | `--border-color`                         | Cor da borda                                          | `var(--color-transparent)`                        |
+ * | `--shadow`                               | Contém o valor da sombra do elemento                  | `var(--shadow-none)`                              |
+ * | **Hover**                                |                                                       |                                                   |
+ * | `--color-hover`                          | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
+ * | `--background-hover`                     | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
+ * | `--border-color-hover`                   | Cor da borda no estado hover                          | `var(--color-brand-01-darkest)`                   |
+ * | **Focused**                              |                                                       |                                                   |
+ * | `--outline-color-focused`                | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
+ * | **Pressed**                              |                                                       |                                                   |
+ * | `--color-pressed`                        | Cor principal no estado de pressionado                | `var(--color-action-pressed)`                     |
+ * | `--background-pressed`                   | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                     |
+ * | **Disabled**                             |                                                       |                                                   |
+ * | `--text-color-disabled`                  | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                    |
+ * | `--color-disabled`                       | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
+ * | `--background-color-disabled`            | Cor de background no estado disabled                  | `var(--color-transparent)`                        |
+ *
  */
+
 @Directive()
 export class PoCalendarBaseComponent {
   /** Evento disparado ao selecionar um dia do calendário. */
@@ -55,6 +104,7 @@ export class PoCalendarBaseComponent {
   private _maxDate: Date;
   private _minDate: Date;
   private _mode: PoCalendarMode;
+  private _size?: string;
 
   /**
    * @optional
@@ -151,6 +201,37 @@ export class PoCalendarBaseComponent {
 
   get isRange() {
     return this.mode === PoCalendarMode.Range;
+  }
+
+  /**
+   * Propriedade que permite integrar o po-combo no componente de calendar.
+   *
+   * Implementa o template de header com `PoCombo`.
+   */
+  @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura de 32px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 44px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
+    this._size = validateSizeFn(value, PoFieldSize);
+  }
+
+  get size(): string {
+    return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   constructor(
