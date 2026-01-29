@@ -8,6 +8,7 @@
     <po-button
       p-kind="tertiary"
       (click)="previous.emit()"
+      (keydown.enter)="previous.emit()"
       p-aria-label="Mês anterior"
       p-icon="an an-caret-left"
       [p-size]="size"
@@ -18,6 +19,7 @@
     <po-button
       p-kind="tertiary"
       (click)="next.emit()"
+      (keydown.enter)="next.emit()"
       p-aria-label="Próximo mês"
       p-icon="an an-caret-right"
       [p-size]="size"
