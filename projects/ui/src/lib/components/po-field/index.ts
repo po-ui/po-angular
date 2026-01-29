@@ -61,6 +61,7 @@ export * from './po-datepicker/po-datepicker.module';
 export * from './po-checkbox/po-checkbox.module';
 export * from './po-radio-group/po-radio-group.module';
 export * from './po-radio/po-radio.module';
+export * from './po-combo/po-combo.module';
 
 export * from './po-field.module';
 export * from './po-switch/index';

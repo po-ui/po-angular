@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
 import { PoIconModule } from '../po-icon';
+import { PoComboModule } from '../po-field/po-combo/po-combo.module';
+import { PoButtonModule } from './../po-button/po-button.module';
 import { PoCalendarComponent } from './po-calendar.component';
 import { PoCalendarHeaderComponent } from './po-calendar-header/po-calendar-header.component';
 import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wrapper.component';
@@ -11,7 +13,7 @@ import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wr
  * Módulo do componente `po-calendar`.
  */
 @NgModule({
-  imports: [CommonModule, PoIconModule],
+  imports: [CommonModule, FormsModule, PoIconModule, PoComboModule, PoButtonModule],
   declarations: [PoCalendarComponent, PoCalendarHeaderComponent, PoCalendarWrapperComponent],
   exports: [PoCalendarComponent]
 })

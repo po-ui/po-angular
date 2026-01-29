@@ -103,6 +103,14 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onSelectDate(selectedDate, partType?) {
+    if (selectedDate === '' || selectedDate === undefined) {
+      this.value = null;
+      this.updateModel('');
+      this.change.emit('');
+      this.changeDetector.markForCheck();
+      return;
+    }
+
     let newValue;
 
     if (this.isRange) {

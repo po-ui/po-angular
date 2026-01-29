@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SimpleChange } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -43,14 +44,14 @@ describe('PoCalendarWrapperComponent', () => {
       const today = new Date();
 
       const changes = {
-        activateDate: { currentValue: today }
+        activateDate: new SimpleChange(undefined, today, false)
       };
 
       spyOn(component, <any>'updateDate');
 
       component.ngOnChanges(changes);
 
-      expect(component['updateDate']).toHaveBeenCalledWith(today);
+      expect(component['updateDate']).toHaveBeenCalledWith(today.getFullYear(), today.getMonth());
     });
 
     it(`initializeLanguage: should call 'setLanguage', 'getWeekDaysArray' and 'getMonthsArray' of
@@ -585,33 +586,21 @@ describe('PoCalendarWrapperComponent', () => {
       component['init']();
 
       expect(component['initializeLanguage']).toHaveBeenCalled();
-      expect(component['updateDate']).toHaveBeenCalledWith(component['activateDate']);
+      expect(component['updateDate']).toHaveBeenCalledWith(2018, 5);
       expect(component['selectDisplayMode']).toHaveBeenCalledWith('day');
     });
 
-    it(`updateDate: should set 'currentMonthNumber' and 'currentYear' to 'date.getMonth()' and 'date.getFullYear()' and
-      call 'updateDisplay'`, () => {
-      const date = new Date();
+    it(`updateDate: should call 'updateDisplay' and 'headerChange.emit' with year and month`, () => {
+      const year = 2020;
+      const month = 5;
 
       spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
 
-      component['updateDate'](date);
+      component['updateDate'](year, month);
 
-      expect(component['currentMonthNumber']).toBe(date.getMonth());
-      expect(component.currentYear).toBe(date.getFullYear());
-      expect(component['updateDisplay']).toHaveBeenCalledWith(component.currentYear, component['currentMonthNumber']);
-    });
-
-    it(`updateDate: should set 'currentMonthNumber' and 'currentYear' with today default date andbcall 'updateDisplay'`, () => {
-      const today = new Date();
-
-      spyOn(component, <any>'updateDisplay');
-
-      component['updateDate']();
-
-      expect(component['currentMonthNumber']).toBe(today.getMonth());
-      expect(component.currentYear).toBe(today.getFullYear());
-      expect(component['updateDisplay']).toHaveBeenCalledWith(component.currentYear, component['currentMonthNumber']);
+      expect(component['updateDisplay']).toHaveBeenCalledWith(year, month);
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month, year });
     });
 
     it(`updateDecade: should call 'addAllYearsInDecade' and update 'displayStartDecade' and 'displayFinalDecade'`, () => {

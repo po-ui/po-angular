@@ -275,14 +275,23 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @description
    *
-   * Define que o filtro no primeiro clique será removido.
+   * Define se o filtro inicial será removido no primeiro clique do campo.
    *
-   * > Caso o combo tenha um valor padrão de inicialização, o primeiro clique
-   * no componente retornará todos os itens da lista e não apenas o item inicialiazado.
+   * Quando habilitado e o combo possui um valor padrão, o primeiro clique
+   * exibirá todos os itens da lista ao invés de apenas o item inicializado.
    *
    * @default `false`
    */
-  @Input('p-remove-initial-filter') removeInitialFilter: boolean = false;
+  @Input('p-remove-initial-filter')
+  set removeInitialFilter(value: boolean) {
+    this._removeInitialFilter = value;
+    if (value) {
+      this.isRemoveInitialFilterSetByInput = true;
+    }
+  }
+  get removeInitialFilter() {
+    return this._removeInitialFilter;
+  }
 
   /**
    * @optional
@@ -464,6 +473,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private language: string;
   private _infiniteScrollDistance?: number = 100;
   private _infiniteScroll?: boolean = false;
+  private _removeInitialFilter: boolean = false;
+  private isRemoveInitialFilterSetByInput: boolean = false;
 
   // utilizado para fazer o controle de atualizar o model.
   // não deve forçar a atualização se o gatilho for o writeValue para não deixar o campo dirty.
@@ -1086,7 +1097,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
         return option;
       });
       this.updateComboList();
-      this.removeInitialFilter = false;
+      if (!this.isRemoveInitialFilterSetByInput) {
+        this.removeInitialFilter = false;
+      }
       return;
     }
 
