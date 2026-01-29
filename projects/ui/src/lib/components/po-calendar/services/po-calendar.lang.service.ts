@@ -149,6 +149,13 @@ export class PoCalendarLangService {
     ru: 'Сегодня'
   };
 
+  private toCleanLabel = {
+    pt: 'Limpar',
+    en: 'To clean',
+    es: 'Para limpiar',
+    ru: 'Чистить'
+  };
+
   getMonth(month: number) {
     return this.months[month][this.language];
   }
@@ -184,6 +191,10 @@ export class PoCalendarLangService {
 
   getTodayLabel() {
     return this.todayLabel[this.language];
+  }
+
+  getToCleanLabel() {
+    return this.toCleanLabel[this.language];
   }
 
   setLanguage(language: string) {

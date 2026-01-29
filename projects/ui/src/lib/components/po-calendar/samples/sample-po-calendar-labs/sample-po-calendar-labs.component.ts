@@ -14,6 +14,7 @@ export class SamplePoCalendarLabsComponent implements OnInit {
   maxDate: string | Date;
   minDate: string | Date;
   mode: PoCalendarMode;
+  size: string;
 
   readonly localeOptions: Array<PoRadioGroupOption> = [
     { label: 'pt', value: 'pt' },
@@ -25,6 +26,11 @@ export class SamplePoCalendarLabsComponent implements OnInit {
   readonly calendarModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Range', value: PoCalendarMode.Range },
     { label: 'Unset', value: null }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
@@ -42,5 +48,6 @@ export class SamplePoCalendarLabsComponent implements OnInit {
     this.maxDate = undefined;
     this.minDate = undefined;
     this.mode = undefined;
+    this.size = 'medium';
   }
 }
