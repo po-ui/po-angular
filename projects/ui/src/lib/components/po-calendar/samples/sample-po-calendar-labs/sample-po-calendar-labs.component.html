@@ -6,6 +6,7 @@
     [p-max-date]="maxDate"
     [p-mode]="mode"
     (p-change)="changeEvent('p-change')"
+    [p-size]="size"
   >
   </po-calendar>
 </div>
@@ -54,6 +55,15 @@
       p-help="Select a locale for the calendar"
       p-label="Locale"
       [p-options]="localeOptions"
+    >
+    </po-radio-group>
+    <po-radio-group
+      class="po-md-6"
+      name="size"
+      [(ngModel)]="size"
+      p-label="Size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="sizeOptions"
     >
     </po-radio-group>
   </div>

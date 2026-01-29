@@ -1,111 +1,170 @@
 <div class="po-calendar-wrapper">
-  <ng-container *ngIf="isDayVisible">
-    <po-calendar-header
-      [p-hide-previous]="isEndPart"
-      [p-hide-next]="isStartPart && !responsive"
-      (p-previous)="onPreviousMonth()"
-      (p-next)="onNextMonth()"
-    >
-      <span class="po-clickable po-mr-1" (click)="selectDisplayMode('month')">{{ displayMonth }}</span>
-      <span class="po-clickable" (click)="selectDisplayMode('year')">{{ displayYear }}</span>
-    </po-calendar-header>
-
-    <div class="po-calendar-content">
-      <div class="po-calendar-labels">
-        <div class="po-calendar-label" *ngFor="let weekDay of displayWeekDays">
-          {{ weekDay }}
-        </div>
-      </div>
-
-      <div class="po-calendar-content-list-day">
-        <div
-          *ngFor="let day of displayDays"
-          class="po-calendar-day"
-          [ngClass]="getDayBackgroundColor(day)"
-          (click)="onSelectDate(day)"
-          (mouseenter)="onMouseEnter(day)"
-          (mouseleave)="onMouseLeave()"
-          attr-calendar
+  @if (isDayVisible) {
+    <ng-container>
+      @if (templateContext) {
+        <po-calendar-header
+          [p-hide-previous]="isEndPart"
+          [p-hide-next]="isEndPart"
+          (p-previous)="onPreviousMonth()"
+          (p-next)="onNextMonth()"
+          [p-display-month]="displayMonth"
+          [p-display-year]="displayYear"
+          [p-template-context]="templateContext"
+          [p-header-template]="headerTemplate || internalComboTemplate"
+          [p-size]="size"
         >
-          <span *ngIf="day !== 0" [ngClass]="getDayForegroundColor(day)">
-            {{ day.getDate() }}
-          </span>
+        </po-calendar-header>
+      }
+
+      <div class="po-calendar-content">
+        <div class="po-calendar-labels">
+          <div class="po-calendar-label" *ngFor="let weekDay of displayWeekDays; trackBy: trackByWeekDay">
+            {{ weekDay }}
+          </div>
+        </div>
+
+        <div class="po-calendar-content-list-day">
+          <div
+            *ngFor="let day of displayDays; let i = index; trackBy: trackByDay"
+            class="po-calendar-day"
+            [ngClass]="getDayBackgroundColor(day)"
+            (click)="onSelectDate(day)"
+            (mouseenter)="onMouseEnter(day)"
+            (mouseleave)="onMouseLeave()"
+            (keydown)="onDayKeydown($event, day, i)"
+            [tabindex]="i === focusedDayIndex ? 0 : -1"
+            attr-calendar
+            [attr.data-other-month]="day.getMonth() !== displayMonthNumber"
+            [attr.data-day-index]="i"
+          >
+            <span [ngClass]="getDayForegroundColor(day)">
+              {{ day.getDate() }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
+  }
 
-  <ng-container *ngIf="isMonthVisible">
-    <po-calendar-header (p-previous)="updateYear(-1)" (p-next)="updateYear(1)">
-      <span class="po-clickable" (click)="selectDisplayMode('year')">
-        {{ displayYear }}
-      </span>
-    </po-calendar-header>
+  @if (isMonthVisible) {
+    <ng-container>
+      <po-calendar-header
+        (p-previous)="updateYear(-1)"
+        (p-next)="updateYear(1)"
+        [p-template-context]="templateContext"
+        [p-header-template]="headerTemplate || internalComboTemplate"
+        [p-size]="size"
+      >
+      </po-calendar-header>
 
-    <div class="po-calendar-content">
-      <div class="po-calendar-labels">
-        <div class="po-calendar-label">
-          {{ monthLabel }}
+      <div class="po-calendar-content">
+        <div class="po-calendar-labels">
+          <div class="po-calendar-label">
+            {{ monthLabel }}
+          </div>
+        </div>
+        <div class="po-calendar-content-list-month">
+          <div
+            *ngFor="let month of displayMonths; let i = index; trackBy: trackByMonth"
+            class="po-calendar-month"
+            [ngClass]="getBackgroundColor(i, displayMonthNumber)"
+            (click)="onSelectMonth(displayYear, i)"
+            attr-calendar
+          >
+            <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
+              {{ month }}
+            </span>
+          </div>
         </div>
       </div>
-      <div class="po-calendar-content-list-month">
-        <div
-          *ngFor="let month of displayMonths; let i = index"
-          class="po-calendar-month"
-          [ngClass]="getBackgroundColor(i, displayMonthNumber)"
-          (click)="onSelectMonth(displayYear, i)"
-          attr-calendar
-        >
-          <span [ngClass]="getForegroundColor(i, displayMonthNumber)">
-            {{ month }}
-          </span>
+    </ng-container>
+  }
+
+  @if (isYearVisible) {
+    <ng-container>
+      <po-calendar-header
+        (p-previous)="updateYear(-10)"
+        (p-next)="updateYear(10)"
+        [p-template-context]="templateContext"
+        [p-header-template]="headerTemplate || internalComboTemplate"
+        [p-size]="size"
+      >
+      </po-calendar-header>
+
+      <div class="po-calendar-content">
+        <div class="po-calendar-labels">
+          <div class="po-calendar-label">
+            {{ yearLabel }}
+          </div>
+        </div>
+
+        <div class="po-calendar-content-list-year">
+          <div
+            *ngFor="let year of displayDecade; let i = index; trackBy: trackByYear"
+            class="po-calendar-year"
+            [ngClass]="getBackgroundColor(year, currentYear)"
+            (click)="onSelectYear(year, displayMonthNumber)"
+            attr-calendar
+          >
+            <span [ngClass]="getForegroundColor(year, currentYear)">
+              {{ year }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
+  }
 
-  <ng-container *ngIf="isYearVisible">
-    <po-calendar-header (p-previous)="updateYear(-10)" (p-next)="updateYear(10)">
-      {{ displayStartDecade }} - {{ displayFinalDecade }}
-    </po-calendar-header>
-
-    <div class="po-calendar-content">
-      <div class="po-calendar-labels">
-        <div class="po-calendar-label">
-          {{ yearLabel }}
-        </div>
-      </div>
-
-      <div class="po-calendar-content-list-year">
-        <div
-          *ngFor="let year of displayDecade; let i = index"
-          class="po-calendar-year"
-          [ngClass]="getBackgroundColor(year, currentYear)"
-          (click)="onSelectYear(year, displayMonthNumber)"
-          attr-calendar
-        >
-          <span [ngClass]="getForegroundColor(year, currentYear)">
-            {{ year }}
-          </span>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="!range">
-    <div class="po-calendar-footer">
-      <div class="po-calendar-footer-today">
-        <button
+  @if (!range) {
+    <ng-container>
+      <div class="po-calendar-footer">
+        <po-button
+          p-kind="tertiary"
           type="button"
-          class="po-calendar-footer-today-button"
+          [p-label]="displayToClean"
+          (click)="onClear()"
+          (keydown.enter)="onClear()"
+          (keydown.space)="onClear()"
+          [p-size]="size"
+        >
+        </po-button>
+        <po-button
+          p-kind="tertiary"
+          type="button"
+          [p-label]="displayToday"
           (click)="onSelectDate(today)"
           (keydown.enter)="onSelectDate(today)"
           (keydown.space)="onSelectDate(today)"
-          [disabled]="isTodayUnavailable()"
+          [p-disabled]="isTodayUnavailable()"
+          [p-size]="size"
         >
-          {{ displayToday }}
-        </button>
+        </po-button>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
+  }
 </div>
+
+<ng-template #internalComboTemplate let-combo>
+  <po-combo
+    class="po-combo-first"
+    [name]="'month-' + comboKey"
+    [p-clean]="false"
+    [p-remove-initial-filter]="true"
+    [ngModel]="combo.monthIndex"
+    [p-options]="combo.monthsOptions"
+    (p-change)="combo.updateDate(combo.year, $event)"
+    [p-size]="size"
+  >
+  </po-combo>
+
+  <po-combo
+    [name]="'year-' + comboKey"
+    [p-clean]="false"
+    [p-remove-initial-filter]="true"
+    [ngModel]="combo.year"
+    [p-options]="combo.yearsOptions"
+    (p-change)="combo.updateDate($event, combo.monthIndex)"
+    [p-size]="size"
+  >
+  </po-combo>
+</ng-template>
