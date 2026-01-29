@@ -5,6 +5,8 @@ import { PoCalendarMode } from './po-calendar-mode.enum';
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 describe('PoCalendarBaseComponent:', () => {
   let component: PoCalendarBaseComponent;
@@ -234,6 +236,38 @@ describe('PoCalendarBaseComponent:', () => {
       spyOn(component, <any>'verifyActivateDate').and.callThrough();
 
       expect(component.activateDate.getDate()).toEqual(today.getDate());
+    });
+  });
+  describe('Properties:', () => {
+    it('p-size: should return default size when _size is undefined', () => {
+      component['_size'] = undefined;
+      expect(component.size).toBe(getDefaultSizeFn(PoFieldSize));
+    });
+
+    it('p-size: should accept valid values', () => {
+      const validSizes = Object.values(PoFieldSize);
+
+      validSizes.forEach(size => {
+        component.size = size;
+        expect(component.size).toBe(validateSizeFn(size, PoFieldSize));
+      });
+    });
+
+    it('p-size: should return _size value when it is defined', () => {
+      const validSize = 'medium';
+      component.size = validSize;
+      expect(component.size).toBe(validSize);
+    });
+
+    it('p-size: should handle invalid size values', () => {
+      const invalidSize = 'invalid-size';
+      component.size = invalidSize;
+      expect(component.size).toBe(getDefaultSizeFn(PoFieldSize));
+    });
+
+    it('p-size: should use default when _size is null', () => {
+      component['_size'] = null;
+      expect(component.size).toBe(getDefaultSizeFn(PoFieldSize));
     });
   });
 });

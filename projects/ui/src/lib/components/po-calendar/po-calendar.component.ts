@@ -166,6 +166,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
       this.activateDate = { start: newStart, end: newEnd };
     }
+
+    this.changeMonthYear.emit({ month, year });
   }
 
   registerOnChange(fn: any): void {

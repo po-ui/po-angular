@@ -149,7 +149,7 @@ export class PoCalendarLangService {
     ru: 'Сегодня'
   };
 
-  private toCleanLabel = {
+  readonly toCleanLabel = {
     pt: 'Limpar',
     en: 'To clean',
     es: 'Para limpiar',

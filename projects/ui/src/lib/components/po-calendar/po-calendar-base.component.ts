@@ -47,43 +47,43 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                              | Descrição                                             | Valor Padrão                                      |
- * |------------------------------------------|-------------------------------------------------------|---------------------------------------------------|
- * | `--font-family`                          | Família tipográfica usada                             | `var(--font-family-theme)`                        |
- * | `--font-size`                            | Tamanho da fonte                                      | `var(--font-size-default)`                        |
- * | `--font-weight`                          | Peso da fonte                                         | `var(--font-weight-bold)`                         |
- * | `--line-height`                          | Tamanho da label                                      | `var(--line-height-none)`                         |
- * | `--border-radius`                        | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-radius-md)`                         |
- * | `--border-width`                         | Contém o valor da largura dos cantos do elemento&nbsp;| `var(--border-width-md)`                          |
- * | `--padding`                              | Preenchimento                                         | `0 1em`                                           |                                                                        | ---                                             |
- * | **Danger**                               |                                                       |                                                   |
- * | `--text-color-danger`                    | Cor do texto no estado danger                         | `var(--color-neutral-light-00)`                   |
- * | `--color-button-danger`                  | Cor do botão no estado danger                         | `var(--color-feedback-negative-dark)`             |
- * | `--color-danger-hover`                   | Cor de hover no estado danger                         | `var(--color-feedback-negative-darker)`           |
- * | `--color-danger-pressed`                 | Cor pressionada no estado danger                      | `var(--color-feedback-negative-darkest)`          |
- * | `--background-danger-hover`              | Cor de background de hover no estado danger           | `var(--color-feedback-negative-lighter)`          |
- * | `--border-color-danger-hover`            | Cor da borda de hover no estado danger                | `var(--color-feedback-negative-darkest)`          |
- * | `--background-danger-pressed`            | Cor de background pressionado no estado danger        | `var(--color-feedback-negative-light)`            |
- * | `--background-color-button-danger`&nbsp; | Cor de background do botão no estado danger           | `var(--color-transparent)`                        |
- * | **Default Values**                       |                                                       |                                                   |
- * | `--text-color`                           | Cor do texto                                          | `var(--color-neutral-light-00)`                   |
- * | `--color`                                | Cor principal do botão                                | `var(--color-action-default)`                     |
- * | `--background-color`                     | Cor de background                                     | `var(--color-transparent)`                        |
- * | `--border-color`                         | Cor da borda                                          | `var(--color-transparent)`                        |
- * | `--shadow`                               | Contém o valor da sombra do elemento                  | `var(--shadow-none)`                              |
- * | **Hover**                                |                                                       |                                                   |
- * | `--color-hover`                          | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
- * | `--background-hover`                     | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                   |
- * | `--border-color-hover`                   | Cor da borda no estado hover                          | `var(--color-brand-01-darkest)`                   |
- * | **Focused**                              |                                                       |                                                   |
- * | `--outline-color-focused`                | Cor do outline do estado de focus                     | `var(--color-action-focus)`                       |
- * | **Pressed**                              |                                                       |                                                   |
- * | `--color-pressed`                        | Cor principal no estado de pressionado                | `var(--color-action-pressed)`                     |
- * | `--background-pressed`                   | Cor de background no estado de pressionado&nbsp;      | `var(--color-brand-01-light)`                     |
- * | **Disabled**                             |                                                       |                                                   |
- * | `--text-color-disabled`                  | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                    |
- * | `--color-disabled`                       | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
- * | `--background-color-disabled`            | Cor de background no estado disabled                  | `var(--color-transparent)`                        |
+ * | Propriedade                  | Descrição                                            | Valor Padrão                      |
+ * |------------------------------|------------------------------------------------------|-----------------------------------|
+ * | **Default Values**           |                                                      |                                   |
+ * | `--background`               | Cor de fundo                                         | `var(--color-neutral-light-00)`   |
+ * | `--border-color`             | Cor da borda                                         | `var(--color-neutral-light-20)`   |
+ * | `--border-radius`            | Raio da borda                                        | `var(--border-radius-md)`         |
+ * | `--border-width`             | Largura da borda                                     | `var(--border-width-sm)`          |
+ * | `--shadow`                   | Contém o valor da sombra do elemento                 | `var(--shadow-md)`                |
+ * | **Weekly cells**             |                                                      |                                   |
+ * | `--color`                    | Cor da fonte utilizada nas células semanais          | `var(--color-neutral-dark-90)`    |
+ * | `--font-family`              | Fonte utilizada nas células semanais                 | `var(--font-family-text)`         |
+ * | `--font-size`                | Tamanho da fonte utilizada nas células semanais      | `var(--font-size-sm)`             |
+ * | `--font-weight`              | Peso da fonte utilizada nas células semanais         | `var(--font-weight-bold)`         |
+ * | **Days cells**               |                                                      |                                   |
+ * | `--font-weight`              | Peso da fonte utilizada nas células de dias          | `var(--font-weight-normal)`       |
+ * | `--color`                    | Cor da fonte utilizada nas células de dias           | `var(--color-neutral-dark-90)`    |
+ * | `--border-radius`            | Raio da borda                                        | `var(--border-radius-md)`         |
+ * | `--border-width`             | Largura da borda                                     | `var(--border-width-sm)`          |
+ * | **Today**                    |                                                      |                                   |
+ * | `--font-weight`              | Peso da fonte utilizada na célula de hoje            | `var(--font-weight-bold)`         |
+ * | `--color`                    | Cor da fonte utilizada na célula de hoje             | `var(--color-action-default)`     |
+ * | **Focused**                  |                                                      |                                   |
+ * | `--outline-color`            | Cor do outline do estado de focus                    | `var(--color-action-focus)`       |
+ * | **Hover**                    |                                                      |                                   |
+ * | `--background-color`         | Cor de fundo das células ao passar o mouse           | `var(--color-neutral-light-00)`   |
+ * | `--color`                    | Cor da fonte utilizada nas células ao passar o mouse | `var(--color-action-hover)`       |
+ * | **Interval**                 |                                                      |                                   |
+ * | `--background-color`         | Cor de fundo das células de intervalo                | `var(--color-brand-01-lighter)`   |
+ * | `--color`                    | Cor da fonte utilizada nas células de intervalo      | `var(--color-action-default)`     |
+ * | **Next Month**               |                                                      |                                   |
+ * | `--color`                    | Cor da fonte utilizada nas células do próximo mês    | `var(--color-action-default)`     |
+ * | **Disabled**                 |                                                      |                                   |
+ * | `--border-color`             | Cor da borda das células desabilitadas               | `var(--color-action-disabled)`    |
+ * | `--color`                    | Cor da fonte utilizada nas células desabilitadas     | `var(--color-action-disabled)`    |
+ * | **Selected**                 |                                                      |                                   |
+ * | `--background-color`         | Cor de fundo das células selecionadas                | `var(--color-neutral-light-00)`   |
+ * | `--color`                    | Cor da fonte utilizada nas células selecionadas      | `var(--color-action-default)`     |
  *
  */
 
@@ -91,6 +91,9 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 export class PoCalendarBaseComponent {
   /** Evento disparado ao selecionar um dia do calendário. */
   @Output('p-change') change = new EventEmitter<string | { start; end }>();
+
+  /** Evento disparado ao alterar o mês ou ano do calendário. */
+  @Output('p-change-month-year') changeMonthYear = new EventEmitter<any>();
 
   activateDate;
   value;

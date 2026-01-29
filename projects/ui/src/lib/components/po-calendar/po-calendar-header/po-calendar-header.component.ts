@@ -19,7 +19,7 @@ import { PoComboOption } from '../../po-field/po-combo/interfaces/po-combo-optio
   standalone: false
 })
 export class PoCalendarHeaderComponent implements OnChanges {
-  private cdr = inject(ChangeDetectorRef);
+  readonly cdr = inject(ChangeDetectorRef);
 
   @Input('p-hide-previous') hidePrevious = false;
   @Input('p-hide-next') hideNext = false;
