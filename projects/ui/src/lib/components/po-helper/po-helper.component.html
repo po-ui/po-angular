@@ -1,5 +1,4 @@
 <div
-  (mouseenter)="setPopoverPositionByScreen()"
   class="po-helper-container po-helper-target"
   [attr.p-size]="this.size()"
   #target
@@ -12,17 +11,19 @@
   [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
   [class.po-helper-disabled]="disabled()"
   (keydown)="onKeyDown($event)"
-  (click)="emitClick($event); popover.ensurePopoverPosition()"
+  (click)="openHelperPopover(); emitClick($event); popover.ensurePopoverPosition()"
 >
   <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
   <po-popover
-    (click)="$event.stopPropagation()"
     #popover
     [p-position]="popoverPosition"
     [p-target]="target"
     [p-title]="helper()?.title"
     [p-append-in-body]="appendBox()"
     p-custom-classes="po-helper-popover"
+    p-trigger="function"
+    (p-close)="handleClose()"
+    (p-open)="handleOpen()"
   >
     <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
       {{ helper()?.content }}
