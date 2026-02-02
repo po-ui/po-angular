@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.2](https://github.com/po-ui/po-angular/compare/v19.39.1...v19.39.2) (2026-02-02)
+
+
+### Bug Fixes
+
+* **fields:** preserva valores falsy em select, multiselect e combo ([5fc028f](https://github.com/po-ui/po-angular/commit/5fc028f19b8677f2e740d4523728b74e1a4fb2c0))
+
 ### [19.39.1](https://github.com/po-ui/po-angular/compare/v19.39.0...v19.39.1) (2026-01-26)
 
 Compatibilidade com @totvs/thf-components@19.39.1
