@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.1.0](https://github.com/po-ui/po-angular/compare/v21.0.1...v21.1.0) (2026-02-03)
+
+
+### Bug Fixes
+
+* **fields:** preserva valores falsy em select, multiselect e combo ([6ba2392](https://github.com/po-ui/po-angular/commit/6ba23925808bf1ac0f4b2bf08dec0b295b911a0c))
+
 ### [21.0.1](https://github.com/po-ui/po-angular/compare/v21.0.0...v21.0.1) (2026-01-29)
 
 Compatibilidade com @po-ui/style@21.0.1
