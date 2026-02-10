@@ -10,70 +10,96 @@
   (keydown)="onKeyDown($event)"
   [tabindex]="disabled || !click.observers.length ? -1 : 0"
 >
-  @if (hasTitleHelpOrSetting()) {
-    <div class="po-widget-header">
-      <div class="po-widget-wrapper-info">
-        <div #wrapperInfo class="po-widget-wrapper-tag">
-          @if (showTitleAction) {
-            <span
-              #wrapperTitle
-              class="po-widget-title-action po-widget-text"
-              (click)="runTitleAction($event)"
-              [p-tooltip]="title && showTooltip() ? title : ''"
+  @if (avatarCustomTemplate() || avatarSrc()) {
+    <div
+      class="po-widget-container__avatar"
+      [style.width]="avatarWidthCustomTemplate()"
+      [style.height]="`${height - 2}px`"
+      [class.po-widget-container__avatar_pb]="primaryLabel"
+    >
+      @if (!avatarCustomTemplate() && avatarSrc()) {
+        <div class="po-widget-container__avatar__po-avatar">
+          <po-avatar [p-size]="avatarSize()" [p-src]="avatarSrc()" />
+        </div>
+      }
+
+      @if (avatarCustomTemplate()) {
+        <div class="po-widget-container__avatar__template">
+          <ng-template [ngTemplateOutlet]="avatarCustomTemplate()"></ng-template>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="po-widget-container__content">
+    @if (hasTitleHelpOrSetting()) {
+      <div class="po-widget-header">
+        @if (tagLabel && tagPosition() === 'top') {
+          <div class="po-widget-header__tag-top">
+            <ng-template [ngTemplateOutlet]="tag"></ng-template>
+          </div>
+        }
+
+        <div class="po-widget-wrapper-info">
+          <div #wrapperInfo class="po-widget-wrapper-tag">
+            @if (showTitleAction) {
+              <span
+                #wrapperTitle
+                class="po-widget-title-action po-widget-text"
+                (click)="runTitleAction($event)"
+                [p-tooltip]="title && showTooltip() ? title : ''"
+              >
+                {{ title }}
+              </span>
+            } @else {
+              <p #wrapperTitle class="po-widget-text" [p-tooltip]="title && showTooltip() ? title : ''">
+                {{ title }}
+              </p>
+            }
+
+            @if (tagLabel && tagPosition() === 'right') {
+              <ng-template [ngTemplateOutlet]="tag"></ng-template>
+            }
+          </div>
+
+          @if (actions?.length) {
+            <div
+              class="po-widget-button-wrapper"
+              #popupTarget
+              (click)="togglePopup(popupTarget, $event)"
+              (keydown)="$event.stopPropagation()"
             >
-              {{ title }}
-            </span>
-          } @else {
-            <p #wrapperTitle class="po-widget-text" [p-tooltip]="title && showTooltip() ? title : ''">
-              {{ title }}
-            </p>
-          }
-          @if (tagLabel) {
-            <po-tag
-              #tagElement
-              [p-value]="tagLabel"
-              [p-icon]="tagIcon"
-              [p-type]="disabled ? null : tagType ? tagType : 'success'"
-              [p-color]="disabled ? '#ECECEE' : null"
-              [p-text-color]="disabled ? '#36364A' : null"
-              p-force-icon
-            >
-            </po-tag>
+              <po-button
+                #buttonPopUp
+                [p-size]="size"
+                p-icon="ICON_MORE_OUT_VERT_FILL"
+                [p-disabled]="disabled"
+                p-kind="tertiary"
+              >
+              </po-button>
+            </div>
           }
         </div>
-        @if (actions?.length) {
-          <div
-            class="po-widget-button-wrapper"
-            #popupTarget
-            (click)="togglePopup(popupTarget, $event)"
-            (keydown)="$event.stopPropagation()"
-          >
-            <po-button
-              #buttonPopUp
-              [p-size]="size"
-              p-icon="ICON_MORE_OUT_VERT_FILL"
-              [p-disabled]="disabled"
-              p-kind="tertiary"
-            >
-            </po-button>
+
+        @if (tagLabel && tagPosition() === 'bottom') {
+          <div class="po-widget-header__tag-bottom">
+            <ng-template [ngTemplateOutlet]="tag"></ng-template>
           </div>
         }
       </div>
-    </div>
-  }
-
-  <po-container p-no-border [p-height]="containerHeight">
-    <div #contentContainer class="po-widget-body">
-      <ng-content #refContent></ng-content>
-    </div>
-    @if (!hasContent && height) {
-      <span class="po-header-content-fallback">.</span>
     }
-  </po-container>
 
-  @if (primaryLabel) {
-    <div class="po-widget-footer">
-      @if (!secondaryLabel) {
+    <po-container p-no-border [p-height]="containerHeight">
+      <div #contentContainer class="po-widget-body">
+        <ng-content #refContent></ng-content>
+      </div>
+      @if (!hasContent && height) {
+        <span class="po-header-content-fallback">.</span>
+      }
+    </po-container>
+
+    @if (primaryLabel) {
+      <div class="po-widget-footer">
         <div class="po-widget-actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
           <po-button
             class="po-widget-actions"
@@ -86,37 +112,36 @@
             [p-size]="size"
           ></po-button>
         </div>
-      }
-      @if (secondaryLabel) {
-        <div class="po-widget-actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-          <po-button
-            class="po-widget-actions"
-            id="primaryAct-{{ id }}"
-            [p-label]="primaryLabel"
-            (p-click)="runPrimaryAction()"
-            [p-danger]="dangerPrimaryAction"
-            [p-kind]="kindPrimaryAction || 'tertiary'"
-            [p-disabled]="disabled"
-            [p-size]="size"
-          ></po-button>
-        </div>
-      }
-      @if (secondaryLabel) {
-        <div class="po-widget-actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-          <po-button
-            class="po-widget-actions"
-            id="secondaryAct-{{ id }}"
-            [p-label]="secondaryLabel"
-            (p-click)="runSecondaryAction()"
-            [p-danger]="dangerSecondaryAction"
-            [p-kind]="kindSecondaryAction || 'tertiary'"
-            [p-disabled]="disabled"
-            [p-size]="size"
-          ></po-button>
-        </div>
-      }
-    </div>
-  }
+
+        @if (secondaryLabel) {
+          <div class="po-widget-actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+            <po-button
+              class="po-widget-actions"
+              id="secondaryAct-{{ id }}"
+              [p-label]="secondaryLabel"
+              (p-click)="runSecondaryAction()"
+              [p-danger]="dangerSecondaryAction"
+              [p-kind]="kindSecondaryAction || 'tertiary'"
+              [p-disabled]="disabled"
+              [p-size]="size"
+            ></po-button>
+          </div>
+        }
+      </div>
+    }
+  </div>
 </div>
 
 <po-popup #popup [p-actions]="actions" [p-size]="size" [p-target]="popupTarget" (p-close)="closePopUp()"> </po-popup>
+
+<ng-template #tag>
+  <po-tag
+    #tagElement
+    [p-value]="tagLabel"
+    [p-icon]="tagIcon"
+    [p-type]="disabled ? null : tagType ? tagType : 'success'"
+    [p-color]="disabled ? '#ECECEE' : null"
+    [p-text-color]="disabled ? '#36364A' : null"
+    p-force-icon
+  />
+</ng-template>
