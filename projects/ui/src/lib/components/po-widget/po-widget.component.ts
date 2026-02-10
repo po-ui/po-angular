@@ -7,15 +7,24 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  computed,
   inject
 } from '@angular/core';
 
-import { PoLanguageService, poLocaleDefault, PoThemeService } from '../../services';
+import { PoLanguageService, poLocaleDefault, PoThemeA11yEnum, PoThemeService } from '../../services';
 import { PoButtonComponent } from '../po-button';
 import { PoPopupComponent } from '../po-popup';
 import { PoKeyCodeEnum } from './../../enums/po-key-code.enum';
 import { poWidgetLiteralsDefault } from './literals/po-widget-language';
 import { PoWidgetBaseComponent } from './po-widget-base.component';
+import {
+  BORDER_WIDTH_SM,
+  SPACING_MD,
+  SPACING_SM,
+  SPACING_XS,
+  TARGET_SIZE_AA,
+  TARGET_SIZE_AAA
+} from '../../utils/design-tokens';
 
 /**
  * @docsExtends PoWidgetBaseComponent
@@ -67,6 +76,19 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
   get showTitleAction(): boolean {
     return !!this.titleAction.observers[0];
   }
+
+  //#region Avatar
+
+  avatarSrc = computed(() => this.avatar()?.src);
+  avatarSize = computed(() => this.avatar()?.size);
+  avatarCustomTemplate = computed(() => this.avatar()?.customTemplate);
+  avatarWidthCustomTemplate = computed(() =>
+    this.avatar()?.widthCustomTemplate && this.avatar()?.customTemplate
+      ? `${this.avatar().widthCustomTemplate}`
+      : undefined
+  );
+
+  //#endregion
 
   constructor() {
     const languageService = inject(PoLanguageService);
@@ -154,29 +176,39 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
 
   setHeight(height: number) {
     this.checkDefaultActions();
-    const actionsHeight = this.a11Level === 'AA' && this.size === 'small' ? 56 : 68;
-    const actionsButton = this.a11Level === 'AA' && this.size === 'small' ? 56 : 68;
-    if (height) {
-      let bodyHeight = height - 2;
-      if ((this.title || this.tagLabel) && !this.actions.length) {
-        if (this.tagLabel && this.tagIcon) {
-          bodyHeight -= 50;
-        } else {
-          bodyHeight -= 48;
-        }
-      }
 
-      if (this.actions.length) {
-        bodyHeight -= actionsHeight;
-      }
-
-      if (this.primaryLabel || this.secondaryLabel) {
-        bodyHeight -= actionsButton;
-      }
-      this.containerHeight = `${bodyHeight}px`;
-    } else {
+    if (!height) {
       this.containerHeight = `auto`;
+      return;
     }
+
+    const buttonSmall = TARGET_SIZE_AA + SPACING_SM + SPACING_XS; // 56
+    const buttonMedium = TARGET_SIZE_AAA + SPACING_SM + SPACING_XS; // 68
+    const tagPosition = this.tagPosition();
+
+    const actionsHeight = this.a11Level === PoThemeA11yEnum.AA && this.size === 'small' ? buttonSmall : buttonMedium;
+    const actionsButton = this.a11Level === PoThemeA11yEnum.AA && this.size === 'small' ? buttonSmall : buttonMedium;
+
+    const tagInRight = this.tagLabel && tagPosition === 'right';
+    let bodyHeight = height - BORDER_WIDTH_SM * 2;
+
+    if ((this.title || tagInRight) && !this.actions.length) {
+      bodyHeight -= SPACING_MD + SPACING_SM + SPACING_XS; // 48
+    }
+
+    if (this.actions.length) {
+      bodyHeight -= actionsHeight;
+    }
+
+    if (this.primaryLabel || this.secondaryLabel) {
+      bodyHeight -= actionsButton;
+    }
+
+    if (this.tagLabel && (tagPosition === 'top' || tagPosition === 'bottom')) {
+      bodyHeight -= SPACING_MD + SPACING_XS; // 32
+    }
+
+    this.containerHeight = `${bodyHeight}px`;
   }
 
   settingOutput() {
@@ -239,16 +271,20 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
 
   private updateContent() {
     const el = this.contentContainer?.nativeElement;
+
     if (!el) {
       return;
     }
+
     const existContent = Array.from(el.childNodes).some(node => {
       if (node.nodeType === Node.TEXT_NODE) {
         return (node.textContent || '').trim().length > 0;
       }
+
       if (node.nodeType === Node.ELEMENT_NODE) {
         return true;
       }
+
       return false;
     });
 
