@@ -1,9 +1,14 @@
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, input, Input, Output, TemplateRef } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { convertToBoolean, getDefaultSizeFn, isTypeof, uuid, validateSizeFn } from '../../utils/util';
 import { PoPopupAction } from '../po-popup';
 import { PoTagType } from '../po-tag';
+import { PoWidgetAvatar } from './interfaces/po-widget-avatar.interface';
+import { convertToBoolean, getDefaultSizeFn, isTypeof, uuid, validateSizeFn } from '../../utils/util';
+import { validateAvatarSize } from '../po-avatar/po-avatar-base.component';
+
+const PO_WIDGET_TAG_POSITION = ['right', 'top', 'bottom'];
+const PO_WIDGET_TAG_POSITION_DEFAULT = 'right';
 
 /**
  *
@@ -46,6 +51,7 @@ import { PoTagType } from '../po-tag';
  * | `--padding` - `@deprecated 21.x.x`           | Preenchimento do componente                                      | `1rem`                                                                      |
  * | `--padding-header`                           | Preenchimento do header                                          | `var(--spacing-sm) var(--spacing-sm) var(--spacing-xs) var(--spacing-sm)`   |
  * | `--padding-body`                             | Preenchimento do body                                            | `var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-sm)`   |
+ * | `--padding-avatar`                           | Preenchimento do avatar                                          | `var(--spacing-sm) 0 var(--spacing-xs) var(--spacing-sm)`                   |
  * | `--padding-footer`                           | Preenchimento do footer                                          | `var(--spacing-xs) var(--spacing-sm) var(--spacing-sm) var(--spacing-sm)`   |
  * | `--border-radius`                            | Contém o valor do raio dos cantos do elemento&nbsp;              | `var(--border-radius-md)`                                                   |
  * | `--border-width`                             | Contém o valor da largura dos cantos do elemento&nbsp;           | `var(--border-width-sm)`                                                    |
@@ -53,14 +59,14 @@ import { PoTagType } from '../po-tag';
  * | `--background`                               | Cor de background                                                | `var(--color-neutral-light-00)`                                             |
  * | `--shadow`                                   | Contém o valor da sombra do elemento                             | `var(--shadow-md)`                                                          |
  * | **Hover**                                    |                                                                  |                                                                             |
- * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-action-hover)`                                                |
+ * | `--border-color-hover`                       | Cor da borda no estado hover                                     | `var(--color-action-hover)`                                                 |
  * | **Focused**                                  |                                                                  |                                                                             |
  * | `--color-focused`                            | Cor principal no estado de focus                                 | `var(--color-action-default)`                                               |
  * | `--outline-color-focused` &nbsp;             | Cor do outline do estado de focus                                | `var(--color-action-focus)`                                                 |
  *
  */
 @Directive()
-export abstract class PoWidgetBaseComponent {
+export class PoWidgetBaseComponent {
   private _size?: string = undefined;
 
   /** Descrição da segunda ação. */
@@ -182,6 +188,21 @@ export abstract class PoWidgetBaseComponent {
   @Input('p-tag-icon') tagIcon: string | TemplateRef<void>;
 
   /**
+   * @Input p-tag-position
+   *
+   * @optional
+   *
+   * @description
+   * Define o posicionamento da `po-tag` no cabeçalho do Widget:
+   * - `right`: posicionada no canto superior direito do cabeçalho.
+   * - `top`: posicionada à esquerda, acima do título (quando houver).
+   * - `bottom`: posicionada à esquerda, abaixo do título (quando houver).
+   *
+   * @default `right`
+   */
+  tagPosition = input('right', { alias: 'p-tag-position', transform: this.transformTagPosition });
+
+  /**
    * @optional
    *
    * @description
@@ -212,6 +233,20 @@ export abstract class PoWidgetBaseComponent {
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
+
+  /**
+   * @Input p-avatar
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define o avatar a ser exibido à esquerda no Widget.
+   */
+  avatar = input<PoWidgetAvatar, PoWidgetAvatar>(undefined, {
+    alias: 'p-avatar',
+    transform: this.transformAvatar
+  });
 
   /**
    * @optional
@@ -325,7 +360,6 @@ export abstract class PoWidgetBaseComponent {
    */
   @Input('p-height') set height(value: number) {
     this._height = parseInt(<any>value, 10);
-    this.setHeight(this.height);
   }
 
   get height(): number {
@@ -341,7 +375,6 @@ export abstract class PoWidgetBaseComponent {
    */
   @Input('p-help') set help(value: string) {
     this._help = isTypeof(value, 'string') ? value : '';
-    this.setHeight(this.height);
   }
 
   get help(): string {
@@ -361,7 +394,6 @@ export abstract class PoWidgetBaseComponent {
    */
   @Input('p-no-shadow') set noShadow(value: boolean) {
     this._noShadow = <any>value === '' ? true : convertToBoolean(value);
-    this.setHeight(this.height);
   }
 
   get noShadow(): boolean {
@@ -395,7 +427,6 @@ export abstract class PoWidgetBaseComponent {
    */
   @Input('p-primary-label') set primaryLabel(value: string) {
     this._primaryLabel = isTypeof(value, 'string') ? value : '';
-    this.setHeight(this.height);
   }
 
   get primaryLabel(): string {
@@ -414,12 +445,32 @@ export abstract class PoWidgetBaseComponent {
    */
   @Input('p-title') set title(value: string) {
     this._title = isTypeof(value, 'string') ? value : '';
-    this.setHeight(this.height);
   }
 
   get title(): string {
     return this._title;
   }
 
-  abstract setHeight(height: number);
+  private transformAvatar(value: PoWidgetAvatar | undefined) {
+    if (!value) {
+      return value;
+    }
+
+    const result = { ...value };
+
+    if (result?.size) {
+      result.size = validateAvatarSize(result.size);
+    }
+
+    if (result?.widthCustomTemplate) {
+      const numericValue = Number(result.widthCustomTemplate.replace(/\D/g, ''));
+      result.widthCustomTemplate = numericValue ? `${Math.min(numericValue, 50)}%` : undefined;
+    }
+
+    return result;
+  }
+
+  private transformTagPosition(value: string): string {
+    return PO_WIDGET_TAG_POSITION.includes(value) ? value : PO_WIDGET_TAG_POSITION_DEFAULT;
+  }
 }

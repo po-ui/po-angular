@@ -23,6 +23,9 @@ export class SamplePoWidgetLabsComponent implements OnInit {
   title: string;
   actionPopup: PoPopupAction = { action: null, label: '' };
   myActions: Array<PoPopupAction> = [];
+  tagPosition: string;
+  avatarSrc: string;
+  avatarSize: string;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabled', label: 'Disabled' },
@@ -39,6 +42,20 @@ export class SamplePoWidgetLabsComponent implements OnInit {
     { label: 'an an-globe', value: 'an an-globe' },
     { label: 'fa fa-address-card', value: 'fa fa-address-card' },
     { label: 'fa fa-bell', value: 'fa fa-bell' }
+  ];
+
+  public readonly listTagPosition: Array<PoSelectOption> = [
+    { label: 'right', value: 'right' },
+    { label: 'top', value: 'top' },
+    { label: 'bottom', value: 'bottom' }
+  ];
+
+  public readonly listAvatarSize: Array<PoSelectOption> = [
+    { label: 'xs', value: 'xs' },
+    { label: 'sm', value: 'sm' },
+    { label: 'md', value: 'md' },
+    { label: 'lg', value: 'lg' },
+    { label: 'xl', value: 'xl' }
   ];
 
   ngOnInit() {
@@ -68,6 +85,9 @@ export class SamplePoWidgetLabsComponent implements OnInit {
     this.tagLabel = undefined;
     this.tagIcon = undefined;
     this.actionPopup = { action: null, label: '' };
+    this.tagPosition = undefined;
+    this.avatarSrc = undefined;
+    this.avatarSize = undefined;
   }
 
   private showAction(action: string): any {

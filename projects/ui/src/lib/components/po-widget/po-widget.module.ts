@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { PoAvatarModule } from '../po-avatar';
 import { PoIconModule } from '../po-icon';
-import { PoContainerModule } from '../po-container/index';
-import { PoWidgetComponent } from './po-widget.component';
-import { PoTagModule } from '../po-tag';
 import { PoButtonModule } from '../po-button';
+import { PoContainerModule } from '../po-container/index';
 import { PoPopupModule } from '../po-popup';
+import { PoTagModule } from '../po-tag';
 import { PoTooltipModule } from '../../directives';
+
+import { PoWidgetComponent } from './po-widget.component';
 
 /**
  * @description
@@ -15,7 +17,16 @@ import { PoTooltipModule } from '../../directives';
  * Módulo do componente po-widget
  */
 @NgModule({
-  imports: [CommonModule, PoContainerModule, PoIconModule, PoTagModule, PoButtonModule, PoPopupModule, PoTooltipModule],
+  imports: [
+    CommonModule,
+    PoAvatarModule,
+    PoButtonModule,
+    PoContainerModule,
+    PoIconModule,
+    PoPopupModule,
+    PoTagModule,
+    PoTooltipModule
+  ],
   exports: [PoWidgetComponent],
   declarations: [PoWidgetComponent]
 })

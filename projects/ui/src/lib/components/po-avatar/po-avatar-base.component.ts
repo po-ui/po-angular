@@ -3,6 +3,8 @@ import { Directive, EventEmitter, Input, Output } from '@angular/core';
 const PO_AVATAR_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
 const PO_AVATAR_SIZE_DEFAULT = 'md';
 
+export const validateAvatarSize = (value: string) => (PO_AVATAR_SIZES.includes(value) ? value : PO_AVATAR_SIZE_DEFAULT);
+
 /**
  * @description
  *
@@ -57,7 +59,7 @@ export class PoAvatarBaseComponent {
    * @default `md`
    */
   @Input('p-size') set size(value: string) {
-    this._size = PO_AVATAR_SIZES.includes(value) ? value : PO_AVATAR_SIZE_DEFAULT;
+    this._size = validateAvatarSize(value);
   }
   get size(): string {
     return this._size;
