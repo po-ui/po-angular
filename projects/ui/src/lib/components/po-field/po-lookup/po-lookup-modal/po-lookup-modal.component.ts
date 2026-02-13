@@ -12,11 +12,12 @@ import {
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { sortArrayOfObjects } from '../../../../utils/util';
+import { PO_TABLE_ROW_HEIGHT_BY_SPACING, sortArrayOfObjects } from '../../../../utils/util';
 import { PoTableColumnSpacing } from '../../../po-table';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
+import { PoFieldSize } from './../../../../../lib/enums/po-field-size.enum';
 
 /**
  * @docsPrivate
@@ -144,16 +145,14 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     this.createDynamicForm();
   }
 
-  private setTableHeight() {
-    const rowHeightMap = {
-      [PoTableColumnSpacing.ExtraSmall]: 32,
-      [PoTableColumnSpacing.Small]: 40,
-      [PoTableColumnSpacing.Medium]: 48,
-      [PoTableColumnSpacing.Large]: 56
-    };
-    const extraHeight = this.infiniteScroll ? 35 : 135;
-    const currentRowHeight = rowHeightMap[this.spacing || PoTableColumnSpacing.Medium];
-    this.tableHeight = currentRowHeight * 10 + extraHeight;
+  private setTableHeight(): void {
+    const visibleRows = 10;
+    const headerHeight = this.spacing === PoTableColumnSpacing.ExtraSmall ? 32 : 48;
+    const footerHeight = this.size === PoFieldSize.Small ? 48 : 60;
+    const currentRowHeight = PO_TABLE_ROW_HEIGHT_BY_SPACING[this.spacing];
+    const extraHeight = this.infiniteScroll ? headerHeight : headerHeight + footerHeight;
+
+    this.tableHeight = currentRowHeight * visibleRows + extraHeight;
   }
 
   private setupModalAdvancedFilter() {

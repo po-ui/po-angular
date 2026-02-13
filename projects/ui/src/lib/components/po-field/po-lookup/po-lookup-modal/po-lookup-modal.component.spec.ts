@@ -11,6 +11,9 @@ import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { PoTableColumnSpacing } from '../../../po-table';
+import { PoFieldSize } from 'projects/ui/src/lib/enums/po-field-size.enum';
+import { PoThemeA11yEnum } from 'projects/ui/src/public-api';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -110,18 +113,223 @@ describe('PoLookupModalComponent', () => {
     expect(fixture.nativeElement.querySelector('.po-modal')).not.toBeNull();
   });
 
-  it('shouldn`t set tableHeight with Infinite Scroll enabled', () => {
-    component.infiniteScroll = true;
-    component['setTableHeight']();
+  describe('setTableHeight', () => {
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+    });
 
-    expect(component.tableHeight).toBe(515);
-  });
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+    });
 
-  it('shouldn`t set tableHeight with Infinite Scroll disabled', () => {
-    component.infiniteScroll = false;
-    component['setTableHeight']();
+    it('should set tableHeight with infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      const visibleRows = 10;
+      const rowHeight = 48;
+      const header = 48;
 
-    expect(component.tableHeight).toBe(615);
+      component.infiniteScroll = true;
+      component.spacing = PoTableColumnSpacing.Medium;
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should set tableHeight with infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      const visibleRows = 10;
+      const rowHeight = 48;
+      const header = 48;
+      const footer = 60;
+
+      component.infiniteScroll = false;
+      component.spacing = PoTableColumnSpacing.Medium;
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
+
+    it('should calculate height with spacing small and infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      const visibleRows = 10;
+      const rowHeight = 40;
+      const header = 48;
+
+      component.infiniteScroll = true;
+      component.spacing = PoTableColumnSpacing.Small;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should calculate height with spacing small and infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      const visibleRows = 10;
+      const rowHeight = 40;
+      const header = 48;
+      const footer = 60;
+
+      component.infiniteScroll = false;
+      component.spacing = PoTableColumnSpacing.Small;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
+
+    it('should calculate height with spacing large and infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      const visibleRows = 10;
+      const rowHeight = 56;
+      const header = 48;
+
+      component.infiniteScroll = true;
+      component.spacing = PoTableColumnSpacing.Large;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should calculate height with spacing large and infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      const visibleRows = 10;
+      const rowHeight = 56;
+      const header = 48;
+      const footer = 60;
+
+      component.infiniteScroll = false;
+      component.spacing = PoTableColumnSpacing.Large;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
+
+    it('should calculate height with size small and infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 32;
+      const header = 32;
+
+      component.infiniteScroll = true;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.ExtraSmall;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should calculate height with size small and infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 32;
+      const header = 32;
+      const footer = 48;
+
+      component.infiniteScroll = false;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.ExtraSmall;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
+
+    it('should calculate height with size small, spacing small and infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 40;
+      const header = 48;
+
+      component.infiniteScroll = true;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.Small;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should calculate height with size small, spacing small and infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 40;
+      const header = 48;
+      const footer = 48;
+
+      component.infiniteScroll = false;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.Small;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
+
+    it('should calculate height with size small, spacing medium and infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 48;
+      const header = 48;
+
+      component.infiniteScroll = true;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.Medium;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should calculate height with size small, spacing medium and infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 48;
+      const header = 48;
+      const footer = 48;
+
+      component.infiniteScroll = false;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.Medium;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
+
+    it('should calculate height with size small, spacing large and infiniteScroll enabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 56;
+      const header = 48;
+
+      component.infiniteScroll = true;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.Large;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header);
+    });
+
+    it('should calculate height with size small, spacing large and infiniteScroll disabled', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      const visibleRows = 10;
+      const rowHeight = 56;
+      const header = 48;
+      const footer = 48;
+
+      component.infiniteScroll = false;
+      component.size = PoFieldSize.Small;
+      component.spacing = PoTableColumnSpacing.Large;
+
+      component['setTableHeight']();
+
+      expect(component.tableHeight).toBe(rowHeight * visibleRows + header + footer);
+    });
   });
 
   describe('AdvancedSearch: ', () => {
