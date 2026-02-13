@@ -34,19 +34,19 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {
     const _poTheme = this.poTheme.applyTheme();
     this.a11yLevel = this.poTheme.getA11yLevel();
+    this.poTheme.setA11yDefaultSizeSmall(true);
+
+    if (this.a11yLevel === PoThemeA11yEnum.AA) {
+      this.poTheme.setDensityMode(PoDensityMode.Small);
+    } else {
+      this.poTheme.setDensityMode(PoDensityMode.Medium);
+    }
 
     if (!_poTheme) {
       this.theme = poThemeConstant.active.type;
       this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
     } else {
       this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
-    }
-
-    if (this.a11yLevel === PoThemeA11yEnum.AA) {
-      this.poTheme.setA11yDefaultSizeSmall(true);
-      this.poTheme.setDensityMode(PoDensityMode.Small);
-    } else {
-      this.poTheme.setDensityMode(PoDensityMode.Medium);
     }
   }
 
@@ -133,8 +133,6 @@ export class AppComponent implements OnInit, OnDestroy {
     if (dispatchEvent) {
       window.dispatchEvent(new Event(this.a11yStorage));
     }
-
-    window.location.reload();
   }
 
   get actions() {
