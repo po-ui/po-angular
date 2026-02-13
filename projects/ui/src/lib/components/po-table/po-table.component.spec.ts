@@ -631,34 +631,14 @@ describe('PoTableComponent:', () => {
       }
     };
 
-    component['calculateHeightTableContainer'].call(fakeThis, '10');
+    component['calculateHeightTableContainer'].call(fakeThis, 10);
     expect(fakeThis.heightTableContainer).toBe(10);
 
-    component['calculateHeightTableContainer'].call(fakeThis, '100');
+    component['calculateHeightTableContainer'].call(fakeThis, 100);
     expect(fakeThis.heightTableContainer).toBe(100);
 
     component['calculateHeightTableContainer'].call(fakeThis, 50);
     expect(fakeThis.heightTableContainer).toBe(50);
-  });
-
-  it('should return undefined when height is not a number in function calculateHeightTableContainer', () => {
-    const fakeThis = {
-      getHeightTableFooter: () => 0,
-      heightTableContainer: 0,
-      setTableOpacity: () => {},
-      changeDetector: {
-        detectChanges: () => {}
-      }
-    };
-
-    component['calculateHeightTableContainer'].call(fakeThis, 'a10');
-    expect(fakeThis.heightTableContainer).toBeUndefined();
-
-    component['calculateHeightTableContainer'].call(fakeThis, undefined);
-    expect(fakeThis.heightTableContainer).toBeUndefined();
-
-    component['calculateHeightTableContainer'].call(fakeThis, null);
-    expect(fakeThis.heightTableContainer).toBeUndefined();
   });
 
   it('should return true in verifyChangeHeightInFooter', () => {
@@ -751,20 +731,6 @@ describe('PoTableComponent:', () => {
     spyOn(fakeThisDoCheck, 'debounceResize');
     component.ngDoCheck.call(fakeThisDoCheck);
     expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
-  });
-
-  it('should set 48 in itemSize if offsetWidth is less than 1366', () => {
-    spyOnProperty(document.body, 'offsetWidth').and.returnValue(1300);
-    component.ngDoCheck();
-
-    expect(component.itemSize).toBe(48);
-  });
-
-  it('should set 48 in itemSize if offsetWidth is greater than 1366', () => {
-    spyOnProperty(document.body, 'offsetWidth').and.returnValue(1500);
-    component.ngDoCheck();
-
-    expect(component.itemSize).toBe(48);
   });
 
   it('should not call debounceResize in ngDoCheck when initialized is false', () => {
@@ -1364,6 +1330,45 @@ describe('PoTableComponent:', () => {
       component['calculateHeightTableContainer'].call(fakeThis, 400);
 
       expect(fakeThis.changeDetector.detectChanges).toHaveBeenCalled();
+    });
+
+    describe('calculateHeightTableContainer - itemSize: ', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+      });
+
+      it('should set itemSize with spacing extraSmall', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        component.spacing = PoTableColumnSpacing.ExtraSmall;
+        component['calculateHeightTableContainer'](400);
+
+        expect(component.itemSize).toBe(32);
+      });
+
+      it('should set itemSize with spacing small', () => {
+        component.spacing = PoTableColumnSpacing.Small;
+        component['calculateHeightTableContainer'](400);
+
+        expect(component.itemSize).toBe(40);
+      });
+
+      it('should set itemSize with spacing medium', () => {
+        component.spacing = PoTableColumnSpacing.Medium;
+        component['calculateHeightTableContainer'](400);
+
+        expect(component.itemSize).toBe(48);
+      });
+
+      it('should set itemSize with spacing large', () => {
+        component.spacing = PoTableColumnSpacing.Large;
+        component['calculateHeightTableContainer'](400);
+
+        expect(component.itemSize).toBe(56);
+      });
     });
 
     describe('isShowRowTemplate:', () => {

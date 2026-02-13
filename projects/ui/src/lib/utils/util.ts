@@ -4,6 +4,7 @@ import { poLocaleDefault, poLocales } from '../services/po-language/po-language.
 import { ElementRef } from '@angular/core';
 import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
 import { PoThemeService } from '../services/po-theme/po-theme.service';
+import { PoTableColumnSpacing } from '../components/po-table/enums/po-table-spacing.enum';
 
 /**
  * Converte e formata os bytes em formato mais legível para o usuário.
@@ -939,4 +940,11 @@ export const PoUtils = {
   sortValues,
   uuid,
   validateDateRange
+};
+
+export const PO_TABLE_ROW_HEIGHT_BY_SPACING = {
+  [PoTableColumnSpacing.ExtraSmall]: 32,
+  [PoTableColumnSpacing.Small]: 40,
+  [PoTableColumnSpacing.Medium]: 48,
+  [PoTableColumnSpacing.Large]: 56
 };
