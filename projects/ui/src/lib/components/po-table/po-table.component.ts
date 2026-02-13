@@ -27,12 +27,11 @@ import { Observable, Subscription } from 'rxjs';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../services/po-notification/po-notification.service';
-import { convertToBoolean, getDefaultSizeFn } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, PO_TABLE_ROW_HEIGHT_BY_SPACING, uuid } from '../../utils/util';
 import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
-import { uuid } from '../../utils/util';
 import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
@@ -137,7 +136,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   popupTarget;
   tableOpacity: number = 0;
   tooltipText: string;
-  itemSize: number = 48;
+  itemSize: number;
   lastVisibleColumnsSelected: Array<PoTableColumn>;
   tagColor: string;
   idRadio: string;
@@ -167,7 +166,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private _iconToken: { [key: string]: string };
   private differ;
   private footerHeight;
-  private headerHeight;
   private timeoutResize;
   private visibleElement = false;
   private scrollEvent$: Observable<any>;
@@ -725,9 +723,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.columns.some(item => item.fixed === true);
   }
 
-  protected calculateHeightTableContainer(height) {
-    const value = parseFloat(height);
-    this.heightTableContainer = value ? value - this.getHeightTableFooter() : undefined;
+  protected calculateHeightTableContainer(height: number) {
+    this.itemSize =
+      PO_TABLE_ROW_HEIGHT_BY_SPACING[this.spacing] ?? PO_TABLE_ROW_HEIGHT_BY_SPACING[PoTableColumnSpacing.Medium];
+    this.heightTableContainer = height ? height - this.getHeightTableFooter() : undefined;
     this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - this.itemSize : undefined;
     this.setTableOpacity(1);
     this.changeDetector.detectChanges();

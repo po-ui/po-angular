@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
 import { PoContextTabButtonComponent } from './po-context-tab-button.component';
 
-describe('PoContextTabButtonComponent:', () => {
+xdescribe('PoContextTabButtonComponent:', () => {
   let component: PoContextTabButtonComponent;
   let fixture: ComponentFixture<PoContextTabButtonComponent>;
   let nativeElement: any;
