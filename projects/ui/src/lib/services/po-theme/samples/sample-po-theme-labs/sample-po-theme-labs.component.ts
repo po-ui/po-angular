@@ -163,6 +163,8 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
     private fb: UntypedFormBuilder,
     private poTheme: PoThemeService
   ) {
+    this.poTheme.setA11yDefaultSizeSmall(true);
+
     const _poTheme = this.poTheme.applyTheme();
     this.a11yLevel = this.poTheme.getA11yLevel();
 
@@ -173,10 +175,6 @@ export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {
       this.theme = _poTheme.active || 0;
     }
     this.createReactiveForm();
-
-    if (this.a11yLevel === 'AA') {
-      this.poTheme.setA11yDefaultSizeSmall(true);
-    }
   }
 
   ngOnInit(): void {
