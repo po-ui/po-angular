@@ -133,8 +133,6 @@ export class AppComponent implements OnInit, OnDestroy {
     if (dispatchEvent) {
       window.dispatchEvent(new Event(this.a11yStorage));
     }
-
-    window.location.reload();
   }
 
   get actions() {
