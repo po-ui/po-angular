@@ -234,7 +234,8 @@ const poThemeDefaultDarkValues = {
     '--shadow-popover-box-shadow': '0 0 4px 0 var(--color-neutral-light-20)',
     '--shadow-popover-box-shadow-arrow': '-1px -1px 1px 0 var(--color-neutral-light-20)',
     /* CALENDAR */
-    '--color-calendar-background-color-box-background-range': 'var(--color-brand-01-lightest)',
+    '--color-calendar-background-color-box-background-range':
+      'var(--color-interval)' /*Deprecated v23.x.x utilizar --color-interval */,
     /* STEPPER */
     '--color-stepper-circle-disabled': 'var(--color-neutral-mid-40)',
     '--color-stepper-bar-disabled': 'var(--color-neutral-mid-40)',

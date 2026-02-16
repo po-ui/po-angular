@@ -10,6 +10,7 @@ import { PoButtonModule } from '../../po-button';
 import { PoDatepickerComponent } from './po-datepicker.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PoHelperModule } from '../../po-helper';
+import { PoLoadingModule } from '../../po-loading';
 
 /**
  * @description
@@ -23,6 +24,7 @@ import { PoHelperModule } from '../../po-helper';
     PoFieldContainerModule,
     OverlayModule,
     PoCleanModule,
+    PoLoadingModule,
     PoCalendarModule,
     PoButtonModule,
     PoHelperModule

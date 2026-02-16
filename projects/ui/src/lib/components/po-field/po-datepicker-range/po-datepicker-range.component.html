@@ -1,7 +1,8 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
-  [class.po-date-picker-container-disabled]="disabled"
-  [p-disabled]="disabled"
+  [class.po-date-picker-container-disabled]="isDisabled"
+  [p-disabled]="isDisabled"
+  [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
@@ -11,26 +12,38 @@
   [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content" [attr.p-size]="size">
-    <div class="po-field-container-input">
+  <div
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    class="po-field-container-content po-field-container-content-datepicker-range"
+    [attr.p-size]="size"
+  >
+    <div class="po-field-container-input" [class.readonly]="readonly && !isDisabled && !loading">
       <div
         #dateRangeField
         class="po-datepicker-range-field po-input"
-        [class.po-input-aa]="size === 'small'"
-        [class.po-datepicker-range-field-disabled]="disabled"
-        [attr.disabled]="disabled"
+        [class.po-datepicker-range-field-disabled]="isDisabled"
+        [class.po-input-icon-right]="enableCleaner && !isDisabled"
+        [attr.disabled]="isDisabled"
+        [attr.aria-label]="label"
+        role="group"
       >
-        <div class="po-datepicker-range-start-date" [class.po-datepicker-range-start-date-aa]="size === 'small'">
+        <div class="po-datepicker-range-start-date" [attr.data-value]="startDateInputValue || placeholder?.start">
           <input
             #startDateInput
             class="po-datepicker-range-input"
             maxlength="10"
             type="text"
-            [attr.aria-label]="label"
+            [attr.aria-label]="literals.startDate"
             [autocomplete]="autocomplete"
-            [disabled]="disabled"
+            [attr.data-focused-element]="!isDisabled"
+            [attr.data-inactive-component]="isDisabled || readonly"
+            [disabled]="isDisabled"
+            [id]="id"
             [name]="startDateInputName"
             [readonly]="readonly"
+            [required]="required"
+            [placeholder]="isDisabled ? '' : placeholder?.start"
             (blur)="onBlur($event)"
             (focus)="onFocus($event)"
             (keydown)="onKeydown($event)"
@@ -47,10 +60,12 @@
             class="po-datepicker-range-input"
             maxlength="10"
             type="text"
+            [attr.aria-label]="literals.endDate"
             [autocomplete]="autocomplete"
-            [disabled]="disabled"
+            [disabled]="isDisabled"
             [name]="endDateInputName"
             [readonly]="readonly"
+            [placeholder]="isDisabled ? '' : placeholder?.end"
             (blur)="onBlur($event)"
             (focus)="onFocus($event)"
             (keydown)="onKeydown($event)"
@@ -59,23 +74,39 @@
           />
         </div>
 
-        <div class="po-datepicker-range-icon">
-          @if (enableCleaner) {
-            <po-clean [p-size]="size" (p-change-event)="clear()"></po-clean>
-          }
-        </div>
-
-        <div class="po-datepicker-range-icon">
-          <po-icon
-            #iconCalendar
-            [p-icon]="!disabled || !readonly ? 'ICON_CALENDAR po-clickable' : 'ICON_CALENDAR'"
-            class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-            [class.po-field-icon-disabled]="disabled || readonly"
-            [class.po-field-icon-aa]="size === 'small'"
-            (click)="toggleCalendar()"
-          >
-          </po-icon>
-        </div>
+        @if (loading) {
+          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+        } @else {
+          <div class="po-field-icon-container-right">
+            @if (enableCleaner) {
+              <po-clean
+                #iconClean
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="literals.clean"
+                class="po-icon-input"
+                p-icon="ICON_FILL_CLEAR_CONTENT"
+                [p-size]="size"
+                (p-change-event)="clear()"
+                (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+                (keydown.space)="clearAndFocus(); $event.preventDefault()"
+              ></po-clean>
+              <div class="po-button-vertical-divider"></div>
+            }
+            <po-button
+              #iconCalendar
+              class="po-datepicker-range-button"
+              [class.po-button-tertiary-danger]="getErrorMessage"
+              p-icon="ICON_CALENDAR_DOTS"
+              p-kind="tertiary"
+              [p-disabled]="isDisabled || readonly"
+              [p-size]="size"
+              (keydown)="onKeyPress($event)"
+              (p-click)="toggleCalendar()"
+            >
+            </po-button>
+          </div>
+        }
       </div>
     </div>
     @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
@@ -84,7 +115,7 @@
         class="po-field-helper-button"
         [p-size]="size"
         [p-helper]="poHelper.helperSettings"
-        [p-disabled]="disabled"
+        [p-disabled]="isDisabled"
         [p-append-in-body]="appendBox"
       >
       </po-helper>
@@ -95,7 +126,7 @@
     <po-field-container-bottom
       [p-append-in-body]="appendBox"
       [p-help]="help"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-error-pattern]="getErrorMessage"
       [p-error-limit]="errorLimit"
       [p-size]="size"
@@ -103,15 +134,32 @@
   }
 </po-field-container>
 
-@if (isCalendarVisible) {
-  <div #calendarPicker class="po-calendar-range-picker">
+@if (appendBox) {
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="true"
+    [cdkConnectedOverlayDisableClose]="true"
+  >
+    <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
+  </ng-template>
+} @else {
+  <ng-container *ngTemplateOutlet="sharedCalendarContent"></ng-container>
+}
+
+<ng-template #sharedCalendarContent>
+  <div #calendarPicker class="po-calendar-range-picker" [hidden]="!isCalendarVisible">
     <po-calendar
       p-mode="range"
       [ngModel]="dateRange"
       [p-max-date]="maxDate"
       [p-min-date]="minDate"
       [p-locale]="locale"
+      [p-size]="size"
       (ngModelChange)="onCalendarChange($event)"
+      (p-change-month-year)="setCalendarPosition()"
+      (keydown)="onCalendarKeyDown($event)"
+      (p-close)="closeCalendar()"
     ></po-calendar>
   </div>
-}
+</ng-template>

@@ -3,23 +3,25 @@
   name="datepickerRange"
   [(ngModel)]="datepickerRange"
   [p-helper]="helperText"
-  [p-clean]="properties.includes('clean')"
-  [p-disabled]="properties.includes('disabled')"
   [p-end-date]="endDate"
   [p-help]="help"
   [p-label]="label"
   [p-literals]="customLiterals"
   [p-max-date]="maxDate"
   [p-min-date]="minDate"
+  [p-field-error-message]="fieldErrorMessage"
+  [p-start-date]="startDate"
+  [p-locale]="locale"
+  [p-size]="size"
+  [p-placeholder]="placeholder"
+  [p-clean]="properties.includes('clean')"
+  [p-disabled]="properties.includes('disabled')"
   [p-no-autocomplete]="properties?.includes('noAutocomplete')"
   [p-optional]="properties.includes('optional')"
   [p-readonly]="properties.includes('readonly')"
   [p-required]="properties.includes('required')"
-  [p-field-error-message]="fieldErrorMessage"
+  [p-loading]="properties.includes('loading')"
   [p-show-required]="properties.includes('showRequired')"
-  [p-start-date]="startDate"
-  [p-locale]="locale"
-  [p-size]="size"
   [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
@@ -43,6 +45,24 @@
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
 
   <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
+
+  <po-input
+    class="po-md-3"
+    name="placeholderStart"
+    [(ngModel)]="placeholder.start"
+    (p-change-model)="changePlaceholderStart($event)"
+    p-label="Placeholder início"
+  >
+  </po-input>
+
+  <po-input
+    class="po-md-3"
+    name="placeholderEnd"
+    [(ngModel)]="placeholder.end"
+    (p-change-model)="changePlaceholderEnd($event)"
+    p-label="Placeholder fim"
+  >
+  </po-input>
 
   <po-datepicker class="po-md-6" name="minDate" [(ngModel)]="minDate" p-clean p-label="Min date" [p-max-date]="maxDate">
   </po-datepicker>
