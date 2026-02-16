@@ -3,7 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
-import { convertIsoToDate, PoUtils as UtilsFunctions } from '../../../utils/util';
+import { convertIsoToDate, mapInputSizeToLoadingIcon, PoUtils as UtilsFunctions } from '../../../utils/util';
 import { PoValidators as ValidatorsFunctions } from './../validators';
 
 import { Subject } from 'rxjs';
@@ -660,6 +660,30 @@ describe('PoDatepickerBaseComponent:', () => {
       component.maxDate = new Date();
 
       expect(UtilsFunctions.setYearFrom0To100).toHaveBeenCalled();
+    });
+
+    it('should convert value to boolean and call markForCheck', () => {
+      const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
+
+      component.loading = 'true' as any;
+
+      expect(component['_loading']).toBeTrue();
+      expect(markForCheckSpy).toHaveBeenCalled();
+    });
+
+    it('should set loading to false when value is falsy', () => {
+      const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
+
+      component.loading = null as any;
+
+      expect(component['_loading']).toBeFalse();
+      expect(markForCheckSpy).toHaveBeenCalled();
+    });
+
+    it('should return the value from mapInputSizeToLoadingIcon', () => {
+      const result = component.mapSizeToIcon('md');
+
+      expect(result).toBe(mapInputSizeToLoadingIcon('md'));
     });
 
     it('p-iso-format: should update with valid value', () => {

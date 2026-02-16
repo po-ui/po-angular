@@ -11,6 +11,7 @@ import { PoLanguageService, PoThemeA11yEnum } from '../../../services';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
+import { mapInputSizeToLoadingIcon } from '../../../utils/util';
 
 describe('PoDatepickerRangeBaseComponent:', () => {
   @Directive()
@@ -217,6 +218,34 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poDatepickerRangeLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('should convert value to boolean and call markForCheck', () => {
+      component['changeDetector'] = {
+        markForCheck: jasmine.createSpy('markForCheck')
+      } as any;
+
+      component.loading = 'true' as any;
+
+      expect(component['_loading']).toBeTrue();
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should set loading to false when value is falsy', () => {
+      component['changeDetector'] = {
+        markForCheck: jasmine.createSpy('markForCheck')
+      } as any;
+
+      component.loading = null as any;
+
+      expect(component['_loading']).toBeFalse();
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should return the value from mapInputSizeToLoadingIcon', () => {
+      const result = component.mapSizeToIcon('md');
+
+      expect(result).toBe(mapInputSizeToLoadingIcon('md'));
     });
 
     it('readonly: should update with true value.', () => {
