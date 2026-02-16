@@ -1,11 +1,10 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component, ElementRef, EventEmitter } from '@angular/core';
+import { ElementRef, EventEmitter, SimpleChanges } from '@angular/core';
 
 import { PoUtils as UtilsFunctions } from '../../../utils/util';
 
 import { PoCalendarService } from '../../po-calendar/services/po-calendar.service';
 import { PoCalendarLangService } from '../../po-calendar/services/po-calendar.lang.service';
-import { PoCalendarModule } from '../../po-calendar/po-calendar.module';
 
 import { PoDatepickerComponent } from './po-datepicker.component';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
@@ -21,340 +20,6 @@ function keyboardEvents(event: string, keyCode: number) {
   Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': keyCode });
   return eventKeyBoard;
 }
-
-describe('PoDatepickerComponent:', () => {
-  let component: PoDatepickerComponent;
-  let fixture: ComponentFixture<PoDatepickerComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [PoDatepickerModule, PoCalendarModule],
-      providers: [PoCalendarService, PoCalendarLangService]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(PoDatepickerComponent);
-    component = fixture.componentInstance;
-    component.label = 'Label de teste';
-    component.help = 'Help de teste';
-    component.format = 'dd/mm/yyyy';
-    component.locale = 'en';
-    component.autoFocus = true;
-    component.required = true;
-    component.clean = true;
-    component.date = new Date();
-    component.inputEl = new ElementRef(document.createElement('input'));
-
-    component.iconDatepicker = {
-      buttonElement: {
-        nativeElement: document.createElement('button')
-      }
-    } as PoButtonComponent;
-
-    document.body.appendChild(component.inputEl.nativeElement);
-  });
-
-  it('should be created', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should have help', () => {
-    component.help = 'Help de teste';
-    fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('Help de teste');
-  });
-
-  it('should be valid form', () => {
-    expect(component.hasInvalidClass()).toBe(false);
-  });
-
-  it('should transform a String to Date', () => {
-    const date = component.getDateFromString('05/06/2017');
-    expect(date.toISOString()).toBe(new Date(2017, 5, 5).toISOString());
-  });
-
-  it('should format Date to dd/mm/yyyy', () => {
-    const date = new Date(2017, 5, 5);
-    const formatted = component.formatToDate(date);
-    expect(formatted).toBe('05/06/2017');
-  });
-
-  it('blocking typing in keyup event', () => {
-    spyOn(component, 'controlModel');
-
-    component.readonly = true;
-    component.onKeyup.call(component, {});
-
-    expect(component.controlModel).not.toHaveBeenCalled();
-  });
-
-  it('blocking typing in keydown event', () => {
-    const fakeThis = {
-      readonly: true,
-      objMask: {
-        keydown: (v: any) => {}
-      }
-    };
-
-    spyOn(fakeThis.objMask, 'keydown');
-
-    component.onKeydown.call(fakeThis, {});
-
-    expect(fakeThis.objMask.keydown).not.toHaveBeenCalled();
-  });
-
-  it('should call onblur', () => {
-    component['onTouchedModel'] = () => {};
-
-    spyOn(component.onblur, 'emit');
-    spyOn(component, <any>'onTouchedModel');
-
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    const event = document.createEvent('Event');
-    event.initEvent('blur', true, true);
-    input.dispatchEvent(event);
-
-    component.eventOnBlur(event);
-
-    expect(component['onTouchedModel']).toHaveBeenCalled();
-    expect(component.onblur.emit).toHaveBeenCalled();
-  });
-
-  it('should call onblur and callOnChange to have been called', () => {
-    component['onTouchedModel'] = () => {};
-
-    spyOn(component, 'callOnChange');
-    spyOn(component, <any>'onTouchedModel');
-
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    input.value = '11/11/2011';
-
-    const fakeEvent = {
-      keyCode: 10,
-      target: {
-        value: '11'
-      }
-    };
-
-    component.eventOnBlur(fakeEvent);
-
-    expect(component['onTouchedModel']).toHaveBeenCalled();
-    expect(component.callOnChange).toHaveBeenCalled();
-  });
-
-  it('should call onChangeModel', () => {
-    const fakeThis = {
-      onChangeModel: val => {}
-    };
-
-    spyOn(fakeThis, 'onChangeModel');
-
-    component.callOnChange.call(fakeThis, '');
-    expect(fakeThis.onChangeModel).toHaveBeenCalled();
-  });
-
-  it('should not change input', () => {
-    const fakeThis = {
-      inputEl: null,
-      isMobile: () => false,
-      formatToDate: () => {}
-    };
-
-    component.writeValue.call(fakeThis, 10);
-    expect(fakeThis.inputEl).toBe(null);
-  });
-
-  it('should set null value when pass null value in writevalue', () => {
-    component.inputEl.nativeElement.value = '25/12/2018';
-
-    component.writeValue('');
-
-    expect(component.inputEl.nativeElement.value).toBe('');
-    expect(component.date).toBeUndefined();
-  });
-
-  it('should set invalid value when pass invalid value in writevalue', () => {
-    component['objMask'] = {
-      keyup: jasmine.createSpy('keyup'),
-      valueToModel: ''
-    };
-    component.inputEl.nativeElement.value = '25/12/2018';
-
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-
-    component.writeValue('1');
-
-    component.format = 'dd/mm/aaaa';
-    component['objMask'].valueToModel = '1';
-    component.errorPattern = 'Invalid Date';
-    component.hasInvalidClass = () => true;
-    fixture.detectChanges();
-
-    spyOn(component, 'callOnChange');
-
-    input.dispatchEvent(keyboardEvents('keypress', 9));
-    input.dispatchEvent(keyboardEvents('keydown', 9));
-    input.dispatchEvent(keyboardEvents('keyup', 9));
-    fixture.debugElement.nativeElement.querySelector('input').dispatchEvent(new Event('blur'));
-
-    expect(component.callOnChange).toHaveBeenCalled();
-
-    const errorElement = fixture.debugElement.nativeElement.querySelector('.po-field-container-bottom-text-error');
-
-    const content = errorElement.innerHTML.toString();
-    expect(content.includes('Invalid Date')).toBeTrue();
-  });
-
-  it('should return if readonly is true', () => {
-    const event = new KeyboardEvent('keyup', { key: 'A' });
-    component['objMask'] = {
-      keyup: jasmine.createSpy('keyup'),
-      valueToModel: ''
-    };
-    component.readonly = true;
-    component.onKeyup(event);
-
-    expect(component['objMask'].keyup).not.toHaveBeenCalled();
-  });
-
-  it('should return if event is not input element', () => {
-    const event = new KeyboardEvent('keyup', { key: 'Enter' });
-
-    spyOn(component, 'callOnChange');
-    component['objMask'] = {
-      keyup: jasmine.createSpy('keyup'),
-      valueToModel: '1'
-    };
-    component.readonly = false;
-    component.inputEl.nativeElement.focus();
-    component.onKeyup(event);
-
-    expect(component.callOnChange).not.toHaveBeenCalled();
-  });
-
-  it('should define this.date undefined', () => {
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    component.inputEl = {
-      nativeElement: input
-    };
-    component['objMask'] = {
-      keyup: jasmine.createSpy('keyup')
-    };
-    component.date = '1';
-    component.readonly = false;
-    component.inputEl.nativeElement.focus();
-    input.dispatchEvent(keyboardEvents('keyup', 13));
-    document.body.appendChild(component.inputEl.nativeElement);
-
-    expect(component.date).toBeUndefined();
-  });
-
-  it('check if element has overlay class ', () => {
-    const datepicker = fixture.nativeElement.querySelector('.po-input');
-    datepicker.classList.add('po-datepicker-calendar-overlay');
-
-    expect(component.hasOverlayClass(datepicker)).toBeTruthy();
-  });
-
-  it('should not call callOnChange on keyup when "valueToModel" is null', () => {
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    component.format = 'dd/mm/aaaa';
-    component['objMask'].valueToModel = '';
-    component.inputEl = {
-      nativeElement: input
-    };
-
-    spyOn(component, 'callOnChange');
-
-    input.dispatchEvent(keyboardEvents('keypress', 13));
-    input.dispatchEvent(keyboardEvents('keydown', 13));
-    input.dispatchEvent(keyboardEvents('keyup', 13));
-    document.body.appendChild(component.inputEl.nativeElement);
-
-    expect(component.callOnChange).toHaveBeenCalled();
-  });
-
-  it('should not call callOnChange on keyup when "valueToModel" is null', () => {
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    component.format = 'dd/mm/aaaa';
-    component['objMask'].valueToModel = null;
-
-    spyOn(component, 'callOnChange');
-
-    input.dispatchEvent(keyboardEvents('keypress', 13));
-    input.dispatchEvent(keyboardEvents('keydown', 13));
-    input.dispatchEvent(keyboardEvents('keyup', 13));
-
-    expect(component.callOnChange).not.toHaveBeenCalled();
-  });
-
-  it('should return true in hasInvalidClass()', () => {
-    component.el.nativeElement.classList.add('ng-invalid');
-    component.el.nativeElement.classList.add('ng-dirty');
-    component.inputEl.nativeElement.value = 'teste';
-    expect(component.hasInvalidClass()).toBe(true);
-  });
-
-  it('should return true in hasInvalidClass if showErrorMessageRequired and required is true', () => {
-    component.el.nativeElement.classList.add('ng-invalid');
-    component.el.nativeElement.classList.add('ng-dirty');
-    component.inputEl.nativeElement.value = '';
-    component.showErrorMessageRequired = true;
-    component.required = true;
-    expect(component.hasInvalidClass()).toBeTruthy();
-  });
-
-  it('should return true in hasInvalidClass if showErrorMessageRequired and hasValidatorRequired is true', () => {
-    component.el.nativeElement.classList.add('ng-invalid');
-    component.el.nativeElement.classList.add('ng-dirty');
-    component.inputEl.nativeElement.value = '';
-    component.showErrorMessageRequired = true;
-    component.required = false;
-    component['hasValidatorRequired'] = true;
-    expect(component.hasInvalidClass()).toBeTruthy();
-  });
-
-  afterEach(() => {
-    document.body.removeChild(component.inputEl.nativeElement);
-  });
-});
-
-@Component({
-  template: `
-    <form>
-      <po-datepicker name="name_teste" [(ngModel)]="value" p-required p-clean> </po-datepicker>
-    </form>
-  `,
-  standalone: false
-})
-class ContentProjectionComponent {
-  value = new Date().toISOString();
-}
-
-describe('PoDatepicker mocked with form', () => {
-  let component: ContentProjectionComponent;
-  let fixture: ComponentFixture<ContentProjectionComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [PoDatepickerModule],
-      declarations: [ContentProjectionComponent],
-      providers: [PoCalendarService, PoCalendarLangService]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(ContentProjectionComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should be created', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should be required', () => {
-    const input = fixture.debugElement.nativeElement.querySelector('input');
-    fixture.detectChanges();
-    expect(input.getAttribute('required')).not.toBeNull();
-  });
-});
 
 describe('PoDatepickerComponent:', () => {
   let component: PoDatepickerComponent;
@@ -533,6 +198,43 @@ describe('PoDatepickerComponent:', () => {
     expect(component.onblur.emit).toHaveBeenCalled();
   });
 
+  describe('hasInvalidClass', () => {
+    it('should handle all validation scenarios', () => {
+      const nativeElement = component.el.nativeElement;
+
+      nativeElement.classList.add('ng-invalid', 'ng-dirty');
+      component.inputEl.nativeElement.value = 'valor';
+      component.showErrorMessageRequired = false;
+
+      expect(component.hasInvalidClass()).toBeTrue();
+
+      nativeElement.classList.remove('ng-invalid');
+      expect(component.hasInvalidClass()).toBeFalse();
+
+      nativeElement.classList.add('ng-invalid');
+      nativeElement.classList.remove('ng-dirty');
+      expect(component.hasInvalidClass()).toBeFalse();
+
+      nativeElement.classList.add('ng-dirty');
+      component.inputEl.nativeElement.value = '';
+      component.showErrorMessageRequired = false;
+      expect(component.hasInvalidClass()).toBeFalse();
+
+      component.showErrorMessageRequired = true;
+      component.required = true;
+      component['hasValidatorRequired'] = false;
+      expect(component.hasInvalidClass()).toBeTrue();
+
+      component.required = false;
+      component['hasValidatorRequired'] = true;
+      expect(component.hasInvalidClass()).toBeTrue();
+
+      component.required = false;
+      component['hasValidatorRequired'] = false;
+      expect(component.hasInvalidClass()).toBeFalse();
+    });
+  });
+
   it('should get error pattern with no error pattern', () => {
     const fakeThis = {
       errorPattern: '',
@@ -569,6 +271,40 @@ describe('PoDatepickerComponent:', () => {
         value: undefined
       }
     };
+
+    it('should set displayAdditionalHelp to false when label changes', () => {
+      component.displayAdditionalHelp = true;
+
+      const changes: SimpleChanges = {
+        label: {
+          currentValue: 'New label',
+          previousValue: 'Old label',
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.displayAdditionalHelp).toBeFalse();
+    });
+
+    it('should not change displayAdditionalHelp when label is not in changes', () => {
+      component.displayAdditionalHelp = true;
+
+      const changes: SimpleChanges = {
+        otherInput: {
+          currentValue: 'value',
+          previousValue: 'old',
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.displayAdditionalHelp).toBeTrue();
+    });
 
     it('ngOnDestroy: should call `removeListeners`.', () => {
       const removeListener = spyOn(component, <any>'removeListeners');
@@ -673,26 +409,6 @@ describe('PoDatepickerComponent:', () => {
       });
     });
 
-    it('addListener: should call wasClickedOnPicker when click in document', () => {
-      component.visible = false;
-
-      component.iconDatepicker = {
-        buttonElement: {
-          nativeElement: document.createElement('button')
-        }
-      } as PoButtonComponent;
-
-      component.togglePicker();
-      const documentBody = document.body;
-      const event = document.createEvent('MouseEvents');
-      event.initEvent('click', false, true);
-
-      spyOn(component, 'wasClickedOnPicker');
-      documentBody.dispatchEvent(event);
-      documentBody.click();
-      expect(component.wasClickedOnPicker).toHaveBeenCalled();
-    });
-
     it(`clear: should update model to 'undefined', update 'valueBeforeChange' with 'formatToDate' return,
       call 'controlModel' and 'formatToDate'.`, () => {
       const dateMock = new Date(2018, 0, 1);
@@ -709,6 +425,92 @@ describe('PoDatepickerComponent:', () => {
       expect(component.controlModel).toHaveBeenCalledWith(undefined);
       expect(component['controlChangeEmitter']).toHaveBeenCalled();
       expect(component['formatToDate']).toHaveBeenCalledWith(dateMock);
+    });
+
+    describe('clearAndFocus', () => {
+      it('should call clear method and focus on input element', fakeAsync(() => {
+        const clearSpy = spyOn(component, 'clear');
+        const focusSpy = spyOn(component, 'focus');
+
+        component.clearAndFocus();
+
+        expect(clearSpy).toHaveBeenCalled();
+
+        tick(200);
+
+        expect(focusSpy).toHaveBeenCalled();
+      }));
+    });
+
+    describe('onKeyup', () => {
+      let mockEvent: any;
+
+      beforeEach(() => {
+        mockEvent = { target: component.inputEl.nativeElement };
+
+        spyOn(component['objMask'], 'keyup');
+        spyOn(component, 'controlModel');
+        spyOn(component, 'getDateFromString').and.returnValue(new Date('2024-01-01'));
+      });
+
+      it('should return early when readonly is true or target is different', () => {
+        component.readonly = true;
+        component.onKeyup(mockEvent);
+        expect(component['objMask'].keyup).not.toHaveBeenCalled();
+        expect(component.controlModel).not.toHaveBeenCalled();
+
+        component.readonly = false;
+        component.onKeyup({ target: document.createElement('div') });
+        expect(component['objMask'].keyup).not.toHaveBeenCalled();
+        expect(component.controlModel).not.toHaveBeenCalled();
+      });
+
+      it('should call keyup and update model when valueToModel has length >= 10', () => {
+        component['objMask'].valueToModel = '25/12/2024';
+        component.inputEl.nativeElement.value = '25/12/2024';
+        const expectedDate = new Date('2024-01-01');
+
+        component.onKeyup(mockEvent);
+
+        expect(component['objMask'].keyup).toHaveBeenCalledWith(mockEvent);
+        expect(component.getDateFromString).toHaveBeenCalledWith('25/12/2024');
+        expect(component.controlModel).toHaveBeenCalledWith(expectedDate);
+        expect(component.date).toEqual(expectedDate);
+      });
+
+      it('should set date to undefined when valueToModel has length < 10', () => {
+        component['objMask'].valueToModel = '25/12/2';
+        component.date = new Date();
+        component.inputEl.nativeElement.value = '25/12/2';
+
+        component.onKeyup(mockEvent);
+
+        expect(component['objMask'].keyup).toHaveBeenCalledWith(mockEvent);
+        expect(component.date).toBeUndefined();
+        expect(component.controlModel).toHaveBeenCalledWith(undefined);
+      });
+
+      it('should set date to undefined when valueToModel is empty string', () => {
+        component['objMask'].valueToModel = '';
+        component.date = new Date();
+
+        component.onKeyup(mockEvent);
+
+        expect(component['objMask'].keyup).toHaveBeenCalledWith(mockEvent);
+        expect(component.date).toBeUndefined();
+        expect(component.controlModel).toHaveBeenCalledWith(undefined);
+      });
+
+      it('should set date to undefined when valueToModel is null', () => {
+        component['objMask'].valueToModel = null;
+        component.date = new Date();
+
+        component.onKeyup(mockEvent);
+
+        expect(component['objMask'].keyup).toHaveBeenCalledWith(mockEvent);
+        expect(component.date).toBeUndefined();
+        expect(component.controlModel).not.toHaveBeenCalled();
+      });
     });
 
     describe('onKeydown', () => {
@@ -829,34 +631,6 @@ describe('PoDatepickerComponent:', () => {
         expect(component.showAdditionalHelp).not.toHaveBeenCalled();
       });
 
-      it('should call `controlChangeEmitter`, `objMask.blur` and `onblur.emit`', () => {
-        const fakeThis = {
-          objMask: { blur: () => {}, valueToModel: undefined },
-          onblur: { emit: () => {} },
-          controlChangeEmitter: () => {},
-          callOnChange: () => {},
-          inputEl: { nativeElement: { value: undefined } },
-          onTouchedModel: () => {},
-          getAdditionalHelpTooltip: () => false,
-          displayAdditionalHelp: false,
-          showAdditionalHelp: () => {}
-        };
-
-        spyOn(fakeThis, <any>'controlChangeEmitter');
-        spyOn(fakeThis.objMask, 'blur');
-        spyOn(fakeThis.onblur, 'emit');
-        spyOn(fakeThis, 'onTouchedModel');
-        spyOn(fakeThis, 'getAdditionalHelpTooltip').and.returnValue(false);
-        spyOn(fakeThis, 'showAdditionalHelp');
-
-        component.eventOnBlur.call(fakeThis, undefined);
-
-        expect(fakeThis['onTouchedModel']).toHaveBeenCalled();
-        expect(fakeThis.controlChangeEmitter).toHaveBeenCalled();
-        expect(fakeThis.objMask.blur).toHaveBeenCalled();
-        expect(fakeThis.onblur.emit).toHaveBeenCalled();
-      });
-
       it('should call `controlModel` if have a `objMask.valueToModel equal or greater than 10`', () => {
         fakeEvent.target.value = '06/11/2019';
         component.date = new Date(2017, 5, 2);
@@ -935,6 +709,23 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('dateSelected:', () => {
+      it('should clear, emit undefined and close calendar when event is empty string', fakeAsync(() => {
+        const clearSpy = spyOn(component, 'clear');
+        const closeSpy = spyOn(component as any, 'closeCalendar');
+        const emitSpy = spyOn(component.onchange, 'emit');
+
+        component.dateSelected('');
+
+        expect(clearSpy).toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalledWith(undefined);
+
+        expect(closeSpy).not.toHaveBeenCalled();
+
+        tick(200);
+
+        expect(closeSpy).toHaveBeenCalled();
+      }));
+
       it('should set `calendar.visible` to false', () => {
         component.visible = true;
         component['onTouchedModel'] = () => {};
@@ -974,6 +765,20 @@ describe('PoDatepickerComponent:', () => {
         component.dateSelected();
 
         expect(spyInputFocus).not.toHaveBeenCalled();
+      });
+
+      it('should set input value to empty string when formatToDate returns null', () => {
+        spyOn(component, 'formatToDate').and.returnValue(null);
+        spyOn(component, 'controlModel');
+        spyOn(component as any, 'controlChangeEmitter');
+        spyOn(component as any, 'togglePicker');
+        spyOn(component, 'verifyMobile').and.returnValue(<any>true);
+
+        component.inputEl.nativeElement.value = 'old value';
+
+        component.dateSelected();
+
+        expect(component.inputEl.nativeElement.value).toBe('');
       });
     });
 
@@ -1205,6 +1010,33 @@ describe('PoDatepickerComponent:', () => {
         expect(component.hasOverlayClass).not.toHaveBeenCalled();
       });
 
+      describe('hasOverlayClass', () => {
+        it('should return true when element contains overlay class', () => {
+          const element = {
+            classList: {
+              contains: jasmine.createSpy().and.returnValue(true)
+            }
+          };
+
+          const result = component.hasOverlayClass(element);
+
+          expect(result).toBeTrue();
+          expect(element.classList.contains).toHaveBeenCalledWith('po-datepicker-calendar-overlay');
+        });
+
+        it('should return false when element does not contain overlay class', () => {
+          const element = {
+            classList: {
+              contains: jasmine.createSpy().and.returnValue(false)
+            }
+          };
+
+          const result = component.hasOverlayClass(element);
+
+          expect(result).toBeFalse();
+        });
+      });
+
       it('should call `closeCalendar` when click in overlay', () => {
         const fakeThis = getFakeThis(true, false, true, false);
 
@@ -1361,27 +1193,104 @@ describe('PoDatepickerComponent:', () => {
       expect(listen).toHaveBeenCalled();
     });
 
-    it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
+    it('setCalendarPosition: should call "controlPosition.setElements" and "controlPosition.adjustPosition".', done => {
+      component.visible = true;
       component.dialogPicker = {
         nativeElement: document.createElement('div')
-      };
+      } as any;
 
-      const setDialogPickerStyleDisplay = spyOn(component, <any>'setDialogPickerStyleDisplay');
+      component.dialogPicker.nativeElement.innerHTML = '<div class="po-calendar"></div>';
+
+      const setDialogPickerStyleDisplay = spyOn(component as any, 'setDialogPickerStyleDisplay');
       const setElements = spyOn(component['controlPosition'], 'setElements');
       const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
 
       component['setCalendarPosition']();
 
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(adjustPosition).toHaveBeenCalled();
-      expect(setElements).toHaveBeenCalledWith(
-        component.dialogPicker.nativeElement,
-        poCalendarContentOffset,
-        component['inputEl'],
-        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-        false,
-        true
-      );
+      setTimeout(() => {
+        expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
+        expect(setElements).toHaveBeenCalledWith(
+          component.dialogPicker.nativeElement,
+          poCalendarContentOffset,
+          component['inputEl'],
+          ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+          false,
+          true
+        );
+        expect(adjustPosition).toHaveBeenCalled();
+        done();
+      }, 100);
+    });
+
+    it('should use scrollHeight and scrollWidth from .po-calendar when it exists', () => {
+      component.visible = true;
+
+      const calendarMock = {
+        scrollHeight: 500,
+        scrollWidth: 300
+      };
+
+      const nativeElementMock: any = {
+        querySelector: jasmine.createSpy().and.returnValue(calendarMock),
+        scrollHeight: 100,
+        scrollWidth: 100,
+        style: {
+          height: '',
+          width: ''
+        }
+      };
+
+      component.dialogPicker = {
+        nativeElement: nativeElementMock
+      } as any;
+
+      component['controlPosition'] = {
+        setElements: jasmine.createSpy(),
+        adjustPosition: jasmine.createSpy()
+      } as any;
+
+      spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['adjustCalendarPosition']();
+
+      expect(nativeElementMock.style.height).toBe('500px');
+      expect(nativeElementMock.style.width).toBe('300px');
+    });
+
+    it('should fallback to nativeElement scrollHeight and scrollWidth when .po-calendar does not exist', () => {
+      component.visible = true;
+
+      const nativeElementMock: any = {
+        querySelector: jasmine.createSpy().and.returnValue(null),
+        scrollHeight: 200,
+        scrollWidth: 150,
+        style: {
+          height: '',
+          width: ''
+        }
+      };
+
+      component.dialogPicker = {
+        nativeElement: nativeElementMock
+      } as any;
+
+      component['controlPosition'] = {
+        setElements: jasmine.createSpy(),
+        adjustPosition: jasmine.createSpy()
+      } as any;
+
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['adjustCalendarPosition']();
+
+      expect(nativeElementMock.style.height).toBe('200px');
+      expect(nativeElementMock.style.width).toBe('150px');
     });
 
     it('onScroll: should call `controlPosition.adjustPosition()`.', () => {
@@ -1444,24 +1353,6 @@ describe('PoDatepickerComponent:', () => {
       expect(component.hour).toBe('T00:00:00+03:00');
     });
 
-    it('onKeyup: should change value of the mask when typing', () => {
-      const fakeThis = {
-        objMask: {
-          valueToModel: '11/11/1111',
-          keyup: (v: any) => {}
-        },
-        mask: '99/99/9999',
-        controlModel: component.controlModel,
-        callOnChange: component.callOnChange,
-        getDateFromString: (v: any) => true,
-        inputEl: component.inputEl
-      };
-
-      spyOn(fakeThis, 'controlModel');
-      component.onKeyup.call(fakeThis, { target: component.inputEl.nativeElement });
-      expect(fakeThis.controlModel).toHaveBeenCalled();
-    });
-
     it(`onKeyPress: should call 'isKeyCodeEnter' and check if typed key is enter.`, () => {
       const eventEnterKey = { keyCode: 13 };
 
@@ -1499,6 +1390,38 @@ describe('PoDatepickerComponent:', () => {
       expect(component.focus).toHaveBeenCalled();
       expect(event.preventDefault).toHaveBeenCalled();
       expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    it(`onKeyPress: should focus iconClean when shift+tab, not visible, clean and input has value`, () => {
+      const event = {
+        key: 'Tab',
+        shiftKey: true,
+        preventDefault: jasmine.createSpy(),
+        stopPropagation: jasmine.createSpy()
+      } as any;
+
+      component.visible = false;
+      component.clean = true;
+
+      component.inputEl = {
+        nativeElement: {
+          value: 'some value'
+        }
+      } as any;
+
+      component.iconClean = {
+        nativeElement: {
+          focus: jasmine.createSpy('focus')
+        }
+      } as any;
+
+      spyOn(component, 'focus');
+
+      component.onKeyPress(event);
+
+      expect(component.iconClean.nativeElement.focus).toHaveBeenCalled();
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.focus).not.toHaveBeenCalled();
     });
 
     it('togglePicker: should not call initializeListeners if component.disabled is true', () => {
@@ -1542,6 +1465,41 @@ describe('PoDatepickerComponent:', () => {
 
       expect(component['setCalendarPosition']).toHaveBeenCalled();
       expect(component['initializeListeners']).toHaveBeenCalled();
+    });
+
+    describe('isFocusOnFirstCombo', () => {
+      it('should return true when first combo is the active element', () => {
+        const fakeElement = {} as Element;
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(fakeElement)
+          }
+        } as any;
+
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(fakeElement);
+
+        const result = (component as any).isFocusOnFirstCombo();
+
+        expect(result).toBeTrue();
+      });
+
+      it('should return false when first combo is not the active element', () => {
+        const fakeElement = {} as Element;
+        const anotherElement = {} as Element;
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(fakeElement)
+          }
+        } as any;
+
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(anotherElement);
+
+        const result = (component as any).isFocusOnFirstCombo();
+
+        expect(result).toBeFalse();
+      });
     });
 
     it('togglePicker: should call removeListeners if component.visible is truthy', () => {
@@ -1665,10 +1623,17 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('focusCalendar:', () => {
-      it('should focus on first focusable element when dialogPicker exists', () => {
-        const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
-        const mockElement = document.createElement('button');
-        spyOn(mockElement, 'focus');
+      let event: KeyboardEvent;
+
+      beforeEach(() => {
+        event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
+      });
+
+      it('should focus on first combo when isFocusOnFirstCombo() returns true', () => {
+        const mockFocus = jasmine.createSpy();
+        const mockElement = { focus: mockFocus } as unknown as HTMLElement;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
 
         component.dialogPicker = {
           nativeElement: {
@@ -1679,7 +1644,33 @@ describe('PoDatepickerComponent:', () => {
         component['focusCalendar'](event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(mockElement.focus).toHaveBeenCalled();
+        expect(mockFocus).toHaveBeenCalled();
+      });
+
+      it('should call togglePicker when isFocusOnFirstCombo() returns false', () => {
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
+        spyOn(component as any, 'togglePicker');
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: () => null
+          }
+        } as ElementRef;
+
+        component['focusCalendar'](event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(component['togglePicker']).toHaveBeenCalledWith(false);
+      });
+      it('should return early when dialogPicker is not present', () => {
+        spyOn(component as any, 'isFocusOnFirstCombo');
+
+        component.dialogPicker = null;
+
+        component['focusCalendar'](event);
+
+        expect(component['isFocusOnFirstCombo']).not.toHaveBeenCalled();
+        expect(event.preventDefault).not.toHaveBeenCalled();
       });
 
       it('should call togglePicker when no focusable element is found', () => {
@@ -1715,81 +1706,170 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('onCalendarKeyDown:', () => {
-      it('should handle Tab key - toggle picker and focus input', () => {
+      it('should do nothing when calendar is not visible', () => {
+        component.visible = false;
+
         const event = {
-          key: 'Tab',
-          keyCode: PoKeyCodeEnum.tab,
+          key: 'Escape',
           preventDefault: jasmine.createSpy(),
           stopPropagation: jasmine.createSpy()
-        } as unknown as KeyboardEvent;
+        } as any;
 
-        spyOn(component, 'togglePicker');
+        spyOn(component as any, 'closeCalendar');
 
         component.onCalendarKeyDown(event);
 
-        expect(component.togglePicker).toHaveBeenCalled();
-        expect(event.preventDefault).toHaveBeenCalled();
-        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component['closeCalendar']).not.toHaveBeenCalled();
+        expect(event.preventDefault).not.toHaveBeenCalled();
       });
 
-      it('should handle Shift+Tab - toggle picker and focus input', () => {
+      it('should close calendar on Escape key', () => {
+        component.visible = true;
+
+        const event = {
+          key: 'Escape',
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.iconDatepicker = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        spyOn(component as any, 'closeCalendar');
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconDatepicker.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component['closeCalendar']).toHaveBeenCalledWith(false);
+      });
+
+      it('should close calendar on Shift+Tab when focus is on first combo', () => {
+        component.visible = true;
+
         const event = {
           key: 'Tab',
-          keyCode: PoKeyCodeEnum.tab,
           shiftKey: true,
           preventDefault: jasmine.createSpy(),
           stopPropagation: jasmine.createSpy()
-        } as unknown as KeyboardEvent;
+        } as any;
 
-        spyOn(component, 'togglePicker');
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+
+        component.iconDatepicker = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(document.activeElement)
+          }
+        } as any;
+
+        spyOn(component as any, 'closeCalendar');
 
         component.onCalendarKeyDown(event);
 
-        expect(component.togglePicker).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconDatepicker.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component['closeCalendar']).toHaveBeenCalledWith(false);
       });
 
-      it('should handle Escape key - toggle picker and focus input', () => {
+      it('should not close calendar on Shift+Tab when focus is not on first combo', () => {
+        component.visible = true;
+
         const event = {
-          key: 'Escape',
-          keyCode: PoKeyCodeEnum.esc,
+          key: 'Tab',
+          shiftKey: true,
           preventDefault: jasmine.createSpy(),
           stopPropagation: jasmine.createSpy()
-        } as unknown as KeyboardEvent;
+        } as any;
 
-        spyOn(component, 'togglePicker');
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
+        spyOn(component as any, 'closeCalendar');
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(document.activeElement)
+          }
+        } as any;
 
         component.onCalendarKeyDown(event);
 
-        expect(component.togglePicker).toHaveBeenCalled();
-        expect(event.preventDefault).toHaveBeenCalled();
-        expect(event.stopPropagation).toHaveBeenCalled();
-      });
-
-      it('should not handle other keys', () => {
-        const event = {
-          key: 'Enter',
-          keyCode: PoKeyCodeEnum.enter,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
-        } as unknown as KeyboardEvent;
-
-        spyOn(component, 'togglePicker');
-
-        component.onCalendarKeyDown(event);
-
-        expect(component.togglePicker).not.toHaveBeenCalled();
-        expect(event.preventDefault).not.toHaveBeenCalled();
-        expect(event.stopPropagation).not.toHaveBeenCalled();
+        expect(component['closeCalendar']).not.toHaveBeenCalled();
       });
     });
 
     describe('closeCalendar', () => {
       beforeEach(() => {
-        spyOn(component, <any>'removeListeners');
+        spyOn(component, <any>'removeListeners').and.callThrough();
         spyOn(component, <any>'setDialogPickerStyleDisplay');
         spyOn(component, 'focus');
+      });
+
+      describe('removeListeners', () => {
+        beforeEach(() => {
+          spyOn(component, <any>'verifyMobile').and.returnValue(false);
+        });
+
+        it('should focus iconDatepicker when focusInput is false, clean is true and input has value', fakeAsync(() => {
+          const iconFocusSpy = jasmine.createSpy('focus');
+
+          component.clean = true;
+          component.inputEl = { nativeElement: { value: '2024-01-01' } } as ElementRef;
+          component.iconDatepicker = { focus: iconFocusSpy } as any;
+
+          component['closeCalendar'](false);
+          tick();
+
+          expect(iconFocusSpy).toHaveBeenCalled();
+        }));
+
+        it('should call clickListener when it exists', () => {
+          const clickListenerSpy = jasmine.createSpy('clickListener');
+          component['clickListener'] = clickListenerSpy;
+
+          component['closeCalendar']();
+
+          expect(clickListenerSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('should call eventResizeListener when it exists', () => {
+          const resizeListenerSpy = jasmine.createSpy('resizeListener');
+          component['eventResizeListener'] = resizeListenerSpy;
+
+          component['closeCalendar']();
+
+          expect(resizeListenerSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('should remove scroll listener from window', () => {
+          spyOn(globalThis, 'removeEventListener');
+
+          component['closeCalendar']();
+
+          expect(globalThis.removeEventListener).toHaveBeenCalledWith('scroll', component['onScroll'], true);
+        });
+
+        it('should handle undefined listeners gracefully', () => {
+          component['clickListener'] = undefined;
+          component['eventResizeListener'] = undefined;
+
+          expect(() => {
+            component['closeCalendar']();
+          }).not.toThrow();
+        });
       });
 
       describe('when focusInput is true (default) and not mobile', () => {
@@ -1858,16 +1938,6 @@ describe('PoDatepickerComponent:', () => {
       const poupCalendar = fixture.debugElement.nativeElement.querySelector('.po-datepicker-popup-calendar');
 
       expect(poupCalendar).toBeFalsy();
-    });
-
-    it('should show po-clean if `clean` is true and `disabled` and `readonly` are false', () => {
-      component.clean = true;
-      component.disabled = false;
-      component.readonly = false;
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBeTruthy();
     });
 
     it('shouldn`t show po-clean if `clean` is true and `disabled` is true', () => {

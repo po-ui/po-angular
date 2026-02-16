@@ -8,8 +8,9 @@
     <po-button
       p-kind="tertiary"
       (click)="previous.emit()"
-      p-aria-label="Mês anterior"
-      p-icon="an an-caret-left"
+      (keydown.enter)="previous.emit(); $event.preventDefault()"
+      [p-aria-label]="previousMonthLabel"
+      p-icon="ICON_ARROW_LEFT"
       [p-size]="size"
     ></po-button>
   }
@@ -18,8 +19,9 @@
     <po-button
       p-kind="tertiary"
       (click)="next.emit()"
-      p-aria-label="Próximo mês"
-      p-icon="an an-caret-right"
+      (keydown.enter)="next.emit(); $event.preventDefault()"
+      [p-aria-label]="nextMonthLabel"
+      p-icon="ICON_ARROW_RIGHT"
       [p-size]="size"
     ></po-button>
   }

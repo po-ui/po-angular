@@ -11,6 +11,7 @@ import { PoLanguageService, PoThemeA11yEnum } from '../../../services';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
+import { mapInputSizeToLoadingIcon } from '../../../utils/util';
 
 describe('PoDatepickerRangeBaseComponent:', () => {
   @Directive()
@@ -111,6 +112,22 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it('should be update property p-locale with the default value ', () => {
       component['language'] = 'pt';
       expectPropertiesValues(component, 'locale', '', 'pt');
+    });
+
+    it('placeholder: should duplicate string to both start and end', () => {
+      component.placeholder = 'placeholder string' as any;
+      expect(component.placeholder).toEqual({ start: 'placeholder string', end: 'placeholder string' });
+    });
+
+    it('placeholder: should respect object values for start and end', () => {
+      const value: PoDatepickerRange = { start: '01/01/2020', end: '31/12/2020' };
+      component.placeholder = value as any;
+      expect(component.placeholder).toEqual(value);
+    });
+
+    it('placeholder: should reset to empty values when set to invalid', () => {
+      component.placeholder = null as any;
+      expect(component.placeholder).toEqual({ start: '', end: '' });
     });
 
     it('disabled: should update with true value.', () => {
@@ -217,6 +234,34 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component['language'] = poLocaleDefault;
 
       expectPropertiesValues(component, 'literals', invalidValues, poDatepickerRangeLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('should convert value to boolean and call markForCheck', () => {
+      component['changeDetector'] = {
+        markForCheck: jasmine.createSpy('markForCheck')
+      } as any;
+
+      component.loading = 'true' as any;
+
+      expect(component['_loading']).toBeTrue();
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should set loading to false when value is falsy', () => {
+      component['changeDetector'] = {
+        markForCheck: jasmine.createSpy('markForCheck')
+      } as any;
+
+      component.loading = null as any;
+
+      expect(component['_loading']).toBeFalse();
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('should return the value from mapInputSizeToLoadingIcon', () => {
+      const result = component.mapSizeToIcon('md');
+
+      expect(result).toBe(mapInputSizeToLoadingIcon('md'));
     });
 
     it('readonly: should update with true value.', () => {
