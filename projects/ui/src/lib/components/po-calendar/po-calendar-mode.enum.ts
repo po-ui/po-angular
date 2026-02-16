@@ -3,9 +3,9 @@
  *
  * @description
  *
- * *Enum* `PoCalendarMode` para especificar os modos de visualização do calendário.
+ * Define os modos de exibição do `po-calendar`.
  */
 export enum PoCalendarMode {
-  /** Define que o calendário será exibido em modo faixa de seleção. */
+  /** Modo de seleção de intervalo (data inicial e final). */
   Range = 'range'
 }

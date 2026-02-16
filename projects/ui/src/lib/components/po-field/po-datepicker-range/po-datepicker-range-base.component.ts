@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnDestroy, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  input,
+  Input,
+  OnDestroy,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
 import { Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -11,6 +20,7 @@ import {
   convertIsoToDate,
   convertToBoolean,
   getDefaultSizeFn,
+  mapInputSizeToLoadingIcon,
   replaceFormatSeparator,
   setYearFrom0To100,
   validateDateRange,
@@ -151,6 +161,15 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
+   * Mensagem que aparecerá enquanto o campo não estiver preenchido.
+   */
+  @Input('p-placeholder') placeholder?: PoDatepickerRange = { start: '', end: '' };
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Exibe a mensagem setada se o campo estiver vazio e for requerido.
    *
    * > Necessário que a propriedade `p-required` esteja habilitada.
@@ -252,6 +271,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _noAutocomplete?: boolean = false;
   private _readonly: boolean = false;
   private _required?: boolean = false;
+  private _loading?: boolean = false;
   private _startDate?;
   private _locale?: string;
   private _size?: string = undefined;
@@ -369,6 +389,27 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
 
   get literals() {
     return this._literals || poDatepickerRangeLiteralsDefault[this.language];
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.changeDetector?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -496,7 +537,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
     this._size = validateSizeFn(value, PoFieldSize);
   }
 
@@ -567,6 +610,11 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
     this.changeDetector.markForCheck();
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   // Função implementada do ControlValueAccessor

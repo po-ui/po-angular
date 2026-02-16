@@ -2169,6 +2169,21 @@ describe('getTextColorFromBackgroundColor:', () => {
 
     expect(result).toBe('#1a1a1a');
   });
+
+  describe('mapInputSizeToLoadingIcon', () => {
+    it('should map small to xs', () => {
+      expect(mapInputSizeToLoadingIcon('small')).toBe('xs');
+    });
+
+    it('should map medium to sm', () => {
+      expect(mapInputSizeToLoadingIcon('medium')).toBe('sm');
+    });
+
+    it('should return sm for invalid values', () => {
+      expect(mapInputSizeToLoadingIcon('large')).toBe('sm');
+      expect(mapInputSizeToLoadingIcon()).toBe('sm');
+    });
+  });
 });
 
 describe('mapInputSizeToLoadingIcon', () => {

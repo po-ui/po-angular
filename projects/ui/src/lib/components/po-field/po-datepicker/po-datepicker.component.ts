@@ -82,6 +82,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('iconClean', { read: ElementRef })
+  iconClean!: ElementRef<HTMLElement>;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /** Rótulo do campo. */
@@ -118,6 +120,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
+  }
+
+  get dateInputValue(): string {
+    return this.inputEl.nativeElement.value;
   }
 
   constructor() {
@@ -236,9 +242,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
 
     if (!this.visible) {
+      this.visible = true;
       this.setCalendarPosition();
       this.initializeListeners();
-      this.visible = true;
 
       this.renderer.setAttribute(this.inputEl.nativeElement, 'aria-expanded', 'true');
       this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded', 'true');
@@ -251,13 +257,36 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
-  dateSelected() {
-    this.onTouchedModel?.();
-    if (!this.verifyMobile()) {
-      this.inputEl.nativeElement.focus();
+  closeCalendar(focusInput = true) {
+    this.visible = false;
+    this.removeListeners();
+    this.setDialogPickerStyleDisplay('none');
+
+    if (!this.verifyMobile() && focusInput) {
+      this.focus();
     }
 
-    this.inputEl.nativeElement.value = this.formatToDate(this.date);
+    if (!focusInput && this.clean && this.inputEl.nativeElement.value) {
+      setTimeout(() => {
+        this.iconDatepicker.focus();
+      });
+    }
+  }
+
+  dateSelected(event?: string) {
+    if (event === '') {
+      this.clear();
+      setTimeout(() => this.closeCalendar(), 200);
+      this.onchange.emit(undefined);
+      return;
+    }
+
+    this.onTouchedModel?.();
+    if (!this.verifyMobile()) {
+      this.focus();
+    }
+
+    this.inputEl.nativeElement.value = this.formatToDate(this.date) || '';
     this.controlModel(this.date);
     this.controlChangeEmitter();
     this.togglePicker();
@@ -293,9 +322,19 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   clear() {
     this.valueBeforeChange = this.formatToDate(this.date);
     this.date = undefined;
+    this.inputEl.nativeElement.value = '';
+
     this.controlModel(this.date);
 
     this.controlChangeEmitter();
+  }
+
+  clearAndFocus() {
+    this.clear();
+
+    setTimeout(() => {
+      this.focus();
+    }, 200);
   }
 
   eventOnBlur($event: any) {
@@ -345,6 +384,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
       this.togglePicker(false);
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.visible && this.clean && this.inputEl.nativeElement.value) {
+      this.iconClean.nativeElement?.focus();
+      event.preventDefault();
+      return;
     }
 
     if (event.key === 'Tab' && event.shiftKey && !this.visible) {
@@ -512,16 +557,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return isMobile();
   }
 
-  private closeCalendar(focusInput = true) {
-    this.visible = false;
-    this.removeListeners();
-    this.setDialogPickerStyleDisplay('none');
-
-    if (!this.verifyMobile() && focusInput) {
-      this.focus();
-    }
-  }
-
   private controlChangeEmitter() {
     const dateModelFormatted = this.formatToDate(this.date);
 
@@ -564,6 +599,16 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     );
   }
 
+  private isFocusOnFirstCombo(): boolean {
+    const first = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+    return first === document.activeElement;
+  }
+
+  private isFocusOnLastCombo(): boolean {
+    const last = this.dialogPicker.nativeElement.querySelector('.po-combo-last .po-combo-input');
+    return last === document.activeElement;
+  }
+
   private onScroll = (): void => {
     this.controlPosition.adjustPosition(poCalendarPositionDefault);
   };
@@ -588,16 +633,32 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private setCalendarPosition(): void {
     this.setDialogPickerStyleDisplay('block');
-    if (this.dialogPicker && this.dialogPicker.nativeElement) {
-      this.controlPosition.setElements(
-        this.dialogPicker.nativeElement,
-        poCalendarContentOffset,
-        this.inputEl,
-        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-        false,
-        true
-      );
-      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    this.adjustCalendarPosition();
+  }
+
+  protected adjustCalendarPosition(): void {
+    if (this?.dialogPicker.nativeElement && this.visible) {
+      requestAnimationFrame(() => {
+        const scrollHeight =
+          this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
+          this.dialogPicker.nativeElement.scrollHeight;
+        const scrollWidth =
+          this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
+          this.dialogPicker.nativeElement.scrollWidth;
+
+        this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
+        this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
+
+        this.controlPosition.setElements(
+          this.dialogPicker.nativeElement,
+          poCalendarContentOffset,
+          this.inputEl,
+          ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+          false,
+          true
+        );
+        this.controlPosition.adjustPosition(poCalendarPositionDefault);
+      });
     }
   }
 
@@ -617,28 +678,33 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
-    const focusableElements = ['button:not([disabled])', '[tabindex]:not([tabindex="-1"])'].join(', ');
-    const focusableElement = this.dialogPicker.nativeElement.querySelector(focusableElements);
-
-    if (focusableElement) {
+    const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+    if (firstCombo) {
       event.preventDefault();
-      focusableElement?.focus();
+      firstCombo.focus();
     } else {
       this.togglePicker(false);
     }
   }
 
   onCalendarKeyDown(event: KeyboardEvent): void {
-    const keysToHandle = new Set(['Tab', 'Escape']);
+    if (!this.visible) return;
 
-    if (!keysToHandle.has(event.key)) {
-      return;
+    if (event.key === 'Escape' || (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo())) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.iconDatepicker.buttonElement?.nativeElement.focus();
+      this.closeCalendar(false);
     }
 
-    this.togglePicker();
+    if (event.key === 'Tab' && event.shiftKey && this.isFocusOnLastCombo()) {
+      const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+      firstCombo.focus();
 
-    event.preventDefault();
-    event.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {

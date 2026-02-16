@@ -11,7 +11,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  HostListener
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -19,10 +20,11 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { replaceFormatSeparator, setHelperSettings } from './../../../utils/util';
+import { isKeyCodeEnter, isKeyCodeSpace, replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoHelperComponent } from '../../po-helper';
+import { PoButtonComponent } from '../../po-button';
 
 const arrowLeftKey = 37;
 const arrowRightKey = 39;
@@ -94,10 +96,12 @@ export class PoDatepickerRangeComponent
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
   @ViewChild('startDateInput', { read: ElementRef, static: true }) startDateInput: ElementRef;
-  @ViewChild('iconCalendar', { read: ElementRef, static: true }) iconCalendar: ElementRef;
+  @ViewChild('iconCalendar') iconCalendar: PoButtonComponent;
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
+  @ViewChild('iconClean', { read: ElementRef }) iconClean!: ElementRef<HTMLElement>;
 
+  id = `po-datepicker-range[${uuid()}]`;
   isCalendarVisible = false;
 
   private clickListener;
@@ -216,6 +220,11 @@ export class PoDatepickerRangeComponent
     this.updateModel(this.dateRange);
   }
 
+  clearAndFocus() {
+    this.clear();
+    this.startDateInput.nativeElement.focus();
+  }
+
   emitAdditionalHelp() {
     if (this.label && this.isAdditionalHelpEventTriggered()) {
       this.additionalHelp.emit();
@@ -273,6 +282,9 @@ export class PoDatepickerRangeComponent
       setTimeout(() => {
         this.isCalendarVisible = false;
         this.cd.markForCheck();
+        if (this.startDateInput?.nativeElement) {
+          this.startDateInput.nativeElement.focus();
+        }
       }, 300);
     }
   }
@@ -299,6 +311,57 @@ export class PoDatepickerRangeComponent
 
     if (isFieldFocused) {
       this.keydown.emit(event);
+    }
+  }
+
+  onKeyPress(event: any) {
+    if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
+      this.toggleCalendar();
+      return;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible && this.enableCleaner) {
+      this.iconClean.nativeElement?.focus();
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible) {
+      this.focus();
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
+      const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+      if (firstCombo) {
+        event.preventDefault();
+        firstCombo.focus();
+      }
+    }
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeydownDatepickerRange($event?: any) {
+    if (this.readonly) {
+      return;
+    }
+
+    if ($event.key === 'Escape' && this.isCalendarVisible) {
+      this.isCalendarVisible = false;
+
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+
+    if (
+      $event.key === 'Tab' &&
+      $event.shiftKey &&
+      $event.target === this.startDateInput.nativeElement &&
+      this.isCalendarVisible
+    ) {
+      this.isCalendarVisible = false;
     }
   }
 
@@ -395,6 +458,27 @@ export class PoDatepickerRangeComponent
     this.changeDetector.detectChanges();
   }
 
+  onCalendarKeyDown(event: KeyboardEvent): void {
+    if (!this.isCalendarVisible) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.iconCalendar.buttonElement?.nativeElement.focus();
+      this.isCalendarVisible = false;
+      return;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo()) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.iconCalendar.buttonElement?.nativeElement.focus();
+      this.isCalendarVisible = false;
+    }
+  }
+
   setHelper(label?: string, additionalHelpTooltip?: string) {
     return setHelperSettings(
       label,
@@ -403,6 +487,31 @@ export class PoDatepickerRangeComponent
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  setCalendarPosition() {
+    if (this?.calendarPicker.nativeElement && this.isCalendarVisible) {
+      const scrollHeight =
+        this.calendarPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
+        this.calendarPicker.nativeElement.scrollHeight;
+      const scrollWidth =
+        this.calendarPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
+        this.calendarPicker.nativeElement.scrollWidth;
+
+      this.calendarPicker.nativeElement.style.height = scrollHeight + 'px';
+      this.calendarPicker.nativeElement.style.width = scrollWidth + 'px';
+
+      this.controlPosition.setElements(
+        this.calendarPicker.nativeElement,
+        poCalendarContentOffset,
+        this.dateRangeField,
+        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
+        false,
+        true
+      );
+
+      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    }
   }
 
   private applyFocusOnDatePickerRangeField() {
@@ -499,6 +608,11 @@ export class PoDatepickerRangeComponent
     return this.isDateRangeInputFormatValid && endDate === this.dateRange.end && startDate === this.dateRange.start;
   }
 
+  private isFocusOnFirstCombo(): boolean {
+    const first = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+    return first === document.activeElement;
+  }
+
   private isSetFocusOnBackspace(event: any) {
     return (
       event.target.name === this.endDateInputName &&
@@ -558,19 +672,6 @@ export class PoDatepickerRangeComponent
     }
 
     window.removeEventListener('scroll', this.onScroll, true);
-  }
-
-  private setCalendarPosition() {
-    this.controlPosition.setElements(
-      this.calendarPicker.nativeElement,
-      poCalendarContentOffset,
-      this.dateRangeField,
-      ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
-      false,
-      true
-    );
-
-    this.controlPosition.adjustPosition(poCalendarPositionDefault);
   }
 
   private setFocusOnArrowLeft(keyCode: number, inputName: string) {
@@ -666,18 +767,34 @@ export class PoDatepickerRangeComponent
     return !!start || !!end;
   }
 
-  private wasClickedOnPicker(event): void {
+  private wasClickedOnPicker(event: Event): void {
     if (!this.isCalendarVisible) {
       return;
     }
 
+    const calendarEl = this.calendarPicker?.nativeElement;
+    const iconEl = this.iconCalendar?.buttonElement?.nativeElement;
+    const target = event.target as Node;
+
     if (
-      !this.calendarPicker.nativeElement.contains(event.target) &&
-      !this.iconCalendar.nativeElement.contains(event.target) &&
-      !this.hasAttrCalendar(event.target)
+      calendarEl &&
+      iconEl &&
+      !calendarEl.contains(target) &&
+      !iconEl.contains(target) &&
+      !this.hasAttrCalendar(target)
     ) {
       this.isCalendarVisible = false;
     }
+
     this.cd.markForCheck();
+  }
+
+  closeCalendar() {
+    this.isCalendarVisible = false;
+    setTimeout(() => {
+      if (this.iconCalendar) {
+        this.iconCalendar.focus();
+      }
+    });
   }
 }
