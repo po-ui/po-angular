@@ -18,6 +18,9 @@ export abstract class PoCleanBaseComponent {
   /** Valor que será atribuído ao campo quando for clicado no po-clean. */
   @Input('p-default-value') defaultValue?: string = '';
 
+  // Ícone customizado para o componente.
+  @Input('p-icon') icon?: string;
+
   // Tamanho do componente.
   @Input('p-size') set size(value: string) {
     this._size = value;
