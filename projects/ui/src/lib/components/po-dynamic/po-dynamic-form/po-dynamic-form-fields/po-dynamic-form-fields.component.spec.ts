@@ -1154,7 +1154,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(nativeElement.querySelectorAll('po-input').length).toBe(3);
       expect(nativeElement.querySelectorAll('po-datepicker').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-number').length).toBe(1);
-      expect(nativeElement.querySelectorAll('po-combo').length).toBe(1);
+      expect(nativeElement.querySelectorAll('po-combo').length).toBe(3);
       expect(nativeElement.querySelectorAll('po-select').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-textarea').length).toBe(1);
     });

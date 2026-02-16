@@ -38,7 +38,8 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     { value: 'requiredFieldErrorMessage', label: 'Required Field Error Message' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' },
-    { value: 'labelTextWrap', label: 'Label Text Wrap' }
+    { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   public readonly formatOptions: Array<PoRadioGroupOption> = [

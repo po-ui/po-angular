@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  input,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import {
@@ -8,7 +18,8 @@ import {
   isTypeof,
   replaceFormatSeparator,
   validateSizeFn,
-  PoUtils
+  PoUtils,
+  mapInputSizeToLoadingIcon
 } from '../../../utils/util';
 import { PoMask } from '../po-input/po-mask';
 import { dateFailed, PoValidators } from './../validators';
@@ -280,6 +291,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _minDate: Date;
   private _noAutocomplete?: boolean = false;
   private _placeholder?: string = '';
+  private _loading?: boolean = false;
   private previousValue: any;
   private _size?: string = undefined;
   private subscription: Subscription = new Subscription();
@@ -372,7 +384,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
     this._size = validateSizeFn(value, PoFieldSize);
   }
 
@@ -528,6 +542,27 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * @optional
    *
    * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
    *
    * Define que o `calendar` e/ou tooltip (`p-additional-help-tooltip` e/ou `p-error-limit`) serão incluídos no body da
    * página e não dentro do componente. Essa opção pode ser necessária em cenários com containers que possuem scroll ou
@@ -609,6 +644,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     } else if (retry) {
       setTimeout(() => this.callOnChange(value, false));
     }
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   // Função implementada do ControlValueAccessor
