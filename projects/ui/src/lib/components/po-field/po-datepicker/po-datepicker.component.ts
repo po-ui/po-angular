@@ -82,6 +82,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('iconDatepicker') iconDatepicker: PoButtonComponent;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('iconClean', { read: ElementRef })
+  iconClean!: ElementRef<HTMLElement>;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   /** Rótulo do campo. */
@@ -118,6 +120,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
+  }
+
+  get dateInputValue(): string {
+    return this.inputEl.nativeElement.value;
   }
 
   constructor() {
@@ -257,7 +263,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.inputEl.nativeElement.focus();
     }
 
-    this.inputEl.nativeElement.value = this.formatToDate(this.date);
+    this.inputEl.nativeElement.value = this.formatToDate(this.date) || '';
     this.controlModel(this.date);
     this.controlChangeEmitter();
     this.togglePicker();
@@ -293,9 +299,16 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   clear() {
     this.valueBeforeChange = this.formatToDate(this.date);
     this.date = undefined;
+    this.inputEl.nativeElement.value = '';
+
     this.controlModel(this.date);
 
     this.controlChangeEmitter();
+  }
+
+  clearAndFocus() {
+    this.clear();
+    this.inputEl.nativeElement.focus();
   }
 
   eventOnBlur($event: any) {
@@ -345,6 +358,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
       this.togglePicker(false);
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.visible && this.clean && this.inputEl.nativeElement.value) {
+      this.iconClean.nativeElement?.focus();
+      event.preventDefault();
+      return;
     }
 
     if (event.key === 'Tab' && event.shiftKey && !this.visible) {
@@ -564,6 +583,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     );
   }
 
+  private isFocusOnFirstCombo(): boolean {
+    const first = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+    return first === document.activeElement;
+  }
+
   private onScroll = (): void => {
     this.controlPosition.adjustPosition(poCalendarPositionDefault);
   };
@@ -629,16 +653,24 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   onCalendarKeyDown(event: KeyboardEvent): void {
-    const keysToHandle = new Set(['Tab', 'Escape']);
+    if (!this.visible) return;
 
-    if (!keysToHandle.has(event.key)) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.iconDatepicker.buttonElement?.nativeElement.focus();
+      this.closeCalendar(false);
       return;
     }
 
-    this.togglePicker();
+    if (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo()) {
+      event.preventDefault();
+      event.stopPropagation();
 
-    event.preventDefault();
-    event.stopPropagation();
+      this.iconDatepicker.buttonElement?.nativeElement.focus();
+      this.closeCalendar(false);
+    }
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
