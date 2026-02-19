@@ -1030,6 +1030,10 @@ describe('PoLookupBaseComponent:', () => {
     const trueValues = [true, 'true', 1, '', [], {}];
     const falseValues = [false, 'false', 0, null, undefined, NaN];
 
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     it('p-filter-service: shoul call `setService` with `filterService`', () => {
       spyOn(component, <any>'setService');
 

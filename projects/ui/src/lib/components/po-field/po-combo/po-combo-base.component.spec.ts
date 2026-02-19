@@ -75,6 +75,10 @@ describe('PoComboBaseComponent:', () => {
     const trueValues = [true, 'true', 1, '', [], {}];
     const falseValues = [false, 'false', 0, null, undefined, NaN];
 
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     it('p-required: should be update with valid and invalid values and call validateModel with selectedValue.', () => {
       spyOn(component, <any>'validateModel');
 

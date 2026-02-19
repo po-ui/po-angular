@@ -701,6 +701,10 @@ describe('PoMultiselectBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
       component['language'] = 'zw';
 

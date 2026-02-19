@@ -48,6 +48,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     it('p-no-autocomplete: should update property with valid values with valid values.', () => {
       const invalidValues = [undefined, null, 0, 'false', 'string'];
       expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
