@@ -96,6 +96,8 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
  * | `--text-color`                         | Cor do texto                                          | `var(--color-neutral-dark-90)`                  |
  * | `--padding-horizontal`                 | Preenchimento horizontal                              | `0.5em`                                         |
  * | `--padding-vertical`                   | Preenchimento vertical                                | `0.7em`                                         |
+ * | `--field-container-title-justify`      | Alinhamento horizontal do título (`justify-content`)  | `space-between`                                 |
+ * | `--field-container-title-flex`         | Flex do título (`flex`)                               | `1 auto`                                        |
  * | **Hover**                              |                                                       |                                                 |
  * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-brand-01-dark)`                    |
  * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lighter)`                 |
@@ -167,6 +169,44 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    * @default `false`
    */
   @Input({ alias: 'p-readonly', transform: convertToBoolean }) readonly: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Define se o título do campo será exibido de forma compacta.
+   *
+   * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:
+   * - `po-label`
+   * - `p-requirement (showRequired)`
+   * - `po-helper`
+   *
+   * Ou seja, todos os elementos relacionados ao título do campo
+   * (rótulo, indicador de obrigatoriedade e componente auxiliar) passam
+   * a seguir o comportamento de layout compacto.
+   *
+   * Também é possível definir esse comportamento de forma global,
+   * uma única vez, na folha de estilo geral da aplicação, por meio
+   * da customização dos tokens CSS:
+   *
+   * - `--field-container-title-justify`
+   * - `--field-container-title-flex`
+   *
+   * Exemplo:
+   *
+   * ```
+   * :root {
+   *   --field-container-title-justify: flex-start;
+   *   --field-container-title-flex: 0 1 auto;
+   * }
+   * ```
+   *
+   * Dessa forma, o layout compacto passa a ser o padrão da aplicação,
+   * sem a necessidade de definir a propriedade individualmente em cada campo.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
 
   /** Mensagem que aparecerá enquanto nenhuma opção estiver selecionada. */
   @Input('p-placeholder') placeholder?: string;

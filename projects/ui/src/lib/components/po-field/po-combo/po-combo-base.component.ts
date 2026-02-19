@@ -75,7 +75,9 @@ const poMultiselectContainerPositionDefault = 'bottom';
  * | `--color`                              | Cor principal do Combo                                | `var(--color-neutral-dark-70)`                    |
  * | `--background`                         | Cor de background                                     | `var(--color-neutral-light-05)`                   |
  * | `--border-radius`                      | Contém o valor do raio dos cantos do elemento&nbsp;   | `var(--border-width-lg)`                          |
- * | `--min-width`                          | Largura mínima do combo                               | `150px`
+ * | `--min-width`                          | Largura mínima do combo                               | `150px`                                           |
+ * | `--field-container-title-justify`      | Alinhamento horizontal do título (`justify-content`)  | `space-between`                                   |
+ * | `--field-container-title-flex`         | Flex do título (`flex`)                               | `1 auto`                                          |
  * | **Hover**                              |                                                       |                                                   |
  * | `--color-hover`                        | Cor principal no estado hover                         | `var(--color-action-hover)`                       |
  * | `--background-hover`                   | Cor de background no estado hover                     | `var(--color-brand-01-lightest)`                  |
@@ -133,6 +135,44 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `false`
    */
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Define se o título do campo será exibido de forma compacta.
+   *
+   * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:
+   * - `po-label`
+   * - `p-requirement (showRequired)`
+   * - `po-helper`
+   *
+   * Ou seja, todos os elementos relacionados ao título do campo
+   * (rótulo, indicador de obrigatoriedade e componente auxiliar) passam
+   * a seguir o comportamento de layout compacto.
+   *
+   * Também é possível definir esse comportamento de forma global,
+   * uma única vez, na folha de estilo geral da aplicação, por meio
+   * da customização dos tokens CSS:
+   *
+   * - `--field-container-title-justify`
+   * - `--field-container-title-flex`
+   *
+   * Exemplo:
+   *
+   * ```
+   * :root {
+   *   --field-container-title-justify: flex-start;
+   *   --field-container-title-flex: 0 1 auto;
+   * }
+   * ```
+   *
+   * Dessa forma, o layout compacto passa a ser o padrão da aplicação,
+   * sem a necessidade de definir a propriedade individualmente em cada campo.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
 
   /** Label no componente. */
   @Input('p-label') label?: string;

@@ -35,6 +35,7 @@ export class SamplePoNumberLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'compactLabel', label: 'Compact Label' },
     { value: 'loading', label: 'Loading' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },

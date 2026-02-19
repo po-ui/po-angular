@@ -9,6 +9,7 @@
   [p-show-helper]="label ? displayAdditionalHelp : undefined"
   [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
+  [p-compact-label]="compactLabel"
 >
   <div #inp role="radiogroup" [attr.aria-label]="label" [attr.data-options]="options.length">
     <div class="po-field-container-content" [attr.p-size]="size">

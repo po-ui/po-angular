@@ -1,5 +1,5 @@
 <div class="po-field-container" (mouseenter)="handleLabelTooltip()" [attr.p-size]="size">
-  <div class="po-field-container-title">
+  <div class="po-field-container-title" [class.po-field-container-compact-label]="compactLabel">
     @if (label || help) {
       <po-label
         #labelEl
