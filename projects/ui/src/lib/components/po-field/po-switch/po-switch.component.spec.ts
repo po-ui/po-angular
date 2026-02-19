@@ -57,6 +57,16 @@ describe('PoSwitchComponent', () => {
       );
     });
 
+    it('should update property p-compact-label', () => {
+      fixture.componentRef.setInput('p-compact-label', true);
+      fixture.detectChanges();
+      expect(component.compactLabel()).toBe(true);
+
+      fixture.componentRef.setInput('p-compact-label', false);
+      fixture.detectChanges();
+      expect(component.compactLabel()).toBe(false);
+    });
+
     describe('p-size', () => {
       beforeEach(() => {
         document.documentElement.removeAttribute('data-a11y');
