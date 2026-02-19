@@ -289,6 +289,15 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    */
   @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
 
+  /**
+   * @description
+   *
+   * Define que somente uma linha da tabela pode ser selecionada.
+   *
+   * > Esta definição não se aplica aos itens filhos, os mesmos possuem comportamento independente do item pai.
+   */
+  @Input('p-single-select') @InputBoolean() singleSelect?: boolean = false;
+
   hasNext = false;
   items = [];
   literals;
