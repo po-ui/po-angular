@@ -28,6 +28,7 @@ export class SamplePoPasswordLabsComponent implements OnInit {
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'hidepasswordpeek', label: 'Hide Password Peek' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'compactLabel', label: 'Compact Label' },
     { value: 'loading', label: 'Loading' },
     { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
