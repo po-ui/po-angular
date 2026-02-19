@@ -1,6 +1,6 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 @if (help) {
-  <po-field-container [p-disabled]="disabled" [p-size]="size">
+  <po-field-container [p-disabled]="disabled" [p-size]="size" [p-compact-label]="compactLabel">
     <div class="po-field-container-content">
       <ng-container *ngTemplateOutlet="checkboxContent"></ng-container>
     </div>
