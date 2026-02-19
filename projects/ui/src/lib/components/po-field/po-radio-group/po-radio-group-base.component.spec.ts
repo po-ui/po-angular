@@ -260,6 +260,17 @@ describe('PoRadioGroupBase: ', () => {
       expect(component['getGridSystemColumns']).toHaveBeenCalled();
     });
 
+    it('p-compact-label: should update property with `true` when input is true', () => {
+      fixture.componentRef.setInput('p-compact-label', true);
+      fixture.detectChanges();
+
+      expect(component.compactLabel()).toBe(true);
+    });
+
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     describe('p-size', () => {
       beforeEach(() => {
         document.documentElement.removeAttribute('data-a11y');

@@ -64,6 +64,17 @@ describe('PoFieldContainerComponent:', () => {
 
       expectPropertiesValues(component, 'required', invalidValues, false);
     });
+
+    it('p-compact-label: should update property with `true` when input is true', () => {
+      fixture.componentRef.setInput('p-compact-label', true);
+      fixture.detectChanges();
+
+      expect(component.compactLabel()).toBe(true);
+    });
+
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
   });
 
   describe('Templates:', () => {
@@ -168,6 +179,24 @@ describe('PoFieldContainerComponent:', () => {
 
       expect(requirement).toBeTruthy();
       expect(requirement.innerHTML).toBe(component.literals['required']);
+    });
+
+    it('should apply `po-field-container-compact-label` class when `compactLabel` is true', () => {
+      fixture.componentRef.setInput('p-compact-label', true);
+      component.label = 'Test Label';
+      fixture.detectChanges();
+
+      const titleElement = fixture.debugElement.nativeElement.querySelector('.po-field-container-title');
+      expect(titleElement.classList.contains('po-field-container-compact-label')).toBe(true);
+    });
+
+    it('should not apply `po-field-container-compact-label` class when `compactLabel` is false', () => {
+      fixture.componentRef.setInput('p-compact-label', false);
+      component.label = 'Test Label';
+      fixture.detectChanges();
+
+      const titleElement = fixture.debugElement.nativeElement.querySelector('.po-field-container-title');
+      expect(titleElement.classList.contains('po-field-container-compact-label')).toBe(false);
     });
   });
 

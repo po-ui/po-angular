@@ -118,6 +118,17 @@ describe('PoTextareaBase:', () => {
   });
 
   describe('Properties:', () => {
+    it('p-compact-label: should update property with `true` when input is true', () => {
+      fixture.componentRef.setInput('p-compact-label', true);
+      fixture.detectChanges();
+
+      expect(component.compactLabel()).toBe(true);
+    });
+
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     it('p-maxlength: should update property p-maxlength with valid values.', () => {
       const validValues = [105, 1, 7, 0, -5];
 
