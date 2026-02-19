@@ -34,6 +34,7 @@ export class SamplePoInputLabsComponent implements OnInit {
     { value: 'disabled', label: 'Disabled' },
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'compactLabel', label: 'Compact Label' },
     { value: 'loading', label: 'Loading' },
     { value: 'maskFormatModel', label: 'Formatted Model' },
     { value: 'maskNoLengthValidation', label: 'Mask No Length Validation' },

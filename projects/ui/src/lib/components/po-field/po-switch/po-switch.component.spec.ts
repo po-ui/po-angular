@@ -57,6 +57,11 @@ describe('PoSwitchComponent', () => {
       );
     });
 
+    it('should update property p-compact-label', () => {
+      expectSettersMethod(component, 'compactLabel', true, '_compactLabel', true);
+      expectSettersMethod(component, 'compactLabel', false, '_compactLabel', false);
+    });
+
     describe('p-size', () => {
       beforeEach(() => {
         document.documentElement.removeAttribute('data-a11y');

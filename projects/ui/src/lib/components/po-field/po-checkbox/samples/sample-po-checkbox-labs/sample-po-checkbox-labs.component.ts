@@ -14,6 +14,7 @@ export class SamplePoCheckboxLabsComponent implements OnInit {
   event: string;
   label: string;
   labelTextWrap: boolean;
+  compactLabel: boolean;
 
   sizeOptions: Array<PoRadioGroupOption> = [
     { label: 'small', value: 'small' },
@@ -37,5 +38,6 @@ export class SamplePoCheckboxLabsComponent implements OnInit {
     this.help = '';
     this.label = undefined;
     this.size = 'medium';
+    this.compactLabel = false;
   }
 }
