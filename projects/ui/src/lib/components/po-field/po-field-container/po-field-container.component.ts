@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostBinding,
   Input,
   OnChanges,
   OnInit,
@@ -90,7 +91,9 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   @Input('p-show-required') showRequired: boolean = false;
 
   /** Define o tamanho do componente. */
-  @Input('p-size') size?: string;
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  size?: string;
 
   /**
    * @Input

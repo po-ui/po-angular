@@ -12,8 +12,8 @@
   [p-text-wrap]="labelTextWrap()"
   [p-compact-label]="compactLabel()"
 >
-  <div class="po-field-container-content" [attr.p-size]="size">
-    <div class="po-upload" [attr.p-size]="size">
+  <div class="po-field-container-content">
+    <div class="po-upload">
       <input
         #inputFile
         class="po-upload-input"
@@ -72,7 +72,6 @@
             <div
               class="po-upload-progress-container"
               [class.po-upload-container-error]="file.status === 2"
-              [class.po-upload-progress-container-aa]="size === 'small'"
               [class.po-upload-status-uploaded]="file.hideDoneContent"
             >
               <po-container>
@@ -80,7 +79,7 @@
                   [ngClass]="showThumbnail && file.thumbnailUrl ? 'po-upload-content-thumbnail' : 'po-upload-content'"
                   class="po-upload-content"
                 >
-                  <div class="po-upload-file-name" [class.po-upload-file-name-aa]="size === 'small'">
+                  <div class="po-upload-file-name">
                     <div class="po-upload-file-name-display">
                       @if (showThumbnail && file.thumbnailUrl) {
                         <div class="po-upload-thumbnail" (click)="openModal(file)" (keydown)="openModal(file, $event)">
@@ -129,7 +128,6 @@
                         <div
                           class="po-upload-icon-focus"
                           [class.po-upload-cancel-disabled]="disabledRemoveFile"
-                          [class.po-upload-icon-focus-aa]="size === 'small'"
                           [attr.aria-label]="literals.close"
                           [tabindex]="disabledRemoveFile ? -1 : 0"
                           (keydown)="cancel(file, $event)"

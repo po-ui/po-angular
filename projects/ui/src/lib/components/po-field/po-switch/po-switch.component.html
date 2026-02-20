@@ -9,7 +9,7 @@
   [p-text-wrap]="labelTextWrap()"
   [p-compact-label]="compactLabel()"
 >
-  <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
+  <div class="po-field-container-content" [attr.name]="name">
     <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
       @if (loading) {
         <div class="po-switch-loading-container">
@@ -30,14 +30,10 @@
           (click)="eventClick()"
           (keydown)="onKeyDown($event)"
         >
-          <div class="po-switch-track" [class.po-switch-track-aa]="size === 'small'">
-            <div
-              class="po-switch-toggle"
-              [class.po-switch-toggle-aa]="size === 'small'"
-              [attr.aria-label]="value === true ? labelOn : labelOff"
-            >
+          <div class="po-switch-track">
+            <div class="po-switch-toggle" [attr.aria-label]="value === true ? labelOn : labelOff">
               @if (value === true) {
-                <po-icon class="po-switch-icon" [class.po-switch-icon-aa]="size === 'small'" p-icon="ICON_OK"></po-icon>
+                <po-icon class="po-switch-icon" p-icon="ICON_OK"></po-icon>
               }
             </div>
           </div>
