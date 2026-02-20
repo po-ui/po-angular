@@ -257,10 +257,17 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
-  dateSelected() {
+  dateSelected(event?: string) {
+    if (event === '') {
+      this.clear();
+      setTimeout(() => this.closeCalendar(), 200);
+      this.onchange.emit(undefined);
+      return;
+    }
+
     this.onTouchedModel?.();
     if (!this.verifyMobile()) {
-      this.inputEl.nativeElement.focus();
+      this.focus();
     }
 
     this.inputEl.nativeElement.value = this.formatToDate(this.date) || '';
@@ -308,7 +315,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   clearAndFocus() {
     this.clear();
-    this.inputEl.nativeElement.focus();
+
+    setTimeout(() => {
+      this.focus();
+    }, 200);
   }
 
   eventOnBlur($event: any) {
@@ -588,6 +598,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return first === document.activeElement;
   }
 
+  private isFocusOnLastCombo(): boolean {
+    const last = this.dialogPicker.nativeElement.querySelector('.po-combo-last .po-combo-input');
+    return last === document.activeElement;
+  }
+
   private onScroll = (): void => {
     this.controlPosition.adjustPosition(poCalendarPositionDefault);
   };
@@ -670,6 +685,14 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
       this.iconDatepicker.buttonElement?.nativeElement.focus();
       this.closeCalendar(false);
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && this.isFocusOnLastCombo()) {
+      const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+      firstCombo.focus();
+
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
