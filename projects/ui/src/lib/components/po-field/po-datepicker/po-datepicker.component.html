@@ -116,6 +116,7 @@
           [p-min-date]="minDate"
           [p-locale]="locale"
           (p-change)="dateSelected($event)"
+          (p-change-month-year)="adjustCalendarPosition()"
           (keydown)="onCalendarKeyDown($event)"
         ></po-calendar>
       </div>

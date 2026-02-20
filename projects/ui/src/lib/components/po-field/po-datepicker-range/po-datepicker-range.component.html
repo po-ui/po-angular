@@ -132,6 +132,7 @@
       [p-min-date]="minDate"
       [p-locale]="locale"
       (ngModelChange)="onCalendarChange($event)"
+      (p-change-month-year)="setCalendarPosition()"
       (keydown)="onCalendarKeyDown($event)"
     ></po-calendar>
   </div>
