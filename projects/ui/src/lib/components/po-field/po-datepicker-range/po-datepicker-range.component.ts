@@ -433,6 +433,31 @@ export class PoDatepickerRangeComponent
     );
   }
 
+  setCalendarPosition() {
+    if (this.calendarPicker && this.calendarPicker.nativeElement && this.isCalendarVisible) {
+      const scrollHeight =
+        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollHeight ??
+        this.calendarPicker.nativeElement.scrollHeight;
+      const scrollWidth =
+        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollWidth ??
+        this.calendarPicker.nativeElement.scrollWidth;
+
+      this.calendarPicker.nativeElement.style.height = scrollHeight + 'px';
+      this.calendarPicker.nativeElement.style.width = scrollWidth + 'px';
+
+      this.controlPosition.setElements(
+        this.calendarPicker.nativeElement,
+        poCalendarContentOffset,
+        this.dateRangeField,
+        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
+        false,
+        true
+      );
+
+      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    }
+  }
+
   private applyFocusOnDatePickerRangeField() {
     this.dateRangeField.nativeElement.classList.add('po-datepicker-range-field-focused');
   }
@@ -591,31 +616,6 @@ export class PoDatepickerRangeComponent
     }
 
     window.removeEventListener('scroll', this.onScroll, true);
-  }
-
-  private setCalendarPosition() {
-    if (this.calendarPicker && this.calendarPicker.nativeElement && this.isCalendarVisible) {
-      const scrollHeight =
-        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollHeight ??
-        this.calendarPicker.nativeElement.scrollHeight;
-      const scrollWidth =
-        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollWidth ??
-        this.calendarPicker.nativeElement.scrollWidth;
-
-      this.calendarPicker.nativeElement.style.height = scrollHeight + 'px';
-      this.calendarPicker.nativeElement.style.width = scrollWidth + 'px';
-
-      this.controlPosition.setElements(
-        this.calendarPicker.nativeElement,
-        poCalendarContentOffset,
-        this.dateRangeField,
-        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
-        false,
-        true
-      );
-
-      this.controlPosition.adjustPosition(poCalendarPositionDefault);
-    }
   }
 
   private setFocusOnArrowLeft(keyCode: number, inputName: string) {
