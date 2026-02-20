@@ -24,6 +24,7 @@ class PoTableComponent extends PoTableBaseComponent {
   changeSizeLoading() {}
   changeHeaderWidth() {}
   getDefaultSpacing() {}
+  reapplySort() {}
 }
 
 describe('PoTableBaseComponent:', () => {

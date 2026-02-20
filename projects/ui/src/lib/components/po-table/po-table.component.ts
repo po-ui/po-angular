@@ -788,6 +788,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       : PoTableColumnSpacing.Medium;
   }
 
+  protected reapplySort(): void {
+    const hasData = this.filteredItems && this.filteredItems.length > 0;
+    const hasSortConfig = !!this.sortedColumn?.property;
+
+    if (hasData && hasSortConfig) {
+      this.sortArray(this.sortedColumn.property, this.sortedColumn.ascending);
+    }
+  }
+
   private checkChangesItems() {
     const changesItems = this.differ.diff(this.items);
 
