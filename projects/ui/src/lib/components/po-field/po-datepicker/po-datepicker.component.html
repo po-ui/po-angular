@@ -115,7 +115,7 @@
           [p-max-date]="maxDate"
           [p-min-date]="minDate"
           [p-locale]="locale"
-          (p-change)="dateSelected()"
+          (p-change)="dateSelected($event)"
           (keydown)="onCalendarKeyDown($event)"
         ></po-calendar>
       </div>

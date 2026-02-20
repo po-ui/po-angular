@@ -163,7 +163,7 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * Mensagem que aparecerá enquanto o campo não estiver preenchido.
    */
-  @Input('p-placeholder') placeholder?: PoDatepickerRange;
+  @Input('p-placeholder') placeholder?: PoDatepickerRange = { start: '', end: '' };
 
   /**
    * @optional
