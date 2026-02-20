@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   input,
   Input,
   OnChanges,
@@ -52,7 +53,9 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   @Input('p-help') help?: string;
 
   /** Define o tamanho do componente. */
-  @Input('p-size') size?: string;
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  size?: string;
 
   /** Configurações do ícone de ajuda adicional vínculado ao label. */
   poHelperComponent = input<PoHelperOptions>(undefined, { alias: 'p-helper' });

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoUtils } from '../../../../utils/util';
@@ -25,7 +25,9 @@ export class PoRichTextImageModalComponent {
 
   @ViewChild('upload', { static: true }) upload: PoUploadComponent;
 
-  @Input('p-size') size: string;
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  size: string;
 
   @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();
 

@@ -1408,7 +1408,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
       return obj;
     });
   }
-  
+
   private applySizeBasedOnA11y(): void {
     const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
     this._componentsSize = size;

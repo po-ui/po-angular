@@ -12,8 +12,8 @@
   [p-compact-label]="compactLabel()"
 >
   <div #inp role="radiogroup" [attr.aria-label]="label" [attr.data-options]="options.length">
-    <div class="po-field-container-content" [attr.p-size]="size">
-      <div class="po-radio-group" [attr.name]="name" [attr.p-size]="size">
+    <div class="po-field-container-content">
+      <div class="po-radio-group" [attr.name]="name">
         @for (option of options; track option) {
           <div class="po-radio-group-item po-md-{{ mdColumns }} po-lg-{{ columns }}">
             <po-radio
