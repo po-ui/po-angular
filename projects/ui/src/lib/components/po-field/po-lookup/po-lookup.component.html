@@ -1,177 +1,186 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 @let needsHelper = !label && (poHelperComponent() || poHelper.hideAdditionalHelp);
-<div class="po-lookup-field-wrapper" [class._active]="needsHelper" [class._size-small]="size === 'small'">
-  <div class="po-lookup-flex-item">
-    <po-field-container
-      [p-disabled]="isDisabled"
-      [p-id]="id"
-      [p-label]="label"
-      [p-optional]="optional"
-      [p-required]="required"
-      [p-show-required]="showRequired"
-      [p-helper]="label ? poHelper.helperSettings : undefined"
-      [p-show-helper]="label ? displayAdditionalHelp : undefined"
-      [p-size]="size"
-      [p-text-wrap]="labelTextWrap()"
+
+<ng-template #poHelperTemplate>
+  <po-helper
+    #helperEl
+    class="po-field-helper-button"
+    [p-size]="size"
+    [p-helper]="poHelper.helperSettings"
+    [p-disabled]="isDisabled"
+    [p-append-in-body]="appendBox"
+  ></po-helper>
+</ng-template>
+
+<po-field-container
+  [p-disabled]="isDisabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
+  [p-text-wrap]="labelTextWrap()"
+>
+  @if (!disclaimers.length) {
+    <div
+      class="po-field-container-content po-lookup"
+      [class.po-lookup-disabled]="disabled"
+      [class.po-lookup-loading]="loading"
+      [attr.p-size]="size"
     >
-      @if (!disclaimers.length) {
-        <div
-          class="po-field-container-content po-lookup"
-          [class.po-lookup-disabled]="disabled"
-          [class.po-lookup-loading]="loading"
-          [attr.p-size]="size"
-        >
-          <div class="po-search-container-wrapper">
-            <input
-              #inp
-              class="po-lookup-input po-lookup-input-trigger"
-              [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
-              [id]="id"
-              type="text"
-              [autocomplete]="autocomplete"
-              [disabled]="isDisabled"
-              [placeholder]="placeholder"
-              [required]="required"
-              (blur)="searchEvent()"
-              (keydown)="onKeyDown($event)"
-            />
-            <div class="po-field-icon-container-right po-lookup-buttons">
-              @if (loading) {
-                <div class="po-lookup-button po-lookup-button-loading">
-                  <po-loading-icon class="po-lookup-loading-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-                </div>
-              } @else {
-                @if (clean && !isDisabled && !!inp.value) {
-                  <po-clean
-                    tabindex="0"
-                    role="button"
-                    [attr.aria-label]="literals.clean"
-                    class="po-lookup-button po-lookup-button-clean"
-                    [class.po-lookup-button-aa]="size === 'small'"
-                    [p-element-ref]="inp"
-                    [p-size]="size"
-                    (p-change-event)="cleanModel()"
-                    (click)="cleanModel(); $event.preventDefault()"
-                    (keydown.enter)="cleanModel(); $event.preventDefault()"
-                  ></po-clean>
-                }
-              }
-              <div
-                #iconLookup
-                tabindex="0"
-                role="button"
-                class="po-lookup-button po-lookup-button-trigger po-field-icon"
-                [class.po-field-icon-disabled]="isDisabled"
-                [ariaLabel]="literals.search"
-                (p-change-event)="openLookup()"
-                (click)="!isDisabled && openLookup(); $event.preventDefault()"
-                (keydown.enter)="!isDisabled && openLookup(); $event.preventDefault()"
-              >
-                <po-icon
-                  p-icon="ICON_SEARCH"
-                  [class.po-field-icon]="!isDisabled"
-                  [class.po-field-icon-aa]="!isDisabled && size === 'small'"
-                ></po-icon>
+      <div class="po-field-container-content-helper-wrapper">
+        <div class="po-field-container-input">
+          <input
+            #inp
+            class="po-lookup-input po-lookup-input-trigger"
+            [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+            [id]="id"
+            type="text"
+            [autocomplete]="autocomplete"
+            [disabled]="isDisabled"
+            [placeholder]="placeholder"
+            [required]="required"
+            (blur)="searchEvent()"
+            (keydown)="onKeyDown($event)"
+          />
+          <div class="po-field-icon-container-right po-lookup-buttons">
+            @if (loading) {
+              <div class="po-lookup-button po-lookup-button-loading">
+                <po-loading-icon class="po-lookup-loading-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
               </div>
-            </div>
-          </div>
-        </div>
-      } @else {
-        <div
-          class="po-field-container-content po-lookup"
-          [class.po-lookup-disabled]="disabled"
-          [class.po-lookup-loading]="loading"
-          [attr.p-size]="size"
-        >
-          <div class="po-search-container-wrapper">
+            } @else {
+              @if (clean && !isDisabled && !!inp.value) {
+                <po-clean
+                  tabindex="0"
+                  role="button"
+                  [attr.aria-label]="literals.clean"
+                  class="po-lookup-button po-lookup-button-clean"
+                  [class.po-lookup-button-aa]="size === 'small'"
+                  [p-element-ref]="inp"
+                  [p-size]="size"
+                  (p-change-event)="cleanModel()"
+                  (click)="cleanModel(); $event.preventDefault()"
+                  (keydown.enter)="cleanModel(); $event.preventDefault()"
+                ></po-clean>
+              }
+            }
             <div
-              #inp
-              [tabindex]="isDisabled ? -1 : 0"
-              class="po-lookup-input po-input-icon-right po-icon-input"
-              [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
-              [class.po-lookup-input-auto]="autoHeight"
-              [class.po-lookup-input-static]="!autoHeight"
-              [class.po-lookup-input-padding-button-clean]="clean || loading"
-              [class.po-lookup-input-disabled]="isDisabled"
-              [class.po-lookup-input-auto-dynamic-height]="isExpandedHeight"
-              (blur)="onBlur()"
-              (keydown)="onKeyDown($event)"
+              #iconLookup
+              tabindex="0"
+              role="button"
+              class="po-lookup-button po-lookup-button-trigger po-field-icon"
+              [class.po-field-icon-disabled]="isDisabled"
+              [ariaLabel]="literals.search"
+              (p-change-event)="openLookup()"
+              (click)="!isDisabled && openLookup(); $event.preventDefault()"
+              (keydown.enter)="!isDisabled && openLookup(); $event.preventDefault()"
             >
-              @if (placeholder && !disclaimers?.length) {
-                <span class="po-lookup-input-placeholder">{{ placeholder }}</span>
-              }
-              @for (disclaimer of visibleDisclaimers; track disclaimer) {
-                <po-disclaimer
-                  class="po-lookup-input-disclaimer"
-                  [p-label]="disclaimer.label"
-                  [p-value]="disclaimer.value"
-                  [p-hide-close]="disclaimer.value === '' || isDisabled"
-                  [class.po-clickable]="disclaimer.value === '' && !isDisabled"
-                  (p-close-action)="closeDisclaimer(disclaimer.value)"
-                ></po-disclaimer>
-              }
-            </div>
-            <div class="po-field-icon-container-right po-lookup-buttons">
-              @if (loading) {
-                <div class="po-lookup-button po-lookup-button-loading">
-                  <po-loading-icon class="po-lookup-loading-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-                </div>
-              } @else {
-                @if (clean && !isDisabled && !!inp.value) {
-                  <po-clean
-                    tabindex="0"
-                    role="button"
-                    [attr.aria-label]="literals.clean"
-                    class="po-lookup-button po-lookup-button-clean"
-                    [p-element-ref]="inp"
-                    [p-size]="size"
-                    (p-change-event)="cleanModel()"
-                    (click)="cleanModel(); $event.preventDefault()"
-                    (keydown.enter)="cleanModel(); $event.preventDefault()"
-                  ></po-clean>
-                }
-              }
-              <div
-                #iconLookup
-                tabindex="0"
-                role="button"
-                class="po-lookup-button po-lookup-button-trigger po-field-icon"
-                [class.po-field-icon-disabled]="isDisabled"
-                [ariaLabel]="literals.search"
-                (p-change-event)="openLookup()"
-                (click)="!isDisabled && openLookup(); $event.preventDefault()"
-                (keydown.enter)="!isDisabled && openLookup(); $event.preventDefault()"
-              >
-                <po-icon
-                  p-icon="ICON_SEARCH"
-                  [class.po-field-icon]="!isDisabled"
-                  [class.po-field-icon-aa]="!isDisabled && size === 'small'"
-                ></po-icon>
-              </div>
+              <po-icon
+                p-icon="ICON_SEARCH"
+                [class.po-field-icon]="!isDisabled"
+                [class.po-field-icon-aa]="!isDisabled && size === 'small'"
+              ></po-icon>
             </div>
           </div>
         </div>
-      }
 
-      <po-field-container-bottom
-        [p-append-in-body]="appendBox"
-        [p-help]="help"
-        [p-disabled]="isDisabled"
-        [p-error-pattern]="getErrorPattern()"
-        [p-error-limit]="errorLimit"
-        [p-size]="size"
-      ></po-field-container-bottom>
-    </po-field-container>
-  </div>
+        @if (needsHelper) {
+          <ng-container *ngTemplateOutlet="poHelperTemplate"></ng-container>
+        }
+      </div>
+    </div>
+  } @else {
+    <div
+      class="po-field-container-content po-lookup"
+      [class.po-lookup-disabled]="disabled"
+      [class.po-lookup-loading]="loading"
+      [attr.p-size]="size"
+    >
+      <div class="po-field-container-content-helper-wrapper">
+        <div class="po-field-container-input">
+          <div
+            #inp
+            [tabindex]="isDisabled ? -1 : 0"
+            class="po-lookup-input po-input-icon-right po-icon-input"
+            [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+            [class.po-lookup-input-auto]="autoHeight"
+            [class.po-lookup-input-static]="!autoHeight"
+            [class.po-lookup-input-padding-button-clean]="clean || loading"
+            [class.po-lookup-input-disabled]="isDisabled"
+            [class.po-lookup-input-auto-dynamic-height]="isExpandedHeight"
+            (blur)="onBlur()"
+            (keydown)="onKeyDown($event)"
+          >
+            @if (placeholder && !disclaimers?.length) {
+              <span class="po-lookup-input-placeholder">{{ placeholder }}</span>
+            }
+            @for (disclaimer of visibleDisclaimers; track disclaimer) {
+              <po-disclaimer
+                class="po-lookup-input-disclaimer"
+                [p-label]="disclaimer.label"
+                [p-value]="disclaimer.value"
+                [p-hide-close]="disclaimer.value === '' || isDisabled"
+                [class.po-clickable]="disclaimer.value === '' && !isDisabled"
+                (p-close-action)="closeDisclaimer(disclaimer.value)"
+              ></po-disclaimer>
+            }
+          </div>
+          <div class="po-field-icon-container-right po-lookup-buttons">
+            @if (loading) {
+              <div class="po-lookup-button po-lookup-button-loading">
+                <po-loading-icon class="po-lookup-loading-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+              </div>
+            } @else {
+              @if (clean && !isDisabled && !!inp.value) {
+                <po-clean
+                  tabindex="0"
+                  role="button"
+                  [attr.aria-label]="literals.clean"
+                  class="po-lookup-button po-lookup-button-clean"
+                  [p-element-ref]="inp"
+                  [p-size]="size"
+                  (p-change-event)="cleanModel()"
+                  (click)="cleanModel(); $event.preventDefault()"
+                  (keydown.enter)="cleanModel(); $event.preventDefault()"
+                ></po-clean>
+              }
+            }
+            <div
+              #iconLookup
+              tabindex="0"
+              role="button"
+              class="po-lookup-button po-lookup-button-trigger po-field-icon"
+              [class.po-field-icon-disabled]="isDisabled"
+              [ariaLabel]="literals.search"
+              (p-change-event)="openLookup()"
+              (click)="!isDisabled && openLookup(); $event.preventDefault()"
+              (keydown.enter)="!isDisabled && openLookup(); $event.preventDefault()"
+            >
+              <po-icon
+                p-icon="ICON_SEARCH"
+                [class.po-field-icon]="!isDisabled"
+                [class.po-field-icon-aa]="!isDisabled && size === 'small'"
+              ></po-icon>
+            </div>
+          </div>
+        </div>
 
-  @if (needsHelper) {
-    <po-helper
-      #helperEl
-      class="po-field-helper-button"
-      [p-size]="size"
-      [p-helper]="poHelper.helperSettings"
-      [p-disabled]="isDisabled"
-      [p-append-in-body]="appendBox"
-    ></po-helper>
+        @if (needsHelper) {
+          <ng-container *ngTemplateOutlet="poHelperTemplate"></ng-container>
+        }
+      </div>
+    </div>
   }
-</div>
+
+  <po-field-container-bottom
+    [p-append-in-body]="appendBox"
+    [p-help]="help"
+    [p-disabled]="isDisabled"
+    [p-error-pattern]="getErrorPattern()"
+    [p-error-limit]="errorLimit"
+    [p-size]="size"
+  ></po-field-container-bottom>
+</po-field-container>
