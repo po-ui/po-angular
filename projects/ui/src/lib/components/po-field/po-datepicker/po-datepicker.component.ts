@@ -242,9 +242,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
 
     if (!this.visible) {
+      this.visible = true;
       this.setCalendarPosition();
       this.initializeListeners();
-      this.visible = true;
 
       this.renderer.setAttribute(this.inputEl.nativeElement, 'aria-expanded', 'true');
       this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-expanded', 'true');
@@ -627,7 +627,21 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private setCalendarPosition(): void {
     this.setDialogPickerStyleDisplay('block');
-    if (this.dialogPicker && this.dialogPicker.nativeElement) {
+    this.adjustCalendarPosition();
+  }
+
+  protected adjustCalendarPosition(): void {
+    if (this.dialogPicker && this.dialogPicker.nativeElement && this.visible) {
+      const scrollHeight =
+        this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
+        this.dialogPicker.nativeElement.scrollHeight;
+      const scrollWidth =
+        this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
+        this.dialogPicker.nativeElement.scrollWidth;
+
+      this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
+      this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
+
       this.controlPosition.setElements(
         this.dialogPicker.nativeElement,
         poCalendarContentOffset,
