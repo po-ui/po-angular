@@ -448,16 +448,18 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('clearAndFocus', () => {
-      it('should call clear method and focus on input element', () => {
+      it('should call clear method and focus on input element', fakeAsync(() => {
         const clearSpy = spyOn(component, 'clear');
-        const focusSpy = spyOn(component.inputEl.nativeElement, 'focus');
+        const focusSpy = spyOn(component, 'focus');
 
         component.clearAndFocus();
 
         expect(clearSpy).toHaveBeenCalled();
+
+        tick(200);
+
         expect(focusSpy).toHaveBeenCalled();
-        expect(clearSpy).toHaveBeenCalledBefore(focusSpy);
-      });
+      }));
     });
 
     describe('onKeyup', () => {
@@ -727,6 +729,23 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('dateSelected:', () => {
+      it('should clear, emit undefined and close calendar when event is empty string', fakeAsync(() => {
+        const clearSpy = spyOn(component, 'clear');
+        const closeSpy = spyOn(component as any, 'closeCalendar');
+        const emitSpy = spyOn(component.onchange, 'emit');
+
+        component.dateSelected('');
+
+        expect(clearSpy).toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalledWith(undefined);
+
+        expect(closeSpy).not.toHaveBeenCalled();
+
+        tick(200);
+
+        expect(closeSpy).toHaveBeenCalled();
+      }));
+
       it('should set `calendar.visible` to false', () => {
         component.visible = true;
         component['onTouchedModel'] = () => {};
@@ -1661,6 +1680,12 @@ describe('PoDatepickerComponent:', () => {
           }
         } as any;
 
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(document.activeElement)
+          }
+        } as any;
+
         spyOn(component as any, 'closeCalendar');
 
         component.onCalendarKeyDown(event);
@@ -1683,6 +1708,12 @@ describe('PoDatepickerComponent:', () => {
 
         spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
         spyOn(component as any, 'closeCalendar');
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(document.activeElement)
+          }
+        } as any;
 
         component.onCalendarKeyDown(event);
 

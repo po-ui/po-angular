@@ -22,6 +22,10 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   event: string;
   help: string;
   label: string;
+  placeholder: PoDatepickerRange = {
+    start: '',
+    end: ''
+  };
   literals: string;
   properties: Array<string>;
   fieldErrorMessage: string;
@@ -40,7 +44,8 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     { value: 'required', label: 'Required' },
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' },
-    { value: 'labelTextWrap', label: 'Label Text Wrap' }
+    { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   public readonly localeOptions: Array<PoSelectOption> = [
@@ -83,6 +88,10 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.event = undefined;
     this.help = undefined;
     this.label = undefined;
+    this.placeholder = {
+      start: '',
+      end: ''
+    };
     this.literals = undefined;
     this.properties = [];
     this.fieldErrorMessage = '';
