@@ -1751,6 +1751,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.isCalendarVisible = true;
       fixture.detectChanges();
 
+      spyOn(component.calendarPicker.nativeElement, 'querySelector').and.returnValue(null);
+
       const setElements = spyOn(component['controlPosition'], 'setElements');
       const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
 

@@ -594,16 +594,28 @@ export class PoDatepickerRangeComponent
   }
 
   private setCalendarPosition() {
-    this.controlPosition.setElements(
-      this.calendarPicker.nativeElement,
-      poCalendarContentOffset,
-      this.dateRangeField,
-      ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
-      false,
-      true
-    );
+    if (this.calendarPicker && this.calendarPicker.nativeElement && this.isCalendarVisible) {
+      const scrollHeight =
+        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollHeight ??
+        this.calendarPicker.nativeElement.scrollHeight;
+      const scrollWidth =
+        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollWidth ??
+        this.calendarPicker.nativeElement.scrollWidth;
 
-    this.controlPosition.adjustPosition(poCalendarPositionDefault);
+      this.calendarPicker.nativeElement.style.height = scrollHeight + 'px';
+      this.calendarPicker.nativeElement.style.width = scrollWidth + 'px';
+
+      this.controlPosition.setElements(
+        this.calendarPicker.nativeElement,
+        poCalendarContentOffset,
+        this.dateRangeField,
+        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
+        false,
+        true
+      );
+
+      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+    }
   }
 
   private setFocusOnArrowLeft(keyCode: number, inputName: string) {
