@@ -631,7 +631,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   protected adjustCalendarPosition(): void {
-    if (this.dialogPicker && this.dialogPicker.nativeElement && this.visible) {
+    if (this?.dialogPicker.nativeElement && this.visible) {
       const scrollHeight =
         this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
         this.dialogPicker.nativeElement.scrollHeight;
