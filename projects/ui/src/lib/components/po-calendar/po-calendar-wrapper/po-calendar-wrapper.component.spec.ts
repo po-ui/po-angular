@@ -1785,15 +1785,13 @@ describe('PoCalendarWrapperComponent', () => {
     it('equalsDate: should return true for the same dates', () => {
       const d1 = new Date(2026, 5, 10);
       const d2 = new Date(2026, 5, 10);
-      // @ts-ignore - acessando método privado para teste
-      expect(component.equalsDate(d1, d2)).toBeTrue();
+      expect(component['equalsDate'](d1, d2)).toBeTrue();
     });
 
     it('equalsDate: should return false for different dates', () => {
       const d1 = new Date(2026, 5, 10);
       const d2 = new Date(2026, 5, 11);
-      // @ts-ignore - acessando método privado para teste
-      expect(component.equalsDate(d1, d2)).toBeFalse();
+      expect(component['equalsDate'](d1, d2)).toBeFalse();
     });
   });
 
