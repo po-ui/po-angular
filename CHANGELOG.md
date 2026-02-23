@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.4](https://github.com/po-ui/po-angular/compare/v19.39.3...v19.39.4) (2026-02-23)
+
+
+### Bug Fixes
+
+* **fields:** aplica propriedade disabled quando loading é habilitado ([457f1d7](https://github.com/po-ui/po-angular/commit/457f1d75ae261a7a9a701c1a0b0ae87014bc4392))
+* **table:** ajusta altura da linha no virtual scroll conforme spacing ([df10b49](https://github.com/po-ui/po-angular/commit/df10b4926c30ffeebc9d44607d53462ad2bcd1e0))
+
 ### [19.39.3](https://github.com/po-ui/po-angular/compare/v19.39.2...v19.39.3) (2026-02-12)
 
 Compatibilidade com @totvs/thf-components@19.39.3
