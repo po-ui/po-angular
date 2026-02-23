@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.3.0](https://github.com/po-ui/po-angular/compare/v21.2.0...v21.3.0) (2026-02-23)
+
+
+### Features
+
+* **fields:** inclui estado de loading nos componentes ([ce9f3a7](https://github.com/po-ui/po-angular/commit/ce9f3a7f3f2114a3d04e7bd2b60b341ad734ea47))
+
+
+### Bug Fixes
+
+* **table:** ajusta altura da linha no virtual scroll conforme spacing ([53b06a6](https://github.com/po-ui/po-angular/commit/53b06a69fcd49c72dbaac5d8a964ae6e72866efd))
+
 ### [21.2.0](https://github.com/po-ui/po-angular/compare/v21.1.0...v21.2.0) (2026-02-12)
 
 Compatibilidade com @totvs/thf-components@21.2.0
