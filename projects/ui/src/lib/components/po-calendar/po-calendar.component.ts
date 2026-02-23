@@ -131,22 +131,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onHeaderChange({ month, year }, partType) {
-    if (this.isRange && this.activateDate && (partType === 'start' || partType === 'end')) {
-      if (partType === 'start') {
-        const currentStart = this.activateDate.start instanceof Date ? this.activateDate.start : new Date();
-        const newStart = this.buildDateWithMonthYear(currentStart, month, year);
-
-        this.setActivateDate(newStart);
-      } else {
-        const currentEnd = this.activateDate.end instanceof Date ? this.activateDate.end : new Date();
-        const newEnd = this.buildDateWithMonthYear(currentEnd, month, year);
-        const previousMonth = newEnd.getMonth() === 0 ? 11 : newEnd.getMonth() - 1;
-        const previousYear = newEnd.getMonth() === 0 ? newEnd.getFullYear() - 1 : newEnd.getFullYear();
-        const newStart = this.buildDateWithMonthYear(newEnd, previousMonth, previousYear);
-
-        this.activateDate = { start: newStart, end: newEnd };
-      }
-    }
+    this.updateActivateDateFromHeaderChange(month, year, partType);
 
     this.changeMonthYear.emit({ month, year });
   }
@@ -197,6 +182,28 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     }
 
     return { start: new Date(this.value.start), end: new Date(selectedDate) };
+  }
+
+  private updateActivateDateFromHeaderChange(month: number, year: number, partType: string): void {
+    if (!this.isRange || !this.activateDate || (partType !== 'start' && partType !== 'end')) {
+      return;
+    }
+
+    if (partType === 'start') {
+      const currentStart = this.activateDate.start instanceof Date ? this.activateDate.start : new Date();
+      const newStart = this.buildDateWithMonthYear(currentStart, month, year);
+
+      this.setActivateDate(newStart);
+      return;
+    }
+
+    const currentEnd = this.activateDate.end instanceof Date ? this.activateDate.end : new Date();
+    const newEnd = this.buildDateWithMonthYear(currentEnd, month, year);
+    const previousMonth = newEnd.getMonth() === 0 ? 11 : newEnd.getMonth() - 1;
+    const previousYear = newEnd.getMonth() === 0 ? newEnd.getFullYear() - 1 : newEnd.getFullYear();
+    const newStart = this.buildDateWithMonthYear(newEnd, previousMonth, previousYear);
+
+    this.activateDate = { start: newStart, end: newEnd };
   }
 
   private buildDateWithMonthYear(baseDate: Date, month: number, year: number): Date {

@@ -684,16 +684,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   onCalendarKeyDown(event: KeyboardEvent): void {
     if (!this.visible) return;
 
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-
-      this.iconDatepicker.buttonElement?.nativeElement.focus();
-      this.closeCalendar(false);
-      return;
-    }
-
-    if (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo()) {
+    if (event.key === 'Escape' || (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo())) {
       event.preventDefault();
       event.stopPropagation();
 

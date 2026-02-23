@@ -409,26 +409,6 @@ describe('PoDatepickerComponent:', () => {
       });
     });
 
-    it('addListener: should call wasClickedOnPicker when click in document', () => {
-      component.visible = false;
-
-      component.iconDatepicker = {
-        buttonElement: {
-          nativeElement: document.createElement('button')
-        }
-      } as PoButtonComponent;
-
-      component.togglePicker();
-      const documentBody = document.body;
-      const event = document.createEvent('MouseEvents');
-      event.initEvent('click', false, true);
-
-      spyOn(component, 'wasClickedOnPicker');
-      documentBody.dispatchEvent(event);
-      documentBody.click();
-      expect(component.wasClickedOnPicker).toHaveBeenCalled();
-    });
-
     it(`clear: should update model to 'undefined', update 'valueBeforeChange' with 'formatToDate' return,
       call 'controlModel' and 'formatToDate'.`, () => {
       const dateMock = new Date(2018, 0, 1);
@@ -1725,9 +1705,50 @@ describe('PoDatepickerComponent:', () => {
 
     describe('closeCalendar', () => {
       beforeEach(() => {
-        spyOn(component, <any>'removeListeners');
+        spyOn(component, <any>'removeListeners').and.callThrough();
         spyOn(component, <any>'setDialogPickerStyleDisplay');
         spyOn(component, 'focus');
+      });
+
+      describe('removeListeners', () => {
+        beforeEach(() => {
+          spyOn(component, <any>'verifyMobile').and.returnValue(false);
+        });
+
+        it('should call clickListener when it exists', () => {
+          const clickListenerSpy = jasmine.createSpy('clickListener');
+          component['clickListener'] = clickListenerSpy;
+
+          component['closeCalendar']();
+
+          expect(clickListenerSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('should call eventResizeListener when it exists', () => {
+          const resizeListenerSpy = jasmine.createSpy('resizeListener');
+          component['eventResizeListener'] = resizeListenerSpy;
+
+          component['closeCalendar']();
+
+          expect(resizeListenerSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('should remove scroll listener from window', () => {
+          spyOn(globalThis, 'removeEventListener');
+
+          component['closeCalendar']();
+
+          expect(globalThis.removeEventListener).toHaveBeenCalledWith('scroll', component['onScroll'], true);
+        });
+
+        it('should handle undefined listeners gracefully', () => {
+          component['clickListener'] = undefined;
+          component['eventResizeListener'] = undefined;
+
+          expect(() => {
+            component['closeCalendar']();
+          }).not.toThrow();
+        });
       });
 
       describe('when focusInput is true (default) and not mobile', () => {

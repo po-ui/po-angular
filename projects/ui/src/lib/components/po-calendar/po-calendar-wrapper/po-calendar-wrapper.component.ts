@@ -142,12 +142,24 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
     if (activateDate && !activateDate.firstChange) {
       const val = activateDate.currentValue;
-      const dateToUse = val instanceof Date ? val : val?.start instanceof Date ? val.start : new Date();
+      const dateToUse = this.getDateToUse(val);
 
       if (dateToUse.getFullYear() !== this.displayYear || dateToUse.getMonth() !== this.displayMonthNumber) {
         this.updateDisplay(dateToUse.getFullYear(), dateToUse.getMonth());
       }
     }
+  }
+
+  private getDateToUse(value: any): Date {
+    if (value instanceof Date) {
+      return value;
+    }
+
+    if (value?.start instanceof Date) {
+      return value.start;
+    }
+
+    return new Date();
   }
 
   private initializeData() {

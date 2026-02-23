@@ -138,6 +138,28 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['updateDisplay']).not.toHaveBeenCalled();
     });
 
+    it('getDateToUse: should return value when it is a Date', () => {
+      const date = new Date(2024, 5, 10);
+
+      const result = (component as any).getDateToUse(date);
+
+      expect(result).toBe(date);
+    });
+
+    it('getDateToUse: should return value.start when it is a Date', () => {
+      const date = new Date(2024, 5, 10);
+
+      const result = (component as any).getDateToUse({ start: date });
+
+      expect(result).toBe(date);
+    });
+
+    it('getDateToUse: should return new Date when value is invalid', () => {
+      const result = (component as any).getDateToUse({ start: 'invalid' });
+
+      expect(result instanceof Date).toBeTrue();
+    });
+
     it('deve incrementar comboKey e chamar cdr.detectChanges() quando o locale mudar (e não for a primeira mudança)', () => {
       const initialComboKey = component.comboKey;
       const cdrSpy = spyOn((component as any).cdr, 'detectChanges');
