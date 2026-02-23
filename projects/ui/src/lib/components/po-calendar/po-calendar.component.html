@@ -1,11 +1,6 @@
 @if (isRange) {
-  <div class="po-calendar-range">
-    @if (isResponsive) {
-      <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
-    } @else {
-      <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
-      <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'end' }"></ng-container>
-    }
+  <div class="po-calendar">
+    <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
   </div>
 } @else {
   <div class="po-calendar">
@@ -28,6 +23,7 @@
     (p-header-change)="onHeaderChange($event, partType)"
     (p-select-date)="onSelectDate($event, partType)"
     (p-hover-date)="onHoverDate($event)"
+    (p-close-calendar)="onCloseCalendar()"
     [p-header-template]="headerTemplate"
     [p-size]="size"
   >

@@ -732,4 +732,13 @@ export class PoDatepickerRangeComponent
 
     this.cd.markForCheck();
   }
+
+  closeCalendar() {
+    this.isCalendarVisible = false;
+    setTimeout(() => {
+      if (this.iconCalendar) {
+        this.iconCalendar.focus();
+      }
+    });
+  }
 }

@@ -211,6 +211,27 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(removeListener).toHaveBeenCalled();
     });
 
+    it('closeCalendar: should set isCalendarVisible to false and focus iconCalendar when available', fakeAsync(() => {
+      component.isCalendarVisible = true;
+      component.iconCalendar = { focus: jasmine.createSpy('focus') } as any;
+
+      component.closeCalendar();
+      tick();
+
+      expect(component.isCalendarVisible).toBeFalse();
+      expect(component.iconCalendar.focus).toHaveBeenCalled();
+    }));
+
+    it('closeCalendar: should set isCalendarVisible to false even when iconCalendar is undefined', fakeAsync(() => {
+      component.isCalendarVisible = true;
+      component.iconCalendar = undefined;
+
+      component.closeCalendar();
+      tick();
+
+      expect(component.isCalendarVisible).toBeFalse();
+    }));
+
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';

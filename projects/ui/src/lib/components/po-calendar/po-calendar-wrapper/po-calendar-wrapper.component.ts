@@ -57,6 +57,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   @Output('p-header-change') headerChange = new EventEmitter<any>();
   @Output('p-select-date') selectDate = new EventEmitter<any>();
+  @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
 
   readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
@@ -140,8 +141,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
 
     if (activateDate && !activateDate.firstChange) {
-      const val = activateDate.currentValue || new Date();
-      this.updateDisplay(val.getFullYear(), val.getMonth());
+      const val = activateDate.currentValue;
+      const dateToUse = val instanceof Date ? val : val?.start instanceof Date ? val.start : new Date();
+
+      if (dateToUse.getFullYear() !== this.displayYear || dateToUse.getMonth() !== this.displayMonthNumber) {
+        this.updateDisplay(dateToUse.getFullYear(), dateToUse.getMonth());
+      }
     }
   }
 
@@ -278,6 +283,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.hoverDateSource.next(null);
   }
 
+  onTodayKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Tab' && !event.shiftKey) {
+      this.closeCalendar.emit();
+    }
+  }
+
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
     const key = event.key;
     const dayOfMonth = day.getDate();
@@ -291,6 +302,9 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       event.preventDefault();
     } else if (key === 'Escape') {
       event.preventDefault();
+    } else if (key === 'Tab' && !event.shiftKey && this.range) {
+      event.preventDefault();
+      this.closeCalendar.emit();
     }
   }
 
@@ -327,7 +341,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
         break;
     }
 
-    if (newIndex !== -1) {
+    if (newIndex !== -1 && newIndex < this.displayDays.length) {
+      const newDate = this.displayDays[newIndex];
+      if (!newDate) return false;
+      if (newDate.getMonth() !== this.displayMonthNumber || newDate.getFullYear() !== this.displayYear) {
+        return false;
+      }
       this.focusedDayIndex = newIndex;
       this.cdr.detectChanges();
       this.focusElement(newIndex);
@@ -370,6 +389,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       }
     }
     this.updateDisplay(this.displayYear, this.displayMonthNumber);
+    this.headerChange.emit({ month: this.displayMonthNumber, year: this.displayYear });
   }
 
   private focusElement(index: number): void {

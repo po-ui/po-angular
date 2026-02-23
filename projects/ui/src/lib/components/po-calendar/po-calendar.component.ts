@@ -11,7 +11,6 @@ import {
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
-import { PoCalendarLangService } from './services/po-calendar.lang.service';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
@@ -88,7 +87,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   getActivateDate(partType) {
     if (this.isRange && this.activateDate) {
-      return this.activateDate[partType];
+      return this.activateDate.start;
     } else {
       return this.activateDate;
     }
@@ -96,7 +95,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   getValue(partType) {
     if (this.isRange && this.value) {
-      return this.value[partType];
+      return this.value.start;
     } else {
       return this.value;
     }
@@ -115,10 +114,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
     if (this.isRange) {
       newValue = this.getValueFromSelectedDate(selectedDate);
-
-      if (partType === 'end' && (!this.value?.start || (this.value.start && this.value.end))) {
-        this.setActivateDate(selectedDate);
-      }
+      this.activateDate = { start: newValue.start, end: newValue.end || newValue.start };
     } else {
       newValue = selectedDate;
       this.setActivateDate(selectedDate);
@@ -135,39 +131,29 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onHeaderChange({ month, year }, partType) {
-    if (this.isRange) {
-      let newStart;
-      let newEnd;
-      const { start, end } = this.activateDate;
+    if (this.isRange && this.activateDate && (partType === 'start' || partType === 'end')) {
+      if (partType === 'start') {
+        const currentStart = this.activateDate.start instanceof Date ? this.activateDate.start : new Date();
+        const newStart = this.buildDateWithMonthYear(currentStart, month, year);
 
-      if (partType === 'end') {
-        const newYear = month === 0 ? year - 1 : year;
-        const daysInMonth = new Date(newYear, month, 0).getDate();
-
-        if (year !== newYear) {
-          newStart = new Date(year, month - 1, Math.min(start.getDate(), daysInMonth));
-          newEnd = new Date(year, month, Math.min(end.getDate(), daysInMonth));
-        } else {
-          newStart = new Date(newYear, month - 1, Math.min(start.getDate(), daysInMonth));
-          newEnd = new Date(newYear, month, Math.min(end.getDate(), daysInMonth));
-        }
+        this.setActivateDate(newStart);
       } else {
-        const newYear = month === 11 ? year + 1 : year;
-        const daysInMonth = new Date(newYear, month + 1, 0).getDate();
+        const currentEnd = this.activateDate.end instanceof Date ? this.activateDate.end : new Date();
+        const newEnd = this.buildDateWithMonthYear(currentEnd, month, year);
+        const previousMonth = newEnd.getMonth() === 0 ? 11 : newEnd.getMonth() - 1;
+        const previousYear = newEnd.getMonth() === 0 ? newEnd.getFullYear() - 1 : newEnd.getFullYear();
+        const newStart = this.buildDateWithMonthYear(newEnd, previousMonth, previousYear);
 
-        if (year !== newYear) {
-          newEnd = new Date(year, month + 1, Math.min(end.getDate(), daysInMonth));
-          newStart = new Date(year, month, Math.min(start.getDate(), daysInMonth));
-        } else {
-          newEnd = new Date(newYear, month + 1, Math.min(end.getDate(), daysInMonth));
-          newStart = new Date(newYear, month, Math.min(start.getDate(), daysInMonth));
-        }
+        this.activateDate = { start: newStart, end: newEnd };
       }
-
-      this.activateDate = { start: newStart, end: newEnd };
     }
 
     this.changeMonthYear.emit({ month, year });
+  }
+
+  onCloseCalendar() {
+    this.change.emit(this.value);
+    this.close.emit();
   }
 
   registerOnChange(fn: any): void {
@@ -211,6 +197,12 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     }
 
     return { start: new Date(this.value.start), end: new Date(selectedDate) };
+  }
+
+  private buildDateWithMonthYear(baseDate: Date, month: number, year: number): Date {
+    const day = baseDate instanceof Date ? baseDate.getDate() : 1;
+    const daysInTargetMonth = new Date(year, month + 1, 0).getDate();
+    return new Date(year, month, Math.min(day, daysInTargetMonth));
   }
 
   private convertDateToISO(date) {

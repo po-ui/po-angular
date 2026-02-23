@@ -103,6 +103,41 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['updateDisplay']).toHaveBeenCalledWith(today.getFullYear(), today.getMonth());
     });
 
+    it('ngOnChanges: should use activateDate.start when currentValue is a range object', () => {
+      const rangeStart = new Date(2024, 2, 10);
+      const rangeEnd = new Date(2024, 2, 15);
+
+      component.displayYear = 2020;
+      component.displayMonthNumber = 0;
+
+      const changes = {
+        activateDate: new SimpleChange(undefined, { start: rangeStart, end: rangeEnd }, false)
+      };
+
+      spyOn(component, <any>'updateDisplay');
+
+      component.ngOnChanges(changes);
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(rangeStart.getFullYear(), rangeStart.getMonth());
+    });
+
+    it('ngOnChanges: should not call updateDisplay when dateToUse matches current display month/year', () => {
+      const sameMonthDate = new Date(2024, 6, 20);
+
+      component.displayYear = sameMonthDate.getFullYear();
+      component.displayMonthNumber = sameMonthDate.getMonth();
+
+      const changes = {
+        activateDate: new SimpleChange(undefined, sameMonthDate, false)
+      };
+
+      spyOn(component, <any>'updateDisplay');
+
+      component.ngOnChanges(changes);
+
+      expect(component['updateDisplay']).not.toHaveBeenCalled();
+    });
+
     it('deve incrementar comboKey e chamar cdr.detectChanges() quando o locale mudar (e não for a primeira mudança)', () => {
       const initialComboKey = component.comboKey;
       const cdrSpy = spyOn((component as any).cdr, 'detectChanges');
@@ -221,6 +256,102 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component.displayYear).toBe(currentYear);
       expect(component.displayMonthNumber).toBe(currentMonth);
       expect(component['updateDisplay']).toHaveBeenCalledWith(currentYear, currentMonth);
+    });
+
+    it('onTodayKeydown: should emit closeCalendar when key is Tab and shift is not pressed', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+
+      spyOn(component.closeCalendar, 'emit');
+
+      component.onTodayKeydown(event);
+
+      expect(component.closeCalendar.emit).toHaveBeenCalled();
+    });
+
+    it('onTodayKeydown: should not emit closeCalendar when key is not Tab or shift is pressed', () => {
+      const eventWithShift = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+      const eventNonTab = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: false });
+
+      spyOn(component.closeCalendar, 'emit');
+
+      component.onTodayKeydown(eventWithShift);
+      component.onTodayKeydown(eventNonTab);
+
+      expect(component.closeCalendar.emit).not.toHaveBeenCalled();
+    });
+
+    it('onDayKeydown: should prevent default and emit closeCalendar when key is Tab, no shift, and range is true', () => {
+      component.range = true;
+
+      const event = { key: 'Tab', shiftKey: false, preventDefault: jasmine.createSpy('preventDefault') } as any;
+      const day = new Date(2024, 5, 10);
+
+      spyOn(component.closeCalendar, 'emit');
+
+      component.onDayKeydown(event, day, 0);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.closeCalendar.emit).toHaveBeenCalled();
+    });
+
+    it('onDayKeydown: should not emit closeCalendar when range is false or shift is pressed', () => {
+      const eventWithShift = { key: 'Tab', shiftKey: true, preventDefault: jasmine.createSpy('preventDefault') } as any;
+      const eventRangeFalse = {
+        key: 'Tab',
+        shiftKey: false,
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+      const day = new Date(2024, 5, 10);
+
+      spyOn(component.closeCalendar, 'emit');
+
+      component.range = true;
+      component.onDayKeydown(eventWithShift, day, 0);
+
+      component.range = false;
+      component.onDayKeydown(eventRangeFalse, day, 0);
+
+      expect(component.closeCalendar.emit).not.toHaveBeenCalled();
+    });
+
+    it('handleNavigationKey: should return false when target date is invalid or undefined', () => {
+      component.displayDays = [];
+      component.displayMonthNumber = 0;
+      component.displayYear = 2024;
+
+      const result = component['handleNavigationKey']('ArrowUp', 0);
+
+      expect(result).toBeFalse();
+    });
+
+    it('handleNavigationKey: should return false when target date is outside current month/year', () => {
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+      component.displayDays = [new Date(2024, 5, 10), new Date(2024, 6, 1)];
+
+      const result = component['handleNavigationKey']('ArrowRight', 0);
+
+      expect(result).toBeFalse();
+    });
+
+    it('handleNavigationKey: should return false when key is not a navigation key', () => {
+      component.displayDays = [new Date(2024, 5, 10)];
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+
+      const result = component['handleNavigationKey']('Enter', 0);
+
+      expect(result).toBeFalse();
+    });
+
+    it('handleNavigationKey: should return false when newDate is undefined', () => {
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+      component.displayDays = [new Date(2024, 5, 10), undefined as any];
+
+      const result = component['handleNavigationKey']('ArrowRight', 0);
+
+      expect(result).toBeFalse();
     });
 
     it(`onSelectYear: should call 'updateDisplay' and 'selectDisplayMode' with 'month' if 'lastDisplay' is equal to 'month'`, () => {

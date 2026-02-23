@@ -95,6 +95,9 @@ export class PoCalendarBaseComponent {
   /** Evento disparado ao alterar o mês ou ano do calendário. */
   @Output('p-change-month-year') changeMonthYear = new EventEmitter<any>();
 
+  /** Evento disparado ao fechar o calendário, seja por seleção de data ou por clique fora do componente. */
+  @Output('p-close') close = new EventEmitter<void>();
+
   activateDate;
   value;
 

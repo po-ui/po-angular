@@ -139,6 +139,7 @@
         (click)="onSelectDate(today)"
         (keydown.enter)="onSelectDate(today)"
         (keydown.space)="onSelectDate(today)"
+        (keydown)="onTodayKeydown($event)"
         [p-disabled]="isTodayUnavailable()"
         [p-size]="size"
       >
