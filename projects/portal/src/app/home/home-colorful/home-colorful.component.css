@@ -1,3 +1,46 @@
+h1 span {
+  position: relative;
+  color: rgba(255, 255, 255, 0.1);
+  animation: displayText 9s infinite;
+  animation-delay: calc(-3s * var(--i));
+  display: inline-block;
+}
+
+@keyframes displayText {
+  0% {
+    display: inline-block;
+  }
+  33.33%,
+  100% {
+    display: none;
+  }
+}
+
+h1 span::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #c9357d;
+  overflow: hidden;
+  border-right: 4px solid #c9357d;
+  filter: drop-shadow(0 0 5px #c9357d) drop-shadow(0 0 25px #c9357d);
+  animation: animate 3s linear infinite;
+}
+
+@keyframes animate {
+  0%,
+  10%,
+  100% {
+    width: 0;
+  }
+  70%,
+  90% {
+    width: 100%;
+  }
+}
+
 .home-colorful-content {
   margin-bottom: 72px;
 }
