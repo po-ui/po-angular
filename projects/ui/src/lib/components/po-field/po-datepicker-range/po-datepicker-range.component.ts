@@ -436,10 +436,10 @@ export class PoDatepickerRangeComponent
   setCalendarPosition() {
     if (this?.calendarPicker.nativeElement && this.isCalendarVisible) {
       const scrollHeight =
-        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollHeight ??
+        this.calendarPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
         this.calendarPicker.nativeElement.scrollHeight;
       const scrollWidth =
-        this.calendarPicker.nativeElement.querySelector('.po-calendar-range')?.scrollWidth ??
+        this.calendarPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
         this.calendarPicker.nativeElement.scrollWidth;
 
       this.calendarPicker.nativeElement.style.height = scrollHeight + 'px';
