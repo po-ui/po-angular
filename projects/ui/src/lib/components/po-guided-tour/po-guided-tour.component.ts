@@ -28,6 +28,8 @@ export interface PoGuidedTourConfig {
 
 @Component({
   selector: 'po-guided-tour',
+    templateUrl: './po-guided-tour.component.html',
+    styleUrls: ['./po-guided-tour.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoGuidedTourComponent implements OnInit, OnDestroy {
