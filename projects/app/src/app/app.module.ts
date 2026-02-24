@@ -6,11 +6,20 @@ import { RouterModule } from '@angular/router';
 
 import { PoModule } from '@po-ui/ng-components';
 import { AppComponent } from './app.component';
+import { PoGuidedTourComponent } from '../../../../ui/src/lib/components/po-guided-tour/po-guided-tour.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    PoGuidedTourComponent
+  ],
   bootstrap: [AppComponent],
-  imports: [BrowserModule, FormsModule, RouterModule.forRoot([], {}), PoModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    RouterModule.forRoot([], {}),
+    PoModule
+  ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class AppModule {}
