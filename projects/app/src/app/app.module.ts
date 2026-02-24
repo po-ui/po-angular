@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { PoModule } from '@po-ui/ng-components';
 import { AppComponent } from './app.component';
-import { PoGuidedTourComponent } from '../../../../ui/src/lib/components/po-guided-tour/po-guided-tour.component';
+import { PoGuidedTourComponent } from '../../../ui/src/lib/components/po-guided-tour/po-guided-tour.component';
 
 @NgModule({
   declarations: [
