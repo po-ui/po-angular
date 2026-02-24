@@ -1,9 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PoPopoverModule } from '../po-popover/po-popover.module';
-
 export interface PoGuidedTourStep {
   id: string;
   element: string;
