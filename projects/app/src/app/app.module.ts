@@ -6,19 +6,18 @@ import { RouterModule } from '@angular/router';
 
 import { PoModule } from '@po-ui/ng-components';
 import { AppComponent } from './app.component';
-import { PoGuidedTourComponent } from '../../../ui/src/lib/components/po-guided-tour/po-guided-tour.component';
-
+import { PoGuidedTourModule } from '../.././ui/src/lib/components/po-guided-tour/po-guided-tour.module';
 @NgModule({
   declarations: [
     AppComponent,
-    PoGuidedTourComponent
   ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot([], {}),
-    PoModule
+    PoModule,
+    PoGuidedTourModule
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
