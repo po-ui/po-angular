@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { PoGuidedTourStep } from './../../ui/src/lib/components/po-guided-tour/po-guided-tour.component';
-import { PoGuidedTourComponent } from './../../ui/src/lib/components/po-guided-tour/po-guided-tour.component';
 
 @Component({
   selector: 'app-root',
