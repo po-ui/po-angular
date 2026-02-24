@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PoPopoverComponent } from '../po-popover';
+import { PoPopoverModule } from '../po-popover/po-popover.module';
 
 export interface PoGuidedTourStep {
   id: string;
@@ -27,12 +28,14 @@ export interface PoGuidedTourConfig {
 
 @Component({
   selector: 'po-guided-tour',
+  standalone: true,
+  imports: [CommonModule, PoPopoverModule],
   templateUrl: './po-guided-tour.component.html',
   styleUrls: ['./po-guided-tour.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoGuidedTourComponent implements OnInit, OnDestroy {
-  @ViewChild(PoPopoverComponent) popover: PoPopoverComponent;
+  @ViewChild('popover') popover: any;
 
   private _steps: PoGuidedTourStep[] = [];
   private _allowClose = true;
