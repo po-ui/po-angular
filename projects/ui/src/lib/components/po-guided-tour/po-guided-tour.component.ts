@@ -29,9 +29,7 @@ export interface PoGuidedTourConfig {
 @Component({
   selector: 'po-guided-tour',
   standalone: true,
-  imports: [CommonModule, PoPopoverModule],
-  templateUrl: './po-guided-tour.component.html',
-  styleUrls: ['./po-guided-tour.component.scss'],
+  imports: [CommonModule, PoPopoverModus'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoGuidedTourComponent implements OnInit, OnDestroy {
@@ -66,7 +64,7 @@ export class PoGuidedTourComponent implements OnInit, OnDestroy {
 
   @Input('p-allow-skip') set allowSkip(value: boolean) {
     this._allowSkip = value !== false;
-  }
+  }refactor(guided-tour): remove standalone e volta a ser um componente de modulo
   get allowSkip(): boolean {
     return this._allowSkip;
   }
