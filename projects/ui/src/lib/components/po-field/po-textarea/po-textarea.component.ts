@@ -8,6 +8,7 @@ import {
   ViewChild,
   inject,
   OnChanges,
+  OnDestroy,
   SimpleChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -61,7 +62,7 @@ import { PoHelperComponent } from '../../po-helper';
   ],
   standalone: false
 })
-export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges {
+export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   private el = inject(ElementRef);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
@@ -70,6 +71,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   id = `po-textarea[${uuid()}]`;
   valueBeforeChange: any;
   fireChange: boolean = false;
+  hasScroll: boolean = false;
+  hasValue: boolean = false;
+  private resizeObserver: ResizeObserver;
 
   constructor() {
     const cd = inject(ChangeDetectorRef);
@@ -110,12 +114,48 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (this.autoFocus) {
       this.focus();
     }
+
+    this.initResizeObserver();
+    window.addEventListener('resize', this.onWindowResize);
+  }
+
+  protected override onAfterThemeChange(): void {
+    requestAnimationFrame(() => {
+      this.calculateTextareaHeight();
+      this.checkScrollState();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.label) {
       this.displayAdditionalHelp = false;
     }
+
+    if (changes.loading) {
+      if (changes.loading.isFirstChange() && this.loading) {
+        requestAnimationFrame(() => {
+          this.calculateTextareaHeight();
+          this.checkScrollState();
+        });
+      } else {
+        this.calculateTextareaHeight();
+        requestAnimationFrame(() => {
+          this.checkScrollState();
+        });
+      }
+    }
+
+    if (!changes.loading && this.loading && (changes.rows || changes.size)) {
+      requestAnimationFrame(() => {
+        this.calculateTextareaHeight();
+        this.checkScrollState();
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    this.resizeObserver?.disconnect();
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   getAdditionalHelpTooltip() {
@@ -143,6 +183,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       } else {
         this.inputEl.nativeElement.value = value;
       }
+
+      this.hasValue = !!value;
+      this.checkScrollState();
     }
 
     // Emite evento quando o model é atualizado, inclusive a primeira vez
@@ -159,6 +202,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     const value = this.validMaxLength(this.maxlength, event.target.value);
     this.callOnChange(value);
     this.inputEl.nativeElement.value = value;
+
+    this.hasValue = !!value;
+    this.checkScrollState();
   }
 
   eventOnFocus() {
@@ -254,5 +300,55 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  private readonly onWindowResize = () => {
+    this.checkScrollState();
+    if (this.loading) {
+      this.calculateTextareaHeight();
+    }
+  };
+
+  private checkScrollState(): void {
+    const el = this.inputEl?.nativeElement;
+    if (!el) return;
+
+    this.hasScroll = el.scrollHeight > el.clientHeight;
+    this.cd.markForCheck();
+  }
+
+  private calculateTextareaHeight(): void {
+    const textarea = this.inputEl?.nativeElement;
+    if (!textarea) return;
+
+    if (this.loading) {
+      textarea.style.height = '';
+
+      const style = getComputedStyle(textarea);
+      const lineHeight = Number.parseFloat(style.lineHeight);
+      const paddingTop = Number.parseFloat(style.paddingTop);
+      const paddingBottom = Number.parseFloat(style.paddingBottom);
+      const borderTop = Number.parseFloat(style.borderTopWidth);
+      const borderBottom = Number.parseFloat(style.borderBottomWidth);
+
+      const calculatedHeight = this.rows * lineHeight + paddingTop + paddingBottom + borderTop + borderBottom;
+      textarea.style.height = `${calculatedHeight}px`;
+    } else {
+      textarea.style.height = '';
+    }
+  }
+
+  private initResizeObserver(): void {
+    const el = this.inputEl?.nativeElement;
+
+    if (!el || typeof ResizeObserver === 'undefined') return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(() => {
+        this.checkScrollState();
+      });
+    });
+
+    this.resizeObserver.observe(el);
   }
 }

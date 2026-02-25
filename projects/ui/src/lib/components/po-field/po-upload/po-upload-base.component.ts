@@ -684,6 +684,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _hideSendButton?: boolean;
   private _isMultiple?: boolean;
   private _literals?: any;
+  private _loading: boolean = false;
   private _required?: boolean;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
@@ -885,6 +886,30 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   get disabled() {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no botão `Selecionar arquivo`, à esquerda do texto, sinalizando que uma operação está em andamento.
+   *
+   * > Incompatível com `p-drag-drop` e `p-hide-select-button`, pois o estado de loading depende da exibição do botão `Selecionar arquivo`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
+  set loading(value: boolean) {
+    this._loading = value;
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
