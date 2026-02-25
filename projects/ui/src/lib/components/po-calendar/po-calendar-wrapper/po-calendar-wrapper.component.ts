@@ -4,7 +4,6 @@ import {
   Input,
   OnChanges,
   OnInit,
-  AfterViewInit,
   Output,
   EventEmitter,
   inject,
@@ -27,7 +26,7 @@ import { PoDateService } from '../../../services/po-date/po-date.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoCalendarWrapperComponent implements OnInit, OnChanges, AfterViewInit {
+export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   private poCalendarService = inject(PoCalendarService);
   private poCalendarLangService = inject(PoCalendarLangService);
   private poDate = inject(PoDateService);
@@ -46,11 +45,11 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges, AfterViewI
   @Input('p-hover-value') hoverValue: Date;
   @Input('p-size') size: string;
   /**
-   * @private
-   * Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
+   * @internal
+   * Template customizado para o header do calendário.
+   * Para uso interno do datepicker/datepicker-range.
    */
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
-
   private _locale: string;
   @Input('p-locale') set locale(value: string) {
     this._locale = value;
@@ -65,8 +64,9 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges, AfterViewI
   readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
   /**
-   * @private
-   * Evento para fechar o calendário. Para uso interno do datepicker/datepicker-range.
+   * @internal
+   * Evento para fechar o calendário.
+   * Para uso interno do datepicker/datepicker-range.
    */
   @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
 
@@ -131,11 +131,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges, AfterViewI
 
   ngOnInit() {
     this.initializeData();
-  }
-
-  ngAfterViewInit() {
-    // Apenas prepara o índice de foco, sem focar automaticamente
-    // O foco será movido quando o usuário interagir via teclado ou clique
   }
 
   ngOnChanges(changes: SimpleChanges) {
