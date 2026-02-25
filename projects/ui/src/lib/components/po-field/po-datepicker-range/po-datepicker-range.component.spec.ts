@@ -2136,6 +2136,24 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['updateModelByScreen']).toHaveBeenCalledWith(false, start, end);
     }));
 
+    it(`onCalendarChange: should focus on startDateInput after selecting both dates`, fakeAsync(() => {
+      component.isCalendarVisible = true;
+
+      const start = new Date(2021, 10, 10);
+      const end = new Date(2021, 11, 11);
+
+      spyOn(component, <any>'updateScreenByModel');
+      spyOn(component, <any>'updateModelByScreen');
+      spyOn(component.startDateInput.nativeElement, 'focus');
+
+      component.onCalendarChange({ start, end });
+
+      tick(300);
+
+      expect(component.isCalendarVisible).toBe(false);
+      expect(component.startDateInput.nativeElement.focus).toHaveBeenCalled();
+    }));
+
     it(`onCalendarChange: should call updateModelByScreen, updateScreenByModel with empty value
       if start and end param is falsy`, fakeAsync(() => {
       const start = null;

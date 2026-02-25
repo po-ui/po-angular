@@ -12,6 +12,7 @@
           [p-template-context]="templateContext"
           [p-header-template]="headerTemplate || internalComboTemplate"
           [p-size]="size"
+          [p-locale]="locale"
         >
         </po-calendar-header>
       }
@@ -34,7 +35,7 @@
               (mouseenter)="onMouseEnter(day)"
               (mouseleave)="onMouseLeave()"
               (keydown)="onDayKeydown($event, day, i)"
-              [tabindex]="i === focusedDayIndex ? 0 : -1"
+              [tabindex]="getDayTabIndex(day, i)"
               attr-calendar
               [attr.data-other-month]="day.getMonth() !== displayMonthNumber"
               [attr.data-day-index]="i"
@@ -57,6 +58,7 @@
         [p-template-context]="templateContext"
         [p-header-template]="headerTemplate || internalComboTemplate"
         [p-size]="size"
+        [p-locale]="locale"
       >
       </po-calendar-header>
 
@@ -92,6 +94,7 @@
         [p-template-context]="templateContext"
         [p-header-template]="headerTemplate || internalComboTemplate"
         [p-size]="size"
+        [p-locale]="locale"
       >
       </po-calendar-header>
 
@@ -119,33 +122,30 @@
       </div>
     </ng-container>
   }
-
-  @if (!range) {
-    <div class="po-calendar-footer">
-      <po-button
-        p-kind="tertiary"
-        type="button"
-        [p-label]="displayToClean"
-        (click)="onClear()"
-        (keydown.enter)="onClear()"
-        (keydown.space)="onClear()"
-        [p-size]="size"
-      >
-      </po-button>
-      <po-button
-        p-kind="tertiary"
-        type="button"
-        [p-label]="displayToday"
-        (click)="onSelectDate(today)"
-        (keydown.enter)="onSelectDate(today)"
-        (keydown.space)="onSelectDate(today)"
-        (keydown)="onTodayKeydown($event)"
-        [p-disabled]="isTodayUnavailable()"
-        [p-size]="size"
-      >
-      </po-button>
-    </div>
-  }
+  <div class="po-calendar-footer">
+    <po-button
+      p-kind="tertiary"
+      type="button"
+      [p-label]="displayToClean"
+      (click)="onClear()"
+      (keydown.enter)="onClear()"
+      (keydown.space)="onClear()"
+      [p-size]="size"
+    >
+    </po-button>
+    <po-button
+      p-kind="tertiary"
+      type="button"
+      [p-label]="displayToday"
+      (click)="onSelectDate(today)"
+      (keydown.enter)="onTodayKeydownEnter($event)"
+      (keydown.space)="onTodayKeydownSpace($event)"
+      (keydown)="onTodayKeydown($event)"
+      [p-disabled]="isTodayUnavailable()"
+      [p-size]="size"
+    >
+    </po-button>
+  </div>
 </div>
 
 <ng-template #internalComboTemplate let-combo>

@@ -9,8 +9,8 @@
       p-kind="tertiary"
       (click)="previous.emit()"
       (keydown.enter)="previous.emit(); $event.preventDefault()"
-      p-aria-label="Mês anterior"
-      p-icon="an an-caret-left"
+      [p-aria-label]="previousMonthLabel"
+      p-icon="ICON_ARROW_LEFT"
       [p-size]="size"
     ></po-button>
   }
@@ -20,8 +20,8 @@
       p-kind="tertiary"
       (click)="next.emit()"
       (keydown.enter)="next.emit(); $event.preventDefault()"
-      p-aria-label="Próximo mês"
-      p-icon="an an-caret-right"
+      [p-aria-label]="nextMonthLabel"
+      p-icon="ICON_ARROW_RIGHT"
       [p-size]="size"
     ></po-button>
   }

@@ -302,18 +302,26 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component.closeCalendar.emit).not.toHaveBeenCalled();
     });
 
-    it('onDayKeydown: should prevent default and emit closeCalendar when key is Tab, no shift, and range is true', () => {
-      component.range = true;
+    it('onTodayKeydownEnter: should prevent default and call onSelectDate with today', () => {
+      const event = { key: 'Enter', preventDefault: jasmine.createSpy('preventDefault') } as any;
 
-      const event = { key: 'Tab', shiftKey: false, preventDefault: jasmine.createSpy('preventDefault') } as any;
-      const day = new Date(2024, 5, 10);
+      spyOn(component, 'onSelectDate');
 
-      spyOn(component.closeCalendar, 'emit');
-
-      component.onDayKeydown(event, day, 0);
+      component.onTodayKeydownEnter(event);
 
       expect(event.preventDefault).toHaveBeenCalled();
-      expect(component.closeCalendar.emit).toHaveBeenCalled();
+      expect(component.onSelectDate).toHaveBeenCalledWith(component.today);
+    });
+
+    it('onTodayKeydownSpace: should prevent default and call onSelectDate with today', () => {
+      const event = { key: ' ', preventDefault: jasmine.createSpy('preventDefault') } as any;
+
+      spyOn(component, 'onSelectDate');
+
+      component.onTodayKeydownSpace(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.onSelectDate).toHaveBeenCalledWith(component.today);
     });
 
     it('onDayKeydown: should not emit closeCalendar when range is false or shift is pressed', () => {
@@ -374,6 +382,75 @@ describe('PoCalendarWrapperComponent', () => {
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
       expect(result).toBeFalse();
+    });
+
+    it('handleNavigationKey: should return false when findNextAvailableDay returns -1', () => {
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+      const disabledDay = new Date(2024, 5, 10);
+      component.displayDays = [disabledDay, new Date(2024, 5, 11)];
+
+      spyOn(component as any, 'isDayDisabled').and.returnValues(true, true);
+      spyOn(component as any, 'findNextAvailableDay').and.returnValue(-1);
+
+      const result = component['handleNavigationKey']('ArrowRight', 0);
+
+      expect(result).toBeFalse();
+      expect(component['findNextAvailableDay']).toHaveBeenCalled();
+    });
+
+    it('handleNavigationKey: should return false when new date found by findNextAvailableDay is still disabled', () => {
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+      const disabledDay1 = new Date(2024, 5, 10);
+      const disabledDay2 = new Date(2024, 5, 11);
+      component.displayDays = [disabledDay1, disabledDay2];
+
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      spyOn(component as any, 'findNextAvailableDay').and.returnValue(1);
+
+      const result = component['handleNavigationKey']('ArrowRight', 0);
+
+      expect(result).toBeFalse();
+      expect(component['isDayDisabled']).toHaveBeenCalledWith(disabledDay2);
+      expect(component['findNextAvailableDay']).toHaveBeenCalled();
+    });
+
+    it('handleNavigationKey: should return false when new date found by findNextAvailableDay is null', () => {
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+      const disabledDay1 = new Date(2024, 5, 10);
+      const disabledDay2 = new Date(2024, 5, 11);
+      component.displayDays = [disabledDay1, disabledDay2, null as any];
+
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      spyOn(component as any, 'findNextAvailableDay').and.returnValue(2);
+
+      const result = component['handleNavigationKey']('ArrowRight', 0);
+
+      expect(result).toBeFalse();
+      expect(component['findNextAvailableDay']).toHaveBeenCalled();
+    });
+
+    it('handleNavigationKey: should return true and focus when disabled day has available alternative', () => {
+      component.displayMonthNumber = 5;
+      component.displayYear = 2024;
+      const disabledDay = new Date(2024, 5, 10);
+      const availableDay = new Date(2024, 5, 11);
+      component.displayDays = [disabledDay, availableDay];
+      component.focusedDayIndex = 0;
+
+      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+      spyOn(component as any, 'findNextAvailableDay').and.returnValue(1);
+      spyOn(component as any, 'focusElement');
+      spyOn(component.cdr, 'detectChanges');
+
+      const result = component['handleNavigationKey']('ArrowRight', 0);
+
+      expect(result).toBeTrue();
+      expect(component.focusedDayIndex).toBe(1);
+      expect(component['findNextAvailableDay']).toHaveBeenCalled();
+      expect(component['focusElement']).toHaveBeenCalledWith(1);
     });
 
     it(`onSelectYear: should call 'updateDisplay' and 'selectDisplayMode' with 'month' if 'lastDisplay' is equal to 'month'`, () => {
@@ -1089,7 +1166,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`updateDate: should call 'updateDisplay' and 'headerChange.emit' with year and month`, () => {
       const year = 2020;
-      const month = 5;
+      const month = 5; // 0-indexed (June)
 
       spyOn(component, <any>'updateDisplay');
       spyOn(component.headerChange, 'emit');
@@ -1097,7 +1174,34 @@ describe('PoCalendarWrapperComponent', () => {
       component['updateDate'](year, month);
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(year, month);
-      expect(component.headerChange.emit).toHaveBeenCalledWith({ month, year });
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 6, year: 2020 });
+    });
+
+    it(`updateDate: should not emit 'headerChange' when year and month are the same`, () => {
+      component.displayYear = 2020;
+      component.displayMonthNumber = 5;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component['updateDate'](2020, 5);
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2020, 5);
+      expect(component.headerChange.emit).not.toHaveBeenCalled();
+    });
+
+    it(`updateDate: should emit 'headerChange' only once when month changes`, () => {
+      component.displayYear = 2020;
+      component.displayMonthNumber = 5;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component['updateDate'](2020, 6);
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2020, 6);
+      expect(component.headerChange.emit).toHaveBeenCalledTimes(1);
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 7, year: 2020 });
     });
 
     it(`updateDecade: should call 'addAllYearsInDecade' and update 'displayStartDecade' and 'displayFinalDecade'`, () => {
@@ -1371,6 +1475,364 @@ describe('PoCalendarWrapperComponent', () => {
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
         expect(event.preventDefault).not.toHaveBeenCalled();
+      });
+
+      it('should block PageUp when all days in target month are disabled', () => {
+        component.displayYear = 2024;
+        component.displayMonthNumber = 5; // June
+        component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
+
+        spyOn(component, <any>'updateDisplay');
+        spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(false);
+
+        const event = {
+          key: 'PageUp',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy('preventDefault')
+        } as any as KeyboardEvent;
+
+        const result = component['handlePageNavigation']('PageUp', false, 10, 9);
+
+        expect(result).toBe(false);
+        expect(component['updateDisplay']).not.toHaveBeenCalled();
+      });
+
+      it('should allow PageUp when target month has available days', () => {
+        component.displayYear = 2024;
+        component.displayMonthNumber = 5; // June
+        component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
+
+        spyOn(component, <any>'updateDisplay');
+        spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(true);
+        spyOn(component as any, 'focusOnSameDayAndWeek');
+
+        const result = component['handlePageNavigation']('PageUp', false, 10, 9);
+
+        expect(result).toBe(true);
+        expect(component['updateDisplay']).toHaveBeenCalled();
+      });
+
+      it('should block PageDown when all days in target month are disabled', () => {
+        component.displayYear = 2024;
+        component.displayMonthNumber = 5; // June
+        component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
+
+        spyOn(component, <any>'updateDisplay');
+        spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(false);
+
+        const event = {
+          key: 'PageDown',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy('preventDefault')
+        } as any as KeyboardEvent;
+
+        const result = component['handlePageNavigation']('PageDown', false, 10, 9);
+
+        expect(result).toBe(false);
+        expect(component['updateDisplay']).not.toHaveBeenCalled();
+      });
+
+      it('hasAvailableDaysInMonth: should return true when month has available days', () => {
+        spyOn(component as any, 'isDayDisabled').and.returnValues(true, false, true);
+
+        const result = component['hasAvailableDaysInMonth'](2024, 5);
+
+        expect(result).toBe(true);
+      });
+
+      it('hasAvailableDaysInMonth: should return false when all days are disabled', () => {
+        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+        const result = component['hasAvailableDaysInMonth'](2024, 5);
+
+        expect(result).toBe(false);
+      });
+
+      it('handleSelectKey: should not select disabled day', () => {
+        const day = new Date(2024, 5, 10);
+        spyOn(component, 'onSelectDate');
+        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+        component['handleSelectKey'](day, 9);
+
+        expect(component.onSelectDate).not.toHaveBeenCalled();
+      });
+
+      it('handleSelectKey: should select available day', () => {
+        const day = new Date(2024, 5, 10);
+        spyOn(component, 'onSelectDate');
+        spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+        spyOn(component as any, 'focusElement');
+
+        component['handleSelectKey'](day, 9);
+
+        expect(component.onSelectDate).toHaveBeenCalledWith(day);
+      });
+
+      it('getFirstAvailableDayInWeek: should return first available day in week', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5),
+          new Date(2024, 5, 6),
+          new Date(2024, 5, 7)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false, false, false, false);
+
+        const result = component['getFirstAvailableDayInWeek'](3);
+
+        expect(result).toBe(2);
+      });
+
+      it('getLastAvailableDayInWeek: should return last available day in week', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5),
+          new Date(2024, 5, 6),
+          new Date(2024, 5, 7)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValues(false, false, false, false, true, true, false);
+
+        const result = component['getLastAvailableDayInWeek'](3);
+
+        expect(result).toBe(6);
+      });
+
+      it('getFirstAvailableDayInWeek: should return weekStart when all days are disabled', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5),
+          new Date(2024, 5, 6),
+          new Date(2024, 5, 7)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+        const result = component['getFirstAvailableDayInWeek'](3);
+
+        expect(result).toBe(0);
+      });
+
+      it('getFirstAvailableDayInWeek: should return weekStart when all days are from other month', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 4, 28),
+          new Date(2024, 4, 29),
+          new Date(2024, 4, 30),
+          new Date(2024, 4, 31),
+          new Date(2024, 6, 1),
+          new Date(2024, 6, 2),
+          new Date(2024, 6, 3)
+        ];
+
+        const result = component['getFirstAvailableDayInWeek'](3);
+
+        expect(result).toBe(0);
+      });
+
+      it('getLastAvailableDayInWeek: should return weekStart when all days are disabled', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5),
+          new Date(2024, 5, 6),
+          new Date(2024, 5, 7)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+        const result = component['getLastAvailableDayInWeek'](3);
+
+        expect(result).toBe(0);
+      });
+
+      it('getLastAvailableDayInWeek: should return weekStart when all days are from other month', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 4, 28),
+          new Date(2024, 4, 29),
+          new Date(2024, 4, 30),
+          new Date(2024, 4, 31),
+          new Date(2024, 6, 1),
+          new Date(2024, 6, 2),
+          new Date(2024, 6, 3)
+        ];
+
+        const result = component['getLastAvailableDayInWeek'](3);
+
+        expect(result).toBe(0);
+      });
+
+      it('findNextAvailableDay: should find next available day forward', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false);
+
+        const result = component['findNextAvailableDay'](0, 'forward');
+
+        expect(result).toBe(3);
+      });
+
+      it('getNavigationDirection: should return forward for ArrowRight', () => {
+        const result = component['getNavigationDirection']('ArrowRight');
+        expect(result).toBe('forward');
+      });
+
+      it('getNavigationDirection: should return forward for ArrowDown', () => {
+        const result = component['getNavigationDirection']('ArrowDown');
+        expect(result).toBe('forward');
+      });
+
+      it('getNavigationDirection: should return forward for End', () => {
+        const result = component['getNavigationDirection']('End');
+        expect(result).toBe('forward');
+      });
+
+      it('getNavigationDirection: should return backward for ArrowLeft', () => {
+        const result = component['getNavigationDirection']('ArrowLeft');
+        expect(result).toBe('backward');
+      });
+
+      it('getNavigationDirection: should return backward for ArrowUp', () => {
+        const result = component['getNavigationDirection']('ArrowUp');
+        expect(result).toBe('backward');
+      });
+
+      it('getNavigationDirection: should return backward for Home', () => {
+        const result = component['getNavigationDirection']('Home');
+        expect(result).toBe('backward');
+      });
+
+      it('getNavigationDirection: should return backward for any other key', () => {
+        const result = component['getNavigationDirection']('PageDown');
+        expect(result).toBe('backward');
+      });
+
+      it('findNextAvailableDay: should find next available day backward', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false);
+
+        const result = component['findNextAvailableDay'](3, 'backward');
+
+        expect(result).toBe(0);
+      });
+
+      it('findNextAvailableDay: should return -1 when no available day found', () => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4)
+        ];
+
+        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+        const result = component['findNextAvailableDay'](0, 'forward');
+
+        expect(result).toBe(-1);
+      });
+
+      it('should skip disabled days when navigating with ArrowRight', () => {
+        component.minDate = new Date(2024, 5, 1);
+        component.maxDate = new Date(2024, 5, 30);
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5)
+        ];
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+
+        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false);
+
+        const event = {
+          key: 'ArrowRight',
+          preventDefault: jasmine.createSpy('preventDefault')
+        } as any as KeyboardEvent;
+        component.onDayKeydown(event, new Date(2024, 5, 1), 0);
+
+        expect(component.focusedDayIndex).toBe(3);
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should skip disabled days when navigating with ArrowLeft', () => {
+        component.minDate = new Date(2024, 5, 1);
+        component.maxDate = new Date(2024, 5, 30);
+        component.displayDays = [
+          new Date(2024, 5, 1), // Index 0 - available (target)
+          new Date(2024, 5, 2), // Index 1 - disabled
+          new Date(2024, 5, 3), // Index 2 - disabled
+          new Date(2024, 5, 4), // Index 3 - starting point
+          new Date(2024, 5, 5)
+        ];
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+
+        // ArrowLeft from index 3: checks index 2 (disabled=true), findNextAvailableDay checks index 1 (disabled=true),
+        // index 0 (disabled=false), then verifies index 0 (disabled=false)
+        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false);
+
+        const event = { key: 'ArrowLeft', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        component.onDayKeydown(event, new Date(2024, 5, 4), 3);
+
+        expect(component.focusedDayIndex).toBe(0);
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should not navigate when all days are disabled in direction', () => {
+        component.minDate = new Date(2024, 5, 15);
+        component.maxDate = new Date(2024, 5, 20);
+        component.displayDays = [
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5)
+        ];
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+
+        spyOn(component as any, 'isDayDisabled').and.returnValues(false, true, true, true, false);
+
+        const event = {
+          key: 'ArrowRight',
+          preventDefault: jasmine.createSpy('preventDefault')
+        } as any as KeyboardEvent;
+        component.onDayKeydown(event, new Date(2024, 5, 1), 0);
+
+        expect(event.preventDefault).toHaveBeenCalled();
       });
 
       it('should handle PageUp without shiftKey in normal month', () => {
@@ -1653,6 +2115,45 @@ describe('PoCalendarWrapperComponent', () => {
         expect(component.focusedDayIndex).toBe(2);
         expect((component as any).elementRef.nativeElement.querySelector).not.toHaveBeenCalled();
       });
+
+      it('should call getFirstAvailableDayInWeek when target day is disabled', fakeAsync(() => {
+        component.displayMonthNumber = 5;
+        component.displayDays = [
+          new Date(2024, 5, 1), // Index 0 - available
+          new Date(2024, 5, 2), // Index 1
+          new Date(2024, 5, 3), // Index 2
+          new Date(2024, 5, 4), // Index 3
+          new Date(2024, 5, 5), // Index 4
+          new Date(2024, 5, 6), // Index 5
+          new Date(2024, 5, 7), // Index 6
+          new Date(2024, 5, 8), // Index 7
+          new Date(2024, 5, 9), // Index 8 - target (disabled)
+          new Date(2024, 5, 10), // Index 9
+          new Date(2024, 5, 11), // Index 10
+          new Date(2024, 5, 12), // Index 11
+          new Date(2024, 5, 13), // Index 12
+          new Date(2024, 5, 14) // Index 13
+        ];
+        component.focusedDayIndex = -1;
+        component.minDate = new Date(2024, 5, 1);
+        component.maxDate = new Date(2024, 5, 8); // Makes June 9 disabled
+
+        const mockElement = document.createElement('div');
+        const focusSpy = spyOn(mockElement, 'focus');
+
+        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        spyOn(component.cdr, 'detectChanges');
+        const getFirstAvailableSpy = spyOn(component as any, 'getFirstAvailableDayInWeek').and.returnValue(7);
+
+        // Try to focus on day 9 (index 8) which is disabled
+        component['focusOnSameDayAndWeek'](9, 1);
+
+        tick();
+
+        expect(getFirstAvailableSpy).toHaveBeenCalledWith(8);
+        expect(component.focusedDayIndex).toBe(7);
+        expect(focusSpy).toHaveBeenCalled();
+      }));
     });
 
     describe('focusElement', () => {
@@ -1884,14 +2385,93 @@ describe('PoCalendarWrapperComponent', () => {
   it('should call updateDate when onHeaderDateChange is triggered', () => {
     const event = { year: 2023, month: 5 };
 
-    spyOn(component, <any>'updateDisplay');
+    spyOn(component, <any>'updateDisplay').and.callThrough();
     spyOn(component.headerChange, 'emit');
 
     component.onHeaderDateChange(event);
 
     expect(component.mode).toBe('day');
     expect(component['updateDisplay']).toHaveBeenCalledWith(event.year, event.month);
-    expect(component.headerChange.emit).toHaveBeenCalledWith(event);
+  });
+
+  it('updateDate: should emit headerChange only once with 1-indexed month', () => {
+    spyOn(component, <any>'updateDisplay');
+    spyOn(component.headerChange, 'emit');
+
+    component.updateDate(2025, 5); // June (0-indexed) should emit as 6 (1-indexed)
+
+    expect(component.headerChange.emit).toHaveBeenCalledTimes(1);
+    expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 6, year: 2025 });
+  });
+
+  it('updateDate: should not emit headerChange when no change', () => {
+    component.displayYear = 2025;
+    component.displayMonthNumber = 5;
+
+    spyOn(component, <any>'updateDisplay');
+    spyOn(component.headerChange, 'emit');
+
+    component.updateDate(2025, 5); // No change
+
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+  });
+
+  it('onNextMonth: should not emit headerChange directly', () => {
+    component.displayMonthNumber = 0;
+    component.displayYear = 2025;
+    component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2025, 0, i + 1));
+
+    spyOn(component, <any>'updateDisplay').and.callFake(() => {
+      component.displayMonthNumber = 1;
+    });
+    spyOn(component.headerChange, 'emit');
+
+    component.onNextMonth();
+
+    expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 1);
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+  });
+
+  it('onPreviousMonth: should not emit headerChange directly', () => {
+    component.displayMonthNumber = 1;
+    component.displayYear = 2025;
+    component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2025, 1, i + 1));
+
+    spyOn(component, <any>'updateDisplay').and.callFake(() => {
+      component.displayMonthNumber = 0;
+    });
+    spyOn(component.headerChange, 'emit');
+
+    component.onPreviousMonth();
+
+    expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 0);
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+  });
+
+  it('onSelectMonth: should not emit headerChange directly', () => {
+    spyOn(component, <any>'selectDisplayMode');
+    spyOn(component, <any>'updateDisplay');
+    spyOn(component.headerChange, 'emit');
+
+    component.onSelectMonth(2025, 5);
+
+    expect(component['selectDisplayMode']).toHaveBeenCalledWith('day');
+    expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 5);
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+  });
+
+  it('onSelectYear: should not emit headerChange directly', () => {
+    component['lastDisplay'] = 'month';
+
+    spyOn(component, <any>'selectDisplayMode');
+    spyOn(component, <any>'updateDisplay');
+    spyOn(component.headerChange, 'emit');
+
+    component.onSelectYear(2025, 5);
+
+    expect(component['selectDisplayMode']).toHaveBeenCalledWith('month');
+    expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 5);
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
   });
 
   describe('trackBy', () => {
@@ -1994,15 +2574,13 @@ describe('PoCalendarWrapperComponent', () => {
     });
   });
 
-  it('onSelectMonth: should update display and emit headerChange', () => {
+  it('onSelectMonth: should update display and set mode to day', () => {
     const updateSpy = spyOn(component as any, 'updateDisplay');
-    const emitSpy = spyOn(component.headerChange, 'emit');
 
     component.onSelectMonth(2026, 5);
 
     expect(component.mode).toBe('day');
     expect(updateSpy).toHaveBeenCalledWith(2026, 5);
-    expect(emitSpy).toHaveBeenCalledWith({ month: 5, year: 2026 });
   });
 
   it('onSelectYear: should restore lastDisplay if it was month', () => {
@@ -2031,6 +2609,223 @@ describe('PoCalendarWrapperComponent', () => {
     const result = (component as any).getRangeColor(dataTestada, prefix, 'background');
 
     expect(result).toBeUndefined();
+  });
+
+  describe('Tabulation', () => {
+    beforeEach(() => {
+      component.displayYear = 2026;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+    });
+
+    it('setInitialFocusedDay: should focus on selected day if available', () => {
+      component.value = new Date(2026, 5, 2);
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(2);
+    });
+
+    it('setInitialFocusedDay: should focus on first available day if no selection', () => {
+      component.value = null;
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(1);
+    });
+
+    it('setInitialFocusedDay: should skip disabled days and other months', () => {
+      component.value = null;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(2);
+    });
+
+    it('setInitialFocusedDay: should focus on value.start when value is range object', () => {
+      component.value = { start: new Date(2026, 5, 2), end: new Date(2026, 5, 10) };
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(2);
+    });
+
+    it('setInitialFocusedDay: should focus on value.start when value is range object without end', () => {
+      component.displayDays = [
+        new Date(2026, 4, 31),
+        new Date(2026, 5, 1),
+        new Date(2026, 5, 2),
+        new Date(2026, 5, 3),
+        new Date(2026, 5, 4),
+        new Date(2026, 5, 5)
+      ];
+      component.value = { start: new Date(2026, 5, 5), end: null };
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(5);
+    });
+
+    it('setInitialFocusedDay: should fallback to first available when value.start is disabled', () => {
+      component.value = { start: new Date(2026, 5, 2), end: null };
+      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(1);
+    });
+
+    it('setInitialFocusedDay: should fallback to first available when value.start is in different month', () => {
+      component.value = { start: new Date(2026, 4, 15), end: null };
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(1);
+    });
+
+    it('setInitialFocusedDay: should handle value object with null start', () => {
+      component.value = { start: null, end: null };
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(1);
+    });
+
+    it('setInitialFocusedDay: should handle value object with undefined start', () => {
+      component.value = { start: undefined, end: undefined };
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(1);
+    });
+
+    it('setInitialFocusedDay: should not change focusedDayIndex when all days are disabled', () => {
+      component.value = null;
+      component.displayMonthNumber = 5;
+      component.focusedDayIndex = 0;
+      component.displayDays = [new Date(2026, 4, 30), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(0);
+    });
+
+    it('setInitialFocusedDay: should not change focusedDayIndex when no days from current month exist', () => {
+      component.value = null;
+      component.displayMonthNumber = 5;
+      component.focusedDayIndex = 5;
+      component.displayDays = [new Date(2026, 4, 30), new Date(2026, 4, 31)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(5);
+    });
+
+    it('getDayTabIndex: should return -1 for disabled days even if focused', () => {
+      const disabledDay = new Date(2026, 5, 1);
+      component.displayMonthNumber = 5;
+      component.focusedDayIndex = 1;
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+      const tabIndex = component.getDayTabIndex(disabledDay, 1);
+
+      expect(tabIndex).toBe(-1);
+      expect((component as any).isDayDisabled).toHaveBeenCalledWith(disabledDay);
+    });
+
+    it('getDayTabIndex: should return -1 for days from other months', () => {
+      const otherMonthDay = new Date(2026, 4, 31);
+
+      const tabIndex = component.getDayTabIndex(otherMonthDay, 0);
+
+      expect(tabIndex).toBe(-1);
+    });
+
+    it('getDayTabIndex: should return 0 only for focused day', () => {
+      const day = new Date(2026, 5, 2);
+      component.focusedDayIndex = 2;
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      const tabIndexFocused = component.getDayTabIndex(day, 2);
+      const tabIndexNotFocused = component.getDayTabIndex(day, 1);
+
+      expect(tabIndexFocused).toBe(0);
+      expect(tabIndexNotFocused).toBe(-1);
+    });
+
+    it('getDayTabIndex: should return -1 for null day', () => {
+      const tabIndex = component.getDayTabIndex(null, 0);
+      expect(tabIndex).toBe(-1);
+    });
+
+    it('getDayTabIndex: should return -1 for undefined day', () => {
+      const tabIndex = component.getDayTabIndex(undefined, 0);
+      expect(tabIndex).toBe(-1);
+    });
+
+    it('getDayTabIndex: should return -1 for non-Date object', () => {
+      const tabIndex = component.getDayTabIndex({ day: 1 } as any, 0);
+      expect(tabIndex).toBe(-1);
+    });
+  });
+
+  describe('Focus Management', () => {
+    it('ensureValidFocusedDay: should maintain focusedDayIndex when current day is valid', () => {
+      component.focusedDayIndex = 2;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).ensureValidFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(2);
+    });
+
+    it('ensureValidFocusedDay: should update focusedDayIndex when current day is disabled', () => {
+      component.focusedDayIndex = 2;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3), new Date(2026, 5, 4)];
+
+      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+
+      (component as any).ensureValidFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(0);
+    });
+
+    it('ensureValidFocusedDay: should update focusedDayIndex when current day is from another month', () => {
+      component.focusedDayIndex = 0;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+
+      (component as any).ensureValidFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(1);
+    });
+
+    it('ensureValidFocusedDay: should not change focusedDayIndex when no valid days available', () => {
+      component.focusedDayIndex = 0;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+
+      (component as any).ensureValidFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(0);
+    });
   });
 
   it('should focus on the same day and week', fakeAsync(() => {

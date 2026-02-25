@@ -280,6 +280,9 @@ export class PoDatepickerRangeComponent
       setTimeout(() => {
         this.isCalendarVisible = false;
         this.cd.markForCheck();
+        if (this.startDateInput?.nativeElement) {
+          this.startDateInput.nativeElement.focus();
+        }
       }, 300);
     }
   }
