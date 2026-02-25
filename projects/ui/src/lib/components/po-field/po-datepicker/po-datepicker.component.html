@@ -62,19 +62,19 @@
               </po-clean>
               <div class="po-button-vertical-divider"></div>
             }
+            <po-button
+              #iconDatepicker
+              class="po-datepicker-button"
+              [class.po-button-tertiary-danger]="getErrorPattern()"
+              p-icon="ICON_CALENDAR_DOTS"
+              p-kind="tertiary"
+              [p-disabled]="isDisabled || readonly"
+              [p-size]="size"
+              (keydown)="onKeyPress($event)"
+              (p-click)="togglePicker()"
+            >
+            </po-button>
           </div>
-          <po-button
-            #iconDatepicker
-            class="po-datepicker-button"
-            [class.po-button-tertiary-danger]="getErrorPattern()"
-            p-icon="ICON_CALENDAR_DOTS"
-            p-kind="tertiary"
-            [p-disabled]="isDisabled || readonly"
-            [p-size]="size"
-            (keydown)="onKeyPress($event)"
-            (p-click)="togglePicker()"
-          >
-          </po-button>
         }
       </div>
       @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {

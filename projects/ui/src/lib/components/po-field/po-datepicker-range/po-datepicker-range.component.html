@@ -18,6 +18,7 @@
         #dateRangeField
         class="po-datepicker-range-field po-input"
         [class.po-datepicker-range-field-disabled]="isDisabled"
+        [class.po-input-icon-right]="enableCleaner"
         [attr.disabled]="isDisabled"
       >
         <div class="po-datepicker-range-start-date">
@@ -82,8 +83,6 @@
               ></po-clean>
               <div class="po-button-vertical-divider"></div>
             }
-          </div>
-          <div class="po-datepicker-range-icon">
             <po-button
               #iconCalendar
               class="po-datepicker-range-button"
