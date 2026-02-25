@@ -1,6 +1,7 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
+
 <po-field-container
-  [p-disabled]="disabled"
+  [p-disabled]="isDisabled"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -13,27 +14,37 @@
   [p-compact-label]="compactLabel()"
 >
   <div class="po-field-container-content">
-    <textarea
-      #inp
-      class="po-textarea"
-      (blur)="eventOnBlur()"
-      (focus)="eventOnFocus()"
-      (input)="eventOnInput($event)"
-      (keydown)="onKeyDown($event)"
-      [attr.name]="name"
-      [disabled]="disabled"
-      [id]="id"
-      [placeholder]="disabled ? '' : placeholder"
-      [readonly]="readonly"
-      [required]="required"
-      [rows]="rows"
-    ></textarea>
+    <div class="po-field-container-textarea-body">
+      <textarea
+        #inp
+        class="po-textarea"
+        [class.has-scroll]="hasScroll"
+        [class.has-value]="hasValue"
+        [class.has-loading]="loading"
+        (blur)="eventOnBlur()"
+        (focus)="eventOnFocus()"
+        (input)="eventOnInput($event)"
+        (keydown)="onKeyDown($event)"
+        [attr.name]="name"
+        [disabled]="isDisabled"
+        [id]="id"
+        [placeholder]="isDisabled ? '' : placeholder"
+        [readonly]="readonly"
+        [required]="required"
+        [rows]="rows"
+      ></textarea>
+      @if (loading) {
+        <div class="po-field-icon-container-right po-textarea-loading-container">
+          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+        </div>
+      }
+    </div>
   </div>
   @if (!readonly) {
     <po-field-container-bottom
       [p-append-in-body]="appendBox"
       [p-help]="help"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
       [p-size]="size"

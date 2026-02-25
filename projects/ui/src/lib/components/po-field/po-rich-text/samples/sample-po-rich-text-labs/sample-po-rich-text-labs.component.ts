@@ -41,7 +41,9 @@ export class SamplePoRichTextLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
-    { value: 'compactLabel', label: 'Compact Label' }
+    { value: 'compactLabel', label: 'Compact Label' },
+    { value: 'disabled', label: 'Disabled' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [

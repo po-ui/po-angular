@@ -188,6 +188,15 @@ export class PoUploadComponent extends PoUploadBaseComponent implements AfterVie
         );
   }
 
+  get isSelectButtonDisabled(): boolean {
+    return this.loading || this.isDisabled;
+  }
+
+  get isFieldDisabled(): boolean {
+    const isSelectButtonVisible = !this.hideSelectButton && !this.displayDragDrop;
+    return (isSelectButtonVisible && this.loading) || this.disabled;
+  }
+
   get maxFiles(): number {
     return this.isMultiple && this.fileRestrictions && this.fileRestrictions.maxFiles;
   }

@@ -11,7 +11,13 @@ import {
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
+import {
+  convertToBoolean,
+  convertToInt,
+  getDefaultSizeFn,
+  mapInputSizeToLoadingIcon,
+  validateSizeFn
+} from '../../../utils/util';
 import { PoValidators } from '../validators';
 import { PoHelperOptions } from '../../po-helper';
 
@@ -289,6 +295,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   displayAdditionalHelp: boolean = false;
 
   private _disabled: boolean = false;
+  private _loading: boolean = false;
   private _maxlength: number;
   private _minlength: number;
   private _placeholder: string = '';
@@ -329,6 +336,28 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
 
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
+  set loading(value: boolean) {
+    this._loading = value;
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -454,7 +483,10 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @HostListener('window:PoUiThemeChange')
   protected onThemeChange(): void {
     this.applySizeBasedOnA11y();
+    this.onAfterThemeChange();
   }
+
+  protected onAfterThemeChange(): void {}
 
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada
@@ -527,6 +559,11 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   writeValue(value: any) {
     this.writeValueModel(value);
     this.cd.markForCheck();
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  protected mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   protected validateModel() {

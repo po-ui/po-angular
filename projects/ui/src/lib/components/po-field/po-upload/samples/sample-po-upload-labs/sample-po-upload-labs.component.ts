@@ -60,7 +60,8 @@ export class SamplePoUploadLabsComponent implements OnInit {
     { value: 'showCustomAction', label: 'Add Custom Action to Progress' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
     { value: 'compactLabel', label: 'Compact Label' },
-    { value: 'showThumbnail', label: 'Show Thumbnail' }
+    { value: 'showThumbnail', label: 'Show Thumbnail' },
+    { value: 'loading', label: 'Loading' }
   ];
 
   public readonly sizeOptions: Array<PoRadioGroupOption> = [
