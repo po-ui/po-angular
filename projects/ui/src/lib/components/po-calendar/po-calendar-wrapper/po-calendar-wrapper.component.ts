@@ -4,6 +4,7 @@ import {
   Input,
   OnChanges,
   OnInit,
+  AfterViewInit,
   Output,
   EventEmitter,
   inject,
@@ -26,7 +27,7 @@ import { PoDateService } from '../../../services/po-date/po-date.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoCalendarWrapperComponent implements OnInit, OnChanges {
+export class PoCalendarWrapperComponent implements OnInit, OnChanges, AfterViewInit {
   private poCalendarService = inject(PoCalendarService);
   private poCalendarLangService = inject(PoCalendarLangService);
   private poDate = inject(PoDateService);
@@ -43,8 +44,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-min-date') minDate: any;
   @Input('p-max-date') maxDate: any;
   @Input('p-hover-value') hoverValue: Date;
-  @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   @Input('p-size') size: string;
+  /**
+   * @private
+   * Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
+   */
+  @Input('p-header-template') headerTemplate?: TemplateRef<any>;
 
   private _locale: string;
   @Input('p-locale') set locale(value: string) {
@@ -57,10 +62,13 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   @Output('p-header-change') headerChange = new EventEmitter<any>();
   @Output('p-select-date') selectDate = new EventEmitter<any>();
-  @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
-
   readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
+  /**
+   * @private
+   * Evento para fechar o calendário. Para uso interno do datepicker/datepicker-range.
+   */
+  @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
 
   currentYear: number;
   displayYear: number;
@@ -125,12 +133,18 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.initializeData();
   }
 
+  ngAfterViewInit() {
+    // Apenas prepara o índice de foco, sem focar automaticamente
+    // O foco será movido quando o usuário interagir via teclado ou clique
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     const { activateDate, minDate, maxDate, locale } = changes;
 
     if (minDate || maxDate) {
       this.comboYearsOptions = [...this.poCalendarService.getYearOptions(this.minDate, this.maxDate)];
       this.updateTemplateContext();
+      this.ensureValidFocusedDay();
       this.cdr.markForCheck();
     }
 
@@ -171,7 +185,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
     this.updateDisplay(this.displayYear, this.displayMonthNumber);
   }
-
   private setupOptions() {
     this.poCalendarLangService.setLanguage(this.locale);
 
@@ -201,7 +214,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   onHeaderDateChange(event: { year: number; month: number }) {
     this.mode = 'day';
     this.updateDisplay(event.year, event.month);
-    this.headerChange.emit(event);
   }
 
   private updateTemplateContext() {
@@ -216,8 +228,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   updateDate(year: number, month: number) {
+    const hasChanged = this.displayYear !== year || this.displayMonthNumber !== month;
     this.updateDisplay(year, month);
-    this.headerChange.emit({ month, year });
+    if (hasChanged) {
+      // Emite mês em formato 1-indexed (janeiro = 1, não 0)
+      this.headerChange.emit({ month: month + 1, year });
+    }
   }
 
   private updateDisplay(year: number, month: number) {
@@ -234,7 +250,71 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
     this.updateTemplateContext();
 
+    this.setInitialFocusedDay();
+
+    this.ensureValidFocusedDay();
+
     this.cdr.detectChanges();
+  }
+
+  private setInitialFocusedDay(): void {
+    if (this.value) {
+      const selectedDate = this.value instanceof Date ? this.value : this.value?.start;
+      if (selectedDate instanceof Date) {
+        const selectedIndex = this.displayDays.findIndex(
+          day =>
+            day &&
+            this.equalsDate(day, selectedDate) &&
+            day.getMonth() === this.displayMonthNumber &&
+            !this.isDayDisabled(day)
+        );
+        if (selectedIndex !== -1) {
+          this.focusedDayIndex = selectedIndex;
+          return;
+        }
+      }
+    }
+
+    const firstAvailableIndex = this.displayDays.findIndex(
+      day => day instanceof Date && day.getMonth() === this.displayMonthNumber && !this.isDayDisabled(day)
+    );
+
+    if (firstAvailableIndex !== -1) {
+      this.focusedDayIndex = firstAvailableIndex;
+    }
+  }
+
+  private ensureValidFocusedDay(): void {
+    const currentDay = this.displayDays[this.focusedDayIndex];
+
+    if (
+      currentDay instanceof Date &&
+      currentDay.getMonth() === this.displayMonthNumber &&
+      !this.isDayDisabled(currentDay)
+    ) {
+      return;
+    }
+
+    const firstAvailableIndex = this.displayDays.findIndex(
+      day => day instanceof Date && day.getMonth() === this.displayMonthNumber && !this.isDayDisabled(day)
+    );
+
+    if (firstAvailableIndex !== -1) {
+      this.focusedDayIndex = firstAvailableIndex;
+    }
+  }
+
+  getDayTabIndex(day: Date, index: number): number {
+    if (!day || !(day instanceof Date)) {
+      return -1;
+    }
+    if (day.getMonth() !== this.displayMonthNumber) {
+      return -1;
+    }
+    if (this.isDayDisabled(day)) {
+      return -1;
+    }
+    return index === this.focusedDayIndex ? 0 : -1;
   }
 
   // --- 4. Navegação (Setas) ---
@@ -243,8 +323,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.displayMonthNumber < 11
       ? this.updateDisplay(this.displayYear, this.displayMonthNumber + 1)
       : this.updateDisplay(this.displayYear + 1, 0);
-
-    this.headerChange.emit({ month: this.displayMonthNumber, year: this.displayYear });
   }
 
   onPreviousMonth() {
@@ -253,8 +331,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     } else {
       this.updateDisplay(this.displayYear - 1, 11);
     }
-
-    this.headerChange.emit({ month: this.displayMonthNumber, year: this.displayYear });
   }
 
   updateYear(value: number) {
@@ -264,14 +340,12 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   onSelectMonth(year: number, month: number) {
     this.selectDisplayMode('day');
     this.updateDisplay(year, month);
-    this.headerChange.emit({ month, year });
   }
 
   onSelectYear(year: number, month: number) {
     this.selectDisplayMode(this.lastDisplay === 'month' ? 'month' : 'day');
     this.currentYear = year;
     this.updateDisplay(year, month);
-    this.headerChange.emit({ month, year });
   }
 
   selectDisplayMode(mode: 'month' | 'day' | 'year') {
@@ -301,6 +375,16 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
   }
 
+  onTodayKeydownEnter(event: KeyboardEvent): void {
+    event.preventDefault();
+    this.onSelectDate(this.today);
+  }
+
+  onTodayKeydownSpace(event: KeyboardEvent): void {
+    event.preventDefault();
+    this.onSelectDate(this.today);
+  }
+
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
     const key = event.key;
     const dayOfMonth = day.getDate();
@@ -314,9 +398,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       event.preventDefault();
     } else if (key === 'Escape') {
       event.preventDefault();
-    } else if (key === 'Tab' && !event.shiftKey && this.range) {
-      event.preventDefault();
-      this.closeCalendar.emit();
     }
   }
 
@@ -325,40 +406,35 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   private handleSelectKey(day: Date, index: number): void {
+    // Bloqueia seleção de dias desabilitados
+    if (this.isDayDisabled(day)) {
+      return;
+    }
     this.onSelectDate(day);
     this.focusElement(index);
   }
 
   private handleNavigationKey(key: string, index: number): boolean {
-    let newIndex = -1;
-
-    switch (key) {
-      case 'ArrowUp':
-        newIndex = Math.max(0, index - 7);
-        break;
-      case 'ArrowDown':
-        newIndex = Math.min(this.displayDays.length - 1, index + 7);
-        break;
-      case 'ArrowRight':
-        newIndex = Math.min(this.displayDays.length - 1, index + 1);
-        break;
-      case 'ArrowLeft':
-        newIndex = Math.max(0, index - 1);
-        break;
-      case 'Home':
-        newIndex = Math.floor(index / 7) * 7;
-        break;
-      case 'End':
-        newIndex = Math.floor(index / 7) * 7 + 6;
-        break;
-    }
+    let newIndex = this.getNextNavigationIndex(key, index);
 
     if (newIndex !== -1 && newIndex < this.displayDays.length) {
-      const newDate = this.displayDays[newIndex];
+      let newDate = this.displayDays[newIndex];
       if (!newDate) return false;
       if (newDate.getMonth() !== this.displayMonthNumber || newDate.getFullYear() !== this.displayYear) {
         return false;
       }
+      if (this.isDayDisabled(newDate)) {
+        const direction = this.getNavigationDirection(key);
+        newIndex = this.findNextAvailableDay(newIndex, direction);
+        if (newIndex === -1) {
+          return false;
+        }
+        newDate = this.displayDays[newIndex];
+        if (!newDate || this.isDayDisabled(newDate)) {
+          return false;
+        }
+      }
+
       this.focusedDayIndex = newIndex;
       this.cdr.detectChanges();
       this.focusElement(newIndex);
@@ -366,6 +442,77 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
 
     return false;
+  }
+
+  private getNextNavigationIndex(key: string, index: number): number {
+    switch (key) {
+      case 'ArrowUp':
+        return Math.max(0, index - 7);
+      case 'ArrowDown':
+        return Math.min(this.displayDays.length - 1, index + 7);
+      case 'ArrowRight':
+        return Math.min(this.displayDays.length - 1, index + 1);
+      case 'ArrowLeft':
+        return Math.max(0, index - 1);
+      case 'Home':
+        return this.getFirstAvailableDayInWeek(index);
+      case 'End':
+        return this.getLastAvailableDayInWeek(index);
+      default:
+        return -1;
+    }
+  }
+
+  private getFirstAvailableDayInWeek(index: number): number {
+    const weekStart = Math.floor(index / 7) * 7;
+    const weekEnd = Math.min(weekStart + 7, this.displayDays.length);
+
+    for (let i = weekStart; i < weekEnd; i++) {
+      const date = this.displayDays[i];
+      if (date instanceof Date && date.getMonth() === this.displayMonthNumber && !this.isDayDisabled(date)) {
+        return i;
+      }
+    }
+
+    return weekStart;
+  }
+
+  private getLastAvailableDayInWeek(index: number): number {
+    const weekStart = Math.floor(index / 7) * 7;
+    const weekEnd = Math.min(weekStart + 7, this.displayDays.length);
+
+    for (let i = weekEnd - 1; i >= weekStart; i--) {
+      const date = this.displayDays[i];
+      if (date instanceof Date && date.getMonth() === this.displayMonthNumber && !this.isDayDisabled(date)) {
+        return i;
+      }
+    }
+
+    return weekStart;
+  }
+
+  private getNavigationDirection(key: string): 'forward' | 'backward' {
+    return key === 'ArrowRight' || key === 'ArrowDown' || key === 'End' ? 'forward' : 'backward';
+  }
+
+  private findNextAvailableDay(startIndex: number, direction: 'forward' | 'backward'): number {
+    const step = direction === 'forward' ? 1 : -1;
+    let index = startIndex + step;
+
+    for (let i = 0; i < 100; i++) {
+      if (index < 0 || index >= this.displayDays.length) {
+        break;
+      }
+
+      const date = this.displayDays[index];
+      if (date instanceof Date && date.getMonth() === this.displayMonthNumber && !this.isDayDisabled(date)) {
+        return index;
+      }
+
+      index += step;
+    }
+
+    return -1;
   }
 
   private handlePageNavigation(key: string, isShiftKey: boolean, dayOfMonth: number, index: number): boolean {
@@ -380,9 +527,37 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       return false;
     }
 
+    const step = direction === 'up' ? -1 : 1;
+    let targetMonth = this.displayMonthNumber;
+    let targetYear = this.displayYear;
+
+    if (isShiftKey) {
+      targetYear += step;
+    } else {
+      targetMonth += step;
+      if (targetMonth < 0) {
+        targetMonth = 11;
+        targetYear -= 1;
+      } else if (targetMonth > 11) {
+        targetMonth = 0;
+        targetYear += 1;
+      }
+    }
+
+    if (!this.hasAvailableDaysInMonth(targetYear, targetMonth)) {
+      return false;
+    }
+
     this.applyPageNavigation(direction, isShiftKey);
     this.focusOnSameDayAndWeek(dayOfMonth, index);
     return true;
+  }
+
+  private hasAvailableDaysInMonth(year: number, month: number): boolean {
+    const calendarArray = this.poCalendarService.monthDays(year, month);
+    const monthDays = [].concat(...calendarArray);
+
+    return monthDays.some(day => day instanceof Date && day.getMonth() === month && !this.isDayDisabled(day));
   }
 
   private applyPageNavigation(direction: 'up' | 'down', isShiftKey: boolean): void {
@@ -401,7 +576,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       }
     }
     this.updateDisplay(this.displayYear, this.displayMonthNumber);
-    this.headerChange.emit({ month: this.displayMonthNumber, year: this.displayYear });
   }
 
   private focusElement(index: number): void {
@@ -423,10 +597,17 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       const focusIndex = this.findTargetDayIndex(dayOfMonth, dayOfWeek, currentWeekRow);
 
       if (focusIndex !== -1) {
-        this.focusedDayIndex = focusIndex;
+        let targetIndex = focusIndex;
+        const targetDate = this.displayDays[targetIndex];
+
+        if (targetDate instanceof Date && this.isDayDisabled(targetDate)) {
+          targetIndex = this.getFirstAvailableDayInWeek(targetIndex);
+        }
+
+        this.focusedDayIndex = targetIndex;
         this.cdr.detectChanges();
 
-        const element = this.queryDayElement(focusIndex);
+        const element = this.queryDayElement(targetIndex);
         if (element instanceof HTMLElement) {
           element.focus();
         }
