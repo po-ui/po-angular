@@ -9,7 +9,8 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -89,8 +90,9 @@ export class PoRichTextComponent
 
   constructor() {
     const richTextService = inject(PoRichTextService);
+    const cd = inject(ChangeDetectorRef);
 
-    super(richTextService);
+    super(richTextService, cd);
   }
 
   ngOnInit(): void {

@@ -104,6 +104,18 @@ describe('PoRichTextToolbarComponent:', () => {
         expect(mediaButton).toBeNull();
       });
     });
+
+    it('disabled: should set `disabled` property to true', () => {
+      component.disabled = true;
+
+      expect(component.disabled).toBeTrue();
+    });
+
+    it('disabled: should set `disabled` property to false', () => {
+      component.disabled = false;
+
+      expect(component.disabled).toBeFalse();
+    });
   });
 
   describe('Methods:', () => {
@@ -383,6 +395,22 @@ describe('PoRichTextToolbarComponent:', () => {
 
       const colorPicker = nativeElement.querySelector('[data-rich-text-toolbar="color"]');
       expect(colorPicker).toBeNull();
+    });
+
+    it('should add `po-rich-text-disabled` class to toolbar when `disabled` is true', () => {
+      component.disabled = true;
+      fixture.detectChanges();
+
+      const toolbar = nativeElement.querySelector('.po-rich-text-toolbar');
+      expect(toolbar.classList.contains('po-rich-text-disabled')).toBeTrue();
+    });
+
+    it('should not add `po-rich-text-disabled` class to toolbar when `disabled` is false', () => {
+      component.disabled = false;
+      fixture.detectChanges();
+
+      const toolbar = nativeElement.querySelector('.po-rich-text-toolbar');
+      expect(toolbar.classList.contains('po-rich-text-disabled')).toBeFalse();
     });
   });
 });
