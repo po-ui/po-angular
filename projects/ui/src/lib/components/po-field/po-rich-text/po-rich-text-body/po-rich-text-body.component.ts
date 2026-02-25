@@ -2,19 +2,23 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
 import { PoRichTextService } from '../po-rich-text.service';
 import { PoKeyCodeEnum } from './../../../../enums/po-key-code.enum';
-import { PoUtils } from './../../../../utils/util';
+import { mapInputSizeToLoadingIcon, PoUtils } from './../../../../utils/util';
 
 const poRichTextBodyCommands = [
   'bold',
@@ -33,8 +37,9 @@ const poRichTextBodyCommands = [
   templateUrl: './po-rich-text-body.component.html',
   standalone: false
 })
-export class PoRichTextBodyComponent implements OnInit, OnDestroy {
+export class PoRichTextBodyComponent implements OnInit, OnDestroy, OnChanges {
   private richTextService = inject(PoRichTextService);
+  private readonly cd = inject(ChangeDetectorRef);
 
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
 
@@ -47,6 +52,10 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   @Input('p-placeholder') placeholder?: string;
 
   @Input('p-readonly') readonly?: string;
+
+  @Input('p-disabled') disabled?: boolean;
+
+  @Input('p-loading') loading?: boolean;
 
   @Output('p-change') change = new EventEmitter<any>();
 
@@ -69,6 +78,14 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
   private timeoutChange: any;
   private valueBeforeChange: any;
   private modelSubscription: Subscription;
+  private resizeObserver: ResizeObserver;
+  hasScroll: boolean = false;
+  hasValue: boolean = false;
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.checkScrollState();
+  }
 
   ngOnInit() {
     this.bodyElement.nativeElement.designMode = 'on';
@@ -78,11 +95,23 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
       this.bodyElement.nativeElement.innerHTML = '';
       this.updateValueWithModelValue();
       this.addClickListenerOnAnchorElements();
+
+      this.updateHasValue();
+      this.checkScrollState();
     });
+
+    this.initResizeObserver();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['loading']) {
+      setTimeout(() => this.checkScrollState());
+    }
   }
 
   ngOnDestroy() {
     this.modelSubscription?.unsubscribe();
+    this.resizeObserver?.disconnect();
   }
 
   executeCommand(command: string | { command: any; value: string | any }) {
@@ -157,11 +186,19 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     this.removeBrElement();
     this.updateModel();
     this.emitSelectionCommands();
+
+    this.updateHasValue();
+    this.checkScrollState();
   }
 
   onPaste() {
     this.update();
-    setTimeout(() => this.addClickListenerOnAnchorElements());
+    setTimeout(() => {
+      this.addClickListenerOnAnchorElements();
+
+      this.updateHasValue();
+      this.checkScrollState();
+    });
   }
 
   update() {
@@ -171,6 +208,9 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
       this.removeBrElement();
       this.updateModel();
       this.emitSelectionCommands();
+
+      this.updateHasValue();
+      this.checkScrollState();
     });
   }
 
@@ -390,5 +430,40 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
     }
 
     return isLink;
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
+  }
+
+  private get bodyEl(): HTMLElement {
+    return this.bodyElement?.nativeElement;
+  }
+
+  private updateHasValue(): void {
+    const text = this.bodyEl?.innerText?.trim();
+    this.hasValue = !!text;
+  }
+
+  private checkScrollState(): void {
+    const el = this.bodyEl;
+    if (!el) return;
+
+    this.hasScroll = el.scrollHeight > el.clientHeight;
+    this.cd.markForCheck();
+  }
+
+  private initResizeObserver(): void {
+    const el = this.bodyEl;
+    if (!el || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.checkScrollState();
+    });
+
+    this.resizeObserver.observe(el);
   }
 }

@@ -2,7 +2,13 @@ import { ChangeDetectorRef, Directive, EventEmitter, input, Input, Output } from
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
+import {
+  convertToBoolean,
+  convertToInt,
+  getDefaultSizeFn,
+  mapInputSizeToLoadingIcon,
+  validateSizeFn
+} from '../../../utils/util';
 import { PoValidators } from '../validators';
 import { PoHelperOptions } from '../../po-helper';
 
@@ -280,6 +286,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   displayAdditionalHelp: boolean = false;
 
   private _disabled: boolean = false;
+  private _loading: boolean = false;
   private _maxlength: number;
   private _minlength: number;
   private _placeholder: string = '';
@@ -319,6 +326,27 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
 
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -515,6 +543,11 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     if (this.validatorChange) {
       this.validatorChange();
     }
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   abstract writeValueModel(value: any): void;

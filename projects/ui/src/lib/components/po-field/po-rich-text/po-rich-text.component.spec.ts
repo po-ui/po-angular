@@ -542,5 +542,23 @@ describe('PoRichTextComponent:', () => {
 
       expect(spyIsAllActionsHidden).toHaveBeenCalled();
     });
+
+    it('should pass `isDisabled` to `po-rich-text-toolbar` as `p-disabled`', () => {
+      component.disabled = true;
+      fixture.detectChanges();
+
+      const toolbar = fixture.debugElement.query(debugEl => debugEl.name === 'po-rich-text-toolbar');
+
+      expect(toolbar.componentInstance.disabled).toBeTrue();
+    });
+
+    it('should pass `isDisabled` as true to toolbar when `loading` is true', () => {
+      component.loading = true;
+      fixture.detectChanges();
+
+      const toolbar = fixture.debugElement.query(debugEl => debugEl.name === 'po-rich-text-toolbar');
+
+      expect(toolbar.componentInstance.disabled).toBeTrue();
+    });
   });
 });

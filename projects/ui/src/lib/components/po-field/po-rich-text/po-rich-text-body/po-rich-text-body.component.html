@@ -1,9 +1,13 @@
 <div
   #bodyElement
   class="po-rich-text-body"
-  tabindex="0"
+  [class.has-value]="hasValue"
+  [class.has-scroll]="hasScroll"
+  [class.has-loading]="loading"
+  [class.po-rich-text-disabled]="disabled"
+  [tabindex]="disabled ? -1 : 0"
   [attr.aria-label]="label"
-  [attr.contenteditable]="!readonly"
+  [attr.contenteditable]="!readonly && !disabled"
   [attr.data-placeholder]="placeholder"
   [attr.p-size]="size"
   [style.height.px]="height"
@@ -15,3 +19,8 @@
   (keyup)="onKeyUp($event)"
   (paste)="onPaste()"
 ></div>
+@if (loading) {
+  <div class="po-rich-text-loading-container">
+    <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+  </div>
+}
