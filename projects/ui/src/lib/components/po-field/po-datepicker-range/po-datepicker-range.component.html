@@ -72,6 +72,7 @@
           <div class="po-field-icon-container-right">
             @if (enableCleaner) {
               <po-clean
+                #iconClean
                 tabindex="0"
                 role="button"
                 class="po-icon-input"
@@ -91,6 +92,7 @@
               p-kind="tertiary"
               [p-disabled]="isDisabled || readonly"
               [p-size]="size"
+              (keydown)="onKeyPress($event)"
               (p-click)="toggleCalendar()"
             >
             </po-button>

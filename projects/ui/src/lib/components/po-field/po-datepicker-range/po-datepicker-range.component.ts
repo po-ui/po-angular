@@ -11,7 +11,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  HostListener
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -19,7 +20,7 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
+import { isKeyCodeEnter, isKeyCodeSpace, replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoHelperComponent } from '../../po-helper';
@@ -98,6 +99,7 @@ export class PoDatepickerRangeComponent
   @ViewChild('iconCalendar') iconCalendar: PoButtonComponent;
   @ViewChild('calendarPicker', { read: ElementRef }) calendarPicker: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
+  @ViewChild('iconClean', { read: ElementRef }) iconClean!: ElementRef<HTMLElement>;
 
   id = `po-datepicker-range[${uuid()}]`;
   isCalendarVisible = false;
@@ -307,6 +309,58 @@ export class PoDatepickerRangeComponent
     if (isFieldFocused) {
       this.keydown.emit(event);
     }
+  }
+
+  onKeyPress(event: any) {
+    if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
+      this.isCalendarVisible = !this.isCalendarVisible;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible && this.enableCleaner) {
+      this.iconClean.nativeElement?.focus();
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible) {
+      this.focus();
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
+      const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+      if (firstCombo) {
+        event.preventDefault();
+        firstCombo.focus();
+      }
+    }
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeydownDatepickerRange($event?: any) {
+    if (this.readonly) {
+      return;
+    }
+
+    if ($event.key === 'Escape' && this.isCalendarVisible) {
+      this.isCalendarVisible = false;
+
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+
+    if (
+      $event.key === 'Tab' &&
+      $event.shiftKey &&
+      $event.target === this.startDateInput.nativeElement &&
+      this.isCalendarVisible
+    ) {
+      this.isCalendarVisible = false;
+    }
+
+    this.poMaskObject.keydown($event);
   }
 
   onKeyup(event: any) {
