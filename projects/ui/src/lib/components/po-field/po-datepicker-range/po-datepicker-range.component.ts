@@ -316,7 +316,8 @@ export class PoDatepickerRangeComponent
 
   onKeyPress(event: any) {
     if (isKeyCodeEnter(event) || isKeyCodeSpace(event)) {
-      this.isCalendarVisible = !this.isCalendarVisible;
+      this.toggleCalendar();
+      return;
     }
 
     if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible && this.enableCleaner) {
