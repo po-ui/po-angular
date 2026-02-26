@@ -1,0 +1,4 @@
+<div class="po-skeleton-wrapper" [ngClass]="computedClasses()" [ngStyle]="computedStyles()" aria-hidden="true"></div>
+@if (loadingLabel()) {
+  <span class="po-skeleton-loading-label" role="status" aria-live="polite">{{ loadingLabel() }}</span>
+}

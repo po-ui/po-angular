@@ -1,0 +1,24 @@
+.post-card {
+  padding: 16px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.post-header-text {
+  flex: 1;
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.post-card po-skeleton:last-child {
+  --margin-bottom: 0;
+}
