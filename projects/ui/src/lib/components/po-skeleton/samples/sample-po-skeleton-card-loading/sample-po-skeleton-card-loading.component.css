@@ -1,0 +1,129 @@
+/* Post Card Styles */
+.post-card {
+  padding: 16px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.post-header-text {
+  flex: 1;
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+/* Credit Card Styles */
+.credit-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 200px;
+  position: relative;
+}
+
+.card-chip {
+  margin-bottom: 32px;
+}
+
+.card-number {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-holder,
+.card-expiry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-brand {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+}
+
+/* Profile Card Styles */
+.profile-card {
+  text-align: center;
+  padding: 24px;
+}
+
+.profile-picture {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Product Card Styles */
+.product-card {
+  padding: 16px;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.product-button {
+  margin-top: 16px;
+}
+
+/* Article Card Styles */
+.article-card {
+  padding: 16px;
+}
+
+.article-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Remove margin-bottom from last skeleton in each card */
+.post-card po-skeleton:last-child,
+.credit-card po-skeleton:last-child,
+.profile-card po-skeleton:last-child,
+.product-card po-skeleton:last-child,
+.article-card po-skeleton:last-child {
+  --margin-bottom: 0;
+}

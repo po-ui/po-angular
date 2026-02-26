@@ -1,0 +1,96 @@
+/* 
+.post-card {
+  padding: 16px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.post-header-text {
+  flex: 1;
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0;
+}
+*/
+
+/*
+.profile-card {
+  text-align: center;
+  padding: 24px;
+}
+
+.profile-picture {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+*/
+
+/*
+.product-card {
+  padding: 16px;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.product-button {
+  margin-top: 16px;
+}
+*/
+
+/*
+.article-card {
+  padding: 16px;
+}
+
+.article-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+*/
+
+/*
+.post-card po-skeleton:last-child,
+.credit-card po-skeleton:last-child,
+.profile-card po-skeleton:last-child,
+.product-card po-skeleton:last-child,
+.article-card po-skeleton:last-child {
+  --margin-bottom: 0;
+}
+*/
