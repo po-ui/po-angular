@@ -678,9 +678,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
-    if (this.isFocusOnFirstCombo()) {
-      const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
-
+    const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+    if (firstCombo) {
       event.preventDefault();
       firstCombo.focus();
     } else {
