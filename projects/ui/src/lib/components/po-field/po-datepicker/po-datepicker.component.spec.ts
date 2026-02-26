@@ -1222,6 +1222,77 @@ describe('PoDatepickerComponent:', () => {
       }, 100);
     });
 
+    it('should use scrollHeight and scrollWidth from .po-calendar when it exists', () => {
+      component.visible = true;
+
+      const calendarMock = {
+        scrollHeight: 500,
+        scrollWidth: 300
+      };
+
+      const nativeElementMock: any = {
+        querySelector: jasmine.createSpy().and.returnValue(calendarMock),
+        scrollHeight: 100,
+        scrollWidth: 100,
+        style: {
+          height: '',
+          width: ''
+        }
+      };
+
+      component.dialogPicker = {
+        nativeElement: nativeElementMock
+      } as any;
+
+      component['controlPosition'] = {
+        setElements: jasmine.createSpy(),
+        adjustPosition: jasmine.createSpy()
+      } as any;
+
+      spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['adjustCalendarPosition']();
+
+      expect(nativeElementMock.style.height).toBe('500px');
+      expect(nativeElementMock.style.width).toBe('300px');
+    });
+
+    it('should fallback to nativeElement scrollHeight and scrollWidth when .po-calendar does not exist', () => {
+      component.visible = true;
+
+      const nativeElementMock: any = {
+        querySelector: jasmine.createSpy().and.returnValue(null),
+        scrollHeight: 200,
+        scrollWidth: 150,
+        style: {
+          height: '',
+          width: ''
+        }
+      };
+
+      component.dialogPicker = {
+        nativeElement: nativeElementMock
+      } as any;
+
+      component['controlPosition'] = {
+        setElements: jasmine.createSpy(),
+        adjustPosition: jasmine.createSpy()
+      } as any;
+
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['adjustCalendarPosition']();
+
+      expect(nativeElementMock.style.height).toBe('200px');
+      expect(nativeElementMock.style.width).toBe('150px');
+    });
+
     it('onScroll: should call `controlPosition.adjustPosition()`.', () => {
       spyOn(component['controlPosition'], 'adjustPosition');
 
@@ -1581,7 +1652,9 @@ describe('PoDatepickerComponent:', () => {
         spyOn(component as any, 'togglePicker');
 
         component.dialogPicker = {
-          nativeElement: {}
+          nativeElement: {
+            querySelector: () => null
+          }
         } as ElementRef;
 
         component['focusCalendar'](event);
@@ -1589,7 +1662,6 @@ describe('PoDatepickerComponent:', () => {
         expect(event.preventDefault).not.toHaveBeenCalled();
         expect(component['togglePicker']).toHaveBeenCalledWith(false);
       });
-
       it('should return early when dialogPicker is not present', () => {
         spyOn(component as any, 'isFocusOnFirstCombo');
 
