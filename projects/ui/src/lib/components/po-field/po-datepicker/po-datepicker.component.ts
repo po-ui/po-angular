@@ -257,6 +257,22 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
+  closeCalendar(focusInput = true) {
+    this.visible = false;
+    this.removeListeners();
+    this.setDialogPickerStyleDisplay('none');
+
+    if (!this.verifyMobile() && focusInput) {
+      this.focus();
+    }
+
+    if (!focusInput && this.clean && this.inputEl.nativeElement.value) {
+      setTimeout(() => {
+        this.iconDatepicker.focus();
+      });
+    }
+  }
+
   dateSelected(event?: string) {
     if (event === '') {
       this.clear();
@@ -539,22 +555,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   /* istanbul ignore next */
   verifyMobile() {
     return isMobile();
-  }
-
-  private closeCalendar(focusInput = true) {
-    this.visible = false;
-    this.removeListeners();
-    this.setDialogPickerStyleDisplay('none');
-
-    if (!this.verifyMobile() && focusInput) {
-      this.focus();
-    }
-
-    if (!focusInput && this.clean && this.inputEl.nativeElement.value) {
-      setTimeout(() => {
-        this.iconDatepicker.focus();
-      });
-    }
   }
 
   private controlChangeEmitter() {
