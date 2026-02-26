@@ -12,13 +12,13 @@
   [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content" [attr.p-size]="size">
+  <div class="po-field-container-content po-field-container-content-datepicker-range" [attr.p-size]="size">
     <div class="po-field-container-input" [class.readonly]="readonly && !isDisabled && !loading">
       <div
         #dateRangeField
         class="po-datepicker-range-field po-input"
         [class.po-datepicker-range-field-disabled]="isDisabled"
-        [class.po-input-icon-right]="enableCleaner"
+        [class.po-input-icon-right]="enableCleaner && !isDisabled"
         [attr.disabled]="isDisabled"
       >
         <div class="po-datepicker-range-start-date">
