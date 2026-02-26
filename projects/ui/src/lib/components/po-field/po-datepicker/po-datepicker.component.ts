@@ -549,6 +549,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (!this.verifyMobile() && focusInput) {
       this.focus();
     }
+
+    if (!focusInput && this.clean && this.inputEl.nativeElement.value) {
+      setTimeout(() => {
+        this.iconDatepicker.focus();
+      });
+    }
   }
 
   private controlChangeEmitter() {
@@ -632,25 +638,27 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   protected adjustCalendarPosition(): void {
     if (this?.dialogPicker.nativeElement && this.visible) {
-      const scrollHeight =
-        this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
-        this.dialogPicker.nativeElement.scrollHeight;
-      const scrollWidth =
-        this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
-        this.dialogPicker.nativeElement.scrollWidth;
+      requestAnimationFrame(() => {
+        const scrollHeight =
+          this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollHeight ??
+          this.dialogPicker.nativeElement.scrollHeight;
+        const scrollWidth =
+          this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
+          this.dialogPicker.nativeElement.scrollWidth;
 
-      this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
-      this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
+        this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
+        this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
 
-      this.controlPosition.setElements(
-        this.dialogPicker.nativeElement,
-        poCalendarContentOffset,
-        this.inputEl,
-        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-        false,
-        true
-      );
-      this.controlPosition.adjustPosition(poCalendarPositionDefault);
+        this.controlPosition.setElements(
+          this.dialogPicker.nativeElement,
+          poCalendarContentOffset,
+          this.inputEl,
+          ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+          false,
+          true
+        );
+        this.controlPosition.adjustPosition(poCalendarPositionDefault);
+      });
     }
   }
 
@@ -670,12 +678,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
-    const focusableElements = ['button:not([disabled])', '[tabindex]:not([tabindex="-1"])'].join(', ');
-    const focusableElement = this.dialogPicker.nativeElement.querySelector(focusableElements);
+    if (this.isFocusOnFirstCombo()) {
+      const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
 
-    if (focusableElement) {
       event.preventDefault();
-      focusableElement?.focus();
+      firstCombo.focus();
     } else {
       this.togglePicker(false);
     }

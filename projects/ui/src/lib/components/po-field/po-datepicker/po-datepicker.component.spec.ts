@@ -1193,12 +1193,13 @@ describe('PoDatepickerComponent:', () => {
       expect(listen).toHaveBeenCalled();
     });
 
-    it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
+    it('setCalendarPosition: should call "controlPosition.setElements" and "controlPosition.adjustPosition".', done => {
       component.visible = true;
-
       component.dialogPicker = {
         nativeElement: document.createElement('div')
       } as any;
+
+      component.dialogPicker.nativeElement.innerHTML = '<div class="po-calendar"></div>';
 
       const setDialogPickerStyleDisplay = spyOn(component as any, 'setDialogPickerStyleDisplay');
       const setElements = spyOn(component['controlPosition'], 'setElements');
@@ -1206,16 +1207,19 @@ describe('PoDatepickerComponent:', () => {
 
       component['setCalendarPosition']();
 
-      expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
-      expect(adjustPosition).toHaveBeenCalled();
-      expect(setElements).toHaveBeenCalledWith(
-        component.dialogPicker.nativeElement,
-        poCalendarContentOffset,
-        component['inputEl'],
-        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-        false,
-        true
-      );
+      setTimeout(() => {
+        expect(setDialogPickerStyleDisplay).toHaveBeenCalled();
+        expect(setElements).toHaveBeenCalledWith(
+          component.dialogPicker.nativeElement,
+          poCalendarContentOffset,
+          component['inputEl'],
+          ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+          false,
+          true
+        );
+        expect(adjustPosition).toHaveBeenCalled();
+        done();
+      }, 100);
     });
 
     it('onScroll: should call `controlPosition.adjustPosition()`.', () => {
@@ -1548,10 +1552,17 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('focusCalendar:', () => {
-      it('should focus on first focusable element when dialogPicker exists', () => {
-        const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
-        const mockElement = document.createElement('button');
-        spyOn(mockElement, 'focus');
+      let event: KeyboardEvent;
+
+      beforeEach(() => {
+        event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
+      });
+
+      it('should focus on first combo when isFocusOnFirstCombo() returns true', () => {
+        const mockFocus = jasmine.createSpy();
+        const mockElement = { focus: mockFocus } as unknown as HTMLElement;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
 
         component.dialogPicker = {
           nativeElement: {
@@ -1562,7 +1573,32 @@ describe('PoDatepickerComponent:', () => {
         component['focusCalendar'](event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(mockElement.focus).toHaveBeenCalled();
+        expect(mockFocus).toHaveBeenCalled();
+      });
+
+      it('should call togglePicker when isFocusOnFirstCombo() returns false', () => {
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
+        spyOn(component as any, 'togglePicker');
+
+        component.dialogPicker = {
+          nativeElement: {}
+        } as ElementRef;
+
+        component['focusCalendar'](event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(component['togglePicker']).toHaveBeenCalledWith(false);
+      });
+
+      it('should return early when dialogPicker is not present', () => {
+        spyOn(component as any, 'isFocusOnFirstCombo');
+
+        component.dialogPicker = null;
+
+        component['focusCalendar'](event);
+
+        expect(component['isFocusOnFirstCombo']).not.toHaveBeenCalled();
+        expect(event.preventDefault).not.toHaveBeenCalled();
       });
 
       it('should call togglePicker when no focusable element is found', () => {
@@ -1714,6 +1750,19 @@ describe('PoDatepickerComponent:', () => {
         beforeEach(() => {
           spyOn(component, <any>'verifyMobile').and.returnValue(false);
         });
+
+        it('should focus iconDatepicker when focusInput is false, clean is true and input has value', fakeAsync(() => {
+          const iconFocusSpy = jasmine.createSpy('focus');
+
+          component.clean = true;
+          component.inputEl = { nativeElement: { value: '2024-01-01' } } as ElementRef;
+          component.iconDatepicker = { focus: iconFocusSpy } as any;
+
+          component['closeCalendar'](false);
+          tick();
+
+          expect(iconFocusSpy).toHaveBeenCalled();
+        }));
 
         it('should call clickListener when it exists', () => {
           const clickListenerSpy = jasmine.createSpy('clickListener');

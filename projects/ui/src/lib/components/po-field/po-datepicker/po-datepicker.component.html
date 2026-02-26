@@ -71,6 +71,7 @@
               [p-disabled]="isDisabled || readonly"
               [p-size]="size"
               (keydown)="onKeyPress($event)"
+              (keydown.tab)="handleCleanKeyboardTab($event)"
               (p-click)="togglePicker()"
             >
             </po-button>
@@ -119,6 +120,7 @@
           (p-change)="dateSelected($event)"
           (p-change-month-year)="adjustCalendarPosition()"
           (keydown)="onCalendarKeyDown($event)"
+          (p-close)="closeCalendar(false)"
         ></po-calendar>
       </div>
     </ng-template>
