@@ -38,6 +38,7 @@ import { PoPopoverModule } from './po-popover/po-popover.module';
 import { PoPopupModule } from './po-popup/po-popup.module';
 import { PoProgressModule } from './po-progress/po-progress.module';
 import { PoSearchModule } from './po-search';
+import { PoSkeletonModule } from './po-skeleton/po-skeleton.module';
 import { PoSlideModule } from './po-slide/po-slide.module';
 import { PoStepperModule } from './po-stepper/po-stepper.module';
 import { PoTableModule } from './po-table/po-table.module';
@@ -84,6 +85,7 @@ const PO_MODULES = [
   PoPopupModule,
   PoProgressModule,
   PoSlideModule,
+  PoSkeletonModule,
   PoStepperModule,
   PoTableModule,
   PoTabsModule,
@@ -99,6 +101,7 @@ const PO_MODULES = [
   PoSwitchModule,
   PoSearchModule,
   PoBadgeModule,
+  PoSkeletonModule,
   PoToasterModule,
   PoHelperModule,
   PoHeaderModule

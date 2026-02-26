@@ -1,0 +1,55 @@
+.po-skeleton-wrapper {
+  display: block;
+  background: var(--background, var(--color-neutral-light-20));
+  border-radius: var(--border-radius, var(--border-radius-md));
+}
+
+.po-skeleton-text {
+  border-radius: var(--border-radius, var(--border-radius-sm));
+}
+
+.po-skeleton-circle {
+  border-radius: 50%;
+}
+
+/* Animação Pulse */
+@keyframes po-skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.po-skeleton-animation-pulse {
+  animation: po-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Animação Shimmer */
+@keyframes po-skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.po-skeleton-animation-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--background, var(--color-neutral-light-20)) 0%,
+    var(--color-neutral-light-10, #f0f0f0) 50%,
+    var(--background, var(--color-neutral-light-20)) 100%
+  );
+  background-size: 200% 100%;
+  animation: po-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.po-skeleton-animation-none {
+  animation: none;
+}

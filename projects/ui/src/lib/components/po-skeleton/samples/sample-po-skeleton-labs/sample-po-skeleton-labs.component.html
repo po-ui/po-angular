@@ -1,0 +1,39 @@
+<div class="po-row">
+  <po-skeleton
+    class="po-md-12"
+    [p-variant]="variant"
+    [p-animation]="animation"
+    [p-width]="width"
+    [p-height]="height"
+    [p-border-radius]="borderRadius"
+  >
+  </po-skeleton>
+</div>
+
+<hr />
+
+<po-info class="po-md-12" p-label="Model" [p-value]="modelValue"></po-info>
+
+<hr />
+
+<form class="po-row">
+  <po-select class="po-md-6" name="variant" [(ngModel)]="variant" p-label="Variant" [p-options]="variantOptions">
+  </po-select>
+
+  <po-select
+    class="po-md-6"
+    name="animation"
+    [(ngModel)]="animation"
+    p-label="Animation"
+    [p-options]="animationOptions"
+  >
+  </po-select>
+
+  <po-input class="po-md-6" name="width" [(ngModel)]="width" p-label="Width"> </po-input>
+
+  <po-input class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-input>
+
+  <po-input class="po-md-6" name="borderRadius" [(ngModel)]="borderRadius" p-label="Border Radius"> </po-input>
+
+  <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+</form>
