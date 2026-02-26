@@ -1,0 +1,31 @@
+.widget-card {
+  padding: 8px 0;
+}
+
+.widget-header {
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.widget-icon {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.widget-content {
+  margin-bottom: 16px;
+}
+
+.widget-spacer {
+  height: 40px;
+}
+
+.widget-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-button {
+  display: flex;
+  justify-content: flex-end;
+}

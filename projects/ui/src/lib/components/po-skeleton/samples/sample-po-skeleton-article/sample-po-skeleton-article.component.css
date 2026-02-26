@@ -1,0 +1,20 @@
+.article-card {
+  padding: 16px;
+}
+
+.article-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.article-card po-skeleton:last-child {
+  --margin-bottom: 0;
+}
