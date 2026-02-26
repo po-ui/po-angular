@@ -24,7 +24,7 @@
           #inp
           type="text"
           class="po-input po-datepicker"
-          [class.po-input-icon-right]="clean && inp.value"
+          [class.po-input-icon-right]="clean && inp.value && !isDisabled"
           [class.po-datepicker-field-disabled]="isDisabled"
           [attr.data-focused-element]="!isDisabled"
           [attr.data-inactive-component]="isDisabled || readonly"
