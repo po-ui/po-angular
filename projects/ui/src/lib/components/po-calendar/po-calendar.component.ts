@@ -185,25 +185,25 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private updateActivateDateFromHeaderChange(month: number, year: number, partType: string): void {
-    if (!this.isRange || !this.activateDate || (partType !== 'start' && partType !== 'end')) {
+    if (!this.isRange || !this.activateDate) {
       return;
     }
 
     if (partType === 'start') {
       const currentStart = this.activateDate.start instanceof Date ? this.activateDate.start : new Date();
-      const newStart = this.buildDateWithMonthYear(currentStart, month, year);
+      const newStart = this.buildDateWithMonthYear(currentStart, month - 1, year);
 
-      this.setActivateDate(newStart);
+      this.activateDate = { start: newStart, end: this.activateDate.end };
       return;
     }
 
-    const currentEnd = this.activateDate.end instanceof Date ? this.activateDate.end : new Date();
-    const newEnd = this.buildDateWithMonthYear(currentEnd, month, year);
-    const previousMonth = newEnd.getMonth() === 0 ? 11 : newEnd.getMonth() - 1;
-    const previousYear = newEnd.getMonth() === 0 ? newEnd.getFullYear() - 1 : newEnd.getFullYear();
-    const newStart = this.buildDateWithMonthYear(newEnd, previousMonth, previousYear);
+    if (partType === 'end') {
+      const currentEnd = this.activateDate.end instanceof Date ? this.activateDate.end : new Date();
+      const newEnd = this.buildDateWithMonthYear(currentEnd, month - 1, year);
 
-    this.activateDate = { start: newStart, end: newEnd };
+      this.activateDate = { start: this.activateDate.start, end: newEnd };
+      return;
+    }
   }
 
   private buildDateWithMonthYear(baseDate: Date, month: number, year: number): Date {

@@ -3,8 +3,6 @@
     <ng-container>
       @if (templateContext) {
         <po-calendar-header
-          [p-hide-previous]="isEndPart"
-          [p-hide-next]="isEndPart"
           (p-previous)="onPreviousMonth()"
           (p-next)="onNextMonth()"
           [p-display-month]="displayMonth"

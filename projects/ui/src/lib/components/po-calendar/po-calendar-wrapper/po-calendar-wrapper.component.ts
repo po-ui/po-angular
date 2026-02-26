@@ -204,11 +204,18 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   private updateTemplateContext() {
+    const yearsOptions = [...this.comboYearsOptions];
+
+    if (this.displayYear !== undefined && !yearsOptions.some(option => option.value === this.displayYear)) {
+      yearsOptions.push({ label: this.displayYear.toString(), value: this.displayYear });
+      yearsOptions.sort((a, b) => a.value - b.value);
+    }
+
     this.templateContext = {
       monthIndex: this.displayMonthNumber,
       monthsOptions: [...this.comboMonthsOptions],
       year: this.displayYear,
-      yearsOptions: [...this.comboYearsOptions],
+      yearsOptions,
       updateDate: (year: number, month: number) => this.updateDate(year, month)
     };
     this.cdr.markForCheck();
@@ -307,21 +314,22 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   // --- 4. Navegação (Setas) ---
 
   onNextMonth() {
-    this.displayMonthNumber < 11
-      ? this.updateDisplay(this.displayYear, this.displayMonthNumber + 1)
-      : this.updateDisplay(this.displayYear + 1, 0);
+    const newMonth = this.displayMonthNumber < 11 ? this.displayMonthNumber + 1 : 0;
+    const newYear = this.displayMonthNumber < 11 ? this.displayYear : this.displayYear + 1;
+    this.updateDisplay(newYear, newMonth);
+    this.headerChange.emit({ month: newMonth + 1, year: newYear });
   }
 
   onPreviousMonth() {
-    if (this.displayMonthNumber > 0) {
-      this.updateDisplay(this.displayYear, this.displayMonthNumber - 1);
-    } else {
-      this.updateDisplay(this.displayYear - 1, 11);
-    }
+    const newMonth = this.displayMonthNumber > 0 ? this.displayMonthNumber - 1 : 11;
+    const newYear = this.displayMonthNumber > 0 ? this.displayYear : this.displayYear - 1;
+    this.updateDisplay(newYear, newMonth);
+    this.headerChange.emit({ month: newMonth + 1, year: newYear });
   }
 
   updateYear(value: number) {
-    this.updateDisplay(this.displayYear + value, this.displayMonthNumber);
+    const newYear = this.displayYear + value;
+    this.updateDisplay(newYear, this.displayMonthNumber);
   }
 
   onSelectMonth(year: number, month: number) {
@@ -692,7 +700,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     if (this.equalsDate(date, this.today)) {
       return this.getColorForToday(date, type);
     }
-
     return this.getColorForDefaultDate(date, type);
   }
 

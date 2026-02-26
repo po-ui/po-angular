@@ -223,6 +223,110 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['updateDisplay']).toHaveBeenCalledWith(1987, 11);
     });
 
+    it('updateTemplateContext: should add displayYear to yearsOptions when it is missing', () => {
+      component.displayYear = 2035;
+      component.displayMonthNumber = 5;
+      component.comboYearsOptions = [
+        { label: '2020', value: 2020 },
+        { label: '2021', value: 2021 }
+      ];
+
+      (component as any).updateTemplateContext();
+
+      const yearsOptions = component.templateContext.yearsOptions;
+
+      expect(yearsOptions.some(option => option.value === 2035)).toBeTrue();
+    });
+
+    it('updateTemplateContext: should not duplicate displayYear when it is already in yearsOptions', () => {
+      component.displayYear = 2021;
+      component.displayMonthNumber = 5;
+      component.comboYearsOptions = [
+        { label: '2020', value: 2020 },
+        { label: '2021', value: 2021 }
+      ];
+
+      (component as any).updateTemplateContext();
+
+      const yearsOptions = component.templateContext.yearsOptions.filter(option => option.value === 2021);
+
+      expect(yearsOptions.length).toBe(1);
+    });
+
+    it('onNextMonth: should call updateDisplay with next month/year', () => {
+      component.displayYear = 2024;
+      component.displayMonthNumber = 5;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component.onNextMonth();
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2024, 6);
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 7, year: 2024 });
+    });
+
+    it('onNextMonth: should call updateDisplay when month wraps to next year', () => {
+      component.displayYear = 2024;
+      component.displayMonthNumber = 11;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component.onNextMonth();
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 0);
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 1, year: 2025 });
+    });
+
+    it('onPreviousMonth: should call updateDisplay with previous month/year', () => {
+      component.displayYear = 2024;
+      component.displayMonthNumber = 5;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component.onPreviousMonth();
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2024, 4);
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 5, year: 2024 });
+    });
+
+    it('onPreviousMonth: should call updateDisplay when month wraps to previous year', () => {
+      component.displayYear = 2024;
+      component.displayMonthNumber = 0;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component.onPreviousMonth();
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2023, 11);
+      expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 12, year: 2023 });
+    });
+
+    it('updateYear: should call updateDisplay with new year', () => {
+      component.displayYear = 2024;
+      component.displayMonthNumber = 6;
+
+      spyOn(component, <any>'updateDisplay');
+
+      component.updateYear(1);
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 6);
+    });
+
+    it('updateYear: should also work with negative year values', () => {
+      component.displayYear = 2024;
+      component.displayMonthNumber = 6;
+
+      spyOn(component, <any>'updateDisplay');
+
+      component.updateYear(-1);
+
+      expect(component['updateDisplay']).toHaveBeenCalledWith(2023, 6);
+    });
+
     it(`updateDisplay: should return early when year is undefined`, () => {
       spyOn(component.cdr, 'detectChanges');
 
@@ -872,8 +976,12 @@ describe('PoCalendarWrapperComponent', () => {
       const dateParam = new Date(2018, 5, 6);
 
       component.displayMonthNumber = 5;
+      component.range = false;
 
-      spyOn(component, <any>'equalsDate').and.returnValue(true);
+      spyOn(component, <any>'equalsDate').and.callFake((d1: Date, d2: Date) => {
+        // Returns true only when comparing to this.date, false when comparing to this.today
+        return d1 === dateParam && d2 === component['date'];
+      });
       spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, 'background');
@@ -887,8 +995,12 @@ describe('PoCalendarWrapperComponent', () => {
       const dateParam = new Date(2018, 5, 6);
 
       component.displayMonthNumber = 5;
+      component.range = false;
 
-      spyOn(component, <any>'equalsDate').and.returnValue(true);
+      spyOn(component, <any>'equalsDate').and.callFake((d1: Date, d2: Date) => {
+        // Returns true only when comparing to this.date
+        return d1 === dateParam && d2 === component['date'];
+      });
       spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, 'background');
@@ -905,7 +1017,10 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.range = false;
 
-      spyOn(component, <any>'equalsDate').and.returnValues(false, true);
+      spyOn(component, <any>'equalsDate').and.callFake((d1: Date, d2: Date) => {
+        // Returns true only when comparing to this.today
+        return d1 === dateParam && d2 === component['today'];
+      });
       spyOn(component, <any>'getColorForToday').and.returnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, 'background');
@@ -1012,6 +1127,51 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 4;
 
       expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
+    });
+
+    it(`getDayColor: should return 'po-calendar-box-background-today-selected' when date is today and selected in non-range mode`, () => {
+      const today = new Date();
+      const local = 'background';
+
+      component.range = false;
+      component.today = today;
+      component.value = today;
+      component.displayMonthNumber = today.getMonth();
+
+      const result = component['getDayColor'](today, local);
+
+      expect(result).toBe('po-calendar-box-background-today-selected');
+    });
+
+    it(`getDayColor: should return 'po-calendar-box-foreground-today-selected' when date is today and selected in non-range mode with foreground type`, () => {
+      const today = new Date();
+      const local = 'foreground';
+
+      component.range = false;
+      component.today = today;
+      component.value = today;
+      component.displayMonthNumber = today.getMonth();
+
+      const result = component['getDayColor'](today, local);
+
+      expect(result).toBe('po-calendar-box-foreground-today-selected');
+    });
+
+    it(`getDayColor: should not return 'today-selected' when date is today but not selected in non-range mode`, () => {
+      const today = new Date();
+      const otherDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+      const local = 'background';
+
+      component.range = false;
+      component.today = today;
+      component.value = otherDate;
+      component.displayMonthNumber = today.getMonth();
+
+      spyOn(component, <any>'getColorForToday').and.returnValue('po-calendar-box-background-today');
+
+      const result = component['getDayColor'](today, local);
+
+      expect(result).toBe('po-calendar-box-background-today');
     });
 
     it(`getDayColor: should return color for end date when range is true and only end date exists`, () => {
@@ -2413,38 +2573,6 @@ describe('PoCalendarWrapperComponent', () => {
 
     component.updateDate(2025, 5); // No change
 
-    expect(component.headerChange.emit).not.toHaveBeenCalled();
-  });
-
-  it('onNextMonth: should not emit headerChange directly', () => {
-    component.displayMonthNumber = 0;
-    component.displayYear = 2025;
-    component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2025, 0, i + 1));
-
-    spyOn(component, <any>'updateDisplay').and.callFake(() => {
-      component.displayMonthNumber = 1;
-    });
-    spyOn(component.headerChange, 'emit');
-
-    component.onNextMonth();
-
-    expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 1);
-    expect(component.headerChange.emit).not.toHaveBeenCalled();
-  });
-
-  it('onPreviousMonth: should not emit headerChange directly', () => {
-    component.displayMonthNumber = 1;
-    component.displayYear = 2025;
-    component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2025, 1, i + 1));
-
-    spyOn(component, <any>'updateDisplay').and.callFake(() => {
-      component.displayMonthNumber = 0;
-    });
-    spyOn(component.headerChange, 'emit');
-
-    component.onPreviousMonth();
-
-    expect(component['updateDisplay']).toHaveBeenCalledWith(2025, 0);
     expect(component.headerChange.emit).not.toHaveBeenCalled();
   });
 

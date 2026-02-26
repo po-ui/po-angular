@@ -433,10 +433,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(8);
+      expect(component.activateDate.end.getMonth()).toEqual(9);
       expect(component.activateDate.end.getFullYear()).toEqual(2010);
     });
 
@@ -452,10 +452,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2023);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth + 1);
+      expect(component.activateDate.end.getMonth()).toEqual(3);
       expect(component.activateDate.end.getFullYear()).toEqual(2023);
     });
 
@@ -471,10 +471,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2023);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth + 1);
+      expect(component.activateDate.end.getMonth()).toEqual(3);
       expect(component.activateDate.end.getFullYear()).toEqual(2023);
     });
 
@@ -490,10 +490,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2022 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2022);
 
-      expect(component.activateDate.end.getMonth()).toEqual(0);
+      expect(component.activateDate.end.getMonth()).toEqual(1);
       expect(component.activateDate.end.getFullYear()).toEqual(2023);
     });
 
@@ -503,16 +503,16 @@ describe('PoCalendarComponent:', () => {
 
       component.activateDate = { start, end };
 
-      const nextMonth = 0;
+      const nextMonth = 1; // Janeiro em formato 1-indexed
 
       spyOnProperty(component, <any>'isRange').and.returnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2024 }, 'end');
 
-      expect(component.activateDate.start.getMonth()).toEqual(11);
+      expect(component.activateDate.start.getMonth()).toEqual(10);
       expect(component.activateDate.start.getFullYear()).toEqual(2023);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth - 1); // 0 = Janeiro 0-indexed
       expect(component.activateDate.end.getFullYear()).toEqual(2024);
     });
 
@@ -528,10 +528,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(0);
+      expect(component.activateDate.end.getMonth()).toEqual(1);
       expect(component.activateDate.end.getFullYear()).toEqual(2011);
     });
 
@@ -541,16 +541,16 @@ describe('PoCalendarComponent:', () => {
 
       component.activateDate = { start, end };
 
-      const nextMonth = 0;
+      const nextMonth = 1; // Janeiro em formato 1-indexed
 
       spyOnProperty(component, <any>'isRange').and.returnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2011 }, 'end');
 
-      expect(component.activateDate.start.getMonth()).toEqual(11);
+      expect(component.activateDate.start.getMonth()).toEqual(10);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth - 1); // 0 = Janeiro 0-indexed
       expect(component.activateDate.end.getFullYear()).toEqual(2011);
     });
 
@@ -566,10 +566,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'end');
 
-      expect(component.activateDate.start.getMonth()).toEqual(8);
+      expect(component.activateDate.start.getMonth()).toEqual(7);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.end.getFullYear()).toEqual(2010);
     });
 
