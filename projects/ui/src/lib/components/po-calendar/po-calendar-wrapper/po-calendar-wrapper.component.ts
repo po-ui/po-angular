@@ -44,11 +44,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-max-date') maxDate: any;
   @Input('p-hover-value') hoverValue: Date;
   @Input('p-size') size: string;
-  /**
-   * @internal
-   * Template customizado para o header do calendário.
-   * Para uso interno do datepicker/datepicker-range.
-   */
+  // Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   private _locale: string;
   @Input('p-locale') set locale(value: string) {
@@ -63,11 +59,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Output('p-select-date') selectDate = new EventEmitter<any>();
   readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
-  /**
-   * @internal
-   * Evento para fechar o calendário.
-   * Para uso interno do datepicker/datepicker-range.
-   */
+  // Evento para fechar o calendário. Para uso interno do datepicker/datepicker-range.
   @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
 
   currentYear: number;
@@ -686,6 +678,11 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     if (this.range && this.selectedValue) {
       const rangeColor = this.getRangeColor(date, prefix, type);
       if (rangeColor) return rangeColor;
+    }
+
+    if (!this.range && this.equalsDate(date, this.today) && this.equalsDate(date, this.date)) {
+      const prefix = `po-calendar-box-${type}`;
+      return `${prefix}-today-selected`;
     }
 
     if (!this.range && this.equalsDate(date, this.date)) {
