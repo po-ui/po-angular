@@ -46,10 +46,23 @@
 
   <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
 
-  <po-input class="po-md-3" name="placeholderStart" [(ngModel)]="placeholder.start" p-label="Placeholder início">
+  <po-input
+    class="po-md-3"
+    name="placeholderStart"
+    [(ngModel)]="placeholder.start"
+    (p-change-model)="changePlaceholderStart($event)"
+    p-label="Placeholder início"
+  >
   </po-input>
 
-  <po-input class="po-md-3" name="placeholderEnd" [(ngModel)]="placeholder.end" p-label="Placeholder fim"> </po-input>
+  <po-input
+    class="po-md-3"
+    name="placeholderEnd"
+    [(ngModel)]="placeholder.end"
+    (p-change-model)="changePlaceholderEnd($event)"
+    p-label="Placeholder fim"
+  >
+  </po-input>
 
   <po-datepicker class="po-md-6" name="minDate" [(ngModel)]="minDate" p-clean p-label="Min date" [p-max-date]="maxDate">
   </po-datepicker>

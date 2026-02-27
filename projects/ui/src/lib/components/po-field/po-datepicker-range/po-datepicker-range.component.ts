@@ -363,8 +363,6 @@ export class PoDatepickerRangeComponent
     ) {
       this.isCalendarVisible = false;
     }
-
-    this.poMaskObject.keydown($event);
   }
 
   onKeyup(event: any) {

@@ -80,6 +80,14 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     return JSON.stringify(this.datepickerRange);
   }
 
+  changePlaceholderStart(value: any) {
+    this.placeholder = { ...this.placeholder, start: value };
+  }
+
+  changePlaceholderEnd(value: any) {
+    this.placeholder = { ...this.placeholder, end: value };
+  }
+
   restore() {
     this.helperText = '';
     this.clean = undefined;

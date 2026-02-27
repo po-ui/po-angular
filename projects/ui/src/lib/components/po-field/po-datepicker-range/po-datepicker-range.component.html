@@ -21,7 +21,7 @@
         [class.po-input-icon-right]="enableCleaner && !isDisabled"
         [attr.disabled]="isDisabled"
       >
-        <div class="po-datepicker-range-start-date">
+        <div class="po-datepicker-range-start-date" [attr.data-value]="startDateInputValue || placeholder?.start">
           <input
             #startDateInput
             class="po-datepicker-range-input"
