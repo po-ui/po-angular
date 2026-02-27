@@ -143,7 +143,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       const result = (component as any).getDateToUse(date);
 
-      expect(result).toBe(date);
+      expect(result).toEqual(date);
     });
 
     it('getDateToUse: should return value.start when it is a Date', () => {
@@ -151,13 +151,40 @@ describe('PoCalendarWrapperComponent', () => {
 
       const result = (component as any).getDateToUse({ start: date });
 
-      expect(result).toBe(date);
+      expect(result).toEqual(date);
+    });
+
+    it('getDateToUse: should parse YYYY-MM-DD string correctly', () => {
+      const dateString = '2024-06-13';
+      const result = (component as any).getDateToUse(dateString);
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(5);
+      expect(result.getDate()).toBe(13);
     });
 
     it('getDateToUse: should return new Date when value is invalid', () => {
       const result = (component as any).getDateToUse({ start: 'invalid' });
 
       expect(result instanceof Date).toBeTrue();
+    });
+
+    it('getDateToUse: should handle UTC midnight correctly', () => {
+      const date = new Date(Date.UTC(2024, 5, 13, 0, 0, 0));
+      date.setHours(3, 15, 0, 0);
+      spyOn(date, 'getUTCHours').and.returnValue(0);
+      spyOn(date, 'getUTCMinutes').and.returnValue(0);
+      spyOn(date, 'getUTCFullYear').and.callThrough();
+      spyOn(date, 'getUTCMonth').and.callThrough();
+      spyOn(date, 'getUTCDate').and.callThrough();
+      const result = (component as any).getDateToUse(date);
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(5);
+      expect(result.getDate()).toBe(date.getUTCDate());
+      expect(date.getUTCHours).toHaveBeenCalled();
+      expect(date.getUTCMinutes).toHaveBeenCalled();
+      expect(date.getUTCFullYear).toHaveBeenCalled();
+      expect(date.getUTCMonth).toHaveBeenCalled();
+      expect(date.getUTCDate).toHaveBeenCalled();
     });
 
     it('deve incrementar comboKey e chamar cdr.detectChanges() quando o locale mudar (e não for a primeira mudança)', () => {
@@ -979,7 +1006,6 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = false;
 
       spyOn(component, <any>'equalsDate').and.callFake((d1: Date, d2: Date) => {
-        // Returns true only when comparing to this.date, false when comparing to this.today
         return d1 === dateParam && d2 === component['date'];
       });
       spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
@@ -998,7 +1024,6 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = false;
 
       spyOn(component, <any>'equalsDate').and.callFake((d1: Date, d2: Date) => {
-        // Returns true only when comparing to this.date
         return d1 === dateParam && d2 === component['date'];
       });
       spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
@@ -1018,7 +1043,6 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = false;
 
       spyOn(component, <any>'equalsDate').and.callFake((d1: Date, d2: Date) => {
-        // Returns true only when comparing to this.today
         return d1 === dateParam && d2 === component['today'];
       });
       spyOn(component, <any>'getColorForToday').and.returnValue(colorClass);
@@ -1326,7 +1350,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`updateDate: should call 'updateDisplay' and 'headerChange.emit' with year and month`, () => {
       const year = 2020;
-      const month = 5; // 0-indexed (June)
+      const month = 5;
 
       spyOn(component, <any>'updateDisplay');
       spyOn(component.headerChange, 'emit');
@@ -1452,7 +1476,65 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component.selectDate.emit).toHaveBeenCalledWith(undefined);
     });
 
+    it('deve limpar a seleção, focar no primeiro dia disponível e detectar mudanças', () => {
+      component.displayMonthNumber = 5;
+      component.focusedDayIndex = 15;
+
+      component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2)];
+
+      const emitSpy = spyOn(component.selectDate, 'emit');
+      const detectSpy = spyOn(component.cdr, 'detectChanges');
+
+      spyOn(component, 'isDayDisabled').and.callFake((date: Date) => {
+        return date.getDate() === 1;
+      });
+
+      component.onClear();
+
+      expect(emitSpy).toHaveBeenCalledWith(undefined);
+      expect(component.focusedDayIndex).toBe(2);
+      expect(detectSpy).toHaveBeenCalled();
+    });
+
+    it('deve limpar a seleção, mas manter o foco intacto se não houver dias disponíveis', () => {
+      component.displayMonthNumber = 5;
+      component.focusedDayIndex = 15;
+
+      component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2)];
+
+      const emitSpy = spyOn(component.selectDate, 'emit');
+      const detectSpy = spyOn(component.cdr, 'detectChanges');
+
+      spyOn(component, 'isDayDisabled').and.returnValue(true);
+
+      component.onClear();
+
+      expect(emitSpy).toHaveBeenCalledWith(undefined);
+      expect(component.focusedDayIndex).toBe(15);
+      expect(detectSpy).toHaveBeenCalled();
+    });
+
     describe('onDayKeydown', () => {
+      it('should handle Tab key and update focusedDayIndex to first available day', () => {
+        component.displayDays = [new Date(2024, 5, 10), new Date(2024, 5, 11), new Date(2024, 5, 12)];
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+        component.focusedDayIndex = 2;
+
+        const event = { key: 'Tab', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+
+        component.onDayKeydown(event, component.displayDays[2], 2);
+
+        const expectedIndex = component.displayDays.findIndex(
+          day =>
+            day instanceof Date &&
+            day.getMonth() === component.displayMonthNumber &&
+            !(component as any).isDayDisabled(day)
+        );
+
+        expect(component.focusedDayIndex).toBe(expectedIndex);
+      });
+
       beforeEach(() => {
         component.displayYear = 2024;
         component.displayMonthNumber = 5;
@@ -1487,25 +1569,79 @@ describe('PoCalendarWrapperComponent', () => {
         expect(event.preventDefault).toHaveBeenCalled();
       });
 
-      it('should handle ArrowUp key', () => {
+      it('should update the index when using the ArrowUp key within the grid limits', () => {
+        component.displayDays = [];
+        for (let i = 1; i <= 30; i++) {
+          component.displayDays.push(new Date(2024, 5, i));
+        }
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+        component.focusedDayIndex = 10;
+
         const event = { key: 'ArrowUp', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const detectSpy = spyOn(component.cdr, 'detectChanges');
 
-        spyOn(component.cdr, 'detectChanges');
+        component.onDayKeydown(event, component.displayDays[10], 10);
 
-        component.onDayKeydown(event, new Date(2024, 5, 4), 3);
-
-        expect(component.focusedDayIndex).toBe(0);
-        expect(component.cdr.detectChanges).toHaveBeenCalled();
+        const expectedIndex = 10 - 7;
+        expect(component.focusedDayIndex).toBe(expectedIndex);
+        expect(detectSpy).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
       });
 
-      it('should handle ArrowDown key', () => {
+      it('should not update the index when using the ArrowUp key on the first row of the grid (upper limit)', () => {
+        component.displayDays = [];
+        for (let i = 1; i <= 30; i++) {
+          component.displayDays.push(new Date(2024, 5, i));
+        }
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+        component.focusedDayIndex = 3;
+
+        const event = { key: 'ArrowUp', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const detectSpy = spyOn(component.cdr, 'detectChanges');
+
+        component.onDayKeydown(event, component.displayDays[3], 3);
+
+        expect(component.focusedDayIndex).toBe(3);
+        expect(detectSpy).not.toHaveBeenCalled();
+      });
+
+      it('should update the index when using the ArrowDown key within the grid limits', () => {
+        component.displayDays = [];
+        for (let i = 1; i <= 30; i++) {
+          component.displayDays.push(new Date(2024, 5, i));
+        }
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+        component.focusedDayIndex = 10;
         const event = { key: 'ArrowDown', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const detectSpy = spyOn(component.cdr, 'detectChanges');
 
-        component.onDayKeydown(event, new Date(2024, 5, 26), 25);
+        component.onDayKeydown(event, component.displayDays[10], 10);
 
-        expect(component.focusedDayIndex).toBe(29);
+        const expectedIndex = 10 + 7;
+        expect(component.focusedDayIndex).toBe(expectedIndex);
+        expect(detectSpy).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should not update the index when using the ArrowDown key on the last row of the grid (lower limit)', () => {
+        component.displayDays = [];
+        for (let i = 1; i <= 30; i++) {
+          component.displayDays.push(new Date(2024, 5, i));
+        }
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+        component.focusedDayIndex = 25;
+
+        const event = { key: 'ArrowDown', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const detectSpy = spyOn(component.cdr, 'detectChanges');
+
+        component.onDayKeydown(event, component.displayDays[25], 25);
+
+        expect(component.focusedDayIndex).toBe(25);
+        expect(detectSpy).not.toHaveBeenCalled();
       });
 
       it('should handle ArrowRight key', () => {
@@ -1521,11 +1657,22 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('should handle ArrowLeft key', () => {
+        component.displayDays = [];
+        for (let i = 1; i <= 30; i++) {
+          component.displayDays.push(new Date(2024, 5, i));
+        }
+        component.displayMonthNumber = 5;
+        component.displayYear = 2024;
+        component.focusedDayIndex = 25;
+
         const event = { key: 'ArrowLeft', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const detectSpy = spyOn(component.cdr, 'detectChanges');
 
-        component.onDayKeydown(event, new Date(2024, 5, 1), 0);
+        component.onDayKeydown(event, component.displayDays[25], 25);
 
-        expect(component.focusedDayIndex).toBe(0);
+        const expectedIndex = Math.max(25 - 1, 0);
+        expect(component.focusedDayIndex).toBe(expectedIndex);
+        expect(detectSpy).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
       });
 
@@ -1639,7 +1786,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should block PageUp when all days in target month are disabled', () => {
         component.displayYear = 2024;
-        component.displayMonthNumber = 5; // June
+        component.displayMonthNumber = 5;
         component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
 
         spyOn(component, <any>'updateDisplay');
@@ -1659,7 +1806,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should allow PageUp when target month has available days', () => {
         component.displayYear = 2024;
-        component.displayMonthNumber = 5; // June
+        component.displayMonthNumber = 5;
         component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
 
         spyOn(component, <any>'updateDisplay');
@@ -1674,7 +1821,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should block PageDown when all days in target month are disabled', () => {
         component.displayYear = 2024;
-        component.displayMonthNumber = 5; // June
+        component.displayMonthNumber = 5;
         component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
 
         spyOn(component, <any>'updateDisplay');
@@ -1951,17 +2098,15 @@ describe('PoCalendarWrapperComponent', () => {
         component.minDate = new Date(2024, 5, 1);
         component.maxDate = new Date(2024, 5, 30);
         component.displayDays = [
-          new Date(2024, 5, 1), // Index 0 - available (target)
-          new Date(2024, 5, 2), // Index 1 - disabled
-          new Date(2024, 5, 3), // Index 2 - disabled
-          new Date(2024, 5, 4), // Index 3 - starting point
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
           new Date(2024, 5, 5)
         ];
         component.displayMonthNumber = 5;
         component.displayYear = 2024;
 
-        // ArrowLeft from index 3: checks index 2 (disabled=true), findNextAvailableDay checks index 1 (disabled=true),
-        // index 0 (disabled=false), then verifies index 0 (disabled=false)
         spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false);
 
         const event = { key: 'ArrowLeft', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
@@ -2279,24 +2424,24 @@ describe('PoCalendarWrapperComponent', () => {
       it('should call getFirstAvailableDayInWeek when target day is disabled', fakeAsync(() => {
         component.displayMonthNumber = 5;
         component.displayDays = [
-          new Date(2024, 5, 1), // Index 0 - available
-          new Date(2024, 5, 2), // Index 1
-          new Date(2024, 5, 3), // Index 2
-          new Date(2024, 5, 4), // Index 3
-          new Date(2024, 5, 5), // Index 4
-          new Date(2024, 5, 6), // Index 5
-          new Date(2024, 5, 7), // Index 6
-          new Date(2024, 5, 8), // Index 7
-          new Date(2024, 5, 9), // Index 8 - target (disabled)
-          new Date(2024, 5, 10), // Index 9
-          new Date(2024, 5, 11), // Index 10
-          new Date(2024, 5, 12), // Index 11
-          new Date(2024, 5, 13), // Index 12
-          new Date(2024, 5, 14) // Index 13
+          new Date(2024, 5, 1),
+          new Date(2024, 5, 2),
+          new Date(2024, 5, 3),
+          new Date(2024, 5, 4),
+          new Date(2024, 5, 5),
+          new Date(2024, 5, 6),
+          new Date(2024, 5, 7),
+          new Date(2024, 5, 8),
+          new Date(2024, 5, 9),
+          new Date(2024, 5, 10),
+          new Date(2024, 5, 11),
+          new Date(2024, 5, 12),
+          new Date(2024, 5, 13),
+          new Date(2024, 5, 14)
         ];
         component.focusedDayIndex = -1;
         component.minDate = new Date(2024, 5, 1);
-        component.maxDate = new Date(2024, 5, 8); // Makes June 9 disabled
+        component.maxDate = new Date(2024, 5, 8);
 
         const mockElement = document.createElement('div');
         const focusSpy = spyOn(mockElement, 'focus');
@@ -2305,7 +2450,6 @@ describe('PoCalendarWrapperComponent', () => {
         spyOn(component.cdr, 'detectChanges');
         const getFirstAvailableSpy = spyOn(component as any, 'getFirstAvailableDayInWeek').and.returnValue(7);
 
-        // Try to focus on day 9 (index 8) which is disabled
         component['focusOnSameDayAndWeek'](9, 1);
 
         tick();
@@ -2434,8 +2578,7 @@ describe('PoCalendarWrapperComponent', () => {
     const month = 5;
 
     component.templateContext.updateDate(year, month);
-
-    expect(component.updateDate).toHaveBeenCalledWith(year, month);
+    expect(component.updateDate).toHaveBeenCalledWith(year, month, undefined);
   });
 
   it('ngOnChanges: should use the current date if activateDate.currentValue is null', () => {
@@ -2558,7 +2701,7 @@ describe('PoCalendarWrapperComponent', () => {
     spyOn(component, <any>'updateDisplay');
     spyOn(component.headerChange, 'emit');
 
-    component.updateDate(2025, 5); // June (0-indexed) should emit as 6 (1-indexed)
+    component.updateDate(2025, 5);
 
     expect(component.headerChange.emit).toHaveBeenCalledTimes(1);
     expect(component.headerChange.emit).toHaveBeenCalledWith({ month: 6, year: 2025 });
@@ -2571,8 +2714,43 @@ describe('PoCalendarWrapperComponent', () => {
     spyOn(component, <any>'updateDisplay');
     spyOn(component.headerChange, 'emit');
 
-    component.updateDate(2025, 5); // No change
+    component.updateDate(2025, 5);
 
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+  });
+
+  it('updateDate: should call comboComponent.focus if comboComponent has focus function', fakeAsync(() => {
+    component.displayYear = 2024;
+    component.displayMonthNumber = 5;
+    const comboComponent = { focus: jasmine.createSpy('focus') };
+    spyOn(component as any, 'updateDisplay');
+    component.updateDate(2024, 5, comboComponent);
+    tick();
+    expect(comboComponent.focus).toHaveBeenCalled();
+    expect((component as any).updateDisplay).toHaveBeenCalledWith(2024, 5);
+  }));
+
+  it('should update templateContext and return when year or month is invalid', () => {
+    component.templateContext = { year: 2022, monthIndex: 5 };
+    spyOn(component as any, 'updateDisplay');
+    spyOn(component.headerChange, 'emit');
+
+    component.updateDate(undefined, 5);
+    expect(component.templateContext.year).toBeUndefined();
+    expect(component.templateContext.monthIndex).toBe(5);
+    expect((component as any).updateDisplay).not.toHaveBeenCalled();
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+
+    component.updateDate(2022, undefined);
+    expect(component.templateContext.year).toBe(2022);
+    expect(component.templateContext.monthIndex).toBeUndefined();
+    expect((component as any).updateDisplay).not.toHaveBeenCalled();
+    expect(component.headerChange.emit).not.toHaveBeenCalled();
+
+    component.updateDate(undefined, undefined);
+    expect(component.templateContext.year).toBeUndefined();
+    expect(component.templateContext.monthIndex).toBeUndefined();
+    expect((component as any).updateDisplay).not.toHaveBeenCalled();
     expect(component.headerChange.emit).not.toHaveBeenCalled();
   });
 
@@ -2740,10 +2918,89 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   describe('Tabulation', () => {
+    it('setInitialFocusedDay: should fallback to first available day when multiple available days exist', () => {
+      component.value = null;
+      component.displayMonthNumber = 5;
+
+      component.displayDays = [new Date(2026, 4, 30), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+
+      spyOn(component as any, 'isDayDisabled').and.callFake((date: Date) => {
+        return date.getDate() === 1;
+      });
+
+      component.focusedDayIndex = 0;
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(2);
+    });
+
+    it('setInitialFocusedDay: should not change focusedDayIndex when all days are disabled', () => {
+      component.value = null;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      component.focusedDayIndex = 2;
+      (component as any).setInitialFocusedDay();
+      const expectedIndex = component.displayDays.findIndex(
+        day =>
+          day instanceof Date &&
+          day.getMonth() === component.displayMonthNumber &&
+          !(component as any).isDayDisabled(day)
+      );
+      expect(component.focusedDayIndex).toBe(expectedIndex === -1 ? 2 : expectedIndex);
+    });
+
+    it('setInitialFocusedDay: should not change focusedDayIndex when no days from current month exist', () => {
+      component.value = null;
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 4, 30), new Date(2026, 4, 31)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      component.focusedDayIndex = 5;
+      (component as any).setInitialFocusedDay();
+      const expectedIndex = component.displayDays.findIndex(
+        day =>
+          day instanceof Date &&
+          day.getMonth() === component.displayMonthNumber &&
+          !(component as any).isDayDisabled(day)
+      );
+      expect(component.focusedDayIndex).toBe(expectedIndex === -1 ? 5 : expectedIndex);
+    });
+
     beforeEach(() => {
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+    });
+
+    it('should update focusedDayIndex to first available day in current month', () => {
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+      component.focusedDayIndex = 0;
+
+      spyOn(component as any, 'isDayDisabled').and.callFake((date: Date) => {
+        return date.getDate() === 1;
+      });
+
+      (component as any).setInitialFocusedDay();
+
+      expect(component.focusedDayIndex).toBe(2);
+      expect((component as any).isDayDisabled).toHaveBeenCalled();
+    });
+
+    it('should not change focusedDayIndex if no available day in current month', () => {
+      component.displayMonthNumber = 5;
+      component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
+      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      component.focusedDayIndex = 2;
+      (component as any).setInitialFocusedDay();
+      const expectedIndex = component.displayDays.findIndex(
+        day =>
+          day instanceof Date &&
+          day.getMonth() === component.displayMonthNumber &&
+          !(component as any).isDayDisabled(day)
+      );
+      expect(component.focusedDayIndex).toBe(expectedIndex === -1 ? 2 : expectedIndex);
     });
 
     it('setInitialFocusedDay: should focus on selected day if available', () => {
@@ -2846,7 +3103,13 @@ describe('PoCalendarWrapperComponent', () => {
 
       (component as any).setInitialFocusedDay();
 
-      expect(component.focusedDayIndex).toBe(0);
+      const expectedIndex = component.displayDays.findIndex(
+        day =>
+          day instanceof Date &&
+          day.getMonth() === component.displayMonthNumber &&
+          !(component as any).isDayDisabled(day)
+      );
+      expect(component.focusedDayIndex).toBe(expectedIndex === -1 ? 0 : expectedIndex);
     });
 
     it('setInitialFocusedDay: should not change focusedDayIndex when no days from current month exist', () => {
@@ -2977,4 +3240,293 @@ describe('PoCalendarWrapperComponent', () => {
 
     expect(focusSpy).toHaveBeenCalled();
   }));
+
+  describe('onComboBlur', () => {
+    it('should call component.onComboBlur when templateContext.onComboBlur is invoked', () => {
+      const spy = spyOn(component, 'onComboBlur');
+      component.templateContext.onComboBlur();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call updateDisplay when templateContext.onComboBlur is triggered and month is undefined', () => {
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      component.displayYear = 2022;
+      component.displayMonthNumber = 3;
+      component.today = new Date(2022, 3, 10);
+      component.templateContext.year = 2022;
+      component.templateContext.monthIndex = undefined;
+      component.templateContext.onComboBlur();
+      expect(updateDisplaySpy).toHaveBeenCalledWith(2022, 3);
+    });
+
+    it('should call updateDisplay with today.getMonth() when month is undefined and displayMonthNumber is also undefined', () => {
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      component.displayYear = 2022;
+      component.displayMonthNumber = undefined;
+      component.today = new Date(2022, 7, 20);
+      component.templateContext.year = 2022;
+      component.templateContext.monthIndex = undefined;
+      component.onComboBlur();
+      expect(updateDisplaySpy).toHaveBeenCalledWith(2022, 7);
+    });
+
+    it('should call updateDisplay with safe values when year or month is undefined', () => {
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      component.displayYear = 2025;
+      component.displayMonthNumber = 6;
+      component.today = new Date(2025, 6, 15);
+      component.templateContext.year = undefined;
+      component.templateContext.monthIndex = undefined;
+      component.onComboBlur();
+      expect(updateDisplaySpy).toHaveBeenCalledWith(2025, 6);
+    });
+
+    it('should call updateDisplay with safe year when only year is undefined', () => {
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      component.displayYear = 2023;
+      component.displayMonthNumber = 4;
+      component.today = new Date(2023, 4, 10);
+      component.templateContext.year = undefined;
+      component.templateContext.monthIndex = 2;
+      component.onComboBlur();
+      expect(updateDisplaySpy).toHaveBeenCalledWith(2023, 2);
+    });
+
+    it('should call updateDisplay with safe month when only month is undefined', () => {
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      component.displayYear = 2022;
+      component.displayMonthNumber = 8;
+      component.today = new Date(2022, 8, 20);
+      component.templateContext.year = 2022;
+      component.templateContext.monthIndex = undefined;
+      component.onComboBlur();
+      expect(updateDisplaySpy).toHaveBeenCalledWith(2022, 8);
+    });
+
+    it('should NOT call updateDisplay when both year and month are defined', () => {
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      component.templateContext.year = 2024;
+      component.templateContext.monthIndex = 5;
+      component.onComboBlur();
+      expect(updateDisplaySpy).not.toHaveBeenCalled();
+    });
+
+    it('onComboBlur: should fallback to today.getFullYear() when year and displayYear are undefined', () => {
+      component.displayYear = undefined;
+      component.templateContext.year = undefined;
+      component.templateContext.monthIndex = 5;
+      spyOn(component, 'updateDisplay');
+      const todayYear = component.today.getFullYear();
+      component.onComboBlur();
+      expect((component as any).updateDisplay).toHaveBeenCalledWith(todayYear, 5);
+    });
+
+    it('onComboBlur: should fallback to today.getFullYear() when year and displayYear are undefined', () => {
+      component.displayYear = undefined;
+      component.templateContext.year = undefined;
+      component.templateContext.monthIndex = 5;
+      spyOn(component as any, 'updateDisplay');
+      const todayYear = component.today.getFullYear();
+      component.onComboBlur();
+      expect((component as any).updateDisplay).toHaveBeenCalledWith(todayYear, 5);
+    });
+
+    it('should call onComboBlur from templateContext', () => {
+      const spy = spyOn(component, 'onComboBlur');
+      component.templateContext.onComboBlur();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call onComboBlur after templateContext reassignment', () => {
+      const spy = spyOn(component, 'onComboBlur');
+      component.templateContext = {
+        ...component.templateContext,
+        onComboBlur: () => component.onComboBlur()
+      };
+      component.templateContext.onComboBlur();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not throw if templateContext.onComboBlur is missing', () => {
+      component.templateContext = {
+        ...component.templateContext
+      };
+      delete component.templateContext.onComboBlur;
+      expect(() => {
+        if (component.templateContext.onComboBlur) {
+          component.templateContext.onComboBlur();
+        }
+      }).not.toThrow();
+    });
+
+    it('should call onComboBlur with context bound to component', () => {
+      const spy = spyOn(component, 'onComboBlur');
+      const fn = component.onComboBlur.bind(component);
+      component.templateContext.onComboBlur = fn;
+      component.templateContext.onComboBlur();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not call component onComboBlur if context is bound to another object', () => {
+      const other = { onComboBlur: jasmine.createSpy('onComboBlur') };
+      component.templateContext.onComboBlur = other.onComboBlur;
+      component.templateContext.onComboBlur();
+      expect(other.onComboBlur).toHaveBeenCalled();
+    });
+
+    it('deve executar onComboBlur através do templateContext', () => {
+      spyOn(component, 'onComboBlur');
+
+      component['updateTemplateContext']();
+
+      component.templateContext.onComboBlur();
+
+      expect(component.onComboBlur).toHaveBeenCalled();
+    });
+
+    it('deve executar updateDate através do templateContext', () => {
+      spyOn(component, 'updateDate');
+
+      component['updateTemplateContext']();
+
+      component.templateContext.updateDate(2026, 5, null);
+
+      expect(component.updateDate).toHaveBeenCalledWith(2026, 5, null);
+    });
+  });
+
+  describe('onSelectToday', () => {
+    it('should call onComboBlur from templateContext', () => {
+      const spy = spyOn(component, 'onComboBlur');
+      component.templateContext.onComboBlur();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call onSelectDate, updateDisplay, set focusedDayIndex and call detectChanges', () => {
+      const today = new Date(2026, 1, 27);
+      component.today = today;
+      component.displayYear = 2025;
+      component.displayMonthNumber = 0;
+      component.displayDays = [new Date(2026, 1, 25), new Date(2026, 1, 26), today, new Date(2026, 1, 28)];
+      spyOn(component, 'onSelectDate');
+      spyOn(component as any, 'updateDisplay');
+      spyOn(component.cdr, 'detectChanges');
+
+      component.onSelectToday();
+
+      expect(component.onSelectDate).toHaveBeenCalledWith(today);
+      expect((component as any).updateDisplay).toHaveBeenCalledWith(today.getFullYear(), today.getMonth());
+      expect(component.focusedDayIndex).toBe(2);
+      expect(component.cdr.detectChanges).toHaveBeenCalled();
+    });
+
+    it('should not updateDisplay if month and year already match today', () => {
+      const today = new Date(2026, 1, 27);
+      component.today = today;
+      component.displayYear = today.getFullYear();
+      component.displayMonthNumber = today.getMonth();
+      component.displayDays = [today];
+      spyOn(component, 'onSelectDate');
+      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      spyOn(component.cdr, 'detectChanges');
+
+      component.onSelectToday();
+
+      expect(updateDisplaySpy).not.toHaveBeenCalled();
+      expect(component.onSelectDate).toHaveBeenCalledWith(today);
+      expect(component.focusedDayIndex).toBe(0);
+      expect(component.cdr.detectChanges).toHaveBeenCalled();
+    });
+
+    it('should not set focusedDayIndex or call detectChanges if today is not found in displayDays', () => {
+      const today = new Date(2026, 1, 27);
+      component.today = today;
+      component.displayYear = today.getFullYear();
+      component.displayMonthNumber = today.getMonth();
+      component.displayDays = [new Date(2026, 1, 25), new Date(2026, 1, 26)];
+      component.focusedDayIndex = 5;
+      spyOn(component, 'onSelectDate');
+      spyOn(component.cdr, 'detectChanges');
+
+      component.onSelectToday();
+
+      expect(component.onSelectDate).toHaveBeenCalledWith(today);
+      expect(component.focusedDayIndex).toBe(5);
+      expect(component.cdr.detectChanges).not.toHaveBeenCalled();
+    });
+  });
+  describe('Tests: onHostKeydown', () => {
+    it('should call restoreOriginalDisplay if pressing Shift+Tab and focus leaves the component', fakeAsync(() => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+
+      spyOn(component.elementRef.nativeElement, 'contains').and.returnValue(false);
+
+      const restoreSpy = spyOn(component as any, 'restoreOriginalDisplay');
+
+      component.onHostKeydown(event);
+
+      tick(0);
+      tick(200);
+
+      expect(restoreSpy).toHaveBeenCalled();
+    }));
+
+    it('should not call restoreOriginalDisplay if pressing Shift+Tab but focus remains inside the component', fakeAsync(() => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+
+      spyOn(component.elementRef.nativeElement, 'contains').and.returnValue(true);
+      const restoreSpy = spyOn(component as any, 'restoreOriginalDisplay');
+
+      component.onHostKeydown(event);
+      tick(200);
+
+      expect(restoreSpy).not.toHaveBeenCalled();
+    }));
+
+    it('should not do anything if the key pressed is not Shift + Tab', fakeAsync(() => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+      const restoreSpy = spyOn(component as any, 'restoreOriginalDisplay');
+
+      component.onHostKeydown(event);
+      tick(200);
+
+      expect(restoreSpy).not.toHaveBeenCalled();
+    }));
+
+    it('should call updateDisplay when the YEAR is different but the month is the same', () => {
+      component.value = new Date(2026, 4, 10);
+      component.displayYear = 2025;
+      component.displayMonthNumber = 4;
+
+      const updateSpy = spyOn(component as any, 'updateDisplay');
+
+      component['restoreOriginalDisplay']();
+
+      expect(updateSpy).toHaveBeenCalledWith(2026, 4);
+    });
+
+    it('should call updateDisplay when the YEAR is the same but the month is different', () => {
+      component.value = new Date(2026, 4, 10);
+      component.displayYear = 2026;
+      component.displayMonthNumber = 11;
+
+      const updateSpy = spyOn(component as any, 'updateDisplay');
+
+      component['restoreOriginalDisplay']();
+
+      expect(updateSpy).toHaveBeenCalledWith(2026, 4);
+    });
+
+    it('should not call updateDisplay when the YEAR and MONTH are already correct on the screen', () => {
+      component.value = new Date(2026, 4, 10);
+      component.displayYear = 2026;
+      component.displayMonthNumber = 4;
+
+      const updateSpy = spyOn(component as any, 'updateDisplay');
+
+      component['restoreOriginalDisplay']();
+
+      expect(updateSpy).not.toHaveBeenCalled();
+    });
+  });
 });

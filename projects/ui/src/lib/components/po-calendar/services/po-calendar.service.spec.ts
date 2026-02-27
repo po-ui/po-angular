@@ -1,6 +1,53 @@
 import { PoCalendarService } from './po-calendar.service';
 
 describe('PoCalendarService:', () => {
+  describe('parseDate:', () => {
+    it('should return undefined for falsy values', () => {
+      expect((service as any).parseDate(undefined)).toBeUndefined();
+      expect((service as any).parseDate(null)).toBeUndefined();
+      expect((service as any).parseDate('')).toBeUndefined();
+    });
+
+    it('should parse yyyy-mm-dd string', () => {
+      const result = (service as any).parseDate('2024-06-10');
+      expect(result).toEqual(new Date(2024, 5, 10));
+    });
+
+    it('should parse valid date string (ISO)', () => {
+      const result = (service as any).parseDate('2024-06-10T12:00:00Z');
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(5);
+      expect(result.getDate()).toBe(10);
+    });
+
+    it('should return undefined for invalid date string', () => {
+      expect((service as any).parseDate('invalid-date')).toBeUndefined();
+    });
+
+    it('should parse Date object', () => {
+      const date = new Date(2024, 5, 10);
+      const result = (service as any).parseDate(date);
+      expect(result).toEqual(new Date(2024, 5, 10));
+    });
+
+    it('should parse Date object with non-zero hours and UTC hours zero', () => {
+      const fakeDate: any = new Date(Date.UTC(2024, 5, 10, 0, 0, 0));
+      fakeDate.getHours = () => 1;
+      fakeDate.getUTCHours = () => 0;
+      fakeDate.getUTCMinutes = () => 0;
+      fakeDate.getUTCFullYear = () => 2024;
+      fakeDate.getUTCMonth = () => 5;
+      fakeDate.getUTCDate = () => 10;
+      const result = (service as any).parseDate(fakeDate);
+      expect(result).toEqual(new Date(2024, 5, 10));
+    });
+
+    it('should return undefined for non-Date, non-string values', () => {
+      expect((service as any).parseDate({})).toBeUndefined();
+      expect((service as any).parseDate(123)).toBeUndefined();
+      expect((service as any).parseDate([])).toBeUndefined();
+    });
+  });
   let service: PoCalendarService;
 
   beforeEach(() => {
@@ -12,10 +59,8 @@ describe('PoCalendarService:', () => {
   });
 
   it('should get month week dates', () => {
-    // Agosto tem 5 semanas
     expect(service.monthDates(2017, 7).length).toBe(5);
 
-    // invalid month
     try {
       expect(service.monthDates(2017, 20)).toThrow(new Error('month must be a number (Jan is 0)'));
     } catch (error) {
@@ -29,7 +74,6 @@ describe('PoCalendarService:', () => {
   });
 
   it('should get month days', () => {
-    // Agosto tem 5 semanas
     expect(service.monthDays(2017, 7).length).toBe(5);
   });
 

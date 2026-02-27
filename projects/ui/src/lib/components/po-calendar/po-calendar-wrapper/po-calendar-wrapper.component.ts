@@ -10,7 +10,8 @@ import {
   TemplateRef,
   ChangeDetectorRef,
   SimpleChanges,
-  ElementRef
+  ElementRef,
+  HostListener
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -322,6 +323,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     if (firstAvailableIndex !== -1) {
       this.focusedDayIndex = firstAvailableIndex;
     }
+
+    this.cdr.markForCheck();
   }
 
   private ensureValidFocusedDay(): void {
@@ -410,9 +413,52 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.hoverDateSource.next(null);
   }
 
+  onSelectToday(): void {
+    this.onSelectDate(this.today);
+
+    if (this.displayMonthNumber !== this.today.getMonth() || this.displayYear !== this.today.getFullYear()) {
+      this.updateDisplay(this.today.getFullYear(), this.today.getMonth());
+    }
+
+    const todayIndex = this.displayDays.findIndex(day => day instanceof Date && this.equalsDate(day, this.today));
+
+    if (todayIndex !== -1) {
+      this.focusedDayIndex = todayIndex;
+      this.cdr.detectChanges();
+    }
+  }
+
   onTodayKeydown(event: KeyboardEvent): void {
     if (event.key === 'Tab' && !event.shiftKey) {
+      this.restoreOriginalDisplay();
       this.closeCalendar.emit();
+    }
+  }
+
+  @HostListener('keydown', ['$event'])
+  onHostKeydown(event: KeyboardEvent) {
+    if (event.key === 'Tab' && event.shiftKey) {
+      setTimeout(() => {
+        const activeElement = document.activeElement;
+
+        if (!this.elementRef.nativeElement.contains(activeElement)) {
+          setTimeout(() => {
+            this.restoreOriginalDisplay();
+          }, 200);
+        }
+      }, 0);
+    }
+  }
+
+  private restoreOriginalDisplay(): void {
+    if (!this.value) return;
+
+    const originalDate = this.getDateToUse(this.value);
+    const originalYear = originalDate.getFullYear();
+    const originalMonth = originalDate.getMonth();
+
+    if (this.displayYear !== originalYear || this.displayMonthNumber !== originalMonth) {
+      this.updateDisplay(originalYear, originalMonth);
     }
   }
 
@@ -439,6 +485,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       event.preventDefault();
     } else if (key === 'Escape') {
       event.preventDefault();
+    } else if (key === 'Tab') {
+      this.setInitialFocusedDay();
     }
   }
 
@@ -488,13 +536,13 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   private getNextNavigationIndex(key: string, index: number): number {
     switch (key) {
       case 'ArrowUp':
-        return Math.max(0, index - 7);
+        return index - 7;
       case 'ArrowDown':
-        return Math.min(this.displayDays.length - 1, index + 7);
+        return index + 7;
       case 'ArrowRight':
-        return Math.min(this.displayDays.length - 1, index + 1);
+        return index + 1;
       case 'ArrowLeft':
-        return Math.max(0, index - 1);
+        return index - 1;
       case 'Home':
         return this.getFirstAvailableDayInWeek(index);
       case 'End':
@@ -695,6 +743,16 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   onClear() {
     this.selectDate.emit(undefined);
+
+    const firstAvailableIndex = this.displayDays.findIndex(
+      day => day instanceof Date && day.getMonth() === this.displayMonthNumber && !this.isDayDisabled(day)
+    );
+
+    if (firstAvailableIndex !== -1) {
+      this.focusedDayIndex = firstAvailableIndex;
+    }
+
+    this.cdr.detectChanges();
   }
 
   getDayBackgroundColor(date: Date) {
