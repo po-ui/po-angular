@@ -148,6 +148,7 @@
 
 <ng-template #internalComboTemplate let-combo>
   <po-combo
+    #monthCombo
     class="po-combo-first"
     [name]="'month-' + comboKey"
     [p-clean]="false"
@@ -155,11 +156,13 @@
     [ngModel]="combo.monthIndex"
     [p-options]="combo.monthsOptions"
     (p-change)="combo.updateDate(combo.year, $event)"
+    (p-blur)="combo.onComboBlur()"
     [p-size]="size"
   >
   </po-combo>
 
   <po-combo
+    #yearCombo
     class="po-combo-last"
     [name]="'year-' + comboKey"
     [p-clean]="false"
@@ -167,6 +170,7 @@
     [ngModel]="combo.year"
     [p-options]="combo.yearsOptions"
     (p-change)="combo.updateDate($event, combo.monthIndex)"
+    (p-blur)="combo.onComboBlur()"
     [p-size]="size"
   >
   </po-combo>

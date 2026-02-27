@@ -6,24 +6,56 @@ const poCalendarServiceFirstWeekDayDefault: number = 0;
   providedIn: 'root'
 })
 export class PoCalendarService {
+  private parseDate(dateValue: any): Date | undefined {
+    if (!dateValue) return undefined;
+
+    // 1. Se for string simples, extraímos os números com segurança
+    if (typeof dateValue === 'string') {
+      const dateOnlyRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
+      if (dateOnlyRegex.test(dateValue)) {
+        const [, year, month, day] = dateValue.match(dateOnlyRegex).map(Number);
+        return new Date(year, month - 1, day);
+      }
+
+      // Se for formato longo (T00:00:00), deixamos o JS tentar converter
+      const parsed = new Date(dateValue);
+      if (!isNaN(parsed.getTime())) {
+        dateValue = parsed; // Passa para a verificação de fuso horário abaixo
+      } else {
+        return undefined;
+      }
+    }
+
+    // 2. Se for um objeto Date (passado via input ou convertido acima)
+    if (dateValue instanceof Date) {
+      // A MÁGICA: Se o navegador criou a data em UTC e subtraiu o fuso do Brasil
+      // (a data local fica às 21:00 do dia anterior, mas o UTC continua 00:00 do dia correto).
+      if (dateValue.getHours() !== 0 && dateValue.getUTCHours() === 0 && dateValue.getUTCMinutes() === 0) {
+        // Lemos a data pela perspectiva UTC (ignorando o fuso roubado) e recriamos no local
+        return new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
+      }
+
+      // Caso contrário (ex: new Date(2017, 10, 28)), apenas clonamos limpando a hora
+      return new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
+    }
+
+    return undefined;
+  }
+
   getYearOptions(minDate?: Date | string, maxDate?: Date | string): Array<{ label: string; value: number }> {
     const currentYear = new Date().getFullYear();
 
     let minYear = currentYear - 150;
     let maxYear = currentYear + 150;
 
-    if (minDate) {
-      const date = new Date(minDate);
-      if (!isNaN(date.getTime())) {
-        minYear = date.getFullYear();
-      }
+    const parsedMinDate = this.parseDate(minDate);
+    if (parsedMinDate) {
+      minYear = parsedMinDate.getFullYear();
     }
 
-    if (maxDate) {
-      const date = new Date(maxDate);
-      if (!isNaN(date.getTime())) {
-        maxYear = date.getFullYear();
-      }
+    const parsedMaxDate = this.parseDate(maxDate);
+    if (parsedMaxDate) {
+      maxYear = parsedMaxDate.getFullYear();
     }
 
     const options = [];

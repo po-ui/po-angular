@@ -89,7 +89,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     monthsOptions: [],
     year: 0,
     yearsOptions: [],
-    updateDate: (year: number, month: number) => this.updateDate(year, month)
+    updateDate: (year: number, month: number, comboComponent?: any) => this.updateDate(year, month, comboComponent),
+    onComboBlur: () => this.onComboBlur()
   };
 
   protected currentMonthNumber: number;
@@ -152,19 +153,33 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   private getDateToUse(value: any): Date {
-    if (value instanceof Date) {
-      return value;
+    if (!value) return new Date();
+
+    let dateValue = value.start !== undefined ? value.start : value;
+
+    if (typeof dateValue === 'string') {
+      const dateOnlyRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
+      if (dateOnlyRegex.test(dateValue)) {
+        const [, year, month, day] = dateValue.match(dateOnlyRegex).map(Number);
+        return new Date(year, month - 1, day);
+      }
+      dateValue = new Date(dateValue);
     }
 
-    if (value?.start instanceof Date) {
-      return value.start;
+    if (dateValue instanceof Date && !isNaN(dateValue.getTime())) {
+      if (dateValue.getUTCHours() === 0 && dateValue.getUTCMinutes() === 0) {
+        return new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
+      }
+
+      return new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
     }
 
     return new Date();
   }
 
   private initializeData() {
-    const date = this.activateDate || new Date();
+    const date = this.getDateToUse(this.activateDate || this.value || new Date());
+
     this.displayYear = date.getFullYear();
     this.displayMonthNumber = date.getMonth();
 
@@ -172,6 +187,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
     this.updateDisplay(this.displayYear, this.displayMonthNumber);
   }
+
   private setupOptions() {
     this.poCalendarLangService.setLanguage(this.locale);
 
@@ -216,17 +232,47 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       monthsOptions: [...this.comboMonthsOptions],
       year: this.displayYear,
       yearsOptions,
-      updateDate: (year: number, month: number) => this.updateDate(year, month)
+      updateDate: (year: number, month: number, comboComponent?: any) => this.updateDate(year, month, comboComponent),
+      onComboBlur: () => this.onComboBlur()
     };
     this.cdr.markForCheck();
   }
 
-  updateDate(year: number, month: number) {
+  updateDate(year: number, month: number, comboComponent?: any) {
+    const isInvalidYear = year === undefined || year === null;
+    const isInvalidMonth = month === undefined || month === null;
+
+    if (isInvalidYear || isInvalidMonth) {
+      this.templateContext = { ...this.templateContext, year, monthIndex: month };
+      return;
+    }
+
     const hasChanged = this.displayYear !== year || this.displayMonthNumber !== month;
     this.updateDisplay(year, month);
+
+    if (comboComponent && typeof comboComponent.focus === 'function') {
+      setTimeout(() => {
+        comboComponent.focus();
+      }, 0);
+    }
+
     if (hasChanged) {
-      // Emite mês em formato 1-indexed (janeiro = 1, não 0)
       this.headerChange.emit({ month: month + 1, year });
+    }
+  }
+
+  onComboBlur() {
+    const currentYear = this.templateContext.year;
+    const currentMonth = this.templateContext.monthIndex;
+
+    const isInvalidYear = currentYear === undefined || currentYear === null;
+    const isInvalidMonth = currentMonth === undefined || currentMonth === null;
+
+    if (isInvalidYear || isInvalidMonth) {
+      const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : currentYear;
+      const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : currentMonth;
+
+      this.updateDisplay(safeYear, safeMonth);
     }
   }
 
