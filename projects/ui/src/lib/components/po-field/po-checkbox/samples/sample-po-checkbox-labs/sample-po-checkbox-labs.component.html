@@ -9,6 +9,7 @@
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
   [p-label-text-wrap]="labelTextWrap"
+  [p-compact-label]="compactLabel"
 >
 </po-checkbox>
 
@@ -32,6 +33,7 @@
 
     <po-switch class="po-sm-3" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
     <po-switch class="po-sm-3" name="labelTextWrap" [(ngModel)]="labelTextWrap" p-label="Label Text Wrap"> </po-switch>
+    <po-switch class="po-sm-3" name="compactLabel" [(ngModel)]="compactLabel" p-label="Compact Label"> </po-switch>
 
     <po-radio-group
       class="po-md-12"

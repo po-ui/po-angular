@@ -517,6 +517,44 @@ export abstract class PoLookupBaseComponent
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
   /**
+   * @optional
+   *
+   * @description
+   * Define se o título do campo será exibido de forma compacta.
+   *
+   * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:
+   * - `po-label`
+   * - `p-requirement (showRequired)`
+   * - `po-helper`
+   *
+   * Ou seja, todos os elementos relacionados ao título do campo
+   * (rótulo, indicador de obrigatoriedade e componente auxiliar) passam
+   * a seguir o comportamento de layout compacto.
+   *
+   * Também é possível definir esse comportamento de forma global,
+   * uma única vez, na folha de estilo geral da aplicação, por meio
+   * da customização dos tokens CSS:
+   *
+   * - `--field-container-title-justify`
+   * - `--field-container-title-flex`
+   *
+   * Exemplo:
+   *
+   * ```
+   * :root {
+   *   --field-container-title-justify: flex-start;
+   *   --field-container-title-flex: 0 1 auto;
+   * }
+   * ```
+   *
+   * Dessa forma, o layout compacto passa a ser o padrão da aplicação,
+   * sem a necessidade de definir a propriedade individualmente em cada campo.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+
+  /**
    *
    * @deprecated v23.x.x use `p-helper`
    *

@@ -178,6 +178,9 @@ const poUploadMinFileSize = 0;
  *
  * | Propriedade                            | Descrição                                             | Valor Padrão                                      |
  * |----------------------------------------|-------------------------------------------------------|---------------------------------------------------|
+ * | **FIELD CONTAINER**                    |                                                       |                                                   |
+ * | `--field-container-title-justify`      | Alinhamento horizontal do título (`justify-content`)  | `space-between`                                   |
+ * | `--field-container-title-flex`         | Flex do título (`flex`)                               | `1 auto`                                          |
  * | **TEXT SUPPORT**                       |                                                       |                                                   |
  * | `--font-family-text-support`           | Família tipográfica usada no texto de suporte         | `var(--font-family-theme)`                        |
  * | `--text-color-text-support`            | Cor da fonte no texto de suporte                      | `var(--color-neutral-dark-90)`                    |
@@ -271,6 +274,44 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   /** Rótulo do campo. */
   @Input('p-label') label?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   * Define se o título do campo será exibido de forma compacta.
+   *
+   * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:
+   * - `po-label`
+   * - `p-requirement (showRequired)`
+   * - `po-helper`
+   *
+   * Ou seja, todos os elementos relacionados ao título do campo
+   * (rótulo, indicador de obrigatoriedade e componente auxiliar) passam
+   * a seguir o comportamento de layout compacto.
+   *
+   * Também é possível definir esse comportamento de forma global,
+   * uma única vez, na folha de estilo geral da aplicação, por meio
+   * da customização dos tokens CSS:
+   *
+   * - `--field-container-title-justify`
+   * - `--field-container-title-flex`
+   *
+   * Exemplo:
+   *
+   * ```
+   * :root {
+   *   --field-container-title-justify: flex-start;
+   *   --field-container-title-flex: 0 1 auto;
+   * }
+   * ```
+   *
+   * Dessa forma, o layout compacto passa a ser o padrão da aplicação,
+   * sem a necessidade de definir a propriedade individualmente em cada campo.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
 
   /** Texto de apoio para o campo. */
   @Input('p-help') help?: string;

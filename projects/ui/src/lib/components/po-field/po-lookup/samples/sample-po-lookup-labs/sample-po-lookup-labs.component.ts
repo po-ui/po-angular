@@ -75,7 +75,8 @@ export class SamplePoLookupLabsComponent implements OnInit {
     { value: 'virtualScroll', label: 'Virtual Sroll' },
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
-    { value: 'loading', label: 'Loading' }
+    { value: 'loading', label: 'Loading' },
+    { value: 'compactLabel', label: 'Compact Label' }
   ];
 
   private readonly columnsDefinition = {
