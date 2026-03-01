@@ -11,9 +11,11 @@ import {
   Input,
   ViewChild,
   OnDestroy,
+  HostListener,
   input,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  HostBinding
 } from '@angular/core';
 import {
   AbstractControl,
@@ -155,6 +157,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   private _loading: boolean = false;
   private _formatModel: boolean = false;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private statusChangesSubscription: Subscription;
 
   /**
@@ -307,10 +310,13 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    * @default `medium`
    *
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -462,6 +468,11 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
     this.setControl();
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   private setControl(): void {
     const ngControl: NgControl = this.injector.get(NgControl, null, this.injectOptions);
 
@@ -527,5 +538,10 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    */
   override showAdditionalHelp(): boolean {
     return super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }

@@ -1,7 +1,7 @@
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output, TemplateRef } from '@angular/core';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, mapInputSizeToLoadingIcon, validateSizeFn } from '../../utils/util';
 import { PoSearchFilterMode } from './enums/po-search-filter-mode.enum';
@@ -87,6 +87,7 @@ export class PoSearchBaseComponent {
   private _ariaLabel?: string;
   private _filterSelect?: Array<PoSearchFilterSelect>;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
   private _keysLabel? = [];
   private _disabled?: boolean = false;
   private _loading: boolean = false;
@@ -400,7 +401,8 @@ export class PoSearchBaseComponent {
    * @default `medium`
    */
   @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
   get size(): string {
@@ -539,6 +541,11 @@ export class PoSearchBaseComponent {
     this.language = languageService.getShortLanguage();
   }
 
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
   ensureFilterSelectOption(values: any) {
     const _values = Array.isArray(values) ? values : Array.of(values);
     return _values.map(value => (typeof value === 'object' ? value : { label: value, value }));
@@ -547,5 +554,10 @@ export class PoSearchBaseComponent {
   //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
   mapSizeToIcon(size: string): string {
     return mapInputSizeToLoadingIcon(size);
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 }

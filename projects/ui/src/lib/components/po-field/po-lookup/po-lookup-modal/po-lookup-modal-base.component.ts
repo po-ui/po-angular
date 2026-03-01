@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 
 import { Observable, Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -158,7 +168,9 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   @Input('p-spacing') spacing: PoTableColumnSpacing;
 
   /** Define o tamanho do componente. */
-  @Input('p-size') size: string;
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  size: string;
 
   /**
    * Habilita ou desabilita a quebra automática de texto. Quando ativada, o texto que excede

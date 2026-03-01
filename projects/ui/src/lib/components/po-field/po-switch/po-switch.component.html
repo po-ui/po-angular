@@ -9,7 +9,7 @@
   [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content" [attr.name]="name" [attr.p-size]="size">
-    <div class="po-switch" [class.po-switch-aa]="size === 'small'" [attr.data-label-position]="getLabelPosition()">
+    <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
       @if (loading) {
         <div class="po-switch-loading-container">
           <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
@@ -18,7 +18,6 @@
         <div
           #switchContainer
           class="po-switch-container"
-          [class.po-switch-container-aa]="size === 'small'"
           role="switch"
           [attr.aria-checked]="value"
           [attr.aria-disabled]="isDisabled"
@@ -46,7 +45,6 @@
         @if (!hideLabelStatus) {
           <po-label
             class="po-switch-label"
-            [class.po-switch-label-aa]="size === 'small'"
             [p-disabled]="isDisabled"
             [p-label]="value === true ? labelOn : labelOff"
             (click)="eventClick()"

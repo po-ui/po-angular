@@ -16,11 +16,11 @@
       <div
         #dateRangeField
         class="po-datepicker-range-field po-input"
-        [class.po-input-aa]="size === 'small'"
         [class.po-datepicker-range-field-disabled]="disabled"
         [attr.disabled]="disabled"
+        [attr.p-size]="size"
       >
-        <div class="po-datepicker-range-start-date" [class.po-datepicker-range-start-date-aa]="size === 'small'">
+        <div class="po-datepicker-range-start-date">
           <input
             #startDateInput
             class="po-datepicker-range-input"

@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Directive, EventEmitter, input, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  input,
+  Input,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -245,6 +254,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   private _required: boolean = false;
   private _rows: number = 3;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   private modelLastUpdate: any;
   private onChangePropagate: any = null;
@@ -386,15 +396,23 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
   constructor(public cd: ChangeDetectorRef) {}
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
 
   callOnChange(value: any) {
     // Quando o input não possui um formulário, então esta função não é registrada
@@ -473,6 +491,11 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
     if (this.validatorChange) {
       this.validatorChange();
     }
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   abstract writeValueModel(value: any): void;
