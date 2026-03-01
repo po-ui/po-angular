@@ -1,6 +1,6 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
-  [p-disabled]="isDisabled"
+  [p-disabled]="isDisabled || isFieldDisabled"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -56,7 +56,8 @@
           #uploadButton
           class="po-upload-button"
           for="file"
-          [p-disabled]="isDisabled"
+          [p-disabled]="isSelectButtonDisabled"
+          [p-loading]="loading"
           [p-label]="selectFileButtonLabel"
           [p-size]="size"
           (p-click)="selectFiles()"
@@ -207,7 +208,7 @@
   <po-field-container-bottom
     [p-append-in-body]="appendBox"
     [p-help]="help"
-    [p-disabled]="disabled"
+    [p-disabled]="isFieldDisabled"
     [p-size]="size"
     [p-helper]="!label ? poHelper.helperSettings : undefined"
     [p-show-helper]="!label ? displayAdditionalHelp : undefined"

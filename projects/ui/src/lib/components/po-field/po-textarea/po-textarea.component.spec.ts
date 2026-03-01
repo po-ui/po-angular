@@ -72,6 +72,59 @@ describe('PoTextareaComponent:', () => {
     expect(component['inputEl'].nativeElement.value).toBe('Somos TOTVS');
   });
 
+  describe('eventOnInput:', () => {
+    beforeEach(() => {
+      component.inputEl = {
+        nativeElement: {
+          value: ''
+        }
+      } as any;
+    });
+
+    it('should call callOnChange with processed value', () => {
+      spyOn(component, 'callOnChange');
+      spyOn(component as any, 'checkScrollState');
+
+      component.maxlength = 5;
+
+      component.eventOnInput({ target: { value: 'TOTVS123' } });
+
+      expect(component.callOnChange).toHaveBeenCalledWith('TOTVS');
+    });
+
+    it('should update textarea value', () => {
+      spyOn(component as any, 'checkScrollState');
+
+      component.eventOnInput({ target: { value: 'PO UI' } });
+
+      expect(component.inputEl.nativeElement.value).toBe('PO UI');
+    });
+
+    it('should set hasValue=true when value exists', () => {
+      spyOn(component as any, 'checkScrollState');
+
+      component.eventOnInput({ target: { value: 'abc' } });
+
+      expect(component.hasValue).toBeTrue();
+    });
+
+    it('should set hasValue=false when value is empty', () => {
+      spyOn(component as any, 'checkScrollState');
+
+      component.eventOnInput({ target: { value: '' } });
+
+      expect(component.hasValue).toBeFalse();
+    });
+
+    it('should call checkScrollState', () => {
+      spyOn(component as any, 'checkScrollState');
+
+      component.eventOnInput({ target: { value: 'content' } });
+
+      expect(component['checkScrollState']).toHaveBeenCalled();
+    });
+  });
+
   it('enter event must be called', () => {
     spyOn(component.enter, 'emit');
 
@@ -168,6 +221,7 @@ describe('PoTextareaComponent:', () => {
 
       beforeEach(() => {
         inputFocus = spyOn(component, 'focus');
+        spyOn(component as any, 'initResizeObserver');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -180,6 +234,95 @@ describe('PoTextareaComponent:', () => {
         component.autoFocus = false;
         component.ngAfterViewInit();
         expect(inputFocus).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('ngOnChanges:', () => {
+      beforeEach(() => {
+        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
+      });
+
+      it('should call `checkScrollState` when `loading` changes', () => {
+        spyOn(component as any, 'checkScrollState');
+
+        component.ngOnChanges({
+          loading: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false } as any
+        });
+
+        expect(component['checkScrollState']).toHaveBeenCalled();
+      });
+
+      it('should not call `checkScrollState` when `loading` does not change', () => {
+        spyOn(component as any, 'checkScrollState');
+
+        component.ngOnChanges({} as any);
+
+        expect(component['checkScrollState']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('ngOnDestroy:', () => {
+      it('should disconnect resizeObserver if it exists', () => {
+        const fakeResizeObserver = { disconnect: jasmine.createSpy('disconnect') };
+        component['resizeObserver'] = fakeResizeObserver as any;
+
+        component.ngOnDestroy();
+
+        expect(fakeResizeObserver.disconnect).toHaveBeenCalled();
+      });
+
+      it('should remove window resize event listener', () => {
+        spyOn(window, 'removeEventListener');
+
+        component.ngOnDestroy();
+
+        expect(window.removeEventListener).toHaveBeenCalledWith('resize', component['onWindowResize']);
+      });
+    });
+
+    describe('initResizeObserver:', () => {
+      it('should observe the input element', () => {
+        const observeSpy = jasmine.createSpy('observe');
+        const disconnectSpy = jasmine.createSpy('disconnect');
+        (window as any).ResizeObserver = jasmine.createSpy('ResizeObserver').and.returnValue({
+          observe: observeSpy,
+          disconnect: disconnectSpy
+        });
+
+        component['initResizeObserver']();
+
+        expect(observeSpy).toHaveBeenCalledWith(component.inputEl.nativeElement);
+      });
+
+      it('should not throw if ResizeObserver is not available', () => {
+        const original = (window as any).ResizeObserver;
+        (window as any).ResizeObserver = undefined;
+
+        expect(() => component['initResizeObserver']()).not.toThrow();
+
+        (window as any).ResizeObserver = original;
+      });
+
+      it('should execute ResizeObserver callback and call `checkScrollState`', () => {
+        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
+        spyOn(component as any, 'checkScrollState');
+
+        let observerCallback: any;
+        (window as any).ResizeObserver = class {
+          constructor(cb: any) {
+            observerCallback = cb;
+          }
+          observe() {}
+          disconnect() {}
+        };
+
+        component['initResizeObserver']();
+
+        if (observerCallback) {
+          observerCallback();
+        }
+
+        expect(component['checkScrollState']).toHaveBeenCalled();
       });
     });
 
@@ -281,13 +424,17 @@ describe('PoTextareaComponent:', () => {
         },
         change: {
           emit: arg => {}
-        }
+        },
+        checkScrollState: () => {}
       };
 
       spyOn(fakeThis.change, 'emit');
+      spyOn(fakeThis, 'checkScrollState');
 
       component.writeValueModel.call(fakeThis, value);
+
       expect(fakeThis.change.emit).toHaveBeenCalledWith(value);
+      expect(fakeThis.checkScrollState).toHaveBeenCalled();
     });
 
     it('writeValueModel: should not call change if value doesn`t exist', () => {
@@ -299,13 +446,45 @@ describe('PoTextareaComponent:', () => {
         },
         change: {
           emit: () => {}
-        }
+        },
+        checkScrollState: () => {}
       };
 
       spyOn(fakeThis.change, 'emit');
+      spyOn(fakeThis, 'checkScrollState');
+
       component.writeValueModel.call(fakeThis);
 
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
+      expect(fakeThis.checkScrollState).toHaveBeenCalled();
+    });
+
+    describe('writeValueModel - internal state:', () => {
+      beforeEach(() => {
+        component.inputEl = {
+          nativeElement: {
+            value: ''
+          }
+        } as any;
+      });
+
+      it('should set hasValue=true and call checkScrollState when value exists', () => {
+        spyOn(component as any, 'checkScrollState');
+
+        component.writeValueModel('abc');
+
+        expect(component.hasValue).toBeTrue();
+        expect(component['checkScrollState']).toHaveBeenCalled();
+      });
+
+      it('should set hasValue=false and call checkScrollState when value is empty', () => {
+        spyOn(component as any, 'checkScrollState');
+
+        component.writeValueModel('');
+
+        expect(component.hasValue).toBeFalse();
+        expect(component['checkScrollState']).toHaveBeenCalled();
+      });
     });
 
     describe('getErrorPattern:', () => {
@@ -540,6 +719,56 @@ describe('PoTextareaComponent:', () => {
       it('should return false when additionalHelpEventTrigger is not "event" and additionalHelp is not observed', () => {
         component.additionalHelpEventTrigger = 'noEvent';
         expect((component as any).isAdditionalHelpEventTriggered()).toBeFalse();
+      });
+    });
+
+    describe('onWindowResize:', () => {
+      it('should call `checkScrollState`', () => {
+        spyOn(component as any, 'checkScrollState');
+
+        component['onWindowResize']();
+
+        expect(component['checkScrollState']).toHaveBeenCalled();
+      });
+    });
+
+    describe('checkScrollState:', () => {
+      beforeEach(() => {
+        component.inputEl = {
+          nativeElement: {
+            scrollHeight: 200,
+            clientHeight: 100
+          }
+        } as any;
+      });
+
+      it('should set `hasScroll` to true when scrollHeight is greater than clientHeight', () => {
+        component['checkScrollState']();
+
+        expect(component.hasScroll).toBeTrue();
+      });
+
+      it('should set `hasScroll` to false when scrollHeight is not greater than clientHeight', () => {
+        component.inputEl.nativeElement.scrollHeight = 100;
+        component.inputEl.nativeElement.clientHeight = 200;
+
+        component['checkScrollState']();
+
+        expect(component.hasScroll).toBeFalse();
+      });
+
+      it('should call `cd.markForCheck`', () => {
+        spyOn(component['cd'], 'markForCheck');
+
+        component['checkScrollState']();
+
+        expect(component['cd'].markForCheck).toHaveBeenCalled();
+      });
+
+      it('should not throw if inputEl is undefined', () => {
+        component.inputEl = undefined;
+
+        expect(() => component['checkScrollState']()).not.toThrow();
       });
     });
   });

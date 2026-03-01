@@ -1,7 +1,14 @@
 import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
-import { convertToBoolean, getDefaultSizeFn, isEquals, validateSizeFn, PoUtils } from '../../../utils/util';
+import {
+  convertToBoolean,
+  getDefaultSizeFn,
+  isEquals,
+  validateSizeFn,
+  PoUtils,
+  mapInputSizeToLoadingIcon
+} from '../../../utils/util';
 import { PoValidators } from '../validators';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -632,6 +639,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _hideSendButton?: boolean;
   private _isMultiple?: boolean;
   private _literals?: any;
+  private _loading: boolean = false;
   private _required?: boolean;
   private _size?: string = undefined;
   private language: string;
@@ -832,6 +840,29 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
 
   get disabled() {
     return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @HostBinding('attr.p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
+  set loading(value: boolean) {
+    this._loading = value;
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -1091,6 +1122,11 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
     }
 
     return files;
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   abstract sendFeedback(file?): void;
