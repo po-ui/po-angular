@@ -1,25 +1,29 @@
-<po-widget
-  class="po-sm-12"
-  [p-background]="background"
-  [p-disabled]="properties.includes('disabled')"
-  [p-size]="properties.includes('small') ? 'small' : 'medium'"
-  [p-height]="height"
-  [p-help]="help"
-  [p-primary]="properties.includes('primaryWidget')"
-  [p-primary-label]="primaryLabel"
-  [p-secondary-label]="secondaryLabel"
-  [p-tag]="tagLabel"
-  [p-tag-icon]="tagIcon"
-  [p-title]="title"
-  [p-actions]="myActions"
-  (p-on-disabled)="changeAction('p-on-disabled')"
-  (p-primary-action)="changeAction('p-primary-action')"
-  (p-secondary-action)="changeAction('p-secondary-action')"
-  (p-setting)="changeAction('p-setting')"
-  (p-title-action)="changeAction('p-title-action')"
->
-  {{ content }}
-</po-widget>
+<div class="po-row">
+  <po-widget
+    class="po-sm-12"
+    [p-background]="background"
+    [p-disabled]="properties.includes('disabled')"
+    [p-size]="properties.includes('small') ? 'small' : 'medium'"
+    [p-height]="height"
+    [p-help]="help"
+    [p-primary]="properties.includes('primaryWidget')"
+    [p-primary-label]="primaryLabel"
+    [p-secondary-label]="secondaryLabel"
+    [p-tag]="tagLabel"
+    [p-tag-icon]="tagIcon"
+    [p-tag-position]="tagPosition"
+    [p-title]="title"
+    [p-actions]="myActions"
+    (p-on-disabled)="changeAction('p-on-disabled')"
+    (p-primary-action)="changeAction('p-primary-action')"
+    (p-secondary-action)="changeAction('p-secondary-action')"
+    (p-setting)="changeAction('p-setting')"
+    (p-title-action)="changeAction('p-title-action')"
+    [p-avatar]="{ src: avatarSrc, size: avatarSize }"
+  >
+    {{ content }}
+  </po-widget>
+</div>
 
 <po-divider />
 
@@ -30,16 +34,16 @@
 <po-divider />
 
 <form #f="ngForm">
-  <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title"> </po-input>
+  <po-input class="po-md-4" name="title" [(ngModel)]="title" p-label="Title" p-clean />
 
-  <po-input class="po-md-4" name="help" [(ngModel)]="help" p-label="Help" p-clean> </po-input>
+  <po-input class="po-md-4" name="help" [(ngModel)]="help" p-label="Help" p-clean />
 
-  <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height"> </po-number>
+  <po-number class="po-md-4" name="height" [(ngModel)]="height" p-label="Height" p-clean />
 
   <div class="po-row">
-    <po-input class="po-md-6" name="actionAction" [(ngModel)]="actionPopup.action" p-clean p-label="Action"> </po-input>
+    <po-input class="po-md-6" name="actionAction" [(ngModel)]="actionPopup.action" p-clean p-label="Action" />
 
-    <po-input class="po-md-6" name="actionLabel" [(ngModel)]="actionPopup.label" p-label="Label" p-required> </po-input>
+    <po-input class="po-md-6" name="actionLabel" [(ngModel)]="actionPopup.label" p-label="Label" p-required />
   </div>
 
   <div class="po-row">
@@ -59,18 +63,46 @@
     p-clean
     p-help="Ex.: 'http://image.com'; '../../image.png'"
     p-label="Background"
-  >
-  </po-input>
+    p-clean
+  />
 
-  <po-input class="po-md-6" name="primaryLabel" [(ngModel)]="primaryLabel" p-label="Primary Label"> </po-input>
+  <po-input class="po-md-6" name="primaryLabel" [(ngModel)]="primaryLabel" p-label="Primary Label" p-clean />
 
-  <po-input class="po-md-6" name="secondaryLabel" [(ngModel)]="secondaryLabel" p-label="Secondary Label"> </po-input>
+  <po-input class="po-md-6" name="secondaryLabel" [(ngModel)]="secondaryLabel" p-label="Secondary Label" p-clean />
+
   <div class="po-row" style="align-items: flex-end">
-    <po-input class="po-md-6" name="tagLabel" [(ngModel)]="tagLabel" p-label="Label tag"> </po-input>
+    <po-input class="po-md-4" name="tagLabel" [(ngModel)]="tagLabel" p-label="Label Tag" p-clean />
 
-    <po-select class="po-md-6 po-mt-2" name="icon" [(ngModel)]="tagIcon" p-label="Icon" [p-options]="iconList">
-    </po-select>
+    <po-select class="po-md-4 po-mt-2" name="icon" [(ngModel)]="tagIcon" p-label="Icon" [p-options]="iconList" />
+
+    <po-select
+      class="po-md-4 po-mt-2"
+      name="tagPosition"
+      [(ngModel)]="tagPosition"
+      p-label="Tag Position"
+      [p-options]="listTagPosition"
+    />
   </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="avatarSrc"
+      [(ngModel)]="avatarSrc"
+      p-label="Avatar Src"
+      p-help="https://picsum.photos/144/144"
+      p-clean
+    />
+
+    <po-select
+      class="po-md-6"
+      name="avatarSize"
+      [(ngModel)]="avatarSize"
+      p-label="Avatar Size"
+      [p-options]="listAvatarSize"
+    />
+  </div>
+
   <div class="po-row">
     <po-checkbox-group
       class="po-md-12"
@@ -79,13 +111,12 @@
       p-columns="3"
       p-label="Properties"
       [p-options]="propertiesOptions"
-    >
-    </po-checkbox-group>
+    />
   </div>
 
-  <po-textarea class="po-md-12" [(ngModel)]="content" name="content" p-label="Content"> </po-textarea>
+  <po-textarea class="po-md-12" [(ngModel)]="content" name="content" p-label="Content" />
 
   <div class="po-row">
-    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()" />
   </div>
 </form>
