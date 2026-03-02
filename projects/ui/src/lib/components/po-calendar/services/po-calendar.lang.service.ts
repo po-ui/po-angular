@@ -149,6 +149,27 @@ export class PoCalendarLangService {
     ru: 'Сегодня'
   };
 
+  private previousMonthLabel = {
+    pt: 'Mês anterior',
+    en: 'Previous month',
+    es: 'Mes anterior',
+    ru: 'Предыдущий месяц'
+  };
+
+  private nextMonthLabel = {
+    pt: 'Próximo mês',
+    en: 'Next month',
+    es: 'Próximo mes',
+    ru: 'Следующий месяц'
+  };
+
+  readonly toCleanLabel = {
+    pt: 'Limpar',
+    en: 'To clean',
+    es: 'Para limpiar',
+    ru: 'Чистить'
+  };
+
   getMonth(month: number) {
     return this.months[month][this.language];
   }
@@ -184,6 +205,18 @@ export class PoCalendarLangService {
 
   getTodayLabel() {
     return this.todayLabel[this.language];
+  }
+
+  getPreviousMonthLabel() {
+    return this.previousMonthLabel[this.language];
+  }
+
+  getNextMonthLabel() {
+    return this.nextMonthLabel[this.language];
+  }
+
+  getToCleanLabel() {
+    return this.toCleanLabel[this.language];
   }
 
   setLanguage(language: string) {

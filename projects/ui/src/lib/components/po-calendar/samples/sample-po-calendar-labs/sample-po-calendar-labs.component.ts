@@ -8,12 +8,15 @@ import { PoRadioGroupOption, PoCalendarMode } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoCalendarLabsComponent implements OnInit {
-  calendar;
-  event;
-  locale: string;
-  maxDate: string | Date;
-  minDate: string | Date;
-  mode: PoCalendarMode;
+  calendar: string = '';
+  event: string = '';
+  infoValue: any;
+  locale: string = '';
+  maxDate: string | Date = '';
+  minDate: string | Date = '';
+  mode: any;
+  monthYearEvent: any;
+  size: string = '';
 
   readonly localeOptions: Array<PoRadioGroupOption> = [
     { label: 'pt', value: 'pt' },
@@ -24,23 +27,40 @@ export class SamplePoCalendarLabsComponent implements OnInit {
 
   readonly calendarModeOptions: Array<PoRadioGroupOption> = [
     { label: 'Range', value: PoCalendarMode.Range },
-    { label: 'Unset', value: null }
+    { label: 'Unset', value: '' }
+  ];
+
+  public readonly sizeOptions: Array<PoRadioGroupOption> = [
+    { label: 'small', value: 'small' },
+    { label: 'medium', value: 'medium' }
   ];
 
   ngOnInit() {
     this.restore();
   }
 
-  changeEvent(event: string) {
-    this.event = event;
+  changeEvent(type: string, event?: any) {
+    if (type === 'p-change') {
+      this.calendar = event;
+      this.infoValue = event;
+    }
+
+    if (type === 'p-change-month-year') {
+      this.monthYearEvent = event;
+      this.infoValue = event;
+    }
+
+    this.event = type;
   }
 
   restore() {
-    this.calendar = undefined;
-    this.event = undefined;
-    this.locale = undefined;
-    this.maxDate = undefined;
-    this.minDate = undefined;
+    this.calendar = '';
+    this.event = '';
+    this.infoValue = '';
+    this.locale = '';
+    this.maxDate = '';
+    this.minDate = '';
     this.mode = undefined;
+    this.size = 'medium';
   }
 }

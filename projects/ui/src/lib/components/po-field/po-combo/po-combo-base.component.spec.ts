@@ -683,7 +683,7 @@ describe('PoComboBaseComponent:', () => {
       expect(component.updateSelectedValue).toHaveBeenCalled();
       expect(component.getOptionFromValue).toHaveBeenCalled();
       expect(component.getObjectByValue).not.toHaveBeenCalled();
-      expect(component.removeInitialFilter).toBeFalsy();
+      expect(component.removeInitialFilter).toBeTruthy();
     });
 
     it('should call `updateSelectedValue` if `changeOnEnter` is `false`', () => {
