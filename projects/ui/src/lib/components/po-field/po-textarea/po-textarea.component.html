@@ -1,6 +1,6 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
-  [p-disabled]="disabled"
+  [p-disabled]="isDisabled"
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
@@ -15,25 +15,33 @@
     <textarea
       #inp
       class="po-textarea"
+      [class.has-scroll]="hasScroll"
+      [class.has-value]="hasValue"
+      [class.has-loading]="loading"
       (blur)="eventOnBlur()"
       (focus)="eventOnFocus()"
       (input)="eventOnInput($event)"
       (keydown)="onKeyDown($event)"
       [attr.name]="name"
       [attr.p-size]="size"
-      [disabled]="disabled"
+      [disabled]="isDisabled"
       [id]="id"
-      [placeholder]="disabled ? '' : placeholder"
+      [placeholder]="isDisabled ? '' : placeholder"
       [readonly]="readonly"
       [required]="required"
       [rows]="rows"
     ></textarea>
+    @if (loading) {
+      <div class="po-textarea-loading-container">
+        <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+      </div>
+    }
   </div>
   @if (!readonly) {
     <po-field-container-bottom
       [p-append-in-body]="appendBox"
       [p-help]="help"
-      [p-disabled]="disabled"
+      [p-disabled]="isDisabled"
       [p-error-pattern]="getErrorPattern()"
       [p-error-limit]="errorLimit"
       [p-size]="size"

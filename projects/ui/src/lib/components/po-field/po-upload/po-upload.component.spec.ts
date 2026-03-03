@@ -235,6 +235,59 @@ describe('PoUploadComponent:', () => {
       expect(component.isDisabled).toBeTruthy();
     });
 
+    it('isSelectButtonDisabled: should enable select button when loading and disabled are false', () => {
+      component.loading = false;
+      component.disabled = false;
+      spyOnProperty(component, 'isDisabled').and.returnValue(false);
+
+      expect(component.isSelectButtonDisabled).toBeFalse();
+    });
+
+    it('isSelectButtonDisabled: should disable select button when loading is true', () => {
+      component.loading = true;
+      component.disabled = false;
+      spyOnProperty(component, 'isDisabled').and.returnValue(false);
+
+      expect(component.isSelectButtonDisabled).toBeTrue();
+    });
+
+    it('isSelectButtonDisabled: should disable select button when disabled is true', () => {
+      component.loading = false;
+      component.disabled = true;
+      spyOnProperty(component, 'isDisabled').and.returnValue(true);
+
+      expect(component.isSelectButtonDisabled).toBeTrue();
+    });
+
+    it('isSelectButtonDisabled: should disable select button when both loading and disabled are true', () => {
+      component.loading = true;
+      component.disabled = true;
+      spyOnProperty(component, 'isDisabled').and.returnValue(true);
+
+      expect(component.isSelectButtonDisabled).toBeTrue();
+    });
+
+    it('isFieldDisabled: should return false when loading and disabled are false', () => {
+      component.loading = false;
+      component.disabled = false;
+
+      expect(component.isFieldDisabled).toBeFalse();
+    });
+
+    it('isFieldDisabled: should return true when loading is true', () => {
+      component.loading = true;
+      component.disabled = false;
+
+      expect(component.isFieldDisabled).toBeTrue();
+    });
+
+    it('isFieldDisabled: should return true when disabled is true', () => {
+      component.loading = false;
+      component.disabled = true;
+
+      expect(component.isFieldDisabled).toBeTrue();
+    });
+
     it('maxFiles: should return false if `isMultiple` is false', () => {
       component.isMultiple = false;
 

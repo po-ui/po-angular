@@ -9,6 +9,7 @@ import { PoRichTextToolbarActions } from './enum/po-rich-text-toolbar-actions.en
 import { PoRichTextBaseComponent } from './po-rich-text-base.component';
 import { PoRichTextService } from './po-rich-text.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { convertToBoolean } from '../../../utils/util';
 
 @Component({
   selector: 'po-rich-texts-base-host',
@@ -155,6 +156,80 @@ describe('PoRichTextBaseComponent:', () => {
         });
       });
     });
+
+    describe('p-disabled:', () => {
+      it('should set `disabled` to true with valid values', () => {
+        const validValues = [true, 'true', 1, ''];
+        validValues.forEach(value => {
+          component.disabled = convertToBoolean(value) as any;
+          expect(component.disabled).toBeTrue();
+        });
+      });
+
+      it('should set `disabled` to false with invalid values', () => {
+        const invalidValues = [undefined, null, 2, 'string'];
+        invalidValues.forEach(value => {
+          component.disabled = convertToBoolean(value) as any;
+          expect(component.disabled).toBeFalse();
+        });
+      });
+    });
+
+    describe('p-loading:', () => {
+      it('should set `loading` to true with valid values', () => {
+        const validValues = [true, 'true', 1, ''];
+        validValues.forEach(value => {
+          component.loading = convertToBoolean(value) as any;
+          expect(component.loading).toBeTrue();
+        });
+      });
+
+      it('should set `loading` to false with invalid values', () => {
+        const invalidValues = [undefined, null, 2, 'string'];
+        invalidValues.forEach(value => {
+          component.loading = convertToBoolean(value) as any;
+          expect(component.loading).toBeFalse();
+        });
+      });
+
+      it('should call `cd.markForCheck` when loading is set', () => {
+        spyOn(component.cd, 'markForCheck');
+
+        component.loading = true;
+
+        expect(component.cd.markForCheck).toHaveBeenCalled();
+      });
+    });
+
+    describe('isDisabled:', () => {
+      it('should return true when `disabled` is true', () => {
+        component.disabled = true;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when `loading` is true', () => {
+        component.disabled = false;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when both `disabled` and `loading` are true', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return false when both `disabled` and `loading` are false', () => {
+        component.disabled = false;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeFalse();
+      });
+    });
   });
 
   describe('Methods:', () => {
@@ -244,6 +319,23 @@ describe('PoRichTextBaseComponent:', () => {
       component['validateModel']('updated value');
 
       expect(component['validatorChange']).toBeUndefined();
+    });
+
+    describe('setDisabledState:', () => {
+      it('should set `disabled` with received value and call `cd.markForCheck`', () => {
+        spyOn(component.cd, 'markForCheck');
+
+        component.setDisabledState(true);
+
+        expect(component.disabled).toBeTrue();
+        expect(component.cd.markForCheck).toHaveBeenCalled();
+      });
+
+      it('should set `disabled` to false when called with false', () => {
+        component.setDisabledState(false);
+
+        expect(component.disabled).toBeFalse();
+      });
     });
   });
 });

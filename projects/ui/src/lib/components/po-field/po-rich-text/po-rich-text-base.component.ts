@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, input, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Directive, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, Validator } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -72,6 +72,47 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    * @default `false`
    */
   @Input({ alias: 'p-disabled-text-align', transform: convertToBoolean }) disabledTextAlign: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Indica que o campo será desabilitado.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-disabled', transform: convertToBoolean })
+  set disabled(disabled: boolean) {
+    this._disabled = disabled;
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @HostBinding('attr.p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
+  set loading(value: boolean) {
+    this._loading = value;
+    this.cd?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
+  }
 
   /**
    * @description
@@ -237,6 +278,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   onChangeModel: any = null;
   value: string;
 
+  private _disabled: boolean = false;
+  private _loading: boolean = false;
   private _height?: number;
   private _placeholder: string;
   private _readonly: boolean;
@@ -346,7 +389,17 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    */
   @Input('p-show-required') showRequired: boolean = false;
 
-  constructor(private richTextService: PoRichTextService) {}
+  constructor(
+    private richTextService: PoRichTextService,
+    public cd: ChangeDetectorRef
+  ) {}
+
+  // Função implementada do ControlValueAccessor
+  // Usada para interceptar os estados de habilitado via forms api
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+    this.cd.markForCheck();
+  }
 
   // Função implementada do ControlValueAccessor
   // Usada para interceptar as mudanças e não atualizar automaticamente o Model
@@ -365,7 +418,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   validate(abstractControl: AbstractControl): { [key: string]: any } {
-    if (PoValidators.requiredFailed(this.required, false, abstractControl.value)) {
+    if (PoValidators.requiredFailed(this.required, this.disabled, abstractControl.value)) {
       return {
         required: {
           valid: false

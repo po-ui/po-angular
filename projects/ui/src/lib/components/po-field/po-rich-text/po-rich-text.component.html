@@ -1,5 +1,6 @@
 @let poHelper = setHelper(label, additionalHelpTooltip);
 <po-field-container
+  [p-disabled]="isDisabled"
   [p-label]="label"
   [p-optional]="optional"
   [p-required]="required"
@@ -17,6 +18,8 @@
       [p-model-value]="value"
       [p-placeholder]="placeholder"
       [p-readonly]="readonly"
+      [p-disabled]="isDisabled"
+      [p-loading]="loading"
       [p-size]="size"
       (p-change)="onChangeValue($event)"
       (p-commands)="richTextToolbar?.setButtonsStates($event)"
@@ -27,11 +30,11 @@
       (p-keydown)="onKeyDown($event)"
     >
     </po-rich-text-body>
-
     @if (!isAllActionsHidden()) {
       <po-rich-text-toolbar
         #richTextToolbar
-        [p-readonly]="readonly"
+        [p-readonly]="readonly || isDisabled"
+        [p-disabled]="isDisabled"
         [p-hide-toolbar-actions]="toolbarActions"
         [p-size]="size"
         (p-link-editing)="richTextBody.linkEditing($event)"
@@ -44,6 +47,7 @@
     <po-field-container-bottom
       [p-append-in-body]="appendBox"
       [p-help]="help"
+      [p-disabled]="isDisabled"
       [p-error-limit]="errorLimit"
       [p-error-pattern]="errorMsg"
       [p-size]="size"
