@@ -29,6 +29,14 @@ export interface PoTableColumnLabel {
    * - <span class="dot po-color-10"></span> `color-10`
    * - <span class="dot po-color-11"></span> `color-11`
    * - <span class="dot po-color-12"></span> `color-12`
+   * - <span class="dot po-color-13"></span> `color-13`
+   * - <span class="dot po-color-14"></span> `color-14`
+   * - <span class="dot po-color-15"></span> `color-15`
+   * - <span class="dot po-color-16"></span> `color-16`
+   * - <span class="dot po-color-17"></span> `color-17`
+   * - <span class="dot po-color-18"></span> `color-18`
+   * - <span class="dot po-color-19"></span> `color-19`
+   * - <span class="dot po-color-20"></span> `color-20`
    */
   color?: string;
 
@@ -55,6 +63,14 @@ export interface PoTableColumnLabel {
    *   - <span class="dot po-color-10"></span> `color-10`
    *   - <span class="dot po-color-11"></span> `color-11`
    *   - <span class="dot po-color-12"></span> `color-12`
+   *   - <span class="dot po-color-13"></span> `color-13`
+   *   - <span class="dot po-color-14"></span> `color-14`
+   *   - <span class="dot po-color-15"></span> `color-15`
+   *   - <span class="dot po-color-16"></span> `color-16`
+   *   - <span class="dot po-color-17"></span> `color-17`
+   *   - <span class="dot po-color-18"></span> `color-18`
+   *   - <span class="dot po-color-19"></span> `color-19`
+   *   - <span class="dot po-color-20"></span> `color-20`
    *
    * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background.
    *
