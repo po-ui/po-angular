@@ -113,6 +113,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   @Input('p-label') label?: string;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -148,7 +150,7 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /** Nome e identificador do campo. */
   @Input('name') name: string;

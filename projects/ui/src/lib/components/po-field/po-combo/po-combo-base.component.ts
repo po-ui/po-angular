@@ -137,6 +137,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -172,7 +174,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /** Label no componente. */
   @Input('p-label') label?: string;

@@ -517,6 +517,8 @@ export abstract class PoLookupBaseComponent
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -552,7 +554,7 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /**
    *

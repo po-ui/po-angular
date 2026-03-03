@@ -276,6 +276,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @Input('p-label') label?: string;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -311,7 +313,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /** Texto de apoio para o campo. */
   @Input('p-help') help?: string;
