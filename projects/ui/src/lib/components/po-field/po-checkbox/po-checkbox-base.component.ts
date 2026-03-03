@@ -123,7 +123,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    *
    * @default `false`
    */
-  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /**
    * @optional
