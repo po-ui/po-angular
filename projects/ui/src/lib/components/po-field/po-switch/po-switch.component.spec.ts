@@ -58,8 +58,13 @@ describe('PoSwitchComponent', () => {
     });
 
     it('should update property p-compact-label', () => {
-      expectSettersMethod(component, 'compactLabel', true, '_compactLabel', true);
-      expectSettersMethod(component, 'compactLabel', false, '_compactLabel', false);
+      fixture.componentRef.setInput('p-compact-label', true);
+      fixture.detectChanges();
+      expect(component.compactLabel()).toBe(true);
+
+      fixture.componentRef.setInput('p-compact-label', false);
+      fixture.detectChanges();
+      expect(component.compactLabel()).toBe(false);
     });
 
     describe('p-size', () => {

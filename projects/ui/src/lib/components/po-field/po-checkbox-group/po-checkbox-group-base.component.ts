@@ -90,6 +90,8 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -125,7 +127,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /** Nome dos checkboxes */
   @Input('name') name: string;

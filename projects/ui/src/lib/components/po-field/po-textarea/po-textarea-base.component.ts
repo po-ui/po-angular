@@ -101,6 +101,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -136,7 +138,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /** Label do campo. */
   @Input('p-label') label?: string;

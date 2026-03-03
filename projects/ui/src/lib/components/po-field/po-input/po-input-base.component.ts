@@ -122,6 +122,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -157,7 +159,7 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /**
    * @optional

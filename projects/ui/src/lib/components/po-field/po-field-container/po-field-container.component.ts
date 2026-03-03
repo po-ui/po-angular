@@ -92,16 +92,21 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define o tamanho do componente. */
   @Input('p-size') size?: string;
 
-  private _compactLabel: boolean = false;
-
-  /** Define se o título do campo será compacto. */
-  @Input('p-compact-label') set compactLabel(value: boolean) {
-    this._compactLabel = convertToBoolean(value);
-  }
-
-  get compactLabel(): boolean {
-    return this._compactLabel;
-  }
+  /**
+   * @Input
+   *
+   * Define se o título do campo será exibido de forma compacta.
+   *
+   * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:
+   * - `po-label`
+   * - `p-requirement (showRequired)`
+   * - `po-helper`
+   *
+   * Ou seja, todos os elementos relacionados ao título do campo
+   * (rótulo, indicador de obrigatoriedade e componente auxiliar) passam
+   * a seguir o comportamento de layout compacto.
+   */
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   constructor(private readonly cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);

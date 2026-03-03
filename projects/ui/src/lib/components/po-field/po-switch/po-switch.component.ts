@@ -155,10 +155,12 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   private _loading: boolean = false;
   private _formatModel: boolean = false;
   private _size?: string = undefined;
-  private _compactLabel: boolean = true;
   private statusChangesSubscription: Subscription;
 
   /**
+   *
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -194,14 +196,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean })
-  set compactLabel(value: boolean) {
-    this._compactLabel = value;
-  }
-
-  get compactLabel(): boolean {
-    return this._compactLabel;
-  }
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /**
    * @optional

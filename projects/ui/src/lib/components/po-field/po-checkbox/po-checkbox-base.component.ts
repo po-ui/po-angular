@@ -88,6 +88,8 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox?: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -123,7 +125,7 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
   /**
    * @optional
