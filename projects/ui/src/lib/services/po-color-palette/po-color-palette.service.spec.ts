@@ -51,12 +51,12 @@ describe('PoColorPaletteService:', () => {
     });
 
     it('getColor: should call `getColorFromType` and return `color-01` if `value.color` isn`t in colors range.', () => {
-      const value = { color: 'color-20' };
+      const value = { color: 'color-21' };
 
       spyOn(service, <any>'getColorFromType').and.callThrough();
 
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color01);
-      expect(service['getColorFromType']).toHaveBeenCalledWith('color-20');
+      expect(service['getColorFromType']).toHaveBeenCalledWith('color-21');
     });
 
     it('getColor: should call `getColorFromType` and return `color-07` if value type is `danger`.', () => {
