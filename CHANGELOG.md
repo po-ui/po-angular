@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.4.0](https://github.com/po-ui/po-angular/compare/v21.3.0...v21.4.0) (2026-03-03)
+
+
+### Features
+
+* **calendar:** implementa definições do AnimaliaDS ([7f19fbc](https://github.com/po-ui/po-angular/commit/7f19fbc8c346a4d833765dd36680ad5a5599784a))
+* **datepicker:** implementa definições do AnimaliaDS ([df8623a](https://github.com/po-ui/po-angular/commit/df8623aa311cee58121f6022cd83330504c8ce9e))
+* **datepicker-range:** implementa definições do AnimaliaDS ([df8623a](https://github.com/po-ui/po-angular/commit/df8623aa311cee58121f6022cd83330504c8ce9e))
+* **widget:** adiciona avatar ao widget e novos posicionamentos da tag ([e032e9f](https://github.com/po-ui/po-angular/commit/e032e9f627cce1f3dd25561f9a8ca234ea9a9319))
+
+
+### Bug Fixes
+
+* **table:** ajusta a ordenação ao atualizar p-items ([6a2495b](https://github.com/po-ui/po-angular/commit/6a2495b04e2e4ddb73de968712af5179d521fe44))
+
 ## [21.3.0](https://github.com/po-ui/po-angular/compare/v21.2.0...v21.3.0) (2026-02-23)
 
 
