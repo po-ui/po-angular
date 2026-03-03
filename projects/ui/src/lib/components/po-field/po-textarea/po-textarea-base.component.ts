@@ -136,7 +136,7 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
 
   /** Label do campo. */
   @Input('p-label') label?: string;

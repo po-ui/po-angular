@@ -92,16 +92,8 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define o tamanho do componente. */
   @Input('p-size') size?: string;
 
-  private _compactLabel: boolean = false;
-
   /** Define se o título do campo será compacto. */
-  @Input('p-compact-label') set compactLabel(value: boolean) {
-    this._compactLabel = convertToBoolean(value);
-  }
-
-  get compactLabel(): boolean {
-    return this._compactLabel;
-  }
+  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
 
   constructor(private readonly cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);

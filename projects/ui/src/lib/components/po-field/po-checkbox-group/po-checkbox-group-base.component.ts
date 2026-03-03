@@ -125,7 +125,7 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
 
   /** Nome dos checkboxes */
   @Input('name') name: string;

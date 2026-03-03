@@ -172,7 +172,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
 
   /** Label no componente. */
   @Input('p-label') label?: string;

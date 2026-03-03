@@ -311,7 +311,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
 
   /** Texto de apoio para o campo. */
   @Input('p-help') help?: string;

@@ -206,7 +206,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    *
    * @default `false`
    */
-  @Input({ alias: 'p-compact-label', transform: convertToBoolean }) compactLabel: boolean = false;
+  compactLabel = input<boolean>(false, { alias: 'p-compact-label' });
 
   /** Mensagem que aparecerá enquanto nenhuma opção estiver selecionada. */
   @Input('p-placeholder') placeholder?: string;

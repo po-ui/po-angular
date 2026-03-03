@@ -65,16 +65,15 @@ describe('PoFieldContainerComponent:', () => {
       expectPropertiesValues(component, 'required', invalidValues, false);
     });
 
-    it('p-compact-label: should update property with `true` if valid values', () => {
-      const validValues = ['', true, 'true'];
+    it('p-compact-label: should update property with `true` when input is true', () => {
+      fixture.componentRef.setInput('p-compact-label', true);
+      fixture.detectChanges();
 
-      expectPropertiesValues(component, 'compactLabel', validValues, true);
+      expect(component.compactLabel()).toBe(true);
     });
 
-    it('p-compact-label: should update property with `false` if invalid values', () => {
-      const invalidValues = ['false', false, 'abc', undefined, null];
-
-      expectPropertiesValues(component, 'compactLabel', invalidValues, false);
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
     });
   });
 
@@ -183,7 +182,7 @@ describe('PoFieldContainerComponent:', () => {
     });
 
     it('should apply `po-field-container-compact-label` class when `compactLabel` is true', () => {
-      component.compactLabel = true;
+      fixture.componentRef.setInput('p-compact-label', true);
       component.label = 'Test Label';
       fixture.detectChanges();
 
@@ -192,7 +191,7 @@ describe('PoFieldContainerComponent:', () => {
     });
 
     it('should not apply `po-field-container-compact-label` class when `compactLabel` is false', () => {
-      component.compactLabel = false;
+      fixture.componentRef.setInput('p-compact-label', false);
       component.label = 'Test Label';
       fixture.detectChanges();
 
