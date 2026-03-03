@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.5](https://github.com/po-ui/po-angular/compare/v19.39.4...v19.39.5) (2026-03-03)
+
+
+### Bug Fixes
+
+* **table:** ajusta a ordenação ao atualizar p-items ([9c88736](https://github.com/po-ui/po-angular/commit/9c8873649155eb312e2075d71c29e79ebf7d3c41))
+
 ### [19.39.4](https://github.com/po-ui/po-angular/compare/v19.39.3...v19.39.4) (2026-02-23)
 
 
