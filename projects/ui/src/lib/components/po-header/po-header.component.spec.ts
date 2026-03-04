@@ -67,7 +67,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component, 'handleSmallSreen');
 
     component['applicationMenu'] = {} as any;
-    (window.innerWidth as any) = 800;
+    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     component['currentWidth'] = 800;
     component.ngOnInit();
     receiveOnChange$.next([{ label: 'menu1' }]);
@@ -81,7 +81,7 @@ describe('PoHeaderComponent', () => {
 
     component['applicationMenu'] = undefined;
     component['currentWidth'] = 800;
-    (window.innerWidth as any) = 800;
+    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
 
     component.ngOnInit();
     receiveOnChange$.next([{ label: 'menu1' }]);
@@ -94,7 +94,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component, 'handleSmallSreen');
 
     component['applicationMenu'] = {} as any;
-    (window.innerWidth as any) = 1200;
+    Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true, configurable: true });
     component['currentWidth'] = 1200;
     component.ngOnInit();
     receiveOnChange$.next([{ label: 'menu1' }]);
@@ -117,7 +117,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component['cd'], 'detectChanges');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
-    (window as any).innerWidth = 800;
+    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     component.ngOnInit();
 
     receiveApplicationMenu$.next({ id: '2' });
@@ -141,7 +141,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component, 'updateMenu');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
-    (window as any).innerWidth = 800;
+    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     component.ngOnInit();
 
     receiveApplicationMenu$.next({ id: '1' });
@@ -153,7 +153,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component['cd'], 'detectChanges');
     spyOn(component, 'handleSmallSreen');
 
-    (window as any).innerWidth = 800;
+    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '1';
 
@@ -171,7 +171,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component['cd'], 'detectChanges');
     spyOn(component, 'handleLargeSreen');
 
-    (window as any).innerWidth = 1000;
+    Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '1';
 
@@ -189,7 +189,7 @@ describe('PoHeaderComponent', () => {
     spyOn(component['cd'], 'detectChanges');
     spyOn(component, 'handleLargeSreen');
 
-    (window as any).innerWidth = 1000;
+    Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
     component.notChangeContext = true;
@@ -207,7 +207,7 @@ describe('PoHeaderComponent', () => {
   it('should set applicationMenu to undefined when id is equal', fakeAsync(() => {
     spyOn(component['cd'], 'detectChanges');
 
-    (window as any).innerWidth = 1000;
+    Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
 
@@ -226,7 +226,7 @@ describe('PoHeaderComponent', () => {
 
     component.ngOnInit();
 
-    (window.innerWidth as any) = 1200;
+    Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true, configurable: true });
     window.dispatchEvent(new Event('resize'));
 
     tick(250);
