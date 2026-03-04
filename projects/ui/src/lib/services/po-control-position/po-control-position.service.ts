@@ -338,6 +338,15 @@ export class PoControlPositionService {
     this.element.style.left = sizesAndPositions.target.left + sizesAndPositions.target.width / 2 - displacement + 'px';
   }
 
+  private setBottomRightPosition(displacement: number, sizesAndPositions) {
+    this.element.style.top = sizesAndPositions.target.bottom + this.elementOffset + 'px';
+    // Usar 'right' para ancorar no lado direito e crescer para a esquerda
+    const rightDistance = sizesAndPositions.window.innerWidth - sizesAndPositions.target.right;
+    this.element.style.right = rightDistance + this.offsetArrow + 'px';
+    // Remover left se existir
+    this.element.style.left = '';
+  }
+
   private setElementPosition(position: string) {
     this.setElementWidth();
 
@@ -372,7 +381,7 @@ export class PoControlPositionService {
         this.setBottomPositions(sizesAndPositions.element.width / 2, sizesAndPositions);
         break;
       case 'bottom-right':
-        this.setBottomPositions(this.offsetArrow + this.differenceDiagonalToWidthArrow, sizesAndPositions);
+        this.setBottomRightPosition(this.offsetArrow + this.differenceDiagonalToWidthArrow, sizesAndPositions);
         break;
       case 'bottom-left':
         this.setBottomPositions(

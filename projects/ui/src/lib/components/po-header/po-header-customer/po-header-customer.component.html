@@ -46,7 +46,7 @@
 }
 
 @if (headerUser?.popover) {
-  <po-popover #poPopoverAction [p-target]="targetRef" p-position="bottom-left" [p-hide-arrow]="true">
+  <po-popover #poPopoverAction [p-target]="targetRef" p-position="bottom-right" [p-hide-arrow]="true">
     <ng-container *ngTemplateOutlet="headerUser.popover.content"></ng-container>
   </po-popover>
 }

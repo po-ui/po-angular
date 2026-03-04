@@ -1,0 +1,39 @@
+.app-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  justify-items: center;
+}
+
+.custom-template {
+  padding: 0.5rem;
+}
+
+.custom-template p {
+  text-align: center;
+  font-weight: bold;
+  color: var(--color-neutral-dark-90);
+}
+
+/* alterado apenas para demonstração no portal*/
+po-header {
+  --nav-position: flex;
+}
+
+/* Estilos para o template de menu do usuário */
+.user-menu-template {
+  background: var(--color-neutral-light-00);
+  border-radius: 4px;
+}
+
+.user-menu-item {
+  user-select: none;
+}
+
+.user-menu-item:active {
+  transform: scale(0.98);
+}
+
+.user-menu-item po-icon {
+  flex-shrink: 0;
+}

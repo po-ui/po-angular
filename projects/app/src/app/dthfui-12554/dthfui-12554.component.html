@@ -1,0 +1,76 @@
+<po-header
+  [p-brand]="headerBrand"
+  [p-menu-items]="menuItems"
+  [p-actions-tools]="actionTools"
+  [p-header-user]="headerUser"
+  [p-side-menu-only-action]="true"
+></po-header>
+
+<ng-template #meuTemplate>
+  <div class="custom-template" [style.width.px]="popoverWidth">
+    <p>Meus aplicativos</p>
+    <p style="font-size: 0.875rem; color: var(--color-neutral-dark-70); margin: 0">Width atual: {{ popoverWidth }}px</p>
+    <br />
+    <div class="app-wrapper">
+      @for (app of systemApps; track app.icon) {
+        <po-button [p-icon]="app.icon" (p-click)="app.action()"></po-button>
+      }
+    </div>
+    <br />
+    <div style="display: flex; gap: 8px; justify-content: center">
+      <po-button p-label="Aumentar Width" p-icon="an an-plus" p-kind="primary" (p-click)="increaseWidth()"></po-button>
+      <po-button
+        p-label="Resetar"
+        p-icon="an an-arrow-counter-clockwise"
+        p-kind="secondary"
+        (p-click)="resetWidth()"
+      ></po-button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #userTemplate>
+  <div class="user-menu-template" style="min-width: 250px; padding: 8px 0">
+    <div style="padding: 16px; border-bottom: 1px solid var(--color-neutral-light-20)">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <img
+          src="https://po-ui.io/assets/graphics/avatar1.png"
+          alt="Avatar"
+          style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover"
+        />
+        <div>
+          <p style="margin: 0; font-weight: 600; font-size: 0.875rem">John Doe</p>
+          <p style="margin: 0; font-size: 0.75rem; color: var(--color-neutral-dark-70)">john.doe&#64;email.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 8px 0">
+      @for (item of userMenuItems; track item.label) {
+        <div
+          class="user-menu-item"
+          (click)="item.action()"
+          style="
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background-color 0.2s ease;
+          "
+          (mouseenter)="$event.currentTarget.style.backgroundColor = 'var(--color-neutral-light-05)'"
+          (mouseleave)="$event.currentTarget.style.backgroundColor = 'transparent'"
+        >
+          <po-icon [p-icon]="item.icon" style="font-size: 1.25rem; color: var(--color-neutral-dark-90)"></po-icon>
+          <span style="font-size: 0.875rem; color: var(--color-neutral-dark-90)">{{ item.label }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<po-page-slide #pageSlide p-title="Po Page Slide Title"> Hello World! </po-page-slide>
+
+<div class="po-row">
+  <po-button class="po-sm-3" p-label="View Page Slide" (p-click)="pageSlide.open()"></po-button>
+</div>
