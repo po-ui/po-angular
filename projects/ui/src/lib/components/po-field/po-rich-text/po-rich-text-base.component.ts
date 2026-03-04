@@ -113,6 +113,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   @Input('p-label') label?: string;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description

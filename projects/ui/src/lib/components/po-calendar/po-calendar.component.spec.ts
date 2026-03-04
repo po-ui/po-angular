@@ -187,28 +187,26 @@ describe('PoCalendarComponent:', () => {
       expect(component.value).toEqual({ start: selectedDate, end: null });
     });
 
-    it(`onSelectDate: should call setActivateDate with selectedDate if isRange is true and component.value is falsy`, () => {
+    it(`onSelectDate: should update activateDate when isRange is true and component.value is falsy`, () => {
       const selectedDate = new Date(2018, 6, 5);
       component.value = null;
 
       spyOnProperty(component, 'isRange').and.returnValue(true);
-      spyOn(component, <any>'setActivateDate').and.callThrough();
 
       component.onSelectDate(selectedDate, 'end');
 
-      expect(component['setActivateDate']).toHaveBeenCalledWith(selectedDate);
+      expect(component.activateDate).toEqual({ start: selectedDate, end: selectedDate });
     });
 
-    it(`onSelectDate: should call setActivateDate with selectedDate if isRange is true and { start, end } are truthy`, () => {
+    it(`onSelectDate: should update activateDate when isRange is true and { start, end } are truthy`, () => {
       const selectedDate = new Date(2018, 6, 5);
       component.value = { start: new Date(2018, 4, 5), end: new Date(2018, 5, 5) };
 
       spyOnProperty(component, 'isRange').and.returnValue(true);
-      spyOn(component, <any>'setActivateDate').and.callThrough();
 
       component.onSelectDate(selectedDate, 'end');
 
-      expect(component['setActivateDate']).toHaveBeenCalledWith(selectedDate);
+      expect(component.activateDate).toEqual({ start: selectedDate, end: selectedDate });
     });
 
     it(`onSelectDate: should call 'convertDateToISO' to set 'dateIso' and call updateModel with new value`, () => {
@@ -435,10 +433,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(8);
+      expect(component.activateDate.end.getMonth()).toEqual(9);
       expect(component.activateDate.end.getFullYear()).toEqual(2010);
     });
 
@@ -454,10 +452,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2023);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth + 1);
+      expect(component.activateDate.end.getMonth()).toEqual(3);
       expect(component.activateDate.end.getFullYear()).toEqual(2023);
     });
 
@@ -473,10 +471,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2023);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth + 1);
+      expect(component.activateDate.end.getMonth()).toEqual(3);
       expect(component.activateDate.end.getFullYear()).toEqual(2023);
     });
 
@@ -492,10 +490,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2022 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2022);
 
-      expect(component.activateDate.end.getMonth()).toEqual(0);
+      expect(component.activateDate.end.getMonth()).toEqual(1);
       expect(component.activateDate.end.getFullYear()).toEqual(2023);
     });
 
@@ -505,16 +503,16 @@ describe('PoCalendarComponent:', () => {
 
       component.activateDate = { start, end };
 
-      const nextMonth = 0;
+      const nextMonth = 1; // Janeiro em formato 1-indexed
 
       spyOnProperty(component, <any>'isRange').and.returnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2024 }, 'end');
 
-      expect(component.activateDate.start.getMonth()).toEqual(11);
+      expect(component.activateDate.start.getMonth()).toEqual(10);
       expect(component.activateDate.start.getFullYear()).toEqual(2023);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth - 1); // 0 = Janeiro 0-indexed
       expect(component.activateDate.end.getFullYear()).toEqual(2024);
     });
 
@@ -530,10 +528,10 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'start');
 
-      expect(component.activateDate.start.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.start.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(0);
+      expect(component.activateDate.end.getMonth()).toEqual(1);
       expect(component.activateDate.end.getFullYear()).toEqual(2011);
     });
 
@@ -543,16 +541,16 @@ describe('PoCalendarComponent:', () => {
 
       component.activateDate = { start, end };
 
-      const nextMonth = 0;
+      const nextMonth = 1; // Janeiro em formato 1-indexed
 
       spyOnProperty(component, <any>'isRange').and.returnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2011 }, 'end');
 
-      expect(component.activateDate.start.getMonth()).toEqual(11);
+      expect(component.activateDate.start.getMonth()).toEqual(10);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth - 1); // 0 = Janeiro 0-indexed
       expect(component.activateDate.end.getFullYear()).toEqual(2011);
     });
 
@@ -568,11 +566,53 @@ describe('PoCalendarComponent:', () => {
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'end');
 
-      expect(component.activateDate.start.getMonth()).toEqual(8);
+      expect(component.activateDate.start.getMonth()).toEqual(7);
       expect(component.activateDate.start.getFullYear()).toEqual(2010);
 
-      expect(component.activateDate.end.getMonth()).toEqual(nextMonth);
+      expect(component.activateDate.end.getMonth()).toEqual(nextMonth - 1);
       expect(component.activateDate.end.getFullYear()).toEqual(2010);
+    });
+
+    it('onHeaderChange: should use new Date when activateDate.start is not a Date', () => {
+      component.activateDate = { start: 'invalid', end: new Date(2010, 8, 10) } as any;
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      const buildSpy = spyOn(component as any, 'buildDateWithMonthYear').and.callThrough();
+
+      component.onHeaderChange({ month: 5, year: 2010 }, 'start');
+
+      expect(buildSpy).toHaveBeenCalled();
+      expect(buildSpy.calls.mostRecent().args[0] instanceof Date).toBeTrue();
+    });
+
+    it('onHeaderChange: should use new Date when activateDate.end is not a Date', () => {
+      component.activateDate = { start: new Date(2010, 7, 10), end: 'invalid' } as any;
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      const buildSpy = spyOn(component as any, 'buildDateWithMonthYear').and.callThrough();
+
+      component.onHeaderChange({ month: 5, year: 2010 }, 'end');
+
+      expect(buildSpy).toHaveBeenCalled();
+      expect(buildSpy.calls.mostRecent().args[0] instanceof Date).toBeTrue();
+    });
+
+    it('buildDateWithMonthYear: should default day to 1 when baseDate is not a Date', () => {
+      const result = (component as any).buildDateWithMonthYear('invalid', 1, 2024);
+
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(1);
+      expect(result.getDate()).toBe(1);
+    });
+
+    it('buildDateWithMonthYear: should clamp day to last day of target month', () => {
+      const baseDate = new Date(2024, 0, 31);
+
+      const result = (component as any).buildDateWithMonthYear(baseDate, 1, 2024);
+
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(1);
+      expect(result.getDate()).toBe(29);
     });
 
     it(`onHeaderChange: should set activateDate if isRange is false`, () => {
@@ -592,15 +632,56 @@ describe('PoCalendarComponent:', () => {
 
       expect(component.hoverValue).toBe(expectedValue);
     });
+
+    it('onSelectDate: should clear value and emit empty string when selectedDate is empty or undefined', () => {
+      spyOn(component as any, 'updateModel');
+      spyOn(component.change, 'emit');
+      spyOn(component['changeDetector'], 'markForCheck');
+
+      component.value = new Date();
+
+      component.onSelectDate('');
+      expect(component.value).toBeNull();
+      expect(component['updateModel']).toHaveBeenCalledWith('');
+      expect(component.change.emit).toHaveBeenCalledWith('');
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+
+      component.value = new Date();
+
+      component.onSelectDate(undefined);
+      expect(component.value).toBeNull();
+      expect(component['updateModel']).toHaveBeenCalledWith('');
+      expect(component.change.emit).toHaveBeenCalledWith('');
+      expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
+    });
+
+    it('onCloseCalendar: should emit change with current value', () => {
+      const currentValue = new Date(2024, 4, 10);
+
+      component.value = currentValue;
+      spyOn(component.change, 'emit');
+
+      component.onCloseCalendar();
+
+      expect(component.change.emit).toHaveBeenCalledWith(currentValue as any);
+    });
+
+    it('onCloseCalendar: should emit close event', () => {
+      spyOn(component.close, 'emit');
+
+      component.onCloseCalendar();
+
+      expect(component.close.emit).toHaveBeenCalled();
+    });
   });
 
   describe('Templates:', () => {
-    it('should show `po-calendar-range` if isRange is true', () => {
+    it('should show `po-calendar` if isRange is true', () => {
       spyOnProperty(component, 'isRange').and.returnValue(true);
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelector('.po-calendar-range')).toBeTruthy();
+      expect(fixture.debugElement.nativeElement.querySelector('.po-calendar')).toBeTruthy();
     });
 
     it('should show `po-calendar` if isRange is false ', () => {
@@ -611,22 +692,12 @@ describe('PoCalendarComponent:', () => {
       expect(fixture.debugElement.nativeElement.querySelector('.po-calendar')).toBeTruthy();
     });
 
-    it('should show 1 po-calendar-wrapper if isResponsive is true and mode is range', () => {
+    it('should show 1 po-calendar-wrapper when mode is range', () => {
       spyOnProperty(component, 'isRange').and.returnValue(true);
-      spyOnProperty(component, 'isResponsive').and.returnValue(true);
 
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelectorAll('po-calendar-wrapper').length).toBe(1);
-    });
-
-    it('should show 2 po-calendar-wrapper if isResponsive is false and mode is range', () => {
-      spyOnProperty(component, 'isRange').and.returnValue(true);
-      spyOnProperty(component, 'isResponsive').and.returnValue(false);
-
-      fixture.detectChanges();
-
-      expect(fixture.debugElement.nativeElement.querySelectorAll('po-calendar-wrapper').length).toBe(2);
     });
   });
 });

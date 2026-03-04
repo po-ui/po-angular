@@ -5,7 +5,9 @@
     [p-min-date]="minDate"
     [p-max-date]="maxDate"
     [p-mode]="mode"
-    (p-change)="changeEvent('p-change')"
+    [p-size]="size"
+    (p-change)="changeEvent('p-change', $event)"
+    (p-change-month-year)="changeEvent('p-change-month-year', $event)"
   >
   </po-calendar>
 </div>
@@ -13,7 +15,7 @@
 <po-divider />
 
 <div class="po-row">
-  <po-info class="po-md-6" p-label="Model" p-value="{{ calendar | json }}"> </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="infoValue | json"> </po-info>
   <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
@@ -50,10 +52,19 @@
       class="po-md-6"
       name="locales"
       [(ngModel)]="locale"
-      p-columns="4"
+      [p-columns]="4"
       p-help="Select a locale for the calendar"
       p-label="Locale"
       [p-options]="localeOptions"
+    >
+    </po-radio-group>
+    <po-radio-group
+      class="po-md-6"
+      name="size"
+      [(ngModel)]="size"
+      p-label="Size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="sizeOptions"
     >
     </po-radio-group>
   </div>

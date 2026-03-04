@@ -90,6 +90,8 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description

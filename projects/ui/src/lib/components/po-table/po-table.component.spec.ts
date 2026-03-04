@@ -3467,4 +3467,59 @@ describe('PoTableComponent:', () => {
 
     expect(result).toBe(0);
   });
+
+  describe('reapplySort', () => {
+    const mockfilteredItems = { id: 1, name: 'item1' };
+    const mockColumn: any = {
+      property: 'name',
+      ascending: true
+    };
+
+    it('should be sorting applied when there is valid data and configuration', () => {
+      component.filteredItems = [mockfilteredItems];
+      component.sortedColumn = mockColumn;
+
+      spyOn(component, 'sortArray');
+
+      component['reapplySort']();
+
+      expect(component.sortArray).toHaveBeenCalledWith(mockColumn.property, true);
+    });
+
+    it('should not be sorting applied when "filteredItems" is empty', () => {
+      component.filteredItems = [];
+      component.sortedColumn = mockColumn;
+
+      spyOn(component, 'sortArray');
+
+      component['reapplySort']();
+
+      expect(component.sortArray).not.toHaveBeenCalled();
+    });
+
+    it('should not be sorting applied when "sortedColumn" is null', () => {
+      component.filteredItems = [mockfilteredItems];
+      component.sortedColumn = null;
+
+      spyOn(component, 'sortArray');
+
+      component['reapplySort']();
+
+      expect(component.sortArray).not.toHaveBeenCalled();
+    });
+
+    it('should not applied sort when property inside "sortedColumn" is undefined', () => {
+      component.filteredItems = [mockfilteredItems];
+      component.sortedColumn = {
+        property: undefined,
+        ascending: false
+      } as any;
+
+      spyOn(component, 'sortArray');
+
+      component['reapplySort']();
+
+      expect(component.sortArray).not.toHaveBeenCalled();
+    });
+  });
 });

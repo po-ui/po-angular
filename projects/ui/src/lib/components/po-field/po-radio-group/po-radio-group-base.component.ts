@@ -117,6 +117,8 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description

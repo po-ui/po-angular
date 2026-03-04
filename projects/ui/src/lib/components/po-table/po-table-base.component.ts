@@ -576,6 +576,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     }
     this.filteredItems = this.height ? [...this.items] : this.items;
 
+    this.reapplySort();
+
     // timeout necessário para os itens serem refletidos na tabela
     setTimeout(() => this.checkInfiniteScroll());
   }
@@ -1407,4 +1409,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   protected abstract changeHeaderWidth();
 
   protected abstract getDefaultSpacing();
+
+  protected abstract reapplySort();
 }

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Subject } from 'rxjs';
 
-import { SimpleChange, SimpleChanges } from '@angular/core';
+import { SimpleChange, SimpleChanges, TemplateRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { PoThemeA11yEnum, PoThemeService } from '../../services';
 import { PoContainerComponent } from '../po-container';
@@ -66,6 +66,68 @@ describe('PoWidgetComponent with only body', () => {
     const nativeElement = fixture.nativeElement;
     fixture.detectChanges();
     expect(nativeElement.querySelector('.po-widget-no-shadow')).toBeFalsy();
+  });
+
+  describe('avatar', () => {
+    const mockTemplate = {} as TemplateRef<any>;
+
+    it('should return undefined values ​​when the avatar is not defined.', () => {
+      fixture.componentRef.setInput('p-avatar', undefined);
+
+      expect(component.avatarSrc()).toBeUndefined();
+      expect(component.avatarSize()).toBeUndefined();
+      expect(component.avatarCustomTemplate()).toBeUndefined();
+      expect(component.avatarWidthCustomTemplate()).toBeUndefined();
+    });
+
+    it('should be correctly mapped src, size e customTemplate', () => {
+      const mockAvatar = {
+        src: 'path/to/img.png',
+        size: 'md',
+        customTemplate: mockTemplate
+      };
+
+      fixture.componentRef.setInput('p-avatar', mockAvatar);
+
+      expect(component.avatarSrc()).toBe('path/to/img.png');
+      expect(component.avatarSize()).toBe('md');
+      expect(component.avatarCustomTemplate()).toEqual(mockTemplate);
+    });
+
+    describe('avatarWidthCustomTemplate', () => {
+      it('should return the value with the template if width and customTemplate exist.', () => {
+        const mockAvatar = {
+          widthCustomTemplate: '40%',
+          customTemplate: mockTemplate
+        };
+
+        fixture.componentRef.setInput('p-avatar', mockAvatar);
+
+        expect(component.avatarWidthCustomTemplate()).toBe('40%');
+      });
+
+      it('should return undefined if width exists but customTemplate is null.', () => {
+        const mockAvatar = {
+          widthCustomTemplate: '40%',
+          customTemplate: undefined
+        };
+
+        fixture.componentRef.setInput('p-avatar', mockAvatar);
+
+        expect(component.avatarWidthCustomTemplate()).toBeUndefined();
+      });
+
+      it('should return undefined if customTemplate exists but width is null.', () => {
+        const mockAvatar = {
+          widthCustomTemplate: undefined,
+          customTemplate: mockTemplate
+        };
+
+        fixture.componentRef.setInput('p-avatar', mockAvatar);
+
+        expect(component.avatarWidthCustomTemplate()).toBeUndefined();
+      });
+    });
   });
 });
 
@@ -523,7 +585,7 @@ describe('PoWidgetComponent with title and actions', () => {
       component.primaryLabel = undefined;
       component.secondaryLabel = undefined;
       component.setHeight(200);
-      expect(component.containerHeight).toBe(`${148}px`);
+      expect(component.containerHeight).toBe(`${150}px`);
     });
 
     it('should calculate containerHeight correctly with title and actions', () => {
@@ -554,6 +616,188 @@ describe('PoWidgetComponent with title and actions', () => {
       component.secondaryLabel = 'test2';
       component.setHeight(200);
       expect(component.containerHeight).toBe(`${86}px`);
+    });
+
+    describe('calculate containerHeight with tagPosition', () => {
+      beforeEach(() => {
+        component.title = undefined;
+        component.actions = [];
+        component.primaryLabel = undefined;
+        component.secondaryLabel = undefined;
+        component.help = undefined;
+      });
+
+      describe('p-tag-position is top', () => {
+        it('should calculate containerHeight correctly with title', () => {
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${118}px`);
+        });
+
+        it('should calculate containerHeight correctly with title and actions', () => {
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.actions = [{ label: 'Test' }];
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${98}px`);
+        });
+
+        it('should calculate containerHeight correctly with title and primaryLabel', () => {
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.primaryLabel = 'OK';
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${50}px`);
+        });
+
+        it('should calculate containerHeight correctly with title, actions and primaryLabel', () => {
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.actions = [{ label: 'Test' }];
+          component.primaryLabel = 'OK';
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${30}px`);
+        });
+      });
+
+      describe('p-tag-position is top and small', () => {
+        beforeEach(() => {
+          document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+          localStorage.setItem('po-default-size', 'small');
+        });
+
+        afterEach(() => {
+          document.documentElement.removeAttribute('data-a11y');
+          localStorage.removeItem('po-default-size');
+        });
+
+        it('should calculate containerHeight correctly with title', () => {
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${118}px`);
+        });
+
+        it('should calculate containerHeight correctly with title and actions', () => {
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.actions = [{ label: 'Test' }];
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${110}px`);
+        });
+
+        it('should calculate containerHeight correctly with title and primaryLabel', () => {
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.primaryLabel = 'OK';
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${62}px`);
+        });
+
+        it('should calculate containerHeight correctly with title, actions and primaryLabel', () => {
+          fixture.componentRef.setInput('p-tag-position', 'top');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.actions = [{ label: 'Test' }];
+          component.primaryLabel = 'OK';
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${54}px`);
+        });
+      });
+
+      describe('p-tag-position is bottom', () => {
+        it('should calculate containerHeight correctly with title', () => {
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          fixture.componentRef.setInput('p-tag-position', 'bottom');
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${118}px`);
+        });
+
+        it('should calculate containerHeight correctly with title and actions', () => {
+          fixture.componentRef.setInput('p-tag-position', 'bottom');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.actions = [{ label: 'Test' }];
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${98}px`);
+        });
+
+        it('should calculate containerHeight correctly with title and primaryLabel', () => {
+          fixture.componentRef.setInput('p-tag-position', 'bottom');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.primaryLabel = 'OK';
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${50}px`);
+        });
+
+        it('should calculate containerHeight correctly with title, actions and primaryLabel', () => {
+          fixture.componentRef.setInput('p-tag-position', 'bottom');
+          component.title = 'Test';
+          component.tagLabel = 'Sales';
+          component.tagIcon = 'an an-bluetooth';
+          component.actions = [{ label: 'Test' }];
+          component.primaryLabel = 'OK';
+          fixture.detectChanges();
+
+          component.setHeight(200);
+
+          expect(component.containerHeight).toBe(`${30}px`);
+        });
+      });
     });
   });
 

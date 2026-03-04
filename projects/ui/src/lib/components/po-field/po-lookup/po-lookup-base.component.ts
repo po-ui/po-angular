@@ -517,6 +517,8 @@ export abstract class PoLookupBaseComponent
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description

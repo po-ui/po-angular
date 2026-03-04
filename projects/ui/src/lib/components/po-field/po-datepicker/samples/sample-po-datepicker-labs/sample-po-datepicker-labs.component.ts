@@ -39,6 +39,7 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     { value: 'showRequired', label: 'Show Required' },
     { value: 'errorLimit', label: 'Limit Error Message' },
     { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'loading', label: 'Loading' },
     { value: 'compactLabel', label: 'Compact Label' }
   ];
 

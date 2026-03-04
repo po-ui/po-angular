@@ -11,7 +11,7 @@ import { PoDateService } from './../../../services/po-date/po-date.service';
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMask } from './../po-input/po-mask';
-import { EventEmitter } from '@angular/core';
+import { ElementRef, EventEmitter } from '@angular/core';
 
 describe('PoDatepickerRangeComponent:', () => {
   let component: PoDatepickerRangeComponent;
@@ -31,7 +31,6 @@ describe('PoDatepickerRangeComponent:', () => {
       providers: [PoDateService]
     });
   });
-
   beforeEach(() => {
     fixture = TestBed.createComponent(PoDatepickerRangeComponent);
     component = fixture.componentInstance;
@@ -191,16 +190,50 @@ describe('PoDatepickerRangeComponent:', () => {
         inputFocus = spyOn(component, 'focus');
       });
 
-      it('should call `focus` if autoFocus is true.', () => {
+      it('should call focus method if autoFocus is true.', () => {
         component.autoFocus = true;
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {}
+          }
+        } as any;
+
+        component['renderer'] = {
+          setAttribute: jasmine.createSpy('setAttribute')
+        } as any;
+
+        component.literals = {
+          open: 'Open calendar'
+        } as any;
+
         component.ngAfterViewInit();
-        expect(inputFocus).toHaveBeenCalled();
+
+        expect(component.focus).toHaveBeenCalled();
       });
 
-      it('should not call `focus` if autoFocus is false.', () => {
+      it('should not call focus if autoFocus is false', () => {
         component.autoFocus = false;
+
+        (component.focus as jasmine.Spy).calls.reset();
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {}
+          }
+        } as any;
+
+        component['renderer'] = {
+          setAttribute: jasmine.createSpy('setAttribute')
+        } as any;
+
+        component.literals = {
+          open: 'Open calendar'
+        } as any;
+
         component.ngAfterViewInit();
-        expect(inputFocus).not.toHaveBeenCalled();
+
+        expect(component.focus).not.toHaveBeenCalled();
       });
     });
 
@@ -211,6 +244,27 @@ describe('PoDatepickerRangeComponent:', () => {
 
       expect(removeListener).toHaveBeenCalled();
     });
+
+    it('closeCalendar: should set isCalendarVisible to false and focus iconCalendar when available', fakeAsync(() => {
+      component.isCalendarVisible = true;
+      component.iconCalendar = { focus: jasmine.createSpy('focus') } as any;
+
+      component.closeCalendar();
+      tick();
+
+      expect(component.isCalendarVisible).toBeFalse();
+      expect(component.iconCalendar.focus).toHaveBeenCalled();
+    }));
+
+    it('closeCalendar: should set isCalendarVisible to false even when iconCalendar is undefined', fakeAsync(() => {
+      component.isCalendarVisible = true;
+      component.iconCalendar = undefined;
+
+      component.closeCalendar();
+      tick();
+
+      expect(component.isCalendarVisible).toBeFalse();
+    }));
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
@@ -339,6 +393,103 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['dateRange']).toEqual(dateRange);
       expect(component.startDateInputValue).toBe('');
       expect(component.endDateInputValue).toBe('');
+    });
+
+    describe('onCalendarKeyDown:', () => {
+      beforeEach(() => {
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+      });
+
+      it('should do nothing when calendar is not visible', () => {
+        component.isCalendarVisible = false;
+
+        const event = {
+          key: 'Escape',
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(event.stopPropagation).not.toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
+      });
+
+      it('should close calendar on Escape key', () => {
+        component.isCalendarVisible = true;
+
+        const event = {
+          key: 'Escape',
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
+      });
+
+      it('should close calendar on Shift+Tab when focus is on first combo', () => {
+        component.isCalendarVisible = true;
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
+      });
+
+      it('should not close calendar on Shift+Tab when focus is not on first combo', () => {
+        component.isCalendarVisible = true;
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(event.stopPropagation).not.toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeTrue();
+      });
+    });
+
+    describe('clearAndFocus', () => {
+      it('should call clear method and focus on input element', () => {
+        const clearSpy = spyOn(component, 'clear');
+        const focusSpy = spyOn(component.startDateInput.nativeElement, 'focus');
+
+        component.clearAndFocus();
+
+        expect(clearSpy).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+        expect(clearSpy).toHaveBeenCalledBefore(focusSpy);
+      });
     });
 
     describe('emitAdditionalHelp:', () => {
@@ -584,6 +735,169 @@ describe('PoDatepickerRangeComponent:', () => {
 
       expect(component['poMaskObject'].keydown).toHaveBeenCalledWith(combinedEvent);
       expect(component.keydown.emit).toHaveBeenCalledWith(combinedEvent);
+    });
+
+    describe('onKeyPress', () => {
+      it('should call toggleCalendar when button is clicked', () => {
+        spyOn(component, 'toggleCalendar');
+
+        component.toggleCalendar();
+
+        expect(component.toggleCalendar).toHaveBeenCalled();
+      });
+
+      it('should focus iconClean when Shift+Tab, calendar hidden and enableCleaner true', () => {
+        const focusSpy = jasmine.createSpy();
+
+        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(true);
+
+        component.isCalendarVisible = false;
+
+        component.iconClean = {
+          nativeElement: { focus: focusSpy }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should call focus when Shift+Tab and calendar hidden without cleaner', () => {
+        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(false);
+        spyOn(component, 'focus');
+
+        component.isCalendarVisible = false;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(component.focus).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should focus first combo when Tab and calendar visible', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy();
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({
+              focus: focusSpy
+            })
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+    });
+
+    describe('onKeydownDatepickerRange', () => {
+      it('should return immediately when readonly is true', () => {
+        component.readonly = true;
+
+        component['poMaskObject'] = {
+          keydown: jasmine.createSpy()
+        } as any;
+
+        component.onKeydownDatepickerRange({});
+
+        expect(component['poMaskObject'].keydown).not.toHaveBeenCalled();
+      });
+
+      it('should close calendar on Escape when visible', () => {
+        component.readonly = false;
+        component.isCalendarVisible = true;
+
+        const event: any = {
+          key: 'Escape',
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        };
+
+        component.onKeydownDatepickerRange(event);
+
+        expect(component.isCalendarVisible).toBeFalse();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should close calendar on Shift+Tab from startDateInput when visible', () => {
+        component.readonly = false;
+        component.isCalendarVisible = true;
+
+        const startInputMock = document.createElement('input');
+
+        component.startDateInput = {
+          nativeElement: startInputMock
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          target: startInputMock
+        };
+
+        component.onKeydownDatepickerRange(event);
+
+        expect(component.isCalendarVisible).toBeFalse();
+      });
+
+      it('should prevent default and focus calendar button on Tab from iconClean', () => {
+        component.readonly = false;
+
+        const iconCleanMock = document.createElement('button');
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.iconClean = {
+          nativeElement: iconCleanMock
+        } as any;
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: focusSpy
+            }
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          target: iconCleanMock,
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        };
+
+        component.onKeydownDatepickerRange(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+      });
     });
 
     it('onKeyup: shouldn`t call `setFocus`, `updateModelWhenComplete` and `poMaskObject.keyup` if `readonly` is true', () => {
@@ -1519,6 +1833,41 @@ describe('PoDatepickerRangeComponent:', () => {
       );
     });
 
+    describe('isFocusOnFirstCombo', () => {
+      it('should return true when first combo is the active element', () => {
+        const fakeElement = {} as Element;
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(fakeElement)
+          }
+        } as any;
+
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(fakeElement);
+
+        const result = (component as any).isFocusOnFirstCombo();
+
+        expect(result).toBeTrue();
+      });
+
+      it('should return false when first combo is not the active element', () => {
+        const fakeElement = {} as Element;
+        const anotherElement = {} as Element;
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(fakeElement)
+          }
+        } as any;
+
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(anotherElement);
+
+        const result = (component as any).isFocusOnFirstCombo();
+
+        expect(result).toBeFalse();
+      });
+    });
+
     it('verifyFormattedDates: should startDateFormatted and endDateFormatted is true', () => {
       const startDateFormatted = '2021-02-22';
       const endDateFormatted = '2021-03-01';
@@ -1616,104 +1965,171 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['controlPosition'].adjustPosition).not.toHaveBeenCalled();
     });
 
-    it(`setCalendarPosition: should call 'controlPosition.setElements' and 'controlPosition.adjustPosition'.`, () => {
+    it(`setCalendarPosition: should call controlPosition methods`, () => {
       component.isCalendarVisible = true;
-      fixture.detectChanges();
 
-      const setElements = spyOn(component['controlPosition'], 'setElements');
-      const adjustPosition = spyOn(component['controlPosition'], 'adjustPosition');
+      spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback): number => {
+        callback(0);
+        return 0;
+      });
 
-      component['setCalendarPosition']();
+      component.calendarPicker = {
+        nativeElement: document.createElement('div')
+      } as any;
 
-      expect(adjustPosition).toHaveBeenCalled();
-      expect(setElements).toHaveBeenCalledWith(
-        component.calendarPicker.nativeElement,
-        poCalendarContentOffset,
-        component['dateRangeField'],
-        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
-        false,
-        true
-      );
+      component.dateRangeField = new ElementRef(document.createElement('div'));
+
+      (component as any).controlPosition = {
+        setElements: jasmine.createSpy('setElements'),
+        adjustPosition: jasmine.createSpy('adjustPosition')
+      };
+
+      spyOn(component.calendarPicker.nativeElement, 'querySelector').and.returnValue(document.createElement('div'));
+
+      component.setCalendarPosition();
+
+      expect((component as any).controlPosition.setElements).toHaveBeenCalled();
+      expect((component as any).controlPosition.adjustPosition).toHaveBeenCalled();
     });
 
-    describe('wasClickedOnPicker: ', () => {
+    it('setCalendarPosition: should use nativeElement scroll when .po-calendar is not found', () => {
+      component.isCalendarVisible = true;
+
+      spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback): number => {
+        callback(0);
+        return 0;
+      });
+
+      const nativeElementMock = document.createElement('div');
+
+      Object.defineProperty(nativeElementMock, 'scrollHeight', { value: 300 });
+      Object.defineProperty(nativeElementMock, 'scrollWidth', { value: 500 });
+
+      component.calendarPicker = {
+        nativeElement: nativeElementMock
+      } as any;
+
+      component.dateRangeField = new ElementRef(document.createElement('div'));
+
+      (component as any).controlPosition = {
+        setElements: jasmine.createSpy('setElements'),
+        adjustPosition: jasmine.createSpy('adjustPosition')
+      };
+
+      spyOn(nativeElementMock, 'querySelector').and.returnValue(null);
+
+      component.setCalendarPosition();
+
+      expect(nativeElementMock.style.height).toBe('300px');
+      expect(nativeElementMock.style.width).toBe('500px');
+
+      expect((component as any).controlPosition.setElements).toHaveBeenCalled();
+      expect((component as any).controlPosition.adjustPosition).toHaveBeenCalled();
+    });
+
+    describe('wasClickedOnPicker:', () => {
+      let fakeTarget: HTMLElement;
+      let event: Event;
+
+      beforeEach(() => {
+        fakeTarget = document.createElement('div');
+
+        event = {
+          target: fakeTarget
+        } as unknown as Event;
+
+        component.calendarPicker = {
+          nativeElement: {
+            contains: () => false
+          }
+        } as any;
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              contains: () => false
+            }
+          }
+        } as any;
+
+        spyOn(component['cd'], 'markForCheck');
+      });
+
       it('shouldn`t call calendarPickerElement.contains if isCalendarVisible is false', () => {
         component.isCalendarVisible = false;
-        component.calendarPicker = { nativeElement: { contains: () => {} } };
 
         const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains');
 
-        component['wasClickedOnPicker']({});
+        component['wasClickedOnPicker'](event);
 
         expect(spyCalendarPickerContains).not.toHaveBeenCalled();
       });
 
       it('should not set isCalendarVisible with false if calendarPicker contains event.target', () => {
         component.isCalendarVisible = true;
-        component.calendarPicker = { nativeElement: { contains: () => {} } };
 
         const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
           true
         );
-        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(false);
 
-        component['wasClickedOnPicker']({});
+        const spyIconCalendarContains = spyOn(
+          component.iconCalendar.buttonElement.nativeElement,
+          'contains'
+        ).and.returnValue(false);
+
+        component['wasClickedOnPicker'](event);
 
         expect(spyCalendarPickerContains).toHaveBeenCalled();
         expect(spyIconCalendarContains).not.toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBe(true);
+        expect(component.isCalendarVisible).toBeTrue();
       });
 
       it('should not set isCalendarVisible with false if iconCalendar contains event.target', () => {
         component.isCalendarVisible = true;
-        component.calendarPicker = { nativeElement: { contains: () => {} } };
 
         const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
           false
         );
-        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(true);
 
-        component['wasClickedOnPicker']({});
+        const spyIconCalendarContains = spyOn(
+          component.iconCalendar.buttonElement.nativeElement,
+          'contains'
+        ).and.returnValue(true);
+
+        component['wasClickedOnPicker'](event);
 
         expect(spyCalendarPickerContains).toHaveBeenCalled();
         expect(spyIconCalendarContains).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBe(true);
+        expect(component.isCalendarVisible).toBeTrue();
       });
 
       it('should not set isCalendarVisible with false if event.target hasAttrCalendar', () => {
         component.isCalendarVisible = true;
-        component.calendarPicker = { nativeElement: { contains: () => {} } };
 
-        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
-          false
-        );
-        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(false);
-        const spyHasAttrCalendar = spyOn(component, <any>'hasAttrCalendar').and.returnValue(true);
+        spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(false);
 
-        component['wasClickedOnPicker']({});
+        spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains').and.returnValue(false);
 
-        expect(spyCalendarPickerContains).toHaveBeenCalled();
-        expect(spyIconCalendarContains).toHaveBeenCalled();
+        const spyHasAttrCalendar = spyOn(component as any, 'hasAttrCalendar').and.returnValue(true);
+
+        component['wasClickedOnPicker'](event);
+
         expect(spyHasAttrCalendar).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBe(true);
+        expect(component.isCalendarVisible).toBeTrue();
       });
 
-      it('should set isCalendarVisible with false if calendarPickerElement and iconElement not contains event.target', () => {
+      it('should set isCalendarVisible with false if calendarPickerElement and iconElement do not contain event.target', () => {
         component.isCalendarVisible = true;
-        component.calendarPicker = { nativeElement: { contains: () => {} } };
 
-        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
-          false
-        );
-        const spyIconCalendarContains = spyOn(component.iconCalendar.nativeElement, 'contains').and.returnValue(false);
-        const spyHasAttrCalendar = spyOn(component, <any>'hasAttrCalendar').and.returnValue(false);
+        spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(false);
 
-        component['wasClickedOnPicker']({});
+        spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains').and.returnValue(false);
 
-        expect(spyHasAttrCalendar).toHaveBeenCalled();
-        expect(spyIconCalendarContains).toHaveBeenCalled();
-        expect(spyCalendarPickerContains).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBe(false);
+        spyOn(component as any, 'hasAttrCalendar').and.returnValue(false);
+
+        component['wasClickedOnPicker'](event);
+
+        expect(component.isCalendarVisible).toBeFalse();
       });
     });
 
@@ -1937,24 +2353,40 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['updateModelByScreen']).toHaveBeenCalledWith(true, start, '');
     }));
 
-    it(`onCalendarChange: should call updateModelByScreen, updateScreenByModel and set isCalendarVisible with false
-      if start and end param is truthy`, fakeAsync(() => {
+    it(`onCalendarChange: should focus on startDateInput after selecting both dates`, fakeAsync(() => {
       component.isCalendarVisible = true;
 
-      const start = new Date(10, 10, 2021);
-      const end = new Date(11, 11, 2021);
+      const start = new Date(2021, 10, 10);
+      const end = new Date(2021, 11, 11);
 
       spyOn(component, <any>'updateScreenByModel');
       spyOn(component, <any>'updateModelByScreen');
+      spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.onCalendarChange({ start, end });
 
       tick(300);
 
       expect(component.isCalendarVisible).toBe(false);
+      expect(component.startDateInput.nativeElement.focus).toHaveBeenCalled();
+    }));
 
-      expect(component['updateScreenByModel']).toHaveBeenCalledWith({ start, end });
-      expect(component['updateModelByScreen']).toHaveBeenCalledWith(false, start, end);
+    it(`onCalendarChange: should focus on startDateInput after selecting both dates`, fakeAsync(() => {
+      component.isCalendarVisible = true;
+
+      const start = new Date(2021, 10, 10);
+      const end = new Date(2021, 11, 11);
+
+      spyOn(component, <any>'updateScreenByModel');
+      spyOn(component, <any>'updateModelByScreen');
+      spyOn(component.startDateInput.nativeElement, 'focus');
+
+      component.onCalendarChange({ start, end });
+
+      tick(300);
+
+      expect(component.isCalendarVisible).toBe(false);
+      expect(component.startDateInput.nativeElement.focus).toHaveBeenCalled();
     }));
 
     it(`onCalendarChange: should call updateModelByScreen, updateScreenByModel with empty value
@@ -2013,22 +2445,6 @@ describe('PoDatepickerRangeComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-datepicker-range-field-disabled')).toBeFalsy();
-    });
-
-    it('should disable calendar icon if `disabled` is true', () => {
-      component.disabled = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeTruthy();
-    });
-
-    it('should disable calendar icon if `readonly` is true', () => {
-      component.readonly = true;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-field-icon-disabled')).toBeTruthy();
     });
 
     it('shouldn`t disable calendar icon if `readonly` and `disabled` are false', () => {

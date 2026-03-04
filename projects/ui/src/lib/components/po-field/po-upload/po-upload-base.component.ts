@@ -276,6 +276,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @Input('p-label') label?: string;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description

@@ -101,6 +101,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description

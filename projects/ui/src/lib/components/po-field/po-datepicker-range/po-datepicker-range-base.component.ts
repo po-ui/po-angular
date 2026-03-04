@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Directive, EventEmitter, input, Input, OnDestroy, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  input,
+  Input,
+  OnDestroy,
+  Output
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, Validators } from '@angular/forms';
 import { Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -11,6 +20,7 @@ import {
   convertIsoToDate,
   convertToBoolean,
   getDefaultSizeFn,
+  mapInputSizeToLoadingIcon,
   replaceFormatSeparator,
   setYearFrom0To100,
   validateDateRange,
@@ -114,6 +124,46 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   * Define se o título do campo será exibido de forma compacta.
+   *
+   * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:
+   * - `po-label`
+   * - `p-requirement (showRequired)`
+   * - `po-helper`
+   *
+   * Ou seja, todos os elementos relacionados ao título do campo
+   * (rótulo, indicador de obrigatoriedade e componente auxiliar) passam
+   * a seguir o comportamento de layout compacto.
+   *
+   * Também é possível definir esse comportamento de forma global,
+   * uma única vez, na folha de estilo geral da aplicação, por meio
+   * da customização dos tokens CSS:
+   *
+   * - `--field-container-title-justify`
+   * - `--field-container-title-flex`
+   *
+   * Exemplo:
+   *
+   * ```
+   * :root {
+   *   --field-container-title-justify: flex-start;
+   *   --field-container-title-flex: 0 1 auto;
+   * }
+   * ```
+   *
+   * Dessa forma, o layout compacto passa a ser o padrão da aplicação,
+   * sem a necessidade de definir a propriedade individualmente em cada campo.
+   *
+   * @default `false`
+   */
+  compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
+
+  /**
    * @optional
    *
    * @description
@@ -183,6 +233,31 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    * @default `false`
    */
   @Input('p-optional') optional: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Mensagem que aparecerá enquanto o campo não estiver preenchido.
+   */
+  @Input('p-placeholder')
+  set placeholder(value: string | PoDatepickerRange) {
+    if (typeof value === 'string') {
+      this._placeholder = { start: value, end: value };
+    } else if (value && typeof value === 'object') {
+      this._placeholder = {
+        start: value.start || '',
+        end: value.end || ''
+      };
+    } else {
+      this._placeholder = { start: '', end: '' };
+    }
+  }
+
+  get placeholder(): PoDatepickerRange {
+    return this._placeholder;
+  }
 
   /**
    * @optional
@@ -290,9 +365,11 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   private _noAutocomplete?: boolean = false;
   private _readonly: boolean = false;
   private _required?: boolean = false;
+  private _loading?: boolean = false;
   private _startDate?;
   private _locale?: string;
   private _size?: string = undefined;
+  private _placeholder: PoDatepickerRange = { start: '', end: '' };
 
   private language;
   private onChangeModel: any;
@@ -407,6 +484,27 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
 
   get literals() {
     return this._literals || poDatepickerRangeLiteralsDefault[this.language];
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   *
+   * @default `false`
+   */
+  @Input('p-loading') set loading(value: boolean) {
+    this._loading = convertToBoolean(value);
+    this.changeDetector?.markForCheck();
+  }
+
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /**
@@ -534,7 +632,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
+  @HostBinding('attr.p-size')
+  @Input('p-size')
+  set size(value: string) {
     this._size = validateSizeFn(value, PoFieldSize);
   }
 
@@ -605,6 +705,11 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
     this.changeDetector.markForCheck();
+  }
+
+  //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
+  mapSizeToIcon(size: string): string {
+    return mapInputSizeToLoadingIcon(size);
   }
 
   // Função implementada do ControlValueAccessor

@@ -83,4 +83,59 @@ describe('PoCalendarLangService:', () => {
 
     expect(service.getWeekDaysArray().toString()).toBe(weekDays.toString());
   });
+
+  it('should get today label in Portuguese', () => {
+    service['language'] = 'pt';
+    expect(service.getTodayLabel()).toBe('Hoje');
+  });
+
+  it('should get today label in English', () => {
+    service['language'] = 'en';
+    expect(service.getTodayLabel()).toBe('Today');
+  });
+
+  it('should get previous month label in Portuguese', () => {
+    service['language'] = 'pt';
+    expect(service.getPreviousMonthLabel()).toBe('Mês anterior');
+  });
+
+  it('should get previous month label in English', () => {
+    service['language'] = 'en';
+    expect(service.getPreviousMonthLabel()).toBe('Previous month');
+  });
+
+  it('should get previous month label in Spanish', () => {
+    service['language'] = 'es';
+    expect(service.getPreviousMonthLabel()).toBe('Mes anterior');
+  });
+
+  it('should get previous month label in Russian', () => {
+    service['language'] = 'ru';
+    expect(service.getPreviousMonthLabel()).toBe('Предыдущий месяц');
+  });
+
+  it('should get next month label in Portuguese', () => {
+    service['language'] = 'pt';
+    expect(service.getNextMonthLabel()).toBe('Próximo mês');
+  });
+
+  it('should get next month label in English', () => {
+    service['language'] = 'en';
+    expect(service.getNextMonthLabel()).toBe('Next month');
+  });
+
+  it('should get next month label in Spanish', () => {
+    service['language'] = 'es';
+    expect(service.getNextMonthLabel()).toBe('Próximo mes');
+  });
+
+  it('should get next month label in Russian', () => {
+    service['language'] = 'ru';
+    expect(service.getNextMonthLabel()).toBe('Следующий месяц');
+  });
+
+  it('should get to clean label in Portuguese', () => {
+    service['language'] = 'pt';
+    expect(service.getToCleanLabel()).toBe('Limpar');
+  });
 });

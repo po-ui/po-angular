@@ -12,6 +12,43 @@
   >
     <po-info [p-label]="label" [p-value]="value"> </po-info>
   </po-widget>
+
+  <po-widget
+    p-title="Apps Enterprise"
+    p-tag="Angular v17+"
+    p-tag-position="top"
+    class="po-lg-6"
+    p-height="300"
+    p-help="https://angular.dev/"
+    [p-avatar]="{ customTemplate: avatar, widthCustomTemplate: '40%' }"
+  >
+    <div>
+      Angular: The default choice for large-scale applications, such as banking and government systems, due to its
+      structured architecture and native TypeScript support.
+      <div class="po-pl-3 po-pt-1">
+        <ul>
+          <li>Out-of-the-Box</li>
+          <li>Standardized and Opinion-Based Architecture</li>
+          <li>Next Generation Reactivity (Signals)</li>
+          <li>Focus on Enterprise and Security</li>
+        </ul>
+      </div>
+    </div>
+
+    <ng-template #avatar>
+      <po-chart
+        p-height="260"
+        [p-options]="{
+          header: { hideExpand: true, hideExportCsv: true, hideExportImage: true, hideTableDetails: true }
+        }"
+        [p-series]="[
+          { label: 'Angular', data: 100 },
+          { label: 'React', data: 10 }
+        ]"
+      >
+      </po-chart>
+    </ng-template>
+  </po-widget>
 </div>
 
 <po-modal p-title="Javascript Technologies">

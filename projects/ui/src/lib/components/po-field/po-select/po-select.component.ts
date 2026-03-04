@@ -171,6 +171,8 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   @Input({ alias: 'p-readonly', transform: convertToBoolean }) readonly: boolean = false;
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
