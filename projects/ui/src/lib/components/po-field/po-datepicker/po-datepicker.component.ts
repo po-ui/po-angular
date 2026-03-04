@@ -344,10 +344,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     const date = this.inputEl.nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
-    this.objMask.blur($event);
+    this.objMask?.blur($event);
     this.onblur.emit();
 
-    if (this.objMask.valueToModel) {
+    if (this.objMask?.valueToModel) {
       if (this.objMask.valueToModel.length >= 10) {
         this.controlModel(newDate);
         this.date = newDate;
