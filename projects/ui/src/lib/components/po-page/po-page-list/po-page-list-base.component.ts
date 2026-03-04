@@ -91,8 +91,8 @@ export abstract class PoPageListBaseComponent {
 
   private _actions?: Array<PoPageAction> = [];
   private _disclaimerGroup?: PoDisclaimerGroup;
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _literals: PoPageListLiterals;
   private _title: string;
 

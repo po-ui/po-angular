@@ -66,8 +66,8 @@ export class PoTreeViewBaseComponent {
    */
   @Output('p-unselected') unselected = new EventEmitter<PoTreeViewItem>();
 
-  private _initialComponentsSize: string = undefined;
   private _componentsSize: string = undefined;
+  private _initialComponentsSize: string = undefined;
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
   private _maxLevel = poTreeViewMaxLevel;

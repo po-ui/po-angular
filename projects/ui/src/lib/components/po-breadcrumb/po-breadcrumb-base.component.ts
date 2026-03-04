@@ -115,8 +115,8 @@ export class PoBreadcrumbBaseComponent {
   protected resizeListener: () => void;
 
   private _items: Array<PoBreadcrumbItem> = [];
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * @description

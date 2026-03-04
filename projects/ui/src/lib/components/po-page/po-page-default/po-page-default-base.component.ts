@@ -56,8 +56,8 @@ export abstract class PoPageDefaultBaseComponent {
   protected language: string;
 
   private _actions?: Array<PoPageAction> = [];
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
   private _title: string;
 

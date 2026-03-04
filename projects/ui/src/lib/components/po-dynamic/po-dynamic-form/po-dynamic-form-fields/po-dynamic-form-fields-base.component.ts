@@ -29,8 +29,8 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   @Input('p-validate-on-input') validateOnInput: boolean;
 
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;
   private _value?: any = {};

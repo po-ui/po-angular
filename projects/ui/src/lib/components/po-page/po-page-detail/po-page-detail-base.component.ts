@@ -95,8 +95,8 @@ export class PoPageDetailBaseComponent {
    */
   @Output('p-remove') remove = new EventEmitter();
 
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDetailLiterals;
   private _title: string;
   private language: string;

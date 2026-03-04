@@ -106,8 +106,8 @@ export abstract class PoMenuBaseComponent {
   readonly literals: any;
 
   private _collapsed = false;
-  private _initialComponentsSize: string = undefined;
   private _componentsSize: string = undefined;
+  private _initialComponentsSize: string = undefined;
   private _filter = false;
   private _searchTreeItems = false;
   private _level;

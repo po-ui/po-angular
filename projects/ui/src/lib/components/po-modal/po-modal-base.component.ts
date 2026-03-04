@@ -70,8 +70,8 @@ export class PoModalBaseComponent {
 
   // Event emmiter para quando a modal é fechada pelo 'X'.
   public onXClosed = new EventEmitter<boolean>();
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _hideClose?: boolean = false;
   private _size?: string = 'md';
 

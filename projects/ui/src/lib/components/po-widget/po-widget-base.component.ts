@@ -67,8 +67,8 @@ const PO_WIDGET_TAG_POSITION_DEFAULT = 'right';
  */
 @Directive()
 export class PoWidgetBaseComponent {
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /** Descrição da segunda ação. */
   /**

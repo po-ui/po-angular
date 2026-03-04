@@ -27,7 +27,6 @@ export class PoInfoBaseComponent {
 
   private _labelSize: number;
   private _orientation: PoInfoOrientation = poInfoOrientationDefault;
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
 

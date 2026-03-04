@@ -136,8 +136,8 @@ export class PoCalendarBaseComponent {
   private _maxDate: Date;
   private _minDate: Date;
   private _mode: PoCalendarMode;
-  private _initialSize?: string;
   private _size?: string;
+  private _initialSize?: string;
 
   /**
    * @optional
