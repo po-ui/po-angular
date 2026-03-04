@@ -488,7 +488,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       setTimeout(() => {
         const activeElement = document.activeElement;
 
-        if (activeElement instanceof Node && !this.elementRef.nativeElement.contains(activeElement)) {
+        if (!this.elementRef.nativeElement.contains(activeElement)) {
           setTimeout(() => {
             this.restoreOriginalDisplay();
           }, 200);

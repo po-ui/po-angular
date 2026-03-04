@@ -20,6 +20,8 @@ describe('PoCalendarWrapperComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoCalendarWrapperComponent);
     component = fixture.componentInstance;
+    spyOn(component.cdr, 'markForCheck');
+    spyOn(component.cdr, 'detectChanges');
   });
 
   it('should create', () => {
@@ -189,7 +191,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('deve incrementar comboKey e chamar cdr.detectChanges() quando o locale mudar (e não for a primeira mudança)', () => {
       const initialComboKey = component.comboKey;
-      const cdrSpy = spyOn((component as any).cdr, 'detectChanges');
+      const cdrSpy = component.cdr.detectChanges as jasmine.Spy;
 
       spyOn(component as any, 'updateTemplateContext');
 
@@ -216,8 +218,6 @@ describe('PoCalendarWrapperComponent', () => {
       spyOn(component['poCalendarLangService'], 'getTodayLabel').and.returnValue('Hoje');
       spyOn(component['poCalendarLangService'], 'getToCleanLabel').and.returnValue('Limpar');
       spyOn(component['poCalendarService'], 'getYearOptions').and.returnValue([]);
-      spyOn(component.cdr, 'markForCheck');
-
       component['_locale'] = 'en';
       component['setupOptions']();
 
@@ -259,8 +259,6 @@ describe('PoCalendarWrapperComponent', () => {
         { label: '2021', value: 2021 }
       ];
 
-      spyOn(component.cdr, 'markForCheck');
-
       (component as any).updateTemplateContext();
 
       const yearsOptions = component.templateContext.yearsOptions;
@@ -275,8 +273,6 @@ describe('PoCalendarWrapperComponent', () => {
         { label: '2020', value: 2020 },
         { label: '2021', value: 2021 }
       ];
-
-      spyOn(component.cdr, 'markForCheck');
 
       (component as any).updateTemplateContext();
 
@@ -360,16 +356,12 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`updateDisplay: should return early when year is undefined`, () => {
-      spyOn(component.cdr, 'detectChanges');
-
       component['updateDisplay'](undefined, 5);
 
       expect(component.cdr.detectChanges).not.toHaveBeenCalled();
     });
 
     it(`updateDisplay: should return early when month is undefined`, () => {
-      spyOn(component.cdr, 'detectChanges');
-
       component['updateDisplay'](2024, undefined);
 
       expect(component.cdr.detectChanges).not.toHaveBeenCalled();
@@ -470,9 +462,6 @@ describe('PoCalendarWrapperComponent', () => {
       const day = new Date(2024, 5, 10);
 
       spyOn(component.closeCalendar, 'emit');
-      spyOn(component.cdr, 'markForCheck');
-      spyOn(component.cdr, 'detectChanges');
-
       component.range = true;
       component.onDayKeydown(eventWithShift, day, 0);
 
@@ -581,8 +570,6 @@ describe('PoCalendarWrapperComponent', () => {
       spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
       spyOn(component as any, 'findNextAvailableDay').and.returnValue(1);
       spyOn(component as any, 'focusElement');
-      spyOn(component.cdr, 'detectChanges');
-
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
       expect(result).toBeTrue();
@@ -1413,9 +1400,6 @@ describe('PoCalendarWrapperComponent', () => {
       const month = 2;
 
       spyOn(component['poCalendarService'], 'monthDays').and.returnValue([...monthDays]);
-      spyOn(component.cdr, 'markForCheck');
-      spyOn(component.cdr, 'detectChanges');
-
       component['updateDisplay'](year, month);
 
       expect(component['displayDays']).toEqual(monthDays);
@@ -1430,9 +1414,6 @@ describe('PoCalendarWrapperComponent', () => {
 
       spyOn(component['poCalendarService'], 'monthDays').and.returnValue([...monthDays]);
       spyOn(component, <any>'getDecadeArray');
-      spyOn(component.cdr, 'markForCheck');
-      spyOn(component.cdr, 'detectChanges');
-
       component['updateDisplay'](year, month);
 
       expect(component.displayMonthNumber).toEqual(month);
@@ -1483,8 +1464,6 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`onClear: should call 'selectDate.emit' with undefined`, () => {
       spyOn(component.selectDate, 'emit');
-      spyOn(component.cdr, 'detectChanges');
-
       component['onClear']();
 
       expect(component.selectDate.emit).toHaveBeenCalledWith(undefined);
@@ -1497,7 +1476,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2)];
 
       const emitSpy = spyOn(component.selectDate, 'emit');
-      const detectSpy = spyOn(component.cdr, 'detectChanges');
+      const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
       spyOn(component, 'isDayDisabled').and.callFake((date: Date) => date.getDate() === 1);
 
@@ -1515,7 +1494,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2)];
 
       const emitSpy = spyOn(component.selectDate, 'emit');
-      const detectSpy = spyOn(component.cdr, 'detectChanges');
+      const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
       spyOn(component, 'isDayDisabled').and.returnValue(true);
 
@@ -1558,8 +1537,6 @@ describe('PoCalendarWrapperComponent', () => {
         const event = { key: 'Enter', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
 
         spyOn(component, 'onSelectDate');
-        spyOn(component.cdr, 'detectChanges');
-
         component.onDayKeydown(event, date, 5);
 
         expect(component.onSelectDate).toHaveBeenCalledWith(date);
@@ -1591,7 +1568,7 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = 10;
 
         const event = { key: 'ArrowUp', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = spyOn(component.cdr, 'detectChanges');
+        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
         component.onDayKeydown(event, component.displayDays[10], 10);
 
@@ -1611,7 +1588,7 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = 3;
 
         const event = { key: 'ArrowUp', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = spyOn(component.cdr, 'detectChanges');
+        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
         component.onDayKeydown(event, component.displayDays[3], 3);
 
@@ -1628,7 +1605,7 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayYear = 2024;
         component.focusedDayIndex = 10;
         const event = { key: 'ArrowDown', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = spyOn(component.cdr, 'detectChanges');
+        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
         component.onDayKeydown(event, component.displayDays[10], 10);
 
@@ -1648,7 +1625,7 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = 25;
 
         const event = { key: 'ArrowDown', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = spyOn(component.cdr, 'detectChanges');
+        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
         component.onDayKeydown(event, component.displayDays[25], 25);
 
@@ -1678,7 +1655,7 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = 25;
 
         const event = { key: 'ArrowLeft', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = spyOn(component.cdr, 'detectChanges');
+        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
 
         component.onDayKeydown(event, component.displayDays[25], 25);
 
@@ -2256,8 +2233,6 @@ describe('PoCalendarWrapperComponent', () => {
           const focusSpy = spyOn(mockElement, 'focus');
 
           spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-          spyOn(component.cdr, 'detectChanges');
-
           component['focusOnSameDayAndWeek'](10, 8);
 
           tick();
@@ -2290,8 +2265,6 @@ describe('PoCalendarWrapperComponent', () => {
           const focusSpy = spyOn(mockElement, 'focus');
 
           spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-          spyOn(component.cdr, 'detectChanges');
-
           component['focusOnSameDayAndWeek'](30, 10);
 
           tick();
@@ -2375,8 +2348,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusOnSameDayAndWeek'](4, 24);
 
         tick();
@@ -2409,8 +2380,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusOnSameDayAndWeek'](30, 3);
 
         tick();
@@ -2459,7 +2428,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
         const getFirstAvailableSpy = spyOn(component as any, 'getFirstAvailableDayInWeek').and.returnValue(7);
 
         component['focusOnSameDayAndWeek'](9, 1);
@@ -2491,8 +2459,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusElement'](5);
 
         jasmine.clock().tick(0);
@@ -2505,8 +2471,6 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should not call focus() when element is not found', () => {
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(null);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusElement'](10);
 
         jasmine.clock().tick(0);
@@ -2519,8 +2483,6 @@ describe('PoCalendarWrapperComponent', () => {
       it('should handle element that is not an HTMLElement', () => {
         const mockElement = { focus: jasmine.createSpy('focus') } as unknown as HTMLElement;
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusElement'](3);
 
         jasmine.clock().tick(0);
@@ -2535,8 +2497,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusElement'](0);
 
         jasmine.clock().tick(0);
@@ -2551,8 +2511,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
-
         component['focusElement'](365);
 
         jasmine.clock().tick(0);
@@ -2569,7 +2527,6 @@ describe('PoCalendarWrapperComponent', () => {
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(component.cdr, 'detectChanges');
         spyOn(window, 'setTimeout').and.callThrough();
 
         component['focusElement'](7);
@@ -2635,7 +2592,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should increment comboKey and call detectChanges if the locale changes after the first time', () => {
-      const spyCdr = spyOn((component as any).cdr, 'detectChanges');
+      const spyCdr = component.cdr.detectChanges as jasmine.Spy;
       component.comboKey = 0;
 
       const changes: SimpleChanges = {
@@ -2871,7 +2828,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   describe('selectDisplayMode', () => {
     it('deve atualizar mode, salvar lastDisplay e disparar detectChanges', () => {
-      const cdrSpy = spyOn(component.cdr, 'detectChanges');
+      const cdrSpy = component.cdr.detectChanges as jasmine.Spy;
       component.mode = 'day';
 
       component.selectDisplayMode('month');
@@ -3777,8 +3734,6 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [new Date(2026, 1, 25), new Date(2026, 1, 26), today, new Date(2026, 1, 28)];
       spyOn(component, 'onSelectDate');
       spyOn(component as any, 'updateDisplay');
-      spyOn(component.cdr, 'detectChanges');
-
       component.onSelectToday();
 
       expect(component.onSelectDate).toHaveBeenCalledWith(today);
@@ -3795,8 +3750,6 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [today];
       spyOn(component, 'onSelectDate');
       const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
-      spyOn(component.cdr, 'detectChanges');
-
       component.onSelectToday();
 
       expect(updateDisplaySpy).not.toHaveBeenCalled();
@@ -3813,8 +3766,6 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [new Date(2026, 1, 25), new Date(2026, 1, 26)];
       component.focusedDayIndex = 5;
       spyOn(component, 'onSelectDate');
-      spyOn(component.cdr, 'detectChanges');
-
       component.onSelectToday();
 
       expect(component.onSelectDate).toHaveBeenCalledWith(today);
