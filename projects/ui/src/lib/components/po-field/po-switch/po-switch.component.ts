@@ -198,7 +198,6 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    */
   compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
-
   /**
    * @optional
    *

@@ -161,7 +161,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
-
   /**
    * @optional
    *

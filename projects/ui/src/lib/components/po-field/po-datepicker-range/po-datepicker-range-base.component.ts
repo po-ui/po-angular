@@ -163,7 +163,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    */
   compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
-
   /**
    * @optional
    *

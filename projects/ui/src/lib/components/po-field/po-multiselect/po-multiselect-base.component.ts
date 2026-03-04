@@ -199,7 +199,6 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    */
   compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
 
-
   /**
    * @optional
    *
