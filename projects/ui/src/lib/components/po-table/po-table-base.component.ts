@@ -500,8 +500,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   initialized = false;
   fixedLayout: boolean = false;
   private initialVisibleColumns: boolean = false;
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _spacing: PoTableColumnSpacing;
   private _filteredColumns: Array<string>;
   private _actions?: Array<PoTableAction> = [];

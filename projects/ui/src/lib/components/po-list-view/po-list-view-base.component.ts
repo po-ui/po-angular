@@ -95,8 +95,8 @@ export class PoListViewBaseComponent {
   showHeader: boolean = false;
 
   private _actions: Array<PoListViewAction>;
-  private _initialComponentsSize: string = undefined;
   private _componentsSize: string = undefined;
+  private _initialComponentsSize: string = undefined;
   private _height: number;
   private _hideSelectAll: boolean;
   private _items: Array<any>;

@@ -69,8 +69,8 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   // Atributo para armazenar a referencia do componente criado via serviço.
   private componentRef: ComponentRef<PoDialogComponent>;
   private closeSubscription: Subscription;
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
 
   private language: string;
 

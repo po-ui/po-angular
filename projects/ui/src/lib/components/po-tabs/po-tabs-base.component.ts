@@ -42,8 +42,8 @@ import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
  */
 @Directive()
 export class PoTabsBaseComponent {
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /**
    * @optional

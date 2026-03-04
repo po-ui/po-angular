@@ -75,8 +75,8 @@ export class PoDropdownBaseComponent {
 
   private _actions: Array<PoDropdownAction>;
   private _disabled: boolean = false;
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoDropdownAction>) {

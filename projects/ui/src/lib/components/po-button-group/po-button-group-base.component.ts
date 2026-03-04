@@ -75,8 +75,8 @@ export class PoButtonGroupBaseComponent {
    */
   readonly buttons = input<Array<PoButtonGroupItem>>([], { alias: 'p-buttons' });
 
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
 

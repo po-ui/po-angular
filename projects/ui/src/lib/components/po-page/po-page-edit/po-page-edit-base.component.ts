@@ -102,8 +102,8 @@ export class PoPageEditBaseComponent {
    */
   @Output('p-save-new') saveNew = new EventEmitter();
 
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _literals: PoPageEditLiterals;
   private _title: string;
   private language: string;

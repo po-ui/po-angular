@@ -73,6 +73,12 @@ describe('PoDynamicFormBaseComponent:', () => {
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
     });
 
     it('p-group-from: should set property to `false` if aren`t valid values', () => {

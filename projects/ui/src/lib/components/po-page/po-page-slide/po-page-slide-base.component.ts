@@ -150,8 +150,8 @@ export class PoPageSlideBaseComponent {
   // Controla se a página está ou não oculta, por padrão é oculto.
   public hidden = true;
 
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _size = 'md';
 
   /**

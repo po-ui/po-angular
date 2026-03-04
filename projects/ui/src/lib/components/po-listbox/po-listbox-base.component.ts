@@ -41,8 +41,8 @@ export class PoListBoxBaseComponent {
   private _type!: PoItemListType;
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
-  private _initialSize?: string = undefined;
   private _size?: string = undefined;
+  private _initialSize?: string = undefined;
 
   @Input('p-listbox-subitems') listboxSubitems = false;
 

@@ -59,8 +59,8 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
   @Input('p-load') load: string | Function;
 
   service: any;
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _fields: Array<PoDynamicViewField> = [];
   private _showAllValue: boolean = false;
   private _value = {};

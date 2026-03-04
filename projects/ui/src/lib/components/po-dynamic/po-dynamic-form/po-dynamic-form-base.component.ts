@@ -201,8 +201,8 @@ export class PoDynamicFormBaseComponent {
    */
   @Input('p-validate-fields') validateFields?: Array<string>;
 
-  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
+  private _initialComponentsSize?: string = undefined;
   private _groupForm?: boolean = false;
 
   /**
