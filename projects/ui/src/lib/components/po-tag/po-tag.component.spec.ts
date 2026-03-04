@@ -355,6 +355,10 @@ describe('PoTagComponent:', () => {
     const darkColor = 'rgb(26, 26, 26)';
     const lightColor = 'rgb(255, 255, 255)';
 
+    beforeEach(() => {
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => 0);
+    });
+
     function mockGetComputedStyle(backgroundColor: string) {
       spyOn(window, 'getComputedStyle').and.returnValue({
         backgroundColor: backgroundColor,
