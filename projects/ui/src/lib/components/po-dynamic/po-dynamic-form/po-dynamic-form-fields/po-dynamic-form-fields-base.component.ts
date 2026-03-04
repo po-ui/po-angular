@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 import { getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../../utils/util';
 
@@ -29,18 +29,31 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   @Input('p-validate-on-input') validateOnInput: boolean;
 
+  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
   private _fields: Array<PoDynamicFormField>;
   private _validateFields: Array<string>;
   private _value?: any = {};
 
   // Define o tamanho dos componentes de formulário.
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 
   // array de objetos que implementam a interface PoDynamicFormField, que serão exibidos no componente.

@@ -500,6 +500,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   initialized = false;
   fixedLayout: boolean = false;
   private initialVisibleColumns: boolean = false;
+  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
   private _spacing: PoTableColumnSpacing;
@@ -557,6 +558,16 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 
   /**

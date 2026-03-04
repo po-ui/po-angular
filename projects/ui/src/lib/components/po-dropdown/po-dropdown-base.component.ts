@@ -128,7 +128,7 @@ export class PoDropdownBaseComponent {
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
-  
+
   @HostListener('window:PoUiThemeChange')
   protected onThemeChange(): void {
     this.applySizeBasedOnA11y();

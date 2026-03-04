@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -102,6 +102,7 @@ export class PoPageEditBaseComponent {
    */
   @Output('p-save-new') saveNew = new EventEmitter();
 
+  private _initialComponentsSize?: string = undefined;
   private _componentsSize?: string = undefined;
   private _literals: PoPageEditLiterals;
   private _title: string;
@@ -121,12 +122,24 @@ export class PoPageEditBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-components-size') set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+  set componentsSize(value: string) {
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 
   /**

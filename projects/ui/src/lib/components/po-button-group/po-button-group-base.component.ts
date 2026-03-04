@@ -75,6 +75,7 @@ export class PoButtonGroupBaseComponent {
    */
   readonly buttons = input<Array<PoButtonGroupItem>>([], { alias: 'p-buttons' });
 
+  private _initialSize?: string = undefined;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
 
@@ -125,6 +126,16 @@ export class PoButtonGroupBaseComponent {
   @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {

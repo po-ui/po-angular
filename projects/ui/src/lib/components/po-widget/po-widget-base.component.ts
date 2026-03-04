@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, input, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, input, Input, Output, TemplateRef } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoPopupAction } from '../po-popup';
@@ -67,6 +67,7 @@ const PO_WIDGET_TAG_POSITION_DEFAULT = 'right';
  */
 @Directive()
 export class PoWidgetBaseComponent {
+  private _initialSize?: string = undefined;
   private _size?: string = undefined;
 
   /** Descrição da segunda ação. */
@@ -226,12 +227,25 @@ export class PoWidgetBaseComponent {
    *
    * @default `medium`
    */
-  @Input({ alias: 'p-size' }) set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   /**
