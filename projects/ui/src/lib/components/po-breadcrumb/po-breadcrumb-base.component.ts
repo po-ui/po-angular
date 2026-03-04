@@ -1,4 +1,4 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
@@ -115,6 +115,7 @@ export class PoBreadcrumbBaseComponent {
   protected resizeListener: () => void;
 
   private _items: Array<PoBreadcrumbItem> = [];
+  private _initialSize?: string = undefined;
   private _size?: string = undefined;
 
   /**
@@ -151,14 +152,25 @@ export class PoBreadcrumbBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size')
-  @Input('p-size')
   set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   private transformToArrayPopup(items: Array<PoBreadcrumbItem>) {

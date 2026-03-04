@@ -1,0 +1,175 @@
+<div style="padding: 16px;">
+  <!-- Controls -->
+  <div style="display: flex; gap: 16px; margin-bottom: 24px; align-items: center; background: #f0f0f0; padding: 16px; border-radius: 8px;">
+    <h3 style="margin: 0;">Controles:</h3>
+    <po-button p-label="Alternar A11y: {{ a11yLabel }}" (p-click)="toggleA11y()"></po-button>
+    <po-button p-label="Tema: {{ themeLabel }}" (p-click)="toggleTheme()"></po-button>
+    <po-button p-label="Abrir Modal" (p-click)="openModal()"></po-button>
+    <po-button p-label="Abrir Page Slide" (p-click)="openPageSlide()"></po-button>
+    <span><strong>Status:</strong> {{ isSmallSize ? 'AA (small)' : 'AAA (medium)' }}</span>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- SECAO 1: Componentes reativos da parte 1 (p-size) -->
+  <!-- ============================================== -->
+  <h2>Parte 1 - Componentes reativos (p-size) - ja implementados</h2>
+
+  <div class="po-row">
+    <po-input class="po-md-6" p-label="po-input" p-help="Helper do input" [(ngModel)]="inputValue"></po-input>
+    <po-email class="po-md-6" p-label="po-email" p-help="Helper do email" [(ngModel)]="emailValue"></po-email>
+  </div>
+
+  <div class="po-row">
+    <po-password class="po-md-6" p-label="po-password" p-help="Helper do password" [(ngModel)]="passwordValue"></po-password>
+    <po-url class="po-md-6" p-label="po-url" p-help="Helper da URL" [(ngModel)]="urlValue"></po-url>
+  </div>
+
+  <div class="po-row">
+    <po-login class="po-md-6" p-label="po-login" p-help="Helper do login" [(ngModel)]="loginValue"></po-login>
+    <po-number class="po-md-6" p-label="po-number" p-help="Helper do number" [(ngModel)]="numberValue"></po-number>
+  </div>
+
+  <div class="po-row">
+    <po-decimal class="po-md-6" p-label="po-decimal" p-help="Helper do decimal" [(ngModel)]="decimalValue"></po-decimal>
+    <po-datepicker class="po-md-6" p-label="po-datepicker" p-help="Helper do datepicker" [(ngModel)]="datepickerValue"></po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-datepicker-range class="po-md-6" p-label="po-datepicker-range"></po-datepicker-range>
+    <po-combo class="po-md-6" p-label="po-combo" p-help="Helper do combo" [p-options]="comboOptions" [(ngModel)]="comboValue"></po-combo>
+  </div>
+
+  <div class="po-row">
+    <po-select class="po-md-6" p-label="po-select" p-help="Helper do select" [p-options]="selectOptions" [(ngModel)]="selectValue"></po-select>
+    <po-multiselect class="po-md-6" p-label="po-multiselect" p-help="Helper do multiselect" [p-options]="multiselectOptions" [(ngModel)]="multiselectValue"></po-multiselect>
+  </div>
+
+  <div class="po-row">
+    <po-textarea class="po-md-6" p-label="po-textarea" p-help="Helper do textarea" [(ngModel)]="textareaValue"></po-textarea>
+    <po-rich-text class="po-md-6" p-label="po-rich-text" p-help="Helper do rich-text" [(ngModel)]="richTextValue"></po-rich-text>
+  </div>
+
+  <div class="po-row">
+    <po-lookup class="po-md-6" p-label="po-lookup" p-help="Helper do lookup" p-field-label="name" p-field-value="id"></po-lookup>
+    <po-search class="po-md-6" p-label="po-search"></po-search>
+  </div>
+
+  <div class="po-row">
+    <div class="po-md-6">
+      <po-checkbox p-label="po-checkbox" [(ngModel)]="checkboxValue"></po-checkbox>
+    </div>
+    <po-checkbox-group class="po-md-6" p-label="po-checkbox-group" [p-options]="checkboxGroupOptions" [(ngModel)]="checkboxGroupValue"></po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <div class="po-md-6">
+      <po-radio p-label="Radio 1" p-value="r1" [(ngModel)]="radioValue"></po-radio>
+    </div>
+    <po-radio-group class="po-md-6" p-label="po-radio-group" [p-options]="radioGroupOptions" [(ngModel)]="radioGroupValue"></po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <div class="po-md-6">
+      <po-switch p-label="po-switch" [(ngModel)]="switchValue"></po-switch>
+    </div>
+    <po-upload class="po-md-6" p-label="po-upload" p-help="Helper do upload" [p-url]="uploadUrl"></po-upload>
+  </div>
+
+  <hr style="margin: 32px 0;" />
+
+  <!-- ============================================== -->
+  <!-- SECAO 2: Componentes reativos da parte 2 (p-size) -->
+  <!-- ============================================== -->
+  <h2>Parte 2 - Novos componentes reativos (p-size)</h2>
+
+  <h3>po-breadcrumb</h3>
+  <po-breadcrumb [p-items]="breadcrumb.items"></po-breadcrumb>
+
+  <h3>po-button-group</h3>
+  <po-button-group [p-buttons]="[{label: 'Botao 1', action: ''}, {label: 'Botao 2', action: ''}, {label: 'Botao 3', action: ''}]"></po-button-group>
+
+  <h3>po-calendar</h3>
+  <po-calendar [(ngModel)]="calendarValue"></po-calendar>
+
+  <h3>po-dropdown</h3>
+  <po-dropdown p-label="Dropdown" [p-actions]="dropdownActions"></po-dropdown>
+
+  <h3>po-info</h3>
+  <div class="po-row">
+    <po-info class="po-md-4" [p-label]="infoLabel" [p-value]="infoValue"></po-info>
+  </div>
+
+  <h3>po-tabs</h3>
+  <po-tabs>
+    <po-tab p-label="Tab 1" [p-active]="true">
+      <p>Conteudo da Tab 1</p>
+    </po-tab>
+    <po-tab p-label="Tab 2">
+      <p>Conteudo da Tab 2</p>
+    </po-tab>
+  </po-tabs>
+
+  <h3>po-widget</h3>
+  <po-widget [p-title]="widgetTitle">
+    <div>Conteudo do widget de exemplo</div>
+  </po-widget>
+
+  <hr style="margin: 32px 0;" />
+
+  <!-- ============================================== -->
+  <!-- SECAO 3: Componentes container (p-components-size) -->
+  <!-- ============================================== -->
+  <h2>Parte 2 - Novos componentes reativos (p-components-size)</h2>
+
+  <h3>po-table</h3>
+  <po-table [p-items]="tableItems" [p-columns]="tableColumns"></po-table>
+
+  <h3>po-tree-view</h3>
+  <po-tree-view [p-items]="treeViewItems" p-selectable></po-tree-view>
+
+  <h3>po-list-view</h3>
+  <po-list-view
+    [p-items]="listViewItems"
+    [p-actions]="listViewActions"
+    p-property-title="title"
+    p-property-detail="detail">
+  </po-list-view>
+
+  <h3>po-dynamic-form</h3>
+  <po-dynamic-form [p-fields]="dynamicFormFields" [p-value]="dynamicFormValue"></po-dynamic-form>
+
+  <h3>po-dynamic-view</h3>
+  <po-dynamic-view [p-fields]="dynamicViewFields" [p-value]="dynamicViewValue"></po-dynamic-view>
+
+  <h3>po-menu</h3>
+  <div style="max-width: 300px; border: 1px solid #ccc;">
+    <po-menu [p-menus]="menuItems" p-logo="/assets/po-logo.svg"></po-menu>
+  </div>
+
+  <!-- Modal -->
+  <po-modal
+    #modalRef
+    p-title="Modal de Exemplo"
+    [p-primary-action]="modalPrimaryAction"
+    [p-secondary-action]="modalSecondaryAction">
+    <div class="po-row">
+      <po-input class="po-md-12" p-label="Campo dentro da Modal" [(ngModel)]="inputValue"></po-input>
+    </div>
+    <div class="po-row">
+      <po-select class="po-md-12" p-label="Select dentro da Modal" [p-options]="selectOptions" [(ngModel)]="selectValue"></po-select>
+    </div>
+  </po-modal>
+
+  <!-- Page Slide -->
+  <po-page-slide
+    #pageSlideRef
+    p-title="Page Slide de Exemplo"
+    p-click-out>
+    <div class="po-row">
+      <po-input class="po-md-12" p-label="Campo dentro do Page Slide" [(ngModel)]="inputValue"></po-input>
+    </div>
+    <div class="po-row">
+      <po-combo class="po-md-12" p-label="Combo dentro do Page Slide" [p-options]="comboOptions" [(ngModel)]="comboValue"></po-combo>
+    </div>
+  </po-page-slide>
+</div>

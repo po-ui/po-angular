@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, input } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
@@ -75,6 +75,7 @@ export class PoButtonGroupBaseComponent {
    */
   readonly buttons = input<Array<PoButtonGroupItem>>([], { alias: 'p-buttons' });
 
+  private _initialSize?: string = undefined;
   private _size?: string = undefined;
 
   private _toggle?: string = PO_TOGGLE_TYPE_DEFAULT;
@@ -115,12 +116,25 @@ export class PoButtonGroupBaseComponent {
    *
    * @default `medium`
    */
-  @Input('p-size') set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+  set size(value: string) {
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   onButtonClick(buttonClicked: PoButtonGroupItem, buttonIndex: number) {

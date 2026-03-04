@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -41,6 +41,7 @@ export class PoListBoxBaseComponent {
   private _type!: PoItemListType;
   private _literals: PoListBoxLiterals;
   private language: string = poLocaleDefault;
+  private _initialSize?: string = undefined;
   private _size?: string = undefined;
 
   @Input('p-listbox-subitems') listboxSubitems = false;
@@ -138,14 +139,25 @@ export class PoListBoxBaseComponent {
 
   @Input('p-should-mark-letter') shouldMarkLetters: boolean = true;
 
-  @HostBinding('attr.p-size')
-  @Input('p-size')
   set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   @Input('p-compare-cache') compareCache: boolean = false;
