@@ -22,6 +22,10 @@ describe('PoCalendarWrapperComponent', () => {
     component = fixture.componentInstance;
     spyOn(component.cdr, 'markForCheck');
     spyOn(component.cdr, 'detectChanges');
+    spyOn(component as any, 'focusElement').and.callFake((index: number) => {
+      component.focusedDayIndex = index;
+      component.cdr.detectChanges();
+    });
   });
 
   it('should create', () => {
@@ -569,7 +573,6 @@ describe('PoCalendarWrapperComponent', () => {
 
       spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
       spyOn(component as any, 'findNextAvailableDay').and.returnValue(1);
-      spyOn(component as any, 'focusElement');
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
       expect(result).toBeTrue();
@@ -1858,7 +1861,6 @@ describe('PoCalendarWrapperComponent', () => {
         const day = new Date(2024, 5, 10);
         spyOn(component, 'onSelectDate');
         spyOn(component as any, 'isDayDisabled').and.returnValue(false);
-        spyOn(component as any, 'focusElement');
 
         component['handleSelectKey'](day, 9);
 
@@ -2442,6 +2444,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     describe('focusElement', () => {
       beforeEach(() => {
+        (component['focusElement'] as jasmine.Spy).and.callThrough();
         try {
           jasmine.clock().uninstall();
         } catch {}

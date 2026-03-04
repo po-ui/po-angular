@@ -194,7 +194,9 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
       try {
         this.renderer.setStyle(this.tooltipContent, 'opacity', 0);
         this.renderer.setStyle(this.tooltipContent, 'visibility', 'hidden');
-      } catch {}
+      } catch (e) {
+        // Tolerate errors when DOM element is partially destroyed during teardown
+      }
 
       this.isHidden = true;
 
