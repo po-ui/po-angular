@@ -216,6 +216,7 @@ describe('PoCalendarWrapperComponent', () => {
       spyOn(component['poCalendarLangService'], 'getTodayLabel').and.returnValue('Hoje');
       spyOn(component['poCalendarLangService'], 'getToCleanLabel').and.returnValue('Limpar');
       spyOn(component['poCalendarService'], 'getYearOptions').and.returnValue([]);
+      spyOn(component.cdr, 'markForCheck');
 
       component['_locale'] = 'en';
       component['setupOptions']();
@@ -258,6 +259,8 @@ describe('PoCalendarWrapperComponent', () => {
         { label: '2021', value: 2021 }
       ];
 
+      spyOn(component.cdr, 'markForCheck');
+
       (component as any).updateTemplateContext();
 
       const yearsOptions = component.templateContext.yearsOptions;
@@ -272,6 +275,8 @@ describe('PoCalendarWrapperComponent', () => {
         { label: '2020', value: 2020 },
         { label: '2021', value: 2021 }
       ];
+
+      spyOn(component.cdr, 'markForCheck');
 
       (component as any).updateTemplateContext();
 
@@ -465,6 +470,8 @@ describe('PoCalendarWrapperComponent', () => {
       const day = new Date(2024, 5, 10);
 
       spyOn(component.closeCalendar, 'emit');
+      spyOn(component.cdr, 'markForCheck');
+      spyOn(component.cdr, 'detectChanges');
 
       component.range = true;
       component.onDayKeydown(eventWithShift, day, 0);
@@ -1406,6 +1413,8 @@ describe('PoCalendarWrapperComponent', () => {
       const month = 2;
 
       spyOn(component['poCalendarService'], 'monthDays').and.returnValue([...monthDays]);
+      spyOn(component.cdr, 'markForCheck');
+      spyOn(component.cdr, 'detectChanges');
 
       component['updateDisplay'](year, month);
 
@@ -1421,6 +1430,8 @@ describe('PoCalendarWrapperComponent', () => {
 
       spyOn(component['poCalendarService'], 'monthDays').and.returnValue([...monthDays]);
       spyOn(component, <any>'getDecadeArray');
+      spyOn(component.cdr, 'markForCheck');
+      spyOn(component.cdr, 'detectChanges');
 
       component['updateDisplay'](year, month);
 
@@ -1472,6 +1483,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`onClear: should call 'selectDate.emit' with undefined`, () => {
       spyOn(component.selectDate, 'emit');
+      spyOn(component.cdr, 'detectChanges');
 
       component['onClear']();
 
