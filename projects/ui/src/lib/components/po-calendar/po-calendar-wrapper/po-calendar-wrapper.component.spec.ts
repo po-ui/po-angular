@@ -2445,87 +2445,77 @@ describe('PoCalendarWrapperComponent', () => {
     describe('focusElement', () => {
       beforeEach(() => {
         (component['focusElement'] as jasmine.Spy).and.callThrough();
-        try {
-          jasmine.clock().uninstall();
-        } catch {}
-        jasmine.clock().install();
       });
 
-      afterEach(() => {
-        try {
-          jasmine.clock().uninstall();
-        } catch {}
-      });
-
-      it('should set focusedDayIndex and call element.focus() when element is found', () => {
+      it('should set focusedDayIndex and call element.focus() when element is found', fakeAsync(() => {
         const mockElement = document.createElement('div');
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
         component['focusElement'](5);
 
-        jasmine.clock().tick(0);
+        tick();
 
         expect(component.focusedDayIndex).toBe(5);
         expect(component.cdr.detectChanges).toHaveBeenCalled();
         expect((component as any).elementRef.nativeElement.querySelector).toHaveBeenCalledWith('[data-day-index="5"]');
         expect(focusSpy).toHaveBeenCalled();
-      });
+      }));
 
-      it('should not call focus() when element is not found', () => {
+      it('should not call focus() when element is not found', fakeAsync(() => {
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(null);
         component['focusElement'](10);
 
-        jasmine.clock().tick(0);
+        tick();
 
         expect(component.focusedDayIndex).toBe(10);
         expect(component.cdr.detectChanges).toHaveBeenCalled();
         expect((component as any).elementRef.nativeElement.querySelector).toHaveBeenCalledWith('[data-day-index="10"]');
-      });
+      }));
 
-      it('should handle element that is not an HTMLElement', () => {
+      it('should handle element that is not an HTMLElement', fakeAsync(() => {
         const mockElement = { focus: jasmine.createSpy('focus') } as unknown as HTMLElement;
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
         component['focusElement'](3);
 
-        jasmine.clock().tick(0);
+        tick();
 
         expect(component.focusedDayIndex).toBe(3);
         expect(component.cdr.detectChanges).toHaveBeenCalled();
         expect((component as any).elementRef.nativeElement.querySelector).toHaveBeenCalledWith('[data-day-index="3"]');
-      });
+      }));
 
-      it('should focus on element with index 0', () => {
+      it('should focus on element with index 0', fakeAsync(() => {
         const mockElement = document.createElement('div');
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
         component['focusElement'](0);
 
-        jasmine.clock().tick(0);
+        tick();
 
         expect(component.focusedDayIndex).toBe(0);
         expect(focusSpy).toHaveBeenCalled();
         expect((component as any).elementRef.nativeElement.querySelector).toHaveBeenCalledWith('[data-day-index="0"]');
-      });
+      }));
 
-      it('should focus on element with large index', () => {
+      it('should focus on element with large index', fakeAsync(() => {
         const mockElement = document.createElement('div');
         const focusSpy = spyOn(mockElement, 'focus');
 
         spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
         component['focusElement'](365);
 
-        jasmine.clock().tick(0);
+        tick();
 
         expect(component.focusedDayIndex).toBe(365);
         expect(focusSpy).toHaveBeenCalled();
         expect((component as any).elementRef.nativeElement.querySelector).toHaveBeenCalledWith(
           '[data-day-index="365"]'
         );
-      });
+      }));
 
-      it('should use setTimeout with 0 delay before focusing', done => {
+      it('should use setTimeout with 0 delay before focusing', fakeAsync(() => {
         const mockElement = document.createElement('div');
         const focusSpy = spyOn(mockElement, 'focus');
 
@@ -2536,11 +2526,10 @@ describe('PoCalendarWrapperComponent', () => {
 
         expect(window.setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 0);
 
-        jasmine.clock().tick(0);
+        tick();
 
         expect(focusSpy).toHaveBeenCalled();
-        done();
-      });
+      }));
     });
   });
   it('should call updateDate with correct parameters', () => {
