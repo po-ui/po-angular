@@ -62,11 +62,13 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
-        flags: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-web-security', '--remote-debugging-port=9222']
+        flags: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-web-security', '--disable-dev-shm-usage', '--remote-debugging-port=9222']
       }
     },
     singleRun: false,
     restartOnFileChange: true,
-    browserNoActivityTimeout: 30000
+    browserNoActivityTimeout: 30000,
+    browserDisconnectTimeout: 50000,
+    browserDisconnectTolerance: 3
   });
 };
