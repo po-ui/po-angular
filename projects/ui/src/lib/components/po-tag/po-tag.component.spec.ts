@@ -354,9 +354,16 @@ describe('PoTagComponent:', () => {
   describe('applyTextColorByContrast:', () => {
     const darkColor = 'rgb(26, 26, 26)';
     const lightColor = 'rgb(255, 255, 255)';
+    let originalClassName: string;
 
     beforeEach(() => {
+      originalClassName = document.documentElement.className;
+      document.documentElement.className = originalClassName.replace(/-dark-/g, '');
       spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => 0);
+    });
+
+    afterEach(() => {
+      document.documentElement.className = originalClassName;
     });
 
     function mockGetComputedStyle(backgroundColor: string) {
