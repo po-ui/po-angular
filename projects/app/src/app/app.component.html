@@ -1,29 +1,11 @@
-<!-- <po-page-default>
-  <po-skeleton 
-  p-variant="circle" 
-  p-height="300px"
-  p-border-radius="8px">
-</po-skeleton>
-<br>
-
-<po-skeleton p-width="200px" class="po-mb-1"></po-skeleton>
-<br>
-
-<po-skeleton p-width="150px"></po-skeleton>
-<br>
-
-<div>
-  <po-skeleton class="po-md-2"></po-skeleton>
-  <po-skeleton class="po-md-2"></po-skeleton>
-  <po-skeleton class="po-md-2"></po-skeleton>
-</div>
-</po-page-default> -->
 <po-page-default>
   <div class="po-row">
     <po-skeleton
       class="po-md-12"
       [p-variant]="variant"
+      [p-type]="type"
       [p-animation]="animation"
+      [p-size]="size"
       [p-width]="width"
       [p-height]="height"
       [p-border-radius]="borderRadius"
@@ -38,8 +20,8 @@
   <hr />
 
   <form class="po-row">
-    <po-select class="po-md-6" name="variant" [(ngModel)]="variant" p-label="Variant" [p-options]="variantOptions">
-    </po-select>
+    <!-- Animation Section -->
+    <po-divider class="po-md-12" p-label="Animation"></po-divider>
 
     <po-select
       class="po-md-6"
@@ -50,11 +32,91 @@
     >
     </po-select>
 
-    <po-input class="po-md-6" name="width" [(ngModel)]="width" p-label="Width"> </po-input>
+    <po-select class="po-md-6" name="type" [(ngModel)]="type" p-label="Type" [p-options]="typeOptions"> </po-select>
 
-    <po-input class="po-md-6" name="height" [(ngModel)]="height" p-label="Height"> </po-input>
+    <!-- Shapes Section -->
+    <po-divider class="po-md-12" p-label="Shapes"></po-divider>
 
-    <po-input class="po-md-6" name="borderRadius" [(ngModel)]="borderRadius" p-label="Border Radius"> </po-input>
+    <po-select
+      class="po-md-6"
+      name="variant"
+      [(ngModel)]="variant"
+      p-label="Variant"
+      [p-options]="variantOptions"
+      (p-change)="onVariantChange()"
+    >
+    </po-select>
+
+    <po-select class="po-md-6" name="size" [(ngModel)]="size" p-label="Size" [p-options]="sizeOptions"> </po-select>
+
+    <!-- Circle Dynamic Size - apenas para variant circle -->
+    @if (variant === 'circle') {
+      <po-divider class="po-md-12" p-label="Circle Dynamic Size (optional)"></po-divider>
+
+      <po-number
+        class="po-md-4"
+        name="circleSize"
+        [(ngModel)]="circleSize"
+        p-clean
+        p-label="Circle Size"
+        p-help="Define o tamanho do círculo"
+        p-min="1"
+        (p-change)="onCircleSizeChange()"
+      >
+      </po-number>
+
+      <po-select
+        class="po-md-2"
+        name="circleSizeUnit"
+        [(ngModel)]="circleSizeUnit"
+        p-label="Unit"
+        [p-options]="unitOptions"
+        (p-change)="onCircleSizeUnitChange()"
+      >
+      </po-select>
+
+      <po-info
+        class="po-md-6"
+        p-label="Applied Size"
+        [p-value]="circleSize ? circleSize + circleSizeUnit : 'Using default size from Size select'"
+      >
+      </po-info>
+    }
+
+    <!-- Custom Section - permite sobrescrever os valores padrão -->
+    @if (variant === 'text') {
+      <po-divider class="po-md-12" p-label="Custom (optional)"></po-divider>
+
+      <po-input
+        class="po-md-6"
+        name="width"
+        [(ngModel)]="width"
+        p-clean
+        p-label="Width"
+        p-help="Valores CSS: px, %, em, rem"
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="height"
+        [(ngModel)]="height"
+        p-clean
+        p-label="Height"
+        p-help="Valores CSS: px, %, em, rem"
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="borderRadius"
+        [(ngModel)]="borderRadius"
+        p-clean
+        p-label="Border Radius"
+        p-help="Valores CSS: px, %, em, rem"
+      >
+      </po-input>
+    }
 
     <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </form>

@@ -1,0 +1,464 @@
+<po-page-default p-title="PO Skeleton - Exemplos de Variações">
+  <!-- Switch de Tema -->
+  <div class="po-row po-mb-4">
+    <po-switch
+      class="po-md-12"
+      name="theme"
+      [(ngModel)]="isDarkTheme"
+      (ngModelChange)="toggleTheme($event)"
+      p-label="Alternar Tema"
+      p-label-off="Claro"
+      p-label-on="Escuro"
+    >
+    </po-switch>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 1: Variantes com Tamanhos Predefinidos -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>1. Variantes com Tamanhos Predefinidos (p-size)</h3>
+      <p>
+        As variantes <code>circle</code>, <code>square</code> e <code>rectangle</code> possuem tamanhos predefinidos
+        controlados pela propriedade <code>p-size</code>.
+      </p>
+    </div>
+
+    <!-- Circle -->
+    <div class="po-md-12 po-mt-3">
+      <h4>Circle - Avatar Sizes</h4>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Small (32px)</strong></p>
+      <po-skeleton p-variant="circle" p-size="sm"></po-skeleton>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Medium (64px)</strong></p>
+      <po-skeleton p-variant="circle" p-size="md"></po-skeleton>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Large (96px)</strong></p>
+      <po-skeleton p-variant="circle" p-size="lg"></po-skeleton>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Extra Large (128px)</strong></p>
+      <po-skeleton p-variant="circle" p-size="xl"></po-skeleton>
+    </div>
+
+    <!-- Square -->
+    <div class="po-md-12 po-mt-3">
+      <h4>Square - Icon/Button Sizes</h4>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Small (32px)</strong></p>
+      <po-skeleton p-variant="square" p-size="sm"></po-skeleton>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Medium (64px)</strong></p>
+      <po-skeleton p-variant="square" p-size="md"></po-skeleton>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Large (96px)</strong></p>
+      <po-skeleton p-variant="square" p-size="lg"></po-skeleton>
+    </div>
+    <div class="po-md-3 po-mb-3">
+      <p><strong>Extra Large (128px)</strong></p>
+      <po-skeleton p-variant="square" p-size="xl"></po-skeleton>
+    </div>
+
+    <!-- Rectangle -->
+    <div class="po-md-12 po-mt-3">
+      <h4>Rectangle - Banner/Card Sizes</h4>
+    </div>
+    <div class="po-md-6 po-mb-3">
+      <p><strong>Small (96x32px)</strong></p>
+      <po-skeleton p-animation="shimmer" p-variant="rectangle" p-size="sm"></po-skeleton>
+    </div>
+    <div class="po-md-6 po-mb-3">
+      <p><strong>Medium (192x64px)</strong></p>
+      <po-skeleton p-variant="rectangle" p-size="md"></po-skeleton>
+    </div>
+    <div class="po-md-6 po-mb-3">
+      <p><strong>Large (288x96px)</strong></p>
+      <po-skeleton p-variant="rectangle" p-size="lg"></po-skeleton>
+    </div>
+    <div class="po-md-6 po-mb-3">
+      <p><strong>Extra Large (384x128px)</strong></p>
+      <po-skeleton p-variant="rectangle" p-size="xl"></po-skeleton>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 2: Tipos de Skeleton (Normal, Primary, Content) -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>2. Tipos de Skeleton - Cores Diferentes (p-type)</h3>
+      <p>A propriedade <code>p-type</code> altera a cor de fundo do skeleton.</p>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Type: Normal (Padrão)</strong></p>
+      <p>Cor neutra clara - #D0D0D7</p>
+      <po-skeleton p-animation="pulse" class="po-md-12 po-mb-1"></po-skeleton>
+      <po-skeleton class="po-md-10 po-mb-1"></po-skeleton>
+      <po-skeleton class="po-md-8"></po-skeleton>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Type: Primary</strong></p>
+      <p>Cor neutra média - #9191A1</p>
+      <po-skeleton p-type="primary" class="po-md-12 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="primary" class="po-md-10 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="primary" class="po-md-8"></po-skeleton>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Type: Content</strong></p>
+      <p>Fundo branco - #FFF</p>
+      <po-skeleton p-type="content" class="po-md-12 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="content" class="po-md-10 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="content" class="po-md-8"></po-skeleton>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 3: Animações -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>3. Tipos de Animação (p-animation)</h3>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Shimmer (Padrão)</strong></p>
+      <p>Animação de brilho deslizante</p>
+      <po-skeleton p-variant="circle" p-size="lg" p-animation="shimmer"></po-skeleton>
+      <po-skeleton p-animation="shimmer" class="po-md-12 po-mt-2"></po-skeleton>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Pulse</strong></p>
+      <p>Animação de pulsação</p>
+      <po-skeleton p-variant="circle" p-size="lg" p-animation="pulse"></po-skeleton>
+      <po-skeleton p-animation="pulse" class="po-md-12 po-mt-2"></po-skeleton>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>None</strong></p>
+      <p>Sem animação</p>
+      <po-skeleton p-variant="circle" p-size="lg" p-animation="none"></po-skeleton>
+      <po-skeleton p-animation="none" class="po-md-12 po-mt-2"></po-skeleton>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 4: Combinações de Tipos e Variantes -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>4. Combinações de Tipos com Circle</h3>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Circle + Normal</strong></p>
+      <div style="display: flex; gap: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-size="sm"></po-skeleton>
+        <po-skeleton p-variant="circle" p-size="md"></po-skeleton>
+        <po-skeleton p-variant="circle" p-size="lg"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Circle + Primary</strong></p>
+      <div style="display: flex; gap: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-type="primary" p-size="sm"></po-skeleton>
+        <po-skeleton p-variant="circle" p-type="primary" p-size="md"></po-skeleton>
+        <po-skeleton p-variant="circle" p-type="primary" p-size="lg"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Circle + Content</strong></p>
+      <div
+        style="
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          padding: 12px;
+          background-color: #f5f5f5;
+          border-radius: 8px;
+        "
+      >
+        <po-skeleton p-variant="circle" p-type="content" p-size="sm"></po-skeleton>
+        <po-skeleton p-variant="circle" p-type="content" p-size="md"></po-skeleton>
+        <po-skeleton p-variant="circle" p-type="content" p-size="lg"></po-skeleton>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 5: Tamanhos Customizados -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>5. Tamanhos Customizados (p-width e p-height)</h3>
+      <p>As propriedades <code>p-width</code> e <code>p-height</code> sempre sobrescrevem os tamanhos predefinidos.</p>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Circle Customizado</strong></p>
+      <po-skeleton p-variant="circle" p-width="80px" p-height="80px"></po-skeleton>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Square Customizado</strong></p>
+      <po-skeleton p-variant="square" p-width="150px" p-height="150px"></po-skeleton>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Rectangle Customizado</strong></p>
+      <po-skeleton p-variant="rectangle" p-width="100%" p-height="200px"></po-skeleton>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 6: Text Variant -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>6. Text Variant - Linhas de Texto</h3>
+      <p>A variante <code>text</code> é ideal para simular parágrafos de texto.</p>
+    </div>
+
+    <div class="po-md-6 po-mb-3">
+      <p><strong>Parágrafo Simples</strong></p>
+      <po-skeleton class="po-md-12 po-mb-1"></po-skeleton>
+      <po-skeleton class="po-md-10 po-mb-1"></po-skeleton>
+      <po-skeleton class="po-md-8 po-mb-1"></po-skeleton>
+      <po-skeleton class="po-md-6"></po-skeleton>
+    </div>
+
+    <div class="po-md-6 po-mb-3">
+      <p><strong>Com Tipo Primary</strong></p>
+      <po-skeleton p-type="primary" class="po-md-12 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="primary" class="po-md-11 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="primary" class="po-md-9 po-mb-1"></po-skeleton>
+      <po-skeleton p-type="primary" class="po-md-7"></po-skeleton>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 7: Layout Complexo - Card de Perfil -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>7. Layout Complexo - Cards de Perfil</h3>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Card Normal</strong></p>
+      <div style="padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px">
+        <div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: center">
+          <po-skeleton p-variant="circle" p-size="md"></po-skeleton>
+          <div style="flex: 1">
+            <po-skeleton p-width="70%" class="po-mb-1"></po-skeleton>
+            <po-skeleton p-width="40%"></po-skeleton>
+          </div>
+        </div>
+        <po-skeleton p-variant="rectangle" p-width="100%" p-height="120px" class="po-mb-2"></po-skeleton>
+        <po-skeleton p-width="90%" class="po-mb-1"></po-skeleton>
+        <po-skeleton p-width="75%" class="po-mb-1"></po-skeleton>
+        <po-skeleton p-width="60%"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Card Primary</strong></p>
+      <div style="padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px">
+        <div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: center">
+          <po-skeleton p-variant="circle" p-type="primary" p-size="md"></po-skeleton>
+          <div style="flex: 1">
+            <po-skeleton p-type="primary" p-width="70%" class="po-mb-1"></po-skeleton>
+            <po-skeleton p-type="primary" p-width="40%"></po-skeleton>
+          </div>
+        </div>
+        <po-skeleton
+          p-variant="rectangle"
+          p-type="primary"
+          p-width="100%"
+          p-height="120px"
+          class="po-mb-2"
+        ></po-skeleton>
+        <po-skeleton p-type="primary" p-width="90%" class="po-mb-1"></po-skeleton>
+        <po-skeleton p-type="primary" p-width="75%" class="po-mb-1"></po-skeleton>
+        <po-skeleton p-type="primary" p-width="60%"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-4 po-mb-3">
+      <p><strong>Card Content</strong></p>
+      <div style="padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; background-color: #f5f5f5">
+        <div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: center">
+          <po-skeleton p-variant="circle" p-type="content" p-size="md"></po-skeleton>
+          <div style="flex: 1">
+            <po-skeleton p-type="content" p-width="70%" class="po-mb-1"></po-skeleton>
+            <po-skeleton p-type="content" p-width="40%"></po-skeleton>
+          </div>
+        </div>
+        <po-skeleton
+          p-variant="rectangle"
+          p-type="content"
+          p-width="100%"
+          p-height="120px"
+          class="po-mb-2"
+        ></po-skeleton>
+        <po-skeleton p-type="content" p-width="90%" class="po-mb-1"></po-skeleton>
+        <po-skeleton p-type="content" p-width="75%" class="po-mb-1"></po-skeleton>
+        <po-skeleton p-type="content" p-width="60%"></po-skeleton>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 8: Grid de Cards com Imagens -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>8. Grid de Cards com Rectangle</h3>
+    </div>
+
+    <div class="po-md-3 po-mb-2">
+      <po-skeleton p-variant="rectangle" p-size="lg" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="80%" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="60%"></po-skeleton>
+    </div>
+
+    <div class="po-md-3 po-mb-2">
+      <po-skeleton p-variant="rectangle" p-size="lg" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="70%" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="50%"></po-skeleton>
+    </div>
+
+    <div class="po-md-3 po-mb-2">
+      <po-skeleton p-variant="rectangle" p-size="lg" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="85%" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="65%"></po-skeleton>
+    </div>
+
+    <div class="po-md-3 po-mb-2">
+      <po-skeleton p-variant="rectangle" p-size="lg" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="75%" class="po-mb-1"></po-skeleton>
+      <po-skeleton p-width="55%"></po-skeleton>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 9: Lista de Usuários -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>9. Lista de Usuários</h3>
+    </div>
+
+    <div class="po-md-6">
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-size="md"></po-skeleton>
+        <div style="flex: 1">
+          <po-skeleton p-width="60%" class="po-mb-1"></po-skeleton>
+          <po-skeleton p-width="40%"></po-skeleton>
+        </div>
+        <po-skeleton p-variant="square" p-size="sm"></po-skeleton>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-size="md"></po-skeleton>
+        <div style="flex: 1">
+          <po-skeleton p-width="55%" class="po-mb-1"></po-skeleton>
+          <po-skeleton p-width="35%"></po-skeleton>
+        </div>
+        <po-skeleton p-variant="square" p-size="sm"></po-skeleton>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-size="md"></po-skeleton>
+        <div style="flex: 1">
+          <po-skeleton p-width="65%" class="po-mb-1"></po-skeleton>
+          <po-skeleton p-width="45%"></po-skeleton>
+        </div>
+        <po-skeleton p-variant="square" p-size="sm"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-6">
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-type="primary" p-size="md"></po-skeleton>
+        <div style="flex: 1">
+          <po-skeleton p-type="primary" p-width="70%" class="po-mb-1"></po-skeleton>
+          <po-skeleton p-type="primary" p-width="50%"></po-skeleton>
+        </div>
+        <po-skeleton p-variant="square" p-type="primary" p-size="sm"></po-skeleton>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-type="primary" p-size="md"></po-skeleton>
+        <div style="flex: 1">
+          <po-skeleton p-type="primary" p-width="58%" class="po-mb-1"></po-skeleton>
+          <po-skeleton p-type="primary" p-width="38%"></po-skeleton>
+        </div>
+        <po-skeleton p-variant="square" p-type="primary" p-size="sm"></po-skeleton>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center">
+        <po-skeleton p-variant="circle" p-type="primary" p-size="md"></po-skeleton>
+        <div style="flex: 1">
+          <po-skeleton p-type="primary" p-width="62%" class="po-mb-1"></po-skeleton>
+          <po-skeleton p-type="primary" p-width="42%"></po-skeleton>
+        </div>
+        <po-skeleton p-variant="square" p-type="primary" p-size="sm"></po-skeleton>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Exemplo 10: Dashboard com Estatísticas -->
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <h3>10. Dashboard com Estatísticas</h3>
+    </div>
+
+    <div class="po-md-3 po-mb-3">
+      <div style="padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px; text-align: center">
+        <po-skeleton p-variant="square" p-size="lg" style="margin: 0 auto 12px"></po-skeleton>
+        <po-skeleton p-width="80%" style="margin: 0 auto 8px"></po-skeleton>
+        <po-skeleton p-width="50%" style="margin: 0 auto"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-3 po-mb-3">
+      <div style="padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px; text-align: center">
+        <po-skeleton p-variant="square" p-size="lg" p-type="primary" style="margin: 0 auto 12px"></po-skeleton>
+        <po-skeleton p-type="primary" p-width="70%" style="margin: 0 auto 8px"></po-skeleton>
+        <po-skeleton p-type="primary" p-width="45%" style="margin: 0 auto"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-3 po-mb-3">
+      <div style="padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px; text-align: center">
+        <po-skeleton p-variant="square" p-size="lg" style="margin: 0 auto 12px"></po-skeleton>
+        <po-skeleton p-width="75%" style="margin: 0 auto 8px"></po-skeleton>
+        <po-skeleton p-width="55%" style="margin: 0 auto"></po-skeleton>
+      </div>
+    </div>
+
+    <div class="po-md-3 po-mb-3">
+      <div style="padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px; text-align: center">
+        <po-skeleton p-variant="square" p-size="lg" p-type="primary" style="margin: 0 auto 12px"></po-skeleton>
+        <po-skeleton p-type="primary" p-width="65%" style="margin: 0 auto 8px"></po-skeleton>
+        <po-skeleton p-type="primary" p-width="40%" style="margin: 0 auto"></po-skeleton>
+      </div>
+    </div>
+  </div>
+</po-page-default>

@@ -1,6 +1,7 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, input } from '@angular/core';
 
 import { PoSkeletonAnimation } from './po-skeleton-animation.enum';
+import { PoSkeletonType } from './po-skeleton-type.enum';
 import { PoSkeletonVariant } from './po-skeleton-variant.enum';
 
 /**
@@ -21,19 +22,26 @@ import { PoSkeletonVariant } from './po-skeleton-variant.enum';
  * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
  * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
  * | **Default Values**                     |                                                       |                                                 |
- * | `--background`                         | Cor de fundo do skeleton                              | `var(--color-neutral-light-20)`                 |
- * | `--border-radius`                      | Raio da borda                                         | `var(--border-radius-md)`                       |
+ * | `--color`                              | Cor de fundo padrão do skeleton                       | `var(--color-neutral-light-20)`                 |
+ * | `--border-radius`                      | Raio da borda do skeleton                             | `var(--border-radius-md)`                       |
+ * | `--margin-bottom`                      | Margem inferior do skeleton                           | `var(--spacing-sm)`                             |
+ * | `--transition-duration`                | Duração da transição                                  | `0.3s`                                          |
+ * | `--transition-property`                | Propriedade CSS da transição                          | `background-color`                              |
+ * | `--transition-timing`                  | Função de temporização da transição                   | `ease-in-out`                                   |
+ * | **Type: Normal**                       |                                                       |                                                 |
+ * | `--color-normal`                       | Cor de fundo do tipo normal                           | `var(--color-neutral-light-20)`                 |
+ * | **Type: Primary**                      |                                                       |                                                 |
+ * | `--color-primary`                      | Cor de fundo do tipo primary                          | `var(--color-neutral-mid-40)`                   |
+ * | **Type: Content**                      |                                                       |                                                 |
+ * | `--color-content`                      | Cor de fundo do tipo content                          | `var(--color-neutral-light-00)`                 |
  *
  */
 @Directive()
 export class PoSkeletonBaseComponent {
-  private _variant: string = PoSkeletonVariant.text;
-  private _animation: string = PoSkeletonAnimation.shimmer;
-  private _width: string = '100%';
-  private _height: string;
-  private _borderRadius: string;
-
   /**
+   *
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -42,21 +50,49 @@ export class PoSkeletonBaseComponent {
    *
    * Valores válidos:
    * - `text`: Simula uma linha de texto (altura padrão: 1em)
-   * - `rect`: Forma retangular (requer definição de altura)
+   * - `rectangle`: Forma retangular (proporção 3:1 por padrão)
+   * - `square`: Forma quadrada (largura e altura iguais)
    * - `circle`: Forma circular (largura e altura iguais)
    *
    * @default `text`
    */
-  @Input('p-variant') set variant(value: string) {
-    this._variant = Object.values(PoSkeletonVariant).includes(value as PoSkeletonVariant)
-      ? value
-      : PoSkeletonVariant.text;
-  }
-  get variant(): string {
-    return this._variant;
-  }
+  variant = input<string, string>(PoSkeletonVariant.text, {
+    alias: 'p-variant',
+    transform: (value: string) => {
+      if (!value) return PoSkeletonVariant.text;
+      return Object.values(PoSkeletonVariant).includes(value as PoSkeletonVariant) ? value : PoSkeletonVariant.text;
+    }
+  });
 
   /**
+   *
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define o tipo visual do skeleton, alterando sua cor de fundo.
+   *
+   * Valores válidos:
+   * - `normal`: Cor neutra clara (padrão)
+   * - `primary`: Cor neutra média
+   * - `content`: Fundo branco
+   *
+   * @default `normal`
+   */
+  type = input<string, string>(PoSkeletonType.normal, {
+    alias: 'p-type',
+    transform: (value: string) => {
+      if (!value) return PoSkeletonType.normal;
+      return Object.values(PoSkeletonType).includes(value as PoSkeletonType) ? value : PoSkeletonType.normal;
+    }
+  });
+
+  /**
+   *
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -70,16 +106,49 @@ export class PoSkeletonBaseComponent {
    *
    * @default `shimmer`
    */
-  @Input('p-animation') set animation(value: string) {
-    this._animation = Object.values(PoSkeletonAnimation).includes(value as PoSkeletonAnimation)
-      ? value
-      : PoSkeletonAnimation.shimmer;
-  }
-  get animation(): string {
-    return this._animation;
-  }
+  animation = input<string, string>(PoSkeletonAnimation.shimmer, {
+    alias: 'p-animation',
+    transform: (value: string) => {
+      if (!value) return PoSkeletonAnimation.shimmer;
+      return Object.values(PoSkeletonAnimation).includes(value as PoSkeletonAnimation)
+        ? value
+        : PoSkeletonAnimation.shimmer;
+    }
+  });
 
   /**
+   *
+   * @Input
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Define o tamanho do skeleton para as variantes pré-definidas (`rectangle`, `square`, `circle`).
+   *
+   * Valores válidos:
+   * - `sm`: Pequeno (32px para square/circle, 96px x 32px para rectangle)
+   * - `md`: Médio (64px para square/circle, 192px x 64px para rectangle)
+   * - `lg`: Grande (96px para square/circle, 288px x 96px para rectangle)
+   * - `xl`: Extra grande (128px para square/circle, 384px x 128px para rectangle)
+   *
+   * Esta propriedade é ignorada quando `p-width` ou `p-height` são definidos explicitamente.
+   *
+   * @default `md`
+   */
+  size = input<string, string>('md', {
+    alias: 'p-size',
+    transform: (value: string) => {
+      if (!value) return 'md';
+      const validSizes = ['sm', 'md', 'lg', 'xl'];
+      return validSizes.includes(value) ? value : 'md';
+    }
+  });
+
+  /**
+   *
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -87,16 +156,17 @@ export class PoSkeletonBaseComponent {
    * Define a largura do skeleton.
    * Aceita valores CSS válidos (px, %, em, rem, etc).
    *
-   * @default `100%`
+   * Quando definido, sobrescreve a largura padrão da variante.
+   *
+   * @default `100%` para variante `text`, tamanho baseado em `p-size` para outras variantes
    */
-  @Input('p-width') set width(value: string) {
-    this._width = value || '100%';
-  }
-  get width(): string {
-    return this._width;
-  }
+  width = input<string>('', {
+    alias: 'p-width'
+  });
 
   /**
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -104,17 +174,16 @@ export class PoSkeletonBaseComponent {
    * Define a altura do skeleton.
    * Aceita valores CSS válidos (px, %, em, rem, etc).
    *
-   * Para a variante `text`, o valor padrão é `1em`.
-   * Para as variantes `rect` e `circle`, é recomendado definir um valor.
+   * Quando definido, sobrescreve a altura padrão da variante.
    */
-  @Input('p-height') set height(value: string) {
-    this._height = value;
-  }
-  get height(): string {
-    return this._height;
-  }
+  height = input<string>('', {
+    alias: 'p-height'
+  });
 
   /**
+   *
+   * @Input
+   *
    * @optional
    *
    * @description
@@ -124,38 +193,7 @@ export class PoSkeletonBaseComponent {
    *
    * Esta propriedade sobrescreve o border-radius padrão de cada variante.
    */
-  @Input('p-border-radius') set borderRadius(value: string) {
-    this._borderRadius = value;
-  }
-  get borderRadius(): string {
-    return this._borderRadius;
-  }
-
-  get computedStyles(): { [key: string]: string } {
-    const styles: { [key: string]: string } = {};
-
-    if (this.width) {
-      styles['width'] = this.width;
-    }
-
-    if (this.height) {
-      styles['height'] = this.height;
-    } else if (this.variant === PoSkeletonVariant.text) {
-      styles['height'] = '1em';
-    }
-
-    if (this.borderRadius) {
-      styles['border-radius'] = this.borderRadius;
-    }
-
-    return styles;
-  }
-
-  get computedClasses(): { [key: string]: boolean } {
-    return {
-      'po-skeleton': true,
-      [`po-skeleton-${this.variant}`]: true,
-      [`po-skeleton-animation-${this.animation}`]: true
-    };
-  }
+  borderRadius = input<string>('', {
+    alias: 'p-border-radius'
+  });
 }

@@ -1,15 +1,40 @@
 .po-skeleton-wrapper {
   display: block;
-  background: var(--background, var(--color-neutral-light-20));
+  background: var(--color, var(--color-neutral-light-20));
   border-radius: var(--border-radius, var(--border-radius-md));
+  margin-bottom: var(--margin-bottom, var(--spacing-sm));
+  transition-duration: var(--transition-duration, 0.3s);
+  transition-property: var(--transition-property, background-color);
+  transition-timing-function: var(--transition-timing, ease-in-out);
 }
 
-.po-skeleton-text {
+.po-skeleton-wrapper.po-skeleton-text {
   border-radius: var(--border-radius, var(--border-radius-sm));
 }
 
-.po-skeleton-circle {
-  border-radius: 50%;
+.po-skeleton-wrapper.po-skeleton-rectangle {
+  border-radius: var(--border-radius, var(--border-radius-md));
+}
+
+.po-skeleton-wrapper.po-skeleton-square {
+  border-radius: var(--border-radius, var(--border-radius-md));
+}
+
+.po-skeleton-wrapper.po-skeleton-circle {
+  border-radius: var(--border-radius, 50%);
+}
+
+/* Types */
+.po-skeleton-wrapper.po-skeleton-type-normal {
+  background: var(--color-normal, var(--color-neutral-light-20, #d0d0d7));
+}
+
+.po-skeleton-wrapper.po-skeleton-type-primary {
+  background: var(--color-primary, var(--color-neutral-mid-40, #9191a1));
+}
+
+.po-skeleton-wrapper.po-skeleton-type-content {
+  background: var(--color-content, var(--color-neutral-light-00, #fff));
 }
 
 /* Animação Pulse */
@@ -25,31 +50,54 @@
   }
 }
 
-.po-skeleton-animation-pulse {
+.po-skeleton-wrapper.po-skeleton-animation-pulse {
   animation: po-skeleton-pulse 1.5s ease-in-out infinite;
 }
 
 /* Animação Shimmer */
 @keyframes po-skeleton-shimmer {
   0% {
-    background-position: -200% 0;
-  }
-  100% {
     background-position: 200% 0;
   }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
-.po-skeleton-animation-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--background, var(--color-neutral-light-20)) 0%,
-    var(--color-neutral-light-10, #f0f0f0) 50%,
-    var(--background, var(--color-neutral-light-20)) 100%
-  );
+.po-skeleton-wrapper.po-skeleton-animation-shimmer {
   background-size: 200% 100%;
-  animation: po-skeleton-shimmer 1.5s ease-in-out infinite;
+  background-position: 200% 0;
+  animation: po-skeleton-shimmer 3s ease-in-out infinite;
 }
 
-.po-skeleton-animation-none {
+.po-skeleton-wrapper.po-skeleton-animation-shimmer.po-skeleton-type-normal,
+.po-skeleton-wrapper.po-skeleton-animation-shimmer:not(.po-skeleton-type-primary):not(.po-skeleton-type-content) {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-normal, var(--color-neutral-light-20, #d0d0d7)) 0%,
+    var(--color-neutral-light-10, #f0f0f0) 50%,
+    var(--color-normal, var(--color-neutral-light-20, #d0d0d7)) 100%
+  );
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-shimmer.po-skeleton-type-primary {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary, var(--color-neutral-mid-40, #9191a1)) 0%,
+    var(--color-neutral-mid-30, #b0b0b8) 50%,
+    var(--color-primary, var(--color-neutral-mid-40, #9191a1)) 100%
+  );
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-shimmer.po-skeleton-type-content {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-content, var(--color-neutral-light-00, #fff)) 0%,
+    var(--color-neutral-light-05, #f9f9f9) 50%,
+    var(--color-content, var(--color-neutral-light-00, #fff)) 100%
+  );
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-none {
   animation: none;
 }

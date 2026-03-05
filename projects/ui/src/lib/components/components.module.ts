@@ -85,7 +85,6 @@ const PO_MODULES = [
   PoPopupModule,
   PoProgressModule,
   PoSlideModule,
-  PoSkeletonModule,
   PoStepperModule,
   PoTableModule,
   PoTabsModule,
