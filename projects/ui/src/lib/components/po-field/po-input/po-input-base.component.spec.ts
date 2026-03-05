@@ -221,6 +221,10 @@ describe('PoInputBase:', async () => {
   });
 
   describe('Properties:', () => {
+    it('p-compact-label: should have default value as false', () => {
+      expect(component.compactLabel()).toBe(false);
+    });
+
     it('p-placeholder: should update property p-placeholder with valid value.', () => {
       component.placeholder = 'teste';
       expect(component.placeholder).toBe('teste');
