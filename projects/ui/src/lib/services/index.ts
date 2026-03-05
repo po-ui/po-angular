@@ -10,4 +10,5 @@ export * from './po-language/index';
 export * from './po-i18n/index';
 export * from './po-media-query/index';
 export * from './po-notification/index';
+export * from './po-telemetry/index';
 export * from './po-theme/index';

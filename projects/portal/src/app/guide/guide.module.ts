@@ -19,6 +19,7 @@ import { GuideReleasesComponent } from './guides/guide-releases/guide-releases.c
 import { GuideSchematicsComponent } from './guides/guide-schematics/guide-schematics.component';
 import { GuideSyncFundamentalsComponent } from './guides/guide-sync-fundamentals/guide-sync-fundamentals.component';
 import { GuideSyncGetStartedComponent } from './guides/guide-sync-get-started/guide-sync-get-started.component';
+import { GuideTelemetryComponent } from './guides/guide-telemetry/guide-telemetry.component';
 import { GuideThemeServiceComponent } from './guides/guide-theme-service/guide-theme-service.component';
 import { GuideCreateThemeCustomizationComponent } from './guides/guide-create-theme-customization/guide-create-theme-customization.component';
 import { GuideGridSystemComponent } from './guides/guide-grid-system/guide-grid-system.component';
@@ -44,6 +45,7 @@ import { GuideTypographyComponent } from './guides/guide-typography/guide-typogr
     GuideSchematicsComponent,
     GuideSyncFundamentalsComponent,
     GuideSyncGetStartedComponent,
+    GuideTelemetryComponent,
     GuideThemeServiceComponent,
     GuideCreateThemeCustomizationComponent,
     GuideGridSystemComponent,
