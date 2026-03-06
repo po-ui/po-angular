@@ -266,61 +266,62 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   onComboBlur(comboComponent?: any) {
     if (comboComponent) {
       setTimeout(() => {
-        let currentYear = this.templateContext.year;
-        let currentMonth = this.templateContext.monthIndex;
-
-        const isMonthInvalid =
-          typeof currentMonth === 'string' || currentMonth < 0 || currentMonth > 11 || isNaN(currentMonth);
-
-        const isYearInvalid =
-          typeof currentYear === 'string' ||
-          isNaN(currentYear) ||
-          (currentYear && currentYear < 1900) ||
-          (currentYear && currentYear > 2100);
-
-        if (comboComponent.selectedOption && comboComponent.selectedOption.value !== undefined) {
-          if (comboComponent.inputEl && comboComponent.inputEl.nativeElement) {
-            const currentInputValue = comboComponent.inputEl.nativeElement.value;
-            const expectedValue = comboComponent.selectedOption.label || '';
-
-            if (currentInputValue !== expectedValue) {
-              comboComponent.inputEl.nativeElement.value = expectedValue;
-            }
-          }
-
-          if (isMonthInvalid || isYearInvalid) {
-            const selectedVal = comboComponent.selectedOption.value;
-            if (selectedVal >= 0 && selectedVal <= 11) {
-              currentMonth = selectedVal;
-            } else if (typeof selectedVal === 'number' && selectedVal > 11) {
-              currentYear = selectedVal;
-            }
-          }
-        }
-
-        const isInvalidYear = currentYear === undefined || currentYear === null;
-        const isInvalidMonth = currentMonth === undefined || currentMonth === null;
-
-        if (isInvalidYear || isInvalidMonth) {
-          const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : currentYear;
-          const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : currentMonth;
-
-          this.updateDisplay(safeYear, safeMonth);
-        }
+        const { year, month } = this.resolveComboValues(comboComponent);
+        this.fallbackDisplayIfInvalid(year, month);
       }, 0);
     } else {
-      const currentYear = this.templateContext.year;
-      const currentMonth = this.templateContext.monthIndex;
+      this.fallbackDisplayIfInvalid(this.templateContext.year, this.templateContext.monthIndex);
+    }
+  }
 
-      const isInvalidYear = currentYear === undefined || currentYear === null;
-      const isInvalidMonth = currentMonth === undefined || currentMonth === null;
+  private resolveComboValues(comboComponent: any): { year: number; month: number } {
+    let currentYear = this.templateContext.year;
+    let currentMonth = this.templateContext.monthIndex;
 
-      if (isInvalidYear || isInvalidMonth) {
-        const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : currentYear;
-        const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : currentMonth;
+    if (comboComponent.selectedOption && comboComponent.selectedOption.value !== undefined) {
+      this.syncComboInputValue(comboComponent);
 
-        this.updateDisplay(safeYear, safeMonth);
+      if (this.isMonthValueInvalid(currentMonth) || this.isYearValueInvalid(currentYear)) {
+        const selectedVal = comboComponent.selectedOption.value;
+        if (selectedVal >= 0 && selectedVal <= 11) {
+          currentMonth = selectedVal;
+        } else if (typeof selectedVal === 'number' && selectedVal > 11) {
+          currentYear = selectedVal;
+        }
       }
+    }
+
+    return { year: currentYear, month: currentMonth };
+  }
+
+  private syncComboInputValue(comboComponent: any): void {
+    if (comboComponent.inputEl && comboComponent.inputEl.nativeElement) {
+      const currentInputValue = comboComponent.inputEl.nativeElement.value;
+      const expectedValue = comboComponent.selectedOption.label || '';
+
+      if (currentInputValue !== expectedValue) {
+        comboComponent.inputEl.nativeElement.value = expectedValue;
+      }
+    }
+  }
+
+  private isMonthValueInvalid(month: any): boolean {
+    return typeof month === 'string' || month < 0 || month > 11 || isNaN(month);
+  }
+
+  private isYearValueInvalid(year: any): boolean {
+    return typeof year === 'string' || isNaN(year) || (year && year < 1900) || (year && year > 2100);
+  }
+
+  private fallbackDisplayIfInvalid(year: number, month: number): void {
+    const isInvalidYear = year === undefined || year === null;
+    const isInvalidMonth = month === undefined || month === null;
+
+    if (isInvalidYear || isInvalidMonth) {
+      const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : year;
+      const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : month;
+
+      this.updateDisplay(safeYear, safeMonth);
     }
   }
 
