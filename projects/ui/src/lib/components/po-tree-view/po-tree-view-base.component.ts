@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -67,6 +67,7 @@ export class PoTreeViewBaseComponent {
   @Output('p-unselected') unselected = new EventEmitter<PoTreeViewItem>();
 
   private _componentsSize: string = undefined;
+  private _initialComponentsSize: string = undefined;
   private _items: Array<PoTreeViewItem> = [];
   private _selectable: boolean = false;
   private _maxLevel = poTreeViewMaxLevel;
@@ -89,14 +90,25 @@ export class PoTreeViewBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-components-size')
-  @Input('p-components-size')
   set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.

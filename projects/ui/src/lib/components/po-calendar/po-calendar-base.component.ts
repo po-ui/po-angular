@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding, HostListener } from '@angular/core';
 
 import { PoDateService } from '../../services/po-date';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -137,6 +137,7 @@ export class PoCalendarBaseComponent {
   private _minDate: Date;
   private _mode: PoCalendarMode;
   private _size?: string;
+  private _initialSize?: string;
 
   /**
    * @optional
@@ -255,14 +256,25 @@ export class PoCalendarBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size')
-  @Input('p-size')
   set size(value: string) {
-    this._size = validateSizeFn(value, PoFieldSize);
+    this._initialSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @Input('p-size')
+  @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialSize, PoFieldSize);
+    this._size = size;
   }
 
   constructor(

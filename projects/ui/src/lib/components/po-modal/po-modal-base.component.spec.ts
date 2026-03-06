@@ -98,6 +98,12 @@ describe('PoModalBaseComponent:', () => {
       component['_componentsSize'] = undefined;
       expect(component.componentsSize).toBe('medium');
     });
+
+    it('onThemeChange: should call applySizeBasedOnA11y', () => {
+      spyOn<any>(component, 'applySizeBasedOnA11y');
+      component['onThemeChange']();
+      expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+    });
   });
 
   it('should emit `onClosedX` if xClosed is true', () => {

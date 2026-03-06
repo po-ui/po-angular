@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
@@ -96,6 +96,7 @@ export class PoListViewBaseComponent {
 
   private _actions: Array<PoListViewAction>;
   private _componentsSize: string = undefined;
+  private _initialComponentsSize: string = undefined;
   private _height: number;
   private _hideSelectAll: boolean;
   private _items: Array<any>;
@@ -133,14 +134,25 @@ export class PoListViewBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-components-size')
-  @Input('p-components-size')
   set componentsSize(value: string) {
-    this._componentsSize = validateSizeFn(value, PoFieldSize);
+    this._initialComponentsSize = value;
+    this.applySizeBasedOnA11y();
   }
 
+  @HostBinding('attr.p-components-size')
+  @Input('p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.applySizeBasedOnA11y();
+  }
+
+  private applySizeBasedOnA11y(): void {
+    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+    this._componentsSize = size;
   }
 
   /**
