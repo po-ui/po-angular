@@ -34,7 +34,7 @@ export class PoUploadBaseService {
   public upload(
     url: string,
     files: Array<PoUploadFile>,
-    headers: { [name: string]: string | Array<string> },
+    headers: { [name: string]: string | Array<string> } | HttpHeaders,
     tOnUpload: EventEmitter<any>,
     uploadCallback: (file: PoUploadFile, percent: number) => void,
     successCallback: (file: PoUploadFile, event: any) => void,
@@ -77,7 +77,7 @@ export class PoUploadBaseService {
   public sendFile(
     url: string,
     file: PoUploadFile,
-    headers: { [name: string]: string | Array<string> },
+    headers: { [name: string]: string | Array<string> } | HttpHeaders,
     formData: FormData,
     uploadCallback: (file: PoUploadFile, percent: number) => void,
     successCallback: (file: PoUploadFile, event: any) => void,
@@ -104,15 +104,16 @@ export class PoUploadBaseService {
 
   public getRequest(
     url: string,
-    headers: { [name: string]: string | Array<string> },
+    headers: { [name: string]: string | Array<string> } | HttpHeaders,
     formData: FormData
   ): Observable<any> {
-    const httpHeaders = new HttpHeaders(headers);
+    const httpHeaders = this.getRequestHeaders(headers, formData);
 
     const req = new HttpRequest('POST', url, formData, {
       reportProgress: true,
-      headers: httpHeaders
+      ...(httpHeaders && { headers: httpHeaders })
     });
+
     return this.http.request(req);
   }
 
@@ -138,5 +139,26 @@ export class PoUploadBaseService {
     if (!hasRequest) {
       this.requests.push({ file, request });
     }
+  }
+
+  private getRequestHeaders(
+    headers: { [name: string]: string | Array<string> } | HttpHeaders,
+    formData: FormData
+  ): HttpHeaders {
+    if (!headers) {
+      return undefined;
+    }
+
+    let requestHeaders = headers instanceof HttpHeaders ? headers : new HttpHeaders(headers);
+
+    if (formData instanceof FormData) {
+      requestHeaders.keys().forEach(key => {
+        if (key.toLocaleLowerCase() === 'content-type') {
+          requestHeaders = requestHeaders.delete(key);
+        }
+      });
+    }
+
+    return requestHeaders.keys().length ? requestHeaders : undefined;
   }
 }

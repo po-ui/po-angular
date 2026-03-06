@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpHeaders, HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -233,6 +233,63 @@ describe('PoUploadBaseService:', () => {
     const req = service.getRequest('', {}, new FormData());
     expect(typeof req.subscribe()).toBe('object');
   }));
+
+  it('getRequest: should remove Content-Type for FormData and preserve custom headers', inject(
+    [PoUploadBaseService],
+    (service: PoUploadBaseService) => {
+      const requestSpy = spyOn<any>(service['http'], 'request').and.callThrough();
+      const headers = {
+        Authorization: 'token-value',
+        'Content-Type': 'application/json;charset=UTF-8'
+      };
+
+      service.getRequest('http://test', headers, new FormData());
+
+      const request: any = requestSpy.calls.mostRecent().args[0];
+
+      expect(request.headers.get('Authorization')).toEqual('token-value');
+      expect(request.headers.has('Content-Type')).toBeFalsy();
+      expect(request.headers.has('content-type')).toBeFalsy();
+    }
+  ));
+
+  it('getRequest: should remove Content-Type regardless of header casing for FormData', inject(
+    [PoUploadBaseService],
+    (service: PoUploadBaseService) => {
+      const requestSpy = spyOn<any>(service['http'], 'request').and.callThrough();
+      const headers = {
+        authorization: 'token-value',
+        'content-type': 'application/json;charset=UTF-8'
+      };
+
+      service.getRequest('http://test', headers, new FormData());
+
+      const request: any = requestSpy.calls.mostRecent().args[0];
+
+      expect(request.headers.get('authorization')).toEqual('token-value');
+      expect(request.headers.has('Content-Type')).toBeFalsy();
+      expect(request.headers.has('content-type')).toBeFalsy();
+    }
+  ));
+
+  it('getRequest: should keep custom headers when they do not include Content-Type', inject(
+    [PoUploadBaseService],
+    (service: PoUploadBaseService) => {
+      const requestSpy = spyOn<any>(service['http'], 'request').and.callThrough();
+      const headers = new HttpHeaders({
+        Authorization: 'token-value',
+        'X-Custom': 'custom-header'
+      });
+
+      service.getRequest('http://test', headers, new FormData());
+
+      const request: any = requestSpy.calls.mostRecent().args[0];
+
+      expect(request.headers.get('Authorization')).toEqual('token-value');
+      expect(request.headers.get('X-Custom')).toEqual('custom-header');
+      expect(request.headers.has('Content-Type')).toBeFalsy();
+    }
+  ));
 });
 
 function returnMethodsCallback() {
