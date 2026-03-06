@@ -104,20 +104,38 @@ export class PoUploadBaseService {
 
   public getRequest(
     url: string,
-    headers: { [name: string]: string | Array<string> },
+    headers: { [name: string]: string | Array<string> } | HttpHeaders,
     formData: FormData
   ): Observable<any> {
-    let httpHeaders = new HttpHeaders(headers || {});
-
-    // Remove Content-Type para que o navegador defina automaticamente
-    // multipart/form-data com o boundary correto para uploads com FormData.
-    httpHeaders = httpHeaders.delete('Content-Type');
+    const httpHeaders = this.getRequestHeaders(headers, formData);
 
     const req = new HttpRequest('POST', url, formData, {
       reportProgress: true,
-      headers: httpHeaders
+      ...(httpHeaders && { headers: httpHeaders })
     });
+
     return this.http.request(req);
+  }
+
+  private getRequestHeaders(
+    headers: { [name: string]: string | Array<string> } | HttpHeaders,
+    formData: FormData
+  ): HttpHeaders {
+    if (!headers) {
+      return undefined;
+    }
+
+    let requestHeaders = headers instanceof HttpHeaders ? headers : new HttpHeaders(headers);
+
+    if (formData instanceof FormData) {
+      requestHeaders.keys().forEach(key => {
+        if (key.toLocaleLowerCase() === 'content-type') {
+          requestHeaders = requestHeaders.delete(key);
+        }
+      });
+    }
+
+    return requestHeaders.keys().length ? requestHeaders : undefined;
   }
 
   public stopRequestByFile(file: any, callback: () => void) {
