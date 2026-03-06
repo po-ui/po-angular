@@ -1,0 +1,25 @@
+/* Credit Card Styles */
+.credit-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 200px;
+  position: relative;
+}
+
+.card-chip,
+.card-number {
+  margin-bottom: 15px;
+}
+
+.card-holder,
+.card-expiry {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-brand {
+  position: absolute;
+  bottom: 24px;
+  right: 35px;
+}
