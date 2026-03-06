@@ -107,7 +107,11 @@ export class PoUploadBaseService {
     headers: { [name: string]: string | Array<string> },
     formData: FormData
   ): Observable<any> {
-    const httpHeaders = new HttpHeaders(headers);
+    let httpHeaders = new HttpHeaders(headers || {});
+
+    // Remove Content-Type para que o navegador defina automaticamente
+    // multipart/form-data com o boundary correto para uploads com FormData.
+    httpHeaders = httpHeaders.delete('Content-Type');
 
     const req = new HttpRequest('POST', url, formData, {
       reportProgress: true,

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpRequest, HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -233,6 +233,75 @@ describe('PoUploadBaseService:', () => {
     const req = service.getRequest('', {}, new FormData());
     expect(typeof req.subscribe()).toBe('object');
   }));
+
+  describe('getRequest - Content-Type headers:', () => {
+    it('should not include Content-Type header when headers is undefined', inject(
+      [PoUploadBaseService],
+      (service: PoUploadBaseService) => {
+        const httpSpy = spyOn(service['http'], 'request').and.callThrough();
+
+        service.getRequest('http://example.com', undefined, new FormData());
+
+        const req = httpSpy.calls.mostRecent().args[0] as unknown as HttpRequest<FormData>;
+        expect(req.headers.has('Content-Type')).toBe(false);
+      }
+    ));
+
+    it('should not include Content-Type header when headers is empty object', inject(
+      [PoUploadBaseService],
+      (service: PoUploadBaseService) => {
+        const httpSpy = spyOn(service['http'], 'request').and.callThrough();
+
+        service.getRequest('http://example.com', {}, new FormData());
+
+        const req = httpSpy.calls.mostRecent().args[0] as unknown as HttpRequest<FormData>;
+        expect(req.headers.has('Content-Type')).toBe(false);
+      }
+    ));
+
+    it('should remove Content-Type header when explicitly provided in headers', inject(
+      [PoUploadBaseService],
+      (service: PoUploadBaseService) => {
+        const httpSpy = spyOn(service['http'], 'request').and.callThrough();
+        const headers = { 'Content-Type': 'application/json', Authorization: 'Bearer token123' };
+
+        service.getRequest('http://example.com', headers, new FormData());
+
+        const req = httpSpy.calls.mostRecent().args[0] as unknown as HttpRequest<FormData>;
+        expect(req.headers.has('Content-Type')).toBe(false);
+        expect(req.headers.get('Authorization')).toBe('Bearer token123');
+      }
+    ));
+
+    it('should preserve custom headers that are not Content-Type', inject(
+      [PoUploadBaseService],
+      (service: PoUploadBaseService) => {
+        const httpSpy = spyOn(service['http'], 'request').and.callThrough();
+        const headers = { Authorization: '145236', 'X-Custom-Header': 'custom-value' };
+
+        service.getRequest('http://example.com', headers, new FormData());
+
+        const req = httpSpy.calls.mostRecent().args[0] as unknown as HttpRequest<FormData>;
+        expect(req.headers.get('Authorization')).toBe('145236');
+        expect(req.headers.get('X-Custom-Header')).toBe('custom-value');
+        expect(req.headers.has('Content-Type')).toBe(false);
+      }
+    ));
+
+    it('should send FormData as request body without serialization', inject(
+      [PoUploadBaseService],
+      (service: PoUploadBaseService) => {
+        const httpSpy = spyOn(service['http'], 'request').and.callThrough();
+        const formData = new FormData();
+        formData.append('file', new Blob(['test']), 'test.txt');
+
+        service.getRequest('http://example.com', {}, formData);
+
+        const req = httpSpy.calls.mostRecent().args[0] as unknown as HttpRequest<FormData>;
+        expect(req.body instanceof FormData).toBe(true);
+      }
+    ));
+  });
 });
 
 function returnMethodsCallback() {
