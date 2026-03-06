@@ -66,13 +66,17 @@ module.exports = function (config) {
           '--disable-gpu',
           '--disable-web-security',
           '--disable-dev-shm-usage',
+          '--disable-ipc-flooding-protection',
+          '--disable-background-timer-throttling',
+          '--disable-renderer-backgrounding',
+          '--disable-backgrounding-occluded-windows',
           '--remote-debugging-port=9222'
         ]
       }
     },
     singleRun: false,
     restartOnFileChange: true,
-    browserNoActivityTimeout: 30000,
+    browserNoActivityTimeout: 120000,
     browserDisconnectTimeout: 50000,
     browserDisconnectTolerance: 3
   });
