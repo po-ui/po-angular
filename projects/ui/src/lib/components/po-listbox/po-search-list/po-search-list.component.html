@@ -10,8 +10,8 @@
   <input
     #inputElement
     class="po-input po-input-icon-left po-listbox-search-input"
-    [class.po-input-aa]="size === 'small'"
     [class.po-input-icon-left-aa]="size === 'small'"
+    [attr.p-size]="size"
     type="text"
     [placeholder]="placeholder"
     (keyup)="onChange($event)"

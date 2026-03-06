@@ -12,68 +12,72 @@
   [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
 >
-  <div class="po-field-container-content po-field-container-input" [attr.p-size]="size">
-    @if (icon) {
-      <div class="po-field-icon-container-left">
-        <po-icon
-          class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-          [class.po-field-icon-disabled]="isDisabled"
-          [class.po-field-icon-aa]="size === 'small'"
-          [p-icon]="icon"
-        ></po-icon>
+  <div class="po-field-container-content" [attr.p-size]="size">
+    <div class="po-field-container-content-helper-wrapper">
+      <div class="po-field-container-input">
+        @if (icon) {
+          <div class="po-field-icon-container-left">
+            <po-icon
+              class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+              [class.po-field-icon-disabled]="isDisabled"
+              [class.po-field-icon-aa]="size === 'small'"
+              [p-icon]="icon"
+            ></po-icon>
+          </div>
+        }
+
+        <input
+          #inp
+          class="po-input"
+          [attr.name]="name"
+          [attr.data-focused-element]="!isDisabled"
+          [attr.data-inactive-component]="isDisabled || readonly"
+          [attr.p-size]="size"
+          [autocomplete]="autocomplete"
+          [class.po-input-icon-left]="icon"
+          [class.po-input-icon-left-aa]="icon && size === 'small'"
+          [class.po-input-icon-right]="clean || loading"
+          [class.po-input-icon-right-aa]="(clean || loading) && size === 'small'"
+          [disabled]="isDisabled"
+          [id]="id"
+          [placeholder]="isDisabled ? '' : placeholder"
+          [readonly]="readonly"
+          [required]="required"
+          [type]="type"
+          (blur)="eventOnBlur($event)"
+          (click)="eventOnClick($event)"
+          (focus)="eventOnFocus($event)"
+          (input)="eventOnInput($event)"
+          (keydown)="onKeyDown($event)"
+        />
+        <div class="po-field-icon-container-right">
+          @if (loading) {
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          }
+
+          @if (!loading && clean && !isDisabled && !readonly) {
+            <po-clean
+              class="{{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+              [p-element-ref]="inputEl"
+              [p-size]="size"
+              (p-change-event)="clear($event)"
+            >
+            </po-clean>
+          }
+        </div>
       </div>
-    }
-
-    <input
-      #inp
-      class="po-input"
-      [attr.name]="name"
-      [attr.data-focused-element]="!isDisabled"
-      [attr.data-inactive-component]="isDisabled || readonly"
-      [autocomplete]="autocomplete"
-      [class.po-input-icon-left]="icon"
-      [class.po-input-icon-left-aa]="icon && size === 'small'"
-      [class.po-input-icon-right]="clean || loading"
-      [class.po-input-icon-right-aa]="(clean || loading) && size === 'small'"
-      [class.po-input-aa]="size === 'small'"
-      [disabled]="isDisabled"
-      [id]="id"
-      [placeholder]="isDisabled ? '' : placeholder"
-      [readonly]="readonly"
-      [required]="required"
-      [type]="type"
-      (blur)="eventOnBlur($event)"
-      (click)="eventOnClick($event)"
-      (focus)="eventOnFocus($event)"
-      (input)="eventOnInput($event)"
-      (keydown)="onKeyDown($event)"
-    />
-    <div class="po-field-icon-container-right">
-      @if (loading) {
-        <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-      }
-
-      @if (!loading && clean && !isDisabled && !readonly) {
-        <po-clean
-          class="{{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-          [p-element-ref]="inputEl"
+      @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+        <po-helper
+          #helperEl
+          class="po-field-helper-button"
           [p-size]="size"
-          (p-change-event)="clear($event)"
+          [p-helper]="poHelper.helperSettings"
+          [p-disabled]="isDisabled"
+          [p-append-in-body]="appendBox"
         >
-        </po-clean>
+        </po-helper>
       }
     </div>
-    @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
-      <po-helper
-        #helperEl
-        class="po-field-helper-button"
-        [p-size]="size"
-        [p-helper]="poHelper.helperSettings"
-        [p-disabled]="isDisabled"
-        [p-append-in-body]="appendBox"
-      >
-      </po-helper>
-    }
   </div>
 
   @if (!readonly) {

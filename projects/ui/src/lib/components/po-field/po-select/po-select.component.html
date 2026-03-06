@@ -12,73 +12,69 @@
   [p-text-wrap]="labelTextWrap()"
 >
   <div class="po-field-container-content" [attr.p-size]="size">
-    <div class="po-select-container">
-      <select
-        #select
-        class="po-select po-select-phosphor"
-        [class.po-select-aa]="size === 'small'"
-        [class.po-select-loading]="loading"
-        [class.po-select-placeholder]="!selectedValue?.toString() && !!placeholder"
-        [attr.data-focused-element]="!isDisabled"
-        [attr.data-inactive-component]="disabled || readonly || loading"
-        [attr.name]="name"
-        [disabled]="isDisabled"
-        [id]="id"
-        [required]="required"
-        (blur)="onBlur($event)"
-        (change)="onSelectChange($event.target.value)"
-        (keydown)="onKeyDown($event)"
-      >
-        @if (!isSafari) {
-          @if (!selectedValue?.toString() || !!placeholder) {
-            <option
-              [disabled]="!!placeholder"
-              [hidden]="!selectedValue?.toString() && !placeholder"
-              [selected]="!selectedValue?.toString()"
-              [value]="placeholder ?? ''"
-            >
-              {{ placeholder }}
-            </option>
+    <div class="po-field-container-content-helper-wrapper">
+      <div class="po-field-container-input">
+        <select
+          #select
+          class="po-select po-select-phosphor"
+          [class.po-select-loading]="loading"
+          [class.po-select-placeholder]="!selectedValue?.toString() && !!placeholder"
+          [attr.data-focused-element]="!isDisabled"
+          [attr.data-inactive-component]="disabled || readonly || loading"
+          [attr.name]="name"
+          [disabled]="isDisabled"
+          [id]="id"
+          [required]="required"
+          (blur)="onBlur($event)"
+          (change)="onSelectChange($event.target.value)"
+          (keydown)="onKeyDown($event)"
+        >
+          @if (!isSafari) {
+            @if (!selectedValue?.toString() || !!placeholder) {
+              <option
+                [disabled]="!!placeholder"
+                [hidden]="!selectedValue?.toString() && !placeholder"
+                [selected]="!selectedValue?.toString()"
+                [value]="placeholder ?? ''"
+              >
+                {{ placeholder }}
+              </option>
+            }
+            <option [hidden]="true">{{ displayValue }}</option>
           }
-          <option [hidden]="true">{{ displayValue }}</option>
-        }
 
-        @if (isSafari) {
-          <option>{{ displayValue || placeholder }}</option>
-        }
-
-        @if (optionWithoutGroup.length > 0) {
-          @for (item of optionWithoutGroup; track item) {
-            <option [disabled]="readonly" [value]="item?.[this.fieldValue]">
-              {{ item?.[this.fieldLabel] }}
-            </option>
+          @if (isSafari) {
+            <option>{{ displayValue || placeholder }}</option>
           }
-        }
-        @if (listGroupOptions.length > 0) {
-          @for (item of listGroupOptions; track item) {
-            @if (item?.options.length > 0) {
-              <optgroup label="{{ item?.label }}" [disabled]="readonly">
-                @for (subItem of item.options; track subItem) {
-                  <option [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
-                    {{ subItem?.[this.fieldLabel] }}
-                  </option>
-                }
-              </optgroup>
+
+          @if (optionWithoutGroup.length > 0) {
+            @for (item of optionWithoutGroup; track item) {
+              <option [disabled]="readonly" [value]="item?.[this.fieldValue]">
+                {{ item?.[this.fieldLabel] }}
+              </option>
             }
           }
-        }
-      </select>
+          @if (listGroupOptions.length > 0) {
+            @for (item of listGroupOptions; track item) {
+              @if (item?.options.length > 0) {
+                <optgroup label="{{ item?.label }}" [disabled]="readonly">
+                  @for (subItem of item.options; track subItem) {
+                    <option [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
+                      {{ subItem?.[this.fieldLabel] }}
+                    </option>
+                  }
+                </optgroup>
+              }
+            }
+          }
+        </select>
 
-      @if (loading) {
-        <div
-          class="po-field-icon-container-right"
-          [class.po-select-loading-with-helper]="
-            (!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)
-          "
-        >
-          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-        </div>
-      }
+        @if (loading) {
+          <div class="po-field-icon-container-right">
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          </div>
+        }
+      </div>
 
       @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
         <po-helper
