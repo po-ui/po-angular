@@ -31,7 +31,7 @@ describe('PoHeaderbrandComponent', () => {
   it('should set smallLogo to true if width is smaller than 960', fakeAsync(() => {
     component.ngAfterViewInit();
 
-    (window.innerWidth as any) = 800;
+    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     window.dispatchEvent(new Event('resize'));
 
     tick(200);
@@ -41,7 +41,7 @@ describe('PoHeaderbrandComponent', () => {
   it('should set smallLogo to false if width is bigger than 960', fakeAsync(() => {
     component.ngAfterViewInit();
 
-    (window.innerWidth as any) = 1200;
+    Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true, configurable: true });
     window.dispatchEvent(new Event('resize'));
 
     tick(200);
