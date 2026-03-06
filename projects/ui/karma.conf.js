@@ -17,7 +17,11 @@ module.exports = function (config) {
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false, // leave Jasmine Spec Runner output visible in browser
+      jasmine: {
+        random: false,
+        timeoutInterval: 30000
+      }
     },
     coverageReporter: {
       dir: require('path').join(__dirname, '../../coverage/ui'),
@@ -53,12 +57,25 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
-        flags: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-web-security', '--remote-debugging-port=9222']
+        flags: [
+          '--no-sandbox',
+          '--headless',
+          '--disable-gpu',
+          '--disable-web-security',
+          '--disable-dev-shm-usage',
+          '--disable-extensions',
+          '--disable-translate',
+          '--remote-debugging-port=9222'
+        ]
       }
     },
     singleRun: true,
     restartOnFileChange: true,
-    browserNoActivityTimeout: 50000,
-    browserDisconnectTimeout: 50000
+    concurrency: 1,
+    captureTimeout: 120000,
+    browserNoActivityTimeout: 120000,
+    browserDisconnectTimeout: 60000,
+    browserDisconnectTolerance: 3,
+    processKillTimeout: 10000
   });
 };
