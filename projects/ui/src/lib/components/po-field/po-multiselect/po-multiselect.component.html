@@ -42,9 +42,9 @@
             (blur)="onBlur($event)"
           >
             @if (!disabled && !loading && !visibleTags?.length) {
-              <span class="po-multiselect-input-placeholder" ria-hidden="true">
-                {{ placeholder ? placeholder : literals.selectItem }}
-              </span>
+              <div class="po-multiselect-input-placeholder" ria-hidden="true">
+                <span>{{ placeholder ? placeholder : literals.selectItem }}</span>
+              </div>
             }
 
             @for (tag of visibleTags; track tag; let i = $index) {
