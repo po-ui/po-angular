@@ -82,7 +82,7 @@ export class PoControlPositionService {
    * @param targetElement elemento de onde deve partir a exibição
    * @param customPositions posições que sobrescreve as posições padrões
    * @param isSetElementWidth indica se deve definir o tamanho do elemento a ser exibido, caso for verdadeiro será igual do targetElement
-   * @param isCornerAligned indica se o elemento filho será alinhado nos cantos do elemneto pai.
+   * @param isCornerAligned indica se o elemento filho será alinhado nos cantos do elemento pai.
    */
   setElements(
     element: ElementRef | HTMLElement,

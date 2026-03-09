@@ -167,7 +167,7 @@ export class PoThemeService {
 
     if (!this.isValidA11yLevel(a11yLevel)) return false;
 
-    const defaultSize = 'small';
+    const defaultSize = enable ? 'small' : 'medium';
     document.documentElement.setAttribute('data-default-size', defaultSize);
 
     if (a11yLevel === PoThemeA11yEnum.AA && enable) {
