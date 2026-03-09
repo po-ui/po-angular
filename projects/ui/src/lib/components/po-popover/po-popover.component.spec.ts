@@ -331,12 +331,14 @@ describe('PoPopoverComponent:', () => {
       setPopoverPosition: () => {},
       setElementsControlPosition: () => {},
       setOpacity: arg => {},
+      observeContentResize: () => {},
       cd: { detectChanges: () => {} }
     };
 
     spyOn(fakeThis, 'addScrollEventListener');
     spyOn(fakeThis, 'setOpacity');
     spyOn(fakeThis, 'setElementsControlPosition');
+    spyOn(fakeThis, 'observeContentResize');
     spyOn(fakeThis.cd, 'detectChanges');
     component.open.call(fakeThis);
 
@@ -346,7 +348,85 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.addScrollEventListener).toHaveBeenCalled();
     expect(fakeThis.setOpacity).toHaveBeenCalledWith(1);
     expect(fakeThis.setElementsControlPosition).toHaveBeenCalled();
+    expect(fakeThis.observeContentResize).toHaveBeenCalled();
     expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
+  }));
+
+  it('open: should set widthPopover and call requestAnimationFrame when cornerAligned is true and width is undefined', fakeAsync(() => {
+    const fakeNativeElement = {
+      style: { width: '', opacity: 0 },
+      scrollWidth: 250
+    };
+
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: true,
+      width: undefined,
+      widthPopover: undefined,
+      popoverElement: { nativeElement: fakeNativeElement },
+      openPopover: { emit: () => {} },
+      setPopoverPosition: jasmine.createSpy('setPopoverPosition'),
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} }
+    };
+
+    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
+    component.open.call(fakeThis);
+    tick(300);
+
+    expect(fakeNativeElement.style.width).toBe('auto');
+    expect(fakeThis.widthPopover).toBe(250);
+    expect(window.requestAnimationFrame).toHaveBeenCalled();
+    expect(fakeThis.setPopoverPosition).toHaveBeenCalled();
+  }));
+
+  it('open: should NOT set widthPopover when cornerAligned is false', fakeAsync(() => {
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: false,
+      width: undefined,
+      widthPopover: undefined,
+      openPopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} }
+    };
+
+    component.open.call(fakeThis);
+    tick(300);
+
+    expect(fakeThis.widthPopover).toBeUndefined();
+  }));
+
+  it('open: should NOT set widthPopover when width input is defined', fakeAsync(() => {
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: true,
+      width: 300,
+      widthPopover: undefined,
+      openPopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} }
+    };
+
+    component.open.call(fakeThis);
+    tick(300);
+
+    expect(fakeThis.widthPopover).toBeUndefined();
   }));
 
   it('open: should set clickoutListener when trigger is function', () => {
@@ -365,6 +445,7 @@ describe('PoPopoverComponent:', () => {
       setOpacity: () => {},
       setElementsControlPosition: () => {},
       setPopoverPosition: () => {},
+      observeContentResize: () => {},
       openPopover: { emit: () => {} },
       cd: { detectChanges: () => {} },
       isHidden: true
@@ -377,13 +458,15 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.clickoutListener).toBe(fakeListener);
   });
 
-  it('should close popover and call `closePopover.emit`', () => {
+  it('should close popover and call `closePopover.emit` and `disconnectResizeObserver`', () => {
     spyOn(component.closePopover, 'emit');
+    spyOn<any>(component, 'disconnectResizeObserver');
     component.isHidden = false;
 
     component.close();
 
     expect(component.isHidden).toBeTruthy();
+    expect(component['disconnectResizeObserver']).toHaveBeenCalled();
     expect(component.closePopover.emit).toHaveBeenCalled();
   });
 
@@ -393,16 +476,19 @@ describe('PoPopoverComponent:', () => {
       trigger: 'function',
       closePopover: { emit: () => {} },
       clickoutListener: () => {},
+      disconnectResizeObserver: () => {},
       cd: { detectChanges: () => {} }
     };
 
     spyOn(fakeThis.closePopover, 'emit');
     spyOn(fakeThis, 'clickoutListener');
+    spyOn(fakeThis, 'disconnectResizeObserver');
     spyOn(fakeThis.cd, 'detectChanges');
 
     component.close.call(fakeThis);
 
     expect(fakeThis.isHidden).toBeTruthy();
+    expect(fakeThis.disconnectResizeObserver).toHaveBeenCalled();
     expect(fakeThis.closePopover.emit).toHaveBeenCalled();
     expect(fakeThis.clickoutListener).toHaveBeenCalled();
     expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
@@ -444,11 +530,13 @@ describe('PoPopoverComponent:', () => {
       expect(component['setElementsControlPosition']).toHaveBeenCalled();
     });
 
-    it('ngOnDestroy: should call removeListeners.', () => {
+    it('ngOnDestroy: should call disconnectResizeObserver and removeListeners.', () => {
+      spyOn(component, <any>'disconnectResizeObserver');
       spyOn(component, <any>'removeListeners');
 
       component.ngOnDestroy();
 
+      expect(component['disconnectResizeObserver']).toHaveBeenCalled();
       expect(component['removeListeners']).toHaveBeenCalled();
     });
 
@@ -568,7 +656,30 @@ describe('PoPopoverComponent:', () => {
       expect(component['poControlPosition'].setElements).toHaveBeenCalledWith(
         component.popoverElement.nativeElement,
         popoverOffset,
-        component.target
+        component.target,
+        undefined,
+        false,
+        false
+      );
+    });
+
+    it(`setElementsControlPosition: should pass cornerAligned=true when cornerAligned is true`, () => {
+      const popoverOffset = 8;
+      component.popoverElement.nativeElement = '<po-popover></po-popover>';
+      component.target = <any>'<div></div>';
+      component.cornerAligned = true;
+
+      spyOn(component['poControlPosition'], 'setElements');
+
+      component['setElementsControlPosition']();
+
+      expect(component['poControlPosition'].setElements).toHaveBeenCalledWith(
+        component.popoverElement.nativeElement,
+        popoverOffset,
+        component.target,
+        undefined,
+        false,
+        true
       );
     });
   });
@@ -1024,6 +1135,142 @@ describe('PoPopoverComponent:', () => {
         expect(focusSpy).toHaveBeenCalled();
         a.remove();
         b.remove();
+      });
+    });
+
+    // ---------------- observeContentResize ----------------
+    describe('observeContentResize:', () => {
+      let originalResizeObserver: typeof ResizeObserver;
+
+      beforeEach(() => {
+        originalResizeObserver = window.ResizeObserver;
+      });
+
+      afterEach(() => {
+        (window as any).ResizeObserver = originalResizeObserver;
+      });
+
+      it('should create a ResizeObserver and observe the popoverElement', () => {
+        const observeSpy = jasmine.createSpy('observe');
+        const disconnectSpy = jasmine.createSpy('disconnect');
+
+        (window as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
+          return { observe: observeSpy, disconnect: disconnectSpy, unobserve: jasmine.createSpy('unobserve') };
+        };
+
+        (component as any).observeContentResize();
+
+        expect(observeSpy).toHaveBeenCalledWith(component.popoverElement.nativeElement);
+        expect(component['resizeObserver']).toBeTruthy();
+      });
+
+      it('should disconnect existing observer before creating a new one', () => {
+        const disconnectSpy = jasmine.createSpy('disconnect');
+        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} } as any;
+
+        (globalThis as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
+          return {
+            observe: jasmine.createSpy('observe'),
+            disconnect: jasmine.createSpy('disconnect'),
+            unobserve: jasmine.createSpy('unobserve')
+          };
+        };
+
+        (component as any).observeContentResize();
+
+        expect(disconnectSpy).toHaveBeenCalled();
+      });
+
+      it('should skip the initial ResizeObserver callback invocation', () => {
+        let capturedCallback: ResizeObserverCallback;
+
+        (globalThis as any).ResizeObserver = function (callback: ResizeObserverCallback) {
+          capturedCallback = callback;
+          return {
+            observe: jasmine.createSpy('observe'),
+            disconnect: jasmine.createSpy('disconnect'),
+            unobserve: jasmine.createSpy('unobserve')
+          };
+        };
+
+        spyOn<any>(component, 'setElementsControlPosition');
+        spyOn(component, 'setPopoverPosition');
+
+        (component as any).observeContentResize();
+
+        // First call (initial) should be skipped
+        capturedCallback([] as any, {} as any);
+
+        expect(component['setElementsControlPosition']).not.toHaveBeenCalled();
+        expect(component.setPopoverPosition).not.toHaveBeenCalled();
+      });
+
+      it('should recalculate position on subsequent ResizeObserver callbacks', () => {
+        let capturedCallback: ResizeObserverCallback;
+
+        (globalThis as any).ResizeObserver = function (callback: ResizeObserverCallback) {
+          capturedCallback = callback;
+          return {
+            observe: jasmine.createSpy('observe'),
+            disconnect: jasmine.createSpy('disconnect'),
+            unobserve: jasmine.createSpy('unobserve')
+          };
+        };
+
+        spyOn<any>(component, 'setElementsControlPosition');
+        spyOn(component, 'setPopoverPosition');
+        spyOn(component['cd'], 'detectChanges');
+
+        (component as any).observeContentResize();
+
+        // First call (initial) — skipped
+        capturedCallback([] as any, {} as any);
+
+        // Second call — should recalculate
+        capturedCallback([] as any, {} as any);
+
+        expect(component['setElementsControlPosition']).toHaveBeenCalled();
+        expect(component.setPopoverPosition).toHaveBeenCalled();
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+      });
+
+      it('should not create observer when popoverElement is undefined', () => {
+        (component as any).popoverElement = undefined;
+
+        const constructorSpy = jasmine.createSpy('ResizeObserverConstructor');
+        (window as any).ResizeObserver = constructorSpy;
+
+        (component as any).observeContentResize();
+
+        expect(constructorSpy).not.toHaveBeenCalled();
+        expect(component['resizeObserver']).toBeNull();
+      });
+    });
+
+    // ---------------- disconnectResizeObserver ----------------
+    describe('disconnectResizeObserver:', () => {
+      it('should disconnect and nullify the resizeObserver', () => {
+        const disconnectSpy = jasmine.createSpy('disconnect');
+        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} } as any;
+
+        (component as any).disconnectResizeObserver();
+
+        expect(disconnectSpy).toHaveBeenCalled();
+        expect(component['resizeObserver']).toBeNull();
+      });
+
+      it('should not throw when resizeObserver is null', () => {
+        component['resizeObserver'] = null;
+
+        expect(() => (component as any).disconnectResizeObserver()).not.toThrow();
+        expect(component['resizeObserver']).toBeNull();
+      });
+
+      it('should not throw when resizeObserver is undefined', () => {
+        component['resizeObserver'] = undefined;
+
+        expect(() => (component as any).disconnectResizeObserver()).not.toThrow();
+        expect(component['resizeObserver']).toBeNull();
       });
     });
 
