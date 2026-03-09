@@ -111,12 +111,21 @@ export interface PoHeaderActionTool {
  */
 export interface PoHeaderActionPopoverAction {
   /**
-   *
    * @description
    *
-   * Template que será renderizado dentro do popover
+   * Template que será renderizado dentro do popover.
    */
   content: TemplateRef<any>;
+
+  /**
+   * @description
+   *
+   * Largura, em pixels, do template renderizado dentro do popover.
+   *
+   * Valores permitidos: de 240 a 800.
+   *
+   */
+  width?: number;
 }
 
 /**

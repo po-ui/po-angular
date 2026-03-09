@@ -3,10 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   OnChanges,
   OnDestroy,
-  Output,
   Renderer2,
   SimpleChanges,
   ViewChild
@@ -49,8 +47,10 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   timeoutResize;
   targetElement;
   afterViewInitWasCalled = false;
+  widthPopover: number = undefined;
   private keydownTargetListener?: () => void;
   private keydownPopoverListener?: () => void;
+  private resizeObserver: ResizeObserver;
   eventListenerFunction: () => void;
   private readonly tabbableSelector = [
     'a[href]:not([tabindex="-1"])',
@@ -97,11 +97,13 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   ngOnDestroy() {
+    this.disconnectResizeObserver();
     this.removeListeners();
   }
 
   close(): void {
     this.isHidden = true;
+    this.disconnectResizeObserver();
     this.closePopover.emit();
 
     if (this.trigger === 'function' && this.clickoutListener) {
@@ -127,6 +129,18 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.setPopoverPosition();
       this.setOpacity(1);
       this.openPopover.emit();
+      this.observeContentResize();
+      if (this.cornerAligned && !this.width) {
+        const el = this.popoverElement.nativeElement;
+
+        el.style.width = 'auto';
+        const width = el.scrollWidth;
+        this.widthPopover = width;
+
+        requestAnimationFrame(() => {
+          this.setPopoverPosition();
+        });
+      }
       this.cd.detectChanges();
     });
 
@@ -238,7 +252,14 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   private setElementsControlPosition() {
     const popoverOffset = 8;
-    this.poControlPosition.setElements(this.popoverElement.nativeElement, popoverOffset, this.target);
+    this.poControlPosition.setElements(
+      this.popoverElement.nativeElement,
+      popoverOffset,
+      this.target,
+      undefined,
+      false,
+      this.cornerAligned
+    );
   }
 
   private focusOnTarget(): void {
@@ -354,5 +375,29 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     const idx = target ? docTabs.indexOf(target) : -1;
     const prev = docTabs[idx - 1] || docTabs[docTabs.length - 1];
     prev?.focus?.();
+  }
+
+  private observeContentResize(): void {
+    this.disconnectResizeObserver();
+
+    if (!this.popoverElement?.nativeElement) return;
+
+    let initialCall = true;
+    this.resizeObserver = new ResizeObserver(() => {
+      if (initialCall) {
+        initialCall = false;
+        return;
+      }
+      this.setElementsControlPosition();
+      this.setPopoverPosition();
+      this.cd.detectChanges();
+    });
+
+    this.resizeObserver.observe(this.popoverElement.nativeElement);
+  }
+
+  private disconnectResizeObserver(): void {
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
   }
 }

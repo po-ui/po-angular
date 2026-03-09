@@ -36,9 +36,11 @@
       @if (action?.popover) {
         <po-popover
           #poPopoverAction
+          p-position="bottom-right"
+          [p-width]="action.popover.width"
           [p-target]="buttonActionElements?.get(i)"
-          p-position="bottom-left"
           [p-hide-arrow]="true"
+          [p-corner-aligned]="true"
         >
           <ng-container *ngTemplateOutlet="action.popover?.content"></ng-container>
         </po-popover>

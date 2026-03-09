@@ -45,6 +45,10 @@ export class PoPopoverBaseComponent {
    */
 
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
+  // Indica se o elemento filho será alinhado nos cantos do elemento pai.
+  @Input('p-corner-aligned') cornerAligned = false;
+
   /**
    * @description
    *
@@ -92,6 +96,9 @@ export class PoPopoverBaseComponent {
 
   /** Título do popover. */
   @Input('p-title') title?: string;
+
+  // Define o width do popover.
+  @Input('p-width') width?: number;
 
   /** Evento disparado ao fechar o popover. */
   @Output('p-close') closePopover = new EventEmitter<any>();
