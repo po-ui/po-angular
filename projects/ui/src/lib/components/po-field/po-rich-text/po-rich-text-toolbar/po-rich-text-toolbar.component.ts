@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild, inject } from '@angular/core';
 
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
 import { PoUtils } from '../../../../utils/util';
@@ -102,6 +102,7 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return PoUtils.isIE();
   }
 
+  @HostBinding('attr.p-size')
   @Input('p-size') size: string;
 
   constructor() {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
 import { isExternalLink, PoUtils } from '../../../../utils/util';
@@ -19,6 +19,7 @@ export class PoRichTextLinkModalComponent implements OnInit {
 
   @ViewChild('modalLinkForm') modalLinkForm: NgForm;
 
+  @HostBinding('attr.p-size')
   @Input('p-size') size: string;
 
   @Output('p-command') command = new EventEmitter<string | { command: string; value: string | any }>();

@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
   OnDestroy,
   OnInit,
@@ -56,6 +57,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy {
 
   @Output('p-selected-link') selectedLink = new EventEmitter<any>();
 
+  @HostBinding('attr.p-size')
   @Input('p-size') size: string;
 
   @Output('p-shortcut-command') shortcutCommand = new EventEmitter<any>();
