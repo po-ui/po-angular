@@ -281,6 +281,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.draggable;
   }
 
+  /**
+   * @deprecated Não é mais necessário com a nova estrutura de virtual scroll onde o thead fica fora do viewport.
+   */
   public get inverseOfTranslation(): string {
     if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
       return '-0px';
