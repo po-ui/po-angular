@@ -147,16 +147,6 @@ export class PoButtonGroupBaseComponent {
     }
   }
 
-  @HostListener('window:PoUiThemeChange')
-  protected onThemeChange(): void {
-    this.applySizeBasedOnA11y();
-  }
-
-  private applySizeBasedOnA11y(): void {
-    const size = validateSizeFn(this._initialSize, PoFieldSize);
-    this._size = size;
-  }
-
   private checkSelecteds(toggleMode: string) {
     if (toggleMode === PoButtonGroupToggle.None) {
       this.deselectAllButtons();

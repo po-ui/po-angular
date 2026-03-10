@@ -559,16 +559,6 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
-  @HostListener('window:PoUiThemeChange')
-  protected onThemeChange(): void {
-    this.applySizeBasedOnA11y();
-  }
-
-  private applySizeBasedOnA11y(): void {
-    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
-    this._componentsSize = size;
-  }
-
   /**
    * @description
    *
