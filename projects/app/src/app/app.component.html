@@ -1,0 +1,87 @@
+<div class="po-font-text" style="padding: 24px; max-width: 1200px; margin: 0 auto">
+  <h1 class="po-font-title">po-timer - App de Demonstração</h1>
+  <p class="po-font-text-large" style="margin-bottom: 32px">
+    Demonstração das variações do componente <strong>po-timer</strong> (Fase 1).
+  </p>
+
+  <!-- Seção 1: Formato 24h (padrão) -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">1. Formato 24h (padrão)</h2>
+    <p class="po-font-text">Exibe horas de 0 a 23. Intervalo de minutos padrão: 5 minutos.</p>
+    <po-timer [p-format]="format24" (p-change)="onTimeChange24($event)"> </po-timer>
+    <p class="po-font-text" style="margin-top: 12px">
+      <strong>Valor selecionado:</strong> {{ selectedTime24 || '(nenhum)' }}
+    </p>
+  </section>
+
+  <po-divider></po-divider>
+
+  <!-- Seção 2: Formato 12h (AM/PM) -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">2. Formato 12h (AM/PM)</h2>
+    <p class="po-font-text">Exibe horas de 1 a 12 com seletor AM/PM.</p>
+    <po-timer [p-format]="format12" (p-change)="onTimeChange12($event)"> </po-timer>
+    <p class="po-font-text" style="margin-top: 12px">
+      <strong>Valor selecionado:</strong> {{ selectedTime12 || '(nenhum)' }}
+    </p>
+  </section>
+
+  <po-divider></po-divider>
+
+  <!-- Seção 3: Com segundos -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">3. Com segundos</h2>
+    <p class="po-font-text">
+      Exibe coluna de segundos (intervalo padrão: 15 segundos). Ativado via <code>p-show-seconds</code>.
+    </p>
+    <po-timer [p-format]="format24" p-show-seconds (p-change)="onTimeChangeWithSeconds($event)"> </po-timer>
+    <p class="po-font-text" style="margin-top: 12px">
+      <strong>Valor selecionado:</strong> {{ selectedTimeWithSeconds || '(nenhum)' }}
+    </p>
+  </section>
+
+  <po-divider></po-divider>
+
+  <!-- Seção 4: Com limites min/max -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">4. Com limites (min: 08:00 / max: 18:00)</h2>
+    <p class="po-font-text">Horas fora do intervalo ficam desabilitadas.</p>
+    <po-timer [p-format]="format24" p-min-time="08:00" p-max-time="18:00" (p-change)="onTimeChangeMinMax($event)">
+    </po-timer>
+    <p class="po-font-text" style="margin-top: 12px">
+      <strong>Valor selecionado:</strong> {{ selectedTimeMinMax || '(nenhum)' }}
+    </p>
+  </section>
+
+  <po-divider></po-divider>
+
+  <!-- Seção 5: Intervalo de minutos personalizado -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">5. Intervalo de minutos personalizado (15 min)</h2>
+    <p class="po-font-text">
+      Minutos exibidos em intervalos de 15: 00, 15, 30, 45. Configurado via <code>p-minute-interval</code>.
+    </p>
+    <po-timer [p-format]="format24" [p-minute-interval]="15" (p-change)="onTimeChangeInterval($event)"> </po-timer>
+    <p class="po-font-text" style="margin-top: 12px">
+      <strong>Valor selecionado:</strong> {{ selectedTimeInterval || '(nenhum)' }}
+    </p>
+  </section>
+
+  <po-divider></po-divider>
+
+  <!-- Seção 6: Tamanho small (AA) -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">6. Tamanho small (AA)</h2>
+    <p class="po-font-text">Versão compacta do componente, ativada via <code>p-size="small"</code>.</p>
+    <po-timer [p-format]="format24" p-size="small"> </po-timer>
+  </section>
+
+  <po-divider></po-divider>
+
+  <!-- Seção 7: 12h + segundos + small -->
+  <section style="margin-bottom: 40px">
+    <h2 class="po-font-subtitle">7. Combinação: 12h + segundos + small</h2>
+    <p class="po-font-text">Todas as variações combinadas: formato 12h, com segundos e tamanho small.</p>
+    <po-timer [p-format]="format12" p-show-seconds p-size="small"> </po-timer>
+  </section>
+</div>
