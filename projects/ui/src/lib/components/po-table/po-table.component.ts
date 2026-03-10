@@ -718,7 +718,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.heightTableContainer = height ? height - this.getHeightTableFooter() : undefined;
     this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - this.itemSize : undefined;
     this.setTableOpacity(1);
-    this.changeDetector.detectChanges();
+    this.changeDetector.markForCheck();
   }
 
   protected verifyCalculateHeightTableContainer() {
