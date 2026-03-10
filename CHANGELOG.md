@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.5.0](https://github.com/po-ui/po-angular/compare/v21.4.0...v21.5.0) (2026-03-10)
+
+
+### Features
+
+* **fields:** aplica definições de espaçamento em label ([b0ea899](https://github.com/po-ui/po-angular/commit/b0ea899a4f2dd795d8d02315189b37055955d0e1))
+
 ## [21.4.0](https://github.com/po-ui/po-angular/compare/v21.3.0...v21.4.0) (2026-03-03)
 
 
