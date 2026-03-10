@@ -1,4 +1,4 @@
-import { Component, ComponentRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentRef, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -81,6 +81,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   }
 
   @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }

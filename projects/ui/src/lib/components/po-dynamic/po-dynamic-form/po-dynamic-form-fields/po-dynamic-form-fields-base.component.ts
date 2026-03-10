@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../../utils/util';
 
@@ -42,6 +42,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
   }
 
   @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }

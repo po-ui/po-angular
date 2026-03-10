@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import {
   convertToBoolean,
@@ -178,6 +178,7 @@ export abstract class PoMenuBaseComponent {
   }
 
   @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }

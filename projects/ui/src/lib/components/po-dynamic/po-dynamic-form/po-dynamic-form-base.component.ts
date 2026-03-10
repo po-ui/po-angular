@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
@@ -225,6 +225,7 @@ export class PoDynamicFormBaseComponent {
   }
 
   @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }

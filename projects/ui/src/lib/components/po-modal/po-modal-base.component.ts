@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
@@ -128,6 +128,7 @@ export class PoModalBaseComponent {
   }
 
   @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }

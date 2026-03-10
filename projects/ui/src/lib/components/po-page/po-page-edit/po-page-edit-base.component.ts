@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, ViewChild } from '@angular/core';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -128,6 +128,7 @@ export class PoPageEditBaseComponent {
   }
 
   @Input('p-components-size')
+  @HostBinding('attr.p-components-size')
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
