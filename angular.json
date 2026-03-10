@@ -361,6 +361,56 @@
           }
         }
       }
+    },
+    "elements": {
+      "projectType": "application",
+      "root": "projects/elements",
+      "sourceRoot": "projects/elements/src",
+      "prefix": "po",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": {
+              "base": "dist/elements"
+            },
+            "index": "projects/elements/src/index.html",
+            "polyfills": ["projects/elements/src/polyfills.ts"],
+            "tsConfig": "projects/elements/tsconfig.app.json",
+            "assets": [],
+            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css"],
+            "scripts": [],
+            "extractLicenses": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true,
+            "browser": "projects/elements/src/main.ts"
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "none",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "open": false,
+            "host": "0.0.0.0",
+            "port": 4210,
+            "buildTarget": "elements:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "elements:build:production"
+            }
+          }
+        }
+      }
     }
   },
   "cli": {

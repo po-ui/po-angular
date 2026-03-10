@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>PO Elements - Demonstracao Web Components</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: 'Roboto', 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 1.15rem;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #753399;
+      color: #753399;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 24px;
+    }
+    .demo-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .demo-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .demo-field {
+      min-width: 280px;
+      max-width: 400px;
+      flex: 1;
+    }
+    pre#log {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .badge {
+      display: inline-block;
+      background: #753399;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>PO Elements <span class="badge">Web Components PoC</span></h1>
+  <p class="subtitle">
+    Componentes PO UI renderizados como Web Components (Custom Elements) em uma pagina HTML pura, sem Angular.
+  </p>
+
+  <!-- ==================== po-button ==================== -->
+  <h2>po-button</h2>
+  <div class="demo-section">
+    <div class="demo-row">
+      <po-button p-label="Primary" p-kind="primary"></po-button>
+      <po-button p-label="Secondary" p-kind="secondary"></po-button>
+      <po-button p-label="Tertiary" p-kind="tertiary"></po-button>
+      <po-button p-label="Danger" p-kind="primary" p-danger></po-button>
+      <po-button p-label="Disabled" p-kind="primary" p-disabled></po-button>
+      <po-button p-label="Com icone" p-kind="secondary" p-icon="an an-search"></po-button>
+    </div>
+  </div>
+
+  <!-- ==================== po-input ==================== -->
+  <h2>po-input</h2>
+  <div class="demo-section">
+    <div class="demo-row">
+      <div class="demo-field">
+        <po-input p-label="Nome completo" p-placeholder="Digite seu nome" p-help="Campo obrigatorio" p-required></po-input>
+      </div>
+      <div class="demo-field">
+        <po-input p-label="Email" p-placeholder="usuario@empresa.com" p-icon="an an-envelope"></po-input>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== po-datepicker ==================== -->
+  <h2>po-datepicker</h2>
+  <div class="demo-section">
+    <div class="demo-row">
+      <div class="demo-field">
+        <po-datepicker p-label="Data de nascimento" p-placeholder="dd/mm/aaaa"></po-datepicker>
+      </div>
+      <div class="demo-field">
+        <po-datepicker p-label="Data desabilitada" p-placeholder="dd/mm/aaaa" p-disabled></po-datepicker>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== po-combo ==================== -->
+  <h2>po-combo</h2>
+  <div class="demo-section">
+    <div class="demo-row">
+      <div class="demo-field">
+        <po-combo id="combo-estados" p-label="Estado" p-placeholder="Selecione um estado"></po-combo>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== po-lookup ==================== -->
+  <h2>po-lookup</h2>
+  <div class="demo-section">
+    <div class="demo-row">
+      <div class="demo-field">
+        <po-lookup id="lookup-cidade" p-label="Cidade" p-placeholder="Pesquise uma cidade"></po-lookup>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Log de eventos ==================== -->
+  <h2>Log de Eventos</h2>
+  <div class="demo-section">
+    <pre id="log">[aguardando eventos dos Web Components...]</pre>
+  </div>
+
+  <script>
+    var logEl = document.getElementById('log');
+    var logCount = 0;
+    function logEvent(source, eventName, detail) {
+      logCount++;
+      var timestamp = new Date().toLocaleTimeString('pt-BR');
+      var detailStr = detail !== undefined && detail !== null ? ' => ' + JSON.stringify(detail) : '';
+      logEl.textContent = '[' + timestamp + '] ' + source + '.' + eventName + detailStr + '\n' + logEl.textContent;
+      if (logCount === 1) {
+        logEl.textContent = logEl.textContent.replace('[aguardando eventos dos Web Components...]\n', '');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var comboEstados = document.getElementById('combo-estados');
+      if (comboEstados) {
+        comboEstados.options = [
+          { label: 'Sao Paulo', value: 'SP' },
+          { label: 'Rio de Janeiro', value: 'RJ' },
+          { label: 'Minas Gerais', value: 'MG' },
+          { label: 'Bahia', value: 'BA' },
+          { label: 'Parana', value: 'PR' },
+          { label: 'Rio Grande do Sul', value: 'RS' },
+          { label: 'Santa Catarina', value: 'SC' },
+          { label: 'Goias', value: 'GO' }
+        ];
+      }
+
+      document.querySelectorAll('po-button').forEach(function(btn, i) {
+        btn.addEventListener('p-click', function(e) {
+          logEvent('po-button[' + i + ']', 'p-click', btn.getAttribute('p-label'));
+        });
+      });
+
+      document.querySelectorAll('po-input').forEach(function(inp, i) {
+        inp.addEventListener('p-change', function(e) {
+          logEvent('po-input[' + i + ']', 'p-change', e.detail);
+        });
+      });
+
+      if (comboEstados) {
+        comboEstados.addEventListener('p-change', function(e) {
+          logEvent('po-combo', 'p-change', e.detail);
+        });
+      }
+
+      document.querySelectorAll('po-datepicker').forEach(function(dp, i) {
+        dp.addEventListener('p-change', function(e) {
+          logEvent('po-datepicker[' + i + ']', 'p-change', e.detail);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
