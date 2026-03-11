@@ -6,12 +6,18 @@
       [p-menus]="menuCollapseJoin"
       [p-external]="applicationMenu"
       [p-hide-button-menu]="hideButtonMenu"
+      [p-size]="size()"
     ></po-header-brand>
   </div>
 
   <ul #menuWrapperItens class="po-header-nav-submenus-wrapper">
     @for (item of visibleMenuItems; track item.id) {
-      <po-header-menu-item #menusubmenuitem [p-item]="item" (p-item-click)="onSelected($event)"></po-header-menu-item>
+      <po-header-menu-item
+        #menusubmenuitem
+        [p-item]="item"
+        (p-item-click)="onSelected($event)"
+        [p-size]="size()"
+      ></po-header-menu-item>
     }
   </ul>
 
@@ -22,6 +28,7 @@
       [p-button-overflow]="true"
       [p-item-overflow]="overflowItems"
       (p-item-click)="onSelected($event)"
+      [p-size]="size()"
     ></po-header-menu-item>
   }
 
@@ -31,10 +38,11 @@
       [p-actions-tools]="actionsTools"
       [p-header-template]="headerTemplate"
       [p-literals]="literals"
+      [p-size]="size()"
     ></po-header-tools>
 
     @if (headerUser?.customerBrand && headerUser?.avatar) {
-      <po-header-customer [p-header-user]="headerUser"></po-header-customer>
+      <po-header-customer [p-header-user]="headerUser" [p-size]="size()"></po-header-customer>
     }
   </ul>
 </nav>

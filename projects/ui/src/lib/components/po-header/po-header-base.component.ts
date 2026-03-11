@@ -1,13 +1,25 @@
-import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import {
+  computed,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  input,
+  Input,
+  Output,
+  signal,
+  TemplateRef
+} from '@angular/core';
 import { PoLanguageService } from '../../services';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
-import { convertToBoolean, isExternalLink } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, isExternalLink, validateSizeFn } from '../../utils/util';
 import { PoMenuItem } from '../po-menu';
 import { PoHeaderActionTool } from './interfaces/po-header-action-tool.interface';
 import { PoHeaderActions } from './interfaces/po-header-actions.interface';
 import { PoHeaderBrand } from './interfaces/po-header-brand.interface';
 import { PoHeaderLiterals } from './interfaces/po-header-literals.interface';
 import { PoHeaderUser } from './interfaces/po-header-user.interface';
+import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 export const poNavbarLiteralsDefault = {
   en: <PoHeaderLiterals>{
@@ -100,24 +112,27 @@ export const poNavbarLiteralsDefault = {
  * | `--border-radius-bottom-left`            | Valor do radius do lado esquerdo do header                 | `var(--border-radius-md)`                         |
  * | `--border-radius-bottom-right`           | Valor do radius do lado direito do header                  | `var(--border-radius-md)`                         |
  * | `--base shadow`                          | Cor da sombra do header                                    | `0 1px 8px rgba(0, 0, 0, 0.1)`                  |
+ * | `--stroke-color`                         | Cor da borda inferior do header                            | `var(--color-brand-01-base)`                      |
  * | **Sub-menu**                             |                                                            |                                                   |
  * | `--border-radius`                        | Valor do radius dos itens do sub-menu                      | `var(--border-radius-md);`                        |
  * | `--text-color-submenu`                   | Cor do texto dos itens do sub-menu                         | `var(--color-brand-01-base)`                      |
  * | `--icon-color`                           | Cor do ícone do sub-menu com itens                         | `var(--color-brand-01-base)`                      |
  * | `--border-color`                         | Cor da borda                                               | `var(--color-transparent)`                        |
  * | `--shadow`                               | Contém o valor da sombra do elemento                       | `var(--shadow-none)`                              |
+ * | `--font-family-submenu`                  | Fonte do texto dos itens de sub-menu                       | `var(--font-family-theme)`                        |
+ * | `--font-weight-submenu`                  | Peso da fonte do texto dos itens de sub-menu               | `var(--font-weight-bold)`                         |
  * | **Sub-menu - Hover**                     |                                                            |                                                   |
  * | `--background-hover`                     | Cor de background dos itens do sub-menu no estado hover    | `var(--color-brand-01-lighter)`                   |
  * | `--icon-color-hover`                     | Cor do ícone dos itens de sub-menu no estado hover         | `var(--color-brand-01-darkest)`                   |
- * | `--text-color-hover`                     | Cor do texo dos itens de sub-menu no estado hover          | `var(--color-brand-01-darkest)`                   |
+ * | `--text-color-hover`                     | Cor do texto dos itens de sub-menu no estado hover         | `var(--color-brand-01-darkest)`                   |
  * | **Sub-menu - pressed**                   |                                                            |                                                   |
  * | `--background-pressed`                   | Cor de background dos itens do sub-menu no estado pressed  | `var(--color-brand-01-light)`                     |
  * | `--icon-color-pressed`                   | Cor do ícone dos itens de sub-menu no estado pressed       | `var(--color-brand-01-darkest)`                   |
- * | `--text-color-pressed`                   | Cor do texo dos itens de sub-menu no estado pressed        | `var(--color-brand-01-darkest)`                   |
+ * | `--text-color-pressed`                   | Cor do texto dos itens de sub-menu no estado pressed       | `var(--color-brand-01-darkest)`                   |
  * | **Sub-menu - selected**                  |                                                            |                                                   |
  * | `--background-selected`                  | Cor de background dos itens do sub-menu no estado selected | `var(--color-brand-01-light)`                     |
  * | `--icon-color-selected`                  | Cor do ícone dos itens de sub-menu no estado selected      | `var(--color-neutral-dark-95)`                    |
- * | `--text-color-selected`                  | Cor do texo dos itens de sub-menu no estado selected       | `var(--color-brand-01-darkest)`                   |
+ * | `--text-color-selected`                  | Cor do texto dos itens de sub-menu no estado selected      | `var(--color-brand-01-darkest)`                   |
  * | **Customer**                             |                                                            |                                                   |
  * | `--background-color-customer`            | Cor do background da seção customer                        | `var(--color-neutral-light-00)`                   |
  * | `--border-color`                         | Cor da borda da seção customer                             | `var(--color-neutral-light-10)`                   |
@@ -125,9 +140,9 @@ export const poNavbarLiteralsDefault = {
  * | `--border-width`                         | Largura da borda da seção customer                         | `var(--border-width-sm)`                          |
  * | **Customer - hover**                     |                                                            |                                                   |
  * | `--background-color-customer-hover`      | Cor do background da seção customer no estado hover        | `var(--color-brand-01-lighter)`                   |
- * | `--background-color-customer-hover`      | Cor do background da seção customer no estado hover        | `var(--color-brand-01-lighter)`                   |
  * | **Customer - pressed**                   |                                                            |                                                   |
  * | `--background-color-customer-pressed`    | Cor do background da seção customer no estado pressed      | `var(--color-brand-01-light)`                     |
+ * | `--border-width-pressed`                 | Largura da borda da seção customer no estado pressed       | `var(--border-width-md)`                          |
  *
  */
 @Directive()
@@ -138,6 +153,7 @@ export abstract class PoHeaderBaseComponent {
   private _brand: PoHeaderBrand | string;
   private _literals: PoHeaderLiterals;
   private language: string = poLocaleDefault;
+  private readonly themeChangeSignal = signal(0);
 
   /**
    * @optional
@@ -316,6 +332,34 @@ export abstract class PoHeaderBaseComponent {
   /**
    * @optional
    *
+   * @Input
+   *
+   * @description
+   *
+   * Define o tamanho do componente:
+   * - `small`: altura de 44px (disponível apenas para acessibilidade AA).
+   * - `medium`: altura de 56px.
+   *
+   * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
+   * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * @default `medium`
+   */
+  sizeInput = input<string>('', { alias: 'p-size' });
+  size = computed(() => {
+    this.themeChangeSignal();
+    const value = this.sizeInput();
+    return value ? (validateSizeFn(value, PoFieldSize) as string) : (getDefaultSizeFn(PoFieldSize) as string);
+  });
+
+  @HostBinding('attr.p-size')
+  get hostSize() {
+    return this.sizeInput() ? validateSizeFn(this.sizeInput(), PoFieldSize) : getDefaultSizeFn(PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
    * @description
    *
    * Evento emitido ao clicar no botão para colapsar ou expandir menu.
@@ -334,4 +378,18 @@ export abstract class PoHeaderBaseComponent {
   private generateRandomId(): string {
     return String(Math.floor(Math.random() * 9999 + 1));
   }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    this.themeChangeSignal.update(v => v + 1);
+    requestAnimationFrame(() => {
+      try {
+        this.updateMenu();
+      } catch {
+        console.error('updateMenu with errors. probably tried to execute before the component was rendered.');
+      }
+    });
+  }
+
+  abstract updateMenu(): void;
 }

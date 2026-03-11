@@ -13,7 +13,7 @@
         [class.po-header-selected-tool]="checkSelected(i)"
         [p-aria-expanded]="checkSelected(i)"
         [p-aria-label]="getAriaLabel(action)"
-        p-size="medium"
+        [p-size]="size()"
       >
       </po-button>
 
@@ -29,7 +29,7 @@
         [p-target]="buttonActionElements?.get(i)"
         [p-hide-arrow]="true"
         (p-close)="onClosePopup(i)"
-        p-size="medium"
+        [p-size]="size()"
       >
       </po-popup>
 

@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  input,
   Input,
   OnChanges,
   OnDestroy,
@@ -54,6 +55,8 @@ export class PoHeaderMenuItemComponent implements OnChanges, OnInit, OnDestroy {
   @Input('p-item-overflow') itemOverFlow: Array<PoHeaderActions>;
 
   @Input('p-button-overflow') overflowButton: boolean = false;
+
+  size = input<string>(undefined, { alias: 'p-size' });
 
   @Output('p-item-click') itemClick = new EventEmitter<any>();
 

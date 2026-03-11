@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, input, Input, ViewChild } from '@angular/core';
 import { PoPopoverComponent } from '../../po-popover';
 import { PoPopupComponent } from '../../po-popup';
 import { PoHeaderUser } from '../interfaces/po-header-user.interface';
@@ -29,6 +29,8 @@ export class PoHeaderCustomerComponent {
   @ViewChild('poPopoverAction') poPopoverAction: PoPopoverComponent;
 
   @Input('p-header-user') headerUser: PoHeaderUser;
+
+  size = input<string>(undefined, { alias: 'p-size' });
 
   constructor(languageService: PoLanguageService) {
     const language = languageService.getShortLanguage();
