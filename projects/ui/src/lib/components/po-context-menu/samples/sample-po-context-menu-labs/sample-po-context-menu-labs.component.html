@@ -1,0 +1,52 @@
+<div class="po-context-menu-wrapper">
+  <po-context-menu
+    [p-context-title]="contextTitle()"
+    [p-title]="title()"
+    [p-items]="menuItems()"
+    [(p-expanded)]="expanded"
+    (p-item-selected)="onItemSelected($event)"
+  />
+</div>
+
+<po-divider />
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input class="po-md-6" name="contextTitle" [(ngModel)]="contextTitle" p-label="Context Title" p-clean />
+
+    <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title" p-clean />
+  </div>
+
+  <div class="po-row">
+    <po-switch
+      class="po-md-6"
+      name="expanded"
+      [(ngModel)]="expanded"
+      p-label="Expanded"
+      p-label-off="Collapsed"
+      p-label-on="Expanded"
+    />
+  </div>
+
+  <po-divider />
+
+  <div class="po-row po-pb-1">
+    <po-input class="po-md-6" name="newItemLabel" [(ngModel)]="newItemLabel" p-label="New Item Label" />
+
+    <po-switch
+      class="po-md-6"
+      name="Selected"
+      [(ngModel)]="selected"
+      p-label="Selected"
+      p-help="Se mais de um item estiver com selected: *true*, apenas o primeiro será mantido como selecionado."
+    />
+
+    <po-button class="po-md-3" p-label="Add Item" (p-click)="addItem()" />
+  </div>
+
+  <po-divider />
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()" />
+  </div>
+</form>
