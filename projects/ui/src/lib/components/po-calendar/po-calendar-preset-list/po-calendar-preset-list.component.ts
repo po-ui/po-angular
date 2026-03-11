@@ -57,10 +57,16 @@ export class PoCalendarPresetListComponent {
       event.preventDefault();
       const prevIndex = index > 0 ? index - 1 : index;
       this.focusPreset(buttons, prevIndex);
-    } else if (event.key === 'Tab' && event.shiftKey && index === 0) {
+    } else if (event.key === 'Tab' && !event.shiftKey) {
+      this.resetFocusToFirst();
+    } else if (event.key === 'Tab' && event.shiftKey) {
       event.preventDefault();
       this.closeCalendar.emit();
     }
+  }
+
+  resetFocusToFirst(): void {
+    this.focusedIndex = 0;
   }
 
   onPresetClick(preset: PoCalendarRangePreset): void {

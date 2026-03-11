@@ -211,13 +211,24 @@ describe('PoCalendarPresetListComponent:', () => {
         expect(component.closeCalendar.emit).toHaveBeenCalled();
       });
 
-      it('should not emit closeCalendar on Shift+Tab from non-first preset', () => {
+      it('should emit closeCalendar on Shift+Tab from any preset', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        spyOn(event, 'preventDefault');
         spyOn(component.closeCalendar, 'emit');
 
         component.onKeydown(event, 2);
 
-        expect(component.closeCalendar.emit).not.toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component.closeCalendar.emit).toHaveBeenCalled();
+      });
+
+      it('should reset focusedIndex to 0 on Tab without Shift', () => {
+        component.focusedIndex = 3;
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+
+        component.onKeydown(event, 3);
+
+        expect(component.focusedIndex).toBe(0);
       });
     });
 
