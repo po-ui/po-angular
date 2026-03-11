@@ -20,7 +20,7 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
+import { isMobile, replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoHelperComponent } from '../../po-helper';
@@ -58,6 +58,11 @@ const providers = [
  * <example name="po-datepicker-range-basic" title="PO Datepicker Range Basic">
  *  <file name="sample-po-datepicker-range-basic/sample-po-datepicker-range-basic.component.html"> </file>
  *  <file name="sample-po-datepicker-range-basic/sample-po-datepicker-range-basic.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-datepicker-range-presets" title="PO Datepicker Range - Presets">
+ *  <file name="sample-po-datepicker-range-presets/sample-po-datepicker-range-presets.component.html"> </file>
+ *  <file name="sample-po-datepicker-range-presets/sample-po-datepicker-range-presets.component.ts"> </file>
  * </example>
  *
  * <example name="po-datepicker-range-labs" title="PO Datepicker Range Labs">
@@ -332,6 +337,12 @@ export class PoDatepickerRangeComponent
     }
 
     if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
+      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
+      if (firstPreset) {
+        event.preventDefault();
+        firstPreset.focus();
+        return;
+      }
       const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
       if (firstCombo) {
         event.preventDefault();
@@ -479,6 +490,12 @@ export class PoDatepickerRangeComponent
       event.preventDefault();
       event.stopPropagation();
 
+      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
+      if (firstPreset) {
+        firstPreset.focus();
+        return;
+      }
+
       this.iconCalendar.buttonElement?.nativeElement.focus();
       this.isCalendarVisible = false;
     }
@@ -494,7 +511,16 @@ export class PoDatepickerRangeComponent
     );
   }
 
+  /* istanbul ignore next */
+  verifyMobile() {
+    return isMobile();
+  }
+
   setCalendarPosition() {
+    if (this.verifyMobile()) {
+      return;
+    }
+
     if (this?.calendarPicker.nativeElement && this.isCalendarVisible) {
       requestAnimationFrame(() => {
         const scrollHeight =
@@ -630,7 +656,7 @@ export class PoDatepickerRangeComponent
   }
 
   private onScroll = (): void => {
-    if (this.isCalendarVisible) {
+    if (this.isCalendarVisible && !this.verifyMobile()) {
       this.controlPosition.adjustPosition(poCalendarPositionDefault);
     }
   };

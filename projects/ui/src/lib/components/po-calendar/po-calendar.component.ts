@@ -11,8 +11,11 @@ import {
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
+import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
+import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoCalendarLangService } from './services';
 
 /* istanbul ignore next */
 const providers = [
@@ -42,6 +45,11 @@ const poCalendarRangeWidth = 600;
  *  <file name="sample-po-calendar-basic/sample-po-calendar-basic.component.ts"> </file>
  * </example>
  *
+ * <example name="po-calendar-range-presets" title="PO Calendar - Range and Presets" >
+ *  <file name="sample-po-calendar-range-presets/sample-po-calendar-range-presets.component.html"> </file>
+ *  <file name="sample-po-calendar-range-presets/sample-po-calendar-range-presets.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-calendar-labs" title="PO Calendar Labs" >
  *  <file name="sample-po-calendar-labs/sample-po-calendar-labs.component.html"> </file>
  *  <file name="sample-po-calendar-labs/sample-po-calendar-labs.component.ts"> </file>
@@ -61,8 +69,10 @@ const poCalendarRangeWidth = 600;
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
   private changeDetector = inject(ChangeDetectorRef);
+  private readonly poCalendarLangService = inject(PoCalendarLangService);
 
   hoverValue: Date;
+  displayToClean: string;
 
   constructor() {
     const poDate = inject(PoDateService);
@@ -75,8 +85,43 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     return window.innerWidth < poCalendarRangeWidth;
   }
 
+  get effectivePresets(): Array<PoCalendarRangePreset> {
+    if (!this.isRange) {
+      return [];
+    }
+
+    const hasCustomPresets = this.rangePresetOptions !== undefined && this.rangePresetOptions.length > 0;
+    let defaultPresets: Array<PoCalendarRangePreset> = [];
+
+    if (Array.isArray(this.rangePresets)) {
+      const allowedKeys = new Set(this.rangePresets.map(k => k.toLowerCase()));
+      allowedKeys.add('today');
+      defaultPresets = PO_CALENDAR_DEFAULT_RANGE_PRESETS.filter(p => allowedKeys.has(p.label.toLowerCase()));
+    } else if (this.rangePresets) {
+      defaultPresets = [...PO_CALENDAR_DEFAULT_RANGE_PRESETS];
+    }
+
+    const customPresets = hasCustomPresets ? this.rangePresetOptions : [];
+    const combined = [...defaultPresets, ...customPresets];
+
+    // Regra: o preset "today" é obrigatório e deve estar presente mesmo com apenas presets customizados
+    if (combined.length > 0 && !combined.some(p => p.label.toLowerCase() === 'today')) {
+      const todayPreset = PO_CALENDAR_DEFAULT_RANGE_PRESETS.find(p => p.label === 'today');
+      if (todayPreset) {
+        combined.unshift(todayPreset);
+      }
+    }
+
+    if (combined.length === 0) {
+      return [];
+    }
+
+    return this.sortPresetsByTemporality(combined);
+  }
+
   ngOnInit() {
     this.setActivateDate();
+    this.displayToClean = this.poCalendarLangService.getToCleanLabel();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,6 +147,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onSelectDate(selectedDate, partType?) {
+    this.selectedPresetLabel = null;
+
     if (selectedDate === '' || selectedDate === undefined) {
       this.value = null;
       this.updateModel('');
@@ -164,6 +211,83 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.setActivateDate(activateDate);
 
     this.changeDetector.markForCheck();
+  }
+
+  onPresetSelected(event: { label: string; start: Date; end: Date }): void {
+    const start = this.clampDate(event.start, this.minDate, this.maxDate);
+    const end = this.clampDate(event.end, this.minDate, this.maxDate);
+
+    if (start > end) {
+      return;
+    }
+
+    this.selectedPresetLabel = event.label;
+    this.value = { start, end };
+    this.activateDate = { start, end };
+
+    const newModel = this.convertDateToISO(this.value);
+    this.updateModel(newModel);
+    this.change.emit(newModel);
+    this.changeDetector.markForCheck();
+  }
+
+  private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
+    const today = new Date();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const todayTime = todayStart.getTime();
+
+    const getGroup = (startDate: Date): number => {
+      const startTime = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate(),
+        0,
+        0,
+        0,
+        0
+      ).getTime();
+      if (startTime > todayTime) {
+        return 0; // Futuro
+      }
+      if (startTime < todayTime) {
+        return 2; // Passado
+      }
+      return 1; // Presente
+    };
+
+    // Ordena em ASC: Futuro → Presente → Passado, proximidade crescente dentro de cada grupo
+    const sorted = [...presets].sort((a, b) => {
+      const rangeA = a.dateRange(today);
+      const rangeB = b.dateRange(today);
+      const startA = new Date(rangeA.start);
+      const startB = new Date(rangeB.start);
+
+      const groupA = getGroup(startA);
+      const groupB = getGroup(startB);
+
+      if (groupA !== groupB) {
+        return groupA - groupB;
+      }
+
+      const distA = Math.abs(startA.getTime() - todayTime);
+      const distB = Math.abs(startB.getTime() - todayTime);
+
+      return distA - distB;
+    });
+
+    // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
+    return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
+  }
+
+  private clampDate(date: Date, min?: Date, max?: Date): Date {
+    let result = new Date(date);
+    if (min && result < min) {
+      result = new Date(min);
+    }
+    if (max && result > max) {
+      result = new Date(max);
+    }
+    return result;
   }
 
   private getValidateStartDate(value) {

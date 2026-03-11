@@ -6,6 +6,9 @@
     [p-max-date]="maxDate"
     [p-mode]="mode"
     [p-size]="size"
+    [p-range-presets]="rangePresets"
+    [p-range-preset-options]="customPresets"
+    [p-range-presets-order]="rangePresetsOrder"
     (p-change)="changeEvent('p-change', $event)"
     (p-change-month-year)="changeEvent('p-change-month-year', $event)"
   >
@@ -65,6 +68,26 @@
       p-label="Size"
       p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
       [p-options]="sizeOptions"
+    >
+    </po-radio-group>
+  </div>
+
+  <div class="po-row">
+    <po-switch class="po-md-4" name="rangePresets" [(ngModel)]="rangePresets" p-label="Range Presets"> </po-switch>
+    <po-switch
+      class="po-md-4"
+      name="customPresets"
+      [(ngModel)]="useCustomPresets"
+      p-label="Custom Presets"
+      (p-change)="onCustomPresetsChange($event)"
+    >
+    </po-switch>
+    <po-radio-group
+      class="po-md-4"
+      name="presetsOrder"
+      [(ngModel)]="rangePresetsOrder"
+      p-label="Presets Order"
+      [p-options]="presetsOrderOptions"
     >
     </po-radio-group>
   </div>

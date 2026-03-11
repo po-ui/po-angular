@@ -27,6 +27,9 @@
   (p-change)="changeEvent('p-change')"
   (p-keydown)="changeEvent('p-keydown')"
   [p-error-limit]="properties?.includes('errorLimit')"
+  [p-range-presets]="rangePresets"
+  [p-range-preset-options]="customPresets"
+  [p-range-presets-order]="rangePresetsOrder"
 >
 </po-datepicker-range>
 
@@ -113,6 +116,26 @@
     [p-options]="sizeOptions"
   >
   </po-radio-group>
+
+  <div class="po-row">
+    <po-switch class="po-md-4" name="rangePresets" [(ngModel)]="rangePresets" p-label="Range Presets"> </po-switch>
+    <po-switch
+      class="po-md-4"
+      name="customPresets"
+      [(ngModel)]="useCustomPresets"
+      p-label="Custom Presets"
+      (p-change)="onCustomPresetsChange($event)"
+    >
+    </po-switch>
+    <po-radio-group
+      class="po-md-4"
+      name="presetsOrder"
+      [(ngModel)]="rangePresetsOrder"
+      p-label="Presets Order"
+      [p-options]="presetsOrderOptions"
+    >
+    </po-radio-group>
+  </div>
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
