@@ -486,14 +486,28 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should close calendar on Shift+Tab when focus is on first combo', () => {
         component.isCalendarVisible = true;
 
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(null)
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+
         const event = {
           key: 'Tab',
           shiftKey: true,
           preventDefault: jasmine.createSpy(),
           stopPropagation: jasmine.createSpy()
         } as any;
-
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
 
         component.onCalendarKeyDown(event);
 
@@ -520,6 +534,69 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(event.preventDefault).not.toHaveBeenCalled();
         expect(event.stopPropagation).not.toHaveBeenCalled();
         expect(component.isCalendarVisible).toBeTrue();
+      });
+
+      it('should focus first preset on Shift+Tab when it exists', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({
+              focus: focusSpy
+            })
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(null as any);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+
+        expect(component.isCalendarVisible).toBeTrue();
+
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+      });
+
+      it('should close calendar on mobile Shift+Tab from first combo', () => {
+        component.isCalendarVisible = true;
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
       });
     });
 
@@ -843,6 +920,59 @@ describe('PoDatepickerRangeComponent:', () => {
             querySelector: jasmine.createSpy().and.returnValue({
               focus: focusSpy
             })
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus first combo when Tab and calendar visible and no preset', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy();
+
+        const querySelectorSpy = jasmine.createSpy();
+
+        querySelectorSpy.and.returnValues(null, { focus: focusSpy });
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: querySelectorSpy
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(querySelectorSpy).toHaveBeenCalledTimes(2);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus first combo on mobile when Tab and calendar visible', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+
+        const focusSpy = jasmine.createSpy();
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
           }
         } as any;
 
@@ -2007,6 +2137,25 @@ describe('PoDatepickerRangeComponent:', () => {
       component['onScroll']();
 
       expect(component['controlPosition'].adjustPosition).not.toHaveBeenCalled();
+    });
+
+    it('setCalendarPosition: should return early when verifyMobile is true', () => {
+      component.isCalendarVisible = true;
+
+      spyOn(component as any, 'verifyMobile').and.returnValue(true);
+
+      const rafSpy = spyOn(window, 'requestAnimationFrame');
+
+      (component as any).controlPosition = {
+        setElements: jasmine.createSpy('setElements'),
+        adjustPosition: jasmine.createSpy('adjustPosition')
+      };
+
+      component.setCalendarPosition();
+
+      expect(rafSpy).not.toHaveBeenCalled();
+      expect((component as any).controlPosition.setElements).not.toHaveBeenCalled();
+      expect((component as any).controlPosition.adjustPosition).not.toHaveBeenCalled();
     });
 
     it(`setCalendarPosition: should call controlPosition methods`, () => {

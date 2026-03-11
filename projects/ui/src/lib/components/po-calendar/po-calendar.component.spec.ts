@@ -6,10 +6,13 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wrapper.component';
 import { PoCalendarHeaderComponent } from './po-calendar-header/po-calendar-header.component';
+import { PoCalendarPresetListComponent } from './po-calendar-preset-list/po-calendar-preset-list.component';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarComponent } from './po-calendar.component';
+import { PoCalendarMode } from './po-calendar-mode.enum';
 import { PoCalendarService } from './services/po-calendar.service';
+import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 
 describe('PoCalendarComponent:', () => {
   let component: PoCalendarComponent;
@@ -18,7 +21,12 @@ describe('PoCalendarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoCalendarComponent, PoCalendarWrapperComponent, PoCalendarHeaderComponent],
+      declarations: [
+        PoCalendarComponent,
+        PoCalendarWrapperComponent,
+        PoCalendarHeaderComponent,
+        PoCalendarPresetListComponent
+      ],
       providers: [PoCalendarService, PoDateService]
     });
   });
@@ -75,6 +83,24 @@ describe('PoCalendarComponent:', () => {
       component.ngOnChanges(changes);
 
       expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('ngDoCheck: should sync internal signals from input properties', () => {
+      component.mode = PoCalendarMode.Range;
+      component.rangePresets = true;
+      component.rangePresetOptions = undefined;
+      component.rangePresetsOrder = 'desc';
+      component.minDate = new Date(2024, 0, 1);
+      component.maxDate = new Date(2024, 11, 31);
+
+      component.ngDoCheck();
+
+      expect(component['_isRange']()).toBeTrue();
+      expect(component['_rangePresetsValue']()).toBeTrue();
+      expect(component['_rangePresetOptionsValue']()).toBeUndefined();
+      expect(component['_rangePresetsOrderValue']()).toBe('desc');
+      expect(component['_minDateValue']()).toEqual(component.minDate);
+      expect(component['_maxDateValue']()).toEqual(component.maxDate);
     });
 
     it('getActivateDate: should get activateDate if range is true', () => {
@@ -672,6 +698,462 @@ describe('PoCalendarComponent:', () => {
       component.onCloseCalendar();
 
       expect(component.close.emit).toHaveBeenCalled();
+    });
+
+    describe('effectivePresets:', () => {
+      it('should return default presets when rangePresets is true and rangePresetOptions is undefined', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = true;
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+        expect(result.length).toBe(PO_CALENDAR_DEFAULT_RANGE_PRESETS.length);
+        PO_CALENDAR_DEFAULT_RANGE_PRESETS.forEach(preset => {
+          expect(result.some(p => p.label === preset.label)).toBeTrue();
+        });
+      });
+
+      it('should return empty array when rangePresets is false and rangePresetOptions is undefined', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = false;
+        component.ngDoCheck();
+
+        expect(component.effectivePresets()).toEqual([]);
+      });
+
+      it('should return empty array when mode is not Range', () => {
+        component.rangePresets = true;
+        component.ngDoCheck();
+
+        expect(component.effectivePresets()).toEqual([]);
+      });
+
+      it('should return defaults + custom when rangePresets is true and rangePresetOptions has values', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = true;
+        const customPresets = [{ label: 'custom', dateRange: () => ({ start: new Date(), end: new Date() }) }];
+        component.rangePresetOptions = customPresets;
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+        expect(result.length).toBe(PO_CALENDAR_DEFAULT_RANGE_PRESETS.length + customPresets.length);
+        expect(result.some(p => p.label === 'custom')).toBeTrue();
+      });
+
+      it('should return only custom presets when rangePresets is false and rangePresetOptions has values', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = false;
+        const customPresets = [{ label: 'custom', dateRange: () => ({ start: new Date(), end: new Date() }) }];
+        component.rangePresetOptions = customPresets;
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+        // custom + mandatory 'today'
+        expect(result.some(p => p.label === 'custom')).toBeTrue();
+        expect(result.some(p => p.label === 'today')).toBeTrue();
+      });
+
+      it('should return empty array when rangePresets is true but mode is not Range', () => {
+        component.rangePresets = true;
+        component.mode = undefined;
+        component.ngDoCheck();
+
+        expect(component.effectivePresets()).toEqual([]);
+      });
+
+      it('should filter default presets when rangePresets is an array of keys', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = ['7days', '30days'];
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+        // Should include 7days, 30days, and today (mandatory)
+        expect(result.some(p => p.label === 'today')).toBeTrue();
+        expect(result.some(p => p.label === '7days')).toBeTrue();
+        expect(result.some(p => p.label === '30days')).toBeTrue();
+        expect(result.some(p => p.label === 'yesterday')).toBeFalse();
+      });
+
+      it('should always include today preset even if not in array', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = ['7days'];
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+        expect(result.some(p => p.label === 'today')).toBeTrue();
+      });
+
+      it('should inject today preset when only custom presets exist without today', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = false;
+        const customPresets = [{ label: 'myPreset', dateRange: () => ({ start: new Date(), end: new Date() }) }];
+        component.rangePresetOptions = customPresets;
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+        expect(result.some(p => p.label === 'today')).toBeTrue();
+        expect(result.some(p => p.label === 'myPreset')).toBeTrue();
+      });
+
+      it('should combine filtered default presets with custom presets when rangePresets is Array<string> and rangePresetOptions has values', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = ['today', 'yesterday', '7days'];
+
+        const today = new Date();
+        const customPreset1 = {
+          label: 'custom1',
+          dateRange: () => {
+            const start = new Date(today);
+            start.setDate(start.getDate() - 3);
+            return { start, end: today };
+          }
+        };
+        const customPreset2 = {
+          label: 'custom2',
+          dateRange: () => {
+            const start = new Date(today);
+            start.setDate(start.getDate() - 15);
+            return { start, end: today };
+          }
+        };
+        component.rangePresetOptions = [customPreset1, customPreset2];
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+
+        // Should contain the filtered default presets
+        expect(result.some(p => p.label === 'today')).toBeTrue();
+        expect(result.some(p => p.label === 'yesterday')).toBeTrue();
+        expect(result.some(p => p.label === '7days')).toBeTrue();
+
+        // Should contain custom presets
+        expect(result.some(p => p.label === 'custom1')).toBeTrue();
+        expect(result.some(p => p.label === 'custom2')).toBeTrue();
+
+        // Should NOT contain default presets not in the array
+        expect(result.some(p => p.label === '14days')).toBeFalse();
+        expect(result.some(p => p.label === '30days')).toBeFalse();
+        expect(result.some(p => p.label === '3months')).toBeFalse();
+        expect(result.some(p => p.label === '6months')).toBeFalse();
+
+        // Result should be sorted (all are past/present, sorted by proximity)
+        // and enriched with isDisabled property
+        result.forEach(p => {
+          expect(p.isDisabled).toBeDefined();
+        });
+      });
+    });
+
+    describe('sortPresetsByTemporality:', () => {
+      it('should sort presets in ASC order: Future -> Present -> Past', () => {
+        component.rangePresetsOrder = 'asc';
+        const today = new Date();
+        const presets = [
+          {
+            label: 'past',
+            dateRange: () => {
+              const start = new Date(today);
+              start.setDate(start.getDate() - 10);
+              return { start, end: today };
+            }
+          },
+          {
+            label: 'future',
+            dateRange: () => {
+              const start = new Date(today);
+              start.setDate(start.getDate() + 5);
+              const end = new Date(today);
+              end.setDate(end.getDate() + 10);
+              return { start, end };
+            }
+          },
+          {
+            label: 'present',
+            dateRange: () => ({ start: new Date(today.getFullYear(), today.getMonth(), today.getDate()), end: today })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].label).toBe('future');
+        expect(result[1].label).toBe('present');
+        expect(result[2].label).toBe('past');
+      });
+
+      it('should sort presets in DESC order: Past -> Present -> Future', () => {
+        component.rangePresetsOrder = 'desc';
+        const today = new Date();
+        const presets = [
+          {
+            label: 'past',
+            dateRange: () => {
+              const start = new Date(today);
+              start.setDate(start.getDate() - 10);
+              return { start, end: today };
+            }
+          },
+          {
+            label: 'future',
+            dateRange: () => {
+              const start = new Date(today);
+              start.setDate(start.getDate() + 5);
+              const end = new Date(today);
+              end.setDate(end.getDate() + 10);
+              return { start, end };
+            }
+          },
+          {
+            label: 'present',
+            dateRange: () => ({ start: new Date(today.getFullYear(), today.getMonth(), today.getDate()), end: today })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].label).toBe('past');
+        expect(result[1].label).toBe('present');
+        expect(result[2].label).toBe('future');
+      });
+
+      it('should sort by proximity within the same group (ASC)', () => {
+        component.rangePresetsOrder = 'asc';
+        const today = new Date();
+        const presets = [
+          {
+            label: 'far-past',
+            dateRange: () => {
+              const start = new Date(today);
+              start.setDate(start.getDate() - 30);
+              return { start, end: today };
+            }
+          },
+          {
+            label: 'near-past',
+            dateRange: () => {
+              const start = new Date(today);
+              start.setDate(start.getDate() - 3);
+              return { start, end: today };
+            }
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].label).toBe('near-past');
+        expect(result[1].label).toBe('far-past');
+      });
+    });
+
+    describe('enrichPresetsWithDisabledState:', () => {
+      it('should set isDisabled to true when preset start is before minDate', () => {
+        component['_minDate'] = new Date(2025, 5, 1);
+
+        const presets = [
+          {
+            label: 'before-min',
+            dateRange: () => ({
+              start: new Date(2025, 4, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+
+      it('should set isDisabled to true when preset end is after maxDate', () => {
+        component['_maxDate'] = new Date(2025, 5, 30);
+
+        const presets = [
+          {
+            label: 'after-max',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 6, 15)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+
+      it('should set isDisabled to true when preset violates both minDate and maxDate', () => {
+        component['_minDate'] = new Date(2025, 5, 10);
+        component['_maxDate'] = new Date(2025, 5, 20);
+
+        const presets = [
+          {
+            label: 'invalid-both',
+            dateRange: () => ({
+              start: new Date(2025, 4, 1),
+              end: new Date(2025, 6, 30)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+
+      it('should set isDisabled to false when preset is within min/max range', () => {
+        component['_minDate'] = new Date(2025, 0, 1);
+        component['_maxDate'] = new Date(2025, 11, 31);
+
+        const presets = [
+          {
+            label: 'valid',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        expect(result[0].isDisabled).toBeFalse();
+      });
+
+      it('should set isDisabled to false when no minDate/maxDate configured', () => {
+        const presets = [
+          {
+            label: 'no-limits',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        expect(result[0].isDisabled).toBeFalse();
+      });
+
+      it('should correctly disable some presets and enable others', () => {
+        component['_minDate'] = new Date(2025, 5, 1);
+
+        const presets = [
+          {
+            label: 'invalid',
+            dateRange: () => ({
+              start: new Date(2025, 4, 1),
+              end: new Date(2025, 4, 15)
+            })
+          },
+          {
+            label: 'valid',
+            dateRange: () => ({
+              start: new Date(2025, 5, 5),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        const invalidPreset = result.find(p => p.label === 'invalid');
+        const validPreset = result.find(p => p.label === 'valid');
+        expect(invalidPreset.isDisabled).toBeTrue();
+        expect(validPreset.isDisabled).toBeFalse();
+      });
+
+      it('should set isDisabled to false when only maxDate is set and preset end is within range', () => {
+        component['_maxDate'] = new Date(2025, 11, 31);
+
+        const presets = [
+          {
+            label: 'within-max',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['enrichPresetsWithDisabledState'](presets);
+        expect(result[0].isDisabled).toBeFalse();
+      });
+
+      it('should use explicit minDate/maxDate parameters when provided instead of component properties', () => {
+        component['_minDate'] = undefined;
+        component['_maxDate'] = undefined;
+
+        const presets = [
+          {
+            label: 'test-explicit',
+            dateRange: () => ({
+              start: new Date(2025, 3, 1),
+              end: new Date(2025, 7, 30)
+            })
+          }
+        ];
+
+        const explicitMin = new Date(2025, 5, 1);
+        const explicitMax = new Date(2025, 5, 30);
+
+        const result = component['enrichPresetsWithDisabledState'](presets, explicitMin, explicitMax);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+    });
+
+    describe('onPresetSelected:', () => {
+      it('should update value, activateDate, and selectedPresetLabel', () => {
+        const start = new Date(2025, 0, 1);
+        const end = new Date(2025, 0, 31);
+
+        spyOnProperty(component, 'isRange').and.returnValue(true);
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onPresetSelected({ label: 'test', start, end });
+
+        expect(component.selectedPresetLabel).toBe('test');
+        expect(component.value.start).toEqual(start);
+        expect(component.value.end).toEqual(end);
+        expect(component.activateDate.start).toEqual(start);
+        expect(component.activateDate.end).toEqual(end);
+        expect(component['updateModel']).toHaveBeenCalled();
+        expect(component.change.emit).toHaveBeenCalled();
+      });
+
+      it('should clamp dates to minDate/maxDate', () => {
+        const minDate = new Date(2025, 0, 10);
+        const maxDate = new Date(2025, 0, 20);
+
+        component['_minDate'] = minDate;
+        component['_maxDate'] = maxDate;
+
+        spyOnProperty(component, 'isRange').and.returnValue(true);
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onPresetSelected({ label: 'test', start: new Date(2025, 0, 1), end: new Date(2025, 0, 31) });
+
+        expect(component.value.start.getTime()).toEqual(minDate.getTime());
+        expect(component.value.end.getTime()).toEqual(maxDate.getTime());
+      });
+
+      it('should do nothing when clamped start > end', () => {
+        const minDate = new Date(2025, 0, 10);
+        const maxDate = new Date(2025, 0, 20);
+
+        component['_minDate'] = minDate;
+        component['_maxDate'] = maxDate;
+
+        spyOnProperty(component, 'isRange').and.returnValue(true);
+        spyOn(component.change, 'emit');
+
+        component.onPresetSelected({ label: 'test', start: new Date(2025, 0, 25), end: new Date(2025, 0, 5) });
+
+        expect(component.change.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    it('onSelectDate: should clear selectedPresetLabel', () => {
+      component.selectedPresetLabel = 'today';
+
+      spyOnProperty(component, 'isRange').and.returnValue(false);
+
+      component.onSelectDate(new Date(2025, 0, 1));
+
+      expect(component.selectedPresetLabel).toBeNull();
     });
   });
 

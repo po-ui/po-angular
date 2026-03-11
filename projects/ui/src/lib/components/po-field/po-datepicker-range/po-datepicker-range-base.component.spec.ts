@@ -390,6 +390,48 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
+
+    describe('rangePresets Input:', () => {
+      it('should set _rangePresets as array when value is an array', () => {
+        const presets = ['today', 'yesterday'];
+
+        component.rangePresets = presets;
+
+        expect((component as any)._rangePresets).toEqual(presets);
+      });
+
+      it('should set _rangePresets as true when value is empty string', () => {
+        component.rangePresets = '';
+
+        expect((component as any)._rangePresets).toBeTrue();
+      });
+
+      it('should set _rangePresets as true when value is boolean true', () => {
+        component.rangePresets = true;
+
+        expect((component as any)._rangePresets).toBeTrue();
+      });
+
+      it('should set _rangePresets as true when value is string "true"', () => {
+        component.rangePresets = 'true';
+
+        expect((component as any)._rangePresets).toBeTrue();
+      });
+
+      it('should set _rangePresets as false for any other value', () => {
+        component.rangePresets = false;
+
+        expect((component as any)._rangePresets).toBeFalse();
+
+        component.rangePresets = 'false';
+
+        expect((component as any)._rangePresets).toBeFalse();
+
+        component.rangePresets = null as any;
+
+        expect((component as any)._rangePresets).toBeFalse();
+      });
+    });
   });
 
   describe('Methods:', () => {
