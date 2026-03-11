@@ -267,6 +267,25 @@ describe('PoSwitchComponent', () => {
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
       });
+
+      it('should not throw error when switchContainer is undefined', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.switchContainer = undefined;
+
+        const fnCall = () => component.onKeyDown(fakeEvent);
+
+        expect(fnCall).not.toThrow();
+      });
+
+      it('should not emit keydown event when switchContainer is undefined', () => {
+        const fakeEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.switchContainer = undefined;
+
+        spyOn(component.keydown, 'emit');
+        component.onKeyDown(fakeEvent);
+
+        expect(component.keydown.emit).not.toHaveBeenCalled();
+      });
     });
 
     describe('onBlur', () => {
