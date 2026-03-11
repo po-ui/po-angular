@@ -14,6 +14,13 @@
       background: #f5f5f5;
       color: #333;
     }
+    /* Corrige exibicao do calendario do datepicker no contexto Web Component.
+       O Angular define display:none via inline style em ngAfterViewInit, mas o
+       togglePicker nao consegue remove-lo corretamente com OnPush + Custom Element.
+       Quando [hidden] e removido (visible=true), forcamos a exibicao via CSS. */
+    po-datepicker .po-datepicker-popup-calendar:not([hidden]) {
+      display: block !important;
+    }
     h1 {
       font-size: 1.5rem;
       margin-bottom: 8px;
@@ -96,10 +103,10 @@
   <div class="demo-section">
     <div class="demo-row">
       <div class="demo-field">
-        <po-input p-label="Nome completo" p-placeholder="Digite seu nome" p-help="Campo obrigatorio" p-required></po-input>
+        <po-input id="input-nome" p-label="Nome completo" p-placeholder="Digite seu nome" p-help="Campo obrigatorio" p-helper="Informe seu nome completo conforme documento de identificacao." additional-help-event-trigger="" p-required></po-input>
       </div>
       <div class="demo-field">
-        <po-input p-label="Email" p-placeholder="usuario@empresa.com" p-icon="an an-envelope"></po-input>
+        <po-input id="input-email" p-label="Email" p-placeholder="usuario@empresa.com" p-icon="an an-envelope" p-helper="Utilize um email corporativo valido para receber as notificacoes." additional-help-event-trigger=""></po-input>
       </div>
     </div>
   </div>
@@ -109,7 +116,7 @@
   <div class="demo-section">
     <div class="demo-row">
       <div class="demo-field">
-        <po-datepicker p-label="Data de nascimento" p-placeholder="dd/mm/aaaa"></po-datepicker>
+        <po-datepicker id="datepicker-nascimento" p-label="Data de nascimento" p-placeholder="dd/mm/aaaa" p-helper="Selecione a data no formato dia/mes/ano." additional-help-event-trigger=""></po-datepicker>
       </div>
       <div class="demo-field">
         <po-datepicker p-label="Data desabilitada" p-placeholder="dd/mm/aaaa" p-disabled></po-datepicker>
@@ -132,7 +139,7 @@
   <div class="demo-section">
     <div class="demo-row">
       <div class="demo-field">
-        <po-lookup id="lookup-cidade" p-label="Cidade" p-placeholder="Pesquise uma cidade"></po-lookup>
+        <po-lookup id="lookup-cidade" p-label="Cidade" p-placeholder="Pesquise uma cidade" p-field-label="nome" p-field-value="id"></po-lookup>
       </div>
     </div>
   </div>
@@ -156,7 +163,19 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Aguarda os Custom Elements serem definidos antes de configurar propriedades.
+     * Propriedades complexas (objetos, arrays) nao podem ser passadas via atributos HTML,
+     * precisam ser configuradas via JavaScript apos o registro do Custom Element.
+     */
+    function waitForElements(selectors) {
+      return Promise.all(selectors.map(function(s) {
+        return customElements.whenDefined(s);
+      }));
+    }
+
+    waitForElements(['po-input', 'po-datepicker', 'po-combo', 'po-lookup', 'po-button']).then(function() {
+      // === Configuracao do po-combo ===
       var comboEstados = document.getElementById('combo-estados');
       if (comboEstados) {
         comboEstados.options = [
@@ -171,6 +190,85 @@
         ];
       }
 
+      // === Configuracao do po-lookup ===
+      // O lookup exige um servico (service) e colunas (columns) para permitir
+      // a abertura da modal de busca. No contexto Web Component, propriedades
+      // complexas (objetos/arrays) precisam ser configuradas diretamente na
+      // instancia do componente Angular via ng.getComponent(), pois a atribuicao
+      // via elemento['p-columns'] nao propaga corretamente para o componente interno.
+      setTimeout(function() {
+        var lookupCidade = document.getElementById('lookup-cidade');
+        if (lookupCidade && typeof ng !== 'undefined') {
+          var lookupComp = ng.getComponent(lookupCidade);
+          if (lookupComp) {
+            lookupComp.columns = [
+              { property: 'id', label: 'Codigo', type: 'number' },
+              { property: 'nome', label: 'Cidade' },
+              { property: 'uf', label: 'UF' }
+            ];
+
+            // Servico mock que implementa a interface PoLookupFilter.
+            // Retorna dados estaticos para demonstrar a abertura da modal.
+            var cidadesMock = [
+              { id: 1, nome: 'Sao Paulo', uf: 'SP' },
+              { id: 2, nome: 'Rio de Janeiro', uf: 'RJ' },
+              { id: 3, nome: 'Belo Horizonte', uf: 'MG' },
+              { id: 4, nome: 'Salvador', uf: 'BA' },
+              { id: 5, nome: 'Curitiba', uf: 'PR' },
+              { id: 6, nome: 'Porto Alegre', uf: 'RS' },
+              { id: 7, nome: 'Florianopolis', uf: 'SC' },
+              { id: 8, nome: 'Goiania', uf: 'GO' },
+              { id: 9, nome: 'Brasilia', uf: 'DF' },
+              { id: 10, nome: 'Recife', uf: 'PE' }
+            ];
+
+            // Mock service usando Observable-like (compativel com rxjs subscribe)
+            lookupComp.service = {
+              getFilteredItems: function(params) {
+                var filter = (params.filter || '').toLowerCase();
+                var filtered = cidadesMock.filter(function(c) {
+                  return c.nome.toLowerCase().indexOf(filter) !== -1 ||
+                         c.uf.toLowerCase().indexOf(filter) !== -1;
+                });
+                return {
+                  subscribe: function(observer) {
+                    var result = { items: filtered, hasNext: false };
+                    if (typeof observer === 'function') {
+                      observer(result);
+                    } else if (observer && typeof observer.next === 'function') {
+                      observer.next(result);
+                      if (typeof observer.complete === 'function') {
+                        observer.complete();
+                      }
+                    }
+                    return { unsubscribe: function() {} };
+                  },
+                  pipe: function() { return this; }
+                };
+              },
+              getObjectByValue: function(value) {
+                var found = cidadesMock.find(function(c) { return c.id === Number(value); });
+                return {
+                  subscribe: function(observer) {
+                    if (typeof observer === 'function') {
+                      observer(found || {});
+                    } else if (observer && typeof observer.next === 'function') {
+                      observer.next(found || {});
+                      if (typeof observer.complete === 'function') {
+                        observer.complete();
+                      }
+                    }
+                    return { unsubscribe: function() {} };
+                  },
+                  pipe: function() { return this; }
+                };
+              }
+            };
+          }
+        }
+      }, 500);
+
+      // === Registro de eventos ===
       document.querySelectorAll('po-button').forEach(function(btn, i) {
         btn.addEventListener('p-click', function(e) {
           logEvent('po-button[' + i + ']', 'p-click', btn.getAttribute('p-label'));
@@ -194,6 +292,13 @@
           logEvent('po-datepicker[' + i + ']', 'p-change', e.detail);
         });
       });
+
+      var lookupEl = document.getElementById('lookup-cidade');
+      if (lookupEl) {
+        lookupEl.addEventListener('p-change', function(e) {
+          logEvent('po-lookup', 'p-change', e.detail);
+        });
+      }
     });
   </script>
 
