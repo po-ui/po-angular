@@ -1,0 +1,28 @@
+<div class="po-calendar-footer">
+  <po-button
+    p-kind="tertiary"
+    type="button"
+    [p-label]="labelClear"
+    [p-size]="size"
+    (click)="onClear()"
+    (keydown.enter)="onClear()"
+    (keydown.space)="onClear()"
+    (keydown)="onClearKeydown($event)"
+  >
+  </po-button>
+
+  @if (!hideTodayButton) {
+    <po-button
+      p-kind="tertiary"
+      type="button"
+      [p-label]="labelToday"
+      [p-disabled]="todayDisabled"
+      [p-size]="size"
+      (click)="onSelectToday()"
+      (keydown.enter)="onSelectToday()"
+      (keydown.space)="onSelectToday()"
+      (keydown)="onTodayKeydown($event)"
+    >
+    </po-button>
+  }
+</div>
