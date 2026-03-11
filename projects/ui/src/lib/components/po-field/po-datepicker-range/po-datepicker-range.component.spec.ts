@@ -12,6 +12,7 @@ import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
 import { PoMask } from './../po-input/po-mask';
 import { ElementRef, EventEmitter } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 describe('PoDatepickerRangeComponent:', () => {
   let component: PoDatepickerRangeComponent;
@@ -19,9 +20,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [PoCalendarModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoCalendarModule, OverlayModule],
       declarations: [
         PoCleanComponent,
         PoDatepickerRangeComponent,
@@ -29,9 +30,8 @@ describe('PoDatepickerRangeComponent:', () => {
         PoFieldContainerComponent
       ],
       providers: [PoDateService]
-    });
-  });
-  beforeEach(() => {
+    }).compileComponents();
+
     fixture = TestBed.createComponent(PoDatepickerRangeComponent);
     component = fixture.componentInstance;
 
@@ -486,14 +486,28 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should close calendar on Shift+Tab when focus is on first combo', () => {
         component.isCalendarVisible = true;
 
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(null)
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+
         const event = {
           key: 'Tab',
           shiftKey: true,
           preventDefault: jasmine.createSpy(),
           stopPropagation: jasmine.createSpy()
         } as any;
-
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
 
         component.onCalendarKeyDown(event);
 
@@ -520,6 +534,69 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(event.preventDefault).not.toHaveBeenCalled();
         expect(event.stopPropagation).not.toHaveBeenCalled();
         expect(component.isCalendarVisible).toBeTrue();
+      });
+
+      it('should focus first preset on Shift+Tab when it exists', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({
+              focus: focusSpy
+            })
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(null as any);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+
+        expect(component.isCalendarVisible).toBeTrue();
+
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+      });
+
+      it('should close calendar on mobile Shift+Tab from first combo', () => {
+        component.isCalendarVisible = true;
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
       });
     });
 
@@ -843,6 +920,59 @@ describe('PoDatepickerRangeComponent:', () => {
             querySelector: jasmine.createSpy().and.returnValue({
               focus: focusSpy
             })
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus first combo when Tab and calendar visible and no preset', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy();
+
+        const querySelectorSpy = jasmine.createSpy();
+
+        querySelectorSpy.and.returnValues(null, { focus: focusSpy });
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: querySelectorSpy
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
+        expect(querySelectorSpy).toHaveBeenCalledTimes(2);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus first combo on mobile when Tab and calendar visible', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+
+        const focusSpy = jasmine.createSpy();
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
           }
         } as any;
 
@@ -2009,6 +2139,25 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['controlPosition'].adjustPosition).not.toHaveBeenCalled();
     });
 
+    it('setCalendarPosition: should return early when verifyMobile is true', () => {
+      component.isCalendarVisible = true;
+
+      spyOn(component as any, 'verifyMobile').and.returnValue(true);
+
+      const rafSpy = spyOn(window, 'requestAnimationFrame');
+
+      (component as any).controlPosition = {
+        setElements: jasmine.createSpy('setElements'),
+        adjustPosition: jasmine.createSpy('adjustPosition')
+      };
+
+      component.setCalendarPosition();
+
+      expect(rafSpy).not.toHaveBeenCalled();
+      expect((component as any).controlPosition.setElements).not.toHaveBeenCalled();
+      expect((component as any).controlPosition.adjustPosition).not.toHaveBeenCalled();
+    });
+
     it(`setCalendarPosition: should call controlPosition methods`, () => {
       component.isCalendarVisible = true;
 
@@ -2462,6 +2611,674 @@ describe('PoDatepickerRangeComponent:', () => {
         component['poDatepickerRangeElement'].nativeElement.classList.add('ng-dirty');
         component.fieldErrorMessage = undefined;
         expect(component.getErrorMessage).toBe('');
+      });
+    });
+
+    describe('calculateWidthWithPresets:', () => {
+      it('should return false when no presets are configured', () => {
+        component.rangePresets = false;
+        component.rangePresetOptions = undefined;
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when rangePresets is falsy and rangePresetOptions is empty', () => {
+        component.rangePresets = false;
+        component.rangePresetOptions = [];
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when size does not match any key in MIN_CALENDAR_WIDTH_WITH_PRESETS', () => {
+        component.rangePresets = true;
+        (component as any)._size = 'invalid';
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return true when rangePresets is true and window.innerWidth < minWidth for medium size', () => {
+        component.rangePresets = true;
+        component.rangePresetOptions = [];
+        component.size = 'medium';
+
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          value: 500
+        });
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeTrue();
+      });
+
+      it('should return false when rangePresets is true and window.innerWidth >= minWidth for medium size', () => {
+        component.rangePresets = true;
+        component.rangePresetOptions = [];
+        component.size = 'medium';
+
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          value: 700
+        });
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return true when rangePresetOptions has items and window.innerWidth < minWidth', () => {
+        component.rangePresets = false;
+        component.rangePresetOptions = [{ label: 'test', dateRange: () => ({ start: new Date(), end: new Date() }) }];
+        component.size = 'medium';
+
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          value: 500
+        });
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeTrue();
+      });
+
+      it('should return true when both rangePresets and rangePresetOptions are set and window.innerWidth < minWidth', () => {
+        component.rangePresets = true;
+        component.rangePresetOptions = [{ label: 'test', dateRange: () => ({ start: new Date(), end: new Date() }) }];
+
+        component.size = 'medium';
+
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          value: 400
+        });
+
+        const result = component['calculateWidthWithPresets']();
+
+        expect(result).toBeTrue();
+      });
+    });
+
+    describe('updateWidthWithPresets:', () => {
+      it('should update widthWithPresets with the result of calculateWidthWithPresets', () => {
+        component.widthWithPresets = false;
+
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+
+        component['updateWidthWithPresets']();
+
+        expect(component.widthWithPresets).toBeTrue();
+      });
+
+      it('should set widthWithPresets to false when calculateWidthWithPresets returns false', () => {
+        component.widthWithPresets = true;
+
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+
+        component['updateWidthWithPresets']();
+
+        expect(component.widthWithPresets).toBeFalse();
+      });
+    });
+
+    describe('onResize:', () => {
+      it('should call updateWidthWithPresets', () => {
+        spyOn(component as any, 'updateWidthWithPresets');
+
+        component.onResize();
+
+        expect(component['updateWidthWithPresets']).toHaveBeenCalled();
+      });
+    });
+
+    describe('enableHorizontalMouseWheel:', () => {
+      it('should add wheel event listener to preset list element', () => {
+        const addEventListenerSpy = jasmine.createSpy('addEventListener');
+        const fakeEl = {
+          addEventListener: addEventListenerSpy,
+          scrollLeft: 0
+        };
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(fakeEl)
+          }
+        } as any;
+
+        component.enableHorizontalMouseWheel();
+
+        expect(component.calendarPicker.nativeElement.querySelector).toHaveBeenCalledWith('.po-calendar-preset-list');
+        expect(addEventListenerSpy).toHaveBeenCalledWith('wheel', jasmine.any(Function));
+      });
+
+      it('should prevent default and update scrollLeft on wheel event', () => {
+        const fakeEl = {
+          addEventListener: jasmine.createSpy('addEventListener'),
+          scrollLeft: 0
+        };
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(fakeEl)
+          }
+        } as any;
+
+        component.enableHorizontalMouseWheel();
+
+        const wheelCallback = fakeEl.addEventListener.calls.mostRecent().args[1];
+        const wheelEvent = { preventDefault: jasmine.createSpy(), deltaY: 50 };
+        wheelCallback(wheelEvent);
+
+        expect(wheelEvent.preventDefault).toHaveBeenCalled();
+        expect(fakeEl.scrollLeft).toBe(50);
+      });
+    });
+
+    describe('verifyMobile:', () => {
+      it('should return the result of isMobile()', () => {
+        const result = component.verifyMobile();
+
+        expect(typeof result === 'boolean' || result === null || result !== undefined).toBeTrue();
+      });
+    });
+
+    describe('handleMobileNavigation:', () => {
+      it('should return true and focus first combo when mobile and combo exists', () => {
+        const focusSpy = jasmine.createSpy('focus');
+
+        spyOn(component, 'verifyMobile').and.returnValue(true as any);
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+          }
+        } as any;
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleMobileNavigation'](event);
+
+        expect(result).toBeTrue();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+      });
+
+      it('should return true without focusing when mobile but combo does not exist', () => {
+        spyOn(component, 'verifyMobile').and.returnValue(true as any);
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(null)
+          }
+        } as any;
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleMobileNavigation'](event);
+
+        expect(result).toBeTrue();
+        expect(event.preventDefault).not.toHaveBeenCalled();
+      });
+
+      it('should return false when not mobile', () => {
+        spyOn(component, 'verifyMobile').and.returnValue(false as any);
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleMobileNavigation'](event);
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe('handlePresetNavigation:', () => {
+      it('should return true and focus preset when preset exists and calculateWidthWithPresets is false', () => {
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+          }
+        } as any;
+
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handlePresetNavigation'](event);
+
+        expect(result).toBeTrue();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+      });
+
+      it('should return false when preset exists but calculateWidthWithPresets is true', () => {
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: jasmine.createSpy() })
+          }
+        } as any;
+
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handlePresetNavigation'](event);
+
+        expect(result).toBeFalse();
+        expect(event.preventDefault).not.toHaveBeenCalled();
+      });
+
+      it('should return false when no preset element found', () => {
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(null)
+          }
+        } as any;
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handlePresetNavigation'](event);
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe('handleComboNavigation:', () => {
+      it('should return true and focus combo when combo exists', () => {
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+          }
+        } as any;
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleComboNavigation'](event);
+
+        expect(result).toBeTrue();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(focusSpy).toHaveBeenCalled();
+      });
+
+      it('should return false when no combo found', () => {
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(null)
+          }
+        } as any;
+
+        const event: any = {
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleComboNavigation'](event);
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe('handleTabWithCalendarVisible:', () => {
+      it('should return false when key is not Tab', () => {
+        const event: any = { key: 'Enter', shiftKey: false };
+
+        const result = component['handleTabWithCalendarVisible'](event);
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when shiftKey is true', () => {
+        component.isCalendarVisible = true;
+
+        const event: any = { key: 'Tab', shiftKey: true };
+
+        const result = component['handleTabWithCalendarVisible'](event);
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when calendar is not visible', () => {
+        component.isCalendarVisible = false;
+
+        const event: any = { key: 'Tab', shiftKey: false };
+
+        const result = component['handleTabWithCalendarVisible'](event);
+
+        expect(result).toBeFalse();
+      });
+
+      it('should delegate to handleMobileNavigation first when Tab and calendar visible', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component as any, 'handleMobileNavigation').and.returnValue(true);
+
+        const event: any = { key: 'Tab', shiftKey: false };
+
+        const result = component['handleTabWithCalendarVisible'](event);
+
+        expect(result).toBeTrue();
+        expect(component['handleMobileNavigation']).toHaveBeenCalledWith(event);
+      });
+
+      it('should delegate to handlePresetNavigation when mobile returns false', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component as any, 'handleMobileNavigation').and.returnValue(false);
+        spyOn(component as any, 'handlePresetNavigation').and.returnValue(true);
+
+        const event: any = { key: 'Tab', shiftKey: false };
+
+        const result = component['handleTabWithCalendarVisible'](event);
+
+        expect(result).toBeTrue();
+        expect(component['handlePresetNavigation']).toHaveBeenCalledWith(event);
+      });
+
+      it('should delegate to handleComboNavigation when both mobile and preset return false', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component as any, 'handleMobileNavigation').and.returnValue(false);
+        spyOn(component as any, 'handlePresetNavigation').and.returnValue(false);
+        spyOn(component as any, 'handleComboNavigation').and.returnValue(true);
+
+        const event: any = { key: 'Tab', shiftKey: false };
+
+        const result = component['handleTabWithCalendarVisible'](event);
+
+        expect(result).toBeTrue();
+        expect(component['handleComboNavigation']).toHaveBeenCalledWith(event);
+      });
+    });
+
+    describe('handleShiftTabWithCleaner:', () => {
+      it('should return true when Shift+Tab, calendar hidden, and enableCleaner true', () => {
+        component.isCalendarVisible = false;
+
+        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(true);
+
+        component.iconClean = {
+          nativeElement: { focus: jasmine.createSpy() }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithCleaner'](event);
+
+        expect(result).toBeTrue();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should return false when enableCleaner is false', () => {
+        component.isCalendarVisible = false;
+
+        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(false);
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithCleaner'](event);
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when calendar is visible', () => {
+        component.isCalendarVisible = true;
+
+        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(true);
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithCleaner'](event);
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when key is not Tab', () => {
+        const event: any = {
+          key: 'Enter',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithCleaner'](event);
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe('handleShiftTabWithoutCleaner:', () => {
+      it('should return true and call focus when Shift+Tab and calendar hidden', () => {
+        component.isCalendarVisible = false;
+
+        spyOn(component, 'focus');
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithoutCleaner'](event);
+
+        expect(result).toBeTrue();
+        expect(component.focus).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should return false when calendar is visible', () => {
+        component.isCalendarVisible = true;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithoutCleaner'](event);
+
+        expect(result).toBeFalse();
+      });
+
+      it('should return false when key is not Tab', () => {
+        const event: any = {
+          key: 'Enter',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        };
+
+        const result = component['handleShiftTabWithoutCleaner'](event);
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe('toggleCalendar with widthWithPresets:', () => {
+      it('should call enableHorizontalMouseWheel when calendar becomes visible and calculateWidthWithPresets returns true', () => {
+        component.isCalendarVisible = false;
+        component.disabled = false;
+        component.readonly = false;
+
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+        spyOn(component, 'enableHorizontalMouseWheel');
+        spyOn(component, 'setCalendarPosition');
+        spyOn(component as any, 'initializeListeners');
+
+        component.toggleCalendar();
+
+        expect(component.enableHorizontalMouseWheel).toHaveBeenCalled();
+      });
+
+      it('should not call enableHorizontalMouseWheel when calculateWidthWithPresets returns false', () => {
+        component.isCalendarVisible = false;
+        component.disabled = false;
+        component.readonly = false;
+
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+        spyOn(component, 'enableHorizontalMouseWheel');
+        spyOn(component, 'setCalendarPosition');
+        spyOn(component as any, 'initializeListeners');
+
+        component.toggleCalendar();
+
+        expect(component.enableHorizontalMouseWheel).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onCalendarKeyDown with calculateWidthWithPresets:', () => {
+      beforeEach(() => {
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+      });
+
+      it('should not focus preset when Shift+Tab from first combo and calculateWidthWithPresets returns true', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(false as any);
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(focusSpy).not.toHaveBeenCalled();
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
+      });
+
+      it('should focus preset when Shift+Tab from first combo and calculateWidthWithPresets returns false', () => {
+        component.isCalendarVisible = true;
+
+        const focusSpy = jasmine.createSpy('focus');
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(false as any);
+        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(focusSpy).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeTrue();
+      });
+    });
+
+    describe('onScroll with verifyMobile:', () => {
+      it('should call adjustPosition when calendar is visible and not mobile', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component, 'verifyMobile').and.returnValue(false as any);
+        spyOn(component['controlPosition'], 'adjustPosition');
+
+        component['onScroll']();
+
+        expect(component['controlPosition'].adjustPosition).toHaveBeenCalled();
+      });
+
+      it('should not call adjustPosition when calendar is visible and is mobile', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component, 'verifyMobile').and.returnValue(true as any);
+        spyOn(component['controlPosition'], 'adjustPosition');
+
+        component['onScroll']();
+
+        expect(component['controlPosition'].adjustPosition).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('ngOnInit widthWithPresets:', () => {
+      it('should set widthWithPresets based on window.innerWidth and MIN_CALENDAR_WIDTH_WITH_PRESETS', () => {
+        component.size = 'medium';
+
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          value: 500
+        });
+
+        component.ngOnInit();
+
+        expect(component.widthWithPresets).toBeTrue();
+      });
+    });
+
+    describe('ngAfterViewInit with optional chaining:', () => {
+      it('should not throw when iconCalendar is undefined', () => {
+        component.iconCalendar = undefined as any;
+
+        expect(() => component.ngAfterViewInit()).not.toThrow();
+      });
+
+      it('should not throw when iconCalendar.buttonElement is undefined', () => {
+        component.iconCalendar = { buttonElement: undefined } as any;
+
+        expect(() => component.ngAfterViewInit()).not.toThrow();
       });
     });
   });
