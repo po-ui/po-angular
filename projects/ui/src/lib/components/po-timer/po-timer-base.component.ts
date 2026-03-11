@@ -94,11 +94,7 @@ export class PoTimerBaseComponent {
   private _maxTime: string;
   private _minTime: string;
   private _minuteInterval: number = PO_TIMER_DEFAULT_MINUTE_INTERVAL;
-  private _period: string = 'AM';
   private _secondInterval: number = PO_TIMER_DEFAULT_SECOND_INTERVAL;
-  private _selectedHour: number = null;
-  private _selectedMinute: number = null;
-  private _selectedSecond: number = null;
   private _showSeconds: boolean = false;
   private _size?: string;
 
@@ -259,12 +255,12 @@ export class PoTimerBaseComponent {
    *
    * @default `medium`
    */
-  @HostBinding('attr.p-size')
-  @Input('p-size')
   set size(value: string) {
     this._size = validateSizeFn(value, PoFieldSize);
   }
 
+  @HostBinding('attr.p-size')
+  @Input('p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
@@ -275,42 +271,15 @@ export class PoTimerBaseComponent {
   minutes: Array<number> = [];
   seconds: Array<number> = [];
 
+  selectedHour: number = null;
+  selectedMinute: number = null;
+  selectedSecond: number = null;
+  period: string = 'AM';
+
   constructor(protected languageService: PoLanguageService) {
     this.shortLanguage = languageService.getShortLanguage();
     this._locale = this.shortLanguage;
     this.setLiterals();
-  }
-
-  get selectedHour(): number {
-    return this._selectedHour;
-  }
-
-  set selectedHour(value: number) {
-    this._selectedHour = value;
-  }
-
-  get selectedMinute(): number {
-    return this._selectedMinute;
-  }
-
-  set selectedMinute(value: number) {
-    this._selectedMinute = value;
-  }
-
-  get selectedSecond(): number {
-    return this._selectedSecond;
-  }
-
-  set selectedSecond(value: number) {
-    this._selectedSecond = value;
-  }
-
-  get period(): string {
-    return this._period;
-  }
-
-  set period(value: string) {
-    this._period = value;
   }
 
   get is12HourFormat(): boolean {
@@ -318,7 +287,7 @@ export class PoTimerBaseComponent {
   }
 
   /** Gera a lista de horas disponíveis de acordo com o formato. */
-  generateHours(): void {
+  protected generateHours(): void {
     this.hours = [];
 
     if (this.is12HourFormat) {
@@ -333,7 +302,7 @@ export class PoTimerBaseComponent {
   }
 
   /** Gera a lista de minutos de acordo com o intervalo configurado. */
-  generateMinutes(): void {
+  protected generateMinutes(): void {
     this.minutes = [];
 
     for (let i = 0; i < 60; i += this._minuteInterval) {
@@ -342,7 +311,7 @@ export class PoTimerBaseComponent {
   }
 
   /** Gera a lista de segundos de acordo com o intervalo configurado. */
-  generateSeconds(): void {
+  protected generateSeconds(): void {
     this.seconds = [];
 
     if (this._showSeconds) {
@@ -353,7 +322,7 @@ export class PoTimerBaseComponent {
   }
 
   /** Formata um número com dois dígitos. */
-  formatValue(value: number): string {
+  protected formatValue(value: number): string {
     if (value == null) {
       return '--';
     }
@@ -361,7 +330,7 @@ export class PoTimerBaseComponent {
   }
 
   /** Verifica se uma hora está desabilitada com base nos limites min/max. */
-  isHourDisabled(hour: number): boolean {
+  protected isHourDisabled(hour: number): boolean {
     if (!this._minTime && !this._maxTime) {
       return false;
     }
@@ -386,16 +355,16 @@ export class PoTimerBaseComponent {
   }
 
   /** Verifica se um minuto está desabilitado com base nos limites min/max e hora selecionada. */
-  isMinuteDisabled(minute: number): boolean {
+  protected isMinuteDisabled(minute: number): boolean {
     if (!this._minTime && !this._maxTime) {
       return false;
     }
 
-    if (this._selectedHour == null) {
+    if (this.selectedHour == null) {
       return false;
     }
 
-    const hour24 = this.convertTo24Hour(this._selectedHour);
+    const hour24 = this.convertTo24Hour(this.selectedHour);
 
     if (this._minTime) {
       const minHour = this.parseTimeComponent(this._minTime, 'hour');
@@ -419,23 +388,23 @@ export class PoTimerBaseComponent {
   }
 
   /** Verifica se um segundo está desabilitado com base nos limites min/max, hora e minuto selecionados. */
-  isSecondDisabled(second: number): boolean {
+  protected isSecondDisabled(second: number): boolean {
     if (!this._minTime && !this._maxTime) {
       return false;
     }
 
-    if (this._selectedHour == null || this._selectedMinute == null) {
+    if (this.selectedHour == null || this.selectedMinute == null) {
       return false;
     }
 
-    const hour24 = this.convertTo24Hour(this._selectedHour);
+    const hour24 = this.convertTo24Hour(this.selectedHour);
 
     if (this._minTime) {
       const minHour = this.parseTimeComponent(this._minTime, 'hour');
       const minMinute = this.parseTimeComponent(this._minTime, 'minute');
       const minSecond = this.parseTimeComponent(this._minTime, 'second');
 
-      if (hour24 === minHour && this._selectedMinute === minMinute && second < minSecond) {
+      if (hour24 === minHour && this.selectedMinute === minMinute && second < minSecond) {
         return true;
       }
     }
@@ -445,7 +414,7 @@ export class PoTimerBaseComponent {
       const maxMinute = this.parseTimeComponent(this._maxTime, 'minute');
       const maxSecond = this.parseTimeComponent(this._maxTime, 'second');
 
-      if (hour24 === maxHour && this._selectedMinute === maxMinute && second > maxSecond) {
+      if (hour24 === maxHour && this.selectedMinute === maxMinute && second > maxSecond) {
         return true;
       }
     }
@@ -454,17 +423,17 @@ export class PoTimerBaseComponent {
   }
 
   /** Gera o valor ISO 8601 com base na seleção atual. */
-  buildTimeValue(): string {
-    if (this._selectedHour == null || this._selectedMinute == null) {
+  protected buildTimeValue(): string {
+    if (this.selectedHour == null || this.selectedMinute == null) {
       return '';
     }
 
-    const hour24 = this.convertTo24Hour(this._selectedHour);
+    const hour24 = this.convertTo24Hour(this.selectedHour);
     const hourStr = this.formatValue(hour24);
-    const minuteStr = this.formatValue(this._selectedMinute);
+    const minuteStr = this.formatValue(this.selectedMinute);
 
-    if (this._showSeconds && this._selectedSecond != null) {
-      const secondStr = this.formatValue(this._selectedSecond);
+    if (this._showSeconds && this.selectedSecond != null) {
+      const secondStr = this.formatValue(this.selectedSecond);
       return `${hourStr}:${minuteStr}:${secondStr}`;
     }
 
@@ -474,9 +443,9 @@ export class PoTimerBaseComponent {
   /** Define o horário a partir de uma string ISO. */
   setTimeFromString(time: string): void {
     if (!time) {
-      this._selectedHour = null;
-      this._selectedMinute = null;
-      this._selectedSecond = null;
+      this.selectedHour = null;
+      this.selectedMinute = null;
+      this.selectedSecond = null;
       return;
     }
 
@@ -489,23 +458,23 @@ export class PoTimerBaseComponent {
 
       if (this.is12HourFormat) {
         if (hour === 0) {
-          this._period = 'AM';
+          this.period = 'AM';
           hour = 12;
         } else if (hour === 12) {
-          this._period = 'PM';
+          this.period = 'PM';
         } else if (hour > 12) {
-          this._period = 'PM';
+          this.period = 'PM';
           hour = hour - 12;
         } else {
-          this._period = 'AM';
+          this.period = 'AM';
         }
       }
 
-      this._selectedHour = hour;
-      this._selectedMinute = minute;
+      this.selectedHour = hour;
+      this.selectedMinute = minute;
 
       if (this._showSeconds) {
-        this._selectedSecond = second;
+        this.selectedSecond = second;
       }
     }
   }
@@ -516,7 +485,7 @@ export class PoTimerBaseComponent {
       return hour;
     }
 
-    if (this._period === 'AM') {
+    if (this.period === 'AM') {
       return hour === 12 ? 0 : hour;
     } else {
       return hour === 12 ? 12 : hour + 12;

@@ -3,6 +3,7 @@ import { QueryList, ElementRef } from '@angular/core';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
+import { PoButtonModule } from './../po-button/po-button.module';
 import { PoTimerBaseComponent } from './po-timer-base.component';
 import { PoTimerComponent } from './po-timer.component';
 import { PoTimerFormat } from './enums/po-timer-format.enum';
@@ -14,6 +15,7 @@ describe('PoTimerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoButtonModule],
       declarations: [PoTimerComponent]
     });
   });
@@ -32,15 +34,15 @@ describe('PoTimerComponent:', () => {
   describe('Methods:', () => {
     describe('ngOnInit:', () => {
       it('should call generateHours, generateMinutes, and generateSeconds', () => {
-        spyOn(component, 'generateHours');
-        spyOn(component, 'generateMinutes');
-        spyOn(component, 'generateSeconds');
+        spyOn(component as any, 'generateHours');
+        spyOn(component as any, 'generateMinutes');
+        spyOn(component as any, 'generateSeconds');
 
         component.ngOnInit();
 
-        expect(component.generateHours).toHaveBeenCalled();
-        expect(component.generateMinutes).toHaveBeenCalled();
-        expect(component.generateSeconds).toHaveBeenCalled();
+        expect(component['generateHours']).toHaveBeenCalled();
+        expect(component['generateMinutes']).toHaveBeenCalled();
+        expect(component['generateSeconds']).toHaveBeenCalled();
       });
     });
 
@@ -208,7 +210,7 @@ describe('PoTimerComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         spyOn(event, 'preventDefault');
         spyOn(component, 'onSelectHour');
-        component.hours = [10, 11, 12];
+        component.displayHours = [10, 11, 12];
 
         component.onCellKeydown(event, 'hour', 1);
 
@@ -220,7 +222,7 @@ describe('PoTimerComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
         spyOn(event, 'preventDefault');
         spyOn(component, 'onSelectMinute');
-        component.minutes = [0, 5, 10];
+        component.displayMinutes = [0, 5, 10];
 
         component.onCellKeydown(event, 'minute', 2);
 
@@ -232,7 +234,7 @@ describe('PoTimerComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         spyOn(event, 'preventDefault');
         spyOn(component, 'onSelectSecond');
-        component.seconds = [0, 15, 30];
+        component.displaySeconds = [0, 15, 30];
 
         component.onCellKeydown(event, 'second', 1);
 
@@ -354,39 +356,45 @@ describe('PoTimerComponent:', () => {
       });
     });
 
-    describe('focusCell (private):', () => {
-      it('should not throw when cells is null', () => {
-        expect(() => component['focusCell'](null, 0)).not.toThrow();
+    describe('navigateInfinityScroll (private):', () => {
+      let mockElements: Array<ElementRef>;
+      let mockCells: QueryList<ElementRef>;
+
+      beforeEach(() => {
+        mockElements = [
+          { nativeElement: { focus: jasmine.createSpy('focus0') } },
+          { nativeElement: { focus: jasmine.createSpy('focus1') } },
+          { nativeElement: { focus: jasmine.createSpy('focus2') } }
+        ];
+
+        mockCells = new QueryList<ElementRef>();
+        mockCells.reset(mockElements);
+
+        component.hourCells = mockCells;
       });
 
-      it('should focus the element at the given index', () => {
-        const mockElement = { nativeElement: { focus: jasmine.createSpy('focus') } };
-        const mockCells = new QueryList<ElementRef>();
-        mockCells.reset([mockElement]);
-
-        component['focusCell'](mockCells, 0);
-
-        expect(mockElement.nativeElement.focus).toHaveBeenCalled();
+      it('should focus the next cell when direction is 1', () => {
+        component['navigateInfinityScroll']('hour', 0, 1);
+        expect(mockElements[1].nativeElement.focus).toHaveBeenCalled();
       });
 
-      it('should not focus when index is negative', () => {
-        const mockElement = { nativeElement: { focus: jasmine.createSpy('focus') } };
-        const mockCells = new QueryList<ElementRef>();
-        mockCells.reset([mockElement]);
-
-        component['focusCell'](mockCells, -1);
-
-        expect(mockElement.nativeElement.focus).not.toHaveBeenCalled();
+      it('should focus the previous cell when direction is -1', () => {
+        component['navigateInfinityScroll']('hour', 2, -1);
+        expect(mockElements[1].nativeElement.focus).toHaveBeenCalled();
       });
 
-      it('should not focus when index exceeds array length', () => {
-        const mockElement = { nativeElement: { focus: jasmine.createSpy('focus') } };
-        const mockCells = new QueryList<ElementRef>();
-        mockCells.reset([mockElement]);
+      it('should not focus when resulting index is out of bounds (negative)', () => {
+        component['navigateInfinityScroll']('hour', 0, -1);
+        mockElements.forEach(el => {
+          expect(el.nativeElement.focus).not.toHaveBeenCalled();
+        });
+      });
 
-        component['focusCell'](mockCells, 5);
-
-        expect(mockElement.nativeElement.focus).not.toHaveBeenCalled();
+      it('should not focus when resulting index is out of bounds (exceeds length)', () => {
+        component['navigateInfinityScroll']('hour', 2, 1);
+        mockElements.forEach(el => {
+          expect(el.nativeElement.focus).not.toHaveBeenCalled();
+        });
       });
     });
   });
@@ -426,7 +434,7 @@ describe('PoTimerComponent:', () => {
 
     it('should render seconds column when showSeconds is true', () => {
       component.showSeconds = true;
-      component.generateSeconds();
+      component.ngOnInit();
       fixture.detectChanges();
 
       const columns = nativeElement.querySelectorAll('[role="listbox"]');
@@ -446,14 +454,12 @@ describe('PoTimerComponent:', () => {
       expect(periodToggle).toBeTruthy();
     });
 
-    it('should render AM and PM buttons in 12h format', () => {
+    it('should render AM and PM po-buttons in 12h format', () => {
       component.format = PoTimerFormat.Format12;
       fixture.detectChanges();
 
       const periodButtons = nativeElement.querySelectorAll('.po-timer-period-button');
       expect(periodButtons.length).toBe(2);
-      expect(periodButtons[0].textContent.trim()).toBe('AM');
-      expect(periodButtons[1].textContent.trim()).toBe('PM');
     });
 
     it('should add selected class to selected hour cell', () => {
@@ -473,9 +479,9 @@ describe('PoTimerComponent:', () => {
       expect(disabledCells.length).toBeGreaterThan(0);
     });
 
-    it('should render column labels', () => {
-      const labels = nativeElement.querySelectorAll('.po-timer-column-label');
-      expect(labels.length).toBeGreaterThanOrEqual(2);
+    it('should render scroll containers for infinity scroll', () => {
+      const scrollContainers = nativeElement.querySelectorAll('.po-timer-column-scroll');
+      expect(scrollContainers.length).toBeGreaterThanOrEqual(2);
     });
   });
 });

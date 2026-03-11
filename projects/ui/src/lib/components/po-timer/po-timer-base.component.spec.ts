@@ -41,9 +41,9 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateHours when format is set', () => {
-        spyOn(component, 'generateHours');
+        spyOn(component as any, 'generateHours');
         component.format = PoTimerFormat.Format12;
-        expect(component.generateHours).toHaveBeenCalled();
+        expect(component['generateHours']).toHaveBeenCalled();
       });
     });
 
@@ -137,9 +137,9 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateMinutes when set', () => {
-        spyOn(component, 'generateMinutes');
+        spyOn(component as any, 'generateMinutes');
         component.minuteInterval = 15;
-        expect(component.generateMinutes).toHaveBeenCalled();
+        expect(component['generateMinutes']).toHaveBeenCalled();
       });
 
       it('should parse string values', () => {
@@ -174,9 +174,9 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateSeconds when set', () => {
-        spyOn(component, 'generateSeconds');
+        spyOn(component as any, 'generateSeconds');
         component.secondInterval = 10;
-        expect(component.generateSeconds).toHaveBeenCalled();
+        expect(component['generateSeconds']).toHaveBeenCalled();
       });
     });
 
@@ -206,9 +206,9 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateSeconds when set', () => {
-        spyOn(component, 'generateSeconds');
+        spyOn(component as any, 'generateSeconds');
         component.showSeconds = true;
-        expect(component.generateSeconds).toHaveBeenCalled();
+        expect(component['generateSeconds']).toHaveBeenCalled();
       });
     });
 
@@ -298,7 +298,7 @@ describe('PoTimerBaseComponent:', () => {
     describe('generateHours:', () => {
       it('should generate 24 hours (0-23) for 24h format', () => {
         component.format = PoTimerFormat.Format24;
-        component.generateHours();
+        component['generateHours']();
         expect(component.hours.length).toBe(24);
         expect(component.hours[0]).toBe(0);
         expect(component.hours[23]).toBe(23);
@@ -306,7 +306,7 @@ describe('PoTimerBaseComponent:', () => {
 
       it('should generate 12 hours (1-12) for 12h format', () => {
         component.format = PoTimerFormat.Format12;
-        component.generateHours();
+        component['generateHours']();
         expect(component.hours.length).toBe(12);
         expect(component.hours[0]).toBe(1);
         expect(component.hours[11]).toBe(12);
@@ -315,7 +315,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('generateMinutes:', () => {
       it('should generate minutes with default interval of 5', () => {
-        component.generateMinutes();
+        component['generateMinutes']();
         expect(component.minutes.length).toBe(12);
         expect(component.minutes[0]).toBe(0);
         expect(component.minutes[1]).toBe(5);
@@ -324,14 +324,14 @@ describe('PoTimerBaseComponent:', () => {
 
       it('should generate minutes with interval of 15', () => {
         component.minuteInterval = 15;
-        component.generateMinutes();
+        component['generateMinutes']();
         expect(component.minutes.length).toBe(4);
         expect(component.minutes).toEqual([0, 15, 30, 45]);
       });
 
       it('should generate minutes with interval of 1', () => {
         component.minuteInterval = 1;
-        component.generateMinutes();
+        component['generateMinutes']();
         expect(component.minutes.length).toBe(60);
       });
     });
@@ -339,190 +339,190 @@ describe('PoTimerBaseComponent:', () => {
     describe('generateSeconds:', () => {
       it('should generate empty array when showSeconds is false', () => {
         component.showSeconds = false;
-        component.generateSeconds();
+        component['generateSeconds']();
         expect(component.seconds.length).toBe(0);
       });
 
       it('should generate seconds with default interval of 15 when showSeconds is true', () => {
         component.showSeconds = true;
-        component.generateSeconds();
+        component['generateSeconds']();
         expect(component.seconds).toEqual([0, 15, 30, 45]);
       });
 
       it('should generate seconds with interval of 30 when showSeconds is true', () => {
         component.showSeconds = true;
         component.secondInterval = 30;
-        component.generateSeconds();
+        component['generateSeconds']();
         expect(component.seconds).toEqual([0, 30]);
       });
     });
 
     describe('formatValue:', () => {
       it('should format single digit with leading zero', () => {
-        expect(component.formatValue(0)).toBe('00');
-        expect(component.formatValue(5)).toBe('05');
-        expect(component.formatValue(9)).toBe('09');
+        expect(component['formatValue'](0)).toBe('00');
+        expect(component['formatValue'](5)).toBe('05');
+        expect(component['formatValue'](9)).toBe('09');
       });
 
       it('should format double digit without leading zero', () => {
-        expect(component.formatValue(10)).toBe('10');
-        expect(component.formatValue(23)).toBe('23');
-        expect(component.formatValue(59)).toBe('59');
+        expect(component['formatValue'](10)).toBe('10');
+        expect(component['formatValue'](23)).toBe('23');
+        expect(component['formatValue'](59)).toBe('59');
       });
 
       it('should return -- when value is null', () => {
-        expect(component.formatValue(null)).toBe('--');
+        expect(component['formatValue'](null)).toBe('--');
       });
 
       it('should return -- when value is undefined', () => {
-        expect(component.formatValue(undefined)).toBe('--');
+        expect(component['formatValue'](undefined)).toBe('--');
       });
     });
 
     describe('isHourDisabled:', () => {
       it('should return false when no min/max is set', () => {
-        expect(component.isHourDisabled(10)).toBe(false);
+        expect(component['isHourDisabled'](10)).toBe(false);
       });
 
       it('should return true when hour is before minTime hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:00';
-        expect(component.isHourDisabled(5)).toBe(true);
+        expect(component['isHourDisabled'](5)).toBe(true);
       });
 
       it('should return false when hour equals minTime hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:00';
-        expect(component.isHourDisabled(8)).toBe(false);
+        expect(component['isHourDisabled'](8)).toBe(false);
       });
 
       it('should return false when hour is after minTime hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:00';
-        expect(component.isHourDisabled(10)).toBe(false);
+        expect(component['isHourDisabled'](10)).toBe(false);
       });
 
       it('should return true when hour is after maxTime hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.maxTime = '18:00';
-        expect(component.isHourDisabled(20)).toBe(true);
+        expect(component['isHourDisabled'](20)).toBe(true);
       });
 
       it('should return false when hour equals maxTime hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.maxTime = '18:00';
-        expect(component.isHourDisabled(18)).toBe(false);
+        expect(component['isHourDisabled'](18)).toBe(false);
       });
 
       it('should return false when hour is before maxTime hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.maxTime = '18:00';
-        expect(component.isHourDisabled(10)).toBe(false);
+        expect(component['isHourDisabled'](10)).toBe(false);
       });
 
       it('should handle 12h format with AM period', () => {
         component.format = PoTimerFormat.Format12;
         component.period = 'AM';
         component.minTime = '08:00';
-        expect(component.isHourDisabled(5)).toBe(true);
-        expect(component.isHourDisabled(10)).toBe(false);
+        expect(component['isHourDisabled'](5)).toBe(true);
+        expect(component['isHourDisabled'](10)).toBe(false);
       });
 
       it('should handle 12h format with PM period', () => {
         component.format = PoTimerFormat.Format12;
         component.period = 'PM';
         component.maxTime = '18:00';
-        expect(component.isHourDisabled(8)).toBe(true);
-        expect(component.isHourDisabled(5)).toBe(false);
+        expect(component['isHourDisabled'](8)).toBe(true);
+        expect(component['isHourDisabled'](5)).toBe(false);
       });
 
       it('should handle both min and max time', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:00';
         component.maxTime = '18:00';
-        expect(component.isHourDisabled(5)).toBe(true);
-        expect(component.isHourDisabled(10)).toBe(false);
-        expect(component.isHourDisabled(20)).toBe(true);
+        expect(component['isHourDisabled'](5)).toBe(true);
+        expect(component['isHourDisabled'](10)).toBe(false);
+        expect(component['isHourDisabled'](20)).toBe(true);
       });
     });
 
     describe('isMinuteDisabled:', () => {
       it('should return false when no min/max is set', () => {
-        expect(component.isMinuteDisabled(30)).toBe(false);
+        expect(component['isMinuteDisabled'](30)).toBe(false);
       });
 
       it('should return false when selectedHour is null', () => {
         component.minTime = '08:30';
         component.selectedHour = null;
-        expect(component.isMinuteDisabled(15)).toBe(false);
+        expect(component['isMinuteDisabled'](15)).toBe(false);
       });
 
       it('should return true when minute is before minTime minute on same hour (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:30';
         component.selectedHour = 8;
-        expect(component.isMinuteDisabled(15)).toBe(true);
+        expect(component['isMinuteDisabled'](15)).toBe(true);
       });
 
       it('should return false when minute equals minTime minute on same hour', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:30';
         component.selectedHour = 8;
-        expect(component.isMinuteDisabled(30)).toBe(false);
+        expect(component['isMinuteDisabled'](30)).toBe(false);
       });
 
       it('should return false when minute is after minTime minute on same hour', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:30';
         component.selectedHour = 8;
-        expect(component.isMinuteDisabled(45)).toBe(false);
+        expect(component['isMinuteDisabled'](45)).toBe(false);
       });
 
       it('should return false when selectedHour is after minTime hour', () => {
         component.format = PoTimerFormat.Format24;
         component.minTime = '08:30';
         component.selectedHour = 10;
-        expect(component.isMinuteDisabled(0)).toBe(false);
+        expect(component['isMinuteDisabled'](0)).toBe(false);
       });
 
       it('should return true when minute is after maxTime minute on same hour', () => {
         component.format = PoTimerFormat.Format24;
         component.maxTime = '18:30';
         component.selectedHour = 18;
-        expect(component.isMinuteDisabled(45)).toBe(true);
+        expect(component['isMinuteDisabled'](45)).toBe(true);
       });
 
       it('should return false when minute equals maxTime minute on same hour', () => {
         component.format = PoTimerFormat.Format24;
         component.maxTime = '18:30';
         component.selectedHour = 18;
-        expect(component.isMinuteDisabled(30)).toBe(false);
+        expect(component['isMinuteDisabled'](30)).toBe(false);
       });
 
       it('should return false when selectedHour is before maxTime hour', () => {
         component.format = PoTimerFormat.Format24;
         component.maxTime = '18:30';
         component.selectedHour = 10;
-        expect(component.isMinuteDisabled(45)).toBe(false);
+        expect(component['isMinuteDisabled'](45)).toBe(false);
       });
     });
 
     describe('isSecondDisabled:', () => {
       it('should return false when no min/max is set', () => {
-        expect(component.isSecondDisabled(30)).toBe(false);
+        expect(component['isSecondDisabled'](30)).toBe(false);
       });
 
       it('should return false when selectedHour is null', () => {
         component.minTime = '08:30:15';
         component.selectedHour = null;
-        expect(component.isSecondDisabled(0)).toBe(false);
+        expect(component['isSecondDisabled'](0)).toBe(false);
       });
 
       it('should return false when selectedMinute is null', () => {
         component.minTime = '08:30:15';
         component.selectedHour = 8;
         component.selectedMinute = null;
-        expect(component.isSecondDisabled(0)).toBe(false);
+        expect(component['isSecondDisabled'](0)).toBe(false);
       });
 
       it('should return true when second is before minTime second on same hour and minute (24h)', () => {
@@ -530,7 +530,7 @@ describe('PoTimerBaseComponent:', () => {
         component.minTime = '08:30:30';
         component.selectedHour = 8;
         component.selectedMinute = 30;
-        expect(component.isSecondDisabled(15)).toBe(true);
+        expect(component['isSecondDisabled'](15)).toBe(true);
       });
 
       it('should return false when second equals minTime second on same hour and minute', () => {
@@ -538,7 +538,7 @@ describe('PoTimerBaseComponent:', () => {
         component.minTime = '08:30:30';
         component.selectedHour = 8;
         component.selectedMinute = 30;
-        expect(component.isSecondDisabled(30)).toBe(false);
+        expect(component['isSecondDisabled'](30)).toBe(false);
       });
 
       it('should return false when second is after minTime second on same hour and minute', () => {
@@ -546,7 +546,7 @@ describe('PoTimerBaseComponent:', () => {
         component.minTime = '08:30:30';
         component.selectedHour = 8;
         component.selectedMinute = 30;
-        expect(component.isSecondDisabled(45)).toBe(false);
+        expect(component['isSecondDisabled'](45)).toBe(false);
       });
 
       it('should return true when second is after maxTime second on same hour and minute (24h)', () => {
@@ -554,7 +554,7 @@ describe('PoTimerBaseComponent:', () => {
         component.maxTime = '18:30:30';
         component.selectedHour = 18;
         component.selectedMinute = 30;
-        expect(component.isSecondDisabled(45)).toBe(true);
+        expect(component['isSecondDisabled'](45)).toBe(true);
       });
 
       it('should return false when second equals maxTime second on same hour and minute', () => {
@@ -562,7 +562,7 @@ describe('PoTimerBaseComponent:', () => {
         component.maxTime = '18:30:30';
         component.selectedHour = 18;
         component.selectedMinute = 30;
-        expect(component.isSecondDisabled(30)).toBe(false);
+        expect(component['isSecondDisabled'](30)).toBe(false);
       });
 
       it('should return false when selectedHour and selectedMinute do not match boundary', () => {
@@ -570,7 +570,7 @@ describe('PoTimerBaseComponent:', () => {
         component.minTime = '08:30:30';
         component.selectedHour = 10;
         component.selectedMinute = 30;
-        expect(component.isSecondDisabled(0)).toBe(false);
+        expect(component['isSecondDisabled'](0)).toBe(false);
       });
     });
 
@@ -578,20 +578,20 @@ describe('PoTimerBaseComponent:', () => {
       it('should return empty string when selectedHour is null', () => {
         component.selectedHour = null;
         component.selectedMinute = 30;
-        expect(component.buildTimeValue()).toBe('');
+        expect(component['buildTimeValue']()).toBe('');
       });
 
       it('should return empty string when selectedMinute is null', () => {
         component.selectedHour = 10;
         component.selectedMinute = null;
-        expect(component.buildTimeValue()).toBe('');
+        expect(component['buildTimeValue']()).toBe('');
       });
 
       it('should return HH:mm when showSeconds is false (24h)', () => {
         component.format = PoTimerFormat.Format24;
         component.selectedHour = 14;
         component.selectedMinute = 30;
-        expect(component.buildTimeValue()).toBe('14:30');
+        expect(component['buildTimeValue']()).toBe('14:30');
       });
 
       it('should return HH:mm:ss when showSeconds is true and selectedSecond is set (24h)', () => {
@@ -600,7 +600,7 @@ describe('PoTimerBaseComponent:', () => {
         component.selectedHour = 14;
         component.selectedMinute = 30;
         component.selectedSecond = 45;
-        expect(component.buildTimeValue()).toBe('14:30:45');
+        expect(component['buildTimeValue']()).toBe('14:30:45');
       });
 
       it('should return HH:mm when showSeconds is true but selectedSecond is null', () => {
@@ -609,7 +609,7 @@ describe('PoTimerBaseComponent:', () => {
         component.selectedHour = 14;
         component.selectedMinute = 30;
         component.selectedSecond = null;
-        expect(component.buildTimeValue()).toBe('14:30');
+        expect(component['buildTimeValue']()).toBe('14:30');
       });
 
       it('should convert 12h AM to 24h for output', () => {
@@ -617,7 +617,7 @@ describe('PoTimerBaseComponent:', () => {
         component.period = 'AM';
         component.selectedHour = 10;
         component.selectedMinute = 30;
-        expect(component.buildTimeValue()).toBe('10:30');
+        expect(component['buildTimeValue']()).toBe('10:30');
       });
 
       it('should convert 12h PM to 24h for output', () => {
@@ -625,7 +625,7 @@ describe('PoTimerBaseComponent:', () => {
         component.period = 'PM';
         component.selectedHour = 2;
         component.selectedMinute = 30;
-        expect(component.buildTimeValue()).toBe('14:30');
+        expect(component['buildTimeValue']()).toBe('14:30');
       });
 
       it('should convert 12 AM to 00 for output', () => {
@@ -633,7 +633,7 @@ describe('PoTimerBaseComponent:', () => {
         component.period = 'AM';
         component.selectedHour = 12;
         component.selectedMinute = 0;
-        expect(component.buildTimeValue()).toBe('00:00');
+        expect(component['buildTimeValue']()).toBe('00:00');
       });
 
       it('should convert 12 PM to 12 for output', () => {
@@ -641,14 +641,14 @@ describe('PoTimerBaseComponent:', () => {
         component.period = 'PM';
         component.selectedHour = 12;
         component.selectedMinute = 0;
-        expect(component.buildTimeValue()).toBe('12:00');
+        expect(component['buildTimeValue']()).toBe('12:00');
       });
 
       it('should format single digits with leading zeros', () => {
         component.format = PoTimerFormat.Format24;
         component.selectedHour = 5;
         component.selectedMinute = 3;
-        expect(component.buildTimeValue()).toBe('05:03');
+        expect(component['buildTimeValue']()).toBe('05:03');
       });
     });
 
