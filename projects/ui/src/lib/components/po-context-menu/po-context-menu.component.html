@@ -1,0 +1,47 @@
+<div class="po-context-menu" [class.po-context-menu-collapsed]="!expanded()">
+  <div class="po-context-menu-header">
+    <button
+      class="po-context-menu-toggle"
+      type="button"
+      [attr.aria-label]="expanded() ? 'Recolher menu' : 'Expandir menu'"
+      (click)="toggleExpand()"
+    >
+      <po-icon [p-icon]="expanded() ? 'ICON_SIDEBAR' : 'ICON_SIDEBAR_SIMPLES'"></po-icon>
+    </button>
+
+    @if (expanded()) {
+      <div class="po-context-menu-header-content">
+        @if (contextTitle()) {
+          <span class="po-context-menu-context-title">{{ contextTitle() }}</span>
+        }
+        @if (title()) {
+          <span class="po-context-menu-title">{{ title() }}</span>
+        }
+      </div>
+    }
+  </div>
+
+  @if (expanded()) {
+    <nav class="po-context-menu-body">
+      <ul class="po-context-menu-list" role="menu">
+        @for (item of _items(); track item.label) {
+          <li
+            #itemRef
+            class="po-context-menu-list-item"
+            role="menuitem"
+            tabindex="0"
+            [class.po-context-menu-item-selected]="item.selected"
+            (click)="selectItem(item)"
+            (keydown.enter)="selectItem(item)"
+            (keydown.space)="selectItem(item)"
+            (mouseenter)="handlerTooltip(item, itemRef)"
+            p-tooltip-position="right"
+            [p-tooltip]="item.tooltip"
+          >
+            <span class="po-context-menu-item-label">{{ item.label }}</span>
+          </li>
+        }
+      </ul>
+    </nav>
+  }
+</div>
