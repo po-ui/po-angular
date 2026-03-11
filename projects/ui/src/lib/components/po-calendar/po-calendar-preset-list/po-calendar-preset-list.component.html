@@ -1,0 +1,14 @@
+<div class="po-calendar-preset-list" role="listbox">
+  @for (preset of presets; track preset.label) {
+    <button
+      class="po-calendar-preset-item"
+      [class.po-calendar-preset-item-selected]="isSelected(preset)"
+      role="option"
+      [attr.aria-selected]="isSelected(preset)"
+      (click)="onPresetClick(preset)"
+      type="button"
+    >
+      {{ getDisplayLabel(preset) }}
+    </button>
+  }
+</div>

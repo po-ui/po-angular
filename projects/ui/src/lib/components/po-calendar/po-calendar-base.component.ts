@@ -5,6 +5,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { poLocales } from '../../services/po-language/po-language.constant';
 
 import { PoCalendarMode } from './po-calendar-mode.enum';
+import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 
@@ -125,6 +126,7 @@ export class PoCalendarBaseComponent {
   @Output('p-close') close = new EventEmitter<void>();
 
   activateDate;
+  selectedPresetLabel: string | null = null;
   value;
 
   protected onTouched: any = null;
@@ -243,6 +245,18 @@ export class PoCalendarBaseComponent {
 
   // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de presets de intervalos de data exibidos no painel lateral do calendário em modo *range*.
+   *
+   * Caso não seja informado, os presets padrão serão utilizados (Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses).
+   * Caso seja informado um array vazio (`[]`), nenhum preset será exibido.
+   */
+  @Input('p-range-presets') rangePresets?: Array<PoCalendarRangePreset>;
 
   /**
    * @optional

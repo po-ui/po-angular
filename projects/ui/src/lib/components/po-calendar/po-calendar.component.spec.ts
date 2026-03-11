@@ -6,10 +6,13 @@ import { configureTestSuite } from './../../util-test/util-expect.spec';
 
 import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wrapper.component';
 import { PoCalendarHeaderComponent } from './po-calendar-header/po-calendar-header.component';
+import { PoCalendarPresetListComponent } from './po-calendar-preset-list/po-calendar-preset-list.component';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
 import { PoCalendarComponent } from './po-calendar.component';
+import { PoCalendarMode } from './po-calendar-mode.enum';
 import { PoCalendarService } from './services/po-calendar.service';
+import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 
 describe('PoCalendarComponent:', () => {
   let component: PoCalendarComponent;
@@ -18,7 +21,7 @@ describe('PoCalendarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoCalendarComponent, PoCalendarWrapperComponent, PoCalendarHeaderComponent],
+      declarations: [PoCalendarComponent, PoCalendarWrapperComponent, PoCalendarHeaderComponent, PoCalendarPresetListComponent],
       providers: [PoCalendarService, PoDateService]
     });
   });
@@ -672,6 +675,98 @@ describe('PoCalendarComponent:', () => {
       component.onCloseCalendar();
 
       expect(component.close.emit).toHaveBeenCalled();
+    });
+
+    describe('effectivePresets:', () => {
+      it('should return default presets when rangePresets is undefined and mode is Range', () => {
+        component.mode = PoCalendarMode.Range;
+
+        expect(component.effectivePresets).toEqual(PO_CALENDAR_DEFAULT_RANGE_PRESETS);
+      });
+
+      it('should return empty array when rangePresets is empty array', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = [];
+
+        expect(component.effectivePresets).toEqual([]);
+      });
+
+      it('should return empty array when mode is not Range', () => {
+        expect(component.effectivePresets).toEqual([]);
+      });
+
+      it('should return custom rangePresets when defined', () => {
+        component.mode = PoCalendarMode.Range;
+        const customPresets = [
+          { label: 'custom', dateRange: () => ({ start: new Date(), end: new Date() }) }
+        ];
+        component.rangePresets = customPresets;
+
+        expect(component.effectivePresets).toEqual(customPresets);
+      });
+    });
+
+    describe('onPresetSelected:', () => {
+      it('should update value, activateDate, and selectedPresetLabel', () => {
+        const start = new Date(2025, 0, 1);
+        const end = new Date(2025, 0, 31);
+
+        spyOnProperty(component, 'isRange').and.returnValue(true);
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onPresetSelected({ label: 'test', start, end });
+
+        expect(component.selectedPresetLabel).toBe('test');
+        expect(component.value.start).toEqual(start);
+        expect(component.value.end).toEqual(end);
+        expect(component.activateDate.start).toEqual(start);
+        expect(component.activateDate.end).toEqual(end);
+        expect(component['updateModel']).toHaveBeenCalled();
+        expect(component.change.emit).toHaveBeenCalled();
+      });
+
+      it('should clamp dates to minDate/maxDate', () => {
+        const minDate = new Date(2025, 0, 10);
+        const maxDate = new Date(2025, 0, 20);
+
+        component['_minDate'] = minDate;
+        component['_maxDate'] = maxDate;
+
+        spyOnProperty(component, 'isRange').and.returnValue(true);
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onPresetSelected({ label: 'test', start: new Date(2025, 0, 1), end: new Date(2025, 0, 31) });
+
+        expect(component.value.start.getTime()).toEqual(minDate.getTime());
+        expect(component.value.end.getTime()).toEqual(maxDate.getTime());
+      });
+
+      it('should do nothing when clamped start > end', () => {
+        const minDate = new Date(2025, 0, 20);
+        const maxDate = new Date(2025, 0, 10);
+
+        component['_minDate'] = minDate;
+        component['_maxDate'] = maxDate;
+
+        spyOnProperty(component, 'isRange').and.returnValue(true);
+        spyOn(component.change, 'emit');
+
+        component.onPresetSelected({ label: 'test', start: new Date(2025, 0, 1), end: new Date(2025, 0, 15) });
+
+        expect(component.change.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    it('onSelectDate: should clear selectedPresetLabel', () => {
+      component.selectedPresetLabel = 'today';
+
+      spyOnProperty(component, 'isRange').and.returnValue(false);
+
+      component.onSelectDate(new Date(2025, 0, 1));
+
+      expect(component.selectedPresetLabel).toBeNull();
     });
   });
 

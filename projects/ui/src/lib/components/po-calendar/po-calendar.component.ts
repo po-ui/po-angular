@@ -11,6 +11,8 @@ import {
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
+import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
+import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
@@ -75,6 +77,13 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     return window.innerWidth < poCalendarRangeWidth;
   }
 
+  get effectivePresets(): Array<PoCalendarRangePreset> {
+    if (!this.isRange) {
+      return [];
+    }
+    return this.rangePresets !== undefined ? this.rangePresets : PO_CALENDAR_DEFAULT_RANGE_PRESETS;
+  }
+
   ngOnInit() {
     this.setActivateDate();
   }
@@ -102,6 +111,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onSelectDate(selectedDate, partType?) {
+    this.selectedPresetLabel = null;
+
     if (selectedDate === '' || selectedDate === undefined) {
       this.value = null;
       this.updateModel('');
@@ -164,6 +175,35 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.setActivateDate(activateDate);
 
     this.changeDetector.markForCheck();
+  }
+
+  onPresetSelected(event: { label: string; start: Date; end: Date }): void {
+    const start = this.clampDate(event.start, this.minDate, this.maxDate);
+    const end = this.clampDate(event.end, this.minDate, this.maxDate);
+
+    if (start > end) {
+      return;
+    }
+
+    this.selectedPresetLabel = event.label;
+    this.value = { start, end };
+    this.activateDate = { start, end };
+
+    const newModel = this.convertDateToISO(this.value);
+    this.updateModel(newModel);
+    this.change.emit(newModel);
+    this.changeDetector.markForCheck();
+  }
+
+  private clampDate(date: Date, min?: Date, max?: Date): Date {
+    let result = new Date(date);
+    if (min && result < min) {
+      result = new Date(min);
+    }
+    if (max && result > max) {
+      result = new Date(max);
+    }
+    return result;
   }
 
   private getValidateStartDate(value) {
