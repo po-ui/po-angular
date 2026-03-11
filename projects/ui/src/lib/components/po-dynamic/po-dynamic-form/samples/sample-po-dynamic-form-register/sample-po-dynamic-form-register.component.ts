@@ -6,7 +6,7 @@ import {
   PoDynamicFormValidation,
   PoNotificationService,
   ForceBooleanComponentEnum
-} from '@po-ui/ng-components';
+} from 'projects/ui/src/lib';
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
 @Component({
@@ -92,7 +92,8 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       type: 'number',
       gridColumns: 6,
       maxValue: 10000,
-      errorMessage: 'Invalid number.'
+      errorMessage: 'Invalid number.',
+      loading: true
     },
     {
       property: 'state',

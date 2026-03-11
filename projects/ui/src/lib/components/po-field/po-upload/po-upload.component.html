@@ -198,7 +198,7 @@
           class="po-upload-send-button"
           [class.po-mt-3]="hasMoreThanFourItems"
           p-kind="primary"
-          [p-disabled]="hasAnyFileUploading(currentFiles)"
+          [p-disabled]="isFieldDisabled || hasAnyFileUploading(currentFiles)"
           [p-label]="literals.startSending"
           [p-size]="size"
           (p-click)="uploadFiles(currentFiles)"

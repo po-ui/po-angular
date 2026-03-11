@@ -266,6 +266,11 @@ export interface PoDynamicFormField extends PoDynamicField {
   listboxControlPosition?: 'top' | 'bottom';
 
   /**
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
+   */
+  loading?: boolean;
+
+  /**
    * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
    *
    * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`
