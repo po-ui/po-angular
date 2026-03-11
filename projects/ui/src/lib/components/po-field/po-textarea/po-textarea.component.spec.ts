@@ -264,30 +264,30 @@ describe('PoTextareaComponent:', () => {
         expect(component['checkScrollState']).not.toHaveBeenCalled();
       });
 
-      it('should call lockTextareaDimensions and checkScrollState when loading changes', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
+      it('should call syncContainerWidth and checkScrollState when loading changes', () => {
+        spyOn(component as any, 'syncContainerWidth');
         spyOn(component as any, 'checkScrollState');
 
         component.ngOnChanges({
           loading: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false }
         });
 
-        expect(component['lockTextareaDimensions']).toHaveBeenCalled();
+        expect(component['syncContainerWidth']).toHaveBeenCalled();
         expect(component['checkScrollState']).toHaveBeenCalled();
       });
 
-      it('should not call lockTextareaDimensions when loading does not change', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
+      it('should not call syncContainerWidth when loading does not change', () => {
+        spyOn(component as any, 'syncContainerWidth');
 
         component.ngOnChanges({
           label: { currentValue: 'test', previousValue: '', firstChange: false, isFirstChange: () => false }
         });
 
-        expect(component['lockTextareaDimensions']).not.toHaveBeenCalled();
+        expect(component['syncContainerWidth']).not.toHaveBeenCalled();
       });
 
-      it('should call lockTextareaDimensions and checkScrollState via requestAnimationFrame on firstChange of loading when loading is true', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
+      it('should call syncContainerWidth and checkScrollState via requestAnimationFrame on firstChange of loading', () => {
+        spyOn(component as any, 'syncContainerWidth');
         spyOn(component as any, 'checkScrollState');
 
         component.loading = true;
@@ -296,77 +296,8 @@ describe('PoTextareaComponent:', () => {
           loading: { currentValue: true, previousValue: undefined, firstChange: true, isFirstChange: () => true }
         });
 
-        expect(component['lockTextareaDimensions']).toHaveBeenCalled();
+        expect(component['syncContainerWidth']).toHaveBeenCalled();
         expect(component['checkScrollState']).toHaveBeenCalled();
-      });
-
-      it('should recalculate height when rows change while loading is active', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
-        spyOn(component as any, 'checkScrollState');
-
-        component.loading = true;
-
-        const changes: SimpleChanges = {
-          rows: {
-            currentValue: 10,
-            previousValue: 3,
-            firstChange: false,
-            isFirstChange: () => false
-          }
-        };
-
-        component.ngOnChanges(changes);
-
-        expect(component['lockTextareaDimensions']).toHaveBeenCalled();
-      });
-
-      it('should recalculate height when size changes while loading is active', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
-        spyOn(component as any, 'checkScrollState');
-        component.loading = true;
-
-        const changes: SimpleChanges = {
-          size: { currentValue: 'small', previousValue: 'medium', firstChange: false, isFirstChange: () => false }
-        };
-
-        component.ngOnChanges(changes);
-
-        expect(component['lockTextareaDimensions']).toHaveBeenCalled();
-      });
-
-      it('should clear textarea inline styles when size changes while loading is active', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
-        component.loading = true;
-
-        const textarea = component.inputEl.nativeElement;
-        textarea.style.width = '300px';
-        textarea.style.height = '150px';
-
-        component.ngOnChanges({
-          size: { currentValue: 'small', previousValue: 'medium', firstChange: false, isFirstChange: () => false }
-        });
-
-        expect(textarea.style.width).toBe('');
-        expect(textarea.style.height).toBe('');
-      });
-
-      it('should not recalculate height when rows change but loading is false', () => {
-        spyOn(component as any, 'lockTextareaDimensions');
-
-        component.loading = false;
-
-        const changes: SimpleChanges = {
-          rows: {
-            currentValue: 10,
-            previousValue: 3,
-            firstChange: false,
-            isFirstChange: () => false
-          }
-        };
-
-        component.ngOnChanges(changes);
-
-        expect(component['lockTextareaDimensions']).not.toHaveBeenCalled();
       });
     });
 
@@ -452,18 +383,17 @@ describe('PoTextareaComponent:', () => {
           disconnect() {}
         };
 
-        const textarea = component.inputEl.nativeElement;
-        const fakeBody = document.createElement('div');
-        spyOn(textarea, 'closest').and.returnValue(fakeBody);
-
         component['initResizeObserver']();
+
+        const textarea = component.inputEl.nativeElement;
         textarea.style.width = '300px';
 
         if (observerCallback) {
           observerCallback();
         }
 
-        expect(fakeBody.style.width).toBe('fit-content');
+        const body = component.textareaBodyEl.nativeElement;
+        expect(body.style.width).toBe('fit-content');
       });
 
       it('should not set body width when textarea has no inline width', () => {
@@ -481,18 +411,17 @@ describe('PoTextareaComponent:', () => {
           disconnect() {}
         };
 
-        const textarea = component.inputEl.nativeElement;
-        const fakeBody = document.createElement('div');
-        spyOn(textarea, 'closest').and.returnValue(fakeBody);
-
         component['initResizeObserver']();
+
+        const textarea = component.inputEl.nativeElement;
         textarea.style.width = '';
 
         if (observerCallback) {
           observerCallback();
         }
 
-        expect(fakeBody.style.width).toBe('');
+        const body = component.textareaBodyEl.nativeElement;
+        expect(body.style.width).toBe('');
       });
 
       it('should not set body width when loading is false', () => {
@@ -510,65 +439,17 @@ describe('PoTextareaComponent:', () => {
           disconnect() {}
         };
 
-        const textarea = component.inputEl.nativeElement;
-        const fakeBody = document.createElement('div');
-        spyOn(textarea, 'closest').and.returnValue(fakeBody);
-
         component['initResizeObserver']();
+
+        const textarea = component.inputEl.nativeElement;
         textarea.style.width = '300px';
 
         if (observerCallback) {
           observerCallback();
         }
 
-        expect(fakeBody.style.width).toBe('');
-      });
-
-      it('should skip checkScrollState during user resize', () => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
-        spyOn(component as any, 'checkScrollState');
-
-        let observerCallback: any;
-        (window as any).ResizeObserver = class {
-          constructor(cb: any) {
-            observerCallback = cb;
-          }
-          observe() {}
-          disconnect() {}
-        };
-
-        component['initResizeObserver']();
-
-        const textarea = component.inputEl.nativeElement;
-        textarea.dispatchEvent(new Event('mousedown'));
-
-        if (observerCallback) {
-          observerCallback();
-        }
-
-        expect(component['checkScrollState']).not.toHaveBeenCalled();
-      });
-
-      it('should call checkScrollState after user resize ends on mouseup', () => {
-        spyOn(component as any, 'checkScrollState');
-
-        let observerCallback: any;
-        (window as any).ResizeObserver = class {
-          constructor(cb: any) {
-            observerCallback = cb;
-          }
-          observe() {}
-          disconnect() {}
-        };
-
-        component['initResizeObserver']();
-
-        const textarea = component.inputEl.nativeElement;
-        textarea.dispatchEvent(new Event('mousedown'));
-
-        window.dispatchEvent(new Event('mouseup'));
-
-        expect(component['checkScrollState']).toHaveBeenCalled();
+        const body = component.textareaBodyEl.nativeElement;
+        expect(body.style.width).toBe('');
       });
     });
 
@@ -951,7 +832,8 @@ describe('PoTextareaComponent:', () => {
     });
 
     describe('onAfterThemeChange:', () => {
-      it('should call checkScrollState via requestAnimationFrame', () => {
+      it('should call syncContainerWidth and checkScrollState via requestAnimationFrame', () => {
+        spyOn(component as any, 'syncContainerWidth');
         spyOn(component as any, 'checkScrollState');
         spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => {
           cb();
@@ -960,10 +842,12 @@ describe('PoTextareaComponent:', () => {
 
         component['onAfterThemeChange']();
 
+        expect(component['syncContainerWidth']).toHaveBeenCalled();
         expect(component['checkScrollState']).toHaveBeenCalled();
       });
 
       it('should call requestAnimationFrame in onAfterThemeChange', () => {
+        spyOn(component as any, 'syncContainerWidth');
         spyOn(component as any, 'checkScrollState');
         const rafSpy = spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: any) => {
           cb();
@@ -973,62 +857,18 @@ describe('PoTextareaComponent:', () => {
         component['onAfterThemeChange']();
 
         expect(rafSpy).toHaveBeenCalled();
+        expect(component['syncContainerWidth']).toHaveBeenCalled();
         expect(component['checkScrollState']).toHaveBeenCalled();
       });
     });
 
     describe('onWindowResize:', () => {
-      it('should call checkScrollState', () => {
+      it('should call syncContainerWidth and checkScrollState', () => {
+        spyOn(component as any, 'syncContainerWidth');
         spyOn(component as any, 'checkScrollState');
         component['onWindowResize']();
+        expect(component['syncContainerWidth']).toHaveBeenCalled();
         expect(component['checkScrollState']).toHaveBeenCalled();
-      });
-
-      it('should clear textarea width and height when inline width is set', () => {
-        spyOn(component as any, 'checkScrollState');
-        const textarea = component.inputEl.nativeElement;
-        textarea.style.width = '300px';
-        textarea.style.height = '150px';
-
-        component['onWindowResize']();
-
-        expect(textarea.style.width).toBe('');
-        expect(textarea.style.height).toBe('');
-      });
-
-      it('should always clear textarea width and height', () => {
-        spyOn(component as any, 'checkScrollState');
-        const textarea = component.inputEl.nativeElement;
-        textarea.style.width = '';
-        textarea.style.height = '150px';
-
-        component['onWindowResize']();
-
-        expect(textarea.style.width).toBe('');
-        expect(textarea.style.height).toBe('');
-      });
-
-      it('should call lockTextareaDimensions via requestAnimationFrame when loading is true', () => {
-        spyOn(component as any, 'checkScrollState');
-        spyOn(component as any, 'lockTextareaDimensions');
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
-
-        component.loading = true;
-
-        component['onWindowResize']();
-
-        expect(component['lockTextareaDimensions']).toHaveBeenCalled();
-      });
-
-      it('should not call lockTextareaDimensions when loading is false', () => {
-        spyOn(component as any, 'checkScrollState');
-        spyOn(component as any, 'lockTextareaDimensions');
-
-        component.loading = false;
-
-        component['onWindowResize']();
-
-        expect(component['lockTextareaDimensions']).not.toHaveBeenCalled();
       });
     });
 
@@ -1114,128 +954,48 @@ describe('PoTextareaComponent:', () => {
       });
     });
 
-    describe('lockTextareaDimensions:', () => {
-      it('should set only height from getBoundingClientRect when loading is true', () => {
-        const textarea = component.inputEl.nativeElement;
+    describe('syncContainerWidth:', () => {
+      it('should set body width to fit-content when loading is true and textarea has inline width', () => {
         component.loading = true;
+        const textarea = component.inputEl.nativeElement;
+        textarea.style.width = '300px';
 
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 150 } as DOMRect);
+        component['syncContainerWidth']();
 
-        component['lockTextareaDimensions']();
-
-        expect(textarea.style.height).toBe('150px');
+        const body = component.textareaBodyEl.nativeElement;
+        expect(body.style.width).toBe('fit-content');
       });
 
-      it('should save preLoadingHeight on first lock', () => {
-        const textarea = component.inputEl.nativeElement;
-        textarea.style.height = '80px';
+      it('should not set body width when textarea has no inline width', () => {
         component.loading = true;
+        const textarea = component.inputEl.nativeElement;
+        textarea.style.width = '';
 
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 80 } as DOMRect);
+        component['syncContainerWidth']();
 
-        component['lockTextareaDimensions']();
-
-        expect(component['preLoadingHeight']).toBe('80px');
-        expect(component['lockedHeight']).toBe('80px');
+        const body = component.textareaBodyEl.nativeElement;
+        expect(body.style.width).toBe('');
       });
 
-      it('should not overwrite preLoadingHeight on subsequent lock calls', () => {
-        const textarea = component.inputEl.nativeElement;
-        textarea.style.height = '80px';
-        component.loading = true;
-
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 80 } as DOMRect);
-
-        component['lockTextareaDimensions']();
-
-        expect(component['preLoadingHeight']).toBe('80px');
-
-        textarea.getBoundingClientRect = jasmine.createSpy().and.returnValue({ width: 300, height: 100 } as DOMRect);
-        component['lockTextareaDimensions']();
-
-        expect(component['preLoadingHeight']).toBe('80px');
-        expect(component['lockedHeight']).toBe('100px');
-      });
-
-      it('should restore preLoadingHeight when loading becomes false and height was not changed', () => {
-        const textarea = component.inputEl.nativeElement;
-        textarea.style.height = '80px';
-        component.loading = true;
-
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 80 } as DOMRect);
-
-        component['lockTextareaDimensions']();
-
+      it('should clear body width when loading is false', () => {
         component.loading = false;
-        component['lockTextareaDimensions']();
-
-        expect(textarea.style.height).toBe('80px');
-      });
-
-      it('should preserve user-modified height when loading becomes false', () => {
         const textarea = component.inputEl.nativeElement;
-        component.loading = true;
+        textarea.style.width = '300px';
 
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 72 } as DOMRect);
+        component['syncContainerWidth']();
 
-        component['lockTextareaDimensions']();
-
-        textarea.style.height = '120px';
-
-        component.loading = false;
-        component['lockTextareaDimensions']();
-
-        expect(textarea.style.height).toBe('120px');
-      });
-
-      it('should clear lockedHeight and preLoadingHeight when loading becomes false', () => {
-        const textarea = component.inputEl.nativeElement;
-        component.loading = true;
-
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 80 } as DOMRect);
-
-        component['lockTextareaDimensions']();
-
-        component.loading = false;
-        component['lockTextareaDimensions']();
-
-        expect(component['lockedHeight']).toBe('');
-        expect(component['preLoadingHeight']).toBe('');
-      });
-
-      it('should clear body width when loading becomes false', () => {
-        const textarea = component.inputEl.nativeElement;
-        const fakeBody = document.createElement('div');
-        fakeBody.style.width = 'fit-content';
-        spyOn(textarea, 'closest').and.returnValue(fakeBody);
-
-        component.loading = true;
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 80 } as DOMRect);
-        component['lockTextareaDimensions']();
-
-        component.loading = false;
-        component['lockTextareaDimensions']();
-
-        expect(fakeBody.style.width).toBe('');
-      });
-
-      it('should restore empty height for non-resized textarea when loading becomes false', () => {
-        const textarea = component.inputEl.nativeElement;
-        component.loading = true;
-
-        spyOn(textarea, 'getBoundingClientRect').and.returnValue({ width: 300, height: 72 } as DOMRect);
-
-        component['lockTextareaDimensions']();
-
-        component.loading = false;
-        component['lockTextareaDimensions']();
-
-        expect(textarea.style.height).toBe('');
+        const body = component.textareaBodyEl.nativeElement;
+        expect(body.style.width).toBe('');
       });
 
       it('should not throw if inputEl is undefined', () => {
         component.inputEl = undefined;
-        expect(() => component['lockTextareaDimensions']()).not.toThrow();
+        expect(() => component['syncContainerWidth']()).not.toThrow();
+      });
+
+      it('should not throw if textareaBodyEl is undefined', () => {
+        component.textareaBodyEl = undefined;
+        expect(() => component['syncContainerWidth']()).not.toThrow();
       });
     });
 
