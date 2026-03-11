@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PoTimerFormat } from '../../../../ui/src/lib/components/po-timer/enums/po-timer-format.enum';
+import { PoTimerFormat } from '../../../ui/src/public-api';
 
 @Component({
   selector: 'app-root',
