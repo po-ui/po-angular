@@ -332,13 +332,11 @@ export class PoDatepickerRangeComponent
     }
 
     if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
-      if (this.pRangePresets) {
-        const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item');
-        if (firstPreset) {
-          event.preventDefault();
-          firstPreset.focus();
-          return;
-        }
+      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item');
+      if (firstPreset) {
+        event.preventDefault();
+        firstPreset.focus();
+        return;
       }
       const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
       if (firstCombo) {
@@ -487,13 +485,10 @@ export class PoDatepickerRangeComponent
       event.preventDefault();
       event.stopPropagation();
 
-      if (this.pRangePresets) {
-        const presetItems = this.calendarPicker.nativeElement.querySelectorAll('.po-calendar-preset-item');
-        const lastPreset = presetItems[presetItems.length - 1];
-        if (lastPreset) {
-          lastPreset.focus();
-          return;
-        }
+      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item');
+      if (firstPreset) {
+        firstPreset.focus();
+        return;
       }
 
       this.iconCalendar.buttonElement?.nativeElement.focus();
