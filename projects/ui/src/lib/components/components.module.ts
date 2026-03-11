@@ -9,6 +9,7 @@ import { PoButtonModule } from './po-button/po-button.module';
 import { PoCalendarModule } from './po-calendar/po-calendar.module';
 import { PoChartModule } from './po-chart/po-chart.module';
 import { PoContainerModule } from './po-container/po-container.module';
+import { PoContextMenuModule } from './po-context-menu/po-context-menu.module';
 import { PoDisclaimerGroupModule } from './po-disclaimer-group/po-disclaimer-group.module';
 import { PoDisclaimerModule } from './po-disclaimer/po-disclaimer.module';
 import { PoDividerModule } from './po-divider/po-divider.module';
@@ -61,6 +62,7 @@ const PO_MODULES = [
   PoCalendarModule,
   PoChartModule,
   PoContainerModule,
+  PoContextMenuModule,
   PoDisclaimerGroupModule,
   PoDisclaimerModule,
   PoDividerModule,

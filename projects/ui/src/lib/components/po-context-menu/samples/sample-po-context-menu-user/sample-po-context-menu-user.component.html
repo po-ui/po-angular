@@ -1,0 +1,49 @@
+<po-context-tabs #tab>
+  <po-tab
+    p-label="Dados cadastrais"
+    p-hide-close
+    p-active
+    id="Dados cadastrais"
+    (p-activated-tab)="onActivatedTab($event)"
+  >
+    <div class="po-context-menu-wrapper">
+      <po-context-menu
+        [p-context-title]="contextTitle"
+        [p-title]="title"
+        [p-items]="menuItems()"
+        (p-item-selected)="onItemSelected($event)"
+      />
+      <po-page-default p-title="Dados cadastrais">
+        <po-dynamic-form #dynamicForm [p-fields]="formDadosCadastrais" />
+      </po-page-default>
+    </div>
+  </po-tab>
+
+  <po-tab p-label="Endereços" id="Endereços" p-hide-close (p-activated-tab)="onActivatedTab($event)">
+    <div class="po-context-menu-wrapper">
+      <po-context-menu
+        [p-context-title]="contextTitle"
+        [p-title]="title"
+        [p-items]="menuItems()"
+        (p-item-selected)="onItemSelected($event)"
+      />
+      <po-page-default p-title="Endereços">
+        <po-dynamic-form #dynamicForm [p-fields]="formEndereco" />
+      </po-page-default>
+    </div>
+  </po-tab>
+
+  <po-tab p-label="Documentos" id="Documentos" p-hide-close (p-activated-tab)="onActivatedTab($event)">
+    <div class="po-context-menu-wrapper">
+      <po-context-menu
+        [p-context-title]="contextTitle"
+        [p-title]="title"
+        [p-items]="menuItems()"
+        (p-item-selected)="onItemSelected($event)"
+      />
+      <po-page-default p-title="Documentos">
+        <po-table [p-items]="documentos" />
+      </po-page-default>
+    </div>
+  </po-tab>
+</po-context-tabs>

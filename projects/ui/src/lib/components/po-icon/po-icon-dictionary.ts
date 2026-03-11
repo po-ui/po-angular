@@ -62,6 +62,8 @@ export const AnimaliaIconDictionary: { [key: string]: string } = {
   ICON_REFRESH: 'an an-arrow-clockwise',
   ICON_SEARCH: 'an an-magnifying-glass',
   ICON_SETTINGS: 'an an-gear-six',
+  ICON_SIDEBAR: 'an an-sidebar',
+  ICON_SIDEBAR_SIMPLES: 'an an-sidebar-simple',
   ICON_SORT: 'an an-arrows-down-up',
   ICON_SORT_ASC: 'an an-arrow-up',
   ICON_SORT_ASCENDING: 'an an-sort-ascending',
