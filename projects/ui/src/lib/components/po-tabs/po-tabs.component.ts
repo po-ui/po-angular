@@ -216,6 +216,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   // Função disparada quando alguma tab ficar ativa
   onTabActive(tab: PoTabComponent) {
     this.previousActiveTab = this.tabsChildren.find(tabChild => tabChild.active && tabChild.id !== tab.id);
+    tab.activatedTab.emit(tab);
     this.deactivateTab();
   }
 
@@ -499,5 +500,17 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
       tabRemoveElements[0].focus();
       this.setTabIndex(tabRemoveElements[0], 0);
     }
+  }
+
+  /**
+   * @ToDo
+   *
+   *
+   * @param id
+   */
+  public focusTab(id: string) {
+    const tab = this.tabsChildrenArray.find(x => x.id === id);
+
+    this.selectedTab(tab);
   }
 }

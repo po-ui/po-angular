@@ -9,6 +9,7 @@ export * from './po-button/index';
 export * from './po-calendar/index';
 export * from './po-chart/index';
 export * from './po-container/index';
+export * from './po-context-menu/index';
 export * from './po-disclaimer-group/index';
 export * from './po-disclaimer/index';
 export * from './po-divider/index';
