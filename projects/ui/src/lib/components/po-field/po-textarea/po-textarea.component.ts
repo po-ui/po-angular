@@ -74,6 +74,8 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   hasScroll: boolean = false;
   hasValue: boolean = false;
   private resizeObserver: ResizeObserver;
+  private lockedHeight: string = '';
+  private preLoadingHeight: string = '';
 
   constructor() {
     const cd = inject(ChangeDetectorRef);
@@ -121,7 +123,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   protected override onAfterThemeChange(): void {
     requestAnimationFrame(() => {
-      this.calculateTextareaHeight();
+      this.lockTextareaDimensions();
       this.checkScrollState();
     });
   }
@@ -134,11 +136,11 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (changes.loading) {
       if (changes.loading.isFirstChange() && this.loading) {
         requestAnimationFrame(() => {
-          this.calculateTextareaHeight();
+          this.lockTextareaDimensions();
           this.checkScrollState();
         });
       } else {
-        this.calculateTextareaHeight();
+        this.lockTextareaDimensions();
         requestAnimationFrame(() => {
           this.checkScrollState();
         });
@@ -146,8 +148,13 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     }
 
     if (!changes.loading && this.loading && (changes.rows || changes.size)) {
+      const textarea = this.inputEl?.nativeElement;
+      if (textarea) {
+        textarea.style.width = '';
+        textarea.style.height = '';
+      }
       requestAnimationFrame(() => {
-        this.calculateTextareaHeight();
+        this.lockTextareaDimensions();
         this.checkScrollState();
       });
     }
@@ -304,8 +311,18 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   private readonly onWindowResize = () => {
     this.checkScrollState();
+
+    const textarea = this.inputEl?.nativeElement;
+
+    if (textarea) {
+      textarea.style.width = '';
+      textarea.style.height = '';
+    }
+
     if (this.loading) {
-      this.calculateTextareaHeight();
+      requestAnimationFrame(() => {
+        this.lockTextareaDimensions();
+      });
     }
   };
 
@@ -317,24 +334,31 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     this.cd.markForCheck();
   }
 
-  private calculateTextareaHeight(): void {
+  private lockTextareaDimensions(): void {
     const textarea = this.inputEl?.nativeElement;
     if (!textarea) return;
 
+    const body = textarea.closest('.po-field-container-textarea-body') as HTMLElement;
+
     if (this.loading) {
-      textarea.style.height = '';
+      if (!this.lockedHeight) {
+        this.preLoadingHeight = textarea.style.height;
+      }
 
-      const style = getComputedStyle(textarea);
-      const lineHeight = Number.parseFloat(style.lineHeight);
-      const paddingTop = Number.parseFloat(style.paddingTop);
-      const paddingBottom = Number.parseFloat(style.paddingBottom);
-      const borderTop = Number.parseFloat(style.borderTopWidth);
-      const borderBottom = Number.parseFloat(style.borderBottomWidth);
-
-      const calculatedHeight = this.rows * lineHeight + paddingTop + paddingBottom + borderTop + borderBottom;
-      textarea.style.height = `${calculatedHeight}px`;
+      const rect = textarea.getBoundingClientRect();
+      const height = `${rect.height}px`;
+      textarea.style.height = height;
+      this.lockedHeight = height;
     } else {
-      textarea.style.height = '';
+      if (textarea.style.height === this.lockedHeight) {
+        textarea.style.height = this.preLoadingHeight;
+      }
+      this.lockedHeight = '';
+      this.preLoadingHeight = '';
+
+      if (body) {
+        body.style.width = '';
+      }
     }
   }
 
@@ -343,8 +367,27 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
     if (!el || typeof ResizeObserver === 'undefined') return;
 
+    let isUserResizing = false;
+    const body = el.closest('.po-field-container-textarea-body') as HTMLElement;
+
+    el.addEventListener('mousedown', () => {
+      isUserResizing = true;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isUserResizing) {
+        isUserResizing = false;
+        this.checkScrollState();
+      }
+    });
+
     this.resizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
+        if (this.loading && body) {
+          body.style.width = el.style.width ? 'fit-content' : '';
+        }
+
+        if (isUserResizing) return;
         this.checkScrollState();
       });
     });

@@ -191,7 +191,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (this.autoFocus) {
       this.focus();
     }
-    this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
+    if (this.iconDatepicker?.buttonElement?.nativeElement) {
+      this.renderer.setAttribute(this.iconDatepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
