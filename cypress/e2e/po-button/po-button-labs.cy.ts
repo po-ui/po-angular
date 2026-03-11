@@ -29,7 +29,10 @@ describe('PO Button Labs Sample', () => {
     });
 
     it('deve exibir o botão Sample Restore', () => {
-      cy.get('sample-po-button-labs po-button').last().find('.po-button-label').should('contain.text', 'Sample Restore');
+      cy.get('sample-po-button-labs po-button')
+        .last()
+        .find('.po-button-label')
+        .should('contain.text', 'Sample Restore');
     });
   });
 
@@ -112,17 +115,26 @@ describe('PO Button Labs Sample', () => {
   describe('Alteração de Size', () => {
     it('deve alterar o tamanho para large', () => {
       cy.get('sample-po-button-labs po-radio-group[name="size"]').contains('large').click();
-      cy.get('sample-po-button-labs po-button').first().find('button.po-button').should('have.class', 'po-button-large');
+      cy.get('sample-po-button-labs po-button')
+        .first()
+        .find('button.po-button')
+        .should('have.class', 'po-button-large');
     });
 
     it('deve alterar o tamanho de large para medium', () => {
       // Muda para large primeiro
       cy.get('sample-po-button-labs po-radio-group[name="size"]').contains('large').click();
-      cy.get('sample-po-button-labs po-button').first().find('button.po-button').should('have.class', 'po-button-large');
+      cy.get('sample-po-button-labs po-button')
+        .first()
+        .find('button.po-button')
+        .should('have.class', 'po-button-large');
 
       // Volta para medium
       cy.get('sample-po-button-labs po-radio-group[name="size"]').contains('medium').click();
-      cy.get('sample-po-button-labs po-button').first().find('button.po-button').should('not.have.class', 'po-button-large');
+      cy.get('sample-po-button-labs po-button')
+        .first()
+        .find('button.po-button')
+        .should('not.have.class', 'po-button-large');
     });
   });
 
@@ -130,12 +142,19 @@ describe('PO Button Labs Sample', () => {
     it('deve desabilitar a opção Danger ao selecionar kind tertiary', () => {
       cy.get('sample-po-button-labs po-radio-group[name="kind"]').contains('tertiary').click();
       // Quando kind é tertiary, a opção Danger fica desabilitada
-      cy.get('sample-po-button-labs po-checkbox-group po-checkbox').last().find('span.po-checkbox').should('have.attr', 'aria-disabled', 'true');
+      cy.get('sample-po-button-labs po-checkbox-group po-checkbox')
+        .last()
+        .find('span.po-checkbox')
+        .should('have.attr', 'aria-disabled', 'true');
     });
 
     it('deve desabilitar a opção tertiary ao marcar Danger', () => {
       cy.get('sample-po-button-labs po-checkbox-group').contains('Danger').click();
-      cy.get('sample-po-button-labs po-radio-group[name="kind"]').find('po-radio').last().find('input').should('be.disabled');
+      cy.get('sample-po-button-labs po-radio-group[name="kind"]')
+        .find('po-radio')
+        .last()
+        .find('input')
+        .should('be.disabled');
     });
   });
 
@@ -162,7 +181,10 @@ describe('PO Button Labs Sample', () => {
       // Verifica que tudo voltou ao estado inicial
       cy.get('sample-po-button-labs po-button').first().should('have.attr', 'p-kind', 'secondary');
       cy.get('sample-po-button-labs po-button').first().find('button.po-button').should('not.be.disabled');
-      cy.get('sample-po-button-labs po-button').first().find('button.po-button').should('not.have.class', 'po-button-large');
+      cy.get('sample-po-button-labs po-button')
+        .first()
+        .find('button.po-button')
+        .should('not.have.class', 'po-button-large');
       cy.get('sample-po-button-labs po-button').first().find('po-icon').should('not.exist');
     });
   });

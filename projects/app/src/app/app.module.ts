@@ -13,7 +13,12 @@ import { SamplePoButtonLabsComponent } from '../../../ui/src/lib/components/po-b
 import { SamplePoButtonSocialNetworkComponent } from '../../../ui/src/lib/components/po-button/samples/sample-po-button-social-network/sample-po-button-social-network.component';
 
 @NgModule({
-  declarations: [AppComponent, SamplePoButtonBasicComponent, SamplePoButtonLabsComponent, SamplePoButtonSocialNetworkComponent],
+  declarations: [
+    AppComponent,
+    SamplePoButtonBasicComponent,
+    SamplePoButtonLabsComponent,
+    SamplePoButtonSocialNetworkComponent
+  ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,

@@ -16,7 +16,10 @@ describe('PO Button Social Network Sample', () => {
 
   it('deve renderizar os três botões de ação', () => {
     cy.get('sample-po-button-social-network po-button').should('have.length', 3);
-    cy.get('sample-po-button-social-network po-button').eq(0).find('.po-button-label').should('contain.text', 'Confirm');
+    cy.get('sample-po-button-social-network po-button')
+      .eq(0)
+      .find('.po-button-label')
+      .should('contain.text', 'Confirm');
     cy.get('sample-po-button-social-network po-button').eq(1).find('.po-button-label').should('contain.text', 'Ignore');
     cy.get('sample-po-button-social-network po-button').eq(2).find('.po-button-label').should('contain.text', 'Block');
   });
