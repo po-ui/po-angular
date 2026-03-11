@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   OnChanges,
   OnDestroy,
   Renderer2,
@@ -69,6 +70,13 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     private readonly cd: ChangeDetectorRef
   ) {
     super();
+  }
+
+  @HostListener('window:PoUiThemeChange')
+  protected onThemeChange(): void {
+    requestAnimationFrame(() => {
+      this.setPopoverPosition();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

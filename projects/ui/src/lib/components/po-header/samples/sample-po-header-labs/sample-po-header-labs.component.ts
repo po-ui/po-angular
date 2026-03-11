@@ -51,6 +51,8 @@ export class SamplePoHeaderLabsComponent {
     status: 'positive'
   };
 
+  size: string = 'medium';
+
   constructor(private poNotification: PoNotificationService) {}
 
   addBrand() {
@@ -114,5 +116,6 @@ export class SamplePoHeaderLabsComponent {
       customerBrand: '',
       status: 'positive'
     };
+    this.size = 'medium';
   }
 }
