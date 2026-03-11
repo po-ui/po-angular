@@ -46,6 +46,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-max-date') maxDate: any;
   @Input('p-hover-value') hoverValue: Date;
   @Input('p-size') size: string;
+  @Input('p-hide-today-button') hideTodayButton: boolean = false;
   // Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   private _locale: string;

@@ -31,6 +31,7 @@ import { PoDatepickerRangeLiterals } from './interfaces/po-datepicker-range-lite
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { poDatepickerRangeLiteralsDefault } from './po-datepicker-range.literals';
 import { PoHelperOptions } from '../../po-helper';
+import { PoCalendarRangePreset } from '../../po-calendar/interfaces/po-calendar-range-preset.interface';
 
 /**
  * @description
@@ -163,6 +164,32 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    * @default `false`
    */
   compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita ou desabilita a funcionalidade de presets de intervalos de data no painel lateral do calendário.
+   *
+   * Quando habilitado (`true`), exibe os presets padrão (Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses)
+   * ou os presets customizados definidos em `p-range-preset-options`.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-range-presets', transform: convertToBoolean }) pRangePresets: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de presets customizados de intervalos de data exibidos no painel lateral do calendário.
+   *
+   * Caso `p-range-presets` esteja habilitado e esta propriedade não seja informada, os presets padrão serão utilizados.
+   * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
+   */
+  @Input('p-range-preset-options') pRangePresetOptions?: Array<PoCalendarRangePreset>;
 
   /**
    * @optional

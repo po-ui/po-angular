@@ -78,10 +78,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   get effectivePresets(): Array<PoCalendarRangePreset> {
-    if (!this.isRange) {
+    if (!this.isRange || !this.pRangePresets) {
       return [];
     }
-    return this.rangePresets !== undefined ? this.rangePresets : PO_CALENDAR_DEFAULT_RANGE_PRESETS;
+    return this.pRangePresetOptions !== undefined ? this.pRangePresetOptions : PO_CALENDAR_DEFAULT_RANGE_PRESETS;
   }
 
   ngOnInit() {

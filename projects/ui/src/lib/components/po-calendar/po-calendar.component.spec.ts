@@ -678,31 +678,42 @@ describe('PoCalendarComponent:', () => {
     });
 
     describe('effectivePresets:', () => {
-      it('should return default presets when rangePresets is undefined and mode is Range', () => {
+      it('should return default presets when pRangePresets is true and pRangePresetOptions is undefined', () => {
         component.mode = PoCalendarMode.Range;
+        component.pRangePresets = true;
 
         expect(component.effectivePresets).toEqual(PO_CALENDAR_DEFAULT_RANGE_PRESETS);
       });
 
-      it('should return empty array when rangePresets is empty array', () => {
+      it('should return empty array when pRangePresets is false', () => {
         component.mode = PoCalendarMode.Range;
-        component.rangePresets = [];
+        component.pRangePresets = false;
 
         expect(component.effectivePresets).toEqual([]);
       });
 
       it('should return empty array when mode is not Range', () => {
+        component.pRangePresets = true;
+
         expect(component.effectivePresets).toEqual([]);
       });
 
-      it('should return custom rangePresets when defined', () => {
+      it('should return custom pRangePresetOptions when defined', () => {
         component.mode = PoCalendarMode.Range;
+        component.pRangePresets = true;
         const customPresets = [
           { label: 'custom', dateRange: () => ({ start: new Date(), end: new Date() }) }
         ];
-        component.rangePresets = customPresets;
+        component.pRangePresetOptions = customPresets;
 
         expect(component.effectivePresets).toEqual(customPresets);
+      });
+
+      it('should return empty array when pRangePresets is true but mode is not Range', () => {
+        component.pRangePresets = true;
+        component.mode = undefined;
+
+        expect(component.effectivePresets).toEqual([]);
       });
     });
 

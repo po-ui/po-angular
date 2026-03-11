@@ -251,12 +251,26 @@ export class PoCalendarBaseComponent {
    *
    * @description
    *
-   * Lista de presets de intervalos de data exibidos no painel lateral do calendário em modo *range*.
+   * Habilita ou desabilita a funcionalidade de presets de intervalos de data no painel lateral do calendário em modo *range*.
    *
-   * Caso não seja informado, os presets padrão serão utilizados (Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses).
-   * Caso seja informado um array vazio (`[]`), nenhum preset será exibido.
+   * Quando habilitado (`true`), exibe os presets padrão (Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses)
+   * ou os presets customizados definidos em `p-range-preset-options`.
+   *
+   * @default `false`
    */
-  @Input('p-range-presets') rangePresets?: Array<PoCalendarRangePreset>;
+  @Input('p-range-presets') pRangePresets: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de presets customizados de intervalos de data exibidos no painel lateral do calendário em modo *range*.
+   *
+   * Caso `p-range-presets` esteja habilitado e esta propriedade não seja informada, os presets padrão serão utilizados.
+   * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
+   */
+  @Input('p-range-preset-options') pRangePresetOptions?: Array<PoCalendarRangePreset>;
 
   /**
    * @optional

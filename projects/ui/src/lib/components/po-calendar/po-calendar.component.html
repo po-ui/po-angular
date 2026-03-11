@@ -6,6 +6,7 @@
         [p-locale]="locale"
         [p-selected-preset]="selectedPresetLabel"
         (p-select-preset)="onPresetSelected($event)"
+        (p-close-calendar)="onCloseCalendar()"
       ></po-calendar-preset-list>
     }
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
@@ -28,6 +29,7 @@
     [p-responsive]="isResponsive"
     [p-selected-value]="value"
     [p-hover-value]="hoverValue"
+    [p-hide-today-button]="effectivePresets.length > 0"
     (p-header-change)="onHeaderChange($event, partType)"
     (p-select-date)="onSelectDate($event, partType)"
     (p-hover-date)="onHoverDate($event)"
