@@ -21,12 +21,12 @@
     <div class="po-field-container-input" [class.readonly]="readonly && !isDisabled && !loading">
       <div
         #dateRangeField
+        role="group"
         class="po-datepicker-range-field po-input"
         [class.po-datepicker-range-field-disabled]="isDisabled"
         [class.po-input-icon-right]="enableCleaner && !isDisabled"
         [attr.disabled]="isDisabled"
         [attr.aria-label]="label"
-        role="group"
         [attr.p-size]="size"
       >
         <div class="po-datepicker-range-start-date" [attr.data-value]="startDateInputValue || placeholder?.start">
@@ -149,14 +149,26 @@
 }
 
 <ng-template #sharedCalendarContent>
-  <div #calendarPicker class="po-calendar-range-picker" [hidden]="!isCalendarVisible">
+  <div
+    #calendarPicker
+    [class.po-calendar-range-picker]="!verifyMobile()"
+    [class.po-datepicker-range-calendar-mobile-container]="verifyMobile() && isCalendarVisible"
+    [hidden]="!isCalendarVisible"
+  >
+    @if (verifyMobile()) {
+      <div class="po-datepicker-calendar-overlay" (click)="closeCalendar()"></div>
+    }
     <po-calendar
       p-mode="range"
+      [class.po-datepicker-range-calendar-mobile]="verifyMobile()"
       [ngModel]="dateRange"
       [p-max-date]="maxDate"
       [p-min-date]="minDate"
       [p-locale]="locale"
       [p-size]="size"
+      [p-range-presets]="rangePresets"
+      [p-range-preset-options]="rangePresetOptions"
+      [p-range-presets-order]="rangePresetsOrder"
       (ngModelChange)="onCalendarChange($event)"
       (p-change-month-year)="setCalendarPosition()"
       (keydown)="onCalendarKeyDown($event)"
