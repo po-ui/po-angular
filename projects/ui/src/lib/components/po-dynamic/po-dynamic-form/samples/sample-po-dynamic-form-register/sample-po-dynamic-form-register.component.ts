@@ -1,11 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
   PoDynamicFormValidation,
   PoNotificationService,
-  ForceBooleanComponentEnum
+  ForceBooleanComponentEnum,
+  PoDynamicFormComponent
 } from '@po-ui/ng-components';
 import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.service';
 
@@ -18,7 +19,7 @@ import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.
 export class SamplePoDynamicFormRegisterComponent implements OnInit {
   poNotification = inject(PoNotificationService);
   private registerService = inject(PoDynamicFormRegisterService);
-
+  @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
   person = {};
   validateFields: Array<string> = ['state'];
 
@@ -200,7 +201,6 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       url: 'https://po-sample-api.onrender.com/v1/uploads/addFile'
     }
   ];
-
   ngOnInit() {
     this.person = {
       name: 'Tony Stark',
@@ -213,14 +213,18 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
   }
 
   onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
+    setTimeout(() => {
+      const options = this.registerService.getCity(changedValue.value.state);
+      this.updateDynamicFormField('city', { options, loading: false });
+    }, 500);
     return {
       value: { city: undefined },
       fields: [
         {
           property: 'city',
           gridColumns: 6,
-          options: this.registerService.getCity(changedValue.value.state),
-          disabled: false
+          disabled: false,
+          loading: true
         }
       ]
     };
@@ -228,5 +232,14 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
 
   onLoadFields(value: any) {
     return this.registerService.getUserDocument(value);
+  }
+
+  private updateDynamicFormField(property: string, updates: Partial<PoDynamicFormField>): void {
+    const currentFields = this.dynamicForm?.fields ?? this.fields;
+    const index = currentFields.findIndex(field => field.property === property);
+    if (index >= 0) {
+      currentFields[index] = { ...currentFields[index], ...updates };
+      this.fields = [...currentFields];
+    }
   }
 }

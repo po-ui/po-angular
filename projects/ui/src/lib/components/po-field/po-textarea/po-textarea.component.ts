@@ -66,6 +66,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   private readonly el = inject(ElementRef);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
+  @ViewChild('textareaBody', { read: ElementRef, static: true }) textareaBodyEl: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
   id = `po-textarea[${uuid()}]`;
@@ -121,7 +122,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   protected override onAfterThemeChange(): void {
     requestAnimationFrame(() => {
-      this.calculateTextareaHeight();
+      this.syncContainerWidth();
       this.checkScrollState();
     });
   }
@@ -132,22 +133,8 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     }
 
     if (changes.loading) {
-      if (changes.loading.isFirstChange() && this.loading) {
-        requestAnimationFrame(() => {
-          this.calculateTextareaHeight();
-          this.checkScrollState();
-        });
-      } else {
-        this.calculateTextareaHeight();
-        requestAnimationFrame(() => {
-          this.checkScrollState();
-        });
-      }
-    }
-
-    if (!changes.loading && this.loading && (changes.rows || changes.size)) {
       requestAnimationFrame(() => {
-        this.calculateTextareaHeight();
+        this.syncContainerWidth();
         this.checkScrollState();
       });
     }
@@ -303,10 +290,8 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   }
 
   private readonly onWindowResize = () => {
+    this.syncContainerWidth();
     this.checkScrollState();
-    if (this.loading) {
-      this.calculateTextareaHeight();
-    }
   };
 
   private checkScrollState(): void {
@@ -317,34 +302,26 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     this.cd.markForCheck();
   }
 
-  private calculateTextareaHeight(): void {
-    const textarea = this.inputEl?.nativeElement;
-    if (!textarea) return;
+  private syncContainerWidth(): void {
+    const el = this.inputEl?.nativeElement;
+    const body = this.textareaBodyEl?.nativeElement;
+    if (!el || !body) return;
 
-    if (this.loading) {
-      textarea.style.height = '';
-
-      const style = getComputedStyle(textarea);
-      const lineHeight = Number.parseFloat(style.lineHeight);
-      const paddingTop = Number.parseFloat(style.paddingTop);
-      const paddingBottom = Number.parseFloat(style.paddingBottom);
-      const borderTop = Number.parseFloat(style.borderTopWidth);
-      const borderBottom = Number.parseFloat(style.borderBottomWidth);
-
-      const calculatedHeight = this.rows * lineHeight + paddingTop + paddingBottom + borderTop + borderBottom;
-      textarea.style.height = `${calculatedHeight}px`;
-    } else {
-      textarea.style.height = '';
-    }
+    body.style.width = this.loading && el.style.width ? 'fit-content' : '';
   }
 
   private initResizeObserver(): void {
     const el = this.inputEl?.nativeElement;
+    const body = this.textareaBodyEl?.nativeElement;
 
-    if (!el || typeof ResizeObserver === 'undefined') return;
+    if (!el || !body || typeof ResizeObserver === 'undefined') return;
 
     this.resizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
+        if (this.loading) {
+          body.style.width = el.style.width ? 'fit-content' : '';
+        }
+
         this.checkScrollState();
       });
     });

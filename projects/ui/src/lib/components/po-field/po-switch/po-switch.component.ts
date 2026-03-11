@@ -442,7 +442,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   }
 
   onKeyDown(event) {
-    const isFieldFocused = document.activeElement === this.switchContainer.nativeElement;
+    const isFieldFocused = document.activeElement === this.switchContainer?.nativeElement;
 
     if (event.which === PoKeyCodeEnum.space || event.keyCode === PoKeyCodeEnum.space) {
       event.preventDefault();
