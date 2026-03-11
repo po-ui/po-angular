@@ -28,9 +28,6 @@
       </div>
     </div>
 
-    <!-- Separador Horas/Minutos -->
-    <div class="po-timer-column-separator" aria-hidden="true">:</div>
-
     <!-- Coluna de Minutos -->
     <div
       class="po-timer-column"
@@ -59,11 +56,8 @@
       </div>
     </div>
 
-    <!-- Separador Minutos/Segundos (condicional) -->
+    <!-- Coluna de Segundos (condicional) -->
     @if (showSeconds) {
-      <div class="po-timer-column-separator" aria-hidden="true">:</div>
-
-      <!-- Coluna de Segundos -->
       <div
         class="po-timer-column"
         role="listbox"
@@ -92,25 +86,31 @@
       </div>
     }
 
-    <!-- Toggle AM/PM (formato 12h) -->
+    <!-- Coluna AM/PM (formato 12h) -->
     @if (is12HourFormat) {
-      <div class="po-timer-period-toggle" role="radiogroup" aria-label="AM/PM">
-        <po-button
-          class="po-timer-period-button"
-          [p-label]="'AM'"
-          [p-kind]="period === 'AM' ? 'primary' : 'tertiary'"
-          [p-size]="size"
+      <div class="po-timer-period-column" role="radiogroup" aria-label="AM/PM">
+        <button
+          class="po-timer-cell"
+          type="button"
+          role="radio"
+          [class.po-timer-cell-selected]="period === 'AM'"
           [attr.aria-checked]="period === 'AM'"
-          (p-click)="onSelectPeriod('AM')"
-        ></po-button>
-        <po-button
-          class="po-timer-period-button"
-          [p-label]="'PM'"
-          [p-kind]="period === 'PM' ? 'primary' : 'tertiary'"
-          [p-size]="size"
+          tabindex="0"
+          (click)="onSelectPeriod('AM')"
+        >
+          AM
+        </button>
+        <button
+          class="po-timer-cell"
+          type="button"
+          role="radio"
+          [class.po-timer-cell-selected]="period === 'PM'"
           [attr.aria-checked]="period === 'PM'"
-          (p-click)="onSelectPeriod('PM')"
-        ></po-button>
+          tabindex="0"
+          (click)="onSelectPeriod('PM')"
+        >
+          PM
+        </button>
       </div>
     }
   </div>

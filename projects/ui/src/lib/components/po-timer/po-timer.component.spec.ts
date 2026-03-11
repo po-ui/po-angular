@@ -3,7 +3,6 @@ import { QueryList, ElementRef } from '@angular/core';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
-import { PoButtonModule } from './../po-button/po-button.module';
 import { PoTimerBaseComponent } from './po-timer-base.component';
 import { PoTimerComponent } from './po-timer.component';
 import { PoTimerFormat } from './enums/po-timer-format.enum';
@@ -15,7 +14,6 @@ describe('PoTimerComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoButtonModule],
       declarations: [PoTimerComponent]
     });
   });
@@ -421,10 +419,9 @@ describe('PoTimerComponent:', () => {
       expect(columns.length).toBeGreaterThanOrEqual(2);
     });
 
-    it('should render separator between hours and minutes', () => {
+    it('should not render separator between columns', () => {
       const separator = nativeElement.querySelector('.po-timer-column-separator');
-      expect(separator).toBeTruthy();
-      expect(separator.textContent.trim()).toBe(':');
+      expect(separator).toBeFalsy();
     });
 
     it('should not render seconds column when showSeconds is false', () => {
@@ -441,25 +438,38 @@ describe('PoTimerComponent:', () => {
       expect(columns.length).toBe(3);
     });
 
-    it('should not render AM/PM toggle in 24h format', () => {
-      const periodToggle = nativeElement.querySelector('.po-timer-period-toggle');
-      expect(periodToggle).toBeFalsy();
+    it('should not render AM/PM column in 24h format', () => {
+      const periodColumn = nativeElement.querySelector('.po-timer-period-column');
+      expect(periodColumn).toBeFalsy();
     });
 
-    it('should render AM/PM toggle in 12h format', () => {
+    it('should render AM/PM column in 12h format', () => {
       component.format = PoTimerFormat.Format12;
       fixture.detectChanges();
 
-      const periodToggle = nativeElement.querySelector('.po-timer-period-toggle');
-      expect(periodToggle).toBeTruthy();
+      const periodColumn = nativeElement.querySelector('.po-timer-period-column');
+      expect(periodColumn).toBeTruthy();
     });
 
-    it('should render AM and PM po-buttons in 12h format', () => {
+    it('should render AM and PM cells in 12h format', () => {
       component.format = PoTimerFormat.Format12;
       fixture.detectChanges();
 
-      const periodButtons = nativeElement.querySelectorAll('.po-timer-period-button');
-      expect(periodButtons.length).toBe(2);
+      const periodColumn = nativeElement.querySelector('.po-timer-period-column');
+      const periodCells = periodColumn.querySelectorAll('.po-timer-cell');
+      expect(periodCells.length).toBe(2);
+      expect(periodCells[0].textContent.trim()).toBe('AM');
+      expect(periodCells[1].textContent.trim()).toBe('PM');
+    });
+
+    it('should mark selected period cell with selected class', () => {
+      component.format = PoTimerFormat.Format12;
+      component.period = 'PM';
+      fixture.detectChanges();
+
+      const periodColumn = nativeElement.querySelector('.po-timer-period-column');
+      const pmCell = periodColumn.querySelectorAll('.po-timer-cell')[1];
+      expect(pmCell.classList.contains('po-timer-cell-selected')).toBe(true);
     });
 
     it('should add selected class to selected hour cell', () => {

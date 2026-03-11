@@ -54,38 +54,45 @@ const PO_TIMER_DEFAULT_SECOND_INTERVAL = 15;
  *
  * | Propriedade                    | Descrição                                            | Valor Padrão                      |
  * |--------------------------------|------------------------------------------------------|-----------------------------------|
- * | **Default Values**             |                                                      |                                   |
+ * | **Base**                       |                                                      |                                   |
  * | `--background`                 | Cor de fundo                                         | `var(--color-neutral-light-00)`   |
  * | `--border-color`               | Cor da borda                                         | `var(--color-neutral-light-20)`   |
  * | `--border-radius`              | Raio da borda                                        | `var(--border-radius-md)`         |
  * | `--border-width`               | Largura da borda                                     | `var(--border-width-sm)`          |
+ * | `--border-style`               | Estilo da borda                                      | `solid`                           |
  * | `--shadow`                     | Contém o valor da sombra do elemento                 | `var(--shadow-md)`                |
- * | **Column Labels**              |                                                      |                                   |
- * | `--font-family`                | Fonte utilizada nos rótulos das colunas              | `var(--font-family-theme)`        |
- * | `--font-size-label`            | Tamanho da fonte dos rótulos                         | `var(--font-size-sm)`             |
- * | `--font-weight-label`          | Peso da fonte dos rótulos                            | `var(--font-weight-bold)`         |
- * | `--text-color-label`           | Cor da fonte dos rótulos                             | `var(--color-neutral-dark-90)`    |
- * | **Cells**                      |                                                      |                                   |
+ * | `--min-height`                 | Altura mínima do componente                          | `37px`                            |
+ * | `--padding`                    | Espaçamento interno                                  | `var(--spacing-sm)`               |
+ * | `--padding-small`              | Espaçamento interno no tamanho small                 | `var(--spacing-xs)`               |
+ * | `--column-gap`                 | Espaçamento entre colunas                            | `var(--spacing-sm)`               |
+ * | `--row-gap`                    | Espaçamento entre linhas                             | `var(--spacing-xs)`               |
+ * | **Font**                       |                                                      |                                   |
+ * | `--font-family`                | Fonte utilizada no componente                        | `var(--font-family-theme)`        |
+ * | `--letter-spacing`             | Espaçamento entre letras                             | `normal`                          |
+ * | **Display (Cells)**            |                                                      |                                   |
+ * | `--color`                      | Cor da fonte das células                             | `var(--color-brand-01-base)`      |
  * | `--font-size-cell`             | Tamanho da fonte das células                         | `var(--font-size-sm)`             |
- * | `--font-weight-cell`           | Peso da fonte das células                            | `var(--font-weight-normal)`       |
- * | `--text-color-cell`            | Cor da fonte das células                             | `var(--color-neutral-dark-90)`    |
+ * | `--font-weight-cell`           | Peso da fonte das células                            | `var(--font-weight-bold)`         |
  * | `--border-radius-cell`         | Raio da borda das células                            | `var(--border-radius-md)`         |
  * | `--cell-size`                  | Tamanho das células (largura e altura)               | `var(--spacing-xl)`               |
  * | `--cell-size-small`            | Tamanho das células em modo compacto (AA)            | `var(--spacing-lg)`               |
  * | `--cell-transition-duration`   | Duração da transição das células                     | `var(--duration-extra-fast)`      |
  * | `--cell-transition-property`   | Atributo da transição das células                    | `all`                             |
  * | `--cell-transition-timing`     | Tipo de transição das células                        | `var(--timing-standart)`          |
- * | **Focused**                    |                                                      |                                   |
- * | `--outline-color-focused`      | Cor do outline do estado de focus                    | `var(--color-action-focus)`       |
+ * | **Focus**                      |                                                      |                                   |
+ * | `--outline-color-focused`      | Cor do outline do estado de focus                    | `var(--color-brand-01-darkest)`   |
+ * | `--outline-width`              | Largura do outline do foco                           | `var(--border-width-md)`          |
+ * | `--outline-offset`             | Deslocamento do outline do foco                      | `3px`                             |
  * | **Hover**                      |                                                      |                                   |
- * | `--color-hover`                | Cor de fundo das células ao passar o mouse           | `var(--color-action-hover)`       |
- * | `--text-color-hover`           | Cor da fonte das células ao passar o mouse           | `var(--color-neutral-light-00)`   |
- * | **Disabled**                   |                                                      |                                   |
- * | `--text-color-disabled`        | Cor da fonte das células desabilitadas               | `var(--color-action-disabled)`    |
- * | `--border-disabled`            | Cor da borda das células desabilitadas               | `var(--color-action-disabled)`    |
+ * | `--color-hover`                | Cor da fonte das células ao passar o mouse           | `var(--color-brand-01-darkest)`   |
+ * | `--background-hover`           | Cor de fundo das células ao passar o mouse           | `var(--color-brand-01-lighter)`   |
+ * | **Pressed**                    |                                                      |                                   |
+ * | `--background-pressed`         | Cor de fundo das células ao pressionar               | `var(--color-brand-01-light)`     |
  * | **Selected**                   |                                                      |                                   |
- * | `--color-selected`             | Cor de fundo das células selecionadas                | `var(--color-action-default)`     |
- * | `--text-color-selected`        | Cor da fonte das células selecionadas                | `var(--color-neutral-light-00)`   |
+ * | `--color-selected`             | Cor da fonte das células selecionadas                | `var(--color-brand-01-darkest)`   |
+ * | `--background-selected`        | Cor de fundo das células selecionadas                | `var(--color-brand-01-lighter)`   |
+ * | **Disabled**                   |                                                      |                                   |
+ * | `--color-disabled`             | Cor da fonte das células desabilitadas               | `var(--color-neutral-light-30)`   |
  */
 @Directive()
 export class PoTimerBaseComponent {

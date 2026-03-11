@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { PoButtonModule } from './../po-button/po-button.module';
-
 import { PoTimerComponent } from './po-timer.component';
 
 /**
@@ -10,7 +8,7 @@ import { PoTimerComponent } from './po-timer.component';
  * Módulo do componente `po-timer`.
  */
 @NgModule({
-  imports: [CommonModule, PoButtonModule],
+  imports: [CommonModule],
   declarations: [PoTimerComponent],
   exports: [PoTimerComponent]
 })
