@@ -1,0 +1,36 @@
+/* ============================================
+   TOKENS CSS DO PO-SKELETON
+   ============================================
+
+   Edite os valores abaixo para testar diferentes
+   configurações no skeleton!
+   ============================================ */
+
+:root {
+  /* ========== TRANSIÇÃO (mudança de tipo) ========== */
+
+  /* Duração da transição quando muda de Normal para Primary
+     Valores sugeridos: 0.05s (rápido), 1s (normal), 5s (lento), 10s (muito lento) */
+  --transition-duration: 0.05s;
+
+  /* Propriedade CSS que sofre transição
+     Valores sugeridos: background-color (padrão), all, opacity */
+  --transition-property: background-color;
+
+  /* ========== ANIMAÇÕES (pulse/shimmer) ========== */
+
+  /* Duração das animações de loading (pulse e shimmer)
+     Valores sugeridos: 0.5s (rápido), 1.5s (normal), 3s (lento), 5s (muito lento) */
+  --animation-duration: 20;
+
+  /* ========== TIMING FUNCTION (ambos) ========== */
+
+  /* Função de temporização (afeta transição E animações)
+     Valores sugeridos:
+     - linear (velocidade constante)
+     - ease-in (começa devagar)
+     - ease-out (termina devagar)
+     - ease-in-out (começa e termina devagar)
+     - cubic-bezier(0.68, -0.55, 0.27, 1.55) (efeito bounce) */
+  --transition-timing: ease-in-out;
+}

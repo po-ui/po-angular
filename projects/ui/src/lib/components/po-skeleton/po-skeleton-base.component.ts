@@ -19,21 +19,14 @@ import { PoSkeletonVariant } from './po-skeleton-variant.enum';
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
- * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
- * | **Default Values**                     |                                                       |                                                 |
- * | `--color`                              | Cor de fundo padrão do skeleton                       | `var(--color-neutral-light-20)`                 |
- * | `--border-radius`                      | Raio da borda do skeleton                             | `var(--border-radius-md)`                       |
- * | `--margin-bottom`                      | Margem inferior do skeleton                           | `var(--spacing-sm)`                             |
- * | `--transition-duration`                | Duração da transição                                  | `0.3s`                                          |
- * | `--transition-property`                | Propriedade CSS da transição                          | `background-color`                              |
- * | `--transition-timing`                  | Função de temporização da transição                   | `ease-in-out`                                   |
- * | **Type: Normal**                       |                                                       |                                                 |
- * | `--color-normal`                       | Cor de fundo do tipo normal                           | `var(--color-neutral-light-20)`                 |
- * | **Type: Primary**                      |                                                       |                                                 |
- * | `--color-primary`                      | Cor de fundo do tipo primary                          | `var(--color-neutral-mid-40)`                   |
- * | **Type: Content**                      |                                                       |                                                 |
- * | `--color-content`                      | Cor de fundo do tipo content                          | `var(--color-neutral-light-00)`                 |
+ * | Propriedade                  | Descrição                                      | Valor Padrão                      |
+ * |------------------------------|------------------------------------------------|-----------------------------------|
+ * | `--color`                    | Cor de fundo do skeleton                       | `var(--color-neutral-light-20)`   |
+ * | `--border-radius`            | Raio da borda do skeleton                      | `var(--border-radius-md)`         |
+ * | `--transition-duration`      | Duração da transição de cor                    | `0.3s`                            |
+ * | `--transition-property`      | Propriedade CSS da transição                   | `background-color`                |
+ * | `--transition-timing`        | Função de temporização da transição/animação   | `ease-in-out`                     |
+ * | `--animation-duration`       | Duração da animação (pulse/shimmer)            | `1.5s` (pulse), `3s` (shimmer)    |
  *
  */
 @Directive()

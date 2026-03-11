@@ -1,0 +1,112 @@
+<po-page-default p-title="Teste de Tokens CSS de Transição - Skeleton">
+  <div class="po-row">
+    <div class="po-md-12">
+      <h3>Demonstração Interativa dos Tokens de Transição</h3>
+      <p>
+        Clique no botão abaixo para alternar entre os tipos <strong>Normal</strong> (cinza claro) e
+        <strong>Primary</strong> (cinza médio) do skeleton.
+      </p>
+      <p>
+        <strong>Edite os valores dos tokens CSS no arquivo CSS</strong> para testar diferentes configurações de
+        transição e veja as mudanças em tempo real!
+      </p>
+    </div>
+  </div>
+
+  <div class="po-row po-mt-3">
+    <div class="po-md-12">
+      <po-button p-label="🔄 Alternar Tipo (Normal ↔ Primary)" (p-click)="toggleType()" p-kind="primary"> </po-button>
+
+      <po-info class="po-mt-2" p-label="Tipo Atual" [p-value]="currentType.toUpperCase()"> </po-info>
+    </div>
+  </div>
+
+  <hr class="po-my-3" />
+
+  <!-- Skeleton de Teste -->
+  <div class="po-row">
+    <div class="po-md-12">
+      <h4>Skeleton com Tokens Customizáveis</h4>
+      <p class="po-text-color-07 po-mb-2">
+        Os tokens abaixo estão aplicados via <code>:root</code> no CSS. Altere os valores para testar!
+      </p>
+    </div>
+
+    <div class="po-md-8 po-offset-md-2 po-mt-3">
+      <po-skeleton [p-type]="currentType" p-variant="rectangle" p-size="xl"></po-skeleton>
+    </div>
+  </div>
+
+  <hr class="po-my-3" />
+
+  <!-- Tabela de Tokens -->
+  <div class="po-row">
+    <div class="po-md-12">
+      <h4>Tokens CSS Ativos</h4>
+      <p class="po-text-color-07">Estes são os tokens que você pode editar no arquivo CSS:</p>
+
+      <div class="tokens-table po-mt-2">
+        <table class="po-table">
+          <thead>
+            <tr>
+              <th>Token CSS</th>
+              <th>Valor Atual</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--transition-duration</code></td>
+              <td><strong>5s</strong></td>
+              <td>Duração da transição ao mudar de tipo (clique no botão)</td>
+            </tr>
+            <tr>
+              <td><code>--animation-duration</code></td>
+              <td><strong>3s</strong></td>
+              <td>Duração das animações pulse/shimmer (ative animation="pulse" ou "shimmer")</td>
+            </tr>
+            <tr>
+              <td><code>--transition-property</code></td>
+              <td><strong>background-color</strong></td>
+              <td>Propriedade que sofre transição (teste: all, background, opacity)</td>
+            </tr>
+            <tr>
+              <td><code>--transition-timing</code></td>
+              <td><strong>ease-in-out</strong></td>
+              <td>Função de temporização (afeta transição E animações)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <hr class="po-my-3" />
+
+  <!-- Sugestões de Teste -->
+  <div class="po-row">
+    <div class="po-md-12">
+      <h4>💡 Sugestões de Testes</h4>
+      <div class="suggestions-box po-p-3">
+        <h5>Para ver diferenças dramáticas:</h5>
+        <ul>
+          <li><strong>Super Lento:</strong> <code>--transition-duration: 10s</code></li>
+          <li><strong>Super Rápido:</strong> <code>--transition-duration: 0.05s</code></li>
+          <li>
+            <strong>Efeito Bounce:</strong> <code>--transition-timing: cubic-bezier(0.68, -0.55, 0.27, 1.55)</code>
+          </li>
+          <li><strong>Linear:</strong> <code>--transition-timing: linear</code></li>
+          <li><strong>Todas as propriedades:</strong> <code>--transition-property: all</code></li>
+        </ul>
+
+        <h5 class="po-mt-2">Como testar:</h5>
+        <ol>
+          <li>Abra o arquivo <code>skeleton-transition-demo.component.css</code></li>
+          <li>Edite os valores dentro de <code>:root</code></li>
+          <li>Salve o arquivo</li>
+          <li>Clique no botão "Alternar Tipo" para ver a transição em ação</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</po-page-default>
