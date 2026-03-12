@@ -176,7 +176,7 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
   private onScroll = ({ target }): void => {
     const { showPopup, popupRef } = this;
 
-    if (showPopup && popupRef?.nativeElement && !popupRef.nativeElement.contains(target)) {
+    if (showPopup && popupRef?.nativeElement && target instanceof Node && !popupRef.nativeElement.contains(target)) {
       this.close();
     }
   };
