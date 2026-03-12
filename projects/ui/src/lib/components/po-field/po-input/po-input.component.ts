@@ -2,10 +2,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  computed,
   ElementRef,
   forwardRef,
-  HostBinding,
   ViewChild,
   inject,
   OnChanges,
@@ -15,7 +13,6 @@ import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/form
 
 import { uuid } from '../../../utils/util';
 
-import { PO_SKELETON_CONTAINER } from '../../po-skeleton/po-skeleton-container/po-skeleton-container.token';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 
 /**
@@ -57,19 +54,9 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
   standalone: false
 })
 export class PoInputComponent extends PoInputGeneric implements OnChanges {
-  private skeletonContainer = inject(PO_SKELETON_CONTAINER, { optional: true });
-
   @ViewChild('inp', { static: true }) inp: ElementRef;
 
   id = `po-input[${uuid()}]`;
-
-  /** Indica se o componente está em modo skeleton via container pai. */
-  isSkeleton = computed(() => !!this.skeletonContainer?.skeleton());
-
-  @HostBinding('attr.p-skeleton')
-  get skeletonAttr(): boolean | null {
-    return this.isSkeleton() ? true : null;
-  }
 
   /* istanbul ignore next */
   constructor() {
