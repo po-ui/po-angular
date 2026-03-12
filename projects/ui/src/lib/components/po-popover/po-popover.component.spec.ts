@@ -704,7 +704,7 @@ describe('PoPopoverComponent:', () => {
 
         (component as any).attachPopoverKeydown.call(component);
 
-        btn.focus();
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(btn);
         const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
         const spyPrevent = spyOn(ev, 'preventDefault').and.callThrough();
 
@@ -718,8 +718,7 @@ describe('PoPopoverComponent:', () => {
         const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
         (component as any).attachPopoverKeydown.call(component);
 
-        firstEl.focus();
-        expect(document.activeElement).toBe(firstEl);
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(firstEl);
 
         const ev = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
         const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
@@ -734,8 +733,7 @@ describe('PoPopoverComponent:', () => {
 
         (component as any).attachPopoverKeydown.call(component);
 
-        lastEl.focus();
-        expect(document.activeElement).toBe(lastEl);
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(lastEl);
 
         const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
         const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
@@ -755,8 +753,7 @@ describe('PoPopoverComponent:', () => {
         special.id = 'popover-content-action';
         host.appendChild(special);
 
-        special.focus();
-        expect(document.activeElement).toBe(special);
+        spyOnProperty(document, 'activeElement', 'get').and.returnValue(special);
 
         const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
         const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();

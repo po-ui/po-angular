@@ -142,7 +142,7 @@ export const expectArraysSameOrdering = (fieldsA: Array<any>, fieldsB: Array<any
  * @param expectedWidth valor esperado para inner width
  */
 export const changeBrowserInnerWidth = (expectedWidth: number) => {
-  (window as any).innerWidth = expectedWidth;
+  Object.defineProperty(window, 'innerWidth', { value: expectedWidth, writable: true, configurable: true });
 };
 
 /**
@@ -151,7 +151,7 @@ export const changeBrowserInnerWidth = (expectedWidth: number) => {
  * @param expectedHeight valor esperado para innerHeight
  */
 export const changeBrowserInnerHeight = (expectedHeight: number) => {
-  (window as any).innerHeight = expectedHeight;
+  Object.defineProperty(window, 'innerHeight', { value: expectedHeight, writable: true, configurable: true });
 };
 
 /**

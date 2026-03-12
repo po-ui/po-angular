@@ -152,10 +152,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
-    this.objMask.keyup($event);
+    this.objMask?.keyup($event);
     // Controla a atualização do model, verificando se a data é valida
-    if (this.objMask.valueToModel || this.objMask.valueToModel === '') {
-      if (this.objMask.valueToModel.length >= 10) {
+    if (this.objMask?.valueToModel || this.objMask?.valueToModel === '') {
+      if (this.objMask?.valueToModel.length >= 10) {
         this.controlModel(this.getDateFromString(this.inputEl.nativeElement.value));
         this.date = this.getDateFromString(this.inputEl.nativeElement.value);
       } else {
@@ -312,10 +312,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     const date = this.inputEl.nativeElement.value;
     const newDate = date ? this.getDateFromString(date) : undefined;
-    this.objMask.blur($event);
+    this.objMask?.blur($event);
     this.onblur.emit();
 
-    if (this.objMask.valueToModel) {
+    if (this.objMask?.valueToModel) {
       if (this.objMask.valueToModel.length >= 10) {
         this.controlModel(newDate);
         this.date = newDate;
@@ -339,7 +339,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       setTimeout(() => this.togglePicker(), 0);
     } else {
       // Atualiza a posição do cursor ao clicar
-      this.objMask.click($event);
+      this.objMask?.click($event);
     }
   }
 
