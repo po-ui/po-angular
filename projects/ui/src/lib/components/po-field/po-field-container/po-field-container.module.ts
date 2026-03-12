@@ -7,6 +7,7 @@ import { PoTooltipModule } from '../../../directives/po-tooltip/index';
 import { PoFieldContainerBottomComponent } from './po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from './po-field-container.component';
 import { PoHelperModule } from '../../po-helper';
+import { PoSkeletonModule } from '../../po-skeleton/po-skeleton.module';
 
 /**
  * @description
@@ -14,7 +15,7 @@ import { PoHelperModule } from '../../po-helper';
  * Módulo do componente `po-field-container`.
  */
 @NgModule({
-  imports: [CommonModule, PoLabelModule, PoIconModule, PoTooltipModule, PoHelperModule],
+  imports: [CommonModule, PoLabelModule, PoIconModule, PoTooltipModule, PoHelperModule, PoSkeletonModule],
   exports: [PoFieldContainerBottomComponent, PoFieldContainerComponent],
   declarations: [PoFieldContainerBottomComponent, PoFieldContainerComponent]
 })

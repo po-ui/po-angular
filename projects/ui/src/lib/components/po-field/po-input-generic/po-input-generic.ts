@@ -1,10 +1,8 @@
 import {
   AfterViewInit,
   ChangeDetectorRef,
-  computed,
   Directive,
   ElementRef,
-  HostBinding,
   HostListener,
   inject,
   OnDestroy,
@@ -14,14 +12,12 @@ import { AbstractControl } from '@angular/forms';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 
-import { PO_SKELETON_CONTAINER } from '../../po-skeleton/po-skeleton-container/po-skeleton-container.token';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
 import { setHelperSettings } from '../../../utils/util';
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 @Directive()
 export abstract class PoInputGeneric extends PoInputBaseComponent implements AfterViewInit, OnDestroy {
-  private skeletonContainer = inject(PO_SKELETON_CONTAINER, { optional: true });
   private subscriptionValidator: Subscription = new Subscription();
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
@@ -31,14 +27,6 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   el: ElementRef;
   valueBeforeChange: any;
   timeoutChange: any;
-
-  /** Indica se o componente está em modo skeleton via container pai. */
-  isSkeleton = computed(() => !!this.skeletonContainer?.skeleton());
-
-  @HostBinding('attr.p-skeleton')
-  get skeletonAttr(): boolean | null {
-    return this.isSkeleton() ? true : null;
-  }
 
   get autocomplete(): string {
     return this.noAutocomplete ? 'off' : 'on';

@@ -1,52 +1,46 @@
-@if (isSkeleton()) {
-  <div class="po-skeleton-group" aria-hidden="true">
-    <po-skeleton p-variant="text" p-width="30%" p-height="14px"></po-skeleton>
-    <po-skeleton p-variant="rectangle" p-width="100%" p-height="120px"></po-skeleton>
+@let poHelper = setHelper(label, additionalHelpTooltip);
+<po-field-container
+  [p-disabled]="disabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
+  [p-text-wrap]="labelTextWrap()"
+  [p-compact-label]="compactLabel()"
+  p-skeleton-height="120px"
+>
+  <div class="po-field-container-content" [attr.p-size]="size">
+    <textarea
+      #inp
+      class="po-textarea"
+      (blur)="eventOnBlur()"
+      (focus)="eventOnFocus()"
+      (input)="eventOnInput($event)"
+      (keydown)="onKeyDown($event)"
+      [attr.name]="name"
+      [attr.p-size]="size"
+      [disabled]="disabled"
+      [id]="id"
+      [placeholder]="disabled ? '' : placeholder"
+      [readonly]="readonly"
+      [required]="required"
+      [rows]="rows"
+    ></textarea>
   </div>
-} @else {
-  @let poHelper = setHelper(label, additionalHelpTooltip);
-  <po-field-container
-    [p-disabled]="disabled"
-    [p-id]="id"
-    [p-label]="label"
-    [p-optional]="optional"
-    [p-required]="required"
-    [p-show-required]="showRequired"
-    [p-helper]="label ? poHelper.helperSettings : undefined"
-    [p-show-helper]="label ? displayAdditionalHelp : undefined"
-    [p-size]="size"
-    [p-text-wrap]="labelTextWrap()"
-    [p-compact-label]="compactLabel()"
-  >
-    <div class="po-field-container-content" [attr.p-size]="size">
-      <textarea
-        #inp
-        class="po-textarea"
-        (blur)="eventOnBlur()"
-        (focus)="eventOnFocus()"
-        (input)="eventOnInput($event)"
-        (keydown)="onKeyDown($event)"
-        [attr.name]="name"
-        [attr.p-size]="size"
-        [disabled]="disabled"
-        [id]="id"
-        [placeholder]="disabled ? '' : placeholder"
-        [readonly]="readonly"
-        [required]="required"
-        [rows]="rows"
-      ></textarea>
-    </div>
-    @if (!readonly) {
-      <po-field-container-bottom
-        [p-append-in-body]="appendBox"
-        [p-help]="help"
-        [p-disabled]="disabled"
-        [p-error-pattern]="getErrorPattern()"
-        [p-error-limit]="errorLimit"
-        [p-size]="size"
-        [p-helper]="!label ? poHelper.helperSettings : undefined"
-        [p-show-helper]="!label ? displayAdditionalHelp : undefined"
-      ></po-field-container-bottom>
-    }
-  </po-field-container>
-}
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="disabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-size]="size"
+      [p-helper]="!label ? poHelper.helperSettings : undefined"
+      [p-show-helper]="!label ? displayAdditionalHelp : undefined"
+    ></po-field-container-bottom>
+  }
+</po-field-container>

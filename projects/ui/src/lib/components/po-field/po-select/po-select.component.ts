@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  computed,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -33,7 +32,6 @@ import {
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { PoFieldValidateModel } from '../po-field-validate.model';
-import { PO_SKELETON_CONTAINER } from '../../po-skeleton/po-skeleton-container/po-skeleton-container.token';
 import { PoSelectOptionGroup } from './po-select-option-group.interface';
 import { PoSelectOption } from './po-select-option.interface';
 import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
@@ -131,7 +129,6 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
   private el = inject(ElementRef);
-  private skeletonContainer = inject(PO_SKELETON_CONTAINER, { optional: true });
   renderer = inject(Renderer2);
 
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;
@@ -224,14 +221,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   listGroupOptions = [];
   optionWithoutGroup = [];
   isSafari: boolean = isSafari();
-
-  /** Indica se o componente está em modo skeleton via container pai. */
-  isSkeleton = computed(() => !!this.skeletonContainer?.skeleton());
-
-  @HostBinding('attr.p-skeleton')
-  get skeletonAttr(): boolean | null {
-    return this.isSkeleton() ? true : null;
-  }
 
   protected onModelTouched: any;
 

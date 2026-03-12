@@ -2,19 +2,22 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
+  HostBinding,
+  inject,
   Input,
+  input,
   OnChanges,
   OnInit,
   SimpleChanges,
-  ViewChild,
-  inject,
-  input
+  ViewChild
 } from '@angular/core';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { convertToBoolean, updateTooltip } from '../../../utils/util';
 import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
+import { PO_SKELETON_CONTAINER } from '../../po-skeleton/po-skeleton-container/po-skeleton-container.token';
 import { poFieldContainerLiterals } from './po-field-container-literals';
 
 /**
@@ -29,6 +32,8 @@ import { poFieldContainerLiterals } from './po-field-container-literals';
   standalone: false
 })
 export class PoFieldContainerComponent implements OnInit, OnChanges {
+  private skeletonContainer = inject(PO_SKELETON_CONTAINER, { optional: true });
+
   @ViewChild('labelEl', { read: ElementRef }) labelEl!: ElementRef<HTMLElement>;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
@@ -92,6 +97,9 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   /** Define o tamanho do componente. */
   @Input('p-size') size?: string;
 
+  /** Altura customizada do skeleton do conteúdo (ex: '120px' para textarea). */
+  @Input('p-skeleton-height') skeletonHeight?: string;
+
   /**
    * @Input
    *
@@ -107,6 +115,13 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
    * a seguir o comportamento de layout compacto.
    */
   compactLabel = input<boolean, unknown>(false, { alias: 'p-compact-label', transform: convertToBoolean });
+
+  isSkeleton = computed(() => !!this.skeletonContainer?.skeleton());
+
+  @HostBinding('attr.p-skeleton')
+  get skeletonAttr(): boolean | null {
+    return this.isSkeleton() ? true : null;
+  }
 
   constructor(private readonly cdr: ChangeDetectorRef) {
     const languageService = inject(PoLanguageService);

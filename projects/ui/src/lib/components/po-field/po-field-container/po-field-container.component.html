@@ -1,30 +1,37 @@
-<div class="po-field-container" (mouseenter)="handleLabelTooltip()" [attr.p-size]="size">
-  <div class="po-field-container-title" [class.po-field-container-compact-label]="compactLabel()">
-    @if (label || help) {
-      <po-label
-        #labelEl
-        [p-disabled]="disabled"
-        p-field="true"
-        [p-for]="id"
-        [p-label]="label"
-        [p-requirement]="requirement"
-        [p-text-wrap]="textWrap()"
-        [p-tooltip]="showTip ? label : null"
-      ></po-label>
-      @if (poHelperComponent()) {
-        <po-helper
-          #helperEl
-          [p-disabled]="disabled"
-          [p-helper]="poHelperComponent()"
-          [p-size]="poHelperComponent().size ? poHelperComponent().size : null"
-        ></po-helper>
-      }
-    }
+@if (isSkeleton()) {
+  <div class="po-skeleton-group" aria-hidden="true">
+    <po-skeleton p-variant="text" p-width="30%" p-height="14px"></po-skeleton>
+    <po-skeleton p-variant="rectangle" p-width="100%" [p-height]="skeletonHeight || (size === 'small' ? '32px' : '44px')"></po-skeleton>
   </div>
+} @else {
+  <div class="po-field-container" (mouseenter)="handleLabelTooltip()" [attr.p-size]="size">
+    <div class="po-field-container-title" [class.po-field-container-compact-label]="compactLabel()">
+      @if (label || help) {
+        <po-label
+          #labelEl
+          [p-disabled]="disabled"
+          p-field="true"
+          [p-for]="id"
+          [p-label]="label"
+          [p-requirement]="requirement"
+          [p-text-wrap]="textWrap()"
+          [p-tooltip]="showTip ? label : null"
+        ></po-label>
+        @if (poHelperComponent()) {
+          <po-helper
+            #helperEl
+            [p-disabled]="disabled"
+            [p-helper]="poHelperComponent()"
+            [p-size]="poHelperComponent().size ? poHelperComponent().size : null"
+          ></po-helper>
+        }
+      }
+    </div>
 
-  @if (help) {
-    <div class="po-field-help">{{ help }}</div>
-  }
+    @if (help) {
+      <div class="po-field-help">{{ help }}</div>
+    }
 
-  <ng-content></ng-content>
-</div>
+    <ng-content></ng-content>
+  </div>
+}
