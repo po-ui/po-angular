@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
+import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoCalendarPresetListComponent } from './po-calendar-preset-list.component';
 import { PoCalendarRangePreset } from '../interfaces/po-calendar-range-preset.interface';
 import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from '../constants/po-calendar-range-presets.constant';
@@ -13,6 +14,7 @@ describe('PoCalendarPresetListComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [PoButtonModule],
       declarations: [PoCalendarPresetListComponent]
     });
   });
@@ -33,8 +35,8 @@ describe('PoCalendarPresetListComponent:', () => {
       component.locale = 'pt';
       fixture.detectChanges();
 
-      const buttons = nativeElement.querySelectorAll('button.po-calendar-preset-item');
-      expect(buttons.length).toBe(7);
+      const presets = nativeElement.querySelectorAll('.po-calendar-preset-item');
+      expect(presets.length).toBe(7);
     });
 
     it('should apply `po-calendar-preset-item-selected` class when selectedPreset matches', () => {
@@ -43,9 +45,9 @@ describe('PoCalendarPresetListComponent:', () => {
       component.selectedPreset = 'today';
       fixture.detectChanges();
 
-      const buttons = nativeElement.querySelectorAll('button.po-calendar-preset-item');
-      expect(buttons[0].classList.contains('po-calendar-preset-item-selected')).toBeTrue();
-      expect(buttons[1].classList.contains('po-calendar-preset-item-selected')).toBeFalse();
+      const presets = nativeElement.querySelectorAll('.po-calendar-preset-item');
+      expect(presets[0].classList.contains('po-calendar-preset-item-selected')).toBeTrue();
+      expect(presets[1].classList.contains('po-calendar-preset-item-selected')).toBeFalse();
     });
 
     it('should set aria-selected="true" on the selected preset button', () => {
@@ -54,9 +56,9 @@ describe('PoCalendarPresetListComponent:', () => {
       component.selectedPreset = 'yesterday';
       fixture.detectChanges();
 
-      const buttons = nativeElement.querySelectorAll('button.po-calendar-preset-item');
-      expect(buttons[1].getAttribute('aria-selected')).toBe('true');
-      expect(buttons[0].getAttribute('aria-selected')).toBe('false');
+      const presets = nativeElement.querySelectorAll('.po-calendar-preset-item');
+      expect(presets[1].getAttribute('aria-selected')).toBe('true');
+      expect(presets[0].getAttribute('aria-selected')).toBe('false');
     });
 
     it('should render no buttons when presets is empty', () => {
@@ -64,8 +66,8 @@ describe('PoCalendarPresetListComponent:', () => {
       component.locale = 'pt';
       fixture.detectChanges();
 
-      const buttons = nativeElement.querySelectorAll('button.po-calendar-preset-item');
-      expect(buttons.length).toBe(0);
+      const presets = nativeElement.querySelectorAll('.po-calendar-preset-item');
+      expect(presets.length).toBe(0);
     });
   });
 

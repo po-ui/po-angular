@@ -7,7 +7,6 @@
       [p-size]="size"
       role="option"
       [attr.aria-selected]="isSelected(preset)"
-      [attr.tabindex]="getTabIndex(i)"
       (click)="onPresetClick(preset)"
       (keydown)="onKeydown($event, i)"
       [p-label]="getDisplayLabel(preset)"

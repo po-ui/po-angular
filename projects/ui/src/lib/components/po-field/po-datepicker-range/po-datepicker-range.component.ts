@@ -332,7 +332,7 @@ export class PoDatepickerRangeComponent
     }
 
     if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
-      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item');
+      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
       if (firstPreset) {
         event.preventDefault();
         firstPreset.focus();
@@ -485,7 +485,7 @@ export class PoDatepickerRangeComponent
       event.preventDefault();
       event.stopPropagation();
 
-      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item');
+      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
       if (firstPreset) {
         firstPreset.focus();
         return;

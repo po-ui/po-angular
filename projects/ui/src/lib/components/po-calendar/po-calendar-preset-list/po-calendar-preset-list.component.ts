@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output
+} from '@angular/core';
 
 import { PoCalendarRangePreset } from '../interfaces/po-calendar-range-preset.interface';
 import { PoCalendarLangService } from '../services/po-calendar.lang.service';
@@ -9,7 +18,7 @@ import { PoCalendarLangService } from '../services/po-calendar.lang.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoCalendarPresetListComponent {
+export class PoCalendarPresetListComponent implements AfterViewChecked {
   private poCalendarLangService = inject(PoCalendarLangService);
   private elementRef = inject(ElementRef);
 
@@ -22,6 +31,10 @@ export class PoCalendarPresetListComponent {
   @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
 
   focusedIndex: number = 0;
+
+  ngAfterViewChecked(): void {
+    this.syncInnerButtonTabIndexes();
+  }
 
   focusFirstPreset(): void {
     const buttons = this.getPresetButtons();
@@ -78,11 +91,19 @@ export class PoCalendarPresetListComponent {
   private focusPreset(buttons: Array<HTMLButtonElement>, index: number): void {
     if (buttons[index]) {
       this.focusedIndex = index;
+      this.syncInnerButtonTabIndexes();
       buttons[index].focus();
     }
   }
 
   private getPresetButtons(): Array<HTMLButtonElement> {
-    return Array.from(this.elementRef.nativeElement.querySelectorAll('.po-calendar-preset-item'));
+    return Array.from(this.elementRef.nativeElement.querySelectorAll('.po-calendar-preset-item .po-button'));
+  }
+
+  private syncInnerButtonTabIndexes(): void {
+    const buttons = this.getPresetButtons();
+    buttons.forEach((button, index) => {
+      button.setAttribute('tabindex', index === this.focusedIndex ? '0' : '-1');
+    });
   }
 }
