@@ -1,7 +1,7 @@
 @if (isSkeleton()) {
-  <div class="po-field-skeleton" aria-hidden="true">
-    <div class="po-field-skeleton-label"></div>
-    <div class="po-field-skeleton-input po-field-skeleton-textarea" [attr.p-size]="size"></div>
+  <div aria-hidden="true" style="display: flex; flex-direction: column; gap: var(--spacing-xs); width: 100%">
+    <po-skeleton p-variant="text" p-width="30%" p-height="14px"></po-skeleton>
+    <po-skeleton p-variant="rectangle" p-width="100%" p-height="120px"></po-skeleton>
   </div>
 } @else {
   @let poHelper = setHelper(label, additionalHelpTooltip);

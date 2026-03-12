@@ -57,6 +57,7 @@ import { PoLabelModule } from '../po-label';
 import { PoTagModule } from '../po-tag';
 import { PoHelperModule } from '../po-helper';
 import { PoLinkModule } from '../po-link';
+import { PoSkeletonModule } from '../po-skeleton/po-skeleton.module';
 
 /**
  * @description
@@ -102,7 +103,8 @@ import { PoLinkModule } from '../po-link';
     PoListBoxModule,
     PoSwitchModule,
     PoTagModule,
-    PoHelperModule
+    PoHelperModule,
+    PoSkeletonModule
   ],
   exports: [
     PoCheckboxGroupModule,

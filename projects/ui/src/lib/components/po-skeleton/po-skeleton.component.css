@@ -1,0 +1,89 @@
+/* Base */
+.po-skeleton-wrapper {
+  display: block;
+  background-color: var(--color, var(--color-neutral-light-20));
+  border-radius: var(--border-radius, var(--border-radius-md));
+  transition: var(--transition-property, background-color) var(--transition-duration, 0.3s)
+    var(--transition-timing, ease-in-out);
+}
+
+/* Variants - Border Radius Override */
+.po-skeleton-wrapper.po-skeleton-text {
+  border-radius: var(--border-radius, var(--border-radius-sm));
+}
+
+.po-skeleton-wrapper.po-skeleton-circle {
+  border-radius: var(--border-radius, 50%);
+}
+
+/* Types - Color Override */
+.po-skeleton-wrapper.po-skeleton-type-primary {
+  background-color: var(--color, var(--color-neutral-mid-40));
+}
+
+.po-skeleton-wrapper.po-skeleton-type-content {
+  background-color: var(--color, var(--color-neutral-light-00));
+}
+
+/* Animation: Pulse */
+@keyframes po-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-pulse {
+  animation: po-skeleton-pulse var(--animation-duration, 1.5s) var(--transition-timing, ease-in-out) infinite;
+}
+
+/* Animation: Shimmer */
+@keyframes po-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-shimmer {
+  background-size: 200% 100%;
+  animation: po-skeleton-shimmer var(--animation-duration, 3s) var(--transition-timing, ease-in-out) infinite;
+}
+
+/* Shimmer Gradients - usando currentColor para ser dinâmico */
+.po-skeleton-wrapper.po-skeleton-animation-shimmer.po-skeleton-type-normal,
+.po-skeleton-wrapper.po-skeleton-animation-shimmer:not(.po-skeleton-type-primary):not(.po-skeleton-type-content) {
+  background-image: linear-gradient(
+    90deg,
+    var(--color, var(--color-neutral-light-20)) 0%,
+    var(--color-neutral-light-10) 50%,
+    var(--color, var(--color-neutral-light-20)) 100%
+  );
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-shimmer.po-skeleton-type-primary {
+  background-image: linear-gradient(
+    90deg,
+    var(--color, var(--color-neutral-mid-40)) 0%,
+    var(--color-neutral-mid-30) 50%,
+    var(--color, var(--color-neutral-mid-40)) 100%
+  );
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-shimmer.po-skeleton-type-content {
+  background-image: linear-gradient(
+    90deg,
+    var(--color, var(--color-neutral-light-00)) 0%,
+    var(--color-neutral-light-05) 50%,
+    var(--color, var(--color-neutral-light-00)) 100%
+  );
+}
+
+.po-skeleton-wrapper.po-skeleton-animation-none {
+  animation: none;
+}
