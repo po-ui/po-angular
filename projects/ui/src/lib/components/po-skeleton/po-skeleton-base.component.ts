@@ -19,14 +19,21 @@ import { PoSkeletonVariant } from './po-skeleton-variant.enum';
  *
  * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
  *
- * | Propriedade                  | Descrição                                      | Valor Padrão                      |
- * |------------------------------|------------------------------------------------|-----------------------------------|
- * | `--color`                    | Cor de fundo do skeleton                       | `var(--color-neutral-light-20)`   |
- * | `--border-radius`            | Raio da borda do skeleton                      | `var(--border-radius-md)`         |
- * | `--transition-duration`      | Duração da transição de cor                    | `0.3s`                            |
- * | `--transition-property`      | Propriedade CSS da transição                   | `background-color`                |
- * | `--transition-timing`        | Função de temporização da transição/animação   | `ease-in-out`                     |
- * | `--animation-duration`       | Duração da animação (pulse/shimmer)            | `1.5s` (pulse), `3s` (shimmer)    |
+ * | Propriedade                    | Descrição                                                | Valor Padrão                      |
+ * |--------------------------------|----------------------------------------------------------|-----------------------------------|
+ * | `--color`                      | Cor de fundo do skeleton (tipo normal)                   | `var(--color-neutral-light-20)`   |
+ * | `--border-radius`              | Raio da borda do skeleton                                | `var(--border-radius-md)`         |
+ * | `--border-radius-text`         | Raio da borda para a variante text                       | `var(--border-radius-sm)`         |
+ * | `--transition-property`        | Propriedade CSS da transição                             | `background-color`                |
+ * | `--transition-duration`        | Duração da transição de cor                              | `0.3s`                            |
+ * | `--transition-timing`          | Função de temporização da transição/animação             | `ease-in-out`                     |
+ * | `--animation-duration-pulse`   | Duração da animação de pulsação                          | `1.5s`                            |
+ * | `--animation-duration-shimmer` | Duração da animação de brilho deslizante                 | `3s`                              |
+ * | `--color-primary`              | Cor de fundo do skeleton para o tipo primary             | `var(--color-neutral-mid-40)`     |
+ * | `--color-content`              | Cor de fundo do skeleton para o tipo content             | `var(--color-neutral-light-00)`   |
+ * | `--shimmer-highlight`          | Cor de destaque do shimmer (tipo normal)                 | `var(--color-neutral-light-10)`   |
+ * | `--shimmer-highlight-primary`  | Cor de destaque do shimmer (tipo primary)                | `var(--color-neutral-mid-30)`     |
+ * | `--shimmer-highlight-content`  | Cor de destaque do shimmer (tipo content)                | `var(--color-neutral-light-05)`   |
  *
  */
 @Directive()
