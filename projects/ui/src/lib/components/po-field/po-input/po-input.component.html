@@ -1,5 +1,5 @@
 @if (isSkeleton()) {
-  <div aria-hidden="true" style="display: flex; flex-direction: column; gap: var(--spacing-xs); width: 100%">
+  <div class="po-skeleton-group" aria-hidden="true">
     <po-skeleton p-variant="text" p-width="30%" p-height="14px"></po-skeleton>
     <po-skeleton p-variant="rectangle" p-width="100%" [p-height]="size === 'small' ? '32px' : '44px'"></po-skeleton>
   </div>
