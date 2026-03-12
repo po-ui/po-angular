@@ -16,6 +16,7 @@ export class PoCalendarPresetListComponent {
   @Input('p-presets') presets: Array<PoCalendarRangePreset> = [];
   @Input('p-locale') locale: string;
   @Input('p-selected-preset') selectedPreset: string | null = null;
+  @Input('p-size') size: string;
 
   @Output('p-select-preset') selectPreset = new EventEmitter<{ label: string; start: Date; end: Date }>();
   @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
