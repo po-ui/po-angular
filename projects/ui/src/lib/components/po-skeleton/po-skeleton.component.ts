@@ -27,7 +27,6 @@ import { PoSkeletonVariant } from './po-skeleton-variant.enum';
 @Component({
   selector: 'po-skeleton',
   templateUrl: './po-skeleton.component.html',
-  styleUrls: ['./po-skeleton.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
