@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoSkeletonComponent } from './po-skeleton.component';
+import { PoSkeletonContainerDirective } from './po-skeleton-container/po-skeleton-container.directive';
 
 /**
  * @description
@@ -10,7 +11,7 @@ import { PoSkeletonComponent } from './po-skeleton.component';
  */
 @NgModule({
   imports: [CommonModule],
-  declarations: [PoSkeletonComponent],
-  exports: [PoSkeletonComponent]
+  declarations: [PoSkeletonComponent, PoSkeletonContainerDirective],
+  exports: [PoSkeletonComponent, PoSkeletonContainerDirective]
 })
 export class PoSkeletonModule {}

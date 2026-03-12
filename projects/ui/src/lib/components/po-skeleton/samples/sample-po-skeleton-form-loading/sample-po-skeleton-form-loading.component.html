@@ -1,0 +1,47 @@
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    [p-label]="isLoading ? 'Show Form' : 'Show Skeleton'"
+    (p-click)="toggleLoading()"
+  ></po-button>
+</div>
+
+<hr />
+
+<!-- The [p-skeleton] directive activates skeleton mode for all child fields -->
+<div class="po-row" [p-skeleton]="isLoading">
+  <po-input
+    class="po-md-6"
+    name="name"
+    [(ngModel)]="name"
+    p-label="Name"
+    p-placeholder="Enter your name"
+    p-required
+  ></po-input>
+
+  <po-input
+    class="po-md-6"
+    name="email"
+    [(ngModel)]="email"
+    p-label="Email"
+    p-placeholder="Enter your email"
+  ></po-input>
+
+  <po-select
+    class="po-md-6"
+    name="city"
+    [(ngModel)]="city"
+    p-label="City"
+    p-placeholder="Select a city"
+    [p-options]="cityOptions"
+  ></po-select>
+
+  <po-textarea
+    class="po-md-6"
+    name="description"
+    [(ngModel)]="description"
+    p-label="Description"
+    p-placeholder="Enter a description"
+    p-rows="4"
+  ></po-textarea>
+</div>

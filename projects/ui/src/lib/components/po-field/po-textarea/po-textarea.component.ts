@@ -3,8 +3,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
   forwardRef,
+  HostBinding,
   ViewChild,
   inject,
   OnChanges,
@@ -14,6 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { setHelperSettings, uuid } from '../../../utils/util';
 
+import { PO_SKELETON_CONTAINER } from '../../po-skeleton/po-skeleton-container/po-skeleton-container.token';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 import { PoHelperComponent } from '../../po-helper';
 
@@ -63,6 +66,7 @@ import { PoHelperComponent } from '../../po-helper';
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges {
   private el = inject(ElementRef);
+  private skeletonContainer = inject(PO_SKELETON_CONTAINER, { optional: true });
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
@@ -70,6 +74,14 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   id = `po-textarea[${uuid()}]`;
   valueBeforeChange: any;
   fireChange: boolean = false;
+
+  /** Indica se o componente está em modo skeleton via container pai. */
+  isSkeleton = computed(() => !!this.skeletonContainer?.skeleton());
+
+  @HostBinding('attr.p-skeleton')
+  get skeletonAttr(): boolean | null {
+    return this.isSkeleton() ? true : null;
+  }
 
   constructor() {
     const cd = inject(ChangeDetectorRef);
