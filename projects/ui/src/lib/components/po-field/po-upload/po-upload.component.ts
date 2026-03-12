@@ -62,6 +62,11 @@ import { PoHelperComponent } from '../../po-helper';
  *   <file name="sample-po-upload-preview/sample-po-upload-preview.component.html"> </file>
  *   <file name="sample-po-upload-preview/sample-po-upload-preview.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-upload-payload-playground" title="PO Upload - Payload Playground">
+ *   <file name="sample-po-upload-payload-playground/sample-po-upload-payload-playground.component.html"> </file>
+ *   <file name="sample-po-upload-payload-playground/sample-po-upload-payload-playground.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-upload',

@@ -1,0 +1,341 @@
+<po-page-default p-title="Po Upload - Playground de Payload">
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-12"
+      name="scenario"
+      [(ngModel)]="activeScenario"
+      p-columns="3"
+      p-label="Selecione o cenário de teste"
+      [p-options]="scenarioOptions"
+      (p-change)="applyScenario($event)"
+    >
+    </po-radio-group>
+  </div>
+
+  <po-divider p-label="Configurações do cenário"></po-divider>
+
+  <div class="po-row">
+    <po-input class="po-md-6" name="label" [(ngModel)]="label" p-label="Label" p-clean> </po-input>
+    <po-input class="po-md-6" name="formField" [(ngModel)]="formField" p-label="Form Field (p-form-field)" p-clean>
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input class="po-md-12" name="url" [(ngModel)]="url" p-label="URL (p-url)" p-clean> </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="headers"
+      [(ngModel)]="headersJson"
+      p-label="Headers (JSON)"
+      p-help='Ex.: {"Authorization": "Bearer token"}'
+      (p-change)="onChangeHeaders()"
+    >
+    </po-input>
+
+    <po-checkbox-group
+      class="po-md-6"
+      name="properties"
+      [(ngModel)]="properties"
+      p-columns="2"
+      p-label="Propriedades"
+      [p-options]="propertiesOptions"
+    >
+    </po-checkbox-group>
+  </div>
+
+  @if (activeScenario === 'additionalData' || activeScenario === 'complete') {
+    <div class="po-row">
+      <po-textarea
+        class="po-md-6"
+        name="additionalData"
+        [(ngModel)]="additionalDataJson"
+        p-label="Additional Data (event.data) - JSON"
+        p-help="Será serializado como JSON e enviado no campo 'data' do FormData"
+        p-rows="3"
+      >
+      </po-textarea>
+    </div>
+  }
+
+  @if (activeScenario === 'extraFormData' || activeScenario === 'complete') {
+    <div class="po-row">
+      <po-textarea
+        class="po-md-6"
+        name="extraFormData"
+        [(ngModel)]="extraFormDataJson"
+        p-label="Extra Form Data (event.extraFormData) - JSON"
+        p-help="Cada chave será adicionada como campo separado no FormData"
+        p-rows="3"
+      >
+      </po-textarea>
+    </div>
+  }
+
+  @if (activeScenario === 'restrictions' || activeScenario === 'complete') {
+    <div class="po-row">
+      <po-input
+        class="po-md-3"
+        name="extensions"
+        [(ngModel)]="allowedExtensions"
+        p-label="Extensões permitidas"
+        p-placeholder=".pdf,.png,.jpg"
+        (p-change)="onChangeExtension()"
+      >
+      </po-input>
+      <po-number
+        class="po-md-3"
+        name="maxFiles"
+        [(ngModel)]="maxFiles"
+        p-label="Max arquivos"
+        p-clean
+        (p-change)="onChangeMaxFiles()"
+      >
+      </po-number>
+      <po-number
+        class="po-md-3"
+        name="maxSize"
+        [(ngModel)]="maxSize"
+        p-label="Max tamanho (MB)"
+        p-clean
+        (p-change)="onChangeMaxSize()"
+      >
+      </po-number>
+      <po-number
+        class="po-md-3"
+        name="minSize"
+        [(ngModel)]="minSize"
+        p-label="Min tamanho (MB)"
+        p-clean
+        (p-change)="onChangeMinSize()"
+      >
+      </po-number>
+    </div>
+  }
+
+  <po-divider p-label="Componente po-upload"></po-divider>
+
+  <div class="po-row">
+    <po-upload
+      class="po-md-12"
+      name="upload"
+      [(ngModel)]="upload"
+      [p-auto-upload]="properties.includes('autoUpload')"
+      [p-directory]="properties.includes('directory')"
+      [p-drag-drop]="properties.includes('dragDrop')"
+      [p-form-field]="formField"
+      [p-headers]="headers"
+      [p-label]="label"
+      [p-multiple]="properties.includes('multiple')"
+      [p-restrictions]="restrictions"
+      [p-show-thumbnail]="properties.includes('showThumbnail')"
+      [p-url]="url"
+      (p-upload)="onUploadEvent($event)"
+      (p-success)="onUploadSuccess($event)"
+      (p-error)="onUploadError($event)"
+    >
+    </po-upload>
+  </div>
+
+  <po-divider p-label="Payloads interceptados"></po-divider>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-md-3" p-label="Limpar logs" p-kind="secondary" (p-click)="clearLogs()"> </po-button>
+    <po-info class="po-md-3" p-label="Total de payloads" [p-value]="payloadLogs.length.toString()"> </po-info>
+  </div>
+
+  @if (payloadLogs.length === 0) {
+    <po-info class="po-md-12" p-label="Status" p-value="Nenhum payload interceptado. Selecione arquivo(s) e envie.">
+    </po-info>
+  }
+
+  @for (log of payloadLogs; track log.id) {
+    <po-widget [p-title]="'Payload #' + log.id + ' - ' + log.scenario + ' (' + log.timestamp + ')'">
+      <div class="po-row">
+        <po-info class="po-md-4" p-label="Método" [p-value]="log.method"> </po-info>
+        <po-info class="po-md-8" p-label="URL" [p-value]="log.url"> </po-info>
+      </div>
+
+      <div class="po-row po-mt-2">
+        <po-info class="po-md-4" p-label="FormData field name" [p-value]="log.formFieldName"> </po-info>
+        <po-info class="po-md-4" p-label="Arquivo" [p-value]="log.fileName"> </po-info>
+        <po-info class="po-md-4" p-label="Tamanho" [p-value]="log.fileSize.toString() + ' bytes'"> </po-info>
+      </div>
+
+      <div class="po-row po-mt-2">
+        <po-info class="po-md-12" p-label="Tipo MIME" [p-value]="log.fileType"> </po-info>
+      </div>
+
+      @if (log.headers && (log.headers | json) !== '{}') {
+        <div class="po-row po-mt-2">
+          <po-info class="po-md-12" p-label="Headers customizados" [p-value]="log.headers | json"> </po-info>
+        </div>
+      }
+
+      @if (log.hasData) {
+        <div class="po-row po-mt-2">
+          <po-info class="po-md-12" p-label="data (JSON serializado no FormData)" [p-value]="log.dataContent">
+          </po-info>
+        </div>
+      }
+
+      @if (log.hasExtraFormData) {
+        <div class="po-row po-mt-2">
+          <po-info
+            class="po-md-12"
+            p-label="extraFormData (campos separados no FormData)"
+            [p-value]="log.extraFormDataContent"
+          >
+          </po-info>
+        </div>
+      }
+
+      <div class="po-row po-mt-2">
+        <div class="po-md-12">
+          <h4>Estrutura do FormData (simulada):</h4>
+          <pre
+            style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px; overflow-x: auto; white-space: pre-wrap"
+          >
+FormData {{'{'}}
+{{ log.rawFormData }}
+{{'}'}}</pre
+          >
+        </div>
+      </div>
+
+      <div class="po-row po-mt-2">
+        <div class="po-md-12">
+          <h4>Entradas do FormData:</h4>
+          <po-table
+            [p-columns]="[
+              { property: 'key', label: 'Chave' },
+              { property: 'value', label: 'Valor' },
+              { property: 'type', label: 'Tipo' }
+            ]"
+            [p-items]="log.formDataEntries"
+            p-hide-columns-manager
+            p-striped
+          >
+          </po-table>
+        </div>
+      </div>
+    </po-widget>
+  }
+
+  <po-divider p-label="Referência: Formatos de payload do po-upload"></po-divider>
+
+  <po-widget p-title="Documentação dos formatos de payload">
+    <div class="po-md-12">
+      <h4>Como o po-upload monta o payload internamente</h4>
+      <p>
+        O componente <strong>po-upload</strong> sempre envia os arquivos via <strong>HTTP POST</strong> usando
+        <strong>FormData</strong>. O serviço <code>PoUploadBaseService.upload()</code> é responsável pela montagem.
+      </p>
+      <p>Para <strong>cada arquivo</strong> selecionado, uma requisição HTTP separada é feita (não é batch).</p>
+
+      <hr />
+
+      <h4>1. Arquivo único (padrão)</h4>
+      <p><strong>Propriedades:</strong> apenas <code>p-url</code></p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+FormData:
+  files: (binary) arquivo.pdf</pre
+      >
+
+      <h4>2. Múltiplos arquivos</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>p-multiple</code></p>
+      <p>Cada arquivo gera uma requisição POST separada com seu próprio FormData.</p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+# Requisição 1:
+FormData:
+  files: (binary) arquivo1.pdf
+
+# Requisição 2:
+FormData:
+  files: (binary) arquivo2.png</pre
+      >
+
+      <h4>3. Com additionalData (event.data)</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>(p-upload)</code> event handler</p>
+      <p>
+        No evento <code>(p-upload)</code>, definir <code>event.data = {{'{'}}...{{'}'}}</code>. O objeto é serializado
+        como JSON e adicionado no campo <code>"data"</code>.
+      </p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+FormData:
+  files: (binary) arquivo.pdf
+  data: "{{'\"userId\":\"123\",\"category\":\"documents\"'}}"</pre
+      >
+
+      <h4>4. Com extraFormData (event.extraFormData)</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>(p-upload)</code> event handler</p>
+      <p>
+        No evento <code>(p-upload)</code>, definir
+        <code>event.extraFormData = {{'{'}}...{{'}'}}</code>. Cada chave do objeto vira um campo separado no FormData.
+      </p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+FormData:
+  files: (binary) arquivo.pdf
+  token: "abc-xyz-456"
+  projectId: "P001"
+  data: "{{'{}'}}"</pre
+      >
+
+      <h4>5. Upload de diretório</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>p-directory</code></p>
+      <p>
+        Cada arquivo do diretório é enviado em requisição separada. O atributo <code>webkitdirectory</code> é adicionado
+        ao input.
+      </p>
+
+      <h4>6. Headers customizados</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>p-headers</code></p>
+      <p>Os headers são passados para <code>HttpHeaders</code> e incluídos na requisição POST.</p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+Headers:
+  Authorization: Bearer token123
+  X-Custom-Header: valor-custom
+
+FormData:
+  files: (binary) arquivo.pdf</pre
+      >
+
+      <h4>7. formField customizado</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>p-form-field="documento"</code></p>
+      <p>O nome do campo no FormData muda de <code>"files"</code> para o valor definido.</p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+FormData:
+  documento: (binary) arquivo.pdf</pre
+      >
+
+      <h4>8. Auto-upload</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>p-auto-upload</code></p>
+      <p>O payload é o mesmo dos cenários acima, mas o envio ocorre automaticamente ao selecionar o arquivo.</p>
+
+      <h4>9. Com restrições</h4>
+      <p><strong>Propriedades:</strong> <code>p-url</code> + <code>p-restrictions</code></p>
+      <p>
+        As restrições (extensão, tamanho, quantidade) são validadas ANTES do envio. Arquivos que não atendem às
+        restrições não geram payload.
+      </p>
+
+      <h4>10. Combinação completa</h4>
+      <p>
+        Todas as propriedades combinadas. Cada arquivo gera um FormData contendo: arquivo + data (JSON) + campos do
+        extraFormData + headers customizados + formField customizado.
+      </p>
+      <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px">
+POST /upload-intercepted
+Headers:
+  Authorization: Bearer token123
+
+FormData:
+  attachments: (binary) arquivo.pdf
+  token: "abc-xyz-456"
+  data: "{{'\"userId\":\"123\"'}}"</pre
+      >
+    </div>
+  </po-widget>
+</po-page-default>
