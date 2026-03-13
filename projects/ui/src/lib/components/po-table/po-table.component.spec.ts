@@ -2083,6 +2083,62 @@ describe('PoTableComponent:', () => {
         expect(component['virtualScrollOverflowConfigured']).toBe(false);
       });
 
+      it('configureVirtualScrollOverflow: should set configured flag even without content wrapper', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component['virtualScrollOverflowConfigured'] = false;
+
+        component['configureVirtualScrollOverflow']();
+
+        expect(component['virtualScrollOverflowConfigured']).toBe(true);
+        expect(component['scrollSyncListener']).toBeTruthy();
+      });
+
+      it('configureVirtualScrollOverflow: should not create a second scroll listener if one already exists', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+
+        component['configureVirtualScrollOverflow']();
+        const firstListener = component['scrollSyncListener'];
+
+        component['virtualScrollOverflowConfigured'] = false;
+        component['configureVirtualScrollOverflow']();
+
+        expect(component['scrollSyncListener']).toBe(firstListener);
+      });
+
+      it('configureVirtualScrollOverflow: scroll sync listener should sync headerScrollContainer scrollLeft', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        const mockHeaderContainer = document.createElement('div');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.headerScrollContainer = { nativeElement: mockHeaderContainer } as any;
+
+        spyOn(component['renderer'], 'listen').and.callFake((_target: any, _eventName: string, callback: Function) => {
+          callback();
+          return () => {};
+        });
+
+        component['scrollSyncListener'] = null;
+        component['configureVirtualScrollOverflow']();
+
+        expect(mockHeaderContainer.scrollLeft).toBe(mockViewportEl.scrollLeft);
+      });
+
+      it('configureVirtualScrollOverflow: scroll sync listener should not fail when headerScrollContainer is null', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.headerScrollContainer = null;
+
+        spyOn(component['renderer'], 'listen').and.callFake((_target: any, _eventName: string, callback: Function) => {
+          callback();
+          return () => {};
+        });
+
+        component['scrollSyncListener'] = null;
+
+        expect(() => component['configureVirtualScrollOverflow']()).not.toThrow();
+      });
+
       it('syncColumnWidths: should sync widths using MAX of header and body via renderer', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
@@ -2122,9 +2178,44 @@ describe('PoTableComponent:', () => {
         expect(() => component['syncColumnWidths']()).not.toThrow();
       });
 
+      it('syncColumnWidths: should not apply styles when body has no rows', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        mockBodyTable.appendChild(mockTbody);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        expect(() => component['syncColumnWidths']()).not.toThrow();
+      });
+
+      it('syncColumnWidths: should not apply styles when cells are empty', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        expect(() => component['syncColumnWidths']()).not.toThrow();
+      });
+
       it('ngAfterViewChecked: should call configureVirtualScrollOverflow when virtualScroll is active and not yet configured', () => {
         const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
         component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.height = 400;
         component.virtualScroll = true;
         component['virtualScrollOverflowConfigured'] = false;
 
@@ -2136,8 +2227,20 @@ describe('PoTableComponent:', () => {
       });
 
       it('ngAfterViewChecked: should not call configureVirtualScrollOverflow when already configured', () => {
+        component.height = 400;
         component.virtualScroll = true;
         component['virtualScrollOverflowConfigured'] = true;
+
+        spyOn<any>(component, 'configureVirtualScrollOverflow');
+
+        component.ngAfterViewChecked();
+
+        expect(component['configureVirtualScrollOverflow']).not.toHaveBeenCalled();
+      });
+
+      it('ngAfterViewChecked: should not call configureVirtualScrollOverflow when virtualScroll is false', () => {
+        component['virtualScrollOverflowConfigured'] = false;
+        component['_virtualScroll'] = false;
 
         spyOn<any>(component, 'configureVirtualScrollOverflow');
 
@@ -3065,6 +3168,22 @@ describe('PoTableComponent:', () => {
     component.ngOnDestroy();
 
     expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();
+  });
+
+  it('ngOnDestroy: should call scrollSyncListener and set it to null', () => {
+    const fakeListener = jasmine.createSpy('scrollSyncListener');
+    component['scrollSyncListener'] = fakeListener;
+
+    component.ngOnDestroy();
+
+    expect(fakeListener).toHaveBeenCalled();
+    expect(component['scrollSyncListener']).toBeNull();
+  });
+
+  it('ngOnDestroy: should not fail when scrollSyncListener is null', () => {
+    component['scrollSyncListener'] = null;
+
+    expect(() => component.ngOnDestroy()).not.toThrow();
   });
 
   it('showMoreInfiniteScroll: should call `onShowMore` if showMoreDisabled is false ', () => {
