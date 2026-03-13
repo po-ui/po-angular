@@ -172,12 +172,18 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * Habilita a exibição dos presets padrão de intervalos de data no painel lateral do calendário.
    *
-   * Quando habilitado (`true`), exibe os presets padrão (Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses).
-   * Caso `p-range-preset-options` também seja informado, os presets customizados serão exibidos após os presets padrão.
+   * Aceita os seguintes valores:
+   * - `true`: exibe todos os presets padrão (Amanhã, Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses).
+   * - `false`: não exibe os presets padrão.
+   * - `Array<string>`: exibe apenas os presets padrão cujos labels estejam no array informado.
+   *   O preset "today" é obrigatório e será incluído automaticamente mesmo que não esteja no array.
+   *
+   * Caso `p-range-preset-options` também seja informado, os presets customizados serão exibidos junto aos presets padrão,
+   * ordenados automaticamente por temporalidade (Futuro → Presente → Passado).
    *
    * @default `false`
    */
-  @Input({ alias: 'p-range-presets', transform: convertToBoolean }) rangePresets: boolean = false;
+  @Input('p-range-presets') rangePresets: boolean | Array<string> = false;
 
   /**
    * @optional
