@@ -2055,20 +2055,22 @@ describe('PoTableComponent:', () => {
         expect(result).toBe(expectedValue);
       });
 
-      it('configureVirtualScrollOverflow: should apply inline styles to viewport element', () => {
+      it('configureVirtualScrollOverflow: should fix content wrapper and add scroll sync listener', () => {
         const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
         const mockContentWrapper = document.createElement('div');
         mockContentWrapper.classList.add('cdk-virtual-scroll-content-wrapper');
         mockViewportEl.appendChild(mockContentWrapper);
 
+        const mockHeaderContainer = document.createElement('div');
         component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.headerScrollContainer = { nativeElement: mockHeaderContainer } as any;
 
         component['configureVirtualScrollOverflow']();
 
-        expect(mockViewportEl.style.overflowX).toBe('hidden');
-        expect(mockViewportEl.style.overflowY).toBe('auto');
+        expect(mockContentWrapper.style.contain).toBe('none');
         expect(mockContentWrapper.style.overflow).toBe('visible');
         expect(mockContentWrapper.style.minWidth).toBe('100%');
+        expect(component['scrollSyncListener']).toBeTruthy();
         expect(component['virtualScrollOverflowConfigured']).toBe(true);
       });
 
