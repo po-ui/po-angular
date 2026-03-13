@@ -1,0 +1,45 @@
+<po-page-default p-title="PoLookup">
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-12"
+      name="filterParams"
+      [(ngModel)]="filterParams"
+      p-label="Choose the entity of SW to search"
+      [p-options]="entities"
+    >
+    </po-radio-group>
+  </div>
+
+  <po-divider />
+
+  <div class="po-row">
+    <po-lookup
+      class="po-md-12"
+      name="entity"
+      [(ngModel)]="entity"
+      p-field-label="name"
+      p-field-value="name"
+      p-help="Select a {{ entityLabel }} to see the list of movies in which it participated"
+      p-label="{{ entityLabel | titlecase }} of Star Wars"
+      [p-columns]="entityColumns"
+      [p-filter-params]="filterParams"
+      [p-filter-service]="filterService"
+      [p-infinite-scroll]="true"
+      (p-selected)="onSelected($event)"
+    >
+    </po-lookup>
+  </div>
+
+  @if (filmItemsFiltered && entity) {
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-columns]="filmColumns"
+      [p-items]="filmItemsFiltered"
+      [p-sort]="true"
+      [p-hide-table-search]="false"
+    >
+    </po-table>
+  </div>
+  }
+</po-page-default>

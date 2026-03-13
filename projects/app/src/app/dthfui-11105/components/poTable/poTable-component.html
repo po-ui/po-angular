@@ -1,0 +1,21 @@
+<po-page-default p-title="PoTable">
+  <!-- CDK View -->
+  <div class="po-row">
+    <po-table
+      #tableComp
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      [p-items]="data"
+      [p-columns]="columns"
+      [p-striped]="true"
+      [p-hide-columns-manager]="true"
+      [p-height]="getHeight()"
+      [p-virtual-scroll]="true"
+    >
+      <ng-template p-table-cell-template let-column="column" let-row="row">
+        <div *ngIf="column.property === 'colA'">
+          <po-checkbox [(ngModel)]="row.colA"> </po-checkbox>
+        </div>
+      </ng-template>
+    </po-table>
+  </div>
+</po-page-default>

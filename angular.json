@@ -67,7 +67,7 @@
                 "output": "/assets/monaco"
               }
             ],
-            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
+            "styles": ["../po-style/dist/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
             "scripts": [],
             "extractLicenses": false,
             "sourceMap": true,

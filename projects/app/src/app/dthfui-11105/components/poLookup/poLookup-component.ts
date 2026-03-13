@@ -1,0 +1,97 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { SamplePoLookupSwFilmsService } from 'projects/portal/src/app/documentation/samples/sample-po-lookup/samples/sample-po-lookup-sw-films/sample-po-lookup-sw-films.service';
+import { PoRadioGroupOption } from 'projects/ui/src/lib';
+
+@Component({
+  templateUrl: './poLookup-component.html',
+  standalone: false
+})
+export class PoLookup2Component implements OnInit {
+  filterService = inject(SamplePoLookupSwFilmsService);
+
+  entity;
+  filmItemsFiltered;
+  filterParams = 'people';
+
+  readonly characterColumns = [
+    { property: 'name', label: 'Name' },
+    { property: 'gender', label: 'Gender' },
+    { property: 'height', label: 'Height' },
+    { property: 'mass', label: 'Mass' }
+  ];
+
+  readonly entities: Array<PoRadioGroupOption> = [
+    { label: 'Character', value: 'people' },
+    { label: 'Planet', value: 'planets' },
+    { label: 'Starship', value: 'starships' }
+  ];
+
+  readonly filmColumns = [
+    { property: 'episode_id', label: 'Episode id' },
+    { property: 'title', label: 'Title' },
+    { property: 'director', label: 'Director' },
+    { property: 'producer', label: 'Producer' },
+    { property: 'release_date', label: 'Release date', type: 'date' }
+  ];
+
+  readonly planetsColumns = [
+    { property: 'name', label: 'Name' },
+    { property: 'diameter', label: 'Diameter' },
+    { property: 'population', label: 'Population' },
+    { property: 'climate', label: 'Climate' }
+  ];
+
+  readonly starshipsColumns = [
+    { property: 'name', label: 'Name' },
+    { property: 'passengers', label: 'Passengers' },
+    { property: 'max_atmosphering_speed', label: 'Max Speed' },
+    { property: 'consumables', label: 'Consumables' }
+  ];
+
+  private filmItems;
+
+  get entityColumns() {
+    return this.getEntityColumns(this.filterParams);
+  }
+
+  get entityLabel() {
+    return this.getLabelOfEntity(this.filterParams);
+  }
+
+  ngOnInit() {
+    this.filterService.getFilms().subscribe((films: { results: Array<any> }) => {
+      this.filmItems = films.results;
+    });
+  }
+
+  onSelected(entity) {
+    this.filterService.getObjectByValue(entity.name, this.filterParams).subscribe({
+      next: result => {
+        this.filmItemsFiltered = this.filmItems.filter(film => result?.films.includes(film.url));
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  private getEntityColumns(entity) {
+    switch (entity) {
+      case 'people':
+        return this.characterColumns;
+      case 'planets':
+        return this.planetsColumns;
+      case 'starships':
+        return this.starshipsColumns;
+    }
+  }
+
+  private getLabelOfEntity(entity): string {
+    switch (entity) {
+      case 'people':
+        return 'character';
+      case 'planets':
+        return 'planet';
+      case 'starships':
+        return 'starship';
+    }
+  }
+}

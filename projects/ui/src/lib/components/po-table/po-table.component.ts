@@ -106,6 +106,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
+  @ViewChild('headerTable', { read: ElementRef, static: false }) headerTableElement: ElementRef;
+  @ViewChild('bodyTable', { read: ElementRef, static: false }) bodyTableElement: ElementRef;
+
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
   @ViewChild(PoModalComponent, { static: true }) modalDelete: PoModalComponent;
@@ -142,6 +145,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   newOrderColumns: Array<PoTableColumn>;
   sizeLoading: string = 'sm';
   headerWidth: number;
+  headerTableScrollWidth: number;
 
   close: PoModalAction = {
     action: () => {
@@ -167,6 +171,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
   private subscriptionService: Subscription = new Subscription();
+  private columnWidths: string[] = [];
+  private resizeObserver: ResizeObserver;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -307,6 +313,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeHeaderWidth();
     this.changeSizeLoading();
     this.applyFixedColumns();
+    this.syncHeaderTableWidth();
+    this.setupColumnWidthSync();
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -328,11 +336,24 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.checkInfiniteScroll();
       this.visibleElement = true;
     }
+
+    // Sincroniza larguras quando virtualScroll está ativo
+    if (this.virtualScroll && this.hasItems) {
+      this.syncHeaderTableWidth();
+      this.syncColumnWidths();
+    }
+
+    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
+      this.debounceResize();
+      this.checkInfiniteScroll();
+      this.visibleElement = true;
+    }
   }
 
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+    this.resizeObserver?.disconnect();
   }
 
   /**
@@ -975,6 +996,56 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
           item.$selected = selectValue;
         }
       });
+    }
+  }
+
+  /**
+   * Lê as larguras computadas das colunas do <tbody> e aplica no <thead>.
+   * Utiliza ResizeObserver para reagir a mudanças de tamanho.
+   */
+  private setupColumnWidthSync(): void {
+    if (!this.virtualScroll) return;
+
+    // Observer para detectar mudanças de largura na tabela do body
+    this.resizeObserver = new ResizeObserver(() => {
+      this.syncColumnWidths();
+    });
+
+    // Observa o viewport do CDK para detectar quando novas linhas são renderizadas
+    const viewportEl = this.tableVirtualScroll?.nativeElement;
+    if (viewportEl) {
+      this.resizeObserver.observe(viewportEl);
+    }
+  }
+
+  private syncColumnWidths(): void {
+    if (!this.bodyTableElement?.nativeElement || !this.headerTableElement?.nativeElement) return;
+
+    // Pega a primeira linha visível do body para ler as larguras computadas
+    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
+    if (!bodyRow) return;
+
+    const bodyCells = bodyRow.querySelectorAll('td');
+    const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead tr th');
+
+    if (bodyCells.length !== headerCells.length) return;
+
+    bodyCells.forEach((td: HTMLElement, index: number) => {
+      const computedWidth = td.getBoundingClientRect().width + 'px';
+      const th = headerCells[index] as HTMLElement;
+      th.style.width = computedWidth;
+      th.style.minWidth = computedWidth;
+      th.style.maxWidth = computedWidth;
+    });
+  }
+
+  private syncHeaderTableWidth(): void {
+    if (this.headerTableElement?.nativeElement) {
+      const newWidth = this.headerTableElement.nativeElement.scrollWidth;
+      if (newWidth !== this.headerTableScrollWidth) {
+        this.headerTableScrollWidth = newWidth;
+        this.changeDetector.detectChanges();
+      }
     }
   }
 }

@@ -1,0 +1,179 @@
+<!-- Labs -->
+<po-page-default p-title="PoTableLabs">
+  <po-table
+    [p-actions]="actions"
+    [p-actions-right]="properties.includes('actionsRight')"
+    [p-columns]="columns"
+    [p-container]="container"
+    [p-height]="height"
+    [p-filter-type]="filterType"
+    [p-components-size]="componentsSize"
+    [p-hide-detail]="properties.includes('hideDetail')"
+    [p-hide-columns-manager]="properties.includes('hideColumnsManager')"
+    [p-hide-batch-actions]="properties.includes('hideBatchActions')"
+    [p-hide-table-search]="properties.includes('hideTableSearch')"
+    [p-hide-select-all]="selection.includes('hideSelectAll')"
+    [p-items]="items"
+    [p-literals]="customLiterals"
+    [p-filtered-columns]="filteredColumns"
+    [p-loading]="properties.includes('loading')"
+    [p-max-columns]="maxColumns"
+    [p-selectable]="selection.includes('selectable')"
+    [p-spacing]="spacing"
+    [p-loading-show-more]="properties.includes('loadingShowMore')"
+    [p-single-select]="selection.includes('singleSelect')"
+    [p-sort]="properties.includes('sort')"
+    [p-striped]="properties.includes('striped')"
+    [p-virtual-scroll]="true"
+    (p-all-selected)="changeEvent('p-all-selected')"
+    (p-all-unselected)="changeEvent('p-all-unselected')"
+    (p-collapsed)="changeEvent('p-collapsed')"
+    (p-expanded)="changeEvent('p-expanded')"
+    (p-selected)="changeEvent('p-selected')"
+    (p-unselected)="changeEvent('p-unselected')"
+    [p-auto-collapse]="properties.includes('autoCollapse')"
+    (p-delete-items)="deleteItems($event)"
+    [p-draggable]="properties.includes('draggable')"
+    [p-hide-action-fixed-columns]="properties.includes('fixed')"
+  >
+  </po-table>
+
+  <form #f="ngForm">
+    <div class="po-row">
+      <po-checkbox-group
+        class="po-md-12"
+        name="columnsName"
+        [(ngModel)]="columnsName"
+        p-label="Columns"
+        p-columns="4"
+        [p-options]="columnsOptions"
+        (p-change)="updateColumns()"
+      >
+      </po-checkbox-group>
+    </div>
+
+    <div class="po-row">
+      <po-radio-group
+        class="po-lg-9"
+        p-columns="3"
+        name="typeHeader"
+        [(ngModel)]="columnsDefinition.detail.detail.typeHeader"
+        p-label="Column detail typeHeader"
+        [p-options]="typeHeaderOptions"
+      >
+      </po-radio-group>
+
+      <po-switch
+        class="po-lg-3"
+        name="hideSelect"
+        [(ngModel)]="columnsDefinition.detail.detail.hideSelect"
+        p-label="Column detail hideSelect"
+      >
+      </po-switch>
+    </div>
+
+    <div class="po-row">
+      <po-checkbox-group
+        class="po-lg-12"
+        name="properties"
+        [(ngModel)]="properties"
+        p-label="Properties"
+        p-columns="4"
+        [p-options]="propertiesOptions"
+      >
+      </po-checkbox-group>
+    </div>
+
+    <div class="po-row">
+      <po-checkbox-group
+        class="po-lg-12"
+        name="actionsDefinition"
+        [(ngModel)]="actionsDefinition"
+        p-columns="4"
+        p-indeterminate
+        p-label="Actions"
+        [p-options]="actionsDefinitionOptions"
+        (p-change)="changeActionOptions()"
+      >
+      </po-checkbox-group>
+    </div>
+
+    <div class="po-row">
+      <po-radio-group
+        class="po-lg-12"
+        name="spacing"
+        [(ngModel)]="spacing"
+        p-columns="4"
+        p-help="Para aplicar o tamanho extraSmall, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+        p-label="Spacing"
+        [p-options]="typeSpacing"
+      >
+      </po-radio-group>
+    </div>
+
+    <div class="po-row">
+      <po-checkbox-group
+        class="po-lg-12"
+        name="selection"
+        [(ngModel)]="selection"
+        p-columns="4"
+        p-help="To enable 'hide select all' and 'single select' check 'selectable'."
+        p-label="Selection"
+        [p-options]="selectionOptions"
+        (p-change)="changeSelectionOptions()"
+      >
+      </po-checkbox-group>
+
+      <po-radio-group
+        class="po-md-12"
+        name="filterMode"
+        [(ngModel)]="filterType"
+        p-columns="4"
+        p-label="Filter mode"
+        [p-options]="filterModeOptions"
+      >
+      </po-radio-group>
+
+      <po-radio-group
+        class="po-md-12"
+        name="size"
+        [(ngModel)]="componentsSize"
+        p-columns="4"
+        p-label="Components size"
+        p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+        [p-options]="componentsSizeOptions"
+      >
+      </po-radio-group>
+    </div>
+
+    <div class="po-row">
+      <po-input
+        class="po-md-12 po-lg-6"
+        name="literals"
+        [(ngModel)]="literals"
+        p-help='Ex.: {"noData": "Sem dados a serem exibidos", "noColumns": "Colunas não definidas"}'
+        p-label="Literals"
+        (p-change)="changeLiterals()"
+      >
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="filteredColumns"
+        [(ngModel)]="filteredColumns"
+        p-help='Ex.: "text, time"'
+        p-label="Filter Columns"
+        (p-change)="changeFilteredColumns()"
+      >
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    </div>
+  </form>
+
+  <po-modal p-click-out="true" p-size="sm" p-title="PO Table">
+    <po-info p-label="Chosen Item:" [p-value]="currentItem"> </po-info>
+  </po-modal>
+</po-page-default>
