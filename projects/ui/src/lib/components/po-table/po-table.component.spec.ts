@@ -2055,25 +2055,90 @@ describe('PoTableComponent:', () => {
         expect(result).toBe(expectedValue);
       });
 
-      it('inverseOfTranslation: should return the correct value of inverseOfTranslation', () => {
-        const mockRenderedContentOffset = 10;
+      it('configureVirtualScrollOverflow: should apply inline styles to viewport element', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        const mockContentWrapper = document.createElement('div');
+        mockContentWrapper.classList.add('cdk-virtual-scroll-content-wrapper');
+        mockViewportEl.appendChild(mockContentWrapper);
 
-        component.viewPort = { _renderedContentOffset: mockRenderedContentOffset } as any;
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
 
-        const resultado = component.inverseOfTranslation;
-        expect(resultado).toEqual('-10px');
+        component['configureVirtualScrollOverflow']();
+
+        expect(mockViewportEl.style.overflowX).toBe('hidden');
+        expect(mockViewportEl.style.overflowY).toBe('auto');
+        expect(mockContentWrapper.style.overflow).toBe('visible');
+        expect(mockContentWrapper.style.minWidth).toBe('100%');
+        expect(component['virtualScrollOverflowConfigured']).toBe(true);
       });
 
-      it('inverseOfTranslation: should return "-0px" if viewPort or _renderedContentOffset are not set', () => {
-        component.viewPort = null;
+      it('configureVirtualScrollOverflow: should not apply styles when tableVirtualScroll is not available', () => {
+        component.tableVirtualScroll = null;
+        component['virtualScrollOverflowConfigured'] = false;
 
-        const resultado1 = component.inverseOfTranslation;
-        expect(resultado1).toEqual('-0px');
+        component['configureVirtualScrollOverflow']();
 
-        component.viewPort = { _renderedContentOffset: null } as any;
+        expect(component['virtualScrollOverflowConfigured']).toBe(false);
+      });
 
-        const resultado2 = component.inverseOfTranslation;
-        expect(resultado2).toEqual('-0px');
+      it('syncColumnWidths: should apply table-layout fixed and sync widths via renderer', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockTh.style.width = '100px';
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTd = document.createElement('td');
+        mockTbody.appendChild(mockTd);
+        mockBodyTable.appendChild(mockTbody);
+
+        document.body.appendChild(mockHeaderTable);
+        document.body.appendChild(mockBodyTable);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        component['syncColumnWidths']();
+
+        expect(mockHeaderTable.style.tableLayout).toBe('fixed');
+        expect(mockBodyTable.style.tableLayout).toBe('fixed');
+
+        document.body.removeChild(mockHeaderTable);
+        document.body.removeChild(mockBodyTable);
+      });
+
+      it('syncColumnWidths: should not apply styles when header or body table is not available', () => {
+        component.headerTableElement = null;
+        component.bodyTableElement = null;
+
+        expect(() => component['syncColumnWidths']()).not.toThrow();
+      });
+
+      it('ngAfterViewChecked: should call configureVirtualScrollOverflow when virtualScroll is active and not yet configured', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.virtualScroll = true;
+        component['virtualScrollOverflowConfigured'] = false;
+
+        spyOn<any>(component, 'configureVirtualScrollOverflow');
+
+        component.ngAfterViewChecked();
+
+        expect(component['configureVirtualScrollOverflow']).toHaveBeenCalled();
+      });
+
+      it('ngAfterViewChecked: should not call configureVirtualScrollOverflow when already configured', () => {
+        component.virtualScroll = true;
+        component['virtualScrollOverflowConfigured'] = true;
+
+        spyOn<any>(component, 'configureVirtualScrollOverflow');
+
+        component.ngAfterViewChecked();
+
+        expect(component['configureVirtualScrollOverflow']).not.toHaveBeenCalled();
       });
 
       it('should update filteredItems on onFilteredItemsChange call', () => {

@@ -3,6 +3,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { DecimalPipe } from '@angular/common';
 import {
+  AfterViewChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -100,12 +101,16 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
   providers: [PoDateService, PoTableService],
   standalone: false
 })
-export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
+export class PoTableComponent
+  extends PoTableBaseComponent
+  implements AfterViewChecked, AfterViewInit, DoCheck, OnDestroy, OnInit
+{
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
   @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
 
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
+  @ViewChild('virtualScrollWrapper', { read: ElementRef, static: false }) virtualScrollWrapper: ElementRef;
   @ViewChild('headerTable', { read: ElementRef, static: false }) headerTableElement: ElementRef;
   @ViewChild('bodyTable', { read: ElementRef, static: false }) bodyTableElement: ElementRef;
 
@@ -171,8 +176,9 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
   private subscriptionService: Subscription = new Subscription();
-  private columnWidths: string[] = [];
+  private columnWidths: Array<string> = [];
   private resizeObserver: ResizeObserver;
+  private virtualScrollOverflowConfigured = false;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -200,7 +206,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
-    renderer: Renderer2,
+    private renderer: Renderer2,
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
@@ -287,16 +293,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.draggable;
   }
 
-  public get inverseOfTranslation(): string {
-    if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
-      return '-0px';
-    }
-
-    const offset = this.viewPort['_renderedContentOffset'];
-
-    return `-${offset}px`;
-  }
-
   ngOnInit() {
     this.idRadio = `po-radio-${uuid()}`;
   }
@@ -315,6 +311,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.applyFixedColumns();
     this.syncHeaderTableWidth();
     this.setupColumnWidthSync();
+    this.configureVirtualScrollOverflow();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.virtualScroll && !this.virtualScrollOverflowConfigured && this.tableVirtualScroll?.nativeElement) {
+      this.configureVirtualScrollOverflow();
+    }
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -1000,18 +1003,37 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   /**
+   * Configura o overflow do CDK virtual scroll viewport via Renderer2.
+   * Estilos inline têm prioridade sobre CSS do CDK, dispensando !important.
+   */
+  private configureVirtualScrollOverflow(): void {
+    if (!this.tableVirtualScroll?.nativeElement) return;
+
+    const viewportEl = this.tableVirtualScroll.nativeElement;
+
+    this.renderer.setStyle(viewportEl, 'overflow-x', 'hidden');
+    this.renderer.setStyle(viewportEl, 'overflow-y', 'auto');
+
+    const contentWrapper = viewportEl.querySelector('.cdk-virtual-scroll-content-wrapper');
+    if (contentWrapper) {
+      this.renderer.setStyle(contentWrapper, 'overflow', 'visible');
+      this.renderer.setStyle(contentWrapper, 'min-width', '100%');
+    }
+
+    this.virtualScrollOverflowConfigured = true;
+  }
+
+  /**
    * Lê as larguras computadas das colunas do <tbody> e aplica no <thead>.
    * Utiliza ResizeObserver para reagir a mudanças de tamanho.
    */
   private setupColumnWidthSync(): void {
     if (!this.virtualScroll) return;
 
-    // Observer para detectar mudanças de largura na tabela do body
     this.resizeObserver = new ResizeObserver(() => {
       this.syncColumnWidths();
     });
 
-    // Observa o viewport do CDK para detectar quando novas linhas são renderizadas
     const viewportEl = this.tableVirtualScroll?.nativeElement;
     if (viewportEl) {
       this.resizeObserver.observe(viewportEl);
@@ -1019,23 +1041,22 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   private syncColumnWidths(): void {
-    if (!this.bodyTableElement?.nativeElement || !this.headerTableElement?.nativeElement) return;
+    if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
-    // Pega a primeira linha visível do body para ler as larguras computadas
-    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
-    if (!bodyRow) return;
+    const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
+    const bodyCells = this.bodyTableElement.nativeElement.querySelectorAll('tbody:first-child td');
 
-    const bodyCells = bodyRow.querySelectorAll('td');
-    const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead tr th');
+    if (!headerCells.length || !bodyCells.length) return;
 
-    if (bodyCells.length !== headerCells.length) return;
+    this.renderer.setStyle(this.headerTableElement.nativeElement, 'table-layout', 'fixed');
+    this.renderer.setStyle(this.bodyTableElement.nativeElement, 'table-layout', 'fixed');
 
-    bodyCells.forEach((td: HTMLElement, index: number) => {
-      const computedWidth = td.getBoundingClientRect().width + 'px';
-      const th = headerCells[index] as HTMLElement;
-      th.style.width = computedWidth;
-      th.style.minWidth = computedWidth;
-      th.style.maxWidth = computedWidth;
+    Array.from(headerCells).forEach((th: HTMLElement, index: number) => {
+      const width = th.getBoundingClientRect().width;
+      if (bodyCells[index]) {
+        this.renderer.setStyle(th, 'width', `${width}px`);
+        this.renderer.setStyle(bodyCells[index] as HTMLElement, 'width', `${width}px`);
+      }
     });
   }
 
