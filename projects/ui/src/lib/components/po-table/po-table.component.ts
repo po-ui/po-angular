@@ -111,7 +111,6 @@ export class PoTableComponent
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
 
   @ViewChild('virtualScrollWrapper', { read: ElementRef, static: false }) virtualScrollWrapper: ElementRef;
-  @ViewChild('headerScrollContainer', { read: ElementRef, static: false }) headerScrollContainer: ElementRef;
   @ViewChild('headerTable', { read: ElementRef, static: false }) headerTableElement: ElementRef;
   @ViewChild('bodyTable', { read: ElementRef, static: false }) bodyTableElement: ElementRef;
 
@@ -179,7 +178,6 @@ export class PoTableComponent
   private subscriptionService: Subscription = new Subscription();
   private columnWidths: Array<string> = [];
   private resizeObserver: ResizeObserver;
-  private scrollSyncListener: (() => void) | null = null;
   private virtualScrollOverflowConfigured = false;
 
   private clickListener: () => void;
@@ -359,10 +357,6 @@ export class PoTableComponent
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
     this.resizeObserver?.disconnect();
-    if (this.scrollSyncListener) {
-      this.scrollSyncListener();
-      this.scrollSyncListener = null;
-    }
   }
 
   /**
@@ -1013,7 +1007,6 @@ export class PoTableComponent
    * O viewport mantém overflow: auto (padrão CDK) para gerenciar ambos os eixos.
    * O content wrapper interno tem contain/overflow ajustados para que
    * position: sticky funcione relativo ao viewport.
-   * O header sincroniza o scrollLeft via listener de scroll.
    */
   private configureVirtualScrollOverflow(): void {
     if (!this.tableVirtualScroll?.nativeElement) return;
@@ -1025,14 +1018,6 @@ export class PoTableComponent
       this.renderer.setStyle(contentWrapper, 'contain', 'none');
       this.renderer.setStyle(contentWrapper, 'overflow', 'visible');
       this.renderer.setStyle(contentWrapper, 'min-width', '100%');
-    }
-
-    if (!this.scrollSyncListener) {
-      this.scrollSyncListener = this.renderer.listen(viewportEl, 'scroll', () => {
-        if (this.headerScrollContainer?.nativeElement) {
-          this.headerScrollContainer.nativeElement.scrollLeft = viewportEl.scrollLeft;
-        }
-      });
     }
 
     this.virtualScrollOverflowConfigured = true;
