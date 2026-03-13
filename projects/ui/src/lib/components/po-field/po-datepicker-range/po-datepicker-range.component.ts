@@ -20,7 +20,7 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
-import { replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
+import { isMobile, replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoHelperComponent } from '../../po-helper';
@@ -506,7 +506,16 @@ export class PoDatepickerRangeComponent
     );
   }
 
+  /* istanbul ignore next */
+  verifyMobile() {
+    return isMobile();
+  }
+
   setCalendarPosition() {
+    if (this.verifyMobile()) {
+      return;
+    }
+
     if (this?.calendarPicker.nativeElement && this.isCalendarVisible) {
       requestAnimationFrame(() => {
         const scrollHeight =

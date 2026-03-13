@@ -149,9 +149,18 @@
 }
 
 <ng-template #sharedCalendarContent>
-  <div #calendarPicker class="po-calendar-range-picker" [hidden]="!isCalendarVisible">
+  <div
+    #calendarPicker
+    [class.po-calendar-range-picker]="!verifyMobile()"
+    [class.po-datepicker-range-calendar-mobile-container]="verifyMobile()"
+    [hidden]="!isCalendarVisible"
+  >
+    @if (verifyMobile()) {
+      <div class="po-datepicker-calendar-overlay"></div>
+    }
     <po-calendar
       p-mode="range"
+      [class.po-datepicker-calendar-mobile]="verifyMobile()"
       [ngModel]="dateRange"
       [p-max-date]="maxDate"
       [p-min-date]="minDate"

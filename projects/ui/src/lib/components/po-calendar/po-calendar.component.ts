@@ -83,20 +83,23 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     }
 
     const hasCustomPresets = this.rangePresetOptions !== undefined && this.rangePresetOptions.length > 0;
+    let defaultPresets: Array<PoCalendarRangePreset> = [];
 
-    if (this.rangePresets && hasCustomPresets) {
-      return [...PO_CALENDAR_DEFAULT_RANGE_PRESETS, ...this.rangePresetOptions];
+    if (Array.isArray(this.rangePresets)) {
+      const allowedKeys = new Set(this.rangePresets.map(k => k.toLowerCase()));
+      allowedKeys.add('today');
+      defaultPresets = PO_CALENDAR_DEFAULT_RANGE_PRESETS.filter(p => allowedKeys.has(p.label.toLowerCase()));
+    } else if (this.rangePresets) {
+      defaultPresets = [...PO_CALENDAR_DEFAULT_RANGE_PRESETS];
     }
 
-    if (this.rangePresets) {
-      return PO_CALENDAR_DEFAULT_RANGE_PRESETS;
+    const combined = [...defaultPresets, ...(hasCustomPresets ? this.rangePresetOptions : [])];
+
+    if (combined.length === 0) {
+      return [];
     }
 
-    if (hasCustomPresets) {
-      return this.rangePresetOptions;
-    }
-
-    return [];
+    return this.sortPresetsByTemporality(combined);
   }
 
   ngOnInit() {
@@ -208,6 +211,32 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.updateModel(newModel);
     this.change.emit(newModel);
     this.changeDetector.markForCheck();
+  }
+
+  private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
+    const today = new Date();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+
+    const future: Array<PoCalendarRangePreset> = [];
+    const present: Array<PoCalendarRangePreset> = [];
+    const past: Array<PoCalendarRangePreset> = [];
+
+    for (const preset of presets) {
+      const range = preset.dateRange(today);
+      const start = new Date(range.start);
+      const end = new Date(range.end);
+
+      if (start > todayEnd) {
+        future.push(preset);
+      } else if (end < todayStart) {
+        past.push(preset);
+      } else {
+        present.push(preset);
+      }
+    }
+
+    return [...future, ...present, ...past];
   }
 
   private clampDate(date: Date, min?: Date, max?: Date): Date {
