@@ -171,6 +171,12 @@ export class PoCalendarLangService {
   };
 
   private presetLabels: { [key: string]: { pt: string; en: string; es: string; ru: string } } = {
+    tomorrow: {
+      pt: 'Amanhã',
+      en: 'Tomorrow',
+      es: 'Mañana',
+      ru: 'Завтра'
+    },
     today: {
       pt: 'Hoje',
       en: 'Today',
@@ -184,34 +190,34 @@ export class PoCalendarLangService {
       ru: 'Вчера'
     },
     '7days': {
-      pt: '7 dias',
-      en: '7 days',
-      es: '7 días',
-      ru: '7 дней'
+      pt: 'Últimos 7 dias',
+      en: 'Last 7 days',
+      es: 'Últimos 7 días',
+      ru: 'Последние 7 дней'
     },
     '14days': {
-      pt: '14 dias',
-      en: '14 days',
-      es: '14 días',
-      ru: '14 дней'
+      pt: 'Últimos 14 dias',
+      en: 'Last 14 days',
+      es: 'Últimos 14 días',
+      ru: 'Последние 14 дней'
     },
     '30days': {
-      pt: '30 dias',
-      en: '30 days',
-      es: '30 días',
-      ru: '30 дней'
+      pt: 'Últimos 30 dias',
+      en: 'Last 30 days',
+      es: 'Últimos 30 días',
+      ru: 'Последние 30 дней'
     },
     '3months': {
-      pt: '3 meses',
-      en: '3 months',
-      es: '3 meses',
-      ru: '3 месяца'
+      pt: 'Últimos 3 meses',
+      en: 'Last 3 months',
+      es: 'Últimos 3 meses',
+      ru: 'Последние 3 месяцев'
     },
     '6months': {
-      pt: '6 meses',
-      en: '6 months',
-      es: '6 meses',
-      ru: '6 месяцев'
+      pt: 'Últimos 6 meses',
+      en: 'Last 6 months',
+      es: 'Últimos 6 meses',
+      ru: 'Последние 6 месяцев'
     }
   };
 

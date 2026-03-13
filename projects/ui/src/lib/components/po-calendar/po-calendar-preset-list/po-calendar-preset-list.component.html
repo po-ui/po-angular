@@ -4,12 +4,12 @@
       class="po-calendar-preset-item"
       [class.po-calendar-preset-item-selected]="isSelected(preset)"
       p-kind="tertiary"
-      [p-size]="size"
       role="option"
+      [p-size]="size"
+      [p-label]="getDisplayLabel(preset)"
       [attr.aria-selected]="isSelected(preset)"
       (click)="onPresetClick(preset)"
       (keydown)="onKeydown($event, i)"
-      [p-label]="getDisplayLabel(preset)"
     >
     </po-button>
   }

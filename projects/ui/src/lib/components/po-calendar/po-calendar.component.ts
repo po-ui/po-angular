@@ -82,18 +82,18 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return [];
     }
 
-    const hasCustomPresets = this.pRangePresetOptions !== undefined && this.pRangePresetOptions.length > 0;
+    const hasCustomPresets = this.rangePresetOptions !== undefined && this.rangePresetOptions.length > 0;
 
-    if (this.pRangePresets && hasCustomPresets) {
-      return [...PO_CALENDAR_DEFAULT_RANGE_PRESETS, ...this.pRangePresetOptions];
+    if (this.rangePresets && hasCustomPresets) {
+      return [...PO_CALENDAR_DEFAULT_RANGE_PRESETS, ...this.rangePresetOptions];
     }
 
-    if (this.pRangePresets) {
+    if (this.rangePresets) {
       return PO_CALENDAR_DEFAULT_RANGE_PRESETS;
     }
 
     if (hasCustomPresets) {
-      return this.pRangePresetOptions;
+      return this.rangePresetOptions;
     }
 
     return [];

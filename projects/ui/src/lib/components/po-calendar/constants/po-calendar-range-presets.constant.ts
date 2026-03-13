@@ -14,6 +14,17 @@ function endOfDay(date: Date): Date {
 
 export const PO_CALENDAR_DEFAULT_RANGE_PRESETS: Array<PoCalendarRangePreset> = [
   {
+    label: 'tomorrow',
+    dateRange: (today: Date) => {
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      return {
+        start: startOfDay(tomorrow),
+        end: endOfDay(tomorrow)
+      };
+    }
+  },
+  {
     label: 'today',
     dateRange: (today: Date) => ({
       start: startOfDay(today),

@@ -258,7 +258,7 @@ export class PoCalendarBaseComponent {
    *
    * @default `false`
    */
-  @Input('p-range-presets') pRangePresets: boolean = false;
+  @Input('p-range-presets') rangePresets: boolean = false;
 
   /**
    * @optional
@@ -271,7 +271,7 @@ export class PoCalendarBaseComponent {
    * Quando informado junto com `p-range-presets` habilitado, os presets customizados são exibidos após os presets padrão.
    * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
    */
-  @Input('p-range-preset-options') pRangePresetOptions?: Array<PoCalendarRangePreset>;
+  @Input('p-range-preset-options') rangePresetOptions?: Array<PoCalendarRangePreset>;
 
   /**
    * @optional
