@@ -2081,18 +2081,19 @@ describe('PoTableComponent:', () => {
         expect(component['virtualScrollOverflowConfigured']).toBe(false);
       });
 
-      it('syncColumnWidths: should apply table-layout fixed and sync widths via renderer', () => {
+      it('syncColumnWidths: should sync widths using MAX of header and body via renderer', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
-        mockTh.style.width = '100px';
         mockThead.appendChild(mockTh);
         mockHeaderTable.appendChild(mockThead);
 
         const mockBodyTable = document.createElement('table');
         const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
         const mockTd = document.createElement('td');
-        mockTbody.appendChild(mockTd);
+        mockTr.appendChild(mockTd);
+        mockTbody.appendChild(mockTr);
         mockBodyTable.appendChild(mockTbody);
 
         document.body.appendChild(mockHeaderTable);
@@ -2103,8 +2104,10 @@ describe('PoTableComponent:', () => {
 
         component['syncColumnWidths']();
 
-        expect(mockHeaderTable.style.tableLayout).toBe('fixed');
-        expect(mockBodyTable.style.tableLayout).toBe('fixed');
+        expect(mockTh.style.width).toBeTruthy();
+        expect(mockTh.style.minWidth).toBeTruthy();
+        expect(mockTd.style.width).toBeTruthy();
+        expect(mockTd.style.minWidth).toBeTruthy();
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);

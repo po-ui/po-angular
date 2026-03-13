@@ -1044,20 +1044,24 @@ export class PoTableComponent
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
     const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
-    const bodyCells = this.bodyTableElement.nativeElement.querySelectorAll('tbody:first-child td');
+    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
+    if (!bodyRow) return;
 
+    const bodyCells = bodyRow.querySelectorAll('td');
     if (!headerCells.length || !bodyCells.length) return;
 
-    this.renderer.setStyle(this.headerTableElement.nativeElement, 'table-layout', 'fixed');
-    this.renderer.setStyle(this.bodyTableElement.nativeElement, 'table-layout', 'fixed');
+    const count = Math.min(headerCells.length, bodyCells.length);
 
-    Array.from(headerCells).forEach((th: HTMLElement, index: number) => {
-      const width = th.getBoundingClientRect().width;
-      if (bodyCells[index]) {
-        this.renderer.setStyle(th, 'width', `${width}px`);
-        this.renderer.setStyle(bodyCells[index] as HTMLElement, 'width', `${width}px`);
-      }
-    });
+    for (let i = 0; i < count; i++) {
+      const thWidth = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
+      const tdWidth = (bodyCells[i] as HTMLElement).getBoundingClientRect().width;
+      const maxWidth = `${Math.max(thWidth, tdWidth)}px`;
+
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', maxWidth);
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', maxWidth);
+      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'width', maxWidth);
+      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'minWidth', maxWidth);
+    }
   }
 
   private syncHeaderTableWidth(): void {
