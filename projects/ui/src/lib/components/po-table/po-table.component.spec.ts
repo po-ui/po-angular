@@ -2081,8 +2081,7 @@ describe('PoTableComponent:', () => {
 
         component['configureVirtualScrollOverflow']();
 
-        expect(mockContentWrapper.style.contain).toBe('none');
-        expect(mockContentWrapper.style.overflow).toBe('visible');
+        expect(mockContentWrapper.style.contain).toBe('layout style');
         expect(mockContentWrapper.style.minWidth).toBe('100%');
         expect(component['scrollSyncListener']).toBeTruthy();
         expect(component['virtualScrollOverflowConfigured']).toBe(true);

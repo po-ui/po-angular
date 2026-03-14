@@ -342,12 +342,6 @@ export class PoTableComponent
       this.visibleElement = true;
     }
 
-    // Sincroniza larguras quando virtualScroll está ativo
-    if (this.virtualScroll && this.hasItems) {
-      this.syncHeaderTableWidth();
-      this.syncColumnWidths();
-    }
-
     if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
       this.debounceResize();
       this.checkInfiniteScroll();
@@ -1011,9 +1005,8 @@ export class PoTableComponent
 
   /**
    * Configura o overflow do CDK virtual scroll viewport via Renderer2.
-   * O viewport mantém overflow: auto (padrão CDK) para gerenciar ambos os eixos.
-   * O content wrapper interno tem contain/overflow ajustados para que
-   * position: sticky funcione relativo ao viewport.
+   * Remove apenas o 'paint' do contain do content wrapper (contain: layout style)
+   * para permitir que position: sticky funcione sem quebrar a otimização do CDK.
    * O header sincroniza o scrollLeft via listener de scroll.
    */
   private configureVirtualScrollOverflow(): void {
@@ -1023,8 +1016,7 @@ export class PoTableComponent
 
     const contentWrapper = viewportEl.querySelector('.cdk-virtual-scroll-content-wrapper');
     if (contentWrapper) {
-      this.renderer.setStyle(contentWrapper, 'contain', 'none');
-      this.renderer.setStyle(contentWrapper, 'overflow', 'visible');
+      this.renderer.setStyle(contentWrapper, 'contain', 'layout style');
       this.renderer.setStyle(contentWrapper, 'min-width', '100%');
     }
 
@@ -1110,7 +1102,7 @@ export class PoTableComponent
       const newWidth = this.headerTableElement.nativeElement.scrollWidth;
       if (newWidth !== this.headerTableScrollWidth) {
         this.headerTableScrollWidth = newWidth;
-        this.changeDetector.detectChanges();
+        this.changeDetector.markForCheck();
       }
     }
   }
