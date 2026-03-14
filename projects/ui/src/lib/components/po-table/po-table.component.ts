@@ -692,6 +692,7 @@ export class PoTableComponent
 
   drop(event: CdkDragDrop<Array<string>>) {
     if (!this.mainColumns[event.currentIndex].fixed) {
+      this.clearColumnWidths();
       moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
 
       if (this.hideColumnsManager === false) {
@@ -1055,6 +1056,22 @@ export class PoTableComponent
     }
   }
 
+  private clearColumnWidths(): void {
+    if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
+
+    const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
+    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
+    const bodyCells = bodyRow ? bodyRow.querySelectorAll('td') : [];
+    const count = Math.min(headerCells.length, bodyCells.length);
+
+    for (let i = 0; i < count; i++) {
+      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
+      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
+      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
+      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
+    }
+  }
+
   private syncColumnWidths(): void {
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
@@ -1067,6 +1084,15 @@ export class PoTableComponent
 
     const count = Math.min(headerCells.length, bodyCells.length);
 
+    // Limpar estilos inline anteriores para permitir que o browser calcule larguras naturais
+    for (let i = 0; i < count; i++) {
+      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
+      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
+      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
+      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
+    }
+
+    // Medir larguras naturais e aplicar o MAX entre header e body
     for (let i = 0; i < count; i++) {
       const thWidth = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
       const tdWidth = (bodyCells[i] as HTMLElement).getBoundingClientRect().width;
