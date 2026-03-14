@@ -886,6 +886,20 @@ describe('PoTableComponent:', () => {
       expect(component.onVisibleColumnsChange).toHaveBeenCalledWith(component.newOrderColumns);
     });
 
+    it('drop: should call clearColumnWidths before reordering columns', () => {
+      const event = {
+        previousIndex: 0,
+        currentIndex: 1
+      };
+
+      component.mainColumns = [{ property: 'column1' }, { property: 'column2' }];
+      const clearSpy = spyOn<any>(component, 'clearColumnWidths');
+
+      component.drop(event as any);
+
+      expect(clearSpy).toHaveBeenCalled();
+    });
+
     it('drop: should update mainColumns when `hideColumnsManager` is true', () => {
       const previousIndex = 0;
       const currentIndex = 1;
@@ -2122,6 +2136,126 @@ describe('PoTableComponent:', () => {
         expect(() => component['syncColumnWidths']()).not.toThrow();
       });
 
+      it('syncColumnWidths: should not apply styles when body has no rows', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        mockBodyTable.appendChild(mockTbody);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        expect(() => component['syncColumnWidths']()).not.toThrow();
+      });
+
+      it('syncColumnWidths: should not apply styles when cells are empty', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        expect(() => component['syncColumnWidths']()).not.toThrow();
+      });
+
+      it('syncColumnWidths: should clear inline widths before recalculating', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockTh.style.width = '500px';
+        mockTh.style.minWidth = '500px';
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        const mockTd = document.createElement('td');
+        mockTd.style.width = '500px';
+        mockTd.style.minWidth = '500px';
+        mockTr.appendChild(mockTd);
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        document.body.appendChild(mockHeaderTable);
+        document.body.appendChild(mockBodyTable);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        const removeStyleSpy = spyOn(component['renderer'], 'removeStyle').and.callThrough();
+
+        component['syncColumnWidths']();
+
+        expect(removeStyleSpy).toHaveBeenCalled();
+
+        document.body.removeChild(mockHeaderTable);
+        document.body.removeChild(mockBodyTable);
+      });
+
+      it('clearColumnWidths: should remove inline width and minWidth from header and body cells', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockTh.style.width = '200px';
+        mockTh.style.minWidth = '200px';
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        const mockTd = document.createElement('td');
+        mockTd.style.width = '200px';
+        mockTd.style.minWidth = '200px';
+        mockTr.appendChild(mockTd);
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        component['clearColumnWidths']();
+
+        expect(mockTh.style.width).toBe('');
+        expect(mockTh.style.minWidth).toBe('');
+        expect(mockTd.style.width).toBe('');
+        expect(mockTd.style.minWidth).toBe('');
+      });
+
+      it('clearColumnWidths: should not fail when tables are not available', () => {
+        component.headerTableElement = null;
+        component.bodyTableElement = null;
+
+        expect(() => component['clearColumnWidths']()).not.toThrow();
+      });
+
+      it('clearColumnWidths: should not fail when body has no rows', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        expect(() => component['clearColumnWidths']()).not.toThrow();
+      });
       it('ngAfterViewChecked: should call configureVirtualScrollOverflow when virtualScroll is active and not yet configured', () => {
         const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
         component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
