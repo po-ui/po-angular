@@ -179,12 +179,8 @@ export class PoTableComponent
   private subscriptionService: Subscription = new Subscription();
   private columnWidths: Array<string> = [];
   private resizeObserver: ResizeObserver;
-  private renderedRangeSubscription: Subscription;
   private scrollSyncListener: (() => void) | null = null;
-  private containerScrollSyncListener: (() => void) | null = null;
   private virtualScrollOverflowConfigured = false;
-  private maxColumnWidths: Array<number> = [];
-  private syncColumnWidthsTimer: ReturnType<typeof setTimeout> | null = null;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -318,12 +314,6 @@ export class PoTableComponent
     this.syncHeaderTableWidth();
     this.setupColumnWidthSync();
     this.configureVirtualScrollOverflow();
-
-    if (this.virtualScroll && this.viewPort) {
-      this.renderedRangeSubscription = this.viewPort.renderedRangeStream.subscribe(() => {
-        this.debounceSyncColumnWidths();
-      });
-    }
   }
 
   ngAfterViewChecked(): void {
@@ -352,6 +342,12 @@ export class PoTableComponent
       this.visibleElement = true;
     }
 
+    // Sincroniza larguras quando virtualScroll está ativo
+    if (this.virtualScroll && this.hasItems) {
+      this.syncHeaderTableWidth();
+      this.syncColumnWidths();
+    }
+
     if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
       this.debounceResize();
       this.checkInfiniteScroll();
@@ -362,19 +358,10 @@ export class PoTableComponent
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
-    this.renderedRangeSubscription?.unsubscribe();
     this.resizeObserver?.disconnect();
     if (this.scrollSyncListener) {
       this.scrollSyncListener();
       this.scrollSyncListener = null;
-    }
-    if (this.containerScrollSyncListener) {
-      this.containerScrollSyncListener();
-      this.containerScrollSyncListener = null;
-    }
-    if (this.syncColumnWidthsTimer) {
-      clearTimeout(this.syncColumnWidthsTimer);
-      this.syncColumnWidthsTimer = null;
     }
   }
 
@@ -623,10 +610,6 @@ export class PoTableComponent
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
     this.changeDetector.detectChanges();
-    if (this.virtualScroll) {
-      this.clearColumnWidths();
-      this.debounceSyncColumnWidths();
-    }
   }
 
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
@@ -709,7 +692,6 @@ export class PoTableComponent
 
   drop(event: CdkDragDrop<Array<string>>) {
     if (!this.mainColumns[event.currentIndex].fixed) {
-      this.clearColumnWidths();
       moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
 
       if (this.hideColumnsManager === false) {
@@ -843,11 +825,6 @@ export class PoTableComponent
 
     if (changesItems && !this.hasColumns && this.hasItems) {
       this.columns = this.getDefaultColumns(this.items[0]);
-    }
-
-    if (changesItems && this.virtualScroll) {
-      this.clearColumnWidths();
-      this.debounceSyncColumnWidths();
     }
   }
 
@@ -1033,8 +1010,9 @@ export class PoTableComponent
 
   /**
    * Configura o overflow do CDK virtual scroll viewport via Renderer2.
-   * Remove apenas o 'paint' do contain do content wrapper (contain: layout style)
-   * para permitir que position: sticky funcione sem quebrar a otimização do CDK.
+   * O viewport mantém overflow: auto (padrão CDK) para gerenciar ambos os eixos.
+   * O content wrapper interno tem contain/overflow ajustados para que
+   * position: sticky funcione relativo ao viewport.
    * O header sincroniza o scrollLeft via listener de scroll.
    */
   private configureVirtualScrollOverflow(): void {
@@ -1044,7 +1022,8 @@ export class PoTableComponent
 
     const contentWrapper = viewportEl.querySelector('.cdk-virtual-scroll-content-wrapper');
     if (contentWrapper) {
-      this.renderer.setStyle(contentWrapper, 'contain', 'layout style');
+      this.renderer.setStyle(contentWrapper, 'contain', 'none');
+      this.renderer.setStyle(contentWrapper, 'overflow', 'visible');
       this.renderer.setStyle(contentWrapper, 'min-width', '100%');
     }
 
@@ -1053,19 +1032,6 @@ export class PoTableComponent
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = viewportEl.scrollLeft;
         }
-        this.debounceSyncColumnWidths();
-      });
-    }
-
-    // O scroll horizontal real acontece no container .po-table-container-fixed-inner (pai do viewport).
-    // Precisamos sincronizar o scrollLeft do header com esse container também.
-    const fixedInnerContainer = viewportEl.closest('.po-table-container-fixed-inner');
-    if (fixedInnerContainer && !this.containerScrollSyncListener) {
-      this.containerScrollSyncListener = this.renderer.listen(fixedInnerContainer, 'scroll', () => {
-        if (this.headerScrollContainer?.nativeElement) {
-          this.headerScrollContainer.nativeElement.scrollLeft = fixedInnerContainer.scrollLeft;
-        }
-        this.debounceSyncColumnWidths();
       });
     }
 
@@ -1089,129 +1055,28 @@ export class PoTableComponent
     }
   }
 
-  private clearColumnWidths(): void {
-    this.maxColumnWidths = [];
-
+  private syncColumnWidths(): void {
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
     const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
-    const bodyRows = this.bodyTableElement.nativeElement.querySelectorAll('tbody tr');
+    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
+    if (!bodyRow) return;
 
-    for (let i = 0; i < headerCells.length; i++) {
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
-    }
+    const bodyCells = bodyRow.querySelectorAll('td');
+    if (!headerCells.length || !bodyCells.length) return;
 
-    bodyRows.forEach((row: HTMLElement) => {
-      const cells = row.querySelectorAll('td');
-      cells.forEach((cell: HTMLElement) => {
-        this.renderer.removeStyle(cell, 'width');
-        this.renderer.removeStyle(cell, 'minWidth');
-      });
-    });
+    const count = Math.min(headerCells.length, bodyCells.length);
 
-    this.renderer.removeStyle(this.headerTableElement.nativeElement, 'table-layout');
-    this.renderer.removeStyle(this.headerTableElement.nativeElement, 'width');
-    this.renderer.removeStyle(this.bodyTableElement.nativeElement, 'table-layout');
-    this.renderer.removeStyle(this.bodyTableElement.nativeElement, 'width');
-  }
-
-  private debounceSyncColumnWidths(): void {
-    if (this.syncColumnWidthsTimer) {
-      clearTimeout(this.syncColumnWidthsTimer);
-    }
-    this.syncColumnWidthsTimer = setTimeout(() => {
-      this.syncColumnWidths();
-      this.syncColumnWidthsTimer = null;
-    }, 100);
-  }
-
-  private syncColumnWidths(): void {
-    if (this.applyFixedColumns()) return;
-    if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
-
-    const headerTable = this.headerTableElement.nativeElement;
-    const bodyTable = this.bodyTableElement.nativeElement;
-    const headerCells = headerTable.querySelectorAll('thead th');
-    const bodyRows = bodyTable.querySelectorAll('tbody tr');
-    if (!bodyRows.length || !headerCells.length) return;
-
-    const firstRowCells = bodyRows[0].querySelectorAll('td');
-    if (!firstRowCells.length) return;
-
-    const count = Math.min(headerCells.length, firstRowCells.length);
-
-    // Inicializar acumulador se necessário
-    if (this.maxColumnWidths.length !== count) {
-      this.maxColumnWidths = new Array(count).fill(0);
-    }
-
-    // --- Medir body com max-content ---
-    // Remover inline widths das cells do body
-    bodyRows.forEach((row: HTMLElement) => {
-      const cells = row.querySelectorAll('td');
-      for (let i = 0; i < Math.min(cells.length, count); i++) {
-        this.renderer.removeStyle(cells[i] as HTMLElement, 'width');
-        this.renderer.removeStyle(cells[i] as HTMLElement, 'minWidth');
-      }
-    });
-    // Setar width: max-content e table-layout: auto na body table
-    this.renderer.setStyle(bodyTable, 'width', 'max-content');
-    this.renderer.setStyle(bodyTable, 'table-layout', 'auto');
-
-    // Medir largura natural de TODAS as linhas visíveis do body e acumular no MAX
-    bodyRows.forEach((row: HTMLElement) => {
-      const cells = row.querySelectorAll('td');
-      for (let i = 0; i < Math.min(cells.length, count); i++) {
-        const cellWidth = (cells[i] as HTMLElement).getBoundingClientRect().width;
-        if (cellWidth > this.maxColumnWidths[i]) {
-          this.maxColumnWidths[i] = cellWidth;
-        }
-      }
-    });
-
-    // Restaurar body table
-    this.renderer.removeStyle(bodyTable, 'width');
-    this.renderer.removeStyle(bodyTable, 'table-layout');
-
-    // --- Medir header com max-content ---
-    // Remover inline widths das cells do header
-    for (let i = 0; i < count; i++) {
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
-    }
-    // Setar width: max-content e table-layout: auto na header table
-    this.renderer.setStyle(headerTable, 'width', 'max-content');
-    this.renderer.setStyle(headerTable, 'table-layout', 'auto');
-
-    // Medir largura natural do header e acumular no MAX
     for (let i = 0; i < count; i++) {
       const thWidth = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
-      if (thWidth > this.maxColumnWidths[i]) {
-        this.maxColumnWidths[i] = thWidth;
-      }
+      const tdWidth = (bodyCells[i] as HTMLElement).getBoundingClientRect().width;
+      const maxWidth = `${Math.max(thWidth, tdWidth)}px`;
+
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', maxWidth);
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', maxWidth);
+      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'width', maxWidth);
+      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'minWidth', maxWidth);
     }
-
-    // Restaurar header table
-    this.renderer.removeStyle(headerTable, 'width');
-    this.renderer.removeStyle(headerTable, 'table-layout');
-
-    // Aplicar MAX acumulado em ambas as tabelas (width + minWidth)
-    for (let i = 0; i < count; i++) {
-      const width = `${this.maxColumnWidths[i]}px`;
-      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', width);
-      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', width);
-    }
-    bodyRows.forEach((row: HTMLElement) => {
-      const cells = row.querySelectorAll('td');
-      for (let i = 0; i < Math.min(cells.length, count); i++) {
-        this.renderer.setStyle(cells[i] as HTMLElement, 'width', `${this.maxColumnWidths[i]}px`);
-        this.renderer.setStyle(cells[i] as HTMLElement, 'minWidth', `${this.maxColumnWidths[i]}px`);
-      }
-    });
-
-    this.syncHeaderTableWidth();
-    this.changeDetector.markForCheck();
   }
 
   private syncHeaderTableWidth(): void {
@@ -1219,7 +1084,7 @@ export class PoTableComponent
       const newWidth = this.headerTableElement.nativeElement.scrollWidth;
       if (newWidth !== this.headerTableScrollWidth) {
         this.headerTableScrollWidth = newWidth;
-        this.changeDetector.markForCheck();
+        this.changeDetector.detectChanges();
       }
     }
   }
