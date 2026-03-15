@@ -2106,10 +2106,11 @@ describe('PoTableComponent:', () => {
         expect(setStyleSpy).not.toHaveBeenCalled();
       });
 
-      it('syncColumnWidths: should apply max-content temporarily and sync widths using MAX of header and body', () => {
+      it('syncColumnWidths: should apply max-content temporarily, sync widths and store computedColumnWidths', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
+        mockTh.classList.add('po-table-header-ellipsis');
         mockThead.appendChild(mockTh);
         mockHeaderTable.appendChild(mockThead);
 
@@ -2117,6 +2118,7 @@ describe('PoTableComponent:', () => {
         const mockTbody = document.createElement('tbody');
         const mockTr = document.createElement('tr');
         const mockTd = document.createElement('td');
+        mockTd.classList.add('p-element');
         mockTr.appendChild(mockTd);
         mockTbody.appendChild(mockTr);
         mockBodyTable.appendChild(mockTbody);
@@ -2148,6 +2150,10 @@ describe('PoTableComponent:', () => {
         expect(mockTh.style.minWidth).toBeTruthy();
         expect(mockTd.style.width).toBeTruthy();
         expect(mockTd.style.minWidth).toBeTruthy();
+
+        // Verifica que computedColumnWidths foi populado
+        expect(component.computedColumnWidths.length).toBe(1);
+        expect(component.computedColumnWidths[0]).toMatch(/^\d+(\.\d+)?px$/);
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);
@@ -2198,6 +2204,7 @@ describe('PoTableComponent:', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
+        mockTh.classList.add('po-table-header-ellipsis');
         mockTh.style.width = '500px';
         mockTh.style.minWidth = '500px';
         mockThead.appendChild(mockTh);
@@ -2207,6 +2214,7 @@ describe('PoTableComponent:', () => {
         const mockTbody = document.createElement('tbody');
         const mockTr = document.createElement('tr');
         const mockTd = document.createElement('td');
+        mockTd.classList.add('p-element');
         mockTd.style.width = '500px';
         mockTd.style.minWidth = '500px';
         mockTr.appendChild(mockTd);
@@ -2235,7 +2243,7 @@ describe('PoTableComponent:', () => {
         document.body.removeChild(mockBodyTable);
       });
 
-      it('clearColumnWidths: should remove inline width, minWidth and table-layout from header and body', () => {
+      it('clearColumnWidths: should remove inline width, minWidth and table-layout from header and body and reset computedColumnWidths', () => {
         const mockHeaderTable = document.createElement('table');
         mockHeaderTable.style.tableLayout = 'auto';
         mockHeaderTable.style.width = 'max-content';
@@ -2260,6 +2268,7 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        component.computedColumnWidths = ['200px'];
 
         component['clearColumnWidths']();
 
@@ -2271,6 +2280,7 @@ describe('PoTableComponent:', () => {
         expect(mockHeaderTable.style.width).toBe('');
         expect(mockBodyTable.style.tableLayout).toBe('');
         expect(mockBodyTable.style.width).toBe('');
+        expect(component.computedColumnWidths).toEqual([]);
       });
 
       it('clearColumnWidths: should not fail when tables are not available', () => {
@@ -2294,6 +2304,64 @@ describe('PoTableComponent:', () => {
 
         expect(() => component['clearColumnWidths']()).not.toThrow();
       });
+      it('drop: should schedule syncColumnWidths after clearing and reordering', (done) => {
+        const event = {
+          previousIndex: 0,
+          currentIndex: 1
+        };
+
+        component.mainColumns = [{ property: 'column1' }, { property: 'column2' }];
+        spyOn<any>(component, 'clearColumnWidths');
+        const syncSpy = spyOn<any>(component, 'syncColumnWidths');
+
+        component.drop(event as any);
+
+        expect(component['clearColumnWidths']).toHaveBeenCalled();
+        expect(syncSpy).not.toHaveBeenCalled();
+
+        setTimeout(() => {
+          expect(syncSpy).toHaveBeenCalled();
+          done();
+        });
+      });
+
+      it('ngDoCheck: should clear computedColumnWidths when columns change', () => {
+        component.computedColumnWidths = ['100px', '200px'];
+        component['lastColumnsKey'] = 'col1::col2::';
+        component.mainColumns = [{ property: 'col1' }, { property: 'col2' }, { property: 'col3' }];
+
+        component.ngDoCheck();
+
+        expect(component.computedColumnWidths).toEqual([]);
+      });
+
+      it('ngAfterViewChecked: should schedule syncColumnWidths when computedColumnWidths is empty and body has rows', (done) => {
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        component.virtualScroll = true;
+        component.items = [{ id: 1 }];
+        component.computedColumnWidths = [];
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        component['virtualScrollOverflowConfigured'] = true;
+        component['syncScheduled'] = false;
+        spyOn(component, 'applyFixedColumns').and.returnValue(false);
+        const syncSpy = spyOn<any>(component, 'syncColumnWidths');
+
+        component.ngAfterViewChecked();
+
+        expect(component['syncScheduled']).toBe(true);
+
+        setTimeout(() => {
+          expect(syncSpy).toHaveBeenCalled();
+          expect(component['syncScheduled']).toBe(false);
+          done();
+        });
+      });
+
       it('ngAfterViewChecked: should call configureVirtualScrollOverflow when virtualScroll is active and not yet configured', () => {
         const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
         component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;

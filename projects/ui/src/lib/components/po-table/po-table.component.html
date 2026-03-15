@@ -605,9 +605,9 @@
               @for (column of mainColumns; track trackBy(i); let i = $index) {
                 <th
                   class="po-table-header-ellipsis p-element po-frozen-column"
-                  [style.width]="applyFixedColumns() ? column.width : null"
-                  [style.max-width]="applyFixedColumns() ? column.width : null"
-                  [style.min-width]="applyFixedColumns() ? column.width : null"
+                  [style.width]="applyFixedColumns() ? column.width : computedColumnWidths[i]"
+                  [style.max-width]="applyFixedColumns() ? column.width : computedColumnWidths[i]"
+                  [style.min-width]="applyFixedColumns() ? column.width : computedColumnWidths[i]"
                   [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
                   [class.po-clickable]="(sort && column.sortable !== false) || hasService"
                   [ngClass]="{
@@ -642,9 +642,9 @@
               @for (column of mainColumns; track trackBy(i); let i = $index) {
                 <th
                   class="po-table-header-ellipsis p-element po-frozen-column"
-                  [style.width]="applyFixedColumns() ? column.width : null"
-                  [style.max-width]="applyFixedColumns() ? column.width : null"
-                  [style.min-width]="applyFixedColumns() ? column.width : null"
+                  [style.width]="applyFixedColumns() ? column.width : computedColumnWidths[i]"
+                  [style.max-width]="applyFixedColumns() ? column.width : computedColumnWidths[i]"
+                  [style.min-width]="applyFixedColumns() ? column.width : computedColumnWidths[i]"
                   [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
                   [class.po-clickable]="(sort && column.sortable !== false) || hasService"
                   [ngClass]="{
@@ -760,9 +760,9 @@
               }
               @for (column of mainColumns; track trackBy(columnIndex); let columnIndex = $index) {
                 <td
-                  [style.width]="applyFixedColumns() ? column.width : null"
-                  [style.max-width]="applyFixedColumns() ? column.width : null"
-                  [style.min-width]="applyFixedColumns() ? column.width : null"
+                  [style.width]="applyFixedColumns() ? column.width : computedColumnWidths[columnIndex]"
+                  [style.max-width]="applyFixedColumns() ? column.width : computedColumnWidths[columnIndex]"
+                  [style.min-width]="applyFixedColumns() ? column.width : computedColumnWidths[columnIndex]"
                   [class.po-table-column]="column.type !== 'icon'"
                   [class.po-table-column-right]="column.type === 'currency' || column.type === 'number'"
                   [class.po-table-column-center]="column.type === 'subtitle'"

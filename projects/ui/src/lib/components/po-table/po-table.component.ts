@@ -152,6 +152,7 @@ export class PoTableComponent
   sizeLoading: string = 'sm';
   headerWidth: number;
   headerTableScrollWidth: number;
+  computedColumnWidths: Array<string> = [];
 
   close: PoModalAction = {
     action: () => {
@@ -182,6 +183,8 @@ export class PoTableComponent
   private scrollSyncListener: (() => void) | null = null;
   private containerScrollSyncListener: (() => void) | null = null;
   private virtualScrollOverflowConfigured = false;
+  private syncScheduled = false;
+  private lastColumnsKey = '';
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -321,6 +324,22 @@ export class PoTableComponent
     if (this.virtualScroll && !this.virtualScrollOverflowConfigured && this.tableVirtualScroll?.nativeElement) {
       this.configureVirtualScrollOverflow();
     }
+
+    // Agenda sincronização quando virtual scroll está ativo mas não há larguras computadas
+    if (
+      this.virtualScroll &&
+      this.hasItems &&
+      !this.applyFixedColumns() &&
+      this.computedColumnWidths.length === 0 &&
+      this.bodyTableElement?.nativeElement?.querySelector('tbody tr') &&
+      !this.syncScheduled
+    ) {
+      this.syncScheduled = true;
+      setTimeout(() => {
+        this.syncColumnWidths();
+        this.syncScheduled = false;
+      });
+    }
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -334,6 +353,15 @@ export class PoTableComponent
     this.applyFixedColumns();
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
+
+    // Detecta mudanças nas colunas e limpa larguras computadas obsoletas
+    const columnsKey = this.mainColumns?.map(c => `${c.property}:${c.fixed || ''}:${c.width || ''}`).join('|') || '';
+    if (columnsKey !== this.lastColumnsKey) {
+      this.lastColumnsKey = columnsKey;
+      if (this.computedColumnWidths.length > 0) {
+        this.computedColumnWidths = [];
+      }
+    }
 
     // Permite que os cabeçalhos sejam calculados na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
@@ -716,6 +744,9 @@ export class PoTableComponent
 
         this.onVisibleColumnsChange(this.newOrderColumns);
       }
+
+      // Re-sincroniza larguras após Angular renderizar a nova ordem
+      setTimeout(() => this.syncColumnWidths());
     }
   }
 
@@ -1097,6 +1128,8 @@ export class PoTableComponent
     this.renderer.removeStyle(headerTable, 'width');
     this.renderer.removeStyle(bodyTable, 'table-layout');
     this.renderer.removeStyle(bodyTable, 'width');
+
+    this.computedColumnWidths = [];
   }
 
   private syncColumnWidths(): void {
@@ -1105,11 +1138,13 @@ export class PoTableComponent
 
     const headerTable = this.headerTableElement.nativeElement;
     const bodyTable = this.bodyTableElement.nativeElement;
-    const headerCells = headerTable.querySelectorAll('thead th');
+
+    // Seleciona apenas cells das mainColumns (ignora selectable, action, etc.)
+    const headerCells = headerTable.querySelectorAll('thead th.po-table-header-ellipsis');
     const bodyRow = bodyTable.querySelector('tbody tr');
     if (!bodyRow) return;
 
-    const bodyCells = bodyRow.querySelectorAll('td');
+    const bodyCells = bodyRow.querySelectorAll('td.p-element');
     if (!headerCells.length || !bodyCells.length) return;
 
     const count = Math.min(headerCells.length, bodyCells.length);
@@ -1147,9 +1182,11 @@ export class PoTableComponent
     this.renderer.removeStyle(headerTable, 'width');
     this.renderer.removeStyle(headerTable, 'table-layout');
 
-    // Fase 3: Aplicar maxColumnWidths em ambas as tabelas
+    // Fase 3: Armazenar larguras computadas e aplicar via Renderer2
+    this.computedColumnWidths = maxColumnWidths.map(w => `${w}px`);
+
     for (let i = 0; i < count; i++) {
-      const widthPx = `${maxColumnWidths[i]}px`;
+      const widthPx = this.computedColumnWidths[i];
       this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', widthPx);
       this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', widthPx);
       this.renderer.setStyle(bodyCells[i] as HTMLElement, 'width', widthPx);
