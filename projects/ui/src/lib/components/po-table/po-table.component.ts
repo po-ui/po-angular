@@ -181,6 +181,7 @@ export class PoTableComponent
   private resizeObserver: ResizeObserver;
   private scrollSyncListener: (() => void) | null = null;
   private containerScrollSyncListener: (() => void) | null = null;
+  private syncColumnWidthsTimer: ReturnType<typeof setTimeout> | null = null;
   private virtualScrollOverflowConfigured = false;
 
   private clickListener: () => void;
@@ -343,10 +344,9 @@ export class PoTableComponent
       this.visibleElement = true;
     }
 
-    // Sincroniza larguras quando virtualScroll está ativo
+    // Sincroniza largura total do header quando virtualScroll está ativo
     if (this.virtualScroll && this.hasItems) {
       this.syncHeaderTableWidth();
-      this.syncColumnWidths();
     }
 
     if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
@@ -1028,8 +1028,7 @@ export class PoTableComponent
 
     const contentWrapper = viewportEl.querySelector('.cdk-virtual-scroll-content-wrapper');
     if (contentWrapper) {
-      this.renderer.setStyle(contentWrapper, 'contain', 'none');
-      this.renderer.setStyle(contentWrapper, 'overflow', 'visible');
+      this.renderer.setStyle(contentWrapper, 'contain', 'layout style');
       this.renderer.setStyle(contentWrapper, 'min-width', '100%');
     }
 
@@ -1038,6 +1037,7 @@ export class PoTableComponent
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = viewportEl.scrollLeft;
         }
+        this.debounceSyncColumnWidths();
       });
     }
 
@@ -1049,6 +1049,7 @@ export class PoTableComponent
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = fixedInnerContainer.scrollLeft;
         }
+        this.debounceSyncColumnWidths();
       });
     }
 
@@ -1070,6 +1071,16 @@ export class PoTableComponent
     if (viewportEl) {
       this.resizeObserver.observe(viewportEl);
     }
+  }
+
+  private debounceSyncColumnWidths(): void {
+    if (this.syncColumnWidthsTimer) {
+      clearTimeout(this.syncColumnWidthsTimer);
+    }
+    this.syncColumnWidthsTimer = setTimeout(() => {
+      this.syncColumnWidths();
+      this.syncColumnWidthsTimer = null;
+    }, 100);
   }
 
   private clearColumnWidths(): void {
@@ -1126,7 +1137,7 @@ export class PoTableComponent
       const newWidth = this.headerTableElement.nativeElement.scrollWidth;
       if (newWidth !== this.headerTableScrollWidth) {
         this.headerTableScrollWidth = newWidth;
-        this.changeDetector.detectChanges();
+        this.changeDetector.markForCheck();
       }
     }
   }

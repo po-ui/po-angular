@@ -605,9 +605,9 @@
               @for (column of mainColumns; track trackBy(i); let i = $index) {
                 <th
                   class="po-table-header-ellipsis p-element po-frozen-column"
-                  [style.width]="column.width"
-                  [style.max-width]="column.width"
-                  [style.min-width]="column.width"
+                  [style.width]="applyFixedColumns() ? column.width : null"
+                  [style.max-width]="applyFixedColumns() ? column.width : null"
+                  [style.min-width]="applyFixedColumns() ? column.width : null"
                   [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
                   [class.po-clickable]="(sort && column.sortable !== false) || hasService"
                   [ngClass]="{
@@ -616,7 +616,6 @@
                       JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                       (sortedColumn.ascending || !sortedColumn.ascending)
                   }"
-                  [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
                   [class.po-table-header-subtitle]="column.type === 'subtitle'"
                   [class.po-table-column-drag-box]="this.isDraggable"
                   (click)="sortColumn(column)"
@@ -643,9 +642,9 @@
               @for (column of mainColumns; track trackBy(i); let i = $index) {
                 <th
                   class="po-table-header-ellipsis p-element po-frozen-column"
-                  [style.width]="column.width"
-                  [style.max-width]="column.width"
-                  [style.min-width]="column.width"
+                  [style.width]="applyFixedColumns() ? column.width : null"
+                  [style.max-width]="applyFixedColumns() ? column.width : null"
+                  [style.min-width]="applyFixedColumns() ? column.width : null"
                   [attr.data-po-table-column-name]="column.label || (column.property | titlecase) | lowercase"
                   [class.po-clickable]="(sort && column.sortable !== false) || hasService"
                   [ngClass]="{
@@ -654,7 +653,6 @@
                       JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                       (sortedColumn.ascending || !sortedColumn.ascending)
                   }"
-                  [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
                   [class.po-table-header-subtitle]="column.type === 'subtitle'"
                   (click)="sortColumn(column)"
                   [pFrozenColumn]="column.fixed"
@@ -762,9 +760,9 @@
               }
               @for (column of mainColumns; track trackBy(columnIndex); let columnIndex = $index) {
                 <td
-                  [style.width]="column.width"
-                  [style.max-width]="column.width"
-                  [style.min-width]="column.width"
+                  [style.width]="applyFixedColumns() ? column.width : null"
+                  [style.max-width]="applyFixedColumns() ? column.width : null"
+                  [style.min-width]="applyFixedColumns() ? column.width : null"
                   [class.po-table-column]="column.type !== 'icon'"
                   [class.po-table-column-right]="column.type === 'currency' || column.type === 'number'"
                   [class.po-table-column-center]="column.type === 'subtitle'"
