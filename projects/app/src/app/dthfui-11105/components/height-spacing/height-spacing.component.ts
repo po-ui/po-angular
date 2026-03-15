@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn, PoTableColumnSpacing } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn, PoTableColumnSpacing } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,8 +8,12 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './height-spacing.component.html',
   standalone: false
 })
-export class HeightSpacingTestComponent {
-  items = generateMockItems(500);
+export class HeightSpacingTestComponent implements OnInit {
+  items: Array<any> = [];
+
+  ngOnInit(): void {
+    this.items = generateMockItems(500);
+  }
   currentHeight = 400;
   currentSpacing: PoTableColumnSpacing = PoTableColumnSpacing.Medium;
 

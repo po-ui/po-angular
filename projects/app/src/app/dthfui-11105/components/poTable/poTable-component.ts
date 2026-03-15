@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
+import { PoTableColumn, PoTableComponent } from 'projects/ui/src/lib';
 
 @Component({
   selector: 'dthfui-11105-po-table',

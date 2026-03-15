@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 

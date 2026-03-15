@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,14 +8,19 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './resize.component.html',
   standalone: false
 })
-export class ResizeTestComponent {
-  items = generateMockItems(500);
+export class ResizeTestComponent implements OnInit {
+  items: Array<any> = [];
   containerWidth = '100%';
   frozenEnabled = false;
 
   columns: Array<PoTableColumn> = this.buildColumns();
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(500);
+    this.height = this.getHeight();
+  }
 
   setContainerWidth(width: string): void {
     this.containerWidth = width;

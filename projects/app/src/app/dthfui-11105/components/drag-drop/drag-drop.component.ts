@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,8 +8,8 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './drag-drop.component.html',
   standalone: false
 })
-export class DragDropTestComponent {
-  items = generateMockItems(200);
+export class DragDropTestComponent implements OnInit {
+  items: Array<any> = [];
   columnsManagerEnabled = true;
 
   columns: Array<PoTableColumn> = [
@@ -25,7 +25,12 @@ export class DragDropTestComponent {
     { property: 'code', label: 'Código', width: '150px' }
   ];
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(200);
+    this.height = this.getHeight();
+  }
 
   toggleColumnsManager(): void {
     this.columnsManagerEnabled = !this.columnsManagerEnabled;

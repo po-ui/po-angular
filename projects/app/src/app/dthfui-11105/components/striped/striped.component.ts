@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,8 +8,8 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './striped.component.html',
   standalone: false
 })
-export class StripedTestComponent {
-  items = generateMockItems(500);
+export class StripedTestComponent implements OnInit {
+  items: Array<any> = [];
   striped = true;
   selectable = false;
 
@@ -22,7 +22,12 @@ export class StripedTestComponent {
     { property: 'value', label: 'Valor', width: '120px', type: 'currency', format: 'BRL' }
   ];
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(500);
+    this.height = this.getHeight();
+  }
 
   toggleStriped(): void {
     this.striped = !this.striped;

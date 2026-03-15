@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems, COLUMNS_WITH_WIDTH, COLUMNS_WITHOUT_WIDTH, COLUMNS_MANY } from '../../mock-data';
 
@@ -8,12 +8,17 @@ import { generateMockItems, COLUMNS_WITH_WIDTH, COLUMNS_WITHOUT_WIDTH, COLUMNS_M
   templateUrl: './column-alignment.component.html',
   standalone: false
 })
-export class ColumnAlignmentComponent {
-  items = generateMockItems(500);
+export class ColumnAlignmentComponent implements OnInit {
+  items: Array<any> = [];
   columns: Array<PoTableColumn> = [...COLUMNS_WITH_WIDTH];
   currentMode = 'withWidth';
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(500);
+    this.height = this.getHeight();
+  }
 
   useColumnsWithWidth(): void {
     this.columns = [...COLUMNS_WITH_WIDTH];

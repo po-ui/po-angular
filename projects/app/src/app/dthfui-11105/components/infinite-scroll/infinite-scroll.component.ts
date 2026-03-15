@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,7 +8,7 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './infinite-scroll.component.html',
   standalone: false
 })
-export class InfiniteScrollTestComponent {
+export class InfiniteScrollTestComponent implements OnInit {
   readonly pageSize = 50;
   readonly totalAvailable = 500;
 
@@ -26,11 +26,12 @@ export class InfiniteScrollTestComponent {
   allDataPool: Array<any> = [];
   currentPage = 0;
 
-  height = this.getHeight();
+  height = 400;
 
-  constructor() {
+  ngOnInit(): void {
     this.allDataPool = generateMockItems(this.totalAvailable);
     this.loadPage();
+    this.height = this.getHeight();
   }
 
   loadMore(): void {

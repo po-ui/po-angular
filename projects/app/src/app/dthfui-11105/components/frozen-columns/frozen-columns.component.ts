@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,14 +8,19 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './frozen-columns.component.html',
   standalone: false
 })
-export class FrozenColumnsComponent {
-  items = generateMockItems(1000);
+export class FrozenColumnsComponent implements OnInit {
+  items: Array<any> = [];
   frozenEnabled = true;
   frozenCount = 2;
 
   columns: Array<PoTableColumn> = this.buildColumns();
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(1000);
+    this.height = this.getHeight();
+  }
 
   toggleFrozen(): void {
     this.frozenEnabled = !this.frozenEnabled;

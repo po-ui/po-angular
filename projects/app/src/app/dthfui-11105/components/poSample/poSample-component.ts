@@ -1,6 +1,5 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { SamplePoPageListHiringProcessesService } from 'projects/portal/src/app/documentation/samples/sample-po-page-list/samples/sample-po-page-list-hiring-processes/sample-po-page-list-hiring-processes.service';
 import {
   PoBreadcrumb,
   PoCheckboxGroupOption,
@@ -20,7 +19,7 @@ import {
   standalone: false
 })
 export class PoSampleComponent {
-  private sampleHiringProcessesService = inject(SamplePoPageListHiringProcessesService);
+  private sampleHiringProcessesService: any = null;
   private poNotification = inject(PoNotificationService);
   private poDialog = inject(PoDialogService);
   private router = inject(Router);

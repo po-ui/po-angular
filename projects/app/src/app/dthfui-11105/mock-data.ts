@@ -1,4 +1,4 @@
-import { PoTableColumn } from '@po-ui/ng-components';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 export function generateMockItems(count: number): Array<any> {
   return Array.from({ length: count }, (_, i) => ({
@@ -7,7 +7,7 @@ export function generateMockItems(count: number): Array<any> {
     email: `item${i + 1}@test.com`,
     city: ['São Paulo', 'Rio de Janeiro', 'Curitiba', 'Belo Horizonte', 'Porto Alegre'][i % 5],
     status: ['Ativo', 'Inativo', 'Pendente'][i % 3],
-    value: Math.round(Math.random() * 10000) / 100,
+    value: Math.round(((i * 7 + 13) % 10000)) / 100,
     date: new Date(2024, i % 12, (i % 28) + 1).toISOString(),
     category: `Categoria ${(i % 10) + 1}`,
     description: `Descrição do item ${i + 1} com texto variável`,

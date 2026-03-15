@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoMenuItem } from '@po-ui/ng-components';
+import { PoMenuItem } from 'projects/ui/src/lib';
 
 @Component({
   selector: 'app-dthfui-11105',

@@ -1,5 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { SamplePoLookupSwFilmsService } from 'projects/portal/src/app/documentation/samples/sample-po-lookup/samples/sample-po-lookup-sw-films/sample-po-lookup-sw-films.service';
+import { Component, OnInit } from '@angular/core';
 import { PoRadioGroupOption } from 'projects/ui/src/lib';
 
 @Component({
@@ -7,7 +6,7 @@ import { PoRadioGroupOption } from 'projects/ui/src/lib';
   standalone: false
 })
 export class PoLookup2Component implements OnInit {
-  filterService = inject(SamplePoLookupSwFilmsService);
+  filterService: any = null;
 
   entity;
   filmItemsFiltered;
@@ -59,18 +58,9 @@ export class PoLookup2Component implements OnInit {
   }
 
   ngOnInit() {
-    this.filterService.getFilms().subscribe((films: { results: Array<any> }) => {
-      this.filmItems = films.results;
-    });
   }
 
   onSelected(entity) {
-    this.filterService.getObjectByValue(entity.name, this.filterParams).subscribe({
-      next: result => {
-        this.filmItemsFiltered = this.filmItems.filter(film => result?.films.includes(film.url));
-      },
-      error: err => console.error(err)
-    });
   }
 
   private getEntityColumns(entity) {

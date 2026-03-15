@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,8 +8,8 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './sort.component.html',
   standalone: false
 })
-export class SortTestComponent {
-  items = generateMockItems(1000);
+export class SortTestComponent implements OnInit {
+  items: Array<any> = [];
   lastSortColumn = '';
   lastSortType = '';
 
@@ -24,7 +24,12 @@ export class SortTestComponent {
     { property: 'code', label: 'Código (string)', width: '150px' }
   ];
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(1000);
+    this.height = this.getHeight();
+  }
 
   onSortBy(event: any): void {
     this.lastSortColumn = event?.column?.property || '';

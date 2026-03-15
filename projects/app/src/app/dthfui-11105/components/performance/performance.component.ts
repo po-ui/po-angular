@@ -1,5 +1,5 @@
-import { Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PoTableColumn } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,10 +8,10 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './performance.component.html',
   standalone: false
 })
-export class PerformanceTestComponent implements OnDestroy {
+export class PerformanceTestComponent implements OnInit, OnDestroy {
   @ViewChild('fpsDisplay', { static: false }) fpsDisplay!: ElementRef;
 
-  items = generateMockItems(5000);
+  items: Array<any> = [];
   fps = 0;
   theadPositionY = 'N/A';
   autoScrolling = false;
@@ -27,7 +27,12 @@ export class PerformanceTestComponent implements OnDestroy {
     { property: 'category', label: 'Categoria', width: '150px' }
   ];
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(5000);
+    this.height = this.getHeight();
+  }
 
   private fpsFrameId: number | null = null;
   private autoScrollId: number | null = null;

@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PoTableColumn, PoTableComponent } from 'projects/ui/src/lib';
 
 import { generateMockItems } from '../../mock-data';
 
@@ -8,10 +8,10 @@ import { generateMockItems } from '../../mock-data';
   templateUrl: './selection.component.html',
   standalone: false
 })
-export class SelectionTestComponent {
+export class SelectionTestComponent implements OnInit {
   @ViewChild('tableComp') tableComponent!: PoTableComponent;
 
-  items = generateMockItems(1000);
+  items: Array<any> = [];
   selectedCount = 0;
   lastEvent = '';
 
@@ -24,7 +24,12 @@ export class SelectionTestComponent {
     { property: 'value', label: 'Valor', width: '120px', type: 'currency', format: 'BRL' }
   ];
 
-  height = this.getHeight();
+  height = 400;
+
+  ngOnInit(): void {
+    this.items = generateMockItems(1000);
+    this.height = this.getHeight();
+  }
 
   onSelected(event: any): void {
     this.selectedCount++;
