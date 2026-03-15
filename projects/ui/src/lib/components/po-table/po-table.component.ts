@@ -1031,6 +1031,12 @@ export class PoTableComponent
       this.renderer.setStyle(contentWrapper, 'min-width', '100%');
     }
 
+    // O header precisa de overflow: hidden para que scrollLeft funcione via JS.
+    // Sem isso, o elemento não cria contexto de scroll e scrollLeft fica sempre em 0.
+    if (this.headerScrollContainer?.nativeElement) {
+      this.renderer.setStyle(this.headerScrollContainer.nativeElement, 'overflow', 'hidden');
+    }
+
     if (!this.scrollSyncListener) {
       this.scrollSyncListener = this.renderer.listen(viewportEl, 'scroll', () => {
         if (this.headerScrollContainer?.nativeElement) {
