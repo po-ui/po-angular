@@ -179,6 +179,7 @@ export class PoTableComponent
   private subscriptionService: Subscription = new Subscription();
   private columnWidths: Array<string> = [];
   private resizeObserver: ResizeObserver;
+  private renderedRangeSubscription: Subscription;
   private scrollSyncListener: (() => void) | null = null;
   private virtualScrollOverflowConfigured = false;
   private maxColumnWidths: Array<number> = [];
@@ -316,6 +317,12 @@ export class PoTableComponent
     this.syncHeaderTableWidth();
     this.setupColumnWidthSync();
     this.configureVirtualScrollOverflow();
+
+    if (this.virtualScroll && this.viewPort) {
+      this.renderedRangeSubscription = this.viewPort.renderedRangeStream.subscribe(() => {
+        this.debounceSyncColumnWidths();
+      });
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -354,6 +361,7 @@ export class PoTableComponent
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+    this.renderedRangeSubscription?.unsubscribe();
     this.resizeObserver?.disconnect();
     if (this.scrollSyncListener) {
       this.scrollSyncListener();
@@ -1158,6 +1166,9 @@ export class PoTableComponent
         this.renderer.setStyle(cells[i] as HTMLElement, 'minWidth', `${this.maxColumnWidths[i]}px`);
       }
     });
+
+    this.syncHeaderTableWidth();
+    this.changeDetector.markForCheck();
   }
 
   private syncHeaderTableWidth(): void {

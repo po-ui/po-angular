@@ -2473,13 +2473,33 @@ describe('PoTableComponent:', () => {
         expect(component['debounceSyncColumnWidths']).toHaveBeenCalled();
       });
 
-      it('ngOnDestroy: should clear syncColumnWidthsTimer', () => {
+      it('ngOnDestroy: should clear syncColumnWidthsTimer and unsubscribe renderedRangeSubscription', () => {
         component['syncColumnWidthsTimer'] = setTimeout(() => {}, 1000);
+        const mockSubscription = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+        component['renderedRangeSubscription'] = mockSubscription;
         spyOn<any>(component, 'removeListeners');
 
         component.ngOnDestroy();
 
         expect(component['syncColumnWidthsTimer']).toBeNull();
+        expect(mockSubscription.unsubscribe).toHaveBeenCalled();
+      });
+
+      it('ngAfterViewInit: should subscribe to renderedRangeStream when virtualScroll is true', () => {
+        component['_virtualScroll'] = true;
+        const mockStream = { subscribe: jasmine.createSpy('subscribe').and.returnValue({ unsubscribe: () => {} }) };
+        component.viewPort = { renderedRangeStream: mockStream } as any;
+
+        spyOn<any>(component, 'changeHeaderWidth');
+        spyOn<any>(component, 'changeSizeLoading');
+        spyOn<any>(component, 'applyFixedColumns');
+        spyOn<any>(component, 'syncHeaderTableWidth');
+        spyOn<any>(component, 'setupColumnWidthSync');
+        spyOn<any>(component, 'configureVirtualScrollOverflow');
+
+        component.ngAfterViewInit();
+
+        expect(mockStream.subscribe).toHaveBeenCalled();
       });
 
       it('should update filteredItems on onFilteredItemsChange call', () => {
