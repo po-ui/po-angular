@@ -2176,6 +2176,7 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        spyOn(component, 'applyFixedColumns').and.returnValue(false);
 
         component['syncColumnWidths']();
 
@@ -2185,6 +2186,37 @@ describe('PoTableComponent:', () => {
         expect(mockTd1.style.minWidth).toBeTruthy();
         expect(mockTd2.style.width).toBeTruthy();
         expect(mockTd2.style.minWidth).toBeTruthy();
+
+        document.body.removeChild(mockHeaderTable);
+        document.body.removeChild(mockBodyTable);
+      });
+
+      it('syncColumnWidths: should skip when applyFixedColumns returns true', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        const mockTd = document.createElement('td');
+        mockTr.appendChild(mockTd);
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        document.body.appendChild(mockHeaderTable);
+        document.body.appendChild(mockBodyTable);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        spyOn(component, 'applyFixedColumns').and.returnValue(true);
+        const setStyleSpy = spyOn(component['renderer'], 'setStyle');
+
+        component['syncColumnWidths']();
+
+        expect(setStyleSpy).not.toHaveBeenCalled();
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);
@@ -2231,7 +2263,7 @@ describe('PoTableComponent:', () => {
         expect(() => component['syncColumnWidths']()).not.toThrow();
       });
 
-      it('syncColumnWidths: should clear inline widths before recalculating for all rows', () => {
+      it('syncColumnWidths: should clear inline widths and apply max-content before recalculating for all rows', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2261,18 +2293,24 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        spyOn(component, 'applyFixedColumns').and.returnValue(false);
 
+        const setStyleSpy = spyOn(component['renderer'], 'setStyle').and.callThrough();
         const removeStyleSpy = spyOn(component['renderer'], 'removeStyle').and.callThrough();
 
         component['syncColumnWidths']();
 
         expect(removeStyleSpy).toHaveBeenCalled();
+        expect(setStyleSpy).toHaveBeenCalledWith(mockBodyTable, 'width', 'max-content');
+        expect(setStyleSpy).toHaveBeenCalledWith(mockBodyTable, 'table-layout', 'auto');
+        expect(setStyleSpy).toHaveBeenCalledWith(mockHeaderTable, 'width', 'max-content');
+        expect(setStyleSpy).toHaveBeenCalledWith(mockHeaderTable, 'table-layout', 'auto');
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);
       });
 
-      it('clearColumnWidths: should remove inline width and minWidth from header and all body rows and reset maxColumnWidths', () => {
+      it('clearColumnWidths: should remove inline width, minWidth and table-layout from header and all body rows and reset maxColumnWidths', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2280,6 +2318,7 @@ describe('PoTableComponent:', () => {
         mockTh.style.minWidth = '200px';
         mockThead.appendChild(mockTh);
         mockHeaderTable.appendChild(mockThead);
+        mockHeaderTable.style.tableLayout = 'auto';
 
         const mockBodyTable = document.createElement('table');
         const mockTbody = document.createElement('tbody');
@@ -2296,10 +2335,13 @@ describe('PoTableComponent:', () => {
         mockTr2.appendChild(mockTd2);
         mockTbody.appendChild(mockTr2);
         mockBodyTable.appendChild(mockTbody);
+        mockBodyTable.style.tableLayout = 'auto';
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
         component['maxColumnWidths'] = [500];
+
+        const removeStyleSpy = spyOn(component['renderer'], 'removeStyle').and.callThrough();
 
         component['clearColumnWidths']();
 
@@ -2310,6 +2352,10 @@ describe('PoTableComponent:', () => {
         expect(mockTd2.style.width).toBe('');
         expect(mockTd2.style.minWidth).toBe('');
         expect(component['maxColumnWidths']).toEqual([]);
+        expect(removeStyleSpy).toHaveBeenCalledWith(mockHeaderTable, 'table-layout');
+        expect(removeStyleSpy).toHaveBeenCalledWith(mockHeaderTable, 'width');
+        expect(removeStyleSpy).toHaveBeenCalledWith(mockBodyTable, 'table-layout');
+        expect(removeStyleSpy).toHaveBeenCalledWith(mockBodyTable, 'width');
       });
 
       it('clearColumnWidths: should not fail when tables are not available and should reset maxColumnWidths', () => {
@@ -2395,7 +2441,7 @@ describe('PoTableComponent:', () => {
         expect(component['syncColumnWidths']).toHaveBeenCalledTimes(1);
       }));
 
-      it('syncColumnWidths: should accumulate maxColumnWidths across calls', () => {
+      it('syncColumnWidths: should accumulate maxColumnWidths across calls and apply max-content temporarily', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2415,12 +2461,19 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        spyOn(component, 'applyFixedColumns').and.returnValue(false);
 
         component['syncColumnWidths']();
         const firstMax = component['maxColumnWidths'][0];
 
         component['syncColumnWidths']();
         expect(component['maxColumnWidths'][0]).toBeGreaterThanOrEqual(firstMax);
+
+        // Verify max-content was restored (not left on tables)
+        expect(mockHeaderTable.style.width).toBe('');
+        expect(mockHeaderTable.style.tableLayout).toBe('');
+        expect(mockBodyTable.style.width).toBe('');
+        expect(mockBodyTable.style.tableLayout).toBe('');
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);
