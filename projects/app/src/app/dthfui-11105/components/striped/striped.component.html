@@ -1,0 +1,29 @@
+<po-page-default p-title="Teste: Striped Rows">
+  <div class="po-row po-mb-2">
+    <div class="po-md-12">
+      <strong>Striped:</strong> {{ striped ? 'Ativado' : 'Desativado' }}
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Selectable:</strong> {{ selectable ? 'Ativado' : 'Desativado' }}</span>
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Itens:</strong> {{ items.length }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" [p-label]="striped ? 'Desativar Striped' : 'Ativar Striped'" (p-click)="toggleStriped()"></po-button>
+    <po-button class="po-mr-2" [p-label]="selectable ? 'Desativar Selectable' : 'Ativar Selectable'" (p-click)="toggleSelectable()"></po-button>
+  </div>
+
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="height"
+      [p-striped]="striped"
+      [p-selectable]="selectable"
+    >
+    </po-table>
+  </div>
+</po-page-default>

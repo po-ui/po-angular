@@ -1,0 +1,38 @@
+<po-page-default p-title="Teste: Altura e Spacing">
+  <div class="po-row po-mb-2">
+    <div class="po-md-12">
+      <strong>Altura:</strong> {{ currentHeight }}px
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Spacing:</strong> {{ currentSpacing }}</span>
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Itens:</strong> {{ items.length }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" p-label="Altura 200" (p-click)="setHeight(200)"></po-button>
+    <po-button class="po-mr-2" p-label="Altura 400" (p-click)="setHeight(400)"></po-button>
+    <po-button class="po-mr-2" p-label="Altura 600" (p-click)="setHeight(600)"></po-button>
+    <po-button class="po-mr-2" p-label="Altura 800" (p-click)="setHeight(800)"></po-button>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" p-label="Extra Small" (p-click)="setSpacing('extraSmall')"></po-button>
+    <po-button class="po-mr-2" p-label="Small" (p-click)="setSpacing('small')"></po-button>
+    <po-button class="po-mr-2" p-label="Medium" (p-click)="setSpacing('medium')"></po-button>
+    <po-button class="po-mr-2" p-label="Large" (p-click)="setSpacing('large')"></po-button>
+  </div>
+
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="currentHeight"
+      [p-spacing]="currentSpacing"
+      [p-striped]="true"
+    >
+    </po-table>
+  </div>
+</po-page-default>

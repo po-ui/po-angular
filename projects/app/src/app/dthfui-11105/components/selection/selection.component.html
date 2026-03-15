@@ -1,0 +1,33 @@
+<po-page-default p-title="Teste: Seleção com Virtual Scroll">
+  <div class="po-row po-mb-2">
+    <div class="po-md-12">
+      <strong>Selecionados:</strong> {{ selectedCount }} / {{ items.length }}
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Último evento:</strong> {{ lastEvent }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" p-label="Selecionar Item 0" (p-click)="selectByIndex(0)"></po-button>
+    <po-button class="po-mr-2" p-label="Selecionar Item 500" (p-click)="selectByIndex(500)"></po-button>
+    <po-button class="po-mr-2" p-label="Selecionar Item 999" (p-click)="selectByIndex(999)"></po-button>
+  </div>
+
+  <div class="po-row">
+    <po-table
+      #tableComp
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="height"
+      [p-selectable]="true"
+      [p-striped]="true"
+      (p-selected)="onSelected($event)"
+      (p-unselected)="onUnselected($event)"
+      (p-all-selected)="onAllSelected()"
+      (p-all-unselected)="onAllUnselected()"
+    >
+    </po-table>
+  </div>
+</po-page-default>

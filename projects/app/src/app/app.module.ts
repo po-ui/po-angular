@@ -17,6 +17,19 @@ import { PoDynamicComponent } from './dthfui-11105/components/poDynamic/poDynami
 import { Dthfui11105PoTableComponent } from './dthfui-11105/components/poTable/poTable-component';
 import { PoPageDynamicTableModule } from '@po-ui/ng-templates';
 import { Dthfui11105PoTableLabsComponent } from './dthfui-11105/components/PoTable_labs/poTable-labs.component';
+import { ColumnAlignmentComponent } from './dthfui-11105/components/column-alignment/column-alignment.component';
+import { FrozenColumnsComponent } from './dthfui-11105/components/frozen-columns/frozen-columns.component';
+import { SelectionTestComponent } from './dthfui-11105/components/selection/selection.component';
+import { SortTestComponent } from './dthfui-11105/components/sort/sort.component';
+import { DragDropTestComponent } from './dthfui-11105/components/drag-drop/drag-drop.component';
+import { InfiniteScrollTestComponent } from './dthfui-11105/components/infinite-scroll/infinite-scroll.component';
+import { StripedTestComponent } from './dthfui-11105/components/striped/striped.component';
+import { HeightSpacingTestComponent } from './dthfui-11105/components/height-spacing/height-spacing.component';
+import { ColumnManagerTestComponent } from './dthfui-11105/components/column-manager/column-manager.component';
+import { LoadingEmptyTestComponent } from './dthfui-11105/components/loading-empty/loading-empty.component';
+import { ResizeTestComponent } from './dthfui-11105/components/resize/resize.component';
+import { PerformanceTestComponent } from './dthfui-11105/components/performance/performance.component';
+import { IndexTestComponent } from './dthfui-11105/components/index/index.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +39,20 @@ import { Dthfui11105PoTableLabsComponent } from './dthfui-11105/components/PoTab
     PoLookup2Component,
     PoDynamicComponent,
     Dthfui11105PoTableComponent,
-    Dthfui11105PoTableLabsComponent
+    Dthfui11105PoTableLabsComponent,
+    ColumnAlignmentComponent,
+    FrozenColumnsComponent,
+    SelectionTestComponent,
+    SortTestComponent,
+    DragDropTestComponent,
+    InfiniteScrollTestComponent,
+    StripedTestComponent,
+    HeightSpacingTestComponent,
+    ColumnManagerTestComponent,
+    LoadingEmptyTestComponent,
+    ResizeTestComponent,
+    PerformanceTestComponent,
+    IndexTestComponent
   ],
   bootstrap: [AppComponent],
   imports: [

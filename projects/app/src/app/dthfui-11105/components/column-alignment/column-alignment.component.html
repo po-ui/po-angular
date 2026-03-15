@@ -1,0 +1,31 @@
+<po-page-default p-title="Teste: Alinhamento de Colunas">
+  <div class="po-row">
+    <div class="po-md-12 po-mb-3">
+      <strong>Modo atual:</strong> {{ currentMode }}
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Colunas:</strong> {{ columns.length }}</span>
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Itens:</strong> {{ items.length }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" p-label="Com Width (px)" (p-click)="useColumnsWithWidth()"></po-button>
+    <po-button class="po-mr-2" p-label="Sem Width" (p-click)="useColumnsWithoutWidth()"></po-button>
+    <po-button class="po-mr-2" p-label="Muitas Colunas (scroll H)" (p-click)="useManyColumns()"></po-button>
+    <po-button class="po-mr-2" p-label="Poucas Colunas (sem scroll H)" (p-click)="useFewColumns()"></po-button>
+    <po-button class="po-mr-2" p-label="Larguras Mistas" (p-click)="useMixedWidths()"></po-button>
+  </div>
+
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="height"
+      [p-striped]="true"
+    >
+    </po-table>
+  </div>
+</po-page-default>

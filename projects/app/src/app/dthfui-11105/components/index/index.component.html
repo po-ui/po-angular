@@ -1,0 +1,19 @@
+<po-page-default p-title="DTHFUI-11105 - Matriz de Validação">
+  <div class="po-row po-mb-3">
+    <div class="po-md-12">
+      <p>Cenários de teste para validação do virtual scroll com thead extraído do cdk-virtual-scroll-viewport.</p>
+    </div>
+  </div>
+
+  <div class="po-row">
+    <div *ngFor="let scenario of scenarios" class="po-md-6 po-lg-4 po-xl-3 po-mb-3">
+      <po-container>
+        <div style="padding: 16px;">
+          <h4 style="margin: 0 0 8px 0;">{{ scenario.label }}</h4>
+          <p style="margin: 0 0 12px 0; color: #666; font-size: 13px;">{{ scenario.description }}</p>
+          <a [href]="scenario.route" style="color: #753399; font-weight: 600; text-decoration: none;">Abrir teste &rarr;</a>
+        </div>
+      </po-container>
+    </div>
+  </div>
+</po-page-default>

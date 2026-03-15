@@ -1,0 +1,30 @@
+<po-page-default p-title="Teste: Frozen Columns">
+  <div class="po-row po-mb-2">
+    <div class="po-md-12">
+      <strong>Frozen:</strong> {{ frozenEnabled ? 'Ativado' : 'Desativado' }}
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Colunas fixas:</strong> {{ frozenEnabled ? frozenCount : 0 }}</span>
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Itens:</strong> {{ items.length }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" [p-label]="frozenEnabled ? 'Desativar Frozen' : 'Ativar Frozen'" (p-click)="toggleFrozen()"></po-button>
+    <po-button class="po-mr-2" p-label="1 Coluna Fixa" (p-click)="setFrozenCount(1)"></po-button>
+    <po-button class="po-mr-2" p-label="2 Colunas Fixas" (p-click)="setFrozenCount(2)"></po-button>
+    <po-button class="po-mr-2" p-label="3 Colunas Fixas" (p-click)="setFrozenCount(3)"></po-button>
+  </div>
+
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="height"
+      [p-striped]="true"
+    >
+    </po-table>
+  </div>
+</po-page-default>

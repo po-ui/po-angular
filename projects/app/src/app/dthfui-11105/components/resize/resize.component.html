@@ -1,0 +1,30 @@
+<po-page-default p-title="Teste: Resize">
+  <div class="po-row po-mb-2">
+    <div class="po-md-12">
+      <strong>Largura do container:</strong> {{ containerWidth }}
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Frozen:</strong> {{ frozenEnabled ? 'Ativado' : 'Desativado' }}</span>
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Itens:</strong> {{ items.length }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" p-label="800px" (p-click)="setContainerWidth('800px')"></po-button>
+    <po-button class="po-mr-2" p-label="1200px" (p-click)="setContainerWidth('1200px')"></po-button>
+    <po-button class="po-mr-2" p-label="100%" (p-click)="setContainerWidth('100%')"></po-button>
+    <po-button class="po-mr-2" [p-label]="frozenEnabled ? 'Desativar Frozen' : 'Ativar Frozen'" (p-click)="toggleFrozen()"></po-button>
+  </div>
+
+  <div class="po-row" [style.width]="containerWidth" style="transition: width 0.3s ease;">
+    <po-table
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="height"
+      [p-striped]="true"
+    >
+    </po-table>
+  </div>
+</po-page-default>

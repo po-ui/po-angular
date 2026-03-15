@@ -1,0 +1,29 @@
+<po-page-default p-title="Teste: Drag and Drop de Colunas">
+  <div class="po-row po-mb-2">
+    <div class="po-md-12">
+      <strong>Itens:</strong> {{ items.length }}
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Colunas:</strong> {{ columns.length }}</span>
+      <span class="po-ml-3">|</span>
+      <span class="po-ml-3"><strong>Column Manager:</strong> {{ columnsManagerEnabled ? 'Visível' : 'Oculto' }}</span>
+    </div>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-mr-2" [p-label]="columnsManagerEnabled ? 'Ocultar Column Manager' : 'Exibir Column Manager'" (p-click)="toggleColumnsManager()"></po-button>
+  </div>
+
+  <div class="po-row">
+    <po-table
+      class="po-sm-12"
+      [p-items]="items"
+      [p-columns]="columns"
+      [p-virtual-scroll]="true"
+      [p-height]="height"
+      [p-draggable]="true"
+      [p-hide-columns-manager]="!columnsManagerEnabled"
+      [p-striped]="true"
+    >
+    </po-table>
+  </div>
+</po-page-default>
