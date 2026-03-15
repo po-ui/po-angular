@@ -180,6 +180,7 @@ export class PoTableComponent
   private columnWidths: Array<string> = [];
   private resizeObserver: ResizeObserver;
   private scrollSyncListener: (() => void) | null = null;
+  private containerScrollSyncListener: (() => void) | null = null;
   private virtualScrollOverflowConfigured = false;
 
   private clickListener: () => void;
@@ -362,6 +363,10 @@ export class PoTableComponent
     if (this.scrollSyncListener) {
       this.scrollSyncListener();
       this.scrollSyncListener = null;
+    }
+    if (this.containerScrollSyncListener) {
+      this.containerScrollSyncListener();
+      this.containerScrollSyncListener = null;
     }
   }
 
@@ -1032,6 +1037,17 @@ export class PoTableComponent
       this.scrollSyncListener = this.renderer.listen(viewportEl, 'scroll', () => {
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = viewportEl.scrollLeft;
+        }
+      });
+    }
+
+    // O scroll horizontal real acontece no container .po-table-container-fixed-inner (pai do viewport).
+    // Precisamos sincronizar o scrollLeft do header com esse container também.
+    const fixedInnerContainer = viewportEl.closest('.po-table-container-fixed-inner');
+    if (fixedInnerContainer && !this.containerScrollSyncListener) {
+      this.containerScrollSyncListener = this.renderer.listen(fixedInnerContainer, 'scroll', () => {
+        if (this.headerScrollContainer?.nativeElement) {
+          this.headerScrollContainer.nativeElement.scrollLeft = fixedInnerContainer.scrollLeft;
         }
       });
     }
