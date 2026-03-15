@@ -181,6 +181,8 @@ export class PoTableComponent
   private resizeObserver: ResizeObserver;
   private scrollSyncListener: (() => void) | null = null;
   private virtualScrollOverflowConfigured = false;
+  private maxColumnWidths: Array<number> = [];
+  private syncColumnWidthsTimer: ReturnType<typeof setTimeout> | null = null;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -356,6 +358,10 @@ export class PoTableComponent
     if (this.scrollSyncListener) {
       this.scrollSyncListener();
       this.scrollSyncListener = null;
+    }
+    if (this.syncColumnWidthsTimer) {
+      clearTimeout(this.syncColumnWidthsTimer);
+      this.syncColumnWidthsTimer = null;
     }
   }
 
@@ -604,6 +610,10 @@ export class PoTableComponent
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
     this.columns = columns;
     this.changeDetector.detectChanges();
+    if (this.virtualScroll) {
+      this.clearColumnWidths();
+      this.debounceSyncColumnWidths();
+    }
   }
 
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
@@ -821,6 +831,11 @@ export class PoTableComponent
     if (changesItems && !this.hasColumns && this.hasItems) {
       this.columns = this.getDefaultColumns(this.items[0]);
     }
+
+    if (changesItems && this.virtualScroll) {
+      this.clearColumnWidths();
+      this.debounceSyncColumnWidths();
+    }
   }
 
   private checkingIfColumnHasTooltip(column, row) {
@@ -1025,6 +1040,7 @@ export class PoTableComponent
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = viewportEl.scrollLeft;
         }
+        this.debounceSyncColumnWidths();
       });
     }
 
@@ -1049,6 +1065,8 @@ export class PoTableComponent
   }
 
   private clearColumnWidths(): void {
+    this.maxColumnWidths = [];
+
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
     const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
@@ -1068,6 +1086,16 @@ export class PoTableComponent
     });
   }
 
+  private debounceSyncColumnWidths(): void {
+    if (this.syncColumnWidthsTimer) {
+      clearTimeout(this.syncColumnWidthsTimer);
+    }
+    this.syncColumnWidthsTimer = setTimeout(() => {
+      this.syncColumnWidths();
+      this.syncColumnWidthsTimer = null;
+    }, 100);
+  }
+
   private syncColumnWidths(): void {
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
@@ -1080,7 +1108,7 @@ export class PoTableComponent
 
     const count = Math.min(headerCells.length, firstRowCells.length);
 
-    // Limpar estilos inline anteriores para permitir que o browser calcule larguras naturais
+    // Limpar estilos inline para medir larguras naturais das cells visíveis
     for (let i = 0; i < count; i++) {
       this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
       this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
@@ -1093,32 +1121,41 @@ export class PoTableComponent
       }
     });
 
-    // Medir largura MAX por coluna entre header e TODAS as linhas visíveis do body
-    const maxWidths: Array<number> = new Array(count).fill(0);
-    for (let i = 0; i < count; i++) {
-      maxWidths[i] = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
+    // Inicializar acumulador se necessário
+    if (this.maxColumnWidths.length !== count) {
+      this.maxColumnWidths = new Array(count).fill(0);
     }
+
+    // Medir largura natural do header e acumular no MAX
+    for (let i = 0; i < count; i++) {
+      const thWidth = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
+      if (thWidth > this.maxColumnWidths[i]) {
+        this.maxColumnWidths[i] = thWidth;
+      }
+    }
+
+    // Medir largura natural de TODAS as linhas visíveis e acumular no MAX
     bodyRows.forEach((row: HTMLElement) => {
       const cells = row.querySelectorAll('td');
       for (let i = 0; i < Math.min(cells.length, count); i++) {
         const cellWidth = (cells[i] as HTMLElement).getBoundingClientRect().width;
-        if (cellWidth > maxWidths[i]) {
-          maxWidths[i] = cellWidth;
+        if (cellWidth > this.maxColumnWidths[i]) {
+          this.maxColumnWidths[i] = cellWidth;
         }
       }
     });
 
-    // Aplicar MAX em header e TODAS as linhas do body
+    // Aplicar MAX acumulado em header e TODAS as linhas visíveis do body
     for (let i = 0; i < count; i++) {
-      const width = `${maxWidths[i]}px`;
+      const width = `${this.maxColumnWidths[i]}px`;
       this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', width);
       this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', width);
     }
     bodyRows.forEach((row: HTMLElement) => {
       const cells = row.querySelectorAll('td');
       for (let i = 0; i < Math.min(cells.length, count); i++) {
-        this.renderer.setStyle(cells[i] as HTMLElement, 'width', `${maxWidths[i]}px`);
-        this.renderer.setStyle(cells[i] as HTMLElement, 'minWidth', `${maxWidths[i]}px`);
+        this.renderer.setStyle(cells[i] as HTMLElement, 'width', `${this.maxColumnWidths[i]}px`);
+        this.renderer.setStyle(cells[i] as HTMLElement, 'minWidth', `${this.maxColumnWidths[i]}px`);
       }
     });
   }

@@ -2272,7 +2272,7 @@ describe('PoTableComponent:', () => {
         document.body.removeChild(mockBodyTable);
       });
 
-      it('clearColumnWidths: should remove inline width and minWidth from header and all body rows', () => {
+      it('clearColumnWidths: should remove inline width and minWidth from header and all body rows and reset maxColumnWidths', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2299,6 +2299,7 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        component['maxColumnWidths'] = [500];
 
         component['clearColumnWidths']();
 
@@ -2308,13 +2309,16 @@ describe('PoTableComponent:', () => {
         expect(mockTd1.style.minWidth).toBe('');
         expect(mockTd2.style.width).toBe('');
         expect(mockTd2.style.minWidth).toBe('');
+        expect(component['maxColumnWidths']).toEqual([]);
       });
 
-      it('clearColumnWidths: should not fail when tables are not available', () => {
+      it('clearColumnWidths: should not fail when tables are not available and should reset maxColumnWidths', () => {
         component.headerTableElement = null;
         component.bodyTableElement = null;
+        component['maxColumnWidths'] = [100, 200];
 
         expect(() => component['clearColumnWidths']()).not.toThrow();
+        expect(component['maxColumnWidths']).toEqual([]);
       });
 
       it('clearColumnWidths: should not fail when body has no rows', () => {
@@ -2367,6 +2371,115 @@ describe('PoTableComponent:', () => {
         component.ngAfterViewChecked();
 
         expect(component['configureVirtualScrollOverflow']).not.toHaveBeenCalled();
+      });
+
+      it('debounceSyncColumnWidths: should call syncColumnWidths after debounce', fakeAsync(() => {
+        spyOn<any>(component, 'syncColumnWidths');
+
+        component['debounceSyncColumnWidths']();
+        expect(component['syncColumnWidths']).not.toHaveBeenCalled();
+
+        tick(100);
+        expect(component['syncColumnWidths']).toHaveBeenCalledTimes(1);
+        expect(component['syncColumnWidthsTimer']).toBeNull();
+      }));
+
+      it('debounceSyncColumnWidths: should debounce multiple rapid calls', fakeAsync(() => {
+        spyOn<any>(component, 'syncColumnWidths');
+
+        component['debounceSyncColumnWidths']();
+        component['debounceSyncColumnWidths']();
+        component['debounceSyncColumnWidths']();
+
+        tick(100);
+        expect(component['syncColumnWidths']).toHaveBeenCalledTimes(1);
+      }));
+
+      it('syncColumnWidths: should accumulate maxColumnWidths across calls', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockThead = document.createElement('thead');
+        const mockTh = document.createElement('th');
+        mockThead.appendChild(mockTh);
+        mockHeaderTable.appendChild(mockThead);
+
+        const mockBodyTable = document.createElement('table');
+        const mockTbody = document.createElement('tbody');
+        const mockTr = document.createElement('tr');
+        const mockTd = document.createElement('td');
+        mockTr.appendChild(mockTd);
+        mockTbody.appendChild(mockTr);
+        mockBodyTable.appendChild(mockTbody);
+
+        document.body.appendChild(mockHeaderTable);
+        document.body.appendChild(mockBodyTable);
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+
+        component['syncColumnWidths']();
+        const firstMax = component['maxColumnWidths'][0];
+
+        component['syncColumnWidths']();
+        expect(component['maxColumnWidths'][0]).toBeGreaterThanOrEqual(firstMax);
+
+        document.body.removeChild(mockHeaderTable);
+        document.body.removeChild(mockBodyTable);
+      });
+
+      it('configureVirtualScrollOverflow: scroll listener should call debounceSyncColumnWidths', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        Object.defineProperty(mockViewportEl, 'scrollLeft', { value: 50 });
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        const mockHeaderContainer = document.createElement('div');
+        component.headerScrollContainer = { nativeElement: mockHeaderContainer } as any;
+
+        spyOn(component['renderer'], 'listen').and.callFake((_target: any, _eventName: string, callback: Function) => {
+          callback();
+          return () => {};
+        });
+
+        spyOn<any>(component, 'debounceSyncColumnWidths');
+
+        component['scrollSyncListener'] = null;
+        component['configureVirtualScrollOverflow']();
+
+        expect(component['debounceSyncColumnWidths']).toHaveBeenCalled();
+      });
+
+      it('checkChangesItems: should call clearColumnWidths and debounceSyncColumnWidths when items change and virtualScroll is true', () => {
+        component['_virtualScroll'] = true;
+        component.items = [{ id: 1 }];
+        component['differ'].diff(component.items);
+        component.items = [{ id: 1 }, { id: 2 }];
+
+        spyOn<any>(component, 'clearColumnWidths');
+        spyOn<any>(component, 'debounceSyncColumnWidths');
+
+        component['checkChangesItems']();
+
+        expect(component['clearColumnWidths']).toHaveBeenCalled();
+        expect(component['debounceSyncColumnWidths']).toHaveBeenCalled();
+      });
+
+      it('onVisibleColumnsChange: should call clearColumnWidths and debounceSyncColumnWidths when virtualScroll is true', () => {
+        component['_virtualScroll'] = true;
+
+        spyOn<any>(component, 'clearColumnWidths');
+        spyOn<any>(component, 'debounceSyncColumnWidths');
+
+        component.onVisibleColumnsChange(component.columns);
+
+        expect(component['clearColumnWidths']).toHaveBeenCalled();
+        expect(component['debounceSyncColumnWidths']).toHaveBeenCalled();
+      });
+
+      it('ngOnDestroy: should clear syncColumnWidthsTimer', () => {
+        component['syncColumnWidthsTimer'] = setTimeout(() => {}, 1000);
+        spyOn<any>(component, 'removeListeners');
+
+        component.ngOnDestroy();
+
+        expect(component['syncColumnWidthsTimer']).toBeNull();
       });
 
       it('should update filteredItems on onFilteredItemsChange call', () => {
