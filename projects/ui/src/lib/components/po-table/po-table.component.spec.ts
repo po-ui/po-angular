@@ -2081,8 +2081,7 @@ describe('PoTableComponent:', () => {
 
         component['configureVirtualScrollOverflow']();
 
-        expect(mockContentWrapper.style.contain).toBe('none');
-        expect(mockContentWrapper.style.overflow).toBe('visible');
+        expect(mockContentWrapper.style.contain).toBe('layout style');
         expect(mockContentWrapper.style.minWidth).toBe('100%');
         expect(component['scrollSyncListener']).toBeTruthy();
         expect(component['virtualScrollOverflowConfigured']).toBe(true);
@@ -2097,7 +2096,16 @@ describe('PoTableComponent:', () => {
         expect(component['virtualScrollOverflowConfigured']).toBe(false);
       });
 
-      it('syncColumnWidths: should sync widths using MAX of header and body via renderer', () => {
+      it('syncColumnWidths: should skip when applyFixedColumns returns true', () => {
+        spyOn(component, 'applyFixedColumns').and.returnValue(true);
+        const setStyleSpy = spyOn(component['renderer'], 'setStyle');
+
+        component['syncColumnWidths']();
+
+        expect(setStyleSpy).not.toHaveBeenCalled();
+      });
+
+      it('syncColumnWidths: should apply max-content temporarily and sync widths using MAX of header and body', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2117,8 +2125,23 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        spyOn(component, 'applyFixedColumns').and.returnValue(false);
+
+        const setStyleSpy = spyOn(component['renderer'], 'setStyle').and.callThrough();
 
         component['syncColumnWidths']();
+
+        // Verifica que width: max-content foi aplicado temporariamente nas tabelas
+        const maxContentCalls = setStyleSpy.calls.allArgs().filter(
+          args => args[1] === 'width' && args[2] === 'max-content'
+        );
+        expect(maxContentCalls.length).toBe(2); // body e header
+
+        // Verifica que table-layout: auto foi aplicado temporariamente
+        const tableLayoutCalls = setStyleSpy.calls.allArgs().filter(
+          args => args[1] === 'table-layout' && args[2] === 'auto'
+        );
+        expect(tableLayoutCalls.length).toBe(2); // body e header
 
         expect(mockTh.style.width).toBeTruthy();
         expect(mockTh.style.minWidth).toBeTruthy();
@@ -2170,7 +2193,7 @@ describe('PoTableComponent:', () => {
         expect(() => component['syncColumnWidths']()).not.toThrow();
       });
 
-      it('syncColumnWidths: should clear inline widths before recalculating', () => {
+      it('syncColumnWidths: should clear inline widths and use max-content before recalculating', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2194,19 +2217,27 @@ describe('PoTableComponent:', () => {
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
         component.bodyTableElement = { nativeElement: mockBodyTable } as any;
+        spyOn(component, 'applyFixedColumns').and.returnValue(false);
 
         const removeStyleSpy = spyOn(component['renderer'], 'removeStyle').and.callThrough();
 
         component['syncColumnWidths']();
 
+        // Verifica que removeStyle foi chamado para limpar widths das cells e restaurar tabelas
         expect(removeStyleSpy).toHaveBeenCalled();
+        const removeTableLayoutCalls = removeStyleSpy.calls.allArgs().filter(
+          args => args[1] === 'table-layout'
+        );
+        expect(removeTableLayoutCalls.length).toBe(2); // body e header restaurados
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);
       });
 
-      it('clearColumnWidths: should remove inline width and minWidth from header and body cells', () => {
+      it('clearColumnWidths: should remove inline width, minWidth and table-layout from header and body', () => {
         const mockHeaderTable = document.createElement('table');
+        mockHeaderTable.style.tableLayout = 'auto';
+        mockHeaderTable.style.width = 'max-content';
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
         mockTh.style.width = '200px';
@@ -2215,6 +2246,8 @@ describe('PoTableComponent:', () => {
         mockHeaderTable.appendChild(mockThead);
 
         const mockBodyTable = document.createElement('table');
+        mockBodyTable.style.tableLayout = 'auto';
+        mockBodyTable.style.width = 'max-content';
         const mockTbody = document.createElement('tbody');
         const mockTr = document.createElement('tr');
         const mockTd = document.createElement('td');
@@ -2233,6 +2266,10 @@ describe('PoTableComponent:', () => {
         expect(mockTh.style.minWidth).toBe('');
         expect(mockTd.style.width).toBe('');
         expect(mockTd.style.minWidth).toBe('');
+        expect(mockHeaderTable.style.tableLayout).toBe('');
+        expect(mockHeaderTable.style.width).toBe('');
+        expect(mockBodyTable.style.tableLayout).toBe('');
+        expect(mockBodyTable.style.width).toBe('');
       });
 
       it('clearColumnWidths: should not fail when tables are not available', () => {

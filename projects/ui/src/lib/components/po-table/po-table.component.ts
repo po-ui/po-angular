@@ -181,7 +181,6 @@ export class PoTableComponent
   private resizeObserver: ResizeObserver;
   private scrollSyncListener: (() => void) | null = null;
   private containerScrollSyncListener: (() => void) | null = null;
-  private syncColumnWidthsTimer: ReturnType<typeof setTimeout> | null = null;
   private virtualScrollOverflowConfigured = false;
 
   private clickListener: () => void;
@@ -1037,7 +1036,6 @@ export class PoTableComponent
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = viewportEl.scrollLeft;
         }
-        this.debounceSyncColumnWidths();
       });
     }
 
@@ -1049,7 +1047,6 @@ export class PoTableComponent
         if (this.headerScrollContainer?.nativeElement) {
           this.headerScrollContainer.nativeElement.scrollLeft = fixedInnerContainer.scrollLeft;
         }
-        this.debounceSyncColumnWidths();
       });
     }
 
@@ -1073,21 +1070,13 @@ export class PoTableComponent
     }
   }
 
-  private debounceSyncColumnWidths(): void {
-    if (this.syncColumnWidthsTimer) {
-      clearTimeout(this.syncColumnWidthsTimer);
-    }
-    this.syncColumnWidthsTimer = setTimeout(() => {
-      this.syncColumnWidths();
-      this.syncColumnWidthsTimer = null;
-    }, 100);
-  }
-
   private clearColumnWidths(): void {
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
-    const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
-    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
+    const headerTable = this.headerTableElement.nativeElement;
+    const bodyTable = this.bodyTableElement.nativeElement;
+    const headerCells = headerTable.querySelectorAll('thead th');
+    const bodyRow = bodyTable.querySelector('tbody tr');
     const bodyCells = bodyRow ? bodyRow.querySelectorAll('td') : [];
     const count = Math.min(headerCells.length, bodyCells.length);
 
@@ -1097,39 +1086,72 @@ export class PoTableComponent
       this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
       this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
     }
+
+    this.renderer.removeStyle(headerTable, 'table-layout');
+    this.renderer.removeStyle(headerTable, 'width');
+    this.renderer.removeStyle(bodyTable, 'table-layout');
+    this.renderer.removeStyle(bodyTable, 'width');
   }
 
   private syncColumnWidths(): void {
+    if (this.applyFixedColumns()) return;
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
-    const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
-    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
+    const headerTable = this.headerTableElement.nativeElement;
+    const bodyTable = this.bodyTableElement.nativeElement;
+    const headerCells = headerTable.querySelectorAll('thead th');
+    const bodyRow = bodyTable.querySelector('tbody tr');
     if (!bodyRow) return;
 
     const bodyCells = bodyRow.querySelectorAll('td');
     if (!headerCells.length || !bodyCells.length) return;
 
     const count = Math.min(headerCells.length, bodyCells.length);
+    const maxColumnWidths: Array<number> = new Array(count).fill(0);
 
-    // Limpar estilos inline anteriores para permitir que o browser calcule larguras naturais
+    // Fase 1: Medir body com max-content (medição não-constrangida)
     for (let i = 0; i < count; i++) {
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
       this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
       this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
     }
+    this.renderer.setStyle(bodyTable, 'width', 'max-content');
+    this.renderer.setStyle(bodyTable, 'table-layout', 'auto');
 
-    // Medir larguras naturais e aplicar o MAX entre header e body
     for (let i = 0; i < count; i++) {
-      const thWidth = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
-      const tdWidth = (bodyCells[i] as HTMLElement).getBoundingClientRect().width;
-      const maxWidth = `${Math.max(thWidth, tdWidth)}px`;
-
-      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', maxWidth);
-      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', maxWidth);
-      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'width', maxWidth);
-      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'minWidth', maxWidth);
+      maxColumnWidths[i] = Math.max(maxColumnWidths[i], (bodyCells[i] as HTMLElement).getBoundingClientRect().width);
     }
+
+    // Restaurar body table
+    this.renderer.removeStyle(bodyTable, 'width');
+    this.renderer.removeStyle(bodyTable, 'table-layout');
+
+    // Fase 2: Medir header com max-content (medição não-constrangida)
+    for (let i = 0; i < count; i++) {
+      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
+      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
+    }
+    this.renderer.setStyle(headerTable, 'width', 'max-content');
+    this.renderer.setStyle(headerTable, 'table-layout', 'auto');
+
+    for (let i = 0; i < count; i++) {
+      maxColumnWidths[i] = Math.max(maxColumnWidths[i], (headerCells[i] as HTMLElement).getBoundingClientRect().width);
+    }
+
+    // Restaurar header table
+    this.renderer.removeStyle(headerTable, 'width');
+    this.renderer.removeStyle(headerTable, 'table-layout');
+
+    // Fase 3: Aplicar maxColumnWidths em ambas as tabelas
+    for (let i = 0; i < count; i++) {
+      const widthPx = `${maxColumnWidths[i]}px`;
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', widthPx);
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', widthPx);
+      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'width', widthPx);
+      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'minWidth', widthPx);
+    }
+
+    this.syncHeaderTableWidth();
+    this.changeDetector.markForCheck();
   }
 
   private syncHeaderTableWidth(): void {
