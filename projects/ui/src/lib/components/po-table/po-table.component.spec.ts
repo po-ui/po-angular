@@ -1523,16 +1523,18 @@ describe('PoTableComponent:', () => {
       expect(component['getDefaultColumns']).not.toHaveBeenCalled();
     });
 
-    it('onVisibleColumnsChange: should set `columns` and call `detectChanges`', () => {
+    it('onVisibleColumnsChange: should call `clearColumnWidths` and `markForCheck`', () => {
       const newColumns: Array<PoTableColumn> = [{ property: 'age', visible: false }];
 
       component.columns = [];
 
-      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+      const spyClearColumnWidths = spyOn(component as any, 'clearColumnWidths');
+      const spyMarkForCheck = spyOn(component['changeDetector'], 'markForCheck');
 
       component.onVisibleColumnsChange(newColumns);
 
-      expect(spyDetectChanges).toHaveBeenCalled();
+      expect(spyClearColumnWidths).toHaveBeenCalled();
+      expect(spyMarkForCheck).toHaveBeenCalled();
     });
 
     it('trackBy: should return index param', () => {

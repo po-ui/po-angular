@@ -640,8 +640,14 @@ export class PoTableComponent
   }
 
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
+    this.clearColumnWidths();
     this.columns = columns;
-    this.changeDetector.detectChanges();
+    this.changeDetector.markForCheck();
+
+    // Re-sincroniza larguras após Angular renderizar a nova configuração de colunas
+    if (this.virtualScroll) {
+      setTimeout(() => this.syncColumnWidths());
+    }
   }
 
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
