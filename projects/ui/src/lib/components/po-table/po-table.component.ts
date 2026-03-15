@@ -358,9 +358,7 @@ export class PoTableComponent
     const columnsKey = this.mainColumns?.map(c => `${c.property}:${c.fixed || ''}:${c.width || ''}`).join('|') || '';
     if (columnsKey !== this.lastColumnsKey) {
       this.lastColumnsKey = columnsKey;
-      if (this.computedColumnWidths.length > 0) {
-        this.computedColumnWidths = [];
-      }
+      this.clearColumnWidths();
     }
 
     // Permite que os cabeçalhos sejam calculados na primeira vez que o componente torna-se visível,
@@ -1114,26 +1112,36 @@ export class PoTableComponent
   }
 
   private clearColumnWidths(): void {
-    if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
+    const headerTable = this.headerTableElement?.nativeElement;
+    const bodyTable = this.bodyTableElement?.nativeElement;
 
-    const headerTable = this.headerTableElement.nativeElement;
-    const bodyTable = this.bodyTableElement.nativeElement;
-    const headerCells = headerTable.querySelectorAll('thead th');
-    const bodyRow = bodyTable.querySelector('tbody tr');
-    const bodyCells = bodyRow ? bodyRow.querySelectorAll('td') : [];
-    const count = Math.min(headerCells.length, bodyCells.length);
-
-    for (let i = 0; i < count; i++) {
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
+    if (headerTable) {
+      const headerCells = headerTable.querySelectorAll('thead th');
+      for (let i = 0; i < headerCells.length; i++) {
+        this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
+        this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
+      }
+      this.renderer.removeStyle(headerTable, 'table-layout');
+      this.renderer.removeStyle(headerTable, 'width');
     }
 
-    this.renderer.removeStyle(headerTable, 'table-layout');
-    this.renderer.removeStyle(headerTable, 'width');
-    this.renderer.removeStyle(bodyTable, 'table-layout');
-    this.renderer.removeStyle(bodyTable, 'width');
+    if (bodyTable) {
+      const bodyRow = bodyTable.querySelector('tbody tr');
+      if (bodyRow) {
+        const bodyCells = bodyRow.querySelectorAll('td');
+        for (let i = 0; i < bodyCells.length; i++) {
+          this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
+          this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
+        }
+      }
+      this.renderer.removeStyle(bodyTable, 'table-layout');
+      this.renderer.removeStyle(bodyTable, 'width');
+    }
+
+    // Reseta scrollLeft do header para evitar desalinhamento após mudança de colunas
+    if (this.headerScrollContainer?.nativeElement) {
+      this.headerScrollContainer.nativeElement.scrollLeft = 0;
+    }
 
     this.computedColumnWidths = [];
   }
