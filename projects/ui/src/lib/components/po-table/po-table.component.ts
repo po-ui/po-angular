@@ -1052,49 +1052,75 @@ export class PoTableComponent
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
     const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
-    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
-    const bodyCells = bodyRow ? bodyRow.querySelectorAll('td') : [];
-    const count = Math.min(headerCells.length, bodyCells.length);
+    const bodyRows = this.bodyTableElement.nativeElement.querySelectorAll('tbody tr');
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < headerCells.length; i++) {
       this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
       this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
     }
+
+    bodyRows.forEach((row: HTMLElement) => {
+      const cells = row.querySelectorAll('td');
+      cells.forEach((cell: HTMLElement) => {
+        this.renderer.removeStyle(cell, 'width');
+        this.renderer.removeStyle(cell, 'minWidth');
+      });
+    });
   }
 
   private syncColumnWidths(): void {
     if (!this.headerTableElement?.nativeElement || !this.bodyTableElement?.nativeElement) return;
 
     const headerCells = this.headerTableElement.nativeElement.querySelectorAll('thead th');
-    const bodyRow = this.bodyTableElement.nativeElement.querySelector('tbody tr');
-    if (!bodyRow) return;
+    const bodyRows = this.bodyTableElement.nativeElement.querySelectorAll('tbody tr');
+    if (!bodyRows.length || !headerCells.length) return;
 
-    const bodyCells = bodyRow.querySelectorAll('td');
-    if (!headerCells.length || !bodyCells.length) return;
+    const firstRowCells = bodyRows[0].querySelectorAll('td');
+    if (!firstRowCells.length) return;
 
-    const count = Math.min(headerCells.length, bodyCells.length);
+    const count = Math.min(headerCells.length, firstRowCells.length);
 
     // Limpar estilos inline anteriores para permitir que o browser calcule larguras naturais
     for (let i = 0; i < count; i++) {
       this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
       this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
     }
+    bodyRows.forEach((row: HTMLElement) => {
+      const cells = row.querySelectorAll('td');
+      for (let i = 0; i < Math.min(cells.length, count); i++) {
+        this.renderer.removeStyle(cells[i] as HTMLElement, 'width');
+        this.renderer.removeStyle(cells[i] as HTMLElement, 'minWidth');
+      }
+    });
 
-    // Medir larguras naturais e aplicar o MAX entre header e body
+    // Medir largura MAX por coluna entre header e TODAS as linhas visíveis do body
+    const maxWidths: Array<number> = new Array(count).fill(0);
     for (let i = 0; i < count; i++) {
-      const thWidth = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
-      const tdWidth = (bodyCells[i] as HTMLElement).getBoundingClientRect().width;
-      const maxWidth = `${Math.max(thWidth, tdWidth)}px`;
-
-      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', maxWidth);
-      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', maxWidth);
-      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'width', maxWidth);
-      this.renderer.setStyle(bodyCells[i] as HTMLElement, 'minWidth', maxWidth);
+      maxWidths[i] = (headerCells[i] as HTMLElement).getBoundingClientRect().width;
     }
+    bodyRows.forEach((row: HTMLElement) => {
+      const cells = row.querySelectorAll('td');
+      for (let i = 0; i < Math.min(cells.length, count); i++) {
+        const cellWidth = (cells[i] as HTMLElement).getBoundingClientRect().width;
+        if (cellWidth > maxWidths[i]) {
+          maxWidths[i] = cellWidth;
+        }
+      }
+    });
+
+    // Aplicar MAX em header e TODAS as linhas do body
+    for (let i = 0; i < count; i++) {
+      const width = `${maxWidths[i]}px`;
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'width', width);
+      this.renderer.setStyle(headerCells[i] as HTMLElement, 'minWidth', width);
+    }
+    bodyRows.forEach((row: HTMLElement) => {
+      const cells = row.querySelectorAll('td');
+      for (let i = 0; i < Math.min(cells.length, count); i++) {
+        this.renderer.setStyle(cells[i] as HTMLElement, 'width', `${maxWidths[i]}px`);
+        this.renderer.setStyle(cells[i] as HTMLElement, 'minWidth', `${maxWidths[i]}px`);
+      }
+    });
   }
 
   private syncHeaderTableWidth(): void {

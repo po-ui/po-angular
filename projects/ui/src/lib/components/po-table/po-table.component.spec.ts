@@ -2152,7 +2152,7 @@ describe('PoTableComponent:', () => {
         expect(() => component['configureVirtualScrollOverflow']()).not.toThrow();
       });
 
-      it('syncColumnWidths: should sync widths using MAX of header and body via renderer', () => {
+      it('syncColumnWidths: should sync widths using MAX of header and all body rows via renderer', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2161,10 +2161,14 @@ describe('PoTableComponent:', () => {
 
         const mockBodyTable = document.createElement('table');
         const mockTbody = document.createElement('tbody');
-        const mockTr = document.createElement('tr');
-        const mockTd = document.createElement('td');
-        mockTr.appendChild(mockTd);
-        mockTbody.appendChild(mockTr);
+        const mockTr1 = document.createElement('tr');
+        const mockTd1 = document.createElement('td');
+        mockTr1.appendChild(mockTd1);
+        mockTbody.appendChild(mockTr1);
+        const mockTr2 = document.createElement('tr');
+        const mockTd2 = document.createElement('td');
+        mockTr2.appendChild(mockTd2);
+        mockTbody.appendChild(mockTr2);
         mockBodyTable.appendChild(mockTbody);
 
         document.body.appendChild(mockHeaderTable);
@@ -2177,8 +2181,10 @@ describe('PoTableComponent:', () => {
 
         expect(mockTh.style.width).toBeTruthy();
         expect(mockTh.style.minWidth).toBeTruthy();
-        expect(mockTd.style.width).toBeTruthy();
-        expect(mockTd.style.minWidth).toBeTruthy();
+        expect(mockTd1.style.width).toBeTruthy();
+        expect(mockTd1.style.minWidth).toBeTruthy();
+        expect(mockTd2.style.width).toBeTruthy();
+        expect(mockTd2.style.minWidth).toBeTruthy();
 
         document.body.removeChild(mockHeaderTable);
         document.body.removeChild(mockBodyTable);
@@ -2225,7 +2231,7 @@ describe('PoTableComponent:', () => {
         expect(() => component['syncColumnWidths']()).not.toThrow();
       });
 
-      it('syncColumnWidths: should clear inline widths before recalculating', () => {
+      it('syncColumnWidths: should clear inline widths before recalculating for all rows', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2236,12 +2242,18 @@ describe('PoTableComponent:', () => {
 
         const mockBodyTable = document.createElement('table');
         const mockTbody = document.createElement('tbody');
-        const mockTr = document.createElement('tr');
-        const mockTd = document.createElement('td');
-        mockTd.style.width = '500px';
-        mockTd.style.minWidth = '500px';
-        mockTr.appendChild(mockTd);
-        mockTbody.appendChild(mockTr);
+        const mockTr1 = document.createElement('tr');
+        const mockTd1 = document.createElement('td');
+        mockTd1.style.width = '500px';
+        mockTd1.style.minWidth = '500px';
+        mockTr1.appendChild(mockTd1);
+        mockTbody.appendChild(mockTr1);
+        const mockTr2 = document.createElement('tr');
+        const mockTd2 = document.createElement('td');
+        mockTd2.style.width = '300px';
+        mockTd2.style.minWidth = '300px';
+        mockTr2.appendChild(mockTd2);
+        mockTbody.appendChild(mockTr2);
         mockBodyTable.appendChild(mockTbody);
 
         document.body.appendChild(mockHeaderTable);
@@ -2260,7 +2272,7 @@ describe('PoTableComponent:', () => {
         document.body.removeChild(mockBodyTable);
       });
 
-      it('clearColumnWidths: should remove inline width and minWidth from header and body cells', () => {
+      it('clearColumnWidths: should remove inline width and minWidth from header and all body rows', () => {
         const mockHeaderTable = document.createElement('table');
         const mockThead = document.createElement('thead');
         const mockTh = document.createElement('th');
@@ -2271,12 +2283,18 @@ describe('PoTableComponent:', () => {
 
         const mockBodyTable = document.createElement('table');
         const mockTbody = document.createElement('tbody');
-        const mockTr = document.createElement('tr');
-        const mockTd = document.createElement('td');
-        mockTd.style.width = '200px';
-        mockTd.style.minWidth = '200px';
-        mockTr.appendChild(mockTd);
-        mockTbody.appendChild(mockTr);
+        const mockTr1 = document.createElement('tr');
+        const mockTd1 = document.createElement('td');
+        mockTd1.style.width = '200px';
+        mockTd1.style.minWidth = '200px';
+        mockTr1.appendChild(mockTd1);
+        mockTbody.appendChild(mockTr1);
+        const mockTr2 = document.createElement('tr');
+        const mockTd2 = document.createElement('td');
+        mockTd2.style.width = '300px';
+        mockTd2.style.minWidth = '300px';
+        mockTr2.appendChild(mockTd2);
+        mockTbody.appendChild(mockTr2);
         mockBodyTable.appendChild(mockTbody);
 
         component.headerTableElement = { nativeElement: mockHeaderTable } as any;
@@ -2286,8 +2304,10 @@ describe('PoTableComponent:', () => {
 
         expect(mockTh.style.width).toBe('');
         expect(mockTh.style.minWidth).toBe('');
-        expect(mockTd.style.width).toBe('');
-        expect(mockTd.style.minWidth).toBe('');
+        expect(mockTd1.style.width).toBe('');
+        expect(mockTd1.style.minWidth).toBe('');
+        expect(mockTd2.style.width).toBe('');
+        expect(mockTd2.style.minWidth).toBe('');
       });
 
       it('clearColumnWidths: should not fail when tables are not available', () => {
