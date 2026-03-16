@@ -219,7 +219,13 @@ describe('PoTableComponent:', () => {
       checkChangesItems: () => {},
       debounceResize: () => true,
       checkInfiniteScroll: () => {},
-      applyFixedColumns: () => {}
+      applyFixedColumns: () => {},
+      clearColumnWidths: () => {},
+      syncHeaderTableWidth: () => {},
+      mainColumns: [],
+      lastColumnsKey: '',
+      virtualScroll: false,
+      hasItems: false
     };
   }
 

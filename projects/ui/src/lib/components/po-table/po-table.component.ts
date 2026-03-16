@@ -384,7 +384,9 @@ export class PoTableComponent
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
-    this.resizeObserver?.disconnect();
+    if (this.resizeObserver && typeof this.resizeObserver.disconnect === 'function') {
+      this.resizeObserver.disconnect();
+    }
     if (this.scrollSyncListener) {
       this.scrollSyncListener();
       this.scrollSyncListener = null;
