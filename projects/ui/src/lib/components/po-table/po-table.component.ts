@@ -373,12 +373,6 @@ export class PoTableComponent
     if (this.virtualScroll && this.hasItems) {
       this.syncHeaderTableWidth();
     }
-
-    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
-      this.debounceResize();
-      this.checkInfiniteScroll();
-      this.visibleElement = true;
-    }
   }
 
   ngOnDestroy() {
