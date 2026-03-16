@@ -2350,6 +2350,7 @@ describe('PoTableComponent:', () => {
         mockTbody.appendChild(mockTr);
         mockBodyTable.appendChild(mockTbody);
 
+        component.height = 400;
         component.virtualScroll = true;
         component.items = [{ id: 1 }];
         component.computedColumnWidths = [];
@@ -2373,6 +2374,7 @@ describe('PoTableComponent:', () => {
       it('ngAfterViewChecked: should call configureVirtualScrollOverflow when virtualScroll is active and not yet configured', () => {
         const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
         component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.height = 400;
         component.virtualScroll = true;
         component['virtualScrollOverflowConfigured'] = false;
 
