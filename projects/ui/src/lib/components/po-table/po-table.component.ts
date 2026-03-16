@@ -1160,37 +1160,9 @@ export class PoTableComponent
     const count = Math.min(headerCells.length, bodyCells.length);
     const maxColumnWidths: Array<number> = new Array(count).fill(0);
 
-    // Fase 1: Medir body com max-content (medição não-constrangida)
-    for (let i = 0; i < count; i++) {
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(bodyCells[i] as HTMLElement, 'minWidth');
-    }
-    this.renderer.setStyle(bodyTable, 'width', 'max-content');
-    this.renderer.setStyle(bodyTable, 'table-layout', 'auto');
-
-    for (let i = 0; i < count; i++) {
-      maxColumnWidths[i] = Math.max(maxColumnWidths[i], (bodyCells[i] as HTMLElement).getBoundingClientRect().width);
-    }
-
-    // Restaurar body table
-    this.renderer.removeStyle(bodyTable, 'width');
-    this.renderer.removeStyle(bodyTable, 'table-layout');
-
-    // Fase 2: Medir header com max-content (medição não-constrangida)
-    for (let i = 0; i < count; i++) {
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'width');
-      this.renderer.removeStyle(headerCells[i] as HTMLElement, 'minWidth');
-    }
-    this.renderer.setStyle(headerTable, 'width', 'max-content');
-    this.renderer.setStyle(headerTable, 'table-layout', 'auto');
-
-    for (let i = 0; i < count; i++) {
-      maxColumnWidths[i] = Math.max(maxColumnWidths[i], (headerCells[i] as HTMLElement).getBoundingClientRect().width);
-    }
-
-    // Restaurar header table
-    this.renderer.removeStyle(headerTable, 'width');
-    this.renderer.removeStyle(headerTable, 'table-layout');
+    // Fase 1 e 2: Medir body e header com max-content (medição não-constrangida)
+    this.measureCellWidths(bodyTable, bodyCells, count, maxColumnWidths);
+    this.measureCellWidths(headerTable, headerCells, count, maxColumnWidths);
 
     // Fase 3: Armazenar larguras computadas e aplicar via Renderer2
     this.computedColumnWidths = maxColumnWidths.map(w => `${w}px`);
@@ -1205,6 +1177,27 @@ export class PoTableComponent
 
     this.syncHeaderTableWidth();
     this.changeDetector.markForCheck();
+  }
+
+  private measureCellWidths(
+    table: HTMLElement,
+    cells: NodeListOf<Element>,
+    count: number,
+    maxColumnWidths: Array<number>
+  ): void {
+    for (let i = 0; i < count; i++) {
+      this.renderer.removeStyle(cells[i] as HTMLElement, 'width');
+      this.renderer.removeStyle(cells[i] as HTMLElement, 'minWidth');
+    }
+    this.renderer.setStyle(table, 'width', 'max-content');
+    this.renderer.setStyle(table, 'table-layout', 'auto');
+
+    for (let i = 0; i < count; i++) {
+      maxColumnWidths[i] = Math.max(maxColumnWidths[i], (cells[i] as HTMLElement).getBoundingClientRect().width);
+    }
+
+    this.renderer.removeStyle(table, 'width');
+    this.renderer.removeStyle(table, 'table-layout');
   }
 
   private syncHeaderTableWidth(): void {
