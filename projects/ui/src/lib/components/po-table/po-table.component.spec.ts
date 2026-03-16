@@ -2396,6 +2396,192 @@ describe('PoTableComponent:', () => {
         expect(component['configureVirtualScrollOverflow']).not.toHaveBeenCalled();
       });
 
+      it('setupColumnWidthSync: should create ResizeObserver and observe viewport when virtualScroll is true', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.height = 400;
+        component.virtualScroll = true;
+
+        component['setupColumnWidthSync']();
+
+        expect(component['resizeObserver']).toBeTruthy();
+      });
+
+      it('setupColumnWidthSync: should not create ResizeObserver when virtualScroll is false', () => {
+        component['resizeObserver'] = undefined;
+        component.height = 0;
+        component.virtualScroll = false;
+
+        component['setupColumnWidthSync']();
+
+        expect(component['resizeObserver']).toBeUndefined();
+      });
+
+      it('ngOnDestroy: should call scrollSyncListener and set to null', () => {
+        const scrollSyncSpy = jasmine.createSpy('scrollSyncListener');
+        component['scrollSyncListener'] = scrollSyncSpy;
+
+        component.ngOnDestroy();
+
+        expect(scrollSyncSpy).toHaveBeenCalled();
+        expect(component['scrollSyncListener']).toBeNull();
+      });
+
+      it('ngOnDestroy: should call containerScrollSyncListener and set to null', () => {
+        const containerSyncSpy = jasmine.createSpy('containerScrollSyncListener');
+        component['containerScrollSyncListener'] = containerSyncSpy;
+
+        component.ngOnDestroy();
+
+        expect(containerSyncSpy).toHaveBeenCalled();
+        expect(component['containerScrollSyncListener']).toBeNull();
+      });
+
+      it('ngOnDestroy: should call resizeObserver.disconnect when disconnect is a function', () => {
+        const disconnectSpy = jasmine.createSpy('disconnect');
+        component['resizeObserver'] = { observe: () => {}, disconnect: disconnectSpy, unobserve: () => {} } as any;
+
+        component.ngOnDestroy();
+
+        expect(disconnectSpy).toHaveBeenCalled();
+      });
+
+      it('ngOnDestroy: should not fail when scrollSyncListener and containerScrollSyncListener are null', () => {
+        component['scrollSyncListener'] = null;
+        component['containerScrollSyncListener'] = null;
+        component['resizeObserver'] = undefined;
+
+        expect(() => component.ngOnDestroy()).not.toThrow();
+      });
+
+      it('ngDoCheck: should call syncHeaderTableWidth when virtualScroll is active and hasItems', () => {
+        component.height = 400;
+        component.virtualScroll = true;
+        component.items = [{ id: 1 }];
+
+        const syncSpy = spyOn<any>(component, 'syncHeaderTableWidth');
+
+        component.ngDoCheck();
+
+        expect(syncSpy).toHaveBeenCalled();
+      });
+
+      it('ngDoCheck: should not call syncHeaderTableWidth when virtualScroll is false', () => {
+        component.virtualScroll = false;
+        component.items = [{ id: 1 }];
+
+        const syncSpy = spyOn<any>(component, 'syncHeaderTableWidth');
+
+        component.ngDoCheck();
+
+        expect(syncSpy).not.toHaveBeenCalled();
+      });
+
+      it('onVisibleColumnsChange: should schedule syncColumnWidths when virtualScroll is active', (done) => {
+        component.height = 400;
+        component.virtualScroll = true;
+
+        const syncSpy = spyOn<any>(component, 'syncColumnWidths');
+        spyOn<any>(component, 'clearColumnWidths');
+
+        component.onVisibleColumnsChange([{ property: 'id' }]);
+
+        setTimeout(() => {
+          expect(syncSpy).toHaveBeenCalled();
+          done();
+        });
+      });
+
+      it('onVisibleColumnsChange: should not schedule syncColumnWidths when virtualScroll is false', () => {
+        component.virtualScroll = false;
+
+        spyOn<any>(component, 'clearColumnWidths');
+        const markSpy = spyOn(component['changeDetector'], 'markForCheck');
+
+        component.onVisibleColumnsChange([{ property: 'id' }]);
+
+        expect(markSpy).toHaveBeenCalled();
+        expect(component.columns).toEqual([{ property: 'id' }]);
+      });
+
+      it('syncHeaderTableWidth: should update headerTableScrollWidth when width changes', () => {
+        const mockHeaderTable = document.createElement('table');
+        mockHeaderTable.innerHTML = '<thead><tr><th style="width:200px">Col</th></tr></thead>';
+        document.body.appendChild(mockHeaderTable);
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.headerTableScrollWidth = 999;
+
+        const markSpy = spyOn(component['changeDetector'], 'markForCheck');
+
+        component['syncHeaderTableWidth']();
+
+        expect(component.headerTableScrollWidth).not.toBe(999);
+        expect(markSpy).toHaveBeenCalled();
+
+        document.body.removeChild(mockHeaderTable);
+      });
+
+      it('syncHeaderTableWidth: should not call markForCheck when width has not changed', () => {
+        const mockHeaderTable = document.createElement('table');
+        document.body.appendChild(mockHeaderTable);
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.headerTableScrollWidth = mockHeaderTable.scrollWidth;
+
+        const markSpy = spyOn(component['changeDetector'], 'markForCheck');
+
+        component['syncHeaderTableWidth']();
+
+        expect(markSpy).not.toHaveBeenCalled();
+
+        document.body.removeChild(mockHeaderTable);
+      });
+
+      it('syncHeaderTableWidth: should not fail when headerTableElement is null', () => {
+        component.headerTableElement = null;
+
+        expect(() => component['syncHeaderTableWidth']()).not.toThrow();
+      });
+
+      it('clearColumnWidths: should reset headerScrollContainer scrollLeft', () => {
+        const mockHeaderTable = document.createElement('table');
+        const mockHeaderContainer = document.createElement('div');
+        Object.defineProperty(mockHeaderContainer, 'scrollLeft', { value: 100, writable: true });
+
+        component.headerTableElement = { nativeElement: mockHeaderTable } as any;
+        component.bodyTableElement = null;
+        component.headerScrollContainer = { nativeElement: mockHeaderContainer } as any;
+
+        component['clearColumnWidths']();
+
+        expect(mockHeaderContainer.scrollLeft).toBe(0);
+      });
+
+      it('configureVirtualScrollOverflow: should not set overflow when headerScrollContainer is null', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.headerScrollContainer = null;
+
+        component['configureVirtualScrollOverflow']();
+
+        expect(component['virtualScrollOverflowConfigured']).toBe(true);
+      });
+
+      it('configureVirtualScrollOverflow: should not create duplicate scroll sync listeners', () => {
+        const mockViewportEl = document.createElement('cdk-virtual-scroll-viewport');
+        const mockHeaderContainer = document.createElement('div');
+        component.tableVirtualScroll = { nativeElement: mockViewportEl } as any;
+        component.headerScrollContainer = { nativeElement: mockHeaderContainer } as any;
+        component['scrollSyncListener'] = () => {};
+
+        const listenSpy = spyOn(component['renderer'], 'listen');
+
+        component['configureVirtualScrollOverflow']();
+
+        // Should not call listen for viewport scroll since scrollSyncListener already exists
+        const viewportListenCalls = listenSpy.calls.allArgs().filter(args => args[1] === 'scroll' && args[0] === mockViewportEl);
+        expect(viewportListenCalls.length).toBe(0);
+      });
+
       it('should update filteredItems on onFilteredItemsChange call', () => {
         component.items = [
           { id: 1, name: 'item1' },
