@@ -183,7 +183,22 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-range-presets') rangePresets: boolean | Array<string> = false;
+  @Input('p-range-presets')
+  set rangePresets(value: boolean | Array<string> | string) {
+    if (Array.isArray(value)) {
+      this._rangePresets = value;
+    } else if (value === '' || value === true || value === 'true') {
+      this._rangePresets = true;
+    } else {
+      this._rangePresets = false;
+    }
+  }
+
+  get rangePresets(): boolean | Array<string> {
+    return this._rangePresets;
+  }
+
+  private _rangePresets: boolean | Array<string> = false;
 
   /**
    * @optional
