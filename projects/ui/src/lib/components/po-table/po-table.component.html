@@ -256,7 +256,7 @@
               }"
               [ngStyle]="{
                 'width':
-                  height > 0 && !virtualScroll ? (!hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto') : ''
+                  height > 0 && !virtualScroll ? (!hasItems ? '100%' : applyFixedColumns() ? column.width : null) : null
               }"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               [class.po-table-column-drag-box]="this.isDraggable"
@@ -296,7 +296,7 @@
               }"
               [ngStyle]="{
                 'width':
-                  height > 0 && !virtualScroll ? (!hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto') : ''
+                  height > 0 && !virtualScroll ? (!hasItems ? '100%' : applyFixedColumns() ? column.width : null) : null
               }"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               (click)="sortColumn(column)"
