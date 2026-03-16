@@ -651,7 +651,7 @@ export class PoDatepickerRangeComponent
   }
 
   private onScroll = (): void => {
-    if (this.isCalendarVisible) {
+    if (this.isCalendarVisible && !this.verifyMobile()) {
       this.controlPosition.adjustPosition(poCalendarPositionDefault);
     }
   };
