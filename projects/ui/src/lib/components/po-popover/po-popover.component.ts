@@ -126,9 +126,13 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     setTimeout(() => {
       this.setElementsControlPosition();
       this.setPopoverPosition();
-      this.setOpacity(1);
       this.openPopover.emit();
       this.observeContentResize();
+
+      setTimeout(() => {
+        this.setOpacity(1);
+      }, 80);
+
       this.cd.detectChanges();
     });
 
@@ -370,14 +374,10 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
     if (!this.popoverElement?.nativeElement) return;
 
-    let initialCall = true;
     this.resizeObserver = new ResizeObserver(() => {
-      if (initialCall) {
-        initialCall = false;
-        return;
-      }
       this.setElementsControlPosition();
       this.setPopoverPosition();
+      this.setOpacity(1);
       this.cd.detectChanges();
     });
 
