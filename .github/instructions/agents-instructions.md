@@ -272,6 +272,59 @@ Todo componente documenta tokens CSS customizáveis em seu `-base.component.ts`:
 4. **Referencie guia de customização de tema** no cabeçalho da documentação
 5. **Teste com níveis de acessibilidade AA e AAA** para garantir que valores de tokens funcionem corretamente
 
+### Animalia DS (Design System)
+
+O PO UI segue as definições visuais do [Animalia DS](https://doc.animaliads.io/), o Design System que serve como base para os tokens de design, especificações de componentes e diretrizes de acessibilidade.
+
+**Relação com o PO UI:**
+- Os componentes PO UI implementam progressivamente as definições visuais do Animalia DS
+- A biblioteca de ícones padrão é o **Animalia Icons** (`@animaliads/animalia-icon`), com prefixo `an an-*`
+- O dicionário de ícones está em `projects/ui/src/lib/components/po-icon/po-icon-dictionary.ts`
+- A documentação de acessibilidade dos componentes referencia as especificações do Animalia DS
+- Variáveis CSS legacy (prefixo `--color-primary-*`, `--color-secondary-*`) estão sendo substituídas por tokens do Animalia DS
+
+**Ao implementar ou modificar componentes:**
+- Consulte a documentação do componente no Animalia DS para verificar as especificações visuais
+- Siga os estados definidos pelo DS: Enable, Disable, Static, Hover, Focus, Active
+- Use os tokens CSS do Animalia DS como referência para valores padrão
+- Documente a conformidade com o Animalia DS no CHANGELOG usando o padrão: `implementa definições do AnimaliaDS`
+
+**Referências:**
+- Documentação Animalia DS: https://doc.animaliads.io/
+- Live demos de componentes: https://doc.animaliads.io/docs/components/
+- Portal PO UI: https://po-ui.io/
+
+### Integração MCP — Ferramentas de Design
+
+Para conectar agentes de IA às especificações de design do Animalia DS no Figma, configure o MCP do Figma no seu ambiente de desenvolvimento.
+
+**Figma MCP** permite que agentes de IA:
+- Consultem especificações de componentes diretamente do Figma
+- Verifiquem espaçamentos, cores e tipografia definidos no design
+- Comparem a implementação com o design original
+- Extraiam informações de estados (hover, focus, disabled, etc.)
+
+**Configuração sugerida para `mcp.json`:**
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio"],
+      "env": {
+        "FIGMA_API_KEY": "<sua-chave-api-figma>"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    }
+  }
+}
+```
+
+> **Nota:** A chave da API do Figma deve ser configurada como variável de ambiente, nunca embutida no código.
+
 ## Acessibilidade
 
 Componentes seguem padrões WCAG:
