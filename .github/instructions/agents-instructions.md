@@ -272,6 +272,83 @@ Todo componente documenta tokens CSS customizáveis em seu `-base.component.ts`:
 4. **Referencie guia de customização de tema** no cabeçalho da documentação
 5. **Teste com níveis de acessibilidade AA e AAA** para garantir que valores de tokens funcionem corretamente
 
+### Animalia DS (Design System)
+
+O PO UI segue as definições visuais do [Animalia DS](https://doc.animaliads.io/), o Design System que serve como base para os tokens de design, especificações de componentes e diretrizes de acessibilidade.
+
+**Relação com o PO UI:**
+- Os componentes PO UI implementam progressivamente as definições visuais do Animalia DS
+- A biblioteca de ícones padrão é o **Animalia Icons** (`@animaliads/animalia-icon`), com prefixo `an an-*`
+- O dicionário de ícones está em `projects/ui/src/lib/components/po-icon/po-icon-dictionary.ts`
+- A documentação de acessibilidade dos componentes referencia as especificações do Animalia DS
+- Variáveis CSS legacy (prefixo `--color-primary-*`, `--color-secondary-*`) estão sendo substituídas por tokens do Animalia DS
+
+**Ao implementar ou modificar componentes:**
+- Consulte a documentação do componente no Animalia DS para verificar as especificações visuais
+- Siga os estados definidos pelo DS: Enable, Disable, Static, Hover, Focus, Active
+- Use os tokens CSS do Animalia DS como referência para valores padrão
+- Documente a conformidade com o Animalia DS no CHANGELOG usando o padrão: `implementa definições do AnimaliaDS`
+
+**Referências:**
+- Documentação Animalia DS: https://doc.animaliads.io/
+- Live demos de componentes: https://doc.animaliads.io/docs/components/
+- Portal PO UI: https://po-ui.io/
+
+### Integração MCP — Ferramentas de Design
+
+Para conectar agentes de IA às especificações de design do Animalia DS no Figma, configure o MCP do Figma no seu ambiente de desenvolvimento.
+
+**Figma MCP** permite que agentes de IA:
+- Consultem especificações de componentes diretamente do Figma
+- Verifiquem espaçamentos, cores e tipografia definidos no design
+- Comparem a implementação com o design original
+- Extraiam informações de estados (hover, focus, disabled, etc.)
+
+**Configuração sugerida para `mcp.json`:**
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio"],
+      "env": {
+        "FIGMA_API_KEY": "<sua-chave-api-figma>"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    }
+  }
+}
+```
+
+> **Nota:** A chave da API do Figma deve ser configurada como variável de ambiente, nunca embutida no código.
+
+## Regras de Código Angular v21+ (OBRIGATÓRIO)
+
+### PROIBIDO (nunca gerar em novos componentes)
+- **NgModules**: NÃO crie arquivos `.module.ts`. Todo componente DEVE usar `standalone: true`.
+- **CommonModule**: NÃO importe `CommonModule`. Importe componentes/diretivas individuais diretamente no array `imports` do decorator `@Component`.
+- **Structural Directives**: NÃO use `*ngIf`, `*ngFor`, `*ngSwitch`. Use Control Flow Syntax:
+  - `@if (condition) { ... } @else { ... }`
+  - `@for (item of items; track item.id) { ... } @empty { ... }`
+  - `@switch (value) { @case ('a') { ... } @default { ... } }`
+- **Tipo `any`**: NÃO use o tipo `any`. Defina interfaces ou types explícitos para todo dado.
+- **Decorator-based Inputs/Outputs**: NÃO use `@Input()` / `@Output()` em novos componentes. Use APIs function-based:
+  - `label = input<string>('', { alias: 'p-label' })` em vez de `@Input('p-label') label: string`
+  - `clicked = output<void>({ alias: 'p-click' })` em vez de `@Output('p-click') click = new EventEmitter()`
+  - Inputs booleanos: `disabled = input<boolean, unknown>(false, { alias: 'p-disabled', transform: convertToBoolean })`
+
+### OBRIGATÓRIO (sempre gerar em novos componentes)
+- **Standalone Components**: Todo novo componente DEVE ter `standalone: true` no decorator `@Component`.
+- **Signals**: Use `signal()` para estado local mutável, `computed()` para valores derivados e `effect()` para side effects reativos.
+- **Control Flow**: Use `@if`, `@for`, `@switch` em todos os templates.
+- **Typed Reactive Forms**: Use `FormControl<string>`, nunca `FormControl` sem tipo genérico.
+- **ControlValueAccessor**: Todo componente de campo (input, select, textarea, datepicker, combo, lookup) DEVE implementar `ControlValueAccessor` para integração com `ngModel` e `FormControl`.
+
+> **Nota sobre código existente (legacy):** Componentes existentes ainda usam `@Input()`, `@Output()`, `NgModules` e `*ngIf`/`*ngFor`. Ao **modificar** componentes existentes, mantenha o padrão vigente no arquivo. As regras acima aplicam-se a **novos** componentes e refatorações explícitas.
+
 ## Acessibilidade
 
 Componentes seguem padrões WCAG:
@@ -281,6 +358,43 @@ Componentes seguem padrões WCAG:
 - Níveis de acessibilidade: **AAA** (padrão - maior contraste, áreas clicáveis maiores) vs **AA** (proporções balanceadas)
 - Modos de densidade: Controle espaçamento entre/dentro de componentes via enum `PoDensityMode`
 - Documente recursos de acessibilidade na seção `@description` do componente
+
+### Atributos ARIA (OBRIGATÓRIO)
+
+Todo componente interativo DEVE incluir:
+- `role` apropriado quando o elemento HTML semântico não for suficiente (ex: `role="dialog"`, `role="listbox"`)
+- `aria-label` ou `aria-labelledby` para elementos sem texto visível
+- `aria-describedby` quando houver texto auxiliar (mensagem de erro, helper text)
+- `aria-expanded` para elementos que controlam painéis expansíveis (dropdowns, accordions)
+- `aria-live="polite"` para regiões com conteúdo dinâmico (toasters, contadores, mensagens de validação)
+- `aria-disabled="true"` em conjunto com `[disabled]` quando relevante
+- `aria-checked` para checkboxes e toggles (incluindo estado `mixed` para indeterminado)
+
+### Focus Trap (OBRIGATÓRIO para overlays)
+
+Modais, drawers, popovers e qualquer overlay DEVEM:
+- Capturar o foco ao abrir (primeiro elemento focável recebe foco)
+- Impedir que Tab/Shift+Tab saiam do overlay enquanto estiver aberto
+- Retornar o foco ao elemento que abriu o overlay ao fechar
+- Fechar com tecla Esc
+
+### Navegação por Teclado
+
+| Tecla | Comportamento esperado |
+|-------|----------------------|
+| `Tab` | Move foco para o próximo elemento focável |
+| `Shift+Tab` | Move foco para o elemento focável anterior |
+| `Enter` / `Space` | Ativa botões, links e controles interativos |
+| `Esc` | Fecha overlay, modal, dropdown ou popover aberto |
+| `Arrow Up/Down` | Navega itens em listas, menus, selects e combos |
+| `Arrow Left/Right` | Navega tabs, segmented controls e radio groups |
+| `Home` / `End` | Vai para primeiro/último item em listas e menus |
+
+### Contraste Mínimo
+
+- Texto normal: ratio mínimo de **4.5:1** (WCAG AA) ou **7:1** (WCAG AAA)
+- Texto grande (≥18px bold ou ≥24px): ratio mínimo de **3:1** (AA) ou **4.5:1** (AAA)
+- Elementos gráficos e componentes de interface: ratio mínimo de **3:1**
 
 ## Localizações Importantes de Arquivos
 
