@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.6.0](https://github.com/po-ui/po-angular/compare/v21.5.0...v21.6.0) (2026-03-17)
+
+
+### Features
+
+* **components:** alterna size por nível de acessibilidade ([a32dd8a](https://github.com/po-ui/po-angular/commit/a32dd8aa6e52a495775bb9fc9404cd3f5b2b3a18))
+* **skeleton:** implementa componente po-skeleton ([f041d86](https://github.com/po-ui/po-angular/commit/f041d86a01d0e2d7cce45940ff9db95f1e29044a))
+
 ## [21.5.0](https://github.com/po-ui/po-angular/compare/v21.4.0...v21.5.0) (2026-03-10)
 
 
