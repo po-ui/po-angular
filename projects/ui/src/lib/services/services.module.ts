@@ -9,6 +9,7 @@ import { PoI18nPipe } from './po-i18n/po-i18n.pipe';
 import { PoLanguageModule } from './po-language/po-language.module';
 import { PoMediaQueryModule } from './po-media-query/po-media-query.module';
 import { PoNotificationModule } from './po-notification/po-notification.module';
+import { PoTelemetryModule } from './po-telemetry/po-telemetry.module';
 import { PoThemeModule } from './po-theme/po-theme.module';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoLanguageModule,
     PoMediaQueryModule,
     PoNotificationModule,
+    PoTelemetryModule,
     PoThemeModule
   ],
   exports: [
@@ -33,6 +35,7 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoI18nPipe,
     PoMediaQueryModule,
     PoNotificationModule,
+    PoTelemetryModule,
     PoThemeModule
   ],
   providers: [],
