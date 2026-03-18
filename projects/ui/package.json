@@ -2,6 +2,9 @@
   "name": "@po-ui/ng-components",
   "version": "0.0.0-PLACEHOLDER",
   "description": "PO UI - Components",
+  "scripts": {
+    "postinstall": "node ./schematics/postinstall/telemetry-notice.js"
+  },
   "author": "PO UI",
   "license": "MIT",
   "homepage": "https://po-ui.io",
