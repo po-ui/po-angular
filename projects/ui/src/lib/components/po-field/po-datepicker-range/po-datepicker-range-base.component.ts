@@ -218,6 +218,23 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @description
    *
+   * Define a ordenação dos presets na lista.
+   *
+   * Valores aceitos:
+   * - `'asc'` (padrão): presets mais próximos de hoje aparecem primeiro.
+   * - `'desc'`: presets mais distantes de hoje aparecem primeiro.
+   *
+   * A ordenação é aplicada dentro de cada grupo de temporalidade (Futuro → Presente → Passado).
+   *
+   * @default `asc`
+   */
+  @Input('p-range-presets-order') rangePresetsOrder: 'asc' | 'desc' = 'asc';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Texto de apoio do campo.
    */
   @Input('p-help') help?: string;

@@ -93,7 +93,16 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       defaultPresets = [...PO_CALENDAR_DEFAULT_RANGE_PRESETS];
     }
 
-    const combined = [...defaultPresets, ...(hasCustomPresets ? this.rangePresetOptions : [])];
+    const customPresets = hasCustomPresets ? this.rangePresetOptions : [];
+    const combined = [...defaultPresets, ...customPresets];
+
+    // Regra: o preset "today" é obrigatório e deve estar presente mesmo com apenas presets customizados
+    if (combined.length > 0 && !combined.some(p => p.label.toLowerCase() === 'today')) {
+      const todayPreset = PO_CALENDAR_DEFAULT_RANGE_PRESETS.find(p => p.label === 'today');
+      if (todayPreset) {
+        combined.unshift(todayPreset);
+      }
+    }
 
     if (combined.length === 0) {
       return [];
@@ -216,17 +225,40 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const todayTime = todayStart.getTime();
+    const isDesc = this.rangePresetsOrder === 'desc';
 
-    const getPriority = (preset: PoCalendarRangePreset) => {
-      const { start } = preset.dateRange(today);
-      const startDate = new Date(start);
-
-      if (startDate > todayStart) return 0;
-      if (startDate < todayStart) return 2;
-      return 1;
+    const getGroup = (startDate: Date): number => {
+      const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0, 0).getTime();
+      if (startTime > todayTime) {
+        return 0; // Futuro
+      }
+      if (startTime < todayTime) {
+        return 2; // Passado
+      }
+      return 1; // Presente
     };
 
-    return [...presets].sort((a, b) => getPriority(a) - getPriority(b));
+    return [...presets].sort((a, b) => {
+      const rangeA = a.dateRange(today);
+      const rangeB = b.dateRange(today);
+      const startA = new Date(rangeA.start);
+      const startB = new Date(rangeB.start);
+
+      const groupA = getGroup(startA);
+      const groupB = getGroup(startB);
+
+      // Primeiro: agrupar por temporalidade (Futuro → Presente → Passado)
+      if (groupA !== groupB) {
+        return groupA - groupB;
+      }
+
+      // Dentro do mesmo grupo: ordenar por proximidade ao dia atual
+      const distA = Math.abs(startA.getTime() - todayTime);
+      const distB = Math.abs(startB.getTime() - todayTime);
+
+      return isDesc ? distB - distA : distA - distB;
+    });
   }
 
   private clampDate(date: Date, min?: Date, max?: Date): Date {
