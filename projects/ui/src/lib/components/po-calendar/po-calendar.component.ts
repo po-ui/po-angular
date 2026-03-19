@@ -216,27 +216,17 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-    const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
 
-    const future: Array<PoCalendarRangePreset> = [];
-    const present: Array<PoCalendarRangePreset> = [];
-    const past: Array<PoCalendarRangePreset> = [];
+    const getPriority = (preset: PoCalendarRangePreset) => {
+      const { start } = preset.dateRange(today);
+      const startDate = new Date(start);
 
-    for (const preset of presets) {
-      const range = preset.dateRange(today);
-      const start = new Date(range.start);
-      const end = new Date(range.end);
+      if (startDate > todayStart) return 0;
+      if (startDate < todayStart) return 2;
+      return 1;
+    };
 
-      if (start > todayEnd) {
-        future.push(preset);
-      } else if (end < todayStart) {
-        past.push(preset);
-      } else {
-        present.push(preset);
-      }
-    }
-
-    return [...future, ...present, ...past];
+    return [...presets].sort((a, b) => getPriority(a) - getPriority(b));
   }
 
   private clampDate(date: Date, min?: Date, max?: Date): Date {
