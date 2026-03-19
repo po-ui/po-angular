@@ -1,7 +1,5 @@
 import { Directive, input, model } from '@angular/core';
 
-import { convertToBoolean } from '../../utils/util';
-
 import { PoContextMenuItem } from './po-context-menu-item.interface';
 
 /**
@@ -73,10 +71,10 @@ export class PoContextMenuBaseComponent {
    *
    * `
    *   [(p-expanded)]="expanded"
-   *   (p-expandChange)="handlerExpeanded($event)
+   *   (p-expandChange)="handlerExpanded($event)
    * `
    *
-   * @default: true
+   * @default `true`
    * */
   expanded = model<boolean>(true, { alias: 'p-expanded' });
 }

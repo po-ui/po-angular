@@ -10,7 +10,7 @@ export interface PoContextMenuItem {
   label: string;
 
   /** Acao executada ao clicar no item. */
-  action: Function;
+  action?: Function;
 
   /** Estado de selecao do item. */
   selected?: boolean;
