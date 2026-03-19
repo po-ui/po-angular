@@ -17,7 +17,7 @@ interface PoInternalContextMenuItem extends PoContextMenuItem {
  *  <file name="sample-po-context-menu-basic/sample-po-context-menu-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-context-tabs-labs" title="PO Context Tabs Labs">
+ * <example name="po-context-menu-labs" title="PO Context Menu Labs">
  *  <file name="sample-po-context-menu-basic-labs/sample-po-context-menu-basic-labs.component.html"> </file>
  *  <file name="sample-po-context-menu-basic-labs/sample-po-context-menu-basic-labs.component.ts"> </file>
  * </example>
