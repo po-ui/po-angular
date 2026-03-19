@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive, output } from '@angular/core';
+import { EventEmitter, Input, Output, Directive } from '@angular/core';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 
@@ -45,13 +45,8 @@ export abstract class PoTabBaseComponent {
    */
   @Output('p-close-tab') closeTab = new EventEmitter();
 
-  /**
-   * @ToDo
-   */
-  activatedTab = output<PoTabBaseComponent>({ alias: 'p-activated-tab' });
-
   // ID da aba
-  @Input('id') id: string = uuid();
+  id?: string = uuid();
 
   private _active?: boolean = false;
   private _disabled?: boolean = false;

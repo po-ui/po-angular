@@ -180,9 +180,7 @@ describe('PoContextMenuComponent:', () => {
       });
 
       it('should sync _items with items input when items change', () => {
-        const items: Array<PoContextMenuItem> = [
-          { label: 'Item 1', action: () => {} }
-        ];
+        const items: Array<PoContextMenuItem> = [{ label: 'Item 1', action: () => {} }];
         fixture.componentRef.setInput('p-items', items);
         fixture.detectChanges();
 
@@ -203,7 +201,7 @@ describe('PoContextMenuComponent:', () => {
       });
 
       it('should set tooltip when label text overflows', () => {
-        const items = [{ label: 'Long text that overflows' }];
+        const items = [{ label: 'Long text that overflows' }, { label: 'Short text' }];
         fixture.componentRef.setInput('p-items', items);
         fixture.detectChanges();
 
@@ -343,10 +341,7 @@ describe('PoContextMenuComponent:', () => {
     });
 
     it('should display correct label text for each item', () => {
-      const items: Array<PoContextMenuItem> = [
-        { label: 'Alpha' },
-        { label: 'Beta' }
-      ];
+      const items: Array<PoContextMenuItem> = [{ label: 'Alpha' }, { label: 'Beta' }];
       fixture.componentRef.setInput('p-items', items);
       component.expanded.set(true);
       fixture.detectChanges();

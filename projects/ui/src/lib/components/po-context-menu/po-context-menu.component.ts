@@ -69,9 +69,7 @@ export class PoContextMenuComponent extends PoContextMenuBaseComponent {
 
     const label = value.firstElementChild as HTMLSpanElement;
     if (label.scrollHeight > label.offsetHeight) {
-      this._items.update(items =>
-        items.map(i => (i.label === item.label ? { ...i, tooltip: item.label } : i))
-      );
+      this._items.update(items => items.map(i => (i === item ? { ...i, tooltip: item.label } : i)));
     }
   }
 
