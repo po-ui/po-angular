@@ -57,6 +57,8 @@ import { PoLabelModule } from '../po-label';
 import { PoTagModule } from '../po-tag';
 import { PoHelperModule } from '../po-helper';
 import { PoLinkModule } from '../po-link';
+import { PoTimepickerModule } from './po-timepicker/po-timepicker.module';
+import { PoTimerModule } from '../po-timer/po-timer.module';
 
 /**
  * @description
@@ -102,7 +104,9 @@ import { PoLinkModule } from '../po-link';
     PoListBoxModule,
     PoSwitchModule,
     PoTagModule,
-    PoHelperModule
+    PoHelperModule,
+    PoTimerModule,
+    PoTimepickerModule
   ],
   exports: [
     PoCheckboxGroupModule,
@@ -131,7 +135,8 @@ import { PoLinkModule } from '../po-link';
     PoRadioModule,
     PoLabelModule,
     PoSwitchModule,
-    PoTagModule
+    PoTagModule,
+    PoTimepickerModule
   ],
   declarations: [
     PoMultiselectOptionTemplateDirective,

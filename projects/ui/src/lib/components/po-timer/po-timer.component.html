@@ -1,0 +1,96 @@
+<div class="po-timer" role="listbox" [attr.aria-label]="ariaLabel">
+  <div class="po-timer-columns">
+    <!-- Coluna de horas -->
+    <div class="po-timer-column" role="group" [attr.aria-label]="literals.hours">
+      <span class="po-timer-column-label">{{ literals.hours }}</span>
+      @for (hour of hours; track hour) {
+        <button
+          type="button"
+          class="po-timer-cell"
+          [class.po-timer-cell-selected]="hour === selectedHour"
+          [class.po-timer-cell-disabled]="isHourDisabled(hour)"
+          [attr.aria-selected]="hour === selectedHour"
+          [attr.aria-disabled]="isHourDisabled(hour)"
+          [disabled]="isHourDisabled(hour)"
+          [attr.tabindex]="hour === selectedHour || (selectedHour === null && hour === hours[0]) ? 0 : -1"
+          (click)="selectHour(hour)"
+          (keydown)="onCellKeydown($event, 'hour', hour)"
+        >
+          {{ hour | number: '2.0-0' }}
+        </button>
+      }
+    </div>
+
+    <span class="po-timer-column-separator" aria-hidden="true">:</span>
+
+    <!-- Coluna de minutos -->
+    <div class="po-timer-column" role="group" [attr.aria-label]="literals.minutes">
+      <span class="po-timer-column-label">{{ literals.minutes }}</span>
+      @for (minute of minutes; track minute) {
+        <button
+          type="button"
+          class="po-timer-cell"
+          [class.po-timer-cell-selected]="minute === selectedMinute"
+          [class.po-timer-cell-disabled]="isMinuteDisabled(minute)"
+          [attr.aria-selected]="minute === selectedMinute"
+          [attr.aria-disabled]="isMinuteDisabled(minute)"
+          [disabled]="isMinuteDisabled(minute)"
+          [attr.tabindex]="minute === selectedMinute || (selectedMinute === null && minute === minutes[0]) ? 0 : -1"
+          (click)="selectMinute(minute)"
+          (keydown)="onCellKeydown($event, 'minute', minute)"
+        >
+          {{ minute | number: '2.0-0' }}
+        </button>
+      }
+    </div>
+
+    <!-- Coluna de segundos (opcional) -->
+    @if (showSeconds) {
+      <span class="po-timer-column-separator" aria-hidden="true">:</span>
+
+      <div class="po-timer-column" role="group" [attr.aria-label]="literals.seconds">
+        <span class="po-timer-column-label">{{ literals.seconds }}</span>
+        @for (second of seconds; track second) {
+          <button
+            type="button"
+            class="po-timer-cell"
+            [class.po-timer-cell-selected]="second === selectedSecond"
+            [class.po-timer-cell-disabled]="isSecondDisabled(second)"
+            [attr.aria-selected]="second === selectedSecond"
+            [attr.aria-disabled]="isSecondDisabled(second)"
+            [disabled]="isSecondDisabled(second)"
+            [attr.tabindex]="second === selectedSecond || (selectedSecond === null && second === seconds[0]) ? 0 : -1"
+            (click)="selectSecond(second)"
+            (keydown)="onCellKeydown($event, 'second', second)"
+          >
+            {{ second | number: '2.0-0' }}
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Seletor AM/PM (formato 12h) -->
+    @if (format === '12') {
+      <div class="po-timer-period" role="group" [attr.aria-label]="literals.period">
+        <button
+          type="button"
+          class="po-timer-period-button"
+          [class.po-timer-period-button-selected]="selectedPeriod === 'AM'"
+          [attr.aria-pressed]="selectedPeriod === 'AM'"
+          (click)="selectPeriod('AM')"
+        >
+          AM
+        </button>
+        <button
+          type="button"
+          class="po-timer-period-button"
+          [class.po-timer-period-button-selected]="selectedPeriod === 'PM'"
+          [attr.aria-pressed]="selectedPeriod === 'PM'"
+          (click)="selectPeriod('PM')"
+        >
+          PM
+        </button>
+      </div>
+    }
+  </div>
+</div>

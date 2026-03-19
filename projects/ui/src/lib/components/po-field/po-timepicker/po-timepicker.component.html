@@ -1,0 +1,120 @@
+@let poHelper = setHelper(label, additionalHelpTooltip);
+<po-field-container
+  [class.po-timepicker-container-disabled]="isDisabled"
+  [p-disabled]="isDisabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
+  [p-text-wrap]="labelTextWrap()"
+  [p-compact-label]="compactLabel()"
+>
+  <div class="po-field-container-content po-field-container-content-datepicker">
+    <div class="po-field-container-input">
+      <input
+        #inp
+        type="text"
+        class="po-input po-timepicker"
+        [class.po-input-icon-right]="clean && inp.value && !isDisabled"
+        [class.po-timepicker-field-disabled]="isDisabled"
+        [attr.data-focused-element]="!isDisabled"
+        [attr.data-inactive-component]="isDisabled || readonly"
+        [attr.name]="name"
+        [attr.p-size]="size"
+        [autocomplete]="autocomplete"
+        [disabled]="isDisabled"
+        [id]="id"
+        [placeholder]="isDisabled ? '' : placeholder"
+        [readonly]="readonly"
+        [required]="required"
+        [attr.aria-expanded]="visible ? 'true' : null"
+        [attr.aria-haspopup]="'listbox'"
+        (blur)="eventOnBlur($event)"
+        (click)="eventOnClick($event)"
+        (keydown)="onKeyDown($event)"
+        (keydown.tab)="handleCleanKeyboardTab($event)"
+        (input)="onInputChange($event)"
+      />
+      @if (loading) {
+        <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+      } @else {
+        <div class="po-field-icon-container-right">
+          @if (clean && inputValue && !isDisabled && !readonly) {
+            <po-clean
+              #iconClean
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="literals.clean"
+              class="po-icon-input"
+              p-icon="ICON_FILL_CLEAR_CONTENT"
+              [p-element-ref]="inputEl"
+              [p-size]="size"
+              (p-change-event)="clear()"
+              (keydown)="handleCleanKeyboardTab($event)"
+              (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+              (keydown.space)="clearAndFocus(); $event.preventDefault()"
+            >
+            </po-clean>
+            <div class="po-button-vertical-divider"></div>
+          }
+          <po-button
+            #iconTimepicker
+            class="po-timepicker-button"
+            [class.po-button-tertiary-danger]="getErrorPattern()"
+            p-icon="ICON_CLOCK"
+            p-kind="tertiary"
+            [p-disabled]="isDisabled || readonly"
+            [p-size]="size"
+            (keydown)="onKeyPress($event)"
+            (keydown.tab)="handleCleanKeyboardTab($event)"
+            (p-click)="togglePicker(false)"
+          >
+          </po-button>
+        </div>
+      }
+    </div>
+    @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+      <po-helper
+        #helperEl
+        class="po-field-helper-button"
+        [p-size]="size"
+        [p-helper]="poHelper.helperSettings"
+        [p-disabled]="isDisabled"
+      >
+      </po-helper>
+    }
+  </div>
+
+  <div #dialogPicker [class.po-timepicker-popup]="!verifyMobile()" tabindex="-1" [hidden]="!visible">
+    @if (verifyMobile()) {
+      <div class="po-timepicker-overlay"></div>
+    }
+    <po-timer
+      #timer
+      [class.po-timepicker-mobile]="verifyMobile()"
+      [p-format]="format"
+      [p-interval]="interval"
+      [p-show-seconds]="showSeconds"
+      [p-min-time]="minTime"
+      [p-max-time]="maxTime"
+      [p-size]="size"
+      (p-change)="timeSelected($event)"
+      (p-close)="closePicker()"
+      (keydown)="onTimerKeyDown($event)"
+    ></po-timer>
+  </div>
+
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-help]="help"
+      [p-disabled]="isDisabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-size]="size"
+    ></po-field-container-bottom>
+  }
+</po-field-container>

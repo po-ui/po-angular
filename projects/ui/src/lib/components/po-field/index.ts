@@ -69,4 +69,8 @@ export * from './po-switch/index';
 export * from './po-field-container/index';
 export * from './po-clean/index';
 
+export * from './po-timepicker/po-timepicker.component';
+export * from './po-timepicker/po-timepicker-base.component';
+export * from './po-timepicker/po-timepicker.module';
+
 export * from './shared/interfaces/error-async-properties.interface';
