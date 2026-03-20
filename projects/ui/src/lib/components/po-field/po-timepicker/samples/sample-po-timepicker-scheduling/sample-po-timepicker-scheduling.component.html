@@ -1,0 +1,77 @@
+<form #formScheduling="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="title"
+      [(ngModel)]="title"
+      p-label="Título do agendamento"
+      p-placeholder="Ex: Reunião de planejamento"
+      p-required
+    >
+    </po-input>
+
+    <po-datepicker
+      class="po-md-6"
+      name="date"
+      [(ngModel)]="date"
+      p-clean
+      p-format="dd/mm/yyyy"
+      p-label="Data"
+      p-required
+    >
+    </po-datepicker>
+  </div>
+
+  <div class="po-row">
+    <po-timepicker
+      class="po-md-4"
+      name="startTime"
+      [(ngModel)]="startTime"
+      p-label="Horário de início"
+      p-placeholder="HH:mm"
+      p-clean
+      p-required
+      p-min-time="08:00"
+      p-max-time="18:00"
+      p-error-pattern="Horário fora do expediente (08:00 - 18:00)"
+      [p-show-required]="true"
+    >
+    </po-timepicker>
+
+    <po-timepicker
+      class="po-md-4"
+      name="endTime"
+      [(ngModel)]="endTime"
+      p-label="Horário de término"
+      p-placeholder="HH:mm"
+      p-clean
+      p-required
+      p-min-time="08:00"
+      p-max-time="18:00"
+      p-error-pattern="Horário fora do expediente (08:00 - 18:00)"
+      [p-show-required]="true"
+    >
+    </po-timepicker>
+
+    <po-select
+      class="po-md-4"
+      name="room"
+      [(ngModel)]="room"
+      p-label="Sala"
+      p-required
+      [p-options]="roomOptions"
+    >
+    </po-select>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3 po-offset-md-9 po-offset-lg-9"
+      name="scheduleButton"
+      p-label="Agendar"
+      [p-disabled]="formScheduling.invalid"
+      (p-click)="schedule()"
+    >
+    </po-button>
+  </div>
+</form>

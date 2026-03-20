@@ -84,6 +84,46 @@
       >
       </po-datepicker-range>
     }
+    @if (compareTo(field.control, 'timepicker')) {
+      <po-timepicker
+        #component
+        [name]="field.property"
+        [(ngModel)]="value[field.property]"
+        [ngClass]="field.componentClass"
+        [additionalHelpEventTrigger]="field.additionalHelp ? 'event' : 'noEvent'"
+        [p-additional-help-tooltip]="field.additionalHelpTooltip"
+        [p-append-in-body]="field.appendBox"
+        [p-compact-label]="field.compactLabel"
+        [p-clean]="field.clean"
+        [p-disabled]="isDisabled(field)"
+        [p-error-pattern]="field.errorMessage"
+        [p-error-limit]="field.errorLimit"
+        [p-auto-focus]="field.focus"
+        [p-format]="field.format"
+        [p-help]="field.help"
+        [p-helper]="field.helper"
+        [p-iso-format]="field.isoFormat"
+        [p-label]="field.label"
+        [p-locale]="field.locale"
+        [p-max-time]="field.maxValue"
+        [p-min-time]="field.minValue"
+        [p-minute-interval]="field.minuteInterval"
+        [p-no-autocomplete]="field.noAutocomplete"
+        [p-optional]="field.optional"
+        [p-placeholder]="field.placeholder"
+        [p-readonly]="field.readonly"
+        [p-required]="field.required"
+        [p-required-field-error-message]="field.requiredFieldErrorMessage"
+        [p-second-interval]="field.secondInterval"
+        [p-show-required]="field.showRequired"
+        [p-show-seconds]="field.showSeconds"
+        [p-size]="field.size || componentsSize"
+        (p-change)="onChangeField(field)"
+        (p-additional-help)="field.additionalHelp?.($event)"
+        (p-keydown)="field.keydown?.($event)"
+      >
+      </po-timepicker>
+    }
     @if (compareTo(field.control, 'input')) {
       <po-input
         #component

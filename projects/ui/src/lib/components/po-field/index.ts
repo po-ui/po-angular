@@ -12,6 +12,9 @@ export * from './po-combo/po-combo-option-template/po-combo-option-template.dire
 export * from './po-combo/po-combo.component';
 export * from './po-datepicker/enums/po-datepicker-iso-format.enum';
 export * from './po-datepicker/po-datepicker.component';
+export * from './po-timepicker/enums/po-timepicker-iso-format.enum';
+export * from './po-timepicker/po-timepicker.component';
+export * from './po-timepicker/po-timepicker.module';
 export * from './po-datepicker-range/interfaces/po-datepicker-range.interface';
 export * from './po-datepicker-range/interfaces/po-datepicker-range-literals.interface';
 export * from './po-datepicker-range/po-datepicker-range.component';

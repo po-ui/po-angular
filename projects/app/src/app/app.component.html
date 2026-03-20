@@ -164,6 +164,179 @@
       <p class="po-font-text">Combinação: formato 12h com coluna de segundos.</p>
       <po-timer [p-format]="format12" [p-size]="currentSize" p-show-seconds> </po-timer>
     </section>
+
+    <po-divider></po-divider>
+
+    <!-- ============================================================ -->
+    <!-- po-timepicker (Fase 2) -->
+    <!-- ============================================================ -->
+    <h1 class="po-font-title" style="margin-top: 40px; margin-bottom: 16px">po-timepicker - Demonstração (Fase 2)</h1>
+    <p class="po-font-text-large" style="margin-bottom: 24px">
+      Demonstração das variações do componente <strong>po-timepicker</strong> (campo + popup).
+    </p>
+
+    <!-- Seção 7: Timepicker básico 24h -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">7. Timepicker básico (24h)</h2>
+      <p class="po-font-text">Campo de horário com popup. Formato 24h, sem segundos.</p>
+      <po-timepicker
+        p-label="Horário"
+        p-placeholder="HH:mm"
+        p-clean
+        [p-size]="currentSize"
+        [(ngModel)]="pickerTime1"
+        (p-change)="onPickerChange1($event)"
+      >
+      </po-timepicker>
+      <p class="po-font-text" style="margin-top: 12px"><strong>Model:</strong> {{ pickerTime1 || '(vazio)' }}</p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 8: Timepicker 12h -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">8. Timepicker 12h (AM/PM)</h2>
+      <p class="po-font-text">Campo de horário com popup. Formato 12h com AM/PM.</p>
+      <po-timepicker
+        p-label="Horário (12h)"
+        p-placeholder="hh:mm"
+        p-clean
+        [p-format]="format12"
+        [p-size]="currentSize"
+        [(ngModel)]="pickerTime2"
+        (p-change)="onPickerChange2($event)"
+      >
+      </po-timepicker>
+      <p class="po-font-text" style="margin-top: 12px"><strong>Model:</strong> {{ pickerTime2 || '(vazio)' }}</p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 9: Timepicker com segundos -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">9. Timepicker com segundos</h2>
+      <p class="po-font-text">Campo com coluna de segundos habilitada. ISO format: <code>HH:mm:ss</code>.</p>
+      <po-timepicker
+        p-label="Horário com segundos"
+        p-placeholder="HH:mm:ss"
+        p-show-seconds
+        p-clean
+        [p-iso-format]="isoFormatHourMinuteSecond"
+        [p-size]="currentSize"
+        [(ngModel)]="pickerTime3"
+        (p-change)="onPickerChange3($event)"
+      >
+      </po-timepicker>
+      <p class="po-font-text" style="margin-top: 12px"><strong>Model:</strong> {{ pickerTime3 || '(vazio)' }}</p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 10: Timepicker com min/max -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">10. Timepicker com limites (08:00 - 18:00)</h2>
+      <p class="po-font-text">Horários fora do intervalo são invalidados.</p>
+      <po-timepicker
+        p-label="Horário comercial"
+        p-placeholder="HH:mm"
+        p-clean
+        p-min-time="08:00"
+        p-max-time="18:00"
+        p-error-pattern="Horário fora do expediente"
+        [p-size]="currentSize"
+        [(ngModel)]="pickerTime4"
+        (p-change)="onPickerChange4($event)"
+      >
+      </po-timepicker>
+      <p class="po-font-text" style="margin-top: 12px"><strong>Model:</strong> {{ pickerTime4 || '(vazio)' }}</p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 11: Timepicker disabled e readonly -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">11. Timepicker disabled e readonly</h2>
+      <div style="display: flex; gap: 24px; flex-wrap: wrap">
+        <po-timepicker
+          p-label="Disabled"
+          p-placeholder="HH:mm"
+          p-disabled
+          [p-size]="currentSize"
+          [(ngModel)]="pickerTime5"
+        >
+        </po-timepicker>
+        <po-timepicker
+          p-label="Readonly"
+          p-placeholder="HH:mm"
+          p-readonly
+          [p-size]="currentSize"
+          [(ngModel)]="pickerTime6"
+        >
+        </po-timepicker>
+      </div>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 12: Reactive Forms -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">12. Timepicker com Reactive Forms</h2>
+      <p class="po-font-text">Integração com formulário reativo. Campo obrigatório.</p>
+      <form [formGroup]="timepickerForm" (ngSubmit)="submitReactiveForm()">
+        <po-timepicker
+          p-label="Horário (obrigatório)"
+          p-placeholder="HHHHHH:mmMMMMMM"
+          p-clean
+          p-required
+          p-error-pattern="Campo obrigatório"
+          [p-show-required]="true"
+          [p-size]="currentSize"
+          formControlName="horario"
+        >
+        </po-timepicker>
+        <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center">
+          <po-button p-label="Enviar" p-kind="primary" (p-click)="submitReactiveForm()"></po-button>
+          <span class="po-font-text">
+            <strong>Form válido:</strong> {{ timepickerForm.valid }} | <strong>Valor:</strong>
+            {{ timepickerForm.value | json }}
+          </span>
+        </div>
+      </form>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- ============================================================ -->
+    <!-- po-dynamic-form + po-timepicker (Fase 3) -->
+    <!-- ============================================================ -->
+    <h1 class="po-font-title" style="margin-top: 40px; margin-bottom: 16px">
+      po-dynamic-form + po-timepicker - Demonstração (Fase 3)
+    </h1>
+    <p class="po-font-text-large" style="margin-bottom: 24px">
+      Integração do <strong>po-timepicker</strong> com <strong>po-dynamic-form</strong> via
+      <code>type: 'time'</code>.
+    </p>
+
+    <!-- Seção 13: Dynamic Form com timepicker -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">13. Dynamic Form com campos de horário</h2>
+      <p class="po-font-text" style="margin-bottom: 16px">
+        Campos configurados via <code>PoDynamicFormField</code> com <code>type: 'time'</code>. Variações: 24h, 12h, com
+        segundos, min/max, disabled, readonly, intervalo personalizado.
+      </p>
+      <po-dynamic-form
+        [p-fields]="dynamicFormFields"
+        [(p-value)]="dynamicFormValue"
+        [p-components-size]="currentSize"
+      >
+      </po-dynamic-form>
+      <div style="margin-top: 16px; padding: 12px; background: #f5f5f5; border-radius: 4px">
+        <p class="po-font-text"><strong>Valor do formulário:</strong></p>
+        <pre class="po-font-text" style="margin: 4px 0 0 0; white-space: pre-wrap">{{
+          dynamicFormValue | json
+        }}</pre>
+      </div>
+    </section>
   } @else {
     <div style="display: flex; justify-content: center; align-items: center; height: 200px">
       <po-loading p-neutral-color [p-size]="'large'"></po-loading>
