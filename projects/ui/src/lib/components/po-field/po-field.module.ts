@@ -12,6 +12,7 @@ import { PoContainerModule } from '../po-container/index';
 import { PoCalendarModule } from '../po-calendar/po-calendar.module';
 import { PoCleanModule } from './po-clean/po-clean.module';
 import { PoDatepickerModule } from './po-datepicker/po-datepicker.module';
+import { PoTimepickerModule } from './po-timepicker/po-timepicker.module';
 import { PoDisclaimerGroupModule } from './../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
 import { PoFieldContainerModule } from './po-field-container/po-field-container.module';
@@ -85,6 +86,7 @@ import { PoLinkModule } from '../po-link';
     PoRadioGroupModule,
     PoContainerModule,
     PoDatepickerModule,
+    PoTimepickerModule,
     PoDisclaimerGroupModule,
     PoDisclaimerModule,
     PoFieldContainerModule,
@@ -109,6 +111,7 @@ import { PoLinkModule } from '../po-link';
     PoRadioGroupModule,
     PoCleanModule,
     PoDatepickerModule,
+    PoTimepickerModule,
     PoComboModule,
     PoMultiselectOptionTemplateDirective,
     PoDecimalComponent,

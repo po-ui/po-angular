@@ -203,9 +203,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
     } else if (this.compareTo(type, PoDynamicFieldType.Date) || this.compareTo(type, PoDynamicFieldType.DateTime)) {
       return field.range ? 'datepickerrange' : 'datepicker';
     } else if (this.compareTo(type, PoDynamicFieldType.Time)) {
-      field.mask = field.mask || '99:99';
-
-      return 'input';
+      return 'timepicker';
     } else if (this.isCombo(field)) {
       return 'combo';
     } else if (this.isLookup(field)) {

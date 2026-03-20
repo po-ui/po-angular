@@ -76,6 +76,24 @@ describe('PoButtonComponent: ', () => {
     expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Button);
   });
 
+  it('should propagate [p-tabindex] input to the inner button element', () => {
+    fixture.componentRef.setInput('p-tabindex', -1);
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('should propagate p-tabindex=0 to the inner button element', () => {
+    fixture.componentRef.setInput('p-tabindex', 0);
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('tabindex')).toBe('0');
+  });
+
+  it('should not set tabindex on inner button when p-tabindex input is null', () => {
+    fixture.componentRef.setInput('p-tabindex', null);
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('tabindex')).toBeNull();
+  });
+
   it('should set type to `submit`.', () => {
     fixture.componentRef.setInput('p-type', PoButtonType.Submit);
     fixture.detectChanges();

@@ -6,6 +6,7 @@ import {
   PoComboLiterals,
   PoDatepickerIsoFormat,
   PoDatepickerRangeLiterals,
+  PoTimepickerModelFormat,
   PoLookupFilter,
   PoLookupLiterals,
   PoMultiselectFilter,
@@ -277,16 +278,20 @@ export interface PoDynamicFormField extends PoDynamicField {
   loading?: boolean;
 
   /**
-   * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
+   * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date*, *dateTime* ou *time*.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`
+   * > Para `po-timepicker`, o valor deve estar no formato `HH:mm` ou `HH:mm:ss`.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`, `po-timepicker`
    * */
   maxValue?: string | number;
 
   /**
-   * Valor mínimo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
+   * Valor mínimo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date*, *dateTime* ou *time*.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`
+   * > Para `po-timepicker`, o valor deve estar no formato `HH:mm` ou `HH:mm:ss`.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`, `po-timepicker`
    */
   minValue?: string | number;
 
@@ -413,6 +418,11 @@ export interface PoDynamicFormField extends PoDynamicField {
    * - mm/dd/yyyy
    * - yyyy/mm/dd
    *
+   * Ao utilizar com o `type` *PoDynamicFieldType.Time*, define o formato de exibição do horário:
+   *
+   * Valores válidos:
+   * - `24`: formato de 24 horas (padrão)
+   * - `12`: formato de 12 horas com indicador AM/PM
    *
    * Também pode-se utilizar em conjunto com `searchService`, informando uma lista de propriedades que será utilizado
    * para formatação da exibição no campo, por exemplo: ["id", "name"].
@@ -534,11 +544,20 @@ export interface PoDynamicFormField extends PoDynamicField {
   hidePasswordPeek?: boolean;
 
   /**
+   * Define o formato do valor do horário a ser utilizado no model do `po-timepicker`.
+   *
+   * > Veja os valores válidos no `PoTimepickerModelFormat`.
+   *
+   * **Componente compatível:** `po-timepicker`
+   */
+  modelFormat?: PoTimepickerModelFormat;
+
+  /**
    * Padrão de formatação para saída do model, independentemente do formato de entrada.
    *
-   * > Veja os valores válidos no `enumPoDatepickerIsoFormat`.
+   * > Veja os valores válidos no `PoDatepickerIsoFormat`.
    *
-   * **Componente compatível:** po-datepicker
+   * **Componente compatível:** `po-datepicker`
    */
   isoFormat?: PoDatepickerIsoFormat;
 
@@ -578,6 +597,33 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Intervalo utilizado no `po-number`.
    */
   step?: number;
+
+  /**
+   * Exibe a coluna de segundos no painel do timepicker.
+   *
+   * @default `false`
+   *
+   * **Componente compatível:** `po-timepicker`
+   */
+  showSeconds?: boolean;
+
+  /**
+   * Define o intervalo entre os minutos exibidos no painel do timepicker.
+   *
+   * @default `5`
+   *
+   * **Componente compatível:** `po-timepicker`
+   */
+  minuteInterval?: number;
+
+  /**
+   * Define o intervalo entre os segundos exibidos no painel do timepicker.
+   *
+   * @default `1`
+   *
+   * **Componente compatível:** `po-timepicker`
+   */
+  secondInterval?: number;
 
   /**
    * Define o modo de pesquisa utilizado no filtro da lista de seleção: `startsWith`, `contains` ou `endsWith`.
