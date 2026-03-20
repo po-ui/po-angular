@@ -1,0 +1,23 @@
+<div class="po-row">
+  <div class="po-md-12">
+    <po-timer [(ngModel)]="alarmTime" p-format="12" [p-minute-interval]="15"> </po-timer>
+  </div>
+</div>
+
+<div class="po-row">
+  <po-info class="po-md-12" p-label="Horário do alarme" [p-value]="alarmTime || 'Nenhum horário selecionado'">
+  </po-info>
+</div>
+
+<div class="po-row">
+  <po-button
+    class="po-md-3"
+    p-label="Configurar alarme"
+    p-kind="primary"
+    [p-disabled]="!alarmTime"
+    (p-click)="setAlarm()"
+  >
+  </po-button>
+
+  <po-button class="po-md-3" p-label="Limpar" [p-disabled]="!alarmTime" (p-click)="clearAlarm()"> </po-button>
+</div>

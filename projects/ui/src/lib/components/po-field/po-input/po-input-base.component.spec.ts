@@ -345,6 +345,21 @@ describe('PoInputBase:', async () => {
           result = component.validate(new FormControl(undefined));
           expect(result).toBeNull();
         });
+
+        it('validate: should return maxlength false when `maskFormatModel` is true, bypassing maskNoLengthValidation', () => {
+          component.maxlength = 5;
+          component.maskFormatModel = true;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '123456';
+
+          const result = component.validate(new FormControl('123456'));
+
+          expect(result).toEqual({
+            maxlength: {
+              valid: false
+            }
+          });
+        });
       });
 
       describe('with p-minlength:', () => {
@@ -419,6 +434,21 @@ describe('PoInputBase:', async () => {
 
           result = component.validate(new FormControl(undefined));
           expect(result).toBeNull();
+        });
+
+        it('validate: should return minlength false when `maskFormatModel` is true, bypassing maskNoLengthValidation', () => {
+          component.minlength = 5;
+          component.maskFormatModel = true;
+          component.maskNoLengthValidation = true;
+          component.getScreenValue = () => '123';
+
+          const result = component.validate(new FormControl('123'));
+
+          expect(result).toEqual({
+            minlength: {
+              valid: false
+            }
+          });
         });
       });
     });
