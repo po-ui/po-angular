@@ -15,6 +15,7 @@ import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.int
 import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoCalendarLangService } from './services';
 
 /* istanbul ignore next */
 const providers = [
@@ -63,8 +64,10 @@ const poCalendarRangeWidth = 600;
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
   private changeDetector = inject(ChangeDetectorRef);
+  private poCalendarLangService = inject(PoCalendarLangService);
 
   hoverValue: Date;
+  displayToClean: string;
 
   constructor() {
     const poDate = inject(PoDateService);
@@ -113,6 +116,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   ngOnInit() {
     this.setActivateDate();
+    this.displayToClean = this.poCalendarLangService.getToCleanLabel();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -228,7 +232,15 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     const todayTime = todayStart.getTime();
 
     const getGroup = (startDate: Date): number => {
-      const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0, 0).getTime();
+      const startTime = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate(),
+        0,
+        0,
+        0,
+        0
+      ).getTime();
       if (startTime > todayTime) {
         return 0; // Futuro
       }

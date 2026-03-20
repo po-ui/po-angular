@@ -120,16 +120,19 @@
       </div>
     </ng-container>
   }
-  <po-calendar-footer
-    [p-label-clear]="displayToClean"
-    [p-label-today]="displayToday"
-    [p-hide-today-button]="hideTodayButton"
-    [p-size]="size"
-    [p-today-disabled]="isTodayUnavailable()"
-    (p-clear)="onClear()"
-    (p-select-today)="onSelectToday()"
-    (p-close-calendar)="onFooterCloseCalendar()"
-  ></po-calendar-footer>
+  @if (!responsive || (responsive && !hasPresets)) {
+    <po-calendar-footer
+      [p-label-clear]="displayToClean"
+      [p-label-today]="displayToday"
+      [p-hide-today-button]="hideTodayButton"
+      [p-size]="size"
+      [p-responsive]="responsive"
+      [p-today-disabled]="isTodayUnavailable()"
+      (p-clear)="onClear()"
+      (p-select-today)="onSelectToday()"
+      (p-close-calendar)="onFooterCloseCalendar()"
+    ></po-calendar-footer>
+  }
 </div>
 
 <ng-template #internalComboTemplate let-combo>

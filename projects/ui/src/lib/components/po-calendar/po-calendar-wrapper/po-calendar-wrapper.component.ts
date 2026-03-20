@@ -47,6 +47,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-hover-value') hoverValue: Date;
   @Input('p-size') size: string;
   @Input('p-hide-today-button') hideTodayButton: boolean = false;
+  @Input('p-presets') hasPresets: boolean = false;
   // Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   private _locale: string;
@@ -507,7 +508,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       this.updateDisplay(originalYear, originalMonth);
     }
   }
-
 
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
     const key = event.key;
