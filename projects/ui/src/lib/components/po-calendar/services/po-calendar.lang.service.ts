@@ -170,6 +170,57 @@ export class PoCalendarLangService {
     ru: 'Чистить'
   };
 
+  private presetLabels: { [key: string]: { pt: string; en: string; es: string; ru: string } } = {
+    tomorrow: {
+      pt: 'Amanhã',
+      en: 'Tomorrow',
+      es: 'Mañana',
+      ru: 'Завтра'
+    },
+    today: {
+      pt: 'Hoje',
+      en: 'Today',
+      es: 'Hoy',
+      ru: 'Сегодня'
+    },
+    yesterday: {
+      pt: 'Ontem',
+      en: 'Yesterday',
+      es: 'Ayer',
+      ru: 'Вчера'
+    },
+    '7days': {
+      pt: 'Últimos 7 dias',
+      en: 'Last 7 days',
+      es: 'Últimos 7 días',
+      ru: 'Последние 7 дней'
+    },
+    '14days': {
+      pt: 'Últimos 14 dias',
+      en: 'Last 14 days',
+      es: 'Últimos 14 días',
+      ru: 'Последние 14 дней'
+    },
+    '30days': {
+      pt: 'Últimos 30 dias',
+      en: 'Last 30 days',
+      es: 'Últimos 30 días',
+      ru: 'Последние 30 дней'
+    },
+    '3months': {
+      pt: 'Últimos 3 meses',
+      en: 'Last 3 months',
+      es: 'Últimos 3 meses',
+      ru: 'Последние 3 месяцев'
+    },
+    '6months': {
+      pt: 'Últimos 6 meses',
+      en: 'Last 6 months',
+      es: 'Últimos 6 meses',
+      ru: 'Последние 6 месяцев'
+    }
+  };
+
   getMonth(month: number) {
     return this.months[month][this.language];
   }
@@ -217,6 +268,11 @@ export class PoCalendarLangService {
 
   getToCleanLabel() {
     return this.toCleanLabel[this.language];
+  }
+
+  getPresetLabel(key: string): string {
+    const labels = this.presetLabels[key];
+    return labels ? labels[this.language] : key;
   }
 
   setLanguage(language: string) {

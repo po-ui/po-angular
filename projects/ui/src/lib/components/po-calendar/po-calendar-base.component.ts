@@ -5,6 +5,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { poLocales } from '../../services/po-language/po-language.constant';
 
 import { PoCalendarMode } from './po-calendar-mode.enum';
+import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 
@@ -125,6 +126,7 @@ export class PoCalendarBaseComponent {
   @Output('p-close') close = new EventEmitter<void>();
 
   activateDate;
+  selectedPresetLabel: string | null = null;
   value;
 
   protected onTouched: any = null;
@@ -243,6 +245,71 @@ export class PoCalendarBaseComponent {
 
   // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a exibição dos presets padrão de intervalos de data no painel lateral do calendário em modo *range*.
+   *
+   * Aceita os seguintes valores:
+   * - `true`: exibe todos os presets padrão (Amanhã, Hoje, Ontem, 7 dias, 14 dias, 30 dias, 3 meses, 6 meses).
+   * - `false`: não exibe os presets padrão.
+   * - `Array<string>`: exibe apenas os presets padrão cujos labels estejam no array informado.
+   *   O preset "today" é obrigatório e será incluído automaticamente mesmo que não esteja no array.
+   *
+   * Caso `p-range-preset-options` também seja informado, os presets customizados serão exibidos junto aos presets padrão,
+   * ordenados automaticamente por temporalidade (Futuro → Presente → Passado).
+   *
+   * @default `false`
+   */
+  @Input('p-range-presets')
+  set rangePresets(value: boolean | Array<string> | string) {
+    if (Array.isArray(value)) {
+      this._rangePresets = value;
+    } else if (value === '' || value === true || value === 'true') {
+      this._rangePresets = true;
+    } else {
+      this._rangePresets = false;
+    }
+  }
+
+  get rangePresets(): boolean | Array<string> {
+    return this._rangePresets;
+  }
+
+  private _rangePresets: boolean | Array<string> = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de presets customizados de intervalos de data exibidos no painel lateral do calendário em modo *range*.
+   *
+   * Quando informado sem `p-range-presets`, exibe apenas os presets customizados.
+   * Quando informado junto com `p-range-presets` habilitado, os presets customizados são exibidos após os presets padrão.
+   * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
+   */
+  @Input('p-range-preset-options') rangePresetOptions?: Array<PoCalendarRangePreset>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a ordenação dos presets na lista.
+   *
+   * Valores aceitos:
+   * - `'asc'` (padrão): presets mais próximos de hoje aparecem primeiro.
+   * - `'desc'`: presets mais distantes de hoje aparecem primeiro.
+   *
+   * A ordenação é aplicada dentro de cada grupo de temporalidade (Futuro → Presente → Passado).
+   *
+   * @default `asc`
+   */
+  @Input('p-range-presets-order') rangePresetsOrder: 'asc' | 'desc' = 'asc';
 
   /**
    * @optional

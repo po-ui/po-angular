@@ -46,6 +46,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-max-date') maxDate: any;
   @Input('p-hover-value') hoverValue: Date;
   @Input('p-size') size: string;
+  @Input('p-hide-today-button') hideTodayButton: boolean = false;
+  @Input('p-presets') hasPresets: boolean = false;
   // Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   private _locale: string;
@@ -475,11 +477,9 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
   }
 
-  onTodayKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Tab' && !event.shiftKey) {
-      this.restoreOriginalDisplay();
-      this.closeCalendar.emit();
-    }
+  onFooterCloseCalendar(): void {
+    this.restoreOriginalDisplay();
+    this.closeCalendar.emit();
   }
 
   @HostListener('keydown', ['$event'])
@@ -507,16 +507,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     if (this.displayYear !== originalYear || this.displayMonthNumber !== originalMonth) {
       this.updateDisplay(originalYear, originalMonth);
     }
-  }
-
-  onTodayKeydownEnter(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.onSelectDate(this.today);
-  }
-
-  onTodayKeydownSpace(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.onSelectDate(this.today);
   }
 
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
