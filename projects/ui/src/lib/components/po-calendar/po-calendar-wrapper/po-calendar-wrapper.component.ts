@@ -476,11 +476,9 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
   }
 
-  onTodayKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Tab' && !event.shiftKey) {
-      this.restoreOriginalDisplay();
-      this.closeCalendar.emit();
-    }
+  onFooterCloseCalendar(): void {
+    this.restoreOriginalDisplay();
+    this.closeCalendar.emit();
   }
 
   @HostListener('keydown', ['$event'])
@@ -510,15 +508,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
   }
 
-  onTodayKeydownEnter(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.onSelectDate(this.today);
-  }
-
-  onTodayKeydownSpace(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.onSelectDate(this.today);
-  }
 
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
     const key = event.key;
