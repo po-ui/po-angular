@@ -112,6 +112,8 @@ export class PoRichTextToolbarComponent implements AfterViewInit {
     return PoUtils.isIE();
   }
 
+  @Input('p-disabled') disabled?: boolean;
+
   @HostBinding('attr.p-size')
   @Input('p-size')
   size: string;

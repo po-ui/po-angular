@@ -8,6 +8,7 @@ import {
   ViewChild,
   inject,
   OnChanges,
+  OnDestroy,
   SimpleChanges
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -61,7 +62,7 @@ import { PoHelperComponent } from '../../po-helper';
   ],
   standalone: false
 })
-export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges {
+export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   private el = inject(ElementRef);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
@@ -70,6 +71,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
   id = `po-textarea[${uuid()}]`;
   valueBeforeChange: any;
   fireChange: boolean = false;
+  hasScroll: boolean = false;
+  hasValue: boolean = false;
+  private resizeObserver: ResizeObserver;
 
   constructor() {
     const cd = inject(ChangeDetectorRef);
@@ -110,12 +114,46 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (this.autoFocus) {
       this.focus();
     }
+
+    this.initResizeObserver();
+    window.addEventListener('resize', this.onWindowResize);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.label) {
       this.displayAdditionalHelp = false;
     }
+
+    if (changes.loading) {
+      if (changes.loading.isFirstChange() && this.loading) {
+        requestAnimationFrame(() => {
+          this.lockTextareaDimensions();
+          this.checkScrollState();
+        });
+      } else {
+        this.lockTextareaDimensions();
+        requestAnimationFrame(() => {
+          this.checkScrollState();
+        });
+      }
+    }
+
+    if (changes.size && this.loading) {
+      const textarea = this.inputEl?.nativeElement;
+      if (textarea) {
+        textarea.style.width = '';
+        textarea.style.height = '';
+      }
+      requestAnimationFrame(() => {
+        this.lockTextareaDimensions();
+        this.checkScrollState();
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    this.resizeObserver?.disconnect();
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   getAdditionalHelpTooltip() {
@@ -143,6 +181,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       } else {
         this.inputEl.nativeElement.value = value;
       }
+
+      this.hasValue = !!value;
+      this.checkScrollState();
     }
 
     // Emite evento quando o model é atualizado, inclusive a primeira vez
@@ -159,6 +200,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     const value = this.validMaxLength(this.maxlength, event.target.value);
     this.callOnChange(value);
     this.inputEl.nativeElement.value = value;
+
+    this.hasValue = !!value;
+    this.checkScrollState();
   }
 
   eventOnFocus() {
@@ -254,5 +298,81 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  private readonly onWindowResize = () => {
+    this.checkScrollState();
+
+    const textarea = this.inputEl?.nativeElement;
+    if (textarea?.style.width) {
+      textarea.style.width = '';
+      textarea.style.height = '';
+    }
+
+    const container = textarea?.closest('.po-field-container-content') as HTMLElement;
+    if (container) {
+      container.style.width = '';
+    }
+  };
+
+  private checkScrollState(): void {
+    const el = this.inputEl?.nativeElement;
+    if (!el) return;
+
+    this.hasScroll = el.scrollHeight > el.clientHeight;
+    this.cd.markForCheck();
+  }
+
+  private syncContainerWidth(): void {
+    const textarea = this.inputEl?.nativeElement;
+    if (!textarea?.style.width) return;
+
+    const container = textarea.closest('.po-field-container-content') as HTMLElement;
+    if (!container) return;
+
+    container.style.width = '';
+    const naturalWidth = container.offsetWidth;
+
+    if (Math.abs(textarea.offsetWidth - naturalWidth) > 1) {
+      container.style.width = `${textarea.offsetWidth}px`;
+    }
+  }
+
+  private lockTextareaDimensions(): void {
+    const textarea = this.inputEl?.nativeElement;
+    if (!textarea) return;
+
+    if (this.loading) {
+      const hadLoading = textarea.classList.contains('has-loading');
+      if (hadLoading) {
+        textarea.classList.remove('has-loading');
+      }
+
+      const rect = textarea.getBoundingClientRect();
+      textarea.style.width = `${rect.width}px`;
+      textarea.style.height = `${rect.height}px`;
+
+      if (hadLoading) {
+        textarea.classList.add('has-loading');
+      }
+    } else {
+      textarea.style.width = '';
+      textarea.style.height = '';
+    }
+  }
+
+  private initResizeObserver(): void {
+    const el = this.inputEl?.nativeElement;
+
+    if (!el || typeof ResizeObserver === 'undefined') return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(() => {
+        this.checkScrollState();
+        this.syncContainerWidth();
+      });
+    });
+
+    this.resizeObserver.observe(el);
   }
 }

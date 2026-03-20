@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -7,6 +7,7 @@ import { PoValidators as ValidatorsFunctions } from '../validators';
 import { PoThemeA11yEnum } from '../../../services';
 import { PoTextareaBaseComponent } from './po-textarea-base.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mapInputSizeToLoadingIcon } from '../../../utils/util';
 
 @Component({
   selector: 'po-textarea-base-host',
@@ -18,18 +19,20 @@ class PoTextareaHostComponent extends PoTextareaBaseComponent {
 }
 
 describe('PoTextareaBase:', () => {
-  const cd = <any>{ markForCheck: () => {} };
-
   let component: PoTextareaHostComponent;
   let fixture: ComponentFixture<PoTextareaHostComponent>;
+  let changeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
 
   beforeEach(() => {
+    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck']);
+
     TestBed.configureTestingModule({
       declarations: [PoTextareaHostComponent]
     });
 
     fixture = TestBed.createComponent(PoTextareaHostComponent);
     component = fixture.componentInstance;
+    component['cd'] = changeDetectorRef;
   });
 
   it('should be created', () => {
@@ -91,7 +94,12 @@ describe('PoTextareaBase:', () => {
 
   it('should call writeValueModel', () => {
     spyOn(component, 'writeValueModel');
-    spyOn(component.cd, 'markForCheck');
+
+    if (!(component.cd.markForCheck as jasmine.Spy)) {
+      spyOn(component.cd, 'markForCheck');
+    } else {
+      (component.cd.markForCheck as jasmine.Spy).calls.reset();
+    }
 
     component.writeValue(1);
 
@@ -227,6 +235,75 @@ describe('PoTextareaBase:', () => {
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
+
+    describe('p-loading:', () => {
+      it('should set loading=true and call markForCheck', () => {
+        component.loading = true;
+
+        expect(component.loading).toBeTrue();
+        expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
+      });
+
+      it('should set loading=false and call markForCheck', () => {
+        component.loading = false;
+
+        expect(component.loading).toBeFalse();
+        expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
+      });
+
+      it('loading should not mutate disabled input', () => {
+        component.disabled = false;
+        component.loading = true;
+
+        expect(component.disabled).toBeFalse();
+      });
+
+      it('should not throw when cd is undefined', () => {
+        component['cd'] = undefined;
+        expect(() => (component.loading = true)).not.toThrow();
+      });
+    });
+
+    describe('isDisabled:', () => {
+      it('should return false when disabled and loading are false', () => {
+        component.disabled = false;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeFalse();
+      });
+
+      it('should return true when disabled is true and loading is false', () => {
+        component.disabled = true;
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when disabled is false and loading is true', () => {
+        component.disabled = false;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should return true when disabled and loading are true', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+
+      it('should keep disabled true after loading toggles from true to false', () => {
+        component.disabled = true;
+        component.loading = true;
+
+        expect(component.isDisabled).toBeTrue();
+
+        component.loading = false;
+
+        expect(component.isDisabled).toBeTrue();
+      });
+    });
   });
 
   describe('Methods:', () => {
@@ -283,7 +360,11 @@ describe('PoTextareaBase:', () => {
       it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
         const expectedValue = true;
 
-        spyOn(component.cd, 'markForCheck');
+        if (!(component.cd.markForCheck as jasmine.Spy)) {
+          spyOn(component.cd, 'markForCheck');
+        } else {
+          (component.cd.markForCheck as jasmine.Spy).calls.reset();
+        }
 
         component.setDisabledState(expectedValue);
 
@@ -362,6 +443,14 @@ describe('PoTextareaBase:', () => {
       component['validateModel']();
 
       expect(component['validatorChange']).toBeUndefined();
+    });
+  });
+
+  describe('mapSizeToIcon:', () => {
+    it('should return the value from mapInputSizeToLoadingIcon', () => {
+      const result = component['mapSizeToIcon']('medium');
+
+      expect(result).toBe(mapInputSizeToLoadingIcon('medium'));
     });
   });
 });
