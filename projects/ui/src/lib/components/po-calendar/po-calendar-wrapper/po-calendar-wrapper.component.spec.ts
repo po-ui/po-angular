@@ -412,48 +412,12 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['updateDisplay']).toHaveBeenCalledWith(currentYear, currentMonth);
     });
 
-    it('onTodayKeydown: should emit closeCalendar when key is Tab and shift is not pressed', () => {
-      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
-
+    it('onFooterCloseCalendar: should emit closeCalendar', () => {
       spyOn(component.closeCalendar, 'emit');
 
-      component.onTodayKeydown(event);
+      component.onFooterCloseCalendar();
 
       expect(component.closeCalendar.emit).toHaveBeenCalled();
-    });
-
-    it('onTodayKeydown: should not emit closeCalendar when key is not Tab or shift is pressed', () => {
-      const eventWithShift = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-      const eventNonTab = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: false });
-
-      spyOn(component.closeCalendar, 'emit');
-
-      component.onTodayKeydown(eventWithShift);
-      component.onTodayKeydown(eventNonTab);
-
-      expect(component.closeCalendar.emit).not.toHaveBeenCalled();
-    });
-
-    it('onTodayKeydownEnter: should prevent default and call onSelectDate with today', () => {
-      const event = { key: 'Enter', preventDefault: jasmine.createSpy('preventDefault') } as any;
-
-      spyOn(component, 'onSelectDate');
-
-      component.onTodayKeydownEnter(event);
-
-      expect(event.preventDefault).toHaveBeenCalled();
-      expect(component.onSelectDate).toHaveBeenCalledWith(component.today);
-    });
-
-    it('onTodayKeydownSpace: should prevent default and call onSelectDate with today', () => {
-      const event = { key: ' ', preventDefault: jasmine.createSpy('preventDefault') } as any;
-
-      spyOn(component, 'onSelectDate');
-
-      component.onTodayKeydownSpace(event);
-
-      expect(event.preventDefault).toHaveBeenCalled();
-      expect(component.onSelectDate).toHaveBeenCalledWith(component.today);
     });
 
     it('onDayKeydown: should not emit closeCalendar when range is false or shift is pressed', () => {
