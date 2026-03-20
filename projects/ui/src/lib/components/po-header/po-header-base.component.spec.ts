@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PoLanguageService } from '../../services';
+import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { PoLanguageService, PoThemeA11yEnum } from '../../services';
 import { PoHeaderLiterals } from './interfaces/po-header-literals.interface';
 import { PoHeaderBaseComponent, poNavbarLiteralsDefault } from './po-header-base.component';
 
@@ -12,6 +12,8 @@ class TestHostComponent extends PoHeaderBaseComponent {
   constructor(languageService: PoLanguageService) {
     super(languageService);
   }
+
+  updateMenu() {}
 }
 
 describe('PoHeaderBaseComponent', () => {
@@ -83,6 +85,102 @@ describe('PoHeaderBaseComponent', () => {
     it('should return default literals if invalid value is passed', () => {
       component.literals = null;
       expect(component.literals).toEqual(poNavbarLiteralsDefault['pt']);
+    });
+  });
+
+  describe('p-size', () => {
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    it('should set property with valid values for accessibility level is AA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+      fixture.componentRef.setInput('p-size', 'small');
+      fixture.detectChanges();
+      expect(component.sizeInput()).toBe('small');
+      expect(component.size()).toBe('small');
+
+      fixture.componentRef.setInput('p-size', 'medium');
+      fixture.detectChanges();
+      expect(component.sizeInput()).toBe('medium');
+      expect(component.size()).toBe('medium');
+    });
+
+    it('should set property with valid values for accessibility level is AAA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      fixture.componentRef.setInput('p-size', 'small');
+      fixture.detectChanges();
+      expect(component.sizeInput()).toBe('small');
+      expect(component.size()).toBe('medium');
+
+      fixture.componentRef.setInput('p-size', 'medium');
+      fixture.detectChanges();
+      expect(component.sizeInput()).toBe('medium');
+      expect(component.size()).toBe('medium');
+    });
+
+    it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'small');
+
+      fixture.componentRef.setInput('p-size', '');
+      fixture.detectChanges();
+      expect(component.size()).toBe('small');
+    });
+
+    it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'medium');
+
+      fixture.componentRef.setInput('p-size', '');
+      fixture.detectChanges();
+      expect(component.size()).toBe('medium');
+    });
+
+    it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      fixture.componentRef.setInput('p-size', '');
+      fixture.detectChanges();
+      expect(component.size()).toBe('medium');
+    });
+
+    it('onThemeChange: should recalculate size when theme changes', fakeAsync(() => {
+      const spy1 = spyOn<any>(component['themeChangeSignal'], 'update').and.callThrough();
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+      fixture.componentRef.setInput('p-size', 'small');
+      fixture.detectChanges();
+      component['onThemeChange']();
+      flush();
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      expect(component.size()).toBe('medium');
+      expect(spy1).toHaveBeenCalled();
+    }));
+
+    it('onThemeChange: should return an error when calling updateMenu', () => {
+      const consoleSpy = spyOn(console, 'error');
+      spyOn(component, 'updateMenu').and.throwError('DOM not ready');
+
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['onThemeChange']();
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'updateMenu with errors. probably tried to execute before the component was rendered.'
+      );
     });
   });
 
