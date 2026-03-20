@@ -24,6 +24,15 @@
         (p-select-preset)="onPresetSelected($event)"
         (p-close-calendar)="onCloseCalendar()"
       ></po-calendar-preset-list>
+
+      <po-calendar-footer
+        [p-size]="size"
+        [p-responsive]="isResponsive"
+        [p-hide-today-button]="true"
+        [p-label-clear]="displayToClean"
+        (p-clear)="onSelectDate($event)"
+        (p-close-calendar)="onCloseCalendar()"
+      ></po-calendar-footer>
     }
   </div>
 } @else {
@@ -38,6 +47,7 @@
     [p-activate-date]="getActivateDate(partType)"
     [p-locale]="locale"
     [p-min-date]="minDate"
+    [p-presets]="effectivePresets.length > 0"
     [p-max-date]="maxDate"
     [p-part-type]="partType"
     [p-range]="isRange"

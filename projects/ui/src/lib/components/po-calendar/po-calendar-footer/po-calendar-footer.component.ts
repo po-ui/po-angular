@@ -12,6 +12,7 @@ export class PoCalendarFooterComponent {
   @Input('p-hide-today-button') hideTodayButton: boolean = false;
   @Input('p-size') size: string;
   @Input('p-today-disabled') todayDisabled: boolean = false;
+  @Input('p-responsive') responsive: boolean = false;
 
   @Output('p-clear') clear = new EventEmitter<void>();
   @Output('p-select-today') selectToday = new EventEmitter<void>();
