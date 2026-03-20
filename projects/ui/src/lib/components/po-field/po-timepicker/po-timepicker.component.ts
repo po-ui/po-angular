@@ -214,7 +214,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
    * ```
    */
   focus(): void {
-    if (!this.disabled && this.inputEl?.nativeElement) {
+    if (!this.isDisabled && this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.focus();
     }
   }
@@ -224,7 +224,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   }
 
   togglePicker(focusInput = true) {
-    if (this.disabled || this.readonly || !this.iconTimepicker?.buttonElement?.nativeElement) {
+    if (this.isDisabled || this.readonly || !this.iconTimepicker?.buttonElement?.nativeElement) {
       return;
     }
 

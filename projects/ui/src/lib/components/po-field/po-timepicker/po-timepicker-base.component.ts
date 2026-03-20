@@ -464,7 +464,7 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
    * @optional
    *
    * @description
-   * Exibe um ícone de carregamento no lado direito do campo.
+   * Exibe um ícone de carregamento no lado direito do campo para sinalizar que uma operação está em andamento.
    *
    * @default `false`
    */
