@@ -226,7 +226,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
     const todayTime = todayStart.getTime();
-    const isDesc = this.rangePresetsOrder === 'desc';
 
     const getGroup = (startDate: Date): number => {
       const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0, 0).getTime();
@@ -239,7 +238,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return 1; // Presente
     };
 
-    return [...presets].sort((a, b) => {
+    // Ordena em ASC: Futuro → Presente → Passado, proximidade crescente dentro de cada grupo
+    const sorted = [...presets].sort((a, b) => {
       const rangeA = a.dateRange(today);
       const rangeB = b.dateRange(today);
       const startA = new Date(rangeA.start);
@@ -248,17 +248,18 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       const groupA = getGroup(startA);
       const groupB = getGroup(startB);
 
-      // Primeiro: agrupar por temporalidade (Futuro → Presente → Passado)
       if (groupA !== groupB) {
         return groupA - groupB;
       }
 
-      // Dentro do mesmo grupo: ordenar por proximidade ao dia atual
       const distA = Math.abs(startA.getTime() - todayTime);
       const distB = Math.abs(startB.getTime() - todayTime);
 
-      return isDesc ? distB - distA : distA - distB;
+      return distA - distB;
     });
+
+    // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
+    return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
   }
 
   private clampDate(date: Date, min?: Date, max?: Date): Date {

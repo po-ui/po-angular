@@ -1,6 +1,10 @@
 @if (isRange) {
-  <div class="po-calendar" [class.po-calendar-with-presets]="effectivePresets.length > 0">
-    @if (effectivePresets.length > 0) {
+  <div
+    class="po-calendar"
+    [class.po-calendar-with-presets]="effectivePresets.length > 0"
+    [class.po-calendar-mobile]="isResponsive"
+  >
+    @if (effectivePresets.length > 0 && !isResponsive) {
       <po-calendar-preset-list
         [p-presets]="effectivePresets"
         [p-locale]="locale"
@@ -11,6 +15,16 @@
       ></po-calendar-preset-list>
     }
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
+    @if (effectivePresets.length > 0 && isResponsive) {
+      <po-calendar-preset-list
+        [p-presets]="effectivePresets"
+        [p-locale]="locale"
+        [p-selected-preset]="selectedPresetLabel"
+        [p-size]="size"
+        (p-select-preset)="onPresetSelected($event)"
+        (p-close-calendar)="onCloseCalendar()"
+      ></po-calendar-preset-list>
+    }
   </div>
 } @else {
   <div class="po-calendar">
