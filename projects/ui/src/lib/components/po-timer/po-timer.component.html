@@ -1,0 +1,145 @@
+<div class="po-timer-wrapper">
+  <div class="po-timer">
+    <!-- Coluna de Horas -->
+    <div
+      #hourColumn
+      class="po-timer-column"
+      role="listbox"
+      [attr.aria-label]="literals.hours"
+      [attr.aria-activedescendant]="activeDescendantIds.hour"
+      (wheel)="onColumnWheel($event, 'hour')"
+    >
+      <div class="po-timer-column-scroll" #hourScroll>
+        <div class="po-timer-column-items" #hourItems>
+          @for (hour of displayHours; track trackByIndex($index, hour); let i = $index) {
+            <po-button
+              #hourCell
+              class="po-timer-display"
+              p-kind="tertiary"
+              [attr.id]="'po-timer-hour-' + i"
+              [p-tabindex]="getCellTabIndex('hour', i)"
+              [p-label]="formatValue(hour)"
+              [p-disabled]="isHourDisabled(hour)"
+              [p-size]="size"
+              [class.po-timer-display-selected]="selectedHour === hour"
+              [attr.role]="'option'"
+              [attr.aria-selected]="selectedHour === hour"
+              (focus)="onCellFocus('hour', i)"
+              (keydown)="onCellKeydown($event, 'hour')"
+              (p-click)="onSelectHour(hour); onCellClick('hour', i)"
+            >
+            </po-button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna de Minutos -->
+    <div
+      #minuteColumn
+      class="po-timer-column"
+      role="listbox"
+      [attr.aria-label]="literals.minutes"
+      [attr.aria-activedescendant]="activeDescendantIds.minute"
+      (wheel)="onColumnWheel($event, 'minute')"
+    >
+      <div class="po-timer-column-scroll" #minuteScroll>
+        <div class="po-timer-column-items" #minuteItems>
+          @for (minute of displayMinutes; track trackByIndex($index, minute); let i = $index) {
+            <po-button
+              #minuteCell
+              class="po-timer-display"
+              p-kind="tertiary"
+              [attr.id]="'po-timer-minute-' + i"
+              [p-tabindex]="getCellTabIndex('minute', i)"
+              [p-label]="formatValue(minute)"
+              [p-disabled]="isMinuteDisabled(minute)"
+              [p-size]="size"
+              [class.po-timer-display-selected]="selectedMinute === minute"
+              [attr.role]="'option'"
+              [attr.aria-selected]="selectedMinute === minute"
+              (focus)="onCellFocus('minute', i)"
+              (keydown)="onCellKeydown($event, 'minute')"
+              (p-click)="onSelectMinute(minute); onCellClick('minute', i)"
+            >
+            </po-button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna de Segundos (condicional) -->
+    @if (showSeconds) {
+      <div
+        #secondColumn
+        class="po-timer-column"
+        role="listbox"
+        [attr.aria-label]="literals.seconds"
+        [attr.aria-activedescendant]="activeDescendantIds.second"
+        (wheel)="onColumnWheel($event, 'second')"
+      >
+        <div class="po-timer-column-scroll" #secondScroll>
+          <div class="po-timer-column-items" #secondItems>
+            @for (second of displaySeconds; track trackByIndex($index, second); let i = $index) {
+              <po-button
+                #secondCell
+                class="po-timer-display"
+                p-kind="tertiary"
+                [attr.id]="'po-timer-second-' + i"
+                [p-tabindex]="getCellTabIndex('second', i)"
+                [p-label]="formatValue(second)"
+                [p-disabled]="isSecondDisabled(second)"
+                [p-size]="size"
+                [class.po-timer-display-selected]="selectedSecond === second"
+                [attr.role]="'option'"
+                [attr.aria-selected]="selectedSecond === second"
+                (focus)="onCellFocus('second', i)"
+                (keydown)="onCellKeydown($event, 'second')"
+                (p-click)="onSelectSecond(second); onCellClick('second', i)"
+              >
+              </po-button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Coluna AM/PM (formato 12h) -->
+    @if (is12HourFormat) {
+      <div #periodColumn class="po-timer-column po-timer-column-period" role="radiogroup" aria-label="AM/PM">
+        <div class="po-timer-column-scroll po-timer-period-scroll po-timer-column-items">
+          <po-button
+            #periodCell
+            class="po-timer-display"
+            p-kind="tertiary"
+            p-label="AM"
+            [p-size]="size"
+            [p-tabindex]="getCellTabIndex('period', 0)"
+            [class.po-timer-display-selected]="period === 'AM'"
+            [attr.role]="'radio'"
+            [attr.aria-checked]="period === 'AM'"
+            (focus)="onCellFocus('period', 0)"
+            (p-click)="onSelectPeriod('AM'); onCellClick('period', 0)"
+            (keydown)="onPeriodKeydown($event, 'AM')"
+          >
+          </po-button>
+          <po-button
+            #periodCell
+            class="po-timer-display"
+            p-kind="tertiary"
+            p-label="PM"
+            [p-size]="size"
+            [p-tabindex]="getCellTabIndex('period', 1)"
+            [class.po-timer-display-selected]="period === 'PM'"
+            [attr.role]="'radio'"
+            [attr.aria-checked]="period === 'PM'"
+            (focus)="onCellFocus('period', 1)"
+            (p-click)="onSelectPeriod('PM'); onCellClick('period', 1)"
+            (keydown)="onPeriodKeydown($event, 'PM')"
+          >
+          </po-button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

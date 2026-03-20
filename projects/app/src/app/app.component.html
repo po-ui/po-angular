@@ -1,0 +1,172 @@
+<div class="po-font-text" style="padding: 24px; max-width: 1200px; margin: 0 auto">
+  <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px">
+    <h1 class="po-font-title" style="margin: 0">po-timer - App de Demonstração</h1>
+    <po-button p-label="Recarregar" p-kind="secondary" (p-click)="reload()"></po-button>
+  </div>
+  <p class="po-font-text-large" style="margin-bottom: 16px">
+    Demonstração das variações do componente <strong>po-timer</strong> (Fase 1).
+  </p>
+
+  <input type="time" id="horario" name="horario" step="900" [(ngModel)]="timeValue" />
+  <p class="po-font-text" style="margin-top: 12px"><strong>Hora selecionada:</strong> {{ timeValue || '(nenhuma)' }}</p>
+
+  <!-- Controles globais -->
+  <section style="margin-bottom: 32px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background: #f9f9f9">
+    <h2 class="po-font-subtitle" style="margin-bottom: 12px">Controles globais</h2>
+    <div style="display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-end">
+      <po-select
+        p-label="Tamanho (p-size)"
+        [p-options]="sizeOptions"
+        [(ngModel)]="currentSize"
+        (p-change)="onSizeChange($event)"
+        style="min-width: 200px"
+      >
+      </po-select>
+      <po-select
+        p-label="Acessibilidade (data-a11y)"
+        [p-options]="a11yOptions"
+        [(ngModel)]="currentA11y"
+        (p-change)="onA11yChange($event)"
+        style="min-width: 200px"
+      >
+      </po-select>
+      <div class="po-font-text" style="padding-bottom: 8px">
+        <strong>Size atual:</strong> {{ currentSize || 'default (medium)' }} | <strong>A11y:</strong>
+        {{ currentA11y || 'nenhum (AAA)' }}
+      </div>
+    </div>
+  </section>
+
+  <po-divider></po-divider>
+
+  @if (!isReloading) {
+    <!-- Seção 0: Calendar como referência -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">0. Referência: po-calendar</h2>
+      <p class="po-font-text">Componente de calendário para comparação visual.</p>
+      <po-calendar [(ngModel)]="calendarDate" [p-size]="currentSize"></po-calendar>
+      <p class="po-font-text" style="margin-top: 12px">
+        <strong>Data selecionada:</strong> {{ calendarDate || '(nenhum)' }}
+      </p>
+    </section>
+
+    <!-- Seção 1: Formato 24h (padrão) -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">1. Formato 24h (padrão)</h2>
+      <p class="po-font-text">Exibe horas de 0 a 23. Intervalo de minutos padrão: 5 minutos.</p>
+      <po-timer [p-format]="format24" [p-size]="currentSize" (p-change)="onTimeChange24($event)"> </po-timer>
+      <p class="po-font-text" style="margin-top: 12px">
+        <strong>Valor selecionado:</strong> {{ selectedTime24 || '(nenhum)' }}
+      </p>
+
+      <!-- exemplo com valor pré-definido -->
+      <div style="margin-top: 16px">
+        <po-timer
+          [(ngModel)]="presetTime24"
+          [p-format]="format24"
+          [p-size]="currentSize"
+          (p-change)="onTimeChange24($event)"
+        >
+        </po-timer>
+        <p class="po-font-text" style="margin-top: 12px"><strong>Valor inicial:</strong> {{ presetTime24 }}</p>
+      </div>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 2: Formato 12h (AM/PM) -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">2. Formato 12h (AM/PM)</h2>
+      <p class="po-font-text">Exibe horas de 1 a 12 com seletor AM/PM.</p>
+      <po-timer [p-format]="format12" [p-size]="currentSize" (p-change)="onTimeChange12($event)"> </po-timer>
+      <p class="po-font-text" style="margin-top: 12px">
+        <strong>Valor selecionado:</strong> {{ selectedTime12 || '(nenhum)' }}
+      </p>
+
+      <!-- exemplo com valor inicial -->
+      <div style="margin-top: 16px">
+        <po-timer
+          [p-format]="format12"
+          [p-size]="currentSize"
+          [p-value]="presetTime12"
+          (p-change)="onTimeChange12($event)"
+        >
+        </po-timer>
+        <p class="po-font-text" style="margin-top: 12px"><strong>Valor inicial:</strong> {{ presetTime12 }}</p>
+      </div>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 3: Com segundos -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">3. Com segundos</h2>
+      <p class="po-font-text">
+        Exibe coluna de segundos (intervalo padrão: 15 segundos). Ativado via <code>p-show-seconds</code>.
+      </p>
+      <po-timer
+        [p-format]="format24"
+        [p-size]="currentSize"
+        p-show-seconds
+        (p-change)="onTimeChangeWithSeconds($event)"
+      >
+      </po-timer>
+      <p class="po-font-text" style="margin-top: 12px">
+        <strong>Valor selecionado:</strong> {{ selectedTimeWithSeconds || '(nenhum)' }}
+      </p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 4: Com limites min/max -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">4. Com limites (min: 08:12 / max: 08:55)</h2>
+      <p class="po-font-text">Horas fora do intervalo ficam desabilitadas.</p>
+      <po-timer
+        [p-format]="format24"
+        [p-size]="currentSize"
+        p-min-time="07:12"
+        p-max-time="08:55"
+        p-minute-interval="1"
+        (p-change)="onTimeChangeMinMax($event)"
+      >
+      </po-timer>
+      <p class="po-font-text" style="margin-top: 12px">
+        <strong>Valor selecionado:</strong> {{ selectedTimeMinMax || '(nenhum)' }}
+      </p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 5: Intervalo de minutos personalizado -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">5. Intervalo de minutos personalizado (15 min)</h2>
+      <p class="po-font-text">
+        Minutos exibidos em intervalos de 15: 00, 15, 30, 45. Configurado via <code>p-minute-interval</code>.
+      </p>
+      <po-timer
+        [p-format]="format24"
+        [p-size]="currentSize"
+        [p-minute-interval]="15"
+        (p-change)="onTimeChangeInterval($event)"
+      >
+      </po-timer>
+      <p class="po-font-text" style="margin-top: 12px">
+        <strong>Valor selecionado:</strong> {{ selectedTimeInterval || '(nenhum)' }}
+      </p>
+    </section>
+
+    <po-divider></po-divider>
+
+    <!-- Seção 6: Formato 12h + segundos -->
+    <section style="margin-bottom: 40px">
+      <h2 class="po-font-subtitle">6. Formato 12h + segundos</h2>
+      <p class="po-font-text">Combinação: formato 12h com coluna de segundos.</p>
+      <po-timer [p-format]="format12" [p-size]="currentSize" p-show-seconds> </po-timer>
+    </section>
+  } @else {
+    <div style="display: flex; justify-content: center; align-items: center; height: 200px">
+      <po-loading p-neutral-color [p-size]="'large'"></po-loading>
+    </div>
+  }
+</div>
