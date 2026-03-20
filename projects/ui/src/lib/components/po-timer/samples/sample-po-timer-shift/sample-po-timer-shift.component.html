@@ -1,0 +1,42 @@
+<div class="po-row">
+  <po-radio-group
+    class="po-md-12"
+    name="shift"
+    [(ngModel)]="shift"
+    p-columns="3"
+    p-label="Turno"
+    [p-options]="shiftOptions"
+  >
+  </po-radio-group>
+</div>
+
+<div class="po-row">
+  <div class="po-md-6">
+    <h4>Início do turno</h4>
+    <po-timer [(ngModel)]="shiftStart" [p-min-time]="shiftMinTime" [p-max-time]="shiftMaxTime" [p-minute-interval]="30">
+    </po-timer>
+  </div>
+
+  <div class="po-md-6">
+    <h4>Fim do turno</h4>
+    <po-timer [(ngModel)]="shiftEnd" [p-min-time]="shiftMinTime" [p-max-time]="shiftMaxTime" [p-minute-interval]="30">
+    </po-timer>
+  </div>
+</div>
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Início" [p-value]="shiftStart || '--:--'"> </po-info>
+
+  <po-info class="po-md-6" p-label="Fim" [p-value]="shiftEnd || '--:--'"> </po-info>
+</div>
+
+<div class="po-row">
+  <po-button
+    class="po-md-3 po-offset-md-9"
+    p-label="Salvar"
+    p-kind="primary"
+    [p-disabled]="!shiftStart || !shiftEnd"
+    (p-click)="save()"
+  >
+  </po-button>
+</div>

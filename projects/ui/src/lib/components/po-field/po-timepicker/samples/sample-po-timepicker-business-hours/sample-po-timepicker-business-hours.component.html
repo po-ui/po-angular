@@ -1,0 +1,55 @@
+<div class="po-row">
+  <po-timepicker
+    class="po-md-6"
+    name="openTime"
+    [(ngModel)]="openTime"
+    p-label="Abertura"
+    p-clean
+    p-min-time="06:00"
+    [p-max-time]="lunchStart"
+    [p-minute-interval]="30"
+  >
+  </po-timepicker>
+
+  <po-timepicker
+    class="po-md-6"
+    name="closeTime"
+    [(ngModel)]="closeTime"
+    p-label="Fechamento"
+    p-clean
+    [p-min-time]="lunchEnd"
+    p-max-time="23:00"
+    [p-minute-interval]="30"
+  >
+  </po-timepicker>
+</div>
+
+<div class="po-row">
+  <po-timepicker
+    class="po-md-6"
+    name="lunchStart"
+    [(ngModel)]="lunchStart"
+    p-label="Início do almoço"
+    p-clean
+    [p-min-time]="openTime"
+    [p-max-time]="lunchEnd"
+    [p-minute-interval]="15"
+  >
+  </po-timepicker>
+
+  <po-timepicker
+    class="po-md-6"
+    name="lunchEnd"
+    [(ngModel)]="lunchEnd"
+    p-label="Fim do almoço"
+    p-clean
+    [p-min-time]="lunchStart"
+    [p-max-time]="closeTime"
+    [p-minute-interval]="15"
+  >
+  </po-timepicker>
+</div>
+
+<div class="po-row">
+  <po-button class="po-md-3 po-offset-md-9" p-label="Salvar" p-kind="primary" (p-click)="save()"> </po-button>
+</div>

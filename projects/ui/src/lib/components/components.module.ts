@@ -51,6 +51,7 @@ import { PoWidgetModule } from './po-widget/po-widget.module';
 import { PoToasterModule } from './po-toaster';
 import { PoHelperModule } from './po-helper/po-helper.module';
 import { PoHeaderModule } from './po-header';
+import { PoTimerModule } from './po-timer/po-timer.module';
 
 const PO_MODULES = [
   PoAccordionModule,
@@ -103,7 +104,8 @@ const PO_MODULES = [
   PoSkeletonModule,
   PoToasterModule,
   PoHelperModule,
-  PoHeaderModule
+  PoHeaderModule,
+  PoTimerModule
 ];
 @NgModule({
   imports: PO_MODULES,
