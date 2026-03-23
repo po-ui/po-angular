@@ -23,6 +23,9 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 
+// Diagnóstico da API key (mostra apenas início/fim para não expor a chave completa)
+console.log(`[AI Server] API Key: ${GEMINI_API_KEY.slice(0, 5)}...${GEMINI_API_KEY.slice(-5)} (${GEMINI_API_KEY.length} chars)`);
+
 if (PROXY_URL) {
   console.log(`[AI Server] Proxy corporativo detectado: ${PROXY_URL}`);
 }
