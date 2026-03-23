@@ -101,14 +101,18 @@ export class MockAiSearchInterceptor implements HttpInterceptor {
       }
     }
 
-    // Idade comparacao
-    const ageMatch = part.match(/idade\s+(maior|menor|acima|abaixo|igual)\s*(?:que|de|a)?\s*(\d+)/i);
+    // Idade comparacao (com ou sem a palavra "idade" na frente)
+    const ageMatch = part.match(/(?:idade\s+)?(maior|menor|acima|abaixo|igual)\s*(?:que|de|a|do que)?\s*(\d+)\s*(?:anos?)?/i);
     if (ageMatch) {
       const ageCol = columns.find(c => c.property === 'age');
       if (ageCol) {
-        const op = this.getOperator(ageMatch[1]);
-        filters.push(`age ${op} ${ageMatch[2]}`);
-        descriptions.push(`Idade ${ageMatch[1]} que ${ageMatch[2]}`);
+        // Verifica se nao eh salario (evita conflito com regex de salario)
+        const isSalary = part.match(/sal[aá]rio/i);
+        if (!isSalary) {
+          const op = this.getOperator(ageMatch[1]);
+          filters.push(`age ${op} ${ageMatch[2]}`);
+          descriptions.push(`Idade ${ageMatch[1]} que ${ageMatch[2]}`);
+        }
       }
     }
 
