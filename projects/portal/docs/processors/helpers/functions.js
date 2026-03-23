@@ -142,7 +142,7 @@ module.exports = {
       // Tipo inferido por valor literal
       if (value === 'true' || value === 'false') return { type: 'boolean', alias };
       if (value.startsWith('"') || value.startsWith("'")) return { type: 'string', alias };
-      if (!isNaN(Number(value))) return { type: 'number', alias };
+      if (value !== '' && !isNaN(Number(value))) return { type: 'number', alias };
 
       // Fallback
       return { type: 'unknown', alias };
