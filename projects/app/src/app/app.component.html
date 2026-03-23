@@ -42,6 +42,7 @@
 
     <po-info class="po-md-12" p-label="Query" [p-value]="lastQuery"></po-info>
     <po-info class="po-md-12 po-mt-1" p-label="Filtro OData" [p-value]="lastFilter || '(nenhum)'"></po-info>
+    <po-info class="po-md-12 po-mt-1" p-label="Chamada API" [p-value]="fullApiUrl || '(nenhuma)'"></po-info>
     <po-info class="po-md-12 po-mt-1" p-label="Descrição" [p-value]="lastDescription || '(nenhuma)'"></po-info>
     <po-info class="po-md-12 po-mt-1" p-label="Confiança" [p-value]="(lastConfidence * 100).toFixed(0) + '%'"></po-info>
 

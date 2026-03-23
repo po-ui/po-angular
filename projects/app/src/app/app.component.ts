@@ -15,6 +15,7 @@ export class AppComponent {
   lastDescription = '';
   lastConfidence = 0;
   errorMessage = '';
+  fullApiUrl = '';
 
   columns: Array<PoTableColumn> = [
     { property: 'id', label: 'ID', type: 'number' },
@@ -51,6 +52,7 @@ export class AppComponent {
     this.lastDescription = result.description;
     this.lastConfidence = result.confidence;
     this.errorMessage = '';
+    this.buildFullApiUrl(result.filter);
   }
 
   onAiSearchLowConfidence(result: PoTableAiSearchResult): void {
@@ -59,6 +61,7 @@ export class AppComponent {
     this.lastDescription = result.description;
     this.lastConfidence = result.confidence;
     this.errorMessage = `Confiança baixa (${(result.confidence * 100).toFixed(0)}%) — filtro não aplicado automaticamente`;
+    this.buildFullApiUrl(result.filter);
   }
 
   onAiSearchError(error: PoTableAiSearchError): void {
@@ -67,5 +70,14 @@ export class AppComponent {
     this.lastDescription = '';
     this.lastConfidence = 0;
     this.errorMessage = `Erro ${error.statusCode}: ${error.message}`;
+    this.fullApiUrl = '';
+  }
+
+  private buildFullApiUrl(filter: string): void {
+    if (filter) {
+      this.fullApiUrl = `${this.serviceApi}?$filter=${encodeURIComponent(filter)}`;
+    } else {
+      this.fullApiUrl = '';
+    }
   }
 }
