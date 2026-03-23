@@ -33,7 +33,7 @@
             [class.po-context-menu-item-selected]="item.selected"
             (click)="selectItem(item)"
             (keydown.enter)="selectItem(item)"
-            (keydown.space)="selectItem(item)"
+            (keydown.space)="$event.preventDefault(); selectItem(item)"
             (mouseenter)="handlerTooltip(item, itemRef)"
             p-tooltip-position="right"
             [p-tooltip]="item.tooltip"
