@@ -122,11 +122,11 @@ module.exports = {
 
     const inferTypeFromCode = codeLine => {
       // Extrai tipo genérico
-      const genericMatch = codeLine.match(/(?:input(?:\.required)?|output|model)<([^>]+)>/);
+      const genericMatch = codeLine.match(/(?:input(?:\.required)?|output|model)<(.+)>(?=\s*\()/);
       const genericRaw = genericMatch ? genericMatch[1].trim() : null;
 
       // Extrai valor passado como primeiro argumento
-      const valueMatch = codeLine.match(/(?:input(?:\.required)?|output|model)(?:<[^>]+>)?\(\s*([^,)]*)/);
+      const valueMatch = codeLine.match(/(?:input(?:\.required)?|output|model)(?:<.+>)?\(\s*([^,)]*)/);
       const value = valueMatch ? valueMatch[1].trim() : '';
 
       // Extrai alias (entre aspas simples ou duplas)

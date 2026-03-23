@@ -81,7 +81,7 @@ export class PoContextMenuBaseComponent {
    * ```html
    * <po-context-menu
    *   [(p-expanded)]="expanded"
-   *   (p-expandChange)="handlerExpanded($event)"
+   *   (p-expandedChange)="handlerExpanded($event)"
    * />
    * ```
    *
