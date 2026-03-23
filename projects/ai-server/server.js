@@ -106,9 +106,9 @@ function callGeminiAPISingle(prompt) {
     });
 
     const targetHost = 'generativelanguage.googleapis.com';
-    // Envia API key via header x-goog-api-key (mais seguro e evita problemas com proxies corporativos)
-    const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
-    const targetPath = `/v1beta/models/${model}:generateContent`;
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite';
+    // Envia API key tanto na URL (como no navegador) quanto no header (redundância)
+    const targetPath = `/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 
     // Em redes corporativas com inspeção SSL, o firewall re-assina certificados
     // causando "self-signed certificate in certificate chain"
@@ -117,7 +117,8 @@ function callGeminiAPISingle(prompt) {
     const commonHeaders = {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(postData),
-      'x-goog-api-key': GEMINI_API_KEY
+      'x-goog-api-key': GEMINI_API_KEY,
+      'User-Agent': 'Mozilla/5.0'
     };
 
     function handleResponse(res) {
@@ -321,7 +322,7 @@ app.listen(PORT, () => {
   console.log(`  AI Server rodando em http://localhost:${PORT}`);
   console.log(`  Endpoint: POST http://localhost:${PORT}/api/ai/filter`);
   console.log(`  Health:   GET  http://localhost:${PORT}/api/ai/health`);
-  console.log(`  Modelo: ${process.env.GEMINI_MODEL || 'gemini-1.5-flash'}`);
+  console.log(`  Modelo: ${process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite'}`);
   console.log(`  Usando: HTTPS nativo (sem SDK/fetch)`);
   console.log(`  TLS verify: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' ? 'sim' : 'NÃO (NODE_TLS_REJECT_UNAUTHORIZED=0)'}`);
   if (PROXY_URL) console.log(`  Proxy: ${PROXY_URL}`);
