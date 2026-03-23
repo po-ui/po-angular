@@ -1,0 +1,52 @@
+<po-page-default p-title="AI Search - Demo po-table">
+  <div class="po-row">
+    <div class="po-md-12">
+      <po-info p-label="Como funciona" p-value="Digite uma busca em linguagem natural no campo com ícone de IA acima da tabela e pressione Enter."></po-info>
+    </div>
+  </div>
+
+  <div class="po-row po-mt-3">
+    <div class="po-md-12">
+      <strong>Exemplos de busca:</strong>
+      <div class="po-mt-1">
+        <po-tag
+          *ngFor="let example of examples"
+          class="po-mr-1 po-mb-1"
+          [p-value]="example"
+          p-type="info"
+        ></po-tag>
+      </div>
+    </div>
+  </div>
+
+  <div class="po-row po-mt-3">
+    <po-table
+      class="po-md-12"
+      [p-columns]="columns"
+      [p-service-api]="serviceApi"
+      [p-ai-search-url]="aiSearchUrl"
+      p-ai-search-placeholder="Busca inteligente com IA... (ex: ativos de São Paulo com idade maior que 30)"
+      [p-ai-search-timeout]="15000"
+      [p-ai-search-min-confidence]="0.3"
+      [p-hide-table-search]="true"
+      [p-height]="400"
+      (p-ai-search-result)="onAiSearchResult($event)"
+      (p-ai-search-low-confidence)="onAiSearchLowConfidence($event)"
+      (p-ai-search-error)="onAiSearchError($event)"
+    >
+    </po-table>
+  </div>
+
+  <div class="po-row po-mt-3" *ngIf="lastFilter || errorMessage">
+    <po-divider class="po-md-12" p-label="Resultado da IA"></po-divider>
+
+    <po-info class="po-md-12" p-label="Query" [p-value]="lastQuery"></po-info>
+    <po-info class="po-md-12 po-mt-1" p-label="Filtro OData" [p-value]="lastFilter || '(nenhum)'"></po-info>
+    <po-info class="po-md-12 po-mt-1" p-label="Descrição" [p-value]="lastDescription || '(nenhuma)'"></po-info>
+    <po-info class="po-md-12 po-mt-1" p-label="Confiança" [p-value]="(lastConfidence * 100).toFixed(0) + '%'"></po-info>
+
+    <div class="po-md-12 po-mt-1" *ngIf="errorMessage">
+      <po-tag [p-value]="errorMessage" p-type="danger"></po-tag>
+    </div>
+  </div>
+</po-page-default>
