@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, Directive } from '@angular/core';
+import { EventEmitter, Input, Output, Directive, output } from '@angular/core';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
 
@@ -45,8 +45,18 @@ export abstract class PoTabBaseComponent {
    */
   @Output('p-close-tab') closeTab = new EventEmitter();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando a aba e ativada.
+   * Emite a instancia do componente da aba que foi ativada.
+   */
+  activatedTab = output<PoTabBaseComponent>({ alias: 'p-activated-tab' });
+
   // ID da aba
-  id?: string = uuid();
+  @Input('id') id: string = uuid();
 
   private _active?: boolean = false;
   private _disabled?: boolean = false;

@@ -109,6 +109,8 @@ describe('PoTabsComponent:', () => {
 
     it('onTabActive: should set `previousActiveTab` and call `deactivateTab`', () => {
       component['previousActiveTab'] = undefined;
+      defaultTab.activatedTab = { emit: () => {} };
+      activeTab.activatedTab = { emit: () => {} };
       component.tabsChildren = <any>[defaultTab, activeTab];
       const tab = component.tabsChildren[0];
 
@@ -514,6 +516,7 @@ describe('PoTabsComponent:', () => {
     it('onTabActiveByDropdown: should correctly call methods and update styles when called', () => {
       const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab-id' });
       tabMock.click = { emit: () => {} };
+      tabMock.activatedTab = { emit: () => {} };
       component.defaultLastTabWidth = 100;
 
       const nativeElementMock = { style: { width: '' }, getBoundingClientRect: () => ({ width: 100 }) };
@@ -705,6 +708,39 @@ describe('PoTabsComponent:', () => {
       component.executeTabsState(false, 'tab-5');
 
       expect(lastTabs.widthButton).toBe(200);
+    });
+
+    describe('selectedTab', () => {
+      it('should call selectedTab when the tab id is found in the array', () => {
+        const mockTab = { id: 'tab-perfil', title: 'Perfil' };
+        const mockTabsArray = [{ id: 'tab-home', title: 'Home' }, mockTab];
+
+        Object.defineProperty(component, 'tabsChildrenArray', {
+          get: () => mockTabsArray,
+          configurable: true
+        });
+
+        const spySelectedTab = spyOn(component, 'selectedTab');
+
+        component.focusTab('tab-perfil');
+
+        expect(spySelectedTab).toHaveBeenCalledWith(mockTab);
+      });
+
+      it('should not call selectedTab if the id does not exist in the array', () => {
+        const mockTabsArray = [{ id: 'tab-home' }];
+
+        Object.defineProperty(component, 'tabsChildrenArray', {
+          get: () => mockTabsArray,
+          configurable: true
+        });
+
+        const spySelectedTab = spyOn(component, 'selectedTab');
+
+        component.focusTab('id-inexistente');
+
+        expect(spySelectedTab).not.toHaveBeenCalled();
+      });
     });
   });
 });

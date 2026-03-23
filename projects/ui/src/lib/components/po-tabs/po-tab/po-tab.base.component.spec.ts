@@ -1,4 +1,5 @@
 import { Directive } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
@@ -10,7 +11,12 @@ class PoTabComponent extends PoTabBaseComponent {
 }
 
 describe('PoTabBaseComponent', () => {
-  const component: PoTabComponent = new PoTabComponent();
+  let component: PoTabComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+    component = TestBed.runInInjectionContext(() => new PoTabComponent());
+  });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
