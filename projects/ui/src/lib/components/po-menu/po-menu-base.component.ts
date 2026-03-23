@@ -1,4 +1,4 @@
-import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, output } from '@angular/core';
 
 import {
   convertToBoolean,
@@ -128,6 +128,19 @@ export abstract class PoMenuBaseComponent {
    * @default `false`
    */
   @Input({ alias: 'p-automatic-toggle', transform: convertToBoolean }) automaticToggle: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido toda vez que o estado do menu muda, enviando `true` quando expandido e `false` quando colapsado.
+   *
+   * ```html
+   * <po-menu (p-toggle)="onMenuToggle($event)"></po-menu>
+   * ```
+   */
+  toggleChange = output<boolean>({ alias: 'p-toggle' });
 
   /**
    * @optional

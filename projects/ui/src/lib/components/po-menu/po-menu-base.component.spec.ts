@@ -1,5 +1,5 @@
-import { Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
@@ -8,7 +8,10 @@ import { PoThemeA11yEnum } from '../../services';
 import { PoMenuBaseComponent } from './po-menu-base.component';
 import { PoMenuFilter } from './po-menu-filter/po-menu-filter.interface';
 
-@Directive()
+@Component({
+  template: '',
+  standalone: true
+})
 export class PoMenuComponent extends PoMenuBaseComponent {
   protected validateCollapseClass() {}
   protected checkActiveMenuByUrl() {}
@@ -33,8 +36,19 @@ describe('PoMenuBaseComponent:', () => {
     getFilteredData: () => {}
   };
 
-  beforeEach(() => {
-    component = new PoMenuComponent(menuGlobalService, menuService, languageService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoMenuComponent],
+      providers: [
+        { provide: 'PoMenuGlobalService', useValue: menuGlobalService },
+        { provide: 'PoMenuService', useValue: menuService },
+        { provide: 'PoLanguageService', useValue: languageService }
+      ]
+    }).compileComponents();
+
+    component = TestBed.runInInjectionContext(
+      () => new PoMenuComponent(menuGlobalService, menuService, languageService)
+    );
     component.menus = [
       {
         label: 'Level 1.1',
