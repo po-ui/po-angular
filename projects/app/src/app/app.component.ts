@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoTableColumn, PoTableAiSearchResult, PoTableAiSearchError } from '../../../../ui/src/lib/components/po-table';
+import { PoTableColumn, PoTableAiSearchResult, PoTableAiSearchError } from '../../../ui/src/public-api';
 
 @Component({
   selector: 'app-root',
