@@ -98,7 +98,8 @@ Se não conseguir gerar um filtro válido, retorne confidence 0 e filter vazio.`
 // Chamada direta à API REST do Gemini usando módulo https nativo do Node.js
 // Suporta proxy corporativo via HTTPS_PROXY
 // Aceita certificados auto-assinados (inspeção SSL corporativa) via NODE_TLS_REJECT_UNAUTHORIZED=0
-function callGeminiAPI(prompt) {
+// Retry automático para erros 429 (rate limit)
+function callGeminiAPISingle(prompt) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }]
@@ -117,8 +118,11 @@ function callGeminiAPI(prompt) {
       res.on('end', () => {
         console.log(`[AI Search] Status HTTP: ${res.statusCode}`);
         if (res.statusCode !== 200) {
-          console.error(`[AI Search] Erro Gemini: ${data}`);
-          reject(new Error(`Gemini API retornou status ${res.statusCode}: ${data}`));
+          console.error(`[AI Search] Erro Gemini (HTTP ${res.statusCode})`);
+          const error = new Error(`Gemini API retornou status ${res.statusCode}`);
+          error.statusCode = res.statusCode;
+          error.responseBody = data;
+          reject(error);
           return;
         }
         try {
@@ -222,6 +226,28 @@ function callGeminiAPI(prompt) {
       req.end();
     }
   });
+}
+
+// Wrapper com retry automático para erros 429 (rate limit)
+async function callGeminiAPI(prompt, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await callGeminiAPISingle(prompt);
+    } catch (error) {
+      if (error.statusCode === 429 && attempt < maxRetries) {
+        // Extrai o tempo de espera sugerido pelo Gemini, ou usa backoff exponencial
+        let waitTime = attempt * 20;
+        const retryMatch = error.responseBody?.match(/retry in ([\d.]+)s/i);
+        if (retryMatch) {
+          waitTime = Math.ceil(parseFloat(retryMatch[1])) + 2;
+        }
+        console.log(`[AI Search] Rate limit (429). Aguardando ${waitTime}s antes do retry ${attempt}/${maxRetries - 1}...`);
+        await new Promise(r => setTimeout(r, waitTime * 1000));
+        continue;
+      }
+      throw error;
+    }
+  }
 }
 
 // Endpoint de health check para diagnóstico
