@@ -523,6 +523,9 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
    */
   public focusTab(id: string) {
     const tab = this.tabsChildrenArray.find(x => x.id === id);
-    this.selectedTab(tab);
+
+    if (tab) {
+      this.selectedTab(tab);
+    }
   }
 }
