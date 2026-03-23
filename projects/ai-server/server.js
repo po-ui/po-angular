@@ -106,11 +106,18 @@ function callGeminiAPISingle(prompt) {
     });
 
     const targetHost = 'generativelanguage.googleapis.com';
-    const targetPath = `/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // Envia API key via header x-goog-api-key (mais seguro e evita problemas com proxies corporativos)
+    const targetPath = '/v1beta/models/gemini-2.0-flash:generateContent';
 
     // Em redes corporativas com inspeção SSL, o firewall re-assina certificados
     // causando "self-signed certificate in certificate chain"
     const rejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0';
+
+    const commonHeaders = {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData),
+      'x-goog-api-key': GEMINI_API_KEY
+    };
 
     function handleResponse(res) {
       let data = '';
@@ -176,11 +183,7 @@ function callGeminiAPISingle(prompt) {
           path: targetPath,
           method: 'POST',
           rejectUnauthorized,
-          headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(postData),
-            'Host': targetHost
-          }
+          headers: { ...commonHeaders, 'Host': targetHost }
         }, handleResponse);
 
         req.on('error', handleError);
@@ -210,10 +213,7 @@ function callGeminiAPISingle(prompt) {
         path: targetPath,
         method: 'POST',
         rejectUnauthorized,
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(postData)
-        }
+        headers: commonHeaders
       };
 
       req = https.request(options, handleResponse);
