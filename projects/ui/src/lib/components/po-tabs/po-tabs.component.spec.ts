@@ -109,6 +109,8 @@ describe('PoTabsComponent:', () => {
 
     it('onTabActive: should set `previousActiveTab` and call `deactivateTab`', () => {
       component['previousActiveTab'] = undefined;
+      defaultTab.activatedTab = { emit: () => {} };
+      activeTab.activatedTab = { emit: () => {} };
       component.tabsChildren = <any>[defaultTab, activeTab];
       const tab = component.tabsChildren[0];
 
@@ -514,6 +516,7 @@ describe('PoTabsComponent:', () => {
     it('onTabActiveByDropdown: should correctly call methods and update styles when called', () => {
       const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab-id' });
       tabMock.click = { emit: () => {} };
+      tabMock.activatedTab = { emit: () => {} };
       component.defaultLastTabWidth = 100;
 
       const nativeElementMock = { style: { width: '' }, getBoundingClientRect: () => ({ width: 100 }) };
