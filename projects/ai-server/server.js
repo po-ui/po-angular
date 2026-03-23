@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
+// Diagnóstico de versão do Node.js
+console.log(`Node.js version: ${process.version}`);
+
 const app = express();
 const PORT = process.env.PORT || 3333;
 
@@ -74,9 +77,21 @@ app.post('/api/ai/filter', async (req, res) => {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const prompt = buildPrompt(query, columns);
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
+    console.log(`[AI Search] Chamando Gemini API...`);
+
+    let text;
+    try {
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      text = response.text();
+    } catch (apiError) {
+      console.error(`[AI Search] Erro na chamada Gemini:`, apiError.message);
+      if (apiError.message.includes('fetch failed') || apiError.message.includes('ENOTFOUND')) {
+        console.error('[AI Search] Problema de rede. Verifique sua conexão com a internet.');
+        console.error('[AI Search] Se estiver atrás de proxy, configure HTTP_PROXY/HTTPS_PROXY.');
+      }
+      throw apiError;
+    }
 
     console.log(`[AI Search] Gemini response: ${text}`);
 
@@ -105,6 +120,9 @@ app.post('/api/ai/filter', async (req, res) => {
     });
   } catch (error) {
     console.error('[AI Search] Erro:', error.message);
+    if (error.cause) {
+      console.error('[AI Search] Causa:', error.cause.message || error.cause);
+    }
     res.status(500).json({
       filter: '',
       description: `Erro ao processar: ${error.message}`,
