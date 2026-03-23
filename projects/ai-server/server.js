@@ -31,27 +31,34 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-// API Key do Gemini - via .env ou variável de ambiente
+// Detecta qual provedor de IA usar: Groq (preferido) ou Gemini (fallback)
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const AI_PROVIDER = GROQ_API_KEY ? 'groq' : GEMINI_API_KEY ? 'gemini' : null;
 
-// Suporte a proxy corporativo via variável de ambiente
+// Suporte a proxy corporativo
 const PROXY_URL = process.env.HTTPS_PROXY || process.env.https_proxy || process.env.HTTP_PROXY || process.env.http_proxy;
 
-if (!GEMINI_API_KEY) {
+if (!AI_PROVIDER) {
   console.error('\n===========================================');
-  console.error('  GEMINI_API_KEY não configurada!');
+  console.error('  Nenhuma API key configurada!');
   console.error('');
-  console.error('  Opção 1 (recomendado): Crie o arquivo .env nesta pasta:');
-  console.error('    echo "GEMINI_API_KEY=sua-chave" > .env');
+  console.error('  Crie o arquivo .env nesta pasta com UMA das opcoes:');
   console.error('');
-  console.error('  Opção 2: Via variável de ambiente (use aspas simples!):');
-  console.error("    GEMINI_API_KEY='sua-chave' node server.js");
+  console.error('  Opcao 1 - Groq (recomendado, gratis sem billing):');
+  console.error('    GROQ_API_KEY=sua-chave-groq');
+  console.error('    (Gere em: https://console.groq.com/keys)');
+  console.error('');
+  console.error('  Opcao 2 - Gemini:');
+  console.error('    GEMINI_API_KEY=sua-chave-gemini');
+  console.error('    (Gere em: https://aistudio.google.com/apikey)');
   console.error('===========================================\n');
   process.exit(1);
 }
 
-// Diagnóstico da API key (mostra apenas início/fim para não expor a chave completa)
-console.log(`[AI Server] API Key: ${GEMINI_API_KEY.slice(0, 5)}...${GEMINI_API_KEY.slice(-5)} (${GEMINI_API_KEY.length} chars)`);
+const apiKey = GROQ_API_KEY || GEMINI_API_KEY;
+console.log(`[AI Server] Provedor: ${AI_PROVIDER.toUpperCase()}`);
+console.log(`[AI Server] API Key: ${apiKey.slice(0, 5)}...${apiKey.slice(-5)} (${apiKey.length} chars)`);
 
 if (PROXY_URL) {
   console.log(`[AI Server] Proxy corporativo detectado: ${PROXY_URL}`);
@@ -95,10 +102,129 @@ Responda APENAS com um JSON válido no formato abaixo, sem markdown, sem explica
 Se não conseguir gerar um filtro válido, retorne confidence 0 e filter vazio.`;
 }
 
-// Chamada direta à API REST do Gemini usando módulo https nativo do Node.js
-// Suporta proxy corporativo via HTTPS_PROXY
-// Aceita certificados auto-assinados (inspeção SSL corporativa) via NODE_TLS_REJECT_UNAUTHORIZED=0
-// Retry automático para erros 429 (rate limit)
+// ============================================================
+// Chamada a API do Groq (formato OpenAI-compatible)
+// ============================================================
+function callGroqAPISingle(prompt) {
+  return new Promise((resolve, reject) => {
+    const postData = JSON.stringify({
+      model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.1,
+      max_tokens: 500
+    });
+
+    const targetHost = 'api.groq.com';
+    const targetPath = '/openai/v1/chat/completions';
+    const rejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0';
+
+    const commonHeaders = {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData),
+      'Authorization': `Bearer ${GROQ_API_KEY}`
+    };
+
+    function handleResponse(res) {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => {
+        console.log(`[AI Search] Status HTTP: ${res.statusCode}`);
+        if (res.statusCode !== 200) {
+          console.error(`[AI Search] Erro Groq (HTTP ${res.statusCode}): ${data}`);
+          const error = new Error(`Groq API retornou status ${res.statusCode}`);
+          error.statusCode = res.statusCode;
+          error.responseBody = data;
+          reject(error);
+          return;
+        }
+        try {
+          const parsed = JSON.parse(data);
+          const text = parsed.choices?.[0]?.message?.content;
+          if (!text) {
+            reject(new Error('Resposta do Groq sem conteudo de texto'));
+            return;
+          }
+          resolve(text);
+        } catch (e) {
+          reject(new Error(`Erro ao parsear resposta do Groq: ${e.message}`));
+        }
+      });
+    }
+
+    function handleError(e) {
+      console.error(`[AI Search] Erro de conexao Groq: ${e.message}`);
+      reject(new Error(`Erro de conexao com Groq API: ${e.message}`));
+    }
+
+    console.log(`[AI Search] Chamando Groq API...`);
+
+    if (PROXY_URL) {
+      const proxy = url.parse(PROXY_URL);
+      console.log(`[AI Search] Usando proxy: ${proxy.hostname}:${proxy.port}`);
+
+      const connectReq = http.request({
+        hostname: proxy.hostname,
+        port: proxy.port || 80,
+        method: 'CONNECT',
+        path: `${targetHost}:443`,
+        headers: { 'Host': `${targetHost}:443` }
+      });
+
+      connectReq.on('connect', (res, socket) => {
+        if (res.statusCode !== 200) {
+          reject(new Error(`Proxy CONNECT falhou com status ${res.statusCode}`));
+          return;
+        }
+
+        const req = https.request({
+          socket,
+          hostname: targetHost,
+          path: targetPath,
+          method: 'POST',
+          rejectUnauthorized,
+          headers: { ...commonHeaders, 'Host': targetHost }
+        }, handleResponse);
+
+        req.on('error', handleError);
+        req.setTimeout(30000, () => {
+          req.destroy();
+          reject(new Error('Timeout na chamada ao Groq API (30s)'));
+        });
+        req.write(postData);
+        req.end();
+      });
+
+      connectReq.on('error', (e) => {
+        reject(new Error(`Erro ao conectar no proxy corporativo: ${e.message}`));
+      });
+      connectReq.setTimeout(15000, () => {
+        connectReq.destroy();
+        reject(new Error('Timeout ao conectar no proxy corporativo (15s)'));
+      });
+      connectReq.end();
+    } else {
+      const req = https.request({
+        hostname: targetHost,
+        path: targetPath,
+        method: 'POST',
+        rejectUnauthorized,
+        headers: commonHeaders
+      }, handleResponse);
+
+      req.on('error', handleError);
+      req.setTimeout(30000, () => {
+        req.destroy();
+        reject(new Error('Timeout na chamada ao Groq API (30s)'));
+      });
+      req.write(postData);
+      req.end();
+    }
+  });
+}
+
+// ============================================================
+// Chamada a API do Gemini (https nativo)
+// ============================================================
 function callGeminiAPISingle(prompt) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
@@ -106,8 +232,7 @@ function callGeminiAPISingle(prompt) {
     });
 
     const targetHost = 'generativelanguage.googleapis.com';
-    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite';
-    // Envia API key tanto na URL (como no navegador) quanto no header (redundância)
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
     const targetPath = `/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 
     // Em redes corporativas com inspeção SSL, o firewall re-assina certificados
@@ -117,8 +242,7 @@ function callGeminiAPISingle(prompt) {
     const commonHeaders = {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(postData),
-      'x-goog-api-key': GEMINI_API_KEY,
-      'User-Agent': 'Mozilla/5.0'
+      'x-goog-api-key': GEMINI_API_KEY
     };
 
     function handleResponse(res) {
@@ -230,11 +354,13 @@ function callGeminiAPISingle(prompt) {
   });
 }
 
-// Wrapper com retry automático para erros 429 (rate limit)
-async function callGeminiAPI(prompt, maxRetries = 3) {
+// Wrapper com retry automatico para erros 429 (rate limit)
+async function callAI(prompt, maxRetries = 3) {
+  const callSingle = AI_PROVIDER === 'groq' ? callGroqAPISingle : callGeminiAPISingle;
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      return await callGeminiAPISingle(prompt);
+      return await callSingle(prompt);
     } catch (error) {
       if (error.statusCode === 429 && attempt < maxRetries) {
         // Extrai o tempo de espera sugerido pelo Gemini, ou usa backoff exponencial
@@ -252,14 +378,14 @@ async function callGeminiAPI(prompt, maxRetries = 3) {
   }
 }
 
-// Endpoint de health check para diagnóstico
+// Endpoint de health check
 app.get('/api/ai/health', (req, res) => {
   res.json({
     status: 'ok',
     port: PORT,
+    provider: AI_PROVIDER,
     proxy: PROXY_URL || 'nenhum',
-    model: 'gemini-2.0-flash',
-    apiKeyConfigured: !!GEMINI_API_KEY,
+    apiKeyConfigured: !!apiKey,
     nodeVersion: process.version
   });
 });
@@ -278,11 +404,12 @@ app.post('/api/ai/filter', async (req, res) => {
 
     console.log(`\n[AI Search] Query: "${query}"`);
     console.log(`[AI Search] Columns: ${columns.map(c => c.property).join(', ')}`);
+    console.log(`[AI Search] Provedor: ${AI_PROVIDER}`);
 
     const prompt = buildPrompt(query, columns);
-    const text = await callGeminiAPI(prompt);
+    const text = await callAI(prompt);
 
-    console.log(`[AI Search] Gemini response: ${text}`);
+    console.log(`[AI Search] Resposta: ${text}`);
 
     // Limpar possíveis marcações de markdown do response
     let cleanText = text.trim();
@@ -318,13 +445,16 @@ app.post('/api/ai/filter', async (req, res) => {
 });
 
 app.listen(PORT, () => {
+  const providerInfo = AI_PROVIDER === 'groq'
+    ? `Provedor: Groq (${process.env.GROQ_MODEL || 'llama-3.3-70b-versatile'})`
+    : `Provedor: Gemini (${process.env.GEMINI_MODEL || 'gemini-2.0-flash'})`;
+
   console.log(`\n===========================================`);
   console.log(`  AI Server rodando em http://localhost:${PORT}`);
   console.log(`  Endpoint: POST http://localhost:${PORT}/api/ai/filter`);
   console.log(`  Health:   GET  http://localhost:${PORT}/api/ai/health`);
-  console.log(`  Modelo: ${process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite'}`);
-  console.log(`  Usando: HTTPS nativo (sem SDK/fetch)`);
-  console.log(`  TLS verify: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' ? 'sim' : 'NÃO (NODE_TLS_REJECT_UNAUTHORIZED=0)'}`);
+  console.log(`  ${providerInfo}`);
+  console.log(`  TLS verify: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' ? 'sim' : 'NAO (NODE_TLS_REJECT_UNAUTHORIZED=0)'}`);
   if (PROXY_URL) console.log(`  Proxy: ${PROXY_URL}`);
   console.log(`===========================================\n`);
 });
