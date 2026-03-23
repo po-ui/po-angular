@@ -50,32 +50,45 @@
   }
 
   @if (aiSearchUrl) {
-    <div class="po-table-ai-search">
-      <div class="po-table-ai-search-input-wrapper">
-        <span class="po-icon po-icon-light po-table-ai-search-icon"></span>
-        <input
-          #aiSearchInput
-          class="po-table-ai-search-input"
-          type="text"
-          [placeholder]="aiSearchPlaceholder"
-          [disabled]="aiSearchLoading"
-          (keyup.enter)="onAiSearch(aiSearchInput.value)"
-        />
-        @if (aiSearchLoading) {
-          <span class="po-table-ai-search-loading po-icon po-icon-refresh"></span>
-        } @else if (aiSearchDescription) {
-          <span
-            class="po-table-ai-search-clear po-icon po-icon-close"
-            (click)="onAiSearchClear(); aiSearchInput.value = ''"
-          ></span>
+    <div class="po-table-ai-search po-row">
+      <div class="po-table-ai-search-field po-md-6">
+        <div class="po-table-ai-search-input-wrapper">
+          <input
+            #aiSearchInput
+            class="po-table-ai-search-input"
+            type="text"
+            [placeholder]="aiSearchPlaceholder"
+            [disabled]="aiSearchLoading"
+            (keyup.enter)="onAiSearch(aiSearchInput.value)"
+          />
+          @if (aiSearchLoading) {
+            <span class="po-table-ai-search-loading po-icon po-icon-refresh"></span>
+          } @else if (aiSearchDescription) {
+            <span
+              class="po-table-ai-search-clear po-icon po-icon-close"
+              (click)="onAiSearchClear(); aiSearchInput.value = ''"
+            ></span>
+          }
+          <button
+            class="po-table-ai-search-button"
+            type="button"
+            [disabled]="aiSearchLoading"
+            (click)="onAiSearch(aiSearchInput.value)"
+          >
+            <svg class="po-table-ai-search-button-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.5 2L10.5 5.5L14 6.5L10.5 7.5L9.5 11L8.5 7.5L5 6.5L8.5 5.5L9.5 2Z" fill="currentColor"/>
+              <path d="M19 8L19.75 10.25L22 11L19.75 11.75L19 14L18.25 11.75L16 11L18.25 10.25L19 8Z" fill="currentColor"/>
+              <path d="M11 15L12.5 19.5L17 21L12.5 22.5L11 27L9.5 22.5L5 21L9.5 19.5L11 15Z" fill="currentColor" transform="scale(0.75) translate(4, -2)"/>
+            </svg>
+          </button>
+        </div>
+        @if (aiSearchDescription) {
+          <div class="po-table-ai-search-description">
+            <span class="po-icon po-icon-info"></span>
+            <span>{{ aiSearchDescription }}</span>
+          </div>
         }
       </div>
-      @if (aiSearchDescription) {
-        <div class="po-table-ai-search-description">
-          <span class="po-icon po-icon-info"></span>
-          <span>{{ aiSearchDescription }}</span>
-        </div>
-      }
     </div>
   }
 </div>

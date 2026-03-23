@@ -103,11 +103,13 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
   styles: [
     `
       .po-table-ai-search {
+        padding: 0 0 8px 0;
+      }
+
+      .po-table-ai-search-field {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        padding: 0 0 8px 0;
-        width: 100%;
       }
 
       .po-table-ai-search-input-wrapper {
@@ -115,7 +117,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
         align-items: center;
         border: 1px solid var(--color-neutral-mid-40, #dadeea);
         border-radius: 4px;
-        padding: 0 12px;
+        padding: 0 0 0 12px;
         height: 44px;
         background: var(--color-neutral-light-00, #ffffff);
         transition: border-color 0.2s;
@@ -123,12 +125,6 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 
       .po-table-ai-search-input-wrapper:focus-within {
         border-color: var(--color-action-default, #1464a5);
-      }
-
-      .po-table-ai-search-icon {
-        color: var(--color-action-default, #1464a5);
-        margin-right: 8px;
-        font-size: 16px;
       }
 
       .po-table-ai-search-input {
@@ -139,6 +135,37 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
         font-size: 14px;
         color: var(--color-neutral-dark-70, #4a5c6a);
         background: transparent;
+        height: 100%;
+      }
+
+      .po-table-ai-search-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 100%;
+        border: none;
+        border-left: 1px solid var(--color-neutral-mid-40, #dadeea);
+        border-radius: 0 3px 3px 0;
+        background: var(--color-action-default, #1464a5);
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        flex-shrink: 0;
+      }
+
+      .po-table-ai-search-button:hover {
+        background: var(--color-action-hover, #0d4d82);
+      }
+
+      .po-table-ai-search-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .po-table-ai-search-button-icon {
+        width: 20px;
+        height: 20px;
       }
 
       .po-table-ai-search-input::placeholder {
