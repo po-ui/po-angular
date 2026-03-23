@@ -67,6 +67,7 @@ Se não conseguir gerar um filtro válido, retorne confidence 0 e filter vazio.`
 
 // Chamada direta à API REST do Gemini usando módulo https nativo do Node.js
 // Suporta proxy corporativo via HTTPS_PROXY
+// Aceita certificados auto-assinados (inspeção SSL corporativa) via NODE_TLS_REJECT_UNAUTHORIZED=0
 function callGeminiAPI(prompt) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
@@ -75,6 +76,10 @@ function callGeminiAPI(prompt) {
 
     const targetHost = 'generativelanguage.googleapis.com';
     const targetPath = `/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    // Em redes corporativas com inspeção SSL, o firewall re-assina certificados
+    // causando "self-signed certificate in certificate chain"
+    const rejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0';
 
     function handleResponse(res) {
       let data = '';
@@ -136,6 +141,7 @@ function callGeminiAPI(prompt) {
           hostname: targetHost,
           path: targetPath,
           method: 'POST',
+          rejectUnauthorized,
           headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(postData),
@@ -169,6 +175,7 @@ function callGeminiAPI(prompt) {
         hostname: targetHost,
         path: targetPath,
         method: 'POST',
+        rejectUnauthorized,
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(postData)
@@ -256,7 +263,10 @@ app.listen(PORT, () => {
   console.log(`\n===========================================`);
   console.log(`  AI Server rodando em http://localhost:${PORT}`);
   console.log(`  Endpoint: POST http://localhost:${PORT}/api/ai/filter`);
+  console.log(`  Health:   GET  http://localhost:${PORT}/api/ai/health`);
   console.log(`  Modelo: gemini-2.0-flash`);
   console.log(`  Usando: HTTPS nativo (sem SDK/fetch)`);
+  console.log(`  TLS verify: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' ? 'sim' : 'NÃO (NODE_TLS_REJECT_UNAUTHORIZED=0)'}`);
+  if (PROXY_URL) console.log(`  Proxy: ${PROXY_URL}`);
   console.log(`===========================================\n`);
 });
