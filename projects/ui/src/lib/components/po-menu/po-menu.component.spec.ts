@@ -1029,7 +1029,10 @@ describe('PoMenuComponent:', () => {
         menuItemsService: {
           sendToChildMenuClicked: () => {}
         },
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: value => {
+          fakeThis.collapsed = value;
+        }
       };
 
       component['toggleMenuCollapse'].call(fakeThis, false);
@@ -1048,7 +1051,8 @@ describe('PoMenuComponent:', () => {
         menuItemsService: {
           sendToChildMenuClicked: () => {}
         },
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'updateMenu');
@@ -1071,7 +1075,8 @@ describe('PoMenuComponent:', () => {
         menuItemsService: {
           sendToChildMenuClicked: () => {}
         },
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1096,7 +1101,8 @@ describe('PoMenuComponent:', () => {
         menuItemsService: {
           sendToChildMenuClicked: () => {}
         },
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1117,7 +1123,8 @@ describe('PoMenuComponent:', () => {
         getActiveMenuParent: () => {},
         toggleGroupedMenuItem: () => {},
         activeMenuItem: undefined,
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1138,7 +1145,8 @@ describe('PoMenuComponent:', () => {
         getActiveMenuParent: () => {},
         toggleGroupedMenuItem: () => {},
         activeMenuItem: undefined,
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'toggleGroupedMenuItem');
@@ -1160,7 +1168,8 @@ describe('PoMenuComponent:', () => {
         menuItemsService: {
           sendToChildMenuClicked: arg => {}
         },
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'activateCollapseSubMenuItem');
@@ -1187,7 +1196,8 @@ describe('PoMenuComponent:', () => {
         menuItemsService: {
           sendToChildMenuClicked: () => {}
         },
-        updateMenu: () => {}
+        updateMenu: () => {},
+        setCollapsed: () => {}
       };
 
       spyOn(fakeThis, 'activateCollapseSubMenuItem');
