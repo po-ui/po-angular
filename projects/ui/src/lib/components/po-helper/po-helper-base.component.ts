@@ -61,8 +61,6 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 })
 export class PoHelperBaseComponent {
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -89,8 +87,6 @@ export class PoHelperBaseComponent {
   });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -112,8 +108,6 @@ export class PoHelperBaseComponent {
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -125,8 +119,6 @@ export class PoHelperBaseComponent {
   disabled = input<boolean>(false, { alias: 'p-disabled' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

@@ -184,8 +184,6 @@ export class PoPopoverBaseComponent {
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

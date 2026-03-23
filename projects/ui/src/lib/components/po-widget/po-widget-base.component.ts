@@ -189,8 +189,6 @@ export class PoWidgetBaseComponent {
   @Input('p-tag-icon') tagIcon: string | TemplateRef<void>;
 
   /**
-   * @Input p-tag-position
-   *
    * @optional
    *
    * @description
@@ -239,8 +237,6 @@ export class PoWidgetBaseComponent {
   }
 
   /**
-   * @Input p-avatar
-   *
    * @optional
    *
    * @description

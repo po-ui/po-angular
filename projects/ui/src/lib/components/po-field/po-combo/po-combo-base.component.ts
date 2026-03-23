@@ -138,8 +138,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -444,8 +442,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   @Input('p-listbox-control-position') listboxControlPosition: 'top' | 'bottom' = poMultiselectContainerPositionDefault;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -458,8 +454,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

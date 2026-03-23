@@ -56,8 +56,6 @@ module.exports = {
     { name: 'usedBy' },
     { name: 'optional' },
     { name: 'default' },
-    { name: "Output" },
-    { name: "Input" },
     { name: 'override' }
   ],
 

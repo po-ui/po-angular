@@ -123,8 +123,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -633,8 +631,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -647,8 +643,6 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

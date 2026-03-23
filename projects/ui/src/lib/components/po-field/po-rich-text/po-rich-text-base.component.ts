@@ -113,8 +113,6 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   @Input('p-label') label?: string;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -204,8 +202,6 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -218,8 +214,6 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

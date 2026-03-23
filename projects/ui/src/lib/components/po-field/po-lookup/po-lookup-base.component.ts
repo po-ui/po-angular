@@ -493,8 +493,6 @@ export abstract class PoLookupBaseComponent
   @Input({ alias: 'p-virtual-scroll', transform: convertToBoolean }) virtualScroll?: boolean = true;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -507,8 +505,6 @@ export abstract class PoLookupBaseComponent
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -522,8 +518,6 @@ export abstract class PoLookupBaseComponent
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

@@ -110,8 +110,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -200,8 +198,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -214,8 +210,6 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

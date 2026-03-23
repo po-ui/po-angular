@@ -172,8 +172,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   @Input({ alias: 'p-readonly', transform: convertToBoolean }) readonly: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -395,8 +393,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -409,8 +405,6 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

@@ -142,8 +142,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -288,8 +286,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -302,8 +298,6 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
