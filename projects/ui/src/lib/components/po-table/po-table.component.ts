@@ -39,6 +39,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
+import { PoTableAiSearchService } from './services/po-table-ai-search.service';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 
@@ -97,8 +98,95 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 @Component({
   selector: 'po-table',
   templateUrl: './po-table.component.html',
-  providers: [PoDateService, PoTableService],
-  standalone: false
+  providers: [PoDateService, PoTableService, PoTableAiSearchService],
+  standalone: false,
+  styles: [
+    `
+      .po-table-ai-search {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 0 0 8px 0;
+        width: 100%;
+      }
+
+      .po-table-ai-search-input-wrapper {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--color-neutral-mid-40, #dadeea);
+        border-radius: 4px;
+        padding: 0 12px;
+        height: 44px;
+        background: var(--color-neutral-light-00, #ffffff);
+        transition: border-color 0.2s;
+      }
+
+      .po-table-ai-search-input-wrapper:focus-within {
+        border-color: var(--color-action-default, #1464a5);
+      }
+
+      .po-table-ai-search-icon {
+        color: var(--color-action-default, #1464a5);
+        margin-right: 8px;
+        font-size: 16px;
+      }
+
+      .po-table-ai-search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-family: var(--font-family, 'NotoSans', sans-serif);
+        font-size: 14px;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        background: transparent;
+      }
+
+      .po-table-ai-search-input::placeholder {
+        color: var(--color-neutral-mid-40, #dadeea);
+      }
+
+      .po-table-ai-search-input:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .po-table-ai-search-loading {
+        animation: po-ai-spin 1s linear infinite;
+        color: var(--color-action-default, #1464a5);
+        font-size: 16px;
+      }
+
+      .po-table-ai-search-clear {
+        cursor: pointer;
+        color: var(--color-neutral-mid-40, #dadeea);
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .po-table-ai-search-clear:hover {
+        color: var(--color-action-default, #1464a5);
+      }
+
+      .po-table-ai-search-description {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        padding: 0 4px;
+      }
+
+      .po-table-ai-search-description .po-icon {
+        font-size: 12px;
+        color: var(--color-action-default, #1464a5);
+      }
+
+      @keyframes po-ai-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `
+  ]
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
@@ -198,7 +286,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    private readonly defaultService: PoTableService
+    private readonly defaultService: PoTableService,
+    private readonly aiSearchService: PoTableAiSearchService
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
@@ -627,6 +716,80 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     } else {
       this.filteredItems = items;
     }
+  }
+
+  /**
+   * Executa a busca inteligente via IA.
+   *
+   * Extrai os metadados das colunas, envia ao endpoint configurado em `p-ai-search-url`
+   * e aplica o filtro OData retornado no `p-service-api`.
+   *
+   * @param query Texto em linguagem natural digitado pelo usuário.
+   */
+  onAiSearch(query: string): void {
+    if (!query || !query.trim() || !this.aiSearchUrl) {
+      return;
+    }
+
+    const columnsMetadata = this.aiSearchService.extractColumnsMetadata(this.columns);
+
+    this.aiSearchLoading = true;
+    this.aiSearchDescription = '';
+    this.changeDetector.detectChanges();
+
+    this.aiSearchService.sendQuery(this.aiSearchUrl, query, columnsMetadata, this.aiSearchTimeout).subscribe({
+      next: response => {
+        this.aiSearchLoading = false;
+
+        const result = {
+          query,
+          filter: response.filter,
+          description: response.description,
+          confidence: response.confidence
+        };
+
+        if (response.confidence < this.aiSearchMinConfidence) {
+          this.aiSearchLowConfidence.emit(result);
+          this.aiSearchDescription = response.description;
+          this.changeDetector.detectChanges();
+          return;
+        }
+
+        this.aiSearchResult.emit(result);
+        this.aiSearchDescription = response.description;
+
+        if (this.hasService && response.filter) {
+          this.applyFilters({ $filter: response.filter });
+        }
+
+        this.changeDetector.detectChanges();
+      },
+      error: error => {
+        this.aiSearchLoading = false;
+        this.aiSearchDescription = '';
+
+        this.aiSearchError.emit({
+          query,
+          statusCode: error.statusCode || 500,
+          message: error.message || 'Erro na busca com IA'
+        });
+
+        this.changeDetector.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Limpa o filtro de IA e recarrega os dados originais.
+   */
+  onAiSearchClear(): void {
+    this.aiSearchDescription = '';
+
+    if (this.hasService) {
+      this.applyFilters();
+    }
+
+    this.changeDetector.detectChanges();
   }
 
   /**

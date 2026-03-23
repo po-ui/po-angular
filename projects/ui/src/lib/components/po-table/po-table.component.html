@@ -48,6 +48,36 @@
       </po-search>
     </div>
   }
+
+  @if (aiSearchUrl) {
+    <div class="po-table-ai-search">
+      <div class="po-table-ai-search-input-wrapper">
+        <span class="po-icon po-icon-light po-table-ai-search-icon"></span>
+        <input
+          #aiSearchInput
+          class="po-table-ai-search-input"
+          type="text"
+          [placeholder]="aiSearchPlaceholder"
+          [disabled]="aiSearchLoading"
+          (keyup.enter)="onAiSearch(aiSearchInput.value)"
+        />
+        @if (aiSearchLoading) {
+          <span class="po-table-ai-search-loading po-icon po-icon-refresh"></span>
+        } @else if (aiSearchDescription) {
+          <span
+            class="po-table-ai-search-clear po-icon po-icon-close"
+            (click)="onAiSearchClear(); aiSearchInput.value = ''"
+          ></span>
+        }
+      </div>
+      @if (aiSearchDescription) {
+        <div class="po-table-ai-search-description">
+          <span class="po-icon po-icon-info"></span>
+          <span>{{ aiSearchDescription }}</span>
+        </div>
+      }
+    </div>
+  }
 </div>
 @if (container) {
   <po-container p-no-padding>

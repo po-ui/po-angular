@@ -32,6 +32,7 @@ import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items-params.interface';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
+import { PoTableAiSearchError, PoTableAiSearchResult } from './interfaces/po-table-ai-search.interface';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
 import { PoTableService } from './services/po-table.service';
 
@@ -475,6 +476,49 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @optional
    *
    * @description
+   *
+   * Evento emitido quando a busca por IA retorna um resultado com sucesso.
+   *
+   * O evento envia um objeto `PoTableAiSearchResult` com as propriedades:
+   * - `query`: texto original digitado.
+   * - `filter`: filtro OData gerado.
+   * - `description`: descrição legível.
+   * - `confidence`: nível de confiança (0.0 a 1.0).
+   */
+  @Output('p-ai-search-result') aiSearchResult: EventEmitter<PoTableAiSearchResult> =
+    new EventEmitter<PoTableAiSearchResult>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando a confiança da resposta da IA é menor que o valor definido em `p-ai-search-min-confidence`.
+   *
+   * Permite ao desenvolvedor decidir se aplica o filtro mesmo assim ou solicita que o usuário refine a busca.
+   */
+  @Output('p-ai-search-low-confidence') aiSearchLowConfidence: EventEmitter<PoTableAiSearchResult> =
+    new EventEmitter<PoTableAiSearchResult>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando ocorre um erro na chamada ao endpoint de IA.
+   *
+   * O evento envia um objeto `PoTableAiSearchError` com as propriedades:
+   * - `query`: texto original digitado.
+   * - `statusCode`: código HTTP do erro.
+   * - `message`: mensagem de erro.
+   */
+  @Output('p-ai-search-error') aiSearchError: EventEmitter<PoTableAiSearchError> =
+    new EventEmitter<PoTableAiSearchError>();
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento disparado ao clicar no botão de restaurar padrão no gerenciador de colunas.
    *
    * O componente envia como parâmetro um array de string com as colunas configuradas inicialmente.
@@ -525,6 +569,22 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _draggable?: boolean = false;
   private _hideActionFixedColumns?: boolean = false;
   private _virtualScroll?: boolean = true;
+  private _aiSearchUrl: string;
+  private _aiSearchTimeout: number = 10000;
+  private _aiSearchMinConfidence: number = 0.5;
+  aiSearchLoading: boolean = false;
+  aiSearchDescription: string = '';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Placeholder customizado para o campo de busca inteligente.
+   *
+   * @default `Busca inteligente com IA...`
+   */
+  @Input('p-ai-search-placeholder') aiSearchPlaceholder: string = 'Busca inteligente com IA...';
 
   constructor(
     private poDate: PoDateService,
@@ -964,6 +1024,63 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
 
   get filteredColumns(): Array<string> {
     return this._filteredColumns;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * URL do endpoint de IA responsável por converter linguagem natural em filtros OData.
+   *
+   * Ao definir esta propriedade, o campo de busca inteligente será habilitado na tabela.
+   * O endpoint deve aceitar `POST` com o corpo `{ query, columns }` e retornar `{ filter, description, confidence }`.
+   *
+   * > A lib envia automaticamente os metadados das colunas visíveis (exceto as marcadas com `aiSearchIgnore: true`)
+   * > e aplica o filtro retornado via `$filter` no `p-service-api`.
+   */
+  @Input('p-ai-search-url') set aiSearchUrl(value: string) {
+    this._aiSearchUrl = value;
+  }
+
+  get aiSearchUrl(): string {
+    return this._aiSearchUrl;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Timeout em milissegundos para a chamada ao endpoint de IA.
+   *
+   * @default `10000`
+   */
+  @Input('p-ai-search-timeout') set aiSearchTimeout(value: number) {
+    this._aiSearchTimeout = value > 0 ? value : 10000;
+  }
+
+  get aiSearchTimeout(): number {
+    return this._aiSearchTimeout;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Confiança mínima aceitável para aplicar o filtro automaticamente.
+   * Se a confiança retornada for menor, o evento `p-ai-search-low-confidence` é emitido
+   * e o filtro **não** é aplicado automaticamente.
+   *
+   * @default `0.5`
+   */
+  @Input('p-ai-search-min-confidence') set aiSearchMinConfidence(value: number) {
+    this._aiSearchMinConfidence = value >= 0 && value <= 1 ? value : 0.5;
+  }
+
+  get aiSearchMinConfidence(): number {
+    return this._aiSearchMinConfidence;
   }
 
   get hasColumns(): boolean {

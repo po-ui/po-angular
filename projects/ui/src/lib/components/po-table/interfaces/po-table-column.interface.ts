@@ -268,4 +268,16 @@ export interface PoTableColumn {
   width?: string;
 
   fixed?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Quando `true`, exclui esta coluna dos metadados enviados ao endpoint de IA configurado via `p-ai-search-url`.
+   * Útil para ocultar colunas sensíveis (ex: CPF, tokens) da consulta de IA.
+   *
+   * @default `false`
+   */
+  aiSearchIgnore?: boolean;
 }
