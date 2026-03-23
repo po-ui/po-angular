@@ -7,7 +7,7 @@ import { PoTableColumn, PoTableAiSearchResult, PoTableAiSearchError } from '../.
   standalone: false
 })
 export class AppComponent {
-  aiSearchUrl = '/api/ai/filter';
+  aiSearchUrl = 'http://localhost:3333/api/ai/filter';
   serviceApi = '/api/employees';
 
   lastQuery = '';
