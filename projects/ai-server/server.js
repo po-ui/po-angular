@@ -3,13 +3,35 @@ const cors = require('cors');
 const https = require('https');
 const http = require('http');
 const url = require('url');
+const fs = require('fs');
+const path = require('path');
 
 console.log(`Node.js version: ${process.version}`);
 
 const app = express();
 const PORT = process.env.PORT || 3333;
 
-// API Key do Gemini - passar via variável de ambiente
+// Carrega .env se existir (lê GEMINI_API_KEY do arquivo para evitar problemas com bash)
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  console.log(`[AI Server] Carregando .env de ${envPath}`);
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const eqIndex = trimmed.indexOf('=');
+      if (eqIndex > 0) {
+        const key = trimmed.slice(0, eqIndex).trim();
+        const value = trimmed.slice(eqIndex + 1).trim();
+        if (!process.env[key]) {
+          process.env[key] = value;
+        }
+      }
+    }
+  });
+}
+
+// API Key do Gemini - via .env ou variável de ambiente
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Suporte a proxy corporativo via variável de ambiente
@@ -18,7 +40,12 @@ const PROXY_URL = process.env.HTTPS_PROXY || process.env.https_proxy || process.
 if (!GEMINI_API_KEY) {
   console.error('\n===========================================');
   console.error('  GEMINI_API_KEY não configurada!');
-  console.error('  Execute com: GEMINI_API_KEY=sua-chave node server.js');
+  console.error('');
+  console.error('  Opção 1 (recomendado): Crie o arquivo .env nesta pasta:');
+  console.error('    echo "GEMINI_API_KEY=sua-chave" > .env');
+  console.error('');
+  console.error('  Opção 2: Via variável de ambiente (use aspas simples!):');
+  console.error("    GEMINI_API_KEY='sua-chave' node server.js");
   console.error('===========================================\n');
   process.exit(1);
 }
