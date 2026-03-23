@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
+const http = require('http');
+const url = require('url');
 
 console.log(`Node.js version: ${process.version}`);
 
@@ -10,12 +12,19 @@ const PORT = process.env.PORT || 3333;
 // API Key do Gemini - passar via variável de ambiente
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
+// Suporte a proxy corporativo via variável de ambiente
+const PROXY_URL = process.env.HTTPS_PROXY || process.env.https_proxy || process.env.HTTP_PROXY || process.env.http_proxy;
+
 if (!GEMINI_API_KEY) {
   console.error('\n===========================================');
   console.error('  GEMINI_API_KEY não configurada!');
   console.error('  Execute com: GEMINI_API_KEY=sua-chave node server.js');
   console.error('===========================================\n');
   process.exit(1);
+}
+
+if (PROXY_URL) {
+  console.log(`[AI Server] Proxy corporativo detectado: ${PROXY_URL}`);
 }
 
 app.use(cors());
@@ -57,25 +66,17 @@ Se não conseguir gerar um filtro válido, retorne confidence 0 e filter vazio.`
 }
 
 // Chamada direta à API REST do Gemini usando módulo https nativo do Node.js
+// Suporta proxy corporativo via HTTPS_PROXY
 function callGeminiAPI(prompt) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }]
     });
 
-    const options = {
-      hostname: 'generativelanguage.googleapis.com',
-      path: `/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
-    };
+    const targetHost = 'generativelanguage.googleapis.com';
+    const targetPath = `/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-    console.log(`[AI Search] Chamando Gemini API (https nativo)...`);
-
-    const req = https.request(options, (res) => {
+    function handleResponse(res) {
       let data = '';
       res.on('data', chunk => { data += chunk; });
       res.on('end', () => {
@@ -97,25 +98,106 @@ function callGeminiAPI(prompt) {
           reject(new Error(`Erro ao parsear resposta do Gemini: ${e.message}`));
         }
       });
-    });
+    }
 
-    req.on('error', (e) => {
+    function handleError(e) {
       console.error(`[AI Search] Erro de conexão: ${e.message}`);
       if (e.cause) {
         console.error(`[AI Search] Causa: ${e.cause.message || e.cause}`);
       }
       reject(new Error(`Erro de conexão com Gemini API: ${e.message}`));
-    });
+    }
 
-    req.setTimeout(30000, () => {
-      req.destroy();
-      reject(new Error('Timeout na chamada ao Gemini API (30s)'));
-    });
+    console.log(`[AI Search] Chamando Gemini API (https nativo)...`);
 
-    req.write(postData);
-    req.end();
+    let req;
+
+    if (PROXY_URL) {
+      // Usa HTTP CONNECT tunnel via proxy corporativo
+      const proxy = url.parse(PROXY_URL);
+      console.log(`[AI Search] Usando proxy: ${proxy.hostname}:${proxy.port}`);
+
+      const connectReq = http.request({
+        hostname: proxy.hostname,
+        port: proxy.port || 80,
+        method: 'CONNECT',
+        path: `${targetHost}:443`,
+        headers: { 'Host': `${targetHost}:443` }
+      });
+
+      connectReq.on('connect', (res, socket) => {
+        if (res.statusCode !== 200) {
+          reject(new Error(`Proxy CONNECT falhou com status ${res.statusCode}`));
+          return;
+        }
+
+        req = https.request({
+          socket,
+          hostname: targetHost,
+          path: targetPath,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData),
+            'Host': targetHost
+          }
+        }, handleResponse);
+
+        req.on('error', handleError);
+        req.setTimeout(30000, () => {
+          req.destroy();
+          reject(new Error('Timeout na chamada ao Gemini API (30s)'));
+        });
+        req.write(postData);
+        req.end();
+      });
+
+      connectReq.on('error', (e) => {
+        console.error(`[AI Search] Erro ao conectar no proxy: ${e.message}`);
+        reject(new Error(`Erro ao conectar no proxy corporativo: ${e.message}`));
+      });
+
+      connectReq.setTimeout(15000, () => {
+        connectReq.destroy();
+        reject(new Error('Timeout ao conectar no proxy corporativo (15s)'));
+      });
+
+      connectReq.end();
+    } else {
+      // Conexão direta sem proxy
+      const options = {
+        hostname: targetHost,
+        path: targetPath,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+
+      req = https.request(options, handleResponse);
+      req.on('error', handleError);
+      req.setTimeout(30000, () => {
+        req.destroy();
+        reject(new Error('Timeout na chamada ao Gemini API (30s)'));
+      });
+      req.write(postData);
+      req.end();
+    }
   });
 }
+
+// Endpoint de health check para diagnóstico
+app.get('/api/ai/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    port: PORT,
+    proxy: PROXY_URL || 'nenhum',
+    model: 'gemini-2.0-flash',
+    apiKeyConfigured: !!GEMINI_API_KEY,
+    nodeVersion: process.version
+  });
+});
 
 app.post('/api/ai/filter', async (req, res) => {
   try {
