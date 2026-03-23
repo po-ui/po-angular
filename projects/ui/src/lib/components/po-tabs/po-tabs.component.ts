@@ -503,9 +503,23 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   }
 
   /**
-   * @ToDo
+   * Ativa a aba correspondente ao `id` informado.
    *
-   * @param id
+   * Para utiliza-la e necessario ter a instancia do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoTabsComponent } from '@po-ui/ng-components';
+   *
+   * ...
+   *
+   * @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;
+   *
+   * focusOnTab() {
+   *   this.poTab.focusTab('meu-id-da-aba');
+   * }
+   * ```
+   *
+   * @param id Identificador unico da aba a ser ativada.
    */
   public focusTab(id: string) {
     const tab = this.tabsChildrenArray.find(x => x.id === id);

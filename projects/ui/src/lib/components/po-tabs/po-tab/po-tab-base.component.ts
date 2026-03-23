@@ -46,7 +46,12 @@ export abstract class PoTabBaseComponent {
   @Output('p-close-tab') closeTab = new EventEmitter();
 
   /**
-   * @ToDo
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando a aba e ativada.
+   * Emite a instancia do componente da aba que foi ativada.
    */
   activatedTab = output<PoTabBaseComponent>({ alias: 'p-activated-tab' });
 
