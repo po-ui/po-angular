@@ -32,7 +32,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/ui/**/*.ts", "projects/ui/**/*.html"]
+            "lintFilePatterns": [
+              "projects/ui/**/*.ts",
+              "projects/ui/**/*.html"
+            ]
           }
         }
       }
@@ -51,7 +54,9 @@
               "base": "dist/app"
             },
             "index": "projects/app/src/index.html",
-            "polyfills": ["projects/app/src/polyfills.ts"],
+            "polyfills": [
+              "projects/app/src/polyfills.ts"
+            ],
             "tsConfig": "projects/app/tsconfig.app.json",
             "assets": [
               "projects/app/src/favicon.ico",
@@ -67,7 +72,10 @@
                 "output": "/assets/monaco"
               }
             ],
-            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
+            "styles": [
+              "./node_modules/@po-ui/style/css/po-theme-default.min.css",
+              "projects/app/src/styles.css"
+            ],
             "scripts": [],
             "extractLicenses": false,
             "sourceMap": true,
@@ -116,7 +124,8 @@
           "options": {
             "open": true,
             "host": "0.0.0.0",
-            "buildTarget": "app:build:es5"
+            "buildTarget": "app:build:es5",
+            "proxyConfig": "projects/app/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -127,7 +136,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/app/**/*.ts", "projects/app/**/*.html"]
+            "lintFilePatterns": [
+              "projects/app/**/*.ts",
+              "projects/app/**/*.html"
+            ]
           }
         }
       }
@@ -160,7 +172,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/storage/**/*.ts", "projects/storage/**/*.html"]
+            "lintFilePatterns": [
+              "projects/storage/**/*.ts",
+              "projects/storage/**/*.html"
+            ]
           }
         }
       }
@@ -193,7 +208,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/sync/**/*.ts", "projects/sync/**/*.html"]
+            "lintFilePatterns": [
+              "projects/sync/**/*.ts",
+              "projects/sync/**/*.html"
+            ]
           }
         }
       }
@@ -227,7 +245,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/templates/**/*.ts", "projects/templates/**/*.html"]
+            "lintFilePatterns": [
+              "projects/templates/**/*.ts",
+              "projects/templates/**/*.html"
+            ]
           }
         }
       }
@@ -261,7 +282,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/code-editor/**/*.ts", "projects/code-editor/**/*.html"]
+            "lintFilePatterns": [
+              "projects/code-editor/**/*.ts",
+              "projects/code-editor/**/*.html"
+            ]
           }
         }
       }
@@ -280,7 +304,9 @@
               "base": "dist/portal"
             },
             "index": "projects/portal/src/index.html",
-            "polyfills": ["projects/portal/src/polyfills.ts"],
+            "polyfills": [
+              "projects/portal/src/polyfills.ts"
+            ],
             "tsConfig": "projects/portal/tsconfig.app.json",
             "assets": [
               "projects/portal/src/favicon.ico",
@@ -357,7 +383,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/portal/**/*.ts", "projects/portal/**/*.html"]
+            "lintFilePatterns": [
+              "projects/portal/**/*.ts",
+              "projects/portal/**/*.html"
+            ]
           }
         }
       }
@@ -365,7 +394,9 @@
   },
   "cli": {
     "analytics": false,
-    "schematicCollections": ["@angular-eslint/schematics"]
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   },
   "schematics": {
     "@schematics/angular:component": {
