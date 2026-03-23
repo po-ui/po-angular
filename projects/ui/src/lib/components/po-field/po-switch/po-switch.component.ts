@@ -161,9 +161,6 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   private statusChangesSubscription: Subscription;
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -363,8 +360,6 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -377,8 +372,6 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

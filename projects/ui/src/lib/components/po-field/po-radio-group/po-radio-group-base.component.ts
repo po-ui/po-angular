@@ -127,8 +127,6 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -211,8 +209,6 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -225,8 +221,6 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

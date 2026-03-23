@@ -67,8 +67,6 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
 })
 export class PoButtonGroupBaseComponent {
   /**
-   * @Input
-   *
    * @description
    *
    * Lista de botões.

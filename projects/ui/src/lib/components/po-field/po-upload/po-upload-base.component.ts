@@ -285,8 +285,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   @Input('p-label') label?: string;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -409,8 +407,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   requiredUrl: boolean = true;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -423,8 +419,6 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
