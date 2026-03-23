@@ -256,6 +256,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private subscriptionScrollEvent: Subscription;
   private subscriptionService: Subscription = new Subscription();
 
+  private aiSearchSubscription: Subscription;
   private clickListener: () => void;
   private resizeListener: () => void;
 
@@ -422,6 +423,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+    this.aiSearchSubscription?.unsubscribe();
   }
 
   /**
@@ -731,52 +733,61 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       return;
     }
 
+    this.aiSearchSubscription?.unsubscribe();
+
     const columnsMetadata = this.aiSearchService.extractColumnsMetadata(this.columns);
 
     this.aiSearchLoading = true;
     this.aiSearchDescription = '';
+    this.loading = true;
     this.changeDetector.detectChanges();
 
-    this.aiSearchService.sendQuery(this.aiSearchUrl, query, columnsMetadata, this.aiSearchTimeout).subscribe({
-      next: response => {
-        this.aiSearchLoading = false;
+    this.aiSearchSubscription = this.aiSearchService
+      .sendQuery(this.aiSearchUrl, query, columnsMetadata, this.aiSearchTimeout)
+      .subscribe({
+        next: response => {
+          this.aiSearchLoading = false;
 
-        const result = {
-          query,
-          filter: response.filter,
-          description: response.description,
-          confidence: response.confidence
-        };
+          const result = {
+            query,
+            filter: response.filter,
+            description: response.description,
+            confidence: response.confidence
+          };
 
-        if (response.confidence < this.aiSearchMinConfidence) {
-          this.aiSearchLowConfidence.emit(result);
+          if (response.confidence < this.aiSearchMinConfidence) {
+            this.aiSearchLowConfidence.emit(result);
+            this.aiSearchDescription = response.description;
+            this.loading = false;
+            this.changeDetector.detectChanges();
+            return;
+          }
+
+          this.aiSearchResult.emit(result);
           this.aiSearchDescription = response.description;
+
+          if (this.hasService && response.filter) {
+            this.applyFilters({ $filter: response.filter });
+          } else {
+            this.loading = false;
+          }
+
           this.changeDetector.detectChanges();
-          return;
+        },
+        error: error => {
+          this.aiSearchLoading = false;
+          this.aiSearchDescription = '';
+          this.loading = false;
+
+          this.aiSearchError.emit({
+            query,
+            statusCode: error.statusCode || 500,
+            message: error.message || 'Erro na busca com IA'
+          });
+
+          this.changeDetector.detectChanges();
         }
-
-        this.aiSearchResult.emit(result);
-        this.aiSearchDescription = response.description;
-
-        if (this.hasService && response.filter) {
-          this.applyFilters({ $filter: response.filter });
-        }
-
-        this.changeDetector.detectChanges();
-      },
-      error: error => {
-        this.aiSearchLoading = false;
-        this.aiSearchDescription = '';
-
-        this.aiSearchError.emit({
-          query,
-          statusCode: error.statusCode || 500,
-          message: error.message || 'Erro na busca com IA'
-        });
-
-        this.changeDetector.detectChanges();
-      }
-    });
+      });
   }
 
   /**
