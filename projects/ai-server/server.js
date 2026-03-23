@@ -107,7 +107,8 @@ function callGeminiAPISingle(prompt) {
 
     const targetHost = 'generativelanguage.googleapis.com';
     // Envia API key via header x-goog-api-key (mais seguro e evita problemas com proxies corporativos)
-    const targetPath = '/v1beta/models/gemini-2.0-flash:generateContent';
+    const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+    const targetPath = `/v1beta/models/${model}:generateContent`;
 
     // Em redes corporativas com inspeção SSL, o firewall re-assina certificados
     // causando "self-signed certificate in certificate chain"
@@ -320,7 +321,7 @@ app.listen(PORT, () => {
   console.log(`  AI Server rodando em http://localhost:${PORT}`);
   console.log(`  Endpoint: POST http://localhost:${PORT}/api/ai/filter`);
   console.log(`  Health:   GET  http://localhost:${PORT}/api/ai/health`);
-  console.log(`  Modelo: gemini-2.0-flash`);
+  console.log(`  Modelo: ${process.env.GEMINI_MODEL || 'gemini-1.5-flash'}`);
   console.log(`  Usando: HTTPS nativo (sem SDK/fetch)`);
   console.log(`  TLS verify: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' ? 'sim' : 'NÃO (NODE_TLS_REJECT_UNAUTHORIZED=0)'}`);
   if (PROXY_URL) console.log(`  Proxy: ${PROXY_URL}`);
