@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const https = require('https');
 
-// Diagnóstico de versão do Node.js
 console.log(`Node.js version: ${process.version}`);
 
 const app = express();
@@ -18,8 +17,6 @@ if (!GEMINI_API_KEY) {
   console.error('===========================================\n');
   process.exit(1);
 }
-
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 app.use(cors());
 app.use(express.json());
@@ -59,6 +56,67 @@ Responda APENAS com um JSON válido no formato abaixo, sem markdown, sem explica
 Se não conseguir gerar um filtro válido, retorne confidence 0 e filter vazio.`;
 }
 
+// Chamada direta à API REST do Gemini usando módulo https nativo do Node.js
+function callGeminiAPI(prompt) {
+  return new Promise((resolve, reject) => {
+    const postData = JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }]
+    });
+
+    const options = {
+      hostname: 'generativelanguage.googleapis.com',
+      path: `/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData)
+      }
+    };
+
+    console.log(`[AI Search] Chamando Gemini API (https nativo)...`);
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => {
+        console.log(`[AI Search] Status HTTP: ${res.statusCode}`);
+        if (res.statusCode !== 200) {
+          console.error(`[AI Search] Erro Gemini: ${data}`);
+          reject(new Error(`Gemini API retornou status ${res.statusCode}: ${data}`));
+          return;
+        }
+        try {
+          const parsed = JSON.parse(data);
+          const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!text) {
+            reject(new Error('Resposta do Gemini sem conteúdo de texto'));
+            return;
+          }
+          resolve(text);
+        } catch (e) {
+          reject(new Error(`Erro ao parsear resposta do Gemini: ${e.message}`));
+        }
+      });
+    });
+
+    req.on('error', (e) => {
+      console.error(`[AI Search] Erro de conexão: ${e.message}`);
+      if (e.cause) {
+        console.error(`[AI Search] Causa: ${e.cause.message || e.cause}`);
+      }
+      reject(new Error(`Erro de conexão com Gemini API: ${e.message}`));
+    });
+
+    req.setTimeout(30000, () => {
+      req.destroy();
+      reject(new Error('Timeout na chamada ao Gemini API (30s)'));
+    });
+
+    req.write(postData);
+    req.end();
+  });
+}
+
 app.post('/api/ai/filter', async (req, res) => {
   try {
     const { query, columns } = req.body;
@@ -74,24 +132,8 @@ app.post('/api/ai/filter', async (req, res) => {
     console.log(`\n[AI Search] Query: "${query}"`);
     console.log(`[AI Search] Columns: ${columns.map(c => c.property).join(', ')}`);
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-
     const prompt = buildPrompt(query, columns);
-    console.log(`[AI Search] Chamando Gemini API...`);
-
-    let text;
-    try {
-      const result = await model.generateContent(prompt);
-      const response = result.response;
-      text = response.text();
-    } catch (apiError) {
-      console.error(`[AI Search] Erro na chamada Gemini:`, apiError.message);
-      if (apiError.message.includes('fetch failed') || apiError.message.includes('ENOTFOUND')) {
-        console.error('[AI Search] Problema de rede. Verifique sua conexão com a internet.');
-        console.error('[AI Search] Se estiver atrás de proxy, configure HTTP_PROXY/HTTPS_PROXY.');
-      }
-      throw apiError;
-    }
+    const text = await callGeminiAPI(prompt);
 
     console.log(`[AI Search] Gemini response: ${text}`);
 
@@ -120,9 +162,6 @@ app.post('/api/ai/filter', async (req, res) => {
     });
   } catch (error) {
     console.error('[AI Search] Erro:', error.message);
-    if (error.cause) {
-      console.error('[AI Search] Causa:', error.cause.message || error.cause);
-    }
     res.status(500).json({
       filter: '',
       description: `Erro ao processar: ${error.message}`,
@@ -136,5 +175,6 @@ app.listen(PORT, () => {
   console.log(`  AI Server rodando em http://localhost:${PORT}`);
   console.log(`  Endpoint: POST http://localhost:${PORT}/api/ai/filter`);
   console.log(`  Modelo: gemini-2.0-flash`);
+  console.log(`  Usando: HTTPS nativo (sem SDK/fetch)`);
   console.log(`===========================================\n`);
 });
