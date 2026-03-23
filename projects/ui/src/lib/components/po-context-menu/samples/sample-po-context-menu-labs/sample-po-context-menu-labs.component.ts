@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { PoContextMenuItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-context-menu-basic-labs',
-  templateUrl: './sample-po-context-menu-basic-labs.component.html',
+  selector: 'sample-po-context-menu-labs',
+  templateUrl: './sample-po-context-menu-labs.component.html',
   standalone: false
 })
-export class SamplePoContextMenuBasicLabsComponent {
+export class SamplePoContextMenuLabsComponent {
   contextTitle: string = 'Jornada';
   title: string = 'Prestador de compra';
   expanded: boolean = true;
@@ -39,10 +39,6 @@ export class SamplePoContextMenuBasicLabsComponent {
     this.title = 'Prestador de compra';
     this.expanded = true;
     this.newItemLabel = '';
-    this.menuItems = [
-      { label: 'Dados cadastrais', selected: true },
-      { label: 'Endereços' },
-      { label: 'Dependentes' }
-    ];
+    this.menuItems = [{ label: 'Dados cadastrais', selected: true }, { label: 'Endereços' }, { label: 'Dependentes' }];
   }
 }

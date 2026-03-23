@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
 
 import { PoContextMenuBaseComponent } from './po-context-menu-base.component';
 import { PoContextMenuItem } from './po-context-menu-item.interface';
@@ -18,8 +18,8 @@ interface PoInternalContextMenuItem extends PoContextMenuItem {
  * </example>
  *
  * <example name="po-context-menu-labs" title="PO Context Menu Labs">
- *  <file name="sample-po-context-menu-basic-labs/sample-po-context-menu-basic-labs.component.html"> </file>
- *  <file name="sample-po-context-menu-basic-labs/sample-po-context-menu-basic-labs.component.ts"> </file>
+ *  <file name="sample-po-context-menu-labs/sample-po-context-menu-labs.component.html"> </file>
+ *  <file name="sample-po-context-menu-labs/sample-po-context-menu-labs.component.ts"> </file>
  * </example>
  */
 @Component({
@@ -30,9 +30,6 @@ interface PoInternalContextMenuItem extends PoContextMenuItem {
 })
 export class PoContextMenuComponent extends PoContextMenuBaseComponent {
   protected _items = signal<Array<PoInternalContextMenuItem>>([]);
-
-  /** Evento emitido ao selecionar um item. Emite o item selecionado. */
-  itemSelected = output<PoContextMenuItem>({ alias: 'p-item-selected' });
 
   constructor() {
     super();

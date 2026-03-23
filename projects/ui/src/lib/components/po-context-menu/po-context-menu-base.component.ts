@@ -1,4 +1,4 @@
-import { Directive, input, model } from '@angular/core';
+import { Directive, input, model, output } from '@angular/core';
 
 import { PoContextMenuItem } from './po-context-menu-item.interface';
 
@@ -47,10 +47,14 @@ import { PoContextMenuItem } from './po-context-menu-item.interface';
  */
 @Directive()
 export class PoContextMenuBaseComponent {
-  /** Titulo do contexto superior (ex: "Jornada"). */
+  /**
+   * Titulo do contexto superior
+   */
   contextTitle = input<string>('', { alias: 'p-context-title' });
 
-  /** Titulo principal do menu (ex: "Prestador de compra"). */
+  /**
+   * Titulo principal do menu
+   */
   title = input<string>('', { alias: 'p-title' });
 
   /**
@@ -65,16 +69,28 @@ export class PoContextMenuBaseComponent {
    * Define se o menu estar aberto ou fechado.
    *
    * Suporta two-way binding:
-   * `[(p-expanded)]="expanded"`
+   *
+   * ```html
+   * <po-context-menu
+   *   [(p-expanded)]="expanded"`
+   * />
+   * ```
    *
    * ou
    *
-   * `
+   * ```html
+   * <po-context-menu
    *   [(p-expanded)]="expanded"
    *   (p-expandChange)="handlerExpanded($event)
-   * `
+   * />
+   * ```
    *
    * @default `true`
-   * */
+   */
   expanded = model<boolean>(true, { alias: 'p-expanded' });
+
+  /**
+   * Evento emitido ao selecionar um item. Emite o item selecionado.
+   */
+  itemSelected = output<PoContextMenuItem>({ alias: 'p-item-selected' });
 }
