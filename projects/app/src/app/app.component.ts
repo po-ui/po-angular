@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { PoDynamicFormField, PoModalComponent, PoPageAction, PoSearchLiterals } from 'projects/ui/src/lib';
 
@@ -7,12 +7,13 @@ import { PoDynamicFormField, PoModalComponent, PoPageAction, PoSearchLiterals } 
   templateUrl: './app.component.html',
   standalone: false
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
   showHelper: boolean = false;
   showLabel: boolean = true;
   showHelpText: boolean = false;
   compactLabel: boolean = false;
+  isLoading: boolean = true;
   // tabs
   tabsCadastro = [
     'Dados cadastrais',
@@ -164,6 +165,17 @@ export class AppComponent {
       placeholder: 'Informe o nome do responsável'
     }
   ];
+
+  ngOnInit() {
+    this.simulateLoading();
+  }
+
+  simulateLoading() {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 3000);
+  }
 
   openMyModal() {
     this.poModal.open();
