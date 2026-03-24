@@ -1,0 +1,360 @@
+<po-page-default p-title="Cadastrar item" p-subtitle="Controle de funcionários" [p-actions]="pageActions">
+  <div class="po-row po-pb-1" style="align-items: center">
+    <po-search class="po-lg-3 po-md-6" [p-literals]="searchLiterals" p-search-type="locate" />
+    <po-switch
+      name="switchSearch"
+      [(ngModel)]="switchSearch"
+      class="po-lg-3 po-md-6"
+      [p-label-on]="switchSearchLabel"
+      [p-label-off]="switchSearchLabel"
+    >
+    </po-switch>
+  </div>
+
+  <po-tabs>
+    @for (tab of tabsCadastro; track tab; let i = $index) {
+      <po-tab [p-label]="tab" [p-active]="i === 0" [p-disabled]="i > 0">
+        @if (i === 0) {
+          <div class="po-row" style="row-gap: 1rem">
+            <!-- formControl -->
+            <po-container>
+              <po-input
+                class="po-md-6"
+                name="code"
+                [(ngModel)]="code"
+                [p-label]="showLabel ? 'Código' : undefined"
+                p-required
+                p-show-required
+                [p-helper]="showHelper ? 'Informe o código do item' : undefined"
+                [p-help]="showHelpText ? 'Código interno do item.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-input>
+              <po-input
+                class="po-md-6"
+                name="defaultTs"
+                [(ngModel)]="defaultTs"
+                [p-label]="showLabel ? 'TS Padrão' : undefined"
+                p-required
+                p-show-required
+                [p-helper]="showHelper ? 'Informe o TS padrão' : undefined"
+                [p-help]="showHelpText ? 'Informe o TS padrão deste item.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-input>
+              <po-select
+                class="po-md-6"
+                name="type"
+                [(ngModel)]="type"
+                [p-label]="showLabel ? 'Tipo' : undefined"
+                [p-options]="[
+                  { label: 'Varejo', value: '1' },
+                  { label: 'Atacado', value: '2' },
+                  { label: 'E-commerce', value: '3' },
+                  { label: 'Exportação', value: '4' }
+                ]"
+                [p-helper]="showHelper ? 'Escolha o tipo de operação' : undefined"
+                [p-help]="showHelpText ? 'Escolha o tipo de operação para o item.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-select>
+              <po-input
+                class="po-lg-3 po-md-6"
+                name="time"
+                [(ngModel)]="time"
+                [p-label]="showLabel ? 'Time' : undefined"
+                p-mask="99:99"
+                p-placeholder="hh:mm"
+                [p-helper]="showHelper ? 'Informe o horário no formato hh:mm' : undefined"
+                [p-help]="showHelpText ? 'Informe o horário no formato hh:mm.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-input>
+              <po-datepicker
+                class="po-lg-3 po-md-6"
+                name="createdAt"
+                [(ngModel)]="createdAt"
+                [p-label]="showLabel ? 'Data de inclusão' : undefined"
+                p-placeholder="dd/mm/aaaa"
+                [p-helper]="showHelper ? 'Selecione a data de inclusão' : undefined"
+                [p-help]="showHelpText ? 'Selecione a data em que o item foi incluído.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-datepicker>
+              <po-select
+                class="po-md-6"
+                name="currencyType"
+                [(ngModel)]="currencyType"
+                [p-label]="showLabel ? 'Tipo' : undefined"
+                [p-options]="[
+                  { label: 'Varejo', value: '1' },
+                  { label: 'Atacado', value: '2' },
+                  { label: 'E-commerce', value: '3' },
+                  { label: 'Exportação', value: '4' }
+                ]"
+                p-placeholder="Selecione um tipo"
+                [p-helper]="showHelper ? 'Tipo relacionado à moeda' : undefined"
+                [p-help]="showHelpText ? 'Selecione o tipo relacionado à moeda.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-select>
+              <po-select
+                class="po-md-6"
+                name="currency"
+                [(ngModel)]="currency"
+                [p-label]="showLabel ? 'Moeda' : undefined"
+                [p-options]="[
+                  { label: 'Real (BRL)', value: 'BRL' },
+                  { label: 'Dólar Americano (USD)', value: 'USD' },
+                  { label: 'Euro (EUR)', value: 'EUR' },
+                  { label: 'Peso Argentino (ARS)', value: 'ARS' },
+                  { label: 'Libra Esterlina (GBP)', value: 'GBP' }
+                ]"
+                p-placeholder="Selecione uma moeda C. Std"
+                [p-helper]="showHelper ? 'Selecione a moeda padrão' : undefined"
+                [p-help]="showHelpText ? 'Selecione a moeda padrão para as transações.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-select>
+              <po-input
+                class="po-md-6"
+                name="trackingCode"
+                [(ngModel)]="trackingCode"
+                [p-label]="showLabel ? 'Código de rastreio' : undefined"
+                p-placeholder="Selecione uma moeda C. Std"
+                [p-helper]="showHelper ? 'Informe o código de rastreio (se houver)' : undefined"
+                [p-help]="showHelpText ? 'Informe o código de rastreio do produto, se houver.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-input>
+              <po-select
+                class="po-md-6"
+                name="appropriation"
+                [(ngModel)]="appropriation"
+                [p-label]="showLabel ? 'Apropriação' : undefined"
+                [p-options]="[
+                  { label: 'Custo', value: 'C' },
+                  { label: 'Despesa', value: 'D' },
+                  { label: 'Investimento', value: 'I' },
+                  { label: 'Imobilizado', value: 'M' },
+                  { label: 'Serviço', value: 'S' },
+                  { label: 'Outros', value: 'O' }
+                ]"
+                p-placeholder="Selecione uma opção"
+                [p-helper]="showHelper ? 'Classificação de apropriação' : undefined"
+                [p-help]="showHelpText ? 'Selecione a classificação de apropriação para o item.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-select>
+              <po-radio-group
+                class="po-lg-3 po-md-6"
+                name="opCosting"
+                [(ngModel)]="opCosting"
+                [p-label]="showLabel ? 'Custeio OP' : undefined"
+                [p-options]="[
+                  { label: 'Sim, permitir', value: '1' },
+                  { label: 'Não permitir', value: '2' }
+                ]"
+                [p-helper]="showHelper ? 'Defina se o custeio por OP é permitido' : undefined"
+                [p-help]="showHelpText ? 'Indique se o custeio por Ordem de Produção será permitido.' : undefined"
+                [p-compact-label]="compactLabel"
+              >
+              </po-radio-group>
+            </po-container>
+            <!-- reactive form -->
+            <po-container>
+              <div class="po-row">
+                <po-divider class="po-lg-12" [p-label]="showLabel ? 'Nota fiscal' : undefined"></po-divider>
+              </div>
+              <form [formGroup]="form">
+                <po-input
+                  class="po-lg-4 po-md-6"
+                  name="name"
+                  formControlName="name"
+                  [p-label]="showLabel ? 'Nome stand' : undefined"
+                  [p-helper]="showHelper ? 'Nome de identificação do stand' : undefined"
+                  [p-help]="showHelpText ? 'Nome de identificação do stand.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-input>
+                <po-number
+                  class="po-lg-4 po-md-6"
+                  name="barcode"
+                  formControlName="barcode"
+                  [p-label]="showLabel ? 'Código de barra' : undefined"
+                  p-minlength="0"
+                  p-maxlength="20"
+                  p-placeholder="000000.000.00000.000-00"
+                  [p-helper]="showHelper ? 'Informe o código de barras (até 20 dígitos)' : undefined"
+                  [p-help]="showHelpText ? 'Digite o código de barras (máx. 20 dígitos).' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-number>
+                <po-select
+                  class="po-lg-4 po-md-6"
+                  name="trackingType"
+                  formControlName="trackingType"
+                  [p-label]="showLabel ? 'Tipo de rastreio' : undefined"
+                  [p-options]="[
+                    { label: 'Nenhum', value: 'NONE' },
+                    { label: 'Lote', value: 'LOT' },
+                    { label: 'Número de Série', value: 'SERIAL' },
+                    { label: 'Validade', value: 'EXPIRATION' },
+                    { label: 'Produção / Ordem de Fabricação', value: 'PRODUCTION' },
+                    { label: 'Código de Barras', value: 'BARCODE' },
+                    { label: 'GTIN / EAN', value: 'GTIN' },
+                    { label: 'Rastreio Interno', value: 'INTERNAL' }
+                  ]"
+                  p-placeholder="Selecione uma opção"
+                  [p-helper]="showHelper ? 'Selecione o método de rastreio' : undefined"
+                  [p-help]="showHelpText ? 'Selecione o método de rastreio aplicável.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-select>
+                <po-datepicker
+                  class="po-lg-3 po-md-6"
+                  name="inclusionDate"
+                  formControlName="inclusionDate"
+                  [p-label]="showLabel ? 'Data da inclusão' : undefined"
+                  p-placeholder="dd/mm/aaaa"
+                  [p-helper]="showHelper ? 'Data em que foi incluído' : undefined"
+                  [p-help]="showHelpText ? 'Informe a data em que o item foi incluído.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-datepicker>
+                <po-datepicker
+                  class="po-lg-3 po-md-6"
+                  name="expirationDate"
+                  formControlName="expirationDate"
+                  [p-label]="showLabel ? 'Validade' : undefined"
+                  p-placeholder="dd/mm/aaaa"
+                  [p-helper]="showHelper ? 'Data de validade (se aplicável)' : undefined"
+                  [p-help]="showHelpText ? 'Informe a data de validade, quando aplicável.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-datepicker>
+                <po-input
+                  class="po-lg-3 po-md-6"
+                  name="time"
+                  formControlName="time"
+                  [p-label]="showLabel ? 'Informe o horário' : undefined"
+                  p-mask="99:99"
+                  p-placeholder="hh:mm"
+                  [p-helper]="showHelper ? 'Horário no formato hh:mm' : undefined"
+                  [p-help]="showHelpText ? 'Informe o horário no formato hh:mm.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-input>
+                <po-textarea
+                  class="po-lg-6"
+                  name="supplierSpecification"
+                  formControlName="supplierSpecification"
+                  [p-label]="showLabel ? 'Especificação do fornecedor' : undefined"
+                  p-placeholder="Informe a especificação do fornecedor"
+                  [p-helper]="showHelper ? 'Detalhe a especificação do fornecedor' : undefined"
+                  [p-help]="showHelpText ? 'Detalhe a especificação do fornecedor para referência.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-textarea>
+                <po-textarea
+                  class="po-lg-6"
+                  name="productDescription"
+                  formControlName="productDescription"
+                  [p-label]="showLabel ? 'Descrição do produto' : undefined"
+                  p-placeholder="Informe a especificação do fornecedor"
+                  [p-helper]="showHelper ? 'Descrição livre do produto' : undefined"
+                  [p-help]="showHelpText ? 'Descreva o produto de forma livre e clara.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-textarea>
+                <po-upload
+                  class="po-lg-6"
+                  name="productImage"
+                  formControlName="productImage"
+                  [p-label]="showLabel ? 'Foto do produto' : undefined"
+                  [p-restrictions]="{
+                    maxFileSize: 524288000,
+                    allowedExtensions: ['.png', '.jpg', '.pdf']
+                  }"
+                  p-url="https://po-sample-api.onrender.com/v1/uploads/addFile"
+                  [p-helper]="showHelper ? 'Envie uma imagem do produto (PNG/JPG/PDF)' : undefined"
+                  [p-help]="showHelpText ? 'Envie a imagem do produto (PNG, JPG ou PDF).' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-upload>
+                <po-radio-group
+                  class="po-lg-3 po-md-6"
+                  name="stockControl"
+                  formControlName="stockControl"
+                  [p-label]="showLabel ? 'Controle de estoque' : undefined"
+                  [p-options]="[
+                    { label: 'Sim', value: '1' },
+                    { label: 'Não', value: '2' }
+                  ]"
+                  [p-helper]="showHelper ? 'Defina se haverá controle de estoque' : undefined"
+                  [p-help]="showHelpText ? 'Defina se haverá controle de estoque para o item.' : undefined"
+                  [p-compact-label]="compactLabel"
+                >
+                </po-radio-group>
+              </form>
+            </po-container>
+            <!-- dynamic-form -->
+            <po-container>
+              <po-tabs>
+                @for (tab of tabsForm3; track tab; let i = $index) {
+                  <po-tab [p-label]="tab" [p-active]="i === 0" [p-disabled]="i > 0">
+                    @if (i === 0) {
+                      <po-dynamic-form [p-fields]="fields3"> </po-dynamic-form>
+                    }
+                  </po-tab>
+                }
+              </po-tabs>
+            </po-container>
+          </div>
+        }
+      </po-tab>
+    }
+  </po-tabs>
+</po-page-default>
+<po-modal #poModal p-title="PO Modal">
+  <form>
+    <div class="po-row">
+      <po-switch
+        class="po-md-4"
+        name="showHelperSwitch"
+        [(ngModel)]="showHelper"
+        p-label="Mostrar PO-Helper"
+        [p-label-on]="'Sim'"
+        [p-label-off]="'Não'"
+      >
+      </po-switch>
+      <po-switch
+        class="po-md-4"
+        name="showLabel"
+        [(ngModel)]="showLabel"
+        p-label="Mostrar PO-Label"
+        [p-label-on]="'Sim'"
+        [p-label-off]="'Não'"
+      >
+      </po-switch>
+      <po-switch
+        class="po-md-4"
+        name="showHelpText"
+        [(ngModel)]="showHelpText"
+        p-label="Mostrar PO-HelpText"
+        [p-label-on]="'Sim'"
+        [p-label-off]="'Não'"
+      >
+      </po-switch>
+      <po-switch
+        class="po-md-4"
+        name="compactLabel"
+        [(ngModel)]="compactLabel"
+        p-label="Habilitar P-CompactLabel"
+        [p-label-on]="'Sim'"
+        [p-label-off]="'Não'"
+      >
+      </po-switch>
+    </div>
+  </form>
+</po-modal>
