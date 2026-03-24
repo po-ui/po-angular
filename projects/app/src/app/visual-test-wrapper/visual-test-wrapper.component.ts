@@ -17,6 +17,7 @@ export class VisualTestWrapperComponent {
     { path: '/visual/po-tag-basic', label: 'po-tag' },
     { path: '/visual/po-accordion-basic', label: 'po-accordion' },
     { path: '/visual/po-divider-basic', label: 'po-divider' },
-    { path: '/visual/po-progress-basic', label: 'po-progress' }
+    { path: '/visual/po-progress-basic', label: 'po-progress' },
+    { path: '/visual/po-input-states', label: 'po-input (estados)' }
   ];
 }

@@ -30,6 +30,9 @@ import { SamplePoProgressBasicComponent } from '../../../ui/src/lib/components/p
 // Visual test wrapper component
 import { VisualTestWrapperComponent } from './visual-test-wrapper/visual-test-wrapper.component';
 
+// Visual test - po-input states
+import { VisualTestPoInputStatesComponent } from './visual-test-po-input-states/visual-test-po-input-states.component';
+
 const visualRoutes: Routes = [
   { path: 'visual/po-button-basic', component: SamplePoButtonBasicComponent },
   { path: 'visual/po-button-group-basic', component: SamplePoButtonGroupBasicComponent },
@@ -42,6 +45,7 @@ const visualRoutes: Routes = [
   { path: 'visual/po-accordion-basic', component: SamplePoAccordionBasicComponent },
   { path: 'visual/po-divider-basic', component: SamplePoDividerBasicComponent },
   { path: 'visual/po-progress-basic', component: SamplePoProgressBasicComponent },
+  { path: 'visual/po-input-states', component: VisualTestPoInputStatesComponent },
   { path: '', component: VisualTestWrapperComponent }
 ];
 
@@ -59,7 +63,8 @@ const visualRoutes: Routes = [
     SamplePoTagBasicComponent,
     SamplePoAccordionBasicComponent,
     SamplePoDividerBasicComponent,
-    SamplePoProgressBasicComponent
+    SamplePoProgressBasicComponent,
+    VisualTestPoInputStatesComponent
   ],
   bootstrap: [AppComponent],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(visualRoutes, {}), PoModule],
