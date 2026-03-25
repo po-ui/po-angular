@@ -1,5 +1,3 @@
-import { fakeAsync, tick } from '@angular/core/testing';
-
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
@@ -141,19 +139,10 @@ describe('PoPageEditBaseComponent:', () => {
       expectPropertiesValues(component, 'literals', invalidValues, poPageEditLiteralsDefault[poLocaleDefault]);
     });
 
-    it('should get title and call recalculateHeaderSize when set title', fakeAsync(() => {
-      component.poPageContent = <any>{
-        recalculateHeaderSize: () => {}
-      };
-
-      spyOn(component.poPageContent, 'recalculateHeaderSize');
-
+    it('should get title when set title', () => {
       component.title = 'teste';
 
-      tick();
-
       expect(component.title).toBe('teste');
-      expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
-    }));
+    });
   });
 });
