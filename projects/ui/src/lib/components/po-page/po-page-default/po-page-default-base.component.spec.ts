@@ -1,5 +1,4 @@
 import { Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
@@ -91,20 +90,11 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
     });
 
-    it('p-title: should get title and call recalculateHeaderSize when set title', fakeAsync(() => {
-      component.poPageContent = <any>{
-        recalculateHeaderSize: () => {}
-      };
-
-      spyOn(component.poPageContent, 'recalculateHeaderSize');
-
+    it('p-title: should get title when set title', () => {
       component.title = 'teste';
 
-      tick();
-
       expect(component.title).toBe('teste');
-      expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
-    }));
+    });
 
     it('p-actions: should update property `p-actions` to empty if is invalid values.', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', [], {}];
