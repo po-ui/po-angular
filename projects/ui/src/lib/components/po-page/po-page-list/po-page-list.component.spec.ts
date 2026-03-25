@@ -251,51 +251,24 @@ describe('PoPageListComponent - Desktop:', () => {
     });
   });
 
-  it('onChangeDisclaimerGroup: should call recalculateHeaderSize when have disclaimers and isRecalculate is true', () => {
-    component['isRecalculate'] = true;
+  it('onChangeDisclaimerGroup: should call disclaimerGroup.change when disclaimerGroup has change function', () => {
     const disclaimers: Array<PoDisclaimer> = [{ value: 'hotel', label: 'Hotel', property: 'hotel' }];
-
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
-    component.onChangeDisclaimerGroup(disclaimers);
-
-    expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
-  });
-
-  it('onChangeDisclaimerGroup: should call recalculateHeaderSize when have 0 disclaimers and isRecalculate is false ', () => {
-    component['isRecalculate'] = false;
-    const disclaimers: Array<PoDisclaimer> = [];
-
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
-    component.onChangeDisclaimerGroup(disclaimers);
-
-    expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
-  });
-
-  it('onChangeDisclaimerGroup: should not call recalculateHeaderSize when have disclaimers and isRecalculate is false', () => {
-    component['isRecalculate'] = false;
-    const disclaimers: Array<PoDisclaimer> = [
-      { value: 'hotel', label: 'Hotel', property: 'hotel' },
-      { value: 'teste2', label: 'teste2', property: 'teste2' },
-      { value: 'teste3', label: 'teste3', property: 'teste3' }
-    ];
-
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
-    component.onChangeDisclaimerGroup(disclaimers);
-
-    expect(component.poPageContent.recalculateHeaderSize).not.toHaveBeenCalled();
-  });
-
-  it('onChangeDisclaimerGroup: should not call recalculateHeaderSize when not have disclaimers and call change of disclaimerGroup', () => {
-    const disclaimers: Array<PoDisclaimer> = [];
     component.disclaimerGroup = { change: () => {}, disclaimers, title: 'teste' };
 
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
     spyOn(component.disclaimerGroup, 'change');
 
     component.onChangeDisclaimerGroup(disclaimers);
 
-    expect(component.poPageContent.recalculateHeaderSize).not.toHaveBeenCalled();
-    expect(component.disclaimerGroup.change).toHaveBeenCalled();
+    expect(component.disclaimerGroup.change).toHaveBeenCalledWith(disclaimers);
+  });
+
+  it('onChangeDisclaimerGroup: should not throw when disclaimerGroup has no change function', () => {
+    const disclaimers: Array<PoDisclaimer> = [];
+    component.disclaimerGroup = { disclaimers, title: 'teste' };
+
+    const result = () => component.onChangeDisclaimerGroup(disclaimers);
+
+    expect(result).not.toThrowError();
   });
 
   it('onRemoveDisclaimer: should call disclaimerGroup.remove if it`s defined', () => {

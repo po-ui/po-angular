@@ -1,4 +1,4 @@
-import { Directive, HostBinding, HostListener, Input, ViewChild } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -9,7 +9,6 @@ import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoDisclaimerGroup } from '../../po-disclaimer-group/po-disclaimer-group.interface';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageFilter } from '../interfaces/po-page-filter.interface';
-import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageListLiterals } from './po-page-list-literals.interface';
 
 export const poPageListLiteralsDefault = {
@@ -56,8 +55,6 @@ export const poPageListLiteralsDefault = {
  */
 @Directive()
 export abstract class PoPageListBaseComponent {
-  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
-
   /**
    * @optional
    *
@@ -209,7 +206,6 @@ export abstract class PoPageListBaseComponent {
   /** Título da página. */
   @Input('p-title') set title(title: string) {
     this._title = title;
-    setTimeout(() => this.poPageContent.recalculateHeaderSize());
   }
 
   get title() {
