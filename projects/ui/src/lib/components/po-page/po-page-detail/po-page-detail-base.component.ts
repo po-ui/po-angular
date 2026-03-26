@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -6,7 +6,6 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
-import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageDetailLiterals } from './po-page-detail-literals.interface';
 
 export const poPageDetailLiteralsDefault = {
@@ -54,8 +53,6 @@ export const poPageDetailLiteralsDefault = {
  */
 @Directive()
 export class PoPageDetailBaseComponent {
-  @ViewChild(PoPageContentComponent, { static: true }) poPageContent: PoPageContentComponent;
-
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb: PoBreadcrumb;
 
@@ -180,7 +177,6 @@ export class PoPageDetailBaseComponent {
   /** Título da página. */
   @Input('p-title') set title(title: string) {
     this._title = title;
-    setTimeout(() => this.poPageContent.recalculateHeaderSize());
   }
 
   get title() {

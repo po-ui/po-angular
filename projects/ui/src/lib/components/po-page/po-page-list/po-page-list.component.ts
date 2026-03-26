@@ -66,7 +66,6 @@ export class PoPageListComponent
 
   callFunction = callFunction;
 
-  private isRecalculate = true;
   private maxWidthMobile: number = 480;
 
   /* istanbul ignore next */
@@ -153,16 +152,8 @@ export class PoPageListComponent
     }
   }
 
-  // Recebe evento change do disclaimer e recalcula tela
+  // Recebe evento change do disclaimer
   onChangeDisclaimerGroup(disclaimers) {
-    if (
-      (disclaimers && disclaimers.length && this.isRecalculate) ||
-      (disclaimers.length === 0 && !this.isRecalculate)
-    ) {
-      this.poPageContent.recalculateHeaderSize();
-      this.isRecalculate = !this.isRecalculate;
-    }
-
     if (this.disclaimerGroup && this.disclaimerGroup.change) {
       this.disclaimerGroup.change(disclaimers);
     }
