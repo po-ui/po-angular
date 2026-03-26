@@ -1,9 +1,12 @@
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
+import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoDropdownAction } from './po-dropdown-action.interface';
+
+const poDropdownDefaultPosition = 'bottom-left';
 
 /**
  * @description
@@ -77,6 +80,7 @@ export class PoDropdownBaseComponent {
   private _disabled: boolean = false;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
+  private _position: string = poDropdownDefaultPosition;
 
   /** Lista de ações que serão exibidas no componente. */
   @Input('p-actions') set actions(value: Array<PoDropdownAction>) {
@@ -127,6 +131,52 @@ export class PoDropdownBaseComponent {
   @HostBinding('attr.p-size')
   get size(): string {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a posição preferencial de abertura do popup do dropdown em relação ao botão.
+   *
+   * Posições válidas:
+   * - `right`: No lado direito.
+   * - `right-bottom`: No lado direito inferior.
+   * - `right-top`: No lado direito superior.
+   * - `bottom`: Abaixo.
+   * - `bottom-left`: Abaixo e à esquerda (padrão).
+   * - `bottom-right`: Abaixo e à direita.
+   * - `left`: No lado esquerdo.
+   * - `left-top`: No lado esquerdo superior.
+   * - `left-bottom`: No lado esquerdo inferior.
+   * - `top`: Acima.
+   * - `top-right`: Acima e à direita.
+   * - `top-left`: Acima e à esquerda.
+   *
+   * > O popup será rotacionado automaticamente caso não caiba na posição definida.
+   *
+   * @default `bottom-left`
+   */
+  @Input('p-position') set position(value: string) {
+    this._position = PO_CONTROL_POSITIONS.includes(value) ? value : poDropdownDefaultPosition;
+  }
+
+  get position(): string {
+    return this._position;
+  }
+
+  get popupCustomPositions(): Array<string> {
+    if (this._position === 'bottom-right') {
+      return ['bottom-right', 'top-right'];
+    }
+    if (this._position === 'top-left') {
+      return ['top-left', 'bottom-left'];
+    }
+    if (this._position === 'top-right') {
+      return ['top-right', 'bottom-right'];
+    }
+    return ['bottom-left', 'top-left'];
   }
 
   @HostListener('window:PoUiThemeChange')

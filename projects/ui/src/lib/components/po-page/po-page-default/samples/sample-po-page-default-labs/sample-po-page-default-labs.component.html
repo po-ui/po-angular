@@ -3,18 +3,70 @@
   [p-breadcrumb]="breadcrumb"
   [p-components-size]="componentsSize"
   [p-literals]="customLiterals"
+  [p-page-actions-layout]="pageActionsLayout"
+  [p-page-header-type]="pageHeaderType"
   [p-title]="title"
   [p-subtitle]="subtitle"
+  (p-back)="onBack()"
 >
 </po-page-default>
 
-<po-divider />
+<po-divider></po-divider>
+
+<form #formPage="ngForm">
+  <div class="po-row">
+    <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title" p-required> </po-input>
+
+    <po-input class="po-md-6" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
+
+    <po-select
+      class="po-lg-3 po-md-6"
+      name="pageHeaderType"
+      [(ngModel)]="pageHeaderType"
+      p-label="Page Header Type"
+      [p-options]="pageHeaderTypeOptions"
+    >
+    </po-select>
+
+    <po-select
+      class="po-lg-3 po-md-6"
+      name="pageActionsLayout"
+      [(ngModel)]="pageActionsLayout"
+      p-label="Page Actions Layout"
+      [p-options]="pageActionsLayoutOptions"
+    >
+    </po-select>
+
+    <po-input
+      class="po-md-6"
+      name="literals"
+      [(ngModel)]="literals"
+      p-help='Ex.: {"otherActions": "Mais ações"}'
+      p-label="Literals"
+      (p-change)="changeLiterals()"
+    >
+    </po-input>
+
+    <po-radio-group
+      class="po-md-12"
+      name="size"
+      [(ngModel)]="componentsSize"
+      p-columns="4"
+      p-label="Components size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
+  </div>
+</form>
+
+<po-divider></po-divider>
 
 <form #formAction="ngForm">
   <div class="po-row">
-    <po-input class="po-md-6" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
-
     <po-input class="po-md-6" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
+
+    <po-input class="po-md-6" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
 
     <po-input class="po-md-6" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
 
@@ -22,6 +74,15 @@
     </po-select>
 
     <po-select class="po-lg-3 po-md-6" name="icon" [(ngModel)]="action.icon" p-label="Icon" [p-options]="iconOptions">
+    </po-select>
+
+    <po-select
+      class="po-lg-3 po-md-6"
+      name="kind"
+      [(ngModel)]="action.kind"
+      p-label="Kind"
+      [p-options]="actionKindOptions"
+    >
     </po-select>
 
     <po-checkbox-group
@@ -47,7 +108,7 @@
   </div>
 </form>
 
-<po-divider />
+<po-divider></po-divider>
 
 <form #formBreadcrumbFavorite="ngForm">
   <div class="po-row">
@@ -97,7 +158,7 @@
   </div>
 </form>
 
-<po-divider />
+<po-divider></po-divider>
 
 <form #formBreadcrumbParams="ngForm">
   <div class="po-row">
@@ -133,36 +194,8 @@
   </div>
 </form>
 
-<po-divider />
+<po-divider></po-divider>
 
-<form #formPage="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="title" [(ngModel)]="title" p-label="Title" p-required> </po-input>
-    <po-input class="po-md-6" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
-
-    <po-input
-      class="po-md-6"
-      name="literals"
-      [(ngModel)]="literals"
-      p-help='Ex.: {"otherActions": "Mais ações"}'
-      p-label="Literals"
-      (p-change)="changeLiterals()"
-    >
-    </po-input>
-
-    <po-radio-group
-      class="po-md-12"
-      name="size"
-      [(ngModel)]="componentsSize"
-      p-columns="4"
-      p-label="Components size"
-      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
-      [p-options]="componentsSizeOptions"
-    >
-    </po-radio-group>
-  </div>
-
-  <div class="po-row">
-    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
-  </div>
-</form>
+<div class="po-row">
+  <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+</div>
