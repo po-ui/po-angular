@@ -14,4 +14,12 @@ import { PoDropdownAction } from '../../po-dropdown';
  *
  * @usedBy PoPageDefaultComponent, PoPageListComponent
  */
-export interface PoPageAction extends PoDropdownAction {}
+export interface PoPageAction extends PoDropdownAction {
+  /**
+   * Define o estilo visual do botão da ação. Valores: `primary`, `secondary`, `tertiary`.
+   *
+   * Utilizado apenas no header `tertiary`. No header `secondary`, todas as ações são forçadas para `secondary`.
+   * No header `primary`, a primeira ação é sempre `primary` e as demais `secondary` (comportamento atual mantido).
+   */
+  kind?: string;
+}

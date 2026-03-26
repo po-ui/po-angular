@@ -118,6 +118,76 @@ describe('PoPageDefaultBaseComponent:', () => {
       expectPropertiesValues(component, 'actions', validValues, validValues);
     });
 
+    describe('p-page-header-type:', () => {
+      it('should set `pageHeaderType` to `primary` when receiving `primary`.', () => {
+        component.pageHeaderType = 'primary';
+        expect(component.pageHeaderType).toBe('primary');
+      });
+
+      it('should set `pageHeaderType` to `secondary` when receiving `secondary`.', () => {
+        component.pageHeaderType = 'secondary';
+        expect(component.pageHeaderType).toBe('secondary');
+      });
+
+      it('should set `pageHeaderType` to `tertiary` when receiving `tertiary`.', () => {
+        component.pageHeaderType = 'tertiary';
+        expect(component.pageHeaderType).toBe('tertiary');
+      });
+
+      it('should default `pageHeaderType` to `primary` with invalid values.', () => {
+        const invalidValues = ['invalid', '', null, undefined, 'other'];
+
+        invalidValues.forEach(value => {
+          component.pageHeaderType = value;
+          expect(component.pageHeaderType).toBe('primary');
+        });
+      });
+    });
+
+    describe('p-page-actions-layout:', () => {
+      it('should set `pageActionsLayout` to `default` when receiving `default`.', () => {
+        component.pageActionsLayout = 'default';
+        expect(component.pageActionsLayout).toBe('default');
+      });
+
+      it('should set `pageActionsLayout` to `dropdown` when receiving `dropdown`.', () => {
+        component.pageActionsLayout = 'dropdown';
+        expect(component.pageActionsLayout).toBe('dropdown');
+      });
+
+      it('should set `pageActionsLayout` to `mixed` when receiving `mixed`.', () => {
+        component.pageActionsLayout = 'mixed';
+        expect(component.pageActionsLayout).toBe('mixed');
+      });
+
+      it('should default `pageActionsLayout` to `default` with invalid values.', () => {
+        const invalidValues = ['invalid', '', null, undefined, 'other'];
+
+        invalidValues.forEach(value => {
+          component.pageActionsLayout = value;
+          expect(component.pageActionsLayout).toBe('default');
+        });
+      });
+    });
+
+    describe('backNavigation literal:', () => {
+      it('should have `backNavigation` literal in english.', () => {
+        expect(poPageDefaultLiteralsDefault.en.backNavigation).toBe('Back');
+      });
+
+      it('should have `backNavigation` literal in spanish.', () => {
+        expect(poPageDefaultLiteralsDefault.es.backNavigation).toBe('Volver');
+      });
+
+      it('should have `backNavigation` literal in portuguese.', () => {
+        expect(poPageDefaultLiteralsDefault.pt.backNavigation).toBe('Voltar');
+      });
+
+      it('should have `backNavigation` literal in russian.', () => {
+        expect(poPageDefaultLiteralsDefault.ru.backNavigation).toBe('Назад');
+      });
+    });
+
     describe('p-components-size', () => {
       beforeEach(() => {
         document.documentElement.removeAttribute('data-a11y');

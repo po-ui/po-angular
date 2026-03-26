@@ -8,4 +8,7 @@
 export interface PoPageDefaultLiterals {
   /** Legenda do `po-dropdown` de ações. */
   otherActions?: string;
+
+  /** Label do botão de navegação (voltar) no header secondary. */
+  backNavigation?: string;
 }

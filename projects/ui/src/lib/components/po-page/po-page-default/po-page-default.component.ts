@@ -91,6 +91,10 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     this.visibleActions = this.getVisibleActions();
     this.setDropdownActions();
 
+    if (this.pageHeaderType === 'secondary') {
+      return true;
+    }
+
     return !!(
       this.title ||
       (this.visibleActions && this.visibleActions.length) ||
@@ -99,8 +103,14 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   }
 
   setDropdownActions(): void {
-    if (this.visibleActions.length > this.limitPrimaryActions) {
-      this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
+    if (this.pageActionsLayout === 'dropdown') {
+      this.dropdownActions = this.visibleActions;
+    } else if (this.pageActionsLayout === 'mixed') {
+      this.dropdownActions = this.visibleActions.slice(1);
+    } else {
+      if (this.visibleActions.length > this.limitPrimaryActions) {
+        this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
+      }
     }
   }
 

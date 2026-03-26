@@ -21,6 +21,9 @@ export class PoPageHeaderBaseComponent {
   /** Subtítulo da página. */
   @Input('p-subtitle') subtitle: string;
 
+  /** Define o tipo de header: `primary`, `secondary` ou `tertiary`. */
+  @Input('p-type') type: string = 'primary';
+
   private _breadcrumb: PoBreadcrumb;
 
   /** Objeto com propriedades do breadcrumb. */

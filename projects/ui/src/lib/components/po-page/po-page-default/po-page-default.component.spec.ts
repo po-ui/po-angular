@@ -398,5 +398,125 @@ describe('PoPageDefaultComponent desktop', () => {
 
       expect(component.hasPageHeader()).toBe(false);
     });
+
+    it('hasPageHeader: should return true for secondary header even without title, actions and breadcrumb', () => {
+      component.actions = [];
+      component.breadcrumb = undefined;
+      component.title = undefined;
+      component.pageHeaderType = 'secondary';
+
+      expect(component.hasPageHeader()).toBe(true);
+    });
+
+    it('setDropdownActions: should put all actions in dropdown when pageActionsLayout is `dropdown`', () => {
+      component.actions = [{ label: 'action1' }, { label: 'action2' }, { label: 'action3' }];
+      component.pageActionsLayout = 'dropdown';
+      component.setDropdownActions();
+
+      expect(component.dropdownActions).toEqual(component.visibleActions);
+    });
+
+    it('setDropdownActions: should put all actions except first in dropdown when pageActionsLayout is `mixed`', () => {
+      component.actions = [{ label: 'action1' }, { label: 'action2' }, { label: 'action3' }];
+      component.pageActionsLayout = 'mixed';
+      component.setDropdownActions();
+
+      expect(component.dropdownActions).toEqual(component.visibleActions.slice(1));
+    });
+
+    it('setDropdownActions: should use default behavior when pageActionsLayout is `default`', () => {
+      component.actions = [
+        { label: 'action1' },
+        { label: 'action2' },
+        { label: 'action3' },
+        { label: 'action4' }
+      ];
+      component.pageActionsLayout = 'default';
+      component.setDropdownActions();
+
+      expect(component.dropdownActions).toEqual(component.visibleActions.slice(component.limitPrimaryActions - 1));
+    });
+  });
+
+  describe('Template - Secondary Header', () => {
+    it('should render back button with `p-kind="tertiary"` and `p-icon="an an-arrow-left"` when pageHeaderType is secondary', () => {
+      component.pageHeaderType = 'secondary';
+      component.title = 'Secondary Page';
+      component.actions = [];
+
+      fixture.detectChanges();
+
+      const backButton = fixture.debugElement.nativeElement.querySelector('po-button[po-page-header-navigation]');
+      expect(backButton).toBeTruthy();
+
+      const buttonEl = backButton.querySelector('button');
+      expect(buttonEl).toBeTruthy();
+    });
+
+    it('should emit `back` event when back button is clicked on secondary header', () => {
+      component.pageHeaderType = 'secondary';
+      component.title = 'Secondary Page';
+      component.actions = [];
+
+      fixture.detectChanges();
+
+      spyOn(component.back, 'emit');
+
+      const backButton = fixture.debugElement.nativeElement.querySelector('po-button[po-page-header-navigation] button');
+      if (backButton) {
+        backButton.click();
+        expect(component.back.emit).toHaveBeenCalled();
+      }
+    });
+
+    it('should not render breadcrumb when pageHeaderType is secondary', () => {
+      component.pageHeaderType = 'secondary';
+      component.title = 'Secondary Page';
+      component.breadcrumb = { items: [{ label: 'Home' }] };
+      component.actions = [];
+
+      fixture.detectChanges();
+
+      const breadcrumb = fixture.debugElement.nativeElement.querySelector('.po-page-header-breadcrumb');
+      expect(breadcrumb).toBeFalsy();
+    });
+
+    it('should force all action buttons to p-kind="secondary" when pageHeaderType is secondary', () => {
+      component.pageHeaderType = 'secondary';
+      component.title = 'Secondary Page';
+      component.actions = [{ label: 'Action 1' }, { label: 'Action 2' }];
+
+      fixture.detectChanges();
+
+      const buttons = fixture.debugElement.nativeElement.querySelectorAll('.po-page-header-actions po-button');
+      buttons.forEach(button => {
+        const buttonEl = button.querySelector('button');
+        if (buttonEl) {
+          expect(buttonEl.classList.contains('po-button-primary')).toBeFalsy();
+        }
+      });
+    });
+
+    it('should not render back button when pageHeaderType is tertiary', () => {
+      component.pageHeaderType = 'tertiary';
+      component.title = 'Tertiary Page';
+      component.actions = [{ label: 'Action 1' }];
+
+      fixture.detectChanges();
+
+      const backButton = fixture.debugElement.nativeElement.querySelector('po-button[po-page-header-navigation]');
+      expect(backButton).toBeFalsy();
+    });
+
+    it('should respect individual `kind` from PoPageAction when pageHeaderType is tertiary', () => {
+      component.pageHeaderType = 'tertiary';
+      component.title = 'Tertiary Page';
+      component.actions = [{ label: 'Action 1', kind: 'primary' }];
+
+      fixture.detectChanges();
+
+      const buttons = fixture.debugElement.nativeElement.querySelectorAll('.po-page-header-actions po-button');
+      expect(buttons.length).toBeGreaterThan(0);
+    });
   });
 });

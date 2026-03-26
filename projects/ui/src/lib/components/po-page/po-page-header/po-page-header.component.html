@@ -1,6 +1,6 @@
-<div class="po-page-header">
-  <!-- Breadcrumb -->
-  @if (breadcrumb && breadcrumb.items.length) {
+<div class="po-page-header" [class.po-page-header-secondary]="type === 'secondary'" [class.po-page-header-tertiary]="type === 'tertiary'">
+  <!-- Breadcrumb - only shown for primary and tertiary -->
+  @if (type !== 'secondary' && breadcrumb && breadcrumb.items.length) {
     <div class="po-page-header-breadcrumb">
       <po-breadcrumb
         [p-favorite-service]="breadcrumb.favorite"
@@ -13,6 +13,9 @@
   }
 
   <div class="po-page-header-container">
+    <!-- Back navigation button - only for secondary, projected from parent -->
+    <ng-content select="[po-page-header-navigation]"></ng-content>
+
     <!-- Titulo e SubTitulo-->
     @if (title || subtitle) {
       <div class="po-page-header-title-container">
