@@ -1,10 +1,12 @@
 import { Directive } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoThemeA11yEnum } from '../../../services';
+import { AnimaliaIconDictionary } from '../../po-icon/po-icon-dictionary';
 import { PoPageDefaultBaseComponent, poPageDefaultLiteralsDefault } from './po-page-default-base.component';
 
 @Directive()
@@ -18,10 +20,12 @@ describe('PoPageDefaultBaseComponent:', () => {
   let languageService: PoLanguageService;
   let component: PoPageDefaultComponent;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+
     languageService = new PoLanguageService();
 
-    component = new PoPageDefaultComponent(languageService);
+    component = TestBed.runInInjectionContext(() => new PoPageDefaultComponent(languageService));
   });
 
   it('should be created', () => {
@@ -160,21 +164,46 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
     });
 
+    describe('p-page-actions-kind:', () => {
+      it('should set `pageActionsKind` to `primary` when receiving `primary`.', () => {
+        component.pageActionsKind = 'primary';
+        expect(component.pageActionsKind).toBe('primary');
+      });
+
+      it('should set `pageActionsKind` to `secondary` when receiving `secondary`.', () => {
+        component.pageActionsKind = 'secondary';
+        expect(component.pageActionsKind).toBe('secondary');
+      });
+
+      it('should default `pageActionsKind` to `secondary` with invalid values.', () => {
+        const invalidValues = ['invalid', '', null, undefined, 'tertiary', 'other'];
+
+        invalidValues.forEach(value => {
+          component.pageActionsKind = value;
+          expect(component.pageActionsKind).toBe('secondary');
+        });
+      });
+    });
+
+    describe('backIcon and defaultMixedIcon:', () => {
+      it('should have `backIcon` set to ICON_ARROW_BACK from dictionary.', () => {
+        expect(component.backIcon).toBe(AnimaliaIconDictionary.ICON_ARROW_BACK);
+      });
+
+      it('should have `defaultMixedIcon` set to ICON_SETTINGS from dictionary.', () => {
+        expect(component.defaultMixedIcon).toBe(AnimaliaIconDictionary.ICON_SETTINGS);
+      });
+    });
+
     describe('backNavigation literal:', () => {
-      it('should have `backNavigation` literal in english.', () => {
-        expect(poPageDefaultLiteralsDefault.en.backNavigation).toBe('Back');
+      it('should not have `backNavigation` literal in defaults (icon-only by default).', () => {
+        expect(poPageDefaultLiteralsDefault.en.backNavigation).toBeUndefined();
+        expect(poPageDefaultLiteralsDefault.pt.backNavigation).toBeUndefined();
       });
 
-      it('should have `backNavigation` literal in spanish.', () => {
-        expect(poPageDefaultLiteralsDefault.es.backNavigation).toBe('Volver');
-      });
-
-      it('should have `backNavigation` literal in portuguese.', () => {
-        expect(poPageDefaultLiteralsDefault.pt.backNavigation).toBe('Voltar');
-      });
-
-      it('should have `backNavigation` literal in russian.', () => {
-        expect(poPageDefaultLiteralsDefault.ru.backNavigation).toBe('Назад');
+      it('should accept custom `backNavigation` literal.', () => {
+        component.literals = { backNavigation: 'Voltar' };
+        expect(component.literals.backNavigation).toBe('Voltar');
       });
     });
 

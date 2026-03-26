@@ -8,6 +8,9 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
  * @description
  *
  * Interface que define o `po-breadcrumb`.
+ *
+ * > O breadcrumb é compatível apenas com o header `primary` do `po-page-default`.
+ * Quando `p-page-header-type` for `secondary` ou `tertiary`, o breadcrumb não será exibido.
  */
 export interface PoBreadcrumb {
   /**

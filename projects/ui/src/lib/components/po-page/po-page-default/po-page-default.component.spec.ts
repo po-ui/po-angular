@@ -439,7 +439,7 @@ describe('PoPageDefaultComponent desktop', () => {
   });
 
   describe('Template - Secondary Header', () => {
-    it('should render back button with `p-kind="tertiary"` and `p-icon="an an-arrow-left"` when pageHeaderType is secondary', () => {
+    it('should render back button with icon-only (no label) by default when pageHeaderType is secondary', () => {
       component.pageHeaderType = 'secondary';
       component.title = 'Secondary Page';
       component.actions = [];
@@ -481,8 +481,9 @@ describe('PoPageDefaultComponent desktop', () => {
       expect(breadcrumb).toBeFalsy();
     });
 
-    it('should force all action buttons to p-kind="secondary" when pageHeaderType is secondary', () => {
+    it('should use pageActionsKind for action buttons when pageHeaderType is secondary', () => {
       component.pageHeaderType = 'secondary';
+      component.pageActionsKind = 'secondary';
       component.title = 'Secondary Page';
       component.actions = [{ label: 'Action 1' }, { label: 'Action 2' }];
 
@@ -495,6 +496,18 @@ describe('PoPageDefaultComponent desktop', () => {
           expect(buttonEl.classList.contains('po-button-primary')).toBeFalsy();
         }
       });
+    });
+
+    it('should not render breadcrumb when pageHeaderType is tertiary', () => {
+      component.pageHeaderType = 'tertiary';
+      component.title = 'Tertiary Page';
+      component.breadcrumb = { items: [{ label: 'Home' }] };
+      component.actions = [];
+
+      fixture.detectChanges();
+
+      const breadcrumb = fixture.debugElement.nativeElement.querySelector('.po-page-header-breadcrumb');
+      expect(breadcrumb).toBeFalsy();
     });
 
     it('should not render back button when pageHeaderType is tertiary', () => {

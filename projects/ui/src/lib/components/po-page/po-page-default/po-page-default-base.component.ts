@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, input, output } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -6,6 +6,7 @@ import { PoLanguageService } from './../../../services/po-language/po-language.s
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
+import { AnimaliaIconDictionary } from '../../po-icon/po-icon-dictionary';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageActionsLayout } from './enums/po-page-actions-layout.enum';
 import { PoPageHeaderType } from './enums/po-page-header-type.enum';
@@ -13,20 +14,16 @@ import { PoPageDefaultLiterals } from './po-page-default-literals.interface';
 
 export const poPageDefaultLiteralsDefault = {
   en: <PoPageDefaultLiterals>{
-    otherActions: 'Other actions',
-    backNavigation: 'Back'
+    otherActions: 'Other actions'
   },
   es: <PoPageDefaultLiterals>{
-    otherActions: 'Otras acciones',
-    backNavigation: 'Volver'
+    otherActions: 'Otras acciones'
   },
   pt: <PoPageDefaultLiterals>{
-    otherActions: 'Outras ações',
-    backNavigation: 'Voltar'
+    otherActions: 'Outras ações'
   },
   ru: <PoPageDefaultLiterals>{
-    otherActions: 'Другие действия',
-    backNavigation: 'Назад'
+    otherActions: 'Другие действия'
   }
 };
 
@@ -52,13 +49,17 @@ export const poPageDefaultLiteralsDefault = {
  * | `--font-size-title-secondary`  | Tamanho da fonte do título       | `var(--font-size-md)`                 |
  * | `--font-weight-title-secondary`| Peso da fonte do título          | `var(--font-weight-semibold)`         |
  * | `--letter-spacing-title-secondary`| Espaçamento entre letras       | `0`                                   |
+ * | `--gap-navigation`             | Espaçamento entre o botão voltar e o título | `var(--spacing-xxs)`          |
  * | **Content**         |                                             |                                       |
  * | `--padding-content` | Espaçamento do conteúdo                     | `var(--spacing-xs) var(--spacing-sm)` |
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {
-  /** Objeto com propriedades do breadcrumb. */
-  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
+  /** Ícone utilizado no botão de voltar do header `secondary`. */
+  readonly backIcon: string = AnimaliaIconDictionary.ICON_ARROW_BACK;
+
+  /** Ícone padrão utilizado no layout `mixed` quando em tela pequena. */
+  readonly defaultMixedIcon: string = AnimaliaIconDictionary.ICON_SETTINGS;
 
   visibleActions: Array<PoPageAction> = [];
 
@@ -68,6 +69,7 @@ export abstract class PoPageDefaultBaseComponent {
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
+  private _pageActionsKind: string = 'secondary';
   private _pageActionsLayout: string = PoPageActionsLayout.default;
   private _pageHeaderType: string = PoPageHeaderType.primary;
   private _title: string;
@@ -89,6 +91,18 @@ export abstract class PoPageDefaultBaseComponent {
   get actions(): Array<PoPageAction> {
     return this._actions;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com propriedades do breadcrumb.
+   *
+   * > Compatível apenas com o header `primary`. No header `secondary` o breadcrumb é substituído pelo botão de voltar.
+   * No header `tertiary` o breadcrumb não é exibido.
+   */
+  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
 
   /**
    * @optional
@@ -165,29 +179,46 @@ export abstract class PoPageDefaultBaseComponent {
   }
 
   /**
-   * Evento que será disparado ao clicar no botão de "Voltar" no header secondary.
+   * @optional
    *
-   * ```
-   * <po-page-default (p-back)="myBackFunction()">
-   * </po-page-default>
-   * ```
+   * @description
+   *
+   * Define o `kind` dos botões de ação fora do dropdown quando `p-page-header-type` é `secondary`.
+   *
+   * Valores válidos:
+   * - `primary`
+   * - `secondary`
+   *
+   * > Utilizado apenas quando `p-page-header-type` é `secondary`.
+   *
+   * @default `secondary`
    */
-  @Output('p-back') back = new EventEmitter();
+  @Input('p-page-actions-kind') set pageActionsKind(value: string) {
+    this._pageActionsKind = value === 'primary' || value === 'secondary' ? value : 'secondary';
+  }
+
+  get pageActionsKind(): string {
+    return this._pageActionsKind;
+  }
 
   /**
    * @optional
    *
    * @description
    *
-   * Define o layout das ações do header. Valores:
+   * Define o layout das ações do header. Aceita valores do enum `PoPageActionsLayout` ou `string`.
+   *
+   * Valores válidos:
    * - `default`: comportamento padrão (botões visíveis e dropdown para overflow).
    * - `dropdown`: todas as ações ficam dentro do dropdown.
-   * - `mixed`: primeira ação como botão, demais no dropdown.
+   * - `mixed`: primeira ação como botão, demais no dropdown. Em telas pequenas (< 480px), a ação exibe
+   *   apenas o ícone (customizável via `PoPageAction.icon`, padrão: ícone de configurações).
    *
    * @default `default`
    */
-  @Input('p-page-actions-layout') set pageActionsLayout(value: string) {
-    this._pageActionsLayout = PoPageActionsLayout[value] ? PoPageActionsLayout[value] : PoPageActionsLayout.default;
+  @Input('p-page-actions-layout') set pageActionsLayout(value: string | PoPageActionsLayout) {
+    const strValue = typeof value === 'string' ? value : '';
+    this._pageActionsLayout = PoPageActionsLayout[strValue] ? PoPageActionsLayout[strValue] : PoPageActionsLayout.default;
   }
 
   get pageActionsLayout(): string {
@@ -199,15 +230,19 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * @description
    *
-   * Define o tipo de header da página. Valores:
+   * Define o tipo de header da página. Aceita valores do enum `PoPageHeaderType` ou `string`.
+   *
+   * Valores válidos:
    * - `primary`: header padrão com breadcrumb e ações (comportamento atual).
-   * - `secondary`: header com botão de voltar, sem breadcrumb, ações forçadas para `secondary`.
-   * - `tertiary`: header sem botão de navegação, ações com `kind` livre.
+   * - `secondary`: header com botão de voltar (apenas ícone por padrão), sem breadcrumb.
+   *   O `kind` dos botões de ação é controlado por `p-page-actions-kind`.
+   * - `tertiary`: header sem botão de navegação e sem breadcrumb. Ações com `kind` livre.
    *
    * @default `primary`
    */
-  @Input('p-page-header-type') set pageHeaderType(value: string) {
-    this._pageHeaderType = PoPageHeaderType[value] ? PoPageHeaderType[value] : PoPageHeaderType.primary;
+  @Input('p-page-header-type') set pageHeaderType(value: string | PoPageHeaderType) {
+    const strValue = typeof value === 'string' ? value : '';
+    this._pageHeaderType = PoPageHeaderType[strValue] ? PoPageHeaderType[strValue] : PoPageHeaderType.primary;
   }
 
   get pageHeaderType(): string {
@@ -231,6 +266,16 @@ export abstract class PoPageDefaultBaseComponent {
    * Subtitulo do Header da página
    */
   @Input('p-subtitle') subtitle: string;
+
+  /**
+   * Evento disparado ao clicar no botão de voltar no header `secondary`.
+   *
+   * ```
+   * <po-page-default (p-back)="myBackFunction()">
+   * </po-page-default>
+   * ```
+   */
+  back = output<void>({ alias: 'p-back' });
 
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();

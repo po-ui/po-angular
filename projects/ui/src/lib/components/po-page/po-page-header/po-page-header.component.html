@@ -1,6 +1,6 @@
 <div class="po-page-header" [class.po-page-header-secondary]="type === 'secondary'" [class.po-page-header-tertiary]="type === 'tertiary'">
-  <!-- Breadcrumb - only shown for primary and tertiary -->
-  @if (type !== 'secondary' && breadcrumb && breadcrumb.items.length) {
+  <!-- Breadcrumb - only shown for primary -->
+  @if (type === 'primary' && breadcrumb && breadcrumb.items.length) {
     <div class="po-page-header-breadcrumb">
       <po-breadcrumb
         [p-favorite-service]="breadcrumb.favorite"

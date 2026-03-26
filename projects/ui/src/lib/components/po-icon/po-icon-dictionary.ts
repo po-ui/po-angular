@@ -6,6 +6,7 @@ export const AnimaliaIconDictionary: { [key: string]: string } = {
   ICON_ALIGN_LEFT: 'an an-text-align-left',
   ICON_ALIGN_RIGHT: 'an an-text-align-right',
   ICON_ARROW_ARC_LEFT: 'an an-arrow-arc-left',
+  ICON_ARROW_BACK: 'an an-arrow-left',
   ICON_ARROW_DOWN: 'an an-caret-down',
   ICON_OTHER_ARROW_DOWN: 'an an-arrow-down',
   ICON_ARROW_LEFT: 'an an-caret-left',
