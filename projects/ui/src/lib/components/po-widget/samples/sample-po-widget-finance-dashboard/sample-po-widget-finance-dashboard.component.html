@@ -1,5 +1,5 @@
-<div class="po-row" style="row-gap: 1rem">
-  <div class="po-row" style="row-gap: 1rem">
+<div class="po-row sample-finance-row-gap">
+  <div class="po-row sample-finance-row-gap">
     <po-widget
       class="po-lg-6"
       p-help="https://github.com/po-ui/po-angular/stargazers"
@@ -10,7 +10,7 @@
     >
       <div>Sales order</div>
       <div>Scheduled to: <strong>05/04/2018</strong></div>
-      <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
+      <div class="sample-finance-actions">
         <po-button p-label="Cancel" p-danger></po-button>
         <po-button
           p-label="Confirm"
@@ -33,28 +33,19 @@
       [p-height]="190"
       (p-primary-action)="openModal('account')"
     >
-      <div class="po-text-center" style="font-size: 2rem; margin-bottom: 0.5rem">$5.000,00</div>
+      <div class="po-text-center sample-finance-total-value">$5.000,00</div>
       <div class="po-text-center">Last updated at 08:20</div>
     </po-widget>
   </div>
 
-  <div class="po-row" style="row-gap: 1rem">
+  <div class="po-row sample-finance-row-gap">
     <po-widget class="po-lg-4" p-background="../../../assets/graphics/sales-statistics.png" [p-height]="180">
-      <div class="po-text-center" style="padding-inline: 0.5rem">
-        <div
-          style="
-            margin-bottom: 0.5rem;
-            display: inline-block;
-            background-color: black;
-            padding: 0.5rem;
-            border-radius: 3px;
-            opacity: 0.85;
-          "
-        >
-          <strong style="color: white">Enter the user routine</strong>
+      <div class="po-text-center sample-finance-padding-inline">
+        <div class="sample-finance-overlay-badge">
+          <strong class="sample-finance-overlay-text">Enter the user routine</strong>
         </div>
       </div>
-      <div style="padding-inline: 0.5rem">
+      <div class="sample-finance-padding-inline">
         <po-multiselect name="multiselect" [p-options]="options"> </po-multiselect>
       </div>
     </po-widget>

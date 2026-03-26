@@ -1,0 +1,18 @@
+.sample-select-option-template-container {
+  display: inline-flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.sample-select-option-template-margin {
+  margin: 5px;
+}
+
+.sample-select-option-template-label {
+  font-size: 16px;
+}
+
+.sample-select-option-template-value {
+  font-size: 12px;
+  text-transform: uppercase;
+}

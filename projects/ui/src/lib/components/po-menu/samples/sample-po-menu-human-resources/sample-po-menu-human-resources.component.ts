@@ -8,13 +8,7 @@ import { SamplePoMenuHumanResourcesService } from './sample-po-menu-human-resour
   selector: 'sample-po-menu-human-resources',
   templateUrl: './sample-po-menu-human-resources.component.html',
   providers: [SamplePoMenuHumanResourcesService],
-  styles: [
-    `
-      .sample-menu-header-text-color {
-        color: #9da7a9;
-      }
-    `
-  ],
+  styleUrls: ['./sample-po-menu-human-resources.component.css'],
   standalone: false
 })
 export class SamplePoMenuHumanResourcesComponent {

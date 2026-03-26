@@ -5,6 +5,7 @@ import { PoModalComponent, PoMultiselectOption, PoNotificationService, PoTableCo
 @Component({
   selector: 'sample-po-widget-finance-dashboard',
   templateUrl: './sample-po-widget-finance-dashboard.component.html',
+  styleUrls: ['./sample-po-widget-finance-dashboard.component.css'],
   standalone: false
 })
 export class SamplePoWidgetFinanceDashboardComponent {

@@ -5,6 +5,7 @@ import { PoCheckboxGroupOption, PoNotificationService, PoPopupAction, PoSelectOp
 @Component({
   selector: 'sample-po-widget-labs',
   templateUrl: './sample-po-widget-labs.component.html',
+  styleUrls: ['./sample-po-widget-labs.component.css'],
   standalone: false
 })
 export class SamplePoWidgetLabsComponent implements OnInit {
