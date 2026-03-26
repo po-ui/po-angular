@@ -31,7 +31,7 @@ const PO_BADGE_MAX_NOTIFICATIONS = 9;
 @Component({
   selector: 'po-badge',
   templateUrl: './po-badge.component.html',
-  styleUrls: ['./po-badge.component.css'],
+  styles: [':host { display: inline-block; vertical-align: middle; }'],
   standalone: false
 })
 export class PoBadgeComponent extends PoBadgeBaseComponent implements OnInit, OnChanges {
