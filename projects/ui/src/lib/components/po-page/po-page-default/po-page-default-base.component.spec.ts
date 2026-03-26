@@ -1,4 +1,5 @@
 import { Directive } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
@@ -18,10 +19,12 @@ describe('PoPageDefaultBaseComponent:', () => {
   let languageService: PoLanguageService;
   let component: PoPageDefaultComponent;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+
     languageService = new PoLanguageService();
 
-    component = new PoPageDefaultComponent(languageService);
+    component = TestBed.runInInjectionContext(() => new PoPageDefaultComponent(languageService));
   });
 
   it('should be created', () => {
@@ -106,6 +109,58 @@ describe('PoPageDefaultBaseComponent:', () => {
       const validValues = [[{ label: 'Share', icon: 'po-icon-share' }]];
 
       expectPropertiesValues(component, 'actions', validValues, validValues);
+    });
+
+    describe('p-page-header-type:', () => {
+      it('should set `pageHeaderType` to `primary` when receiving `primary`.', () => {
+        component.pageHeaderType = 'primary';
+        expect(component.pageHeaderType).toBe('primary');
+      });
+
+      it('should set `pageHeaderType` to `secondary` when receiving `secondary`.', () => {
+        component.pageHeaderType = 'secondary';
+        expect(component.pageHeaderType).toBe('secondary');
+      });
+
+      it('should set `pageHeaderType` to `tertiary` when receiving `tertiary`.', () => {
+        component.pageHeaderType = 'tertiary';
+        expect(component.pageHeaderType).toBe('tertiary');
+      });
+
+      it('should default `pageHeaderType` to `primary` with invalid values.', () => {
+        const invalidValues = ['invalid', '', null, undefined, 'other'];
+
+        invalidValues.forEach(value => {
+          component.pageHeaderType = value;
+          expect(component.pageHeaderType).toBe('primary');
+        });
+      });
+    });
+
+    describe('p-page-actions-layout:', () => {
+      it('should set `pageActionsLayout` to `default` when receiving `default`.', () => {
+        component.pageActionsLayout = 'default';
+        expect(component.pageActionsLayout).toBe('default');
+      });
+
+      it('should set `pageActionsLayout` to `dropdown` when receiving `dropdown`.', () => {
+        component.pageActionsLayout = 'dropdown';
+        expect(component.pageActionsLayout).toBe('dropdown');
+      });
+
+      it('should set `pageActionsLayout` to `mixed` when receiving `mixed`.', () => {
+        component.pageActionsLayout = 'mixed';
+        expect(component.pageActionsLayout).toBe('mixed');
+      });
+
+      it('should default `pageActionsLayout` to `default` with invalid values.', () => {
+        const invalidValues = ['invalid', '', null, undefined, 'other'];
+
+        invalidValues.forEach(value => {
+          component.pageActionsLayout = value;
+          expect(component.pageActionsLayout).toBe('default');
+        });
+      });
     });
 
     describe('p-components-size', () => {

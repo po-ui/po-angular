@@ -1,3 +1,5 @@
+export * from './po-page-default/enums/po-page-actions-layout.enum';
+export * from './po-page-default/enums/po-page-header-type.enum';
 export * from './po-page-default/po-page-default.component';
 export * from './po-page-default/po-page-default.interface';
 export * from './po-page-default/po-page-default-literals.interface';

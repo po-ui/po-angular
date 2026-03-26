@@ -1,47 +1,135 @@
 <po-page>
+  <!-- Shared action templates -->
+  <ng-template #actionsDropdown>
+    @if (visibleActions.length) {
+      <po-dropdown [p-label]="literals.otherActions" [p-actions]="visibleActions" [p-size]="componentsSize"></po-dropdown>
+    }
+  </ng-template>
+
+  <ng-template #actionsMixed let-kindFallback="kindFallback">
+    @if (visibleActions.length > 1) {
+      <po-dropdown [p-label]="literals.otherActions" [p-actions]="dropdownActions" [p-size]="componentsSize"></po-dropdown>
+    }
+    @if (visibleActions[0]) {
+      <po-button
+        [p-kind]="getActionKind(visibleActions[0], kindFallback)"
+        [p-danger]="visibleActions[0].type === 'danger'"
+        [p-disabled]="actionIsDisabled(visibleActions[0])"
+        [p-icon]="visibleActions[0].icon"
+        [p-label]="(isMobile && visibleActions[0].icon) ? '' : visibleActions[0].label"
+        [p-aria-label]="visibleActions[0].label"
+        [p-size]="componentsSize"
+        (p-click)="callAction(visibleActions[0])"
+      ></po-button>
+    }
+  </ng-template>
+
+  <ng-template #actionsDefault>
+    @if (visibleActions.length > limitPrimaryActions) {
+      <po-dropdown [p-label]="literals.otherActions" [p-actions]="dropdownActions" [p-size]="componentsSize"></po-dropdown>
+    }
+    @if (visibleActions.length === 3 && visibleActions[2] && !isMobile) {
+      <po-button
+        [p-kind]="getActionKind(visibleActions[2], 'secondary')"
+        [p-danger]="visibleActions[2].type === 'danger'"
+        [p-disabled]="actionIsDisabled(visibleActions[2])"
+        [p-icon]="visibleActions[2].icon"
+        [p-label]="visibleActions[2].label"
+        [p-size]="componentsSize"
+        (p-click)="callAction(visibleActions[2])"
+      ></po-button>
+    }
+    @if (visibleActions[1] && (visibleActions.length === 2 || !isMobile)) {
+      <po-button
+        [p-kind]="getActionKind(visibleActions[1], 'secondary')"
+        [p-disabled]="actionIsDisabled(visibleActions[1])"
+        [p-icon]="visibleActions[1].icon"
+        [p-label]="visibleActions[1].label"
+        [p-danger]="visibleActions[1].type === 'danger'"
+        [p-size]="componentsSize"
+        (p-click)="callAction(visibleActions[1])"
+      ></po-button>
+    }
+    @if (visibleActions[0]) {
+      <po-button
+        [p-kind]="getActionKind(visibleActions[0], 'primary')"
+        [p-danger]="visibleActions[0].type === 'danger'"
+        [p-disabled]="actionIsDisabled(visibleActions[0])"
+        [p-icon]="visibleActions[0].icon"
+        [p-label]="(isMobile && visibleActions[0].icon) ? '' : visibleActions[0].label"
+        [p-aria-label]="visibleActions[0].label"
+        [p-size]="componentsSize"
+        (p-click)="callAction(visibleActions[0])"
+      ></po-button>
+    }
+  </ng-template>
+
   <!-- HEADER -->
   @if (hasPageHeader()) {
-    <po-page-header [p-breadcrumb]="breadcrumb" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
-      <!-- OPERATIONS -->
-      <div class="po-page-header-actions">
-        @if (visibleActions.length > limitPrimaryActions) {
-          <po-dropdown [p-label]="literals.otherActions" [p-actions]="dropdownActions" [p-size]="componentsSize">
-          </po-dropdown>
-        }
-        @if (visibleActions.length === 3 && visibleActions[2] && !isMobile) {
+    @switch (pageHeaderType) {
+      @case ('secondary') {
+        <po-page-header [p-type]="'secondary'" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
+          <!-- Back navigation button (icon-only, aria-label for screen readers) -->
           <po-button
-            [p-danger]="visibleActions[2].type === 'danger'"
-            [p-disabled]="actionIsDisabled(visibleActions[2])"
-            [p-label]="visibleActions[2].label"
+            po-page-header-navigation
+            p-kind="tertiary"
+            [p-icon]="backIcon"
+            p-label=""
             [p-size]="componentsSize"
-            (p-click)="callAction(visibleActions[2])"
-          >
-          </po-button>
-        }
-        @if (visibleActions[1] && (visibleActions.length === 2 || !isMobile)) {
-          <po-button
-            [p-disabled]="actionIsDisabled(visibleActions[1])"
-            [p-label]="visibleActions[1].label"
-            [p-danger]="visibleActions[1].type === 'danger'"
-            [p-size]="componentsSize"
-            (p-click)="callAction(visibleActions[1])"
-          >
-          </po-button>
-        }
-        @if (visibleActions[0]) {
-          <po-button
-            p-kind="primary"
-            [p-danger]="visibleActions[0].type === 'danger'"
-            [p-disabled]="actionIsDisabled(visibleActions[0])"
-            [p-icon]="visibleActions[0].icon"
-            [p-label]="visibleActions[0].label"
-            [p-size]="componentsSize"
-            (p-click)="callAction(visibleActions[0])"
-          >
-          </po-button>
-        }
-      </div>
-    </po-page-header>
+            [p-aria-label]="backNavigationLabel"
+            (p-click)="back.emit()"
+          ></po-button>
+
+          <div class="po-page-header-actions">
+            @switch (pageActionsLayout) {
+              @case ('dropdown') {
+                <ng-container *ngTemplateOutlet="actionsDropdown"></ng-container>
+              }
+              @case ('mixed') {
+                <ng-container *ngTemplateOutlet="actionsMixed; context: { kindFallback: 'secondary' }"></ng-container>
+              }
+              @default {
+                <ng-container *ngTemplateOutlet="actionsDefault"></ng-container>
+              }
+            }
+          </div>
+        </po-page-header>
+      }
+      @case ('tertiary') {
+        <po-page-header [p-type]="'tertiary'" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
+          <div class="po-page-header-actions">
+            @switch (pageActionsLayout) {
+              @case ('dropdown') {
+                <ng-container *ngTemplateOutlet="actionsDropdown"></ng-container>
+              }
+              @case ('mixed') {
+                <ng-container *ngTemplateOutlet="actionsMixed; context: { kindFallback: 'secondary' }"></ng-container>
+              }
+              @default {
+                <ng-container *ngTemplateOutlet="actionsDefault"></ng-container>
+              }
+            }
+          </div>
+        </po-page-header>
+      }
+      @default {
+        <po-page-header [p-breadcrumb]="breadcrumb" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
+          <div class="po-page-header-actions">
+            @switch (pageActionsLayout) {
+              @case ('dropdown') {
+                <ng-container *ngTemplateOutlet="actionsDropdown"></ng-container>
+              }
+              @case ('mixed') {
+                <ng-container *ngTemplateOutlet="actionsMixed; context: { kindFallback: 'primary' }"></ng-container>
+              }
+              @default {
+                <ng-container *ngTemplateOutlet="actionsDefault"></ng-container>
+              }
+            }
+          </div>
+        </po-page-header>
+      }
+    }
   }
 
   <!-- CONTENT -->
