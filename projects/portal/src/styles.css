@@ -774,3 +774,28 @@ blockquote {
     display: none;
   }
 }
+
+sample-po-context-menu-basic-view .docs-sample-container .po-context-menu-wrapper,
+sample-po-context-menu-labs-view .docs-sample-container .po-context-menu-wrapper {
+  min-height: 384px !important;
+  border: var(--border-width-sm) solid;
+  border-color: var(--color-neutral-light-20);
+}
+
+sample-po-context-menu-user-view .docs-sample-container {
+  border: 1px solid #ccc;
+  padding: 0px;
+}
+
+sample-po-context-menu-user-view po-context-tabs .po-tabs-container {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-content {
+  height: 384px !important;
+}
+
+sample-po-context-menu-user-view po-context-tabs {
+  --po-density-gap-header-content: 0px;
+}

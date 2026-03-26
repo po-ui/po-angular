@@ -319,14 +319,14 @@ export class PoMenuComponent
 
   onMouseEnter(): void {
     if (this.collapsed && this.automaticToggle) {
-      this.collapsed = false;
+      this.setCollapsed(false);
       this.allowCollapseHover = true;
     }
   }
 
   onMouseLeave(): void {
     if (!this.collapsed && this.allowCollapseHover && this.automaticToggle) {
-      this.collapsed = true;
+      this.setCollapsed(true);
     }
   }
 
@@ -585,7 +585,7 @@ export class PoMenuComponent
   }
 
   private toggleMenuCollapse(collapsed: boolean = false) {
-    this.collapsed = collapsed;
+    this.setCollapsed(collapsed);
 
     if (this.groupedMenuItem && this.activeMenuItem) {
       this.groupedMenuItem =
@@ -627,5 +627,10 @@ export class PoMenuComponent
     this.filteredItems = [...this.menus];
     this.menuPrevious = this.stringify(this.menus);
     this.validateMenus(this.menus);
+  }
+
+  private setCollapsed(value: boolean) {
+    this.collapsed = value;
+    this.toggleChange.emit(!value);
   }
 }

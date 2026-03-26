@@ -96,8 +96,6 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   size?: string;
 
   /**
-   * @Input
-   *
    * Define se o título do campo será exibido de forma compacta.
    *
    * Quando habilitado (`true`), o modo compacto afeta o conjunto composto por:

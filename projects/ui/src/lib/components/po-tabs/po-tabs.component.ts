@@ -216,6 +216,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
   // Função disparada quando alguma tab ficar ativa
   onTabActive(tab: PoTabComponent) {
     this.previousActiveTab = this.tabsChildren.find(tabChild => tabChild.active && tabChild.id !== tab.id);
+    tab.activatedTab.emit(tab);
     this.deactivateTab();
   }
 
@@ -498,6 +499,33 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
       this.setTabIndex(tabRemoveElements[index], -1);
       tabRemoveElements[0].focus();
       this.setTabIndex(tabRemoveElements[0], 0);
+    }
+  }
+
+  /**
+   * Ativa a aba correspondente ao `id` informado.
+   *
+   * Para utilizá-la é necessário ter a instância do componente no DOM, podendo ser utilizado o ViewChild da seguinte forma:
+   *
+   * ```
+   * import { PoTabsComponent } from '@po-ui/ng-components';
+   *
+   * ...
+   *
+   * @ViewChild('poTab', { static: true }) poTab: PoTabsComponent;
+   *
+   * focusOnTab() {
+   *   this.poTab.activateTab('meu-id-da-aba');
+   * }
+   * ```
+   *
+   * @param id Identificador único da aba a ser ativada.
+   */
+  public activateTab(id: string) {
+    const tab = this.tabsChildrenArray.find(x => x.id === id);
+
+    if (tab) {
+      this.selectedTab(tab);
     }
   }
 }

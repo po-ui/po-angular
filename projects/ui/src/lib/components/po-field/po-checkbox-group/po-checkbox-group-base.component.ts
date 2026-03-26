@@ -90,8 +90,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -180,8 +178,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -194,8 +190,6 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

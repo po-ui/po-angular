@@ -48,9 +48,6 @@ import { PoSkeletonVariant } from './enums/po-skeleton-variant.enum';
 @Directive()
 export class PoSkeletonBaseComponent {
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -70,9 +67,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -91,9 +85,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -112,9 +103,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -138,9 +126,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -157,8 +142,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -173,9 +156,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -190,9 +170,6 @@ export class PoSkeletonBaseComponent {
   });
 
   /**
-   *
-   * @Input
-   *
    * @optional
    *
    * @description

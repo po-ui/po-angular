@@ -41,7 +41,7 @@ module.exports = {
 
     // Resolve all methods and properties from the classDoc. Includes inherited docs.
     classDoc.methods = classDoc.methods.concat(this.resolveMethods(classDoc));
-    
+
     // Concatena propriedades da classe atual
     const currentProperties = this.resolveProperties(classDoc);
     classDoc.properties = classDoc.properties.concat(currentProperties);
@@ -55,14 +55,14 @@ module.exports = {
         propertyMap.set(prop.name, prop);
         continue;
       }
-      
+
       const hasOverrideTag = (prop.tags?.tags || []).some(tag => tag.tagName === 'override');
 
       if (hasOverrideTag) {
         propertyMap.set(prop.name, prop);
       }
     }
-    
+
     // Converte o Map de volta para array e ordena
     classDoc.properties = Array.from(propertyMap.values()).sort((a, b) => {
       return a.name > b.name ? 1 : -1;
@@ -95,21 +95,11 @@ module.exports = {
   processPropertyDoc: function (propertyDoc) {
     this.processPublicDoc(propertyDoc);
 
-    if (propertyDoc.Input != undefined) {
-      propertyDoc.isDirectiveInput = true;
-      propertyDoc.directiveInputAlias = propertyDoc.directiveInputAlias || propertyDoc.Input;
-    } else {
-      propertyDoc.isDirectiveInput = this.isDirectiveInput(propertyDoc);
-      propertyDoc.directiveInputAlias = this.getDirectiveInputAlias(propertyDoc);
-    }
+    propertyDoc.isDirectiveInput = this.isDirectiveInput(propertyDoc) || propertyDoc.isDirectiveInput;
+    propertyDoc.directiveInputAlias = this.getDirectiveInputAlias(propertyDoc) || propertyDoc.directiveInputAlias;
 
-    if (propertyDoc.Output != undefined) {
-      propertyDoc.isDirectiveOutput = true;
-      propertyDoc.directiveOutputAlias = propertyDoc.Output;
-    } else {
-      propertyDoc.isDirectiveOutput = this.isDirectiveOutput(propertyDoc);
-      propertyDoc.directiveOutputAlias = this.getDirectiveOutputAlias(propertyDoc);
-    }
+    propertyDoc.isDirectiveOutput = this.isDirectiveOutput(propertyDoc) || propertyDoc.isDirectiveOutput;
+    propertyDoc.directiveOutputAlias = this.getDirectiveOutputAlias(propertyDoc) || propertyDoc.directiveOutputAlias;
   },
 
   /**
@@ -130,13 +120,13 @@ module.exports = {
   resolveProperties: function (classDoc) {
     let properties = classDoc.members.filter(member => !member.hasOwnProperty('parameters'));
 
-    const inferTypeFromInput = codeLine => {
+    const inferTypeFromCode = codeLine => {
       // Extrai tipo genérico
-      const genericMatch = codeLine.match(/input<([^>]+)>/);
+      const genericMatch = codeLine.match(/(?:input(?:\.required)?|output|model)<([^>]+)>/);
       const genericRaw = genericMatch ? genericMatch[1].trim() : null;
 
       // Extrai valor passado como primeiro argumento
-      const valueMatch = codeLine.match(/input(?:<[^>]+>)?\(\s*([^,)]*)/);
+      const valueMatch = codeLine.match(/(?:input(?:\.required)?|output|model)(?:<[^>]+>)?\(\s*([^,)]*)/);
       const value = valueMatch ? valueMatch[1].trim() : '';
 
       // Extrai alias (entre aspas simples ou duplas)
@@ -152,7 +142,7 @@ module.exports = {
       // Tipo inferido por valor literal
       if (value === 'true' || value === 'false') return { type: 'boolean', alias };
       if (value.startsWith('"') || value.startsWith("'")) return { type: 'string', alias };
-      if (!isNaN(Number(value))) return { type: 'number', alias };
+      if (value !== '' && !isNaN(Number(value))) return { type: 'number', alias };
 
       // Fallback
       return { type: 'unknown', alias };
@@ -167,10 +157,20 @@ module.exports = {
         property.isOptional = true;
       }
 
-      if (property.type.includes('input') && property.Input !== undefined) {
-        const { type, alias } = inferTypeFromInput(property.type);
+      // Tratamento input e model no Signal
+      if ((property.type.includes('input') || property.type.includes('model'))) {
+        const { type, alias } = inferTypeFromCode(property.type);
         properties[index].type = type;
         properties[index].directiveInputAlias = alias;
+        properties[index].isDirectiveInput = true;
+      }
+
+      // Tratamento output no Signal
+      if (property.type.includes('output')) {
+        const { type, alias } = inferTypeFromCode(property.type);
+        properties[index].type = 'EventEmitter';
+        properties[index].directiveOutputAlias = alias;
+        properties[index].isDirectiveOutput = true;
       }
     });
 

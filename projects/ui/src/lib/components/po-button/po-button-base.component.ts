@@ -77,8 +77,6 @@ import { PoButtonType } from './enums/po-button-type.enum';
 })
 export class PoButtonBaseComponent {
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -88,8 +86,6 @@ export class PoButtonBaseComponent {
   readonly label = input<string>(undefined, { alias: 'p-label' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -117,8 +113,6 @@ export class PoButtonBaseComponent {
   readonly icon = input<string | TemplateRef<void>>(undefined, { alias: 'p-icon' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -220,8 +214,6 @@ export class PoButtonBaseComponent {
   }
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description

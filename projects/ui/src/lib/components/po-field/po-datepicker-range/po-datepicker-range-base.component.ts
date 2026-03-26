@@ -125,8 +125,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   @Input({ alias: 'p-auto-focus', transform: convertToBoolean }) autoFocus: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -262,8 +260,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   @Input('p-error-limit') errorLimit: boolean = false;
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
@@ -276,8 +272,6 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
   poHelperComponent = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /**
-   * @Input
-   *
    * @optional
    *
    * @description
