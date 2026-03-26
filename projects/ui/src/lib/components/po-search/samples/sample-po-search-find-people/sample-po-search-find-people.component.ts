@@ -4,7 +4,24 @@ import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.
 @Component({
   selector: 'sample-po-search-find-people',
   templateUrl: './sample-po-search-find-people.component.html',
-  styleUrls: ['./sample-po-search-find-people.component.css'],
+  styles: [
+    `
+      li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+      }
+    `,
+    `
+      li div {
+        width: 0.75em;
+        height: 0.75em;
+        border-radius: 50%;
+        background-color: green;
+        margin-left: 10px;
+      }
+    `
+  ],
   providers: [SamplePoSearchFindPeopleService],
   standalone: false
 })

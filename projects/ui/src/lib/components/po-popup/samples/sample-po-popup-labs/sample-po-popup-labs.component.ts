@@ -11,7 +11,14 @@ import {
 @Component({
   selector: 'sample-po-popup-labs',
   templateUrl: './sample-po-popup-labs.component.html',
-  styleUrls: ['./sample-po-popup-labs.component.css'],
+  styles: [
+    `
+      .sample-button-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoPopupLabsComponent implements OnInit {

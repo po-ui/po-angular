@@ -5,7 +5,14 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
 @Component({
   selector: 'sample-po-loading-overlay-labs',
   templateUrl: './sample-po-loading-overlay-labs.component.html',
-  styleUrls: ['./sample-po-loading-overlay-labs.component.css'],
+  styles: [
+    `
+      .sample-container {
+        position: relative;
+        height: 300px;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoLoadingOverlayLabsComponent implements OnInit {

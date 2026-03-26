@@ -10,7 +10,28 @@ import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-cu
   selector: 'sample-po-select-customer-registration',
   templateUrl: './sample-po-select-customer-registration.component.html',
   providers: [SamplePoSelectCustomerRegistrationService],
-  styleUrls: ['./sample-po-select-customer-registration.component.css'],
+  styles: [
+    `
+      .sample-select-option-template-container {
+        display: inline-flex;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .sample-select-option-template-margin {
+        margin: 5px;
+      }
+
+      .sample-select-option-template-label {
+        font-size: 16px;
+      }
+
+      .sample-select-option-template-value {
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, OnInit {

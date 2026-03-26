@@ -7,7 +7,6 @@ import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.ser
 @Component({
   selector: 'sample-po-combo-scheduling',
   templateUrl: './sample-po-combo-scheduling.component.html',
-  styleUrls: ['./sample-po-combo-scheduling.component.css'],
   providers: [SamplePoComboSchedulingService],
   standalone: false
 })

@@ -12,7 +12,16 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
 @Component({
   selector: 'sample-po-page-default-dashboard',
   templateUrl: './sample-po-page-default-dashboard.component.html',
-  styleUrls: ['./sample-po-page-default-dashboard.component.css'],
+  styles: [
+    `
+      .sample-widget-text-subtitle {
+        font-family: NunitoSans;
+        font-size: 14px;
+        text-align: center;
+        color: #9da7a9;
+      }
+    `
+  ],
   providers: [SampleDashboardService],
   standalone: false
 })

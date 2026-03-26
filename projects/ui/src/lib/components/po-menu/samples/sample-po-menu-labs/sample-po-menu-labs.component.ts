@@ -11,7 +11,20 @@ import {
 @Component({
   selector: 'sample-po-menu-labs',
   templateUrl: './sample-po-menu-labs.component.html',
-  styleUrls: ['./sample-po-menu-labs.component.css'],
+  styles: [
+    `
+      .sample-menu-circle {
+        border-radius: 14px;
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+      }
+
+      .sample-menu-vertical-middle {
+        vertical-align: middle;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {

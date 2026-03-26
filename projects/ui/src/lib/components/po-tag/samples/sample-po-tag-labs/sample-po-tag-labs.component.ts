@@ -11,7 +11,18 @@ import {
 @Component({
   selector: 'sample-po-tag-labs',
   templateUrl: './sample-po-tag-labs.component.html',
-  styleUrls: ['./sample-po-tag-labs.component.css'],
+  styles: [
+    `
+      .sample-tag-color-circle {
+        border-radius: 10px;
+        display: inline-block;
+        height: 16px;
+        margin-right: 4px;
+        vertical-align: middle;
+        width: 16px;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoTagLabsComponent implements OnInit {

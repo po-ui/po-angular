@@ -3,7 +3,14 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'sample-po-loading-overlay-basic',
   templateUrl: './sample-po-loading-overlay-basic.component.html',
-  styleUrls: ['./sample-po-loading-overlay-basic.component.css'],
+  styles: [
+    `
+      .sample-container {
+        position: relative;
+        height: 300px;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoLoadingOverlayBasicComponent {}

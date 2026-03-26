@@ -620,10 +620,6 @@ input[type='range'] {
   accent-color: #753399;
 }
 
-.theme-builder-row-gap {
-  row-gap: 8px;
-}
-
 @media (max-width: 960px) {
   .container-overflow {
     height: 30vh !important;

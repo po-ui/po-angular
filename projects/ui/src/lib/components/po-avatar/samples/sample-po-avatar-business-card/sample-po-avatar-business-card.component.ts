@@ -2,7 +2,14 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'sample-po-avatar-business-card',
-  styleUrls: ['./sample-po-avatar-business-card.component.css'],
+  styles: [
+    `
+      .sample-center-image {
+        display: block;
+        margin: 0 auto;
+      }
+    `
+  ],
   templateUrl: './sample-po-avatar-business-card.component.html',
   standalone: false
 })

@@ -14,7 +14,6 @@ import {
 @Component({
   selector: 'sample-po-progress-labs',
   templateUrl: './sample-po-progress-labs.component.html',
-  styleUrls: ['./sample-po-progress-labs.component.css'],
   standalone: false
 })
 export class SamplePoProgressLabsComponent implements OnInit {

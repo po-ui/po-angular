@@ -6,7 +6,23 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
 @Component({
   selector: 'sample-po-popup-email',
   templateUrl: './sample-po-popup-email.component.html',
-  styleUrls: ['./sample-po-popup-email.component.css'],
+  styles: [
+    `
+      .sample-logo-po {
+        height: 15%;
+        padding-top: 2.5%;
+      }
+
+      .sample-popup-header-template {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        color: #0c9abe;
+        padding-bottom: 5%;
+        padding-left: 25%;
+        padding-top: 5%;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoPopupEmailComponent implements OnInit {
