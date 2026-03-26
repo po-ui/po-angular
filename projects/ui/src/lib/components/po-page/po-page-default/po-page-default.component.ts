@@ -1,20 +1,13 @@
-import {
-  AfterContentInit,
-  Component,
-  OnChanges,
-  Renderer2,
-  SimpleChange,
-  ViewContainerRef,
-  inject
-} from '@angular/core';
+import { AfterContentInit, Component, inject, OnChanges, Renderer2, SimpleChange } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { isExternalLink, isTypeof, PoUtils } from '../../../utils/util';
+import { AnimaliaIconDictionary } from '../../po-icon/po-icon-dictionary';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
-import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
+import { backNavigationAriaLabels, PoPageDefaultBaseComponent } from './po-page-default-base.component';
 
 /**
  * @docsExtends PoPageDefaultBaseComponent
@@ -46,6 +39,9 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   private readonly renderer = inject(Renderer2);
   private readonly router = inject(Router);
 
+  readonly backIcon: string = AnimaliaIconDictionary.ICON_ARROW_BACK;
+  readonly backNavigationLabel: string;
+
   limitPrimaryActions: number = 3;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
@@ -56,6 +52,8 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     const languageService = inject(PoLanguageService);
 
     super(languageService);
+
+    this.backNavigationLabel = backNavigationAriaLabels[this.language] || backNavigationAriaLabels['en'];
   }
 
   public ngAfterContentInit(): void {
@@ -91,6 +89,14 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     this.visibleActions = this.getVisibleActions();
     this.setDropdownActions();
 
+    if (this.pageHeaderType === 'secondary') {
+      return true;
+    }
+
+    if (this.pageHeaderType === 'tertiary') {
+      return !!(this.title || (this.visibleActions && this.visibleActions.length));
+    }
+
     return !!(
       this.title ||
       (this.visibleActions && this.visibleActions.length) ||
@@ -99,8 +105,16 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   }
 
   setDropdownActions(): void {
-    if (this.visibleActions.length > this.limitPrimaryActions) {
-      this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
+    if (this.pageActionsLayout === 'dropdown') {
+      this.dropdownActions = this.visibleActions;
+    } else if (this.pageActionsLayout === 'mixed') {
+      this.dropdownActions = this.visibleActions.slice(1);
+    } else {
+      if (this.visibleActions.length > this.limitPrimaryActions) {
+        this.dropdownActions = this.visibleActions.slice(this.limitPrimaryActions - 1);
+      } else {
+        this.dropdownActions = [];
+      }
     }
   }
 
