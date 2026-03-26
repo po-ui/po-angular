@@ -19,9 +19,9 @@
   #popupRef
   p-hide-arrow
   p-is-corner-align
-  p-position="bottom-left"
+  [p-position]="position"
   [p-actions]="actions"
-  [p-custom-positions]="['bottom-left', 'top-left']"
+  [p-custom-positions]="popupCustomPositions"
   [p-size]="size"
   [p-target]="dropdownRef"
   [p-listbox-subitems]="true"
