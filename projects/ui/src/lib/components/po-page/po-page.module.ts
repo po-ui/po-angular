@@ -23,8 +23,9 @@ import { PoPageSlideModule } from './po-page-slide/po-page-slide.module';
 
 /**
  * @description
- * Módulo dos componentes po-page-default, po-page-detail, po-page-edit,
- * po-page-list e po-page-slide.
+ *
+ * Módulo responsável pelos componentes de estrutura de página: `po-page-default`, `po-page-detail`,
+ * `po-page-edit`, `po-page-list` e `po-page-slide`.
  */
 @NgModule({
   imports: [

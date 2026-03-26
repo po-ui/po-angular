@@ -4,11 +4,12 @@ import {
   PoBreadcrumb,
   PoBreadcrumbItem,
   PoCheckboxGroupOption,
+  PoNotificationService,
+  PoPageAction,
+  PoPageDefaultLiterals,
   PoRadioGroupOption,
   PoSelectOption
 } from '@po-ui/ng-components';
-
-import { PoNotificationService, PoPageAction, PoPageDefaultLiterals } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-default-labs',
@@ -18,16 +19,23 @@ import { PoNotificationService, PoPageAction, PoPageDefaultLiterals } from '@po-
 export class SamplePoPageDefaultLabsComponent implements OnInit {
   private poNotification = inject(PoNotificationService);
 
-  action: PoPageAction;
-  actions: Array<PoPageAction>;
-  breadcrumb: PoBreadcrumb;
-  breadcrumbItem: PoBreadcrumbItem;
-  breadcrumbParams: any;
-  componentsSize: string;
-  customLiterals: PoPageDefaultLiterals;
-  literals: string;
-  title: string;
-  subtitle: string;
+  action: PoPageAction = { label: '' };
+  actions: Array<PoPageAction> = [];
+  breadcrumb: PoBreadcrumb = { items: [] };
+  breadcrumbItem: PoBreadcrumbItem = { label: undefined, link: undefined };
+  breadcrumbParams: { property?: string; value?: string } = {};
+  componentsSize: string = 'medium';
+  customLiterals: PoPageDefaultLiterals | undefined;
+  literals: string = '';
+  pageActionsLayout: string = 'default';
+  pageHeaderType: string = 'primary';
+  subtitle: string = '';
+  title: string = 'PO Page Default';
+
+  public readonly actionKindOptions: Array<PoSelectOption> = [
+    { label: 'primary', value: 'primary' },
+    { label: 'secondary', value: 'secondary' }
+  ];
 
   public readonly actionOptions: Array<PoCheckboxGroupOption> = [
     { label: 'Disabled', value: 'disabled' },
@@ -48,6 +56,18 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     { value: 'fa fa-podcast', label: 'fa fa-podcast' }
   ];
 
+  public readonly pageActionsLayoutOptions: Array<PoSelectOption> = [
+    { label: 'default', value: 'default' },
+    { label: 'dropdown', value: 'dropdown' },
+    { label: 'mixed', value: 'mixed' }
+  ];
+
+  public readonly pageHeaderTypeOptions: Array<PoSelectOption> = [
+    { label: 'primary', value: 'primary' },
+    { label: 'secondary', value: 'secondary' },
+    { label: 'tertiary', value: 'tertiary' }
+  ];
+
   public readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Danger', value: 'danger' },
     { label: 'Default', value: 'default' }
@@ -58,7 +78,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   }
 
   addAction(action: PoPageAction) {
-    const newAction = Object.assign({}, action);
+    const newAction: PoPageAction = { ...action };
     newAction.action = newAction.action ? this.showAction.bind(this, newAction.action) : undefined;
     this.actions = [...this.actions, newAction];
 
@@ -71,7 +91,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   }
 
   addBreadcrumbParam() {
-    const newParam = { [this.breadcrumbParams.property]: this.breadcrumbParams.value };
+    const newParam = { [this.breadcrumbParams.property || '']: this.breadcrumbParams.value };
 
     if (this.breadcrumb.params) {
       this.breadcrumb.params = Object.assign(this.breadcrumb.params, newParam);
@@ -90,22 +110,30 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     }
   }
 
+  onBack() {
+    this.poNotification.information('Back button clicked (p-back event)');
+  }
+
   restore() {
+    this.action = { label: '' };
     this.actions = [];
     this.breadcrumb = { items: [] };
     this.breadcrumbItem = { label: undefined, link: undefined };
     this.breadcrumbParams = {};
     this.componentsSize = 'medium';
+    this.customLiterals = undefined;
     this.literals = '';
-    this.title = 'PO Page Default';
+    this.pageActionsLayout = 'default';
+    this.pageHeaderType = 'primary';
     this.subtitle = '';
+    this.title = 'PO Page Default';
     this.restoreActionForm();
   }
 
   restoreActionForm() {
     this.action = {
-      label: undefined,
-      visible: null
+      label: '',
+      visible: true
     };
   }
 
