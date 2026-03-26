@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.7.0](https://github.com/po-ui/po-angular/compare/v21.6.0...v21.7.0) (2026-03-26)
+
+
+### Features
+
+* **fields:** inclui estado de loading nos componentes ([2f4cb44](https://github.com/po-ui/po-angular/commit/2f4cb44349bc03e1bd7f231f33685fba336eb15e))
+
+
+### Bug Fixes
+
+* **header:** implementa correção para posicionamento do popover ([2977bc6](https://github.com/po-ui/po-angular/commit/2977bc61c6d3d4f930e8d52f97f646e8ea5bd6b3))
+
 ## [21.6.0](https://github.com/po-ui/po-angular/compare/v21.5.0...v21.6.0) (2026-03-17)
 
 
