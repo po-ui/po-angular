@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.7](https://github.com/po-ui/po-angular/compare/v19.39.6...v19.39.7) (2026-03-26)
+
+
+### Bug Fixes
+
+* **header:** implementa correção para posicionamento do popover ([3c89d32](https://github.com/po-ui/po-angular/commit/3c89d32bc27f85475db421b2ea0955e7f7438406))
+
 ### [19.39.6](https://github.com/po-ui/po-angular/compare/v19.39.5...v19.39.6) (2026-03-10)
 
 Compatibilidade com @totvs/thf-components@19.39.6
