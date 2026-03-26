@@ -2,11 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "types": [],
-    "paths": {
-      "@po-ui/ng-components": ["./projects/ui/src/public-api"],
-      "@po-ui/ng-components/*": ["./projects/ui/src/*"]
-    }
+    "types": []
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.d.ts"]

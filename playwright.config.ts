@@ -20,7 +20,7 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'npx ng serve app --port 4200 --host 0.0.0.0',
+    command: 'npx ng serve visual-app --port 4200 --host 0.0.0.0',
     url: 'http://localhost:4200',
     reuseExistingServer: !process.env['CI'],
     timeout: 120000
