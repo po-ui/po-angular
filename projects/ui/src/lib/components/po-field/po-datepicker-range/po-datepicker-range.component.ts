@@ -504,8 +504,8 @@ export class PoDatepickerRangeComponent
           this.calendarPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
           this.calendarPicker.nativeElement.scrollWidth;
 
-        this.calendarPicker.nativeElement.style.height = scrollHeight + 'px';
-        this.calendarPicker.nativeElement.style.width = scrollWidth + 'px';
+        this.renderer.setStyle(this.calendarPicker.nativeElement, 'height', scrollHeight + 'px');
+        this.renderer.setStyle(this.calendarPicker.nativeElement, 'width', scrollWidth + 'px');
 
         this.controlPosition.setElements(
           this.calendarPicker.nativeElement,

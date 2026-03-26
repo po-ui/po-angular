@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, Renderer2, ViewChild, inject } from '@angular/core';
 import { PoLanguageService } from './../../services/po-language/po-language.service';
 
 import { PoTagIcon } from './enums/po-tag-icon.enum';
@@ -36,6 +36,7 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   private el = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   @ViewChild('tagContainer', { static: true }) tagContainer: ElementRef;
   @ViewChild('tagClose', { static: true }) tagClose: ElementRef;
@@ -131,9 +132,9 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
       computedStyle?.backgroundColor
     ) {
       const textColor = getTextColorFromBackgroundColor(computedStyle.backgroundColor);
-      this.poTag.nativeElement.style.color = textColor;
+      this.renderer.setStyle(this.poTag.nativeElement, 'color', textColor);
     } else {
-      this.poTag.nativeElement.style.color = '';
+      this.renderer.removeStyle(this.poTag.nativeElement, 'color');
     }
   };
 

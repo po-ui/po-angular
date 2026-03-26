@@ -11,7 +11,7 @@
 </div>
 
 @if (isDropdownOpen) {
-  <div class="po-tab-dropdown-container" [ngStyle]="dropdownStyles">
+  <div class="po-tab-dropdown-container" [style.top]="dropdownTop" [style.max-width]="dropdownMaxWidth" [style.right]="dropdownRight">
     <po-listbox
       #listbox
       #poListBoxRef

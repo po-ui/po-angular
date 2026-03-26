@@ -9,6 +9,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  Renderer2,
   SimpleChanges,
   ViewChild,
   ViewChildren,
@@ -111,6 +112,7 @@ use([
 })
 export class PoChartComponent extends PoChartBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   el = inject(ElementRef);
+  private renderer = inject(Renderer2);
   private readonly currencyPipe = inject(CurrencyPipe);
   private readonly decimalPipe = inject(DecimalPipe);
   private readonly colorService = inject(PoColorService);
@@ -491,8 +493,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
 
     this.tooltipText = this.resolveCustomTooltip(params, name, seriesName, valueLabel);
 
-    divTooltipElement.style.left = `${params.event.offsetX + chartElement.offsetLeft + 3}px`;
-    divTooltipElement.style.top = `${chartElement.offsetTop + params.event.offsetY - 2}px`;
+    this.renderer.setStyle(divTooltipElement, 'left', `${params.event.offsetX + chartElement.offsetLeft + 3}px`);
+    this.renderer.setStyle(divTooltipElement, 'top', `${chartElement.offsetTop + params.event.offsetY - 2}px`);
     this.poTooltip.last.toggleTooltipVisibility(true);
   }
 

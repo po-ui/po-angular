@@ -4,7 +4,7 @@
   [class.po-badge-border]="showBorder"
   [attr.data-status]="status"
   [ariaLabel]="notificationLabel"
-  [ngStyle]="customColor && !status ? { 'background-color': customColor } : {}"
+  [style.background-color]="customColor && !status ? customColor : ''"
 >
   @if (!isNotification && size !== 'small' && badgeIcon && status !== 'disabled') {
     <po-icon [p-icon]="badgeIcon"></po-icon>

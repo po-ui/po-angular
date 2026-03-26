@@ -24,13 +24,13 @@
         [class.po-tag-removable]="removable"
         [class.po-tag-disabled]="disabled && removable"
         [ngClass]="tagColor"
-        [ngStyle]="styleTag()"
+        [style.background-color]="styleTag()['background-color'] || ''"
       >
         @if (icon && !removable) {
           <po-icon
             class="po-tag-icon"
             [p-icon]="!type || forceIcon ? icon : iconFromType"
-            [ngStyle]="!type && customTextColor ? { 'color': customTextColor } : ''"
+            [style.color]="!type && customTextColor ? customTextColor : ''"
           >
           </po-icon>
         }
@@ -42,7 +42,7 @@
           [p-tooltip]="getWidthTag() ? value : ''"
           p-tooltip-position="top"
         >
-          <span [ngStyle]="!type && customTextColor && !removable ? { 'color': customTextColor } : ''">{{
+          <span [style.color]="!type && customTextColor && !removable ? customTextColor : ''">{{
             value
           }}</span>
         </div>

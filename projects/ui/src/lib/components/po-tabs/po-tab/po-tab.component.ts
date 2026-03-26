@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnChanges, Renderer2, SimpleChanges, inject } from '@angular/core';
 
 import { PoTabBaseComponent } from './po-tab-base.component';
 import { PoTabsService } from '../po-tabs.service';
@@ -13,6 +13,7 @@ import { PoTabsService } from '../po-tabs.service';
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit, OnChanges {
   elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
   private tabsService = inject(PoTabsService);
 
   // Propriedade interna utilizada no po-context-tabs
@@ -34,6 +35,10 @@ export class PoTabComponent extends PoTabBaseComponent implements AfterContentIn
   }
 
   protected setDisplayOnActive() {
-    this.elementRef.nativeElement.style.display = this.active ? '' : 'none';
+    if (this.active) {
+      this.renderer.removeStyle(this.elementRef.nativeElement, 'display');
+    } else {
+      this.renderer.setStyle(this.elementRef.nativeElement, 'display', 'none');
+    }
   }
 }

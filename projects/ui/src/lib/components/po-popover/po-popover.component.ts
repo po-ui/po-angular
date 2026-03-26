@@ -133,7 +133,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       if (this.cornerAligned && !this.width) {
         const el = this.popoverElement.nativeElement;
 
-        el.style.width = 'auto';
+        this.renderer.setStyle(el, 'width', 'auto');
         const width = el.scrollWidth;
         this.widthPopover = width;
 
@@ -162,7 +162,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   setOpacity(value: number): void {
-    this.popoverElement.nativeElement.style.opacity = value;
+    this.renderer.setStyle(this.popoverElement.nativeElement, 'opacity', value);
   }
 
   setPopoverPosition() {

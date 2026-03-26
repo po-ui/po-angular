@@ -625,7 +625,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private setDialogPickerStyleDisplay(value: string): void {
     if (this.dialogPicker && this.dialogPicker.nativeElement) {
-      this.dialogPicker.nativeElement.style.display = value;
+      if (value) {
+        this.renderer.setStyle(this.dialogPicker.nativeElement, 'display', value);
+      } else {
+        this.renderer.removeStyle(this.dialogPicker.nativeElement, 'display');
+      }
     }
   }
 
@@ -644,8 +648,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
           this.dialogPicker.nativeElement.querySelector('.po-calendar')?.scrollWidth ??
           this.dialogPicker.nativeElement.scrollWidth;
 
-        this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
-        this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
+        this.renderer.setStyle(this.dialogPicker.nativeElement, 'height', scrollHeight + 'px');
+        this.renderer.setStyle(this.dialogPicker.nativeElement, 'width', scrollWidth + 'px');
         this.dialogPicker.nativeElement.style.setProperty('--po-calendar-width', scrollWidth + 'px');
 
         this.controlPosition.setElements(

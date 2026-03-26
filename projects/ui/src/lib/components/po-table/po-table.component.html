@@ -254,10 +254,7 @@
                   JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                   (sortedColumn.ascending || !sortedColumn.ascending)
               }"
-              [ngStyle]="{
-                'width':
-                  height > 0 && !virtualScroll ? (!hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto') : ''
-              }"
+              [style.width]="getColumnHeaderWidth(column)"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               [class.po-table-column-drag-box]="this.isDraggable"
               (click)="sortColumn(column)"
@@ -294,10 +291,7 @@
                   JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                   (sortedColumn.ascending || !sortedColumn.ascending)
               }"
-              [ngStyle]="{
-                'width':
-                  height > 0 && !virtualScroll ? (!hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto') : ''
-              }"
+              [style.width]="getColumnHeaderWidth(column)"
               [class.po-table-header-subtitle]="column.type === 'subtitle'"
               (click)="sortColumn(column)"
               [pFrozenColumn]="column.fixed"
@@ -617,7 +611,7 @@
                     JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                     (sortedColumn.ascending || !sortedColumn.ascending)
                 }"
-                [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
+                [style.width]="!hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto'"
                 [class.po-table-header-subtitle]="column.type === 'subtitle'"
                 [class.po-table-column-drag-box]="this.isDraggable"
                 (click)="sortColumn(column)"
@@ -655,7 +649,7 @@
                     JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
                     (sortedColumn.ascending || !sortedColumn.ascending)
                 }"
-                [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
+                [style.width]="!hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto'"
                 [class.po-table-header-subtitle]="column.type === 'subtitle'"
                 (click)="sortColumn(column)"
                 [pFrozenColumn]="column.fixed"

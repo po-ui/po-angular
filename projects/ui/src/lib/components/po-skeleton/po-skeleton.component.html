@@ -1,4 +1,11 @@
-<div class="po-skeleton-wrapper" [ngClass]="computedClasses()" [ngStyle]="computedStyles()" aria-hidden="true"></div>
+<div
+  class="po-skeleton-wrapper"
+  [ngClass]="computedClasses()"
+  [style.width]="computedStyles().width"
+  [style.height]="computedStyles().height"
+  [style.border-radius]="computedStyles()['border-radius']"
+  aria-hidden="true"
+></div>
 @if (ariaLabel()) {
   <span class="po-skeleton-aria-label" role="status" aria-live="polite">{{ ariaLabel() }}</span>
 }

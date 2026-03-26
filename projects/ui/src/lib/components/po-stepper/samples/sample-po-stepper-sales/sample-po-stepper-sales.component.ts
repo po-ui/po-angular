@@ -8,6 +8,13 @@ import { delay, finalize, map, tap } from 'rxjs/operators';
 @Component({
   selector: 'sample-po-stepper-sales',
   templateUrl: './sample-po-stepper-sales.component.html',
+  styles: [
+    `
+      .sample-stepper-position-relative {
+        position: relative;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoStepperSalesComponent {

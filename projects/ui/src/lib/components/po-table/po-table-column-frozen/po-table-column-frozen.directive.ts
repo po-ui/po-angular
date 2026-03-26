@@ -56,7 +56,7 @@ export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
         if (next) {
           right = this.getOuterWidth(next) + (parseFloat(next.style.right) || 0);
         }
-        this.el.nativeElement.style.right = right + 'px';
+        this.renderer.setStyle(this.el.nativeElement, 'right', right + 'px');
       } else {
         let left = 0;
         const prev = this.el.nativeElement.previousElementSibling;
@@ -71,7 +71,7 @@ export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
         ) {
           left = this.getOuterWidth(prev) + (parseFloat(prev.style.left) || 0);
         }
-        this.el.nativeElement.style.left = left - 1 + 'px';
+        this.renderer.setStyle(this.el.nativeElement, 'left', left - 1 + 'px');
         this.renderer.addClass(this.el.nativeElement, 'po-table-column-fixed');
       }
 
@@ -80,8 +80,8 @@ export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
       if (filterRow) {
         const index = this.index(this.el.nativeElement);
         if (filterRow.children && filterRow.children[index]) {
-          filterRow.children[index].style.left = this.el.nativeElement.style.left;
-          filterRow.children[index].style.right = this.el.nativeElement.style.right;
+          this.renderer.setStyle(filterRow.children[index], 'left', this.el.nativeElement.style.left);
+          this.renderer.setStyle(filterRow.children[index], 'right', this.el.nativeElement.style.right);
         }
       }
     }
@@ -106,7 +106,7 @@ export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
       // Calcula o novo 'left' para cada elemento anterior e aplica
       for (let i = prevElements.length - 1; i >= 0; i--) {
         const prevWidth = this.getOuterWidth(prevElements[i], true);
-        prevElements[i].style.left = leftAccumulator - 1 + 'px';
+        this.renderer.setStyle(prevElements[i], 'left', leftAccumulator - 1 + 'px');
         leftAccumulator += prevWidth;
       }
     }

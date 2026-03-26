@@ -110,9 +110,9 @@ export class PoToasterComponent extends PoToasterBaseComponent implements AfterV
       }
 
       if (this.orientation === PoToasterOrientation.Top) {
-        this.toaster.nativeElement.style.top = this.margin + 'px';
+        this.renderer.setStyle(this.toaster.nativeElement, 'top', this.margin + 'px');
       } else {
-        this.toaster.nativeElement.style.bottom = this.margin + 'px';
+        this.renderer.setStyle(this.toaster.nativeElement, 'bottom', this.margin + 'px');
       }
     });
   }

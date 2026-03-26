@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   QueryList,
+  Renderer2,
   ViewChild,
   ViewChildren,
   OnChanges,
@@ -65,6 +66,7 @@ const poSlideTiming = '250ms ease';
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   private builder = inject(AnimationBuilder);
+  private renderer = inject(Renderer2);
 
   @ContentChild(PoSlideContentTemplateDirective, { static: true })
   slideContentTemplate: PoSlideContentTemplateDirective;
@@ -282,7 +284,7 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
 
   private setDefaultHeight(height: number) {
     if ((height && height <= poSlideMinHeight) || (!height && this.isImageSlide)) {
-      this.slide.nativeElement.style.height = `${poSlideDefaultHeight}px`;
+      this.renderer.setStyle(this.slide.nativeElement, 'height', `${poSlideDefaultHeight}px`);
       this.imageHeight = poSlideDefaultHeight;
     } else {
       this.imageHeight = undefined;
@@ -291,7 +293,7 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
 
   private setHeight(height: number) {
     if (height && height > poSlideMinHeight) {
-      this.slide.nativeElement.style.height = `${height}px`;
+      this.renderer.setStyle(this.slide.nativeElement, 'height', `${height}px`);
       this.imageHeight = height;
     } else {
       this.setDefaultHeight(height);

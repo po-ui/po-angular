@@ -7,6 +7,7 @@ import {
   Input,
   OnChanges,
   Output,
+  Renderer2,
   SimpleChanges,
   ViewChild,
   inject
@@ -29,6 +30,7 @@ import { convertToBoolean } from '../../../utils/util';
 export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   changeDetector = inject(ChangeDetectorRef);
   private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   @ViewChild('tabButtom', { static: true }) tabButtom: ElementRef;
 
@@ -100,6 +102,10 @@ export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   }
 
   private setDisplayOnHide() {
-    this.elementRef.nativeElement.style.display = this.hide ? 'none' : '';
+    if (this.hide) {
+      this.renderer.setStyle(this.elementRef.nativeElement, 'display', 'none');
+    } else {
+      this.renderer.removeStyle(this.elementRef.nativeElement, 'display');
+    }
   }
 }

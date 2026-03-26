@@ -6,6 +6,7 @@ import {
   HostListener,
   Input,
   Output,
+  Renderer2,
   ViewChild,
   inject
 } from '@angular/core';
@@ -29,6 +30,7 @@ import { PoTabComponent } from '../po-tab/po-tab.component';
 })
 export class PoTabDropdownComponent implements AfterViewInit {
   private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;
 
@@ -52,7 +54,9 @@ export class PoTabDropdownComponent implements AfterViewInit {
   @Output('p-click') click = new EventEmitter<any>();
 
   isDropdownOpen: boolean = false;
-  dropdownStyles: any = {};
+  dropdownTop: string = '';
+  dropdownMaxWidth: string = '';
+  dropdownRight: string = '';
 
   ngAfterViewInit(): void {
     this.setDropdownPosition();
@@ -84,7 +88,10 @@ export class PoTabDropdownComponent implements AfterViewInit {
     const dropdownWidth = 300;
 
     const isInsidePage = this.elementRef.nativeElement.closest('.po-page-content');
-    this.dropdownStyles = this.calculateDropdownStyles(buttonRect, tabsContainerRect, dropdownWidth, isInsidePage);
+    const styles = this.calculateDropdownStyles(buttonRect, tabsContainerRect, dropdownWidth, isInsidePage);
+    this.dropdownTop = styles.top;
+    this.dropdownMaxWidth = styles.maxWidth;
+    this.dropdownRight = styles.right;
   }
 
   private calculateDropdownStyles(

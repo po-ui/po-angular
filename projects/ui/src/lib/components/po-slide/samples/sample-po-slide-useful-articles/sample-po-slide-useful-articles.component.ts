@@ -3,6 +3,17 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'sample-po-slide-useful-articles',
   templateUrl: './sample-po-slide-useful-articles.component.html',
+  styles: [
+    `
+      .sample-slide-bg {
+        background-size: cover;
+        height: 100%;
+      }
+      .sample-slide-content-bg {
+        background: white;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoSlideUsefulArticlesComponent {

@@ -4,7 +4,7 @@
     <div
       class="po-page-slide-container po-page-slide-right po-page-slide-{{ size }}"
       [@slide]="slideParams"
-      [ngStyle]="{ 'width': flexibleWidth ? '' : size === 'auto' ? 'auto' : '' }"
+      [style.width]="flexibleWidth ? '' : size === 'auto' ? 'auto' : ''"
     >
       <div class="po-page-slide-content" tabindex="-1" #pageContent>
         <div class="po-page-slide-header">

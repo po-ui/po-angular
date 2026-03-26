@@ -5,6 +5,13 @@ import { PoCheckboxGroupOption, PoNotificationService, PoPopupAction, PoSelectOp
 @Component({
   selector: 'sample-po-widget-labs',
   templateUrl: './sample-po-widget-labs.component.html',
+  styles: [
+    `
+      .sample-widget-align-end {
+        align-items: flex-end;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoWidgetLabsComponent implements OnInit {

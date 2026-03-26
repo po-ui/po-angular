@@ -122,8 +122,8 @@ export class PoContextTabsComponent extends PoTabsComponent {
           t.widthButton = undefined;
           firstItemDropdown.nativeElement.hidden = false;
           this.sumOfWidth += width;
-          firstItemDropdown.nativeElement.style.width = '';
-          firstItemDropdown.nativeElement.style.display = 'inline-block';
+          this.renderer.removeStyle(firstItemDropdown.nativeElement, 'width');
+          this.renderer.setStyle(firstItemDropdown.nativeElement, 'display', 'inline-block');
           this.quantityTabsButton = this.quantityTabsButton + 1;
 
           if (this.byQuantityFunction > 0 && this.byQuantityFunction === this.quantityTabsButton) {
@@ -169,7 +169,7 @@ export class PoContextTabsComponent extends PoTabsComponent {
             }
           } else {
             initDropdown = true;
-            element.nativeElement.style.display = 'none';
+            this.renderer.setStyle(element.nativeElement, 'display', 'none');
             element.nativeElement.hidden = true;
           }
 
@@ -201,14 +201,14 @@ export class PoContextTabsComponent extends PoTabsComponent {
       const currentTab = this.initialTabsWidth.find(t => t.id === tab.nativeElement.id);
       const quantityTabs = this.byQuantityFunction || this.quantityTabsButton;
       if (tab.nativeElement.hidden && !this.tabsChildren['_results'][indexTab]?.hide) {
-        tab.nativeElement.style.display = 'inline-block';
+        this.renderer.setStyle(tab.nativeElement, 'display', 'inline-block');
         tab.nativeElement.hidden = false;
       }
 
       if (!currentTab) {
         this.initialTabsWidth.push({ id: tab.nativeElement.id, width: tab.nativeElement.offsetWidth });
         if (index > quantityTabs) {
-          tab.nativeElement.style.display = 'none';
+          this.renderer.setStyle(tab.nativeElement, 'display', 'none');
           tab.nativeElement.hidden = true;
         }
         this.tabsChildren['_results'] = this.tabsChildren['_results'].filter(item => !item.removed);
@@ -230,20 +230,20 @@ export class PoContextTabsComponent extends PoTabsComponent {
     const lastTab = showedTabs[showedTabs.length - 1];
     const lastTabWidth = lastTab.nativeElement.offsetWidth;
 
-    lastTab.nativeElement.style.display = 'none';
+    this.renderer.setStyle(lastTab.nativeElement, 'display', 'none');
     lastTab.nativeElement.hidden = true;
 
     const currentTabIndex = this.tabButton.toArray().findIndex(t => t.nativeElement.id === tab.id);
     const currentTab = this.tabButton.toArray()[currentTabIndex].nativeElement;
     currentTab.hidden = false;
-    currentTab.style.display = 'inline-block';
+    this.renderer.setStyle(currentTab, 'display', 'inline-block');
 
     this.reorderTabs(tab, lastTab.nativeElement);
     tab.widthButton = lastTabWidth;
     if (initialWidth.width > lastTabWidth) {
       tab.showTooltip = true;
     }
-    currentTab.style.width = `${lastTabWidth}px`;
+    this.renderer.setStyle(currentTab, 'width', `${lastTabWidth}px`);
     this.handleKeyboardNavigationTab();
 
     if (eventEmitter) {

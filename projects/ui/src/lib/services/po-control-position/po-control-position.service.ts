@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, Renderer2, inject } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -43,6 +43,7 @@ const poControlPositionSidesDefault: Array<string> = [
   providedIn: 'root'
 })
 export class PoControlPositionService {
+  private renderer = inject(Renderer2);
   private arrowDirection: string;
   private customPositions: Array<string>;
   private differenceDiagonalToWidthArrow: number = 3;
@@ -265,8 +266,8 @@ export class PoControlPositionService {
   }
 
   private setAlignedBottomPositions(displacement: number, sizesAndPositions) {
-    this.element.style.top = sizesAndPositions.target.bottom + this.elementOffset + 'px';
-    this.element.style.left = sizesAndPositions.target.left - displacement + 'px';
+    this.renderer.setStyle(this.element, 'top', sizesAndPositions.target.bottom + this.elementOffset + 'px');
+    this.renderer.setStyle(this.element, 'left', sizesAndPositions.target.left - displacement + 'px');
   }
 
   private setAlignedElementPosition(position: string) {
@@ -299,9 +300,12 @@ export class PoControlPositionService {
   }
 
   private setAlignedTopPositions(displacement: number, sizesAndPositions) {
-    this.element.style.top =
-      sizesAndPositions.target.top - sizesAndPositions.element.height - this.elementOffset + 'px';
-    this.element.style.left = sizesAndPositions.target.left - displacement + 'px';
+    this.renderer.setStyle(
+      this.element,
+      'top',
+      sizesAndPositions.target.top - sizesAndPositions.element.height - this.elementOffset + 'px'
+    );
+    this.renderer.setStyle(this.element, 'left', sizesAndPositions.target.left - displacement + 'px');
   }
 
   private setArrowDirection(elementPosition: string) {
@@ -334,8 +338,12 @@ export class PoControlPositionService {
   }
 
   private setBottomPositions(displacement: number, sizesAndPositions) {
-    this.element.style.top = sizesAndPositions.target.bottom + this.elementOffset + 'px';
-    this.element.style.left = sizesAndPositions.target.left + sizesAndPositions.target.width / 2 - displacement + 'px';
+    this.renderer.setStyle(this.element, 'top', sizesAndPositions.target.bottom + this.elementOffset + 'px');
+    this.renderer.setStyle(
+      this.element,
+      'left',
+      sizesAndPositions.target.left + sizesAndPositions.target.width / 2 - displacement + 'px'
+    );
   }
 
   private setElementPosition(position: string) {
@@ -396,25 +404,43 @@ export class PoControlPositionService {
 
   private setElementWidth() {
     if (this.isSetElementWidth && this.targetElement) {
-      this.element.style.width = `${this.targetElement.clientWidth}px`;
+      this.renderer.setStyle(this.element, 'width', `${this.targetElement.clientWidth}px`);
     }
   }
 
   private setLeftPositions(displacement: number, sizesAndPositions) {
-    this.element.style.top = sizesAndPositions.target.top - displacement + sizesAndPositions.target.height / 2 + 'px';
-    this.element.style.left =
-      sizesAndPositions.target.left - sizesAndPositions.element.width - this.elementOffset + 'px';
+    this.renderer.setStyle(
+      this.element,
+      'top',
+      sizesAndPositions.target.top - displacement + sizesAndPositions.target.height / 2 + 'px'
+    );
+    this.renderer.setStyle(
+      this.element,
+      'left',
+      sizesAndPositions.target.left - sizesAndPositions.element.width - this.elementOffset + 'px'
+    );
   }
 
   private setRightPositions(displacement: number, sizesAndPositions) {
-    this.element.style.top = sizesAndPositions.target.top - displacement + sizesAndPositions.target.height / 2 + 'px';
-    this.element.style.left = sizesAndPositions.target.right + this.elementOffset + 'px';
+    this.renderer.setStyle(
+      this.element,
+      'top',
+      sizesAndPositions.target.top - displacement + sizesAndPositions.target.height / 2 + 'px'
+    );
+    this.renderer.setStyle(this.element, 'left', sizesAndPositions.target.right + this.elementOffset + 'px');
   }
 
   private setTopPositions(displacement: number, sizesAndPositions) {
-    this.element.style.top =
-      sizesAndPositions.target.top - sizesAndPositions.element.height - this.elementOffset + 'px';
-    this.element.style.left = sizesAndPositions.target.left + sizesAndPositions.target.width / 2 - displacement + 'px';
+    this.renderer.setStyle(
+      this.element,
+      'top',
+      sizesAndPositions.target.top - sizesAndPositions.element.height - this.elementOffset + 'px'
+    );
+    this.renderer.setStyle(
+      this.element,
+      'left',
+      sizesAndPositions.target.left + sizesAndPositions.target.width / 2 - displacement + 'px'
+    );
   }
 
   private verifySubPositions(position: string) {

@@ -364,6 +364,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return !this.columns.some(column => !column.width);
   }
 
+  getColumnHeaderWidth(column: PoTableColumn): string {
+    if (this.height > 0 && !this.virtualScroll) {
+      return !this.hasItems ? '100%' : this.applyFixedColumns() ? column.width : 'auto';
+    }
+    return '';
+  }
+
   /**
    * Método que colapsa uma linha com detalhe quando executada.
    *

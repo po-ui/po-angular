@@ -5,6 +5,17 @@ import { PoSlideComponent } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-slide-external-controls',
   templateUrl: './sample-po-slide-external-controls.component.html',
+  styles: [
+    `
+      .sample-slide-bg {
+        background-size: cover;
+        height: 100%;
+      }
+      .sample-slide-content-bg {
+        background: white;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoSlideExternalControlsComponent {

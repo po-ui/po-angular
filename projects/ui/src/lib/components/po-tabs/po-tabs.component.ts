@@ -8,6 +8,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  Renderer2,
   ViewChild,
   ViewChildren,
   inject
@@ -93,6 +94,7 @@ const poTabsMaxNumberOfTabs = 5;
 })
 export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   changeDetector = inject(ChangeDetectorRef);
+  protected renderer = inject(Renderer2);
   private languageService = inject(PoLanguageService);
   private tabsService = inject(PoTabsService);
 
@@ -205,7 +207,7 @@ export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, Afte
 
     this.reorderTabs(tab);
     tab.widthButton = lastTabWidth;
-    this.tabButton.last.nativeElement.style.width = `${lastTabWidth}px`;
+    this.renderer.setStyle(this.tabButton.last.nativeElement, 'width', `${lastTabWidth}px`);
     this.handleKeyboardNavigationTab();
 
     if (eventEmitter) {

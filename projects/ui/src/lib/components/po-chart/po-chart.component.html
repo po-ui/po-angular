@@ -50,14 +50,10 @@
       #chartContainer
       id="chart-id"
       class="po-chart"
-      [ngStyle]="
-        showHeader
-          ? {
-              height: height - headerHeight - paddingContainerGauge - descriptionHeight + 'px',
-              'margin-top': chartMarginTop
-            }
-          : { height: height - paddingContainerGauge - descriptionHeight + 'px', 'margin-top': chartMarginTop }
-      "
+      [style.height]="showHeader
+        ? (height - headerHeight - paddingContainerGauge - descriptionHeight + 'px')
+        : (height - paddingContainerGauge - descriptionHeight + 'px')"
+      [style.margin-top]="chartMarginTop"
     ></div>
     <div
       #tooltipElement

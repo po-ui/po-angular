@@ -14,6 +14,14 @@ import {
 @Component({
   selector: 'sample-po-progress-labs',
   templateUrl: './sample-po-progress-labs.component.html',
+  styles: [
+    `
+      .sample-progress-grid {
+        display: grid;
+        gap: 16px;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoProgressLabsComponent implements OnInit {

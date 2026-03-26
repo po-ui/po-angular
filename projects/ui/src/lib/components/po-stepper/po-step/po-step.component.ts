@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, Input, TemplateRef, inject } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, Renderer2, TemplateRef, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
@@ -49,6 +49,7 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 })
 export class PoStepComponent implements AfterContentInit {
   private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   /**
    * @optional
@@ -128,7 +129,11 @@ export class PoStepComponent implements AfterContentInit {
   }
 
   protected setDisplayOnActiveOrError() {
-    this.elementRef.nativeElement.style.display =
-      this.status === PoStepperStatus.Active || this.status === PoStepperStatus.Error ? '' : 'none';
+    const displayValue = this.status === PoStepperStatus.Active || this.status === PoStepperStatus.Error ? '' : 'none';
+    if (displayValue) {
+      this.renderer.setStyle(this.elementRef.nativeElement, 'display', displayValue);
+    } else {
+      this.renderer.removeStyle(this.elementRef.nativeElement, 'display');
+    }
   }
 }

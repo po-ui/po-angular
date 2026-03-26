@@ -5,6 +5,7 @@ import {
   Component,
   ElementRef,
   forwardRef,
+  Renderer2,
   ViewChild,
   inject,
   OnChanges,
@@ -64,6 +65,7 @@ import { PoHelperComponent } from '../../po-helper';
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
   private el = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
@@ -322,7 +324,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (!textarea) return;
 
     if (this.loading) {
-      textarea.style.height = '';
+      this.renderer.removeStyle(textarea, 'height');
 
       const style = getComputedStyle(textarea);
       const lineHeight = Number.parseFloat(style.lineHeight);
@@ -332,9 +334,9 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
       const borderBottom = Number.parseFloat(style.borderBottomWidth);
 
       const calculatedHeight = this.rows * lineHeight + paddingTop + paddingBottom + borderTop + borderBottom;
-      textarea.style.height = `${calculatedHeight}px`;
+      this.renderer.setStyle(textarea, 'height', `${calculatedHeight}px`);
     } else {
-      textarea.style.height = '';
+      this.renderer.removeStyle(textarea, 'height');
     }
   }
 

@@ -5,6 +5,36 @@ import { PoModalComponent, PoMultiselectOption, PoNotificationService, PoTableCo
 @Component({
   selector: 'sample-po-widget-finance-dashboard',
   templateUrl: './sample-po-widget-finance-dashboard.component.html',
+  styles: [
+    `
+      .sample-finance-row-gap {
+        row-gap: 1rem;
+      }
+      .sample-finance-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      .sample-finance-total-value {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      .sample-finance-padding-inline {
+        padding-inline: 0.5rem;
+      }
+      .sample-finance-overlay-badge {
+        margin-bottom: 0.5rem;
+        display: inline-block;
+        background-color: black;
+        padding: 0.5rem;
+        border-radius: 3px;
+        opacity: 0.85;
+      }
+      .sample-finance-overlay-text {
+        color: white;
+      }
+    `
+  ],
   standalone: false
 })
 export class SamplePoWidgetFinanceDashboardComponent {
