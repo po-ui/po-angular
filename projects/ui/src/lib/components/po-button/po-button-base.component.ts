@@ -241,6 +241,17 @@ export class PoButtonBaseComponent {
    *
    * @description
    *
+   * Define o `tabindex` do elemento `<button>` nativo interno.
+   *
+   * Use `[tabindex]="-1"` para remover o botão da ordem de foco do teclado.
+   */
+  @Input('p-tabindex') tabindex?: number | string = null;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define o tamanho do componente:
    * - `small`: altura de 32px (disponível apenas para acessibilidade AA).
    * - `medium`: altura de 44px.

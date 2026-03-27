@@ -589,15 +589,14 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         expect(component['compareTo']).toHaveBeenCalledWith('datetime', PoDynamicFieldType.DateTime);
       });
 
-      it('should call `compareTo`, set `field.mask` and return `input` if type is `time`', () => {
-        const expectedValue = 'input';
+      it('should call `compareTo` and return `timepicker` if type is `time`', () => {
+        const expectedValue = 'timepicker';
         const field = <any>{ type: 'time', property: 'code' };
 
         spyOn(component, <any>'compareTo').and.callThrough();
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Time);
-        expect(field.mask).toBe('99:99');
       });
 
       it('should call `isCombo` and return `combo` if contains `optionsService` as url string', () => {

@@ -1,0 +1,222 @@
+@let poHelper = setHelper(label);
+<po-field-container
+  [class.po-timepicker-container-disabled]="isDisabled"
+  [p-disabled]="isDisabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
+  [p-text-wrap]="labelTextWrap()"
+  [p-compact-label]="compactLabel()"
+>
+  <div #outerContainer>
+    <div cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="po-field-container-content">
+      <div class="po-field-container-input">
+        <div
+          #timepickerField
+          class="po-timepicker-field po-input"
+          [class.po-input-icon-right]="clean && hasValue() && !isDisabled"
+          [class.po-timepicker-field-disabled]="isDisabled"
+          [class.po-timepicker-field-readonly]="readonly"
+          [class.po-timepicker-field-focused]="isSegmentFocused"
+          [attr.data-focused-element]="!isDisabled"
+          [attr.data-inactive-component]="isDisabled || readonly"
+          [attr.p-size]="size"
+          [attr.data-append-in-body]="appendBox"
+          role="group"
+          (click)="onFieldClick($event)"
+          (keydown)="onKeyDown($event)"
+        >
+          <div class="po-timepicker-field-segment" [attr.data-value]="hourDisplay || hourPlaceholder || '  '">
+            <input
+              #inp
+              class="po-timepicker-segment-input"
+              maxlength="2"
+              type="text"
+              inputmode="numeric"
+              [attr.name]="name"
+              [autocomplete]="autocomplete"
+              [disabled]="isDisabled"
+              [id]="id"
+              [readonly]="readonly"
+              [required]="required"
+              [placeholder]="isDisabled ? '' : hourPlaceholder"
+              (input)="onSegmentInput($event, 'hour')"
+              (blur)="onSegmentBlur($event)"
+              (focus)="onSegmentFocus()"
+              (click)="eventOnClick($event)"
+              (keydown)="onSegmentKeydown($event, 'hour')"
+            />
+          </div>
+
+          <div class="po-timepicker-field-separator">:</div>
+
+          <div class="po-timepicker-field-segment" [attr.data-value]="minuteDisplay || minutePlaceholder || '  '">
+            <input
+              #minuteInput
+              class="po-timepicker-segment-input"
+              maxlength="2"
+              type="text"
+              inputmode="numeric"
+              [disabled]="isDisabled"
+              [readonly]="readonly"
+              [placeholder]="isDisabled ? '' : minutePlaceholder"
+              (input)="onSegmentInput($event, 'minute')"
+              (blur)="onSegmentBlur($event)"
+              (focus)="onSegmentFocus()"
+              (click)="eventOnClick($event)"
+              (keydown)="onSegmentKeydown($event, 'minute')"
+            />
+          </div>
+
+          @if (showSeconds) {
+            <div class="po-timepicker-field-separator">:</div>
+
+            <div class="po-timepicker-field-segment" [attr.data-value]="secondDisplay || secondPlaceholder || '  '">
+              <input
+                #secondInput
+                class="po-timepicker-segment-input"
+                maxlength="2"
+                type="text"
+                inputmode="numeric"
+                [disabled]="isDisabled"
+                [readonly]="readonly"
+                [placeholder]="isDisabled ? '' : secondPlaceholder"
+                (input)="onSegmentInput($event, 'second')"
+                (blur)="onSegmentBlur($event)"
+                (focus)="onSegmentFocus()"
+                (click)="eventOnClick($event)"
+                (keydown)="onSegmentKeydown($event, 'second')"
+              />
+            </div>
+          }
+
+          @if (is12HourFormat) {
+            <div
+              class="po-timepicker-field-segment po-timepicker-field-period"
+              [attr.data-value]="periodDisplay || 'AM'"
+            >
+              <input
+                #periodInput
+                class="po-timepicker-segment-input po-timepicker-period-input"
+                maxlength="2"
+                type="text"
+                [value]="periodDisplay || 'AM'"
+                [disabled]="isDisabled"
+                [readonly]="true"
+                [attr.tabindex]="isDisabled || readonly ? -1 : 0"
+                role="button"
+                [attr.aria-label]="periodDisplay || 'AM'"
+                (keydown)="onPeriodSegmentKeydown($event)"
+                (click)="onPeriodSegmentClick($event)"
+                (blur)="onSegmentBlur($event)"
+                (focus)="onSegmentFocus()"
+              />
+            </div>
+          }
+
+          @if (loading) {
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          } @else {
+            <div class="po-field-icon-container-right">
+              @if (clean && hasValue() && !isDisabled && !readonly) {
+                <po-clean
+                  #iconClean
+                  tabindex="0"
+                  role="button"
+                  [attr.aria-label]="literals.clean"
+                  class="po-icon-input"
+                  p-icon="ICON_FILL_CLEAR_CONTENT"
+                  [p-element-ref]="inputEl"
+                  [p-size]="size"
+                  (p-change-event)="clear()"
+                  (keydown)="handleCleanKeyboardTab($event)"
+                  (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+                  (keydown.space)="clearAndFocus(); $event.preventDefault()"
+                >
+                </po-clean>
+                <div class="po-button-vertical-divider"></div>
+              }
+              <po-button
+                #iconTimepicker
+                class="po-timepicker-button"
+                [class.po-button-tertiary-danger]="getErrorPattern()"
+                p-icon="ICON_CLOCK"
+                p-kind="tertiary"
+                [p-disabled]="isDisabled || readonly"
+                [p-size]="size"
+                (keydown)="onKeyPress($event)"
+                (keydown.tab)="handleCleanKeyboardTab($event)"
+                (p-click)="togglePicker(false)"
+              >
+              </po-button>
+            </div>
+          }
+        </div>
+      </div>
+      @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+        <po-helper
+          #helperEl
+          class="po-field-helper-button"
+          [p-size]="size"
+          [p-helper]="poHelper.helperSettings"
+          [p-disabled]="isDisabled"
+          [p-append-in-body]="appendBox"
+        >
+        </po-helper>
+      }
+    </div>
+
+    @if (appendBox) {
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="true"
+        [cdkConnectedOverlayDisableClose]="true"
+      >
+        <ng-container *ngTemplateOutlet="sharedTimerContent"></ng-container>
+      </ng-template>
+    } @else {
+      <ng-container *ngTemplateOutlet="sharedTimerContent"></ng-container>
+    }
+
+    <ng-template #sharedTimerContent>
+      <div #dialogPicker [class.po-timepicker-popup-timer]="!verifyMobile()" tabindex="-1" [hidden]="!visible">
+        @if (verifyMobile()) {
+          <div class="po-timepicker-timer-overlay"></div>
+        }
+        <po-timer
+          #timer
+          [class.po-timepicker-timer-mobile]="verifyMobile()"
+          [p-format]="format"
+          [p-show-seconds]="showSeconds"
+          [p-minute-interval]="minuteInterval"
+          [p-second-interval]="secondInterval"
+          [p-min-time]="minTime"
+          [p-max-time]="maxTime"
+          [p-size]="size"
+          [p-value]="timeValue"
+          (p-change)="timerSelected($event)"
+          (p-boundary-tab)="onTimerBoundaryTab($event)"
+          (keydown)="onTimerKeyDown($event)"
+          (focusout)="onTimerFocusOut($event)"
+        ></po-timer>
+      </div>
+    </ng-template>
+  </div>
+
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="isDisabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-size]="size"
+    ></po-field-container-bottom>
+  }
+</po-field-container>

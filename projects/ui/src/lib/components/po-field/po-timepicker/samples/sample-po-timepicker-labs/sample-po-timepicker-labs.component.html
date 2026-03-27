@@ -1,0 +1,120 @@
+<po-timepicker
+  class="po-sm-12"
+  name="timepicker"
+  [(ngModel)]="timepicker"
+  [p-clean]="properties.includes('clean')"
+  [p-disabled]="properties.includes('disabled')"
+  [p-error-pattern]="errorPattern"
+  [p-format]="format"
+  [p-help]="help"
+  [p-model-format]="modelFormat"
+  [p-label]="label"
+  [p-locale]="locale"
+  [p-max-time]="maxTime"
+  [p-min-time]="minTime"
+  [p-minute-interval]="minuteInterval"
+  [p-second-interval]="secondInterval"
+  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
+  [p-optional]="properties.includes('optional')"
+  [p-placeholder]="placeholder"
+  [p-readonly]="properties.includes('readonly')"
+  [p-required]="properties.includes('required')"
+  [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
+  [p-show-required]="properties.includes('showRequired')"
+  [p-show-seconds]="properties.includes('showSeconds')"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
+  [p-loading]="properties.includes('loading')"
+  [p-compact-label]="properties?.includes('compactLabel')"
+  [p-append-in-body]="properties?.includes('appendInBody')"
+  [p-error-limit]="properties?.includes('errorLimit')"
+  [p-size]="size"
+  (p-blur)="changeEvent('p-blur')"
+  (p-change)="changeEvent('p-change')"
+  (p-keydown)="changeEvent('p-keydown')"
+>
+</po-timepicker>
+
+<po-divider />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Model" [p-value]="timepicker"> </po-info>
+
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
+</div>
+
+<po-divider />
+
+<form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern"> </po-input>
+
+  <po-timepicker class="po-md-6" name="minTime" [(ngModel)]="minTime" p-clean p-label="Min Time"> </po-timepicker>
+
+  <po-timepicker class="po-md-6" name="maxTime" [(ngModel)]="maxTime" p-clean p-label="Max Time"> </po-timepicker>
+
+  <po-number class="po-md-6" name="minuteInterval" [(ngModel)]="minuteInterval" p-clean p-label="Minute Interval">
+  </po-number>
+
+  <po-number class="po-md-6" name="secondInterval" [(ngModel)]="secondInterval" p-clean p-label="Second Interval">
+  </po-number>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="locale"
+    [(ngModel)]="locale"
+    p-columns="4"
+    p-label="Locale"
+    [p-options]="localeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="format"
+    [(ngModel)]="format"
+    p-columns="4"
+    p-label="Format"
+    [p-options]="formatOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="modelFormat"
+    [(ngModel)]="modelFormat"
+    p-columns="4"
+    p-label="Model Format"
+    [p-options]="modelFormatOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
+  <div class="po-row">
+    <po-button class="po-lg-3 po-md-6" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  </div>
+</form>
