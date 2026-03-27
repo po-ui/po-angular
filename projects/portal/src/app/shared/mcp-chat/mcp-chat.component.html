@@ -1,0 +1,79 @@
+<!-- FAB Button -->
+<button class="mcp-fab" (click)="openChat()" title="Assistente PO UI">
+  <span class="mcp-fab-icon an an-chat-circle-dots"></span>
+</button>
+
+<!-- Page Slide Chat -->
+<po-page-slide
+  #chatSlide
+  p-title="Assistente PO UI"
+  p-subtitle="Documentação via MCP"
+  p-size="md"
+  [p-click-out]="true"
+>
+  <div class="mcp-chat-container">
+    <!-- Messages -->
+    <div class="mcp-chat-messages">
+      @if (messages.length === 0) {
+        <div class="mcp-chat-welcome">
+          <div class="mcp-chat-welcome-icon">
+            <span class="an an-robot"></span>
+          </div>
+          <h3>Olá! Sou o assistente PO UI</h3>
+          <p>Pergunte sobre componentes, propriedades, tokens CSS, exemplos de código e guias.</p>
+          <div class="mcp-chat-suggestions">
+            @for (suggestion of suggestions; track suggestion) {
+              <button class="mcp-suggestion-chip" (click)="sendSuggestion(suggestion)">
+                {{ suggestion }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      @for (msg of messages; track $index) {
+        <div class="mcp-chat-message" [class.mcp-chat-message-user]="msg.role === 'user'" [class.mcp-chat-message-assistant]="msg.role === 'assistant'">
+          @if (msg.role === 'assistant' && msg.tool) {
+            <div class="mcp-chat-tool-info">
+              <span class="mcp-tool-badge">{{ msg.tool }}</span>
+              @if (formatParams(msg.params)) {
+                <span class="mcp-tool-params">{{ formatParams(msg.params) }}</span>
+              }
+            </div>
+          }
+          <div class="mcp-chat-message-content" [innerHTML]="msg.content"></div>
+        </div>
+      }
+
+      @if (isLoading) {
+        <div class="mcp-chat-message mcp-chat-message-assistant">
+          <div class="mcp-chat-typing">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Input -->
+    <div class="mcp-chat-input-area">
+      <div class="mcp-chat-input-wrapper">
+        <input
+          type="text"
+          class="mcp-chat-input"
+          [(ngModel)]="inputText"
+          (keydown)="onKeyDown($event)"
+          placeholder="Pergunte sobre componentes PO UI..."
+          [disabled]="isLoading"
+        />
+        <button
+          class="mcp-chat-send-btn"
+          (click)="sendMessage()"
+          [disabled]="!inputText.trim() || isLoading"
+          title="Enviar"
+        >
+          <span class="an an-paper-plane-tilt"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</po-page-slide>

@@ -8,6 +8,7 @@ import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
 
 import { customLanguage } from './po-language-terraform.constant';
 import { HighlightCodeDirective } from './../documentation/documentation-code.directive';
+import { McpChatComponent } from './mcp-chat/mcp-chat.component';
 
 @NgModule({
   imports: [
@@ -61,7 +62,7 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
     }),
     PoCodeEditorModule.forRegister(customLanguage)
   ],
-  declarations: [HighlightCodeDirective],
+  declarations: [HighlightCodeDirective, McpChatComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -69,7 +70,8 @@ import { HighlightCodeDirective } from './../documentation/documentation-code.di
     HighlightCodeDirective,
     PoModule,
     PoTemplatesModule,
-    PoCodeEditorModule
+    PoCodeEditorModule,
+    McpChatComponent
   ],
   providers: []
 })
