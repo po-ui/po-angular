@@ -577,6 +577,85 @@ describe('PoDatepickerComponent:', () => {
       });
     });
 
+    describe('ngAfterViewInit:', () => {
+      it('should not throw error when iconDatepicker is undefined', () => {
+        component.iconDatepicker = undefined;
+
+        spyOn(component, 'focus');
+        spyOn(component as any, 'setDialogPickerStyleDisplay');
+
+        const fnCall = () => component.ngAfterViewInit();
+
+        expect(fnCall).not.toThrow();
+      });
+
+      it('should not call renderer.setAttribute when iconDatepicker is undefined', () => {
+        component.iconDatepicker = undefined;
+
+        spyOn(component, 'focus');
+        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
+
+        component.ngAfterViewInit();
+
+        expect(setAttributeSpy).not.toHaveBeenCalled();
+      });
+
+      it('should call renderer.setAttribute with aria-label when iconDatepicker is defined', () => {
+        component.iconDatepicker = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as any;
+
+        spyOn(component, 'focus');
+        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
+
+        component.ngAfterViewInit();
+
+        expect(setAttributeSpy).toHaveBeenCalledWith(
+          component.iconDatepicker.buttonElement.nativeElement,
+          'aria-label',
+          component.literals.open
+        );
+      });
+
+      it('should call focus when autoFocus is true', () => {
+        component.autoFocus = true;
+        component.iconDatepicker = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as any;
+
+        spyOn(component, 'focus');
+        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        spyOn(component['renderer'], 'setAttribute');
+
+        component.ngAfterViewInit();
+
+        expect(component.focus).toHaveBeenCalled();
+      });
+
+      it('should not call focus when autoFocus is false', () => {
+        component.autoFocus = false;
+        component.iconDatepicker = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as any;
+
+        spyOn(component, 'focus');
+        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        spyOn(component['renderer'], 'setAttribute');
+
+        component.ngAfterViewInit();
+
+        expect(component.focus).not.toHaveBeenCalled();
+      });
+    });
+
     it('togglePicker: should keep the component invisible when `disabled` and `readonly` is true', () => {
       component.disabled = true;
       component.readonly = true;

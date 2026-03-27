@@ -266,6 +266,17 @@ export interface PoDynamicFormField extends PoDynamicField {
   listboxControlPosition?: 'top' | 'bottom';
 
   /**
+   * Habilita um estado de carregamento no componente, desabilitando-o e exibindo um ícone de carregamento.
+   *
+   * > Por padrão é `false`.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`,
+   * `po-input`, `po-select`, `po-switch`, `po-combo`, `po-lookup`, `po-multiselect`,
+   * `po-textarea`, `po-password`, `po-upload`.
+   */
+  loading?: boolean;
+
+  /**
    * Valor máximo a ser informado no componente, podendo ser utilizado quando o tipo de dado por *number*, *date* ou *dateTime*.
    *
    * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-number`, `po-decimal`

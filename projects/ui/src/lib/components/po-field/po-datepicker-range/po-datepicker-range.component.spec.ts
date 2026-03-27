@@ -235,6 +235,46 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component.focus).not.toHaveBeenCalled();
       });
+
+      it('should not throw error when iconCalendar is undefined', () => {
+        component.iconCalendar = undefined;
+
+        const fnCall = () => component.ngAfterViewInit();
+
+        expect(fnCall).not.toThrow();
+      });
+
+      it('should not call renderer.setAttribute when iconCalendar is undefined', () => {
+        component.iconCalendar = undefined;
+
+        const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
+
+        component.ngAfterViewInit();
+
+        expect(setAttributeSpy).not.toHaveBeenCalled();
+      });
+
+      it('should call renderer.setAttribute with aria-label when iconCalendar is defined', () => {
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as any;
+
+        component.literals = {
+          open: 'Open calendar'
+        } as any;
+
+        const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
+
+        component.ngAfterViewInit();
+
+        expect(setAttributeSpy).toHaveBeenCalledWith(
+          component.iconCalendar.buttonElement.nativeElement,
+          'aria-label',
+          'Open calendar'
+        );
+      });
     });
 
     it('ngOnDestroy: should call `removeListeners`.', () => {

@@ -182,7 +182,8 @@ export class PoDatepickerRangeComponent
     if (this.autoFocus) {
       this.focus();
     }
-    this.renderer.setAttribute(this.iconCalendar.buttonElement.nativeElement, 'aria-label', this.literals.open);
+    this.iconCalendar?.buttonElement?.nativeElement &&
+      this.renderer.setAttribute(this.iconCalendar.buttonElement.nativeElement, 'aria-label', this.literals.open);
   }
 
   ngOnInit() {
