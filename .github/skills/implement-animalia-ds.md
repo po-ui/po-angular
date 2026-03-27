@@ -5,7 +5,7 @@ Implementa as definições visuais do Animalia DS em um componente PO UI existen
 
 ## Pré-requisitos
 - Consultar a especificação do componente em https://doc.animaliads.io/docs/components/
-- Verificar quais estados estão especificados: Enable, Disable, Static, Hover, Focus, Active
+- Verificar quais estados estão especificados: Enable, Disable, Static, Hover, Focus, Active, Loading
 
 ## Passos
 

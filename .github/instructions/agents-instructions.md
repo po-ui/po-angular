@@ -175,7 +175,7 @@ Todos os pacotes exportam padrão barrel module:
 ```
 
 **Types**: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`  
-**Scope**: Nome do componente (não nome do projeto)  
+**Scope**: Nome do componente **sem** o prefixo `po-` (ex: `feat(button)`, NÃO `feat(po-button)`)  
 **Use rebase/squash** antes do PR para garantir um único commit por feature
 
 ### Checklist de Pull Request
@@ -285,7 +285,7 @@ O PO UI segue as definições visuais do [Animalia DS](https://doc.animaliads.io
 
 **Ao implementar ou modificar componentes:**
 - Consulte a documentação do componente no Animalia DS para verificar as especificações visuais
-- Siga os estados definidos pelo DS: Enable, Disable, Static, Hover, Focus, Active
+- Siga os estados definidos pelo DS: Enable, Disable, Static, Hover, Focus, Active, Loading
 - Use os tokens CSS do Animalia DS como referência para valores padrão
 - Documente a conformidade com o Animalia DS no CHANGELOG usando o padrão: `implementa definições do AnimaliaDS`
 
@@ -369,6 +369,8 @@ Todo componente interativo DEVE incluir:
 - `aria-live="polite"` para regiões com conteúdo dinâmico (toasters, contadores, mensagens de validação)
 - `aria-disabled="true"` em conjunto com `[disabled]` quando relevante
 - `aria-checked` para checkboxes e toggles (incluindo estado `mixed` para indeterminado)
+- `aria-selected` para itens selecionáveis em listas, tabs e menus
+- `aria-hidden="true"` para elementos decorativos que não devem ser anunciados por leitores de tela
 
 ### Focus Trap (OBRIGATÓRIO para overlays)
 
