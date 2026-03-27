@@ -1,0 +1,34 @@
+<div class="po-wrapper">
+  <po-menu p-title="PO UI Guided Tour" [p-menus]="[{ label: 'Home', link: '/' }, { label: 'Showcase', link: '/showcase' }]"></po-menu>
+
+  <po-page-default p-title="Guided Tour Showcase">
+    <div class="po-row">
+      <po-info class="po-md-12" p-label="Demonstração" p-value="Este é um exemplo de uso do novo componente de tour guiado."></po-info>
+    </div>
+
+    <div class="po-row">
+      <po-widget class="po-md-6" id="welcome-card" p-title="Bem-vindo!">
+        <p>Este card é o primeiro passo do nosso tour. Ele serve para dar as boas-vindas aos usuários.</p>
+      </po-widget>
+
+      <po-widget class="po-md-6" p-title="Configurações">
+        <p>Clique no botão abaixo para iniciar a experiência guiada.</p>
+        <po-button id="action-btn" p-label="Iniciar Tour" (p-click)="startTour()" p-type="primary"></po-button>
+      </po-widget>
+    </div>
+
+    <div class="po-row">
+      <po-widget class="po-md-12" id="final-card" p-title="Resumo da Experiência">
+        <p>O tour guiado ajuda a aumentar o engajamento e diminuir a curva de aprendizado da sua aplicação.</p>
+      </po-widget>
+    </div>
+  </po-page-default>
+
+  <!-- Componente de Tour Guiado -->
+  <po-guided-tour
+    [p-steps]="tourSteps"
+    [p-allow-close]="true"
+    [p-allow-skip]="true"
+    (p-on-complete)="onTourComplete()"
+  ></po-guided-tour>
+</div>
