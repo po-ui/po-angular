@@ -46,6 +46,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-max-date') maxDate: any;
   @Input('p-hover-value') hoverValue: Date;
   @Input('p-size') size: string;
+  @Input('p-hide-today-button') hideTodayButton: boolean = false;
+  @Input('p-presets') hasPresets: boolean = false;
   // Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   private _locale: string;
@@ -157,18 +159,18 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   private getDateToUse(value: any): Date {
     if (!value) return new Date();
 
-    let dateValue = value.start !== undefined ? value.start : value;
+    let dateValue = value.start ?? value;
 
     if (typeof dateValue === 'string') {
       const dateOnlyRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
       if (dateOnlyRegex.test(dateValue)) {
-        const [, year, month, day] = dateValue.match(dateOnlyRegex).map(Number);
+        const [, year, month, day] = dateOnlyRegex.exec(dateValue).map(Number);
         return new Date(year, month - 1, day);
       }
       dateValue = new Date(dateValue);
     }
 
-    if (dateValue instanceof Date && !isNaN(dateValue.getTime())) {
+    if (dateValue instanceof Date && !Number.isNaN(dateValue.getTime())) {
       if (dateValue.getUTCHours() === 0 && dateValue.getUTCMinutes() === 0) {
         return new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
       }
@@ -265,63 +267,74 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   onComboBlur(comboComponent?: any) {
     if (comboComponent) {
-      setTimeout(() => {
-        let currentYear = this.templateContext.year;
-        let currentMonth = this.templateContext.monthIndex;
-
-        const isMonthInvalid =
-          typeof currentMonth === 'string' || currentMonth < 0 || currentMonth > 11 || isNaN(currentMonth);
-
-        const isYearInvalid =
-          typeof currentYear === 'string' ||
-          isNaN(currentYear) ||
-          (currentYear && currentYear < 1900) ||
-          (currentYear && currentYear > 2100);
-
-        if (comboComponent.selectedOption && comboComponent.selectedOption.value !== undefined) {
-          if (comboComponent.inputEl && comboComponent.inputEl.nativeElement) {
-            const currentInputValue = comboComponent.inputEl.nativeElement.value;
-            const expectedValue = comboComponent.selectedOption.label || '';
-
-            if (currentInputValue !== expectedValue) {
-              comboComponent.inputEl.nativeElement.value = expectedValue;
-            }
-          }
-
-          if (isMonthInvalid || isYearInvalid) {
-            const selectedVal = comboComponent.selectedOption.value;
-            if (selectedVal >= 0 && selectedVal <= 11) {
-              currentMonth = selectedVal;
-            } else if (typeof selectedVal === 'number' && selectedVal > 11) {
-              currentYear = selectedVal;
-            }
-          }
-        }
-
-        const isInvalidYear = currentYear === undefined || currentYear === null;
-        const isInvalidMonth = currentMonth === undefined || currentMonth === null;
-
-        if (isInvalidYear || isInvalidMonth) {
-          const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : currentYear;
-          const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : currentMonth;
-
-          this.updateDisplay(safeYear, safeMonth);
-        }
-      }, 0);
+      setTimeout(() => this.handleComboBlur(comboComponent), 0);
     } else {
-      const currentYear = this.templateContext.year;
-      const currentMonth = this.templateContext.monthIndex;
+      this.ensureValidDisplay(this.templateContext.year, this.templateContext.monthIndex);
+    }
+  }
 
-      const isInvalidYear = currentYear === undefined || currentYear === null;
-      const isInvalidMonth = currentMonth === undefined || currentMonth === null;
+  private handleComboBlur(comboComponent: any) {
+    let currentYear = this.templateContext.year;
+    let currentMonth = this.templateContext.monthIndex;
 
-      if (isInvalidYear || isInvalidMonth) {
-        const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : currentYear;
-        const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : currentMonth;
+    const isMonthInvalid = this.isMonthInvalid(currentMonth);
+    const isYearInvalid = this.isYearInvalid(currentYear);
 
-        this.updateDisplay(safeYear, safeMonth);
+    if (comboComponent?.selectedOption?.value !== undefined) {
+      this.syncInputValue(comboComponent);
+
+      if (isMonthInvalid || isYearInvalid) {
+        ({ currentYear, currentMonth } = this.applySelectedValue(
+          comboComponent.selectedOption.value,
+          currentYear,
+          currentMonth
+        ));
       }
     }
+
+    this.ensureValidDisplay(currentYear, currentMonth);
+  }
+
+  private syncInputValue(comboComponent: any) {
+    if (comboComponent?.inputEl?.nativeElement) {
+      const currentInputValue = comboComponent.inputEl.nativeElement.value;
+      const expectedValue = comboComponent.selectedOption.label || '';
+
+      if (currentInputValue !== expectedValue) {
+        comboComponent.inputEl.nativeElement.value = expectedValue;
+      }
+    }
+  }
+
+  private applySelectedValue(value: any, currentYear: any, currentMonth: any) {
+    if (value >= 0 && value <= 11) {
+      currentMonth = value;
+    } else if (typeof value === 'number' && value > 11) {
+      currentYear = value;
+    }
+
+    return { currentYear, currentMonth };
+  }
+
+  private ensureValidDisplay(currentYear: any, currentMonth: any) {
+    const isInvalidYear = currentYear === undefined || currentYear === null;
+    const isInvalidMonth = currentMonth === undefined || currentMonth === null;
+
+    if (isInvalidYear || isInvalidMonth) {
+      const safeYear = isInvalidYear ? this.displayYear || this.today.getFullYear() : currentYear;
+
+      const safeMonth = isInvalidMonth ? (this.displayMonthNumber ?? this.today.getMonth()) : currentMonth;
+
+      this.updateDisplay(safeYear, safeMonth);
+    }
+  }
+
+  private isMonthInvalid(month: any): boolean {
+    return typeof month === 'string' || month < 0 || month > 11 || Number.isNaN(month);
+  }
+
+  private isYearInvalid(year: any): boolean {
+    return typeof year === 'string' || Number.isNaN(year) || (year && year < 1900) || (year && year > 2100);
   }
 
   private updateDisplay(year: number, month: number) {
@@ -475,11 +488,9 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
   }
 
-  onTodayKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Tab' && !event.shiftKey) {
-      this.restoreOriginalDisplay();
-      this.closeCalendar.emit();
-    }
+  onFooterCloseCalendar(): void {
+    this.restoreOriginalDisplay();
+    this.closeCalendar.emit();
   }
 
   @HostListener('keydown', ['$event'])
@@ -507,16 +518,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     if (this.displayYear !== originalYear || this.displayMonthNumber !== originalMonth) {
       this.updateDisplay(originalYear, originalMonth);
     }
-  }
-
-  onTodayKeydownEnter(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.onSelectDate(this.today);
-  }
-
-  onTodayKeydownSpace(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.onSelectDate(this.today);
   }
 
   onDayKeydown(event: KeyboardEvent, day: Date, index: number) {
@@ -691,7 +692,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   private hasAvailableDaysInMonth(year: number, month: number): boolean {
     const calendarArray = this.poCalendarService.monthDays(year, month);
-    const monthDays = [].concat(...calendarArray);
+    const monthDays = calendarArray.flat();
 
     return monthDays.some(day => day instanceof Date && day.getMonth() === month && !this.isDayDisabled(day));
   }

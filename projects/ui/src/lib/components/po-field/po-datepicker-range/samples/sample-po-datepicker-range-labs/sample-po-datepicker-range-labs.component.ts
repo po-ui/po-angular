@@ -5,7 +5,8 @@ import {
   PoDatepickerRange,
   PoDatepickerRangeLiterals,
   PoRadioGroupOption,
-  PoSelectOption
+  PoSelectOption,
+  PoCalendarRangePreset
 } from '@po-ui/ng-components';
 
 @Component({
@@ -34,6 +35,10 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
   minDate: string | Date;
   locale: string;
   size: string;
+  rangePresets: boolean;
+  rangePresetsOrder: 'asc' | 'desc';
+  customPresets: Array<PoCalendarRangePreset>;
+  useCustomPresets: boolean;
 
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
@@ -61,12 +66,41 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     { label: 'medium', value: 'medium' }
   ];
 
+  public readonly presetsOrderOptions: Array<PoRadioGroupOption> = [
+    { label: 'ASC', value: 'asc' },
+    { label: 'DESC', value: 'desc' }
+  ];
+
+  readonly sampleCustomPresets: Array<PoCalendarRangePreset> = [
+    {
+      label: 'Próximos 3 meses',
+      dateRange: (today: Date) => {
+        const end = new Date(today);
+        end.setMonth(end.getMonth() + 3);
+        return { start: new Date(today.getFullYear(), today.getMonth(), today.getDate()), end };
+      }
+    },
+    {
+      label: 'Última semana',
+      dateRange: (today: Date) => {
+        const start = new Date(today);
+        start.setDate(start.getDate() - 7);
+        return { start, end: new Date(today.getFullYear(), today.getMonth(), today.getDate()) };
+      }
+    }
+  ];
+
   ngOnInit() {
     this.restore();
   }
 
   changeEvent(event: string) {
     this.event = event;
+  }
+
+  onCustomPresetsChange(value: boolean) {
+    this.useCustomPresets = value;
+    this.customPresets = value ? [...this.sampleCustomPresets] : [];
   }
 
   changeLiterals() {
@@ -109,6 +143,10 @@ export class SamplePoDatepickerRangeLabsComponent implements OnInit {
     this.minDate = undefined;
     this.locale = undefined;
     this.size = 'medium';
+    this.rangePresets = false;
+    this.rangePresetsOrder = 'asc';
+    this.customPresets = [];
+    this.useCustomPresets = false;
     setTimeout(() => (this.datepickerRange = undefined));
   }
 }
