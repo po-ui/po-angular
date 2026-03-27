@@ -66,6 +66,47 @@ xdescribe('Schematic: ng-add', () => {
     });
   });
 
+  describe('Telemetry configuration:', () => {
+    it('should create .po-ui-telemetry.json with enabled true when enableTelemetry is true', async () => {
+      const tree = await runner.runSchematic('ng-add', { ...componentOptions, enableTelemetry: true }, appTree);
+
+      const telemetryConfig = JSON.parse(getFileContent(tree, '.po-ui-telemetry.json'));
+      expect(telemetryConfig.enabled).toBe(true);
+      expect(telemetryConfig.consentDate).toBeDefined();
+      expect(telemetryConfig.version).toBe('0.0.0-PLACEHOLDER');
+    });
+
+    it('should create .po-ui-telemetry.json with enabled false when enableTelemetry is false', async () => {
+      const tree = await runner.runSchematic('ng-add', { ...componentOptions, enableTelemetry: false }, appTree);
+
+      const telemetryConfig = JSON.parse(getFileContent(tree, '.po-ui-telemetry.json'));
+      expect(telemetryConfig.enabled).toBe(false);
+      expect(telemetryConfig.consentDate).toBeDefined();
+      expect(telemetryConfig.version).toBe('0.0.0-PLACEHOLDER');
+    });
+
+    it('should create .po-ui-telemetry.json with enabled false when enableTelemetry is not provided', async () => {
+      const tree = await runner.runSchematic('ng-add', componentOptions, appTree);
+
+      const telemetryConfig = JSON.parse(getFileContent(tree, '.po-ui-telemetry.json'));
+      expect(telemetryConfig.enabled).toBe(false);
+      expect(telemetryConfig.consentDate).toBeDefined();
+      expect(telemetryConfig.version).toBe('0.0.0-PLACEHOLDER');
+    });
+
+    it('should have correct JSON structure in .po-ui-telemetry.json', async () => {
+      const tree = await runner.runSchematic('ng-add', { ...componentOptions, enableTelemetry: true }, appTree);
+
+      const telemetryConfig = JSON.parse(getFileContent(tree, '.po-ui-telemetry.json'));
+
+      const keys = Object.keys(telemetryConfig);
+      expect(keys).toContain('enabled');
+      expect(keys).toContain('consentDate');
+      expect(keys).toContain('version');
+      expect(keys.length).toBe(3);
+    });
+  });
+
   describe('Theme configuration:', () => {
     const defaultThemePath = './node_modules/@po-ui/style/css/po-theme-default.min.css';
 
