@@ -121,7 +121,7 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   protected override onAfterThemeChange(): void {
     requestAnimationFrame(() => {
-      this.calculateTextareaHeight();
+      this.lockTextareaDimensions();
       this.checkScrollState();
     });
   }
@@ -134,11 +134,11 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     if (changes.loading) {
       if (changes.loading.isFirstChange() && this.loading) {
         requestAnimationFrame(() => {
-          this.calculateTextareaHeight();
+          this.lockTextareaDimensions();
           this.checkScrollState();
         });
       } else {
-        this.calculateTextareaHeight();
+        this.lockTextareaDimensions();
         requestAnimationFrame(() => {
           this.checkScrollState();
         });
@@ -146,8 +146,13 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     }
 
     if (!changes.loading && this.loading && (changes.rows || changes.size)) {
+      const textarea = this.inputEl?.nativeElement;
+      if (textarea) {
+        textarea.style.width = '';
+        textarea.style.height = '';
+      }
       requestAnimationFrame(() => {
-        this.calculateTextareaHeight();
+        this.lockTextareaDimensions();
         this.checkScrollState();
       });
     }
@@ -304,8 +309,22 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
   private readonly onWindowResize = () => {
     this.checkScrollState();
+
+    const textarea = this.inputEl?.nativeElement;
+    if (textarea?.style.width) {
+      textarea.style.width = '';
+      textarea.style.height = '';
+    }
+
+    const container = textarea?.closest('.po-field-container-content') as HTMLElement;
+    if (container) {
+      container.style.width = '';
+    }
+
     if (this.loading) {
-      this.calculateTextareaHeight();
+      requestAnimationFrame(() => {
+        this.lockTextareaDimensions();
+      });
     }
   };
 
@@ -317,23 +336,31 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
     this.cd.markForCheck();
   }
 
-  private calculateTextareaHeight(): void {
+  private syncContainerWidth(): void {
+    const textarea = this.inputEl?.nativeElement;
+    if (!textarea?.style.width) return;
+
+    const container = textarea.closest('.po-field-container-content') as HTMLElement;
+    if (!container) return;
+
+    container.style.width = '';
+    const naturalWidth = container.offsetWidth;
+
+    if (Math.abs(textarea.offsetWidth - naturalWidth) > 1) {
+      container.style.width = `${textarea.offsetWidth}px`;
+    }
+  }
+
+  private lockTextareaDimensions(): void {
     const textarea = this.inputEl?.nativeElement;
     if (!textarea) return;
 
     if (this.loading) {
-      textarea.style.height = '';
-
-      const style = getComputedStyle(textarea);
-      const lineHeight = Number.parseFloat(style.lineHeight);
-      const paddingTop = Number.parseFloat(style.paddingTop);
-      const paddingBottom = Number.parseFloat(style.paddingBottom);
-      const borderTop = Number.parseFloat(style.borderTopWidth);
-      const borderBottom = Number.parseFloat(style.borderBottomWidth);
-
-      const calculatedHeight = this.rows * lineHeight + paddingTop + paddingBottom + borderTop + borderBottom;
-      textarea.style.height = `${calculatedHeight}px`;
+      const rect = textarea.getBoundingClientRect();
+      textarea.style.width = `${rect.width}px`;
+      textarea.style.height = `${rect.height}px`;
     } else {
+      textarea.style.width = '';
       textarea.style.height = '';
     }
   }
@@ -343,12 +370,46 @@ export class PoTextareaComponent extends PoTextareaBaseComponent implements Afte
 
     if (!el || typeof ResizeObserver === 'undefined') return;
 
+    let lastContainerWidth = 0;
+    let isUserResizing = false;
+
+    const onMouseDown = () => {
+      isUserResizing = true;
+    };
+    const onMouseUp = () => {
+      isUserResizing = false;
+    };
+
+    el.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup', onMouseUp);
+
     this.resizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
         this.checkScrollState();
+
+        if (this.loading && !isUserResizing) {
+          const container = el.closest('.po-field-container-content') as HTMLElement;
+          const currentContainerWidth = container?.offsetWidth ?? 0;
+
+          if (currentContainerWidth !== lastContainerWidth) {
+            el.style.width = '';
+            el.style.height = '';
+            lastContainerWidth = currentContainerWidth;
+
+            this.lockTextareaDimensions();
+          }
+        }
+
+        this.syncContainerWidth();
       });
     });
 
     this.resizeObserver.observe(el);
+
+    const container = el.closest('.po-field-container-content') as HTMLElement;
+    if (container) {
+      lastContainerWidth = container.offsetWidth;
+      this.resizeObserver.observe(container);
+    }
   }
 }
