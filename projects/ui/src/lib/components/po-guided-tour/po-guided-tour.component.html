@@ -1,0 +1,54 @@
+<div class="po-guided-tour-container" *ngIf="isActive">
+  <!-- Popover com controles -->
+  <div class="po-guided-tour-popover" [style.z-index]="zIndex + 1">
+    <div class="po-guided-tour-popover-header">
+      <h3 class="po-guided-tour-title">{{ getCurrentStep()?.title }}</h3>
+      <button 
+        *ngIf="allowClose" 
+        class="po-guided-tour-close-btn"
+        (click)="cancel()"
+        title="Close tour"
+        aria-label="Close guided tour">
+        ×
+      </button>
+    </div>
+    
+    <div class="po-guided-tour-content">
+      <p>{{ getCurrentStep()?.description }}</p>
+    </div>
+    
+    <div class="po-guided-tour-progress">
+      <div class="po-guided-tour-progress-bar" 
+        [style.width.%]="getProgress()"></div>
+    </div>
+    
+    <div class="po-guided-tour-footer">
+      <small>{{ currentStep + 1 }} of {{ steps.length }}</small>
+      
+      <div class="po-guided-tour-actions">
+        <button 
+          *ngIf="!isFirstStep()"
+          class="po-guided-tour-btn po-guided-tour-btn-secondary"
+          (click)="previous()"
+          aria-label="Previous step">
+          Previous
+        </button>
+        
+        <button 
+          *ngIf="allowSkip"
+          class="po-guided-tour-btn po-guided-tour-btn-tertiary"
+          (click)="skipTour()"
+          aria-label="Skip tour">
+          Skip
+        </button>
+        
+        <button 
+          class="po-guided-tour-btn po-guided-tour-btn-primary"
+          (click)="isLastStep() ? complete() : next()"
+          [attr.aria-label]="isLastStep() ? 'Complete tour' : 'Next step'">
+          {{ isLastStep() ? 'Complete' : 'Next' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
