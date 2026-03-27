@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  input,
+  Input,
+  QueryList,
+  TemplateRef,
+  ViewChildren
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { PoUtils } from '../../../utils/util';
 import { PoButtonComponent } from '../../po-button';
@@ -32,6 +41,8 @@ export class PoHeaderToolsComponent {
   }
 
   @Input('p-literals') literals: PoHeaderLiterals;
+
+  size = input<string>(undefined, { alias: 'p-size' });
 
   get actionTools(): Array<PoHeaderActionTool> {
     return this._actionTools;

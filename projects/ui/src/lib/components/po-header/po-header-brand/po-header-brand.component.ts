@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  input,
   Input,
   OnChanges,
   OnDestroy,
@@ -40,6 +41,8 @@ export class PoHeaderbrandComponent implements AfterViewInit, OnChanges, OnDestr
   @Input('p-menus') menuCollapse: Array<PoMenuItem> = [];
 
   @Input('p-external') externalMenu: boolean;
+
+  size = input<string>(undefined, { alias: 'p-size' });
 
   constructor(
     private cd: ChangeDetectorRef,

@@ -4,6 +4,7 @@
   [p-menu-items]="menuActions"
   [p-actions-tools]="actionTools"
   [p-header-user]="actionUser"
+  [p-size]="size"
 ></po-header>
 
 <div class="po-row po-mt-4">
@@ -18,8 +19,8 @@
 <hr />
 <div class="po-row po-mt-2">
   <h3 class="po-lg-12 po-mb-2">Ações dos itens de menu</h3>
-  <po-input class="po-lg-6 po-md-6" [(ngModel)]="menuActionLabel" p-clean p-label="Action"> </po-input>
-  <po-input class="po-lg-6 po-md-6" [(ngModel)]="menuActionEvent" p-clean p-label="label"> </po-input>
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="menuActionEvent" p-clean p-label="Action"> </po-input>
+  <po-input class="po-lg-6 po-md-6" [(ngModel)]="menuActionLabel" p-clean p-label="Label"> </po-input>
   <po-button [p-disabled]="!menuActionLabel" class="po-md-3" p-label="Add Action" (p-click)="addAction()"></po-button>
 </div>
 <hr />
@@ -66,6 +67,26 @@
     p-label="Add settings"
     (p-click)="addUser()"
   ></po-button>
+
   <hr />
+  <h3 class="po-lg-12 po-mb-2">Variações de tamanho</h3>
+  <div class="po-row po-mt-2">
+    <po-radio-group
+      class="po-md-12 po-lg-12"
+      name="size"
+      [(ngModel)]="size"
+      p-columns="4"
+      p-label="Size"
+      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      [p-options]="[
+        { label: 'Medium', value: 'medium' },
+        { label: 'Small', value: 'small' }
+      ]"
+    >
+    </po-radio-group>
+  </div>
+
+  <hr />
+
   <po-button class="po-md-3" p-label="Reset" (p-click)="reset()"></po-button>
 </form>

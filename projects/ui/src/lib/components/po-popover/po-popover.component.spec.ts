@@ -540,6 +540,31 @@ describe('PoPopoverComponent:', () => {
       expect(component['removeListeners']).toHaveBeenCalled();
     });
 
+    it('onThemeChange: should call setPopoverPosition inside requestAnimationFrame', () => {
+      spyOn(component, 'setPopoverPosition');
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['onThemeChange']();
+
+      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(component.setPopoverPosition).toHaveBeenCalled();
+    });
+
+    it('onThemeChange: should be triggered by window PoUiThemeChange event', () => {
+      spyOn(component, 'setPopoverPosition');
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      window.dispatchEvent(new Event('PoUiThemeChange'));
+
+      expect(component.setPopoverPosition).toHaveBeenCalled();
+    });
+
     it('should call setElementsControlPosition, setPopoverPosition and cd.detectChanges after timeout', fakeAsync(() => {
       const fakeThis = {
         setElementsControlPosition: () => {},

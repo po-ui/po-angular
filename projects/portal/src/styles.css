@@ -19,6 +19,11 @@ html.potheme-light-AAA #logo-totvs {
   content: url('./assets/graphics/logo-totvs-preto.png');
 }
 
+html.potheme-dark-AA .po-header-nav,
+html.potheme-dark-AAA .po-header-nav {
+  --stroke-color: var(--color-brand-01-dark);
+}
+
 .dot {
   border-radius: 50%;
   display: inline-block;
