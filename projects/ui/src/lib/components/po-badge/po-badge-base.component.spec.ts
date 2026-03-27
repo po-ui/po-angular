@@ -29,7 +29,7 @@ describe('PoBadgeBaseComponent:', () => {
     });
 
     it('p-color: should update with invalid values and set value default `color-07`', () => {
-      component.color = 'color-13';
+      component.color = 'color-21';
 
       expect(component['_color']).toBe('color-07');
     });
