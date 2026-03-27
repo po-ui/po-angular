@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { isExternalLink, isTypeof, PoUtils } from '../../../utils/util';
+import { AnimaliaIconDictionary } from '../../po-icon/po-icon-dictionary';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 
 import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
@@ -45,6 +46,8 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
 export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
   private renderer = inject(Renderer2);
   private router = inject(Router);
+
+  readonly backIcon: string = AnimaliaIconDictionary.ICON_ARROW_BACK;
 
   limitPrimaryActions: number = 3;
   dropdownActions: Array<PoPageAction>;

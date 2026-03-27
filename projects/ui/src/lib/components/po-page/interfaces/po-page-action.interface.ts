@@ -18,9 +18,11 @@ export interface PoPageAction extends PoDropdownAction {
   /**
    * Define o estilo visual do botão da ação. Valores: `primary`, `secondary`, `tertiary`.
    *
-   * Utilizado apenas no header `tertiary`. No header `secondary`, o `kind` dos botões é controlado
-   * pela propriedade `p-page-actions-kind` (padrão: `secondary`).
-   * No header `primary`, a primeira ação é sempre `primary` e as demais `secondary` (comportamento atual mantido).
+   * Compatível com `PoPageHeaderType`:
+   * - `secondary`: o `kind` de cada ação é definido individualmente (padrão: `secondary`).
+   * - `tertiary`: o `kind` de cada ação é definido individualmente (padrão: `secondary`).
+   * - `primary`: a primeira ação é sempre `primary` e as demais `secondary` (comportamento atual mantido).
+   *   A propriedade `kind` não tem efeito no header `primary`.
    */
   kind?: string;
 }

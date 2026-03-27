@@ -6,7 +6,6 @@ import { poLocaleDefault } from './../../../services/po-language/po-language.con
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoThemeA11yEnum } from '../../../services';
-import { AnimaliaIconDictionary } from '../../po-icon/po-icon-dictionary';
 import { PoPageDefaultBaseComponent, poPageDefaultLiteralsDefault } from './po-page-default-base.component';
 
 @Directive()
@@ -161,37 +160,6 @@ describe('PoPageDefaultBaseComponent:', () => {
           component.pageActionsLayout = value;
           expect(component.pageActionsLayout).toBe('default');
         });
-      });
-    });
-
-    describe('p-page-actions-kind:', () => {
-      it('should set `pageActionsKind` to `primary` when receiving `primary`.', () => {
-        component.pageActionsKind = 'primary';
-        expect(component.pageActionsKind).toBe('primary');
-      });
-
-      it('should set `pageActionsKind` to `secondary` when receiving `secondary`.', () => {
-        component.pageActionsKind = 'secondary';
-        expect(component.pageActionsKind).toBe('secondary');
-      });
-
-      it('should default `pageActionsKind` to `secondary` with invalid values.', () => {
-        const invalidValues = ['invalid', '', null, undefined, 'tertiary', 'other'];
-
-        invalidValues.forEach(value => {
-          component.pageActionsKind = value;
-          expect(component.pageActionsKind).toBe('secondary');
-        });
-      });
-    });
-
-    describe('backIcon and defaultMixedIcon:', () => {
-      it('should have `backIcon` set to ICON_ARROW_BACK from dictionary.', () => {
-        expect(component.backIcon).toBe(AnimaliaIconDictionary.ICON_ARROW_BACK);
-      });
-
-      it('should have `defaultMixedIcon` set to ICON_SETTINGS from dictionary.', () => {
-        expect(component.defaultMixedIcon).toBe(AnimaliaIconDictionary.ICON_SETTINGS);
       });
     });
 

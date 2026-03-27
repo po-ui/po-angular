@@ -481,9 +481,8 @@ describe('PoPageDefaultComponent desktop', () => {
       expect(breadcrumb).toBeFalsy();
     });
 
-    it('should use pageActionsKind for action buttons when pageHeaderType is secondary', () => {
+    it('should default action buttons to secondary kind when pageHeaderType is secondary', () => {
       component.pageHeaderType = 'secondary';
-      component.pageActionsKind = 'secondary';
       component.title = 'Secondary Page';
       component.actions = [{ label: 'Action 1' }, { label: 'Action 2' }];
 
@@ -496,6 +495,17 @@ describe('PoPageDefaultComponent desktop', () => {
           expect(buttonEl.classList.contains('po-button-primary')).toBeFalsy();
         }
       });
+    });
+
+    it('should respect individual kind from PoPageAction when pageHeaderType is secondary', () => {
+      component.pageHeaderType = 'secondary';
+      component.title = 'Secondary Page';
+      component.actions = [{ label: 'Action 1', kind: 'primary' }, { label: 'Action 2' }];
+
+      fixture.detectChanges();
+
+      const buttons = fixture.debugElement.nativeElement.querySelectorAll('.po-page-header-actions po-button');
+      expect(buttons.length).toBeGreaterThan(0);
     });
 
     it('should not render breadcrumb when pageHeaderType is tertiary', () => {

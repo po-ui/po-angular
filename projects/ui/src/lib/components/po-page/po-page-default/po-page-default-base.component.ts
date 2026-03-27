@@ -1,4 +1,4 @@
-import { Directive, HostBinding, HostListener, Input, input, output } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, output } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -6,7 +6,6 @@ import { PoLanguageService } from './../../../services/po-language/po-language.s
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
-import { AnimaliaIconDictionary } from '../../po-icon/po-icon-dictionary';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageActionsLayout } from './enums/po-page-actions-layout.enum';
 import { PoPageHeaderType } from './enums/po-page-header-type.enum';
@@ -49,18 +48,14 @@ export const poPageDefaultLiteralsDefault = {
  * | `--font-size-title-secondary`  | Tamanho da fonte do título       | `var(--font-size-md)`                 |
  * | `--font-weight-title-secondary`| Peso da fonte do título          | `var(--font-weight-semibold)`         |
  * | `--letter-spacing-title-secondary`| Espaçamento entre letras       | `0`                                   |
- * | `--gap-navigation`             | Espaçamento entre o botão voltar e o título | `var(--spacing-xxs)`          |
+ * | `--gap-navigation`             | Espaçamento entre o botão voltar e o título | `var(--spacing-xs)`           |
+ * | **Header Tertiary** |                                             |                                       |
+ * | `--font-weight-title-tertiary` | Peso da fonte do título          | `var(--font-weight-normal)`           |
  * | **Content**         |                                             |                                       |
  * | `--padding-content` | Espaçamento do conteúdo                     | `var(--spacing-xs) var(--spacing-sm)` |
  */
 @Directive()
 export abstract class PoPageDefaultBaseComponent {
-  /** Ícone utilizado no botão de voltar do header `secondary`. */
-  readonly backIcon: string = AnimaliaIconDictionary.ICON_ARROW_BACK;
-
-  /** Ícone padrão utilizado no layout `mixed` quando em tela pequena. */
-  readonly defaultMixedIcon: string = AnimaliaIconDictionary.ICON_SETTINGS;
-
   visibleActions: Array<PoPageAction> = [];
 
   protected language: string;
@@ -69,7 +64,6 @@ export abstract class PoPageDefaultBaseComponent {
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
-  private _pageActionsKind: string = 'secondary';
   private _pageActionsLayout: string = PoPageActionsLayout.default;
   private _pageHeaderType: string = PoPageHeaderType.primary;
   private _title: string;
@@ -183,36 +177,13 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * @description
    *
-   * Define o `kind` dos botões de ação fora do dropdown quando `p-page-header-type` é `secondary`.
-   *
-   * Valores válidos:
-   * - `primary`
-   * - `secondary`
-   *
-   * > Utilizado apenas quando `p-page-header-type` é `secondary`.
-   *
-   * @default `secondary`
-   */
-  @Input('p-page-actions-kind') set pageActionsKind(value: string) {
-    this._pageActionsKind = value === 'primary' || value === 'secondary' ? value : 'secondary';
-  }
-
-  get pageActionsKind(): string {
-    return this._pageActionsKind;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
    * Define o layout das ações do header. Aceita valores do enum `PoPageActionsLayout` ou `string`.
    *
    * Valores válidos:
    * - `default`: comportamento padrão (botões visíveis e dropdown para overflow).
    * - `dropdown`: todas as ações ficam dentro do dropdown.
    * - `mixed`: primeira ação como botão, demais no dropdown. Em telas pequenas (< 480px), a ação exibe
-   *   apenas o ícone (customizável via `PoPageAction.icon`, padrão: ícone de configurações).
+   *   apenas o ícone (customizável via `PoPageAction.icon`).
    *
    * @default `default`
    */
@@ -235,8 +206,9 @@ export abstract class PoPageDefaultBaseComponent {
    * Valores válidos:
    * - `primary`: header padrão com breadcrumb e ações (comportamento atual).
    * - `secondary`: header com botão de voltar (apenas ícone por padrão), sem breadcrumb.
-   *   O `kind` dos botões de ação é controlado por `p-page-actions-kind`.
-   * - `tertiary`: header sem botão de navegação e sem breadcrumb. Ações com `kind` livre.
+   *   O `kind` dos botões de ação é definido individualmente via `PoPageAction.kind` (padrão: `secondary`).
+   * - `tertiary`: header sem botão de navegação e sem breadcrumb.
+   *   O `kind` dos botões de ação é definido individualmente via `PoPageAction.kind` (padrão: `secondary`).
    *
    * @default `primary`
    */

@@ -20,9 +20,15 @@
     @if (title || subtitle) {
       <div class="po-page-header-title-container">
         @if (title) {
-          <h1 class="po-page-header-title">
-            {{ title }}
-          </h1>
+          @if (type === 'secondary' || type === 'tertiary') {
+            <h3 class="po-page-header-title">
+              {{ title }}
+            </h3>
+          } @else {
+            <h2 class="po-page-header-title">
+              {{ title }}
+            </h2>
+          }
         }
         @if (subtitle) {
           <div class="po-page-header-subtitle">
