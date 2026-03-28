@@ -148,8 +148,40 @@
 
 /* Message Content */
 .mcp-chat-message-content {
-  white-space: pre-wrap;
   overflow-x: auto;
+}
+
+.mcp-chat-message-content p {
+  margin: 4px 0;
+}
+
+.mcp-chat-message-content ul,
+.mcp-chat-message-content ol {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+
+.mcp-chat-message-content li {
+  margin: 2px 0;
+}
+
+.mcp-chat-message-content strong {
+  font-weight: 600;
+}
+
+.mcp-chat-message-content hr {
+  border: none;
+  border-top: 1px solid var(--color-neutral-light-20);
+  margin: 8px 0;
+}
+
+.mcp-chat-message-content blockquote {
+  border-left: 3px solid var(--color-action-default);
+  margin: 8px 0;
+  padding: 4px 12px;
+  color: var(--color-neutral-dark-70);
+  background: var(--color-neutral-light-05);
+  border-radius: 0 4px 4px 0;
 }
 
 .mcp-chat-message-content h1,

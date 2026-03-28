@@ -5,10 +5,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PoModule, PoI18nModule } from '@po-ui/ng-components';
 import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
+import { MarkdownModule, SANITIZE } from 'ngx-markdown';
 
 import { customLanguage } from './po-language-terraform.constant';
 import { HighlightCodeDirective } from './../documentation/documentation-code.directive';
 import { McpChatComponent } from './mcp-chat/mcp-chat.component';
+import { MarkdownPipe } from './mcp-chat/markdown.pipe';
 
 @NgModule({
   imports: [
@@ -60,9 +62,15 @@ import { McpChatComponent } from './mcp-chat/mcp-chat.component';
         cache: true
       }
     }),
-    PoCodeEditorModule.forRegister(customLanguage)
+    PoCodeEditorModule.forRegister(customLanguage),
+    MarkdownModule.forRoot({
+      sanitize: {
+        provide: SANITIZE,
+        useValue: 0
+      }
+    })
   ],
-  declarations: [HighlightCodeDirective, McpChatComponent],
+  declarations: [HighlightCodeDirective, McpChatComponent, MarkdownPipe],
   exports: [
     CommonModule,
     FormsModule,
@@ -71,7 +79,8 @@ import { McpChatComponent } from './mcp-chat/mcp-chat.component';
     PoModule,
     PoTemplatesModule,
     PoCodeEditorModule,
-    McpChatComponent
+    McpChatComponent,
+    MarkdownPipe
   ],
   providers: []
 })

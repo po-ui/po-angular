@@ -41,7 +41,7 @@
               }
             </div>
           }
-          <div class="mcp-chat-message-content" [innerHTML]="msg.content"></div>
+          <div class="mcp-chat-message-content" [innerHTML]="msg.content | markdown"></div>
         </div>
       }
 
