@@ -1,152 +1,208 @@
 <po-page-default class="app-portal app-portal-home">
   <app-home-colorful></app-home-colorful>
-  <div class="po-row">
-    <main class="po-offset-lg-1 po-offset-xl-2 po-lg-10 po-xl-8">
-      <section>
-        <po-widget
-          p-no-shadow
-          p-primary-label="Começar a usar"
-          (p-primary-action)="openInternalLink('guides/getting-started')"
-          p-secondary-label="Ver no Github"
-          (p-secondary-action)="openExternalLink('https://github.com/po-ui')"
-        >
-          <h4 class="section-title">Prazer, somos o PO UI 😃</h4>
-          <p>
-            Somos um projeto <span class="font-code">open source</span> que utiliza tecnologias atuais como
-            <a class="home-link" href="https://angular.io/">Angular</a> e
-            <a class="home-link" href="https://www.typescriptlang.org">Typescript.</a>
-          </p>
-          <p>
-            Nascemos na TOTVS, empresa líder em softwares corporativos na América Latina, presente em mais de 40 países.
-            Temos a intenção de retornar a comunidade toda contribuição que ela tem nos dados.
-          </p>
-        </po-widget>
-      </section>
 
-      <section class="ux-friendly">
-        <div class="po-row ux-friendly-header">
-          <h4 class="section-title">UX Friendly</h4>
-          <po-button
-            class="see-all-components"
-            p-label="Ver todos os componentes"
-            (p-click)="openInternalLink('documentation')"
-          >
-          </po-button>
+  <!-- Features Bento Grid -->
+  <section class="section-features">
+    <div class="section-header">
+      <span class="section-tag">Recursos</span>
+      <h2 class="section-title">Tudo que voc&ecirc; precisa</h2>
+      <p class="section-description">
+        Componentes poderosos, acess&iacute;veis e prontos para produ&ccedil;&atilde;o.
+      </p>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-card bento-card-large" (click)="openInternalLink('documentation')">
+        <div class="bento-card-icon">
+          <span class="an an-puzzle-piece"></span>
         </div>
-        <p class="po-mt-1 po-mt-sm-4 po-text-color-neutral-dark-60">Últimos componentes homologados.</p>
-        <div class="box-widget">
-          <po-widget
-            class="app-home-widget-components po-md-4 home-widget-components-left"
+        <h3 class="bento-card-title">80+ Componentes</h3>
+        <p class="bento-card-text">
+          Inputs, tabelas, modais, menus, gr&aacute;ficos e muito mais. Todos otimizados para performance e acessibilidade.
+        </p>
+        <div class="bento-card-preview">
+          <po-button p-kind="primary" p-label="Prim&aacute;rio" p-size="small"></po-button>
+          <po-button p-label="Secund&aacute;rio" p-size="small"></po-button>
+          <po-button p-kind="tertiary" p-label="Terci&aacute;rio" p-size="small"></po-button>
+        </div>
+      </div>
+
+      <div class="bento-card" (click)="openInternalLink('documentation/po-page-dynamic-table')">
+        <div class="bento-card-icon">
+          <span class="an an-layout"></span>
+        </div>
+        <h3 class="bento-card-title">Templates Din&acirc;micos</h3>
+        <p class="bento-card-text">
+          P&aacute;ginas completas geradas a partir de metadados JSON. CRUD em minutos.
+        </p>
+      </div>
+
+      <div class="bento-card" (click)="openInternalLink('guides/sync-fundamentals')">
+        <div class="bento-card-icon">
+          <span class="an an-cloud-arrow-up"></span>
+        </div>
+        <h3 class="bento-card-title">Sync & Offline</h3>
+        <p class="bento-card-text">
+          Motor de sincroniza&ccedil;&atilde;o offline-first com persist&ecirc;ncia local inteligente.
+        </p>
+      </div>
+
+      <div class="bento-card" (click)="openInternalLink('construtor-de-temas')">
+        <div class="bento-card-icon">
+          <span class="an an-paint-brush-broad"></span>
+        </div>
+        <h3 class="bento-card-title">Temas Custom</h3>
+        <p class="bento-card-text">
+          Design tokens e construtor visual. Personalize cada detalhe da identidade visual.
+        </p>
+      </div>
+
+      <div class="bento-card" (click)="openInternalLink('guides/getting-started')">
+        <div class="bento-card-icon">
+          <span class="an an-terminal-window"></span>
+        </div>
+        <h3 class="bento-card-title">Schematics</h3>
+        <p class="bento-card-text">
+          <span class="code-inline">ng add @po-ui/ng-components</span> e pronto. Setup instant&acirc;neo via Angular CLI.
+        </p>
+      </div>
+
+      <div class="bento-card bento-card-accent">
+        <div class="bento-card-icon">
+          <span class="an an-eye"></span>
+        </div>
+        <h3 class="bento-card-title">Acessibilidade AA/AAA</h3>
+        <p class="bento-card-text">
+          Componentes compat&iacute;veis com WCAG. Dois n&iacute;veis de acessibilidade integrados.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component Showcase -->
+  <section class="section-showcase">
+    <div class="section-header">
+      <span class="section-tag">Componentes</span>
+      <h2 class="section-title">Feitos para desenvolvedores</h2>
+      <p class="section-description">
+        Explore componentes reais e prontos para uso.
+      </p>
+    </div>
+
+    <div class="showcase-grid">
+      <div class="showcase-card" (click)="openInternalLink('/documentation/po-input')">
+        <div class="showcase-label">Inputs</div>
+        <div class="showcase-demo">
+          <po-input p-label="Nome completo" p-placeholder="Digite seu nome"></po-input>
+        </div>
+      </div>
+
+      <div class="showcase-card" (click)="openInternalLink('/documentation/po-table')">
+        <div class="showcase-label">Tabelas</div>
+        <div class="showcase-demo">
+          <po-table
+            p-hide-columns-manager
+            p-container
             p-no-shadow
-            p-height="220"
-            p-primary-label="Inputs"
-            (p-primary-action)="openInternalLink('/documentation/po-input')"
-          >
-            <div class="home-widget-components-container">
-              <div class="home-widget-components-content">
-                <po-input p-placeholder="Placeholder"></po-input>
-                <po-input></po-input>
-              </div>
-            </div>
-          </po-widget>
-
-          <po-widget
-            class="app-home-widget-components po-md-4 po-md-4 home-widget-components-medium"
-            p-no-shadow
-            p-height="220"
-            p-primary-label="Tabelas"
-            (p-primary-action)="openInternalLink('/documentation/po-table')"
-          >
-            <div class="home-widget-components-container">
-              <div class="home-widget-components-content">
-                <po-table
-                  p-hide-columns-manager
-                  p-checkbox
-                  p-container
-                  p-no-shadow
-                  [p-items]="[{ Content: 'content', content: 'content' }]"
-                >
-                </po-table>
-              </div>
-            </div>
-          </po-widget>
-
-          <po-widget
-            class="app-home-widget-components po-md-4 home-widget-components-right po-mb-sm-3"
-            p-no-shadow
-            p-height="220"
-            p-primary-label="Botões"
-            (p-primary-action)="openInternalLink('/documentation/po-button')"
-          >
-            <div class="home-widget-components-container">
-              <div class="home-widget-components-content">
-                <p class="po-mb-2">
-                  <po-button p-kind="primary" p-label="Primário"></po-button>
-                </p>
-                <p><po-button p-label="Default" p-size="large"></po-button></p>
-              </div>
-            </div>
-          </po-widget>
+            p-striped
+            [p-items]="[{ nome: 'Angular', versao: '19' }, { nome: 'TypeScript', versao: '5.5' }]"
+          ></po-table>
         </div>
-      </section>
+      </div>
 
-      <section class="section-open-source po-mb-5">
-        <div class="section-open-source-icon po-md-2 po-sm-3">
-          <img [attr.src]="imageHeart()" alt="Open source icon" class="section-title-icon" />
-          <div class="color-ball"></div>
+      <div class="showcase-card" (click)="openInternalLink('/documentation/po-button')">
+        <div class="showcase-label">Bot&otilde;es</div>
+        <div class="showcase-demo showcase-demo-buttons">
+          <po-button p-kind="primary" p-label="Primary"></po-button>
+          <po-button p-label="Secondary"></po-button>
+          <po-button p-kind="tertiary" p-label="Tertiary"></po-button>
         </div>
-        <div class="section-open-source-title po-md-10 po-sm-9">
-          <h4 class="section-title-primary po-pt-1">PO UI é open source</h4>
-          <p class="po-text-color-neutral-dark-60">
-            Resumindo… Você pode contribuir e ajudar o desenvolvimento do framework PO UI.
-          </p>
-        </div>
-      </section>
+      </div>
 
-      <section class="section-quem-utiliza">
-        <div class="po-row quem-utiliza-header po-pt-sm-2 po-mb-4">
-          <h4 class="section-title">Quem utiliza PO UI</h4>
-          <po-button
-            class="see-examples"
-            p-label="Made with PO UI"
-            (p-click)="openExternalLink('https://github.com/po-ui/po-angular/issues/374')"
-          >
-          </po-button>
+      <div class="showcase-card" (click)="openInternalLink('/documentation/po-tag')">
+        <div class="showcase-label">Tags</div>
+        <div class="showcase-demo showcase-demo-tags">
+          <po-tag p-label="Sucesso" p-type="success"></po-tag>
+          <po-tag p-label="Alerta" p-type="warning"></po-tag>
+          <po-tag p-label="Info" p-type="info"></po-tag>
+          <po-tag p-label="Perigo" p-type="danger"></po-tag>
         </div>
-        <div class="po-row">
-          <div class="po-md-12">
-            <a href="https://www.totvs.com/" target="_blank" rel="noopener"
-              ><img id="logo-totvs" class="quem-utiliza-item" alt="Logo Totvs"
-            /></a>
-          </div>
+      </div>
+    </div>
+
+    <div class="showcase-cta">
+      <po-button
+        p-label="Ver todos os componentes"
+        p-icon="an an-arrow-right"
+        (p-click)="openInternalLink('documentation')"
+      ></po-button>
+    </div>
+  </section>
+
+  <!-- Open Source Section -->
+  <section class="section-opensource">
+    <div class="opensource-bg">
+      <div class="opensource-orb"></div>
+    </div>
+    <div class="opensource-content">
+      <div class="opensource-icon-wrap">
+        <img [attr.src]="imageHeart()" alt="Open source icon" class="opensource-icon" />
+      </div>
+      <h2 class="opensource-title">PO UI &eacute; open source</h2>
+      <p class="opensource-text">
+        Nascemos na TOTVS, l&iacute;der em software corporativo na Am&eacute;rica Latina, presente em mais de 40 pa&iacute;ses.
+        Contribua, colabore e fa&ccedil;a parte dessa comunidade.
+      </p>
+      <div class="opensource-actions">
+        <po-button
+          p-kind="primary"
+          p-label="Contribuir no GitHub"
+          p-icon="an an-github-logo"
+          (p-click)="openExternalLink('https://github.com/po-ui/po-angular')"
+        ></po-button>
+        <po-button
+          p-label="C&oacute;digo de conduta"
+          (p-click)="openExternalLink('https://github.com/po-ui/po-angular/blob/master/CODE_OF_CONDUCT.md')"
+        ></po-button>
+      </div>
+
+      <div class="opensource-badges">
+        <div class="opensource-badge" (click)="openExternalLink('https://github.com/po-ui/po-angular/blob/master/LICENSE')">
+          <span class="an an-scales"></span>
+          <span>Licen&ccedil;a MIT</span>
         </div>
-      </section>
+        <div class="opensource-badge" (click)="openExternalLink('https://github.com/po-ui/po-angular/issues/374')">
+          <span class="an an-buildings"></span>
+          <span>Made with PO UI</span>
+        </div>
+        <div class="opensource-badge" (click)="openExternalLink('https://github.com/orgs/po-ui/people')">
+          <span class="an an-users-three"></span>
+          <span>Core Team</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <section>
-        <po-widget
-          class="po-md-6 home-widget-components-left"
-          p-no-shadow
-          p-primary-label="Leia mais"
-          (p-primary-action)="openExternalLink('https://github.com/po-ui/po-angular/blob/master/LICENSE')"
-        >
-          <div class="po-m-1">
-            <h4 class="section-title">Licença MIT</h4>
-            <p>Licença permissiva utilizada tanto em software livre quanto em software proprietário.</p>
-          </div>
-        </po-widget>
-
-        <po-widget
-          class="po-md-6 home-widget-components-right"
-          p-no-shadow
-          p-primary-label="Leia mais"
-          (p-primary-action)="openExternalLink('https://github.com/po-ui/po-angular/blob/master/CODE_OF_CONDUCT.md')"
-        >
-          <div class="po-m-1">
-            <h4 class="section-title">Código de conduta</h4>
-            <p>O código de conduta é a premissa ética que conduz o framework PO UI.</p>
-          </div>
-        </po-widget>
-      </section>
-    </main>
-  </div>
+  <!-- CTA Final -->
+  <section class="section-cta">
+    <h2 class="cta-title">Pronto para come&ccedil;ar?</h2>
+    <p class="cta-text">
+      Instale com um &uacute;nico comando e construa algo incr&iacute;vel.
+    </p>
+    <div class="cta-code">
+      <code>ng add @po-ui/ng-components</code>
+    </div>
+    <div class="cta-actions">
+      <po-button
+        p-kind="primary"
+        p-label="Come&ccedil;ar agora"
+        p-icon="an an-rocket-launch"
+        (p-click)="openInternalLink('guides/getting-started')"
+      ></po-button>
+      <po-button
+        p-label="Ver documenta&ccedil;&atilde;o"
+        (p-click)="openInternalLink('documentation')"
+      ></po-button>
+    </div>
+  </section>
 </po-page-default>

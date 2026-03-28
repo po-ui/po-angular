@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
 import { HomeColorfulService } from './home-colorful.service';
 
@@ -11,7 +12,10 @@ import { HomeColorfulService } from './home-colorful.service';
 export class HomeColorfulComponent implements OnInit {
   public stargazers_count: number;
 
-  constructor(private service: HomeColorfulService) {}
+  constructor(
+    private service: HomeColorfulService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.getStargazersCount();
@@ -26,5 +30,9 @@ export class HomeColorfulComponent implements OnInit {
 
   openExternalLink(url) {
     window.open(url, '_blank');
+  }
+
+  openInternalLink(route) {
+    this.router.navigate([`/${route}`]);
   }
 }

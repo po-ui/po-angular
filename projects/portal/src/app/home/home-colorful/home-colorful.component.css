@@ -1,131 +1,253 @@
-.home-colorful-content {
-  margin-bottom: 72px;
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2rem;
 }
 
-.larger-boxes {
-  height: 64px;
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.larger-box {
-  height: 64px;
-  width: 6.25%;
-  display: inline-block;
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: float 12s ease-in-out infinite;
 }
 
-.smaller-boxes {
-  height: 8px;
-  margin-top: -8px;
-  margin-bottom: 8px;
+.hero-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #753399 0%, transparent 70%);
+  top: -10%;
+  left: -5%;
+  animation-delay: 0s;
 }
 
-.smaller-box {
-  height: 8px;
-  width: 6.25%;
-  display: inline-block;
+.hero-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #b92f72 0%, transparent 70%);
+  top: 20%;
+  right: -5%;
+  animation-delay: -4s;
+  animation-duration: 15s;
 }
 
-.title {
-  color: var(--color-neutral-dark-80);
-  font-size: 50px;
-  margin: 0px;
-  padding-top: 100px;
-  font-family: var(--font-family-po-ui-light);
+.hero-orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #ffd464 0%, transparent 70%);
+  bottom: -5%;
+  left: 30%;
+  animation-delay: -8s;
+  animation-duration: 18s;
 }
 
-.library {
-  color: var(--color-neutral-dark-70);
-  font-size: 34px;
-  font-family: var(--font-family-po-ui-light);
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(117, 51, 153, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(117, 51, 153, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
 }
 
-.star {
-  padding-top: 28px;
-  display: block;
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(15px, 30px) scale(1.02); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
   text-align: center;
+  max-width: 800px;
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.color-1 {
-  background-color: #bdffd9;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.color-2 {
-  background-color: #60e78b;
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  background: rgba(117, 51, 153, 0.08);
+  border: 1px solid rgba(117, 51, 153, 0.15);
+  color: var(--color-neutral-dark-70);
+  font-size: 13px;
+  font-family: var(--font-family-po-ui);
+  letter-spacing: 0.5px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-.color-3 {
-  background-color: #20d18b;
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #753399;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
-.color-4 {
-  background-color: #159e82;
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(117, 51, 153, 0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(117, 51, 153, 0); }
 }
 
-.color-5 {
-  background-color: #108071;
+.hero-title {
+  margin: 0 0 24px;
+  line-height: 1.1;
 }
 
-.color-6 {
-  background-color: #8241a4;
+.hero-title-line {
+  display: block;
+  font-size: 56px;
+  font-family: var(--font-family-po-ui);
+  color: var(--color-neutral-dark-80);
+  font-weight: 300;
 }
 
-.color-7 {
-  background-color: #af2fa9;
+.hero-title-accent {
+  display: block;
+  font-size: 68px;
+  font-family: var(--font-family-po-ui-bold);
+  background: linear-gradient(135deg, #753399 0%, #b92f72 50%, #ffd464 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 4px;
 }
 
-.color-8 {
-  background-color: #c93570;
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-neutral-dark-60);
+  font-family: var(--font-family-po-ui);
+  max-width: 560px;
+  margin: 0 auto 40px;
 }
 
-.color-9 {
-  background-color: #be2972;
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
 }
 
-.color-10 {
-  background-color: #d1506b;
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.color-11 {
-  background-color: #f26c58;
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
-.color-12 {
-  background-color: #f37673;
+.hero-stat-value {
+  font-size: 28px;
+  font-family: var(--font-family-po-ui-bold);
+  color: var(--color-neutral-dark-80);
 }
 
-.color-13 {
-  background-color: #ff8e64;
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--color-neutral-dark-50);
+  font-family: var(--font-family-po-ui);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.color-14 {
-  background-color: #ffd464;
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
-.color-15 {
-  background-color: #ffef95;
+.hero-scroll-line {
+  width: 2px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--color-neutral-dark-30), transparent);
+  border-radius: 2px;
+  animation: scrollPulse 2s ease-in-out infinite;
 }
 
-.color-16 {
-  background-color: #ffff95;
-}
-
-.color-17 {
-  background-color: #85fcb8;
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
 }
 
 @media (max-width: 768px) {
-  .title {
-    font-size: 46px;
+  .hero {
+    min-height: 85vh;
+    padding: 1.5rem;
   }
 
-  .library {
-    font-size: 20px;
+  .hero-title-line {
+    font-size: 36px;
   }
 
-  .larger-box {
-    height: 42px;
+  .hero-title-accent {
+    font-size: 44px;
   }
 
-  .smaller-boxes {
-    margin-top: -27px;
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .hero-stats {
+    gap: 32px;
+  }
+
+  .hero-stat-value {
+    font-size: 22px;
+  }
+
+  .hero-orb-1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .hero-orb-2 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .hero-orb-3 {
+    width: 200px;
+    height: 200px;
   }
 }
