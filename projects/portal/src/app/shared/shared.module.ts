@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PoModule, PoI18nModule } from '@po-ui/ng-components';
 import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
-import { MarkdownModule, SANITIZE } from 'ngx-markdown';
 
 import { customLanguage } from './po-language-terraform.constant';
 import { HighlightCodeDirective } from './../documentation/documentation-code.directive';
@@ -62,13 +61,7 @@ import { MarkdownPipe } from './mcp-chat/markdown.pipe';
         cache: true
       }
     }),
-    PoCodeEditorModule.forRegister(customLanguage),
-    MarkdownModule.forRoot({
-      sanitize: {
-        provide: SANITIZE,
-        useValue: 0
-      }
-    })
+    PoCodeEditorModule.forRegister(customLanguage)
   ],
   declarations: [HighlightCodeDirective, McpChatComponent, MarkdownPipe],
   exports: [
