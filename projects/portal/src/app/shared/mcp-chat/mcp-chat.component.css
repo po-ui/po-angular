@@ -318,3 +318,30 @@
 .mcp-chat-send-btn:not(:disabled):hover {
   opacity: 0.85;
 }
+
+/* Doc Link Button */
+.mcp-doc-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: var(--color-action-default);
+  color: var(--color-neutral-light-00);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  width: fit-content;
+}
+
+.mcp-doc-link:hover {
+  opacity: 0.85;
+}
+
+.mcp-doc-link .an {
+  font-size: 14px;
+}

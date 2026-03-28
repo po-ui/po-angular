@@ -42,6 +42,12 @@
             </div>
           }
           <div class="mcp-chat-message-content" [innerHTML]="msg.content | markdown"></div>
+          @if (msg.docLink) {
+            <button class="mcp-doc-link" (click)="navigateToDoc(msg.docLink)">
+              <span class="an an-arrow-square-out"></span>
+              {{ msg.docLinkLabel }}
+            </button>
+          }
         </div>
       }
 

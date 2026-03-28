@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PoPageSlideComponent } from '@po-ui/ng-components';
 
@@ -9,6 +10,8 @@ interface ChatMessage {
   content: string;
   tool?: string;
   params?: Record<string, string>;
+  docLink?: string;
+  docLinkLabel?: string;
 }
 
 @Component({
@@ -33,7 +36,10 @@ export class McpChatComponent {
     'Estrutura do monorepo'
   ];
 
-  constructor(private mcpChatService: McpChatService) {}
+  constructor(
+    private mcpChatService: McpChatService,
+    private router: Router
+  ) {}
 
   openChat(): void {
     this.chatSlide.open();
@@ -55,11 +61,14 @@ export class McpChatComponent {
 
     this.mcpChatService.sendQuery(query).subscribe({
       next: (result: ChatToolResult) => {
+        const link = this.buildDocLink(result.tool, result.params);
         this.messages.push({
           role: 'assistant',
           content: result.result,
           tool: result.tool,
-          params: result.params
+          params: result.params,
+          docLink: link?.path,
+          docLinkLabel: link?.label
         });
         this.isLoading = false;
         this.scrollToBottom();
@@ -94,6 +103,51 @@ export class McpChatComponent {
       return '';
     }
     return Object.entries(params).map(([k, v]) => `${k}="${v}"`).join(', ');
+  }
+
+  navigateToDoc(path: string): void {
+    this.chatSlide.close();
+    this.router.navigateByUrl(path);
+  }
+
+  private buildDocLink(tool: string, params: Record<string, string>): { path: string; label: string } | null {
+    if (!tool || !params) {
+      return null;
+    }
+
+    const name = params['name'];
+
+    if ((tool === 'get_component' || tool === 'get_component_properties' ||
+         tool === 'get_component_samples' || tool === 'get_css_tokens') && name) {
+      return {
+        path: `/documentation/${name}`,
+        label: `Ver documentação completa de ${name}`
+      };
+    }
+
+    if (tool === 'get_guide' && name) {
+      const slug = name.replace(/\.md$/, '');
+      return {
+        path: `/guides/${slug}`,
+        label: `Abrir guia: ${slug}`
+      };
+    }
+
+    if (tool === 'list_components') {
+      return {
+        path: '/documentation',
+        label: 'Ver todos os componentes'
+      };
+    }
+
+    if (tool === 'list_guides') {
+      return {
+        path: '/guides',
+        label: 'Ver todos os guias'
+      };
+    }
+
+    return null;
   }
 
   private scrollToBottom(): void {
