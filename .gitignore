@@ -53,6 +53,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# MCP build output
+projects/mcp/build
+projects/mcp/node_modules
+
 # Build files
 projects/portal/src/app/guide/guides
 projects/portal/src/app/guide/menu-guides.service.ts

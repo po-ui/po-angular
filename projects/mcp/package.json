@@ -1,0 +1,51 @@
+{
+  "name": "@po-ui/mcp-server",
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "MCP Server para o PO UI - documentação de componentes, propriedades, tokens CSS, exemplos e guias via Model Context Protocol",
+  "type": "module",
+  "main": "build/server-external.js",
+  "bin": {
+    "po-ui-mcp": "build/server-external.js"
+  },
+  "files": [
+    "build/**/*.js",
+    "build/**/*.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/server-external.js",
+    "start:demo": "npx tsx demo/server.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "po-ui",
+    "mcp",
+    "model-context-protocol",
+    "angular",
+    "components",
+    "documentation",
+    "ai",
+    "cursor",
+    "copilot",
+    "claude"
+  ],
+  "author": "PO UI",
+  "license": "MIT",
+  "homepage": "https://po-ui.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/po-ui/po-angular"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.5.0",
+    "@types/node": "^20.11.0"
+  }
+}

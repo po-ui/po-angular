@@ -45,6 +45,8 @@
     "build:storage:lite": "ng build storage --configuration production",
     "build:sync": "ng build sync --configuration production && gulp build:schematics --lib sync && gulp replaceVersion && cd dist/ng-sync && npm pack",
     "build": "npm run build:schematics && npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
+    "build:mcp": "cd projects/mcp && npm run build",
+    "start:mcp:demo": "cd projects/mcp && npx tsx demo/server.ts",
     "build:portal:prod": "ng build portal --configuration production",
     "build:portal": "npm run build:ui && npm run build:templates && npm run build:code-editor && npm run build:portal:docs",
     "build:portal:docs": "cd projects/portal && gulp build && npm run script:copy-icons",

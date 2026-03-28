@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO UI MCP - Demo Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border-bottom: 1px solid #475569;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header .logo {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; color: white;
+    }
+    header h1 { font-size: 20px; font-weight: 600; color: #f1f5f9; }
+    header .subtitle { font-size: 13px; color: #94a3b8; margin-top: 2px; }
+    header .badge {
+      background: #059669; color: white; font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 12px; margin-left: auto;
+    }
+
+    .suggestions {
+      display: flex;
+      gap: 8px;
+      padding: 12px 24px;
+      overflow-x: auto;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+    }
+    .suggestions button {
+      white-space: nowrap;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .suggestions button:hover {
+      background: #334155;
+      color: #e2e8f0;
+      border-color: #475569;
+    }
+
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .message.assistant {
+      align-self: flex-start;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-bottom-left-radius: 4px;
+    }
+    .message .tool-badge {
+      display: inline-block;
+      background: #7c3aed22;
+      border: 1px solid #7c3aed55;
+      color: #a78bfa;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-family: monospace;
+    }
+    .message .tool-params {
+      display: inline-block;
+      color: #67e8f9;
+      font-size: 11px;
+      font-family: monospace;
+      margin-left: 6px;
+    }
+    .message .content { white-space: pre-wrap; }
+    .message .content h1, .message .content h2, .message .content h3 {
+      color: #f1f5f9; margin: 12px 0 6px;
+    }
+    .message .content h1 { font-size: 18px; }
+    .message .content h2 { font-size: 15px; }
+    .message .content h3 { font-size: 14px; }
+    .message .content code {
+      background: #0f172a;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #67e8f9;
+    }
+    .message .content pre {
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 8px 0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .message .content pre code {
+      background: none; padding: 0;
+    }
+    .message .content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+    .message .content table th,
+    .message .content table td {
+      border: 1px solid #334155;
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .message .content table th {
+      background: #1a2332;
+      font-weight: 600;
+    }
+    .message .content strong { color: #f1f5f9; }
+    .message .content em { color: #94a3b8; }
+
+    .typing {
+      align-self: flex-start;
+      padding: 14px 18px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      display: none;
+    }
+    .typing.active { display: flex; gap: 4px; }
+    .typing span {
+      width: 8px; height: 8px;
+      background: #64748b;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    .input-area {
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border-top: 1px solid #475569;
+      display: flex;
+      gap: 12px;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+    .input-area input:focus { border-color: #3b82f6; }
+    .input-area button {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .input-area button:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">PO</div>
+    <div>
+      <h1>PO UI MCP Server</h1>
+      <div class="subtitle">Documentacao de componentes via Model Context Protocol</div>
+    </div>
+    <div class="badge">MCP Externo</div>
+  </header>
+
+  <div class="suggestions" id="suggestions">
+    <button onclick="window.sendSuggestion('Quais componentes de formulario existem?')">Componentes de formulario</button>
+    <button onclick="window.sendSuggestion('Como usar o po-table?')">Como usar po-table</button>
+    <button onclick="window.sendSuggestion('Tokens CSS do po-button')">Tokens CSS po-button</button>
+    <button onclick="window.sendSuggestion('Exemplo de codigo do po-upload')">Exemplos po-upload</button>
+    <button onclick="window.sendSuggestion('Guias disponiveis')">Guias</button>
+    <button onclick="window.sendSuggestion('Estrutura do monorepo')">Estrutura</button>
+    <button onclick="window.sendSuggestion('Propriedades do po-combo')">Props po-combo</button>
+    <button onclick="window.sendSuggestion('Buscar modal')">Buscar modal</button>
+  </div>
+
+  <div class="chat-area" id="chat">
+    <div class="message assistant">
+      <div class="content">Ola! Sou o assistente do <strong>PO UI MCP Server</strong>. Posso ajudar com documentacao de componentes, propriedades, tokens CSS, exemplos de codigo e guias.
+
+Experimente clicar em uma sugestao acima ou digite sua pergunta!</div>
+    </div>
+  </div>
+
+  <div class="typing" id="typing">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="input" placeholder="Pergunte sobre componentes PO UI..." autocomplete="off">
+    <button onclick="window.send()">Enviar</button>
+  </div>
+
+  <script>
+    var chat = document.getElementById('chat');
+    var input = document.getElementById('input');
+    var typing = document.getElementById('typing');
+
+    input.addEventListener('keydown', function(e) { if (e.key === 'Enter') window.send(); });
+
+    window.sendSuggestion = function(text) {
+      input.value = text;
+      window.send();
+    };
+
+    window.send = async function() {
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+
+      var userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerHTML = '<div class="content">' + escapeHtml(text) + '</div>';
+      chat.appendChild(userMsg);
+
+      typing.classList.add('active');
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+        var res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: text })
+        });
+        var data = await res.json();
+
+        typing.classList.remove('active');
+
+        var assistantMsg = document.createElement('div');
+        assistantMsg.className = 'message assistant';
+
+        var html = '';
+        if (data.tool && data.tool !== 'help') {
+          html += '<div class="tool-badge">tool: ' + data.tool + '</div>';
+          if (data.params && Object.keys(data.params).length > 0) {
+            html += '<span class="tool-params">(' + JSON.stringify(data.params) + ')</span>';
+          }
+          html += '<br>';
+        }
+        html += '<div class="content">' + renderMarkdown(data.result) + '</div>';
+        assistantMsg.innerHTML = html;
+        chat.appendChild(assistantMsg);
+      } catch (err) {
+        typing.classList.remove('active');
+        var errMsg = document.createElement('div');
+        errMsg.className = 'message assistant';
+        errMsg.innerHTML = '<div class="content">Erro ao processar a pergunta. Tente novamente.</div>';
+        chat.appendChild(errMsg);
+      }
+
+      chat.scrollTop = chat.scrollHeight;
+    };
+
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderMarkdown(md) {
+      var html = escapeHtml(md);
+
+      // Code blocks
+      html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+      // Bold
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // Italic
+      html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+      // Headers
+      html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+      // Tables
+      html = html.replace(/^(\|.+\|)\n(\|[-| :]+\|)\n((?:\|.+\|\n?)*)/gm, function(match, header, sep, body) {
+        var ths = header.split('|').filter(Boolean).map(function(c) { return '<th>' + c.trim() + '</th>'; }).join('');
+        var rows = body.trim().split('\n').map(function(row) {
+          var tds = row.split('|').filter(Boolean).map(function(c) { return '<td>' + c.trim() + '</td>'; }).join('');
+          return '<tr>' + tds + '</tr>';
+        }).join('');
+        return '<table><thead><tr>' + ths + '</tr></thead><tbody>' + rows + '</tbody></table>';
+      });
+      // Line breaks
+      html = html.replace(/\n/g, '<br>');
+
+      return html;
+    }
+  </script>
+</body>
+</html>
