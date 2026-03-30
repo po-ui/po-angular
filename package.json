@@ -48,6 +48,7 @@
     "build:portal:prod": "ng build portal --configuration production",
     "build:portal": "npm run build:ui && npm run build:templates && npm run build:code-editor && npm run build:portal:docs",
     "build:portal:docs": "cd projects/portal && gulp build && npm run script:copy-icons",
+    "build:portal:llms": "cd projects/portal && gulp build:api && gulp build:llms",
     "release": "standard-version -- --preset angular",
     "format:check": "prettier --check --log-level error \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
     "format:all": "prettier --write \"**/*{.ts,.js,.json,.css,.scss,.html}\"",
