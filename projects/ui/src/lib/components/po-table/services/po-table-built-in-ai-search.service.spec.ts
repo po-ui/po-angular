@@ -30,48 +30,42 @@ describe('PoTableBuiltInAiSearchService', () => {
   });
 
   describe('isAvailable', () => {
-    it('should return false when window.ai is not available', async () => {
+    it('should return false when window.LanguageModel is not available', async () => {
       const result = await service.isAvailable();
       expect(result).toBeFalse();
     });
 
-    it('should return true when window.ai.languageModel is available and ready', async () => {
-      (window as any).ai = {
-        languageModel: {
-          capabilities: () => Promise.resolve({ available: 'readily' })
-        }
+    it('should return true when window.LanguageModel is available and ready', async () => {
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.resolve({ available: 'readily' })
       };
 
       const result = await service.isAvailable();
       expect(result).toBeTrue();
 
-      delete (window as any).ai;
+      delete (window as any).LanguageModel;
     });
 
-    it('should return true when window.ai.languageModel is available after download', async () => {
-      (window as any).ai = {
-        languageModel: {
-          capabilities: () => Promise.resolve({ available: 'after-download' })
-        }
+    it('should return true when window.LanguageModel is available after download', async () => {
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.resolve({ available: 'after-download' })
       };
 
       const result = await service.isAvailable();
       expect(result).toBeTrue();
 
-      delete (window as any).ai;
+      delete (window as any).LanguageModel;
     });
 
     it('should return false when capabilities check throws an error', async () => {
-      (window as any).ai = {
-        languageModel: {
-          capabilities: () => Promise.reject(new Error('Not supported'))
-        }
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.reject(new Error('Not supported'))
       };
 
       const result = await service.isAvailable();
       expect(result).toBeFalse();
 
-      delete (window as any).ai;
+      delete (window as any).LanguageModel;
     });
   });
 
@@ -146,14 +140,12 @@ describe('PoTableBuiltInAiSearchService', () => {
         confidence: 0.95
       });
 
-      (window as any).ai = {
-        languageModel: {
-          create: () =>
-            Promise.resolve({
-              prompt: () => Promise.resolve(mockResponse),
-              destroy: () => {}
-            })
-        }
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve(mockResponse),
+            destroy: () => {}
+          })
       };
 
       service.sendQuery('idade maior que 30', mockColumns).subscribe({
@@ -161,36 +153,34 @@ describe('PoTableBuiltInAiSearchService', () => {
           expect(result.filter).toBe('age gt 30');
           expect(result.description).toBe('Idade maior que 30');
           expect(result.confidence).toBe(0.95);
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done();
         },
         error: () => {
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done.fail('Should not have errored');
         }
       });
     });
 
     it('should handle malformed JSON response gracefully', done => {
-      (window as any).ai = {
-        languageModel: {
-          create: () =>
-            Promise.resolve({
-              prompt: () => Promise.resolve('This is not valid JSON'),
-              destroy: () => {}
-            })
-        }
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve('This is not valid JSON'),
+            destroy: () => {}
+          })
       };
 
       service.sendQuery('test query', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe('');
           expect(result.confidence).toBeLessThan(0.5);
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done();
         },
         error: () => {
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done.fail('Should not have errored');
         }
       });
@@ -199,25 +189,23 @@ describe('PoTableBuiltInAiSearchService', () => {
     it('should extract JSON from text with extra content', done => {
       const mockResponse = 'Here is the result: {"filter": "name eq \'Ana\'", "description": "Nome igual a Ana", "confidence": 0.9} some extra text';
 
-      (window as any).ai = {
-        languageModel: {
-          create: () =>
-            Promise.resolve({
-              prompt: () => Promise.resolve(mockResponse),
-              destroy: () => {}
-            })
-        }
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve(mockResponse),
+            destroy: () => {}
+          })
       };
 
       service.sendQuery('nome Ana', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe("name eq 'Ana'");
           expect(result.confidence).toBe(0.9);
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done();
         },
         error: () => {
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done.fail('Should not have errored');
         }
       });
@@ -230,24 +218,22 @@ describe('PoTableBuiltInAiSearchService', () => {
         confidence: 1.5
       });
 
-      (window as any).ai = {
-        languageModel: {
-          create: () =>
-            Promise.resolve({
-              prompt: () => Promise.resolve(mockResponse),
-              destroy: () => {}
-            })
-        }
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve(mockResponse),
+            destroy: () => {}
+          })
       };
 
       service.sendQuery('test', mockColumns).subscribe({
         next: result => {
           expect(result.confidence).toBeLessThanOrEqual(1);
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done();
         },
         error: () => {
-          delete (window as any).ai;
+          delete (window as any).LanguageModel;
           done.fail('Should not have errored');
         }
       });

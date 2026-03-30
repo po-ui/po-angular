@@ -21,11 +21,11 @@ export class PoTableBuiltInAiSearchService {
    */
   async isAvailable(): Promise<boolean> {
     try {
-      const ai = (window as any).ai;
-      if (!ai?.languageModel) {
+      const LanguageModel = (window as any).LanguageModel;
+      if (!LanguageModel) {
         return false;
       }
-      const capabilities = await ai.languageModel.capabilities();
+      const capabilities = await LanguageModel.capabilities();
       return capabilities?.available === 'readily' || capabilities?.available === 'after-download';
     } catch {
       return false;
@@ -93,15 +93,15 @@ export class PoTableBuiltInAiSearchService {
   }
 
   private async getSession(columns: Array<PoTableAiSearchColumn>): Promise<any> {
-    const ai = (window as any).ai;
-    if (!ai?.languageModel) {
+    const LanguageModel = (window as any).LanguageModel;
+    if (!LanguageModel) {
       throw new Error('Built-in AI is not available in this browser');
     }
 
     const systemPrompt = this.buildSystemPrompt(columns);
 
     this.destroySession();
-    this.session = await ai.languageModel.create({
+    this.session = await LanguageModel.create({
       systemPrompt
     });
 
@@ -113,28 +113,105 @@ export class PoTableBuiltInAiSearchService {
       .map(col => `  - "${col.property}" (label: "${col.label}", type: ${col.type})`)
       .join('\n');
 
-    return `You are an OData v4 filter generator. Your job is to convert natural language queries into OData v4 $filter expressions.
+    return `You are an OData v4 $filter expression generator. Convert natural language queries into valid OData v4 $filter expressions using ONLY the columns listed below.
 
 Available columns:
 ${columnsDescription}
 
-Rules:
+--- OData v4 Filter Protocol Reference ---
+
+COMPARISON OPERATORS:
+  eq    Equal                    → Property eq 'Value' | Property eq 10
+  ne    Not equal                → Property ne 'Value'
+  gt    Greater than             → Property gt 20
+  ge    Greater than or equal    → Property ge 10
+  lt    Less than                → Property lt 20
+  le    Less than or equal       → Property le 100
+  has   Has flags                → Property has Namespace.EnumType'Value'
+  in    Is a member of           → Property in ('Value1', 'Value2')
+
+LOGICAL OPERATORS:
+  and   Logical and              → Price le 200 and Price gt 3.5
+  or    Logical or               → Price le 3.5 or Price gt 200
+  not   Logical negation         → not endswith(Description,'milk')
+
+ARITHMETIC OPERATORS:
+  add   Addition                 → Price add 5 gt 10
+  sub   Subtraction              → Price sub 5 gt 10
+  mul   Multiplication           → Price mul 2 gt 2000
+  div   Division                 → Price div 2 gt 4
+  divby Decimal Division         → Price divby 2 gt 3.5
+  mod   Modulo                   → Price mod 2 eq 0
+
+GROUPING:
+  ( )   Precedence grouping      → (Price sub 5) gt 10
+
+STRING AND COLLECTION FUNCTIONS:
+  concat(s1, s2)                 → concat(concat(City,', '), Country) eq 'Berlin, Germany'
+  contains(s, sub)               → contains(CompanyName,'freds')
+  endswith(s, sub)               → endswith(CompanyName,'Futterkiste')
+  indexof(s, sub)                → indexof(CompanyName,'lfreds') eq 1
+  length(s)                      → length(CompanyName) eq 19
+  startswith(s, sub)             → startswith(CompanyName,'Alfr')
+  substring(s, pos)              → substring(CompanyName,1) eq 'lfreds Futterkiste'
+
+STRING FUNCTIONS:
+  matchesPattern(s, pattern)     → matchesPattern(CompanyName,'%5EA.*e$')
+  tolower(s)                     → tolower(CompanyName) eq 'alfreds futterkiste'
+  toupper(s)                     → toupper(CompanyName) eq 'ALFREDS FUTTERKISTE'
+  trim(s)                        → trim(CompanyName) eq 'Alfreds Futterkiste'
+
+DATE AND TIME FUNCTIONS:
+  year(d)                        → year(BirthDate) eq 2024
+  month(d)                       → month(BirthDate) eq 12
+  day(d)                         → day(StartTime) eq 8
+  hour(d)                        → hour(StartTime) eq 1
+  minute(d)                      → minute(StartTime) eq 0
+  second(d)                      → second(StartTime) eq 0
+  fractionalseconds(d)           → fractionalseconds(StartTime) lt 0.01
+  date(d)                        → date(StartTime) ne date(EndTime)
+  time(d)                        → time(StartTime) le StartOfDay
+  totaloffsetminutes(d)          → totaloffsetminutes(StartTime) eq 60
+  totalseconds(d)                → totalseconds(duration'PT1M') eq 60
+  now()                          → StartTime ge now()
+  maxdatetime()                  → EndTime eq maxdatetime()
+  mindatetime()                  → StartTime eq mindatetime()
+
+ARITHMETIC FUNCTIONS:
+  ceiling(n)                     → ceiling(Freight) eq 33
+  floor(n)                       → floor(Freight) eq 32
+  round(n)                       → round(Freight) eq 32
+
+TYPE FUNCTIONS:
+  cast(expr, type)               → cast(ShipCountry,Edm.String)
+  isof(expr, type)               → isof(ShipCountry,Edm.String)
+
+CONDITIONAL FUNCTIONS:
+  case(expr:val, ..., true:def)  → case(X gt 0:1,X lt 0:-1,true:0)
+
+--- Rules ---
 1. Use ONLY the column properties listed above.
-2. For string comparisons use: eq, ne, contains(), startswith(), endswith().
-3. For numeric comparisons use: eq, ne, gt, ge, lt, le.
-4. For date comparisons use: eq, ne, gt, ge, lt, le with format YYYY-MM-DD.
-5. Combine conditions with "and" or "or".
-6. String values must be enclosed in single quotes.
-7. The contains() function is case-sensitive in OData but many servers implement it as case-insensitive.
+2. String values must be enclosed in single quotes: 'value'.
+3. Use lower case operator and function names for compatibility with OData 4.0.
+4. Combine conditions with "and", "or", and parentheses for grouping.
+5. For case-insensitive string matching prefer: contains(tolower(property), 'lowercasevalue').
+6. For date columns use date functions (year, month, day) or direct comparison with YYYY-MM-DD format.
+7. Use "in" operator for multiple value matching: Property in ('A', 'B', 'C').
+8. Use "not" for negation: not contains(Property, 'value').
 
-You MUST respond ONLY with a valid JSON object in this exact format (no markdown, no extra text):
-{"filter": "<OData filter expression>", "description": "<human-readable description of the filter in the same language as the query>", "confidence": <number between 0 and 1>}
+--- Response Format ---
+You MUST respond ONLY with a valid JSON object (no markdown, no extra text):
+{"filter": "<OData v4 $filter expression>", "description": "<human-readable description in the same language as the query>", "confidence": <number between 0 and 1>}
 
-Examples:
-- Query: "age greater than 30" → {"filter": "age gt 30", "description": "Age greater than 30", "confidence": 0.95}
-- Query: "name contains Silva" → {"filter": "contains(name, 'Silva')", "description": "Name contains Silva", "confidence": 0.9}
-- Query: "active employees from São Paulo" → {"filter": "status eq 'Ativo' and city eq 'São Paulo'", "description": "Active employees from São Paulo", "confidence": 0.85}
-- Query: "salary above 10000 and department IT" → {"filter": "salary gt 10000 and department eq 'TI'", "description": "Salary above 10000 and IT department", "confidence": 0.9}
+--- Examples ---
+- "age greater than 30" → {"filter": "age gt 30", "description": "Age greater than 30", "confidence": 0.95}
+- "name contains Silva" → {"filter": "contains(tolower(name), 'silva')", "description": "Name contains Silva", "confidence": 0.9}
+- "active employees from São Paulo" → {"filter": "status eq 'Ativo' and city eq 'São Paulo'", "description": "Active employees from São Paulo", "confidence": 0.85}
+- "salary between 5000 and 10000" → {"filter": "salary ge 5000 and salary le 10000", "description": "Salary between 5000 and 10000", "confidence": 0.9}
+- "hired in 2023" → {"filter": "year(hireDate) eq 2023", "description": "Hired in 2023", "confidence": 0.9}
+- "department is TI or Marketing" → {"filter": "department in ('TI', 'Marketing')", "description": "Department is TI or Marketing", "confidence": 0.95}
+- "name starts with A and age not equal 30" → {"filter": "startswith(name, 'A') and age ne 30", "description": "Name starts with A and age is not 30", "confidence": 0.9}
+- "salary above average (mod 1000 equals 0)" → {"filter": "salary gt 8000 and salary mod 1000 eq 0", "description": "Salary above 8000 and multiple of 1000", "confidence": 0.7}
 
 If you cannot interpret the query, return: {"filter": "", "description": "Could not interpret the query", "confidence": 0.0}`;
   }

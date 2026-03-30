@@ -68,15 +68,104 @@ export class MockEmployeesInterceptor implements HttpInterceptor {
   }
 
   private applyODataFilter(items: Employee[], filter: string): Employee[] {
-    const conditions = filter.split(/\s+and\s+/i);
+    return items.filter(item => this.evaluateExpression(item, filter));
+  }
 
-    return items.filter(item => {
-      return conditions.every(condition => this.evaluateCondition(item, condition.trim()));
-    });
+  /**
+   * Avalia uma expressão OData completa com suporte a "or", "and", "not" e agrupamento com parênteses.
+   */
+  private evaluateExpression(item: any, expression: string): boolean {
+    const trimmed = expression.trim();
+
+    // not operador
+    if (trimmed.toLowerCase().startsWith('not ')) {
+      return !this.evaluateExpression(item, trimmed.substring(4));
+    }
+
+    // Divide por "or" (respeitando parênteses)
+    const orParts = this.splitByOperator(trimmed, 'or');
+    if (orParts.length > 1) {
+      return orParts.some(part => this.evaluateExpression(item, part.trim()));
+    }
+
+    // Divide por "and" (respeitando parênteses)
+    const andParts = this.splitByOperator(trimmed, 'and');
+    if (andParts.length > 1) {
+      return andParts.every(part => this.evaluateExpression(item, part.trim()));
+    }
+
+    // Remove parênteses externas
+    if (trimmed.startsWith('(') && trimmed.endsWith(')')) {
+      const inner = trimmed.substring(1, trimmed.length - 1);
+      if (this.isBalanced(inner)) {
+        return this.evaluateExpression(item, inner);
+      }
+    }
+
+    return this.evaluateCondition(item, trimmed);
+  }
+
+  /**
+   * Divide a expressão por um operador lógico respeitando parênteses e funções.
+   */
+  private splitByOperator(expression: string, operator: string): string[] {
+    const parts: string[] = [];
+    let depth = 0;
+    let current = '';
+    const regex = new RegExp(`\\s+${operator}\\s+`, 'gi');
+    let i = 0;
+
+    while (i < expression.length) {
+      if (expression[i] === '(') {
+        depth++;
+        current += expression[i];
+        i++;
+      } else if (expression[i] === ')') {
+        depth--;
+        current += expression[i];
+        i++;
+      } else if (depth === 0) {
+        const remaining = expression.substring(i);
+        const match = remaining.match(regex);
+        if (match && remaining.indexOf(match[0]) === 0) {
+          parts.push(current);
+          current = '';
+          i += match[0].length;
+        } else {
+          current += expression[i];
+          i++;
+        }
+      } else {
+        current += expression[i];
+        i++;
+      }
+    }
+
+    if (current) {
+      parts.push(current);
+    }
+
+    return parts;
+  }
+
+  private isBalanced(expression: string): boolean {
+    let depth = 0;
+    for (const char of expression) {
+      if (char === '(') { depth++; }
+      if (char === ')') { depth--; }
+      if (depth < 0) { return false; }
+    }
+    return depth === 0;
   }
 
   private evaluateCondition(item: any, condition: string): boolean {
-    // contains(property, 'value')
+    // contains(tolower(property), 'value') ou contains(property, 'value')
+    const containsTolowerMatch = condition.match(/contains\(tolower\((\w+)\),\s*'([^']+)'\)/i);
+    if (containsTolowerMatch) {
+      const value = String(item[containsTolowerMatch[1]] || '').toLowerCase();
+      return value.includes(containsTolowerMatch[2].toLowerCase());
+    }
+
     const containsMatch = condition.match(/contains\((\w+),\s*'([^']+)'\)/i);
     if (containsMatch) {
       const value = String(item[containsMatch[1]] || '').toLowerCase();
@@ -90,15 +179,116 @@ export class MockEmployeesInterceptor implements HttpInterceptor {
       return value.startsWith(startsWithMatch[2].toLowerCase());
     }
 
+    // endswith(property, 'value')
+    const endsWithMatch = condition.match(/endswith\((\w+),\s*'([^']+)'\)/i);
+    if (endsWithMatch) {
+      const value = String(item[endsWithMatch[1]] || '').toLowerCase();
+      return value.endsWith(endsWithMatch[2].toLowerCase());
+    }
+
+    // tolower(property) op 'value'
+    const tolowerMatch = condition.match(/tolower\((\w+)\)\s+(eq|ne)\s+'([^']+)'/i);
+    if (tolowerMatch) {
+      const value = String(item[tolowerMatch[1]] || '').toLowerCase();
+      const compareValue = tolowerMatch[3].toLowerCase();
+      return tolowerMatch[2] === 'eq' ? value === compareValue : value !== compareValue;
+    }
+
+    // toupper(property) op 'VALUE'
+    const toupperMatch = condition.match(/toupper\((\w+)\)\s+(eq|ne)\s+'([^']+)'/i);
+    if (toupperMatch) {
+      const value = String(item[toupperMatch[1]] || '').toUpperCase();
+      const compareValue = toupperMatch[3].toUpperCase();
+      return toupperMatch[2] === 'eq' ? value === compareValue : value !== compareValue;
+    }
+
+    // length(property) op number
+    const lengthMatch = condition.match(/length\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+)/i);
+    if (lengthMatch) {
+      const value = String(item[lengthMatch[1]] || '').length;
+      return this.compareNumbers(value, Number(lengthMatch[3]), lengthMatch[2]);
+    }
+
+    // indexof(property, 'value') op number
+    const indexofMatch = condition.match(/indexof\((\w+),\s*'([^']+)'\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+)/i);
+    if (indexofMatch) {
+      const value = String(item[indexofMatch[1]] || '').indexOf(indexofMatch[2]);
+      return this.compareNumbers(value, Number(indexofMatch[4]), indexofMatch[3]);
+    }
+
+    // year(property) op number
+    const yearMatch = condition.match(/year\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+)/i);
+    if (yearMatch) {
+      const value = new Date(item[yearMatch[1]]).getFullYear();
+      return this.compareNumbers(value, Number(yearMatch[3]), yearMatch[2]);
+    }
+
+    // month(property) op number
+    const monthMatch = condition.match(/month\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+)/i);
+    if (monthMatch) {
+      const value = new Date(item[monthMatch[1]]).getMonth() + 1;
+      return this.compareNumbers(value, Number(monthMatch[3]), monthMatch[2]);
+    }
+
+    // day(property) op number
+    const dayMatch = condition.match(/day\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+)/i);
+    if (dayMatch) {
+      const value = new Date(item[dayMatch[1]]).getDate();
+      return this.compareNumbers(value, Number(dayMatch[3]), dayMatch[2]);
+    }
+
+    // property in ('value1', 'value2', ...)
+    const inMatch = condition.match(/(\w+)\s+in\s+\(([^)]+)\)/i);
+    if (inMatch) {
+      const value = String(item[inMatch[1]] || '').toLowerCase();
+      const values = inMatch[2].match(/'([^']+)'/g)?.map(v => v.replace(/'/g, '').toLowerCase()) || [];
+      return values.includes(value);
+    }
+
+    // property op arithmetic expression: property mod|add|sub|mul|div number op number
+    const arithmeticMatch = condition.match(/(\w+)\s+(mod|add|sub|mul|div|divby)\s+(\d+(?:\.\d+)?)\s+(eq|ne|gt|ge|lt|le)\s+(\d+(?:\.\d+)?)/i);
+    if (arithmeticMatch) {
+      const propValue = Number(item[arithmeticMatch[1]]);
+      const operand = Number(arithmeticMatch[3]);
+      const computed = this.applyArithmetic(propValue, operand, arithmeticMatch[2].toLowerCase());
+      return this.compareNumbers(computed, Number(arithmeticMatch[5]), arithmeticMatch[4]);
+    }
+
+    // ceiling(property) op number
+    const ceilingMatch = condition.match(/ceiling\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+(?:\.\d+)?)/i);
+    if (ceilingMatch) {
+      const value = Math.ceil(Number(item[ceilingMatch[1]]));
+      return this.compareNumbers(value, Number(ceilingMatch[3]), ceilingMatch[2]);
+    }
+
+    // floor(property) op number
+    const floorMatch = condition.match(/floor\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+(?:\.\d+)?)/i);
+    if (floorMatch) {
+      const value = Math.floor(Number(item[floorMatch[1]]));
+      return this.compareNumbers(value, Number(floorMatch[3]), floorMatch[2]);
+    }
+
+    // round(property) op number
+    const roundMatch = condition.match(/round\((\w+)\)\s+(eq|ne|gt|ge|lt|le)\s+(\d+(?:\.\d+)?)/i);
+    if (roundMatch) {
+      const value = Math.round(Number(item[roundMatch[1]]));
+      return this.compareNumbers(value, Number(roundMatch[3]), roundMatch[2]);
+    }
+
     // property op 'string_value'
     const stringMatch = condition.match(/(\w+)\s+(eq|ne)\s+'([^']+)'/);
     if (stringMatch) {
-      const value = String(item[stringMatch[1]] || '');
-      const compareValue = stringMatch[3];
-      if (stringMatch[2] === 'eq') {
-        return value.toLowerCase() === compareValue.toLowerCase();
-      }
-      return value.toLowerCase() !== compareValue.toLowerCase();
+      const value = String(item[stringMatch[1]] || '').toLowerCase();
+      const compareValue = stringMatch[3].toLowerCase();
+      return stringMatch[2] === 'eq' ? value === compareValue : value !== compareValue;
+    }
+
+    // property op date_value (YYYY-MM-DD) — deve vir antes de number para não capturar datas como números
+    const dateMatch = condition.match(/(\w+)\s+(eq|ne|gt|ge|lt|le)\s+(\d{4}-\d{2}-\d{2})/);
+    if (dateMatch) {
+      const value = new Date(item[dateMatch[1]]).getTime();
+      const compareValue = new Date(dateMatch[3]).getTime();
+      return this.compareNumbers(value, compareValue, dateMatch[2]);
     }
 
     // property op number_value
@@ -106,31 +296,33 @@ export class MockEmployeesInterceptor implements HttpInterceptor {
     if (numberMatch) {
       const value = Number(item[numberMatch[1]]);
       const compareValue = Number(numberMatch[3]);
-      switch (numberMatch[2]) {
-        case 'eq': return value === compareValue;
-        case 'ne': return value !== compareValue;
-        case 'gt': return value > compareValue;
-        case 'ge': return value >= compareValue;
-        case 'lt': return value < compareValue;
-        case 'le': return value <= compareValue;
-      }
-    }
-
-    // property op date_value (YYYY-MM-DD)
-    const dateMatch = condition.match(/(\w+)\s+(eq|ne|gt|ge|lt|le)\s+(\d{4}-\d{2}-\d{2})/);
-    if (dateMatch) {
-      const value = new Date(item[dateMatch[1]]).getTime();
-      const compareValue = new Date(dateMatch[3]).getTime();
-      switch (dateMatch[2]) {
-        case 'eq': return value === compareValue;
-        case 'ne': return value !== compareValue;
-        case 'gt': return value > compareValue;
-        case 'ge': return value >= compareValue;
-        case 'lt': return value < compareValue;
-        case 'le': return value <= compareValue;
-      }
+      return this.compareNumbers(value, compareValue, numberMatch[2]);
     }
 
     return true;
+  }
+
+  private compareNumbers(value: number, compareValue: number, operator: string): boolean {
+    switch (operator.toLowerCase()) {
+      case 'eq': return value === compareValue;
+      case 'ne': return value !== compareValue;
+      case 'gt': return value > compareValue;
+      case 'ge': return value >= compareValue;
+      case 'lt': return value < compareValue;
+      case 'le': return value <= compareValue;
+      default: return true;
+    }
+  }
+
+  private applyArithmetic(value: number, operand: number, operator: string): number {
+    switch (operator) {
+      case 'add': return value + operand;
+      case 'sub': return value - operand;
+      case 'mul': return value * operand;
+      case 'div': return operand !== 0 ? Math.trunc(value / operand) : 0;
+      case 'divby': return operand !== 0 ? value / operand : 0;
+      case 'mod': return value % operand;
+      default: return value;
+    }
   }
 }

@@ -39,15 +39,18 @@ export class AppComponent {
     'idade maior que 35',
     'ativos de São Paulo',
     'salário acima de 10000',
-    'departamento TI',
+    'departamento TI ou Marketing',
     'inativos',
     'idade entre 25 e 30',
     'nome contém Silva',
-    'admitidos em 2024',
-    'nome contém Silva e salário menor que 10000',
+    'admitidos em 2023',
+    'nome começa com A e idade diferente de 30',
     'ativos de São Paulo com idade maior que 30',
-    'departamento TI e idade entre 25 e 35',
-    'inativos com salário acima de 8000'
+    'departamento não é RH',
+    'salário múltiplo de 1000',
+    'admitidos no mês 6',
+    'nome termina com Silva',
+    'salário menor ou igual a 8000 ou cidade é Curitiba'
   ];
 
   onAiSearchResult(result: PoTableAiSearchResult): void {
