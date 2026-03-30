@@ -34,12 +34,8 @@ export class PoTableBuiltInAiSearchService {
    */
   async isAvailable(): Promise<boolean> {
     try {
-      const LanguageModel = (window as any).LanguageModel;
-      if (!LanguageModel) {
-        return false;
-      }
-      const capabilities = await LanguageModel.capabilities();
-      return capabilities?.available === 'readily' || capabilities?.available === 'after-download';
+      const availability = await this.checkAvailability();
+      return availability === 'readily' || availability === 'after-download';
     } catch {
       return false;
     }
@@ -47,6 +43,10 @@ export class PoTableBuiltInAiSearchService {
 
   /**
    * Verifica o estado detalhado de disponibilidade do Built-in AI.
+   *
+   * Suporta ambas as versões da API:
+   * - Nova API: `LanguageModel.availability()` retorna string diretamente (`'available'`, `'downloadable'`, `'downloading'`, etc.)
+   * - API legada: `LanguageModel.capabilities()` retorna objeto `{ available: 'readily' | 'after-download' | 'no' }`
    *
    * Retorna:
    * - `readily`: modelo pronto para uso imediato.
@@ -60,17 +60,49 @@ export class PoTableBuiltInAiSearchService {
       if (!LanguageModel) {
         return 'unsupported';
       }
-      const capabilities = await LanguageModel.capabilities();
-      const available = capabilities?.available;
-      if (available === 'readily') {
-        return 'readily';
-      }
-      if (available === 'after-download') {
-        return 'after-download';
-      }
-      return 'unavailable';
+      return await this.resolveAvailability(LanguageModel);
     } catch {
       return 'unsupported';
+    }
+  }
+
+  private async resolveAvailability(languageModel: any): Promise<PoTableAiSearchAvailability> {
+    if (typeof languageModel.availability === 'function') {
+      const status = await languageModel.availability();
+      return this.mapAvailabilityStatus(status);
+    }
+
+    if (typeof languageModel.capabilities === 'function') {
+      const capabilities = await languageModel.capabilities();
+      return this.mapCapabilitiesStatus(capabilities?.available);
+    }
+
+    return 'unavailable';
+  }
+
+  private mapAvailabilityStatus(status: string): PoTableAiSearchAvailability {
+    switch (status) {
+      case 'available':
+      case 'readily':
+        return 'readily';
+      case 'downloadable':
+      case 'after-download':
+        return 'after-download';
+      case 'downloading':
+        return 'after-download';
+      default:
+        return 'unavailable';
+    }
+  }
+
+  private mapCapabilitiesStatus(available: string): PoTableAiSearchAvailability {
+    switch (available) {
+      case 'readily':
+        return 'readily';
+      case 'after-download':
+        return 'after-download';
+      default:
+        return 'unavailable';
     }
   }
 

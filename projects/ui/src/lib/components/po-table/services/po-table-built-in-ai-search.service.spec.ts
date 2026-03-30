@@ -263,46 +263,116 @@ describe('PoTableBuiltInAiSearchService', () => {
       expect(result).toBe('unsupported');
     });
 
-    it('should return readily when capabilities.available is readily', async () => {
+    it('should return unsupported when check throws an error', async () => {
       (window as any).LanguageModel = {
-        capabilities: () => Promise.resolve({ available: 'readily' })
-      };
-
-      const result = await service.checkAvailability();
-      expect(result).toBe('readily');
-
-      delete (window as any).LanguageModel;
-    });
-
-    it('should return after-download when capabilities.available is after-download', async () => {
-      (window as any).LanguageModel = {
-        capabilities: () => Promise.resolve({ available: 'after-download' })
-      };
-
-      const result = await service.checkAvailability();
-      expect(result).toBe('after-download');
-
-      delete (window as any).LanguageModel;
-    });
-
-    it('should return unavailable when capabilities.available is no', async () => {
-      (window as any).LanguageModel = {
-        capabilities: () => Promise.resolve({ available: 'no' })
-      };
-
-      const result = await service.checkAvailability();
-      expect(result).toBe('unavailable');
-
-      delete (window as any).LanguageModel;
-    });
-
-    it('should return unsupported when capabilities check throws an error', async () => {
-      (window as any).LanguageModel = {
-        capabilities: () => Promise.reject(new Error('Not supported'))
+        availability: () => Promise.reject(new Error('Not supported'))
       };
 
       const result = await service.checkAvailability();
       expect(result).toBe('unsupported');
+
+      delete (window as any).LanguageModel;
+    });
+
+    describe('availability() API (nova)', () => {
+      afterEach(() => {
+        delete (window as any).LanguageModel;
+      });
+
+      it('should return readily when availability() returns available', async () => {
+        (window as any).LanguageModel = {
+          availability: () => Promise.resolve('available')
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('readily');
+      });
+
+      it('should return readily when availability() returns readily', async () => {
+        (window as any).LanguageModel = {
+          availability: () => Promise.resolve('readily')
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('readily');
+      });
+
+      it('should return after-download when availability() returns downloadable', async () => {
+        (window as any).LanguageModel = {
+          availability: () => Promise.resolve('downloadable')
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('after-download');
+      });
+
+      it('should return after-download when availability() returns downloading', async () => {
+        (window as any).LanguageModel = {
+          availability: () => Promise.resolve('downloading')
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('after-download');
+      });
+
+      it('should return unavailable when availability() returns unavailable', async () => {
+        (window as any).LanguageModel = {
+          availability: () => Promise.resolve('unavailable')
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('unavailable');
+      });
+
+      it('should prefer availability() over capabilities() when both exist', async () => {
+        (window as any).LanguageModel = {
+          availability: () => Promise.resolve('available'),
+          capabilities: () => Promise.resolve({ available: 'no' })
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('readily');
+      });
+    });
+
+    describe('capabilities() API (legada)', () => {
+      afterEach(() => {
+        delete (window as any).LanguageModel;
+      });
+
+      it('should return readily when capabilities.available is readily', async () => {
+        (window as any).LanguageModel = {
+          capabilities: () => Promise.resolve({ available: 'readily' })
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('readily');
+      });
+
+      it('should return after-download when capabilities.available is after-download', async () => {
+        (window as any).LanguageModel = {
+          capabilities: () => Promise.resolve({ available: 'after-download' })
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('after-download');
+      });
+
+      it('should return unavailable when capabilities.available is no', async () => {
+        (window as any).LanguageModel = {
+          capabilities: () => Promise.resolve({ available: 'no' })
+        };
+
+        const result = await service.checkAvailability();
+        expect(result).toBe('unavailable');
+      });
+    });
+
+    it('should return unavailable when LanguageModel has no availability or capabilities', async () => {
+      (window as any).LanguageModel = {};
+
+      const result = await service.checkAvailability();
+      expect(result).toBe('unavailable');
 
       delete (window as any).LanguageModel;
     });
