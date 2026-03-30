@@ -208,8 +208,67 @@ Isso garante que a documentação para LLMs esteja sempre sincronizada com a ver
 
 ---
 
+---
+
+## Servidor MCP (@po-ui/mcp)
+
+O PO UI oferece um servidor [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) oficial que pode ser integrado
+diretamente a IDEs e assistentes de código como **Cursor**, **Claude Desktop**, **VS Code** e outros clientes MCP.
+
+### Instalação e Configuração
+
+Não é necessário instalar nada — o servidor é executado via `npx`. Configure seu cliente MCP:
+
+**Cursor** (`.cursor/mcp.json` ou configurações globais):
+
+```json
+{
+  "mcpServers": {
+    "po-ui": {
+      "command": "npx",
+      "args": ["-y", "@po-ui/mcp"]
+    }
+  }
+}
+```
+
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json` no macOS
+ou `%APPDATA%\Claude\claude_desktop_config.json` no Windows):
+
+```json
+{
+  "mcpServers": {
+    "po-ui": {
+      "command": "npx",
+      "args": ["-y", "@po-ui/mcp"]
+    }
+  }
+}
+```
+
+### Ferramentas Disponíveis
+
+| Ferramenta | Descrição |
+|---|---|
+| `list_components` | Lista todos os componentes, serviços, interfaces e enums com descrições resumidas. Suporta filtro por seção e texto livre. |
+| `get_component_docs` | Retorna a documentação completa em Markdown para um componente ou API específica pelo slug. |
+| `search_docs` | Busca texto livre em toda a documentação do PO UI. |
+| `get_guide` | Retorna o conteúdo de um guia de documentação (ex: `getting-started`, `schematics`). |
+
+### Exemplos de Uso
+
+Com o servidor configurado, você pode perguntar ao seu assistente:
+
+- *"Liste todos os componentes de formulário do PO UI"*
+- *"Mostre a documentação completa do po-table"*
+- *"Busque componentes que suportem upload de arquivo"*
+- *"Mostre o guia de instalação do PO UI"*
+
+---
+
 ## Referências
 
 - [Especificação llms.txt](https://llmstxt.org/)
 - [Diretório de sites com llms.txt](https://llmstxt.site/)
 - [GitHub - llms-txt](https://github.com/AnswerDotAI/llms-txt)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
