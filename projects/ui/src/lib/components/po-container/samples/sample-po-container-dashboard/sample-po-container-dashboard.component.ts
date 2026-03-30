@@ -15,15 +15,7 @@ import {
 @Component({
   selector: 'sample-po-container-dashboard',
   templateUrl: './sample-po-container-dashboard.component.html',
-  styles: [
-    `
-      .sample-container-dashboard {
-        color: #9da7a9;
-        font-family: NunitoSans;
-        font-size: 14px;
-      }
-    `
-  ],
+  styleUrls: ['./sample-po-container-dashboard.component.css'],
   providers: [SampleDashboardService],
   standalone: false
 })

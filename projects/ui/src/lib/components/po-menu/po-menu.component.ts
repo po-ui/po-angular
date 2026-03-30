@@ -107,11 +107,13 @@ const poMenuRootLevel = 1;
  * <example name="po-menu-labs" title="PO Menu Labs">
  *   <file name="sample-po-menu-labs/sample-po-menu-labs.component.html"> </file>
  *   <file name="sample-po-menu-labs/sample-po-menu-labs.component.ts"> </file>
+ *   <file name="sample-po-menu-labs/sample-po-menu-labs.component.css"> </file>
  * </example>
  *
  * <example name="po-menu-human-resources" title="PO Menu - Human Resources">
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.component.html"> </file>
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.component.ts"> </file>
+ *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.component.css"> </file>
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.service.ts"> </file>
  * </example>
  */

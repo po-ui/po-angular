@@ -20,6 +20,7 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
  * <example name="po-avatar-business-card" title="PO Avatar - Business Card" >
  *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.html"> </file>
  *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.ts"> </file>
+ *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.css"> </file>
  * </example>
  */
 @Component({

@@ -22,11 +22,13 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
  * <example name="po-popup-labs" title="PO Popup - Labs">
  *   <file name="sample-po-popup-labs/sample-po-popup-labs.component.html"> </file>
  *   <file name="sample-po-popup-labs/sample-po-popup-labs.component.ts"> </file>
+ *   <file name="sample-po-popup-labs/sample-po-popup-labs.component.css"> </file>
  * </example>
  *
  * <example name="po-popup-email" title="PO Popup Email">
  *   <file name="sample-po-popup-email/sample-po-popup-email.component.html"> </file>
  *   <file name="sample-po-popup-email/sample-po-popup-email.component.ts"> </file>
+ *   <file name="sample-po-popup-email/sample-po-popup-email.component.css"> </file>
  * </example>
  *
  */

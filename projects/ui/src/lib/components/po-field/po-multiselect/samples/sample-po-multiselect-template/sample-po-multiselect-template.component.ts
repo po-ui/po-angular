@@ -4,26 +4,7 @@ import { PoSelectOption } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-multiselect-template',
   templateUrl: './sample-po-multiselect-template.component.html',
-  styles: [
-    `
-      .containerFlex {
-        display: flex;
-        align-items: center;
-      }
-
-      .containerFlexTag {
-        display: flex;
-        gap: 2px;
-        flex-direction: column;
-      }
-
-      .containerButton {
-        display: flex;
-        align-items: flex-end;
-        padding: 8px;
-      }
-    `
-  ],
+  styleUrls: ['./sample-po-multiselect-template.component.css'],
   standalone: false
 })
 export class SamplePoMultiselectTemplateComponent {

@@ -39,12 +39,14 @@ const ID_SEARCH_BUTTON_CLEAN = 'search-button-clean';
  * <example name="po-search-labs" title="PO Search Labs">
  *  <file name="sample-po-search-labs/sample-po-search-labs.component.html"> </file>
  *  <file name="sample-po-search-labs/sample-po-search-labs.component.ts"> </file>
+ *  <file name="sample-po-search-labs/sample-po-search-labs.component.css"> </file>
  *  <file name="sample-po-search-labs/sample-po-search-labs.service.ts"> </file>
  * </example>
  *
  * <example name="po-search-find-people" title="PO Search Find People">
  *  <file name="sample-po-search-find-people/sample-po-search-find-people.component.html"> </file>
  *  <file name="sample-po-search-find-people/sample-po-search-find-people.component.ts"> </file>
+ *  <file name="sample-po-search-find-people/sample-po-search-find-people.component.css"> </file>
  *  <file name="sample-po-search-find-people/sample-po-search-find-people.service.ts"> </file>
  * </example>
  *
@@ -62,6 +64,7 @@ const ID_SEARCH_BUTTON_CLEAN = 'search-button-clean';
  * <example name="po-search-execute" title="PO Search Form Fields with Execute">
  *  <file name="sample-po-search-execute/sample-po-search-execute.component.html"> </file>
  *  <file name="sample-po-search-execute/sample-po-search-execute.component.ts"> </file>
+ *  <file name="sample-po-search-execute/sample-po-search-execute.component.css"> </file>
  * </example>
  *
  * <example name="po-search-fields-locate" title="PO Search Form Fields with Locate">
