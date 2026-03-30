@@ -587,6 +587,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   aiSearchDownloadProgress: PoTableAiSearchDownloadProgress = { loaded: 0, total: 0, percent: 0 };
   aiSearchPhase: PoTableAiSearchPhase = 'idle';
   aiSearchStreamText: string = '';
+  aiSearchElapsedTime: number = 0;
 
   /**
    * @optional

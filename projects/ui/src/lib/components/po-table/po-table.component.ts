@@ -365,6 +365,17 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
         animation: po-ai-pulse 1.2s ease-in-out infinite;
       }
 
+      .po-table-ai-search-phase-timer {
+        margin-left: auto;
+        font-size: 12px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        background: var(--color-neutral-light-05, #f5f5f5);
+        padding: 2px 8px;
+        border-radius: 10px;
+      }
+
       @keyframes po-ai-pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.3; }
@@ -470,6 +481,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private aiDownloadProgressSubscription: Subscription;
   private aiPhaseSubscription: Subscription;
   private aiStreamSubscription: Subscription;
+  private aiSearchTimerInterval: any = null;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -645,6 +657,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.aiDownloadProgressSubscription?.unsubscribe();
     this.aiPhaseSubscription?.unsubscribe();
     this.aiStreamSubscription?.unsubscribe();
+    this.stopAiSearchTimer();
     this.builtInAiSearchService.destroySession();
   }
 
@@ -710,6 +723,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.aiSearchStreamText = '';
     this.aiSearchPhase = 'idle';
     this.aiSearchSubscription?.unsubscribe();
+    this.startAiSearchTimer();
 
     this.subscribeToDownloadProgress();
     this.subscribeToPhaseChanges();
@@ -722,6 +736,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
         this.aiSearchLoading = false;
         this.aiSearchDownloading = false;
         this.aiSearchPhase = 'done';
+        this.stopAiSearchTimer();
 
         const result = {
           query: query.trim(),
@@ -747,6 +762,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
         this.aiSearchLoading = false;
         this.aiSearchDownloading = false;
         this.aiSearchPhase = 'error';
+        this.stopAiSearchTimer();
         this.aiSearchError.emit({
           query: query.trim(),
           statusCode: error.statusCode || 500,
@@ -766,6 +782,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.aiSearchDownloading = false;
     this.aiSearchPhase = 'idle';
     this.aiSearchStreamText = '';
+    this.stopAiSearchTimer();
     this.applyFilters();
   }
 
@@ -816,6 +833,31 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.aiSearchStreamText = text;
       this.changeDetector.detectChanges();
     });
+  }
+
+  private startAiSearchTimer(): void {
+    this.stopAiSearchTimer();
+    this.aiSearchElapsedTime = 0;
+    this.aiSearchTimerInterval = setInterval(() => {
+      this.aiSearchElapsedTime++;
+      this.changeDetector.detectChanges();
+    }, 1000);
+  }
+
+  private stopAiSearchTimer(): void {
+    if (this.aiSearchTimerInterval) {
+      clearInterval(this.aiSearchTimerInterval);
+      this.aiSearchTimerInterval = null;
+    }
+  }
+
+  formatElapsedTime(): string {
+    const minutes = Math.floor(this.aiSearchElapsedTime / 60);
+    const seconds = this.aiSearchElapsedTime % 60;
+    if (minutes > 0) {
+      return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+    }
+    return `${seconds}s`;
   }
 
   /**

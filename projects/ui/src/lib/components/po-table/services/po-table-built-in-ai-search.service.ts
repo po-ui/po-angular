@@ -258,117 +258,30 @@ export class PoTableBuiltInAiSearchService {
 
   private buildSystemPrompt(columns: Array<PoTableAiSearchColumn>): string {
     const columnsDescription = columns
-      .map(col => `  - "${col.property}" (label: "${col.label}", type: ${col.type})`)
-      .join('\n');
+      .map(col => `${col.property}(${col.type})`)
+      .join(', ');
     const currentYear = new Date().getFullYear();
 
-    return `You are an OData v4 $filter expression generator. Convert natural language queries into valid OData v4 $filter expressions using ONLY the columns listed below.
+    return `OData v4 filter generator. Current year: ${currentYear}. Columns: ${columnsDescription}
 
-Current year: ${currentYear}
+Operators: eq,ne,gt,ge,lt,le,has,in,and,or,not,add,sub,mul,div,divby,mod
+Functions: contains,startswith,endswith,tolower,toupper,trim,concat,length,indexof,substring,matchesPattern,year,month,day,hour,minute,second,now,date,time,ceiling,floor,round,cast,isof
 
-Available columns:
-${columnsDescription}
+Rules:
+- Use ONLY listed columns. Strings in single quotes. Lowercase operators.
+- Case-insensitive: contains(tolower(prop),'value')
+- "this year"/"este ano" → year(col) eq ${currentYear}
 
---- OData v4 Filter Protocol Reference ---
+Respond ONLY with JSON, no extra text:
+{"filter":"<OData expression>","description":"<brief description>"}
 
-COMPARISON OPERATORS:
-  eq    Equal                    → Property eq 'Value' | Property eq 10
-  ne    Not equal                → Property ne 'Value'
-  gt    Greater than             → Property gt 20
-  ge    Greater than or equal    → Property ge 10
-  lt    Less than                → Property lt 20
-  le    Less than or equal       → Property le 100
-  has   Has flags                → Property has Namespace.EnumType'Value'
-  in    Is a member of           → Property in ('Value1', 'Value2')
+Examples:
+"age > 30" → {"filter":"age gt 30","description":"Idade maior que 30"}
+"name contains Silva" → {"filter":"contains(tolower(name),'silva')","description":"Nome contém Silva"}
+"hired this year" → {"filter":"year(hireDate) eq ${currentYear}","description":"Admitidos em ${currentYear}"}
+"dept TI or Marketing" → {"filter":"department in ('TI','Marketing')","description":"Departamento TI ou Marketing"}
 
-LOGICAL OPERATORS:
-  and   Logical and              → Price le 200 and Price gt 3.5
-  or    Logical or               → Price le 3.5 or Price gt 200
-  not   Logical negation         → not endswith(Description,'milk')
-
-ARITHMETIC OPERATORS:
-  add   Addition                 → Price add 5 gt 10
-  sub   Subtraction              → Price sub 5 gt 10
-  mul   Multiplication           → Price mul 2 gt 2000
-  div   Division                 → Price div 2 gt 4
-  divby Decimal Division         → Price divby 2 gt 3.5
-  mod   Modulo                   → Price mod 2 eq 0
-
-GROUPING:
-  ( )   Precedence grouping      → (Price sub 5) gt 10
-
-STRING AND COLLECTION FUNCTIONS:
-  concat(s1, s2)                 → concat(concat(City,', '), Country) eq 'Berlin, Germany'
-  contains(s, sub)               → contains(CompanyName,'freds')
-  endswith(s, sub)               → endswith(CompanyName,'Futterkiste')
-  indexof(s, sub)                → indexof(CompanyName,'lfreds') eq 1
-  length(s)                      → length(CompanyName) eq 19
-  startswith(s, sub)             → startswith(CompanyName,'Alfr')
-  substring(s, pos)              → substring(CompanyName,1) eq 'lfreds Futterkiste'
-
-STRING FUNCTIONS:
-  matchesPattern(s, pattern)     → matchesPattern(CompanyName,'%5EA.*e$')
-  tolower(s)                     → tolower(CompanyName) eq 'alfreds futterkiste'
-  toupper(s)                     → toupper(CompanyName) eq 'ALFREDS FUTTERKISTE'
-  trim(s)                        → trim(CompanyName) eq 'Alfreds Futterkiste'
-
-DATE AND TIME FUNCTIONS:
-  year(d)                        → year(BirthDate) eq 2024
-  month(d)                       → month(BirthDate) eq 12
-  day(d)                         → day(StartTime) eq 8
-  hour(d)                        → hour(StartTime) eq 1
-  minute(d)                      → minute(StartTime) eq 0
-  second(d)                      → second(StartTime) eq 0
-  fractionalseconds(d)           → fractionalseconds(StartTime) lt 0.01
-  date(d)                        → date(StartTime) ne date(EndTime)
-  time(d)                        → time(StartTime) le StartOfDay
-  totaloffsetminutes(d)          → totaloffsetminutes(StartTime) eq 60
-  totalseconds(d)                → totalseconds(duration'PT1M') eq 60
-  now()                          → StartTime ge now()
-  maxdatetime()                  → EndTime eq maxdatetime()
-  mindatetime()                  → StartTime eq mindatetime()
-
-ARITHMETIC FUNCTIONS:
-  ceiling(n)                     → ceiling(Freight) eq 33
-  floor(n)                       → floor(Freight) eq 32
-  round(n)                       → round(Freight) eq 32
-
-TYPE FUNCTIONS:
-  cast(expr, type)               → cast(ShipCountry,Edm.String)
-  isof(expr, type)               → isof(ShipCountry,Edm.String)
-
-CONDITIONAL FUNCTIONS:
-  case(expr:val, ..., true:def)  → case(X gt 0:1,X lt 0:-1,true:0)
-
---- Rules ---
-1. Use ONLY the column properties listed above.
-2. String values must be enclosed in single quotes: 'value'.
-3. Use lower case operator and function names for compatibility with OData 4.0.
-4. Combine conditions with "and", "or", and parentheses for grouping.
-5. For case-insensitive string matching prefer: contains(tolower(property), 'lowercasevalue').
-6. For date columns use date functions (year, month, day) or direct comparison with YYYY-MM-DD format.
-7. Use "in" operator for multiple value matching: Property in ('A', 'B', 'C').
-8. Use "not" for negation: not contains(Property, 'value').
-
---- Response Format ---
-You MUST respond ONLY with a valid JSON object (no markdown, no extra text):
-{"filter": "<OData v4 $filter expression>", "description": "<human-readable description in the same language as the query>", "confidence": <number between 0 and 1>}
-
---- Examples ---
-- "age greater than 30" → {"filter": "age gt 30", "description": "Age greater than 30", "confidence": 0.95}
-- "name contains Silva" → {"filter": "contains(tolower(name), 'silva')", "description": "Name contains Silva", "confidence": 0.9}
-- "active employees from São Paulo" → {"filter": "status eq 'Ativo' and city eq 'São Paulo'", "description": "Active employees from São Paulo", "confidence": 0.85}
-- "salary between 5000 and 10000" → {"filter": "salary ge 5000 and salary le 10000", "description": "Salary between 5000 and 10000", "confidence": 0.9}
-- "hired in 2023" → {"filter": "year(hireDate) eq 2023", "description": "Hired in 2023", "confidence": 0.9}
-- "department is TI or Marketing" → {"filter": "department in ('TI', 'Marketing')", "description": "Department is TI or Marketing", "confidence": 0.95}
-- "name starts with A and age not equal 30" → {"filter": "startswith(name, 'A') and age ne 30", "description": "Name starts with A and age is not 30", "confidence": 0.9}
-- "salary above average (mod 1000 equals 0)" → {"filter": "salary gt 8000 and salary mod 1000 eq 0", "description": "Salary above 8000 and multiple of 1000", "confidence": 0.7}
-- "hired this year" → {"filter": "year(hireDate) eq ${currentYear}", "description": "Hired in ${currentYear}", "confidence": 0.95}
-- "employees hired before this year" → {"filter": "year(hireDate) lt ${currentYear}", "description": "Employees hired before ${currentYear}", "confidence": 0.9}
-
-IMPORTANT: When the user references "this year", "current year", "este ano", or "ano atual", use year(column) eq ${currentYear} with the current year value ${currentYear}. For relative date expressions like "today" or "now", use the now() function.
-
-If you cannot interpret the query, return: {"filter": "", "description": "Could not interpret the query", "confidence": 0.0}`;
+If cannot interpret: {"filter":"","description":"Não foi possível interpretar"}`;
   }
 
   private buildPrompt(query: string, columns: Array<PoTableAiSearchColumn>): { query: string; columns: Array<PoTableAiSearchColumn> } {
@@ -399,7 +312,9 @@ If you cannot interpret the query, return: {"filter": "", "description": "Could 
         if (done) {
           break;
         }
-        fullText = typeof value === 'string' ? value : fullText + value;
+        if (typeof value === 'string') {
+          fullText += value;
+        }
         this.ngZone.run(() => this.streamChunk$.next(fullText));
       }
     } finally {
@@ -415,7 +330,7 @@ If you cannot interpret the query, return: {"filter": "", "description": "Could 
       if (!jsonMatch) {
         return {
           filter: '',
-          description: `Could not interpret the query: "${originalQuery}"`,
+          description: `Não foi possível interpretar: "${originalQuery}"`,
           confidence: 0.1
         };
       }
@@ -425,12 +340,12 @@ If you cannot interpret the query, return: {"filter": "", "description": "Could 
       return {
         filter: typeof parsed.filter === 'string' ? parsed.filter : '',
         description: typeof parsed.description === 'string' ? parsed.description : '',
-        confidence: typeof parsed.confidence === 'number' ? Math.min(1, Math.max(0, parsed.confidence)) : 0.5
+        confidence: parsed.filter ? 0.9 : 0.0
       };
     } catch {
       return {
         filter: '',
-        description: `Could not parse AI response for: "${originalQuery}"`,
+        description: `Não foi possível processar resposta para: "${originalQuery}"`,
         confidence: 0.1
       };
     }
