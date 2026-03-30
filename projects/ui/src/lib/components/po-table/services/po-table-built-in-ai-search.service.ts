@@ -125,9 +125,40 @@ export class PoTableBuiltInAiSearchService {
   }
 
   /**
+   * Detecta o navegador do usuário.
+   *
+   * @returns `'edge'` para Microsoft Edge, `'chrome'` para Google Chrome, `'unknown'` para outros.
+   */
+  detectBrowser(): 'chrome' | 'edge' | 'unknown' {
+    const ua = navigator.userAgent;
+    if (ua.includes('Edg/')) {
+      return 'edge';
+    }
+    if (ua.includes('Chrome/')) {
+      return 'chrome';
+    }
+    return 'unknown';
+  }
+
+  /**
    * Retorna as etapas de configuração para habilitar o Built-in AI no navegador.
+   * As instruções são adaptadas automaticamente de acordo com o navegador detectado (Chrome ou Edge).
    */
   getConfigurationSteps(): Array<PoTableAiSearchConfigStep> {
+    const browser = this.detectBrowser();
+
+    if (browser === 'edge') {
+      return this.getEdgeConfigurationSteps();
+    }
+
+    if (browser === 'chrome') {
+      return this.getChromeConfigurationSteps();
+    }
+
+    return this.getUnsupportedBrowserSteps();
+  }
+
+  private getChromeConfigurationSteps(): Array<PoTableAiSearchConfigStep> {
     return [
       {
         step: 1,
@@ -157,6 +188,44 @@ export class PoTableBuiltInAiSearchService {
         title: 'Verificar download do modelo',
         description: 'Acesse chrome://components e localize "Optimization Guide On Device Model". Clique em "Check for update" se o status não for "Up-to-date".',
         url: 'chrome://components'
+      }
+    ];
+  }
+
+  private getEdgeConfigurationSteps(): Array<PoTableAiSearchConfigStep> {
+    return [
+      {
+        step: 1,
+        title: 'Verificar versão do Edge',
+        description: 'Utilize o Microsoft Edge versão 128 ou superior. Recomenda-se o Edge Canary ou Edge Dev para acesso antecipado.',
+        url: 'https://www.microsoft.com/pt-br/edge/download/insider'
+      },
+      {
+        step: 2,
+        title: 'Habilitar Prompt API for Phi mini',
+        description: 'Acesse edge://flags/ e procure por "Prompt API for Phi mini". Selecione "Enabled".',
+        url: 'edge://flags/'
+      },
+      {
+        step: 3,
+        title: 'Reiniciar o navegador',
+        description: 'Feche e reabra o Edge completamente para que a flag tenha efeito.'
+      },
+      {
+        step: 4,
+        title: 'Verificar download do modelo',
+        description: 'O modelo Phi mini será baixado automaticamente na primeira utilização. Verifique a conexão com a internet e aguarde o download.'
+      }
+    ];
+  }
+
+  private getUnsupportedBrowserSteps(): Array<PoTableAiSearchConfigStep> {
+    return [
+      {
+        step: 1,
+        title: 'Navegador não suportado',
+        description: 'O Built-in AI requer Google Chrome (versão 128+) ou Microsoft Edge (versão 128+). Instale um desses navegadores para utilizar esta funcionalidade.',
+        url: 'https://www.google.com/intl/pt-BR/chrome/canary/'
       }
     ];
   }

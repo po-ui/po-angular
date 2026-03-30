@@ -433,16 +433,59 @@ describe('PoTableBuiltInAiSearchService', () => {
     });
   });
 
+  describe('detectBrowser', () => {
+    it('should detect Chrome browser', () => {
+      spyOnProperty(navigator, 'userAgent').and.returnValue(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+      );
+      expect(service.detectBrowser()).toBe('chrome');
+    });
+
+    it('should detect Edge browser', () => {
+      spyOnProperty(navigator, 'userAgent').and.returnValue(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0'
+      );
+      expect(service.detectBrowser()).toBe('edge');
+    });
+
+    it('should return unknown for other browsers', () => {
+      spyOnProperty(navigator, 'userAgent').and.returnValue(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
+      );
+      expect(service.detectBrowser()).toBe('unknown');
+    });
+  });
+
   describe('getConfigurationSteps', () => {
-    it('should return an array of configuration steps', () => {
+    it('should return Chrome-specific steps when browser is Chrome', () => {
+      spyOn(service, 'detectBrowser').and.returnValue('chrome');
       const steps = service.getConfigurationSteps();
 
       expect(steps.length).toBe(5);
-      expect(steps[0].step).toBe(1);
       expect(steps[0].title).toContain('Chrome');
       expect(steps[1].url).toContain('chrome://flags');
-      expect(steps[2].url).toContain('chrome://flags');
+      expect(steps[2].description).toContain('Gemini Nano');
       expect(steps[4].url).toContain('chrome://components');
+    });
+
+    it('should return Edge-specific steps when browser is Edge', () => {
+      spyOn(service, 'detectBrowser').and.returnValue('edge');
+      const steps = service.getConfigurationSteps();
+
+      expect(steps.length).toBe(4);
+      expect(steps[0].title).toContain('Edge');
+      expect(steps[1].description).toContain('Phi mini');
+      expect(steps[1].url).toContain('edge://flags');
+    });
+
+    it('should return unsupported browser step when browser is unknown', () => {
+      spyOn(service, 'detectBrowser').and.returnValue('unknown');
+      const steps = service.getConfigurationSteps();
+
+      expect(steps.length).toBe(1);
+      expect(steps[0].title).toContain('não suportado');
+      expect(steps[0].description).toContain('Chrome');
+      expect(steps[0].description).toContain('Edge');
     });
 
     it('should have sequential step numbers', () => {
