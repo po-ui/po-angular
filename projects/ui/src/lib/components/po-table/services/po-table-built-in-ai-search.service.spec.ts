@@ -257,6 +257,96 @@ describe('PoTableBuiltInAiSearchService', () => {
     });
   });
 
+  describe('checkAvailability', () => {
+    it('should return unsupported when window.LanguageModel does not exist', async () => {
+      const result = await service.checkAvailability();
+      expect(result).toBe('unsupported');
+    });
+
+    it('should return readily when capabilities.available is readily', async () => {
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.resolve({ available: 'readily' })
+      };
+
+      const result = await service.checkAvailability();
+      expect(result).toBe('readily');
+
+      delete (window as any).LanguageModel;
+    });
+
+    it('should return after-download when capabilities.available is after-download', async () => {
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.resolve({ available: 'after-download' })
+      };
+
+      const result = await service.checkAvailability();
+      expect(result).toBe('after-download');
+
+      delete (window as any).LanguageModel;
+    });
+
+    it('should return unavailable when capabilities.available is no', async () => {
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.resolve({ available: 'no' })
+      };
+
+      const result = await service.checkAvailability();
+      expect(result).toBe('unavailable');
+
+      delete (window as any).LanguageModel;
+    });
+
+    it('should return unsupported when capabilities check throws an error', async () => {
+      (window as any).LanguageModel = {
+        capabilities: () => Promise.reject(new Error('Not supported'))
+      };
+
+      const result = await service.checkAvailability();
+      expect(result).toBe('unsupported');
+
+      delete (window as any).LanguageModel;
+    });
+  });
+
+  describe('getConfigurationSteps', () => {
+    it('should return an array of configuration steps', () => {
+      const steps = service.getConfigurationSteps();
+
+      expect(steps.length).toBe(5);
+      expect(steps[0].step).toBe(1);
+      expect(steps[0].title).toContain('Chrome');
+      expect(steps[1].url).toContain('chrome://flags');
+      expect(steps[2].url).toContain('chrome://flags');
+      expect(steps[4].url).toContain('chrome://components');
+    });
+
+    it('should have sequential step numbers', () => {
+      const steps = service.getConfigurationSteps();
+
+      steps.forEach((step, index) => {
+        expect(step.step).toBe(index + 1);
+      });
+    });
+  });
+
+  describe('onDownloadProgress', () => {
+    it('should emit download progress events', done => {
+      const progressValues: Array<any> = [];
+
+      service.onDownloadProgress.subscribe(progress => {
+        progressValues.push(progress);
+        if (progressValues.length === 2) {
+          expect(progressValues[0].percent).toBe(50);
+          expect(progressValues[1].percent).toBe(100);
+          done();
+        }
+      });
+
+      service['downloadProgress$'].next({ loaded: 500, total: 1000, percent: 50 });
+      service['downloadProgress$'].next({ loaded: 1000, total: 1000, percent: 100 });
+    });
+  });
+
   describe('sanitizeInput', () => {
     it('should sanitize HTML special characters', () => {
       const result = service['sanitizeInput']('<script>alert("xss")</script>');

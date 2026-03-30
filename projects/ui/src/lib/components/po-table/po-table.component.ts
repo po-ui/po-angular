@@ -198,6 +198,141 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
+
+      .po-table-ai-search-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        margin-top: 4px;
+      }
+
+      .po-table-ai-search-status--warning {
+        background: var(--color-feedback-warning-lightest, #fff8e1);
+        color: var(--color-feedback-warning-dark, #8d6e00);
+        border: 1px solid var(--color-feedback-warning-lighter, #ffe082);
+      }
+
+      .po-table-ai-search-status--info {
+        background: var(--color-feedback-info-lightest, #e3f2fd);
+        color: var(--color-feedback-info-dark, #0d47a1);
+        border: 1px solid var(--color-feedback-info-lighter, #90caf9);
+      }
+
+      .po-table-ai-search-status--downloading {
+        background: var(--color-feedback-info-lightest, #e3f2fd);
+        color: var(--color-feedback-info-dark, #0d47a1);
+        border: 1px solid var(--color-feedback-info-lighter, #90caf9);
+      }
+
+      .po-table-ai-search-config-toggle {
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 600;
+        margin-left: 4px;
+      }
+
+      .po-table-ai-search-config-toggle:hover {
+        opacity: 0.8;
+      }
+
+      .po-table-ai-search-config {
+        margin-top: 8px;
+        padding: 12px 16px;
+        background: var(--color-neutral-light-05, #f5f5f5);
+        border-radius: 4px;
+        border: 1px solid var(--color-neutral-mid-40, #dadeea);
+      }
+
+      .po-table-ai-search-config-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        margin-bottom: 12px;
+      }
+
+      .po-table-ai-search-config-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .po-table-ai-search-config-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--color-neutral-mid-40, #dadeea);
+      }
+
+      .po-table-ai-search-config-step:last-child {
+        border-bottom: none;
+      }
+
+      .po-table-ai-search-config-step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--color-action-default, #1464a5);
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      .po-table-ai-search-config-step-content {
+        flex: 1;
+      }
+
+      .po-table-ai-search-config-step-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+      }
+
+      .po-table-ai-search-config-step-description {
+        font-size: 12px;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        margin-top: 2px;
+      }
+
+      .po-table-ai-search-config-step-url {
+        font-size: 12px;
+        color: var(--color-action-default, #1464a5);
+        font-family: monospace;
+        word-break: break-all;
+      }
+
+      .po-table-ai-search-download {
+        margin-top: 4px;
+      }
+
+      .po-table-ai-search-download-bar {
+        height: 6px;
+        background: var(--color-neutral-mid-40, #dadeea);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .po-table-ai-search-download-fill {
+        height: 100%;
+        background: var(--color-action-default, #1464a5);
+        border-radius: 3px;
+        transition: width 0.3s ease;
+      }
+
+      .po-table-ai-search-download-text {
+        font-size: 11px;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        margin-top: 4px;
+        display: flex;
+        justify-content: space-between;
+      }
     `
   ]
 })
@@ -269,6 +404,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private subscriptionScrollEvent: Subscription;
   private subscriptionService: Subscription = new Subscription();
   private aiSearchSubscription: Subscription;
+  private aiDownloadProgressSubscription: Subscription;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -410,6 +546,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeHeaderWidth();
     this.changeSizeLoading();
     this.applyFixedColumns();
+
+    if (this.aiSearch) {
+      this.checkAiAvailability();
+    }
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -437,6 +577,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
     this.aiSearchSubscription?.unsubscribe();
+    this.aiDownloadProgressSubscription?.unsubscribe();
     this.builtInAiSearchService.destroySession();
   }
 
@@ -463,6 +604,31 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   /**
+   * Verifica a disponibilidade do Built-in AI e configura o estado do componente.
+   */
+  async checkAiAvailability(): Promise<void> {
+    this.aiSearchAvailability = await this.builtInAiSearchService.checkAvailability();
+
+    if (this.aiSearchAvailability === 'unsupported' || this.aiSearchAvailability === 'unavailable') {
+      this.aiSearchConfigSteps = this.builtInAiSearchService.getConfigurationSteps();
+      this.aiSearchShowConfig = true;
+    } else {
+      this.aiSearchShowConfig = false;
+    }
+
+    if (this.aiSearchAvailability === 'after-download') {
+      this.subscribeToDownloadProgress();
+    }
+  }
+
+  /**
+   * Alterna a exibição do fluxo de configuração.
+   */
+  toggleAiSearchConfig(): void {
+    this.aiSearchShowConfig = !this.aiSearchShowConfig;
+  }
+
+  /**
    * Executa a busca inteligente utilizando o Built-in AI do navegador.
    * Converte a query em linguagem natural para um filtro OData v4 e aplica na tabela.
    */
@@ -473,13 +639,17 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     this.aiSearchLoading = true;
     this.aiSearchDescription = '';
+    this.aiSearchDownloading = false;
     this.aiSearchSubscription?.unsubscribe();
+
+    this.subscribeToDownloadProgress();
 
     const columns = this.builtInAiSearchService.extractColumnsMetadata(this.columns);
 
     this.aiSearchSubscription = this.builtInAiSearchService.sendQuery(query.trim(), columns).subscribe({
       next: response => {
         this.aiSearchLoading = false;
+        this.aiSearchDownloading = false;
 
         const result = {
           query: query.trim(),
@@ -503,6 +673,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       },
       error: error => {
         this.aiSearchLoading = false;
+        this.aiSearchDownloading = false;
         this.aiSearchError.emit({
           query: query.trim(),
           statusCode: error.statusCode || 500,
@@ -519,7 +690,21 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.aiSearchDescription = '';
     this.aiSearchSubscription?.unsubscribe();
     this.aiSearchLoading = false;
+    this.aiSearchDownloading = false;
     this.applyFilters();
+  }
+
+  private subscribeToDownloadProgress(): void {
+    this.aiDownloadProgressSubscription?.unsubscribe();
+    this.aiDownloadProgressSubscription = this.builtInAiSearchService.onDownloadProgress.subscribe(progress => {
+      this.aiSearchDownloading = true;
+      this.aiSearchDownloadProgress = progress;
+      if (progress.percent >= 100) {
+        this.aiSearchDownloading = false;
+        this.aiSearchAvailability = 'readily';
+      }
+      this.changeDetector.detectChanges();
+    });
   }
 
   /**

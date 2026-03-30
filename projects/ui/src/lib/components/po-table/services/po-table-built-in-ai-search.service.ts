@@ -1,8 +1,13 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Observable, from, throwError } from 'rxjs';
+import { Observable, Subject, from, throwError } from 'rxjs';
 import { catchError, map, timeout } from 'rxjs/operators';
 
-import { PoTableAiSearchColumn } from '../interfaces/po-table-ai-search.interface';
+import {
+  PoTableAiSearchAvailability,
+  PoTableAiSearchColumn,
+  PoTableAiSearchConfigStep,
+  PoTableAiSearchDownloadProgress
+} from '../interfaces/po-table-ai-search.interface';
 
 interface BuiltInAiResponse {
   filter: string;
@@ -13,8 +18,16 @@ interface BuiltInAiResponse {
 @Injectable()
 export class PoTableBuiltInAiSearchService {
   private session: any = null;
+  private downloadProgress$ = new Subject<PoTableAiSearchDownloadProgress>();
 
   constructor(private ngZone: NgZone) {}
+
+  /**
+   * Observable que emite o progresso de download do modelo de IA.
+   */
+  get onDownloadProgress(): Observable<PoTableAiSearchDownloadProgress> {
+    return this.downloadProgress$.asObservable();
+  }
 
   /**
    * Verifica se o Built-in AI está disponível no navegador.
@@ -30,6 +43,72 @@ export class PoTableBuiltInAiSearchService {
     } catch {
       return false;
     }
+  }
+
+  /**
+   * Verifica o estado detalhado de disponibilidade do Built-in AI.
+   *
+   * Retorna:
+   * - `readily`: modelo pronto para uso imediato.
+   * - `after-download`: modelo precisa ser baixado na primeira utilização.
+   * - `unavailable`: API existe no navegador mas está desabilitada (requer configuração de flags).
+   * - `unsupported`: navegador não possui a API LanguageModel.
+   */
+  async checkAvailability(): Promise<PoTableAiSearchAvailability> {
+    try {
+      const LanguageModel = (window as any).LanguageModel;
+      if (!LanguageModel) {
+        return 'unsupported';
+      }
+      const capabilities = await LanguageModel.capabilities();
+      const available = capabilities?.available;
+      if (available === 'readily') {
+        return 'readily';
+      }
+      if (available === 'after-download') {
+        return 'after-download';
+      }
+      return 'unavailable';
+    } catch {
+      return 'unsupported';
+    }
+  }
+
+  /**
+   * Retorna as etapas de configuração para habilitar o Built-in AI no navegador.
+   */
+  getConfigurationSteps(): Array<PoTableAiSearchConfigStep> {
+    return [
+      {
+        step: 1,
+        title: 'Verificar versão do Chrome',
+        description: 'Utilize o Google Chrome versão 128 ou superior. Recomenda-se o Chrome Canary ou Chrome Dev para acesso antecipado.',
+        url: 'https://www.google.com/intl/pt-BR/chrome/canary/'
+      },
+      {
+        step: 2,
+        title: 'Habilitar Optimization Guide On Device Model',
+        description: 'Acesse chrome://flags/#optimization-guide-on-device-model e selecione "Enabled BypassPerfRequirement".',
+        url: 'chrome://flags/#optimization-guide-on-device-model'
+      },
+      {
+        step: 3,
+        title: 'Habilitar Prompt API for Gemini Nano',
+        description: 'Acesse chrome://flags/#prompt-api-for-gemini-nano e selecione "Enabled".',
+        url: 'chrome://flags/#prompt-api-for-gemini-nano'
+      },
+      {
+        step: 4,
+        title: 'Reiniciar o navegador',
+        description: 'Feche e reabra o Chrome completamente para que as flags tenham efeito.'
+      },
+      {
+        step: 5,
+        title: 'Verificar download do modelo',
+        description: 'Acesse chrome://components e localize "Optimization Guide On Device Model". Clique em "Check for update" se o status não for "Up-to-date".',
+        url: 'chrome://components'
+      }
+    ];
   }
 
   /**
@@ -102,7 +181,17 @@ export class PoTableBuiltInAiSearchService {
 
     this.destroySession();
     this.session = await LanguageModel.create({
-      systemPrompt
+      systemPrompt,
+      monitor: (monitor: any) => {
+        monitor.addEventListener('downloadprogress', (event: any) => {
+          this.ngZone.run(() => {
+            const loaded = event.loaded || 0;
+            const total = event.total || 0;
+            const percent = total > 0 ? Math.round((loaded / total) * 100) : 0;
+            this.downloadProgress$.next({ loaded, total, percent });
+          });
+        });
+      }
     });
 
     return this.session;

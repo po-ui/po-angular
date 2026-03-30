@@ -58,7 +58,7 @@
             class="po-table-ai-search-input"
             type="text"
             [placeholder]="aiSearchPlaceholder"
-            [disabled]="aiSearchLoading"
+            [disabled]="aiSearchLoading || aiSearchAvailability === 'unsupported' || aiSearchAvailability === 'unavailable'"
             (keyup.enter)="onAiSearch(aiSearchInput.value)"
           />
           @if (aiSearchLoading) {
@@ -72,7 +72,7 @@
           <button
             class="po-table-ai-search-button"
             type="button"
-            [disabled]="aiSearchLoading"
+            [disabled]="aiSearchLoading || aiSearchAvailability === 'unsupported' || aiSearchAvailability === 'unavailable'"
             (click)="onAiSearch(aiSearchInput.value)"
           >
             <svg class="po-table-ai-search-button-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,6 +82,69 @@
             </svg>
           </button>
         </div>
+
+        @if (aiSearchAvailability === 'unsupported' || aiSearchAvailability === 'unavailable') {
+          <div class="po-table-ai-search-status po-table-ai-search-status--warning">
+            <span class="po-icon po-icon-warning"></span>
+            <span>
+              Built-in AI não disponível.
+              <span class="po-table-ai-search-config-toggle" (click)="toggleAiSearchConfig()">
+                {{ aiSearchShowConfig ? 'Ocultar etapas' : 'Ver como habilitar' }}
+              </span>
+            </span>
+          </div>
+        }
+
+        @if (aiSearchAvailability === 'after-download' && !aiSearchDownloading) {
+          <div class="po-table-ai-search-status po-table-ai-search-status--info">
+            <span class="po-icon po-icon-info"></span>
+            <span>O modelo de IA será baixado na primeira utilização.</span>
+          </div>
+        }
+
+        @if (aiSearchDownloading) {
+          <div class="po-table-ai-search-download">
+            <div class="po-table-ai-search-status po-table-ai-search-status--downloading">
+              <span class="po-icon po-icon-refresh po-table-ai-search-loading"></span>
+              <span>Baixando modelo de IA...</span>
+            </div>
+            <div class="po-table-ai-search-download-bar">
+              <div
+                class="po-table-ai-search-download-fill"
+                [style.width.%]="aiSearchDownloadProgress.percent"
+              ></div>
+            </div>
+            <div class="po-table-ai-search-download-text">
+              <span>{{ aiSearchDownloadProgress.percent }}%</span>
+              @if (aiSearchDownloadProgress.total > 0) {
+                <span>
+                  {{ (aiSearchDownloadProgress.loaded / 1048576).toFixed(1) }} MB /
+                  {{ (aiSearchDownloadProgress.total / 1048576).toFixed(1) }} MB
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (aiSearchShowConfig) {
+          <div class="po-table-ai-search-config">
+            <div class="po-table-ai-search-config-title">Fluxo de Configuração — Built-in AI</div>
+            <ul class="po-table-ai-search-config-steps">
+              @for (configStep of aiSearchConfigSteps; track configStep.step) {
+                <li class="po-table-ai-search-config-step">
+                  <span class="po-table-ai-search-config-step-number">{{ configStep.step }}</span>
+                  <div class="po-table-ai-search-config-step-content">
+                    <div class="po-table-ai-search-config-step-title">{{ configStep.title }}</div>
+                    <div class="po-table-ai-search-config-step-description">{{ configStep.description }}</div>
+                    @if (configStep.url) {
+                      <div class="po-table-ai-search-config-step-url">{{ configStep.url }}</div>
+                    }
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        }
       </div>
     </div>
   }

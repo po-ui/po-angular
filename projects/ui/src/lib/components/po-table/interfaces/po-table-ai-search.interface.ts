@@ -54,3 +54,57 @@ export interface PoTableAiSearchError {
   /** Mensagem de erro. */
   message: string;
 }
+
+/**
+ * @usedBy PoTableComponent
+ *
+ * @description
+ *
+ * Tipo que representa o estado de disponibilidade do Built-in AI no navegador.
+ *
+ * - `readily`: modelo disponível e pronto para uso imediato.
+ * - `after-download`: modelo precisa ser baixado antes de ser utilizado.
+ * - `unavailable`: funcionalidade existe no navegador mas está desabilitada (requer configuração).
+ * - `unsupported`: navegador não suporta Built-in AI.
+ * - `unknown`: estado ainda não verificado.
+ */
+export type PoTableAiSearchAvailability = 'readily' | 'after-download' | 'unavailable' | 'unsupported' | 'unknown';
+
+/**
+ * @usedBy PoTableComponent
+ *
+ * @description
+ *
+ * Interface que define o progresso de download do modelo de IA.
+ */
+export interface PoTableAiSearchDownloadProgress {
+  /** Bytes já baixados. */
+  loaded: number;
+
+  /** Total de bytes a serem baixados. */
+  total: number;
+
+  /** Percentual de progresso (0 a 100). */
+  percent: number;
+}
+
+/**
+ * @usedBy PoTableComponent
+ *
+ * @description
+ *
+ * Interface que define uma etapa do fluxo de configuração do Built-in AI.
+ */
+export interface PoTableAiSearchConfigStep {
+  /** Número da etapa. */
+  step: number;
+
+  /** Título da etapa. */
+  title: string;
+
+  /** Descrição detalhada da etapa. */
+  description: string;
+
+  /** URL ou endereço para navegação (ex: chrome://flags). */
+  url?: string;
+}

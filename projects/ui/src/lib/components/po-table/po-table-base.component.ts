@@ -32,7 +32,13 @@ import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items-params.interface';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
-import { PoTableAiSearchError, PoTableAiSearchResult } from './interfaces/po-table-ai-search.interface';
+import {
+  PoTableAiSearchAvailability,
+  PoTableAiSearchConfigStep,
+  PoTableAiSearchDownloadProgress,
+  PoTableAiSearchError,
+  PoTableAiSearchResult
+} from './interfaces/po-table-ai-search.interface';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
 import { PoTableService } from './services/po-table.service';
 
@@ -573,6 +579,11 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _aiSearchMinConfidence: number = 0.5;
   aiSearchLoading: boolean = false;
   aiSearchDescription: string = '';
+  aiSearchAvailability: PoTableAiSearchAvailability = 'unknown';
+  aiSearchConfigSteps: Array<PoTableAiSearchConfigStep> = [];
+  aiSearchShowConfig: boolean = false;
+  aiSearchDownloading: boolean = false;
+  aiSearchDownloadProgress: PoTableAiSearchDownloadProgress = { loaded: 0, total: 0, percent: 0 };
 
   /**
    * @optional
