@@ -112,8 +112,11 @@ export class PoTableBuiltInAiSearchService {
     const columnsDescription = columns
       .map(col => `  - "${col.property}" (label: "${col.label}", type: ${col.type})`)
       .join('\n');
+    const currentYear = new Date().getFullYear();
 
     return `You are an OData v4 $filter expression generator. Convert natural language queries into valid OData v4 $filter expressions using ONLY the columns listed below.
+
+Current year: ${currentYear}
 
 Available columns:
 ${columnsDescription}
@@ -212,6 +215,10 @@ You MUST respond ONLY with a valid JSON object (no markdown, no extra text):
 - "department is TI or Marketing" → {"filter": "department in ('TI', 'Marketing')", "description": "Department is TI or Marketing", "confidence": 0.95}
 - "name starts with A and age not equal 30" → {"filter": "startswith(name, 'A') and age ne 30", "description": "Name starts with A and age is not 30", "confidence": 0.9}
 - "salary above average (mod 1000 equals 0)" → {"filter": "salary gt 8000 and salary mod 1000 eq 0", "description": "Salary above 8000 and multiple of 1000", "confidence": 0.7}
+- "hired this year" → {"filter": "year(hireDate) eq ${currentYear}", "description": "Hired in ${currentYear}", "confidence": 0.95}
+- "employees hired before this year" → {"filter": "year(hireDate) lt ${currentYear}", "description": "Employees hired before ${currentYear}", "confidence": 0.9}
+
+IMPORTANT: When the user references "this year", "current year", "este ano", or "ano atual", use year(column) eq ${currentYear} with the current year value ${currentYear}. For relative date expressions like "today" or "now", use the now() function.
 
 If you cannot interpret the query, return: {"filter": "", "description": "Could not interpret the query", "confidence": 0.0}`;
   }

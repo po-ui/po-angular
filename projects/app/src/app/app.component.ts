@@ -50,6 +50,7 @@ export class AppComponent {
     'salário múltiplo de 1000',
     'admitidos no mês 6',
     'nome termina com Silva',
+    'admitidos este ano',
     'salário menor ou igual a 8000 ou cidade é Curitiba'
   ];
 
