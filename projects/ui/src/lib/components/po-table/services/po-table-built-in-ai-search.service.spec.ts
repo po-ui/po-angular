@@ -165,7 +165,7 @@ describe('PoTableBuiltInAiSearchService', () => {
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve('This is not valid JSON'),
+            prompt: () => Promise.resolve('This is not valid JSON at all'),
             destroy: () => {}
           })
       };
@@ -173,7 +173,61 @@ describe('PoTableBuiltInAiSearchService', () => {
       service.sendQuery('test query', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe('');
-          expect(result.confidence).toBeLessThan(0.5);
+          expect(result.confidence).toBe(0.0);
+          delete (window as any).LanguageModel;
+          done();
+        },
+        error: () => {
+          delete (window as any).LanguageModel;
+          done.fail('Should not have errored');
+        }
+      });
+    });
+
+    it('should retry when response has wrong JSON keys and extract OData filter from any key', done => {
+      let callCount = 0;
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => {
+              callCount++;
+              if (callCount === 1) {
+                return Promise.resolve('{"choice": "departamento TI"}');
+              }
+              return Promise.resolve('{"filter": "department in (\'TI\')", "confidence": 0.8}');
+            },
+            destroy: () => {}
+          })
+      };
+
+      service.sendQuery('departamento TI', mockColumns).subscribe({
+        next: result => {
+          expect(result.filter).toBe("department in ('TI')");
+          expect(result.confidence).toBe(0.8);
+          expect(callCount).toBe(2);
+          delete (window as any).LanguageModel;
+          done();
+        },
+        error: () => {
+          delete (window as any).LanguageModel;
+          done.fail('Should not have errored');
+        }
+      });
+    });
+
+    it('should extract OData filter from unexpected JSON keys', done => {
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve('{"result": "age gt 30"}'),
+            destroy: () => {}
+          })
+      };
+
+      service.sendQuery('idade maior que 30', mockColumns).subscribe({
+        next: result => {
+          expect(result.filter).toBe('age gt 30');
+          expect(result.confidence).toBe(0.5);
           delete (window as any).LanguageModel;
           done();
         },

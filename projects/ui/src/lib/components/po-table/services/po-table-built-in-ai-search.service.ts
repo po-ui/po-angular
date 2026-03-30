@@ -262,25 +262,31 @@ export class PoTableBuiltInAiSearchService {
       .join(', ');
     const currentYear = new Date().getFullYear();
 
-    return `You are a strict JSON API. You ONLY output valid JSON. No markdown, no explanation, no text before or after the JSON.
-
-Task: Convert natural language to OData v4 $filter.
-Year: ${currentYear}. Columns: ${columnsDescription}
-Ops: eq,ne,gt,ge,lt,le,has,in,and,or,not
-Fn: contains,tolower,toupper,startswith,endswith,year,month,day,now,concat,length,trim,substring,floor,ceiling,round
-
-Output format (NOTHING else, ONLY this JSON object):
-{"filter":"<OData>","confidence":<0.0-1.0>}
-
-Examples:
-Input: age > 30
-{"filter":"age gt 30","confidence":0.95}
-Input: name contains Silva
-{"filter":"contains(tolower(name),'silva')","confidence":0.9}
-Input: hired this year
-{"filter":"year(hireDate) eq ${currentYear}","confidence":0.9}
-Input: ???
-{"filter":"","confidence":0.0}`;
+    return [
+      'Convert natural language queries into OData v4 $filter expressions.',
+      `Available columns: ${columnsDescription}`,
+      `Current year: ${currentYear}`,
+      'OData operators: eq, ne, gt, ge, lt, le, and, or, not, in',
+      'OData functions: contains, tolower, toupper, startswith, endswith, year, month, day, now, concat, length, trim, substring, floor, ceiling, round',
+      '',
+      'You must ALWAYS respond with EXACTLY one line of JSON in this format:',
+      '{"filter":"ODATA_EXPRESSION","confidence":NUMBER}',
+      '',
+      'Do NOT include any other text, explanation, markdown, or code blocks.',
+      'Do NOT use any keys other than "filter" and "confidence".',
+      '',
+      'Example interactions:',
+      'User: age greater than 30',
+      'Assistant: {"filter":"age gt 30","confidence":0.95}',
+      'User: name contains Silva',
+      'Assistant: {"filter":"contains(tolower(name),\'silva\')","confidence":0.9}',
+      `User: hired this year`,
+      `Assistant: {"filter":"year(hireDate) eq ${currentYear}","confidence":0.9}`,
+      'User: department TI or Marketing',
+      'Assistant: {"filter":"department in (\'TI\',\'Marketing\')","confidence":0.9}',
+      'User: asdfgh',
+      'Assistant: {"filter":"","confidence":0.0}'
+    ].join('\n');
   }
 
   private buildPrompt(query: string, columns: Array<PoTableAiSearchColumn>): { query: string; columns: Array<PoTableAiSearchColumn> } {
@@ -289,16 +295,37 @@ Input: ???
 
   private async executePromptWithStreaming(prompt: { query: string; columns: Array<PoTableAiSearchColumn> }): Promise<string> {
     const session = await this.getSession(prompt.columns);
-    const message = `${prompt.query}
-Respond with ONLY JSON, nothing else.`;
 
     this.ngZone.run(() => this.phase$.next('generating'));
 
+    const response = await this.promptSession(session, prompt.query);
+
+    if (this.isValidResponse(response)) {
+      return response;
+    }
+
+    const retryMessage = `Your previous response was invalid. Respond with ONLY this JSON format, nothing else:\n{"filter":"ODATA_EXPRESSION","confidence":NUMBER}\n\nConvert: ${prompt.query}`;
+    return this.promptSession(session, retryMessage);
+  }
+
+  private async promptSession(session: any, message: string): Promise<string> {
     if (typeof session.promptStreaming === 'function') {
       return this.handleStreaming(session, message);
     }
-
     return session.prompt(message);
+  }
+
+  private isValidResponse(response: string): boolean {
+    try {
+      const jsonMatch = response.match(/\{[\s\S]*?\}/);
+      if (!jsonMatch) {
+        return false;
+      }
+      const parsed = JSON.parse(jsonMatch[0]);
+      return typeof parsed.filter === 'string' && typeof parsed.confidence === 'number';
+    } catch {
+      return false;
+    }
   }
 
   private async handleStreaming(session: any, message: string): Promise<string> {
@@ -328,30 +355,65 @@ Respond with ONLY JSON, nothing else.`;
     try {
       const jsonMatch = responseText.match(/\{[\s\S]*?\}/);
       if (!jsonMatch) {
+        const odataFilter = this.extractODataFromText(responseText);
         return {
-          filter: '',
-          description: `Não foi possível interpretar: "${originalQuery}"`,
-          confidence: 0.0
+          filter: odataFilter,
+          description: odataFilter ? '' : `Não foi possível interpretar: "${originalQuery}"`,
+          confidence: odataFilter ? 0.5 : 0.0
         };
       }
 
       const parsed = JSON.parse(jsonMatch[0]);
+
+      const filter = typeof parsed.filter === 'string'
+        ? parsed.filter
+        : this.extractFilterFromParsed(parsed);
+
       const confidence = typeof parsed.confidence === 'number'
         ? Math.max(0, Math.min(1, parsed.confidence))
-        : (parsed.filter ? 0.5 : 0.0);
+        : (filter ? 0.5 : 0.0);
 
-      return {
-        filter: typeof parsed.filter === 'string' ? parsed.filter : '',
-        description: typeof parsed.description === 'string' ? parsed.description : '',
-        confidence
-      };
+      return { filter, description: '', confidence };
     } catch {
+      const odataFilter = this.extractODataFromText(responseText);
       return {
-        filter: '',
-        description: `Não foi possível processar resposta para: "${originalQuery}"`,
-        confidence: 0.0
+        filter: odataFilter,
+        description: odataFilter ? '' : `Não foi possível processar resposta para: "${originalQuery}"`,
+        confidence: odataFilter ? 0.5 : 0.0
       };
     }
+  }
+
+  private extractFilterFromParsed(parsed: Record<string, any>): string {
+    for (const key of Object.keys(parsed)) {
+      const value = parsed[key];
+      if (typeof value === 'string' && this.looksLikeODataFilter(value)) {
+        return value;
+      }
+    }
+    return '';
+  }
+
+  private extractODataFromText(text: string): string {
+    const odataPattern = /\$filter=([^\s`'"]+)/;
+    const match = text.match(odataPattern);
+    if (match) {
+      return match[1];
+    }
+
+    const filterPattern = /(?:^|\n)\s*([a-zA-Z_]\w*\s+(?:eq|ne|gt|ge|lt|le)\s+.+?)\s*(?:\n|$)/;
+    const filterMatch = text.match(filterPattern);
+    if (filterMatch) {
+      return filterMatch[1].trim();
+    }
+
+    return '';
+  }
+
+  private looksLikeODataFilter(value: string): boolean {
+    const odataKeywords = /\b(eq|ne|gt|ge|lt|le|and|or|not|in)\b/;
+    const odataFunctions = /\b(contains|tolower|toupper|startswith|endswith|year|month|day)\s*\(/;
+    return odataKeywords.test(value) || odataFunctions.test(value);
   }
 
   private sanitizeInput(input: string): string {
