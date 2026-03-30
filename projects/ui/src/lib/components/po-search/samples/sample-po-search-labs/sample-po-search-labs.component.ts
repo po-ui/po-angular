@@ -12,20 +12,7 @@ import { PoSearchLocateSummary } from '@po-ui/ng-components/lib/components/po-se
 @Component({
   selector: 'sample-po-search-labs',
   templateUrl: './sample-po-search-labs.component.html',
-  styles: [
-    `
-      .sample-list-search {
-        list-style: none;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 1rem;
-      }
-
-      .sample-list-search strong {
-        text-transform: capitalize;
-      }
-    `
-  ],
+  styleUrls: ['./sample-po-search-labs.component.css'],
   standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {

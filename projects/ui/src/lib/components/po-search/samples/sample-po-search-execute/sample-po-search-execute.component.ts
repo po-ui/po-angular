@@ -5,13 +5,7 @@ import { PoModalComponent, PoSearchFilterMode } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-search-execute',
   templateUrl: './sample-po-search-execute.component.html',
-  styles: [
-    `
-      .full {
-        width: 100%;
-      }
-    `
-  ],
+  styleUrls: ['./sample-po-search-execute.component.css'],
   standalone: false
 })
 export class SamplePoSearchExecuteComponent {

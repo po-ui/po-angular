@@ -65,6 +65,12 @@ const mkdirDocComponent = (path, componentName, moduleName) => mkdir(`${path}/${
 const writeFile = (file, data) => fs.writeFileSync(file, data, 'utf-8');
 const saveDocComponent = (path, componentName, moduleName, data) =>
   writeFile(`${path}/${moduleName}-${componentName}/${moduleName}-${componentName}.component.ts`, data);
+const saveDocComponentCss = (pathDir, componentName, moduleName, cssTemplatePath) => {
+  if (fs.existsSync(cssTemplatePath)) {
+    const cssContent = fs.readFileSync(cssTemplatePath, 'utf-8');
+    writeFile(`${pathDir}/${moduleName}-${componentName}/${moduleName}-${componentName}.component.css`, cssContent);
+  }
+};
 const saveDocView = (path, componentName, moduleName, data) =>
   writeFile(`${path}/${moduleName}-${componentName}/${moduleName}-${componentName}.component.html`, data);
 const saveDocModule = (moduleName, data) => writeFile(`${APP_DIR}/${moduleName}/${moduleName}.module.ts`, data);
@@ -106,6 +112,9 @@ const createDocs = (file, pathDir, moduleName) => {
     templateUrl: doc.fileName
   });
   saveDocComponent(pathDir, fileName, moduleName, doc.component);
+
+  const DOC_CSS_TEMPLATE = `./docs/templates/${moduleName}/${moduleName}.component.template.css`;
+  saveDocComponentCss(pathDir, doc.fileName, moduleName, DOC_CSS_TEMPLATE);
 
   return doc;
 };

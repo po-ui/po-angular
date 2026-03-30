@@ -54,13 +54,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
   selector: 'po-page-job-scheduler',
   templateUrl: './po-page-job-scheduler.component.html',
   encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
-      po-container .po-container {
-        overflow-y: unset;
-      }
-    `
-  ],
+  styles: [],
   standalone: false
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {

@@ -12,7 +12,6 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
-  AfterViewInit,
   input,
   HostBinding
 } from '@angular/core';
@@ -59,6 +58,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
  * <example name="po-select-customer-registration" title="PO Select - Customer registration">
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.html"> </file>
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.ts"> </file>
+ *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.component.css"> </file>
  *   <file name="sample-po-select-customer-registration/sample-po-select-customer-registration.service.ts"> </file>
  * </example>
  *
