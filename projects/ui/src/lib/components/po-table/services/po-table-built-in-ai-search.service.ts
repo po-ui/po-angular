@@ -175,11 +175,10 @@ export class PoTableBuiltInAiSearchService {
     timeoutMs: number = 120000
   ): Observable<BuiltInAiResponse> {
     const sanitizedQuery = this.sanitizeInput(query);
-    const prompt = this.buildPrompt(sanitizedQuery, columns);
 
     this.phase$.next('initializing');
 
-    return from(this.executePromptWithStreaming(prompt)).pipe(
+    return from(this.executePromptWithStreaming(sanitizedQuery, columns)).pipe(
       timeout(timeoutMs),
       map(responseText => {
         this.phase$.next('analyzing');
@@ -230,17 +229,14 @@ export class PoTableBuiltInAiSearchService {
     }
   }
 
-  private async getSession(columns: Array<PoTableAiSearchColumn>): Promise<any> {
+  private async getSession(): Promise<any> {
     const LanguageModel = (window as any).LanguageModel;
     if (!LanguageModel) {
       throw new Error('Built-in AI is not available in this browser');
     }
 
-    const systemPrompt = this.buildSystemPrompt(columns);
-
     this.destroySession();
     this.session = await LanguageModel.create({
-      systemPrompt,
       monitor: (monitor: any) => {
         monitor.addEventListener('downloadprogress', (event: any) => {
           this.ngZone.run(() => {
@@ -256,18 +252,18 @@ export class PoTableBuiltInAiSearchService {
     return this.session;
   }
 
-  private buildSystemPrompt(columns: Array<PoTableAiSearchColumn>): string {
+  private buildFullPrompt(query: string, columns: Array<PoTableAiSearchColumn>): string {
     const columnsDescription = columns
       .map(col => `${col.property}(${col.type})`)
       .join(', ');
     const currentYear = new Date().getFullYear();
 
     return [
-      'You are an OData v4 filter translator.',
+      'Convert the natural language query below into an OData v4 $filter expression.',
       'Reply with ONLY the OData $filter expression. Nothing else. No explanation. No JSON. No markdown. Just the raw filter.',
       '',
-      `Columns: ${columnsDescription}`,
-      `Year: ${currentYear}`,
+      `Available columns: ${columnsDescription}`,
+      `Current year: ${currentYear}`,
       'Operators: eq ne gt ge lt le and or not in',
       'Functions: contains tolower toupper startswith endswith year month day now concat length trim substring floor ceiling round',
       '',
@@ -289,17 +285,16 @@ export class PoTableBuiltInAiSearchService {
       'Q: department TI or Marketing',
       'A: department in (\'TI\',\'Marketing\')',
       'Q: sdkfjhskdjfh',
-      'A: EMPTY'
+      'A: EMPTY',
+      '',
+      `Q: ${query}`,
+      'A:'
     ].join('\n');
   }
 
-  private buildPrompt(query: string, columns: Array<PoTableAiSearchColumn>): { query: string; columns: Array<PoTableAiSearchColumn> } {
-    return { query, columns };
-  }
-
-  private async executePromptWithStreaming(prompt: { query: string; columns: Array<PoTableAiSearchColumn> }): Promise<string> {
-    const session = await this.getSession(prompt.columns);
-    const message = prompt.query;
+  private async executePromptWithStreaming(query: string, columns: Array<PoTableAiSearchColumn>): Promise<string> {
+    const session = await this.getSession();
+    const message = this.buildFullPrompt(query, columns);
 
     this.ngZone.run(() => this.phase$.next('generating'));
 
