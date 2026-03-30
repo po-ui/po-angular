@@ -21,6 +21,7 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
  * <example name="po-tag-labs" title="PO Tag Labs">
  *  <file name="sample-po-tag-labs/sample-po-tag-labs.component.html"> </file>
  *  <file name="sample-po-tag-labs/sample-po-tag-labs.component.ts"> </file>
+ *  <file name="sample-po-tag-labs/sample-po-tag-labs.component.css"> </file>
  * </example>
  *
  * <example name="po-tag-bank-account" title="PO Tag - Bank Account">

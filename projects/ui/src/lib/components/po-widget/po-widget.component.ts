@@ -39,11 +39,13 @@ import {
  * <example name="po-widget-labs" title="PO Widget Labs">
  *  <file name="sample-po-widget-labs/sample-po-widget-labs.component.html"> </file>
  *  <file name="sample-po-widget-labs/sample-po-widget-labs.component.ts"> </file>
+ *  <file name="sample-po-widget-labs/sample-po-widget-labs.component.css"> </file>
  * </example>
  *
  * <example name="po-widget-finance-dashboard" title="PO Widget - Finance dashboard">
  *  <file name="sample-po-widget-finance-dashboard/sample-po-widget-finance-dashboard.component.html"> </file>
  *  <file name="sample-po-widget-finance-dashboard/sample-po-widget-finance-dashboard.component.ts"> </file>
+ *  <file name="sample-po-widget-finance-dashboard/sample-po-widget-finance-dashboard.component.css"> </file>
  * </example>
  *
  * <example name="po-widget-card" title="PO Widget - Card">

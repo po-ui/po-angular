@@ -54,6 +54,7 @@ const poComboContainerOffset = 8;
  * <example name="po-combo-scheduling" title="PO Combo - Scheduling">
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.html"> </file>
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.ts"> </file>
+ *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.component.css"> </file>
  *   <file name="sample-po-combo-scheduling/sample-po-combo-scheduling.service.ts"> </file>
  * </example>
  *

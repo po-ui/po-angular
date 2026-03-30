@@ -19,6 +19,7 @@ import { PoProgressBaseComponent } from './po-progress-base.component';
  * <example name="po-progress-labs" title="PO Progress Labs">
  *   <file name="sample-po-progress-labs/sample-po-progress-labs.component.html"> </file>
  *   <file name="sample-po-progress-labs/sample-po-progress-labs.component.ts"> </file>
+ *   <file name="sample-po-progress-labs/sample-po-progress-labs.component.css"> </file>
  * </example>
  *
  * <example name="po-progress-publication" title="PO Progress - Publication">

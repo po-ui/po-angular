@@ -96,6 +96,7 @@ const providers = [
  * <example name="po-multiselect-template" title="PO Multiselect - Template">
  *   <file name="sample-po-multiselect-template/sample-po-multiselect-template.component.html"> </file>
  *   <file name="sample-po-multiselect-template/sample-po-multiselect-template.component.ts"> </file>
+ *   <file name="sample-po-multiselect-template/sample-po-multiselect-template.component.css"> </file>
  * </example>
  *
  * <example name="po-multiselect-heroes" title="PO Multiselect - Heroes - using API">

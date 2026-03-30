@@ -34,6 +34,7 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
  * <example name="po-page-default-dashboard" title="PO Page Default - Dashboard">
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.component.html"> </file>
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.component.ts"> </file>
+ *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.component.css"> </file>
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.service.ts"> </file>
  * </example>
  */
