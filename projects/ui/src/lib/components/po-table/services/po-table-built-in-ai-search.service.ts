@@ -263,29 +263,33 @@ export class PoTableBuiltInAiSearchService {
     const currentYear = new Date().getFullYear();
 
     return [
-      'Convert natural language queries into OData v4 $filter expressions.',
-      `Available columns: ${columnsDescription}`,
-      `Current year: ${currentYear}`,
-      'OData operators: eq, ne, gt, ge, lt, le, and, or, not, in',
-      'OData functions: contains, tolower, toupper, startswith, endswith, year, month, day, now, concat, length, trim, substring, floor, ceiling, round',
+      'You are an OData v4 filter translator.',
+      'Reply with ONLY the OData $filter expression. Nothing else. No explanation. No JSON. No markdown. Just the raw filter.',
       '',
-      'You must ALWAYS respond with EXACTLY one line of JSON in this format:',
-      '{"filter":"ODATA_EXPRESSION","confidence":NUMBER}',
+      `Columns: ${columnsDescription}`,
+      `Year: ${currentYear}`,
+      'Operators: eq ne gt ge lt le and or not in',
+      'Functions: contains tolower toupper startswith endswith year month day now concat length trim substring floor ceiling round',
       '',
-      'Do NOT include any other text, explanation, markdown, or code blocks.',
-      'Do NOT use any keys other than "filter" and "confidence".',
+      'RULES:',
+      '- Output ONLY the filter expression, one single line',
+      '- Strings in single quotes',
+      '- For text search use: contains(tolower(column),\'value\')',
+      `- "this year"/"este ano" means: year(column) eq ${currentYear}`,
+      '- Multiple values: column in (\'val1\',\'val2\')',
+      '- If you cannot convert, reply with exactly: EMPTY',
       '',
-      'Example interactions:',
-      'User: age greater than 30',
-      'Assistant: {"filter":"age gt 30","confidence":0.95}',
-      'User: name contains Silva',
-      'Assistant: {"filter":"contains(tolower(name),\'silva\')","confidence":0.9}',
-      `User: hired this year`,
-      `Assistant: {"filter":"year(hireDate) eq ${currentYear}","confidence":0.9}`,
-      'User: department TI or Marketing',
-      'Assistant: {"filter":"department in (\'TI\',\'Marketing\')","confidence":0.9}',
-      'User: asdfgh',
-      'Assistant: {"filter":"","confidence":0.0}'
+      'Examples:',
+      'Q: age greater than 30',
+      'A: age gt 30',
+      'Q: name contains Silva',
+      'A: contains(tolower(name),\'silva\')',
+      `Q: hired this year`,
+      `A: year(hireDate) eq ${currentYear}`,
+      'Q: department TI or Marketing',
+      'A: department in (\'TI\',\'Marketing\')',
+      'Q: sdkfjhskdjfh',
+      'A: EMPTY'
     ].join('\n');
   }
 
@@ -295,37 +299,15 @@ export class PoTableBuiltInAiSearchService {
 
   private async executePromptWithStreaming(prompt: { query: string; columns: Array<PoTableAiSearchColumn> }): Promise<string> {
     const session = await this.getSession(prompt.columns);
+    const message = prompt.query;
 
     this.ngZone.run(() => this.phase$.next('generating'));
 
-    const response = await this.promptSession(session, prompt.query);
-
-    if (this.isValidResponse(response)) {
-      return response;
-    }
-
-    const retryMessage = `Your previous response was invalid. Respond with ONLY this JSON format, nothing else:\n{"filter":"ODATA_EXPRESSION","confidence":NUMBER}\n\nConvert: ${prompt.query}`;
-    return this.promptSession(session, retryMessage);
-  }
-
-  private async promptSession(session: any, message: string): Promise<string> {
     if (typeof session.promptStreaming === 'function') {
       return this.handleStreaming(session, message);
     }
-    return session.prompt(message);
-  }
 
-  private isValidResponse(response: string): boolean {
-    try {
-      const jsonMatch = response.match(/\{[\s\S]*?\}/);
-      if (!jsonMatch) {
-        return false;
-      }
-      const parsed = JSON.parse(jsonMatch[0]);
-      return typeof parsed.filter === 'string' && typeof parsed.confidence === 'number';
-    } catch {
-      return false;
-    }
+    return session.prompt(message);
   }
 
   private async handleStreaming(session: any, message: string): Promise<string> {
@@ -352,62 +334,93 @@ export class PoTableBuiltInAiSearchService {
   }
 
   private parseResponse(responseText: string, originalQuery: string): BuiltInAiResponse {
-    try {
-      const jsonMatch = responseText.match(/\{[\s\S]*?\}/);
-      if (!jsonMatch) {
-        const odataFilter = this.extractODataFromText(responseText);
-        return {
-          filter: odataFilter,
-          description: odataFilter ? '' : `Não foi possível interpretar: "${originalQuery}"`,
-          confidence: odataFilter ? 0.5 : 0.0
-        };
-      }
+    const filter = this.extractODataFilter(responseText);
+    const confidence = this.calculateConfidence(filter, responseText);
 
-      const parsed = JSON.parse(jsonMatch[0]);
-
-      const filter = typeof parsed.filter === 'string'
-        ? parsed.filter
-        : this.extractFilterFromParsed(parsed);
-
-      const confidence = typeof parsed.confidence === 'number'
-        ? Math.max(0, Math.min(1, parsed.confidence))
-        : (filter ? 0.5 : 0.0);
-
-      return { filter, description: '', confidence };
-    } catch {
-      const odataFilter = this.extractODataFromText(responseText);
-      return {
-        filter: odataFilter,
-        description: odataFilter ? '' : `Não foi possível processar resposta para: "${originalQuery}"`,
-        confidence: odataFilter ? 0.5 : 0.0
-      };
-    }
+    return {
+      filter,
+      description: filter ? '' : `Não foi possível interpretar: "${originalQuery}"`,
+      confidence
+    };
   }
 
-  private extractFilterFromParsed(parsed: Record<string, any>): string {
-    for (const key of Object.keys(parsed)) {
-      const value = parsed[key];
-      if (typeof value === 'string' && this.looksLikeODataFilter(value)) {
-        return value;
+  private extractODataFilter(responseText: string): string {
+    const cleaned = responseText
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/`([^`]+)`/g, '$1')
+      .trim();
+
+    if (/^EMPTY$/i.test(cleaned)) {
+      return '';
+    }
+
+    const jsonMatch = cleaned.match(/\{[\s\S]*?\}/);
+    if (jsonMatch) {
+      try {
+        const parsed = JSON.parse(jsonMatch[0]);
+        if (typeof parsed.filter === 'string') {
+          return parsed.filter;
+        }
+        for (const key of Object.keys(parsed)) {
+          if (typeof parsed[key] === 'string' && this.looksLikeODataFilter(parsed[key])) {
+            return parsed[key];
+          }
+        }
+      } catch {}
+    }
+
+    const filterParamMatch = cleaned.match(/\$filter=([^\s&]+)/);
+    if (filterParamMatch) {
+      return decodeURIComponent(filterParamMatch[1]);
+    }
+
+    const lines = cleaned.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    for (const line of lines) {
+      const cleanLine = line.replace(/^[*\-•]\s*/, '').replace(/^[Aa]:\s*/, '').trim();
+      if (this.looksLikeODataFilter(cleanLine) && cleanLine.length < 500) {
+        return cleanLine;
       }
     }
+
+    if (lines.length > 0) {
+      const firstLine = lines[0].replace(/^[Aa]:\s*/, '').trim();
+      if (firstLine.length < 200 && !firstLine.includes(' ') === false) {
+        const hasColumn = /[a-zA-Z_]\w*/.test(firstLine);
+        if (hasColumn && !firstLine.startsWith('The ') && !firstLine.startsWith('Here ') && !firstLine.startsWith('I ')) {
+          return firstLine;
+        }
+      }
+    }
+
     return '';
   }
 
-  private extractODataFromText(text: string): string {
-    const odataPattern = /\$filter=([^\s`'"]+)/;
-    const match = text.match(odataPattern);
-    if (match) {
-      return match[1];
+  private calculateConfidence(filter: string, responseText: string): number {
+    if (!filter) {
+      return 0.0;
     }
 
-    const filterPattern = /(?:^|\n)\s*([a-zA-Z_]\w*\s+(?:eq|ne|gt|ge|lt|le)\s+.+?)\s*(?:\n|$)/;
-    const filterMatch = text.match(filterPattern);
-    if (filterMatch) {
-      return filterMatch[1].trim();
+    let confidence = 0.5;
+
+    const odataOps = (filter.match(/\b(eq|ne|gt|ge|lt|le|and|or|not|in)\b/g) || []).length;
+    const odataFns = (filter.match(/\b(contains|tolower|toupper|startswith|endswith|year|month|day)\s*\(/g) || []).length;
+
+    if (odataOps > 0) {
+      confidence += 0.2;
+    }
+    if (odataFns > 0) {
+      confidence += 0.15;
+    }
+    if (/^[a-zA-Z_]/.test(filter)) {
+      confidence += 0.1;
     }
 
-    return '';
+    const hasExtraText = responseText.length > filter.length * 3;
+    if (hasExtraText) {
+      confidence -= 0.15;
+    }
+
+    return Math.max(0, Math.min(1, parseFloat(confidence.toFixed(2))));
   }
 
   private looksLikeODataFilter(value: string): boolean {

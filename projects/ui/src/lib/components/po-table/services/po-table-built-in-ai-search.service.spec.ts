@@ -133,16 +133,11 @@ describe('PoTableBuiltInAiSearchService', () => {
       });
     });
 
-    it('should send query and parse valid JSON response', done => {
-      const mockResponse = JSON.stringify({
-        filter: "age gt 30",
-        confidence: 0.95
-      });
-
+    it('should parse raw OData filter from AI response', done => {
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve(mockResponse),
+            prompt: () => Promise.resolve('age gt 30'),
             destroy: () => {}
           })
       };
@@ -150,7 +145,7 @@ describe('PoTableBuiltInAiSearchService', () => {
       service.sendQuery('idade maior que 30', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe('age gt 30');
-          expect(result.confidence).toBe(0.95);
+          expect(result.confidence).toBeGreaterThan(0.5);
           delete (window as any).LanguageModel;
           done();
         },
@@ -161,11 +156,34 @@ describe('PoTableBuiltInAiSearchService', () => {
       });
     });
 
-    it('should handle malformed JSON response gracefully', done => {
+    it('should handle EMPTY response as no filter', done => {
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve('This is not valid JSON at all'),
+            prompt: () => Promise.resolve('EMPTY'),
+            destroy: () => {}
+          })
+      };
+
+      service.sendQuery('asdfgh', mockColumns).subscribe({
+        next: result => {
+          expect(result.filter).toBe('');
+          expect(result.confidence).toBe(0.0);
+          delete (window as any).LanguageModel;
+          done();
+        },
+        error: () => {
+          delete (window as any).LanguageModel;
+          done.fail('Should not have errored');
+        }
+      });
+    });
+
+    it('should handle plain text response without OData keywords', done => {
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve('I cannot understand this query'),
             destroy: () => {}
           })
       };
@@ -184,27 +202,19 @@ describe('PoTableBuiltInAiSearchService', () => {
       });
     });
 
-    it('should retry when response has wrong JSON keys and extract OData filter from any key', done => {
-      let callCount = 0;
+    it('should extract filter from JSON response with filter key', done => {
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => {
-              callCount++;
-              if (callCount === 1) {
-                return Promise.resolve('{"choice": "departamento TI"}');
-              }
-              return Promise.resolve('{"filter": "department in (\'TI\')", "confidence": 0.8}');
-            },
+            prompt: () => Promise.resolve('{"filter": "age gt 30"}'),
             destroy: () => {}
           })
       };
 
-      service.sendQuery('departamento TI', mockColumns).subscribe({
+      service.sendQuery('idade maior que 30', mockColumns).subscribe({
         next: result => {
-          expect(result.filter).toBe("department in ('TI')");
-          expect(result.confidence).toBe(0.8);
-          expect(callCount).toBe(2);
+          expect(result.filter).toBe('age gt 30');
+          expect(result.confidence).toBeGreaterThan(0);
           delete (window as any).LanguageModel;
           done();
         },
@@ -227,7 +237,7 @@ describe('PoTableBuiltInAiSearchService', () => {
       service.sendQuery('idade maior que 30', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe('age gt 30');
-          expect(result.confidence).toBe(0.5);
+          expect(result.confidence).toBeGreaterThan(0);
           delete (window as any).LanguageModel;
           done();
         },
@@ -238,21 +248,19 @@ describe('PoTableBuiltInAiSearchService', () => {
       });
     });
 
-    it('should extract JSON from text with extra content', done => {
-      const mockResponse = 'Here is the result: {"filter": "name eq \'Ana\'", "confidence": 0.85} some extra text';
-
+    it('should extract filter from markdown code blocks', done => {
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve(mockResponse),
+            prompt: () => Promise.resolve('```\nage gt 30\n```'),
             destroy: () => {}
           })
       };
 
-      service.sendQuery('nome Ana', mockColumns).subscribe({
+      service.sendQuery('idade maior que 30', mockColumns).subscribe({
         next: result => {
-          expect(result.filter).toBe("name eq 'Ana'");
-          expect(result.confidence).toBe(0.85);
+          expect(result.filter).toBe('age gt 30');
+          expect(result.confidence).toBeGreaterThan(0);
           delete (window as any).LanguageModel;
           done();
         },
@@ -263,24 +271,19 @@ describe('PoTableBuiltInAiSearchService', () => {
       });
     });
 
-    it('should return confidence 0.0 when filter is empty', done => {
-      const mockResponse = JSON.stringify({
-        filter: '',
-        confidence: 0.0
-      });
-
+    it('should extract filter from $filter= URL parameter', done => {
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve(mockResponse),
+            prompt: () => Promise.resolve('$filter=age%20gt%2030'),
             destroy: () => {}
           })
       };
 
-      service.sendQuery('test', mockColumns).subscribe({
+      service.sendQuery('idade maior que 30', mockColumns).subscribe({
         next: result => {
-          expect(result.confidence).toBe(0.0);
-          expect(result.filter).toBe('');
+          expect(result.filter).toBe('age gt 30');
+          expect(result.confidence).toBeGreaterThan(0);
           delete (window as any).LanguageModel;
           done();
         },
@@ -485,15 +488,10 @@ describe('PoTableBuiltInAiSearchService', () => {
         }
       });
 
-      const mockResponse = JSON.stringify({
-        filter: "age gt 30",
-        confidence: 0.95
-      });
-
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve(mockResponse),
+            prompt: () => Promise.resolve('age gt 30'),
             destroy: () => {}
           })
       };
@@ -530,11 +528,6 @@ describe('PoTableBuiltInAiSearchService', () => {
         }
       });
 
-      const mockResponse = JSON.stringify({
-        filter: "age gt 30",
-        confidence: 0.9
-      });
-
       const mockStream = {
         getReader: () => {
           let callCount = 0;
@@ -542,10 +535,10 @@ describe('PoTableBuiltInAiSearchService', () => {
             read: () => {
               callCount++;
               if (callCount === 1) {
-                return Promise.resolve({ done: false, value: '{"filter":' });
+                return Promise.resolve({ done: false, value: 'age ' });
               }
               if (callCount === 2) {
-                return Promise.resolve({ done: false, value: mockResponse });
+                return Promise.resolve({ done: false, value: 'gt 30' });
               }
               return Promise.resolve({ done: true, value: undefined });
             },
@@ -566,15 +559,10 @@ describe('PoTableBuiltInAiSearchService', () => {
     });
 
     it('should fall back to prompt() when promptStreaming is not available', done => {
-      const mockResponse = JSON.stringify({
-        filter: "age gt 30",
-        confidence: 0.9
-      });
-
       (window as any).LanguageModel = {
         create: () =>
           Promise.resolve({
-            prompt: () => Promise.resolve(mockResponse),
+            prompt: () => Promise.resolve('age gt 30'),
             destroy: () => {}
           })
       };
