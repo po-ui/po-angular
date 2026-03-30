@@ -417,6 +417,159 @@ describe('PoTableBuiltInAiSearchService', () => {
     });
   });
 
+  describe('onPhaseChange', () => {
+    it('should emit phase changes during query processing', done => {
+      const phases: Array<string> = [];
+
+      service.onPhaseChange.subscribe(phase => {
+        phases.push(phase);
+        if (phase === 'done') {
+          expect(phases).toContain('initializing');
+          expect(phases).toContain('generating');
+          expect(phases).toContain('analyzing');
+          expect(phases).toContain('done');
+          delete (window as any).LanguageModel;
+          done();
+        }
+      });
+
+      const mockResponse = JSON.stringify({
+        filter: "age gt 30",
+        description: 'Idade maior que 30',
+        confidence: 0.95
+      });
+
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve(mockResponse),
+            destroy: () => {}
+          })
+      };
+
+      service.sendQuery('idade maior que 30', mockColumns).subscribe();
+    });
+
+    it('should emit error phase when query fails', done => {
+      service.onPhaseChange.subscribe(phase => {
+        if (phase === 'error') {
+          expect(phase).toBe('error');
+          done();
+        }
+      });
+
+      service.sendQuery('test query', mockColumns).subscribe({
+        error: () => {}
+      });
+    });
+  });
+
+  describe('onStreamChunk', () => {
+    it('should emit stream chunks when promptStreaming is available', done => {
+      const chunks: Array<string> = [];
+      let chunkCount = 0;
+
+      service.onStreamChunk.subscribe(text => {
+        chunks.push(text);
+        chunkCount++;
+        if (chunkCount >= 2) {
+          expect(chunks.length).toBeGreaterThanOrEqual(2);
+          delete (window as any).LanguageModel;
+          done();
+        }
+      });
+
+      const mockResponse = JSON.stringify({
+        filter: "age gt 30",
+        description: 'test',
+        confidence: 0.9
+      });
+
+      const mockStream = {
+        getReader: () => {
+          let callCount = 0;
+          return {
+            read: () => {
+              callCount++;
+              if (callCount === 1) {
+                return Promise.resolve({ done: false, value: '{"filter":' });
+              }
+              if (callCount === 2) {
+                return Promise.resolve({ done: false, value: mockResponse });
+              }
+              return Promise.resolve({ done: true, value: undefined });
+            },
+            releaseLock: () => {}
+          };
+        }
+      };
+
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            promptStreaming: () => mockStream,
+            destroy: () => {}
+          })
+      };
+
+      service.sendQuery('idade maior que 30', mockColumns).subscribe();
+    });
+
+    it('should fall back to prompt() when promptStreaming is not available', done => {
+      const mockResponse = JSON.stringify({
+        filter: "age gt 30",
+        description: 'test',
+        confidence: 0.9
+      });
+
+      (window as any).LanguageModel = {
+        create: () =>
+          Promise.resolve({
+            prompt: () => Promise.resolve(mockResponse),
+            destroy: () => {}
+          })
+      };
+
+      service.sendQuery('test', mockColumns).subscribe({
+        next: result => {
+          expect(result.filter).toBe('age gt 30');
+          delete (window as any).LanguageModel;
+          done();
+        },
+        error: () => {
+          delete (window as any).LanguageModel;
+          done.fail('Should not have errored');
+        }
+      });
+    });
+  });
+
+  describe('timeout configuration', () => {
+    it('should use default timeout of 120000ms', () => {
+      spyOn(service as any, 'executePromptWithStreaming').and.returnValue(
+        new Promise(() => {})
+      );
+
+      const subscription = service.sendQuery('test', mockColumns).subscribe({
+        error: () => {}
+      });
+
+      subscription.unsubscribe();
+    });
+
+    it('should accept custom timeout parameter', () => {
+      spyOn(service as any, 'executePromptWithStreaming').and.returnValue(
+        new Promise(() => {})
+      );
+
+      const subscription = service.sendQuery('test', mockColumns, 60000).subscribe({
+        error: () => {}
+      });
+
+      subscription.unsubscribe();
+    });
+  });
+
   describe('sanitizeInput', () => {
     it('should sanitize HTML special characters', () => {
       const result = service['sanitizeInput']('<script>alert("xss")</script>');

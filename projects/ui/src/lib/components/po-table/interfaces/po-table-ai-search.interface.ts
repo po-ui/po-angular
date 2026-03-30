@@ -108,3 +108,20 @@ export interface PoTableAiSearchConfigStep {
   /** URL ou endereço para navegação (ex: chrome://flags). */
   url?: string;
 }
+
+/**
+ * @usedBy PoTableComponent
+ *
+ * @description
+ *
+ * Tipo que representa a fase atual do processamento da IA.
+ *
+ * - `idle`: nenhum processamento em andamento.
+ * - `initializing`: criando sessão com o modelo de IA.
+ * - `downloading`: modelo sendo baixado pela primeira vez.
+ * - `generating`: modelo gerando a resposta (streaming ativo).
+ * - `analyzing`: resposta gerada, analisando resultado.
+ * - `done`: processamento concluído com sucesso.
+ * - `error`: ocorreu um erro durante o processamento.
+ */
+export type PoTableAiSearchPhase = 'idle' | 'initializing' | 'downloading' | 'generating' | 'analyzing' | 'done' | 'error';

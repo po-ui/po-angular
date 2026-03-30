@@ -37,6 +37,7 @@ import {
   PoTableAiSearchConfigStep,
   PoTableAiSearchDownloadProgress,
   PoTableAiSearchError,
+  PoTableAiSearchPhase,
   PoTableAiSearchResult
 } from './interfaces/po-table-ai-search.interface';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
@@ -584,6 +585,8 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   aiSearchShowConfig: boolean = false;
   aiSearchDownloading: boolean = false;
   aiSearchDownloadProgress: PoTableAiSearchDownloadProgress = { loaded: 0, total: 0, percent: 0 };
+  aiSearchPhase: PoTableAiSearchPhase = 'idle';
+  aiSearchStreamText: string = '';
 
   /**
    * @optional

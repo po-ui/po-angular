@@ -333,6 +333,69 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
         display: flex;
         justify-content: space-between;
       }
+
+      .po-table-ai-search-button--loading {
+        background: var(--color-action-hover, #0d4d82);
+      }
+
+      .po-table-ai-search-button-spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: po-ai-spin 0.8s linear infinite;
+      }
+
+      .po-table-ai-search-phase {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--color-action-default, #1464a5);
+      }
+
+      .po-table-ai-search-phase-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--color-action-default, #1464a5);
+        animation: po-ai-pulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes po-ai-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+
+      .po-table-ai-search-stream {
+        margin-top: 4px;
+        padding: 8px 12px;
+        background: var(--color-neutral-light-05, #f5f5f5);
+        border: 1px solid var(--color-neutral-mid-40, #dadeea);
+        border-radius: 4px;
+        font-size: 12px;
+      }
+
+      .po-table-ai-search-stream-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        margin-bottom: 4px;
+      }
+
+      .po-table-ai-search-stream-text {
+        font-family: monospace;
+        font-size: 12px;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        white-space: pre-wrap;
+        word-break: break-all;
+        margin: 0;
+        max-height: 120px;
+        overflow-y: auto;
+      }
     `
   ]
 })
@@ -405,6 +468,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private subscriptionService: Subscription = new Subscription();
   private aiSearchSubscription: Subscription;
   private aiDownloadProgressSubscription: Subscription;
+  private aiPhaseSubscription: Subscription;
+  private aiStreamSubscription: Subscription;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -578,6 +643,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.subscriptionService?.unsubscribe();
     this.aiSearchSubscription?.unsubscribe();
     this.aiDownloadProgressSubscription?.unsubscribe();
+    this.aiPhaseSubscription?.unsubscribe();
+    this.aiStreamSubscription?.unsubscribe();
     this.builtInAiSearchService.destroySession();
   }
 
@@ -640,9 +707,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.aiSearchLoading = true;
     this.aiSearchDescription = '';
     this.aiSearchDownloading = false;
+    this.aiSearchStreamText = '';
+    this.aiSearchPhase = 'idle';
     this.aiSearchSubscription?.unsubscribe();
 
     this.subscribeToDownloadProgress();
+    this.subscribeToPhaseChanges();
+    this.subscribeToStreamChunks();
 
     const columns = this.builtInAiSearchService.extractColumnsMetadata(this.columns);
 
@@ -650,6 +721,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       next: response => {
         this.aiSearchLoading = false;
         this.aiSearchDownloading = false;
+        this.aiSearchPhase = 'done';
 
         const result = {
           query: query.trim(),
@@ -674,6 +746,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       error: error => {
         this.aiSearchLoading = false;
         this.aiSearchDownloading = false;
+        this.aiSearchPhase = 'error';
         this.aiSearchError.emit({
           query: query.trim(),
           statusCode: error.statusCode || 500,
@@ -691,7 +764,26 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.aiSearchSubscription?.unsubscribe();
     this.aiSearchLoading = false;
     this.aiSearchDownloading = false;
+    this.aiSearchPhase = 'idle';
+    this.aiSearchStreamText = '';
     this.applyFilters();
+  }
+
+  getAiSearchPhaseLabel(): string {
+    switch (this.aiSearchPhase) {
+      case 'initializing':
+        return 'Inicializando sessão de IA...';
+      case 'downloading':
+        return 'Baixando modelo de IA...';
+      case 'generating':
+        return 'Gerando resposta...';
+      case 'analyzing':
+        return 'Analisando resultado...';
+      case 'error':
+        return 'Erro no processamento';
+      default:
+        return '';
+    }
   }
 
   private subscribeToDownloadProgress(): void {
@@ -703,6 +795,25 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
         this.aiSearchDownloading = false;
         this.aiSearchAvailability = 'readily';
       }
+      this.changeDetector.detectChanges();
+    });
+  }
+
+  private subscribeToPhaseChanges(): void {
+    this.aiPhaseSubscription?.unsubscribe();
+    this.aiPhaseSubscription = this.builtInAiSearchService.onPhaseChange.subscribe(phase => {
+      this.aiSearchPhase = phase;
+      if (phase === 'downloading') {
+        this.aiSearchDownloading = true;
+      }
+      this.changeDetector.detectChanges();
+    });
+  }
+
+  private subscribeToStreamChunks(): void {
+    this.aiStreamSubscription?.unsubscribe();
+    this.aiStreamSubscription = this.builtInAiSearchService.onStreamChunk.subscribe(text => {
+      this.aiSearchStreamText = text;
       this.changeDetector.detectChanges();
     });
   }

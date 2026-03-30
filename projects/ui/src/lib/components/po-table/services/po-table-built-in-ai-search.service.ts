@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, Subject, from, throwError } from 'rxjs';
-import { catchError, map, timeout } from 'rxjs/operators';
+import { catchError, map, timeout, finalize } from 'rxjs/operators';
 
 import {
   PoTableAiSearchAvailability,
@@ -15,10 +15,14 @@ interface BuiltInAiResponse {
   confidence: number;
 }
 
+export type PoTableAiSearchPhase = 'idle' | 'initializing' | 'downloading' | 'generating' | 'analyzing' | 'done' | 'error';
+
 @Injectable()
 export class PoTableBuiltInAiSearchService {
   private session: any = null;
   private downloadProgress$ = new Subject<PoTableAiSearchDownloadProgress>();
+  private phase$ = new Subject<PoTableAiSearchPhase>();
+  private streamChunk$ = new Subject<string>();
 
   constructor(private ngZone: NgZone) {}
 
@@ -27,6 +31,20 @@ export class PoTableBuiltInAiSearchService {
    */
   get onDownloadProgress(): Observable<PoTableAiSearchDownloadProgress> {
     return this.downloadProgress$.asObservable();
+  }
+
+  /**
+   * Observable que emite a fase atual do processamento da IA.
+   */
+  get onPhaseChange(): Observable<PoTableAiSearchPhase> {
+    return this.phase$.asObservable();
+  }
+
+  /**
+   * Observable que emite chunks de texto conforme a IA gera a resposta em tempo real.
+   */
+  get onStreamChunk(): Observable<string> {
+    return this.streamChunk$.asObservable();
   }
 
   /**
@@ -145,23 +163,32 @@ export class PoTableBuiltInAiSearchService {
 
   /**
    * Envia uma query em linguagem natural ao Built-in AI e retorna o filtro OData correspondente.
+   * Utiliza streaming quando disponível para exibir a resposta em tempo real.
    *
    * @param query Texto em linguagem natural digitado pelo usuário.
    * @param columns Metadados das colunas visíveis da tabela.
-   * @param timeoutMs Timeout em milissegundos para a chamada.
+   * @param timeoutMs Timeout em milissegundos para a chamada (padrão: 120s para suportar execução em CPU).
    */
   sendQuery(
     query: string,
     columns: Array<PoTableAiSearchColumn>,
-    timeoutMs: number = 30000
+    timeoutMs: number = 120000
   ): Observable<BuiltInAiResponse> {
     const sanitizedQuery = this.sanitizeInput(query);
     const prompt = this.buildPrompt(sanitizedQuery, columns);
 
-    return from(this.executePrompt(prompt)).pipe(
+    this.phase$.next('initializing');
+
+    return from(this.executePromptWithStreaming(prompt)).pipe(
       timeout(timeoutMs),
-      map(responseText => this.parseResponse(responseText, sanitizedQuery)),
+      map(responseText => {
+        this.phase$.next('analyzing');
+        const result = this.parseResponse(responseText, sanitizedQuery);
+        this.phase$.next('done');
+        return result;
+      }),
       catchError(error => {
+        this.phase$.next('error');
         if (error.name === 'TimeoutError') {
           return throwError(() => ({
             statusCode: 408,
@@ -348,9 +375,38 @@ If you cannot interpret the query, return: {"filter": "", "description": "Could 
     return { query, columns };
   }
 
-  private async executePrompt(prompt: { query: string; columns: Array<PoTableAiSearchColumn> }): Promise<string> {
+  private async executePromptWithStreaming(prompt: { query: string; columns: Array<PoTableAiSearchColumn> }): Promise<string> {
     const session = await this.getSession(prompt.columns);
-    return session.prompt(`Convert this to an OData v4 filter: "${prompt.query}"`);
+    const message = `Convert this to an OData v4 filter: "${prompt.query}"`;
+
+    this.ngZone.run(() => this.phase$.next('generating'));
+
+    if (typeof session.promptStreaming === 'function') {
+      return this.handleStreaming(session, message);
+    }
+
+    return session.prompt(message);
+  }
+
+  private async handleStreaming(session: any, message: string): Promise<string> {
+    const stream = session.promptStreaming(message);
+    const reader = stream.getReader();
+    let fullText = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        fullText = typeof value === 'string' ? value : fullText + value;
+        this.ngZone.run(() => this.streamChunk$.next(fullText));
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    return fullText;
   }
 
   private parseResponse(responseText: string, originalQuery: string): BuiltInAiResponse {
