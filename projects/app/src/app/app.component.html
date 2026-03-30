@@ -1,0 +1,60 @@
+<po-page-default p-title="Built-in AI - Filtro OData v4 por Linguagem Natural">
+  <div class="po-row">
+    <div class="po-md-12">
+      <p>
+        Este exemplo demonstra a integração do <strong>po-table</strong> com o <strong>Built-in AI</strong> do navegador.
+        Digite uma busca em linguagem natural no campo abaixo e o Built-in AI converterá para um filtro OData v4.
+      </p>
+    </div>
+  </div>
+
+  <div class="po-row">
+    <div class="po-md-12">
+      <po-table
+        [p-columns]="columns"
+        [p-service-api]="serviceApi"
+        [p-ai-search]="true"
+        p-ai-search-placeholder="Busque em linguagem natural... ex: ativos de São Paulo com salário acima de 10000"
+        [p-ai-search-min-confidence]="0.5"
+        (p-ai-search-result)="onAiSearchResult($event)"
+        (p-ai-search-low-confidence)="onAiSearchLowConfidence($event)"
+        (p-ai-search-error)="onAiSearchError($event)"
+        p-sort
+      >
+      </po-table>
+    </div>
+  </div>
+
+  @if (lastFilter || errorMessage) {
+    <div class="po-row po-mt-3">
+      <div class="po-md-12">
+        <po-divider p-label="Resultado da IA"></po-divider>
+      </div>
+
+      @if (errorMessage) {
+        <div class="po-md-12">
+          <po-tag p-color="color-07" p-icon="ICON_WARNING" [p-value]="errorMessage"></po-tag>
+        </div>
+      }
+
+      @if (lastFilter) {
+        <po-info class="po-md-4" p-label="Query" [p-value]="lastQuery"></po-info>
+        <po-info class="po-md-4" p-label="Filtro OData" [p-value]="lastFilter"></po-info>
+        <po-info class="po-md-2" p-label="Confiança" [p-value]="(lastConfidence * 100).toFixed(0) + '%'"></po-info>
+        <po-info class="po-md-6" p-label="Descrição" [p-value]="lastDescription"></po-info>
+        <po-info class="po-md-6" p-label="URL da API" [p-value]="fullApiUrl"></po-info>
+      }
+    </div>
+  }
+
+  <div class="po-row po-mt-3">
+    <div class="po-md-12">
+      <po-divider p-label="Exemplos de busca"></po-divider>
+    </div>
+    <div class="po-md-12">
+      @for (example of examples; track example) {
+        <po-tag class="po-mr-1 po-mb-1" p-color="color-08" [p-value]="example"></po-tag>
+      }
+    </div>
+  </div>
+</po-page-default>

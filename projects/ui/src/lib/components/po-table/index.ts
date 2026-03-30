@@ -2,6 +2,7 @@ export * from './enums/po-table-column-sort-type.enum';
 export * from './enums/po-table-row-template-arrow-direction.enum';
 export * from './enums/po-table-spacing.enum';
 export * from './interfaces/po-table-action.interface';
+export * from './interfaces/po-table-ai-search.interface';
 export * from './interfaces/po-table-boolean.interface';
 export * from './interfaces/po-table-column.interface';
 export * from './interfaces/po-table-column-sort.interface';

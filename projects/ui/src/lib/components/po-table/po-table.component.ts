@@ -39,6 +39,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
+import { PoTableBuiltInAiSearchService } from './services/po-table-built-in-ai-search.service';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 
@@ -97,8 +98,108 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 @Component({
   selector: 'po-table',
   templateUrl: './po-table.component.html',
-  providers: [PoDateService, PoTableService],
-  standalone: false
+  providers: [PoDateService, PoTableService, PoTableBuiltInAiSearchService],
+  standalone: false,
+  styles: [
+    `
+      .po-table-ai-search {
+        padding: 0 0 8px 0;
+      }
+
+      .po-table-ai-search-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .po-table-ai-search-input-wrapper {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--color-neutral-mid-40, #dadeea);
+        border-radius: 4px;
+        padding: 0 0 0 12px;
+        height: 44px;
+        background: var(--color-neutral-light-00, #ffffff);
+        transition: border-color 0.2s;
+      }
+
+      .po-table-ai-search-input-wrapper:focus-within {
+        border-color: var(--color-action-default, #1464a5);
+      }
+
+      .po-table-ai-search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-family: var(--font-family, 'NotoSans', sans-serif);
+        font-size: 14px;
+        color: var(--color-neutral-dark-70, #4a5c6a);
+        background: transparent;
+        height: 100%;
+      }
+
+      .po-table-ai-search-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 100%;
+        border: none;
+        border-left: 1px solid var(--color-neutral-mid-40, #dadeea);
+        border-radius: 0 3px 3px 0;
+        background: var(--color-action-default, #1464a5);
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        flex-shrink: 0;
+      }
+
+      .po-table-ai-search-button:hover {
+        background: var(--color-action-hover, #0d4d82);
+      }
+
+      .po-table-ai-search-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .po-table-ai-search-button-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .po-table-ai-search-input::placeholder {
+        color: var(--color-neutral-mid-40, #dadeea);
+      }
+
+      .po-table-ai-search-input:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .po-table-ai-search-loading {
+        animation: po-ai-spin 1s linear infinite;
+        color: var(--color-action-default, #1464a5);
+        font-size: 16px;
+      }
+
+      .po-table-ai-search-clear {
+        cursor: pointer;
+        color: var(--color-neutral-mid-40, #dadeea);
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .po-table-ai-search-clear:hover {
+        color: var(--color-action-default, #1464a5);
+      }
+
+      @keyframes po-ai-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `
+  ]
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
@@ -167,6 +268,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
   private subscriptionService: Subscription = new Subscription();
+  private aiSearchSubscription: Subscription;
 
   private clickListener: () => void;
   private resizeListener: () => void;
@@ -198,7 +300,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     poLanguageService: PoLanguageService,
     private changeDetector: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
-    private readonly defaultService: PoTableService
+    private readonly defaultService: PoTableService,
+    private readonly builtInAiSearchService: PoTableBuiltInAiSearchService
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
@@ -333,6 +436,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+    this.aiSearchSubscription?.unsubscribe();
+    this.builtInAiSearchService.destroySession();
   }
 
   /**
@@ -355,6 +460,66 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   applyFilters(queryParams?: { [key: string]: QueryParamsType }) {
     this.page = 1;
     this.initializeData(queryParams);
+  }
+
+  /**
+   * Executa a busca inteligente utilizando o Built-in AI do navegador.
+   * Converte a query em linguagem natural para um filtro OData v4 e aplica na tabela.
+   */
+  onAiSearch(query: string): void {
+    if (!query?.trim()) {
+      return;
+    }
+
+    this.aiSearchLoading = true;
+    this.aiSearchDescription = '';
+    this.aiSearchSubscription?.unsubscribe();
+
+    const columns = this.builtInAiSearchService.extractColumnsMetadata(this.columns);
+
+    this.aiSearchSubscription = this.builtInAiSearchService.sendQuery(query.trim(), columns).subscribe({
+      next: response => {
+        this.aiSearchLoading = false;
+
+        const result = {
+          query: query.trim(),
+          filter: response.filter,
+          description: response.description,
+          confidence: response.confidence
+        };
+
+        if (response.confidence < this.aiSearchMinConfidence) {
+          this.aiSearchLowConfidence.emit(result);
+          this.aiSearchDescription = response.description || '';
+          return;
+        }
+
+        this.aiSearchResult.emit(result);
+        this.aiSearchDescription = response.description || '';
+
+        if (response.filter) {
+          this.applyFilters({ $filter: response.filter });
+        }
+      },
+      error: error => {
+        this.aiSearchLoading = false;
+        this.aiSearchError.emit({
+          query: query.trim(),
+          statusCode: error.statusCode || 500,
+          message: error.message || 'Erro ao processar busca com IA'
+        });
+      }
+    });
+  }
+
+  /**
+   * Limpa a busca inteligente e recarrega os dados sem filtro.
+   */
+  onAiSearchClear(): void {
+    this.aiSearchDescription = '';
+    this.aiSearchSubscription?.unsubscribe();
+    this.aiSearchLoading = false;
+    this.applyFilters();
   }
 
   /**
