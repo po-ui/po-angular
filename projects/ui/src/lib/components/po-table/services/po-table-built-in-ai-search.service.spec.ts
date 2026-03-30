@@ -136,7 +136,7 @@ describe('PoTableBuiltInAiSearchService', () => {
     it('should send query and parse valid JSON response', done => {
       const mockResponse = JSON.stringify({
         filter: "age gt 30",
-        description: 'Idade maior que 30'
+        confidence: 0.95
       });
 
       (window as any).LanguageModel = {
@@ -150,8 +150,7 @@ describe('PoTableBuiltInAiSearchService', () => {
       service.sendQuery('idade maior que 30', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe('age gt 30');
-          expect(result.description).toBe('Idade maior que 30');
-          expect(result.confidence).toBe(0.9);
+          expect(result.confidence).toBe(0.95);
           delete (window as any).LanguageModel;
           done();
         },
@@ -186,7 +185,7 @@ describe('PoTableBuiltInAiSearchService', () => {
     });
 
     it('should extract JSON from text with extra content', done => {
-      const mockResponse = 'Here is the result: {"filter": "name eq \'Ana\'", "description": "Nome igual a Ana"} some extra text';
+      const mockResponse = 'Here is the result: {"filter": "name eq \'Ana\'", "confidence": 0.85} some extra text';
 
       (window as any).LanguageModel = {
         create: () =>
@@ -199,7 +198,7 @@ describe('PoTableBuiltInAiSearchService', () => {
       service.sendQuery('nome Ana', mockColumns).subscribe({
         next: result => {
           expect(result.filter).toBe("name eq 'Ana'");
-          expect(result.confidence).toBe(0.9);
+          expect(result.confidence).toBe(0.85);
           delete (window as any).LanguageModel;
           done();
         },
@@ -213,7 +212,7 @@ describe('PoTableBuiltInAiSearchService', () => {
     it('should return confidence 0.0 when filter is empty', done => {
       const mockResponse = JSON.stringify({
         filter: '',
-        description: 'Não foi possível interpretar'
+        confidence: 0.0
       });
 
       (window as any).LanguageModel = {
@@ -434,7 +433,7 @@ describe('PoTableBuiltInAiSearchService', () => {
 
       const mockResponse = JSON.stringify({
         filter: "age gt 30",
-        description: 'Idade maior que 30'
+        confidence: 0.95
       });
 
       (window as any).LanguageModel = {
@@ -479,7 +478,7 @@ describe('PoTableBuiltInAiSearchService', () => {
 
       const mockResponse = JSON.stringify({
         filter: "age gt 30",
-        description: 'test'
+        confidence: 0.9
       });
 
       const mockStream = {
@@ -515,7 +514,7 @@ describe('PoTableBuiltInAiSearchService', () => {
     it('should fall back to prompt() when promptStreaming is not available', done => {
       const mockResponse = JSON.stringify({
         filter: "age gt 30",
-        description: 'test'
+        confidence: 0.9
       });
 
       (window as any).LanguageModel = {

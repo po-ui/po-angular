@@ -262,26 +262,25 @@ export class PoTableBuiltInAiSearchService {
       .join(', ');
     const currentYear = new Date().getFullYear();
 
-    return `OData v4 filter generator. Current year: ${currentYear}. Columns: ${columnsDescription}
+    return `You are a strict JSON API. You ONLY output valid JSON. No markdown, no explanation, no text before or after the JSON.
 
-Operators: eq,ne,gt,ge,lt,le,has,in,and,or,not,add,sub,mul,div,divby,mod
-Functions: contains,startswith,endswith,tolower,toupper,trim,concat,length,indexof,substring,matchesPattern,year,month,day,hour,minute,second,now,date,time,ceiling,floor,round,cast,isof
+Task: Convert natural language to OData v4 $filter.
+Year: ${currentYear}. Columns: ${columnsDescription}
+Ops: eq,ne,gt,ge,lt,le,has,in,and,or,not
+Fn: contains,tolower,toupper,startswith,endswith,year,month,day,now,concat,length,trim,substring,floor,ceiling,round
 
-Rules:
-- Use ONLY listed columns. Strings in single quotes. Lowercase operators.
-- Case-insensitive: contains(tolower(prop),'value')
-- "this year"/"este ano" → year(col) eq ${currentYear}
-
-Respond ONLY with JSON, no extra text:
-{"filter":"<OData expression>","description":"<brief description>"}
+Output format (NOTHING else, ONLY this JSON object):
+{"filter":"<OData>","confidence":<0.0-1.0>}
 
 Examples:
-"age > 30" → {"filter":"age gt 30","description":"Idade maior que 30"}
-"name contains Silva" → {"filter":"contains(tolower(name),'silva')","description":"Nome contém Silva"}
-"hired this year" → {"filter":"year(hireDate) eq ${currentYear}","description":"Admitidos em ${currentYear}"}
-"dept TI or Marketing" → {"filter":"department in ('TI','Marketing')","description":"Departamento TI ou Marketing"}
-
-If cannot interpret: {"filter":"","description":"Não foi possível interpretar"}`;
+Input: age > 30
+{"filter":"age gt 30","confidence":0.95}
+Input: name contains Silva
+{"filter":"contains(tolower(name),'silva')","confidence":0.9}
+Input: hired this year
+{"filter":"year(hireDate) eq ${currentYear}","confidence":0.9}
+Input: ???
+{"filter":"","confidence":0.0}`;
   }
 
   private buildPrompt(query: string, columns: Array<PoTableAiSearchColumn>): { query: string; columns: Array<PoTableAiSearchColumn> } {
@@ -290,7 +289,8 @@ If cannot interpret: {"filter":"","description":"Não foi possível interpretar"
 
   private async executePromptWithStreaming(prompt: { query: string; columns: Array<PoTableAiSearchColumn> }): Promise<string> {
     const session = await this.getSession(prompt.columns);
-    const message = `Convert this to an OData v4 filter: "${prompt.query}"`;
+    const message = `${prompt.query}
+Respond with ONLY JSON, nothing else.`;
 
     this.ngZone.run(() => this.phase$.next('generating'));
 
@@ -326,27 +326,30 @@ If cannot interpret: {"filter":"","description":"Não foi possível interpretar"
 
   private parseResponse(responseText: string, originalQuery: string): BuiltInAiResponse {
     try {
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      const jsonMatch = responseText.match(/\{[\s\S]*?\}/);
       if (!jsonMatch) {
         return {
           filter: '',
           description: `Não foi possível interpretar: "${originalQuery}"`,
-          confidence: 0.1
+          confidence: 0.0
         };
       }
 
       const parsed = JSON.parse(jsonMatch[0]);
+      const confidence = typeof parsed.confidence === 'number'
+        ? Math.max(0, Math.min(1, parsed.confidence))
+        : (parsed.filter ? 0.5 : 0.0);
 
       return {
         filter: typeof parsed.filter === 'string' ? parsed.filter : '',
         description: typeof parsed.description === 'string' ? parsed.description : '',
-        confidence: parsed.filter ? 0.9 : 0.0
+        confidence
       };
     } catch {
       return {
         filter: '',
         description: `Não foi possível processar resposta para: "${originalQuery}"`,
-        confidence: 0.1
+        confidence: 0.0
       };
     }
   }
