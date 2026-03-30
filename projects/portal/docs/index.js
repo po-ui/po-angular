@@ -45,6 +45,7 @@ let poDocsPackage = new DgeniPackage('po-api-docs', [
   .processor(require('./processors/docs-processor'))
   // Processor to group components into top-level groups such as "Tabs", "Sidenav", etc.
   .processor(require('./processors/docs-grouper'))
+  .processor(require('./processors/llms-generator'))
   // Processor to generate samples
   .processor(require('./processors/samples/samples-parse'))
   .processor(require('./processors/samples/samples-generate'))

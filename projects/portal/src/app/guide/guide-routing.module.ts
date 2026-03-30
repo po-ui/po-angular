@@ -22,6 +22,7 @@ import { GuideGridSystemComponent } from './guides/guide-grid-system/guide-grid-
 import { GuideSpacingComponent } from './guides/guide-spacing/guide-spacing.component';
 import { GuideThemeCustomizationComponent } from './guides/guide-theme-customization/guide-theme-customization.component';
 import { GuideTypographyComponent } from './guides/guide-typography/guide-typography.component';
+import { GuideLlmsComponent } from './guides/guide-llms/guide-llms.component';
 
 // Route Configuration
 export const guidesRoutes: Routes = [
@@ -35,6 +36,7 @@ export const guidesRoutes: Routes = [
       { path: 'development-flow', component: GuideDevelopmentFlowComponent },
       { path: 'getting-started', component: GuideGettingStartedComponent },
       { path: 'guide-charts', component: GuideGuideChartsComponent },
+      { path: 'llms', component: GuideLlmsComponent },
       { path: 'migration-poui-v2', component: GuideMigrationPouiV2Component },
       { path: 'migration-poui', component: GuideMigrationPouiComponent },
       { path: 'migration-thf-to-po-ui', component: GuideMigrationThfToPoUiComponent },

@@ -295,6 +295,21 @@
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor/min",
                 "output": "/assets/monaco"
+              },
+              {
+                "glob": "llms.txt",
+                "input": "projects/portal/src",
+                "output": "/"
+              },
+              {
+                "glob": "llms-full.txt",
+                "input": "projects/portal/src",
+                "output": "/"
+              },
+              {
+                "glob": "**/*.md",
+                "input": "projects/portal/src/llms-generated",
+                "output": "/llms-generated"
               }
             ],
             "styles": [
