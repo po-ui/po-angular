@@ -25,7 +25,6 @@ import { GuideGridSystemComponent } from './guides/guide-grid-system/guide-grid-
 import { GuideSpacingComponent } from './guides/guide-spacing/guide-spacing.component';
 import { GuideThemeCustomizationComponent } from './guides/guide-theme-customization/guide-theme-customization.component';
 import { GuideTypographyComponent } from './guides/guide-typography/guide-typography.component';
-import { GuideLlmsComponent } from './guides/guide-llms/guide-llms.component';
 
 @NgModule({
   imports: [SharedModule, GuideRoutingModule],
@@ -33,7 +32,6 @@ import { GuideLlmsComponent } from './guides/guide-llms/guide-llms.component';
     GuidesComponent,
     GuideApiComponent,
     GuideBrowserSupportComponent,
-    GuideLlmsComponent,
     GuideDeprecationsComponent,
     GuideDevelopmentFlowComponent,
     GuideGettingStartedComponent,

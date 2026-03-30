@@ -22,6 +22,13 @@ export class MenuComponentsService {
 
     return [
       { label: 'Componentes', subItems: items.filter(item => item.type === 'components') },
+      {
+        label: 'Ferramentas para I.A.',
+        subItems: [
+          { label: 'LLMS', link: '/documentation/ia-tools-llms' },
+          { label: 'MCP PO-UI', link: '/documentation/ia-tools-mcp' }
+        ]
+      },
       { label: 'Diretivas', subItems: items.filter(item => item.type === 'directives') },
       { label: 'Interceptors', subItems: items.filter(item => item.type === 'interceptors') },
       { label: 'Serviços', subItems: items.filter(item => item.type === 'services') },

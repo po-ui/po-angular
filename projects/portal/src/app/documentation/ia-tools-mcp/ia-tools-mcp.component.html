@@ -1,0 +1,85 @@
+<po-page-default class="guides app-portal" p-title="MCP PO-UI">
+  <h2>Servidor MCP (&#64;po-ui/mcp)</h2>
+  <p>
+    O PO UI oferece um servidor
+    <a href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a> oficial que pode ser integrado
+    diretamente a IDEs e assistentes de código como <strong>Cursor</strong>, <strong>Claude Desktop</strong>,
+    <strong>VS Code</strong> e outros clientes MCP.
+  </p>
+
+  <h3>Instalação e Configuração</h3>
+  <p>Não é necessário instalar nada — o servidor é executado via <code>npx</code>. Configure seu cliente MCP:</p>
+
+  <p><strong>Cursor</strong> (<code>.cursor/mcp.json</code> ou configurações globais):</p>
+  <pre><code>&#123;
+  "mcpServers": &#123;
+    "po-ui": &#123;
+      "command": "npx",
+      "args": ["-y", "&#64;po-ui/mcp"]
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+  <p>
+    <strong>Claude Desktop</strong> (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code> no
+    macOS ou <code>%APPDATA%\Claude\claude_desktop_config.json</code> no Windows):
+  </p>
+  <pre><code>&#123;
+  "mcpServers": &#123;
+    "po-ui": &#123;
+      "command": "npx",
+      "args": ["-y", "&#64;po-ui/mcp"]
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+  <h3>Ferramentas Disponíveis</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Ferramenta</th>
+        <th>Descrição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>list_components</code></td>
+        <td>
+          Lista todos os componentes, serviços, interfaces e enums com descrições resumidas. Suporta filtro por seção e
+          texto livre.
+        </td>
+      </tr>
+      <tr>
+        <td><code>get_component_docs</code></td>
+        <td>Retorna a documentação completa em Markdown para um componente ou API específica pelo slug.</td>
+      </tr>
+      <tr>
+        <td><code>search_docs</code></td>
+        <td>Busca texto livre em toda a documentação do PO UI.</td>
+      </tr>
+      <tr>
+        <td><code>get_guide</code></td>
+        <td>
+          Retorna o conteúdo de um guia de documentação (ex: <code>getting-started</code>, <code>schematics</code>).
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Exemplos de Uso</h3>
+  <p>Com o servidor configurado, você pode perguntar ao seu assistente:</p>
+  <ul>
+    <li><em>"Liste todos os componentes de formulário do PO UI"</em></li>
+    <li><em>"Mostre a documentação completa do po-table"</em></li>
+    <li><em>"Busque componentes que suportem upload de arquivo"</em></li>
+    <li><em>"Mostre o guia de instalação do PO UI"</em></li>
+  </ul>
+
+  <hr />
+
+  <h2>Referências</h2>
+  <ul>
+    <li><a href="https://modelcontextprotocol.io/">Model Context Protocol</a></li>
+    <li><a href="https://llmstxt.org/">Especificação llms.txt</a></li>
+  </ul>
+</po-page-default>

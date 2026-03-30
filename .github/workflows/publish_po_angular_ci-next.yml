@@ -8,6 +8,7 @@ env:
   COMPONENTS_NPM_PATH: po-ui/ng-components
   TEMPLATES_NPM_PATH: po-ui/ng-templates
   CODE_EDITOR_NPM_PATH: po-ui/ng-code-editor
+  MCP_NPM_PATH: po-ui/mcp
   WORKING_DIR: /home/runner/work/po-angular/po-angular/po-angular
 
 on:
@@ -41,6 +42,10 @@ jobs:
 
     - name: Install and Build
       run: npm install && npm run build
+      working-directory: ${{env.WORKING_DIR}}
+
+    - name: Build MCP
+      run: npm run build:mcp
       working-directory: ${{env.WORKING_DIR}}
 
     # Pega as versões publicadas no NPM e salva no arquivo versions.json
@@ -156,6 +161,22 @@ jobs:
     - name: ng-code-editor - add "next" tag
       if: contains(steps.version.outputs.publish, 'no')
       run: npm dist-tags add @${{ env.CODE_EDITOR_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "next"
+      working-directory: ${{env.WORKING_DIR}}
+      env:
+        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    # PUBLISH MCP
+    - name: mcp - publish
+      if: contains(steps.version.outputs.publish, 'yes')
+      run: npm publish ${{env.WORKING_DIR}}/dist/mcp --tag next --ignore-scripts
+      env:
+        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: mcp - add "next" tag
+      if: contains(steps.version.outputs.publish, 'no')
+      run: npm dist-tags add @${{ env.MCP_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "next"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}

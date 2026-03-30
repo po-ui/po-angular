@@ -365,9 +365,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { DocumentationComponent } from './documentation.component';
 import { DocumentationListComponent } from './documentation-list.component';
+import { IaToolsLlmsComponent } from './ia-tools-llms/ia-tools-llms.component';
+import { IaToolsMcpComponent } from './ia-tools-mcp/ia-tools-mcp.component';
 
 const documentationRoutes: Routes = [
   { path: '', component: DocumentationComponent, children: [
+    { path: 'ia-tools-llms', component: IaToolsLlmsComponent },
+    { path: 'ia-tools-mcp', component: IaToolsMcpComponent },
     {{#each docs}}
     { path: '{{name}}', loadChildren: () => import('./samples/sample-{{name}}/doc-{{name}}.module').then(m => m.Doc{{componentName}}Module) },
     {{/each}}

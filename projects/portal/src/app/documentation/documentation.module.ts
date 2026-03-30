@@ -8,6 +8,8 @@ import { DocumentationRoutingModule } from './documentation-routing.module';
 import { DocumentationComponent } from './documentation.component';
 import { DocumentationService } from './documentation.service';
 import { DocumentationListComponent } from './documentation-list.component';
+import { IaToolsLlmsComponent } from './ia-tools-llms/ia-tools-llms.component';
+import { IaToolsMcpComponent } from './ia-tools-mcp/ia-tools-mcp.component';
 
 @NgModule({
   imports: [
@@ -20,7 +22,7 @@ import { DocumentationListComponent } from './documentation-list.component';
     }),
     DocumentationRoutingModule
   ],
-  declarations: [DocumentationComponent, DocumentationListComponent],
+  declarations: [DocumentationComponent, DocumentationListComponent, IaToolsLlmsComponent, IaToolsMcpComponent],
   exports: [],
   providers: [DocumentationService]
 })

@@ -70,6 +70,7 @@ jobs:
     - run: npm i
     - run: npm run build
     - run: npm run build:portal:docs
+    - run: npm run build:portal:llms
     - run: npm run build:portal:prod
 
     - uses: actions/upload-artifact@v4
@@ -146,6 +147,22 @@ jobs:
     - run: npm run build:schematics
     - run: npm run test:storage
     - run: npm run test:storage:schematics
+
+  test-mcp:
+    name: Test mcp
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 24
+
+    - run: npm i
+    - run: npm run test:mcp
 
   test-sync:
     name: Test sync

@@ -1,0 +1,309 @@
+<po-page-default class="guides app-portal" p-title="LLMS">
+  <h2>Introdução</h2>
+  <p>
+    O <strong>PO UI</strong> oferece suporte ao padrão <a href="https://llmstxt.org/">llms.txt</a>, uma especificação
+    aberta que facilita o consumo de documentação por <strong>Large Language Models (LLMs)</strong> e ferramentas de
+    Inteligência Artificial. Este recurso permite que assistentes de código como <strong>GitHub Copilot</strong>,
+    <strong>Claude</strong>, <strong>ChatGPT</strong> e outros agentes de IA acessem informações estruturadas sobre os
+    componentes da biblioteca de forma otimizada.
+  </p>
+
+  <h3>O que é llms.txt?</h3>
+  <p>
+    O padrão <code>/llms.txt</code> foi proposto para fornecer conteúdo amigável para LLMs em websites. Diferente de
+    páginas HTML complexas com navegação, anúncios e JavaScript, os arquivos llms.txt oferecem informações concisas e
+    especializadas em formato Markdown, ideal para o contexto limitado das janelas de processamento dos modelos de
+    linguagem.
+  </p>
+  <blockquote>
+    <p>
+      <strong>Referência oficial:</strong>
+      <a href="https://llmstxt.org/">https://llmstxt.org/</a>
+    </p>
+  </blockquote>
+
+  <hr />
+
+  <h2>Arquivos Disponíveis</h2>
+  <p>O PO UI gera automaticamente três tipos de documentação para consumo por ferramentas de IA:</p>
+
+  <h3>1. Índice Resumido (<code>llms.txt</code>)</h3>
+  <p>
+    <strong>URL:</strong>
+    <a href="https://po-ui.io/llms.txt">https://po-ui.io/llms.txt</a>
+  </p>
+  <p>Arquivo de índice seguindo a especificação oficial do llmstxt.org. Contém:</p>
+  <ul>
+    <li>Descrição geral da biblioteca PO UI</li>
+    <li>Instruções de instalação</li>
+    <li>Lista categorizada de todos os componentes, serviços, interfaces e enums</li>
+    <li>Links para documentação detalhada de cada item</li>
+    <li>Referências para guias importantes</li>
+  </ul>
+  <p>
+    Este arquivo é ideal para dar contexto inicial sobre a biblioteca a um LLM, permitindo que ele entenda a estrutura e
+    saiba onde buscar informações específicas.
+  </p>
+  <p><strong>Exemplo de uso:</strong></p>
+  <pre><code>Adicione https://po-ui.io/llms.txt ao contexto do seu assistente de IA para que ele conheça todos os componentes disponíveis no PO UI.</code></pre>
+
+  <hr />
+
+  <h3>2. Documentação Completa (<code>llms-full.txt</code>)</h3>
+  <p>
+    <strong>URL:</strong>
+    <a href="https://po-ui.io/llms-full.txt">https://po-ui.io/llms-full.txt</a>
+  </p>
+  <p>Arquivo com a documentação completa de todos os componentes concatenada em um único arquivo. Inclui:</p>
+  <ul>
+    <li>Descrição detalhada de cada componente</li>
+    <li>Tabelas de propriedades (Inputs) com tipo, alias, valores padrão e descrição</li>
+    <li>Tabelas de eventos (Outputs)</li>
+    <li>Propriedades de interfaces e modelos</li>
+    <li>Valores de enums</li>
+    <li>Métodos de serviços com parâmetros e tipos de retorno</li>
+  </ul>
+  <p>
+    Este arquivo é útil quando você precisa fornecer contexto completo sobre a biblioteca ao LLM, permitindo respostas
+    mais precisas sobre qualquer componente.
+  </p>
+  <blockquote>
+    <p>
+      <strong>Atenção:</strong> Este arquivo pode ser grande. Use-o quando precisar de informações detalhadas sobre
+      múltiplos componentes ou quando o LLM precisar entender relacionamentos entre diferentes partes da API.
+    </p>
+  </blockquote>
+
+  <hr />
+
+  <h3>3. Documentação Individual por Componente</h3>
+  <p>
+    <strong>URL Base:</strong>
+    <code>https://po-ui.io/llms-generated/&lt;componente&gt;.md</code>
+  </p>
+  <p>
+    Cada componente, serviço, interface e enum possui seu próprio arquivo Markdown com documentação completa. Isso
+    permite carregar apenas a documentação necessária para uma tarefa específica.
+  </p>
+  <p><strong>Exemplos:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Componente</th>
+        <th>URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Componente</td>
+        <td>po-button</td>
+        <td>
+          <a href="https://po-ui.io/llms-generated/po-button.md">https://po-ui.io/llms-generated/po-button.md</a>
+        </td>
+      </tr>
+      <tr>
+        <td>Componente</td>
+        <td>po-table</td>
+        <td>
+          <a href="https://po-ui.io/llms-generated/po-table.md">https://po-ui.io/llms-generated/po-table.md</a>
+        </td>
+      </tr>
+      <tr>
+        <td>Componente</td>
+        <td>po-modal</td>
+        <td>
+          <a href="https://po-ui.io/llms-generated/po-modal.md">https://po-ui.io/llms-generated/po-modal.md</a>
+        </td>
+      </tr>
+      <tr>
+        <td>Serviço</td>
+        <td>PoNotificationService</td>
+        <td>
+          <a href="https://po-ui.io/llms-generated/po-notification-service.md"
+            >https://po-ui.io/llms-generated/po-notification-service.md</a
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>Interface</td>
+        <td>PoTableColumn</td>
+        <td>
+          <a href="https://po-ui.io/llms-generated/po-table-column.md"
+            >https://po-ui.io/llms-generated/po-table-column.md</a
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>Enum</td>
+        <td>PoButtonKind</td>
+        <td>
+          <a href="https://po-ui.io/llms-generated/po-button-kind.md"
+            >https://po-ui.io/llms-generated/po-button-kind.md</a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Padrão de nomenclatura:</strong></p>
+  <ul>
+    <li>Componentes: <code>po-&lt;nome&gt;.md</code> (ex: <code>po-button.md</code>, <code>po-combo.md</code>)</li>
+    <li>Serviços: <code>po-&lt;nome&gt;-service.md</code> (ex: <code>po-dialog-service.md</code>)</li>
+    <li>Interfaces: <code>po-&lt;nome&gt;.md</code> (ex: <code>po-table-column.md</code>)</li>
+    <li>Enums: <code>po-&lt;nome&gt;.md</code> (ex: <code>po-button-kind.md</code>)</li>
+  </ul>
+
+  <hr />
+
+  <h2>Como Usar com Ferramentas de IA</h2>
+
+  <h3>GitHub Copilot</h3>
+  <p>No VS Code com GitHub Copilot, você pode referenciar a documentação do PO UI de diferentes formas:</p>
+  <p><strong>1. Usando o arquivo de contexto:</strong></p>
+  <pre><code>&#64;workspace Adicione o conteúdo de https://po-ui.io/llms.txt como contexto</code></pre>
+  <p><strong>2. Referenciando componentes específicos:</strong></p>
+  <pre><code>Usando a documentação em https://po-ui.io/llms-generated/po-table.md,
+crie uma tabela com ordenação e paginação.</code></pre>
+
+  <h3>Claude / ChatGPT</h3>
+  <p>Ao iniciar uma conversa sobre PO UI, forneça o contexto:</p>
+  <pre><code>Estou trabalhando com a biblioteca PO UI para Angular.
+A documentação completa está disponível em: https://po-ui.io/llms-full.txt
+
+[sua pergunta aqui]</code></pre>
+  <p>Para perguntas específicas sobre um componente:</p>
+  <pre><code>Consulte https://po-ui.io/llms-generated/po-lookup.md e me explique
+como configurar o filtro avançado do po-lookup.</code></pre>
+
+  <h3>Cursor / Continue.dev / Outros Agentes</h3>
+  <p>
+    Configure o arquivo <code>llms.txt</code> como fonte de documentação nas configurações do seu agente de IA
+    preferido. A maioria dos agentes modernos suporta URLs externas como fonte de contexto.
+  </p>
+
+  <hr />
+
+  <h2>Estrutura dos Arquivos Gerados</h2>
+
+  <h3>Formato do llms.txt</h3>
+  <p>O arquivo <code>llms.txt</code> segue a especificação oficial:</p>
+
+  <h2>Componentes e Diretivas</h2>
+  <ul>
+    <li>
+      <a href="https://po-ui.io/llms-generated/po-button.md">PoButtonComponent</a>: O po-button permite que o usuário
+      execute ações...
+    </li>
+    <li>
+      <a href="https://po-ui.io/llms-generated/po-table.md">PoTableComponent</a>: Componente de tabela para exibição de
+      dados...
+    </li>
+  </ul>
+
+  <h2>Serviços</h2>
+  <ul>
+    <li>
+      <a href="https://po-ui.io/llms-generated/po-dialog-service.md">PoDialogService</a>: Serviço para exibição de
+      diálogos...
+    </li>
+  </ul>
+
+  <h2>Interfaces e Modelos</h2>
+  <ul>
+    <li>
+      <a href="https://po-ui.io/llms-generated/po-table-column.md">PoTableColumn</a>: Interface para configuração de
+      colunas...
+    </li>
+  </ul>
+
+  <h2>Guias</h2>
+  <ul>
+    <li><a href="https://po-ui.io/guides/getting-started">Instalação e configuração</a>: Como instalar o PO UI...</li>
+  </ul>
+
+  <h3>Formato dos Arquivos de Componente (.md)</h3>
+  <p>Cada arquivo individual contém:</p>
+  <pre><code># PoButtonComponent
+
+**Seletor:** `po-button`
+**Tipo:** Componente / Diretiva
+**Pacote:** `&#64;po-ui/ng-components`
+**Referência:** https://po-ui.io/documentation/po-button
+
+[Descrição completa do componente...]
+
+## Inputs
+
+| Propriedade | Alias | Tipo | Opcional | Padrão | Descrição |
+|---|---|---|---|---|---|
+| `label` | `p-label` | `string` | não | - | Texto exibido no botão |
+| `disabled` | `p-disabled` | `boolean` | sim | `false` | Desabilita o botão |
+...
+
+## Outputs
+
+| Evento | Alias | Tipo | Descrição |
+|---|---|---|---|
+| `click` | `p-click` | `EventEmitter&lt;void&gt;` | Emitido ao clicar no botão |
+...</code></pre>
+
+  <hr />
+
+  <h2>Geração Automática</h2>
+  <p>Os arquivos de documentação para IA são gerados automaticamente durante o build do portal PO UI.</p>
+  <p>Isso garante que a documentação para LLMs esteja sempre sincronizada com a versão mais recente da biblioteca.</p>
+
+  <h3>Arquivos Gerados</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Arquivo</th>
+        <th>Localização</th>
+        <th>Descrição</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>llms.txt</code></td>
+        <td><code>/llms.txt</code></td>
+        <td>Índice com links para documentação detalhada</td>
+      </tr>
+      <tr>
+        <td><code>llms-full.txt</code></td>
+        <td><code>/llms-full.txt</code></td>
+        <td>Documentação completa em arquivo único</td>
+      </tr>
+      <tr>
+        <td><code>*.md</code></td>
+        <td><code>/llms-generated/*.md</code></td>
+        <td>Documentação individual por componente</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <h2>Benefícios</h2>
+  <ul>
+    <li>
+      <strong>Contexto otimizado:</strong> Informações estruturadas em Markdown, ideal para janelas de contexto de LLMs
+    </li>
+    <li><strong>Sempre atualizado:</strong> Gerado automaticamente a partir do código-fonte</li>
+    <li>
+      <strong>Flexibilidade:</strong> Escolha entre índice resumido, documentação completa ou arquivos individuais
+    </li>
+    <li><strong>Padrão aberto:</strong> Segue a especificação <a href="https://llmstxt.org/">llmstxt.org</a></li>
+    <li><strong>Compatibilidade:</strong> Funciona com qualquer ferramenta de IA que aceite contexto em texto</li>
+  </ul>
+
+  <hr />
+
+  <h2>Referências</h2>
+  <ul>
+    <li><a href="https://llmstxt.org/">Especificação llms.txt</a></li>
+    <li><a href="https://llmstxt.site/">Diretório de sites com llms.txt</a></li>
+    <li><a href="https://github.com/AnswerDotAI/llms-txt">GitHub - llms-txt</a></li>
+    <li><a href="https://modelcontextprotocol.io/">Model Context Protocol</a></li>
+  </ul>
+</po-page-default>
