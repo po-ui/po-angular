@@ -238,3 +238,21 @@ jobs:
     - run: npm run build:ui:lite
     - run: npx playwright install --with-deps chromium
     - run: npx playwright test
+
+    # Disponibiliza o relatorio HTML do Playwright como artefato
+    - name: Upload visual regression report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: visual-regression-report
+        path: e2e/visual/playwright-report/
+        retention-days: 30
+
+    # Disponibiliza os resultados de teste (diffs, screenshots) como artefato
+    - name: Upload visual regression test results
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: visual-regression-test-results
+        path: e2e/visual/test-results/
+        retention-days: 30
