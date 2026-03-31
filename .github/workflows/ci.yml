@@ -237,7 +237,25 @@ jobs:
 
     - run: npm run build:ui:lite
     - run: npx playwright install --with-deps chromium
-    - run: npx playwright test
+
+    # Restaura baselines do cache (geradas em execucoes anteriores no CI)
+    - name: Restore visual regression baselines from cache
+      id: baselines-cache
+      uses: actions/cache@v4
+      with:
+        path: e2e/visual/__snapshots__
+        key: visual-baselines-${{ runner.os }}-${{ hashFiles('e2e/visual/**/*.visual.spec.ts', 'e2e/visual/**/*.component.html') }}
+        restore-keys: |
+          visual-baselines-${{ runner.os }}-
+
+    # Se nao encontrou baselines no cache, gera novas para o ambiente CI
+    - name: Generate baselines for CI environment
+      if: steps.baselines-cache.outputs.cache-hit != 'true'
+      run: npx playwright test --update-snapshots --reporter=list
+
+    # Executa os testes visuais comparando com as baselines
+    - name: Run visual regression tests
+      run: npx playwright test
 
     # Disponibiliza o relatorio HTML do Playwright como artefato
     - name: Upload visual regression report
