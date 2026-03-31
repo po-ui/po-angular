@@ -1,12 +1,25 @@
 <div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
   <!-- State: basic -->
   <div data-testid="state-basic">
-    <po-lookup name="basic" p-placeholder="Pesquisar" p-field-label="label" p-field-value="value" [p-filter-service]="filterService"></po-lookup>
+    <po-lookup
+      name="basic"
+      p-placeholder="Pesquisar"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
   </div>
 
   <!-- State: label -->
   <div data-testid="state-label">
-    <po-lookup name="label" p-label="Label do campo" p-placeholder="Campo com label" p-field-label="label" p-field-value="value" [p-filter-service]="filterService"></po-lookup>
+    <po-lookup
+      name="label"
+      p-label="Label do campo"
+      p-placeholder="Campo com label"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
   </div>
 
   <!-- State: label + helper -->
