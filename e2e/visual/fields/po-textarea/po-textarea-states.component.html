@@ -1,0 +1,70 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
+  <!-- State: basic -->
+  <div data-testid="state-basic">
+    <po-textarea name="basic" p-placeholder="Digite um texto"></po-textarea>
+  </div>
+
+  <!-- State: label -->
+  <div data-testid="state-label">
+    <po-textarea name="label" p-label="Label do campo" p-placeholder="Campo com label"></po-textarea>
+  </div>
+
+  <!-- State: label + helper -->
+  <div data-testid="state-label-helper">
+    <po-textarea
+      name="label-helper"
+      p-label="Label do campo"
+      p-helper="Texto de ajuda do helper"
+      p-placeholder="Campo com label e helper"
+    ></po-textarea>
+  </div>
+
+  <!-- State: label + help-text -->
+  <div data-testid="state-label-help">
+    <po-textarea
+      name="label-help"
+      p-label="Label do campo"
+      p-help="Texto de apoio do campo"
+      p-placeholder="Campo com label e help"
+    ></po-textarea>
+  </div>
+
+  <!-- State: disabled -->
+  <div data-testid="state-disabled">
+    <po-textarea name="disabled" p-label="Campo desabilitado" p-disabled p-placeholder="Campo desabilitado"></po-textarea>
+  </div>
+
+  <!-- State: readonly -->
+  <div data-testid="state-readonly">
+    <po-textarea
+      name="readonly"
+      p-label="Campo somente leitura"
+      p-readonly
+      p-placeholder="Campo readonly"
+      [(ngModel)]="readonlyValue"
+    ></po-textarea>
+  </div>
+
+  <!-- State: required -->
+  <div data-testid="state-required">
+    <po-textarea
+      name="required"
+      p-label="Campo obrigatorio"
+      p-required
+      [p-show-required]="true"
+      p-placeholder="Campo obrigatorio"
+    ></po-textarea>
+  </div>
+
+  <!-- State: required + errorMessage -->
+  <div data-testid="state-required-error">
+    <po-textarea
+      name="required-error"
+      p-label="Campo obrigatorio com erro"
+      p-required
+      [p-show-required]="true"
+      p-field-error-message="Este campo e obrigatorio"
+      p-placeholder="Campo obrigatorio com mensagem de erro"
+    ></po-textarea>
+  </div>
+</div>

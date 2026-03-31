@@ -1,0 +1,26 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
+  <!-- State: basic -->
+  <div data-testid="state-basic">
+    <po-checkbox name="basic" p-label="Checkbox basico"></po-checkbox>
+  </div>
+
+  <!-- State: label + help-text -->
+  <div data-testid="state-label-help">
+    <po-checkbox name="label-help" p-label="Checkbox com help" p-help="Texto de apoio do campo"></po-checkbox>
+  </div>
+
+  <!-- State: disabled -->
+  <div data-testid="state-disabled">
+    <po-checkbox name="disabled" p-label="Checkbox desabilitado" p-disabled></po-checkbox>
+  </div>
+
+  <!-- State: disabled + checked -->
+  <div data-testid="state-disabled-checked">
+    <po-checkbox name="disabled-checked" p-label="Checkbox desabilitado marcado" p-disabled [(ngModel)]="checkedValue"></po-checkbox>
+  </div>
+
+  <!-- State: required -->
+  <div data-testid="state-required">
+    <po-checkbox name="required" p-label="Checkbox obrigatorio" p-required></po-checkbox>
+  </div>
+</div>
