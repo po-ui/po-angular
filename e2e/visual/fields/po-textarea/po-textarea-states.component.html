@@ -1,12 +1,12 @@
 <div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
   <!-- State: basic -->
   <div data-testid="state-basic">
-    <po-textarea name="basic" p-placeholder="Digite um texto"></po-textarea>
+    <po-textarea name="basic" p-placeholder="Digite um texto" p-rows="3"></po-textarea>
   </div>
 
   <!-- State: label -->
   <div data-testid="state-label">
-    <po-textarea name="label" p-label="Label do campo" p-placeholder="Campo com label"></po-textarea>
+    <po-textarea name="label" p-label="Label do campo" p-placeholder="Campo com label" p-rows="3"></po-textarea>
   </div>
 
   <!-- State: label + helper -->
@@ -16,6 +16,7 @@
       p-label="Label do campo"
       p-helper="Texto de ajuda do helper"
       p-placeholder="Campo com label e helper"
+      p-rows="3"
     ></po-textarea>
   </div>
 
@@ -26,6 +27,7 @@
       p-label="Label do campo"
       p-help="Texto de apoio do campo"
       p-placeholder="Campo com label e help"
+      p-rows="3"
     ></po-textarea>
   </div>
 
@@ -36,6 +38,7 @@
       p-label="Campo desabilitado"
       p-disabled
       p-placeholder="Campo desabilitado"
+      p-rows="3"
     ></po-textarea>
   </div>
 
@@ -47,6 +50,7 @@
       p-readonly
       p-placeholder="Campo readonly"
       [(ngModel)]="readonlyValue"
+      p-rows="3"
     ></po-textarea>
   </div>
 
@@ -58,6 +62,7 @@
       p-required
       [p-show-required]="true"
       p-placeholder="Campo obrigatorio"
+      p-rows="3"
     ></po-textarea>
   </div>
 
@@ -70,6 +75,7 @@
       [p-show-required]="true"
       p-field-error-message="Este campo e obrigatorio"
       p-placeholder="Campo obrigatorio com mensagem de erro"
+      p-rows="3"
     ></po-textarea>
   </div>
 </div>
