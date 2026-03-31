@@ -11,7 +11,7 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
   standalone: false
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
-  private datePipe = inject(DatePipe);
+  private readonly datePipe = inject(DatePipe);
 
   @Input('p-components-size') componentsSize: string;
 

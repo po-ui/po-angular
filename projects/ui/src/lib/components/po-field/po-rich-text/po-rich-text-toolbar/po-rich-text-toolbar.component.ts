@@ -28,7 +28,7 @@ const poRichTextDefaultColor = '#000000';
   standalone: false
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {
-  private languageService = inject(PoLanguageService);
+  private readonly languageService = inject(PoLanguageService);
 
   @ViewChild('colorPickerInput', { read: ElementRef }) colorPickerInput: ElementRef;
 

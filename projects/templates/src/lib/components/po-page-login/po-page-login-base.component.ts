@@ -1013,7 +1013,7 @@ export abstract class PoPageLoginBaseComponent implements OnDestroy {
   }
 
   constructor(
-    private loginService: PoPageLoginService,
+    private readonly loginService: PoPageLoginService,
     public router: Router,
     public poLanguageService: PoLanguageService
   ) {

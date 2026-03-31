@@ -45,7 +45,7 @@ const SPACE_BETWEEN_TOASTERS = 8;
 })
 export class PoToasterComponent extends PoToasterBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
   changeDetector = inject(ChangeDetectorRef);
-  private renderer = inject(Renderer2);
+  private readonly renderer = inject(Renderer2);
 
   /* Componente toaster */
   @ViewChild('toaster') toaster: ElementRef;

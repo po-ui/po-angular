@@ -64,14 +64,14 @@ const poSlideTiming = '250ms ease';
   standalone: false
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
-  private builder = inject(AnimationBuilder);
+  private readonly builder = inject(AnimationBuilder);
 
   @ContentChild(PoSlideContentTemplateDirective, { static: true })
   slideContentTemplate: PoSlideContentTemplateDirective;
 
-  @ViewChild('slide', { static: true }) private slide: ElementRef;
+  @ViewChild('slide', { static: true }) private readonly slide: ElementRef;
 
-  @ViewChildren(PoSlideItemComponent) private itemsElements: QueryList<PoSlideItemComponent>;
+  @ViewChildren(PoSlideItemComponent) private readonly itemsElements: QueryList<PoSlideItemComponent>;
 
   currentSlideIndex = 0;
   imageHeight: number;
@@ -81,7 +81,7 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
   private isLoaded: boolean = false;
   private player: AnimationPlayer;
   private setInterval: any;
-  private resize$ = new Subject<any>();
+  private readonly resize$ = new Subject<any>();
   private resizeSubscription: Subscription;
 
   private get hasElements() {

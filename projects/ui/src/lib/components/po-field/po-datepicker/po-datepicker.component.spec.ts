@@ -17,7 +17,7 @@ import { PoButtonComponent } from '../../po-button';
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
   eventKeyBoard.initEvent(event, true, true);
-  Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': keyCode });
+  Object.defineProperty(eventKeyBoard, 'keyCode', { 'value': keyCode, configurable: true });
   return eventKeyBoard;
 }
 
@@ -538,7 +538,7 @@ describe('PoDatepickerComponent:', () => {
           component.visible = true;
           const mockTarget = document.createElement('div');
           fakeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
-          Object.defineProperty(fakeEvent, 'target', { value: mockTarget });
+          Object.defineProperty(fakeEvent, 'target', { value: mockTarget, configurable: true });
         });
 
         it('should call togglePicker(false) and preventDefault', () => {
@@ -558,7 +558,7 @@ describe('PoDatepickerComponent:', () => {
         const mockInputElement = document.createElement('input');
         spyOn(component, 'togglePicker');
 
-        Object.defineProperty(fakeEvent, 'target', { value: mockInputElement });
+        Object.defineProperty(fakeEvent, 'target', { value: mockInputElement, configurable: true });
 
         component.onKeydown(fakeEvent);
 
@@ -1238,10 +1238,12 @@ describe('PoDatepickerComponent:', () => {
         nativeElement: nativeElementMock
       } as any;
 
-      component['controlPosition'] = {
-        setElements: jasmine.createSpy(),
-        adjustPosition: jasmine.createSpy()
-      } as any;
+      Object.defineProperty(component, 'controlPosition', {
+        value: {
+          setElements: jasmine.createSpy(),
+          adjustPosition: jasmine.createSpy()
+        } as any
+      });
 
       spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
         cb(0);
@@ -1272,10 +1274,12 @@ describe('PoDatepickerComponent:', () => {
         nativeElement: nativeElementMock
       } as any;
 
-      component['controlPosition'] = {
-        setElements: jasmine.createSpy(),
-        adjustPosition: jasmine.createSpy()
-      } as any;
+      Object.defineProperty(component, 'controlPosition', {
+        value: {
+          setElements: jasmine.createSpy(),
+          adjustPosition: jasmine.createSpy()
+        } as any
+      });
 
       spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
         cb(0);

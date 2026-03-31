@@ -16,7 +16,7 @@ import { Observable, Subscription } from 'rxjs';
   providedIn: 'root'
 })
 export class PoUploadBaseService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   formField: string = 'files';
   requests: Array<any> = [];

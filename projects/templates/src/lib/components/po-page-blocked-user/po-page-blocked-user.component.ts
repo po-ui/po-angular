@@ -54,8 +54,8 @@ export const poPageBlockedUserButtonLiterals: object = {
   standalone: false
 })
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
-  private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   literals;
 

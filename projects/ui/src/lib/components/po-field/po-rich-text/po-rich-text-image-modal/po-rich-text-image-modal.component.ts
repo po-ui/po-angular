@@ -17,7 +17,7 @@ const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.
   standalone: false
 })
 export class PoRichTextImageModalComponent {
-  private languageService = inject(PoLanguageService);
+  private readonly languageService = inject(PoLanguageService);
 
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 

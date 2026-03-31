@@ -35,7 +35,7 @@ import { PoAccordionService } from './services/po-accordion.service';
   standalone: false
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {
-  private accordionService = inject(PoAccordionService);
+  private readonly accordionService = inject(PoAccordionService);
 
   @ViewChildren(PoAccordionItemHeaderComponent) accordionsHeader: QueryList<PoAccordionItemHeaderComponent>;
   @ContentChildren(PoAccordionItemComponent) poAccordionItems: QueryList<PoAccordionItemComponent>;

@@ -66,7 +66,7 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   menuExternal = [];
   existMenuExternal = false;
   applicationMenu: PoMenuComponent;
-  private id = uuid();
+  private readonly id = uuid();
   private currentWidth = 0;
 
   private previousMenusItems = [];
@@ -87,9 +87,9 @@ export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterVie
   }
 
   constructor(
-    private cd: ChangeDetectorRef,
-    private elRef: ElementRef,
-    private menuGlobalService: PoMenuGlobalService,
+    private readonly cd: ChangeDetectorRef,
+    private readonly elRef: ElementRef,
+    private readonly menuGlobalService: PoMenuGlobalService,
     poLanguageService: PoLanguageService
   ) {
     super(poLanguageService);

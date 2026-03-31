@@ -43,14 +43,14 @@ import { PoPageDefaultBaseComponent } from './po-page-default-base.component';
   standalone: false
 })
 export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
-  private renderer = inject(Renderer2);
-  private router = inject(Router);
+  private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
 
   limitPrimaryActions: number = 3;
   dropdownActions: Array<PoPageAction>;
   isMobile: boolean;
 
-  private maxWidthMobile: number = 480;
+  private readonly maxWidthMobile: number = 480;
 
   constructor() {
     const languageService = inject(PoLanguageService);

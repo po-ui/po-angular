@@ -18,8 +18,8 @@ import { PoSyncSchema } from '../po-sync/interfaces/po-sync-schema.interface';
 })
 export class PoSchemaService {
   constructor(
-    private poSchemaDefinitionService: PoSchemaDefinitionService,
-    private poStorage: PoStorageService
+    private readonly poSchemaDefinitionService: PoSchemaDefinitionService,
+    private readonly poStorage: PoStorageService
   ) {}
 
   /**

@@ -192,7 +192,7 @@ describe('PoPageDynamicEditComponent: ', () => {
 
     describe('p-literals:', () => {
       it('should be in portuguese if browser is setted with an unsupported language', () => {
-        component['language'] = 'zw';
+        Object.defineProperty(component, 'language', { value: 'zw', configurable: true });
 
         component.literals = {};
 
@@ -200,7 +200,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should be in portuguese if browser is setted with `pt`', () => {
-        component['language'] = 'pt';
+        Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
         component.literals = {};
 
@@ -208,7 +208,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should be in english if browser is setted with `en`', () => {
-        component['language'] = 'en';
+        Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
         component.literals = {};
 
@@ -216,7 +216,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should be in spanish if browser is setted with `es`', () => {
-        component['language'] = 'es';
+        Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
         component.literals = {};
 
@@ -224,7 +224,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should be in russian if browser is setted with `ru`', () => {
-        component['language'] = 'ru';
+        Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
 
         component.literals = {};
 
@@ -232,7 +232,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       });
 
       it('should accept custom literals', () => {
-        component['language'] = poLocaleDefault;
+        Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
         const customLiterals = Object.assign({}, poPageDynamicEditLiteralsDefault[poLocaleDefault]);
 
@@ -247,13 +247,13 @@ describe('PoPageDynamicEditComponent: ', () => {
       it('should update property with default literals if is setted with invalid values', () => {
         const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-        component['language'] = poLocaleDefault;
+        Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
         expectPropertiesValues(component, 'literals', invalidValues, poPageDynamicEditLiteralsDefault[poLocaleDefault]);
       });
 
       it('should get literals directly from poPageDynamicEditLiteralsDefault if it not initialized', () => {
-        component['language'] = 'pt';
+        Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
         expect(component.literals).toEqual(poPageDynamicEditLiteralsDefault['pt']);
       });
@@ -554,7 +554,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
         spyOn(component['poPageDynamicService'], <any>'configServiceApi');
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         component.ngOnInit();
 
@@ -588,7 +588,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
         spyOn(component['poPageDynamicService'], <any>'configServiceApi');
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         component.ngOnInit();
 
@@ -640,7 +640,7 @@ describe('PoPageDynamicEditComponent: ', () => {
           items: [{ label: 'Test' }, { label: 'Test2' }]
         });
 
-        component['subscriptions'] = null;
+        Object.defineProperty(component, 'subscriptions', { value: null, configurable: true });
         component.ngOnDestroy();
       }));
 
@@ -676,7 +676,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(metadata));
         spyOn(<any>component['poPageCustomizationService'], 'createObservable').and.returnValue(of(custom));
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         component.ngOnInit();
 
@@ -713,7 +713,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
         spyOn(component, <any>'loadData').and.returnValue(of({}));
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component['loadDataFromAPI']();
 
         tick();
@@ -741,7 +741,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of({}));
         spyOn(component, <any>'loadData').and.returnValue(of({}));
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(of({}));
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component['loadDataFromAPI']();
 
         tick();
@@ -897,7 +897,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         };
 
         component.dynamicForm = dynamicFormValid;
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component.model = model;
 
         spyOn(component['poNotification'], 'warning');
@@ -927,7 +927,7 @@ describe('PoPageDynamicEditComponent: ', () => {
 
         component.model = model;
         component.dynamicForm = dynamicFormValid;
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         spyOn(component['poNotification'], 'warning');
 
@@ -1415,7 +1415,7 @@ describe('PoPageDynamicEditComponent: ', () => {
         }
       };
 
-      component['activatedRoute'] = activatedRoute;
+      Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
       spyOn(component, <any>'saveOperation').and.returnValue(of(message));
       spyOn(component['poNotification'], 'success');
@@ -1443,7 +1443,7 @@ describe('PoPageDynamicEditComponent: ', () => {
       };
 
       component.dynamicForm = dynamicFormValid;
-      component['activatedRoute'] = activatedRoute;
+      Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
       spyOn(component, <any>'saveOperation').and.returnValue(of(message));
       spyOn(component['poNotification'], 'success');
@@ -1586,7 +1586,7 @@ describe('PoPageDynamicEditComponent: ', () => {
           }
         };
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         spyOn(component, <any>'formatUniqueKey').and.returnValue('1');
 
@@ -1605,7 +1605,7 @@ describe('PoPageDynamicEditComponent: ', () => {
           }
         };
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         spyOn(component, <any>'formatUniqueKey');
 

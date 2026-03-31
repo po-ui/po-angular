@@ -5,9 +5,9 @@ import { Injectable, ComponentRef, ComponentFactoryResolver, ApplicationRef, Inj
 })
 export class PoComponentInjectorService {
   constructor(
-    private componentResolver: ComponentFactoryResolver,
-    private applicationRef: ApplicationRef,
-    private injector: Injector
+    private readonly componentResolver: ComponentFactoryResolver,
+    private readonly applicationRef: ApplicationRef,
+    private readonly injector: Injector
   ) {}
 
   // Cria um dinamicamente no ApplicationRef

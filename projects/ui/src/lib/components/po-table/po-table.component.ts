@@ -160,16 +160,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
-  private differ;
+  private readonly differ;
   private footerHeight;
   private timeoutResize;
   private visibleElement = false;
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
-  private subscriptionService: Subscription = new Subscription();
+  private readonly subscriptionService: Subscription = new Subscription();
 
-  private clickListener: () => void;
-  private resizeListener: () => void;
+  private readonly clickListener: () => void;
+  private readonly resizeListener: () => void;
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -196,8 +196,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     differs: IterableDiffers,
     renderer: Renderer2,
     poLanguageService: PoLanguageService,
-    private changeDetector: ChangeDetectorRef,
-    private decimalPipe: DecimalPipe,
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly decimalPipe: DecimalPipe,
     private readonly defaultService: PoTableService
   ) {
     super(poDate, poLanguageService, defaultService);

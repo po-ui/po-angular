@@ -77,8 +77,11 @@ describe('PoPageSlideComponent', () => {
       };
 
       component['firstElement'] = <any>{ focus: () => {} };
-      component['id'] = '1';
-      component['poActiveOverlayService'] = { activeOverlay: ['1'] };
+      Object.defineProperty(component, 'id', { value: '1', configurable: true });
+      Object.defineProperty(component, 'poActiveOverlayService', {
+        value: { activeOverlay: ['1'] },
+        configurable: true
+      });
       component['pageContent'] = { nativeElement: { contains: () => 0 } };
       component.hideClose = true;
 
@@ -111,7 +114,7 @@ describe('PoPageSlideComponent', () => {
     });
 
     it('close: should remove id value from `poActiveOverlayService.activeOverlay` list when last element', () => {
-      component['id'] = '2';
+      Object.defineProperty(component, 'id', { value: '2', configurable: true });
       component['poActiveOverlayService'].activeOverlay = ['1', '2'];
 
       component.open();

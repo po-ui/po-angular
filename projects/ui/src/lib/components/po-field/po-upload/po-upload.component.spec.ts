@@ -631,9 +631,12 @@ describe('PoUploadComponent:', () => {
       it('should`t call `poUploadDragDropComponent.focus` if `displayDragDrop` is false ', () => {
         component.disabled = false;
         component['uploadButton'] = undefined;
-        component['poUploadDragDropComponent'] = <any>{
-          focus: () => {}
-        };
+        Object.defineProperty(component, 'poUploadDragDropComponent', {
+          value: <any>{
+            focus: () => {}
+          },
+          configurable: true
+        });
         spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
 
         const spy = spyOn(component['poUploadDragDropComponent'], 'focus');
@@ -1196,9 +1199,11 @@ describe('PoUploadComponent:', () => {
       const arg = 'invalidAmount';
       const literalAttr = 'invalidAmount';
 
-      component['notification'] = {
-        information: () => {}
-      } as any;
+      Object.defineProperty(component, 'notification', {
+        value: {
+          information: () => {}
+        } as any
+      });
 
       spyOn(component['notification'], 'information').and.callThrough();
       const file = { uui: 1234, errorMessage: '' };
@@ -1272,8 +1277,8 @@ describe('PoUploadComponent:', () => {
       expect(component['tooltipTitle']).toBe('Long Title');
 
       // Simula conteúdo sem overflow
-      Object.defineProperty(element, 'scrollWidth', { value: 80 });
-      Object.defineProperty(element, 'offsetWidth', { value: 100 });
+      Object.defineProperty(element, 'scrollWidth', { value: 80, configurable: true });
+      Object.defineProperty(element, 'offsetWidth', { value: 100, configurable: true });
 
       component['showTooltipText'](event, '');
       expect(component['tooltipTitle']).toBeUndefined();

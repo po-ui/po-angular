@@ -28,7 +28,7 @@ export class PoLookupFilterService implements PoLookupFilter {
   private fieldValue;
   private multiple = false;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getFilteredItems(filteredItemsParams: PoLookupFilteredItemsParams): Observable<any> {
     const { filterParams, advancedFilters, ...restFilteredItemsParams } = filteredItemsParams;

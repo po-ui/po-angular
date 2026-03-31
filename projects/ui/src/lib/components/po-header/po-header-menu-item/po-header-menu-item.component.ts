@@ -61,8 +61,8 @@ export class PoHeaderMenuItemComponent implements OnChanges, OnInit, OnDestroy {
   @Output('p-item-click') itemClick = new EventEmitter<any>();
 
   constructor(
-    private cd: ChangeDetectorRef,
-    private router: Router,
+    private readonly cd: ChangeDetectorRef,
+    private readonly router: Router,
     languageService: PoLanguageService
   ) {
     const language = languageService.getShortLanguage();

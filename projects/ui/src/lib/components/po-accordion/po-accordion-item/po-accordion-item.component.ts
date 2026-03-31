@@ -42,7 +42,7 @@ import { PoAccordionService } from '../services/po-accordion.service';
   standalone: false
 })
 export class PoAccordionItemComponent implements OnDestroy {
-  private accordionService = inject(PoAccordionService);
+  private readonly accordionService = inject(PoAccordionService);
 
   private _type?: PoTagType;
 
@@ -104,8 +104,8 @@ export class PoAccordionItemComponent implements OnDestroy {
 
   expanded: boolean;
 
-  private expandSubscription: Subscription;
-  private collapseSubscription: Subscription;
+  private readonly expandSubscription: Subscription;
+  private readonly collapseSubscription: Subscription;
 
   constructor() {
     this.expandSubscription = this.accordionService

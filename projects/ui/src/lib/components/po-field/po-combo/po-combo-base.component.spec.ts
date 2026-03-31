@@ -156,14 +156,14 @@ describe('PoComboBaseComponent:', () => {
 
     describe('p-literals:', () => {
       it('should be set `literals` with browser language if `literals` is `undefined`', () => {
-        component['language'] = Utils.getShortBrowserLanguage();
+        Object.defineProperty(component, 'language', { value: Utils.getShortBrowserLanguage(), configurable: true });
         component.literals = undefined;
 
         expect(component.literals).toEqual(poComboLiteralsDefault[Utils.getShortBrowserLanguage()]);
       });
 
       it('should be in portuguese if browser is set with `pt`.', () => {
-        component['language'] = 'pt';
+        Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
         component.literals = {};
 
@@ -171,7 +171,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in english if browser is set with `en`.', () => {
-        component['language'] = 'en';
+        Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
         component.literals = {};
 
@@ -179,7 +179,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in spanish if browser is set with `es`.', () => {
-        component['language'] = 'es';
+        Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
         component.literals = {};
 
@@ -187,7 +187,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should be in russian if browser is set with `ru`.', () => {
-        component['language'] = 'ru';
+        Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
 
         component.literals = {};
 
@@ -195,7 +195,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('should accept custom literals.', () => {
-        component['language'] = poLocaleDefault;
+        Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
         const customLiterals = Object.assign({}, poComboLiteralsDefault[poLocaleDefault]);
         customLiterals.noData = 'Sem dados';
@@ -329,7 +329,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('p-placeholder: should update property p-placeholder with empty value if set with invalid values.', () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
       const invalidValues = [null, undefined, '', 0, false];
       expectPropertiesValues(component, 'placeholder', invalidValues, 'Escolha uma opção');
     });

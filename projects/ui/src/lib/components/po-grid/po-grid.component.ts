@@ -46,8 +46,8 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
   standalone: false
 })
 export class PoGridComponent implements OnDestroy {
-  private changeDetectorRef = inject(ChangeDetectorRef);
-  private elRef = inject(ElementRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly elRef = inject(ElementRef);
 
   @ViewChild('table', { static: true }) tableElement: ElementRef;
   @ViewChild('wrapper', { static: true }) tableWrapper: ElementRef;
@@ -78,7 +78,7 @@ export class PoGridComponent implements OnDestroy {
   widporeeze = 0;
   widthActions = 0;
 
-  private resizeListener: () => void;
+  private readonly resizeListener: () => void;
   private timeoutResize;
 
   private _columns = [];

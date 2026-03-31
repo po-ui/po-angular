@@ -88,10 +88,10 @@ export class PoDatepickerRangeComponent
   extends PoDatepickerRangeBaseComponent
   implements AfterViewInit, OnInit, OnDestroy, OnChanges
 {
-  private controlPosition = inject(PoControlPositionService);
-  private renderer = inject(Renderer2);
-  private cd = inject(ChangeDetectorRef);
-  private poLanguageService: PoLanguageService;
+  private readonly controlPosition = inject(PoControlPositionService);
+  private readonly renderer = inject(Renderer2);
+  private readonly cd = inject(ChangeDetectorRef);
+  private readonly poLanguageService: PoLanguageService;
 
   @ViewChild('dateRangeField', { read: ElementRef, static: true }) dateRangeField: ElementRef;
   @ViewChild('endDateInput', { read: ElementRef, static: true }) endDateInput: ElementRef;
@@ -106,7 +106,7 @@ export class PoDatepickerRangeComponent
 
   private clickListener;
   private eventResizeListener;
-  private poDatepickerRangeElement: ElementRef<any>;
+  private readonly poDatepickerRangeElement: ElementRef<any>;
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -629,7 +629,7 @@ export class PoDatepickerRangeComponent
     );
   }
 
-  private onScroll = (): void => {
+  private readonly onScroll = (): void => {
     if (this.isCalendarVisible) {
       this.controlPosition.adjustPosition(poCalendarPositionDefault);
     }

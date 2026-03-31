@@ -34,7 +34,7 @@ const PoNotificationFadeTime = 200;
   providedIn: 'root'
 })
 export class PoNotificationService extends PoNotificationBaseService {
-  constructor(private poComponentInjector: PoComponentInjectorService) {
+  constructor(private readonly poComponentInjector: PoComponentInjectorService) {
     super();
   }
 

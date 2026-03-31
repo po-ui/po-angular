@@ -9,11 +9,11 @@ import { PoMenuItem } from '../po-menu-item.interface';
   providedIn: 'root'
 })
 export class PoMenuGlobalService {
-  private applicationMenu = new Subject<PoMenuComponent>();
-  private menus = new Subject<Array<PoMenuItem>>();
-  private removedApplicationMenu = new Subject<string>();
-  private menuId = new Subject<string>();
-  private menuChanges = new Subject<Array<PoMenuItem>>();
+  private readonly applicationMenu = new Subject<PoMenuComponent>();
+  private readonly menus = new Subject<Array<PoMenuItem>>();
+  private readonly removedApplicationMenu = new Subject<string>();
+  private readonly menuId = new Subject<string>();
+  private readonly menuChanges = new Subject<Array<PoMenuItem>>();
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   receiveApplicationMenu$ = this.applicationMenu.asObservable();

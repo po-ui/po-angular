@@ -8,8 +8,8 @@ import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface
   providedIn: 'root'
 })
 export class PoTreeViewService {
-  private expandedEvent = new Subject<PoTreeViewItem>();
-  private selectedEvent = new Subject<PoTreeViewItem>();
+  private readonly expandedEvent = new Subject<PoTreeViewItem>();
+  private readonly selectedEvent = new Subject<PoTreeViewItem>();
 
   emitExpandedEvent(treeViewItem: PoTreeViewItem) {
     return this.expandedEvent.next(treeViewItem);

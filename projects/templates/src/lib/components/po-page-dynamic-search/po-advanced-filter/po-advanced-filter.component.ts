@@ -26,7 +26,7 @@ import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.compone
 export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent implements OnDestroy, OnInit {
   @ViewChild(PoDynamicFormComponent, { static: true }) poDynamicForm: PoDynamicFormComponent;
 
-  private subscription = new Subscription();
+  private readonly subscription = new Subscription();
 
   constructor() {
     const languageService = inject(PoLanguageService);

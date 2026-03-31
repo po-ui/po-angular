@@ -32,7 +32,7 @@ export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, O
   private timeoutResize;
 
   constructor(
-    private element: ElementRef,
+    private readonly element: ElementRef,
     public renderer: Renderer2
   ) {}
 

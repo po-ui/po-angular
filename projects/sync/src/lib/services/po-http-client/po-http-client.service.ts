@@ -18,7 +18,7 @@ import { PoHttpRequestType } from './po-http-request-type.enum';
   providedIn: 'root'
 })
 export class PoHttpClientService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   /**
    * Constrói uma requisição HTTP personalizada.

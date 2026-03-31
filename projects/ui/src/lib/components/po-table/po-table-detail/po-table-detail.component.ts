@@ -82,7 +82,7 @@ export class PoTableDetailComponent {
     return this._detail;
   }
 
-  constructor(private decimalPipe: DecimalPipe) {}
+  constructor(private readonly decimalPipe: DecimalPipe) {}
 
   get detailColumns(): Array<PoTableDetailColumn> {
     return this.detail?.columns || [];

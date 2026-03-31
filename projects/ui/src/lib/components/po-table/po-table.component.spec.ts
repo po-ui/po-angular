@@ -1461,8 +1461,8 @@ describe('PoTableComponent:', () => {
     });
 
     it('removeListeners: shouldn`t call `resizeListener` and `clickListener`', () => {
-      component['resizeListener'] = undefined;
-      component['clickListener'] = undefined;
+      Object.defineProperty(component, 'resizeListener', { value: undefined, configurable: true });
+      Object.defineProperty(component, 'clickListener', { value: undefined, configurable: true });
 
       component['removeListeners']();
 
@@ -2980,7 +2980,7 @@ describe('PoTableComponent:', () => {
   it(`ngOnDestroy: should unsubscribe 'subscriptionService'`, () => {
     const fakeSubscription = <any>{ unsubscribe: () => {} };
     spyOn(fakeSubscription, <any>'unsubscribe');
-    component['subscriptionService'] = fakeSubscription;
+    Object.defineProperty(component, 'subscriptionService', { value: fakeSubscription, configurable: true });
 
     component.ngOnDestroy();
 
@@ -2989,11 +2989,11 @@ describe('PoTableComponent:', () => {
 
   it(`ngOnDestroy: should not unsubscribe if 'subscriptionService' is falsy.`, () => {
     const fakeSubscription = <any>{ unsubscribe: () => {} };
-    component['subscriptionService'] = fakeSubscription;
+    Object.defineProperty(component, 'subscriptionService', { value: fakeSubscription, configurable: true });
 
     spyOn(fakeSubscription, <any>'unsubscribe');
 
-    component['subscriptionService'] = undefined;
+    Object.defineProperty(component, 'subscriptionService', { value: undefined, configurable: true });
     component.ngOnDestroy();
 
     expect(fakeSubscription.unsubscribe).not.toHaveBeenCalled();

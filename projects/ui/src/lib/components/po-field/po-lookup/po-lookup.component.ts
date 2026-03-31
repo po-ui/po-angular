@@ -151,9 +151,9 @@ export class PoLookupComponent
   extends PoLookupBaseComponent
   implements AfterViewInit, OnDestroy, OnInit, DoCheck, OnChanges
 {
-  private renderer = inject(Renderer2);
-  private cd = inject(ChangeDetectorRef);
-  private el = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly cd = inject(ChangeDetectorRef);
+  private readonly el = inject(ElementRef);
 
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   initialized = false;

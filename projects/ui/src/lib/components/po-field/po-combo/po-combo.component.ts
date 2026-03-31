@@ -107,7 +107,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   differs = inject(IterableDiffers);
   defaultService = inject(PoComboFilterService);
   renderer = inject(Renderer2);
-  private controlPosition = inject(PoControlPositionService);
+  private readonly controlPosition = inject(PoControlPositionService);
 
   @ContentChild(PoComboOptionTemplateDirective, { static: true }) comboOptionTemplate: PoComboOptionTemplateDirective;
   @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
@@ -137,7 +137,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   private filterSubscription: Subscription;
   private getSubscription: Subscription;
 
-  private subscriptionScrollEvent: Subscription;
+  private readonly subscriptionScrollEvent: Subscription;
 
   constructor() {
     const changeDetector = inject(ChangeDetectorRef);
@@ -757,7 +757,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.updateOptionByFilteredValue(null);
   }
 
-  private onScroll = (): void => {
+  private readonly onScroll = (): void => {
     this.adjustContainerPosition();
   };
 

@@ -53,10 +53,10 @@ export class PoTableListManagerComponent extends PoCheckboxGroupComponent {
   private _componentsSize?: string = undefined;
 
   @Output('p-change-position')
-  private changePosition = new EventEmitter<any>();
+  private readonly changePosition = new EventEmitter<any>();
 
   @Output('p-change-fixed')
-  private changeColumnFixed = new EventEmitter<any>();
+  private readonly changeColumnFixed = new EventEmitter<any>();
 
   @Input('p-columns-manager') columnsManager: Array<PoTableColumn>;
 

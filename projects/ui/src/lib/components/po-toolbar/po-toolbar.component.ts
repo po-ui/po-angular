@@ -29,7 +29,7 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
   standalone: false
 })
 export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit {
-  private titleService = inject(Title);
+  private readonly titleService = inject(Title);
 
   ngOnInit(): void {
     this.setTitle(this.title);

@@ -24,7 +24,7 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
   standalone: false
 })
 export class PoToolbarNotificationComponent implements AfterViewInit {
-  private cdr = inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @ViewChild('notification', { read: ElementRef }) notificationRef: ElementRef;
 

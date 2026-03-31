@@ -86,8 +86,8 @@ const poDecimalTotalLengthLimit = 16;
   standalone: false
 })
 export class PoDecimalComponent extends PoInputBaseComponent implements AfterViewInit, OnInit, OnDestroy, OnChanges {
-  private el = inject(ElementRef);
-  private poLanguageService = inject(PoLanguageService);
+  private readonly el = inject(ElementRef);
+  private readonly poLanguageService = inject(PoLanguageService);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
 
@@ -100,8 +100,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   private decimalSeparator: string;
   private fireChange: boolean = false;
-  private isKeyboardAndroid: boolean = false;
-  private minusSign: string = '-';
+  private readonly isKeyboardAndroid: boolean = false;
+  private readonly minusSign: string = '-';
   private oldDotsLength = null;
   private thousandSeparator: string;
   private valueBeforeChange: any;

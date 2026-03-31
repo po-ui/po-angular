@@ -29,9 +29,9 @@ import { PoDateService } from '../../../services/po-date/po-date.service';
   standalone: false
 })
 export class PoCalendarWrapperComponent implements OnInit, OnChanges {
-  private poCalendarService = inject(PoCalendarService);
-  private poCalendarLangService = inject(PoCalendarLangService);
-  private poDate = inject(PoDateService);
+  private readonly poCalendarService = inject(PoCalendarService);
+  private readonly poCalendarLangService = inject(PoCalendarLangService);
+  private readonly poDate = inject(PoDateService);
   readonly cdr = inject(ChangeDetectorRef);
   readonly elementRef = inject(ElementRef<HTMLElement>);
 

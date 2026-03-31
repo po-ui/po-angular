@@ -63,11 +63,11 @@ export class PoCheckboxGroupComponent
   extends PoCheckboxGroupBaseComponent
   implements AfterViewChecked, AfterViewInit, OnChanges
 {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChildren('checkboxLabel') checkboxLabels: QueryList<PoCheckboxComponent>;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
-  private el: ElementRef = inject(ElementRef);
+  private readonly el: ElementRef = inject(ElementRef);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.label) {

@@ -8,7 +8,7 @@ import { PoModalPasswordRecovery } from './interfaces/po-modal-password-recovery
   providedIn: 'root'
 })
 export class PoModalPasswordRecoveryService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   post(
     urlRecovery: string,

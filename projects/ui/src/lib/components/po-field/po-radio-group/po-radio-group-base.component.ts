@@ -274,7 +274,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
   mdColumns: number = poRadioGroupColumnsDefaultLength;
   value: any;
 
-  protected cd = inject(ChangeDetectorRef);
+  protected readonly cd = inject(ChangeDetectorRef);
   protected onTouched: any = null;
 
   private _columns: number = poRadioGroupColumnsDefaultLength;

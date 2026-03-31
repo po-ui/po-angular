@@ -9,7 +9,7 @@ import { isExternalLink, PoUtils } from '../../../../utils/util';
   standalone: false
 })
 export class PoNavbarActionComponent {
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   @Input('p-action') action?: Function;
 

@@ -37,7 +37,7 @@ import { PoTreeViewService } from './services/po-tree-view.service';
   standalone: false
 })
 export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit, OnChanges {
-  private treeViewService = inject(PoTreeViewService);
+  private readonly treeViewService = inject(PoTreeViewService);
 
   get hasItems() {
     return !!(this.items && this.items.length);

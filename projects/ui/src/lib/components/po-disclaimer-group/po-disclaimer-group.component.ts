@@ -47,7 +47,7 @@ import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
 export class PoDisclaimerGroupComponent extends PoDisclaimerGroupBaseComponent implements AfterViewInit, OnChanges {
   private subscription: Subscription = new Subscription();
 
-  private el = inject(ElementRef);
+  private readonly el = inject(ElementRef);
 
   constructor() {
     const differs = inject(IterableDiffers);

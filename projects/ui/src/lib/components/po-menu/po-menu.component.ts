@@ -126,10 +126,10 @@ export class PoMenuComponent
   implements AfterViewInit, OnDestroy, OnInit, DoCheck, OnChanges
 {
   changeDetector = inject(ChangeDetectorRef);
-  private element = inject(ElementRef);
-  private renderer = inject(Renderer2);
-  private router = inject(Router);
-  private menuItemsService = inject(PoMenuItemsService);
+  private readonly element = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
+  private readonly menuItemsService = inject(PoMenuItemsService);
 
   @ContentChild(PoMenuHeaderTemplateDirective, { static: true }) menuHeaderTemplate: PoMenuHeaderTemplateDirective;
 

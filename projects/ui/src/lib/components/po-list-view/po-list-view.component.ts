@@ -54,7 +54,7 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
   standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ContentChild(PoListViewContentTemplateDirective, { static: true })
   listViewContentTemplate: PoListViewContentTemplateDirective;
@@ -63,7 +63,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
 
-  private differ;
+  private readonly differ;
 
   constructor() {
     const differs = inject(IterableDiffers);

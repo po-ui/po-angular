@@ -16,7 +16,7 @@ import { PoLookupModalComponent } from '../po-lookup-modal/po-lookup-modal.compo
   providedIn: 'root'
 })
 export class PoLookupModalService {
-  private poComponentInjector = inject(PoComponentInjectorService);
+  private readonly poComponentInjector = inject(PoComponentInjectorService);
 
   selectValueEvent: EventEmitter<any> = new EventEmitter<any>();
 

@@ -163,13 +163,13 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
   standalone: false
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private poDialogService = inject(PoDialogService);
-  private poNotification = inject(PoNotificationService);
-  private poPageDynamicService = inject(PoPageDynamicService);
-  private poPageCustomizationService = inject(PoPageCustomizationService);
-  private poPageDynamicTableActionsService = inject(PoPageDynamicTableActionsService);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly poDialogService = inject(PoDialogService);
+  private readonly poNotification = inject(PoNotificationService);
+  private readonly poPageDynamicService = inject(PoPageDynamicService);
+  private readonly poPageCustomizationService = inject(PoPageCustomizationService);
+  private readonly poPageDynamicTableActionsService = inject(PoPageDynamicTableActionsService);
 
   /**
    * Função ou serviço que será executado na inicialização do componente.
@@ -309,7 +309,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
   private itemSelectedAction;
   private params = {};
   private sortedColumn: PoTableColumnSort;
-  private subscriptions = new Subscription();
+  private readonly subscriptions = new Subscription();
   private hasCustomActionWithSelectable = false;
 
   private _componentsSize?: string = undefined;

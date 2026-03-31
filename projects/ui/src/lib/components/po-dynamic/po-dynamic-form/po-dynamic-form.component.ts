@@ -53,7 +53,7 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
 
   private onLoadSubscription: Subscription;
   private sendFormSubscription: Subscription;
-  private comboOptionSubject = new Subject<any>();
+  private readonly comboOptionSubject = new Subject<any>();
 
   @ViewChild('dynamicForm') set form(value: NgForm) {
     // necessario para nao ocorrer o ExpressionChangedAfterItHasBeenCheckedError
@@ -69,9 +69,9 @@ export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implement
   }
 
   constructor(
-    private changes: ChangeDetectorRef,
-    private loadService: PoDynamicFormLoadService,
-    private validationService: PoDynamicFormValidationService
+    private readonly changes: ChangeDetectorRef,
+    private readonly loadService: PoDynamicFormLoadService,
+    private readonly validationService: PoDynamicFormValidationService
   ) {
     super();
   }

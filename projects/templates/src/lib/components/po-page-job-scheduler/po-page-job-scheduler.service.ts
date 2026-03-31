@@ -14,7 +14,7 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
   providedIn: 'root'
 })
 export class PoPageJobSchedulerService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'

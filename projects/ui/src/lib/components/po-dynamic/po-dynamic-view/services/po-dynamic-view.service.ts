@@ -15,7 +15,7 @@ import { PoDynamicViewField } from '../po-dynamic-view-field.interface';
   providedIn: 'root'
 })
 export class PoDynamicViewService {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-No-Message': 'true'

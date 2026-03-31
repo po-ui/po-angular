@@ -28,13 +28,13 @@ export class PoHttpInterceptorDetailComponent implements OnInit {
   details: Array<PoHttpInterceptorDetail> = [];
   title: string;
 
-  private language: any;
-  private literals: any;
+  private readonly language: any;
+  private readonly literals: any;
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   primaryAction: PoModalAction;
 
-  constructor(private languageService: PoLanguageService) {
+  constructor(private readonly languageService: PoLanguageService) {
     this.language = this.languageService?.getShortLanguage();
     this.literals = poHttpInterceptorDetailLiteralsDefault[this.language];
   }

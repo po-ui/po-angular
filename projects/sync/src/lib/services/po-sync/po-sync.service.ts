@@ -33,7 +33,7 @@ export class PoSyncService {
   private config: PoSyncConfig;
   private emitter: any;
   private eventSub: Observable<any>;
-  private finishSyncSubject: Subject<null> = new Subject<null>();
+  private readonly finishSyncSubject: Subject<null> = new Subject<null>();
   private isSyncEnabled: boolean = true;
   private schemas: Array<PoSyncSchema>;
   private subscription: Subscription;
@@ -41,11 +41,11 @@ export class PoSyncService {
   private timer: Observable<number>;
 
   constructor(
-    private poEventSourcingService: PoEventSourcingService,
-    private poHttpClient: PoHttpClientService,
-    private poNetworkService: PoNetworkService,
-    private poSchemaDefinitionService: PoSchemaDefinitionService,
-    private poSchemaService: PoSchemaService
+    private readonly poEventSourcingService: PoEventSourcingService,
+    private readonly poHttpClient: PoHttpClientService,
+    private readonly poNetworkService: PoNetworkService,
+    private readonly poSchemaDefinitionService: PoSchemaDefinitionService,
+    private readonly poSchemaService: PoSchemaService
   ) {}
 
   /**

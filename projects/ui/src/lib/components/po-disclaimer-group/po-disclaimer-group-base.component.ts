@@ -68,7 +68,7 @@ export class PoDisclaimerGroupBaseComponent implements DoCheck {
   private _disclaimers: Array<PoDisclaimer> = [];
   private _hideRemoveAll: boolean = false;
 
-  private differ;
+  private readonly differ;
   private previousDisclaimers: Array<PoDisclaimer> = [];
 
   /** Lista de *disclaimers*. */

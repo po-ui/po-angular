@@ -405,7 +405,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should update applicationMenu.menus when applicationMenu exists', () => {
-    component['id'] = '123';
+    Object.defineProperty(component, 'id', { value: '123', configurable: true });
     component.menuCollapseJoinExternal = [
       { label: 'Tool 1', action: 'a1' },
       { label: 'Menu 1', action: 'a2' }
@@ -562,7 +562,7 @@ describe('PoHeaderComponent', () => {
 
     component['menuCollapse'] = [{ label: 'Collapsed Menu' }];
     component['literals'] = { headerLinks: 'Links' };
-    component['id'] = '123';
+    Object.defineProperty(component, 'id', { value: '123', configurable: true });
 
     const result = (component as any).combineItems();
 

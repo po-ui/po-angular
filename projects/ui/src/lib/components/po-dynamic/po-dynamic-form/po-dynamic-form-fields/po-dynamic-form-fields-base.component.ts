@@ -73,7 +73,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
     return this._validateFields;
   }
 
-  constructor(private titleCasePipe: TitleCasePipe) {
+  constructor(private readonly titleCasePipe: TitleCasePipe) {
     super();
   }
 

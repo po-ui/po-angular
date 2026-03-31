@@ -58,7 +58,7 @@ describe('PoTabDropdownComponent:', () => {
     fixture = TestBed.createComponent(PoTabDropdownComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.debugElement.nativeElement;
-    Object.defineProperty(window, 'scrollY', { value: 50, writable: true });
+    Object.defineProperty(window, 'scrollY', { value: 50, writable: true, configurable: true });
 
     const buttom = TestBed.createComponent(PoButtonComponent);
     component.tabs = tabs;
@@ -127,7 +127,7 @@ describe('PoTabDropdownComponent:', () => {
     });
 
     it('setDropdownPosition: should set dropdownStyles with correct values when not inside a PoPage', () => {
-      component['elementRef'] = elementRefMock as ElementRef;
+      Object.defineProperty(component, 'elementRef', { value: elementRefMock as ElementRef, configurable: true });
 
       component.setDropdownPosition();
 
@@ -166,7 +166,7 @@ describe('PoTabDropdownComponent:', () => {
       };
 
       component.button.buttonElement = buttonElementRefMock as ElementRef;
-      component['elementRef'] = elementRefMock as ElementRef;
+      Object.defineProperty(component, 'elementRef', { value: elementRefMock as ElementRef, configurable: true });
 
       component.setDropdownPosition();
 

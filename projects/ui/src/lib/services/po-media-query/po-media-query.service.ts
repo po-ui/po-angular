@@ -57,7 +57,7 @@ import { PoMediaQueryTokens } from './po-media-query.interface';
   providedIn: 'root'
 })
 export class PoMediaQueryService {
-  private renderer: Renderer2;
+  private readonly renderer: Renderer2;
 
   constructor(rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);

@@ -68,10 +68,10 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
   canLoad = false;
 
   constructor(
-    private zone: NgZone,
-    private el: ElementRef,
-    private poCodeEditorSuggestionService: PoCodeEditorSuggestionService,
-    private codeEditorRegister?: PoCodeEditorRegister
+    private readonly zone: NgZone,
+    private readonly el: ElementRef,
+    private readonly poCodeEditorSuggestionService: PoCodeEditorSuggestionService,
+    private readonly codeEditorRegister?: PoCodeEditorRegister
   ) {
     super();
   }

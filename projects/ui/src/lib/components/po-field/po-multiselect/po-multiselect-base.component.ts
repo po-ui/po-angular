@@ -413,7 +413,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _fieldValue?: string = PO_MULTISELECT_FIELD_VALUE_DEFAULT;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
-  private language: string;
+  private readonly language: string;
 
   private lastLengthModel;
   private onModelChange: any;

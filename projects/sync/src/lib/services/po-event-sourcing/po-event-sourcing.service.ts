@@ -47,15 +47,15 @@ export class PoEventSourcingService {
 
   private emitter: any;
   private eventSub: Observable<null>;
-  private responseSubject = new Subject<PoSyncResponse>();
+  private readonly responseSubject = new Subject<PoSyncResponse>();
 
   private schemasSyncConfig = {};
 
   constructor(
-    private poSchemaDefinition: PoSchemaDefinitionService,
-    private poSchemaService: PoSchemaService,
-    private poStorage: PoStorageService,
-    private poHttpClient: PoHttpClientService
+    private readonly poSchemaDefinition: PoSchemaDefinitionService,
+    private readonly poSchemaService: PoSchemaService,
+    private readonly poStorage: PoStorageService,
+    private readonly poHttpClient: PoHttpClientService
   ) {}
 
   private static getUrl(eventSourcingItem, schema, requestType): string {

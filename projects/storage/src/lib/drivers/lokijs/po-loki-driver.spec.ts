@@ -405,7 +405,7 @@ describe('PoLokiDriver', () => {
     it(`getDriver: should return driver`, () => {
       const driver = 'lokijs';
 
-      poLokiDriver['driver'] = driver;
+      Object.defineProperty(poLokiDriver, 'driver', { value: driver, configurable: true });
 
       expect(poLokiDriver.getDriver()).toBe(driver);
     });

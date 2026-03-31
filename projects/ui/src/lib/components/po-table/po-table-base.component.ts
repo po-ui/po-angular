@@ -515,7 +515,7 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _literals: PoTableLiterals;
   private _loading?: boolean = false;
   private _selectable?: boolean;
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
   private _serviceApi: string;
   private _serviceDeleteApi: string;
   private poTableServiceSubscription: Subscription;
@@ -527,9 +527,9 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
   private _virtualScroll?: boolean = true;
 
   constructor(
-    private poDate: PoDateService,
+    private readonly poDate: PoDateService,
     languageService: PoLanguageService,
-    private poTableService: PoTableService
+    private readonly poTableService: PoTableService
   ) {
     this.language = languageService.getShortLanguage();
   }

@@ -10,8 +10,8 @@ import { PoUploadLiterals } from '../interfaces/po-upload-literals.interface';
   standalone: false
 })
 export class PoUploadDragDropDirective {
-  private i18nPipe = inject(PoI18nPipe);
-  private notification = inject(PoNotificationService);
+  private readonly i18nPipe = inject(PoI18nPipe);
+  private readonly notification = inject(PoNotificationService);
 
   @Input('p-area-element') areaElement: HTMLElement;
 

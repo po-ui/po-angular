@@ -128,7 +128,7 @@ export class PoLoadingOverlayBaseComponent {
     return this._size;
   }
 
-  constructor(private languageService: PoLanguageService) {
+  constructor(private readonly languageService: PoLanguageService) {
     this.text = this.getTextDefault();
   }
 

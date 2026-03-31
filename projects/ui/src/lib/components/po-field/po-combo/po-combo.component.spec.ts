@@ -24,7 +24,7 @@ import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 
 const eventKeyBoard = document.createEvent('KeyboardEvent');
 eventKeyBoard.initEvent('keyup', true, true);
-Object.defineProperty(eventKeyBoard, 'keyCode', { value: '50' });
+Object.defineProperty(eventKeyBoard, 'keyCode', { value: '50', configurable: true });
 
 const eventClick = document.createEvent('MouseEvents');
 eventClick.initEvent('click', false, true);
@@ -2343,7 +2343,7 @@ describe('PoComboComponent - with service:', () => {
 
     it('ngOnDestroy: should unsubscribe if infiniteScroll is true', () => {
       component.infiniteScroll = true;
-      component['subscriptionScrollEvent'] = fakeSubscription;
+      Object.defineProperty(component, 'subscriptionScrollEvent', { value: fakeSubscription, configurable: true });
 
       spyOn(fakeSubscription, <any>'unsubscribe');
 
@@ -2535,12 +2535,12 @@ describe('PoComboComponent - with service:', () => {
     });
 
     it('removeListeners: should not unsubscribe from the scroll event when it does not exist and has infinity Scroll', () => {
-      component['subscriptionScrollEvent'] = fakeSubscription;
+      Object.defineProperty(component, 'subscriptionScrollEvent', { value: fakeSubscription, configurable: true });
 
       spyOn(fakeSubscription, <any>'unsubscribe');
       component.infiniteScroll = true;
       component['defaultService'].hasNext = false;
-      component['subscriptionScrollEvent'] = undefined;
+      Object.defineProperty(component, 'subscriptionScrollEvent', { value: undefined, configurable: true });
 
       component['removeListeners']();
 

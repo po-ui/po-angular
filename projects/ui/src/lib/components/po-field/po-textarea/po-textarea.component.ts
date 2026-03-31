@@ -63,7 +63,7 @@ import { PoHelperComponent } from '../../po-helper';
   standalone: false
 })
 export class PoTextareaComponent extends PoTextareaBaseComponent implements AfterViewInit, OnChanges, OnDestroy {
-  private el = inject(ElementRef);
+  private readonly el = inject(ElementRef);
 
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;

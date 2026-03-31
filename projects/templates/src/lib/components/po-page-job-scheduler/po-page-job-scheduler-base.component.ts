@@ -294,7 +294,7 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
 
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 
-  private _subscription = new Subscription();
+  private readonly _subscription = new Subscription();
   private _orientation;
 
   constructor(protected poPageJobSchedulerService: PoPageJobSchedulerService) {}

@@ -22,7 +22,7 @@ import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component
   standalone: false
 })
 export class PoNavbarItemsComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   @ViewChild('navbarItemsContainer', { read: ElementRef, static: true }) navbarItemsContainer: ElementRef;
 

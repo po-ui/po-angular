@@ -245,7 +245,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
   private _literals: PoLookupLiterals;
   private _title: string;
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   primaryAction: PoModalAction = {

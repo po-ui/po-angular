@@ -93,8 +93,8 @@ const poTabsMaxNumberOfTabs = 5;
 })
 export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   changeDetector = inject(ChangeDetectorRef);
-  private languageService = inject(PoLanguageService);
-  private tabsService = inject(PoTabsService);
+  private readonly languageService = inject(PoLanguageService);
+  private readonly tabsService = inject(PoTabsService);
 
   // Tabs utilizados no ng-content
   @ContentChildren(PoTabComponent) tabsChildren: QueryList<PoTabComponent>;

@@ -19,9 +19,9 @@ import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.i
  */
 export class PoEntity {
   constructor(
-    private eventSourcing: PoEventSourcingService,
-    private schema: PoSyncSchema,
-    private poSchemaService: PoSchemaService
+    private readonly eventSourcing: PoEventSourcingService,
+    private readonly schema: PoSyncSchema,
+    private readonly poSchemaService: PoSchemaService
   ) {}
 
   /**

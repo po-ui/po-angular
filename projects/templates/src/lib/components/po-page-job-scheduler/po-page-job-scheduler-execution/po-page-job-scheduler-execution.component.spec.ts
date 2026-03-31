@@ -167,9 +167,12 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
 
     it('checkExistsProcessesAPI: should subscribe `getHeadProcesses` and on error set `existProcessAPI` to false', () => {
       component.existProcessAPI = true;
-      component['poPageJobSchedulerService'] = <any>{
-        getHeadProcesses: () => {}
-      };
+      Object.defineProperty(component, 'poPageJobSchedulerService', {
+        value: <any>{
+          getHeadProcesses: () => {}
+        },
+        configurable: true
+      });
 
       spyOn(component['poPageJobSchedulerService'], <any>'getHeadProcesses').and.returnValue(throwError(''));
 

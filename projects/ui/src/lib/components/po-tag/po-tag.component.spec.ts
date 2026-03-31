@@ -168,7 +168,7 @@ describe('PoTagComponent:', () => {
           remove: jasmine.createSpy('remove')
         }
       };
-      component['el'] = mockElementRef;
+      Object.defineProperty(component, 'el', { value: mockElementRef, configurable: true });
       component.disabled = false;
 
       component['onRemove']();

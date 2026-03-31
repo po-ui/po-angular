@@ -190,9 +190,9 @@ export abstract class PoHttpInterceptorBaseService implements HttpInterceptor {
   private httpInterceptorDetailComponent: ComponentRef<PoHttpInterceptorDetailComponent> = undefined;
 
   constructor(
-    private componentInjector: PoComponentInjectorService,
-    private notification: any,
-    private languageService: PoLanguageService
+    private readonly componentInjector: PoComponentInjectorService,
+    private readonly notification: any,
+    private readonly languageService: PoLanguageService
   ) {
     this.literals = poHttpInterceptorLiterals[this.languageService?.getShortLanguage()];
   }

@@ -99,7 +99,7 @@ export class PoPageDetailBaseComponent {
   private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDetailLiterals;
   private _title: string;
-  private language: string;
+  private readonly language: string;
 
   /**
    * @optional

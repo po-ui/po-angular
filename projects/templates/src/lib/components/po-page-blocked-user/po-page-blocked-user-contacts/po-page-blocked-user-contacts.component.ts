@@ -17,7 +17,7 @@ const poPageBlockedUserContactItemMargin = 16;
   standalone: false
 })
 export class PoPageBlockedUserContactsComponent {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild('contactGroup', { static: true }) contactGroup: ElementRef;
 

@@ -60,8 +60,8 @@ export class PoProgressComponent extends PoProgressBaseComponent implements OnIn
     return 'po-progress-default';
   }
 
-  private poLanguageService = inject(PoLanguageService);
-  private router = inject(Router);
+  private readonly poLanguageService = inject(PoLanguageService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.language = this.poLanguageService.getShortLanguage();

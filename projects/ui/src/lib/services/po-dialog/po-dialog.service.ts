@@ -30,7 +30,7 @@ import { PoDialogType } from './enums/po-dialog.enum';
   providedIn: 'root'
 })
 export class PoDialogService extends PoDialogBaseService {
-  constructor(private poComponentInjector: PoComponentInjectorService) {
+  constructor(private readonly poComponentInjector: PoComponentInjectorService) {
     super();
   }
 

@@ -48,7 +48,7 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
   standalone: false
 })
 export class PoStepComponent implements AfterContentInit {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   /**
    * @optional

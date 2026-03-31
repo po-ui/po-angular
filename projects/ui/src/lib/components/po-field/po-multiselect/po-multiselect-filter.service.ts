@@ -10,13 +10,13 @@ import { PoMultiselectOption } from './interfaces/po-multiselect-option.interfac
   providedIn: 'root'
 })
 export class PoMultiselectFilterService implements PoMultiselectFilter {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   fieldLabel: string = 'label';
   fieldValue: string = 'value';
 
   private _url: string;
-  private messages = [];
+  private readonly messages = [];
 
   get url(): string {
     return this._url;

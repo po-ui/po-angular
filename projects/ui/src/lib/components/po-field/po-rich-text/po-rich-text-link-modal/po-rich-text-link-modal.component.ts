@@ -23,7 +23,7 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
   standalone: false
 })
 export class PoRichTextLinkModalComponent implements OnInit {
-  private languageService = inject(PoLanguageService);
+  private readonly languageService = inject(PoLanguageService);
 
   @ViewChild('modal', { static: true }) modal: PoModalComponent;
 

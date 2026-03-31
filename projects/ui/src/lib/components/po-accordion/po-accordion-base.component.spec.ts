@@ -18,7 +18,7 @@ describe('PoAccordionBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      component['language'] = 'zw';
+      Object.defineProperty(component, 'language', { value: 'zw', configurable: true });
 
       component.literals = {};
 
@@ -26,7 +26,7 @@ describe('PoAccordionBaseComponent:', () => {
     });
 
     it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component.literals = {};
 
@@ -34,7 +34,7 @@ describe('PoAccordionBaseComponent:', () => {
     });
 
     it('p-literals: should be in english if browser is setted with `en`', () => {
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       component.literals = {};
 
@@ -42,7 +42,7 @@ describe('PoAccordionBaseComponent:', () => {
     });
 
     it('p-literals: should be in spanish if browser is setted with `es`', () => {
-      component['language'] = 'es';
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
       component.literals = {};
 
@@ -50,7 +50,7 @@ describe('PoAccordionBaseComponent:', () => {
     });
 
     it('p-literals: should be in russian if browser is setted with `ru`', () => {
-      component['language'] = 'ru';
+      Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
 
       component['_literals'] = undefined;
 
@@ -58,7 +58,7 @@ describe('PoAccordionBaseComponent:', () => {
     });
 
     it('p-literals: should accept custom literals', () => {
-      component['language'] = poLocaleDefault;
+      Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
       const customLiterals = Object.assign({}, poAccordionLiteralsDefault[poLocaleDefault]);
 
@@ -72,7 +72,7 @@ describe('PoAccordionBaseComponent:', () => {
     it('p-literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      component['language'] = poLocaleDefault;
+      Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
       expectPropertiesValues(component, 'literals', invalidValues, poAccordionLiteralsDefault[poLocaleDefault]);
     });

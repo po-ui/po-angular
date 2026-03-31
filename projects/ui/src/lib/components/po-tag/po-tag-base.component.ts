@@ -152,7 +152,7 @@ export class PoTagBaseComponent {
   private _orientation?: PoTagOrientation = poTagOrientationDefault;
   private _type?: PoTagType;
   private _literals: PoTagLiterals;
-  private language: string;
+  private readonly language: string;
 
   /**
    * @optional

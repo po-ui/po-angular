@@ -175,11 +175,11 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
   }
 
   constructor(
-    private currencyPipe: CurrencyPipe,
-    private datePipe: DatePipe,
-    private decimalPipe: DecimalPipe,
-    private timePipe: PoTimePipe,
-    private titleCasePipe: TitleCasePipe,
+    private readonly currencyPipe: CurrencyPipe,
+    private readonly datePipe: DatePipe,
+    private readonly decimalPipe: DecimalPipe,
+    private readonly timePipe: PoTimePipe,
+    private readonly titleCasePipe: TitleCasePipe,
     protected dynamicViewService: PoDynamicViewService,
     protected comboFilterService: PoComboFilterService,
     protected multiselectFilterService: PoMultiselectFilterService

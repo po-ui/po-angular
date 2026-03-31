@@ -258,7 +258,7 @@ describe('PoI18nService:', () => {
           const configMock = {
             contexts: ['pt-br']
           };
-          service['config'] = <any>{ contexts: { test: 'test' } };
+          Object.defineProperty(service, 'config', { value: <any>{ contexts: { test: 'test' } }, configurable: true });
           service['contextDefault'] = undefined;
           service['setConfig'](<any>configMock);
           expect(service['contextDefault']).toBeUndefined();

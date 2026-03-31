@@ -29,7 +29,7 @@ import { PoListBoxComponent } from './../../../po-listbox/po-listbox.component';
   standalone: false
 })
 export class PoMultiselectDropdownComponent {
-  private cd = inject(ChangeDetectorRef);
+  private readonly cd = inject(ChangeDetectorRef);
 
   /** Propriedade que indica se deve exibir o loading. */
   @Input('p-searching') isServerSearching?: boolean = false;

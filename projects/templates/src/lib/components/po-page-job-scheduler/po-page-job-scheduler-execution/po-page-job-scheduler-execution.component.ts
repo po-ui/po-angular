@@ -24,7 +24,7 @@ import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
   standalone: false
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {
-  private poPageJobSchedulerService = inject(PoPageJobSchedulerService);
+  private readonly poPageJobSchedulerService = inject(PoPageJobSchedulerService);
   poPageJobSchedulerLookup = inject(PoPageJobSchedulerLookupService);
 
   @ViewChild('formExecution', { static: true }) form: NgForm;

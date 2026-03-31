@@ -62,7 +62,7 @@ describe('PoPageChangePasswordComponent:', () => {
     });
 
     it('ngOnDestroy: should unsubscribe `newPasswordSubscription` on destroy', () => {
-      component['newPasswordSubscription'] = fakeSubscription;
+      Object.defineProperty(component, 'newPasswordSubscription', { value: fakeSubscription, configurable: true });
 
       spyOn(component['newPasswordSubscription'], <any>'unsubscribe');
 

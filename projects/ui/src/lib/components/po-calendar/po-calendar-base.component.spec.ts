@@ -18,7 +18,7 @@ describe('PoCalendarBaseComponent:', () => {
     poDate = new PoDateService();
     languageService = new PoLanguageService();
     component = new PoCalendarBaseComponent(poDate, languageService);
-    component['shortLanguage'] = 'pt';
+    Object.defineProperty(component, 'shortLanguage', { value: 'pt', configurable: true });
   });
 
   describe('Properties:', () => {

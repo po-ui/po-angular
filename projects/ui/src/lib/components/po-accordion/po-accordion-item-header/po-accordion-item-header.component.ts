@@ -18,7 +18,7 @@ import { poLocaleDefault } from '../../../services/po-language/po-language.const
   standalone: false
 })
 export class PoAccordionItemHeaderComponent {
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
 
   @ViewChild('accordionElement', { read: ElementRef, static: true }) accordionElement: ElementRef;
   @ViewChild('accordionHeaderElement', { read: ElementRef, static: true }) accordionHeaderElement: ElementRef;

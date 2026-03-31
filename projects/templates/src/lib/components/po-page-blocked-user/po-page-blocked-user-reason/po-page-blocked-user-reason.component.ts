@@ -12,7 +12,7 @@ import { PoPageBlockedUserReasonParams } from '../interfaces/po-page-blocked-use
   standalone: false
 })
 export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @Input('p-params') params: PoPageBlockedUserReasonParams;
 
@@ -21,7 +21,7 @@ export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {
   literalParams;
   literals: { title: string; firstPhrase: string; secondPhrase: string; thirdPhrase: string };
 
-  private language: string;
+  private readonly language: string;
 
   constructor() {
     const languageService = inject(PoLanguageService);

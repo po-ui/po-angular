@@ -55,7 +55,7 @@ import { PoToaster } from './interface/po-toaster.interface';
  */
 @Directive()
 export abstract class PoToasterBaseComponent {
-  private _isHide: boolean;
+  private readonly _isHide: boolean;
   private _sizeActions: string = undefined;
   private _initialSizeActions: string = undefined;
 

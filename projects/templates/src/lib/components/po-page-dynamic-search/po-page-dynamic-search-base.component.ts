@@ -233,7 +233,7 @@ export abstract class PoPageDynamicSearchBaseComponent {
   private _hideCloseDisclaimers: Array<string> = [];
   private _literals: PoPageDynamicSearchLiterals;
   private _quickSearchWidth: number;
-  private language: string;
+  private readonly language: string;
 
   previousFilters: Array<PoDynamicFormField>;
 

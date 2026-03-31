@@ -111,7 +111,7 @@ export abstract class PoMenuBaseComponent {
   private _filter = false;
   private _searchTreeItems = false;
   private _level;
-  private _maxLevel = 4;
+  private readonly _maxLevel = 4;
   private _menus = [];
   private _params: any;
   private _service: string | PoMenuFilter;

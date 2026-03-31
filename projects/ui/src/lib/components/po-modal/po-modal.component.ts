@@ -34,7 +34,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
   standalone: false
 })
 export class PoModalComponent extends PoModalBaseComponent {
-  private poActiveOverlayService = inject(PoActiveOverlayService);
+  private readonly poActiveOverlayService = inject(PoActiveOverlayService);
 
   @ViewChild('modalContent', { read: ElementRef }) modalContent: ElementRef;
   @ViewChild('modalContainer', { read: ElementRef }) modalContainer: ElementRef;
@@ -42,8 +42,8 @@ export class PoModalComponent extends PoModalBaseComponent {
 
   private firstElement;
   private focusFunction;
-  private focusableElements = 'input, select, textarea, button:not([disabled]), a';
-  private id: string = uuid();
+  private readonly focusableElements = 'input, select, textarea, button:not([disabled]), a';
+  private readonly id: string = uuid();
   private sourceElement;
 
   constructor() {

@@ -75,8 +75,8 @@ const poCalendarPositionDefault = 'bottom-left';
   standalone: false
 })
 export class PoDatepickerComponent extends PoDatepickerBaseComponent implements AfterViewInit, OnDestroy, OnChanges {
-  private controlPosition = inject(PoControlPositionService);
-  private renderer = inject(Renderer2);
+  private readonly controlPosition = inject(PoControlPositionService);
+  private readonly renderer = inject(Renderer2);
 
   @ViewChild('calendar', { static: true }) calendar: PoCalendarComponent;
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
@@ -607,7 +607,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return last === document.activeElement;
   }
 
-  private onScroll = (): void => {
+  private readonly onScroll = (): void => {
     this.controlPosition.adjustPosition(poCalendarPositionDefault);
   };
 

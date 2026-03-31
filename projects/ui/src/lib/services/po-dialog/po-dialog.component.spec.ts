@@ -280,7 +280,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('setDialogLiterals: should set `literalsAlert` in portuguese if browser is setted with an unsupported language.', () => {
-      component['language'] = 'xx';
+      Object.defineProperty(component, 'language', { value: 'xx', configurable: true });
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -288,7 +288,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('setDialogLiterals: should set `literalsConfirm` in portuguese if browser is setted with an unsupported language.', () => {
-      component['language'] = 'xx';
+      Object.defineProperty(component, 'language', { value: 'xx', configurable: true });
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -296,7 +296,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in english.`, () => {
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -304,7 +304,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in spanish.`, () => {
-      component['language'] = 'es';
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -312,7 +312,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in portuguese.`, () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -320,7 +320,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in english.`, () => {
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -328,7 +328,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in spanish.`, () => {
-      component['language'] = 'es';
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -336,7 +336,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsAlert' in russian.`, () => {
-      component['language'] = 'ru';
+      Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
 
       component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
 
@@ -344,7 +344,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it(`setDialogLiterals: should set 'literalsConfirm' in portuguese.`, () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
 
@@ -360,7 +360,7 @@ describe('PoDialogComponent:', () => {
         ok: () => {}
       };
 
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component['setDialogLiterals'](alertOptionsCustom, PoDialogType.Alert);
 
@@ -377,7 +377,7 @@ describe('PoDialogComponent:', () => {
         cancel: () => {}
       };
 
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component['setDialogLiterals'](confirmOptionsCustom, PoDialogType.Confirm);
 

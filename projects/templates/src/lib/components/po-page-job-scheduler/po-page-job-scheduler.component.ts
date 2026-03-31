@@ -65,9 +65,9 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {
   poPageDynamicLookupService = inject(PoPageJobSchedulerLookupService);
-  private activatedRoute = inject(ActivatedRoute);
-  private poDialogService = inject(PoDialogService);
-  private poNotification = inject(PoNotificationService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly poDialogService = inject(PoDialogService);
+  private readonly poNotification = inject(PoNotificationService);
 
   @ViewChild('schedulerExecution', { static: true }) schedulerExecution: { form: NgForm };
   @ViewChild('schedulerParameters') schedulerParameters: { form: NgForm };
@@ -91,26 +91,26 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
 
   protected steps: Array<PoStepperItem> = [];
 
-  private backPageAction: PoPageAction = {
+  private readonly backPageAction: PoPageAction = {
     label: this.literals.back,
     action: this.nextStepOperation.bind(this, 'back'),
     disabled: this.isDisabledBack.bind(this)
   };
 
-  private concludePageAction: PoPageAction = {
+  private readonly concludePageAction: PoPageAction = {
     label: this.literals.conclude,
     action: this.confirmJobScheduler.bind(this)
   };
 
-  private nextPageAction: PoPageAction = {
+  private readonly nextPageAction: PoPageAction = {
     label: this.literals.next,
     action: this.nextStepOperation.bind(this, 'next'),
     disabled: this.isDisabledAdvance.bind(this)
   };
 
-  private concludePageActions: Array<PoPageAction> = [this.concludePageAction, this.backPageAction];
+  private readonly concludePageActions: Array<PoPageAction> = [this.concludePageAction, this.backPageAction];
 
-  private nextPageActions: Array<PoPageAction> = [this.nextPageAction, this.backPageAction];
+  private readonly nextPageActions: Array<PoPageAction> = [this.nextPageAction, this.backPageAction];
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   jobSchedulerActions: Array<PoPageAction> = [...this.nextPageActions];

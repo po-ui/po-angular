@@ -61,8 +61,8 @@ import { PoPageLoginService } from './po-page-login.service';
 })
 export class PoPageLoginComponent extends PoPageLoginBaseComponent implements AfterViewChecked, OnInit {
   changeDetector = inject(ChangeDetectorRef);
-  private activatedRoute = inject(ActivatedRoute);
-  private poComponentInjector = inject(PoComponentInjectorService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly poComponentInjector = inject(PoComponentInjectorService);
 
   @ViewChild('loginForm', { read: NgForm, static: true }) loginForm: NgForm;
   @ViewChild('pageLogin', { read: ViewContainerRef, static: true }) pageLogin: ViewContainerRef;
@@ -70,7 +70,7 @@ export class PoPageLoginComponent extends PoPageLoginBaseComponent implements Af
   initialSelectLanguage: string;
 
   private componentRef: ComponentRef<any> = null;
-  private differ: any;
+  private readonly differ: any;
   private readonly customPasswordError = { custom: false };
 
   constructor() {

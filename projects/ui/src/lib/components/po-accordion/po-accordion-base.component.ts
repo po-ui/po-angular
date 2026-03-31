@@ -97,7 +97,7 @@ export const poAccordionLiteralsDefault = {
  */
 @Directive()
 export class PoAccordionBaseComponent {
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
   private _literals;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;

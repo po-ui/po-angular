@@ -23,7 +23,7 @@ const poMenuItemSubItemSize = 98;
   standalone: false
 })
 export class PoMenuItemComponent implements OnDestroy, OnInit {
-  private menuItemsService = inject(PoMenuItemsService);
+  private readonly menuItemsService = inject(PoMenuItemsService);
 
   // Ação que será chamada ao clicar no item.
   @Input('p-action') action: Function;

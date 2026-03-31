@@ -207,13 +207,13 @@ export const poPageDynamicEditLiteralsDefault = {
   standalone: false
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private poNotification = inject(PoNotificationService);
-  private poDialogService = inject(PoDialogService);
-  private poPageDynamicService = inject(PoPageDynamicService);
-  private poPageCustomizationService = inject(PoPageCustomizationService);
-  private poPageDynamicEditActionsService = inject(PoPageDynamicEditActionsService);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly poNotification = inject(PoNotificationService);
+  private readonly poDialogService = inject(PoDialogService);
+  private readonly poPageDynamicService = inject(PoPageDynamicService);
+  private readonly poPageCustomizationService = inject(PoPageCustomizationService);
+  private readonly poPageDynamicEditActionsService = inject(PoPageDynamicEditActionsService);
 
   @ViewChild('dynamicForm') dynamicForm: PoDynamicFormComponent;
   @ViewChild('gridDetail') gridDetail: PoGridComponent;
@@ -364,8 +364,8 @@ export class PoPageDynamicEditComponent implements OnInit, OnDestroy {
   readonly detailActions: PoGridRowActions = {};
 
   private indexFocus = 0;
-  private language: string;
-  private subscriptions: Array<Subscription> = [];
+  private readonly language: string;
+  private readonly subscriptions: Array<Subscription> = [];
   private _actions: PoPageDynamicEditActions = {};
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;

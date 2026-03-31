@@ -6,7 +6,7 @@ const keyField = 'key';
 export class PoLokiDriver {
   private collection;
   private db: any;
-  private driver: any;
+  private readonly driver: any;
 
   constructor() {
     const self = this;

@@ -69,14 +69,14 @@ export const poPageSlideLiteralsDefault = {
   standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
-  private poActiveOverlayService = inject(PoActiveOverlayService);
-  private languageService = inject(PoLanguageService);
+  private readonly poActiveOverlayService = inject(PoActiveOverlayService);
+  private readonly languageService = inject(PoLanguageService);
 
   private _pageContent: ElementRef;
 
   private firstElement: any;
-  private id: string = uuid();
-  private loadingCompleted = new ReplaySubject<void>();
+  private readonly id: string = uuid();
+  private readonly loadingCompleted = new ReplaySubject<void>();
   private sourceElement: any;
   buttonAriaLabel: string;
   duration: string = '70ms';

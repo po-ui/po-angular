@@ -35,8 +35,8 @@ import { PoRadioSize } from './enums/po-radio-size.enum';
   standalone: false
 })
 export class PoRadioComponent extends PoFieldModel<boolean> {
-  private changeDetector = inject(ChangeDetectorRef);
-  private renderer = inject(Renderer2);
+  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly renderer = inject(Renderer2);
 
   @ViewChild('radio', { static: true }) radio: ElementRef;
   @ViewChild('radioInput', { static: true }) radioInput: ElementRef;

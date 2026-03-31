@@ -15,7 +15,7 @@ export class PoTableService implements PoTableFilter {
   private url: string;
   private urlDelete: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getFilteredItems(filteredParams?: PoTableFilteredItemsParams): Observable<any> {
     const params = this.validateParams(filteredParams);

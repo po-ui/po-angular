@@ -179,7 +179,10 @@ describe('PoRadioComponent', () => {
 
       component.value = true;
 
-      component['changeDetector'] = <any>{ markForCheck: () => {} };
+      Object.defineProperty(component, 'changeDetector', {
+        value: <any>{ markForCheck: () => {} },
+        configurable: true
+      });
       spyOn(component['changeDetector'], 'markForCheck');
 
       component.onWriteValue(expectedValue);
@@ -193,7 +196,10 @@ describe('PoRadioComponent', () => {
 
       component.value = expectedValue;
 
-      component['changeDetector'] = <any>{ markForCheck: () => {} };
+      Object.defineProperty(component, 'changeDetector', {
+        value: <any>{ markForCheck: () => {} },
+        configurable: true
+      });
 
       spyOn(component['changeDetector'], 'markForCheck');
 

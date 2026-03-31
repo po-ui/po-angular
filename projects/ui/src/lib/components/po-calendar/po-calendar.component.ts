@@ -60,7 +60,7 @@ const poCalendarRangeWidth = 600;
   standalone: false
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   hoverValue: Date;
 

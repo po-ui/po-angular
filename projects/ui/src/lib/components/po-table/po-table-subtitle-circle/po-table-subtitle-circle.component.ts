@@ -34,5 +34,5 @@ export class PoTableSubtitleCircleComponent {
     return this._subtitle;
   }
 
-  constructor(private poColorPaletteService: PoColorPaletteService) {}
+  constructor(private readonly poColorPaletteService: PoColorPaletteService) {}
 }

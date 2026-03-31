@@ -316,7 +316,7 @@ describe('PoDecimalComponent:', () => {
   });
 
   it('should have a call onInput method with this.isKeyboardAndroid true', () => {
-    component['isKeyboardAndroid'] = true;
+    Object.defineProperty(component, 'isKeyboardAndroid', { value: true, configurable: true });
 
     const fakeEvent = {
       target: {
@@ -806,7 +806,7 @@ describe('PoDecimalComponent:', () => {
       },
       key: '-'
     };
-    component['isKeyboardAndroid'] = true;
+    Object.defineProperty(component, 'isKeyboardAndroid', { value: true, configurable: true });
 
     const verifyInsertMinusSign = component['verifyInsertMinusSign'](fakeEvent);
 
@@ -996,7 +996,7 @@ describe('PoDecimalComponent:', () => {
         },
         preventDefault: () => {}
       };
-      component['isKeyboardAndroid'] = true;
+      Object.defineProperty(component, 'isKeyboardAndroid', { value: true, configurable: true });
 
       spyOn(component, <any>'isInvalidKey').and.returnValue(false);
       spyOn(fakeEvent, 'preventDefault');
@@ -1015,7 +1015,7 @@ describe('PoDecimalComponent:', () => {
         which: 8,
         preventDefault: () => {}
       };
-      component['isKeyboardAndroid'] = false;
+      Object.defineProperty(component, 'isKeyboardAndroid', { value: false, configurable: true });
 
       const isValidKey = component['isValidKey'](fakeEvent);
 
@@ -1605,7 +1605,9 @@ describe('PoDecimalComponent:', () => {
       beforeEach(() => {
         component['cd'] = { detectChanges: () => {} } as any;
         component['inputEl'] = { nativeElement: { value: 'test' } } as ElementRef;
-        component['el'] = { nativeElement: document.createElement('div') } as ElementRef;
+        Object.defineProperty(component, 'el', {
+          value: { nativeElement: document.createElement('div') } as ElementRef
+        });
 
         component.errorPattern = 'Erro de exemplo';
         component.errorAsyncProperties = {

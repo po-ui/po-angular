@@ -424,7 +424,10 @@ describe('PoMenuComponent:', () => {
   it('should receive from child active menu item', () => {
     const menuItem = { label: 'Teste', type: 'internalLink' };
 
-    component['menuItemsService'] = fakeMenuService(menuItem) as PoMenuItemsService;
+    Object.defineProperty(component, 'menuItemsService', {
+      value: fakeMenuService(menuItem) as PoMenuItemsService,
+      configurable: true
+    });
     component.subscribeToMenuItem();
     expect(component.activeMenuItem).toEqual(menuItem);
   });
@@ -432,7 +435,10 @@ describe('PoMenuComponent:', () => {
   it('should receive from child grouped menu item', () => {
     const menuItem = { label: 'Teste', type: 'subItems' };
 
-    component['menuItemsService'] = fakeMenuService(menuItem) as PoMenuItemsService;
+    Object.defineProperty(component, 'menuItemsService', {
+      value: fakeMenuService(menuItem) as PoMenuItemsService,
+      configurable: true
+    });
     component.subscribeToMenuItem();
     expect(component.groupedMenuItem).toEqual(menuItem);
   });
@@ -1556,7 +1562,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('checkingRouterChildrenFragments: should return the route that is in the value of redirectTo', () => {
-      Object.defineProperty(router, 'url', { get: () => '/home' });
+      Object.defineProperty(router, 'url', { get: () => '/home', configurable: true });
 
       const result = component['checkingRouterChildrenFragments']();
       expect(result).toEqual('/home');

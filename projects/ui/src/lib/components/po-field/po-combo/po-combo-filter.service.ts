@@ -20,7 +20,7 @@ import { validateObjectType } from '../../../utils/util';
   providedIn: 'root'
 })
 export class PoComboFilterService implements PoComboFilter {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   fieldLabel: string = 'label';
   fieldValue: string = 'value';

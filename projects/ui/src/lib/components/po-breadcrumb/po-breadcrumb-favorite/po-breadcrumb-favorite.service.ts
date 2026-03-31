@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PoBreadcrumbFavoriteService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   private _url: string;
   private _bodyParams: object;

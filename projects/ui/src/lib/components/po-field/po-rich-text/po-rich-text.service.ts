@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class PoRichTextService {
-  private model = new Subject<string>();
+  private readonly model = new Subject<string>();
 
   emitModel(value: string) {
     this.model.next(value);

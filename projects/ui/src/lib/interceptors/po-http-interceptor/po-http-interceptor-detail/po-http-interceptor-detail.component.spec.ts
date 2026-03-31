@@ -27,7 +27,10 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
 
-    component['literals'] = poHttpInterceptorDetailLiteralsDefault['en'];
+    Object.defineProperty(component, 'literals', {
+      value: poHttpInterceptorDetailLiteralsDefault['en'],
+      configurable: true
+    });
   });
 
   it('should create', () => {

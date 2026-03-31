@@ -45,8 +45,8 @@ export class PoHeaderbrandComponent implements AfterViewInit, OnChanges, OnDestr
   size = input<string>(undefined, { alias: 'p-size' });
 
   constructor(
-    private cd: ChangeDetectorRef,
-    private router: Router
+    private readonly cd: ChangeDetectorRef,
+    private readonly router: Router
   ) {}
 
   ngAfterViewInit(): void {

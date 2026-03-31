@@ -241,8 +241,8 @@ describe('PoModalComponent:', () => {
     component['firstElement'] = <any>{
       focus: () => {}
     };
-    component['id'] = '1';
-    component['poActiveOverlayService'] = { activeOverlay: ['1'] };
+    Object.defineProperty(component, 'id', { value: '1', configurable: true });
+    Object.defineProperty(component, 'poActiveOverlayService', { value: { activeOverlay: ['1'] }, configurable: true });
     component['modalContent'] = {
       nativeElement: {
         contains: () => 0

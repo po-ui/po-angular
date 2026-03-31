@@ -10,7 +10,7 @@ import { PoPageLoginAuthenticationType } from './enums/po-page-login-authenticat
   providedIn: 'root'
 })
 export class PoPageLoginService {
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   onLogin(url: string, type: PoPageLoginAuthenticationType, loginForm: PoPageLogin): Observable<object> {
     if (type === PoPageLoginAuthenticationType.Bearer) {

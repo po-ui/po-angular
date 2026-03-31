@@ -45,7 +45,7 @@ export abstract class PoNavbarBaseComponent {
   private _literals: PoNavbarLiterals;
   private _logo: string;
   private _shadow: boolean = false;
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
 
   /**
    * @deprecated v23.x.x

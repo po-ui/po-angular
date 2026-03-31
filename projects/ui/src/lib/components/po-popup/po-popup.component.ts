@@ -38,9 +38,9 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
 })
 export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewInit {
   id = `po-popup[${uuid()}]`;
-  private renderer = inject(Renderer2);
-  private router = inject(Router);
-  private poControlPosition = inject(PoControlPositionService);
+  private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
+  private readonly poControlPosition = inject(PoControlPositionService);
   changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
@@ -173,7 +173,7 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     window.addEventListener('scroll', this.onScroll, true);
   }
 
-  private onScroll = ({ target }): void => {
+  private readonly onScroll = ({ target }): void => {
     const { showPopup, popupRef } = this;
 
     if (showPopup && popupRef?.nativeElement && target instanceof Node && !popupRef.nativeElement.contains(target)) {

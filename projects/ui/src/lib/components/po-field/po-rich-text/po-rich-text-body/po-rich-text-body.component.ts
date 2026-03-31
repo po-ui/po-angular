@@ -39,7 +39,7 @@ const poRichTextBodyCommands = [
   standalone: false
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy, OnChanges {
-  private richTextService = inject(PoRichTextService);
+  private readonly richTextService = inject(PoRichTextService);
   private readonly cd = inject(ChangeDetectorRef);
 
   @ViewChild('bodyElement', { static: true }) bodyElement: ElementRef;
@@ -334,7 +334,7 @@ export class PoRichTextBodyComponent implements OnInit, OnDestroy, OnChanges {
     return `<a class="po-rich-text-link" href="${urlLink}" target="_blank">${urlLinkText || urlLink}</a>`;
   }
 
-  private onAnchorClick = event => {
+  private readonly onAnchorClick = event => {
     const { target, ctrlKey, metaKey } = event;
     let url;
     let elementLink;

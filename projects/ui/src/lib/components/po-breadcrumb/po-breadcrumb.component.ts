@@ -51,7 +51,7 @@ export const poBreadcrumbLiterals: object = {
   standalone: false
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {
-  private element = inject(ElementRef);
+  private readonly element = inject(ElementRef);
   renderer = inject(Renderer2);
   languageService = inject(PoLanguageService);
 
@@ -68,7 +68,7 @@ export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements 
 
   private _breadcrumbItemsLenght: number = 0;
   private calculatedElement = false;
-  private differ;
+  private readonly differ;
   private hiddenWithoutResize = false;
   private initialized = false;
   private timeoutResize;

@@ -28,7 +28,7 @@ import { PoTabComponent } from '../po-tab/po-tab.component';
   standalone: false
 })
 export class PoTabDropdownComponent implements AfterViewInit {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   @ViewChild('popover', { static: true }) popover: PoPopoverComponent;
 

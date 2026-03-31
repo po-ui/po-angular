@@ -20,7 +20,7 @@ import { PoUploadLiterals } from '../../interfaces/po-upload-literals.interface'
   standalone: false
 })
 export class PoUploadDragDropAreaOverlayComponent implements AfterViewInit {
-  private renderer = inject(Renderer2);
+  private readonly renderer = inject(Renderer2);
 
   @ViewChild('DragDropAreaFixed', { read: ElementRef, static: true }) DragDropAreaFixed: ElementRef;
 

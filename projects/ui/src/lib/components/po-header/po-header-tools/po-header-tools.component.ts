@@ -55,8 +55,8 @@ export class PoHeaderToolsComponent {
   @Input('p-header-template') headerTemplate: TemplateRef<any>;
 
   constructor(
-    private router: Router,
-    private cd: ChangeDetectorRef
+    private readonly router: Router,
+    private readonly cd: ChangeDetectorRef
   ) {}
 
   onClickAction(index: number) {

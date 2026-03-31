@@ -40,10 +40,10 @@ const poNavbarTiming = '250ms ease';
   standalone: false
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy, OnInit {
-  private renderer = inject(Renderer2);
-  private builder = inject(AnimationBuilder);
-  private changeDetector = inject(ChangeDetectorRef);
-  private menuGlobalService = inject(PoMenuGlobalService);
+  private readonly renderer = inject(Renderer2);
+  private readonly builder = inject(AnimationBuilder);
+  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly menuGlobalService = inject(PoMenuGlobalService);
 
   @ViewChild(PoNavbarItemsComponent, { read: ElementRef, static: true }) navbarItemsElement: ElementRef;
 
@@ -57,11 +57,11 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   private _menuComponent;
 
   private isNavbarUpdateMenu: boolean = false;
-  private id = uuid();
+  private readonly id = uuid();
   private mediaQuery: any;
   private offset: number = 0;
   private player: AnimationPlayer;
-  private menuItems: Array<PoMenuItem>;
+  private readonly menuItems: Array<PoMenuItem>;
   private previousMenuComponentId;
   private previousMenusItems = [];
 
@@ -276,7 +276,7 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
     this.validateMaxOffset(maxAllowedOffset);
   }
 
-  private onMediaQueryChange = changed => {
+  private readonly onMediaQueryChange = changed => {
     this.changeNavbarMenuItems(changed.matches, this.items, this.literals.navbarLinks);
   };
 

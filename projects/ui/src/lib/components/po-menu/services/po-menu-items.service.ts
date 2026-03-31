@@ -13,8 +13,8 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class PoMenuItemsService {
-  private subjectParent = new Subject<any>();
-  private subjectChild = new Subject<any>();
+  private readonly subjectParent = new Subject<any>();
+  private readonly subjectChild = new Subject<any>();
 
   // Envia informações do click do po-menu-item para o po-menu
   sendToParentMenuClicked(menu: object) {

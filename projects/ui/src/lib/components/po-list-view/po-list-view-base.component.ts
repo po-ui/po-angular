@@ -103,7 +103,7 @@ export class PoListViewBaseComponent {
   private _literals: PoListViewLiterals;
   private _select: boolean;
   private _showMoreDisabled: boolean;
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
 
   /**
    * @optional

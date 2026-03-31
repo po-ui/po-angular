@@ -45,7 +45,7 @@ import { PoStepperItem } from './po-stepper-item.interface';
   standalone: false
 })
 export class PoStepperComponent extends PoStepperBaseComponent implements AfterContentInit {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ContentChildren(PoStepComponent) poSteps: QueryList<PoStepComponent>;
 

@@ -129,7 +129,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
   standalone: false
 })
 export class PoSelectComponent extends PoFieldValidateModel<any> implements OnChanges {
-  private el = inject(ElementRef);
+  private readonly el = inject(ElementRef);
   renderer = inject(Renderer2);
 
   @ViewChild('select', { read: ElementRef, static: true }) selectElement: ElementRef;

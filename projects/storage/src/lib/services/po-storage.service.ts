@@ -87,9 +87,9 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
 })
 export class PoStorageService {
   private driver: string = null;
-  private idleQueue = new IdleQueue();
+  private readonly idleQueue = new IdleQueue();
   private storagePromise: Promise<any>;
-  private lokijsDriver: PoLokiDriver;
+  private readonly lokijsDriver: PoLokiDriver;
 
   constructor(@Inject(PO_STORAGE_CONFIG_TOKEN) config?: PoStorageConfig) {
     this.lokijsDriver = new PoLokiDriver();

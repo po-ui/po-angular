@@ -44,8 +44,8 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
   standalone: false
 })
 export class PoDropdownComponent extends PoDropdownBaseComponent {
-  private renderer = inject(Renderer2);
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild('dropdownRef', { read: ElementRef, static: true }) dropdownRef: ElementRef;
   @ViewChild('popupRef') popupRef: any;
@@ -87,7 +87,7 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
     window.addEventListener('scroll', this.onScroll, true);
   }
 
-  private onScroll = ({ target }): void => {
+  private readonly onScroll = ({ target }): void => {
     if (this.open && target.className !== 'po-popup-container' && !this.isDropdownClosed()) {
       this.hideDropdown();
     }

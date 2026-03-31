@@ -85,9 +85,9 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
   standalone: false
 })
 export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements OnDestroy, OnInit {
-  private location = inject(Location);
-  private menuItemsService = inject(PoMenuPanelItemsService);
-  private router = inject(Router);
+  private readonly location = inject(Location);
+  private readonly menuItemsService = inject(PoMenuPanelItemsService);
+  private readonly router = inject(Router);
 
   activeMenuItem: PoMenuPanelItem;
   linkActive: string;

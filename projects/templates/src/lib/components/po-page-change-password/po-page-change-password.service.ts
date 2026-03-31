@@ -8,7 +8,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PoPageChangePasswordService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   post(url: string, item: any): Observable<HttpResponse<object>> {
     return this.http.post<any>(url, item, { observe: 'response' });

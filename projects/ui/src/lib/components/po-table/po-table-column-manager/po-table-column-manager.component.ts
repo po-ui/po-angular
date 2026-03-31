@@ -81,7 +81,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   private resizeListener: () => void;
   private restoreDefaultEvent: boolean;
   private lastEmittedValue: Array<string>;
-  private minColumns: number = 1;
+  private readonly minColumns: number = 1;
   private _componentsSize?: string = undefined;
 
   /**
@@ -115,7 +115,7 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   }
 
   constructor(
-    private renderer: Renderer2,
+    private readonly renderer: Renderer2,
     languageService: PoLanguageService
   ) {
     const language = languageService.getShortLanguage();

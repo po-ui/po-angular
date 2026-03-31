@@ -54,8 +54,8 @@ export class PoPageListComponent
   implements AfterContentInit, OnChanges, OnDestroy, OnInit
 {
   renderer = inject(Renderer2);
-  private router = inject(Router);
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild('filterInput') filterInput: ElementRef;
 
@@ -67,7 +67,7 @@ export class PoPageListComponent
   callFunction = callFunction;
 
   private isRecalculate = true;
-  private maxWidthMobile: number = 480;
+  private readonly maxWidthMobile: number = 480;
 
   /* istanbul ignore next */
   constructor() {

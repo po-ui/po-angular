@@ -39,14 +39,14 @@ export class PoTooltipDirective extends PoTooltipBaseDirective implements OnInit
   private isHidden: boolean;
   private lastTooltipText: string;
   private textContent;
-  private tooltipOffset: number = 8;
+  private readonly tooltipOffset: number = 8;
 
   private eventListenerFunction: () => void;
 
   constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    private poControlPosition: PoTooltipControlPositionService,
+    private readonly elementRef: ElementRef,
+    private readonly renderer: Renderer2,
+    private readonly poControlPosition: PoTooltipControlPositionService,
     private readonly sanitizer: DomSanitizer
   ) {
     super();

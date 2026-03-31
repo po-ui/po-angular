@@ -688,7 +688,7 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
   private _required?: boolean;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
-  private language: string;
+  private readonly language: string;
   private validatorChange: any;
 
   /**

@@ -106,7 +106,7 @@ export class PoPageEditBaseComponent {
   private _initialComponentsSize?: string = undefined;
   private _literals: PoPageEditLiterals;
   private _title: string;
-  private language: string;
+  private readonly language: string;
 
   /**
    * @optional

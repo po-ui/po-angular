@@ -18,7 +18,7 @@ import { PoMenuPanelItemsService } from '../services/po-menu-panel-items.service
   standalone: false
 })
 export class PoMenuPanelItemComponent implements OnDestroy, OnInit {
-  private menuItemsService = inject(PoMenuPanelItemsService);
+  private readonly menuItemsService = inject(PoMenuPanelItemsService);
 
   @Input('p-menu-item-internal') menuItemInternal: PoMenuPanelItemInternal;
 

@@ -18,7 +18,7 @@ describe('PoPageDynamicService:', () => {
     poPageDynamicService = TestBed.inject(PoPageDynamicService);
     httpMock = TestBed.inject(HttpTestingController);
 
-    poPageDynamicService['language'] = 'en';
+    Object.defineProperty(poPageDynamicService, 'language', { value: 'en', configurable: true });
   });
 
   afterEach(() => {

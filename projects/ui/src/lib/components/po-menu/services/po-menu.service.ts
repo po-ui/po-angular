@@ -19,7 +19,7 @@ import { PoMenuFilter } from '../po-menu-filter/po-menu-filter.interface';
   providedIn: 'root'
 })
 export class PoMenuService implements PoMenuFilter {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   private _url: string;
 

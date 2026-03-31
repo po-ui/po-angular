@@ -63,7 +63,7 @@ export class PoFieldContainerBottomComponent implements OnChanges {
   /** Define se o componente helper estará visível através das ações customizadas */
   showHelperComponent = input<boolean>(false, { alias: 'p-show-helper' });
 
-  private isInitialChange: boolean = true;
+  private readonly isInitialChange: boolean = true;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showHelperComponent && this.showHelperComponent()) {

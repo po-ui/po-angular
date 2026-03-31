@@ -28,8 +28,8 @@ export class PoTableColumnFrozenDirective implements AfterViewInit, OnChanges {
   @Input() alignFrozen: string = 'left';
 
   constructor(
-    private el: ElementRef,
-    private renderer: Renderer2
+    private readonly el: ElementRef,
+    private readonly renderer: Renderer2
   ) {}
 
   ngAfterViewInit() {

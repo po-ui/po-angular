@@ -121,10 +121,10 @@ export class PoMultiselectComponent
   extends PoMultiselectBaseComponent
   implements AfterViewInit, DoCheck, OnDestroy, OnChanges
 {
-  private renderer = inject(Renderer2);
-  private changeDetector: ChangeDetectorRef;
-  private el = inject(ElementRef);
-  private controlPosition = inject(PoControlPositionService);
+  private readonly renderer = inject(Renderer2);
+  private readonly changeDetector: ChangeDetectorRef;
+  private readonly el = inject(ElementRef);
+  private readonly controlPosition = inject(PoControlPositionService);
   defaultService = inject(PoMultiselectFilterService);
 
   @ContentChild(PoMultiselectOptionTemplateDirective, { static: true })
@@ -734,7 +734,7 @@ export class PoMultiselectComponent
     );
   }
 
-  private onScroll = (): void => {
+  private readonly onScroll = (): void => {
     this.adjustContainerPosition();
   };
 

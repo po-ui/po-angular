@@ -72,7 +72,7 @@ export class PoDialogComponent implements OnDestroy, OnInit {
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
 
-  private language: string;
+  private readonly language: string;
 
   // Define o tamanho dos componentes de formulário no dialog.
   set componentsSize(value: string) {

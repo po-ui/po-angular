@@ -31,7 +31,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     nativeElement = fixture.debugElement.nativeElement;
     changeDetector = fixture.componentRef.injector.get(ChangeDetectorRef);
 
-    component['language'] = 'en';
+    Object.defineProperty(component, 'language', { value: 'en', configurable: true });
   });
 
   it('should be created', () => {
@@ -73,7 +73,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('formatAllowedExtensions: should return `PNG, JPG and SVG` if allowedExtensions is `png,jpg and svg`', () => {
       const allowedExtensions = ['png', 'jpg', 'svg'];
 
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       expect(component['formatAllowedExtensions'](allowedExtensions)).toBe('PNG, JPG and SVG');
     });
@@ -81,7 +81,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('formatAllowedExtensions: should return `PNG and JPG` if allowedExtensions is `png and jpg`', () => {
       const allowedExtensions = ['png', 'jpg'];
 
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       expect(component['formatAllowedExtensions'](allowedExtensions)).toBe('PNG and JPG');
     });
@@ -89,7 +89,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('formatAllowedExtensions: should return `PNG e JPG` if allowedExtensions is `png and jpg` and `language` is `pt`', () => {
       const allowedExtensions = ['png', 'jpg'];
 
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       expect(component['formatAllowedExtensions'](allowedExtensions)).toBe('PNG e JPG');
     });
@@ -97,7 +97,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('formatAllowedExtensions: should return `PNG y JPG` if allowedExtensions is `png and jpg` and `language` is `es`', () => {
       const allowedExtensions = ['png', 'jpg'];
 
-      component['language'] = 'es';
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
       expect(component['formatAllowedExtensions'](allowedExtensions)).toBe('PNG y JPG');
     });
@@ -117,7 +117,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('setLiterals: should set `literals` with `poUploadLiteralsDefault`', () => {
       component.literals = undefined;
 
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       component['setLiterals']();
 
@@ -127,7 +127,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     it('setLiterals: should set `literals` with `poUploadLiteralsDefault` and `poLocaleDefault`', () => {
       component.literals = undefined;
 
-      component['language'] = '';
+      Object.defineProperty(component, 'language', { value: '', configurable: true });
 
       component['setLiterals']();
 

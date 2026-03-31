@@ -27,7 +27,7 @@ export class PoIconComponent {
   @ViewChild('iconElement', { static: false }) iconElement: ElementRef;
   class: string;
   private _icon: string | TemplateRef<void>;
-  private _iconToken: { [key: string]: string };
+  private readonly _iconToken: { [key: string]: string };
 
   @HostBinding('attr.p-icon') hostPIcon: string | null = null;
 

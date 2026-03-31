@@ -265,7 +265,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
         spyOn(component['poPageDynamicService'], <any>'configServiceApi');
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         component.ngOnInit();
 
@@ -293,7 +293,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
         spyOn(component['poPageDynamicService'], <any>'configServiceApi');
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         component.ngOnInit();
 
@@ -400,7 +400,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(metadata));
         spyOn(<any>component['poPageCustomizationService'], 'createObservable').and.returnValue(of(custom));
 
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
 
         component.ngOnInit();
 
@@ -723,7 +723,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component['loadDataFromAPI']();
 
         tick();
@@ -866,7 +866,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component['loadDataFromAPI']();
 
         expect(component['loadData']).toHaveBeenCalledWith({ search: 'Jhon' });
@@ -895,7 +895,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(of(response));
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component['loadDataFromAPI']();
 
         tick();
@@ -959,7 +959,7 @@ describe('PoPageDynamicTableComponent:', () => {
         spyOn(component['poPageDynamicService'], 'getMetadata').and.returnValue(EMPTY);
         spyOn(component, <any>'loadData').and.returnValue(EMPTY);
         spyOn(component, <any>'loadOptionsOnInitialize').and.returnValue(EMPTY);
-        component['activatedRoute'] = activatedRoute;
+        Object.defineProperty(component, 'activatedRoute', { value: activatedRoute, configurable: true });
         component['loadDataFromAPI']();
 
         tick();

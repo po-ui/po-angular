@@ -74,7 +74,7 @@ export class PoUrlComponent extends PoInputGeneric implements AfterViewInit, OnD
 
   mask = '';
 
-  private listener = this.validateClassesForPattern.bind(this);
+  private readonly listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
   constructor() {

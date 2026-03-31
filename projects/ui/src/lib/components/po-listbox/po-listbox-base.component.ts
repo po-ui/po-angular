@@ -40,7 +40,7 @@ export class PoListBoxBaseComponent {
   private _items: Array<PoItemListOption | PoItemListOptionGroup | any> = [];
   private _type!: PoItemListType;
   private _literals: PoListBoxLiterals;
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
 

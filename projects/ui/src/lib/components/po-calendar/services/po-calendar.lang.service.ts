@@ -8,7 +8,7 @@ import { poLocales, poLocaleDefault } from '../../../services/po-language/po-lan
 export class PoCalendarLangService {
   private language = poLocaleDefault;
 
-  private months = [
+  private readonly months = [
     {
       pt: 'Janeiro',
       en: 'January',
@@ -83,7 +83,7 @@ export class PoCalendarLangService {
     }
   ];
 
-  private shortWeekDays = [
+  private readonly shortWeekDays = [
     {
       pt: 'Dom',
       en: 'Sun',
@@ -128,35 +128,35 @@ export class PoCalendarLangService {
     }
   ];
 
-  private monthLabel = {
+  private readonly monthLabel = {
     pt: 'Mês',
     en: 'Month',
     es: 'Mes',
     ru: 'Месяц'
   };
 
-  private yearLabel = {
+  private readonly yearLabel = {
     pt: 'Ano',
     en: 'Year',
     es: 'Año',
     ru: 'Год'
   };
 
-  private todayLabel = {
+  private readonly todayLabel = {
     pt: 'Hoje',
     en: 'Today',
     es: 'Hoy',
     ru: 'Сегодня'
   };
 
-  private previousMonthLabel = {
+  private readonly previousMonthLabel = {
     pt: 'Mês anterior',
     en: 'Previous month',
     es: 'Mes anterior',
     ru: 'Предыдущий месяц'
   };
 
-  private nextMonthLabel = {
+  private readonly nextMonthLabel = {
     pt: 'Próximo mês',
     en: 'Next month',
     es: 'Próximo mes',

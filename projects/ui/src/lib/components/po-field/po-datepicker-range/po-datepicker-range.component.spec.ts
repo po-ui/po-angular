@@ -199,9 +199,11 @@ describe('PoDatepickerRangeComponent:', () => {
           }
         } as any;
 
-        component['renderer'] = {
-          setAttribute: jasmine.createSpy('setAttribute')
-        } as any;
+        Object.defineProperty(component, 'renderer', {
+          value: {
+            setAttribute: jasmine.createSpy('setAttribute')
+          } as any
+        });
 
         component.literals = {
           open: 'Open calendar'
@@ -223,9 +225,11 @@ describe('PoDatepickerRangeComponent:', () => {
           }
         } as any;
 
-        component['renderer'] = {
-          setAttribute: jasmine.createSpy('setAttribute')
-        } as any;
+        Object.defineProperty(component, 'renderer', {
+          value: {
+            setAttribute: jasmine.createSpy('setAttribute')
+          } as any
+        });
 
         component.literals = {
           open: 'Open calendar'
@@ -2002,8 +2006,8 @@ describe('PoDatepickerRangeComponent:', () => {
 
       const nativeElementMock = document.createElement('div');
 
-      Object.defineProperty(nativeElementMock, 'scrollHeight', { value: 300 });
-      Object.defineProperty(nativeElementMock, 'scrollWidth', { value: 500 });
+      Object.defineProperty(nativeElementMock, 'scrollHeight', { value: 300, configurable: true });
+      Object.defineProperty(nativeElementMock, 'scrollWidth', { value: 500, configurable: true });
 
       component.calendarPicker = {
         nativeElement: nativeElementMock

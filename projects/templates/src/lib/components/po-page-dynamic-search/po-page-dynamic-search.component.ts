@@ -58,9 +58,9 @@ export class PoPageDynamicSearchComponent
   extends PoPageDynamicSearchBaseComponent
   implements OnInit, OnDestroy, AfterViewInit, OnChanges
 {
-  private languageService: PoLanguageService;
-  private poPageCustomizationService = inject(PoPageCustomizationService);
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly languageService: PoLanguageService;
+  private readonly poPageCustomizationService = inject(PoPageCustomizationService);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild(PoAdvancedFilterComponent, { static: true }) poAdvancedFilter: PoAdvancedFilterComponent;
   @ViewChild(PoPageListComponent, { static: true }) poPageList: PoPageListComponent;

@@ -141,13 +141,16 @@ describe('PoPageJobSchedulerComponent:', () => {
         const endpoint = { endpoint: component.serviceApi };
         const id = 1;
 
-        component['activatedRoute'] = <any>{
-          snapshot: {
-            params: {
-              id
+        Object.defineProperty(component, 'activatedRoute', {
+          value: <any>{
+            snapshot: {
+              params: {
+                id
+              }
             }
-          }
-        };
+          },
+          configurable: true
+        });
 
         spyOn(component['poPageJobSchedulerService'], <any>'configServiceApi');
         spyOn(component, <any>'loadData');
@@ -165,13 +168,16 @@ describe('PoPageJobSchedulerComponent:', () => {
         const endpoint = { endpoint: component.serviceApi };
         const id = undefined;
 
-        component['activatedRoute'] = <any>{
-          snapshot: {
-            params: {
-              id
+        Object.defineProperty(component, 'activatedRoute', {
+          value: <any>{
+            snapshot: {
+              params: {
+                id
+              }
             }
-          }
-        };
+          },
+          configurable: true
+        });
 
         spyOn(component['poPageJobSchedulerService'], <any>'configServiceApi');
         spyOn(component, <any>'loadData');
@@ -375,13 +381,16 @@ describe('PoPageJobSchedulerComponent:', () => {
       it(`should call 'poDialogservice.confirm' with 'literals.confirmSaveMessage'`, () => {
         let paramConfirm;
 
-        component['activatedRoute'] = <any>{
-          snapshot: {
-            params: {
-              id: undefined
+        Object.defineProperty(component, 'activatedRoute', {
+          value: <any>{
+            snapshot: {
+              params: {
+                id: undefined
+              }
             }
-          }
-        };
+          },
+          configurable: true
+        });
 
         spyOn(component['poDialogService'], 'confirm').and.callFake(param => (paramConfirm = param));
         spyOn(component, <any>'save');

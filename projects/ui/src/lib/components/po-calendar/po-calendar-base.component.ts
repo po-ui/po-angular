@@ -131,7 +131,7 @@ export class PoCalendarBaseComponent {
   protected propagateChange: any = null;
   protected today: Date = new Date();
 
-  private shortLanguage: string;
+  private readonly shortLanguage: string;
   private _locale: string;
   private _maxDate: Date;
   private _minDate: Date;
@@ -269,7 +269,7 @@ export class PoCalendarBaseComponent {
 
   constructor(
     public poDate: PoDateService,
-    private languageService: PoLanguageService
+    private readonly languageService: PoLanguageService
   ) {
     this.shortLanguage = languageService.getShortLanguage();
     this._locale = this.languageService.getShortLanguage();

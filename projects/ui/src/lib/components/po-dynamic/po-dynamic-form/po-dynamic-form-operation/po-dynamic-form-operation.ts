@@ -6,7 +6,7 @@ import { PoDynamicFormLoad } from '../po-dynamic-form-load/po-dynamic-form-load.
 import { PoDynamicFormValidation } from '../po-dynamic-form-validation/po-dynamic-form-validation.interface';
 
 export class PoDynamicFormOperation {
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   protected execute(action: Function | string, param: any) {
     return typeof action === 'string' ? this.post(action, param) : of(action(param));

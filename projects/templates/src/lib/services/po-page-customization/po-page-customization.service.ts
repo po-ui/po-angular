@@ -12,7 +12,7 @@ type urlOrFunction = string | Function;
   providedIn: 'root'
 })
 export class PoPageCustomizationService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   getCustomOptions<T>(
     origin: urlOrFunction,

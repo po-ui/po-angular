@@ -16,7 +16,7 @@ import { PoSyncSchema } from './../../po-sync/interfaces/po-sync-schema.interfac
   providedIn: 'root'
 })
 export class PoSchemaDefinitionService {
-  constructor(private poStorage: PoStorageService) {}
+  constructor(private readonly poStorage: PoStorageService) {}
 
   /**
    * Destrói a chave do *storage* que contém as definições dos *schemas*.

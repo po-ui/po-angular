@@ -13,8 +13,8 @@ import { PoItemListOption } from './interfaces/po-item-list-option.interface';
  */
 @Directive()
 export class PoItemListBaseComponent {
-  private _label: string;
-  private _value: string;
+  private readonly _label: string;
+  private readonly _value: string;
   private _type!: PoItemListType;
   private _visible: boolean = true;
   private _disabled: boolean = false;

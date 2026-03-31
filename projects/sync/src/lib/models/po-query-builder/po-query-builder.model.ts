@@ -40,8 +40,8 @@ export class PoQueryBuilder {
   private _sort: string;
 
   constructor(
-    private poSchemaService: PoSchemaService,
-    private schema: PoSyncSchema
+    private readonly poSchemaService: PoSchemaService,
+    private readonly schema: PoSyncSchema
   ) {
     this._page = 1;
     this.filters = {};

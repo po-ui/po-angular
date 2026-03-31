@@ -15,7 +15,7 @@ import {
   standalone: false
 })
 export class PoGridCellComponent {
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   @Input('p-align') align?: string = 'left';
 

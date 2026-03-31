@@ -35,7 +35,7 @@ import { PoTreeViewItem } from './po-tree-view-item.interface';
   standalone: false
 })
 export class PoTreeViewItemComponent {
-  private treeViewService = inject(PoTreeViewService);
+  private readonly treeViewService = inject(PoTreeViewService);
 
   @Input('p-components-size') componentsSize: string;
 

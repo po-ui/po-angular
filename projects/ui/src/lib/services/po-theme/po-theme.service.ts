@@ -49,11 +49,11 @@ import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
   providedIn: 'root'
 })
 export class PoThemeService {
-  private renderer: Renderer2;
+  private readonly renderer: Renderer2;
   private theme: PoTheme;
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
+    @Inject(DOCUMENT) private readonly document: Document,
     rendererFactory: RendererFactory2
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);

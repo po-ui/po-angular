@@ -25,7 +25,7 @@ const PoUploadDragDropHeightMin = 160;
   standalone: false
 })
 export class PoUploadDragDropComponent {
-  private changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @ViewChild('dragDropOverlay', { read: ElementRef }) dragDropOverlayElement: ElementRef;
   @ViewChild(PoUploadDragDropAreaComponent, { static: true }) dragDropAreaComponent: PoUploadDragDropAreaComponent;

@@ -107,7 +107,10 @@ describe('PoMenuPanelItemComponent', () => {
 
       spyOn(component, fnSpy);
 
-      component['menuItemsService'] = <any>fakeMenuService(menuItemInternal);
+      Object.defineProperty(component, 'menuItemsService', {
+        value: <any>fakeMenuService(menuItemInternal),
+        configurable: true
+      });
       component['subscribeMenuClickedFromParent']();
 
       expect(component[fnSpy]).toHaveBeenCalled();

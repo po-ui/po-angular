@@ -28,7 +28,7 @@ import { convertToBoolean } from '../../../utils/util';
 })
 export class PoTabButtonComponent implements OnChanges, AfterViewInit {
   changeDetector = inject(ChangeDetectorRef);
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   @ViewChild('tabButtom', { static: true }) tabButtom: ElementRef;
 

@@ -25,8 +25,8 @@ import {
   standalone: false
 })
 export class PoStepperLabelComponent implements AfterViewInit, OnChanges {
-  private renderer = inject(Renderer2);
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   // Alinhamento da label.
   @Input('p-align-center') alignCenter: boolean;
@@ -47,7 +47,7 @@ export class PoStepperLabelComponent implements AfterViewInit, OnChanges {
   displayedContent: string;
   tooltipContent: string;
 
-  private maxLabelLength: number = 100;
+  private readonly maxLabelLength: number = 100;
 
   ngAfterViewInit() {
     this.updateLabel();

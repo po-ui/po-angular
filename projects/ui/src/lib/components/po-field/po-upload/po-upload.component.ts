@@ -85,11 +85,11 @@ import { PoHelperComponent } from '../../po-helper';
 })
 export class PoUploadComponent extends PoUploadBaseComponent implements AfterViewInit, OnChanges {
   renderer = inject(Renderer2);
-  private i18nPipe = inject(PoI18nPipe);
-  private notification = inject(PoNotificationService);
+  private readonly i18nPipe = inject(PoI18nPipe);
+  private readonly notification = inject(PoNotificationService);
 
-  @ViewChild('inputFile', { read: ElementRef, static: true }) private inputFile: ElementRef;
-  @ViewChild(PoUploadDragDropComponent) private poUploadDragDropComponent: PoUploadDragDropComponent;
+  @ViewChild('inputFile', { read: ElementRef, static: true }) private readonly inputFile: ElementRef;
+  @ViewChild(PoUploadDragDropComponent) private readonly poUploadDragDropComponent: PoUploadDragDropComponent;
   @ViewChild('uploadButton') uploadButton: PoButtonComponent;
   @ViewChild('modal') modalComponent: PoModalComponent;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;

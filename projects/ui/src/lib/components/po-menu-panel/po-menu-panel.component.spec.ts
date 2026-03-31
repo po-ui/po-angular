@@ -101,7 +101,10 @@ describe('PoMenuPanelComponent: ', () => {
 
       spyOn(component, <any>'clickMenuItem');
 
-      component['menuItemsService'] = fakeMenuPanelService(menuItem) as PoMenuPanelItemsService;
+      Object.defineProperty(component, 'menuItemsService', {
+        value: fakeMenuPanelService(menuItem) as PoMenuPanelItemsService,
+        configurable: true
+      });
       component['subscribeToMenuItem']();
 
       expect(component['clickMenuItem']).toHaveBeenCalled();

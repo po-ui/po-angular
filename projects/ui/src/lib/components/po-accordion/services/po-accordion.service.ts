@@ -16,7 +16,7 @@ import { PoAccordionItemComponent } from '../po-accordion-item/po-accordion-item
   providedIn: 'root'
 })
 export class PoAccordionService {
-  private subjectChild = new Subject<PoAccordionItemComponent>();
+  private readonly subjectChild = new Subject<PoAccordionItemComponent>();
 
   // Recebe o accordionItem
   receiveFromChildAccordionClicked() {

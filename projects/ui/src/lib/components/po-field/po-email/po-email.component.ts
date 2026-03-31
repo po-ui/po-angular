@@ -92,7 +92,7 @@ export class PoEmailComponent extends PoInputGeneric implements AfterViewInit, O
 
   mask = '';
 
-  private listener = this.validateClassesForPattern.bind(this);
+  private readonly listener = this.validateClassesForPattern.bind(this);
 
   /* istanbul ignore next */
   constructor() {

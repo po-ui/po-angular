@@ -74,13 +74,13 @@ export class PoRichTextComponent
   extends PoRichTextBaseComponent
   implements AfterViewInit, OnDestroy, OnInit, OnChanges
 {
-  private element = inject(ElementRef);
+  private readonly element = inject(ElementRef);
 
   @ViewChild(PoRichTextBodyComponent, { static: true }) bodyElement: PoRichTextBodyComponent;
   @ViewChild(PoRichTextToolbarComponent, { static: false }) richTextToolbar: PoRichTextToolbarComponent;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
 
-  private listener = this.validateClassesForRequired.bind(this);
+  private readonly listener = this.validateClassesForRequired.bind(this);
   private modelLastUpdate: any;
   toolbarActions: Array<PoRichTextToolbarActions> = [];
 

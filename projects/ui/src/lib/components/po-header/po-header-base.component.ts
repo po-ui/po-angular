@@ -152,7 +152,7 @@ export abstract class PoHeaderBaseComponent {
   public menuCollapseJoinExternal = [];
   private _brand: PoHeaderBrand | string;
   private _literals: PoHeaderLiterals;
-  private language: string = poLocaleDefault;
+  private readonly language: string = poLocaleDefault;
   private readonly themeChangeSignal = signal(0);
 
   /**

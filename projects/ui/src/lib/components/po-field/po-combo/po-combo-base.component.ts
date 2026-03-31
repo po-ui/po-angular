@@ -514,7 +514,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
   private _sort?: boolean = false;
-  private language: string;
+  private readonly language: string;
   private _infiniteScrollDistance?: number = 100;
   private _infiniteScroll?: boolean = false;
   private _removeInitialFilter: boolean = false;

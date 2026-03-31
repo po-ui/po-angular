@@ -13,7 +13,7 @@ import { PoTabsService } from '../po-tabs.service';
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit, OnChanges {
   elementRef = inject(ElementRef);
-  private tabsService = inject(PoTabsService);
+  private readonly tabsService = inject(PoTabsService);
 
   // Propriedade interna utilizada no po-context-tabs
   removed = false;

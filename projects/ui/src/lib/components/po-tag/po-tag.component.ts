@@ -35,7 +35,7 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
   standalone: false
 })
 export class PoTagComponent extends PoTagBaseComponent implements OnInit {
-  private el = inject(ElementRef);
+  private readonly el = inject(ElementRef);
 
   @ViewChild('tagContainer', { static: true }) tagContainer: ElementRef;
   @ViewChild('tagClose', { static: true }) tagClose: ElementRef;
@@ -121,7 +121,7 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
     }
   }
 
-  private applyTextColorByContrast = () => {
+  private readonly applyTextColorByContrast = () => {
     const computedStyle = getComputedStyle(this.poTag.nativeElement);
 
     if (

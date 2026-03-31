@@ -160,8 +160,8 @@ export class PoHttpRequestInterceptorService implements HttpInterceptor {
   private overlayRequests: number = 0;
 
   constructor(
-    private controlHttpRequest: PoHttpRequesControltService,
-    private poComponentInjector: PoComponentInjectorService
+    private readonly controlHttpRequest: PoHttpRequesControltService,
+    private readonly poComponentInjector: PoComponentInjectorService
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {

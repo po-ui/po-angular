@@ -65,7 +65,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     '[tabindex]:not([tabindex="-1"])'
   ].join(',');
   constructor(
-    private renderer: Renderer2,
+    private readonly renderer: Renderer2,
     private readonly poControlPosition: PoControlPositionService,
     private readonly cd: ChangeDetectorRef
   ) {

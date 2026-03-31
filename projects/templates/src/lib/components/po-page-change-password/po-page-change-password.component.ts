@@ -71,11 +71,11 @@ export class PoPageChangePasswordComponent
   extends PoPageChangePasswordBaseComponent
   implements AfterViewInit, OnDestroy, OnInit
 {
-  private activatedRoute = inject(ActivatedRoute);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private service = inject(PoPageChangePasswordService);
-  private poComponentInjector = inject(PoComponentInjectorService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly service = inject(PoPageChangePasswordService);
+  private readonly poComponentInjector = inject(PoComponentInjectorService);
 
   @ViewChild(PoModalComponent, { static: true }) modal: PoModalComponent;
   @ViewChild('pageChangePassword', { read: ViewContainerRef, static: true }) pageChangePassword: ViewContainerRef;
@@ -106,7 +106,7 @@ export class PoPageChangePasswordComponent
     label: this.literals.enterSystemButton
   };
 
-  private newPasswordSubscription: Subscription;
+  private readonly newPasswordSubscription: Subscription;
   private componentRef: ComponentRef<any> = null;
 
   constructor() {

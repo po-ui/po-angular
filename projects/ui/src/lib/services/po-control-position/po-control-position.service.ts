@@ -45,13 +45,13 @@ const poControlPositionSidesDefault: Array<string> = [
 export class PoControlPositionService {
   private arrowDirection: string;
   private customPositions: Array<string>;
-  private differenceDiagonalToWidthArrow: number = 3;
+  private readonly differenceDiagonalToWidthArrow: number = 3;
   private element: HTMLElement;
   private elementOffset: number;
   private isCornerAligned: boolean;
   private isSetElementWidth: boolean = false;
   // offset da seta em relação ao canto do componente
-  private offsetArrow: number = 12;
+  private readonly offsetArrow: number = 12;
   private targetElement: HTMLElement;
 
   /**

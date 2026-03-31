@@ -164,13 +164,13 @@ export const poPageDynamicDetailLiteralsDefault = {
   standalone: false
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private poNotification = inject(PoNotificationService);
-  private poDialogService = inject(PoDialogService);
-  private poPageDynamicService = inject(PoPageDynamicService);
-  private poPageDynamicDetailActionsService = inject(PoPageDynamicDetailActionsService);
-  private poPageCustomizationService = inject(PoPageCustomizationService);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly poNotification = inject(PoNotificationService);
+  private readonly poDialogService = inject(PoDialogService);
+  private readonly poPageDynamicService = inject(PoPageDynamicService);
+  private readonly poPageDynamicDetailActionsService = inject(PoPageDynamicDetailActionsService);
+  private readonly poPageCustomizationService = inject(PoPageCustomizationService);
 
   /** Objeto com propriedades do breadcrumb. */
   @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb = { items: [] };
@@ -248,7 +248,7 @@ export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
   literals;
   model: any = {};
 
-  private subscriptions: Array<Subscription> = [];
+  private readonly subscriptions: Array<Subscription> = [];
 
   private _actions: PoPageDynamicDetailActions = {};
   private _autoRouter: boolean = false;

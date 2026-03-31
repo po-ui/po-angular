@@ -58,7 +58,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
   describe('Properties:', () => {
     it('literals: should return literals default if `_literals` is undefined', () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component['_literals'] = undefined;
 
@@ -68,7 +68,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('literals: should set title with value of `literals.modalTitle`', () => {
       const literals = { 'modalTitle': 'title' };
 
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component.literals = literals;
 
@@ -77,7 +77,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('literals: shouldn`t define a title if a modalTitle is not defined', () => {
       const literals = { 'modalPrimaryActionLabel': 'action' };
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component.literals = literals;
 
@@ -85,7 +85,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with an unsupported language', () => {
-      component['language'] = 'zw';
+      Object.defineProperty(component, 'language', { value: 'zw', configurable: true });
 
       component.literals = {};
 
@@ -93,7 +93,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in portuguese if browser is setted with `pt`', () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
 
       component.literals = {};
 
@@ -101,7 +101,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in english if browser is setted with `en`', () => {
-      component['language'] = 'en';
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
 
       component.literals = {};
 
@@ -109,7 +109,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should accept custom literals and call `setTableLiterals`', () => {
-      component['language'] = poLocaleDefault;
+      Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
       spyOn(component, <any>'setTableLiterals');
 
@@ -124,7 +124,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in spanish if browser is setted with `es`', () => {
-      component['language'] = 'es';
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
 
       component.literals = {};
 
@@ -132,7 +132,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('literals: should be in russian if browser is setted with `ru`', () => {
-      component['language'] = 'ru';
+      Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
 
       component.literals = {};
 
@@ -142,7 +142,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('literals: should update property with default literals if is setted with invalid values', () => {
       const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
 
-      component['language'] = poLocaleDefault;
+      Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
       expectPropertiesValues(component, 'literals', invalidValues, poLookupLiteralsDefault[poLocaleDefault]);
     });
@@ -537,7 +537,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it("addDisclaimer: should return formated currency in locale default if field type is 'currency'", () => {
-      component['language'] = 'pt';
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
       component.advancedFilters = [{ property: 'value', type: 'currency' }];
       const expectedValueDisclaimer = { property: 'value', value: 321, label: 'Value: 321,00' };
       const expectedValueDisclaimerGroup = {

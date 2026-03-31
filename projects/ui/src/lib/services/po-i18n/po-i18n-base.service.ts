@@ -177,9 +177,9 @@ export class PoI18nBaseService {
   private servicesContext: any = {};
 
   constructor(
-    @Inject(I18N_CONFIG) private config?: PoI18nConfig,
-    @Inject(HttpClient) private http?: HttpClient,
-    private languageService?: PoLanguageService
+    @Inject(I18N_CONFIG) private readonly config?: PoI18nConfig,
+    @Inject(HttpClient) private readonly http?: HttpClient,
+    private readonly languageService?: PoLanguageService
   ) {
     this.setConfig(config);
   }

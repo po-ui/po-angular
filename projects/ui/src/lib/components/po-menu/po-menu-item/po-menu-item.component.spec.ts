@@ -191,7 +191,10 @@ describe('PoMenuItemComponent:', () => {
 
   it('should call receiveFromParentMenuClicked Observable', () => {
     const menuItem = { label: 'Teste', type: 'subItems' };
-    component['menuItemsService'] = fakeMenuService(menuItem) as PoMenuItemsService;
+    Object.defineProperty(component, 'menuItemsService', {
+      value: fakeMenuService(menuItem) as PoMenuItemsService,
+      configurable: true
+    });
 
     spyOn(component, <any>'processMenuItem');
 

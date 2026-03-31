@@ -26,7 +26,7 @@ import { PoListBoxLiterals } from '../interfaces/po-listbox-literals.interface';
   standalone: false
 })
 export class PoSearchListComponent {
-  private cd = inject(ChangeDetectorRef);
+  private readonly cd = inject(ChangeDetectorRef);
 
   @ViewChild('inputElement', { read: ElementRef, static: true }) inputElement: ElementRef;
 

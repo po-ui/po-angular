@@ -40,8 +40,8 @@ export const PoBreadcrumbLiterals: object = {
   standalone: false
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {
-  private service = inject(PoBreadcrumbFavoriteService);
-  private languageService = inject(PoLanguageService);
+  private readonly service = inject(PoBreadcrumbFavoriteService);
+  private readonly languageService = inject(PoLanguageService);
 
   // URL do serviço.
   @Input('p-favorite-service') favoriteService: string;

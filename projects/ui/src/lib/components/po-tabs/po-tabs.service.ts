@@ -6,8 +6,8 @@ import { PoTabComponent } from './po-tab/po-tab.component';
   providedIn: 'root'
 })
 export class PoTabsService {
-  private onChangesTriggeredSource = new Subject<any>();
-  private onChangesTriggeredActiveSource = new Subject<any>();
+  private readonly onChangesTriggeredSource = new Subject<any>();
+  private readonly onChangesTriggeredActiveSource = new Subject<any>();
 
   onChangesTriggered$ = this.onChangesTriggeredSource.asObservable();
   triggerActiveOnChanges$ = this.onChangesTriggeredActiveSource.asObservable();

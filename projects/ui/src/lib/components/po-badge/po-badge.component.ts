@@ -41,7 +41,7 @@ export class PoBadgeComponent extends PoBadgeBaseComponent implements OnInit, On
   badgeIcon: string = '';
   isValidValue: boolean = false;
 
-  private poLanguageService = inject(PoLanguageService);
+  private readonly poLanguageService = inject(PoLanguageService);
 
   ngOnInit(): void {
     this.literals = PoBadgeLiteralsDefault[this.poLanguageService.getShortLanguage()];

@@ -17,7 +17,7 @@ interface ExecuteActionParameter {
   providedIn: 'root'
 })
 export class PoPageDynamicDetailActionsService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   readonly headers: HttpHeaders = new HttpHeaders({
     'X-PO-SCREEN-LOCK': 'true'
