@@ -252,7 +252,7 @@ jobs:
     # Se nao encontrou baselines no cache, gera novas para o ambiente CI
     - name: Generate baselines for CI environment
       if: steps.baselines-cache.outputs.cache-hit != 'true'
-      run: npx playwright test --update-snapshots --reporter=list
+      run: npx playwright test --update-snapshots=missing --reporter=list
 
     # Executa os testes visuais comparando com as baselines
     - name: Run visual regression tests
