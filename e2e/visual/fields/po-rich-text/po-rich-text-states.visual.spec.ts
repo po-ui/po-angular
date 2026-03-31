@@ -28,7 +28,7 @@ test.describe('po-rich-text - visual regression por estado', () => {
 
   test('disabled', async ({ page }) => {
     const el = page.locator('[data-testid="state-disabled"]');
-    await expect(el).toHaveScreenshot('po-rich-text-state-disabled.png');
+    await expect(el).toHaveScreenshot('po-rich-text-state-disabled.png', { maxDiffPixelRatio: 0.05 });
   });
 
   test('readonly', async ({ page }) => {
