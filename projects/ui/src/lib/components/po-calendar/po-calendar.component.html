@@ -1,4 +1,21 @@
-@if (isRange) {
+@if (isMonthYear || isYearOnly) {
+  <div class="po-calendar po-calendar-month-year-mode">
+    <po-calendar-month-year
+      #monthYearPicker
+      [p-locale]="locale"
+      [p-selected-month]="selectedMonthValue"
+      [p-selected-year]="selectedYearValue"
+      [p-min-date]="minDate"
+      [p-max-date]="maxDate"
+      [p-year-range]="yearRange"
+      [p-mode]="isMonthYear ? 'monthYear' : 'year'"
+      [p-size]="size"
+      (p-select)="onMonthYearSelect($event)"
+      (p-close)="onMonthYearClose()"
+    >
+    </po-calendar-month-year>
+  </div>
+} @else if (isRange) {
   <div class="po-calendar">
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
   </div>

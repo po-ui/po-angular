@@ -6,11 +6,13 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewChild,
   inject
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
+import { PoCalendarMonthYearComponent } from './po-calendar-month-year/po-calendar-month-year.component';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 
@@ -62,7 +64,11 @@ const poCalendarRangeWidth = 600;
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
   private readonly changeDetector = inject(ChangeDetectorRef);
 
+  @ViewChild('monthYearPicker') monthYearPicker: PoCalendarMonthYearComponent;
+
   hoverValue: Date;
+  selectedMonthValue: number = null;
+  selectedYearValue: number = null;
 
   constructor() {
     const poDate = inject(PoDateService);
@@ -141,6 +147,29 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.close.emit();
   }
 
+  onMonthYearSelect(event: { month?: number; year: number }): void {
+    if (this.isMonthYear) {
+      this.selectedMonthValue = event.month;
+      this.selectedYearValue = event.year;
+      const formattedMonth = ('0' + (event.month + 1)).slice(-2);
+      const modelValue = `${formattedMonth}/${event.year}`;
+      this.value = modelValue;
+      this.updateModel(modelValue);
+      this.change.emit(modelValue);
+    } else if (this.isYearOnly) {
+      this.selectedYearValue = event.year;
+      const modelValue = `${event.year}`;
+      this.value = modelValue;
+      this.updateModel(modelValue);
+      this.change.emit(modelValue);
+    }
+    this.changeDetector.markForCheck();
+  }
+
+  onMonthYearClose(): void {
+    this.close.emit();
+  }
+
   registerOnChange(fn: any): void {
     this.propagateChange = fn;
   }
@@ -154,16 +183,41 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   writeValue(value: any) {
-    if (value) {
+    if (this.isMonthYear && value && typeof value === 'string') {
+      this.writeMonthYearValue(value);
+    } else if (this.isYearOnly && value) {
+      this.writeYearValue(value);
+    } else if (value) {
       this.writeDate(value);
     } else {
       this.value = null;
+      this.selectedMonthValue = null;
+      this.selectedYearValue = null;
     }
 
-    const activateDate = this.getValidateStartDate(value);
-    this.setActivateDate(activateDate);
+    if (!this.isMonthYear && !this.isYearOnly) {
+      const activateDate = this.getValidateStartDate(value);
+      this.setActivateDate(activateDate);
+    }
 
     this.changeDetector.markForCheck();
+  }
+
+  private writeMonthYearValue(value: string): void {
+    const parts = value.split('/');
+    if (parts.length === 2) {
+      this.selectedMonthValue = parseInt(parts[0], 10) - 1;
+      this.selectedYearValue = parseInt(parts[1], 10);
+      this.value = value;
+    }
+  }
+
+  private writeYearValue(value: any): void {
+    const year = typeof value === 'string' ? parseInt(value, 10) : value;
+    if (!isNaN(year)) {
+      this.selectedYearValue = year;
+      this.value = `${year}`;
+    }
   }
 
   private getValidateStartDate(value) {

@@ -7,6 +7,7 @@ import { PoButtonModule } from './../po-button/po-button.module';
 import { PoCalendarComponent } from './po-calendar.component';
 import { PoCalendarHeaderComponent } from './po-calendar-header/po-calendar-header.component';
 import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wrapper.component';
+import { PoCalendarMonthYearComponent } from './po-calendar-month-year/po-calendar-month-year.component';
 
 /**
  * @description
@@ -14,7 +15,7 @@ import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wr
  */
 @NgModule({
   imports: [CommonModule, FormsModule, PoIconModule, PoComboModule, PoButtonModule],
-  declarations: [PoCalendarComponent, PoCalendarHeaderComponent, PoCalendarWrapperComponent],
+  declarations: [PoCalendarComponent, PoCalendarHeaderComponent, PoCalendarWrapperComponent, PoCalendarMonthYearComponent],
   exports: [PoCalendarComponent]
 })
 export class PoCalendarModule {}
