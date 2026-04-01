@@ -165,8 +165,32 @@ jobs:
     - run: npm run test:sync
     - run: npm run test:sync:schematics
 
+  # Detecta quais arquivos mudaram para decidir se roda testes visuais
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    outputs:
+      visual: ${{ steps.filter.outputs.visual }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: |
+          visual:
+            - 'e2e/visual/**'
+            - 'projects/ui/src/lib/**'
+            - 'package.json'
+            - 'playwright.config.ts'
+            - 'angular.json'
+            - '.github/workflows/ci.yml'
+
   test-visual:
     name: Test visual regression
+    needs: changes
+    # Roda sempre em push (master/development) e em PRs apenas se arquivos relevantes mudaram
+    if: github.event_name == 'push' || needs.changes.outputs.visual == 'true'
 
     runs-on: ubuntu-latest
 
@@ -260,7 +284,17 @@ jobs:
         echo "Instalando @po-ui/style a partir de: $TGZ_PATH"
         npm install "$TGZ_PATH"
 
-    - run: npm run build:ui:lite
+    # Cache do build da lib UI para evitar rebuild a cada execucao
+    - name: Cache UI build
+      id: cache-ui-build
+      uses: actions/cache@v4
+      with:
+        path: dist/ng-components
+        key: ui-build-${{ runner.os }}-${{ hashFiles('projects/ui/src/**', 'package.json') }}
+
+    - name: Build UI library
+      if: steps.cache-ui-build.outputs.cache-hit != 'true'
+      run: npm run build:ui:lite
 
     # Instala dependencias de sistema do Playwright (sempre necessario, mesmo com cache de browsers)
     - name: Install Playwright system deps
