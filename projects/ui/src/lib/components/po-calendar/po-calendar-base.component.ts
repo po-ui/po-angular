@@ -138,6 +138,7 @@ export class PoCalendarBaseComponent {
   private _mode: PoCalendarMode;
   private _size?: string;
   private _initialSize?: string;
+  private _yearRange: number = 150;
 
   /**
    * @optional
@@ -241,8 +242,33 @@ export class PoCalendarBaseComponent {
     return this.mode === PoCalendarMode.Range;
   }
 
+  get isMonthYear() {
+    return this.mode === PoCalendarMode.MonthYear;
+  }
+
+  get isYearOnly() {
+    return this.mode === PoCalendarMode.Year;
+  }
+
   // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o intervalo de anos exibidos nas variações `MonthYear` e `Year`.
+   * O valor representa a quantidade de anos anteriores e posteriores ao ano atual.
+   *
+   * @default `150`
+   */
+  @Input('p-year-range') set yearRange(value: number) {
+    this._yearRange = value && value > 0 ? value : 150;
+  }
+  get yearRange(): number {
+    return this._yearRange;
+  }
 
   /**
    * @optional
