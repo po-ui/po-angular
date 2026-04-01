@@ -265,7 +265,7 @@ jobs:
       with:
         name: visual-regression-report
         path: e2e/visual/playwright-report/
-        retention-days: 30
+        retention-days: 15
 
     # Disponibiliza os resultados de teste (diffs, screenshots) como artefato
     - name: Upload visual regression test results
@@ -274,4 +274,4 @@ jobs:
       with:
         name: visual-regression-test-results
         path: e2e/visual/test-results/
-        retention-days: 30
+        retention-days: 15

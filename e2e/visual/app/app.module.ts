@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PoModule } from '@po-ui/ng-components';
 
-import { AppComponent } from './app.component';
+import { AppComponent, VisualHomeComponent } from './app.component';
 
 // Sample components - Buttons & Controls
 import { SamplePoButtonBasicComponent } from '../../../projects/ui/src/lib/components/po-button/samples/sample-po-button-basic/sample-po-button-basic.component';
@@ -87,12 +87,16 @@ const visualRoutes: Routes = [
   { path: 'visual/fields/po-checkbox-states', component: VisualTestPoCheckboxStatesComponent },
   { path: 'visual/fields/po-checkbox-group-states', component: VisualTestPoCheckboxGroupStatesComponent },
   { path: 'visual/fields/po-switch-states', component: VisualTestPoSwitchStatesComponent },
-  { path: 'visual/fields/po-radio-group-states', component: VisualTestPoRadioGroupStatesComponent }
+  { path: 'visual/fields/po-radio-group-states', component: VisualTestPoRadioGroupStatesComponent },
+
+  // Landing page
+  { path: '', component: VisualHomeComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
+    VisualHomeComponent,
     // Basic samples
     SamplePoButtonBasicComponent,
     SamplePoButtonGroupBasicComponent,
