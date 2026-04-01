@@ -271,10 +271,19 @@ jobs:
       if: steps.cache-playwright.outputs.cache-hit != 'true'
       run: npx playwright install chromium
 
-    # Gera baselines para o ambiente CI (Linux) a partir dos snapshots commitados
-    # As baselines commitadas sao a fonte da verdade; regeneramos para o ambiente CI
+    # Cache de baselines geradas no ambiente CI (sem restore-keys para evitar matches parciais stale)
+    - name: Restore visual regression baselines from cache
+      id: baselines-cache
+      uses: actions/cache@v4
+      with:
+        path: e2e/visual/__snapshots__
+        key: visual-baselines-${{ runner.os }}-${{ hashFiles('e2e/visual/**/*.visual.spec.ts', 'e2e/visual/**/*.component.html') }}
+
+    # Se nao encontrou baselines no cache, regenera todas para o ambiente CI (Linux)
+    # Usa --update-snapshots para sobrescrever baselines commitadas (geradas em outro OS)
     - name: Generate baselines for CI environment
-      run: npx playwright test --update-snapshots=missing --reporter=list
+      if: steps.baselines-cache.outputs.cache-hit != 'true'
+      run: npx playwright test --update-snapshots --reporter=list
 
     # Executa os testes visuais comparando com as baselines
     - name: Run visual regression tests
