@@ -184,7 +184,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: node_modules
-        key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        key: node-modules-${{ runner.os }}-${{ hashFiles('package.json') }}
 
     # Cache dos browsers do Playwright para evitar download a cada execucao
     - name: Cache Playwright browsers
@@ -192,7 +192,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/ms-playwright
-        key: playwright-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        key: playwright-browsers-${{ runner.os }}-${{ hashFiles('package.json') }}
 
     # Detecta o nome da branch atual
     - name: Get branch name
@@ -256,10 +256,14 @@ jobs:
 
     - run: npm run build:ui:lite
 
+    # Instala dependencias de sistema do Playwright (sempre necessario, mesmo com cache de browsers)
+    - name: Install Playwright system deps
+      run: npx playwright install-deps chromium
+
     # Instala browsers do Playwright (skip se cache hit)
     - name: Install Playwright browsers
       if: steps.cache-playwright.outputs.cache-hit != 'true'
-      run: npx playwright install --with-deps chromium
+      run: npx playwright install chromium
 
     # Restaura baselines do cache (geradas em execucoes anteriores no CI)
     - name: Restore visual regression baselines from cache
