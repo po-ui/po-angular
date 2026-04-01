@@ -29,6 +29,7 @@ import { Observable, Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoCalendarMode } from '../../po-calendar/po-calendar-mode.enum';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoHelperOptions } from '../../po-helper';
 
@@ -612,6 +613,32 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * @default `false`
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o modo de exibição do calendário no datepicker.
+   *
+   * Valores válidos:
+   *  - `undefined`: modo padrão de seleção de data completa.
+   *  - `PoCalendarMode.MonthYear`: exibe listas de meses e anos para seleção.
+   *  - `PoCalendarMode.Year`: exibe apenas a lista de anos para seleção.
+   */
+  @Input('p-mode') calendarMode: PoCalendarMode;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o intervalo de anos exibidos nas variações `MonthYear` e `Year`.
+   * O valor representa a quantidade de anos anteriores e posteriores ao ano atual.
+   *
+   * @default `150`
+   */
+  @Input('p-year-range') yearRange: number = 150;
 
   constructor(
     protected languageService: PoLanguageService,

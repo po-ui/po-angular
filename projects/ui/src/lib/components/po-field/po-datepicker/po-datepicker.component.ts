@@ -23,6 +23,7 @@ import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
+import { PoCalendarMode } from '../../po-calendar/po-calendar-mode.enum';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
 import { PoDatepickerLiterals } from './po-datepicker.literals';
 import { PoHelperComponent } from '../../po-helper';
@@ -677,6 +678,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       return;
     }
 
+    if (this.isMonthYearOrYearMode()) {
+      event.preventDefault();
+      this.focusMonthYearPicker();
+      return;
+    }
+
     const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
     if (firstCombo) {
       event.preventDefault();
@@ -686,10 +693,37 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
+  private isMonthYearOrYearMode(): boolean {
+    return this.calendarMode === PoCalendarMode.MonthYear || this.calendarMode === PoCalendarMode.Year;
+  }
+
+  private focusMonthYearPicker(): void {
+    if (this.calendar?.monthYearPicker) {
+      if (this.calendarMode === PoCalendarMode.MonthYear) {
+        this.calendar.monthYearPicker.focusFirstMonth();
+      } else {
+        this.calendar.monthYearPicker.focusFirstYear();
+      }
+      this.calendar.monthYearPicker.scrollToSelectedYear();
+    }
+  }
+
   onCalendarKeyDown(event: KeyboardEvent): void {
     if (!this.visible) return;
 
-    if (event.key === 'Escape' || (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo())) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.iconDatepicker.buttonElement?.nativeElement.focus();
+      this.closeCalendar(false);
+      return;
+    }
+
+    if (this.isMonthYearOrYearMode()) {
+      return;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo()) {
       event.preventDefault();
       event.stopPropagation();
 
