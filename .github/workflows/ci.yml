@@ -246,6 +246,12 @@ jobs:
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       run: npm i
 
+    # Se o cache de node_modules foi restaurado mas NAO existe branch po-style,
+    # reinstala @po-ui/style do npm para evitar versao stale de um tgz anterior
+    - name: Ensure clean po-style from npm
+      if: steps.cache-node-modules.outputs.cache-hit == 'true' && steps.po_style.outputs.found != 'true'
+      run: npm install @po-ui/style@$(node -p "require('./package.json').dependencies['@po-ui/style']")
+
     # Se tiver o tgz do po-style, instala por cima da versao do npm
     - name: Install po-style from tgz
       if: steps.po_style.outputs.found == 'true'
@@ -265,19 +271,9 @@ jobs:
       if: steps.cache-playwright.outputs.cache-hit != 'true'
       run: npx playwright install chromium
 
-    # Restaura baselines do cache (geradas em execucoes anteriores no CI)
-    - name: Restore visual regression baselines from cache
-      id: baselines-cache
-      uses: actions/cache@v4
-      with:
-        path: e2e/visual/__snapshots__
-        key: visual-baselines-${{ runner.os }}-${{ hashFiles('e2e/visual/**/*.visual.spec.ts', 'e2e/visual/**/*.component.html') }}
-        restore-keys: |
-          visual-baselines-${{ runner.os }}-
-
-    # Se nao encontrou baselines no cache, gera novas para o ambiente CI
+    # Gera baselines para o ambiente CI (Linux) a partir dos snapshots commitados
+    # As baselines commitadas sao a fonte da verdade; regeneramos para o ambiente CI
     - name: Generate baselines for CI environment
-      if: steps.baselines-cache.outputs.cache-hit != 'true'
       run: npx playwright test --update-snapshots=missing --reporter=list
 
     # Executa os testes visuais comparando com as baselines
