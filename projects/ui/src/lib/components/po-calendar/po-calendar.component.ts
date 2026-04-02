@@ -73,6 +73,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   hoverValue: Date;
   displayToClean: string;
+  isDisabled: boolean = false;
 
   constructor() {
     const poDate = inject(PoDateService);
@@ -233,34 +234,33 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
     const today = new Date();
-    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const todayTime = todayStart.getTime();
 
     const getGroup = (startDate: Date): number => {
-      const startTime = new Date(
-        startDate.getFullYear(),
-        startDate.getMonth(),
-        startDate.getDate(),
-        0,
-        0,
-        0,
-        0
-      ).getTime();
-      if (startTime > todayTime) {
-        return 0; // Futuro
-      }
-      if (startTime < todayTime) {
-        return 2; // Passado
-      }
+      const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
+
+      if (startTime > todayTime) return 0; // Futuro
+      if (startTime < todayTime) return 2; // Passado
       return 1; // Presente
     };
 
-    // Ordena em ASC: Futuro → Presente → Passado, proximidade crescente dentro de cada grupo
-    const sorted = [...presets].sort((a, b) => {
-      const rangeA = a.dateRange(today);
-      const rangeB = b.dateRange(today);
-      const startA = new Date(rangeA.start);
-      const startB = new Date(rangeB.start);
+    const enriched = presets.map(preset => {
+      const range = preset.dateRange(today);
+      const start = new Date(range.start);
+      const end = new Date(range.end);
+
+      const isDisabled = (this.minDate && start < this.minDate) || (this.maxDate && end > this.maxDate);
+
+      return {
+        ...preset,
+        isDisabled // 👈 aqui você injeta a propriedade
+      };
+    });
+
+    const sorted = enriched.sort((a, b) => {
+      const startA = new Date(a.dateRange(today).start);
+      const startB = new Date(b.dateRange(today).start);
 
       const groupA = getGroup(startA);
       const groupB = getGroup(startB);
@@ -275,7 +275,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return distA - distB;
     });
 
-    // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
     return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
   }
 

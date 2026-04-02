@@ -24,6 +24,7 @@ export class PoCalendarPresetListComponent implements AfterViewChecked {
 
   @Input('p-size') size: string;
   @Input('p-locale') locale: string;
+  @Input('p-disabled') disabled: boolean = false;
   @Input('p-presets') presets: Array<PoCalendarRangePreset> = [];
   @Input('p-selected-preset') selectedPreset: string | null = null;
 
