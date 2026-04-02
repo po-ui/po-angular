@@ -190,7 +190,8 @@ jobs:
     name: Test visual regression
     needs: changes
     # Roda sempre em push (master/development) e em PRs apenas se arquivos relevantes mudaram
-    if: github.event_name == 'push' || needs.changes.outputs.visual == 'true'
+    # Usa always() para garantir que roda em push mesmo quando o job 'changes' foi skipped
+    if: always() && !cancelled() && (github.event_name == 'push' || needs.changes.outputs.visual == 'true')
 
     runs-on: ubuntu-latest
 
