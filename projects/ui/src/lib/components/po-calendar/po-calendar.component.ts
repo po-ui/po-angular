@@ -73,7 +73,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   hoverValue: Date;
   displayToClean: string;
-  isDisabled: boolean = false;
 
   constructor() {
     const poDate = inject(PoDateService);
@@ -250,11 +249,11 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       const start = new Date(range.start);
       const end = new Date(range.end);
 
-      const isDisabled = (this.minDate && start < this.minDate) || (this.maxDate && end > this.maxDate);
+      const isDisabled = (this.minDate && start < this.minDate) || (this.maxDate && end > this.maxDate) ? true : false;
 
       return {
         ...preset,
-        isDisabled // 👈 aqui você injeta a propriedade
+        isDisabled
       };
     });
 

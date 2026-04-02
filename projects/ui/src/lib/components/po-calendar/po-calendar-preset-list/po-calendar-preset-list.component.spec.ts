@@ -257,5 +257,100 @@ describe('PoCalendarPresetListComponent:', () => {
 
       expect(component.focusedIndex).toBe(component.presets.length - 1);
     });
+
+    describe('isPresetDisabled:', () => {
+      it('should return true when preset.isDisabled is true', () => {
+        const preset: PoCalendarRangePreset = {
+          label: 'test',
+          dateRange: () => ({ start: new Date(), end: new Date() }),
+          isDisabled: true
+        };
+
+        expect(component.isPresetDisabled(preset)).toBeTrue();
+      });
+
+      it('should return false when preset.isDisabled is false', () => {
+        const preset: PoCalendarRangePreset = {
+          label: 'test',
+          dateRange: () => ({ start: new Date(), end: new Date() }),
+          isDisabled: false
+        };
+
+        expect(component.isPresetDisabled(preset)).toBeFalse();
+      });
+
+      it('should return false when preset.isDisabled is undefined', () => {
+        const preset: PoCalendarRangePreset = {
+          label: 'test',
+          dateRange: () => ({ start: new Date(), end: new Date() })
+        };
+
+        expect(component.isPresetDisabled(preset)).toBeFalse();
+      });
+    });
+
+    describe('onPresetClick with disabled:', () => {
+      it('should not emit p-select-preset when preset is disabled', () => {
+        const mockPreset: PoCalendarRangePreset = {
+          label: 'test',
+          dateRange: () => ({
+            start: new Date(2025, 0, 1),
+            end: new Date(2025, 0, 31)
+          }),
+          isDisabled: true
+        };
+
+        spyOn(component.selectPreset, 'emit');
+
+        component.onPresetClick(mockPreset);
+
+        expect(component.selectPreset.emit).not.toHaveBeenCalled();
+      });
+
+      it('should emit p-select-preset when preset is not disabled', () => {
+        const mockPreset: PoCalendarRangePreset = {
+          label: 'test',
+          dateRange: () => ({
+            start: new Date(2025, 0, 1),
+            end: new Date(2025, 0, 31)
+          }),
+          isDisabled: false
+        };
+
+        spyOn(component.selectPreset, 'emit');
+
+        component.onPresetClick(mockPreset);
+
+        expect(component.selectPreset.emit).toHaveBeenCalledWith({
+          label: 'test',
+          start: new Date(2025, 0, 1),
+          end: new Date(2025, 0, 31)
+        });
+      });
+    });
+  });
+
+  describe('Templates - disabled:', () => {
+    it('should call isPresetDisabled for each preset during rendering', () => {
+      const disabledPreset: PoCalendarRangePreset = {
+        label: 'disabled-preset',
+        dateRange: () => ({ start: new Date(), end: new Date() }),
+        isDisabled: true
+      };
+      const enabledPreset: PoCalendarRangePreset = {
+        label: 'enabled-preset',
+        dateRange: () => ({ start: new Date(), end: new Date() }),
+        isDisabled: false
+      };
+
+      component.presets = [disabledPreset, enabledPreset];
+      component.locale = 'pt';
+
+      spyOn(component, 'isPresetDisabled').and.callThrough();
+      fixture.detectChanges();
+
+      expect(component.isPresetDisabled).toHaveBeenCalledWith(disabledPreset);
+      expect(component.isPresetDisabled).toHaveBeenCalledWith(enabledPreset);
+    });
   });
 });

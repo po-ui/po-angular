@@ -24,7 +24,6 @@ export class PoCalendarPresetListComponent implements AfterViewChecked {
 
   @Input('p-size') size: string;
   @Input('p-locale') locale: string;
-  @Input('p-disabled') disabled: boolean = false;
   @Input('p-presets') presets: Array<PoCalendarRangePreset> = [];
   @Input('p-selected-preset') selectedPreset: string | null = null;
 
@@ -83,7 +82,14 @@ export class PoCalendarPresetListComponent implements AfterViewChecked {
     this.focusedIndex = 0;
   }
 
+  isPresetDisabled(preset: PoCalendarRangePreset): boolean {
+    return preset.isDisabled === true;
+  }
+
   onPresetClick(preset: PoCalendarRangePreset): void {
+    if (this.isPresetDisabled(preset)) {
+      return;
+    }
     const { start, end } = preset.dateRange(new Date());
     this.selectPreset.emit({ label: preset.label, start, end });
   }

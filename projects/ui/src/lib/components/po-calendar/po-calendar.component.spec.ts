@@ -838,6 +838,128 @@ describe('PoCalendarComponent:', () => {
         expect(result[2].label).toBe('future');
       });
 
+      it('should set isDisabled to true when preset start is before minDate', () => {
+        component.rangePresetsOrder = 'asc';
+        const minDate = new Date(2025, 5, 1);
+        component['_minDate'] = minDate;
+
+        const presets = [
+          {
+            label: 'before-min',
+            dateRange: () => ({
+              start: new Date(2025, 4, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+
+      it('should set isDisabled to true when preset end is after maxDate', () => {
+        component.rangePresetsOrder = 'asc';
+        const maxDate = new Date(2025, 5, 30);
+        component['_maxDate'] = maxDate;
+
+        const presets = [
+          {
+            label: 'after-max',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 6, 15)
+            })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+
+      it('should set isDisabled to true when preset violates both minDate and maxDate', () => {
+        component.rangePresetsOrder = 'asc';
+        component['_minDate'] = new Date(2025, 5, 10);
+        component['_maxDate'] = new Date(2025, 5, 20);
+
+        const presets = [
+          {
+            label: 'invalid-both',
+            dateRange: () => ({
+              start: new Date(2025, 4, 1),
+              end: new Date(2025, 6, 30)
+            })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].isDisabled).toBeTrue();
+      });
+
+      it('should set isDisabled to false when preset is within min/max range', () => {
+        component.rangePresetsOrder = 'asc';
+        component['_minDate'] = new Date(2025, 0, 1);
+        component['_maxDate'] = new Date(2025, 11, 31);
+
+        const presets = [
+          {
+            label: 'valid',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].isDisabled).toBeFalse();
+      });
+
+      it('should set isDisabled to false when no minDate/maxDate configured', () => {
+        component.rangePresetsOrder = 'asc';
+
+        const presets = [
+          {
+            label: 'no-limits',
+            dateRange: () => ({
+              start: new Date(2025, 5, 1),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        expect(result[0].isDisabled).toBeFalse();
+      });
+
+      it('should correctly disable some presets and enable others', () => {
+        component.rangePresetsOrder = 'asc';
+        component['_minDate'] = new Date(2025, 5, 1);
+
+        const today = new Date();
+        const presets = [
+          {
+            label: 'invalid',
+            dateRange: () => ({
+              start: new Date(2025, 4, 1),
+              end: new Date(2025, 4, 15)
+            })
+          },
+          {
+            label: 'valid',
+            dateRange: () => ({
+              start: new Date(2025, 5, 5),
+              end: new Date(2025, 5, 15)
+            })
+          }
+        ];
+
+        const result = component['sortPresetsByTemporality'](presets);
+        const invalidPreset = result.find(p => p.label === 'invalid');
+        const validPreset = result.find(p => p.label === 'valid');
+        expect(invalidPreset.isDisabled).toBeTrue();
+        expect(validPreset.isDisabled).toBeFalse();
+      });
+
       it('should sort by proximity within the same group (ASC)', () => {
         component.rangePresetsOrder = 'asc';
         const today = new Date();

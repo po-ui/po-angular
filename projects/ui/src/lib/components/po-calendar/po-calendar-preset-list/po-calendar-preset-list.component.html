@@ -7,7 +7,7 @@
       role="option"
       [p-size]="size"
       [p-label]="getDisplayLabel(preset)"
-      [p-disabled]="disabled"
+      [p-disabled]="isPresetDisabled(preset)"
       aria-selected="false"
       [attr.aria-selected]="isSelected(preset)"
       (click)="onPresetClick(preset)"
