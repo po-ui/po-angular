@@ -1,8 +1,9 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, input } from '@angular/core';
 
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoProgressShape } from './enums/po-progress-shape.enum';
 import { PoProgressSize } from './enums/po-progress-size.enum';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressAction } from './interfaces';
@@ -205,6 +206,24 @@ export class PoProgressBaseComponent {
   private _size: string = 'large';
   private _sizeActions: string = undefined;
   private _initialSizeActions: string = undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o formato visual do componente de progresso.
+   *
+   * Valores válidos:
+   *  - `bar`: exibe o progresso em formato de barra.
+   *  - `circle`: exibe o progresso em formato circular.
+   *
+   * @default `bar`
+   */
+  shape = input<string, string>(PoProgressShape.bar, {
+    alias: 'p-shape',
+    transform: (value: string) => (PoProgressShape[value] ? PoProgressShape[value] : PoProgressShape.bar)
+  });
 
   /**
    * @optional

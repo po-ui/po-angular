@@ -5,12 +5,25 @@
     </div>
   }
 
-  <po-progress-bar
-    class="po-progress-bar po-progress-bar-{{ size }}"
-    [p-indeterminate]="indeterminate"
-    [p-value]="value"
-  >
-  </po-progress-bar>
+  @if (shape() === 'bar') {
+    <po-progress-bar
+      class="po-progress-bar po-progress-bar-{{ size }}"
+      [p-indeterminate]="indeterminate"
+      [p-value]="value"
+    >
+    </po-progress-bar>
+  }
+
+  @if (shape() === 'circle') {
+    <po-progress-circle
+      [p-indeterminate]="indeterminate"
+      [p-value]="value"
+      [p-size]="size"
+      [p-status]="status"
+      [p-show-percentage]="showPercentage"
+    >
+    </po-progress-circle>
+  }
 
   <div class="po-progress-info">
     <div class="po-progress-info-left">
@@ -25,7 +38,7 @@
       }
     </div>
     <div class="po-progress-info-right">
-      @if (showPercentage && !indeterminate) {
+      @if (showPercentage && !indeterminate && shape() !== 'circle') {
         <span>{{ value }}%</span>
       }
 

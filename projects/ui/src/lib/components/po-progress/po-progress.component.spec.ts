@@ -295,6 +295,64 @@ describe('PoProgressComponent:', () => {
       expect(nativeElement.querySelector('.po-progress-default')).toBeTruthy();
     });
 
+    it('should render po-progress-bar when shape is bar', () => {
+      fixture.componentRef.setInput('p-shape', 'bar');
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-progress-bar')).toBeTruthy();
+      expect(nativeElement.querySelector('po-progress-circle')).toBeFalsy();
+    });
+
+    it('should render po-progress-circle when shape is circle', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-progress-circle')).toBeTruthy();
+      expect(nativeElement.querySelector('po-progress-bar')).toBeFalsy();
+    });
+
+    it('should render po-progress-bar by default when shape is not set', () => {
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-progress-bar')).toBeTruthy();
+      expect(nativeElement.querySelector('po-progress-circle')).toBeFalsy();
+    });
+
+    it('should update property `p-shape` with valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'bar');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('circle');
+    });
+
+    it('should update property `p-shape` with bar if has not valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'square');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'triangle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+    });
+
+    it('should not show percentage in info area when shape is circle', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      component.showPercentage = true;
+      component.value = 50;
+
+      fixture.detectChanges();
+
+      const infoRight = nativeElement.querySelector('.po-progress-info-right');
+      const spans = infoRight.querySelectorAll('span');
+      const percentageSpan = Array.from(spans).find((span: HTMLSpanElement) => span.textContent.trim() === '50%');
+      expect(percentageSpan).toBeFalsy();
+    });
+
     it('should contain `po-progress-bar-indeterminate-track` if `indeterminate` is `true`', () => {
       component.indeterminate = true;
 

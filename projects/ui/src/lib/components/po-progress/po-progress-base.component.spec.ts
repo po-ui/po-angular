@@ -1,14 +1,30 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { PoThemeA11yEnum } from '../../services';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { convertToBoolean } from '../../utils/util';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 
+@Component({
+  template: '',
+  standalone: false
+})
+class TestHostComponent extends PoProgressBaseComponent {}
+
 describe('PoProgressBaseComponent:', () => {
-  let component: PoProgressBaseComponent;
+  let component: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(() => {
-    component = new PoProgressBaseComponent();
+    TestBed.configureTestingModule({
+      declarations: [TestHostComponent]
+    });
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -110,6 +126,34 @@ describe('PoProgressBaseComponent:', () => {
       const validValues = [150, 'test', -1, 1000];
 
       expectPropertiesValues(component, 'value', validValues, 0);
+    });
+
+    it('p-shape: should have default value as bar', () => {
+      expect(component.shape()).toBe('bar');
+    });
+
+    it('p-shape: should update with valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'bar');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('circle');
+    });
+
+    it('p-shape: should default to bar if has not valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'square');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'triangle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'hexagon');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
     });
 
     it('should update property `p-size` with valid values', () => {
