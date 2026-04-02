@@ -1,14 +1,17 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, input } from '@angular/core';
 
 import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoProgressShape } from './enums/po-progress-shape.enum';
 import { PoProgressSize } from './enums/po-progress-size.enum';
 import { PoProgressStatus } from './enums/po-progress-status.enum';
 import { PoProgressAction } from './interfaces';
 
 const poProgressMaxValue = 100;
 const poProgressMinValue = 0;
+const CIRCLE_DEFAULT_RADIUS = 0;
+const CIRCLE_MIN_RADIUS = 24;
 
 /**
  * @description
@@ -34,6 +37,9 @@ const poProgressMinValue = 0;
  * | **po-progress-bar**                    |                                                       |                                                 |
  * | `--background-color-tray`              | Cor do background                                     | `var(--color-brand-01-lightest)`                |
  * | `--background-color-indicator`         | Cor do background do indicador                        | `var(--color-action-default)`                   |
+ * | **po-progress-circle**                 |                                                       |                                                 |
+ * | `--background-color-tray`              | Cor do background                                     | `var(--color-brand-01-lightest)`                |
+ * | `--background-color-indicator`         | Cor do background do indicador                        | `var(--color-action-default)`                   |
  *
  */
 @Directive()
@@ -43,10 +49,23 @@ export class PoProgressBaseComponent {
    *
    * @description
    *
+   * Define um nome acessível para o elemento com `role="progressbar"`.
+   *
+   * Quando não informado, o componente utiliza o valor de `p-text` como alternativa, se disponível.
+   */
+  @Input('p-aria-label') ariaLabel?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Desabilita botão de cancelamento na parte inferior da barra de progresso.
    *
    * > Se nenhuma função for passada para o evento `(p-cancel)` ou a barra de progresso estiver com o status `PoProgressStatus.Success`,
    * o ícone de cancelamento não será exibido.
+   *
+   * > Não compatível com `p-shape="circle"`.
    *
    * @default `false`
    */
@@ -58,6 +77,8 @@ export class PoProgressBaseComponent {
    * @description
    *
    * Informação adicional que aparecerá abaixo da barra de progresso ao lado direito.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Input('p-info') info?: string;
 
@@ -69,6 +90,8 @@ export class PoProgressBaseComponent {
    * Ícone que aparecerá ao lado do texto da propriedade `p-info`.
    *
    * Exemplo: `an an-check`.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 
@@ -90,6 +113,8 @@ export class PoProgressBaseComponent {
    * @description
    *
    * Texto principal que aparecerá abaixo da barra de progresso no lado esquerdo.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Input('p-text') text?: string;
 
@@ -106,6 +131,8 @@ export class PoProgressBaseComponent {
    * - **`type`**: Tipo do botão (`default` ou `danger`) para indicar a intenção da ação (opcional).
    * - **`disabled`**: Indica se o botão deve estar desabilitado (opcional).
    * - **`visible`**: Determina se o botão será exibido. Pode ser um valor booleano ou uma função que retorna um booleano (opcional).
+   *
+   * > Não compatível com `p-shape="circle"`.
    *
    * @example
    * **Exemplo de uso:**
@@ -143,6 +170,8 @@ export class PoProgressBaseComponent {
    *
    * Evento emitido quando o botão definido em `p-custom-action` é clicado. Este evento retorna informações
    * relacionadas à barra de progresso ou ao arquivo/processo associado, permitindo executar ações específicas.
+   *
+   * > Não compatível com `p-shape="circle"`.
    *
    * @example
    * **Exemplo de uso:**
@@ -185,6 +214,8 @@ export class PoProgressBaseComponent {
    *
    * > Se nenhuma função for passada para o evento ou a barra de progresso estiver com o status `PoProgressStatus.Success`,
    * o ícone de cancelamento não será exibido.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Output('p-cancel') cancel: EventEmitter<any> = new EventEmitter();
 
@@ -197,6 +228,8 @@ export class PoProgressBaseComponent {
    *
    * > o ícone será exibido apenas se informar uma função neste evento e o status da barra de progresso for
    * `PoProgressStatus.Error`.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Output('p-retry') retry: EventEmitter<any> = new EventEmitter();
 
@@ -205,6 +238,59 @@ export class PoProgressBaseComponent {
   private _size: string = 'large';
   private _sizeActions: string = undefined;
   private _initialSizeActions: string = undefined;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o formato visual do componente de progresso.
+   *
+   * Valores válidos:
+   *  - `bar`: exibe o progresso em formato de barra.
+   *  - `circle`: exibe o progresso em formato circular.
+   *
+   * @example
+   * ```html
+   * <po-progress p-shape="circle" [p-value]="50"></po-progress>
+   * ```
+   *
+   * @default `bar`
+   */
+  shape = input<string, string>(PoProgressShape.bar, {
+    alias: 'p-shape',
+    transform: (value: string) => (PoProgressShape[value] ? PoProgressShape[value] : PoProgressShape.bar)
+  });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o raio do círculo SVG em pixels. Permite ao usuário customizar o tamanho
+   * do indicador circular ao utilizar `p-shape="circle"`.
+   *
+   * > O valor mínimo aceito é **24**.
+   *
+   * > Quando não informado, o componente calcula o raio automaticamente a partir do container pai.
+   * Caso o container pai não possua dimensões definidas, o valor padrão de **45** será utilizado.
+   *
+   * > Não compatível com `p-shape="bar"`.
+   *
+   * @default `45` (automático)
+   */
+  radius = input<number, number>(CIRCLE_DEFAULT_RADIUS, {
+    alias: 'p-radius',
+    transform: (value: number) => {
+      // Se nenhum valor foi fornecido (undefined/null), retorna 0 para indicar "não informado"
+      if (value === undefined || value === null) {
+        return CIRCLE_DEFAULT_RADIUS;
+      }
+      const intValue = convertToInt(value, CIRCLE_DEFAULT_RADIUS);
+      // Quando o usuário informa um valor, aplica o mínimo de CIRCLE_MIN_RADIUS
+      return intValue > 0 ? Math.max(intValue, CIRCLE_MIN_RADIUS) : CIRCLE_DEFAULT_RADIUS;
+    }
+  });
 
   /**
    * @optional
@@ -282,6 +368,8 @@ export class PoProgressBaseComponent {
    * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
    * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
    *
+   * > Não compatível com `p-shape="circle"`.
+   *
    * @default `medium`
    */
   set sizeActions(value: string) {
@@ -301,6 +389,8 @@ export class PoProgressBaseComponent {
    * @description
    *
    * Ativa a exibição da porcentagem atual da barra de progresso.
+   *
+   * > Se utilizada no `p-shape="circle"` e o status estiver como `error`, a porcentagem não será exibida.
    *
    * @default `false`
    */

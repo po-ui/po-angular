@@ -295,6 +295,180 @@ describe('PoProgressComponent:', () => {
       expect(nativeElement.querySelector('.po-progress-default')).toBeTruthy();
     });
 
+    it('should render po-progress-bar when shape is bar', () => {
+      fixture.componentRef.setInput('p-shape', 'bar');
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-progress-bar')).toBeTruthy();
+      expect(nativeElement.querySelector('po-progress-circle')).toBeFalsy();
+    });
+
+    it('should render po-progress-circle when shape is circle', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-progress-circle')).toBeTruthy();
+      expect(nativeElement.querySelector('po-progress-bar')).toBeFalsy();
+    });
+
+    it('should set indicator pathLength in circle indeterminate mode', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      component.indeterminate = true;
+
+      fixture.detectChanges();
+
+      const circleIndicator = nativeElement.querySelector(
+        '.po-progress-circle-indeterminate .po-progress-circle-indicator'
+      );
+
+      expect(circleIndicator).toBeTruthy();
+      expect(circleIndicator.getAttribute('pathLength')).toBe('100');
+    });
+
+    it('should set aria-valuemin and aria-valuemax in circle indeterminate mode', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      component.indeterminate = true;
+
+      fixture.detectChanges();
+
+      const progressbar = nativeElement.querySelector('.po-progress-circle-indeterminate[role="progressbar"]');
+
+      expect(progressbar).toBeTruthy();
+      expect(progressbar.getAttribute('aria-valuemin')).toBe('0');
+      expect(progressbar.getAttribute('aria-valuemax')).toBe('100');
+      expect(progressbar.hasAttribute('aria-valuenow')).toBeFalse();
+    });
+
+    it('should set aria-label in bar progress when p-aria-label is informed', () => {
+      fixture.componentRef.setInput('p-aria-label', 'Upload progress');
+
+      fixture.detectChanges();
+
+      const progressbar = nativeElement.querySelector('.po-progress-bar-default[role="progressbar"]');
+
+      expect(progressbar).toBeTruthy();
+      expect(progressbar.getAttribute('aria-label')).toBe('Upload progress');
+    });
+
+    it('should use p-text as fallback aria-label in bar progress', () => {
+      component.text = 'File upload';
+
+      fixture.detectChanges();
+
+      const progressbar = nativeElement.querySelector('.po-progress-bar-default[role="progressbar"]');
+
+      expect(progressbar).toBeTruthy();
+      expect(progressbar.getAttribute('aria-label')).toBe('File upload');
+    });
+
+    it('should set aria-label and range attributes in indeterminate bar progress', () => {
+      fixture.componentRef.setInput('p-aria-label', 'Upload in progress');
+      component.indeterminate = true;
+
+      fixture.detectChanges();
+
+      const progressbar = nativeElement.querySelector('.po-progress-bar-indeterminate-track[role="progressbar"]');
+
+      expect(progressbar).toBeTruthy();
+      expect(progressbar.getAttribute('aria-label')).toBe('Upload in progress');
+      expect(progressbar.getAttribute('aria-valuemin')).toBe('0');
+      expect(progressbar.getAttribute('aria-valuemax')).toBe('100');
+      expect(progressbar.hasAttribute('aria-valuenow')).toBeFalse();
+    });
+
+    it('should set aria-label in circle progress when p-aria-label is informed', () => {
+      fixture.componentRef.setInput('p-status', 'success');
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.componentRef.setInput('p-aria-label', 'Sync progress');
+
+      fixture.detectChanges();
+
+      const progressbar = nativeElement.querySelector('po-progress-circle [role="progressbar"]');
+
+      expect(progressbar).toBeTruthy();
+      expect(progressbar.getAttribute('aria-label')).toBe('success Sync progress');
+    });
+
+    it('should apply minimum effective radius when showPercentage is true and radius is smaller than 24', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.componentRef.setInput('p-radius', 10);
+      component.showPercentage = true;
+
+      fixture.detectChanges();
+
+      const tray = nativeElement.querySelector('.po-progress-circle-tray');
+
+      expect(tray).toBeTruthy();
+      expect(tray.getAttribute('r')).toBe('24');
+    });
+
+    it('should apply minimum effective radius when status is error and radius is smaller than 24', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.componentRef.setInput('p-radius', 10);
+      component.status = PoProgressStatus.Error;
+
+      fixture.detectChanges();
+
+      const tray = nativeElement.querySelector('.po-progress-circle-tray');
+
+      expect(tray).toBeTruthy();
+      expect(tray.getAttribute('r')).toBe('24');
+    });
+
+    it('should keep provided radius when value is greater than or equal to 20 and center content is not rendered', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.componentRef.setInput('p-radius', 30);
+      component.showPercentage = false;
+      component.status = PoProgressStatus.Default;
+
+      fixture.detectChanges();
+
+      const tray = nativeElement.querySelector('.po-progress-circle-tray');
+
+      expect(tray).toBeTruthy();
+      expect(tray.getAttribute('r')).toBe('30');
+    });
+
+    it('should render po-progress-bar by default when shape is not set', () => {
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-progress-bar')).toBeTruthy();
+      expect(nativeElement.querySelector('po-progress-circle')).toBeFalsy();
+    });
+
+    it('should update property `p-shape` with valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'bar');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('circle');
+    });
+
+    it('should update property `p-shape` with bar if has not valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'square');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'triangle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+    });
+
+    it('should not show percentage in info area when shape is circle', () => {
+      fixture.componentRef.setInput('p-shape', 'circle');
+      component.showPercentage = true;
+      component.value = 50;
+
+      fixture.detectChanges();
+
+      const infoRight = nativeElement.querySelector('.po-progress-info-right');
+      expect(infoRight).toBeNull();
+    });
+
     it('should contain `po-progress-bar-indeterminate-track` if `indeterminate` is `true`', () => {
       component.indeterminate = true;
 
@@ -469,6 +643,299 @@ describe('PoProgressComponent:', () => {
 
       const customActionButton = nativeElement.querySelector('.po-progress-custom-button button');
       expect(customActionButton.hasAttribute('disabled')).toBeFalse();
+    });
+  });
+
+  describe('Circle shape - private methods:', () => {
+    describe('hasExplicitHeight:', () => {
+      it('should return true for element with inline height in px', () => {
+        const el = document.createElement('div');
+        el.style.height = '200px';
+        expect((component as any).hasExplicitHeight(el)).toBeTrue();
+      });
+
+      it('should return false for element with no height set', () => {
+        const el = document.createElement('div');
+        expect((component as any).hasExplicitHeight(el)).toBeFalse();
+      });
+    });
+
+    describe('hasAllocatedHeight:', () => {
+      it('should return true when parent with explicit height', () => {
+        const grandparent = document.createElement('div');
+        grandparent.style.display = 'flex';
+        grandparent.style.flexDirection = 'column';
+        grandparent.style.height = '200px';
+        const parent = document.createElement('div');
+        grandparent.appendChild(parent);
+        document.body.appendChild(grandparent);
+
+        expect((component as any).hasAllocatedHeight(parent)).toBeTrue();
+
+        document.body.removeChild(grandparent);
+      });
+
+      it('should return false when parent element does not exist', () => {
+        const orphan = document.createElement('div');
+        expect((component as any).hasAllocatedHeight(orphan)).toBeFalse();
+      });
+
+      it('should return false when parent  without explicit height', () => {
+        const grandparent = document.createElement('div');
+        grandparent.style.display = 'flex';
+        grandparent.style.flexDirection = 'column';
+        const parent = document.createElement('div');
+        grandparent.appendChild(parent);
+        document.body.appendChild(grandparent);
+
+        expect((component as any).hasAllocatedHeight(parent)).toBeFalse();
+
+        document.body.removeChild(grandparent);
+      });
+    });
+
+    describe('measureAndSetParentSize:', () => {
+      it('should set parentSize based on element dimensions', () => {
+        spyOn(window, 'getComputedStyle').and.returnValue({
+          height: '150px',
+          width: '200px',
+          paddingTop: '0px',
+          paddingBottom: '0px',
+          paddingLeft: '0px',
+          paddingRight: '0px'
+        } as CSSStyleDeclaration);
+        const el = document.createElement('div');
+        el.style.width = '200px';
+        el.style.height = '150px';
+        el.style.padding = '0px';
+        document.body.appendChild(el);
+
+        (component as any).measureAndSetParentSize(el);
+
+        expect(component.parentSize()).toBe(150);
+
+        document.body.removeChild(el);
+      });
+
+      it('should subtract padding from dimensions', () => {
+        spyOn(window, 'getComputedStyle').and.returnValue({
+          height: '200px',
+          width: '200px',
+          paddingTop: '10px',
+          paddingBottom: '10px',
+          paddingLeft: '10px',
+          paddingRight: '10px'
+        } as CSSStyleDeclaration);
+
+        const el = document.createElement('div');
+        el.style.width = '200px';
+        el.style.height = '200px';
+        el.style.padding = '10px';
+        el.style.boxSizing = 'border-box';
+        document.body.appendChild(el);
+
+        (component as any).measureAndSetParentSize(el, 'entrei');
+        const sizeWithPadding = component.parentSize();
+
+        expect(sizeWithPadding).toBe(180);
+
+        document.body.removeChild(el);
+      });
+
+      it('should not set parentSize when size is 0', () => {
+        const el = document.createElement('div');
+        el.style.width = '0px';
+        el.style.height = '0px';
+        document.body.appendChild(el);
+
+        component.parentSize.set(0);
+        (component as any).measureAndSetParentSize(el);
+
+        expect(component.parentSize()).toBe(0);
+
+        document.body.removeChild(el);
+      });
+    });
+
+    describe('findConstrainedAncestor:', () => {
+      it('should return element with explicit height in ancestor chain', () => {
+        const root = document.createElement('div');
+        root.style.height = '300px';
+        const middle = document.createElement('div');
+        root.appendChild(middle);
+        const child = document.createElement('div');
+        middle.appendChild(child);
+        document.body.appendChild(root);
+
+        const result = (component as any).findConstrainedAncestor(child);
+        expect(result).toBe(root);
+
+        document.body.removeChild(root);
+      });
+
+      it('should return start element when no ancestor has explicit height', () => {
+        const root = document.createElement('div');
+        const child = document.createElement('div');
+        root.appendChild(child);
+        document.body.appendChild(root);
+
+        const result = (component as any).findConstrainedAncestor(child);
+        expect(result).toBe(child);
+
+        document.body.removeChild(root);
+      });
+
+      it('should stop traversal at max depth (10 levels)', () => {
+        let current = document.createElement('div');
+        const deepChild = current;
+        for (let i = 0; i < 15; i++) {
+          const parent = document.createElement('div');
+          parent.appendChild(current);
+          current = parent;
+        }
+        current.style.height = '200px';
+        document.body.appendChild(current);
+
+        const result = (component as any).findConstrainedAncestor(deepChild);
+        expect(result).toBe(deepChild);
+
+        document.body.removeChild(current);
+      });
+    });
+
+    describe('ngOnInit circle detection:', () => {
+      it('should set parentSize when parent has allocated height', () => {
+        const grandparent = document.createElement('div');
+        grandparent.style.display = 'flex';
+        grandparent.style.flexDirection = 'column';
+        grandparent.style.height = '200px';
+        grandparent.style.width = '200px';
+        const parent = document.createElement('div');
+        parent.style.flex = '1';
+        grandparent.appendChild(parent);
+        document.body.appendChild(grandparent);
+        parent.appendChild(nativeElement);
+
+        fixture.componentRef.setInput('p-shape', 'circle');
+        component.ngOnInit();
+
+        expect(component.parentSize()).toBeGreaterThan(0);
+
+        document.body.removeChild(grandparent);
+      });
+
+      it('should set parentSize when constrained ancestor has explicit height', () => {
+        const ancestor = document.createElement('div');
+        ancestor.style.height = '300px';
+        ancestor.style.width = '300px';
+        ancestor.appendChild(nativeElement);
+        document.body.appendChild(ancestor);
+
+        fixture.componentRef.setInput('p-shape', 'circle');
+        component.ngOnInit();
+
+        expect(component.parentSize()).toBeGreaterThan(0);
+
+        document.body.removeChild(ancestor);
+      });
+
+      it('should keep parentSize as 0 when no height constraint exists', () => {
+        const parent = document.createElement('div');
+        parent.appendChild(nativeElement);
+        document.body.appendChild(parent);
+
+        fixture.componentRef.setInput('p-shape', 'circle');
+        component.ngOnInit();
+
+        expect(component.parentSize()).toBe(0);
+
+        document.body.removeChild(parent);
+      });
+
+      it('should not execute circle logic when shape is bar', () => {
+        fixture.componentRef.setInput('p-shape', 'bar');
+        component.ngOnInit();
+
+        expect(component.parentSize()).toBe(0);
+      });
+    });
+
+    describe('ngAfterViewInit:', () => {
+      beforeEach(() => {
+        (window as any).ResizeObserver = jasmine.createSpy('ResizeObserver').and.returnValue({
+          observe: jasmine.createSpy('observe'),
+          disconnect: jasmine.createSpy('disconnect')
+        });
+      });
+
+      it('should not create ResizeObserver when shape is not circle', () => {
+        fixture.componentRef.setInput('p-shape', 'bar');
+        component.ngOnInit();
+        component.ngAfterViewInit();
+
+        expect((component as any).resizeObserver).toBeUndefined();
+      });
+
+      it('should not create ResizeObserver when observeTarget is null', () => {
+        const parent = document.createElement('div');
+        parent.appendChild(nativeElement);
+        document.body.appendChild(parent);
+
+        fixture.componentRef.setInput('p-shape', 'circle');
+        component.ngOnInit();
+        component.ngAfterViewInit();
+
+        expect((component as any).resizeObserver).toBeUndefined();
+
+        document.body.removeChild(parent);
+      });
+
+      it('should create ResizeObserver when observeTarget exists', () => {
+        const ancestor = document.createElement('div');
+        ancestor.style.height = '200px';
+        ancestor.style.width = '200px';
+        ancestor.appendChild(nativeElement);
+        document.body.appendChild(ancestor);
+
+        fixture.componentRef.setInput('p-shape', 'circle');
+        component.ngOnInit();
+        component.ngAfterViewInit();
+
+        expect((component as any).resizeObserver).toBeDefined();
+
+        document.body.removeChild(ancestor);
+      });
+
+      it('should update parentSize when ResizeObserver callback fires with valid dimensions', (done: DoneFn) => {
+        let resizeCallback: ResizeObserverCallback;
+        const OriginalResizeObserver = window.ResizeObserver;
+
+        (window as any).ResizeObserver = class {
+          constructor(cb: ResizeObserverCallback) {
+            resizeCallback = cb;
+          }
+          observe() {}
+          unobserve() {}
+          disconnect() {}
+        };
+
+        const ancestor = document.createElement('div');
+        ancestor.style.height = '200px';
+        ancestor.style.width = '200px';
+        ancestor.appendChild(nativeElement);
+        document.body.appendChild(ancestor);
+
+        fixture.componentRef.setInput('p-shape', 'circle');
+        component.ngOnInit();
+        component.ngAfterViewInit();
+
+        resizeCallback([{ contentRect: { width: 200, height: 200 } } as any], {} as any);
+        expect(component.parentSize()).toBe(200);
+        done();
+
+        document.body.removeChild(ancestor);
+        window.ResizeObserver = OriginalResizeObserver;
+      });
     });
   });
 });

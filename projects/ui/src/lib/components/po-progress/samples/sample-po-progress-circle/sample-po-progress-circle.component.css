@@ -1,0 +1,20 @@
+.container {
+  display: grid;
+  gap: 24px;
+  padding: 16px;
+}
+
+.line-height {
+  line-height: 1.6;
+}
+
+.row {
+  text-align: center;
+  gap: 16px;
+}
+
+.items {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

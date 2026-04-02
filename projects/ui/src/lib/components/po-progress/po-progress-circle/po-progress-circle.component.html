@@ -1,0 +1,85 @@
+@if (!indeterminate()) {
+  <div
+    class="po-progress-circle-svg-wrapper"
+    role="progressbar"
+    [attr.aria-valuenow]="value()"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-live="polite"
+    [attr.aria-label]="ariaLabel()"
+    [style.max-height]="naturalSize()"
+    [style.max-width]="naturalSize()"
+  >
+    <svg
+      class="po-progress-circle-svg"
+      [attr.viewBox]="'0 0 ' + viewBoxSize() + ' ' + viewBoxSize()"
+      [attr.width]="viewBoxSize()"
+      [attr.height]="viewBoxSize()"
+    >
+      <circle
+        class="po-progress-circle-tray"
+        [attr.cx]="center()"
+        [attr.cy]="center()"
+        [attr.r]="effectiveRadius()"
+        fill="none"
+      />
+
+      <circle
+        class="po-progress-circle-indicator"
+        [attr.cx]="center()"
+        [attr.cy]="center()"
+        [attr.r]="effectiveRadius()"
+        fill="none"
+        [attr.stroke-dasharray]="circumference()"
+        [attr.stroke-dashoffset]="dashOffset()"
+      />
+    </svg>
+
+    @if (showPercentage() && status() !== 'error') {
+      <span class="po-progress-circle-info po-progress-circle-info-percentage">{{ value() }}%</span>
+    }
+
+    @if (status() === 'error') {
+      <span class="po-progress-circle-info po-progress-circle-info-error po-progress-circle-info-error-{{ size() }}">
+        <span class="an an-warning-circle"></span>
+      </span>
+    }
+  </div>
+}
+
+@if (indeterminate()) {
+  <div
+    class="po-progress-circle-indeterminate"
+    role="progressbar"
+    [attr.aria-label]="ariaLabel()"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-live="polite"
+  >
+    <div class="po-progress-circle-svg-wrapper" [style.max-width]="naturalSize()" [style.max-height]="naturalSize()">
+      <svg
+        class="po-progress-circle-svg"
+        [attr.viewBox]="'0 0 ' + viewBoxSize() + ' ' + viewBoxSize()"
+        [attr.width]="viewBoxSize()"
+        [attr.height]="viewBoxSize()"
+      >
+        <circle
+          class="po-progress-circle-tray"
+          [attr.cx]="center()"
+          [attr.cy]="center()"
+          [attr.r]="effectiveRadius()"
+          fill="none"
+        />
+
+        <circle
+          class="po-progress-circle-indicator"
+          [attr.cx]="center()"
+          [attr.cy]="center()"
+          [attr.r]="effectiveRadius()"
+          [attr.pathLength]="100"
+          fill="none"
+        />
+      </svg>
+    </div>
+  </div>
+}
