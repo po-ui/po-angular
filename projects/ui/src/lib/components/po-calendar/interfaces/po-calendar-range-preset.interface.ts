@@ -11,6 +11,6 @@ export interface PoCalendarRangePreset {
   /** Função que calcula dinamicamente o intervalo de datas relativo à data informada. */
   dateRange: (today: Date) => { start: Date; end: Date };
 
-  /** Indica se o preset está desabilitado (calculado internamente com base em p-min-date / p-max-date). */
+  // Indica se o preset está desabilitado (calculado internamente com base em p-min-date / p-max-date).
   isDisabled?: boolean;
 }

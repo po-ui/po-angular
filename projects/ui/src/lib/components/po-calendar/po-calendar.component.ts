@@ -233,47 +233,43 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
     const today = new Date();
-    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
     const todayTime = todayStart.getTime();
-
     const getGroup = (startDate: Date): number => {
-      const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
-
-      if (startTime > todayTime) return 0; // Futuro
-      if (startTime < todayTime) return 2; // Passado
+      const startTime = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate(),
+        0,
+        0,
+        0,
+        0
+      ).getTime();
+      if (startTime > todayTime) {
+        return 0; // Futuro
+      }
+      if (startTime < todayTime) {
+        return 2; // Passado
+      }
       return 1; // Presente
     };
 
-    const enriched = presets.map(preset => {
-      const range = preset.dateRange(today);
-      const start = new Date(range.start);
-      const end = new Date(range.end);
-
-      const isDisabled = (this.minDate && start < this.minDate) || (this.maxDate && end > this.maxDate) ? true : false;
-
-      return {
-        ...preset,
-        isDisabled
-      };
-    });
-
-    const sorted = enriched.sort((a, b) => {
-      const startA = new Date(a.dateRange(today).start);
-      const startB = new Date(b.dateRange(today).start);
-
+    // Ordena em ASC: Futuro → Presente → Passado, proximidade crescente dentro de cada grupo
+    const sorted = [...presets].sort((a, b) => {
+      const rangeA = a.dateRange(today);
+      const rangeB = b.dateRange(today);
+      const startA = new Date(rangeA.start);
+      const startB = new Date(rangeB.start);
       const groupA = getGroup(startA);
       const groupB = getGroup(startB);
-
       if (groupA !== groupB) {
         return groupA - groupB;
       }
-
       const distA = Math.abs(startA.getTime() - todayTime);
       const distB = Math.abs(startB.getTime() - todayTime);
-
       return distA - distB;
     });
-
+    // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
     return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
   }
 
