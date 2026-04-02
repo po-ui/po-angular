@@ -116,7 +116,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return [];
     }
 
-    return this.sortPresetsByTemporality(combined);
+    const sorted = this.sortPresetsByTemporality(combined);
+    return this.enrichPresetsWithDisabledState(sorted);
   }
 
   ngOnInit() {
@@ -271,6 +272,17 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     });
     // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
     return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
+  }
+
+  private enrichPresetsWithDisabledState(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
+    const today = new Date();
+    return presets.map(preset => {
+      const range = preset.dateRange(today);
+      const start = new Date(range.start);
+      const end = new Date(range.end);
+      const isDisabled = (this.minDate && start < this.minDate) || (this.maxDate && end > this.maxDate) ? true : false;
+      return { ...preset, isDisabled };
+    });
   }
 
   private clampDate(date: Date, min?: Date, max?: Date): Date {
