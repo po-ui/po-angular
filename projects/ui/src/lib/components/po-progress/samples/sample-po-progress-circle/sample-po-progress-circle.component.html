@@ -1,0 +1,117 @@
+<div class="container">
+  <po-widget p-title="Regra de Adequação de Layout">
+    <div class="line-height">
+      <p class="po-font-text-large-bold">📏 Para adequação do layout, o valor mínimo de p-radius é 24px.</p>
+      <p class="po-text-large">
+        O raio mínimo de 24px é necessário para evitar colisão entre o conteúdo central (porcentagem ou ícone de erro) e
+        a borda do círculo. Valores menores podem causar sobreposição visual dos elementos.
+      </p>
+    </div>
+  </po-widget>
+
+  <po-widget p-title="Exemplo Básico - Radius Mínimo (24px)">
+    <div class="po-row po-align-items-center">
+      <div class="po-md-6 po-lg-4 po-center">
+        <po-progress p-shape="circle" [p-value]="value" p-show-percentage="true" p-radius="24"></po-progress>
+      </div>
+      <div class="po-md-6 po-lg-8">
+        <p><strong>Configuração:</strong></p>
+        <ul>
+          <li>p-shape="circle"</li>
+          <li>p-value="65"</li>
+          <li>p-show-percentage="true"</li>
+          <li>p-radius="24" (valor mínimo permitido)</li>
+        </ul>
+        <p class="po-font-text">A porcentagem é exibida no centro sem colisão com a borda do círculo.</p>
+      </div>
+    </div>
+  </po-widget>
+
+  <po-widget p-title="Com Radius Maior (60px)">
+    <div class="po-row po-align-items-center">
+      <div class="po-md-6 po-lg-4 po-center">
+        <po-progress p-shape="circle" [p-value]="value" p-show-percentage="true" p-radius="60"></po-progress>
+      </div>
+      <div class="po-md-6 po-lg-8">
+        <p><strong>Configuração:</strong></p>
+        <ul>
+          <li>p-shape="circle"</li>
+          <li>p-value="65"</li>
+          <li>p-show-percentage="true"</li>
+          <li>p-radius="60" (valor maior)</li>
+        </ul>
+        <p class="po-font-text">
+          Maior espaço disponível para o conteúdo central. Recomendado para melhor visualização.
+        </p>
+      </div>
+    </div>
+  </po-widget>
+
+  <po-widget p-title="Com Status Error (Radius 24px)">
+    <div class="po-row po-align-items-center">
+      <div class="po-md-6 po-lg-4 po-center">
+        <po-progress p-shape="circle" p-value="50" p-status="error" p-radius="24"></po-progress>
+      </div>
+      <div class="po-md-6 po-lg-8">
+        <p><strong>Configuração:</strong></p>
+        <ul>
+          <li>p-shape="circle"</li>
+          <li>p-value="50"</li>
+          <li>p-status="error"</li>
+          <li>p-radius="24" (valor mínimo)</li>
+        </ul>
+        <p class="po-font-text">Ícone de erro exibido no centro. O radius mínimo de 24px evita sobreposição.</p>
+      </div>
+    </div>
+  </po-widget>
+
+  <po-widget p-title="Modo Indeterminado">
+    <div class="po-row po-align-items-center">
+      <div class="po-md-6 po-lg-4 po-center">
+        <po-progress p-shape="circle" p-indeterminate="true" p-radius="30"></po-progress>
+      </div>
+      <div class="po-md-6 po-lg-8">
+        <p><strong>Configuração:</strong></p>
+        <ul>
+          <li>p-shape="circle"</li>
+          <li>p-indeterminate="true"</li>
+          <li>p-radius="30"</li>
+        </ul>
+        <p class="po-font-text">Animação contínua para indicar progresso em andamento.</p>
+      </div>
+    </div>
+  </po-widget>
+
+  <po-widget p-title="Comparação Visual - Diferentes Status">
+    <div class="po-row row">
+      <div class="po-md-3 po-center items">
+        <p class="po-font-text-large-bold po-mb-1">Success</p>
+        <po-progress
+          p-shape="circle"
+          p-value="100"
+          p-status="success"
+          p-show-percentage="true"
+          p-radius="25"
+        ></po-progress>
+      </div>
+      <div class="po-md-3 po-center items">
+        <p class="po-font-text-large-bold po-mb-1">Warning</p>
+        <po-progress
+          p-shape="circle"
+          p-value="50"
+          p-status="warning"
+          p-show-percentage="true"
+          p-radius="25"
+        ></po-progress>
+      </div>
+      <div class="po-md-3 po-center items">
+        <p class="po-font-text-large-bold po-mb-1">Error</p>
+        <po-progress p-shape="circle" p-value="0" p-status="error" p-show-percentage="true" p-radius="25"></po-progress>
+      </div>
+      <div class="po-md-3 po-center items">
+        <p class="po-font-text-large-bold po-mb-1">Default</p>
+        <po-progress p-shape="circle" p-value="75" p-show-percentage="true" p-radius="25"></po-progress>
+      </div>
+    </div>
+  </po-widget>
+</div>

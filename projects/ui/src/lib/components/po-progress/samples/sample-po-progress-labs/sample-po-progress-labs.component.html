@@ -9,6 +9,8 @@
     [p-text]="text"
     [p-value]="value"
     [p-size]="size"
+    [p-shape]="shape"
+    [p-radius]="radius"
     [p-size-actions]="sizeActions"
     [p-custom-action]="action"
     (p-custom-action-click)="onEvent('p-custom-action-click')"
@@ -16,79 +18,112 @@
     (p-retry)="onEvent('p-retry')"
   />
 
-  <po-widget p-title="Events">
-    <po-info [p-value]="event" />
-  </po-widget>
+  @if (shape === 'bar') {
+    <po-widget p-title="Events">
+      <po-info [p-value]="event" />
+    </po-widget>
+  }
 
   <po-widget p-title="Properties">
     <form #progressBarPropertiesForm="ngForm">
-      <po-input class="po-md-6" name="text" [(ngModel)]="text" p-clean p-label="Label" />
-      <po-number
-        class="po-md-6 po-lg-3"
-        name="value"
-        [(ngModel)]="value"
-        p-clean
-        p-label="Value"
-        p-max="100"
-        p-min="0"
-      />
-      <po-select class="po-md-6 po-lg-3" name="Size" p-label="Size" [(ngModel)]="size" [p-options]="sizeOptions" />
-      <po-select
-        class="po-md-6 po-lg-3"
-        name="Status"
-        p-label="Status"
-        [(ngModel)]="status"
-        [p-options]="statusOptions"
-      />
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12">
+        <po-radio-group
+          class="po-md-6 po-lg-3"
+          name="shape"
+          [(ngModel)]="shape"
+          p-label="Shape"
+          [p-options]="shapeOptions"
+          (p-change)="onShapeChange($event)"
+        >
+        </po-radio-group>
+      </div>
 
-      <po-select
-        class="po-md-6 po-lg-3"
-        name="infoIcon"
-        [(ngModel)]="infoIcon"
-        p-label="Info icon"
-        [p-options]="infoIconsOptions"
-      />
-      <po-input class="po-md-6" name="info" [(ngModel)]="info" p-clean p-label="Info" />
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-mt-2">
+        <po-number
+          class="po-md-6 po-lg-3"
+          name="value"
+          [(ngModel)]="value"
+          p-clean
+          p-label="Value"
+          p-max="100"
+          p-min="0"
+        />
 
-      <po-checkbox-group
-        class="po-md-12"
-        name="properties"
-        [(ngModel)]="properties"
-        p-columns="4"
-        p-help="Select any options"
-        p-label="Properties"
-        [p-options]="propertiesOptions"
-      >
-      </po-checkbox-group>
+        <po-select class="po-md-6 po-lg-3" name="Size" p-label="Size" [(ngModel)]="size" [p-options]="sizeOptions" />
 
-      <po-radio-group
-        class="po-md-12"
-        name="sizeActions"
-        [(ngModel)]="sizeActions"
-        p-columns="4"
-        p-label="Size actions"
-        p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
-        [p-options]="sizeActionsOptions"
-      >
-      </po-radio-group>
+        <po-select
+          class="po-md-6 po-lg-3"
+          name="Status"
+          p-label="Status"
+          [(ngModel)]="status"
+          [p-options]="statusOptions"
+        />
 
-      <po-switch class="po-md-3" name="addAction" [(ngModel)]="showAction" p-label="Add Action Button" />
+        @if (shape === 'bar') {
+          <po-select
+            class="po-md-6 po-lg-3"
+            name="infoIcon"
+            [(ngModel)]="infoIcon"
+            p-label="Info icon"
+            [p-options]="infoIconsOptions"
+          />
+
+          <po-input class="po-md-6" name="text" [(ngModel)]="text" p-clean p-label="Label" />
+
+          <po-input class="po-md-6" name="info" [(ngModel)]="info" p-clean p-label="Info" />
+
+          <po-radio-group
+            class="po-md-12 po-mb-2"
+            name="sizeActions"
+            [(ngModel)]="sizeActions"
+            p-columns="4"
+            p-label="Size actions"
+            p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+            [p-options]="sizeActionsOptions"
+          >
+          </po-radio-group>
+
+          <po-switch class="po-md-3" name="addAction" [(ngModel)]="showAction" p-label="Add Action Button" />
+
+          @if (showAction) {
+            <div>
+              <po-widget p-title="Action Button">
+                <form [formGroup]="actionForm" class="po-row">
+                  <po-input class="po-md-6 po-lg-4" formControlName="label" p-label="Label" />
+                  <po-select class="po-md-6 po-lg-3" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
+                  <po-select class="po-md-6 po-lg-3" formControlName="type" p-label="Type" [p-options]="typeOptions" />
+                  <po-switch class="po-md-3 po-lg-2" formControlName="disabled" p-label="Disabled" />
+                  <po-switch class="po-md-3 po-lg-2" formControlName="visible" p-label="Visible" />
+                </form>
+              </po-widget>
+            </div>
+          }
+        }
+
+        @if (shape === 'circle') {
+          <po-number
+            class="po-md-6 po-lg-3"
+            name="radius"
+            [(ngModel)]="radius"
+            p-clean
+            p-label="Radius"
+            p-help="Para adequação do layout, o valor mínimo de p-radius é 24px."
+            p-min="24"
+          />
+        }
+
+        <po-checkbox-group
+          class="po-md-12 po-mt-2"
+          name="properties"
+          [(ngModel)]="properties"
+          p-columns="4"
+          p-label="Properties"
+          [p-options]="propertiesOptions"
+        >
+        </po-checkbox-group>
+      </div>
     </form>
   </po-widget>
-
-  @if (showAction) {
-    <div>
-      <po-widget p-title="Action Button">
-        <form [formGroup]="actionForm" class="po-row">
-          <po-input class="po-md-6 po-lg-4" formControlName="label" p-label="Label" />
-          <po-select class="po-md-6 po-lg-3" formControlName="icon" p-label="Icon" [p-options]="iconOptions" />
-          <po-select class="po-md-6 po-lg-3" formControlName="type" p-label="Type" [p-options]="typeOptions" />
-          <po-switch class="po-md-3 po-lg-2" formControlName="disabled" p-label="Disabled" />
-          <po-switch class="po-md-3 po-lg-2" formControlName="visible" p-label="Visible" />
-        </form>
-      </po-widget>
-    </div>
-  }
 
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="restore()"> </po-button>

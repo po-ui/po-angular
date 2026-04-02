@@ -7,6 +7,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   standalone: false
 })
 export class PoProgressBarComponent {
+  @Input('p-aria-label') ariaLabel?: string;
+
   @Input('p-indeterminate') indeterminate: boolean;
 
   @Input('p-value') value: number;

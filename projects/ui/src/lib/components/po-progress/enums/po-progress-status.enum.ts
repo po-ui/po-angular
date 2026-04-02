@@ -3,7 +3,7 @@
  *
  * @description
  *
- * *Enum* `PoProgressStatus` para os status de barra de progresso.
+ * Enum `PoProgressStatus` para os status de barra de progresso.
  */
 export enum PoProgressStatus {
   /** Define o status `default` para a barra de progresso. */

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoProgressBarComponent } from './po-progress-bar/po-progress-bar.component';
+import { PoProgressCircleComponent } from './po-progress-circle/po-progress-circle.component';
 import { PoProgressComponent } from './po-progress.component';
 import { PoButtonModule } from '../po-button/po-button.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
@@ -13,7 +14,7 @@ import { PoLabelModule } from '../po-label/po-label.module';
  * Módulo do componente `po-progress`.
  */
 @NgModule({
-  imports: [CommonModule, PoButtonModule, PoIconModule, PoLabelModule],
+  imports: [CommonModule, PoButtonModule, PoIconModule, PoLabelModule, PoProgressCircleComponent],
   exports: [PoProgressComponent],
   declarations: [PoProgressBarComponent, PoProgressComponent]
 })

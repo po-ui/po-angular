@@ -1,14 +1,30 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { PoThemeA11yEnum } from '../../services';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { convertToBoolean } from '../../utils/util';
 
 import { PoProgressBaseComponent } from './po-progress-base.component';
 
+@Component({
+  template: '',
+  standalone: false
+})
+class TestHostComponent extends PoProgressBaseComponent {}
+
 describe('PoProgressBaseComponent:', () => {
-  let component: PoProgressBaseComponent;
+  let component: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(() => {
-    component = new PoProgressBaseComponent();
+    TestBed.configureTestingModule({
+      declarations: [TestHostComponent]
+    });
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -110,6 +126,84 @@ describe('PoProgressBaseComponent:', () => {
       const validValues = [150, 'test', -1, 1000];
 
       expectPropertiesValues(component, 'value', validValues, 0);
+    });
+
+    it('p-shape: should have default value as bar', () => {
+      expect(component.shape()).toBe('bar');
+    });
+
+    it('p-shape: should update with valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'bar');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'circle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('circle');
+    });
+
+    it('p-shape: should default to bar if has not valid values', () => {
+      fixture.componentRef.setInput('p-shape', 'square');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'triangle');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+
+      fixture.componentRef.setInput('p-shape', 'hexagon');
+      fixture.detectChanges();
+      expect(component.shape()).toBe('bar');
+    });
+
+    it('p-radius: should have default value as 0', () => {
+      expect(component.radius()).toBe(0);
+    });
+
+    it('p-radius: should accept valid positive values', () => {
+      fixture.componentRef.setInput('p-radius', 30);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(30);
+
+      fixture.componentRef.setInput('p-radius', 60);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(60);
+    });
+
+    it('p-radius: should return 0 (default) for zero or negative values', () => {
+      fixture.componentRef.setInput('p-radius', 0);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(0);
+
+      fixture.componentRef.setInput('p-radius', -10);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(0);
+    });
+
+    it('p-radius: should apply minimum of 24 when value is positive but less than 24', () => {
+      fixture.componentRef.setInput('p-radius', 19);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(24);
+
+      fixture.componentRef.setInput('p-radius', 1);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(24);
+    });
+
+    it('p-radius: should convert string values to int', () => {
+      fixture.componentRef.setInput('p-radius', '50');
+      fixture.detectChanges();
+      expect(component.radius()).toBe(50);
+    });
+
+    it('p-radius: should return 0 for undefined or null values', () => {
+      fixture.componentRef.setInput('p-radius', undefined);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(0);
+
+      fixture.componentRef.setInput('p-radius', null);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(0);
     });
 
     it('should update property `p-size` with valid values', () => {

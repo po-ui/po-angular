@@ -1,6 +1,7 @@
 @if (!indeterminate) {
   <div
     role="progressbar"
+    [attr.aria-label]="ariaLabel"
     [attr.aria-valuenow]="value"
     aria-valuemin="0"
     aria-valuemax="100"
@@ -13,7 +14,14 @@
 }
 
 @if (indeterminate) {
-  <div class="po-progress-bar-indeterminate-track">
+  <div
+    class="po-progress-bar-indeterminate-track"
+    role="progressbar"
+    [attr.aria-label]="ariaLabel"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-live="polite"
+  >
     <div class="po-progress-bar-indeterminate-track-bar"></div>
   </div>
 }
