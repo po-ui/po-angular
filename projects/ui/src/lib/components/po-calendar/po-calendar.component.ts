@@ -270,17 +270,32 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       const distB = Math.abs(startB.getTime() - todayTime);
       return distA - distB;
     });
+
     // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
     return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
   }
 
+  private normalizeDate(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
   private enrichPresetsWithDisabledState(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
     const today = new Date();
+
+    const minDate = this.minDate ? this.normalizeDate(this.minDate) : undefined;
+    const maxDate = this.maxDate ? this.normalizeDate(this.maxDate) : undefined;
+
     return presets.map(preset => {
       const range = preset.dateRange(today);
-      const start = new Date(range.start);
-      const end = new Date(range.end);
-      const isDisabled = (this.minDate && start < this.minDate) || (this.maxDate && end > this.maxDate) ? true : false;
+
+      const start = this.normalizeDate(new Date(range.start));
+      const end = this.normalizeDate(new Date(range.end));
+
+      const isBeforeMin = minDate ? start < minDate : false;
+      const isAfterMax = maxDate ? end > maxDate : false;
+
+      const isDisabled = isBeforeMin || isAfterMax;
+
       return { ...preset, isDisabled };
     });
   }
