@@ -337,6 +337,15 @@ export class PoDatepickerRangeComponent
     }
 
     if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
+      if (this.verifyMobile()) {
+        const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+        if (firstCombo) {
+          event.preventDefault();
+          firstCombo.focus();
+        }
+        return;
+      }
+
       const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
       if (firstPreset) {
         event.preventDefault();
@@ -487,6 +496,14 @@ export class PoDatepickerRangeComponent
     }
 
     if (event.key === 'Tab' && event.shiftKey && this.isFocusOnFirstCombo()) {
+      if (this.verifyMobile()) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.iconCalendar.buttonElement?.nativeElement.focus();
+        this.isCalendarVisible = false;
+        return;
+      }
+
       event.preventDefault();
       event.stopPropagation();
 

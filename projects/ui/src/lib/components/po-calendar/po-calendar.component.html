@@ -1,12 +1,12 @@
 @if (isRange) {
   <div
     class="po-calendar"
-    [class.po-calendar-with-presets]="effectivePresets.length > 0"
+    [class.po-calendar-with-presets]="effectivePresets().length > 0"
     [class.po-calendar-mobile]="isResponsive"
   >
-    @if (effectivePresets.length > 0 && !isResponsive) {
+    @if (effectivePresets().length > 0 && !isResponsive) {
       <po-calendar-preset-list
-        [p-presets]="effectivePresets"
+        [p-presets]="effectivePresets()"
         [p-locale]="locale"
         [p-selected-preset]="selectedPresetLabel"
         [p-size]="size"
@@ -15,9 +15,9 @@
       ></po-calendar-preset-list>
     }
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
-    @if (effectivePresets.length > 0 && isResponsive) {
+    @if (effectivePresets().length > 0 && isResponsive) {
       <po-calendar-preset-list
-        [p-presets]="effectivePresets"
+        [p-presets]="effectivePresets()"
         [p-locale]="locale"
         [p-selected-preset]="selectedPresetLabel"
         [p-size]="size"
@@ -47,14 +47,14 @@
     [p-activate-date]="getActivateDate(partType)"
     [p-locale]="locale"
     [p-min-date]="minDate"
-    [p-presets]="effectivePresets.length > 0"
+    [p-presets]="effectivePresets().length > 0"
     [p-max-date]="maxDate"
     [p-part-type]="partType"
     [p-range]="isRange"
     [p-responsive]="isResponsive"
     [p-selected-value]="value"
     [p-hover-value]="hoverValue"
-    [p-hide-today-button]="effectivePresets.length > 0"
+    [p-hide-today-button]="effectivePresets().length > 0"
     (p-header-change)="onHeaderChange($event, partType)"
     (p-select-date)="onSelectDate($event, partType)"
     (p-hover-date)="onHoverDate($event)"
