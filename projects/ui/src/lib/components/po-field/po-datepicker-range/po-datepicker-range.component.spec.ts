@@ -510,6 +510,7 @@ describe('PoDatepickerRangeComponent:', () => {
         } as any;
 
         spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(null as any);
 
         const event = {
           key: 'Tab',
@@ -527,6 +528,35 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(component.isCalendarVisible).toBeTrue();
 
         expect(component.iconCalendar.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
+      });
+
+      it('should close calendar on mobile Shift+Tab from first combo', () => {
+        component.isCalendarVisible = true;
+
+        component.iconCalendar = {
+          buttonElement: {
+            nativeElement: {
+              focus: jasmine.createSpy('focus')
+            }
+          }
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
+        expect(component.isCalendarVisible).toBeFalse();
       });
     });
 
@@ -889,6 +919,31 @@ describe('PoDatepickerRangeComponent:', () => {
         component.onKeyPress(event);
 
         expect(querySelectorSpy).toHaveBeenCalledTimes(2);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus first combo on mobile when Tab and calendar visible', () => {
+        component.isCalendarVisible = true;
+
+        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+
+        const focusSpy = jasmine.createSpy();
+
+        component.calendarPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+          }
+        } as any;
+
+        const event: any = {
+          key: 'Tab',
+          shiftKey: false,
+          preventDefault: jasmine.createSpy()
+        };
+
+        component.onKeyPress(event);
+
         expect(focusSpy).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
       });

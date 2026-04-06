@@ -85,6 +85,24 @@ describe('PoCalendarComponent:', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
+    it('ngDoCheck: should sync internal signals from input properties', () => {
+      component.mode = PoCalendarMode.Range;
+      component.rangePresets = true;
+      component.rangePresetOptions = undefined;
+      component.rangePresetsOrder = 'desc';
+      component.minDate = new Date(2024, 0, 1);
+      component.maxDate = new Date(2024, 11, 31);
+
+      component.ngDoCheck();
+
+      expect(component['_isRange']()).toBeTrue();
+      expect(component['_rangePresetsValue']()).toBeTrue();
+      expect(component['_rangePresetOptionsValue']()).toBeUndefined();
+      expect(component['_rangePresetsOrderValue']()).toBe('desc');
+      expect(component['_minDateValue']()).toEqual(component.minDate);
+      expect(component['_maxDateValue']()).toEqual(component.maxDate);
+    });
+
     it('getActivateDate: should get activateDate if range is true', () => {
       const expectedValue = new Date(2020, 10, 10);
       component.activateDate = { start: expectedValue, end: new Date(2020, 11, 10) };
@@ -686,8 +704,9 @@ describe('PoCalendarComponent:', () => {
       it('should return default presets when rangePresets is true and rangePresetOptions is undefined', () => {
         component.mode = PoCalendarMode.Range;
         component.rangePresets = true;
+        component.ngDoCheck();
 
-        const result = component.effectivePresets;
+        const result = component.effectivePresets();
         expect(result.length).toBe(PO_CALENDAR_DEFAULT_RANGE_PRESETS.length);
         PO_CALENDAR_DEFAULT_RANGE_PRESETS.forEach(preset => {
           expect(result.some(p => p.label === preset.label)).toBeTrue();
@@ -697,14 +716,16 @@ describe('PoCalendarComponent:', () => {
       it('should return empty array when rangePresets is false and rangePresetOptions is undefined', () => {
         component.mode = PoCalendarMode.Range;
         component.rangePresets = false;
+        component.ngDoCheck();
 
-        expect(component.effectivePresets).toEqual([]);
+        expect(component.effectivePresets()).toEqual([]);
       });
 
       it('should return empty array when mode is not Range', () => {
         component.rangePresets = true;
+        component.ngDoCheck();
 
-        expect(component.effectivePresets).toEqual([]);
+        expect(component.effectivePresets()).toEqual([]);
       });
 
       it('should return defaults + custom when rangePresets is true and rangePresetOptions has values', () => {
@@ -712,8 +733,9 @@ describe('PoCalendarComponent:', () => {
         component.rangePresets = true;
         const customPresets = [{ label: 'custom', dateRange: () => ({ start: new Date(), end: new Date() }) }];
         component.rangePresetOptions = customPresets;
+        component.ngDoCheck();
 
-        const result = component.effectivePresets;
+        const result = component.effectivePresets();
         expect(result.length).toBe(PO_CALENDAR_DEFAULT_RANGE_PRESETS.length + customPresets.length);
         expect(result.some(p => p.label === 'custom')).toBeTrue();
       });
@@ -723,8 +745,9 @@ describe('PoCalendarComponent:', () => {
         component.rangePresets = false;
         const customPresets = [{ label: 'custom', dateRange: () => ({ start: new Date(), end: new Date() }) }];
         component.rangePresetOptions = customPresets;
+        component.ngDoCheck();
 
-        const result = component.effectivePresets;
+        const result = component.effectivePresets();
         // custom + mandatory 'today'
         expect(result.some(p => p.label === 'custom')).toBeTrue();
         expect(result.some(p => p.label === 'today')).toBeTrue();
@@ -733,15 +756,17 @@ describe('PoCalendarComponent:', () => {
       it('should return empty array when rangePresets is true but mode is not Range', () => {
         component.rangePresets = true;
         component.mode = undefined;
+        component.ngDoCheck();
 
-        expect(component.effectivePresets).toEqual([]);
+        expect(component.effectivePresets()).toEqual([]);
       });
 
       it('should filter default presets when rangePresets is an array of keys', () => {
         component.mode = PoCalendarMode.Range;
         component.rangePresets = ['7days', '30days'];
+        component.ngDoCheck();
 
-        const result = component.effectivePresets;
+        const result = component.effectivePresets();
         // Should include 7days, 30days, and today (mandatory)
         expect(result.some(p => p.label === 'today')).toBeTrue();
         expect(result.some(p => p.label === '7days')).toBeTrue();
@@ -752,8 +777,9 @@ describe('PoCalendarComponent:', () => {
       it('should always include today preset even if not in array', () => {
         component.mode = PoCalendarMode.Range;
         component.rangePresets = ['7days'];
+        component.ngDoCheck();
 
-        const result = component.effectivePresets;
+        const result = component.effectivePresets();
         expect(result.some(p => p.label === 'today')).toBeTrue();
       });
 
@@ -762,10 +788,59 @@ describe('PoCalendarComponent:', () => {
         component.rangePresets = false;
         const customPresets = [{ label: 'myPreset', dateRange: () => ({ start: new Date(), end: new Date() }) }];
         component.rangePresetOptions = customPresets;
+        component.ngDoCheck();
 
-        const result = component.effectivePresets;
+        const result = component.effectivePresets();
         expect(result.some(p => p.label === 'today')).toBeTrue();
         expect(result.some(p => p.label === 'myPreset')).toBeTrue();
+      });
+
+      it('should combine filtered default presets with custom presets when rangePresets is Array<string> and rangePresetOptions has values', () => {
+        component.mode = PoCalendarMode.Range;
+        component.rangePresets = ['today', 'yesterday', '7days'];
+
+        const today = new Date();
+        const customPreset1 = {
+          label: 'custom1',
+          dateRange: () => {
+            const start = new Date(today);
+            start.setDate(start.getDate() - 3);
+            return { start, end: today };
+          }
+        };
+        const customPreset2 = {
+          label: 'custom2',
+          dateRange: () => {
+            const start = new Date(today);
+            start.setDate(start.getDate() - 15);
+            return { start, end: today };
+          }
+        };
+        component.rangePresetOptions = [customPreset1, customPreset2];
+        component.ngDoCheck();
+
+        const result = component.effectivePresets();
+
+        // Should contain the filtered default presets
+        expect(result.some(p => p.label === 'today')).toBeTrue();
+        expect(result.some(p => p.label === 'yesterday')).toBeTrue();
+        expect(result.some(p => p.label === '7days')).toBeTrue();
+
+        // Should contain custom presets
+        expect(result.some(p => p.label === 'custom1')).toBeTrue();
+        expect(result.some(p => p.label === 'custom2')).toBeTrue();
+
+        // Should NOT contain default presets not in the array
+        expect(result.some(p => p.label === '14days')).toBeFalse();
+        expect(result.some(p => p.label === '30days')).toBeFalse();
+        expect(result.some(p => p.label === '3months')).toBeFalse();
+        expect(result.some(p => p.label === '6months')).toBeFalse();
+
+        // Result should be sorted (all are past/present, sorted by proximity)
+        // and enriched with isDisabled property
+        result.forEach(p => {
+          expect(p.isDisabled).toBeDefined();
+        });
       });
     });
 

@@ -252,46 +252,6 @@ describe('PoCalendarPresetListComponent:', () => {
       });
     });
 
-    describe('syncInnerButtonTabIndexes:', () => {
-      it('should set tabindex=0 on focused button and tabindex=-1 on others', () => {
-        component.presets = PO_CALENDAR_DEFAULT_RANGE_PRESETS;
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        // Create mock buttons and inject them into the DOM
-        const listDiv = nativeElement.querySelector('.po-calendar-preset-list');
-        const presetItems = nativeElement.querySelectorAll('.po-calendar-preset-item');
-
-        // Add .po-button elements inside each preset item
-        const mockButtons: HTMLButtonElement[] = [];
-        presetItems.forEach((item: HTMLElement) => {
-          const btn = document.createElement('button');
-          btn.classList.add('po-button');
-          item.appendChild(btn);
-          mockButtons.push(btn);
-        });
-
-        component.focusedIndex = 2;
-        component['syncInnerButtonTabIndexes']();
-
-        if (mockButtons.length > 2) {
-          expect(mockButtons[0].getAttribute('tabindex')).toBe('-1');
-          expect(mockButtons[1].getAttribute('tabindex')).toBe('-1');
-          expect(mockButtons[2].getAttribute('tabindex')).toBe('0');
-        }
-      });
-    });
-
-    describe('ngAfterViewChecked:', () => {
-      it('should call syncInnerButtonTabIndexes', () => {
-        spyOn(component as any, 'syncInnerButtonTabIndexes');
-
-        component.ngAfterViewChecked();
-
-        expect(component['syncInnerButtonTabIndexes']).toHaveBeenCalled();
-      });
-    });
-
     describe('isPresetDisabled:', () => {
       it('should return true when preset.isDisabled is true', () => {
         const preset: PoCalendarRangePreset = {

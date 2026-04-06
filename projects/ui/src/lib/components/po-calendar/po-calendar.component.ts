@@ -2,9 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
+  DoCheck,
   forwardRef,
   OnChanges,
   OnInit,
+  signal,
   SimpleChanges,
   inject
 } from '@angular/core';
@@ -67,41 +70,44 @@ const poCalendarRangeWidth = 600;
   providers,
   standalone: false
 })
-export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges {
+export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges, DoCheck {
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly poCalendarLangService = inject(PoCalendarLangService);
 
   hoverValue: Date;
   displayToClean: string;
 
-  constructor() {
-    const poDate = inject(PoDateService);
-    const languageService = inject(PoLanguageService);
+  private readonly _isRange = signal(false);
+  private readonly _rangePresetsValue = signal<boolean | Array<string>>(false);
+  private readonly _rangePresetOptionsValue = signal<Array<PoCalendarRangePreset> | undefined>(undefined);
+  private readonly _rangePresetsOrderValue = signal<'asc' | 'desc'>('asc');
+  private readonly _minDateValue = signal<Date | undefined>(undefined);
+  private readonly _maxDateValue = signal<Date | undefined>(undefined);
 
-    super(poDate, languageService);
-  }
+  readonly effectivePresets = computed<Array<PoCalendarRangePreset>>(() => {
+    const isRange = this._isRange();
+    const rangePresets = this._rangePresetsValue();
+    const rangePresetOptions = this._rangePresetOptionsValue();
+    const rangePresetsOrder = this._rangePresetsOrderValue();
+    const minDate = this._minDateValue();
+    const maxDate = this._maxDateValue();
 
-  get isResponsive() {
-    return window.innerWidth < poCalendarRangeWidth;
-  }
-
-  get effectivePresets(): Array<PoCalendarRangePreset> {
-    if (!this.isRange) {
+    if (!isRange) {
       return [];
     }
 
-    const hasCustomPresets = this.rangePresetOptions !== undefined && this.rangePresetOptions.length > 0;
+    const hasCustomPresets = rangePresetOptions !== undefined && rangePresetOptions.length > 0;
     let defaultPresets: Array<PoCalendarRangePreset> = [];
 
-    if (Array.isArray(this.rangePresets)) {
-      const allowedKeys = new Set(this.rangePresets.map(k => k.toLowerCase()));
+    if (Array.isArray(rangePresets)) {
+      const allowedKeys = new Set(rangePresets.map(k => k.toLowerCase()));
       allowedKeys.add('today');
       defaultPresets = PO_CALENDAR_DEFAULT_RANGE_PRESETS.filter(p => allowedKeys.has(p.label.toLowerCase()));
-    } else if (this.rangePresets) {
+    } else if (rangePresets) {
       defaultPresets = [...PO_CALENDAR_DEFAULT_RANGE_PRESETS];
     }
 
-    const customPresets = hasCustomPresets ? this.rangePresetOptions : [];
+    const customPresets = hasCustomPresets ? rangePresetOptions : [];
     const combined = [...defaultPresets, ...customPresets];
 
     // Regra: o preset "today" é obrigatório e deve estar presente mesmo com apenas presets customizados
@@ -116,8 +122,19 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return [];
     }
 
-    const sorted = this.sortPresetsByTemporality(combined);
-    return this.enrichPresetsWithDisabledState(sorted);
+    const sorted = this.sortPresetsByTemporality(combined, rangePresetsOrder);
+    return this.enrichPresetsWithDisabledState(sorted, minDate, maxDate);
+  });
+
+  constructor() {
+    const poDate = inject(PoDateService);
+    const languageService = inject(PoLanguageService);
+
+    super(poDate, languageService);
+  }
+
+  get isResponsive() {
+    return window.innerWidth < poCalendarRangeWidth;
   }
 
   ngOnInit() {
@@ -129,6 +146,15 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     if (changes.minDate || changes.maxDate) {
       this.setActivateDate();
     }
+  }
+
+  ngDoCheck(): void {
+    this._isRange.set(this.isRange);
+    this._rangePresetsValue.set(this.rangePresets);
+    this._rangePresetOptionsValue.set(this.rangePresetOptions);
+    this._rangePresetsOrderValue.set(this.rangePresetsOrder);
+    this._minDateValue.set(this.minDate);
+    this._maxDateValue.set(this.maxDate);
   }
 
   getActivateDate(partType) {
@@ -232,7 +258,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.changeDetector.markForCheck();
   }
 
-  private sortPresetsByTemporality(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
+  private sortPresetsByTemporality(
+    presets: Array<PoCalendarRangePreset>,
+    order?: 'asc' | 'desc'
+  ): Array<PoCalendarRangePreset> {
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
     const todayTime = todayStart.getTime();
@@ -271,19 +300,27 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return distA - distB;
     });
 
+    const resolvedOrder = order ?? this.rangePresetsOrder;
     // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
-    return this.rangePresetsOrder === 'desc' ? sorted.reverse() : sorted;
+    return resolvedOrder === 'desc' ? sorted.reverse() : sorted;
   }
 
   private normalizeDate(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
 
-  private enrichPresetsWithDisabledState(presets: Array<PoCalendarRangePreset>): Array<PoCalendarRangePreset> {
+  private enrichPresetsWithDisabledState(
+    presets: Array<PoCalendarRangePreset>,
+    minDateInput?: Date,
+    maxDateInput?: Date
+  ): Array<PoCalendarRangePreset> {
     const today = new Date();
 
-    const minDate = this.minDate ? this.normalizeDate(this.minDate) : undefined;
-    const maxDate = this.maxDate ? this.normalizeDate(this.maxDate) : undefined;
+    const resolvedMinDate = minDateInput !== undefined ? minDateInput : this.minDate;
+    const resolvedMaxDate = maxDateInput !== undefined ? maxDateInput : this.maxDate;
+
+    const minDate = resolvedMinDate ? this.normalizeDate(resolvedMinDate) : undefined;
+    const maxDate = resolvedMaxDate ? this.normalizeDate(resolvedMaxDate) : undefined;
 
     return presets.map(preset => {
       const range = preset.dateRange(today);
