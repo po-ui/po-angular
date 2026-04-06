@@ -316,8 +316,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   ): Array<PoCalendarRangePreset> {
     const today = new Date();
 
-    const resolvedMinDate = minDateInput !== undefined ? minDateInput : this.minDate;
-    const resolvedMaxDate = maxDateInput !== undefined ? maxDateInput : this.maxDate;
+    const resolvedMinDate = minDateInput ?? this.minDate;
+    const resolvedMaxDate = maxDateInput ?? this.maxDate;
 
     const minDate = resolvedMinDate ? this.normalizeDate(resolvedMinDate) : undefined;
     const maxDate = resolvedMaxDate ? this.normalizeDate(resolvedMaxDate) : undefined;
