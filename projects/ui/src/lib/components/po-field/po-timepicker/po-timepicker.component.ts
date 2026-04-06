@@ -158,6 +158,18 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     return this.customPlaceholderSegments[index];
   }
 
+  @HostListener('focusout', ['$event'])
+  onHostFocusOut(event: FocusEvent): void {
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const isStillInsideComponent =
+      relatedTarget &&
+      (this.el.nativeElement.contains(relatedTarget) || this.dialogPicker?.nativeElement?.contains(relatedTarget));
+
+    if (!isStillInsideComponent) {
+      this.onblur.emit();
+    }
+  }
+
   @HostListener('keydown', ['$event'])
   onKeydown($event?: any) {
     if (this.readonly) {
@@ -514,7 +526,6 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
     if (!isInternalFocus) {
       this.onTouchedModel?.();
-      this.onblur.emit();
       this.validateAndUpdateModel();
       this.controlChangeEmitter();
 

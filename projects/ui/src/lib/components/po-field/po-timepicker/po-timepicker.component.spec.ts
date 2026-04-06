@@ -1416,7 +1416,7 @@ describe('PoTimepickerComponent:', () => {
         expect(component.isSegmentFocused).toBeFalse();
       });
 
-      it('should call onTouchedModel and emit onblur when focus leaves the component', () => {
+      it('should call onTouchedModel and validateAndUpdateModel when focus leaves the component but NOT emit onblur directly', () => {
         fixture.detectChanges();
         const touchedSpy = jasmine.createSpy('touched');
         component['onTouchedModel'] = touchedSpy;
@@ -1431,7 +1431,7 @@ describe('PoTimepickerComponent:', () => {
         component.onSegmentBlur({ target: hourInput, relatedTarget: externalEl } as unknown as FocusEvent);
 
         expect(touchedSpy).toHaveBeenCalled();
-        expect(component.onblur.emit).toHaveBeenCalled();
+        expect(component.onblur.emit).not.toHaveBeenCalled();
         expect(component['validateAndUpdateModel']).toHaveBeenCalled();
         document.body.removeChild(externalEl);
       });
@@ -1449,6 +1449,78 @@ describe('PoTimepickerComponent:', () => {
         component.onSegmentBlur({ target: hourInput, relatedTarget: externalEl } as unknown as FocusEvent);
 
         expect(component.closeTimer).toHaveBeenCalledWith(false, true);
+        document.body.removeChild(externalEl);
+      });
+    });
+
+    describe('onHostFocusOut:', () => {
+      it('should emit onblur when focus moves to an element outside the component', () => {
+        fixture.detectChanges();
+        spyOn(component.onblur, 'emit');
+
+        const externalEl = document.createElement('input');
+        document.body.appendChild(externalEl);
+
+        const event = new FocusEvent('focusout', { relatedTarget: externalEl });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).toHaveBeenCalled();
+        document.body.removeChild(externalEl);
+      });
+
+      it('should NOT emit onblur when focus moves to an element inside the component', () => {
+        fixture.detectChanges();
+        spyOn(component.onblur, 'emit');
+
+        const minuteInput = fixture.nativeElement.querySelectorAll(
+          '.po-timepicker-segment-input'
+        )[1] as HTMLInputElement;
+
+        const event = new FocusEvent('focusout', { relatedTarget: minuteInput });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).not.toHaveBeenCalled();
+      });
+
+      it('should emit onblur when relatedTarget is null (focus leaves the document)', () => {
+        fixture.detectChanges();
+        spyOn(component.onblur, 'emit');
+
+        const event = new FocusEvent('focusout', { relatedTarget: null });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).toHaveBeenCalled();
+      });
+
+      it('should NOT emit onblur when focus moves to the dialogPicker (appendBox mode)', () => {
+        fixture.detectChanges();
+        spyOn(component.onblur, 'emit');
+
+        const dialogEl = component.dialogPicker?.nativeElement;
+        if (dialogEl) {
+          const innerEl = document.createElement('div');
+          dialogEl.appendChild(innerEl);
+
+          const event = new FocusEvent('focusout', { relatedTarget: innerEl });
+          component.onHostFocusOut(event);
+
+          expect(component.onblur.emit).not.toHaveBeenCalled();
+          dialogEl.removeChild(innerEl);
+        }
+      });
+
+      it('should emit onblur when Tab moves focus from the timepicker button to an external element', () => {
+        fixture.detectChanges();
+        spyOn(component.onblur, 'emit');
+
+        const externalEl = document.createElement('input');
+        document.body.appendChild(externalEl);
+
+        // Simula focusout de um elemento externo
+        const event = new FocusEvent('focusout', { relatedTarget: externalEl });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).toHaveBeenCalled();
         document.body.removeChild(externalEl);
       });
     });
