@@ -39,7 +39,6 @@ const ID_SEARCH_BUTTON_CLEAN = 'search-button-clean';
  * <example name="po-search-labs" title="PO Search Labs">
  *  <file name="sample-po-search-labs/sample-po-search-labs.component.html"> </file>
  *  <file name="sample-po-search-labs/sample-po-search-labs.component.ts"> </file>
- *  <file name="sample-po-search-labs/sample-po-search-labs.service.ts"> </file>
  * </example>
  *
  * <example name="po-search-find-people" title="PO Search Find People">
