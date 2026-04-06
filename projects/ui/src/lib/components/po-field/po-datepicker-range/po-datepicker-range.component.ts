@@ -511,7 +511,6 @@ export class PoDatepickerRangeComponent
     );
   }
 
-  /* istanbul ignore next */
   verifyMobile() {
     return isMobile();
   }

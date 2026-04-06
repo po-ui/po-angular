@@ -157,14 +157,6 @@ describe('PoCalendarPresetListComponent:', () => {
       ).toBeFalse();
     });
 
-    it('getTabIndex: should return 0 for focused index and -1 for others', () => {
-      component.focusedIndex = 2;
-
-      expect(component.getTabIndex(2)).toBe(0);
-      expect(component.getTabIndex(0)).toBe(-1);
-      expect(component.getTabIndex(1)).toBe(-1);
-    });
-
     describe('onKeydown:', () => {
       beforeEach(() => {
         component.presets = PO_CALENDAR_DEFAULT_RANGE_PRESETS;
@@ -235,27 +227,6 @@ describe('PoCalendarPresetListComponent:', () => {
 
         expect(component.focusedIndex).toBe(0);
       });
-    });
-
-    it('focusFirstPreset: should set focusedIndex to 0', () => {
-      component.presets = PO_CALENDAR_DEFAULT_RANGE_PRESETS;
-      component.locale = 'pt';
-      fixture.detectChanges();
-
-      component.focusedIndex = 3;
-      component.focusFirstPreset();
-
-      expect(component.focusedIndex).toBe(0);
-    });
-
-    it('focusLastPreset: should set focusedIndex to last index', () => {
-      component.presets = PO_CALENDAR_DEFAULT_RANGE_PRESETS;
-      component.locale = 'pt';
-      fixture.detectChanges();
-
-      component.focusLastPreset();
-
-      expect(component.focusedIndex).toBe(component.presets.length - 1);
     });
 
     describe('focusPreset:', () => {
