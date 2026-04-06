@@ -26,7 +26,7 @@ export class PoCalendarPresetListComponent {
   @Input('p-presets') presets: Array<PoCalendarRangePreset> = [];
   @Input('p-selected-preset') selectedPreset: string | null = null;
   @Input('p-responsive') responsive: boolean = false;
-  @Input()
+  @Input('p-locale')
   set locale(value: string) {
     this._locale = value;
     this.poCalendarLangService.setLanguage(value);
