@@ -1070,6 +1070,27 @@ describe('PoCalendarComponent:', () => {
         const result = component['enrichPresetsWithDisabledState'](presets);
         expect(result[0].isDisabled).toBeFalse();
       });
+
+      it('should use explicit minDate/maxDate parameters when provided instead of component properties', () => {
+        component['_minDate'] = undefined;
+        component['_maxDate'] = undefined;
+
+        const presets = [
+          {
+            label: 'test-explicit',
+            dateRange: () => ({
+              start: new Date(2025, 3, 1),
+              end: new Date(2025, 7, 30)
+            })
+          }
+        ];
+
+        const explicitMin = new Date(2025, 5, 1);
+        const explicitMax = new Date(2025, 5, 30);
+
+        const result = component['enrichPresetsWithDisabledState'](presets, explicitMin, explicitMax);
+        expect(result[0].isDisabled).toBeTrue();
+      });
     });
 
     describe('onPresetSelected:', () => {
