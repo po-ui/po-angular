@@ -219,6 +219,26 @@ describe('PoCalendarPresetListComponent:', () => {
         expect(component.closeCalendar.emit).toHaveBeenCalled();
       });
 
+      it('should not emit closeCalendar on Shift+Tab when responsive is true', () => {
+        component.responsive = true;
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        spyOn(component.closeCalendar, 'emit');
+
+        component.onKeydown(event, 0);
+
+        expect(component.closeCalendar.emit).not.toHaveBeenCalled();
+      });
+
+      it('should not emit closeCalendar on Shift+Tab from any preset when responsive is true', () => {
+        component.responsive = true;
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        spyOn(component.closeCalendar, 'emit');
+
+        component.onKeydown(event, 2);
+
+        expect(component.closeCalendar.emit).not.toHaveBeenCalled();
+      });
+
       it('should reset focusedIndex to 0 on Tab without Shift', () => {
         component.focusedIndex = 3;
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
