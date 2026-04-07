@@ -190,6 +190,23 @@ describe('PoTimepickerBaseComponent:', () => {
         component.format = 'invalid' as any;
         expect(component.format).toBe(PoTimerFormat.Format24);
       });
+
+      it('should call refreshValue with current timeValue when format changes', () => {
+        spyOn(component, 'refreshValue');
+        component['_timeValue'] = '14:00';
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.refreshValue).toHaveBeenCalledWith('14:00');
+      });
+
+      it('should call refreshValue with empty string when format changes and no value is set', () => {
+        spyOn(component, 'refreshValue');
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.refreshValue).toHaveBeenCalledWith('');
+      });
     });
 
     describe('p-min-time:', () => {

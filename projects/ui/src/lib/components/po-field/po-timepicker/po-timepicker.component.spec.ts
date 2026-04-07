@@ -424,6 +424,92 @@ describe('PoTimepickerComponent:', () => {
       });
     });
 
+    describe('dynamic format change:', () => {
+      it('should convert 24h display to 12h when format changes from 24 to 12', () => {
+        fixture.detectChanges();
+        component.writeValue('14:00');
+
+        expect(component.hourDisplay).toBe('14');
+        expect(component.minuteDisplay).toBe('00');
+        expect(component.periodDisplay).toBe('');
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.hourDisplay).toBe('02');
+        expect(component.minuteDisplay).toBe('00');
+        expect(component.periodDisplay).toBe('PM');
+      });
+
+      it('should convert 12h display back to 24h when format changes from 12 to 24', () => {
+        component.format = PoTimerFormat.Format12;
+        fixture.detectChanges();
+        component.writeValue('14:00');
+
+        expect(component.hourDisplay).toBe('02');
+        expect(component.periodDisplay).toBe('PM');
+
+        component.format = PoTimerFormat.Format24;
+
+        expect(component.hourDisplay).toBe('14');
+        expect(component.minuteDisplay).toBe('00');
+        expect(component.periodDisplay).toBe('');
+      });
+
+      it('should display AM for midnight (00:00) when switching to 12h format', () => {
+        fixture.detectChanges();
+        component.writeValue('00:30');
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.hourDisplay).toBe('12');
+        expect(component.minuteDisplay).toBe('30');
+        expect(component.periodDisplay).toBe('AM');
+      });
+
+      it('should display PM for noon (12:00) when switching to 12h format', () => {
+        fixture.detectChanges();
+        component.writeValue('12:00');
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.hourDisplay).toBe('12');
+        expect(component.minuteDisplay).toBe('00');
+        expect(component.periodDisplay).toBe('PM');
+      });
+
+      it('should not break when format changes and no value is set', () => {
+        fixture.detectChanges();
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.hourDisplay).toBe('');
+        expect(component.minuteDisplay).toBe('');
+        expect(component.timeValue).toBe('');
+      });
+
+      it('should preserve timeValue in 24h ISO format when format changes to 12h', () => {
+        fixture.detectChanges();
+        component.writeValue('14:00');
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.timeValue).toBe('14:00');
+      });
+
+      it('should handle seconds when switching format with showSeconds enabled', () => {
+        component.showSeconds = true;
+        fixture.detectChanges();
+        component.writeValue('14:30:45');
+
+        component.format = PoTimerFormat.Format12;
+
+        expect(component.hourDisplay).toBe('02');
+        expect(component.minuteDisplay).toBe('30');
+        expect(component.secondDisplay).toBe('45');
+        expect(component.periodDisplay).toBe('PM');
+      });
+    });
+
     describe('period segment:', () => {
       it('should toggle AM/PM with ArrowUp and ArrowDown', () => {
         component.format = PoTimerFormat.Format12;

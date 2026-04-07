@@ -321,6 +321,7 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
   @Input('p-format') set format(value: PoTimerFormat) {
     this._format = Object.values(PoTimerFormat).includes(value) ? value : PoTimerFormat.Format24;
     this.updateMask();
+    this.refreshValue(this._timeValue);
   }
 
   get format(): PoTimerFormat {
