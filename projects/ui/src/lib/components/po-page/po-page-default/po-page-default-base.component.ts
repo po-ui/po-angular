@@ -56,8 +56,9 @@ export const backNavigationAriaLabels = {
  *
  * | Propriedade         | Descrição                                   | Valor Padrão                          |
  * |---------------------|---------------------------------------------|---------------------------------------|
- * | **Header**          |                                             |                                       |
+ * | **Página**          |                                             |                                       |
  * | `--background`      | Background da página (header e body)        | `var(--color-page-background-color-page)` |
+ * | **Header**          |                                             |                                       |
  * | `--padding`         | Espaçamento do header                       | `var(--spacing-xs) var(--spacing-md)` |
  * | `--gap`             | Espaçamento entre os breadcrumbs e o título | `var(--spacing-md)`                   |
  * | `--gap-actions`     | Espaçamento entre as ações                  | `var(--spacing-xs)`                   |
