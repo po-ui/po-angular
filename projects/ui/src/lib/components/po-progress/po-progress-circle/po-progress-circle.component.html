@@ -1,31 +1,37 @@
-@if (!indeterminate) {
-  <div role="progressbar" [attr.aria-valuenow]="value" aria-valuemin="0" aria-valuemax="100" aria-live="polite">
+@if (!indeterminate()) {
+  <div role="progressbar" [attr.aria-valuenow]="value()" aria-valuemin="0" aria-valuemax="100" aria-live="polite">
     <div class="po-progress-circle-svg-wrapper">
       <svg
         class="po-progress-circle-svg"
-        [attr.width]="viewBoxSize"
-        [attr.height]="viewBoxSize"
-        [attr.viewBox]="'0 0 ' + viewBoxSize + ' ' + viewBoxSize"
+        [attr.width]="viewBoxSize()"
+        [attr.height]="viewBoxSize()"
+        [attr.viewBox]="'0 0 ' + viewBoxSize() + ' ' + viewBoxSize()"
       >
-        <circle class="po-progress-circle-tray" [attr.cx]="center" [attr.cy]="center" [attr.r]="radius" fill="none" />
+        <circle
+          class="po-progress-circle-tray"
+          [attr.cx]="center()"
+          [attr.cy]="center()"
+          [attr.r]="radius()"
+          fill="none"
+        />
 
         <circle
           class="po-progress-circle-indicator"
-          [attr.cx]="center"
-          [attr.cy]="center"
-          [attr.r]="radius"
+          [attr.cx]="center()"
+          [attr.cy]="center()"
+          [attr.r]="radius()"
           fill="none"
-          [attr.stroke-dasharray]="circumference"
-          [attr.stroke-dashoffset]="dashOffset"
+          [attr.stroke-dasharray]="circumference()"
+          [attr.stroke-dashoffset]="dashOffset()"
         />
       </svg>
 
-      @if (showPercentage) {
-        <span class="po-progress-circle-info po-progress-circle-info-percentage">{{ value }}%</span>
+      @if (showPercentage()) {
+        <span class="po-progress-circle-info po-progress-circle-info-percentage">{{ value() }}%</span>
       }
 
-      @if (status === 'error' && !showPercentage) {
-        <span class="po-progress-circle-info po-progress-circle-info-error po-progress-circle-info-error-{{ size }}">
+      @if (status() === 'error' && !showPercentage()) {
+        <span class="po-progress-circle-info po-progress-circle-info-error po-progress-circle-info-error-{{ size() }}">
           <span class="an an-warning-circle"></span>
         </span>
       }
@@ -33,29 +39,33 @@
   </div>
 }
 
-@if (indeterminate) {
+@if (indeterminate()) {
   <div
-    class="po-progress-circle po-progress-circle-indeterminate po-progress-circle-{{ size }}"
+    class="po-progress-circle po-progress-circle-indeterminate po-progress-circle-{{ size() }}"
     role="progressbar"
     aria-live="polite"
   >
     <div class="po-progress-circle-svg-wrapper">
       <svg
         class="po-progress-circle-svg"
-        [attr.width]="viewBoxSize"
-        [attr.height]="viewBoxSize"
-        [attr.viewBox]="'0 0 ' + viewBoxSize + ' ' + viewBoxSize"
+        [attr.width]="viewBoxSize()"
+        [attr.height]="viewBoxSize()"
+        [attr.viewBox]="'0 0 ' + viewBoxSize() + ' ' + viewBoxSize()"
       >
-        <circle class="po-progress-circle-tray" [attr.cx]="center" [attr.cy]="center" [attr.r]="radius" fill="none" />
+        <circle
+          class="po-progress-circle-tray"
+          [attr.cx]="center()"
+          [attr.cy]="center()"
+          [attr.r]="radius()"
+          fill="none"
+        />
 
         <circle
           class="po-progress-circle-indicator"
-          [attr.cx]="center"
-          [attr.cy]="center"
-          [attr.r]="radius"
+          [attr.cx]="center()"
+          [attr.cy]="center()"
+          [attr.r]="radius()"
           fill="none"
-          [attr.stroke-dasharray]="circumference"
-          [attr.stroke-dashoffset]="circumference * 0.75"
         />
       </svg>
     </div>

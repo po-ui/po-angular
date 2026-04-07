@@ -10,6 +10,7 @@ import { PoProgressAction } from './interfaces';
 
 const poProgressMaxValue = 100;
 const poProgressMinValue = 0;
+const CIRCLE_DEFAULT_RADIUS = 45;
 
 /**
  * @description
@@ -223,6 +224,24 @@ export class PoProgressBaseComponent {
   shape = input<string, string>(PoProgressShape.bar, {
     alias: 'p-shape',
     transform: (value: string) => (PoProgressShape[value] ? PoProgressShape[value] : PoProgressShape.bar)
+  });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o raio do círculo SVG em pixels. Permite ao usuário customizar o tamanho
+   * do indicador circular ao utilizar `p-shape="circle"`.
+   *
+   * @default `45`
+   */
+  radius = input<number, number>(CIRCLE_DEFAULT_RADIUS, {
+    alias: 'p-radius',
+    transform: (value: number) => {
+      const intValue = convertToInt(value, CIRCLE_DEFAULT_RADIUS);
+      return intValue > 0 ? intValue : CIRCLE_DEFAULT_RADIUS;
+    }
   });
 
   /**
