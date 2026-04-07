@@ -19,6 +19,7 @@ import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoCalendarLangService } from './services';
+import { isMobile } from '../../utils/util';
 
 /* istanbul ignore next */
 const providers = [
@@ -35,8 +36,6 @@ const providers = [
     multi: true
   }
 ];
-
-const poCalendarRangeWidth = 600;
 
 /**
  * @docsExtends PoCalendarBaseComponent
@@ -134,7 +133,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   get isResponsive() {
-    return window.innerWidth < poCalendarRangeWidth;
+    return isMobile();
   }
 
   ngOnInit() {
