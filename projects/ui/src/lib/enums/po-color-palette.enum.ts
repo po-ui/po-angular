@@ -3,7 +3,7 @@
  *
  * @description
  *
- * Enum que contém paleta de 12 cores.
+ * Enum que contém paleta de 20 cores.
  */
 export enum PoColorPaletteEnum {
   /** #0c9abe */
@@ -40,5 +40,29 @@ export enum PoColorPaletteEnum {
   Color11 = 'color-11',
 
   /** #06a6a5 */
-  Color12 = 'color-12'
+  Color12 = 'color-12',
+
+  /** #1a7a4f */
+  Color13 = 'color-13',
+
+  /** #4a8c2a */
+  Color14 = 'color-14',
+
+  /** #d4a017 */
+  Color15 = 'color-15',
+
+  /** #d47217 */
+  Color16 = 'color-16',
+
+  /** #c43a6a */
+  Color17 = 'color-17',
+
+  /** #7a2dc8 */
+  Color18 = 'color-18',
+
+  /** #3f6ec8 */
+  Color19 = 'color-19',
+
+  /** #1ab5c8 */
+  Color20 = 'color-20'
 }
