@@ -144,7 +144,7 @@
     "mkdirp": "3.0.1",
     "ng-packagr": "~21.0.0",
     "prettier": "^3.1.0",
-    "rollup": "4.24.4",
+    "rollup": "4.60.1",
     "standard-version": "^9.5.0",
     "ts-node": "~10.9.1",
     "typemoq": "^2.1.0",
@@ -152,7 +152,12 @@
     "validate.js": "file:libs/validate.js-v0.13.2.tgz"
   },
   "overrides": {
-    "axios": "1.12.2"
+    "axios": "1.12.2",
+    "vite": "7.3.2",
+    "picomatch": "4.0.4",
+    "eslint-plugin-sonarjs": {
+      "minimatch": "9.0.7"
+    }
   },
   "standard-version": {
     "skip": {
