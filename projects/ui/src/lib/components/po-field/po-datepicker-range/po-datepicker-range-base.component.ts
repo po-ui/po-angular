@@ -174,7 +174,9 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    * - `true`: exibe todos os presets padrão (Amanhã, Hoje, Ontem, Últimos 7 dias, Últimos 14 dias, Últimos 30 dias, Últimos 3 meses, Últimos 6 meses).
    * - `false`: não exibe os presets padrão.
    * - `Array<string>`: exibe apenas os presets padrão cujos labels estejam no array informado.
-   *   O preset "today" é obrigatório e será incluído automaticamente mesmo que não esteja no array.
+   * > Label dos presets: tomorrow, today, yesterday, 7days, 14days, 30days, 3months, 6months.
+   *
+   * O preset "today" é obrigatório e será incluído automaticamente mesmo que não esteja no array.
    *
    * Caso `p-range-preset-options` também seja informado, os presets customizados serão exibidos junto aos presets padrão,
    * ordenados automaticamente por temporalidade com base na data início (Futuro → Presente → Passado).

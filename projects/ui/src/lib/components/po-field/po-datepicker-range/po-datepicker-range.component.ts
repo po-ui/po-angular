@@ -108,10 +108,15 @@ export class PoDatepickerRangeComponent
 
   id = `po-datepicker-range[${uuid()}]`;
   isCalendarVisible = false;
+  widthWithPresets = false;
 
   private clickListener;
   private eventResizeListener;
   private readonly poDatepickerRangeElement: ElementRef<any>;
+  private readonly MIN_CALENDAR_WIDTH_WITH_PRESETS = {
+    medium: 624,
+    small: 512
+  };
 
   get autocomplete() {
     return this.noAutocomplete ? 'off' : 'on';
@@ -197,6 +202,8 @@ export class PoDatepickerRangeComponent
     this.poMaskObject = this.buildMask(
       replaceFormatSeparator(this.format, this.poLanguageService.getDateSeparator(this.locale))
     );
+
+    this.widthWithPresets = window.innerWidth < this.MIN_CALENDAR_WIDTH_WITH_PRESETS[this.size];
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -325,41 +332,81 @@ export class PoDatepickerRangeComponent
   }
 
   onKeyPress(event: any) {
+    if (this.handleShiftTabWithCleaner(event)) return;
+
+    if (this.handleShiftTabWithoutCleaner(event)) return;
+
+    if (this.handleTabWithCalendarVisible(event)) return;
+  }
+
+  private handleShiftTabWithCleaner(event: any): boolean {
     if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible && this.enableCleaner) {
       this.iconClean.nativeElement?.focus();
       event.preventDefault();
-      return;
+      return true;
     }
+    return false;
+  }
 
+  private handleShiftTabWithoutCleaner(event: any): boolean {
     if (event.key === 'Tab' && event.shiftKey && !this.isCalendarVisible) {
       this.focus();
       event.preventDefault();
       event.stopPropagation();
-      return;
+      return true;
+    }
+    return false;
+  }
+
+  private handleTabWithCalendarVisible(event: any): boolean {
+    if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
+      if (this.handleMobileNavigation(event)) return true;
+
+      if (this.handlePresetNavigation(event)) return true;
+
+      return this.handleComboNavigation(event);
     }
 
-    if (event.key === 'Tab' && !event.shiftKey && this.isCalendarVisible) {
-      if (this.verifyMobile()) {
-        const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
-        if (firstCombo) {
-          event.preventDefault();
-          firstCombo.focus();
-        }
-        return;
-      }
+    return false;
+  }
 
-      const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
-      if (firstPreset) {
-        event.preventDefault();
-        firstPreset.focus();
-        return;
-      }
+  private handleMobileNavigation(event: any): boolean {
+    if (this.verifyMobile()) {
       const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+
       if (firstCombo) {
         event.preventDefault();
         firstCombo.focus();
       }
+
+      return true;
     }
+
+    return false;
+  }
+
+  private handlePresetNavigation(event: any): boolean {
+    const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
+
+    if (firstPreset && !this.calculateWidthWithPresets()) {
+      event.preventDefault();
+      firstPreset.focus();
+      return true;
+    }
+
+    return false;
+  }
+
+  private handleComboNavigation(event: any): boolean {
+    const firstCombo = this.calendarPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+
+    if (firstCombo) {
+      event.preventDefault();
+      firstCombo.focus();
+      return true;
+    }
+
+    return false;
   }
 
   @HostListener('keydown', ['$event'])
@@ -456,6 +503,15 @@ export class PoDatepickerRangeComponent
     return this.displayAdditionalHelp;
   }
 
+  enableHorizontalMouseWheel() {
+    const el = this?.calendarPicker.nativeElement.querySelector('.po-calendar-preset-list');
+
+    el.addEventListener('wheel', (event: WheelEvent) => {
+      event.preventDefault();
+      el.scrollLeft += event.deltaY;
+    });
+  }
+
   toggleCalendar() {
     if (this.disabled || this.readonly) {
       return;
@@ -465,6 +521,10 @@ export class PoDatepickerRangeComponent
     this.changeDetector.markForCheck();
 
     if (this.isCalendarVisible) {
+      if (this.calculateWidthWithPresets()) {
+        this.enableHorizontalMouseWheel();
+      }
+
       this.setCalendarPosition();
       this.initializeListeners();
     } else {
@@ -510,7 +570,7 @@ export class PoDatepickerRangeComponent
       event.stopPropagation();
 
       const firstPreset = this.calendarPicker.nativeElement.querySelector('.po-calendar-preset-item .po-button');
-      if (firstPreset) {
+      if (firstPreset && !this.calculateWidthWithPresets()) {
         firstPreset.focus();
         return;
       }
@@ -528,6 +588,31 @@ export class PoDatepickerRangeComponent
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.updateWidthWithPresets();
+  }
+
+  private calculateWidthWithPresets(): boolean {
+    const hasPresets = this.rangePresets || this.rangePresetOptions?.length > 0;
+
+    if (!hasPresets) {
+      return false;
+    }
+
+    const minWidth = this.MIN_CALENDAR_WIDTH_WITH_PRESETS[this.size];
+
+    if (!minWidth) {
+      return false;
+    }
+
+    return window.innerWidth < minWidth;
+  }
+
+  private updateWidthWithPresets() {
+    this.widthWithPresets = this.calculateWidthWithPresets();
   }
 
   verifyMobile() {

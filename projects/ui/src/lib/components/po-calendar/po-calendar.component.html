@@ -2,9 +2,10 @@
   <div
     class="po-calendar"
     [class.po-calendar-with-presets]="effectivePresets().length > 0"
-    [class.po-calendar-mobile]="isResponsive"
+    [class.po-calendar-mobile]="isResponsive || widthWithPresets"
+    [class.po-calendar-responsive]="!isResponsive && widthWithPresets"
   >
-    @if (effectivePresets().length > 0 && !isResponsive) {
+    @if (effectivePresets().length > 0 && !isResponsive && !widthWithPresets) {
       <po-calendar-preset-list
         [p-presets]="effectivePresets()"
         [p-locale]="locale"
@@ -15,7 +16,7 @@
       ></po-calendar-preset-list>
     }
     <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'start' }"></ng-container>
-    @if (effectivePresets().length > 0 && isResponsive) {
+    @if (effectivePresets().length > 0 && (isResponsive || widthWithPresets)) {
       <po-calendar-preset-list
         [p-presets]="effectivePresets()"
         [p-locale]="locale"
@@ -52,7 +53,7 @@
     [p-max-date]="maxDate"
     [p-part-type]="partType"
     [p-range]="isRange"
-    [p-responsive]="isResponsive"
+    [p-responsive]="isResponsive || widthWithPresets"
     [p-selected-value]="value"
     [p-hover-value]="hoverValue"
     [p-hide-today-button]="effectivePresets().length > 0"

@@ -336,6 +336,10 @@ export class PoCalendarBaseComponent {
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
+  // Propriedade interna responsável por controlar a visibilidade do calendário
+  // no po-datepicker-range, especialmente quando presets estão configurados.
+  @Input('p-width-with-presets') widthWithPresets?: boolean;
+
   constructor(
     public poDate: PoDateService,
     private readonly languageService: PoLanguageService
