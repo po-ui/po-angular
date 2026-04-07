@@ -543,4 +543,30 @@ describe('PoPageDefaultComponent desktop', () => {
       expect(buttons.length).toBeGreaterThan(0);
     });
   });
+
+  describe('getActionKind', () => {
+    it('should return "primary" when action.kind is "primary"', () => {
+      expect(component.getActionKind({ label: 'A', kind: 'primary' }, 'secondary')).toBe('primary');
+    });
+
+    it('should return "secondary" when action.kind is "secondary"', () => {
+      expect(component.getActionKind({ label: 'A', kind: 'secondary' }, 'primary')).toBe('secondary');
+    });
+
+    it('should return fallback when action.kind is "tertiary" (invalid)', () => {
+      expect(component.getActionKind({ label: 'A', kind: 'tertiary' }, 'primary')).toBe('primary');
+    });
+
+    it('should return fallback when action.kind is undefined', () => {
+      expect(component.getActionKind({ label: 'A' }, 'secondary')).toBe('secondary');
+    });
+
+    it('should return fallback when action.kind is an invalid string', () => {
+      expect(component.getActionKind({ label: 'A', kind: 'invalid' }, 'primary')).toBe('primary');
+    });
+
+    it('should return fallback when action.kind is empty string', () => {
+      expect(component.getActionKind({ label: 'A', kind: '' }, 'secondary')).toBe('secondary');
+    });
+  });
 });

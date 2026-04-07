@@ -12,7 +12,7 @@
     }
     @if (visibleActions[0]) {
       <po-button
-        [p-kind]="visibleActions[0].kind || kindFallback"
+        [p-kind]="getActionKind(visibleActions[0], kindFallback)"
         [p-danger]="visibleActions[0].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[0])"
         [p-icon]="visibleActions[0].icon"
@@ -30,6 +30,7 @@
     }
     @if (visibleActions.length === 3 && visibleActions[2] && !isMobile) {
       <po-button
+        [p-kind]="getActionKind(visibleActions[2], 'secondary')"
         [p-danger]="visibleActions[2].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[2])"
         [p-icon]="visibleActions[2].icon"
@@ -40,6 +41,7 @@
     }
     @if (visibleActions[1] && (visibleActions.length === 2 || !isMobile)) {
       <po-button
+        [p-kind]="getActionKind(visibleActions[1], 'secondary')"
         [p-disabled]="actionIsDisabled(visibleActions[1])"
         [p-icon]="visibleActions[1].icon"
         [p-label]="visibleActions[1].label"
@@ -50,7 +52,7 @@
     }
     @if (visibleActions[0]) {
       <po-button
-        p-kind="primary"
+        [p-kind]="getActionKind(visibleActions[0], 'primary')"
         [p-danger]="visibleActions[0].type === 'danger'"
         [p-disabled]="actionIsDisabled(visibleActions[0])"
         [p-icon]="visibleActions[0].icon"

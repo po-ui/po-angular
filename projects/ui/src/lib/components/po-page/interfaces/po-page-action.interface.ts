@@ -23,17 +23,21 @@ export interface PoPageAction extends PoDropdownAction {
   /**
    * @description
    *
-   * Define o estilo visual da ação quando ela é exibida como um botão.
+   * Define o estilo visual da ação quando ela é exibida como botão fora do *dropdown*.
    *
-   * Valores válidos:
+   * Valores permitidos:
    * - `primary`: Botão com maior destaque visual.
    * - `secondary`: Estilo padrão para a maioria das ações.
-   * - `tertiary`: Botão com menor destaque (apenas texto/ícone).
    *
-   * > Aplicável quando `PoPageActionsLayout` for `mixed`. No layout `default`, a primeira ação é sempre `primary`
-   * e as demais `secondary`, independente do valor de `kind`.
+   * > Valores inválidos são ignorados, mantendo o valor padrão da posição da ação.
    *
-   * > Quando o header é do tipo `secondary` ou `tertiary`, o valor padrão desta propriedade passa a ser `secondary`.
+   * > Aplicável apenas a ações exibidas como botões (fora do *dropdown*). Ações dentro do *dropdown* não utilizam esta propriedade.
+   *
+   * > Funciona independentemente da posição da ação e com qualquer `PoPageHeaderType` ou `PoPageActionsLayout`.
+   *
+   * **Valores padrão por posição (quando `kind` não é definido):**
+   * - Layout `default`: primeira ação = `primary`, demais = `secondary`.
+   * - Layout `mixed`: primeira ação = `primary` (header primary) ou `secondary` (header secondary/tertiary).
    */
   kind?: string;
 }

@@ -121,6 +121,14 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     return this.actions.filter(action => this.actionIsVisible(action) !== false);
   }
 
+  /**
+   * Retorna o kind validado da ação. Apenas 'primary' e 'secondary' são permitidos.
+   * Valores inválidos são ignorados, retornando o fallback informado.
+   */
+  getActionKind(action: PoPageAction, fallback: string): string {
+    return action.kind === 'primary' || action.kind === 'secondary' ? action.kind : fallback;
+  }
+
   private onResize(event: Event): void {
     const width = (event.target as Window).innerWidth;
 
