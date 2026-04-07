@@ -2347,15 +2347,30 @@ describe('PoTimepickerComponent:', () => {
     });
 
     describe('updateCombinedValue (private):', () => {
-      it('should clear when segments are incomplete', () => {
+      it('should silently clear when segments are partially filled during editing', () => {
         fixture.detectChanges();
         component.hourDisplay = '10';
         component.minuteDisplay = '';
 
         spyOn(component as any, 'callOnChange');
+        spyOn(component as any, 'applyInputValidationError');
         component['updateCombinedValue']();
 
         expect(component['callOnChange']).toHaveBeenCalledWith('');
+        expect(component['applyInputValidationError']).not.toHaveBeenCalled();
+      });
+
+      it('should clear without error when all segments are empty', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+
+        spyOn(component as any, 'callOnChange');
+        spyOn(component as any, 'applyInputValidationError');
+        component['updateCombinedValue']();
+
+        expect(component['callOnChange']).toHaveBeenCalledWith('');
+        expect(component['applyInputValidationError']).not.toHaveBeenCalled();
       });
 
       it('should set timeValue when segments are complete and valid', () => {
@@ -2454,6 +2469,81 @@ describe('PoTimepickerComponent:', () => {
     });
 
     describe('validateAndUpdateModel (private):', () => {
+      it('should show error on blur when segments are partially filled (hour only)', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '10';
+        component.minuteDisplay = '';
+
+        spyOn(component as any, 'applyInputValidationError');
+        component['validateAndUpdateModel']();
+
+        expect(component['applyInputValidationError']).toHaveBeenCalledWith('10:', false);
+      });
+
+      it('should show error on blur when segments are partially filled (minute only)', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '';
+        component.minuteDisplay = '30';
+
+        spyOn(component as any, 'applyInputValidationError');
+        component['validateAndUpdateModel']();
+
+        expect(component['applyInputValidationError']).toHaveBeenCalledWith(':30', false);
+      });
+
+      it('should show error on blur when showSeconds is true and second segment is missing', () => {
+        component.showSeconds = true;
+        fixture.detectChanges();
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        component.secondDisplay = '';
+
+        spyOn(component as any, 'applyInputValidationError');
+        component['validateAndUpdateModel']();
+
+        expect(component['applyInputValidationError']).toHaveBeenCalledWith('10:30:', false);
+      });
+
+      it('should not show error on blur when all segments are empty', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+
+        spyOn(component as any, 'applyInputValidationError');
+        component['validateAndUpdateModel']();
+
+        expect(component['applyInputValidationError']).not.toHaveBeenCalled();
+      });
+
+      it('should clear error when partial input is completed after blur', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '10';
+        component.minuteDisplay = '';
+        component['validateAndUpdateModel']();
+
+        expect(component.timeValue).toBe('');
+        expect(component.errorPattern).toBe('Hora inválida');
+
+        component.minuteDisplay = '30';
+        component['updateCombinedValue']();
+
+        expect(component.timeValue).toBe('10:30');
+        expect(component.errorPattern).toBe('');
+      });
+
+      it('should clear error on clear() after partial blur', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '10';
+        component.minuteDisplay = '';
+        component['validateAndUpdateModel']();
+
+        component.clear();
+
+        expect(component.errorPattern).toBe('');
+        expect(component.hourDisplay).toBe('');
+        expect(component.minuteDisplay).toBe('');
+      });
+
       it('should pad single digit hour and update', () => {
         fixture.detectChanges();
         component.hourDisplay = '1';

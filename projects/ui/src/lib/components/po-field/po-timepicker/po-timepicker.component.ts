@@ -981,6 +981,9 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   private updateCombinedValue(): void {
     if (!this.areSegmentsComplete()) {
       this.clearValidationValue();
+      if (this.isGeneratedErrorPattern(this.errorPattern)) {
+        this.errorPattern = '';
+      }
       this.timeValue = '';
       this.callOnChange('');
       this.validateModel(this.timeValue);
@@ -996,6 +999,20 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
     const combined = this.is12HourFormat ? this.convertDisplayTo24h(displayCombined) : displayCombined;
     this.updateTimeFromInput(combined);
+  }
+
+  /** Monta a string parcial combinando os segmentos preenchidos e vazios. */
+  private buildPartialCombined(): string {
+    const hour = this.hourDisplay || '';
+    const minute = this.minuteDisplay || '';
+    let combined = `${hour}:${minute}`;
+
+    if (this.showSeconds) {
+      const second = this.secondDisplay || '';
+      combined += `:${second}`;
+    }
+
+    return combined;
   }
 
   private areSegmentsComplete(): boolean {
@@ -1056,6 +1073,11 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     }
 
     this.updateCombinedValue();
+
+    if (!this.areSegmentsComplete() && this.hasValue()) {
+      const partial = this.buildPartialCombined();
+      this.applyInputValidationError(partial, false);
+    }
   }
 
   private updateTimeFromInput(rawValue: string): void {
