@@ -1,0 +1,44 @@
+<h3>Cenario: Secondary Header - Todos os Layouts</h3>
+<p>Header type secondary com 5 acoes. Botao voltar sempre presente.</p>
+
+<h4>1. Layout Default</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Secondary - Default Layout"
+    p-subtitle="5 acoes, overflow no dropdown"
+    [p-actions]="actions"
+    p-page-header-type="secondary"
+    p-page-actions-layout="default"
+    (p-back)="onBack()"
+  >
+    <p>Layout default no secondary: primeira acao primary kind, demais secondary. Dropdown para overflow.</p>
+  </po-page-default>
+</div>
+
+<h4>2. Layout Dropdown</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Secondary - Dropdown Layout"
+    p-subtitle="Todas as acoes no dropdown"
+    [p-actions]="actions"
+    p-page-header-type="secondary"
+    p-page-actions-layout="dropdown"
+    (p-back)="onBack()"
+  >
+    <p>Layout dropdown no secondary: todas as acoes no dropdown. Botao voltar visivel.</p>
+  </po-page-default>
+</div>
+
+<h4>3. Layout Mixed</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Secondary - Mixed Layout"
+    p-subtitle="Primeira acao como botao, demais no dropdown"
+    [p-actions]="actions"
+    p-page-header-type="secondary"
+    p-page-actions-layout="mixed"
+    (p-back)="onBack()"
+  >
+    <p>Layout mixed no secondary: primeiro botao visivel (kind conforme action.kind), demais no dropdown.</p>
+  </po-page-default>
+</div>

@@ -1,0 +1,72 @@
+<h3>Cenario: Contagem de Acoes</h3>
+<p>Valida comportamento com diferentes quantidades de acoes em cada header type.</p>
+
+<h4>Primary - 0 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary sem acoes" [p-actions]="noActions" p-page-header-type="primary">
+    <p>Sem acoes - header visivel apenas pelo titulo.</p>
+  </po-page-default>
+</div>
+
+<h4>Primary - 1 acao com icone</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary 1 acao" [p-actions]="oneAction" p-page-header-type="primary">
+    <p>1 acao com icone, kind primary.</p>
+  </po-page-default>
+</div>
+
+<h4>Primary - 1 acao sem icone</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary 1 acao sem icone" [p-actions]="oneActionNoIcon" p-page-header-type="primary">
+    <p>1 acao sem icone - label deve ser exibido em todas as telas.</p>
+  </po-page-default>
+</div>
+
+<h4>Primary - 2 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary 2 acoes" [p-actions]="twoActions" p-page-header-type="primary">
+    <p>2 acoes: primeira primary, segunda secondary.</p>
+  </po-page-default>
+</div>
+
+<h4>Primary - 3 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary 3 acoes" [p-actions]="threeActions" p-page-header-type="primary">
+    <p>3 acoes: primeira primary, demais secondary.</p>
+  </po-page-default>
+</div>
+
+<h4>Primary - 5 acoes (overflow)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary 5 acoes" [p-actions]="fiveActions" p-page-header-type="primary">
+    <p>5 acoes: overflow, dropdown automatico.</p>
+  </po-page-default>
+</div>
+
+<h4>Secondary - 0 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary sem acoes" [p-actions]="noActions" p-page-header-type="secondary" (p-back)="onBack()">
+    <p>Secondary sem acoes - header visivel pelo botao voltar.</p>
+  </po-page-default>
+</div>
+
+<h4>Secondary - 3 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary 3 acoes" [p-actions]="threeActions" p-page-header-type="secondary" (p-back)="onBack()">
+    <p>Secondary com 3 acoes no default layout.</p>
+  </po-page-default>
+</div>
+
+<h4>Tertiary - 0 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary sem acoes" [p-actions]="noActions" p-page-header-type="tertiary">
+    <p>Tertiary sem acoes - header visivel apenas pelo titulo.</p>
+  </po-page-default>
+</div>
+
+<h4>Tertiary - 3 acoes</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary 3 acoes" [p-actions]="threeActions" p-page-header-type="tertiary">
+    <p>Tertiary com 3 acoes no default layout.</p>
+  </po-page-default>
+</div>

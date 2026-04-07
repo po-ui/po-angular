@@ -1,0 +1,42 @@
+<h3>Cenario: Comparacao dos 3 Header Types</h3>
+<p>Todos com as mesmas 3 acoes, titulo, subtitulo e breadcrumb (quando compativel).</p>
+
+<h4>1. Primary (padrao)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Pagina Primary"
+    p-subtitle="Subtitulo da pagina"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+    p-page-header-type="primary"
+  >
+    <p>Conteudo do header primary. Breadcrumb visivel, titulo h2, primeira acao primary kind.</p>
+  </po-page-default>
+</div>
+
+<h4>2. Secondary</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Pagina Secondary"
+    p-subtitle="Subtitulo da pagina"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+    p-page-header-type="secondary"
+    (p-back)="onBack()"
+  >
+    <p>Conteudo do header secondary. Breadcrumb NAO visivel, botao voltar, titulo h3 semibold, primeira acao primary kind no default layout.</p>
+  </po-page-default>
+</div>
+
+<h4>3. Tertiary</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Pagina Tertiary"
+    p-subtitle="Subtitulo da pagina"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+    p-page-header-type="tertiary"
+  >
+    <p>Conteudo do header tertiary. Sem breadcrumb, sem botao voltar, titulo h3 regular, primeira acao primary kind no default layout.</p>
+  </po-page-default>
+</div>

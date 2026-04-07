@@ -1,0 +1,76 @@
+<h3>Cenario: Botao Voltar (Secondary)</h3>
+<p>Valida o botao de navegacao (voltar) no header secondary.</p>
+
+<h4>1. Secondary com acoes - botao voltar + aria-label</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-title="Secondary com Back"
+    p-subtitle="Clique no botao voltar"
+    [p-actions]="actions"
+    p-page-header-type="secondary"
+    (p-back)="onBack()"
+  >
+    <p>Botao voltar: apenas icone (arrow-left), aria-label para leitores de tela.</p>
+    <p>Verifique: inspecione o botao voltar e confirme que tem aria-label='Voltar' (ou equivalente no idioma).</p>
+    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+  </po-page-default>
+</div>
+
+<h4>2. Secondary sem acoes - apenas botao voltar</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-title="Apenas Voltar"
+    p-page-header-type="secondary"
+    (p-back)="onBack()"
+  >
+    <p>Header visivel apenas com botao voltar e titulo. Sem acoes.</p>
+    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+  </po-page-default>
+</div>
+
+<h4>3. Secondary sem titulo - apenas voltar</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-page-header-type="secondary"
+    (p-back)="onBack()"
+  >
+    <p>Header secondary sem titulo. Botao voltar ainda visivel.</p>
+    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+  </po-page-default>
+</div>
+
+<h4>4. Primary - NAO deve ter botao voltar</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-title="Primary sem voltar"
+    [p-actions]="actions"
+    p-page-header-type="primary"
+  >
+    <p>Header primary NAO deve exibir botao voltar.</p>
+  </po-page-default>
+</div>
+
+<h4>5. Tertiary - NAO deve ter botao voltar</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-title="Tertiary sem voltar"
+    [p-actions]="actions"
+    p-page-header-type="tertiary"
+  >
+    <p>Header tertiary NAO deve exibir botao voltar.</p>
+  </po-page-default>
+</div>
+
+<h4>6. Secondary + Dropdown layout - botao voltar + dropdown</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-title="Secondary Dropdown + Back"
+    [p-actions]="actions"
+    p-page-header-type="secondary"
+    p-page-actions-layout="dropdown"
+    (p-back)="onBack()"
+  >
+    <p>Botao voltar + todas as acoes no dropdown.</p>
+    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+  </po-page-default>
+</div>

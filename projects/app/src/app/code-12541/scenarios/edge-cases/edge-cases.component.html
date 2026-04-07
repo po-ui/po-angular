@@ -1,0 +1,71 @@
+<h3>Cenario: Casos Limite (Edge Cases)</h3>
+
+<h4>1. Subtitle sem Title (subtitle nao deve aparecer)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-subtitle="Subtitulo sem titulo" [p-actions]="actions" p-page-header-type="primary">
+    <p>Subtitle fornecido mas sem title. O subtitle NAO deve ser renderizado.</p>
+  </po-page-default>
+</div>
+
+<h4>2. Secondary sem titulo, sem acoes (header visivel pelo botao voltar)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-page-header-type="secondary" (p-back)="onBack()">
+    <p>Secondary sem titulo e sem acoes. Header deve ser visivel pelo botao voltar.</p>
+  </po-page-default>
+</div>
+
+<h4>3. Tertiary sem titulo e sem acoes (header NAO deve aparecer)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-page-header-type="tertiary">
+    <p>Tertiary sem titulo e sem acoes. hasPageHeader() retorna false, header NAO visivel.</p>
+  </po-page-default>
+</div>
+
+<h4>4. Primary sem titulo, sem acoes, sem breadcrumb (header NAO deve aparecer)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-page-header-type="primary">
+    <p>Primary sem nada. hasPageHeader() retorna false.</p>
+  </po-page-default>
+</div>
+
+<h4>5. Breadcrumb no Secondary (breadcrumb ignorado)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary + Breadcrumb" [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="secondary" (p-back)="onBack()">
+    <p>Breadcrumb fornecido mas ignorado no secondary. Nao deve renderizar breadcrumb.</p>
+  </po-page-default>
+</div>
+
+<h4>6. Breadcrumb no Tertiary (breadcrumb ignorado, sem espaco)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary + Breadcrumb" [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="tertiary">
+    <p>Breadcrumb fornecido mas ignorado no tertiary. Nao deve renderizar breadcrumb nem reservar espaco.</p>
+  </po-page-default>
+</div>
+
+<h4>7. Header type invalido (deve usar primary como default)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Header Invalido" [p-actions]="actions" p-page-header-type="invalido">
+    <p>Header type invalido. Deve fazer fallback para primary.</p>
+  </po-page-default>
+</div>
+
+<h4>8. Actions layout invalido (deve usar default)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Layout Invalido" [p-actions]="actions" p-page-header-type="primary" p-page-actions-layout="invalido">
+    <p>Actions layout invalido. Deve fazer fallback para default.</p>
+  </po-page-default>
+</div>
+
+<h4>9. Apenas breadcrumb sem titulo (Primary)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default [p-breadcrumb]="breadcrumb" p-page-header-type="primary">
+    <p>Apenas breadcrumb, sem titulo. Header visivel pelo breadcrumb. Nao deve haver gap desnecessario.</p>
+  </po-page-default>
+</div>
+
+<h4>10. Secondary subtitle sem title</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-subtitle="Subtitulo orfao" p-page-header-type="secondary" [p-actions]="actions" (p-back)="onBack()">
+    <p>Secondary com subtitle mas sem title. Subtitle NAO deve ser renderizado.</p>
+  </po-page-default>
+</div>

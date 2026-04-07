@@ -1,0 +1,41 @@
+<h3>Cenario: Tertiary Header - Todos os Layouts</h3>
+<p>Header type tertiary com 5 acoes. Sem botao voltar, sem breadcrumb.</p>
+
+<h4>1. Layout Default</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Tertiary - Default Layout"
+    p-subtitle="5 acoes, overflow no dropdown"
+    [p-actions]="actions"
+    p-page-header-type="tertiary"
+    p-page-actions-layout="default"
+  >
+    <p>Layout default no tertiary: primeira acao primary kind, demais secondary. Dropdown para overflow.</p>
+  </po-page-default>
+</div>
+
+<h4>2. Layout Dropdown</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Tertiary - Dropdown Layout"
+    p-subtitle="Todas as acoes no dropdown"
+    [p-actions]="actions"
+    p-page-header-type="tertiary"
+    p-page-actions-layout="dropdown"
+  >
+    <p>Layout dropdown no tertiary: todas as acoes no dropdown.</p>
+  </po-page-default>
+</div>
+
+<h4>3. Layout Mixed</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Tertiary - Mixed Layout"
+    p-subtitle="Primeira acao como botao, demais no dropdown"
+    [p-actions]="actions"
+    p-page-header-type="tertiary"
+    p-page-actions-layout="mixed"
+  >
+    <p>Layout mixed no tertiary: primeiro botao visivel, demais no dropdown.</p>
+  </po-page-default>
+</div>

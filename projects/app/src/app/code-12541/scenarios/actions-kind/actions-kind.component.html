@@ -1,0 +1,51 @@
+<h3>Cenario: Propriedade kind das Acoes</h3>
+<p>Valida como o kind de cada acao se comporta em cada header type.</p>
+
+<h4>Primary - Acoes com kind explicito (kind ignorado no primary default)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Primary + kind explicito" [p-actions]="actionsWithKind" p-page-header-type="primary">
+    <p>No primary default: primeira acao = primary, demais = secondary. Kind do PoPageAction NAO tem efeito.</p>
+  </po-page-default>
+</div>
+
+<h4>Secondary - Acoes com kind explicito</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary + kind explicito" [p-actions]="actionsWithKind" p-page-header-type="secondary" (p-back)="onBack()">
+    <p>No secondary default: primeira acao = primary (padrao do layout default), demais usam kind ou fallback secondary.</p>
+  </po-page-default>
+</div>
+
+<h4>Tertiary - Acoes com kind explicito</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary + kind explicito" [p-actions]="actionsWithKind" p-page-header-type="tertiary">
+    <p>No tertiary default: primeira acao = primary (padrao do layout default), demais usam kind ou fallback secondary.</p>
+  </po-page-default>
+</div>
+
+<h4>Secondary - Acoes SEM kind (fallback)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary sem kind" [p-actions]="actionsNoKind" p-page-header-type="secondary" (p-back)="onBack()">
+    <p>Sem kind: primeira acao = primary, demais = secondary (fallback padrao).</p>
+  </po-page-default>
+</div>
+
+<h4>Tertiary - Acoes com kind misto</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary kind misto" [p-actions]="actionsMixed" p-page-header-type="tertiary">
+    <p>Primeira = primary, segunda sem kind (secondary), terceira = tertiary explicito.</p>
+  </po-page-default>
+</div>
+
+<h4>Secondary Mixed Layout - kind no primeiro botao</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary Mixed + kind" [p-actions]="actionsWithKind" p-page-header-type="secondary" p-page-actions-layout="mixed" (p-back)="onBack()">
+    <p>Mixed: primeiro botao usa action.kind || 'secondary'. Demais no dropdown.</p>
+  </po-page-default>
+</div>
+
+<h4>Tertiary Mixed Layout - kind no primeiro botao</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary Mixed + kind" [p-actions]="actionsWithKind" p-page-header-type="tertiary" p-page-actions-layout="mixed">
+    <p>Mixed: primeiro botao usa action.kind || 'secondary'. Demais no dropdown.</p>
+  </po-page-default>
+</div>

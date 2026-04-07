@@ -1,0 +1,44 @@
+<h3>Cenario: Primary Header - Todos os Layouts</h3>
+<p>Header type primary com 5 acoes para testar overflow no dropdown.</p>
+
+<h4>1. Layout Default (padrao)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Primary - Default Layout"
+    p-subtitle="5 acoes, overflow no dropdown"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+    p-page-header-type="primary"
+    p-page-actions-layout="default"
+  >
+    <p>Layout default: ate 3 botoes visiveis, restante no dropdown.</p>
+  </po-page-default>
+</div>
+
+<h4>2. Layout Dropdown</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Primary - Dropdown Layout"
+    p-subtitle="Todas as acoes no dropdown"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+    p-page-header-type="primary"
+    p-page-actions-layout="dropdown"
+  >
+    <p>Layout dropdown: todas as 5 acoes ficam dentro do dropdown.</p>
+  </po-page-default>
+</div>
+
+<h4>3. Layout Mixed</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+  <po-page-default
+    p-title="Primary - Mixed Layout"
+    p-subtitle="Primeira acao como botao, demais no dropdown"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+    p-page-header-type="primary"
+    p-page-actions-layout="mixed"
+  >
+    <p>Layout mixed: primeiro botao visivel (primary kind), demais no dropdown.</p>
+  </po-page-default>
+</div>

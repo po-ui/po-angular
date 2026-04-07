@@ -1,0 +1,82 @@
+<h3>Cenario: Propriedades da Pagina</h3>
+
+<h4>1. Titulo + Subtitulo + Breadcrumb</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Titulo Completo" p-subtitle="Subtitulo visivel" [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="primary">
+    <p>Todas as propriedades preenchidas.</p>
+  </po-page-default>
+</div>
+
+<h4>2. Apenas Titulo (sem subtitulo, sem breadcrumb)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Apenas Titulo" [p-actions]="actions" p-page-header-type="primary">
+    <p>Sem subtitulo e sem breadcrumb.</p>
+  </po-page-default>
+</div>
+
+<h4>3. Titulo + Subtitulo (sem breadcrumb)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Com Subtitulo" p-subtitle="Subtitulo presente" [p-actions]="actions" p-page-header-type="primary">
+    <p>Titulo e subtitulo sem breadcrumb.</p>
+  </po-page-default>
+</div>
+
+<h4>4. Titulo + Breadcrumb (sem subtitulo)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Com Breadcrumb" [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="primary">
+    <p>Titulo e breadcrumb sem subtitulo.</p>
+  </po-page-default>
+</div>
+
+<h4>5. Apenas Breadcrumb (sem titulo)</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="primary">
+    <p>Apenas breadcrumb e acoes, sem titulo.</p>
+  </po-page-default>
+</div>
+
+<h4>6. Components Size: small</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Size Small" p-subtitle="Componentes pequenos" [p-actions]="actions" p-page-header-type="primary" p-components-size="small">
+    <p>p-components-size = small.</p>
+  </po-page-default>
+</div>
+
+<h4>7. Components Size: medium</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Size Medium" p-subtitle="Componentes medios" [p-actions]="actions" p-page-header-type="primary" p-components-size="medium">
+    <p>p-components-size = medium (padrao).</p>
+  </po-page-default>
+</div>
+
+<h4>8. Literals customizadas</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default
+    p-title="Literals Custom"
+    [p-actions]="[
+      { label: 'A1' },
+      { label: 'A2' },
+      { label: 'A3' },
+      { label: 'A4' },
+      { label: 'A5' }
+    ]"
+    [p-literals]="customLiterals"
+    p-page-header-type="primary"
+  >
+    <p>Dropdown deve exibir 'Mais opcoes' ao inves de 'Outras acoes'.</p>
+  </po-page-default>
+</div>
+
+<h4>9. Secondary - Titulo + Subtitulo</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Secondary Props" p-subtitle="Subtitulo secondary" [p-actions]="actions" p-page-header-type="secondary" (p-back)="onBack()">
+    <p>Secondary com titulo (h3, semibold) e subtitulo.</p>
+  </po-page-default>
+</div>
+
+<h4>10. Tertiary - Titulo + Subtitulo</h4>
+<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+  <po-page-default p-title="Tertiary Props" p-subtitle="Subtitulo tertiary" [p-actions]="actions" p-page-header-type="tertiary">
+    <p>Tertiary com titulo (h3, regular) e subtitulo.</p>
+  </po-page-default>
+</div>
