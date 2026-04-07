@@ -39,6 +39,12 @@
               maxlength="2"
               type="text"
               inputmode="numeric"
+              role="spinbutton"
+              [attr.aria-label]="literals.hour"
+              [attr.aria-valuenow]="hourDisplay ? +hourDisplay : null"
+              [attr.aria-valuemin]="is12HourFormat ? 1 : 0"
+              [attr.aria-valuemax]="is12HourFormat ? 12 : 23"
+              [attr.aria-valuetext]="hourDisplay || null"
               [attr.name]="name"
               [autocomplete]="autocomplete"
               [disabled]="isDisabled"
@@ -63,6 +69,12 @@
               maxlength="2"
               type="text"
               inputmode="numeric"
+              role="spinbutton"
+              [attr.aria-label]="literals.minute"
+              [attr.aria-valuenow]="minuteDisplay ? +minuteDisplay : null"
+              aria-valuemin="0"
+              aria-valuemax="59"
+              [attr.aria-valuetext]="minuteDisplay || null"
               [disabled]="isDisabled"
               [readonly]="readonly"
               [placeholder]="isDisabled ? '' : minutePlaceholder"
@@ -84,6 +96,12 @@
                 maxlength="2"
                 type="text"
                 inputmode="numeric"
+                role="spinbutton"
+                [attr.aria-label]="literals.second"
+                [attr.aria-valuenow]="secondDisplay ? +secondDisplay : null"
+                aria-valuemin="0"
+                aria-valuemax="59"
+                [attr.aria-valuetext]="secondDisplay || null"
                 [disabled]="isDisabled"
                 [readonly]="readonly"
                 [placeholder]="isDisabled ? '' : secondPlaceholder"
@@ -132,7 +150,7 @@
                   [attr.aria-label]="literals.clean"
                   class="po-icon-input"
                   p-icon="ICON_FILL_CLEAR_CONTENT"
-                  [p-element-ref]="inputEl"
+                  [p-element-ref]="cleanElementRef"
                   [p-size]="size"
                   (p-change-event)="clear()"
                   (keydown)="handleCleanKeyboardTab($event)"
@@ -186,7 +204,14 @@
     }
 
     <ng-template #sharedTimerContent>
-      <div #dialogPicker [class.po-timepicker-popup-timer]="!verifyMobile()" tabindex="-1" [hidden]="!visible">
+      <div
+        #dialogPicker
+        [class.po-timepicker-popup-timer]="!verifyMobile()"
+        tabindex="-1"
+        [hidden]="!visible"
+        role="dialog"
+        [attr.aria-label]="literals.field"
+      >
         @if (verifyMobile()) {
           <div class="po-timepicker-timer-overlay"></div>
         }
@@ -208,6 +233,8 @@
         ></po-timer>
       </div>
     </ng-template>
+
+    <span class="po-sr-only" aria-live="polite" aria-atomic="true">{{ ariaLiveMessage }}</span>
   </div>
 
   @if (!readonly) {

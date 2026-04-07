@@ -618,6 +618,93 @@ describe('PoTimepickerComponent:', () => {
       });
     });
 
+    describe('cleanElementRef:', () => {
+      it('should return combined value when only minuteDisplay has value', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '';
+        component.minuteDisplay = '05';
+        component.secondDisplay = '';
+
+        const ref = component.cleanElementRef;
+        expect(ref.nativeElement.value).toBe('05');
+      });
+
+      it('should return combined value when all segments have values', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '14';
+        component.minuteDisplay = '30';
+        component.secondDisplay = '00';
+
+        const ref = component.cleanElementRef;
+        expect(ref.nativeElement.value).toBe('14:30:00');
+      });
+
+      it('should return empty string when no segment has value', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+
+        const ref = component.cleanElementRef;
+        expect(ref.nativeElement.value).toBe('');
+      });
+
+      it('should return combined value when only hourDisplay has value', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '14';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+
+        const ref = component.cleanElementRef;
+        expect(ref.nativeElement.value).toBe('14');
+      });
+    });
+
+    describe('clear button visibility with partial input:', () => {
+      it('should show clean icon when only minutes are typed', () => {
+        component.clean = true;
+        fixture.detectChanges();
+
+        component.hourDisplay = '';
+        component.minuteDisplay = '05';
+        fixture.detectChanges();
+
+        const cleanEl = fixture.nativeElement.querySelector('po-clean');
+        expect(cleanEl).toBeTruthy();
+
+        const ref = component.cleanElementRef;
+        expect(ref.nativeElement.value).not.toBe('');
+      });
+
+      it('should not render clean button when no segment has value', () => {
+        component.clean = true;
+        fixture.detectChanges();
+
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+        fixture.detectChanges();
+
+        const cleanEl = fixture.nativeElement.querySelector('po-clean');
+        expect(cleanEl).toBeFalsy();
+      });
+
+      it('should show clean icon after typing only hour', () => {
+        component.clean = true;
+        fixture.detectChanges();
+
+        component.hourDisplay = '14';
+        component.minuteDisplay = '';
+        fixture.detectChanges();
+
+        const cleanEl = fixture.nativeElement.querySelector('po-clean');
+        expect(cleanEl).toBeTruthy();
+
+        const ref = component.cleanElementRef;
+        expect(ref.nativeElement.value).toBe('14');
+      });
+    });
+
     describe('typed validation:', () => {
       function typeSegment(value: string, segment: 'hour' | 'minute' | 'second') {
         const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
@@ -3543,6 +3630,131 @@ describe('PoTimepickerComponent:', () => {
         expect(parseInt(component['hourDisplay'], 10)).toBe(12);
         expect(component['periodDisplay']).toBe('AM');
       });
+    });
+  });
+
+  describe('Accessibility:', () => {
+    it('should render aria-label on hour segment input', () => {
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const hourInput = inputs[0] as HTMLInputElement;
+
+      expect(hourInput.getAttribute('aria-label')).toBe('Hora');
+    });
+
+    it('should render aria-label on minute segment input', () => {
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const minuteInput = inputs[1] as HTMLInputElement;
+
+      expect(minuteInput.getAttribute('aria-label')).toBe('Minuto');
+    });
+
+    it('should render aria-label on second segment input when showSeconds is true', () => {
+      component.showSeconds = true;
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const secondInput = inputs[2] as HTMLInputElement;
+
+      expect(secondInput.getAttribute('aria-label')).toBe('Segundo');
+    });
+
+    it('should render role="spinbutton" on all segment inputs', () => {
+      component.showSeconds = true;
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+
+      expect(inputs[0].getAttribute('role')).toBe('spinbutton');
+      expect(inputs[1].getAttribute('role')).toBe('spinbutton');
+      expect(inputs[2].getAttribute('role')).toBe('spinbutton');
+    });
+
+    it('should render aria-valuenow with current value on hour segment input', fakeAsync(() => {
+      fixture.detectChanges();
+      component.writeValue('10:30');
+      tick(100);
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const hourInput = inputs[0] as HTMLInputElement;
+
+      expect(hourInput.getAttribute('aria-valuenow')).toBe('10');
+    }));
+
+    it('should render aria-live region', () => {
+      fixture.detectChanges();
+
+      const liveRegion = fixture.nativeElement.querySelector('[aria-live="polite"]');
+
+      expect(liveRegion).toBeTruthy();
+      expect(liveRegion.getAttribute('aria-atomic')).toBe('true');
+    });
+
+    it('should update ariaLiveMessage when timerSelected is called', () => {
+      fixture.detectChanges();
+
+      component.timerSelected('10:30');
+
+      expect(component.ariaLiveMessage).toContain('10:30');
+    });
+
+    it('should clear ariaLiveMessage when clear is called', () => {
+      fixture.detectChanges();
+
+      component.ariaLiveMessage = 'Horário selecionado: 10:30';
+      component.clear();
+
+      expect(component.ariaLiveMessage).toBe('');
+    });
+
+    it('should render role="dialog" on timer popup container', fakeAsync(() => {
+      fixture.detectChanges();
+
+      component.togglePicker(false);
+      tick();
+      fixture.detectChanges();
+
+      const dialogPicker = fixture.nativeElement.querySelector('[role="dialog"]');
+
+      expect(dialogPicker).toBeTruthy();
+      expect(dialogPicker.getAttribute('aria-label')).toBeTruthy();
+
+      component.togglePicker();
+    }));
+
+    it('should render aria-valuemin and aria-valuemax on hour segment', () => {
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const hourInput = inputs[0] as HTMLInputElement;
+
+      expect(hourInput.getAttribute('aria-valuemin')).toBe('0');
+      expect(hourInput.getAttribute('aria-valuemax')).toBe('23');
+    });
+
+    it('should render aria-valuemin=1 and aria-valuemax=12 on hour segment in 12h format', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const hourInput = inputs[0] as HTMLInputElement;
+
+      expect(hourInput.getAttribute('aria-valuemin')).toBe('1');
+      expect(hourInput.getAttribute('aria-valuemax')).toBe('12');
+    });
+
+    it('should render aria-valuemin=0 and aria-valuemax=59 on minute segment', () => {
+      fixture.detectChanges();
+
+      const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
+      const minuteInput = inputs[1] as HTMLInputElement;
+
+      expect(minuteInput.getAttribute('aria-valuemin')).toBe('0');
+      expect(minuteInput.getAttribute('aria-valuemax')).toBe('59');
     });
   });
 });

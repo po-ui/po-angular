@@ -3038,4 +3038,98 @@ describe('PoTimerComponent:', () => {
       });
     });
   });
+
+  describe('Accessibility:', () => {
+    beforeEach(() => {
+      component.format = PoTimerFormat.Format24;
+      component.ngOnInit();
+      fixture.detectChanges();
+    });
+
+    it('should render p-aria-label with contextual label on hour cells', () => {
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+      const nativeButton = firstHourCell?.querySelector('button') as HTMLButtonElement;
+
+      expect(nativeButton).toBeTruthy();
+      expect(nativeButton.getAttribute('aria-label')).toContain('Horas');
+    });
+
+    it('should propagate role="option" to native button elements', () => {
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+      const nativeButton = firstHourCell?.querySelector('button') as HTMLButtonElement;
+
+      expect(nativeButton).toBeTruthy();
+      expect(nativeButton.getAttribute('role')).toBe('option');
+    });
+
+    it('should propagate aria-selected to native button elements', () => {
+      component.onSelectHour(10);
+      fixture.detectChanges();
+
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      let foundSelected = false;
+
+      hourCells.forEach((cell: HTMLElement) => {
+        const nativeButton = cell.querySelector('button') as HTMLButtonElement;
+        if (nativeButton && nativeButton.getAttribute('aria-selected') === 'true') {
+          foundSelected = true;
+        }
+      });
+
+      expect(foundSelected).toBe(true);
+    });
+
+    it('should render data-aria-role and data-aria-selected on host po-button elements', () => {
+      component.onSelectHour(0);
+      fixture.detectChanges();
+
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+
+      expect(firstHourCell.getAttribute('data-aria-role')).toBe('option');
+      expect(firstHourCell.getAttribute('data-aria-selected')).toBe('true');
+    });
+
+    it('should not set data-aria-selected on non-selected host po-button elements', () => {
+      component.onSelectHour(10);
+      fixture.detectChanges();
+
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+
+      expect(firstHourCell.getAttribute('data-aria-selected')).toBeNull();
+    });
+
+    it('should render data-aria-setsize and data-aria-posinset on host po-button elements', () => {
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+
+      expect(firstHourCell.getAttribute('data-aria-setsize')).toBe('24');
+      expect(firstHourCell.getAttribute('data-aria-posinset')).toBe('1');
+    });
+
+    it('should propagate aria-setsize and aria-posinset to native button elements', () => {
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+      const nativeButton = firstHourCell?.querySelector('button') as HTMLButtonElement;
+
+      expect(nativeButton).toBeTruthy();
+      expect(nativeButton.getAttribute('aria-setsize')).toBe('24');
+      expect(nativeButton.getAttribute('aria-posinset')).toBe('1');
+    });
+
+    it('should not propagate aria-selected to non-selected native button elements', () => {
+      component.onSelectHour(10);
+      fixture.detectChanges();
+
+      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
+      const firstHourCell = hourCells[0] as HTMLElement;
+      const nativeButton = firstHourCell?.querySelector('button') as HTMLButtonElement;
+
+      expect(nativeButton).toBeTruthy();
+      expect(nativeButton.hasAttribute('aria-selected')).toBe(false);
+    });
+  });
 });

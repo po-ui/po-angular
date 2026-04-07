@@ -109,9 +109,15 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   secondDisplay: string = '';
   periodDisplay: string = '';
   isSegmentFocused: boolean = false;
+  ariaLiveMessage: string = '';
 
   eventListenerFunction: () => void;
   eventResizeListener: () => void;
+
+  get cleanElementRef(): { nativeElement: { value: string } } {
+    const combined = [this.hourDisplay, this.minuteDisplay, this.secondDisplay].filter(s => s !== '').join(':');
+    return { nativeElement: { value: combined } };
+  }
 
   private clickListener: () => void;
   private timeoutChange: any;
@@ -300,6 +306,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
     this.timeValue = time;
     this.updateInputDisplay(time);
+    this.updateAriaLiveMessage(time);
 
     this.callOnChange(time);
     this.controlChangeEmitter();
@@ -343,6 +350,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     this.minuteDisplay = '';
     this.secondDisplay = '';
     this.periodDisplay = this.getDefaultPeriodDisplay();
+    this.ariaLiveMessage = '';
     if (this.isGeneratedErrorPattern(this.errorPattern)) {
       this.errorPattern = '';
     }
@@ -752,6 +760,35 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     this.syncSegmentInputElements();
   }
 
+  /** Atualiza a mensagem aria-live com o valor do horario para anuncio por leitores de tela. */
+  private updateAriaLiveMessage(time: string): void {
+    if (!time) {
+      this.ariaLiveMessage = '';
+      return;
+    }
+
+    const displayTime = this.is12HourFormat ? this.buildDisplayTime() : time;
+    this.ariaLiveMessage = `${this.literals.selectedTime}: ${displayTime}`;
+  }
+
+  /** Constroi a string de horario no formato de exibicao atual (12h ou 24h). */
+  private buildDisplayTime(): string {
+    const hour = this.hourDisplay || '--';
+    const minute = this.minuteDisplay || '--';
+    let display = `${hour}:${minute}`;
+
+    if (this.showSeconds) {
+      const second = this.secondDisplay || '--';
+      display += `:${second}`;
+    }
+
+    if (this.is12HourFormat && this.periodDisplay) {
+      display += ` ${this.periodDisplay}`;
+    }
+
+    return display;
+  }
+
   /** Normaliza valores `HH:mm` para `HH:mm:00` quando segundos estão habilitados. */
   private normalizeTimeValueForDisplay(value: string): string {
     if (this.showSeconds && typeof value === 'string' && value.length === 5) {
@@ -1038,6 +1075,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     }
 
     this.timeValue = rawValue;
+    this.updateAriaLiveMessage(rawValue);
     this.callOnChange(rawValue);
     this.validateModel(rawValue);
   }

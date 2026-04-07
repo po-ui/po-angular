@@ -174,6 +174,7 @@ export class PoTimerComponent
     this.ngZone.runOutsideAngular(() => {
       requestAnimationFrame(() => {
         this.initAllColumnOffsets();
+        this.syncAriaToNativeButtons();
       });
     });
   }
@@ -182,6 +183,8 @@ export class PoTimerComponent
     if (!this.hasViewInitialized) {
       return;
     }
+
+    this.syncAriaToNativeButtons();
 
     const nextSize = this.size;
 
@@ -618,13 +621,15 @@ export class PoTimerComponent
 
     for (let offset = 0; offset < arr.length; offset++) {
       const index = (startIndex + offset) % arr.length;
-      const nativeButton = arr[index]?.nativeElement?.querySelector('button') as HTMLButtonElement | null;
+      const hostEl = arr[index]?.nativeElement as HTMLElement;
+      const nativeButton = hostEl?.querySelector('button') as HTMLButtonElement | null;
 
       if (!nativeButton || nativeButton.disabled || nativeButton.getAttribute('aria-disabled') === 'true') {
         continue;
       }
 
       this.focusedDisplayIndex[type] = index;
+      this.syncSingleButtonAria(hostEl, nativeButton);
       nativeButton.focus({ preventScroll: true });
       this.refreshRovingTabIndex();
       return;
@@ -1169,6 +1174,64 @@ export class PoTimerComponent
         return this.displaySeconds;
       default:
         return [];
+    }
+  }
+
+  /**
+   * Propaga atributos ARIA (role, aria-selected, aria-setsize, aria-posinset)
+   * dos elementos host <po-button> para os elementos nativos <button> internos,
+   * garantindo que leitores de tela como NVDA recebam a semantica correta.
+   */
+  private syncAriaToNativeButtons(): void {
+    const columnTypes: PoTimerColumnType[] = ['hour', 'minute', 'second'];
+
+    for (const type of columnTypes) {
+      const cells = this.getCellsForType(type);
+      if (!cells) {
+        continue;
+      }
+
+      const arr = cells.toArray();
+      for (const cellRef of arr) {
+        const hostEl = cellRef.nativeElement as HTMLElement;
+        const nativeButton = hostEl?.querySelector('button') as HTMLButtonElement | null;
+
+        if (!nativeButton) {
+          continue;
+        }
+
+        this.syncSingleButtonAria(hostEl, nativeButton);
+      }
+    }
+  }
+
+  /**
+   * Sincroniza os atributos ARIA de um unico par host/nativeButton.
+   * Chamado tanto por syncAriaToNativeButtons (batch) quanto por
+   * focusButtonAt (antes do .focus()) para evitar leitura duplicada.
+   */
+  private syncSingleButtonAria(hostEl: HTMLElement, nativeButton: HTMLButtonElement): void {
+    const role = hostEl.getAttribute('data-aria-role');
+    const selected = hostEl.getAttribute('data-aria-selected');
+    const setsize = hostEl.getAttribute('data-aria-setsize');
+    const posinset = hostEl.getAttribute('data-aria-posinset');
+
+    if (role) {
+      nativeButton.setAttribute('role', role);
+    }
+
+    if (selected === 'true') {
+      nativeButton.setAttribute('aria-selected', 'true');
+    } else {
+      nativeButton.removeAttribute('aria-selected');
+    }
+
+    if (setsize) {
+      nativeButton.setAttribute('aria-setsize', setsize);
+    }
+
+    if (posinset) {
+      nativeButton.setAttribute('aria-posinset', posinset);
     }
   }
 }
