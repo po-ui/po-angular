@@ -152,7 +152,13 @@
     "validate.js": "file:libs/validate.js-v0.13.2.tgz"
   },
   "overrides": {
-    "axios": "1.12.2"
+    "axios": "1.12.2",
+    "ngx-markdown": {
+      "mermaid": "11.12.3"
+    },
+    "mermaid": {
+      "@mermaid-js/parser": "1.0.0"
+    }
   },
   "standard-version": {
     "skip": {
