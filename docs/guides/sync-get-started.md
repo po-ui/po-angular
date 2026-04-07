@@ -9,7 +9,7 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~21.0.0):
+- [Angular CLI](https://cli.angular.io/) (~21.2.4):
   - ```shell
     npm install -g @angular/cli@21
     ```
@@ -55,14 +55,14 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~21.0.8",
-    "@angular/common": "~21.0.8",
-    "@angular/compiler": "~21.0.8",
-    "@angular/core": "~21.0.8",
-    "@angular/forms": "~21.0.8",
-    "@angular/platform-browser": "~21.0.8",
-    "@angular/platform-browser-dynamic": "~21.0.8",
-    "@angular/router": "~21.0.8",
+    "@angular/animations": "~21.2.4",
+    "@angular/common": "~21.2.4",
+    "@angular/compiler": "~21.2.4",
+    "@angular/core": "~21.2.4",
+    "@angular/forms": "~21.2.4",
+    "@angular/platform-browser": "~21.2.4",
+    "@angular/platform-browser-dynamic": "~21.2.4",
+    "@angular/router": "~21.2.4",
     "@capacitor/app": "8.0.0",
     "@capacitor/core": "8.0.1",
     "@capacitor/haptics": "8.0.0",
@@ -76,11 +76,11 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "~21.0.0",
+    "@angular-devkit/schematics": "~21.2.4",
     ...
-    "@angular/cli": "~21.0.5",
-    "@angular/compiler-cli": "~21.0.8",
-    "@angular/language-service": "~21.0.8",
+    "@angular/cli": "~21.2.4",
+    "@angular/compiler-cli": "~21.2.4",
+    "@angular/language-service": "~21.2.4",
     "@capacitor/cli": "8.0.1",
     "@ionic/angular-toolkit": "^12.0.0",
     ...
