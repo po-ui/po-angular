@@ -156,6 +156,36 @@ describe('PoProgressBaseComponent:', () => {
       expect(component.shape()).toBe('bar');
     });
 
+    it('p-radius: should have default value as 45', () => {
+      expect(component.radius()).toBe(45);
+    });
+
+    it('p-radius: should accept valid positive values', () => {
+      fixture.componentRef.setInput('p-radius', 30);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(30);
+
+      fixture.componentRef.setInput('p-radius', 60);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(60);
+    });
+
+    it('p-radius: should default to 45 if value is 0 or negative', () => {
+      fixture.componentRef.setInput('p-radius', 0);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(45);
+
+      fixture.componentRef.setInput('p-radius', -10);
+      fixture.detectChanges();
+      expect(component.radius()).toBe(45);
+    });
+
+    it('p-radius: should convert string values to int', () => {
+      fixture.componentRef.setInput('p-radius', '50');
+      fixture.detectChanges();
+      expect(component.radius()).toBe(50);
+    });
+
     it('should update property `p-size` with valid values', () => {
       const validValues = ['large', 'medium'];
 

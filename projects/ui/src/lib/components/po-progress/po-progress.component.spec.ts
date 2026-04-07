@@ -348,9 +348,7 @@ describe('PoProgressComponent:', () => {
       fixture.detectChanges();
 
       const infoRight = nativeElement.querySelector('.po-progress-info-right');
-      const spans = infoRight.querySelectorAll('span');
-      const percentageSpan = Array.from(spans).find((span: HTMLSpanElement) => span.textContent.trim() === '50%');
-      expect(percentageSpan).toBeFalsy();
+      expect(infoRight).toBeNull();
     });
 
     it('should contain `po-progress-bar-indeterminate-track` if `indeterminate` is `true`', () => {
