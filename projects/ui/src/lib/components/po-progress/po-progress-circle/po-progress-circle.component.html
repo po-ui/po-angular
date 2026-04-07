@@ -1,82 +1,63 @@
 @if (!indeterminate) {
-  <div
-    class="po-progress-circle-container"
-    [ngClass]="statusClass"
-    role="progressbar"
-    [attr.aria-valuenow]="value"
-    aria-valuemin="0"
-    aria-valuemax="100"
-    aria-live="polite"
-  >
-    <svg
-      [attr.width]="viewBoxSize"
-      [attr.height]="viewBoxSize"
-      [attr.viewBox]="'0 0 ' + viewBoxSize + ' ' + viewBoxSize"
-    >
-      <circle
-        class="po-progress-circle-track"
-        [attr.cx]="center"
-        [attr.cy]="center"
-        [attr.r]="radius"
-        [attr.stroke-width]="strokeWidth"
-        fill="none"
-      />
-      <circle
-        class="po-progress-circle-indicator"
-        [attr.cx]="center"
-        [attr.cy]="center"
-        [attr.r]="radius"
-        [attr.stroke-width]="strokeWidth"
-        fill="none"
-        stroke-linecap="round"
-        [attr.stroke-dasharray]="circumference"
-        [attr.stroke-dashoffset]="dashOffset"
-        transform-origin="center"
-        [attr.transform]="'rotate(-90 ' + center + ' ' + center + ')'"
-      />
-    </svg>
-    @if (showPercentage) {
-      <span
-        class="po-progress-circle-percentage"
-        [style.font-size]="fontSize"
-      >{{ value }}%</span>
-    }
+  <div role="progressbar" [attr.aria-valuenow]="value" aria-valuemin="0" aria-valuemax="100" aria-live="polite">
+    <div class="po-progress-circle-svg-wrapper">
+      <svg
+        class="po-progress-circle-svg"
+        [attr.width]="viewBoxSize"
+        [attr.height]="viewBoxSize"
+        [attr.viewBox]="'0 0 ' + viewBoxSize + ' ' + viewBoxSize"
+      >
+        <circle class="po-progress-circle-tray" [attr.cx]="center" [attr.cy]="center" [attr.r]="radius" fill="none" />
+
+        <circle
+          class="po-progress-circle-indicator"
+          [attr.cx]="center"
+          [attr.cy]="center"
+          [attr.r]="radius"
+          fill="none"
+          [attr.stroke-dasharray]="circumference"
+          [attr.stroke-dashoffset]="dashOffset"
+        />
+      </svg>
+
+      @if (showPercentage) {
+        <span class="po-progress-circle-info po-progress-circle-info-percentage">{{ value }}%</span>
+      }
+
+      @if (status === 'error' && !showPercentage) {
+        <span class="po-progress-circle-info po-progress-circle-info-error po-progress-circle-info-error-{{ size }}">
+          <span class="an an-warning-circle"></span>
+        </span>
+      }
+    </div>
   </div>
 }
 
 @if (indeterminate) {
   <div
-    class="po-progress-circle-container po-progress-circle-indeterminate"
-    [ngClass]="statusClass"
+    class="po-progress-circle po-progress-circle-indeterminate po-progress-circle-{{ size }}"
     role="progressbar"
     aria-live="polite"
   >
-    <svg
-      [attr.width]="viewBoxSize"
-      [attr.height]="viewBoxSize"
-      [attr.viewBox]="'0 0 ' + viewBoxSize + ' ' + viewBoxSize"
-    >
-      <circle
-        class="po-progress-circle-track"
-        [attr.cx]="center"
-        [attr.cy]="center"
-        [attr.r]="radius"
-        [attr.stroke-width]="strokeWidth"
-        fill="none"
-      />
-      <circle
-        class="po-progress-circle-indicator po-progress-circle-indicator-indeterminate"
-        [attr.cx]="center"
-        [attr.cy]="center"
-        [attr.r]="radius"
-        [attr.stroke-width]="strokeWidth"
-        fill="none"
-        stroke-linecap="round"
-        [attr.stroke-dasharray]="circumference"
-        [attr.stroke-dashoffset]="circumference * 0.75"
-        transform-origin="center"
-        [attr.transform]="'rotate(-90 ' + center + ' ' + center + ')'"
-      />
-    </svg>
+    <div class="po-progress-circle-svg-wrapper">
+      <svg
+        class="po-progress-circle-svg"
+        [attr.width]="viewBoxSize"
+        [attr.height]="viewBoxSize"
+        [attr.viewBox]="'0 0 ' + viewBoxSize + ' ' + viewBoxSize"
+      >
+        <circle class="po-progress-circle-tray" [attr.cx]="center" [attr.cy]="center" [attr.r]="radius" fill="none" />
+
+        <circle
+          class="po-progress-circle-indicator"
+          [attr.cx]="center"
+          [attr.cy]="center"
+          [attr.r]="radius"
+          fill="none"
+          [attr.stroke-dasharray]="circumference"
+          [attr.stroke-dashoffset]="circumference * 0.75"
+        />
+      </svg>
+    </div>
   </div>
 }
