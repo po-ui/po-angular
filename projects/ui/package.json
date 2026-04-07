@@ -21,7 +21,7 @@
     ]
   },
   "dependencies": {
-    "@angular/cdk": "~21.0.3",
+    "@angular/cdk": "~21.2.4",
     "@po-ui/style": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
     "echarts": "^5.6.0",
