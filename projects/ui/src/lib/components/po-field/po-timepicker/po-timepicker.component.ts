@@ -301,8 +301,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     this.timeValue = time;
     this.updateInputDisplay(time);
 
-    const output = this.formatOutput(time);
-    this.callOnChange(output);
+    this.callOnChange(time);
     this.controlChangeEmitter();
   }
 
@@ -1039,9 +1038,8 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     }
 
     this.timeValue = rawValue;
-    const output = this.formatOutput(rawValue);
-    this.callOnChange(output);
-    this.validateModel(output);
+    this.callOnChange(rawValue);
+    this.validateModel(rawValue);
   }
 
   private applyInputValidationError(
@@ -1057,7 +1055,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   }
 
   private controlChangeEmitter() {
-    const currentValue = this.timeValue;
+    const currentValue = this.formatOutput(this.timeValue) || this.timeValue;
 
     if (currentValue !== this.valueBeforeChange) {
       this.valueBeforeChange = currentValue;
@@ -1091,8 +1089,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     this.timeValue = committedTime;
     this.updateInputDisplay(committedTime);
 
-    const output = this.formatOutput(committedTime);
-    this.callOnChange(output);
+    this.callOnChange(committedTime);
     this.controlChangeEmitter();
   }
 

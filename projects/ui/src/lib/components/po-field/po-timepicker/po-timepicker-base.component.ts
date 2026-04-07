@@ -408,6 +408,7 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
   @Input('p-show-seconds') set showSeconds(value: boolean) {
     this._showSeconds = value === true || <any>value === 'true' || <any>value === '';
     this.updateMask();
+    this.refreshValue(this._timeValue);
   }
 
   get showSeconds(): boolean {
@@ -587,7 +588,7 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
     }
 
     if (this._modelFormat === PoTimepickerModelFormat.HourMinuteSecond) {
-      return time;
+      return time.length === 5 ? `${time}:00` : time;
     }
 
     if (this._modelFormat === PoTimepickerModelFormat.HourMinute) {
@@ -652,16 +653,18 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
     return poTimepickerLiterals[key]?.outOfRangeTime || poTimepickerLiterals.pt.outOfRangeTime;
   }
 
-  // Executa a função onChange.
+  // Executa a função onChange, aplicando formatOutput automaticamente.
   protected callOnChange(value: any) {
+    const formatted = typeof value === 'string' && value ? this.formatOutput(value) || value : value;
+
     if (this.onChangeModel) {
-      if (value !== this.previousValue) {
-        this.onChangeModel(value);
-        this.previousValue = value;
+      if (formatted !== this.previousValue) {
+        this.onChangeModel(formatted);
+        this.previousValue = formatted;
       }
       this.pendingChangeValue = null;
     } else {
-      this.pendingChangeValue = { value };
+      this.pendingChangeValue = { value: formatted };
     }
   }
 

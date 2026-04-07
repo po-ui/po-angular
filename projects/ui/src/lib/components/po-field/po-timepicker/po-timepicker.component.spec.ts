@@ -271,6 +271,32 @@ describe('PoTimepickerComponent:', () => {
         expect(component.timeValue).toBe('10:30');
         expect(component.secondDisplay).toBe('');
       });
+
+      it('should output HH:mm:ss with :00 when modelFormat is HourMinuteSecond and showSeconds is off', () => {
+        fixture.detectChanges();
+        component.showSeconds = false;
+        component.modelFormat = PoTimepickerModelFormat.HourMinuteSecond;
+
+        const changeSpy = jasmine.createSpy('onChange');
+        component.registerOnChange(changeSpy);
+
+        component.timerSelected('14:30');
+
+        expect(changeSpy).toHaveBeenCalledWith('14:30:00');
+      });
+
+      it('should output HH:mm:ss as-is when modelFormat is HourMinuteSecond and showSeconds is on', () => {
+        fixture.detectChanges();
+        component.showSeconds = true;
+        component.modelFormat = PoTimepickerModelFormat.HourMinuteSecond;
+
+        const changeSpy = jasmine.createSpy('onChange');
+        component.registerOnChange(changeSpy);
+
+        component.timerSelected('14:30:45');
+
+        expect(changeSpy).toHaveBeenCalledWith('14:30:45');
+      });
     });
 
     describe('closeTimer:', () => {
@@ -507,6 +533,54 @@ describe('PoTimepickerComponent:', () => {
         expect(component.minuteDisplay).toBe('30');
         expect(component.secondDisplay).toBe('45');
         expect(component.periodDisplay).toBe('PM');
+      });
+    });
+
+    describe('dynamic showSeconds change:', () => {
+      it('should fill seconds with 00 when showSeconds is enabled and value is HH:mm', () => {
+        fixture.detectChanges();
+        component.writeValue('12:00');
+
+        expect(component.secondDisplay).toBe('');
+
+        component.showSeconds = true;
+
+        expect(component.hourDisplay).toBe('12');
+        expect(component.minuteDisplay).toBe('00');
+        expect(component.secondDisplay).toBe('00');
+      });
+
+      it('should keep seconds in display properties when showSeconds is disabled (UI hides the field)', () => {
+        component.showSeconds = true;
+        fixture.detectChanges();
+        component.writeValue('14:30:45');
+
+        expect(component.secondDisplay).toBe('45');
+
+        component.showSeconds = false;
+
+        expect(component.hourDisplay).toBe('14');
+        expect(component.minuteDisplay).toBe('30');
+        expect(component.secondDisplay).toBe('45');
+      });
+
+      it('should not break when showSeconds is enabled and no value is set', () => {
+        fixture.detectChanges();
+
+        component.showSeconds = true;
+
+        expect(component.hourDisplay).toBe('');
+        expect(component.minuteDisplay).toBe('');
+        expect(component.secondDisplay).toBe('');
+      });
+
+      it('should preserve timeValue when showSeconds is enabled dynamically', () => {
+        fixture.detectChanges();
+        component.writeValue('14:30');
+
+        component.showSeconds = true;
+
+        expect(component.timeValue).toBe('14:30');
       });
     });
 
@@ -1091,11 +1165,13 @@ describe('PoTimepickerComponent:', () => {
       it('should format output according to modelFormat', () => {
         fixture.detectChanges();
         component.modelFormat = PoTimepickerModelFormat.HourMinute;
-        spyOn(component as any, 'callOnChange');
+
+        const changeSpy = jasmine.createSpy('onChange');
+        component.registerOnChange(changeSpy);
 
         component.timerSelected('14:30:45');
 
-        expect(component['callOnChange']).toHaveBeenCalledWith('14:30');
+        expect(changeSpy).toHaveBeenCalledWith('14:30');
       });
     });
 

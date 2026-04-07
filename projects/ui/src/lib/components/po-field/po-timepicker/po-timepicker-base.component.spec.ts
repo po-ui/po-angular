@@ -255,6 +255,23 @@ describe('PoTimepickerBaseComponent:', () => {
         component.showSeconds = false;
         expect(component.showSeconds).toBeFalse();
       });
+
+      it('should call refreshValue with current timeValue when showSeconds changes', () => {
+        spyOn(component, 'refreshValue');
+        component['_timeValue'] = '14:00';
+
+        component.showSeconds = true;
+
+        expect(component.refreshValue).toHaveBeenCalledWith('14:00');
+      });
+
+      it('should call refreshValue with empty string when showSeconds changes and no value is set', () => {
+        spyOn(component, 'refreshValue');
+
+        component.showSeconds = true;
+
+        expect(component.refreshValue).toHaveBeenCalledWith('');
+      });
     });
 
     describe('p-placeholder:', () => {
@@ -386,9 +403,14 @@ describe('PoTimepickerBaseComponent:', () => {
         expect(component['formatOutput'](null)).toBe('');
       });
 
-      it('should keep HH:mm when modelFormat is HourMinuteSecond and time has 5 chars', () => {
+      it('should append :00 when modelFormat is HourMinuteSecond and time has no seconds', () => {
         component.modelFormat = PoTimepickerModelFormat.HourMinuteSecond;
-        expect(component['formatOutput']('10:30')).toBe('10:30');
+        expect(component['formatOutput']('10:30')).toBe('10:30:00');
+      });
+
+      it('should keep full time when modelFormat is HourMinuteSecond and time already has seconds', () => {
+        component.modelFormat = PoTimepickerModelFormat.HourMinuteSecond;
+        expect(component['formatOutput']('10:30:45')).toBe('10:30:45');
       });
 
       it('should truncate to 5 chars when modelFormat is HourMinute', () => {
