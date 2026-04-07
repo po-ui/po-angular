@@ -220,6 +220,7 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   }
 
   protected override onLocaleChange(): void {
+    super.onLocaleChange();
     const lang = this.locale || this.shortLanguage;
     this.literals = {
       ...(poTimepickerLiterals[lang] || poTimepickerLiterals[this.shortLanguage])

@@ -754,7 +754,14 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
     this._size = size;
   }
 
-  protected onLocaleChange(): void {}
+  protected onLocaleChange(): void {
+    if (this.isGeneratedErrorPattern(this.errorPattern)) {
+      const isOutOfRange = Object.values(poTimepickerLiterals).some(
+        literal => this.errorPattern === literal.outOfRangeTime
+      );
+      this.errorPattern = isOutOfRange ? this.getDefaultOutOfRangeTimeMessage() : this.getDefaultInvalidTimeMessage();
+    }
+  }
 
   abstract writeValue(value: any): void;
 
