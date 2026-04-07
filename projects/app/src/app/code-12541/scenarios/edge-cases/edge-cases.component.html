@@ -1,71 +1,71 @@
-<h3>Cenario: Casos Limite (Edge Cases)</h3>
+<div class="po-font-subtitle po-mb-2">Cenario: Casos Limite (Edge Cases)</div>
 
-<h4>1. Subtitle sem Title (subtitle nao deve aparecer)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">1. Subtitle sem Title (subtitle nao deve aparecer)</div>
+<po-container class="po-mb-2">
   <po-page-default p-subtitle="Subtitulo sem titulo" [p-actions]="actions" p-page-header-type="primary">
-    <p>Subtitle fornecido mas sem title. O subtitle NAO deve ser renderizado.</p>
+    <div class="po-font-text">Subtitle fornecido mas sem title. O subtitle NAO deve ser renderizado.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>2. Secondary sem titulo, sem acoes (header visivel pelo botao voltar)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">2. Secondary sem titulo, sem acoes (header visivel pelo botao voltar)</div>
+<po-container class="po-mb-2">
   <po-page-default p-page-header-type="secondary" (p-back)="onBack()">
-    <p>Secondary sem titulo e sem acoes. Header deve ser visivel pelo botao voltar.</p>
+    <div class="po-font-text">Secondary sem titulo e sem acoes. Header deve ser visivel pelo botao voltar.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>3. Tertiary sem titulo e sem acoes (header NAO deve aparecer)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">3. Tertiary sem titulo e sem acoes (header NAO deve aparecer)</div>
+<po-container class="po-mb-2">
   <po-page-default p-page-header-type="tertiary">
-    <p>Tertiary sem titulo e sem acoes. hasPageHeader() retorna false, header NAO visivel.</p>
+    <div class="po-font-text">Tertiary sem titulo e sem acoes. hasPageHeader() retorna false, header NAO visivel.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>4. Primary sem titulo, sem acoes, sem breadcrumb (header NAO deve aparecer)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">4. Primary sem titulo, sem acoes, sem breadcrumb (header NAO deve aparecer)</div>
+<po-container class="po-mb-2">
   <po-page-default p-page-header-type="primary">
-    <p>Primary sem nada. hasPageHeader() retorna false.</p>
+    <div class="po-font-text">Primary sem nada. hasPageHeader() retorna false.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>5. Breadcrumb no Secondary (breadcrumb ignorado)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">5. Breadcrumb no Secondary (breadcrumb ignorado)</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Secondary + Breadcrumb" [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="secondary" (p-back)="onBack()">
-    <p>Breadcrumb fornecido mas ignorado no secondary. Nao deve renderizar breadcrumb.</p>
+    <div class="po-font-text">Breadcrumb fornecido mas ignorado no secondary. Nao deve renderizar breadcrumb.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>6. Breadcrumb no Tertiary (breadcrumb ignorado, sem espaco)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">6. Breadcrumb no Tertiary (breadcrumb ignorado, sem espaco)</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Tertiary + Breadcrumb" [p-breadcrumb]="breadcrumb" [p-actions]="actions" p-page-header-type="tertiary">
-    <p>Breadcrumb fornecido mas ignorado no tertiary. Nao deve renderizar breadcrumb nem reservar espaco.</p>
+    <div class="po-font-text">Breadcrumb fornecido mas ignorado no tertiary. Nao deve renderizar breadcrumb nem reservar espaco.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>7. Header type invalido (deve usar primary como default)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">7. Header type invalido (deve usar primary como default)</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Header Invalido" [p-actions]="actions" p-page-header-type="invalido">
-    <p>Header type invalido. Deve fazer fallback para primary.</p>
+    <div class="po-font-text">Header type invalido. Deve fazer fallback para primary.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>8. Actions layout invalido (deve usar default)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">8. Actions layout invalido (deve usar default)</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Layout Invalido" [p-actions]="actions" p-page-header-type="primary" p-page-actions-layout="invalido">
-    <p>Actions layout invalido. Deve fazer fallback para default.</p>
+    <div class="po-font-text">Actions layout invalido. Deve fazer fallback para default.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>9. Apenas breadcrumb sem titulo (Primary)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">9. Apenas breadcrumb sem titulo (Primary)</div>
+<po-container class="po-mb-2">
   <po-page-default [p-breadcrumb]="breadcrumb" p-page-header-type="primary">
-    <p>Apenas breadcrumb, sem titulo. Header visivel pelo breadcrumb. Nao deve haver gap desnecessario.</p>
+    <div class="po-font-text">Apenas breadcrumb, sem titulo. Header visivel pelo breadcrumb. Nao deve haver gap desnecessario.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>10. Secondary subtitle sem title</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">10. Secondary subtitle sem title</div>
+<po-container class="po-mb-2">
   <po-page-default p-subtitle="Subtitulo orfao" p-page-header-type="secondary" [p-actions]="actions" (p-back)="onBack()">
-    <p>Secondary com subtitle mas sem title. Subtitle NAO deve ser renderizado.</p>
+    <div class="po-font-text">Secondary com subtitle mas sem title. Subtitle NAO deve ser renderizado.</div>
   </po-page-default>
-</div>
+</po-container>

@@ -1,20 +1,20 @@
-<h2>QA - po-page-default (DTHFUI-12541)</h2>
-<p style="margin-bottom: 16px;">Cenarios estaticos para validacao de todas as propriedades do componente.</p>
+<div class="po-font-subtitle po-mb-2">QA - po-page-default (DTHFUI-12541)</div>
+<div class="po-font-text po-mb-3">Cenarios estaticos para validacao de todas as propriedades do componente.</div>
 
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
+<div class="po-row po-mb-3">
   @for (tab of tabs; track tab.value) {
-    <button
-      [style.background]="activeTab === tab.value ? 'var(--color-action-default)' : '#eee'"
-      [style.color]="activeTab === tab.value ? '#fff' : '#333'"
-      style="border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px;"
-      (click)="setTab(tab.value)"
-    >
-      {{ tab.label }}
-    </button>
+    <div class="po-mb-1 po-mr-1">
+      <po-button
+        [p-label]="tab.label"
+        [p-kind]="activeTab === tab.value ? 'primary' : 'secondary'"
+        p-size="small"
+        (p-click)="setTab(tab.value)"
+      ></po-button>
+    </div>
   }
 </div>
 
-<div style="padding: 16px; border: 1px solid #ddd; border-radius: 8px;">
+<po-container>
   @switch (activeTab) {
     @case ('header-types') { <app-scenario-header-types></app-scenario-header-types> }
     @case ('layout-primary') { <app-scenario-layout-primary></app-scenario-layout-primary> }
@@ -27,4 +27,4 @@
     @case ('edge-cases') { <app-scenario-edge-cases></app-scenario-edge-cases> }
     @case ('back-button') { <app-scenario-back-button></app-scenario-back-button> }
   }
-</div>
+</po-container>

@@ -1,36 +1,36 @@
-<h3>Cenario: Estados das Acoes (disabled, danger, visible)</h3>
+<div class="po-font-subtitle po-mb-2">Cenario: Estados das Acoes (disabled, danger, visible)</div>
 
-<h4>Primary - Acoes disabled</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - Acoes disabled</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary Disabled" [p-actions]="actionsDisabled" p-page-header-type="primary">
-    <p>Primeira ativa, segunda e terceira desabilitadas.</p>
+    <div class="po-font-text">Primeira ativa, segunda e terceira desabilitadas.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - Acoes danger</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - Acoes danger</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary Danger" [p-actions]="actionsDanger" p-page-header-type="primary">
-    <p>Segunda e terceira com type danger.</p>
+    <div class="po-font-text">Segunda e terceira com type danger.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - Acoes com visible</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - Acoes com visible</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary Visible" [p-actions]="actionsVisible" p-page-header-type="primary">
-    <p>Segunda acao oculta (visible: false). Apenas 2 acoes visiveis.</p>
+    <div class="po-font-text">Segunda acao oculta (visible: false). Apenas 2 acoes visiveis.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Secondary - Acoes mistas (normal + disabled + danger)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Secondary - Acoes mistas (normal + disabled + danger)</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Secondary Mixed States" [p-actions]="actionsMixed" p-page-header-type="secondary" (p-back)="onBack()">
-    <p>Normal, disabled e danger no secondary.</p>
+    <div class="po-font-text">Normal, disabled e danger no secondary.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Tertiary - Acoes mistas</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Tertiary - Acoes mistas</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Tertiary Mixed States" [p-actions]="actionsMixed" p-page-header-type="tertiary">
-    <p>Normal, disabled e danger no tertiary.</p>
+    <div class="po-font-text">Normal, disabled e danger no tertiary.</div>
   </po-page-default>
-</div>
+</po-container>

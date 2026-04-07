@@ -1,72 +1,72 @@
-<h3>Cenario: Contagem de Acoes</h3>
-<p>Valida comportamento com diferentes quantidades de acoes em cada header type.</p>
+<div class="po-font-subtitle po-mb-2">Cenario: Contagem de Acoes</div>
+<div class="po-font-text po-mb-3">Valida comportamento com diferentes quantidades de acoes em cada header type.</div>
 
-<h4>Primary - 0 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - 0 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary sem acoes" [p-actions]="noActions" p-page-header-type="primary">
-    <p>Sem acoes - header visivel apenas pelo titulo.</p>
+    <div class="po-font-text">Sem acoes - header visivel apenas pelo titulo.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - 1 acao com icone</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - 1 acao com icone</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary 1 acao" [p-actions]="oneAction" p-page-header-type="primary">
-    <p>1 acao com icone, kind primary.</p>
+    <div class="po-font-text">1 acao com icone, kind primary.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - 1 acao sem icone</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - 1 acao sem icone</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary 1 acao sem icone" [p-actions]="oneActionNoIcon" p-page-header-type="primary">
-    <p>1 acao sem icone - label deve ser exibido em todas as telas.</p>
+    <div class="po-font-text">1 acao sem icone - label deve ser exibido em todas as telas.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - 2 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - 2 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary 2 acoes" [p-actions]="twoActions" p-page-header-type="primary">
-    <p>2 acoes: primeira primary, segunda secondary.</p>
+    <div class="po-font-text">2 acoes: primeira primary, segunda secondary.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - 3 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - 3 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary 3 acoes" [p-actions]="threeActions" p-page-header-type="primary">
-    <p>3 acoes: primeira primary, demais secondary.</p>
+    <div class="po-font-text">3 acoes: primeira primary, demais secondary.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Primary - 5 acoes (overflow)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Primary - 5 acoes (overflow)</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Primary 5 acoes" [p-actions]="fiveActions" p-page-header-type="primary">
-    <p>5 acoes: overflow, dropdown automatico.</p>
+    <div class="po-font-text">5 acoes: overflow, dropdown automatico.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Secondary - 0 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Secondary - 0 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Secondary sem acoes" [p-actions]="noActions" p-page-header-type="secondary" (p-back)="onBack()">
-    <p>Secondary sem acoes - header visivel pelo botao voltar.</p>
+    <div class="po-font-text">Secondary sem acoes - header visivel pelo botao voltar.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Secondary - 3 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Secondary - 3 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Secondary 3 acoes" [p-actions]="threeActions" p-page-header-type="secondary" (p-back)="onBack()">
-    <p>Secondary com 3 acoes no default layout.</p>
+    <div class="po-font-text">Secondary com 3 acoes no default layout.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Tertiary - 0 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Tertiary - 0 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Tertiary sem acoes" [p-actions]="noActions" p-page-header-type="tertiary">
-    <p>Tertiary sem acoes - header visivel apenas pelo titulo.</p>
+    <div class="po-font-text">Tertiary sem acoes - header visivel apenas pelo titulo.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>Tertiary - 3 acoes</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">Tertiary - 3 acoes</div>
+<po-container class="po-mb-2">
   <po-page-default p-title="Tertiary 3 acoes" [p-actions]="threeActions" p-page-header-type="tertiary">
-    <p>Tertiary com 3 acoes no default layout.</p>
+    <div class="po-font-text">Tertiary com 3 acoes no default layout.</div>
   </po-page-default>
-</div>
+</po-container>

@@ -1,8 +1,8 @@
-<h3>Cenario: Comparacao dos 3 Header Types</h3>
-<p>Todos com as mesmas 3 acoes, titulo, subtitulo e breadcrumb (quando compativel).</p>
+<div class="po-font-subtitle po-mb-2">Cenario: Comparacao dos 3 Header Types</div>
+<div class="po-font-text po-mb-3">Todos com as mesmas 3 acoes, titulo, subtitulo e breadcrumb (quando compativel).</div>
 
-<h4>1. Primary (padrao)</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+<div class="po-font-text-large-bold po-mb-1">1. Primary (padrao)</div>
+<po-container class="po-mb-3">
   <po-page-default
     p-title="Pagina Primary"
     p-subtitle="Subtitulo da pagina"
@@ -10,12 +10,12 @@
     [p-actions]="actions"
     p-page-header-type="primary"
   >
-    <p>Conteudo do header primary. Breadcrumb visivel, titulo h2, primeira acao primary kind.</p>
+    <div class="po-font-text">Conteudo do header primary. Breadcrumb visivel, titulo h2, primeira acao primary kind.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>2. Secondary</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+<div class="po-font-text-large-bold po-mb-1">2. Secondary</div>
+<po-container class="po-mb-3">
   <po-page-default
     p-title="Pagina Secondary"
     p-subtitle="Subtitulo da pagina"
@@ -24,12 +24,12 @@
     p-page-header-type="secondary"
     (p-back)="onBack()"
   >
-    <p>Conteudo do header secondary. Breadcrumb NAO visivel, botao voltar, titulo h3 semibold, primeira acao primary kind no default layout.</p>
+    <div class="po-font-text">Conteudo do header secondary. Breadcrumb NAO visivel, botao voltar, titulo h3 semibold, primeira acao primary kind no default layout.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>3. Tertiary</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 24px;">
+<div class="po-font-text-large-bold po-mb-1">3. Tertiary</div>
+<po-container class="po-mb-3">
   <po-page-default
     p-title="Pagina Tertiary"
     p-subtitle="Subtitulo da pagina"
@@ -37,6 +37,6 @@
     [p-actions]="actions"
     p-page-header-type="tertiary"
   >
-    <p>Conteudo do header tertiary. Sem breadcrumb, sem botao voltar, titulo h3 regular, primeira acao primary kind no default layout.</p>
+    <div class="po-font-text">Conteudo do header tertiary. Sem breadcrumb, sem botao voltar, titulo h3 regular, primeira acao primary kind no default layout.</div>
   </po-page-default>
-</div>
+</po-container>

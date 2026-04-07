@@ -1,8 +1,8 @@
-<h3>Cenario: Botao Voltar (Secondary)</h3>
-<p>Valida o botao de navegacao (voltar) no header secondary.</p>
+<div class="po-font-subtitle po-mb-2">Cenario: Botao Voltar (Secondary)</div>
+<div class="po-font-text po-mb-3">Valida o botao de navegacao (voltar) no header secondary.</div>
 
-<h4>1. Secondary com acoes - botao voltar + aria-label</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">1. Secondary com acoes - botao voltar + aria-label</div>
+<po-container class="po-mb-2">
   <po-page-default
     p-title="Secondary com Back"
     p-subtitle="Clique no botao voltar"
@@ -10,59 +10,59 @@
     p-page-header-type="secondary"
     (p-back)="onBack()"
   >
-    <p>Botao voltar: apenas icone (arrow-left), aria-label para leitores de tela.</p>
-    <p>Verifique: inspecione o botao voltar e confirme que tem aria-label='Voltar' (ou equivalente no idioma).</p>
-    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+    <div class="po-font-text">Botao voltar: apenas icone (arrow-left), aria-label para leitores de tela.</div>
+    <div class="po-font-text">Verifique: inspecione o botao voltar e confirme que tem aria-label='Voltar' (ou equivalente no idioma).</div>
+    <div class="po-font-text-bold">Cliques no voltar: {{ backCount }}</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>2. Secondary sem acoes - apenas botao voltar</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">2. Secondary sem acoes - apenas botao voltar</div>
+<po-container class="po-mb-2">
   <po-page-default
     p-title="Apenas Voltar"
     p-page-header-type="secondary"
     (p-back)="onBack()"
   >
-    <p>Header visivel apenas com botao voltar e titulo. Sem acoes.</p>
-    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+    <div class="po-font-text">Header visivel apenas com botao voltar e titulo. Sem acoes.</div>
+    <div class="po-font-text-bold">Cliques no voltar: {{ backCount }}</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>3. Secondary sem titulo - apenas voltar</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">3. Secondary sem titulo - apenas voltar</div>
+<po-container class="po-mb-2">
   <po-page-default
     p-page-header-type="secondary"
     (p-back)="onBack()"
   >
-    <p>Header secondary sem titulo. Botao voltar ainda visivel.</p>
-    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+    <div class="po-font-text">Header secondary sem titulo. Botao voltar ainda visivel.</div>
+    <div class="po-font-text-bold">Cliques no voltar: {{ backCount }}</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>4. Primary - NAO deve ter botao voltar</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">4. Primary - NAO deve ter botao voltar</div>
+<po-container class="po-mb-2">
   <po-page-default
     p-title="Primary sem voltar"
     [p-actions]="actions"
     p-page-header-type="primary"
   >
-    <p>Header primary NAO deve exibir botao voltar.</p>
+    <div class="po-font-text">Header primary NAO deve exibir botao voltar.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>5. Tertiary - NAO deve ter botao voltar</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">5. Tertiary - NAO deve ter botao voltar</div>
+<po-container class="po-mb-2">
   <po-page-default
     p-title="Tertiary sem voltar"
     [p-actions]="actions"
     p-page-header-type="tertiary"
   >
-    <p>Header tertiary NAO deve exibir botao voltar.</p>
+    <div class="po-font-text">Header tertiary NAO deve exibir botao voltar.</div>
   </po-page-default>
-</div>
+</po-container>
 
-<h4>6. Secondary + Dropdown layout - botao voltar + dropdown</h4>
-<div style="border: 1px solid #ccc; margin-bottom: 16px;">
+<div class="po-font-text-large-bold po-mb-1">6. Secondary + Dropdown layout - botao voltar + dropdown</div>
+<po-container class="po-mb-2">
   <po-page-default
     p-title="Secondary Dropdown + Back"
     [p-actions]="actions"
@@ -70,7 +70,7 @@
     p-page-actions-layout="dropdown"
     (p-back)="onBack()"
   >
-    <p>Botao voltar + todas as acoes no dropdown.</p>
-    <p><strong>Cliques no voltar: {{ backCount }}</strong></p>
+    <div class="po-font-text">Botao voltar + todas as acoes no dropdown.</div>
+    <div class="po-font-text-bold">Cliques no voltar: {{ backCount }}</div>
   </po-page-default>
-</div>
+</po-container>
