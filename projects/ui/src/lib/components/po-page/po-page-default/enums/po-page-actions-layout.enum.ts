@@ -3,7 +3,9 @@
  *
  * @description
  *
+ * Enum que define os layouts de ações disponíveis no `po-page-default`.
  *
+ * > Compatível com todos os valores de `PoPageHeaderType` (`primary`, `secondary` e `tertiary`).
  *
  * Define os layouts de exibição das ações no cabeçalho.
  */

@@ -87,7 +87,6 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
 
   hasPageHeader() {
     this.visibleActions = this.getVisibleActions();
-    this.setDropdownActions();
 
     if (this.pageHeaderType === 'secondary') {
       return true;

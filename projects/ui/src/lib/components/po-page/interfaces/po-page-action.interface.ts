@@ -30,6 +30,9 @@ export interface PoPageAction extends PoDropdownAction {
    * - `secondary`: Estilo padrão para a maioria das ações.
    * - `tertiary`: Botão com menor destaque (apenas texto/ícone).
    *
+   * > Aplicável quando `PoPageActionsLayout` for `mixed`. No layout `default`, a primeira ação é sempre `primary`
+   * e as demais `secondary`, independente do valor de `kind`.
+   *
    * > Quando o header é do tipo `secondary` ou `tertiary`, o valor padrão desta propriedade passa a ser `secondary`.
    */
   kind?: string;

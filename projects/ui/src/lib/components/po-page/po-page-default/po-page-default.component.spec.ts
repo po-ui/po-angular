@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -57,7 +58,7 @@ describe('PoPageDefaultComponent mobile', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
+      imports: [CommonModule, RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         MobileComponent,
         PoPageDefaultComponent,
@@ -155,7 +156,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
+      imports: [CommonModule, RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         DesktopComponent,
         PoPageDefaultComponent,
@@ -298,7 +299,7 @@ describe('PoPageDefaultComponent desktop', () => {
       expect(fixture.debugElement.nativeElement.querySelector('po-page-header')).toBeFalsy();
     });
 
-    it('should show only one icon in button actions.', () => {
+    it('should show icons in all visible button actions.', () => {
       component.actions[0] = { label: 'action 1', icon: 'an-newspaper' };
       component.actions[1] = { label: 'action 2', icon: 'an-newspaper' };
       component.actions[2] = { label: 'action 3', icon: 'an-newspaper' };
@@ -307,7 +308,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       const icons = fixture.debugElement.nativeElement.querySelectorAll('.an-newspaper');
 
-      expect(icons.length).toBe(1);
+      expect(icons.length).toBe(3);
     });
 
     it('should not display buttons that have visible equal to false', () => {
