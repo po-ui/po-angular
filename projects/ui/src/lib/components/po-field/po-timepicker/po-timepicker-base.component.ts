@@ -444,6 +444,7 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
    */
   @Input('p-locale') set locale(value: string) {
     this._locale = value && value.length >= 2 ? value : this.shortLanguage;
+    this.onLocaleChange();
   }
 
   get locale(): string {
@@ -752,6 +753,8 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
     const size = validateSizeFn(this._initialSize, PoFieldSize);
     this._size = size;
   }
+
+  protected onLocaleChange(): void {}
 
   abstract writeValue(value: any): void;
 

@@ -219,6 +219,14 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     this.removeListeners();
   }
 
+  protected override onLocaleChange(): void {
+    const lang = this.locale || this.shortLanguage;
+    this.literals = {
+      ...(poTimepickerLiterals[lang] || poTimepickerLiterals[this.shortLanguage])
+    };
+    this.cd.markForCheck();
+  }
+
   emitAdditionalHelp() {
     // deprecated - kept for backward compatibility
   }
