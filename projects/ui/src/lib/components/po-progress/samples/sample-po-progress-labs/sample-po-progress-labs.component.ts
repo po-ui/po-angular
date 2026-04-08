@@ -6,9 +6,9 @@ import {
   PoProgressStatus,
   PoRadioGroupOption,
   PoProgressSize,
+  PoProgressShape,
   PoProgressAction,
-  PoSelectOption,
-  PoNotificationService
+  PoSelectOption
 } from '@po-ui/ng-components';
 
 @Component({
@@ -18,7 +18,6 @@ import {
 })
 export class SamplePoProgressLabsComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private poNotification = inject(PoNotificationService);
 
   event: any;
   info: string;
@@ -28,6 +27,8 @@ export class SamplePoProgressLabsComponent implements OnInit {
   showPercentage: boolean;
   status: PoProgressStatus = PoProgressStatus.Default;
   size: PoProgressSize = PoProgressSize.large;
+  shape: PoProgressShape = PoProgressShape.bar;
+  radius: number;
   text: string;
   value: number;
   action: PoProgressAction;
@@ -54,6 +55,11 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { label: 'Large', value: PoProgressSize.large }
   ];
 
+  shapeOptions: Array<PoRadioGroupOption> = [
+    { label: 'Bar', value: PoProgressShape.bar },
+    { label: 'Circle', value: PoProgressShape.circle }
+  ];
+
   sizeActionsOptions: Array<PoRadioGroupOption> = [
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
@@ -76,7 +82,7 @@ export class SamplePoProgressLabsComponent implements OnInit {
     { label: 'Visible', value: 'visible' }
   ];
 
-  public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+  public propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'disabledCancel', label: 'Disabled cancel' },
     { value: 'indeterminate', label: 'Indeterminate' },
     { value: 'showPercentage', label: 'Show percentage' }
@@ -84,6 +90,17 @@ export class SamplePoProgressLabsComponent implements OnInit {
 
   constructor() {
     this.initializeActionForm();
+  }
+
+  onShapeChange(value: string): void {
+    this.restore(value);
+    if (value === 'circle') {
+      this.propertiesOptions[0].disabled = true;
+    } else {
+      this.propertiesOptions[0].disabled = false;
+    }
+
+    this.propertiesOptions = [...this.propertiesOptions];
   }
 
   initializeActionForm() {
@@ -111,7 +128,7 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.event = event;
   }
 
-  restore() {
+  restore(shape?: string) {
     this.event = undefined;
     this.info = undefined;
     this.infoIcon = undefined;
@@ -122,10 +139,15 @@ export class SamplePoProgressLabsComponent implements OnInit {
     this.text = undefined;
     this.value = undefined;
     this.size = PoProgressSize.large;
+    this.radius = undefined;
     this.actionForm.reset({ type: 'default', visible: true });
     this.action = { label: '', type: 'default' };
     this.showAction = false;
     this.properties = [];
     this.sizeActions = 'medium';
+
+    if (!shape) {
+      this.shape = PoProgressShape.bar;
+    }
   }
 }

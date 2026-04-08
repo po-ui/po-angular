@@ -50,6 +50,8 @@ export class PoProgressBaseComponent {
    * > Se nenhuma função for passada para o evento `(p-cancel)` ou a barra de progresso estiver com o status `PoProgressStatus.Success`,
    * o ícone de cancelamento não será exibido.
    *
+   * > Não compatível com `p-shape="circle"`.
+   *
    * @default `false`
    */
   @Input({ alias: 'p-disabled-cancel', transform: convertToBoolean }) disabledCancel: boolean = false;
@@ -60,6 +62,8 @@ export class PoProgressBaseComponent {
    * @description
    *
    * Informação adicional que aparecerá abaixo da barra de progresso ao lado direito.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Input('p-info') info?: string;
 
@@ -71,6 +75,8 @@ export class PoProgressBaseComponent {
    * Ícone que aparecerá ao lado do texto da propriedade `p-info`.
    *
    * Exemplo: `an an-check`.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Input('p-info-icon') infoIcon?: string | TemplateRef<void>;
 
@@ -92,6 +98,8 @@ export class PoProgressBaseComponent {
    * @description
    *
    * Texto principal que aparecerá abaixo da barra de progresso no lado esquerdo.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Input('p-text') text?: string;
 
@@ -108,6 +116,8 @@ export class PoProgressBaseComponent {
    * - **`type`**: Tipo do botão (`default` ou `danger`) para indicar a intenção da ação (opcional).
    * - **`disabled`**: Indica se o botão deve estar desabilitado (opcional).
    * - **`visible`**: Determina se o botão será exibido. Pode ser um valor booleano ou uma função que retorna um booleano (opcional).
+   *
+   * > Não compatível com `p-shape="circle"`.
    *
    * @example
    * **Exemplo de uso:**
@@ -145,6 +155,8 @@ export class PoProgressBaseComponent {
    *
    * Evento emitido quando o botão definido em `p-custom-action` é clicado. Este evento retorna informações
    * relacionadas à barra de progresso ou ao arquivo/processo associado, permitindo executar ações específicas.
+   *
+   * > Não compatível com `p-shape="circle"`.
    *
    * @example
    * **Exemplo de uso:**
@@ -187,6 +199,8 @@ export class PoProgressBaseComponent {
    *
    * > Se nenhuma função for passada para o evento ou a barra de progresso estiver com o status `PoProgressStatus.Success`,
    * o ícone de cancelamento não será exibido.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Output('p-cancel') cancel: EventEmitter<any> = new EventEmitter();
 
@@ -199,6 +213,8 @@ export class PoProgressBaseComponent {
    *
    * > o ícone será exibido apenas se informar uma função neste evento e o status da barra de progresso for
    * `PoProgressStatus.Error`.
+   *
+   * > Não compatível com `p-shape="circle"`.
    */
   @Output('p-retry') retry: EventEmitter<any> = new EventEmitter();
 
@@ -233,6 +249,8 @@ export class PoProgressBaseComponent {
    *
    * Define o raio do círculo SVG em pixels. Permite ao usuário customizar o tamanho
    * do indicador circular ao utilizar `p-shape="circle"`.
+   *
+   * > Não compatível com `p-shape="bar"`.
    *
    * @default `45`
    */
@@ -319,6 +337,8 @@ export class PoProgressBaseComponent {
    *
    * > Caso a acessibilidade AA não esteja configurada, o tamanho `medium` será mantido.
    * Para mais detalhes, consulte a documentação do [po-theme](https://po-ui.io/documentation/po-theme).
+   *
+   * > Não compatível com `p-shape="circle"`.
    *
    * @default `medium`
    */

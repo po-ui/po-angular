@@ -26,11 +26,11 @@
         />
       </svg>
 
-      @if (showPercentage()) {
+      @if (showPercentage() && status() !== 'error') {
         <span class="po-progress-circle-info po-progress-circle-info-percentage">{{ value() }}%</span>
       }
 
-      @if (status() === 'error' && !showPercentage()) {
+      @if (status() === 'error') {
         <span class="po-progress-circle-info po-progress-circle-info-error po-progress-circle-info-error-{{ size() }}">
           <span class="an an-warning-circle"></span>
         </span>

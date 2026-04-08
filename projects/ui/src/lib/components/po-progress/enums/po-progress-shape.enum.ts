@@ -3,7 +3,7 @@
  *
  * @description
  *
- * *Enum* `PoProgressShape` para definir o formato visual do componente de progresso.
+ * Enum `PoProgressShape` para definir o formato visual do componente de progresso.
  */
 export enum PoProgressShape {
   /** Formato de barra de progresso (padrão). */
