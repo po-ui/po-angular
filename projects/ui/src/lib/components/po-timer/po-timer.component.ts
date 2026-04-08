@@ -629,7 +629,7 @@ export class PoTimerComponent
       }
 
       this.focusedDisplayIndex[type] = index;
-      this.syncSingleButtonAria(hostEl, nativeButton);
+      this.syncAriaToNativeButtons();
       nativeButton.focus({ preventScroll: true });
       this.refreshRovingTabIndex();
       return;
@@ -1181,6 +1181,15 @@ export class PoTimerComponent
    * Propaga atributos ARIA (role, aria-selected, aria-setsize, aria-posinset)
    * dos elementos host <po-button> para os elementos nativos <button> internos,
    * garantindo que leitores de tela como NVDA recebam a semantica correta.
+   *
+   * Usa a secao fixa do meio [sourceLength, 2*sourceLength) como canonica.
+   * Quando o item focado esta fora dessa secao (na fronteira do infinity scroll),
+   * ele substitui o item equivalente na secao fixa para manter exatamente
+   * sourceLength itens com role="option".
+   *
+   * Duplicatas recebem aria-hidden="true" e role="none" no <button> nativo
+   * (nao apenas no host <po-button>), pois NVDA ignora aria-hidden em
+   * elementos customizados e conta <button> filhos de role="listbox".
    */
   private syncAriaToNativeButtons(): void {
     const columnTypes: PoTimerColumnType[] = ['hour', 'minute', 'second'];
@@ -1191,18 +1200,77 @@ export class PoTimerComponent
         continue;
       }
 
+      const sourceLength = this.getSourceArray(type).length;
+      const useInfinityScroll = sourceLength >= VISIBLE_ITEMS_PER_COLUMN;
       const arr = cells.toArray();
-      for (const cellRef of arr) {
-        const hostEl = cellRef.nativeElement as HTMLElement;
+
+      const focusedIdx = this.focusedDisplayIndex[type];
+      const focusedInFixed = useInfinityScroll && focusedIdx >= sourceLength && focusedIdx < 2 * sourceLength;
+      const focusedSourceIdx = useInfinityScroll ? ((focusedIdx % sourceLength) + sourceLength) % sourceLength : -1;
+
+      for (let i = 0; i < arr.length; i++) {
+        const hostEl = arr[i].nativeElement as HTMLElement;
         const nativeButton = hostEl?.querySelector('button') as HTMLButtonElement | null;
 
         if (!nativeButton) {
           continue;
         }
 
-        this.syncSingleButtonAria(hostEl, nativeButton);
+        const isCanonical = this.isCanonicalDisplayItem(
+          i,
+          useInfinityScroll,
+          sourceLength,
+          focusedIdx,
+          focusedInFixed,
+          focusedSourceIdx
+        );
+
+        if (isCanonical) {
+          hostEl.removeAttribute('inert');
+          hostEl.removeAttribute('aria-hidden');
+          this.syncSingleButtonAria(hostEl, nativeButton);
+        } else {
+          hostEl.setAttribute('inert', '');
+          hostEl.setAttribute('aria-hidden', 'true');
+        }
       }
     }
+  }
+
+  /**
+   * Determina se um item do displayArray e canonico para fins de ARIA.
+   *
+   * - Sem infinity scroll: todos sao canonicos.
+   * - Com infinity scroll: a secao fixa [sourceLength, 2*sourceLength) e canonica,
+   *   exceto quando o item focado esta fora dela — nesse caso o item da secao fixa
+   *   com o mesmo valor-fonte e substituido pelo item focado.
+   */
+  private isCanonicalDisplayItem(
+    index: number,
+    useInfinityScroll: boolean,
+    sourceLength: number,
+    focusedIdx: number,
+    focusedInFixed: boolean,
+    focusedSourceIdx: number
+  ): boolean {
+    if (!useInfinityScroll) {
+      return true;
+    }
+
+    if (index === focusedIdx) {
+      return true;
+    }
+
+    const inFixedSection = index >= sourceLength && index < 2 * sourceLength;
+
+    if (inFixedSection) {
+      if (!focusedInFixed && index % sourceLength === focusedSourceIdx) {
+        return false;
+      }
+      return true;
+    }
+
+    return false;
   }
 
   /**

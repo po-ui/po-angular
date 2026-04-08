@@ -1241,7 +1241,6 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     }
 
     event.preventDefault();
-
     this.timerComponent.focusFirstVisibleCell();
   }
 }
