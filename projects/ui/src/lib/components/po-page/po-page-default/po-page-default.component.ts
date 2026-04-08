@@ -93,13 +93,13 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     }
 
     if (this.pageHeaderType === 'tertiary') {
-      return !!(this.title || (this.visibleActions && this.visibleActions.length));
+      return !!(this.title || this.visibleActions?.length);
     }
 
     return !!(
       this.title ||
-      (this.visibleActions && this.visibleActions.length) ||
-      (this.breadcrumb && this.breadcrumb.items.length)
+      this.visibleActions?.length ||
+      this.breadcrumb?.items.length
     );
   }
 
@@ -121,10 +121,8 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     return this.actions.filter(action => this.actionIsVisible(action) !== false);
   }
 
-  /**
-   * Retorna o kind validado da ação. Apenas 'primary' e 'secondary' são permitidos.
-   * Valores inválidos são ignorados, retornando o fallback informado.
-   */
+  // Retorna o kind validado da ação. Apenas 'primary' e 'secondary' são permitidos.
+  // Valores inválidos são ignorados, retornando o fallback informado.
   getActionKind(action: PoPageAction, fallback: string): string {
     return action.kind === 'primary' || action.kind === 'secondary' ? action.kind : fallback;
   }
