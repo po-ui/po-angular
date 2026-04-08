@@ -53,6 +53,16 @@ describe('PoProgressCircleComponent:', () => {
         fixture.componentRef.setInput('p-show-percentage', false);
         expect(component.showPercentage()).toBe(false);
       });
+
+      it('should not show percentage when status is error but showPercentage is true', () => {
+        fixture.componentRef.setInput('p-indeterminate', false);
+        fixture.componentRef.setInput('p-status', 'error');
+        fixture.componentRef.setInput('p-show-percentage', true);
+        fixture.detectChanges();
+
+        const percentage = nativeElement.querySelector('.po-progress-circle-info-percentage');
+        expect(percentage).toBeNull();
+      });
     });
 
     describe('p-size:', () => {
@@ -429,16 +439,6 @@ describe('PoProgressCircleComponent:', () => {
         const errorIcon = nativeElement.querySelector('.po-progress-circle-info-error');
         expect(errorIcon).toBeTruthy();
         expect(errorIcon.querySelector('.an-warning-circle')).toBeTruthy();
-      });
-
-      it('should not show error icon when status is error but showPercentage is true', () => {
-        fixture.componentRef.setInput('p-indeterminate', false);
-        fixture.componentRef.setInput('p-status', 'error');
-        fixture.componentRef.setInput('p-show-percentage', true);
-        fixture.detectChanges();
-
-        const errorIcon = nativeElement.querySelector('.po-progress-circle-info-error');
-        expect(errorIcon).toBeNull();
       });
 
       it('should not show error icon when status is not error', () => {
