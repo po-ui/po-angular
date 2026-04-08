@@ -474,6 +474,25 @@ describe('PoTimerComponent:', () => {
         expect(steps).toBe(0);
       });
 
+      it('should return negative steps when wrapped focused item is above viewport even on ArrowDown', () => {
+        const mockItemsEl = {
+          style: { transform: '' },
+          scrollHeight: 0,
+          parentElement: { clientHeight: 240 }
+        } as any;
+
+        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
+        spyOn(component as any, 'getCellStep').and.returnValue(40);
+
+        component['columnOffsets'].hour = 42 * 40;
+
+        const shouldTranslate = component['shouldTranslateToRevealFocusedItem']('hour', 24);
+        const steps = component['getStepsToRevealFocusedItem']('hour', 24, 1);
+
+        expect(shouldTranslate).toBe(true);
+        expect(steps).toBeLessThan(0);
+      });
+
       it('should resolve focus to visible equivalent repeated minute index', () => {
         component.minuteInterval = 5;
         component.ngOnInit();
@@ -3120,6 +3139,19 @@ describe('PoTimerComponent:', () => {
       expect(nativeButton.getAttribute('aria-posinset')).toBe('1');
     });
 
+    it('should keep aria-setsize and aria-posinset consistent when focus moves to duplicated hour item', () => {
+      component['focusedDisplayIndex'].hour = component.hours.length * 2;
+      component['syncAriaToNativeButtons']();
+      fixture.detectChanges();
+
+      const wrappedHourCell = nativeElement.querySelector('#po-timer-hour-48') as HTMLElement;
+      const wrappedNativeButton = wrappedHourCell?.querySelector('button') as HTMLButtonElement;
+
+      expect(wrappedNativeButton).toBeTruthy();
+      expect(wrappedNativeButton.getAttribute('aria-setsize')).toBe('24');
+      expect(wrappedNativeButton.getAttribute('aria-posinset')).toBe('1');
+    });
+
     it('should not propagate aria-selected to non-selected native button elements', () => {
       component.onSelectHour(10);
       fixture.detectChanges();
@@ -3130,6 +3162,13 @@ describe('PoTimerComponent:', () => {
 
       expect(nativeButton).toBeTruthy();
       expect(nativeButton.hasAttribute('aria-selected')).toBe(false);
+    });
+
+    it('should keep aria-activedescendant on focused repeated hour index', () => {
+      component['focusedDisplayIndex'].hour = component.hours.length * 2;
+      component['updateActiveDescendant']('hour', component['focusedDisplayIndex'].hour);
+
+      expect(component.activeDescendantIds.hour).toBe('po-timer-hour-48');
     });
   });
 });

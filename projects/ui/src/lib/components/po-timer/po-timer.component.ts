@@ -880,7 +880,7 @@ export class PoTimerComponent
     return itemTop < -tolerance || itemBottom > viewportHeight + tolerance;
   }
 
-  private getStepsToRevealFocusedItem(type: PoTimerColumnType, focusedIndex: number, stepDirection: -1 | 1): number {
+  private getStepsToRevealFocusedItem(type: PoTimerColumnType, focusedIndex: number, _stepDirection: -1 | 1): number {
     const itemsEl = this.getItemsElement(type);
     const displayArray = this.getDisplayArray(type);
 
@@ -899,19 +899,15 @@ export class PoTimerComponent
     const itemBottom = itemTop + step;
     const tolerance = 0.5;
 
-    if (stepDirection > 0) {
-      if (itemBottom <= viewportHeight + tolerance) {
-        return 0;
-      }
+    if (itemTop < -tolerance) {
+      return -Math.max(1, Math.ceil(-itemTop / step));
+    }
 
+    if (itemBottom > viewportHeight + tolerance) {
       return Math.max(1, Math.ceil((itemBottom - viewportHeight) / step));
     }
 
-    if (itemTop >= -tolerance) {
-      return 0;
-    }
-
-    return -Math.max(1, Math.ceil(-itemTop / step));
+    return 0;
   }
 
   private getColumnViewportHeight(itemsEl: HTMLElement, step: number): number {
@@ -1205,8 +1201,8 @@ export class PoTimerComponent
       const arr = cells.toArray();
 
       const focusedIdx = this.focusedDisplayIndex[type];
-      const focusedInFixed = useInfinityScroll && focusedIdx >= sourceLength && focusedIdx < 2 * sourceLength;
-      const focusedSourceIdx = useInfinityScroll ? ((focusedIdx % sourceLength) + sourceLength) % sourceLength : -1;
+      const focusedSectionStart =
+        useInfinityScroll && sourceLength > 0 ? Math.floor(focusedIdx / sourceLength) * sourceLength : 0;
 
       for (let i = 0; i < arr.length; i++) {
         const hostEl = arr[i].nativeElement as HTMLElement;
@@ -1221,17 +1217,22 @@ export class PoTimerComponent
           useInfinityScroll,
           sourceLength,
           focusedIdx,
-          focusedInFixed,
-          focusedSourceIdx
+          focusedSectionStart
         );
 
         if (isCanonical) {
           hostEl.removeAttribute('inert');
           hostEl.removeAttribute('aria-hidden');
-          this.syncSingleButtonAria(hostEl, nativeButton);
+          nativeButton.removeAttribute('aria-hidden');
+          this.syncSingleButtonAria(hostEl, nativeButton, i, sourceLength);
         } else {
           hostEl.setAttribute('inert', '');
           hostEl.setAttribute('aria-hidden', 'true');
+          nativeButton.setAttribute('role', 'none');
+          nativeButton.setAttribute('aria-hidden', 'true');
+          nativeButton.removeAttribute('aria-setsize');
+          nativeButton.removeAttribute('aria-posinset');
+          nativeButton.removeAttribute('aria-selected');
         }
       }
     }
@@ -1241,36 +1242,25 @@ export class PoTimerComponent
    * Determina se um item do displayArray e canonico para fins de ARIA.
    *
    * - Sem infinity scroll: todos sao canonicos.
-   * - Com infinity scroll: a secao fixa [sourceLength, 2*sourceLength) e canonica,
-   *   exceto quando o item focado esta fora dela — nesse caso o item da secao fixa
-   *   com o mesmo valor-fonte e substituido pelo item focado.
+   * - Com infinity scroll: a secao que contem o item focado e canonica.
    */
   private isCanonicalDisplayItem(
     index: number,
     useInfinityScroll: boolean,
     sourceLength: number,
     focusedIdx: number,
-    focusedInFixed: boolean,
-    focusedSourceIdx: number
+    focusedSectionStart: number
   ): boolean {
     if (!useInfinityScroll) {
       return true;
     }
 
-    if (index === focusedIdx) {
-      return true;
+    if (sourceLength <= 0) {
+      return false;
     }
 
-    const inFixedSection = index >= sourceLength && index < 2 * sourceLength;
-
-    if (inFixedSection) {
-      if (!focusedInFixed && index % sourceLength === focusedSourceIdx) {
-        return false;
-      }
-      return true;
-    }
-
-    return false;
+    const sectionStart = Math.floor(index / sourceLength) * sourceLength;
+    return sectionStart === focusedSectionStart || index === focusedIdx;
   }
 
   /**
@@ -1278,11 +1268,14 @@ export class PoTimerComponent
    * Chamado tanto por syncAriaToNativeButtons (batch) quanto por
    * focusButtonAt (antes do .focus()) para evitar leitura duplicada.
    */
-  private syncSingleButtonAria(hostEl: HTMLElement, nativeButton: HTMLButtonElement): void {
+  private syncSingleButtonAria(
+    hostEl: HTMLElement,
+    nativeButton: HTMLButtonElement,
+    displayIndex: number,
+    sourceLength: number
+  ): void {
     const role = hostEl.getAttribute('data-aria-role');
     const selected = hostEl.getAttribute('data-aria-selected');
-    const setsize = hostEl.getAttribute('data-aria-setsize');
-    const posinset = hostEl.getAttribute('data-aria-posinset');
 
     if (role) {
       nativeButton.setAttribute('role', role);
@@ -1294,12 +1287,13 @@ export class PoTimerComponent
       nativeButton.removeAttribute('aria-selected');
     }
 
-    if (setsize) {
-      nativeButton.setAttribute('aria-setsize', setsize);
-    }
-
-    if (posinset) {
-      nativeButton.setAttribute('aria-posinset', posinset);
+    if (sourceLength > 0) {
+      const normalizedPosInSet = (((displayIndex % sourceLength) + sourceLength) % sourceLength) + 1;
+      nativeButton.setAttribute('aria-setsize', String(sourceLength));
+      nativeButton.setAttribute('aria-posinset', String(normalizedPosInSet));
+    } else {
+      nativeButton.removeAttribute('aria-setsize');
+      nativeButton.removeAttribute('aria-posinset');
     }
   }
 }
