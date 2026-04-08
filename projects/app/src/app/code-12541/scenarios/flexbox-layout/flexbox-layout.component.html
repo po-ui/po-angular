@@ -1,0 +1,122 @@
+<div class="po-font-text-large-bold po-mb-2">Cenarios de Validacao de Layout Flexbox</div>
+<div class="po-font-text po-mb-3">Valida que a migracao para Flexbox mantem a integridade visual em diferentes estruturas.</div>
+
+<!-- F1: po-page-default standalone (sem wrapper) -->
+<div class="po-font-text-bold po-mb-1">F1 - po-page-default standalone (sem .po-wrapper)</div>
+<div class="po-font-text po-mb-1">Esperado: min-height 100vh, scroll no content area.</div>
+<po-container class="po-mb-3">
+  <po-page-default
+    p-title="Standalone Page"
+    p-subtitle="Sem .po-wrapper"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsDefault"
+  >
+    <div class="po-font-text po-mb-1">Conteudo dentro do po-page-content.</div>
+    <div class="po-font-text po-mb-1">Deve ocupar espaco restante apos o header.</div>
+  </po-page-default>
+</po-container>
+
+<!-- F2: po-page-default com conteudo longo -->
+<div class="po-font-text-bold po-mb-1">F2 - po-page-default com conteudo longo (scroll)</div>
+<div class="po-font-text po-mb-1">Esperado: header fixo no topo, scroll apenas no content.</div>
+<po-container class="po-mb-3" style="height: 300px; overflow: hidden;">
+  <po-page-default
+    p-title="Pagina com Scroll"
+    p-subtitle="Conteudo longo"
+    [p-actions]="actionsDefault"
+  >
+    @for (item of longContent; track item) {
+      <div class="po-font-text po-mb-1">{{ item }}</div>
+    }
+  </po-page-default>
+</po-container>
+
+<!-- F3: po-page-default com header secondary -->
+<div class="po-font-text-bold po-mb-1">F3 - Header secondary com conteudo longo</div>
+<div class="po-font-text po-mb-1">Esperado: header secondary fixo, scroll no content.</div>
+<po-container class="po-mb-3" style="height: 300px; overflow: hidden;">
+  <po-page-default
+    p-title="Secondary com Scroll"
+    p-subtitle="Conteudo extenso"
+    p-page-header-type="secondary"
+    [p-actions]="actionsDefault"
+  >
+    @for (item of longContent; track item) {
+      <div class="po-font-text po-mb-1">{{ item }}</div>
+    }
+  </po-page-default>
+</po-container>
+
+<!-- F4: po-page-default com header tertiary -->
+<div class="po-font-text-bold po-mb-1">F4 - Header tertiary com conteudo longo</div>
+<div class="po-font-text po-mb-1">Esperado: header tertiary fixo, scroll no content.</div>
+<po-container class="po-mb-3" style="height: 300px; overflow: hidden;">
+  <po-page-default
+    p-title="Tertiary com Scroll"
+    p-page-header-type="tertiary"
+    [p-actions]="actionsDefault"
+  >
+    @for (item of longContent; track item) {
+      <div class="po-font-text po-mb-1">{{ item }}</div>
+    }
+  </po-page-default>
+</po-container>
+
+<!-- F5: po-page-list com tabela -->
+<div class="po-font-text-bold po-mb-1">F5 - po-page-list (componente consumidor)</div>
+<div class="po-font-text po-mb-1">Esperado: layout flexbox herdado, header e content corretos.</div>
+<po-container class="po-mb-3">
+  <po-page-list
+    p-title="Lista de Registros"
+    p-subtitle="po-page-list com acoes"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsDefault"
+  >
+    <div class="po-font-text">Conteudo da lista.</div>
+  </po-page-list>
+</po-container>
+
+<!-- F6: po-page-detail (componente consumidor) -->
+<div class="po-font-text-bold po-mb-1">F6 - po-page-detail (componente consumidor)</div>
+<div class="po-font-text po-mb-1">Esperado: layout flexbox herdado, acoes back/edit/remove.</div>
+<po-container class="po-mb-3">
+  <po-page-detail
+    p-title="Detalhe do Registro"
+    p-subtitle="po-page-detail"
+    [p-breadcrumb]="breadcrumb"
+  >
+    <div class="po-font-text">Conteudo do detalhe.</div>
+  </po-page-detail>
+</po-container>
+
+<!-- F7: po-page-edit (componente consumidor) -->
+<div class="po-font-text-bold po-mb-1">F7 - po-page-edit (componente consumidor)</div>
+<div class="po-font-text po-mb-1">Esperado: layout flexbox herdado, acoes save/cancel.</div>
+<po-container class="po-mb-3">
+  <po-page-edit
+    p-title="Edicao do Registro"
+    p-subtitle="po-page-edit"
+    [p-breadcrumb]="breadcrumb"
+  >
+    <div class="po-font-text">Conteudo do formulario de edicao.</div>
+  </po-page-edit>
+</po-container>
+
+<!-- F8: Todas as variantes de header com overflow de acoes -->
+<div class="po-font-text-bold po-mb-1">F8 - Overflow de acoes nos 3 tipos de header</div>
+<div class="po-font-text po-mb-1">Esperado: dropdown renderizado sem quebrar layout flexbox.</div>
+<po-container class="po-mb-3">
+  <po-page-default p-title="Primary Overflow" [p-actions]="actionsOverflow">
+    <div class="po-font-text">Primary com 5 acoes (overflow no dropdown).</div>
+  </po-page-default>
+</po-container>
+<po-container class="po-mb-3">
+  <po-page-default p-title="Secondary Overflow" p-page-header-type="secondary" [p-actions]="actionsOverflow">
+    <div class="po-font-text">Secondary com 5 acoes (overflow no dropdown).</div>
+  </po-page-default>
+</po-container>
+<po-container class="po-mb-3">
+  <po-page-default p-title="Tertiary Overflow" p-page-header-type="tertiary" [p-actions]="actionsOverflow">
+    <div class="po-font-text">Tertiary com 5 acoes (overflow no dropdown).</div>
+  </po-page-default>
+</po-container>

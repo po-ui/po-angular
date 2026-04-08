@@ -14,6 +14,9 @@ import { ScenarioActionsStatesComponent } from './scenarios/actions-states/actio
 import { ScenarioPropertiesComponent } from './scenarios/properties/properties.component';
 import { ScenarioEdgeCasesComponent } from './scenarios/edge-cases/edge-cases.component';
 import { ScenarioBackButtonComponent } from './scenarios/back-button/back-button.component';
+import { ScenarioFlexboxLayoutComponent } from './scenarios/flexbox-layout/flexbox-layout.component';
+import { ScenarioBackgroundTokenComponent } from './scenarios/background-token/background-token.component';
+import { ScenarioPageConsumersComponent } from './scenarios/page-consumers/page-consumers.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { ScenarioBackButtonComponent } from './scenarios/back-button/back-button
     ScenarioActionsStatesComponent,
     ScenarioPropertiesComponent,
     ScenarioEdgeCasesComponent,
-    ScenarioBackButtonComponent
+    ScenarioBackButtonComponent,
+    ScenarioFlexboxLayoutComponent,
+    ScenarioBackgroundTokenComponent,
+    ScenarioPageConsumersComponent
   ],
   imports: [CommonModule, PoModule],
   exports: [Code12541Component]

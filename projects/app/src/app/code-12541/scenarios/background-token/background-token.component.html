@@ -1,0 +1,110 @@
+<div class="po-font-text-large-bold po-mb-2">Cenarios de Token --background</div>
+<div class="po-font-text po-mb-3">Valida que o token --background cascateia para header E body em todos os page types.</div>
+
+<!-- B1: --background em po-page-default -->
+<div class="po-font-text-bold po-mb-1">B1 - Token --background em po-page-default</div>
+<div class="po-font-text po-mb-1">Esperado: header e body com background #e8f5e9 (verde claro).</div>
+<po-container class="po-mb-3">
+  <po-page-default
+    p-title="Default com --background"
+    p-subtitle="Token customizado"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsDefault"
+    style="--background: #e8f5e9;"
+  >
+    <div class="po-font-text po-mb-1">Conteudo do body - deve ter o mesmo background do header.</div>
+    <div class="po-font-text">Se o header e o body estao com fundo verde claro, o token esta funcionando.</div>
+  </po-page-default>
+</po-container>
+
+<!-- B2: --background em po-page-default secondary -->
+<div class="po-font-text-bold po-mb-1">B2 - Token --background em po-page-default (secondary)</div>
+<div class="po-font-text po-mb-1">Esperado: header secondary e body com background #e3f2fd (azul claro).</div>
+<po-container class="po-mb-3">
+  <po-page-default
+    p-title="Secondary com --background"
+    p-subtitle="Token customizado"
+    p-page-header-type="secondary"
+    [p-actions]="actionsDefault"
+    style="--background: #e3f2fd;"
+  >
+    <div class="po-font-text po-mb-1">Conteudo do body - deve ter o mesmo background do header.</div>
+    <div class="po-font-text">Se o header e o body estao com fundo azul claro, o token esta funcionando.</div>
+  </po-page-default>
+</po-container>
+
+<!-- B3: --background em po-page-default tertiary -->
+<div class="po-font-text-bold po-mb-1">B3 - Token --background em po-page-default (tertiary)</div>
+<div class="po-font-text po-mb-1">Esperado: header tertiary e body com background #fff3e0 (laranja claro).</div>
+<po-container class="po-mb-3">
+  <po-page-default
+    p-title="Tertiary com --background"
+    p-page-header-type="tertiary"
+    [p-actions]="actionsDefault"
+    style="--background: #fff3e0;"
+  >
+    <div class="po-font-text po-mb-1">Conteudo do body - deve ter o mesmo background do header.</div>
+    <div class="po-font-text">Se o header e o body estao com fundo laranja claro, o token esta funcionando.</div>
+  </po-page-default>
+</po-container>
+
+<!-- B4: --background em po-page-list -->
+<div class="po-font-text-bold po-mb-1">B4 - Token --background em po-page-list</div>
+<div class="po-font-text po-mb-1">Esperado: header e body com background #fce4ec (rosa claro).</div>
+<po-container class="po-mb-3">
+  <po-page-list
+    p-title="Lista com --background"
+    p-subtitle="Token customizado"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsDefault"
+    style="--background: #fce4ec;"
+  >
+    <div class="po-font-text po-mb-1">Conteudo da lista - deve ter o mesmo background do header.</div>
+    <div class="po-font-text">Se o header e o body estao com fundo rosa claro, o token esta funcionando.</div>
+  </po-page-list>
+</po-container>
+
+<!-- B5: --background em po-page-detail -->
+<div class="po-font-text-bold po-mb-1">B5 - Token --background em po-page-detail</div>
+<div class="po-font-text po-mb-1">Esperado: header e body com background #f3e5f5 (roxo claro).</div>
+<po-container class="po-mb-3">
+  <po-page-detail
+    p-title="Detalhe com --background"
+    p-subtitle="Token customizado"
+    [p-breadcrumb]="breadcrumb"
+    style="--background: #f3e5f5;"
+  >
+    <div class="po-font-text po-mb-1">Conteudo do detalhe - deve ter o mesmo background do header.</div>
+    <div class="po-font-text">Se o header e o body estao com fundo roxo claro, o token esta funcionando.</div>
+  </po-page-detail>
+</po-container>
+
+<!-- B6: --background em po-page-edit -->
+<div class="po-font-text-bold po-mb-1">B6 - Token --background em po-page-edit</div>
+<div class="po-font-text po-mb-1">Esperado: header e body com background #e0f7fa (ciano claro).</div>
+<po-container class="po-mb-3">
+  <po-page-edit
+    p-title="Edicao com --background"
+    p-subtitle="Token customizado"
+    [p-breadcrumb]="breadcrumb"
+    style="--background: #e0f7fa;"
+  >
+    <div class="po-font-text po-mb-1">Conteudo da edicao - deve ter o mesmo background do header.</div>
+    <div class="po-font-text">Se o header e o body estao com fundo ciano claro, o token esta funcionando.</div>
+  </po-page-edit>
+</po-container>
+
+<!-- B7: Sem --background (fallback) -->
+<div class="po-font-text-bold po-mb-1">B7 - Sem token --background (fallback)</div>
+<div class="po-font-text po-mb-1">Esperado: usa fallback --color-page-background-color-page (cor padrao do tema).</div>
+<po-container class="po-mb-3">
+  <po-page-default
+    p-title="Sem --background"
+    p-subtitle="Fallback para cor padrao"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsDefault"
+  >
+    <div class="po-font-text po-mb-1">Conteudo sem token customizado.</div>
+    <div class="po-font-text">Deve usar a cor padrao do tema ativo (light, dark ou sunset).</div>
+  </po-page-default>
+</po-container>

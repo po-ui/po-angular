@@ -18,7 +18,10 @@ export class Code12541Component {
     { label: 'Estados Acoes', value: 'actions-states' },
     { label: 'Propriedades', value: 'properties' },
     { label: 'Edge Cases', value: 'edge-cases' },
-    { label: 'Botao Voltar', value: 'back-button' }
+    { label: 'Botao Voltar', value: 'back-button' },
+    { label: 'Flexbox Layout', value: 'flexbox-layout' },
+    { label: 'Token Background', value: 'background-token' },
+    { label: 'Consumidores', value: 'page-consumers' }
   ];
 
   setTab(tab: string): void {

@@ -1,0 +1,156 @@
+<div class="po-font-text-large-bold po-mb-2">Cenarios de Componentes Consumidores do po-page</div>
+<div class="po-font-text po-mb-3">Valida que po-page-list, po-page-detail e po-page-edit funcionam corretamente com o novo layout Flexbox.</div>
+
+<!-- PC1: po-page-list com breadcrumb e acoes -->
+<div class="po-font-text-bold po-mb-1">PC1 - po-page-list com breadcrumb e acoes</div>
+<div class="po-font-text po-mb-1">Esperado: header primario com breadcrumb, ate 3 acoes + dropdown overflow.</div>
+<po-container class="po-mb-3">
+  <po-page-list
+    p-title="Lista de Clientes"
+    p-subtitle="Consulta de clientes cadastrados"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsOverflow"
+  >
+    <div class="po-font-text">Conteudo da lista com 5 acoes (3 visiveis + 2 no dropdown).</div>
+  </po-page-list>
+</po-container>
+
+<!-- PC2: po-page-list sem breadcrumb -->
+<div class="po-font-text-bold po-mb-1">PC2 - po-page-list sem breadcrumb</div>
+<div class="po-font-text po-mb-1">Esperado: header sem breadcrumb, acoes normais.</div>
+<po-container class="po-mb-3">
+  <po-page-list
+    p-title="Lista Simples"
+    [p-actions]="actionsDefault"
+  >
+    <div class="po-font-text">Lista sem breadcrumb.</div>
+  </po-page-list>
+</po-container>
+
+<!-- PC3: po-page-detail com breadcrumb -->
+<div class="po-font-text-bold po-mb-1">PC3 - po-page-detail com breadcrumb</div>
+<div class="po-font-text po-mb-1">Esperado: header com breadcrumb, acoes back/edit/remove do detail.</div>
+<po-container class="po-mb-3">
+  <po-page-detail
+    p-title="Detalhe do Cliente"
+    p-subtitle="Visualizacao completa"
+    [p-breadcrumb]="breadcrumb"
+  >
+    <div class="po-font-text po-mb-1">Campo 1: Valor do campo</div>
+    <div class="po-font-text po-mb-1">Campo 2: Valor do campo</div>
+    <div class="po-font-text">Campo 3: Valor do campo</div>
+  </po-page-detail>
+</po-container>
+
+<!-- PC4: po-page-detail sem subtitle -->
+<div class="po-font-text-bold po-mb-1">PC4 - po-page-detail sem subtitle</div>
+<div class="po-font-text po-mb-1">Esperado: apenas titulo, sem subtitle renderizado.</div>
+<po-container class="po-mb-3">
+  <po-page-detail
+    p-title="Detalhe Simples"
+    [p-breadcrumb]="breadcrumb"
+  >
+    <div class="po-font-text">Detalhe sem subtitle.</div>
+  </po-page-detail>
+</po-container>
+
+<!-- PC5: po-page-edit com breadcrumb -->
+<div class="po-font-text-bold po-mb-1">PC5 - po-page-edit com breadcrumb</div>
+<div class="po-font-text po-mb-1">Esperado: header com breadcrumb, acoes save/saveNew/cancel do edit.</div>
+<po-container class="po-mb-3">
+  <po-page-edit
+    p-title="Edicao de Cliente"
+    p-subtitle="Formulario de edicao"
+    [p-breadcrumb]="breadcrumb"
+  >
+    <div class="po-font-text po-mb-1">Campo editavel 1</div>
+    <div class="po-font-text po-mb-1">Campo editavel 2</div>
+    <div class="po-font-text">Campo editavel 3</div>
+  </po-page-edit>
+</po-container>
+
+<!-- PC6: po-page-edit sem subtitle -->
+<div class="po-font-text-bold po-mb-1">PC6 - po-page-edit sem subtitle</div>
+<div class="po-font-text po-mb-1">Esperado: apenas titulo, sem subtitle renderizado.</div>
+<po-container class="po-mb-3">
+  <po-page-edit
+    p-title="Edicao Simples"
+    [p-breadcrumb]="breadcrumb"
+  >
+    <div class="po-font-text">Edicao sem subtitle.</div>
+  </po-page-edit>
+</po-container>
+
+<!-- PC7: po-page-list com conteudo longo -->
+<div class="po-font-text-bold po-mb-1">PC7 - po-page-list com conteudo longo (scroll)</div>
+<div class="po-font-text po-mb-1">Esperado: header fixo, scroll apenas no content area.</div>
+<po-container class="po-mb-3" style="height: 250px; overflow: hidden;">
+  <po-page-list
+    p-title="Lista com Scroll"
+    p-subtitle="Conteudo extenso"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actionsDefault"
+  >
+    @for (item of longContent; track item) {
+      <div class="po-font-text po-mb-1">{{ item }}</div>
+    }
+  </po-page-list>
+</po-container>
+
+<!-- PC8: po-page-detail com conteudo longo -->
+<div class="po-font-text-bold po-mb-1">PC8 - po-page-detail com conteudo longo (scroll)</div>
+<div class="po-font-text po-mb-1">Esperado: header fixo, scroll apenas no content area.</div>
+<po-container class="po-mb-3" style="height: 250px; overflow: hidden;">
+  <po-page-detail
+    p-title="Detalhe com Scroll"
+    p-subtitle="Conteudo extenso"
+    [p-breadcrumb]="breadcrumb"
+  >
+    @for (item of longContent; track item) {
+      <div class="po-font-text po-mb-1">{{ item }}</div>
+    }
+  </po-page-detail>
+</po-container>
+
+<!-- PC9: po-page-edit com conteudo longo -->
+<div class="po-font-text-bold po-mb-1">PC9 - po-page-edit com conteudo longo (scroll)</div>
+<div class="po-font-text po-mb-1">Esperado: header fixo, scroll apenas no content area.</div>
+<po-container class="po-mb-3" style="height: 250px; overflow: hidden;">
+  <po-page-edit
+    p-title="Edicao com Scroll"
+    p-subtitle="Conteudo extenso"
+    [p-breadcrumb]="breadcrumb"
+  >
+    @for (item of longContent; track item) {
+      <div class="po-font-text po-mb-1">{{ item }}</div>
+    }
+  </po-page-edit>
+</po-container>
+
+<!-- PC10: po-page-default vs po-page-list layout comparison -->
+<div class="po-font-text-bold po-mb-1">PC10 - Comparacao de layout: po-page-default vs po-page-list</div>
+<div class="po-font-text po-mb-1">Esperado: ambos com layout identico (mesma hierarquia flex).</div>
+<div class="po-row po-mb-3">
+  <div class="po-lg-6 po-md-6">
+    <po-container>
+      <po-page-default
+        p-title="Default"
+        p-subtitle="po-page-default"
+        [p-actions]="actionsDefault"
+      >
+        <div class="po-font-text">Conteudo default.</div>
+      </po-page-default>
+    </po-container>
+  </div>
+  <div class="po-lg-6 po-md-6">
+    <po-container>
+      <po-page-list
+        p-title="List"
+        p-subtitle="po-page-list"
+        [p-actions]="actionsDefault"
+      >
+        <div class="po-font-text">Conteudo list.</div>
+      </po-page-list>
+    </po-container>
+  </div>
+</div>
