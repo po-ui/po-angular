@@ -3801,17 +3801,21 @@ describe('PoTimepickerComponent:', () => {
       expect(component.ariaLiveMessage).toBe('');
     });
 
-    it('should render role="dialog" on timer popup container', fakeAsync(() => {
+    it('should not add role="dialog" on timer popup container to avoid duplicate screen reader announcements', fakeAsync(() => {
       fixture.detectChanges();
 
       component.togglePicker(false);
       tick();
       fixture.detectChanges();
 
-      const dialogPicker = fixture.nativeElement.querySelector('[role="dialog"]');
+      // Simulate Tab into the timer (which calls focusTimer internally).
+      const event = new KeyboardEvent('keydown', { key: 'Tab' });
+      Object.defineProperty(event, 'preventDefault', { value: jasmine.createSpy('preventDefault') });
+      (component as any).focusTimer(event);
+      fixture.detectChanges();
 
-      expect(dialogPicker).toBeTruthy();
-      expect(dialogPicker.getAttribute('aria-label')).toBeTruthy();
+      const dialogPicker = fixture.nativeElement.querySelector('[role="dialog"]');
+      expect(dialogPicker).toBeFalsy();
 
       component.togglePicker();
     }));

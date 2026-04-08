@@ -204,14 +204,7 @@
     }
 
     <ng-template #sharedTimerContent>
-      <div
-        #dialogPicker
-        [class.po-timepicker-popup-timer]="!verifyMobile()"
-        tabindex="-1"
-        [hidden]="!visible"
-        role="dialog"
-        [attr.aria-label]="literals.field"
-      >
+      <div #dialogPicker [class.po-timepicker-popup-timer]="!verifyMobile()" tabindex="-1" [hidden]="!visible">
         @if (verifyMobile()) {
           <div class="po-timepicker-timer-overlay"></div>
         }
