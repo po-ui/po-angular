@@ -51,9 +51,9 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~21.2.4",
-    "@angular-devkit/schematics": "~21.0.0",
+    "@angular-devkit/schematics": "~21.2.4",
     "@angular/cli": "~21.2.4",
-    "@angular/compiler-cli": "~21.0.0",
+    "@angular/compiler-cli": "~21.2.4",
     ...
     "typescript": "~5.9.3"
   }
