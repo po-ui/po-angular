@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.9.0](https://github.com/po-ui/po-angular/compare/v21.8.0...v21.9.0) (2026-04-09)
+
+
+### Features
+
+* **calendar:** adiciona períodos pré-estabelecidos no modo range ([c32ca35](https://github.com/po-ui/po-angular/commit/c32ca35fe5d833085883b5ac2fad61809732468a))
+* **fields:** repassa propriedade loading para o componente Dynamic Form ([a432752](https://github.com/po-ui/po-angular/commit/a432752b29fff5ac2576114d52c148485cf34a72))
+* **timepicker:** implementa componente po-timepicker ([3c9cc5c](https://github.com/po-ui/po-angular/commit/3c9cc5c00e81046b2c265aa5a03ef0876070cab0))
+
 ## [21.8.0](https://github.com/po-ui/po-angular/compare/v21.7.0...v21.8.0) (2026-04-01)
 
 
