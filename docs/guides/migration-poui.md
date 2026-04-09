@@ -70,7 +70,7 @@ ng update @po-ui/ng-components --allow-dirty --force
 ```json
   "devDependencies": {
     ...,
-    "@angular-devkit/schematics": "~19.0.5",
+    "@angular-devkit/schematics": "~19.2.24",
     ...
   }
 ```
