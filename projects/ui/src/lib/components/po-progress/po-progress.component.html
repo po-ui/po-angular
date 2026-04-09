@@ -1,11 +1,10 @@
 <div class="po-progress" [ngClass]="statusClass">
-  @if (text) {
-    <div class="po-progress-description">
-      <po-label [p-label]="text"></po-label>
-    </div>
-  }
-
   @if (shape() === 'bar') {
+    @if (text) {
+      <div class="po-progress-description">
+        <po-label [p-label]="text"></po-label>
+      </div>
+    }
     <po-progress-bar
       class="po-progress-bar po-progress-bar-{{ size }}"
       [p-indeterminate]="indeterminate"

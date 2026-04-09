@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoProgressCircleComponent } from './po-progress-circle.component';
-import { PoProgressModule } from '../po-progress.module';
 
 describe('PoProgressCircleComponent:', () => {
   let component: PoProgressCircleComponent;
@@ -10,7 +9,7 @@ describe('PoProgressCircleComponent:', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [PoProgressModule]
+      imports: [PoProgressCircleComponent]
     });
 
     fixture = TestBed.createComponent(PoProgressCircleComponent);

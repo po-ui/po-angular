@@ -8,7 +8,7 @@ const CIRCLE_STROKE_LARGE = 8;
   selector: 'po-progress-circle',
   templateUrl: './po-progress-circle.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+  standalone: true
 })
 export class PoProgressCircleComponent {
   indeterminate = input<boolean, boolean>(false, { alias: 'p-indeterminate', transform: convertToBoolean });

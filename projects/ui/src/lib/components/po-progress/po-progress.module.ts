@@ -14,8 +14,8 @@ import { PoLabelModule } from '../po-label/po-label.module';
  * Módulo do componente `po-progress`.
  */
 @NgModule({
-  imports: [CommonModule, PoButtonModule, PoIconModule, PoLabelModule],
+  imports: [CommonModule, PoButtonModule, PoIconModule, PoLabelModule, PoProgressCircleComponent],
   exports: [PoProgressComponent],
-  declarations: [PoProgressBarComponent, PoProgressCircleComponent, PoProgressComponent]
+  declarations: [PoProgressBarComponent, PoProgressComponent]
 })
 export class PoProgressModule {}
