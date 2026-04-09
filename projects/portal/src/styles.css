@@ -19,11 +19,6 @@ html.potheme-light-AAA #logo-totvs {
   content: url('./assets/graphics/logo-totvs-preto.png');
 }
 
-html.potheme-dark-AA .po-header-nav,
-html.potheme-dark-AAA .po-header-nav {
-  --stroke-color: var(--color-brand-01-dark);
-}
-
 .dot {
   border-radius: 50%;
   display: inline-block;
@@ -252,6 +247,21 @@ pre code {
   position: relative;
 }
 
+.docs-sample-container .po-wrapper {
+  display: flex;
+  max-height: none;
+  max-width: calc(100vw - 286px) !important;
+  position: relative;
+}
+
+.docs-sample-container .po-wrapper-menu-panel .po-page {
+  display: inline-block;
+}
+
+.docs-sample-container po-menu + po-page-default {
+  width: 80%;
+}
+
 .docs-presskit-row {
   align-items: center;
   display: flex;
@@ -271,12 +281,54 @@ sample-po-menu-human-resources .po-wrapper.po-collapsed-menu .po-toolbar {
   left: 5px;
 }
 
+.docs-sample-container po-menu ~ po-toolbar .po-toolbar {
+  left: 290px;
+  margin-left: 0;
+  position: absolute;
+}
+
+.docs-sample-container .po-wrapper.po-collapsed-menu po-page-default {
+  width: 100%;
+}
+
+.docs-sample-container .po-wrapper-menu-panel .po-page {
+  width: calc(100% - 61px) !important;
+}
+
+.docs-sample-container .po-wrapper .po-page .po-page-content {
+  height: 100% !important;
+}
+
+.docs-sample-container .po-page {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  width: 100%;
+  height: 100% !important;
+}
+
+.docs-sample-container .po-wrapper po-toolbar ~ po-menu .po-menu,
+.docs-sample-container .po-wrapper-menu-panel po-toolbar ~ po-menu-panel .po-menu-panel {
+  margin-top: -40px;
+}
+
+.docs-sample-container .po-wrapper.po-collapsed-menu .po-page {
+  margin-left: 0;
+}
+
 .docs-sample-container .po-menu-panel {
   position: relative;
 }
 
 .docs-sample-container .po-page-bottom-edit-actions {
   padding-right: 50px;
+}
+
+.docs-sample-container .po-page-content {
+  left: 0px !important;
+  margin-top: 0px !important;
+  position: relative !important;
+  width: 100% !important;
 }
 
 .docs-sample-container .po-page-bottom-container {
@@ -333,6 +385,39 @@ sample-po-menu-human-resources-view .docs-sample-container .po-menu {
 
   .docs-presskit-row {
     flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .docs-sample-container .po-wrapper {
+    max-width: 100% !important;
+  }
+
+  .docs-sample-container .po-wrapper .po-toolbar {
+    left: 48px;
+    position: absolute;
+  }
+
+  .docs-sample-container .po-wrapper-menu-panel .po-toolbar {
+    margin-left: 60px;
+    margin-top: 12px;
+    position: relative;
+  }
+
+  .docs-sample-container .po-wrapper .po-page {
+    left: 8px;
+    position: absolute;
+    top: 45px;
+  }
+
+  .docs-sample-container .po-menu {
+    margin-left: -324px;
+    margin-top: -40px;
+    position: relative;
+  }
+
+  .docs-sample-container .po-menu-animation {
+    margin-left: 0;
   }
 }
 
@@ -529,7 +614,7 @@ blockquote {
 }
 
 .app-portal-home .po-page .po-page-content {
-  padding: 0 0 var(--spacing-xs);
+  padding: 0 0 4.5rem;
 }
 
 .guides-grid-system-box {
@@ -688,25 +773,4 @@ blockquote {
   .card-list-item::after {
     display: none;
   }
-}
-
-sample-po-context-menu-basic-view .docs-sample-container .po-context-menu-wrapper,
-sample-po-context-menu-labs-view .docs-sample-container .po-context-menu-wrapper {
-  min-height: 384px !important;
-  border: var(--border-width-sm) solid;
-  border-color: var(--color-neutral-light-20);
-}
-
-sample-po-context-menu-user-view .docs-sample-container {
-  border: 1px solid #ccc;
-  padding: 0px;
-}
-
-sample-po-context-menu-user-view po-context-tabs .po-tabs-container {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-content {
-  height: 384px !important;
 }
