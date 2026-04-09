@@ -626,8 +626,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
         colorVariable = getComputedStyle(document.documentElement)
           .getPropertyValue(serie.color.replace(/^var\((--[^)]+)\)$/, '$1'))
           .trim();
-      } else if (serie.color?.includes('color')) {
-        colorVariable = this.getCSSVariable(`--${serie.color.replace('po-', '')}`);
+      } else if (serie.color?.includes('color') || serie.color?.startsWith('caption-tag-')) {
+        colorVariable = this.getCSSVariable(`--color-${serie.color.replace('po-', '').replace('color-', '')}`);
       } else {
         colorVariable = serie.color;
       }

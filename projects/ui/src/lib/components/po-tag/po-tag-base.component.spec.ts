@@ -1,5 +1,6 @@
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
+import { PoCaptionTagColorEnum } from '../../enums/po-caption-tag-color.enum';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 
 import { poLocaleDefault } from './../../services/po-language/po-language.constant';
@@ -11,6 +12,7 @@ import { PoTagBaseComponent, PoTagLiteralsDefault } from './po-tag-base.componen
 describe('PoTagBaseComponent:', () => {
   const component = new PoTagBaseComponent(new PoLanguageService());
   const poTagColors = (<any>Object).values(PoColorPaletteEnum);
+  const poCaptionTagColors = (<any>Object).values(PoCaptionTagColorEnum);
 
   it('should be created', () => {
     expect(component instanceof PoTagBaseComponent).toBeTruthy();
@@ -21,6 +23,20 @@ describe('PoTagBaseComponent:', () => {
       const colorsValidTrueValues = poTagColors;
 
       expectPropertiesValues(component, 'color', colorsValidTrueValues, colorsValidTrueValues);
+    });
+
+    it('color: should accept caption-tag color values.', () => {
+      const captionTagValidValues = poCaptionTagColors;
+
+      expectPropertiesValues(component, 'color', captionTagValidValues, captionTagValidValues);
+    });
+
+    it('color: should accept first and last caption-tag colors.', () => {
+      component.color = 'caption-tag-01';
+      expect(component.color).toBe('caption-tag-01');
+
+      component.color = 'caption-tag-35';
+      expect(component.color).toBe('caption-tag-35');
     });
 
     it('color: shouldn´t update to false value.', () => {
@@ -98,6 +114,12 @@ describe('PoTagBaseComponent:', () => {
       const colorsValidTrueValues = poTagColors;
 
       expectPropertiesValues(component, 'textColor', colorsValidTrueValues, colorsValidTrueValues);
+    });
+
+    it('textColor: should not accept caption-tag color values.', () => {
+      const captionTagValues = poCaptionTagColors;
+
+      expectPropertiesValues(component, 'textColor', captionTagValues, undefined);
     });
 
     it('textColor: shouldn´t update to false value.', () => {

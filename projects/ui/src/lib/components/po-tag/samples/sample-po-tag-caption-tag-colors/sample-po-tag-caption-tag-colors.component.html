@@ -1,0 +1,47 @@
+<po-page-default p-title="Caption Tag Colors">
+  <po-widget class="po-md-12 po-mb-1" p-title="Paleta completa - 35 cores">
+    <div class="po-row">
+      @for (tag of captionTags; track tag.color) {
+        <po-tag class="po-md-3 po-lg-2 po-mb-1" [p-color]="tag.color" [p-value]="tag.label"> </po-tag>
+      }
+    </div>
+  </po-widget>
+
+  <po-widget class="po-md-12 po-mb-1" p-title="Status de processos">
+    <div class="po-row">
+      @for (item of statusItems; track item.color) {
+        <po-tag
+          class="po-md-4 po-lg-3 po-mb-1"
+          [p-color]="item.color"
+          [p-label]="item.label"
+          [p-value]="item.value"
+          p-orientation="horizontal"
+        >
+        </po-tag>
+      }
+    </div>
+  </po-widget>
+
+  <po-widget class="po-md-12" p-title="Categorias com icones">
+    <div class="po-row">
+      @for (cat of categories; track cat.color) {
+        <po-tag class="po-md-4 po-lg-3 po-mb-1" [p-color]="cat.color" [p-icon]="cat.icon" [p-value]="cat.label">
+        </po-tag>
+      }
+    </div>
+  </po-widget>
+
+  <po-widget class="po-md-12 po-mb-1" p-title="Familias de cores">
+    <po-tabs>
+      @for (family of families; track family.name) {
+        <po-tab [p-label]="family.name">
+          <div class="po-row">
+            @for (tag of family.tags; track tag.color) {
+              <po-tag class="po-md-4 po-lg-2 po-mb-1" [p-color]="tag.color" [p-value]="tag.label"> </po-tag>
+            }
+          </div>
+        </po-tab>
+      }
+    </po-tabs>
+  </po-widget>
+</po-page-default>

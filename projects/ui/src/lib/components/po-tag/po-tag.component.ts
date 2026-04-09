@@ -27,6 +27,11 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
  *  <file name="sample-po-tag-bank-account/sample-po-tag-bank-account.component.html"> </file>
  *  <file name="sample-po-tag-bank-account/sample-po-tag-bank-account.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-tag-caption-tag-colors" title="PO Tag - Caption Tag Colors">
+ *  <file name="sample-po-tag-caption-tag-colors/sample-po-tag-caption-tag-colors.component.html"> </file>
+ *  <file name="sample-po-tag-caption-tag-colors/sample-po-tag-caption-tag-colors.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-tag',
@@ -67,6 +72,10 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
       case PoTagType.Warning:
         return PoTagIcon.Warning;
     }
+  }
+
+  get isCaptionTag(): boolean {
+    return this.tagColor?.startsWith('po-caption-tag-');
   }
 
   get tagColor() {
@@ -124,7 +133,10 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   private readonly applyTextColorByContrast = () => {
     const computedStyle = getComputedStyle(this.poTag.nativeElement);
 
-    if (
+    if (this.tagColor?.startsWith('po-caption-tag-')) {
+      const captionIndex = this.tagColor.replace('po-caption-tag-', '');
+      this.poTag.nativeElement.style.color = `var(--color-caption-tag-text-${captionIndex})`;
+    } else if (
       (!this.tagColor || this.tagColor?.startsWith('po-color-')) &&
       !this.removable &&
       !this.textColor &&

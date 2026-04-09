@@ -31,21 +31,21 @@ export class SamplePoTableComponentsComponent implements OnInit {
       labels: <Array<PoTableColumnLabel>>[
         {
           value: SamplePoTableComponentStatus.Stable,
-          color: 'color-11',
+          color: 'caption-tag-13',
           label: 'Stable',
           textColor: 'white',
           tooltip: 'Published component'
         },
         {
           value: SamplePoTableComponentStatus.Experimental,
-          color: 'color-08',
+          color: 'caption-tag-08',
           label: 'Experimental',
           textColor: 'white',
           tooltip: 'Component in homologation'
         },
         {
           value: SamplePoTableComponentStatus.RoadMap,
-          color: 'color-07',
+          color: 'caption-tag-03',
           label: 'Roadmap',
           textColor: 'white',
           tooltip: 'Component in roadmap'
@@ -104,7 +104,7 @@ export class SamplePoTableComponentsComponent implements OnInit {
   }
 
   experimentalColor(row) {
-    return row?.component?.status === SamplePoTableComponentStatus.Experimental ? 'color-08' : 'color-11';
+    return row?.component?.status === SamplePoTableComponentStatus.Experimental ? 'caption-tag-08' : 'caption-tag-13';
   }
 
   extras(value, row) {
@@ -152,6 +152,6 @@ export class SamplePoTableComponentsComponent implements OnInit {
   }
 
   private isFavorite(row) {
-    return row?.component?.isFavorite ? 'color-08' : 'color-11';
+    return row?.component?.isFavorite ? 'caption-tag-08' : 'caption-tag-13';
   }
 }

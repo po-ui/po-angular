@@ -18,7 +18,21 @@ export class SamplePoTableLabsService {
     'color-09',
     'color-10',
     'color-11',
-    'color-12'
+    'color-12',
+    'caption-tag-01',
+    'caption-tag-03',
+    'caption-tag-06',
+    'caption-tag-08',
+    'caption-tag-11',
+    'caption-tag-13',
+    'caption-tag-16',
+    'caption-tag-18',
+    'caption-tag-21',
+    'caption-tag-23',
+    'caption-tag-26',
+    'caption-tag-28',
+    'caption-tag-31',
+    'caption-tag-33'
   ];
 
   generateNewItem(index: number) {
@@ -90,7 +104,21 @@ export class SamplePoTableLabsService {
           { value: 'color-09', color: 'color-09', label: 'Color 9' },
           { value: 'color-10', color: 'color-10', label: 'Color 10' },
           { value: 'color-11', color: 'color-11', label: 'Color 11' },
-          { value: 'color-12', color: 'color-12', label: 'Color 12' }
+          { value: 'color-12', color: 'color-12', label: 'Color 12' },
+          { value: 'caption-tag-01', color: 'caption-tag-01', label: 'Caption 01' },
+          { value: 'caption-tag-03', color: 'caption-tag-03', label: 'Caption 03' },
+          { value: 'caption-tag-06', color: 'caption-tag-06', label: 'Caption 06' },
+          { value: 'caption-tag-08', color: 'caption-tag-08', label: 'Caption 08' },
+          { value: 'caption-tag-11', color: 'caption-tag-11', label: 'Caption 11' },
+          { value: 'caption-tag-13', color: 'caption-tag-13', label: 'Caption 13' },
+          { value: 'caption-tag-16', color: 'caption-tag-16', label: 'Caption 16' },
+          { value: 'caption-tag-18', color: 'caption-tag-18', label: 'Caption 18' },
+          { value: 'caption-tag-21', color: 'caption-tag-21', label: 'Caption 21' },
+          { value: 'caption-tag-23', color: 'caption-tag-23', label: 'Caption 23' },
+          { value: 'caption-tag-26', color: 'caption-tag-26', label: 'Caption 26' },
+          { value: 'caption-tag-28', color: 'caption-tag-28', label: 'Caption 28' },
+          { value: 'caption-tag-31', color: 'caption-tag-31', label: 'Caption 31' },
+          { value: 'caption-tag-33', color: 'caption-tag-33', label: 'Caption 33' }
         ]
       },
 
@@ -115,7 +143,7 @@ export class SamplePoTableLabsService {
   private changeColor(row, column) {
     const number = row[column].slice(5, 7).trim();
 
-    return number % 2 === 0 ? 'color-08' : 'color-11';
+    return number % 2 === 0 ? 'caption-tag-08' : 'caption-tag-13';
   }
 
   private generateRandomBoolean(): boolean {

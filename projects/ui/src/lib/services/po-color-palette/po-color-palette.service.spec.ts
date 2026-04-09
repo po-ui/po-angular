@@ -1,3 +1,4 @@
+import { PoCaptionTagColorEnum } from '../../enums/po-caption-tag-color.enum';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 import { PoColorPaletteService } from './po-color-palette.service';
 
@@ -66,6 +67,33 @@ describe('PoColorPaletteService:', () => {
 
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color07);
       expect(service['getColorFromType']).toHaveBeenCalledWith('danger');
+    });
+
+    it('getColor: shouldn`t call `getColorFromType` and return `caption-tag-01` if `value.color` is a caption-tag color.', () => {
+      const value = { color: 'caption-tag-01' };
+
+      spyOn(service, <any>'getColorFromType').and.callThrough();
+
+      expect(service['getColor'](value)).toBe(PoCaptionTagColorEnum.CaptionTag01);
+      expect(service['getColorFromType']).not.toHaveBeenCalled();
+    });
+
+    it('getColor: shouldn`t call `getColorFromType` and return `caption-tag-35` if `value.color` is the last caption-tag color.', () => {
+      const value = { color: 'caption-tag-35' };
+
+      spyOn(service, <any>'getColorFromType').and.callThrough();
+
+      expect(service['getColor'](value)).toBe(PoCaptionTagColorEnum.CaptionTag35);
+      expect(service['getColorFromType']).not.toHaveBeenCalled();
+    });
+
+    it('getColor: shouldn`t call `getColorFromType` and return `caption-tag-18` if `value.color` is a middle caption-tag color.', () => {
+      const value = { color: 'caption-tag-18' };
+
+      spyOn(service, <any>'getColorFromType').and.callThrough();
+
+      expect(service['getColor'](value)).toBe(PoCaptionTagColorEnum.CaptionTag18);
+      expect(service['getColorFromType']).not.toHaveBeenCalled();
     });
   });
 });

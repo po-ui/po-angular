@@ -22,9 +22,9 @@ export class SamplePoTableAirfareService {
         property: 'status',
         type: 'label',
         labels: [
-          { value: 'available', color: 'color-11', label: 'Available' },
-          { value: 'reserved', color: 'color-08', label: 'Reserved' },
-          { value: 'closed', color: 'color-07', label: 'Closed' }
+          { value: 'available', color: 'caption-tag-13', label: 'Available' },
+          { value: 'reserved', color: 'caption-tag-08', label: 'Reserved' },
+          { value: 'closed', color: 'caption-tag-03', label: 'Closed' }
         ]
       },
       { property: 'country' },

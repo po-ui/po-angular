@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { PoCaptionTagColorEnum } from '../../enums/po-caption-tag-color.enum';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 
 @Injectable({
@@ -7,9 +8,13 @@ import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 })
 export class PoColorPaletteService {
   getColor(value: { color?: string; type?: string }): string {
-    return (<any>Object).values(PoColorPaletteEnum).includes(value.color)
-      ? value.color
-      : this.getColorFromType(value.type || value.color);
+    if (
+      (<any>Object).values(PoColorPaletteEnum).includes(value.color) ||
+      (<any>Object).values(PoCaptionTagColorEnum).includes(value.color)
+    ) {
+      return value.color;
+    }
+    return this.getColorFromType(value.type || value.color);
   }
 
   private getColorFromType(type: string): PoColorPaletteEnum {

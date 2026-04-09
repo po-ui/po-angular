@@ -30,7 +30,7 @@
           <po-icon
             class="po-tag-icon"
             [p-icon]="!type || forceIcon ? icon : iconFromType"
-            [ngStyle]="!type && customTextColor ? { 'color': customTextColor } : ''"
+            [ngStyle]="!type && customTextColor && !isCaptionTag ? { 'color': customTextColor } : ''"
           >
           </po-icon>
         }
@@ -42,9 +42,10 @@
           [p-tooltip]="getWidthTag() ? value : ''"
           p-tooltip-position="top"
         >
-          <span [ngStyle]="!type && customTextColor && !removable ? { 'color': customTextColor } : ''">{{
-            value
-          }}</span>
+          <span
+            [ngStyle]="!type && customTextColor && !removable && !isCaptionTag ? { 'color': customTextColor } : ''"
+            >{{ value }}</span
+          >
         </div>
 
         @if (removable) {

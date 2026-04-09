@@ -20,10 +20,10 @@ export class SamplePoTableTransportService {
         type: 'label',
         width: '8%',
         labels: [
-          { value: 'delivered', color: 'blue', label: 'Delivered' },
-          { value: 'transport', label: 'Transport', type: PoTagType.Success },
-          { value: 'production', color: ' #745678', label: 'Production' },
-          { value: 'stock', color: 'rgb(201, 53, 125)', label: 'Stock', icon: 'an an-package' }
+          { value: 'delivered', color: 'caption-tag-23', label: 'Delivered' },
+          { value: 'transport', color: 'caption-tag-14', label: 'Transport' },
+          { value: 'production', color: 'caption-tag-03', label: 'Production' },
+          { value: 'stock', color: 'caption-tag-33', label: 'Stock', icon: 'an an-package' }
         ]
       }
     ];

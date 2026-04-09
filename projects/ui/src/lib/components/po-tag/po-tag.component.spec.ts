@@ -255,6 +255,15 @@ describe('PoTagComponent:', () => {
       expect(nativeElement.querySelector('.po-tag-label').innerHTML).not.toContain(':');
     });
 
+    it('should add caption-tag class when color is caption-tag-XX.', () => {
+      component.color = 'caption-tag-15';
+      component.type = undefined;
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-caption-tag-15')).toBeTruthy();
+    });
+
     it('should add `po-tag-info` as default.', () => {
       fixture.detectChanges();
 
@@ -372,7 +381,9 @@ describe('PoTagComponent:', () => {
         getPropertyValue: (token: string) => {
           const tokens = {
             '--color-neutral-light-00': lightColor,
-            '--color-neutral-dark-95': darkColor
+            '--color-neutral-dark-95': darkColor,
+            '--color-caption-tag-text-01': '#1d2426',
+            '--color-caption-tag-text-05': '#ffffff'
           };
           return tokens[token] || '';
         }
@@ -389,6 +400,42 @@ describe('PoTagComponent:', () => {
       component['applyTextColorByContrast']();
 
       expect(component.poTag.nativeElement.style.color).toBe(darkColor);
+    });
+
+    it('should apply text color from CSS token for light caption-tag colors', () => {
+      mockGetComputedStyle('rgb(255, 229, 231)');
+      component.removable = false;
+      component.textColor = undefined;
+      component.color = 'caption-tag-01';
+      fixture.detectChanges();
+
+      component['applyTextColorByContrast']();
+
+      expect(component.poTag.nativeElement.style.color).toBe('var(--color-caption-tag-text-01)');
+    });
+
+    it('should apply text color from CSS token for dark caption-tag colors', () => {
+      mockGetComputedStyle('rgb(51, 0, 3)');
+      component.removable = false;
+      component.textColor = undefined;
+      component.color = 'caption-tag-05';
+      fixture.detectChanges();
+
+      component['applyTextColorByContrast']();
+
+      expect(component.poTag.nativeElement.style.color).toBe('var(--color-caption-tag-text-05)');
+    });
+
+    it('should reset text color when caption-tag token is not defined', () => {
+      mockGetComputedStyle('rgb(200, 200, 200)');
+      component.removable = false;
+      component.textColor = undefined;
+      component.color = 'caption-tag-99';
+      fixture.detectChanges();
+
+      component['applyTextColorByContrast']();
+
+      expect(component.poTag.nativeElement.style.color).toBe('');
     });
 
     it('should set text color to light for dark backgrounds', () => {

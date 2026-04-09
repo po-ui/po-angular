@@ -28,8 +28,9 @@ html.potheme-dark-AAA .po-header-nav {
   border-radius: 50%;
   display: inline-block;
   height: 16px;
-  vertical-align: bottom;
+  vertical-align: middle;
   width: 16px;
+  margin: 0 5px;
 }
 
 .po-page-content {

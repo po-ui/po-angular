@@ -34,6 +34,24 @@ describe('PoBadgeBaseComponent:', () => {
       expect(component['_color']).toBe('color-07');
     });
 
+    it('p-color: should update with valid caption-tag color', () => {
+      component.color = 'caption-tag-01';
+
+      expect(component['_color']).toBe('caption-tag-01');
+    });
+
+    it('p-color: should update with valid caption-tag-35 color', () => {
+      component.color = 'caption-tag-35';
+
+      expect(component['_color']).toBe('caption-tag-35');
+    });
+
+    it('p-color: should set default when caption-tag value is invalid', () => {
+      component.color = 'caption-tag-99';
+
+      expect(component['_color']).toBe('color-07');
+    });
+
     it('customColor: should update with valid values', () => {
       const validValues = ['#ffffff', 'red', 'rgb(201, 53, 125)'];
 

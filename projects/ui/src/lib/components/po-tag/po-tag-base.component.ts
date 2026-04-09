@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
+import { PoCaptionTagColorEnum } from '../../enums/po-caption-tag-color.enum';
 import { PoColorPaletteEnum } from '../../enums/po-color-palette.enum';
 import { convertToBoolean } from '../../utils/util';
 
@@ -10,7 +11,8 @@ import { PoTagType } from './enums/po-tag-type.enum';
 import { PoTagItem } from './interfaces/po-tag-item.interface';
 import { PoTagLiterals } from './interfaces/po-tag-literals.interface';
 
-const poTagColors = (<any>Object).values(PoColorPaletteEnum);
+const poTagColors = [...(<any>Object).values(PoColorPaletteEnum), ...(<any>Object).values(PoCaptionTagColorEnum)];
+const poTagTextColors = (<any>Object).values(PoColorPaletteEnum);
 const poTagOrientationDefault = PoTagOrientation.Vertical;
 
 export const PoTagLiteralsDefault = {
@@ -178,8 +180,24 @@ export class PoTagBaseComponent {
    *   - <span class="dot po-color-11"></span> `color-11`
    *   - <span class="dot po-color-12"></span> `color-12`
    *
+   * > Também é possível utilizar as 35 cores da paleta **Caption Tag Colors**:
+   *
+   *   - <span class="dot po-caption-tag-01"></span> `caption-tag-01` <span class="dot po-caption-tag-02"></span> `caption-tag-02` <span class="dot po-caption-tag-03"></span> `caption-tag-03` <span class="dot po-caption-tag-04"></span> `caption-tag-04` <span class="dot po-caption-tag-05"></span> `caption-tag-05`
+   *   - <span class="dot po-caption-tag-06"></span> `caption-tag-06` <span class="dot po-caption-tag-07"></span> `caption-tag-07` <span class="dot po-caption-tag-08"></span> `caption-tag-08` <span class="dot po-caption-tag-09"></span> `caption-tag-09` <span class="dot po-caption-tag-10"></span> `caption-tag-10`
+   *   - <span class="dot po-caption-tag-11"></span> `caption-tag-11` <span class="dot po-caption-tag-12"></span> `caption-tag-12` <span class="dot po-caption-tag-13"></span> `caption-tag-13` <span class="dot po-caption-tag-14"></span> `caption-tag-14` <span class="dot po-caption-tag-15"></span> `caption-tag-15`
+   *   - <span class="dot po-caption-tag-16"></span> `caption-tag-16` <span class="dot po-caption-tag-17"></span> `caption-tag-17` <span class="dot po-caption-tag-18"></span> `caption-tag-18` <span class="dot po-caption-tag-19"></span> `caption-tag-19` <span class="dot po-caption-tag-20"></span> `caption-tag-20`
+   *   - <span class="dot po-caption-tag-21"></span> `caption-tag-21` <span class="dot po-caption-tag-22"></span> `caption-tag-22` <span class="dot po-caption-tag-23"></span> `caption-tag-23` <span class="dot po-caption-tag-24"></span> `caption-tag-24` <span class="dot po-caption-tag-25"></span> `caption-tag-25`
+   *   - <span class="dot po-caption-tag-26"></span> `caption-tag-26` <span class="dot po-caption-tag-27"></span> `caption-tag-27` <span class="dot po-caption-tag-28"></span> `caption-tag-28` <span class="dot po-caption-tag-29"></span> `caption-tag-29` <span class="dot po-caption-tag-30"></span> `caption-tag-30`
+   *   - <span class="dot po-caption-tag-31"></span> `caption-tag-31` <span class="dot po-caption-tag-32"></span> `caption-tag-32` <span class="dot po-caption-tag-33"></span> `caption-tag-33` <span class="dot po-caption-tag-34"></span> `caption-tag-34` <span class="dot po-caption-tag-35"></span> `caption-tag-35`
+   *
+   * Exemplo de uso:
+   * ```
+   * <po-tag p-color="caption-tag-15" p-value="Status"></po-tag>
+   * ```
+   *
    * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background;
-   * - O componente ajusta automaticamente a cor do texto para garantir legibilidade, escolhendo dinamicamente entre texto claro ou escuro conforme o contraste necessário.
+   * - Para as cores legacy (`color-01` a `color-12`) e cores customizadas, o componente ajusta automaticamente a cor do texto para garantir legibilidade.
+   * - Para as cores **Caption Tag Colors** (`caption-tag-01` a `caption-tag-35`), a cor do texto é fixa e definida via token CSS, não sendo possível alterá-la via `p-text-color`.
    *
    * > **Atenção:** A propriedade `p-type` sobrepõe esta definição.
    */
@@ -221,9 +239,12 @@ export class PoTagBaseComponent {
    * - Para uma melhor acessibilidade no uso do componente é recomendável utilizar cores com um melhor contraste em relação ao background.
    *
    * > **Atenção:** A propriedade `p-type` sobrepõe esta definição.
+   *
+   * > **Atenção:** As cores da paleta **Caption Tag Colors** (`caption-tag-01` a `caption-tag-35`) não são aceitas nesta propriedade,
+   * pois possuem cor de texto fixa definida via token CSS.
    */
   @Input('p-text-color') set textColor(value: string) {
-    this._textColor = poTagColors.includes(value) ? value : undefined;
+    this._textColor = poTagTextColors.includes(value) ? value : undefined;
     if (this._textColor === undefined) {
       CSS.supports('color', value) ? (this.customTextColor = value) : (this.customTextColor = undefined);
     }
