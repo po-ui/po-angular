@@ -250,6 +250,8 @@ export class PoProgressBaseComponent {
    * Define o raio do círculo SVG em pixels. Permite ao usuário customizar o tamanho
    * do indicador circular ao utilizar `p-shape="circle"`.
    *
+   * > É recomendado o valor **mínimo** de **20**.
+   *
    * > Não compatível com `p-shape="bar"`.
    *
    * @default `45`
@@ -359,6 +361,8 @@ export class PoProgressBaseComponent {
    * @description
    *
    * Ativa a exibição da porcentagem atual da barra de progresso.
+   *
+   * > Se utilizada no `p-shape="circle"` e o status estiver como `error`, a porcentagem não será exibida.
    *
    * @default `false`
    */
