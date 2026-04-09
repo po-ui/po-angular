@@ -146,11 +146,13 @@
     "typescript": "~5.6.3",
     "validate.js": "file:libs/validate.js-v0.13.2.tgz"
   },
-    "overrides": {
-      "axios": "1.12.2",
-      "vite": "6.4.2",
-      "serialize-javascript": "7.0.5"
-    },
+  "overrides": {
+    "axios": "1.12.2",
+    "vite": "6.4.2",
+    "serialize-javascript": "7.0.5",
+    "tar": "7.5.13",
+    "picomatch": "4.0.4"
+  },
   "standard-version": {
     "skip": {
       "commit": true,
