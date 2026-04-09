@@ -9,7 +9,7 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~19.0.0):
+- [Angular CLI](https://cli.angular.io/) (~19.2.20):
   - ```shell
     npm install -g @angular/cli@19
     ```
@@ -49,15 +49,15 @@ Antes de executar a instalação, é necessário que todas as dependências do p
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~19.0.0",
-    "@angular/common": "~19.0.0",
-    "@angular/compiler": "~19.0.0",
-    "@angular/core": "~19.0.0",
-    "@angular/forms": "~19.0.0",
-    "@angular/platform-browser": "~19.0.0",
-    "@angular/platform-browser-dynamic": "~19.0.0",
-    "@angular/router": "~19.0.0",
-    "@angular/service-worker": "~19.0.0",
+    "@angular/animations": "~19.2.20",
+    "@angular/common": "~19.2.20",
+    "@angular/compiler": "~19.2.20",
+    "@angular/core": "~19.2.20",
+    "@angular/forms": "~19.2.20",
+    "@angular/platform-browser": "~19.2.20",
+    "@angular/platform-browser-dynamic": "~19.2.20",
+    "@angular/router": "~19.2.20",
+    "@angular/service-worker": "~19.2.20",
     "@ionic/angular": "^8.0.0",
     "@capacitor/network": "^6.0.1",
     "@capacitor/splash-screen": "^6.0.1",
@@ -68,11 +68,11 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.2.3",
-    "@angular-devkit/schematics": "~19.0.5",
-    "@angular/cli": "~19.0.5",
-    "@angular/compiler-cli": "~19.0.0",
-    "@angular/language-service": "~19.0.0",
+    "@angular-devkit/build-angular": "~19.2.24",
+    "@angular-devkit/schematics": "~19.2.24",
+    "@angular/cli": "~19.2.24",
+    "@angular/compiler-cli": "~19.2.20",
+    "@angular/language-service": "~19.2.20",
     "@ionic/angular-toolkit": "^11.0.1",
     "typescript": "~5.6.2"
   },
