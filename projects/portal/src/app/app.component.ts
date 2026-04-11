@@ -6,7 +6,7 @@ import { PoMenuItem, PoNavbarIconAction, PoNavbarItem, PoThemeA11yEnum } from '@
 import { PoDensityMode } from 'projects/ui/src/lib/enums/po-density-mode.enum';
 import { firstValueFrom } from 'rxjs';
 import { PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
-import { poThemeConstant } from './shared/po-theme.constant';
+import { poThemeVioletConstant } from './shared/po-theme-violet.constant';
 import { VersionService } from './shared/version.service';
 
 @Component({
@@ -43,8 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     if (!_poTheme) {
-      this.theme = poThemeConstant.active.type;
-      this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
+      this.theme = poThemeVioletConstant.active.type;
+      this.poTheme.setTheme(poThemeVioletConstant, this.theme, this.a11yLevel);
     } else {
       this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
     }
@@ -104,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.a11yLevel = this.poTheme.getA11yLevel();
 
-    this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
+    this.poTheme.setTheme(poThemeVioletConstant, this.theme, this.a11yLevel);
 
     if (this.a11yLevel === PoThemeA11yEnum.AA) {
       this.poTheme.setA11yDefaultSizeSmall(true);
@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.a11yLevel = this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
     this.iconActions = this.actions;
 
-    this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
+    this.poTheme.setTheme(poThemeVioletConstant, this.theme, this.a11yLevel);
 
     if (this.a11yLevel === PoThemeA11yEnum.AA) {
       this.poTheme.setA11yDefaultSizeSmall(true);
