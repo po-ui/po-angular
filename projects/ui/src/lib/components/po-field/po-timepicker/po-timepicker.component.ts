@@ -152,6 +152,10 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     return this.getCustomPlaceholderSegment(2) ?? '';
   }
 
+  get isPlaceholder(): boolean {
+    return !this.hourDisplay && !this.minuteDisplay && (!this.showSeconds || !this.secondDisplay);
+  }
+
   private get customPlaceholderSegments(): Array<string> {
     if (!this.placeholder?.trim()) {
       return [];
@@ -167,12 +171,20 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   @HostListener('focusout', ['$event'])
   onHostFocusOut(event: FocusEvent): void {
     const relatedTarget = event.relatedTarget as HTMLElement;
+    const dialogEl = this.dialogPicker?.nativeElement;
     const isStillInsideComponent =
       relatedTarget &&
-      (this.el.nativeElement.contains(relatedTarget) || this.dialogPicker?.nativeElement?.contains(relatedTarget));
+      (this.timepickerFieldEl.nativeElement.contains(relatedTarget) ||
+        dialogEl?.contains(relatedTarget) ||
+        this.iconClean?.nativeElement?.contains(relatedTarget) ||
+        this.iconTimepicker?.buttonElement?.nativeElement?.contains(relatedTarget));
 
     if (!isStillInsideComponent) {
       this.onblur.emit();
+
+      if (this.visible) {
+        this.closeTimer(false, true);
+      }
     }
   }
 
@@ -203,9 +215,6 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     this.setDialogPickerStyleDisplay('none');
     if (this.autoFocus) {
       this.focus();
-    }
-    if (this.iconTimepicker?.buttonElement?.nativeElement) {
-      this.renderer.setAttribute(this.iconTimepicker.buttonElement.nativeElement, 'aria-label', this.literals.open);
     }
   }
 
@@ -266,14 +275,14 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
     if (!this.visible) {
       this.visible = true;
-      this.setTimerPosition();
       this.initializeListeners();
 
       this.renderer.setAttribute(this.inputEl.nativeElement, 'aria-expanded', 'true');
       this.renderer.setAttribute(this.iconTimepicker.buttonElement.nativeElement, 'aria-expanded', 'true');
 
       requestAnimationFrame(() => {
-        this.timerComponent.initAllColumnOffsets();
+        this.setTimerPosition();
+        this.timerComponent?.initAllColumnOffsets();
       });
     } else {
       this.inputEl.nativeElement.disabled = false;
@@ -311,14 +320,28 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
       return;
     }
 
+    const hadValue = this.hasValue();
+
     this.onTouchedModel?.();
+
+    // Limpar erro parcial ANTES de atualizar o valor
+    this.clearValidationValue();
+    if (this.isGeneratedErrorPattern(this.errorPattern)) {
+      this.errorPattern = '';
+    }
 
     this.timeValue = time;
     this.updateInputDisplay(time);
     this.updateAriaLiveMessage(time);
 
     this.callOnChange(time);
+    this.validateModel(time);
     this.controlChangeEmitter();
+
+    if (!hadValue) {
+      this.iconTimepicker?.focus();
+      this.closeTimer(false);
+    }
   }
 
   wasClickedOnPicker(event: any): void {
@@ -335,10 +358,10 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
   hasInvalidClass() {
     return (
+      this.hasValidationValue() ||
       (this.el.nativeElement.classList.contains('ng-invalid') &&
         this.el.nativeElement.classList.contains('ng-dirty') &&
-        (this.hasValue() || (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired)))) ||
-      this.hasValidationValue()
+        (this.hasValue() || (this.showErrorMessageRequired && (this.required || this.hasValidatorRequired))))
     );
   }
 
@@ -401,7 +424,12 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
   onKeyDown(event: KeyboardEvent): void {
     const isFieldFocused = this.el.nativeElement.contains(document.activeElement);
-    if (isFieldFocused) {
+    const target = event.target as HTMLElement;
+    const isIconTarget =
+      this.iconClean?.nativeElement?.contains(target) ||
+      this.iconTimepicker?.buttonElement?.nativeElement?.contains(target);
+
+    if (isFieldFocused && !isIconTarget) {
       this.keydown.emit(event);
     }
   }
@@ -464,8 +492,6 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     if (event.key === 'Tab' && !event.shiftKey && this.visible && this.isLastSegment(segment)) {
       this.focusTimer(event);
     }
-
-    this.keydown.emit(event);
   }
 
   private handleSegmentNavigation(event: KeyboardEvent, segment: PoTimepickerSegment): boolean {
@@ -474,7 +500,19 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     if (event.key === 'Tab' && event.shiftKey && this.visible && segment !== 'hour') {
       this.advanceToPreviousSegment(segment);
       event.preventDefault();
+      event.stopPropagation();
       return true;
+    }
+
+    if (event.key === 'Tab' && !event.shiftKey && !this.visible) {
+      if (this.advanceToNextSegment(segment)) {
+        event.preventDefault();
+        event.stopPropagation();
+        return true;
+      }
+      // Último segmento sem elemento interno focável: deixar o Tab nativo
+      // mover o foco para o próximo elemento fora do componente.
+      return false;
     }
 
     if (event.key === 'Backspace' && input.value === '' && input.selectionStart === 0) {
@@ -525,9 +563,16 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     const sourceInput = event.target as HTMLInputElement;
     const normalizedSegmentOnBlur = this.normalizeSingleDigitSegment(sourceInput);
 
-    // Verificar se o foco moveu para outro elemento dentro do timepicker
+    // Verificar se o foco moveu para outro elemento dentro do timepicker (inputs, botão timer, clean)
     const relatedTarget = event.relatedTarget as HTMLElement;
-    const isInternalFocus = relatedTarget && this.el.nativeElement.contains(relatedTarget);
+    const dialogEl = this.dialogPicker?.nativeElement;
+    const isInternalFocus =
+      relatedTarget &&
+      this.el.nativeElement.contains(relatedTarget) &&
+      (this.timepickerFieldEl?.nativeElement?.contains(relatedTarget) ||
+        dialogEl?.contains(relatedTarget) ||
+        this.iconClean?.nativeElement?.contains(relatedTarget) ||
+        this.iconTimepicker?.buttonElement?.nativeElement?.contains(relatedTarget));
 
     if (normalizedSegmentOnBlur) {
       this.updateCombinedValue();
@@ -544,10 +589,6 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
       this.onTouchedModel?.();
       this.validateAndUpdateModel();
       this.controlChangeEmitter();
-
-      if (this.visible) {
-        this.closeTimer(false, true);
-      }
     }
   }
 
@@ -588,20 +629,13 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
     if (event.key === 'Tab' && event.shiftKey) {
       event.preventDefault();
-      if (this.showSeconds && this.secondInputEl?.nativeElement) {
-        this.secondInputEl.nativeElement.focus();
-      } else if (this.minuteInputEl?.nativeElement) {
-        this.minuteInputEl.nativeElement.focus();
-      }
+      this.focusPreviousPeriodSegment();
       return;
     }
 
-    if (event.key === 'Tab' && !event.shiftKey && this.visible) {
-      this.focusTimer(event);
-    }
-
-    if (event.key.length === 1 && !event.ctrlKey && !event.metaKey) {
+    if (event.key === 'Tab' && !event.shiftKey) {
       event.preventDefault();
+      this.focusNextPeriodSegment(event);
     }
   }
 
@@ -671,6 +705,19 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   }
 
   handleCleanKeyboardTab(event: KeyboardEvent) {
+    if (event.key === 'Tab' && !event.shiftKey) {
+      this.iconTimepicker.buttonElement?.nativeElement.focus();
+      event.preventDefault();
+    }
+
+    if (event.key === 'Tab' && event.shiftKey) {
+      this.focusLastSegment();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
+  handleTimepickerButtonKeyboardTab(event: KeyboardEvent) {
     if (this.shouldHandleTab(event)) {
       this.focusTimer(event);
     }
@@ -840,30 +887,95 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     });
   }
 
-  /** Avanca o foco para o proximo input de segmento. */
-  private advanceToNextSegment(current: PoTimepickerSegment): void {
+  /**
+   * Avança o foco para o próximo input de segmento ou elemento focável interno.
+   * Retorna `true` se o foco foi movido, `false` se não há próximo elemento focável.
+   */
+  private advanceToNextSegment(current: PoTimepickerSegment): boolean {
     if (current === 'hour' && this.minuteInputEl?.nativeElement) {
       this.minuteInputEl.nativeElement.focus();
       this.minuteInputEl.nativeElement.select();
-    } else if (current === 'minute' && this.showSeconds && this.secondInputEl?.nativeElement) {
+      return true;
+    }
+
+    if (current === 'minute' && this.showSeconds && this.secondInputEl?.nativeElement) {
       this.secondInputEl.nativeElement.focus();
       this.secondInputEl.nativeElement.select();
-    } else if (
+      return true;
+    }
+
+    if (
       this.is12HourFormat &&
       this.periodInputEl?.nativeElement &&
+      !this.isDisabled &&
+      !this.readonly &&
       ((current === 'minute' && !this.showSeconds) || current === 'second')
     ) {
       this.periodInputEl.nativeElement.focus();
+      return true;
+    }
+
+    if (current === 'minute' || current === 'second') {
+      return this.focusCleanOrButton();
+    }
+
+    return false;
+  }
+
+  /**
+   * Tenta focar o botão de limpar ou o botão do timer.
+   * Retorna `true` se o foco foi movido, `false` se nenhum elemento está focável.
+   */
+  private focusCleanOrButton(): boolean {
+    if (this.clean && this.hasValue() && !this.isDisabled && !this.readonly && this.iconClean?.nativeElement) {
+      this.iconClean.nativeElement.focus();
+      return true;
+    }
+
+    if (this.iconTimepicker?.buttonElement?.nativeElement && !this.isDisabled && !this.readonly) {
+      this.iconTimepicker.buttonElement.nativeElement.focus();
+      return true;
+    }
+
+    return false;
+  }
+
+  private focusPreviousPeriodSegment(): void {
+    if (this.showSeconds && this.secondInputEl?.nativeElement) {
+      this.secondInputEl.nativeElement.focus();
+      return;
+    }
+
+    if (this.minuteInputEl?.nativeElement) {
+      this.minuteInputEl.nativeElement.focus();
     }
   }
 
-  /** Avanca o foco para o input de segmento anterior. */
-  private advanceToPreviousSegment(current: PoTimepickerSegment): void {
+  private focusNextPeriodSegment(event: KeyboardEvent): void {
+    if (this.visible) {
+      this.focusTimer(event);
+      return;
+    }
+
+    this.focusCleanOrButton();
+  }
+
+  /**
+   * Retorna o foco para o input de segmento anterior.
+   * Retorna `true` se o foco foi movido, `false` se não há segmento anterior focável.
+   */
+  private advanceToPreviousSegment(current: PoTimepickerSegment): boolean {
     if (current === 'minute' && this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.focus();
-    } else if (current === 'second' && this.minuteInputEl?.nativeElement) {
-      this.minuteInputEl.nativeElement.focus();
+      return true;
     }
+
+    if (current === 'second' && this.minuteInputEl?.nativeElement) {
+      this.minuteInputEl.nativeElement.focus();
+      return true;
+    }
+
+    return false;
   }
 
   /** Foca o ultimo input de segmento visivel. */
@@ -893,8 +1005,43 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   /** Alterna entre AM e PM no display de periodo e atualiza o modelo. */
   private togglePeriod(): void {
     const currentPeriod = this.periodDisplay || this.getDefaultPeriodDisplay();
-    this.periodDisplay = currentPeriod === 'AM' ? 'PM' : 'AM';
+    const targetPeriod = currentPeriod === 'AM' ? 'PM' : 'AM';
+
+    if (this.isPeriodBlocked(targetPeriod)) {
+      return;
+    }
+
+    this.periodDisplay = targetPeriod;
     this.updateCombinedValue();
+  }
+
+  /**
+   * Verifica se um período (AM/PM) está completamente fora do range min/max.
+   * AM corresponde às horas 0-11 em 24h, PM às horas 12-23.
+   */
+  private isPeriodBlocked(targetPeriod: string): boolean {
+    if (!this.is12HourFormat || (!this.minTime && !this.maxTime)) {
+      return false;
+    }
+
+    const periodMinHour24 = targetPeriod === 'AM' ? 0 : 12;
+    const periodMaxHour24 = targetPeriod === 'AM' ? 11 : 23;
+
+    if (this.maxTime) {
+      const maxHour = parseInt(this.maxTime.split(':')[0], 10) || 0;
+      if (periodMinHour24 > maxHour) {
+        return true;
+      }
+    }
+
+    if (this.minTime) {
+      const minHour = parseInt(this.minTime.split(':')[0], 10) || 0;
+      if (periodMaxHour24 < minHour) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /** Incrementa ou decrementa o valor de um segmento na direcao indicada (+1 ou -1), respeitando limites e intervalos. */
@@ -922,10 +1069,15 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     current += direction;
 
     if (current > max || current < min) {
-      current = current > max ? min : max;
       if (this.is12HourFormat) {
-        this.periodDisplay = (this.periodDisplay || this.getDefaultPeriodDisplay()) === 'AM' ? 'PM' : 'AM';
+        const nextPeriod = (this.periodDisplay || this.getDefaultPeriodDisplay()) === 'AM' ? 'PM' : 'AM';
+        if (this.isPeriodBlocked(nextPeriod)) {
+          // Período alvo bloqueado: manter a hora no limite sem alternar.
+          return;
+        }
+        this.periodDisplay = nextPeriod;
       }
+      current = current > max ? min : max;
     }
 
     this.hourDisplay = current.toString().padStart(2, '0');
@@ -989,13 +1141,16 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   /** Combina os valores dos segmentos em uma string de horario e atualiza o modelo. */
   private updateCombinedValue(): void {
     if (!this.areSegmentsComplete()) {
-      this.clearValidationValue();
-      if (this.isGeneratedErrorPattern(this.errorPattern)) {
-        this.errorPattern = '';
+      // Manter erro parcial se já existe, não chamar callOnChange
+      if (!this.hasValidationValue()) {
+        this.clearValidationValue();
+        if (this.isGeneratedErrorPattern(this.errorPattern)) {
+          this.errorPattern = '';
+        }
+        this.timeValue = '';
+        this.callOnChange('');
+        this.validateModel(this.timeValue);
       }
-      this.timeValue = '';
-      this.callOnChange('');
-      this.validateModel(this.timeValue);
       return;
     }
 
@@ -1081,12 +1236,14 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
       }
     }
 
-    this.updateCombinedValue();
-
+    // Validar parcial ANTES de updateCombinedValue para manter mensagem de erro
     if (!this.areSegmentsComplete() && this.hasValue()) {
       const partial = this.buildPartialCombined();
       this.applyInputValidationError(partial, false);
+      return;
     }
+
+    this.updateCombinedValue();
   }
 
   private updateTimeFromInput(rawValue: string): void {
@@ -1207,27 +1364,25 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
 
   protected adjustTimerPosition(): void {
     if (this?.dialogPicker?.nativeElement && this.visible) {
-      requestAnimationFrame(() => {
-        const scrollHeight =
-          this.dialogPicker.nativeElement.querySelector('po-timer')?.scrollHeight ??
-          this.dialogPicker.nativeElement.scrollHeight;
-        const scrollWidth =
-          this.dialogPicker.nativeElement.querySelector('po-timer')?.scrollWidth ??
-          this.dialogPicker.nativeElement.scrollWidth;
+      const scrollHeight =
+        this.dialogPicker.nativeElement.querySelector('po-timer')?.scrollHeight ??
+        this.dialogPicker.nativeElement.scrollHeight;
+      const scrollWidth =
+        this.dialogPicker.nativeElement.querySelector('po-timer')?.scrollWidth ??
+        this.dialogPicker.nativeElement.scrollWidth;
 
-        this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
-        this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
+      this.dialogPicker.nativeElement.style.height = scrollHeight + 'px';
+      this.dialogPicker.nativeElement.style.width = scrollWidth + 'px';
 
-        this.controlPosition.setElements(
-          this.dialogPicker.nativeElement,
-          poTimerContentOffset,
-          this.timepickerFieldEl || this.inputEl,
-          ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-          false,
-          true
-        );
-        this.controlPosition.adjustPosition(poTimerPositionDefault);
-      });
+      this.controlPosition.setElements(
+        this.dialogPicker.nativeElement,
+        poTimerContentOffset,
+        this.timepickerFieldEl || this.inputEl,
+        ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+        false,
+        true
+      );
+      this.controlPosition.adjustPosition(poTimerPositionDefault);
     }
   }
 

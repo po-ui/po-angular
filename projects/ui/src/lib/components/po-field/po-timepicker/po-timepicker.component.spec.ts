@@ -249,16 +249,32 @@ describe('PoTimepickerComponent:', () => {
     });
 
     describe('timerSelected:', () => {
-      it('should not close picker after selecting a valid time', () => {
+      it('should close picker and focus the timer toggle button after selecting a valid time when no value existed before', () => {
         fixture.detectChanges();
-        const togglePickerSpy = spyOn(component, 'togglePicker');
-        const focusSpy = spyOn(component, 'focus');
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+        const closeTimerSpy = spyOn(component, 'closeTimer');
+        const iconFocusSpy = spyOn(component.iconTimepicker, 'focus');
 
         component.timerSelected('10:30');
 
         expect(component.timeValue).toBe('10:30');
-        expect(togglePickerSpy).not.toHaveBeenCalled();
-        expect(focusSpy).not.toHaveBeenCalled();
+        expect(iconFocusSpy).toHaveBeenCalled();
+        expect(closeTimerSpy).toHaveBeenCalledWith(false);
+      });
+
+      it('should not close picker after selecting a valid time when a value existed before', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '08';
+        component.minuteDisplay = '15';
+        component.secondDisplay = '';
+        const closeTimerSpy = spyOn(component, 'closeTimer');
+
+        component.timerSelected('10:30');
+
+        expect(component.timeValue).toBe('10:30');
+        expect(closeTimerSpy).not.toHaveBeenCalled();
       });
 
       it('should not close picker after selecting a valid time with seconds', () => {
@@ -275,6 +291,8 @@ describe('PoTimepickerComponent:', () => {
       it('should keep partial HH:mm without forcing seconds while picker is open', () => {
         fixture.detectChanges();
         component.showSeconds = true;
+        component.hourDisplay = '09';
+        component.minuteDisplay = '15';
 
         component.timerSelected('10:30');
 
@@ -937,12 +955,13 @@ describe('PoTimepickerComponent:', () => {
 
     it('should render readonly period input with default AM in 12h format', () => {
       component.format = PoTimerFormat.Format12;
+      component.readonly = true;
       fixture.detectChanges();
 
       const periodInput = fixture.nativeElement.querySelector('.po-timepicker-period-input') as HTMLInputElement;
 
       expect(periodInput).toBeTruthy();
-      expect(periodInput.readOnly).toBeTrue();
+      expect(periodInput.tabIndex).toBe(-1);
       expect(periodInput.value).toBe('AM');
     });
 
@@ -1079,6 +1098,10 @@ describe('PoTimepickerComponent:', () => {
 
         spyOn(component as any, 'setTimerPosition');
         spyOn(component as any, 'initializeListeners');
+        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+          callback(0);
+          return 0;
+        });
 
         component.togglePicker();
 
@@ -1280,6 +1303,15 @@ describe('PoTimepickerComponent:', () => {
       it('should close timer when click outside picker and icon', () => {
         fixture.detectChanges();
         spyOn(component, 'closeTimer');
+
+        component['dialogPicker'] = {
+          nativeElement: document.createElement('div')
+        } as any;
+        component['iconTimepicker'] = {
+          buttonElement: {
+            nativeElement: document.createElement('button')
+          }
+        } as any;
 
         const outsideEl = document.createElement('div');
         document.body.appendChild(outsideEl);
@@ -1612,7 +1644,7 @@ describe('PoTimepickerComponent:', () => {
         expect(event.preventDefault).not.toHaveBeenCalled();
       });
 
-      it('should emit keydown event', () => {
+      it('should not emit keydown event from onSegmentKeydown', () => {
         fixture.detectChanges();
         spyOn(component.keydown, 'emit');
 
@@ -1625,7 +1657,7 @@ describe('PoTimepickerComponent:', () => {
 
         component.onSegmentKeydown(event, 'hour');
 
-        expect(component.keydown.emit).toHaveBeenCalledWith(event);
+        expect(component.keydown.emit).not.toHaveBeenCalled();
       });
 
       it('should focus timer on Tab from last segment when visible', () => {
@@ -1665,7 +1697,8 @@ describe('PoTimepickerComponent:', () => {
           shiftKey: true,
           cancelable: true,
           target: input,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
         } as unknown as KeyboardEvent;
 
         spyOn(component as any, 'advanceToPreviousSegment');
@@ -1673,6 +1706,30 @@ describe('PoTimepickerComponent:', () => {
         component.onSegmentKeydown(event, 'minute');
 
         expect(component['advanceToPreviousSegment']).toHaveBeenCalledWith('minute');
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should advance to next segment on Tab when picker is closed', () => {
+        fixture.detectChanges();
+        component.visible = false;
+
+        const input = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
+        const event = {
+          key: 'Tab',
+          shiftKey: false,
+          cancelable: true,
+          target: input,
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as unknown as KeyboardEvent;
+
+        spyOn(component as any, 'advanceToNextSegment').and.returnValue(true);
+
+        component.onSegmentKeydown(event, 'hour');
+
+        expect(component['advanceToNextSegment']).toHaveBeenCalledWith('hour');
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
       });
     });
 
@@ -1707,7 +1764,7 @@ describe('PoTimepickerComponent:', () => {
         document.body.removeChild(externalEl);
       });
 
-      it('should close timer when blurring outside while visible', () => {
+      it('should not close timer when blurring outside while visible (handled by onHostFocusOut)', () => {
         fixture.detectChanges();
         component.visible = true;
         component['onTouchedModel'] = () => {};
@@ -1719,7 +1776,7 @@ describe('PoTimepickerComponent:', () => {
 
         component.onSegmentBlur({ target: hourInput, relatedTarget: externalEl } as unknown as FocusEvent);
 
-        expect(component.closeTimer).toHaveBeenCalledWith(false, true);
+        expect(component.closeTimer).not.toHaveBeenCalled();
         document.body.removeChild(externalEl);
       });
     });
@@ -1767,17 +1824,17 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         spyOn(component.onblur, 'emit');
 
-        const dialogEl = component.dialogPicker?.nativeElement;
-        if (dialogEl) {
-          const innerEl = document.createElement('div');
-          dialogEl.appendChild(innerEl);
+        const dialogEl = document.createElement('div');
+        component['dialogPicker'] = { nativeElement: dialogEl } as any;
 
-          const event = new FocusEvent('focusout', { relatedTarget: innerEl });
-          component.onHostFocusOut(event);
+        const innerEl = document.createElement('div');
+        dialogEl.appendChild(innerEl);
 
-          expect(component.onblur.emit).not.toHaveBeenCalled();
-          dialogEl.removeChild(innerEl);
-        }
+        const event = new FocusEvent('focusout', { relatedTarget: innerEl });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).not.toHaveBeenCalled();
+        dialogEl.removeChild(innerEl);
       });
 
       it('should emit onblur when Tab moves focus from the timepicker button to an external element', () => {
@@ -1792,6 +1849,70 @@ describe('PoTimepickerComponent:', () => {
         component.onHostFocusOut(event);
 
         expect(component.onblur.emit).toHaveBeenCalled();
+        document.body.removeChild(externalEl);
+      });
+
+      it('should NOT emit onblur when focus moves to the iconTimepicker button', () => {
+        fixture.detectChanges();
+        spyOn(component.onblur, 'emit');
+
+        const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
+        if (buttonEl) {
+          const event = new FocusEvent('focusout', { relatedTarget: buttonEl });
+          component.onHostFocusOut(event);
+
+          expect(component.onblur.emit).not.toHaveBeenCalled();
+        }
+      });
+
+      it('should NOT emit onblur when focus moves to the iconClean element', () => {
+        component.clean = true;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        fixture.detectChanges();
+
+        spyOn(component.onblur, 'emit');
+
+        const cleanEl = component.iconClean?.nativeElement;
+        if (cleanEl) {
+          const event = new FocusEvent('focusout', { relatedTarget: cleanEl });
+          component.onHostFocusOut(event);
+
+          expect(component.onblur.emit).not.toHaveBeenCalled();
+        }
+      });
+
+      it('should close timer when focus moves outside and picker is visible', () => {
+        fixture.detectChanges();
+        component.visible = true;
+        spyOn(component.onblur, 'emit');
+        spyOn(component, 'closeTimer');
+
+        const externalEl = document.createElement('input');
+        document.body.appendChild(externalEl);
+
+        const event = new FocusEvent('focusout', { relatedTarget: externalEl });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).toHaveBeenCalled();
+        expect(component.closeTimer).toHaveBeenCalledWith(false, true);
+        document.body.removeChild(externalEl);
+      });
+
+      it('should NOT close timer when focus moves outside and picker is not visible', () => {
+        fixture.detectChanges();
+        component.visible = false;
+        spyOn(component.onblur, 'emit');
+        spyOn(component, 'closeTimer');
+
+        const externalEl = document.createElement('input');
+        document.body.appendChild(externalEl);
+
+        const event = new FocusEvent('focusout', { relatedTarget: externalEl });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).toHaveBeenCalled();
+        expect(component.closeTimer).not.toHaveBeenCalled();
         document.body.removeChild(externalEl);
       });
     });
@@ -1914,13 +2035,47 @@ describe('PoTimepickerComponent:', () => {
         expect(component['focusTimer']).toHaveBeenCalledWith(event);
       });
 
+      it('should focus clean icon on Tab when picker is not visible and clean is present', () => {
+        component.clean = true;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        fixture.detectChanges();
+
+        const fakeCleanEl = { nativeElement: { focus: jasmine.createSpy('focus') } } as any;
+        (component as any).iconClean = fakeCleanEl;
+
+        component.onPeriodSegmentKeydown(new KeyboardEvent('keydown', { key: 'Tab', cancelable: true }));
+
+        expect(fakeCleanEl.nativeElement.focus).toHaveBeenCalled();
+      });
+
+      it('should focus timer button on Tab when picker is not visible and no clean icon exists', () => {
+        component.clean = false;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        fixture.detectChanges();
+
+        spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
+
+        component.onPeriodSegmentKeydown(new KeyboardEvent('keydown', { key: 'Tab', cancelable: true }));
+
+        expect(component.iconTimepicker.buttonElement.nativeElement.focus).toHaveBeenCalled();
+      });
+
       it('should prevent single character key presses', () => {
         fixture.detectChanges();
 
-        const event = new KeyboardEvent('keydown', { key: 'p', cancelable: true });
+        const input = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
+        const event = {
+          key: 'p',
+          cancelable: true,
+          target: input,
+          preventDefault: () => {}
+        } as unknown as KeyboardEvent;
+
         spyOn(event, 'preventDefault');
 
-        component.onPeriodSegmentKeydown(event);
+        component.onSegmentKeydown(event, 'hour');
 
         expect(event.preventDefault).toHaveBeenCalled();
       });
@@ -2068,12 +2223,12 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component as any, 'focusTimer');
+        spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
         component.handleCleanKeyboardTab(event);
 
-        expect(component['focusTimer']).toHaveBeenCalledWith(event);
+        expect(component.iconTimepicker.buttonElement.nativeElement.focus).toHaveBeenCalled();
       });
 
       it('should not focus timer when not visible', () => {
@@ -2096,6 +2251,32 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
         component.handleCleanKeyboardTab(event);
+
+        expect(component['focusTimer']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('handleTimepickerButtonKeyboardTab:', () => {
+      it('should focus timer when visible and Tab without Shift', () => {
+        fixture.detectChanges();
+        component.visible = true;
+
+        spyOn(component as any, 'focusTimer');
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.handleTimepickerButtonKeyboardTab(event);
+
+        expect(component['focusTimer']).toHaveBeenCalledWith(event);
+      });
+
+      it('should not focus timer when not visible or when Shift is pressed', () => {
+        fixture.detectChanges();
+        component.visible = false;
+
+        spyOn(component as any, 'focusTimer');
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        component.handleTimepickerButtonKeyboardTab(event);
 
         expect(component['focusTimer']).not.toHaveBeenCalled();
       });
@@ -2188,16 +2369,33 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
+        const dialogEl = document.createElement('div');
+        component['dialogPicker'] = { nativeElement: dialogEl } as any;
         spyOn(component, 'closeTimer');
 
         const outsideEl = document.createElement('div');
         document.body.appendChild(outsideEl);
 
-        if (component['dialogPicker']?.nativeElement) {
-          component.onTimerFocusOut({ relatedTarget: outsideEl } as unknown as FocusEvent);
+        component.onTimerFocusOut({ relatedTarget: outsideEl } as unknown as FocusEvent);
 
-          expect(component.closeTimer).toHaveBeenCalledWith(false);
-        }
+        expect(component.closeTimer).toHaveBeenCalledWith(false);
+        document.body.removeChild(outsideEl);
+      });
+
+      it('should close when focus leaves the dialog and the timepicker', () => {
+        fixture.detectChanges();
+        component.visible = true;
+
+        const dialogEl = document.createElement('div');
+        component['dialogPicker'] = { nativeElement: dialogEl } as any;
+        spyOn(component, 'closeTimer');
+
+        const outsideEl = document.createElement('div');
+        document.body.appendChild(outsideEl);
+
+        component.onTimerFocusOut({ relatedTarget: outsideEl } as unknown as FocusEvent);
+
+        expect(component.closeTimer).toHaveBeenCalledWith(false);
         document.body.removeChild(outsideEl);
       });
 
@@ -2217,12 +2415,14 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
+        const dialogEl = document.createElement('div');
+        component['dialogPicker'] = { nativeElement: dialogEl } as any;
         spyOn(component, 'closeTimer');
 
-        if (component['dialogPicker']?.nativeElement) {
-          component.onTimerFocusOut({ relatedTarget: null } as unknown as FocusEvent);
-          tick();
-        }
+        component.onTimerFocusOut({ relatedTarget: null } as unknown as FocusEvent);
+        tick(100);
+
+        expect(component.closeTimer).toHaveBeenCalled();
       }));
     });
 
@@ -2487,6 +2687,19 @@ describe('PoTimepickerComponent:', () => {
         component['updateCombinedValue']();
 
         expect(component.timeValue).toBe('');
+      });
+
+      it('should preserve partial error and not call callOnChange when hasValidationValue is true and segments are incomplete', () => {
+        fixture.detectChanges();
+        component.hourDisplay = '10';
+        component.minuteDisplay = '';
+        component['setValidationValue']('10:');
+
+        spyOn(component as any, 'callOnChange');
+        component['updateCombinedValue']();
+
+        expect(component['callOnChange']).not.toHaveBeenCalled();
+        expect(component['hasValidationValue']()).toBeTrue();
       });
     });
 
@@ -2825,6 +3038,37 @@ describe('PoTimepickerComponent:', () => {
 
         expect(component.periodInputEl.nativeElement.focus).toHaveBeenCalled();
       });
+
+      it('should focus clean icon when current is minute and no seconds in 24h format', () => {
+        component.clean = true;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        component.showSeconds = false;
+        component.format = PoTimerFormat.Format24;
+        fixture.detectChanges();
+
+        const fakeCleanEl = { nativeElement: { focus: jasmine.createSpy('focus') } } as any;
+        (component as any).iconClean = fakeCleanEl;
+
+        component['advanceToNextSegment']('minute');
+
+        expect(fakeCleanEl.nativeElement.focus).toHaveBeenCalled();
+      });
+
+      it('should focus timer button when current is minute and no clean icon exists', () => {
+        component.clean = false;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        component.showSeconds = false;
+        component.format = PoTimerFormat.Format24;
+        fixture.detectChanges();
+
+        spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
+
+        component['advanceToNextSegment']('minute');
+
+        expect(component.iconTimepicker.buttonElement.nativeElement.focus).toHaveBeenCalled();
+      });
     });
 
     describe('advanceToPreviousSegment (private):', () => {
@@ -3138,20 +3382,82 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component['visible'] = true;
 
-        if (component['dialogPicker']?.nativeElement) {
-          const mockTimerEl = document.createElement('po-timer');
-          Object.defineProperty(mockTimerEl, 'scrollHeight', { value: 300 });
-          Object.defineProperty(mockTimerEl, 'scrollWidth', { value: 200 });
-          component['dialogPicker'].nativeElement.appendChild(mockTimerEl);
+        const mockTimerEl = document.createElement('po-timer');
+        Object.defineProperty(mockTimerEl, 'scrollHeight', { value: 300 });
+        Object.defineProperty(mockTimerEl, 'scrollWidth', { value: 200 });
 
-          spyOn(component['controlPosition'], 'setElements');
-          spyOn(component['controlPosition'], 'adjustPosition');
+        const dialogEl = document.createElement('div');
+        spyOn(dialogEl, 'querySelector').and.returnValue(mockTimerEl);
 
-          component['adjustTimerPosition']();
-          tick(100);
-        }
+        component['dialogPicker'] = { nativeElement: dialogEl } as any;
+        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+          callback(0);
+          return 0;
+        });
+        spyOn(component['controlPosition'], 'setElements');
+        spyOn(component['controlPosition'], 'adjustPosition');
 
-        expect(true).toBeTrue();
+        component['adjustTimerPosition']();
+        tick(0);
+
+        expect(component['controlPosition'].setElements).toHaveBeenCalled();
+        expect(component['controlPosition'].adjustPosition).toHaveBeenCalled();
+      }));
+
+      it('should use dialogPicker scrollHeight/scrollWidth when po-timer element is not found', fakeAsync(() => {
+        fixture.detectChanges();
+        component['visible'] = true;
+        component['dialogPicker'] = { nativeElement: document.createElement('div') } as any;
+
+        const dialogEl = component['dialogPicker'].nativeElement;
+        dialogEl.style.display = 'block';
+
+        Object.defineProperty(dialogEl, 'scrollHeight', { value: 450 });
+        Object.defineProperty(dialogEl, 'scrollWidth', { value: 350 });
+
+        spyOn(dialogEl, 'querySelector').and.returnValue(null);
+        spyOn(component['controlPosition'], 'setElements');
+        spyOn(component['controlPosition'], 'adjustPosition');
+
+        console.warn('component.dialogPicker.nativeElement:', component['dialogPicker'].nativeElement);
+        component['adjustTimerPosition']();
+        tick(100);
+
+        expect(component['controlPosition'].setElements).toHaveBeenCalled();
+        expect(dialogEl.style.height).toBe('450px');
+        expect(dialogEl.style.width).toBe('350px');
+      }));
+
+      it('should use inputEl when timepickerFieldEl is not set', fakeAsync(() => {
+        fixture.detectChanges();
+        component['visible'] = true;
+        component['dialogPicker'] = { nativeElement: document.createElement('div') } as any;
+        component['timepickerFieldEl'] = undefined;
+
+        const dialogEl = component['dialogPicker'].nativeElement;
+        dialogEl.style.display = 'block';
+
+        Object.defineProperty(dialogEl, 'scrollHeight', { value: 280 });
+        Object.defineProperty(dialogEl, 'scrollWidth', { value: 180 });
+
+        spyOn(dialogEl, 'querySelector').and.returnValue(null);
+        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+          callback(0);
+          return 0;
+        });
+        spyOn(component['controlPosition'], 'setElements');
+        spyOn(component['controlPosition'], 'adjustPosition');
+
+        component['adjustTimerPosition']();
+
+        expect(component['controlPosition'].setElements).toHaveBeenCalledWith(
+          dialogEl,
+          8,
+          component.inputEl,
+          ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+          false,
+          true
+        );
       }));
     });
 
@@ -3302,14 +3608,19 @@ describe('PoTimepickerComponent:', () => {
       it('should handle null relatedTarget when visible', fakeAsync(() => {
         fixture.detectChanges();
         component['visible'] = true;
+        component['dialogPicker'] = { nativeElement: document.createElement('div') } as any;
+        spyOn(component, 'closeTimer');
 
-        if (component['dialogPicker']?.nativeElement) {
-          const event = new FocusEvent('focusout', { relatedTarget: null });
-          component.onTimerFocusOut(event);
-          tick(100);
-        }
+        const outside = document.createElement('div');
+        document.body.appendChild(outside);
+        outside.focus();
 
-        expect(true).toBeTrue();
+        const event = new FocusEvent('focusout', { relatedTarget: null });
+        component.onTimerFocusOut(event);
+        tick(100);
+
+        expect(component.closeTimer).toHaveBeenCalledWith(false);
+        document.body.removeChild(outside);
       }));
     });
 
@@ -3399,27 +3710,6 @@ describe('PoTimepickerComponent:', () => {
       }));
     });
 
-    describe('adjustTimerPosition - scrollHeight/scrollWidth fallback:', () => {
-      it('should use dialogPicker scrollHeight/scrollWidth when po-timer element is not found', fakeAsync(() => {
-        fixture.detectChanges();
-        component['visible'] = true;
-
-        if (component['dialogPicker']?.nativeElement) {
-          component['dialogPicker'].nativeElement.style.display = 'block';
-
-          spyOn(component['controlPosition'], 'setElements');
-          spyOn(component['controlPosition'], 'adjustPosition');
-
-          component['adjustTimerPosition']();
-          tick(100);
-
-          expect(component['controlPosition'].setElements).toHaveBeenCalled();
-        }
-
-        expect(true).toBeTrue();
-      }));
-    });
-
     describe('showAdditionalHelp - helperEl visible branch:', () => {
       it('should close helper popover when helperEl is visible', () => {
         fixture.detectChanges();
@@ -3472,25 +3762,6 @@ describe('PoTimepickerComponent:', () => {
         tick(300);
 
         expect(component['hourDisplay']).toBeDefined();
-      }));
-    });
-
-    describe('adjustTimerPosition - timepickerFieldEl fallback:', () => {
-      it('should use inputEl when timepickerFieldEl is not set', fakeAsync(() => {
-        fixture.detectChanges();
-        component['visible'] = true;
-        component['timepickerFieldEl'] = undefined;
-
-        if (component['dialogPicker']?.nativeElement) {
-          component['dialogPicker'].nativeElement.style.display = 'block';
-          spyOn(component['controlPosition'], 'setElements');
-          spyOn(component['controlPosition'], 'adjustPosition');
-
-          component['adjustTimerPosition']();
-          tick(100);
-        }
-
-        expect(true).toBeTrue();
       }));
     });
 
@@ -3651,29 +3922,6 @@ describe('PoTimepickerComponent:', () => {
         expect(component.closeTimer).toHaveBeenCalled();
 
         component['removeListeners']();
-      }));
-    });
-
-    describe('adjustTimerPosition - scrollHeight/scrollWidth fallback:', () => {
-      it('should fallback to dialogPicker scrollHeight/scrollWidth when po-timer not found', fakeAsync(() => {
-        fixture.detectChanges();
-        component['visible'] = true;
-
-        if (component['dialogPicker']?.nativeElement) {
-          const dialogEl = component['dialogPicker'].nativeElement;
-          dialogEl.style.display = 'block';
-
-          spyOn(dialogEl, 'querySelector').and.returnValue(null);
-          spyOn(component['controlPosition'], 'setElements');
-          spyOn(component['controlPosition'], 'adjustPosition');
-
-          component['adjustTimerPosition']();
-          tick(100);
-
-          expect(component['controlPosition'].setElements).toHaveBeenCalled();
-        }
-
-        expect(true).toBeTrue();
       }));
     });
 
@@ -3925,6 +4173,268 @@ describe('PoTimepickerComponent:', () => {
 
       expect(minuteInput.getAttribute('aria-valuemin')).toBe('0');
       expect(minuteInput.getAttribute('aria-valuemax')).toBe('59');
+    });
+  });
+
+  describe('Coverage - timerSelected errorPattern clearing:', () => {
+    it('should clear generated errorPattern when timerSelected is called with valid time', () => {
+      fixture.detectChanges();
+      component.errorPattern = 'Hora inválida';
+      component['setValidationValue']('invalid');
+
+      component.timerSelected('10:30');
+
+      expect(component.errorPattern).toBe('');
+      expect(component.timeValue).toBe('10:30');
+    });
+  });
+
+  describe('Coverage - handleSegmentNavigation Tab on last segment fallback:', () => {
+    it('should return false and allow native Tab when on last segment without focusable element', () => {
+      fixture.detectChanges();
+      component.visible = false;
+      component.disabled = true;
+
+      const input = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[1] as HTMLInputElement;
+      const event = {
+        key: 'Tab',
+        shiftKey: false,
+        cancelable: true,
+        target: input,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as unknown as KeyboardEvent;
+
+      const result = component['handleSegmentNavigation'](event, 'minute');
+
+      expect(result).toBeFalse();
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Coverage - onSegmentBlur isInternalFocus branches:', () => {
+    it('should detect focus on iconClean as internal when timepickerFieldEl does not contain target', () => {
+      component.clean = true;
+      component.hourDisplay = '10';
+      component.minuteDisplay = '30';
+      fixture.detectChanges();
+
+      const cleanEl = component.iconClean?.nativeElement;
+      if (cleanEl) {
+        spyOn(component['timepickerFieldEl'].nativeElement, 'contains').and.returnValue(false);
+
+        const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
+        spyOn(component as any, 'controlChangeEmitter');
+
+        component.onSegmentBlur({ target: hourInput, relatedTarget: cleanEl } as unknown as FocusEvent);
+
+        // isInternalFocus=true AND shouldCommitForInternalFocusTarget=true for iconClean
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+      }
+    });
+
+    it('should detect focus on iconTimepicker button as internal when timepickerFieldEl does not contain target', () => {
+      fixture.detectChanges();
+
+      const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
+      if (buttonEl) {
+        spyOn(component['timepickerFieldEl'].nativeElement, 'contains').and.returnValue(false);
+
+        const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
+        spyOn(component as any, 'controlChangeEmitter');
+
+        component.onSegmentBlur({ target: hourInput, relatedTarget: buttonEl } as unknown as FocusEvent);
+
+        // isInternalFocus=true AND shouldCommitForInternalFocusTarget=true for iconTimepicker
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+      }
+    });
+  });
+
+  describe('Coverage - advanceToNextSegment focusCleanOrButton branch:', () => {
+    it('should return true via focusCleanOrButton focusing iconTimepicker when Tab from minute', () => {
+      fixture.detectChanges();
+      component.clean = false;
+
+      const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
+      expect(buttonEl).toBeTruthy();
+      spyOn(buttonEl, 'focus');
+
+      const result = component['advanceToNextSegment']('minute');
+
+      expect(result).toBeTrue();
+      expect(buttonEl.focus).toHaveBeenCalled();
+    });
+
+    it('should return true via focusCleanOrButton when Tab from second segment', () => {
+      component.showSeconds = true;
+      fixture.detectChanges();
+
+      const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
+      expect(buttonEl).toBeTruthy();
+      spyOn(buttonEl, 'focus');
+
+      const result = component['advanceToNextSegment']('second');
+
+      expect(result).toBeTrue();
+      expect(buttonEl.focus).toHaveBeenCalled();
+    });
+
+    it('should return false via focusCleanOrButton when disabled', () => {
+      fixture.detectChanges();
+      component.clean = false;
+      component.disabled = true;
+
+      const result = component['advanceToNextSegment']('minute');
+
+      expect(result).toBeFalse();
+    });
+
+    it('should return false via focusCleanOrButton when disabled', () => {
+      fixture.detectChanges();
+      const result = component['advanceToNextSegment']('-' as any);
+
+      expect(result).toBeFalse();
+    });
+  });
+
+  describe('Coverage - focusCleanOrButton clean icon branch:', () => {
+    it('should focus clean icon when clean is enabled and has value', () => {
+      component.clean = true;
+      fixture.detectChanges();
+      component.hourDisplay = '10';
+      component.minuteDisplay = '30';
+      fixture.detectChanges();
+
+      const cleanEl = component.iconClean?.nativeElement;
+      if (cleanEl) {
+        spyOn(cleanEl, 'focus');
+
+        const result = component['focusCleanOrButton']();
+
+        expect(result).toBeTrue();
+        expect(cleanEl.focus).toHaveBeenCalled();
+      }
+    });
+  });
+
+  describe('Coverage - advanceToPreviousSegment fallback:', () => {
+    it('should return false when current segment is hour', () => {
+      fixture.detectChanges();
+
+      const result = component['advanceToPreviousSegment']('hour');
+
+      expect(result).toBeFalse();
+    });
+  });
+
+  describe('Coverage - togglePeriod blocked branch:', () => {
+    it('should not toggle period when target period is blocked by minTime', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.minTime = '13:00';
+      component['periodDisplay'] = 'PM';
+
+      component['togglePeriod']();
+
+      expect(component['periodDisplay']).toBe('PM');
+    });
+
+    it('should not toggle period when target period is blocked by maxTime', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.maxTime = '11:00';
+      component['periodDisplay'] = 'AM';
+
+      component['togglePeriod']();
+
+      expect(component['periodDisplay']).toBe('AM');
+    });
+  });
+
+  describe('Coverage - isPeriodBlocked branches:', () => {
+    it('should return false when format is not 12h', () => {
+      fixture.detectChanges();
+      component.minTime = '08:00';
+
+      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+    });
+
+    it('should return false when no min/max is set', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+
+      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+    });
+
+    it('should return true when PM is blocked by maxTime before noon', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.maxTime = '11:00';
+
+      expect(component['isPeriodBlocked']('PM')).toBeTrue();
+    });
+
+    it('should return true when AM is blocked by minTime after noon', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.minTime = '13:00';
+
+      expect(component['isPeriodBlocked']('AM')).toBeTrue();
+    });
+
+    it('should return false when period is within range', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.minTime = '08:00';
+      component.maxTime = '18:00';
+
+      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+      expect(component['isPeriodBlocked']('PM')).toBeFalse();
+    });
+
+    it('should fallback maxHour to 0 when maxTime hour is 00', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.maxTime = '00:30';
+
+      expect(component['isPeriodBlocked']('PM')).toBeTrue();
+    });
+
+    it('should fallback minHour to 0 when minTime hour is 00', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.minTime = '00:00';
+
+      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+    });
+  });
+
+  describe('Coverage - incrementHourSegment blocked period branch:', () => {
+    it('should not toggle period when wrapping and target period is blocked', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.minTime = '13:00';
+      component['hourDisplay'] = '12';
+      component['minuteDisplay'] = '00';
+      component['periodDisplay'] = 'PM';
+
+      component['incrementHourSegment'](1);
+
+      expect(component['periodDisplay']).toBe('PM');
+    });
+
+    it('should not toggle period when decrementing past min and target period is blocked', () => {
+      component.format = PoTimerFormat.Format12;
+      fixture.detectChanges();
+      component.maxTime = '11:00';
+      component['hourDisplay'] = '01';
+      component['minuteDisplay'] = '00';
+      component['periodDisplay'] = 'AM';
+
+      component['incrementHourSegment'](-1);
+
+      expect(component['periodDisplay']).toBe('AM');
     });
   });
 });

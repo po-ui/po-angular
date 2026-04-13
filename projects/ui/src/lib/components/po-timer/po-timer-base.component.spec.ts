@@ -603,13 +603,13 @@ describe('PoTimerBaseComponent:', () => {
         expect(component['buildTimeValue']()).toBe('14:30:45');
       });
 
-      it('should return HH:mm when showSeconds is true but selectedSecond is null', () => {
+      it('should return empty string when showSeconds is true but selectedSecond is null', () => {
         component.format = PoTimerFormat.Format24;
         component.showSeconds = true;
         component.selectedHour = 14;
         component.selectedMinute = 30;
         component.selectedSecond = null;
-        expect(component['buildTimeValue']()).toBe('14:30');
+        expect(component['buildTimeValue']()).toBe('');
       });
 
       it('should convert 12h AM to 24h for output', () => {
@@ -1165,6 +1165,46 @@ describe('PoTimerBaseComponent:', () => {
         component.format = PoTimerFormat.Format24;
 
         expect(component['isSecondAllowed'](10, 30, 15)).toBe(true);
+      });
+    });
+
+    describe('isPeriodDisabled:', () => {
+      it('should return false when format is 24h', () => {
+        component.format = PoTimerFormat.Format24;
+        component.minTime = '08:00';
+
+        expect(component['isPeriodDisabled']('AM')).toBe(false);
+      });
+
+      it('should return false when no min/max is set', () => {
+        component.format = PoTimerFormat.Format12;
+
+        expect(component['isPeriodDisabled']('AM')).toBe(false);
+      });
+
+      it('should return true when all hours are disabled for the target period', () => {
+        component.format = PoTimerFormat.Format12;
+        component.minTime = '13:00';
+
+        expect(component['isPeriodDisabled']('AM')).toBe(true);
+      });
+
+      it('should return false when some hours are available for the target period', () => {
+        component.format = PoTimerFormat.Format12;
+        component.minTime = '08:00';
+        component.maxTime = '18:00';
+
+        expect(component['isPeriodDisabled']('AM')).toBe(false);
+      });
+
+      it('should restore original period after checking', () => {
+        component.format = PoTimerFormat.Format12;
+        component.period = 'AM';
+        component.minTime = '13:00';
+
+        component['isPeriodDisabled']('PM');
+
+        expect(component.period).toBe('AM');
       });
     });
 

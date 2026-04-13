@@ -1,5 +1,5 @@
 /**
- * @usedBy PoTimepickerComponent
+ * @usedBy PoTimepickerComponent, PoDynamicFormComponent
  *
  * @description
  *

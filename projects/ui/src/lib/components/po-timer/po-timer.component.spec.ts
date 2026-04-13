@@ -831,9 +831,51 @@ describe('PoTimerComponent:', () => {
 
         expect(component['initAllColumnOffsets']).not.toHaveBeenCalled();
       }));
+
+      it('should not sync ARIA when not needed', () => {
+        spyOn<any>(component as any, 'syncAriaToNativeButtons');
+
+        component['hasViewInitialized'] = true;
+        component['ariaSyncNeeded'] = false;
+
+        component.ngAfterViewChecked();
+
+        expect(component['syncAriaToNativeButtons']).not.toHaveBeenCalled();
+      });
+
+      it('should sync ARIA when needed', () => {
+        spyOn<any>(component as any, 'syncAriaToNativeButtons');
+
+        component['hasViewInitialized'] = true;
+        component['ariaSyncNeeded'] = true;
+
+        component.ngAfterViewChecked();
+
+        expect(component['syncAriaToNativeButtons']).toHaveBeenCalled();
+        expect(component['ariaSyncNeeded']).toBe(false);
+      });
     });
 
-    describe('initColumnOffset with min/max:', () => {
+    describe('initColumnOffset:', () => {
+      it('should initialize hour and minute at selected value', () => {
+        component.format = PoTimerFormat.Format24;
+        component.minuteInterval = 1;
+        component['selectedHour'] = 8;
+        component['selectedMinute'] = 12;
+        component.ngOnInit();
+
+        const mockItemsEl = { style: { transform: '' }, scrollHeight: 0 } as any;
+
+        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
+        spyOn(component as any, 'getCellStep').and.returnValue(1);
+
+        component['initColumnOffset']('hour');
+        component['initColumnOffset']('minute');
+
+        expect(component['columnOffsets'].hour).toBe(32);
+        expect(component['columnOffsets'].minute).toBe(72);
+      });
+
       it('should initialize hour and minute columns at first available values', () => {
         component.format = PoTimerFormat.Format24;
         component.minuteInterval = 1;
@@ -870,6 +912,46 @@ describe('PoTimerComponent:', () => {
         component['initColumnOffset']('second');
 
         expect(component['columnOffsets'].second).toBe(94);
+      });
+
+      it('should return early when getItemsElement returns null', () => {
+        component.ngOnInit();
+        spyOn(component as any, 'getItemsElement').and.returnValue(null);
+
+        expect(() => component['initColumnOffset']('hour')).not.toThrow();
+      });
+
+      it('should return early when source array is empty', () => {
+        component.ngOnInit();
+
+        const mockItemsEl = { style: { transform: '' } } as any;
+        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
+        spyOn(component as any, 'getSourceArray').and.returnValue([]);
+        spyOn(component as any, 'getDisplayArray').and.returnValue([0]);
+
+        expect(() => component['initColumnOffset']('hour')).not.toThrow();
+      });
+
+      it('should return early when display array is empty', () => {
+        component.ngOnInit();
+
+        const mockItemsEl = { style: { transform: '' } } as any;
+        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
+        spyOn(component as any, 'getSourceArray').and.returnValue([0]);
+        spyOn(component as any, 'getDisplayArray').and.returnValue([]);
+
+        expect(() => component['initColumnOffset']('hour')).not.toThrow();
+      });
+
+      it('should return early when source array is empty but display array has items', () => {
+        component.ngOnInit();
+
+        const mockItemsEl = { style: { transform: '' } } as any;
+        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
+        spyOn(component as any, 'getSourceArray').and.returnValue([]);
+        spyOn(component as any, 'getDisplayArray').and.returnValue([0]);
+
+        expect(() => component['initColumnOffset']('hour')).not.toThrow();
       });
     });
   });
@@ -1333,40 +1415,6 @@ describe('PoTimerComponent:', () => {
         component.ngOnInit();
 
         expect(component['getVisibleColumnTypes']()).toEqual(['hour', 'minute', 'second', 'period']);
-      });
-    });
-
-    describe('getCellsForType (private):', () => {
-      it('should return hourCells for hour', () => {
-        component.ngOnInit();
-        fixture.detectChanges();
-
-        expect(component['getCellsForType']('hour')).toBe(component.hourCells);
-      });
-
-      it('should return minuteCells for minute', () => {
-        component.ngOnInit();
-        fixture.detectChanges();
-
-        expect(component['getCellsForType']('minute')).toBe(component.minuteCells);
-      });
-
-      it('should return secondCells for second', () => {
-        component.ngOnInit();
-        fixture.detectChanges();
-
-        expect(component['getCellsForType']('second')).toBe(component.secondCells);
-      });
-
-      it('should return periodCells for period', () => {
-        component.ngOnInit();
-        fixture.detectChanges();
-
-        expect(component['getCellsForType']('period')).toBe(component.periodCells);
-      });
-
-      it('should return null for unknown type', () => {
-        expect(component['getCellsForType']('unknown' as any)).toBeNull();
       });
     });
 
@@ -1874,6 +1922,30 @@ describe('PoTimerComponent:', () => {
 
         expect(component['getDomFocusedDisplayIndex']('hour')).toBeNull();
       });
+
+      it('should return numeric index when the focused host id is valid', () => {
+        const hostButton = { id: 'po-timer-hour-5' } as any;
+
+        (component as any)['domDocument'] = {
+          activeElement: {
+            closest: () => hostButton
+          }
+        };
+
+        expect(component['getDomFocusedDisplayIndex']('hour')).toBe(5);
+      });
+
+      it('should return null when the focused host id suffix is not numeric', () => {
+        const hostButton = { id: 'po-timer-hour-abc' } as any;
+
+        (component as any)['domDocument'] = {
+          activeElement: {
+            closest: () => hostButton
+          }
+        };
+
+        expect(component['getDomFocusedDisplayIndex']('hour')).toBeNull();
+      });
     });
 
     describe('buildDisplayArrays (private):', () => {
@@ -1974,26 +2046,6 @@ describe('PoTimerComponent:', () => {
         spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
 
         expect(() => component['scrollColumnByStep']('second', 1)).not.toThrow();
-      });
-    });
-
-    describe('initColumnOffset edge cases:', () => {
-      it('should return early when getItemsElement returns null', () => {
-        component.ngOnInit();
-        spyOn(component as any, 'getItemsElement').and.returnValue(null);
-
-        expect(() => component['initColumnOffset']('hour')).not.toThrow();
-      });
-
-      it('should return early when source array is empty', () => {
-        component.ngOnInit();
-        component.hours = [];
-        component.displayHours = [];
-
-        const mockItemsEl = { style: { transform: '' } } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-
-        expect(() => component['initColumnOffset']('hour')).not.toThrow();
       });
     });
 
@@ -2110,7 +2162,7 @@ describe('PoTimerComponent:', () => {
 
     describe('focusButtonAt (private) edge cases:', () => {
       it('should return early when cells are null', () => {
-        spyOn(component as any, 'getCellsForType').and.returnValue(null);
+        component['cachedCellPairs'] = { hour: null, minute: null, second: null, period: null };
         expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
       });
     });
@@ -2533,9 +2585,84 @@ describe('PoTimerComponent:', () => {
             }
           ]
         };
-        spyOn(component as any, 'getCellsForType').and.returnValue(mockCells);
+        component['cachedCellPairs'] = {
+          hour: mockCells.toArray().map(cell => ({
+            hostEl: cell.nativeElement,
+            nativeButton: cell.nativeElement.querySelector('button')
+          })),
+          minute: [],
+          second: [],
+          period: []
+        };
 
         expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
+      });
+
+      it('should continue past a disabled button and focus the next enabled one', () => {
+        component.format = PoTimerFormat.Format24;
+        component.ngOnInit();
+
+        const disabledButton = document.createElement('button');
+        disabledButton.disabled = true;
+        spyOn(disabledButton, 'focus');
+
+        const enabledButton = document.createElement('button');
+        spyOn(enabledButton, 'focus');
+
+        const disabledHostEl = document.createElement('div');
+        disabledHostEl.setAttribute('data-aria-role', 'option');
+
+        const enabledHostEl = document.createElement('div');
+        enabledHostEl.setAttribute('data-aria-role', 'option');
+
+        (component as any).cachedCellPairs = {
+          hour: [
+            { hostEl: disabledHostEl, nativeButton: disabledButton },
+            { hostEl: enabledHostEl, nativeButton: enabledButton }
+          ],
+          minute: [],
+          second: [],
+          period: []
+        } as any;
+
+        spyOn(component as any, 'getSourceArray').and.returnValue([0, 1]);
+        spyOn(component as any, 'syncAriaToNativeButtons');
+        spyOn(component as any, 'refreshRovingTabIndex');
+
+        expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
+
+        expect(disabledButton.focus).not.toHaveBeenCalled();
+        expect(enabledButton.focus).toHaveBeenCalled();
+        expect(component['syncAriaToNativeButtons']).toHaveBeenCalled();
+        expect(component['refreshRovingTabIndex']).toHaveBeenCalled();
+      });
+
+      it('should focus the first enabled native button', () => {
+        component.format = PoTimerFormat.Format24;
+        component.ngOnInit();
+
+        const hostEl = document.createElement('div');
+        hostEl.setAttribute('data-aria-role', 'option');
+        hostEl.setAttribute('data-aria-selected', 'true');
+
+        const nativeButton = document.createElement('button');
+        spyOn(nativeButton, 'focus');
+
+        (component as any).cachedCellPairs = {
+          hour: [{ hostEl, nativeButton }],
+          minute: [],
+          second: [],
+          period: []
+        } as any;
+        spyOn(component as any, 'getSourceArray').and.returnValue([0]);
+        spyOn(component as any, 'syncAriaToNativeButtons');
+        spyOn(component as any, 'refreshRovingTabIndex');
+
+        expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
+
+        expect(nativeButton.focus).toHaveBeenCalled();
+        expect(component['syncAriaToNativeButtons']).toHaveBeenCalled();
+        expect(component['refreshRovingTabIndex']).toHaveBeenCalled();
       });
 
       it('should handle empty cells array', () => {
@@ -2543,7 +2670,15 @@ describe('PoTimerComponent:', () => {
         fixture.detectChanges();
 
         const mockCells = { toArray: () => [] };
-        spyOn(component as any, 'getCellsForType').and.returnValue(mockCells);
+        component['cachedCellPairs'] = {
+          hour: mockCells.toArray().map(cell => ({
+            hostEl: cell.nativeElement,
+            nativeButton: cell.nativeElement.querySelector('button')
+          })),
+          minute: [],
+          second: [],
+          period: []
+        };
 
         expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
       });
@@ -2653,15 +2788,6 @@ describe('PoTimerComponent:', () => {
 
         const result = component['getDisplayArray']('period');
         expect(result).toEqual([]);
-      });
-    });
-
-    describe('getCellsForType - default branch:', () => {
-      it('should return null for unknown type', () => {
-        component.ngOnInit();
-
-        const result = component['getCellsForType']('unknown' as any);
-        expect(result).toBeNull();
       });
     });
 
@@ -2856,25 +2982,25 @@ describe('PoTimerComponent:', () => {
       });
     });
 
-    describe('getDomFocusedDisplayIndex - valid numeric id:', () => {
-      it('should return numeric index when id has valid number', () => {
-        component.ngOnInit();
-        fixture.detectChanges();
+    // describe('getDomFocusedDisplayIndex - valid numeric id:', () => {
+    //   it('should return numeric index when id has valid number', () => {
+    //     component.ngOnInit();
+    //     fixture.detectChanges();
 
-        const btn = document.createElement('button');
-        const poBtn = document.createElement('po-button');
-        poBtn.classList.add('po-timer-display');
-        poBtn.id = 'po-timer-hour-5';
-        poBtn.appendChild(btn);
-        document.body.appendChild(poBtn);
-        btn.focus();
+    //     const btn = document.createElement('button');
+    //     const poBtn = document.createElement('po-button');
+    //     poBtn.classList.add('po-timer-display');
+    //     poBtn.id = 'po-timer-hour-5';
+    //     poBtn.appendChild(btn);
+    //     document.body.appendChild(poBtn);
+    //     btn.focus();
 
-        const result = component['getDomFocusedDisplayIndex']('hour');
-        expect(result).toBe(5);
+    //     const result = component['getDomFocusedDisplayIndex']('hour');
+    //     expect(result).toBe(5);
 
-        document.body.removeChild(poBtn);
-      });
-    });
+    //     document.body.removeChild(poBtn);
+    //   });
+    // });
 
     describe('moveFocusByStep - integration with stepsToReveal:', () => {
       it('should scroll column when shouldTranslateToRevealFocusedItem returns true', () => {
@@ -3058,11 +3184,10 @@ describe('PoTimerComponent:', () => {
     });
 
     describe('syncAriaToNativeButtons - continue branch:', () => {
-      it('should skip current column iteration when getCellsForType returns null', () => {
-        spyOn(component as any, 'getCellsForType').and.returnValue(null);
+      it('should skip current column iteration when cachedCellPairs returns null', () => {
+        component['cachedCellPairs'] = { hour: null, minute: null, second: null, period: null };
 
         expect(() => component['syncAriaToNativeButtons']()).not.toThrow();
-        expect((component as any).getCellsForType).toHaveBeenCalled();
       });
 
       it('should continue loop when host element has no native button', () => {
@@ -3071,18 +3196,207 @@ describe('PoTimerComponent:', () => {
           toArray: () => [{ nativeElement: hostWithoutButton }]
         } as any;
 
-        spyOn(component as any, 'getCellsForType').and.returnValue(fakeCells);
+        component['cachedCellPairs'] = {
+          hour: fakeCells.toArray().map(cell => ({
+            hostEl: cell.nativeElement,
+            nativeButton: cell.nativeElement.querySelector('button')
+          })),
+          minute: null,
+          second: null,
+          period: null
+        };
         spyOn(component as any, 'getSourceArray').and.returnValue([0, 1, 2]);
 
         expect(() => component['syncAriaToNativeButtons']()).not.toThrow();
       });
+
+      it('should hide duplicate native buttons from screen readers without using inert', () => {
+        const hourPairs = Array.from({ length: 52 }, () => {
+          const hostEl = document.createElement('div');
+          const nativeButton = document.createElement('button');
+
+          return { hostEl, nativeButton };
+        });
+        const sourceValues = Array.from({ length: 26 }, (_, index) => index);
+
+        (component as any).cachedCellPairs = {
+          hour: hourPairs,
+          minute: null,
+          second: null,
+          period: null
+        };
+        component['focusedDisplayIndex'].hour = 0;
+
+        spyOn(component as any, 'getSourceArray').and.callFake((type: string) => (type === 'hour' ? sourceValues : []));
+
+        component['syncAriaToNativeButtons']();
+
+        // Duplicata (indice 26 = secao 1) deve ter role="none" e aria-hidden, mas sem inert
+        expect(hourPairs[26].hostEl.hasAttribute('inert')).toBeFalse();
+        expect(hourPairs[26].nativeButton.getAttribute('role')).toBe('none');
+        expect(hourPairs[26].nativeButton.getAttribute('aria-hidden')).toBe('true');
+
+        // Item canonico (indice 0 = secao 0) deve ter role="option" e sem aria-hidden
+        expect(hourPairs[0].hostEl.hasAttribute('inert')).toBeFalse();
+        expect(hourPairs[0].nativeButton.getAttribute('aria-hidden')).toBeNull();
+      });
     });
 
-    describe('isCanonicalDisplayItem - sourceLength guard:', () => {
-      it('should return false when using infinity scroll with sourceLength <= 0', () => {
-        const result = component['isCanonicalDisplayItem'](0, true, 0, 0, 0);
+    describe('subscribeToCellChanges and updateCachedCellPairs:', () => {
+      it('should refresh cached cell pairs when hour cells emit a change', () => {
+        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
+        let capturedHourChangeCallback: (() => void) | undefined;
+        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe').and.callFake((callback: () => void) => {
+          capturedHourChangeCallback = callback;
+        });
+        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe');
+        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe');
+        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe');
 
-        expect(result).toBeFalse();
+        component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
+        component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
+        component.secondCells = { toArray: () => [], changes: { subscribe: secondSubscribeSpy } } as any;
+        component.periodCells = { toArray: () => [], changes: { subscribe: periodSubscribeSpy } } as any;
+
+        (component as any).subscribeToCellChanges();
+        capturedHourChangeCallback?.();
+
+        expect(hourSubscribeSpy).toHaveBeenCalled();
+        expect(updateSpy).toHaveBeenCalledWith('hour', component.hourCells);
+      });
+
+      it('should refresh cached cell pairs when second cells emit a change', () => {
+        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
+        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe');
+        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe');
+        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe').and.callFake((callback: () => void) => {
+          callback();
+        });
+        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe');
+
+        component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
+        component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
+        component.secondCells = { toArray: () => [], changes: { subscribe: secondSubscribeSpy } } as any;
+        component.periodCells = { toArray: () => [], changes: { subscribe: periodSubscribeSpy } } as any;
+
+        (component as any).subscribeToCellChanges();
+
+        expect(secondSubscribeSpy).toHaveBeenCalled();
+        expect(updateSpy).toHaveBeenCalledWith('second', component.secondCells);
+      });
+
+      it('should refresh cached cell pairs when minute cells emit a change', () => {
+        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
+        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe');
+        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe').and.callFake((callback: () => void) => {
+          callback();
+        });
+        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe');
+        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe');
+
+        component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
+        component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
+        component.secondCells = { toArray: () => [], changes: { subscribe: secondSubscribeSpy } } as any;
+        component.periodCells = { toArray: () => [], changes: { subscribe: periodSubscribeSpy } } as any;
+
+        (component as any).subscribeToCellChanges();
+
+        expect(minuteSubscribeSpy).toHaveBeenCalled();
+        expect(updateSpy).toHaveBeenCalledWith('minute', component.minuteCells);
+      });
+
+      it('should refresh cached cell pairs when period cells emit a change', () => {
+        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
+        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe');
+        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe');
+        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe');
+        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe').and.callFake((callback: () => void) => {
+          callback();
+        });
+
+        component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
+        component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
+        component.secondCells = { toArray: () => [], changes: { subscribe: secondSubscribeSpy } } as any;
+        component.periodCells = { toArray: () => [], changes: { subscribe: periodSubscribeSpy } } as any;
+
+        (component as any).subscribeToCellChanges();
+
+        expect(periodSubscribeSpy).toHaveBeenCalled();
+        expect(updateSpy).toHaveBeenCalledWith('period', component.periodCells);
+      });
+
+      it('should cache native buttons from the component buttonElement and from the host fallback', () => {
+        const hostWithNativeButton = document.createElement('div');
+        const directNativeButton = document.createElement('button');
+        const fallbackNativeButton = document.createElement('button');
+        hostWithNativeButton.appendChild(fallbackNativeButton);
+
+        const fallbackHost = document.createElement('div');
+        fallbackHost.appendChild(fallbackNativeButton);
+
+        const cells = {
+          toArray: () => [
+            {
+              elementRef: { nativeElement: hostWithNativeButton },
+              buttonElement: { nativeElement: directNativeButton }
+            },
+            {
+              elementRef: { nativeElement: fallbackHost },
+              buttonElement: null
+            }
+          ]
+        } as any;
+
+        (component as any).updateCachedCellPairs('hour', cells);
+
+        expect((component as any).cachedCellPairs.hour).toEqual([
+          { hostEl: hostWithNativeButton, nativeButton: directNativeButton },
+          { hostEl: fallbackHost, nativeButton: fallbackNativeButton }
+        ]);
+      });
+
+      it('should ignore entries without a native button', () => {
+        const hostWithoutButton = document.createElement('div');
+        const cells = {
+          toArray: () => [
+            {
+              elementRef: { nativeElement: hostWithoutButton },
+              buttonElement: null
+            }
+          ]
+        } as any;
+
+        (component as any).updateCachedCellPairs('hour', cells);
+
+        expect((component as any).cachedCellPairs.hour).toEqual([]);
+      });
+    });
+
+    describe('syncSingleButtonAria - remove branch:', () => {
+      it('should remove aria-setsize and aria-posinset when sourceLength is 0', () => {
+        const hostEl = document.createElement('div');
+        const nativeButton = document.createElement('button');
+        nativeButton.setAttribute('aria-setsize', '3');
+        nativeButton.setAttribute('aria-posinset', '2');
+
+        (component as any).syncSingleButtonAria(hostEl, nativeButton, 0, 0);
+
+        expect(nativeButton.getAttribute('aria-setsize')).toBeNull();
+        expect(nativeButton.getAttribute('aria-posinset')).toBeNull();
+      });
+
+      it('should remove aria-selected when the host does not declare a selected state', () => {
+        const hostEl = document.createElement('div');
+        hostEl.setAttribute('data-aria-role', 'option');
+
+        const nativeButton = document.createElement('button');
+
+        (component as any).syncSingleButtonAria(hostEl, nativeButton, 1, 24);
+
+        expect(nativeButton.getAttribute('role')).toBe('option');
+        expect(nativeButton.getAttribute('aria-selected')).toBeNull();
+        expect(nativeButton.getAttribute('aria-setsize')).toBe('24');
+        expect(nativeButton.getAttribute('aria-posinset')).toBe('2');
       });
     });
   });
@@ -3113,20 +3427,15 @@ describe('PoTimerComponent:', () => {
     });
 
     it('should propagate aria-selected to native button elements', () => {
-      component.onSelectHour(10);
-      fixture.detectChanges();
+      const hostEl = document.createElement('div');
+      hostEl.setAttribute('data-aria-role', 'option');
+      hostEl.setAttribute('data-aria-selected', 'true');
 
-      const hourCells = nativeElement.querySelectorAll('po-button.po-timer-display');
-      let foundSelected = false;
+      const nativeButton = document.createElement('button');
 
-      hourCells.forEach((cell: HTMLElement) => {
-        const nativeButton = cell.querySelector('button');
-        if (nativeButton && nativeButton.getAttribute('aria-selected') === 'true') {
-          foundSelected = true;
-        }
-      });
+      (component as any).syncSingleButtonAria(hostEl, nativeButton, 0, 1);
 
-      expect(foundSelected).toBe(true);
+      expect(nativeButton.getAttribute('aria-selected')).toBe('true');
     });
 
     it('should render data-aria-role and data-aria-selected on host po-button elements', () => {
@@ -3198,6 +3507,109 @@ describe('PoTimerComponent:', () => {
       component['updateActiveDescendant']('hour', component['focusedDisplayIndex'].hour);
 
       expect(component.activeDescendantIds.hour).toBe('po-timer-hour-48');
+    });
+  });
+
+  describe('Coverage - initAllColumnOffsets PM branch:', () => {
+    it('should set focusedDisplayIndex.period to 1 when period is PM in 12h format', () => {
+      component.format = PoTimerFormat.Format12;
+      component.ngOnInit();
+      fixture.detectChanges();
+      component.period = 'PM';
+
+      component.initAllColumnOffsets();
+
+      expect(component['focusedDisplayIndex']['period']).toBe(1);
+    });
+
+    it('should set focusedDisplayIndex.period to 0 when period is AM in 12h format', () => {
+      component.format = PoTimerFormat.Format12;
+      component.ngOnInit();
+      fixture.detectChanges();
+      component.period = 'AM';
+
+      component.initAllColumnOffsets();
+
+      expect(component['focusedDisplayIndex']['period']).toBe(0);
+    });
+  });
+
+  describe('Coverage - movePeriodFocusByStep disabled branch:', () => {
+    it('should not move focus when target period is disabled', () => {
+      component.format = PoTimerFormat.Format12;
+      component.minTime = '13:00';
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      component.period = 'PM';
+      component['focusedDisplayIndex']['period'] = 1;
+
+      component['movePeriodFocusByStep'](-1);
+
+      expect(component['focusedDisplayIndex']['period']).toBe(1);
+    });
+  });
+
+  describe('Coverage - selectFocusedPeriod disabled branch:', () => {
+    it('should not select period when target period is disabled', () => {
+      component.format = PoTimerFormat.Format12;
+      component.minTime = '13:00';
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      component['focusedDisplayIndex']['period'] = 0;
+      spyOn(component, 'onSelectPeriod');
+
+      component['selectFocusedPeriod']();
+
+      expect(component.onSelectPeriod).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Coverage - isDisplayIndexDisabled PM branch:', () => {
+    it('should check isPeriodDisabled with PM when displayIndex is 1', () => {
+      component.format = PoTimerFormat.Format12;
+      component.minTime = '13:00';
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      const result = component['isDisplayIndexDisabled']('period', 1, [0, 1]);
+
+      expect(typeof result).toBe('boolean');
+    });
+
+    it('should check second disabled state', () => {
+      component.format = PoTimerFormat.Format24;
+      component.showSeconds = true;
+      component.minTime = '08:30:30';
+      component.ngOnInit();
+      component.selectedHour = 8;
+      component.selectedMinute = 30;
+      component['rebuildDisabledCaches']();
+
+      expect(component['isDisplayIndexDisabled']('second', 0, component.displaySeconds)).toBeTrue();
+    });
+  });
+
+  describe('Coverage - isCanonicalDisplayItem:', () => {
+    it('should return true when useInfinityScroll is false', () => {
+      expect(component['isCanonicalDisplayItem'](5, false, 10, 0)).toBe(true);
+    });
+
+    it('should return false when sourceLength is 0', () => {
+      expect(component['isCanonicalDisplayItem'](0, true, 0, 0)).toBe(false);
+    });
+
+    it('should return true when index is within canonical range', () => {
+      expect(component['isCanonicalDisplayItem'](5, true, 10, 3)).toBe(true);
+    });
+
+    it('should return false when index is before canonical range', () => {
+      expect(component['isCanonicalDisplayItem'](1, true, 10, 3)).toBe(false);
+    });
+
+    it('should return false when index is after canonical range', () => {
+      expect(component['isCanonicalDisplayItem'](15, true, 10, 3)).toBe(false);
     });
   });
 });

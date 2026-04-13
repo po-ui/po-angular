@@ -79,7 +79,13 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   keydown?: Function;
 
-  /** Define a obrigatoriedade do campo. */
+  /**
+   * Define a obrigatoriedade do campo.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-timepicker`, `po-input`, `po-number`,
+   * `po-decimal`, `po-select`, `po-radio-group`, `po-combo`, `po-lookup`, `po-checkbox-group`, `po-multiselect`,
+   * `po-textarea`, `po-password``, `po-upload`.
+   */
   required?: boolean;
 
   /**
@@ -88,7 +94,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * > Necessário que a propriedade `required` esteja habilitada.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`.
+   * **Componentes compatíveis:** `po-datepicker`, `po-timepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`.
    */
   requiredFieldErrorMessage?: boolean;
 
@@ -98,6 +104,10 @@ export interface PoDynamicFormField extends PoDynamicField {
    * > A indicação não será exibida, se:
    * - O campo for `required`, ou;
    * - Não possuir `help` e `label`.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-timepicker`, `po-input`, `po-number`,
+   * `po-decimal`, `po-select`, `po-radio-group`, `po-combo`, `po-lookup`, `po-checkbox-group`, `po-multiselect`,
+   * `po-textarea`, `po-password`.
    */
   optional?: boolean;
 
@@ -360,14 +370,15 @@ export interface PoDynamicFormField extends PoDynamicField {
    *  - required;
    *
    * > Esta mensagem pode ser exibida quando o campo estiver vazio, caso seja requerido. Em casos de componentes como
-   * `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, é necessário que a propriedade
+   * `po-datepicker`, `po-input`, `po-number`, `po-decimal`, `po-password`, `po-timepicker`, é necessário que a propriedade
    * `requiredFieldErrorMessage` esteja como `true` para que a mensagem seja exibida com o campo vazio. Componentes
    * como `po-datepicker-range`, `po-select`, `po-checkbox-group`, `po-radio-group`, `po-multiselect`, `po-combo`,
    * `po-lookup` e `po-textarea` não é necessário passar a propriedade `requiredFieldErrorMessage`.
    *
    *
    * **Componentes compatíveis:**  `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
-   *  `po-decimal`, `po-input`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`, `po-radio-group`, `po-select`, `po-switch`, `po-textarea`.
+   *  `po-decimal`, `po-input`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`, `po-radio-group`, `po-select`,
+   * `po-switch`, `po-textarea`, `po-timepicker`.
    */
   errorMessage?: string;
 
@@ -382,7 +393,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    * e um tooltip será exibido ao passar o mouse sobre a mensagem para mostrar o conteúdo completo.
    *
    * **Componentes compatíveis:** `po-checkbox-group`, `po-combo`, `po-datepicker`, `po-datepicker-range`,
-   *  `po-decimal`, `po-input`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`, `po-radio-group`, `po-select`, `po-switch`, `po-textarea`.
+   *  `po-decimal`, `po-input`, `po-lookup`, `po-multiselect`, `po-number`, `po-password`, `po-radio-group`, `po-select`,
+   * `po-switch`, `po-textarea`, `po-timepicker`.
    *
    * @default `false`
    */
@@ -426,6 +438,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * Também pode-se utilizar em conjunto com `searchService`, informando uma lista de propriedades que será utilizado
    * para formatação da exibição no campo, por exemplo: ["id", "name"].
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-timepicker`, `po-lookup`.
    */
   format?: string | Array<string>;
 
@@ -479,7 +493,12 @@ export interface PoDynamicFormField extends PoDynamicField {
    */
   order?: number;
 
-  /** Mensagem que será exibida enquanto o campo não estiver preenchido. */
+  /**
+   * Mensagem que será exibida enquanto o campo não estiver preenchido.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-timepicker`, `po-input`, `po-number`,
+   *  `po-decimal`, `po-select`, `po-combo`, `po-lookup`, `po-multiselect`, `po-textarea`, `po-password`.
+   */
   placeholder?: string;
 
   /**
@@ -495,7 +514,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    * ```
    *
    * > Para ver quais linguagens suportadas acesse [`I18n`](documentation/po-i18n)
-   * > A propriedade será repassada para os componentes que suportam a mesma.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-decimal`, `po-timepicker`.
    */
   locale?: string;
 
@@ -508,7 +528,8 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Indica que o campo será somente leitura.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`, `po-select`, `po-textarea`, `po-password`
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-timepicker`, `po-input`, `po-number`,
+   * `po-decimal`, `po-select`, `po-textarea`, `po-password`.
    */
   readonly?: boolean;
 
@@ -521,14 +542,16 @@ export interface PoDynamicFormField extends PoDynamicField {
 
   /** Se verdadeiro, o campo receberá um botão para ser limpo.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`, `po-combo`, `po-lookup`, `po-password`
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`,
+   * `po-combo`, `po-lookup`, `po-password`, `po-timepicker`.
    */
   clean?: boolean;
 
   /**
    * Define a propriedade nativa `autocomplete` do campo como off.
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`, `po-lookup`, `po-password`
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-input`, `po-number`, `po-decimal`,
+   * `po-lookup`, `po-password`, `po-timepicker`.
    */
   noAutocomplete?: boolean;
 
@@ -838,6 +861,10 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * > Não será exibida a indicação se:
    * - Não possuir `p-help` e/ou `p-label`.
+   *
+   * **Componentes compatíveis:** `po-datepicker`, `po-datepicker-range`, `po-timepicker`, `po-input`, `po-number`,
+   * `po-decimal`, `po-select`, `po-radio-group`, `po-combo`, `po-lookup`, `po-checkbox-group`, `po-multiselect`,
+   * `po-textarea`, `po-password`, `po-upload`.
    */
   showRequired?: boolean;
 

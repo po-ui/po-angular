@@ -23,7 +23,7 @@
           [class.po-timepicker-field-disabled]="isDisabled"
           [class.po-timepicker-field-readonly]="readonly"
           [class.po-timepicker-field-focused]="isSegmentFocused"
-          [attr.data-focused-element]="!isDisabled"
+          [class.po-timepicker-field-placeholder]="isPlaceholder"
           [attr.data-inactive-component]="isDisabled || readonly"
           [attr.p-size]="size"
           [attr.data-append-in-body]="appendBox"
@@ -45,6 +45,7 @@
               [attr.aria-valuemin]="is12HourFormat ? 1 : 0"
               [attr.aria-valuemax]="is12HourFormat ? 12 : 23"
               [attr.aria-valuetext]="hourDisplay || null"
+              [attr.data-focused-element]="!isDisabled"
               [attr.name]="name"
               [autocomplete]="autocomplete"
               [disabled]="isDisabled"
@@ -126,9 +127,8 @@
                 type="text"
                 [value]="periodDisplay || 'AM'"
                 [disabled]="isDisabled"
-                [readonly]="true"
                 [attr.tabindex]="isDisabled || readonly ? -1 : 0"
-                role="button"
+                role="spinbutton"
                 [attr.aria-label]="periodDisplay || 'AM'"
                 (keydown)="onPeriodSegmentKeydown($event)"
                 (click)="onPeriodSegmentClick($event)"
@@ -166,10 +166,11 @@
                 [class.po-button-tertiary-danger]="getErrorPattern()"
                 p-icon="ICON_CLOCK"
                 p-kind="tertiary"
+                [p-aria-label]="literals.open"
                 [p-disabled]="isDisabled || readonly"
                 [p-size]="size"
                 (keydown)="onKeyPress($event)"
-                (keydown.tab)="handleCleanKeyboardTab($event)"
+                (keydown.tab)="handleTimepickerButtonKeyboardTab($event)"
                 (p-click)="togglePicker(false)"
               >
               </po-button>
@@ -204,28 +205,30 @@
     }
 
     <ng-template #sharedTimerContent>
-      <div #dialogPicker [class.po-timepicker-popup-timer]="!verifyMobile()" tabindex="-1" [hidden]="!visible">
-        @if (verifyMobile()) {
-          <div class="po-timepicker-timer-overlay"></div>
-        }
-        <po-timer
-          #timer
-          [class.po-timepicker-timer-mobile]="verifyMobile()"
-          [p-format]="format"
-          [p-locale]="locale"
-          [p-show-seconds]="showSeconds"
-          [p-minute-interval]="minuteInterval"
-          [p-second-interval]="secondInterval"
-          [p-min-time]="minTime"
-          [p-max-time]="maxTime"
-          [p-size]="size"
-          [p-value]="timeValue"
-          (p-change)="timerSelected($event)"
-          (p-boundary-tab)="onTimerBoundaryTab($event)"
-          (keydown)="onTimerKeyDown($event)"
-          (focusout)="onTimerFocusOut($event)"
-        ></po-timer>
-      </div>
+      @if (visible) {
+        <div #dialogPicker [class.po-timepicker-popup-timer]="!verifyMobile()" tabindex="-1">
+          @if (verifyMobile()) {
+            <div class="po-timepicker-timer-overlay"></div>
+          }
+          <po-timer
+            #timer
+            [class.po-timepicker-timer-mobile]="verifyMobile()"
+            [p-format]="format"
+            [p-locale]="locale"
+            [p-show-seconds]="showSeconds"
+            [p-minute-interval]="minuteInterval"
+            [p-second-interval]="secondInterval"
+            [p-min-time]="minTime"
+            [p-max-time]="maxTime"
+            [p-size]="size"
+            [p-value]="timeValue"
+            (p-change)="timerSelected($event)"
+            (p-boundary-tab)="onTimerBoundaryTab($event)"
+            (keydown)="onTimerKeyDown($event)"
+            (focusout)="onTimerFocusOut($event)"
+          ></po-timer>
+        </div>
+      }
     </ng-template>
 
     <span class="po-sr-only" aria-live="polite" aria-atomic="true">{{ ariaLiveMessage }}</span>

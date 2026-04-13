@@ -21,6 +21,7 @@ import { DOCUMENT } from '@angular/common';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoButtonComponent } from '../po-button/po-button.component';
 
 import { PoTimerBaseComponent } from './po-timer-base.component';
 import { PoTimerScrollHelper } from './po-timer-scroll.helper';
@@ -76,10 +77,10 @@ export class PoTimerComponent
   implements OnInit, OnChanges, AfterViewInit, AfterViewChecked, OnDestroy
 {
   // Refs dos botoes de cada coluna para gerenciamento de foco programatico.
-  @ViewChildren('hourCell', { read: ElementRef }) hourCells: QueryList<ElementRef>;
-  @ViewChildren('minuteCell', { read: ElementRef }) minuteCells: QueryList<ElementRef>;
-  @ViewChildren('secondCell', { read: ElementRef }) secondCells: QueryList<ElementRef>;
-  @ViewChildren('periodCell', { read: ElementRef }) periodCells: QueryList<ElementRef>;
+  @ViewChildren('hourCell') hourCells: QueryList<PoButtonComponent>;
+  @ViewChildren('minuteCell') minuteCells: QueryList<PoButtonComponent>;
+  @ViewChildren('secondCell') secondCells: QueryList<PoButtonComponent>;
+  @ViewChildren('periodCell') periodCells: QueryList<PoButtonComponent>;
 
   // Containers de recorte (clipping) de cada coluna.
   @ViewChildren('hourItems', { read: ElementRef }) hourItemsRefs: QueryList<ElementRef<HTMLElement>>;
@@ -132,6 +133,15 @@ export class PoTimerComponent
   // Cache de segundos desabilitados para evitar recalculo a cada ciclo de change detection.
   disabledSecondCache: Set<number> = new Set();
 
+  private ariaSyncNeeded = false;
+  private cachedCellPairs: Record<PoTimerColumnType, Array<{ hostEl: HTMLElement; nativeButton: HTMLButtonElement }>> =
+    {
+      hour: [],
+      minute: [],
+      second: [],
+      period: []
+    };
+
   constructor() {
     const languageService = inject(PoLanguageService);
     super(languageService);
@@ -168,6 +178,8 @@ export class PoTimerComponent
   ngAfterViewInit(): void {
     this.hasViewInitialized = true;
     this.currentRenderedSize = this.size;
+    this.updateAllCachedCellPairs();
+    this.subscribeToCellChanges();
 
     // requestAnimationFrame garante que o layout ja foi calculado
     // e scrollHeight dos containers esta disponivel.
@@ -184,7 +196,10 @@ export class PoTimerComponent
       return;
     }
 
-    this.syncAriaToNativeButtons();
+    if (this.ariaSyncNeeded) {
+      this.syncAriaToNativeButtons();
+      this.ariaSyncNeeded = false;
+    }
 
     const nextSize = this.size;
 
@@ -278,6 +293,7 @@ export class PoTimerComponent
     this.focusedDisplayIndex[type] = displayIndex;
     this.normalizeFocusedIndex(type);
     this.updateActiveDescendant(type, this.focusedDisplayIndex[type]);
+    this.markAriaSyncNeeded();
   }
 
   getCellTabIndex(type: PoTimerColumnType, displayIndex: number): number {
@@ -414,7 +430,15 @@ export class PoTimerComponent
     this.initColumnOffset('hour');
     this.initColumnOffset('minute');
     this.initColumnOffset('second');
+
+    // Sincronizar o focusedDisplayIndex do período com o valor atual de this.period
+    // para que o roving tabindex aponte para o botão correto (AM=0, PM=1).
+    if (this.is12HourFormat) {
+      this.focusedDisplayIndex['period'] = this.period === 'PM' ? 1 : 0;
+    }
+
     this.refreshRovingTabIndex();
+    this.syncAriaToNativeButtons();
   }
 
   /**
@@ -591,6 +615,8 @@ export class PoTimerComponent
       this.normalizeFocusedIndex(type);
       this.updateActiveDescendant(type, this.focusedDisplayIndex[type]);
     }
+
+    this.syncAriaToNativeButtons();
   }
 
   private wrapOffset(offset: number, sectionHeight: number): number {
@@ -607,22 +633,16 @@ export class PoTimerComponent
    * no fluxo natural do Tab, mas pode receber foco programatico.
    */
   private focusButtonAt(type: PoTimerColumnType, displayIndex: number): void {
-    const cells = this.getCellsForType(type);
-    if (!cells) {
+    const cellPairs = this.cachedCellPairs[type];
+    if (!cellPairs?.length) {
       return;
     }
 
-    const arr = cells.toArray();
-    if (!arr.length) {
-      return;
-    }
+    const startIndex = this.getFocusableDisplayIndex(type, displayIndex, cellPairs.length);
 
-    const startIndex = this.getFocusableDisplayIndex(type, displayIndex, arr.length);
-
-    for (let offset = 0; offset < arr.length; offset++) {
-      const index = (startIndex + offset) % arr.length;
-      const hostEl = arr[index]?.nativeElement;
-      const nativeButton = hostEl?.querySelector('button') as HTMLButtonElement | null;
+    for (let offset = 0; offset < cellPairs.length; offset++) {
+      const index = (startIndex + offset) % cellPairs.length;
+      const { nativeButton } = cellPairs[index];
 
       if (!nativeButton || nativeButton.disabled || nativeButton.getAttribute('aria-disabled') === 'true') {
         continue;
@@ -713,19 +733,37 @@ export class PoTimerComponent
     return columns;
   }
 
-  private getCellsForType(type: PoTimerColumnType): QueryList<ElementRef> | null {
-    switch (type) {
-      case 'hour':
-        return this.hourCells;
-      case 'minute':
-        return this.minuteCells;
-      case 'second':
-        return this.secondCells;
-      case 'period':
-        return this.periodCells;
-      default:
-        return null;
-    }
+  private updateAllCachedCellPairs(): void {
+    this.updateCachedCellPairs('hour', this.hourCells);
+    this.updateCachedCellPairs('minute', this.minuteCells);
+    this.updateCachedCellPairs('second', this.secondCells);
+    this.updateCachedCellPairs('period', this.periodCells);
+    this.markAriaSyncNeeded();
+  }
+
+  private subscribeToCellChanges(): void {
+    this.hourCells?.changes?.subscribe(() => this.updateCachedCellPairs('hour', this.hourCells));
+    this.minuteCells?.changes?.subscribe(() => this.updateCachedCellPairs('minute', this.minuteCells));
+    this.secondCells?.changes?.subscribe(() => this.updateCachedCellPairs('second', this.secondCells));
+    this.periodCells?.changes?.subscribe(() => this.updateCachedCellPairs('period', this.periodCells));
+  }
+
+  private updateCachedCellPairs(type: PoTimerColumnType, cells: QueryList<PoButtonComponent>): void {
+    const elements = cells?.toArray() ?? [];
+    this.cachedCellPairs[type] = elements
+      .map(component => {
+        const hostEl = component.elementRef.nativeElement as HTMLElement;
+        const nativeButton =
+          (component.buttonElement?.nativeElement as HTMLButtonElement | null) || hostEl?.querySelector('button');
+
+        return nativeButton && hostEl ? { hostEl, nativeButton } : null;
+      })
+      .filter((pair): pair is { hostEl: HTMLElement; nativeButton: HTMLButtonElement } => pair !== null);
+    this.markAriaSyncNeeded();
+  }
+
+  private markAriaSyncNeeded(): void {
+    this.ariaSyncNeeded = true;
   }
 
   /** Atualiza aria-activedescendant para o indice focado no displayArray. */
@@ -770,6 +808,12 @@ export class PoTimerComponent
 
   private movePeriodFocusByStep(stepDirection: -1 | 1): void {
     const nextIndex = (((this.getCurrentFocusedDisplayIndex('period') + stepDirection) % 2) + 2) % 2;
+    const targetPeriod = nextIndex === 0 ? 'AM' : 'PM';
+
+    if (this.isPeriodDisabled(targetPeriod)) {
+      return;
+    }
+
     this.focusedDisplayIndex['period'] = nextIndex;
     this.focusButtonAt('period', nextIndex);
     this.updateActiveDescendant('period', nextIndex);
@@ -777,7 +821,13 @@ export class PoTimerComponent
 
   private selectFocusedPeriod(): void {
     const focusedPeriodIndex = this.getCurrentFocusedDisplayIndex('period');
-    this.onSelectPeriod(focusedPeriodIndex === 0 ? 'AM' : 'PM');
+    const targetPeriod = focusedPeriodIndex === 0 ? 'AM' : 'PM';
+
+    if (this.isPeriodDisabled(targetPeriod)) {
+      return;
+    }
+
+    this.onSelectPeriod(targetPeriod);
   }
 
   private getFocusableDisplayIndex(type: PoTimerColumnType, displayIndex: number, displayLength: number): number {
@@ -1089,6 +1139,8 @@ export class PoTimerComponent
         return this.isMinuteDisabled(value);
       case 'second':
         return this.isSecondDisabled(value);
+      case 'period':
+        return this.isPeriodDisabled(displayIndex === 0 ? 'AM' : 'PM');
       default:
         return false;
     }
@@ -1111,6 +1163,7 @@ export class PoTimerComponent
     this.displayHours = this.repeatArray(this.hours);
     this.displayMinutes = this.repeatArray(this.minutes);
     this.displaySeconds = this.repeatArray(this.seconds);
+    this.markAriaSyncNeeded();
   }
 
   /** Reconstroi os caches de minutos e segundos desabilitados. */
@@ -1183,51 +1236,48 @@ export class PoTimerComponent
    * ele substitui o item equivalente na secao fixa para manter exatamente
    * sourceLength itens com role="option".
    *
-   * Duplicatas recebem aria-hidden="true" e role="none" no <button> nativo
-   * (nao apenas no host <po-button>), pois NVDA ignora aria-hidden em
-   * elementos customizados e conta <button> filhos de role="listbox".
+   * Todos os botoes nativos recebem os atributos ARIA corretos
+   * (role, aria-selected, aria-setsize, aria-posinset) propagados
+   * dos data-attributes do host <po-button>.
+   *
+   * Nao usa `inert` — o infinity scroll repete o array 3x e marcar
+   * secoes como inert causava botoes desabilitados durante transicoes
+   * de scroll. Em vez disso, duplicatas recebem role="none" e
+   * aria-hidden="true" no <button> nativo para que NVDA nao as conte,
+   * mas permanecem clicaveis visualmente.
+   *
+   * A secao canonica e determinada pela secao do item focado,
+   * garantindo que exatamente sourceLength itens tenham role="option".
    */
   private syncAriaToNativeButtons(): void {
     const columnTypes: Array<PoTimerColumnType> = ['hour', 'minute', 'second'];
 
     for (const type of columnTypes) {
-      const cells = this.getCellsForType(type);
-      if (!cells) {
+      const cellPairs = this.cachedCellPairs[type];
+      if (!cellPairs?.length) {
         continue;
       }
 
       const sourceLength = this.getSourceArray(type).length;
       const useInfinityScroll = sourceLength >= VISIBLE_ITEMS_PER_COLUMN;
-      const arr = cells.toArray();
 
       const focusedIdx = this.focusedDisplayIndex[type];
-      const focusedSectionStart =
+      const canonicalStart =
         useInfinityScroll && sourceLength > 0 ? Math.floor(focusedIdx / sourceLength) * sourceLength : 0;
 
-      for (let i = 0; i < arr.length; i++) {
-        const hostEl = arr[i].nativeElement;
-        const nativeButton = hostEl?.querySelector('button') as HTMLButtonElement | null;
+      for (let i = 0; i < cellPairs.length; i++) {
+        const { hostEl, nativeButton } = cellPairs[i];
 
-        if (!nativeButton) {
+        if (!hostEl || !nativeButton) {
           continue;
         }
 
-        const isCanonical = this.isCanonicalDisplayItem(
-          i,
-          useInfinityScroll,
-          sourceLength,
-          focusedIdx,
-          focusedSectionStart
-        );
+        const isCanonical = this.isCanonicalDisplayItem(i, useInfinityScroll, sourceLength, canonicalStart);
 
         if (isCanonical) {
-          hostEl.removeAttribute('inert');
-          hostEl.removeAttribute('aria-hidden');
           nativeButton.removeAttribute('aria-hidden');
           this.syncSingleButtonAria(hostEl, nativeButton, i, sourceLength);
         } else {
-          hostEl.setAttribute('inert', '');
-          hostEl.setAttribute('aria-hidden', 'true');
           nativeButton.setAttribute('role', 'none');
           nativeButton.setAttribute('aria-hidden', 'true');
           nativeButton.removeAttribute('aria-setsize');
@@ -1242,14 +1292,14 @@ export class PoTimerComponent
    * Determina se um item do displayArray e canonico para fins de ARIA.
    *
    * - Sem infinity scroll: todos sao canonicos.
-   * - Com infinity scroll: a secao que contem o item focado e canonica.
+   * - Com infinity scroll: apenas itens na secao canonica (determinada
+   *   pelo offset visivel) recebem role="option".
    */
   private isCanonicalDisplayItem(
     index: number,
     useInfinityScroll: boolean,
     sourceLength: number,
-    focusedIdx: number,
-    focusedSectionStart: number
+    canonicalStart: number
   ): boolean {
     if (!useInfinityScroll) {
       return true;
@@ -1259,8 +1309,7 @@ export class PoTimerComponent
       return false;
     }
 
-    const sectionStart = Math.floor(index / sourceLength) * sourceLength;
-    return sectionStart === focusedSectionStart || index === focusedIdx;
+    return index >= canonicalStart && index < canonicalStart + sourceLength;
   }
 
   /**
