@@ -697,7 +697,10 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
   }
 
   validate(c: AbstractControl): { [key: string]: any } {
-    this.errorPattern = this.isGeneratedErrorPattern(this.errorPattern) ? '' : this.errorPattern;
+    // Limpar errorPattern se valor atual é válido (não tem erro parcial ou erro anterior)
+    if (!this.hasValidationValue() && this.isValidTimeString(this.getValidationValue(c.value))) {
+      this.errorPattern = this.isGeneratedErrorPattern(this.errorPattern) ? '' : this.errorPattern;
+    }
 
     if (!this.hasValidatorRequired && this.showErrorMessageRequired && c.hasValidator(Validators.required)) {
       this.hasValidatorRequired = true;

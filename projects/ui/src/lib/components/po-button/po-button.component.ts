@@ -31,6 +31,10 @@ import { PoButtonBaseComponent } from './po-button-base.component';
 export class PoButtonComponent extends PoButtonBaseComponent {
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
+  constructor(public elementRef: ElementRef) {
+    super();
+  }
+
   onBlur(): void {
     this.blur.emit();
   }

@@ -372,6 +372,24 @@ export class PoTimerBaseComponent implements ControlValueAccessor {
     return false;
   }
 
+  /**
+   * Verifica se um período (AM/PM) está completamente desabilitado.
+   * Retorna `true` quando todas as horas do período estão fora do range min/max.
+   */
+  protected isPeriodDisabled(targetPeriod: string): boolean {
+    if (!this.is12HourFormat || (!this._minTime && !this._maxTime)) {
+      return false;
+    }
+
+    const currentPeriod = this.period;
+    this.period = targetPeriod;
+
+    const allDisabled = this.hours.every(hour => this.isHourDisabled(hour));
+
+    this.period = currentPeriod;
+    return allDisabled;
+  }
+
   /** Verifica se um minuto está desabilitado com base nos limites min/max e hora selecionada. */
   protected isMinuteDisabled(minute: number): boolean {
     if (!this._minTime && !this._maxTime) {
@@ -485,6 +503,10 @@ export class PoTimerBaseComponent implements ControlValueAccessor {
   /** Gera o valor ISO 8601 com base na seleção atual. */
   protected buildTimeValue(): string {
     if (this.selectedHour == null || this.selectedMinute == null) {
+      return '';
+    }
+
+    if (this._showSeconds && this.selectedSecond == null) {
       return '';
     }
 
