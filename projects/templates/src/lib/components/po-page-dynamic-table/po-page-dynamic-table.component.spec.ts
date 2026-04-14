@@ -2340,6 +2340,15 @@ describe('PoPageDynamicTableComponent:', () => {
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
     });
 
+    it('onChangeFixedColumns: should call `changeFixedColumns.emit`', () => {
+      spyOn(component.changeFixedColumns, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onChangeFixedColumns(fakeColumns);
+
+      expect(component.changeFixedColumns.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
     it('onColumnRestoreManager: should call `columnRestoreManager.emit`', () => {
       spyOn(component.columnRestoreManager, 'emit');
       const fakeColumns = ['name', 'age'];

@@ -28,9 +28,6 @@ class PoTableComponent extends PoTableBaseComponent {
 }
 
 describe('PoTableBaseComponent:', () => {
-  let dateService: PoDateService;
-  let languageService: PoLanguageService;
-  let tableService: PoTableService;
   let component: PoTableComponent;
   let actions: Array<PoTableAction>;
   let columns: Array<PoTableColumn>;
@@ -48,10 +45,14 @@ describe('PoTableBaseComponent:', () => {
       ]
     }).compileComponents();
 
-    dateService = new PoDateService();
-    languageService = new PoLanguageService();
-    tableService = TestBed.inject(PoTableService);
-    component = new PoTableComponent(dateService, languageService, tableService);
+    component = TestBed.runInInjectionContext(
+      () =>
+        new PoTableComponent(
+          TestBed.inject(PoDateService),
+          TestBed.inject(PoLanguageService),
+          TestBed.inject(PoTableService)
+        )
+    );
 
     actions = [
       {

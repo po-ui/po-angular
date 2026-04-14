@@ -724,6 +724,10 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     this.changeVisibleColumns.emit(value);
   }
 
+  onChangeFixedColumns(value: Array<string>) {
+    this.changeFixedColumns.emit(value);
+  }
+
   onColumnRestoreManager(value: Array<string>) {
     this.columnRestoreManager.emit(value);
   }

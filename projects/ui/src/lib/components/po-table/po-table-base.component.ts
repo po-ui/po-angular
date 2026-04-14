@@ -7,7 +7,8 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  output
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
@@ -470,6 +471,29 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao alterar o estado de fixação de uma coluna no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as propriedades das colunas fixas.
+   * Por exemplo: ["name", "age"].
+   *
+   * > Incompatível com `p-hide-action-fixed-columns`. Quando esta propriedade estiver ativa, o evento não será disparado.
+   *
+   * @example
+   *
+   * ```html
+   * <po-table
+   *   [p-columns]="columns"
+   *   [p-items]="items"
+   *   (p-change-fixed-columns)="onFixedColumnsChange($event)">
+   * </po-table>
+   * ```
+   */
+  changeFixedColumns = output<Array<string>>({ alias: 'p-change-fixed-columns' });
 
   /**
    * @optional

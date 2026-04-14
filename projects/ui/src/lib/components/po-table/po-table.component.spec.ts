@@ -1579,6 +1579,25 @@ describe('PoTableComponent:', () => {
       expect(component.changeVisibleColumns.emit).toHaveBeenCalledWith(fakeColumns);
     });
 
+    it('onChangeFixedColumns: should call `changeFixedColumns.emit`', () => {
+      spyOn(component.changeFixedColumns, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.onChangeFixedColumns(fakeColumns);
+
+      expect(component.changeFixedColumns.emit).toHaveBeenCalledWith(fakeColumns);
+    });
+
+    it('onChangeFixedColumns: should not call `changeFixedColumns.emit` when hideActionFixedColumns is true', () => {
+      spyOn(component.changeFixedColumns, 'emit');
+      component.hideActionFixedColumns = true;
+      const fakeColumns = ['name', 'age'];
+
+      component.onChangeFixedColumns(fakeColumns);
+
+      expect(component.changeFixedColumns.emit).not.toHaveBeenCalled();
+    });
+
     it('onColumnRestoreManager: should call `columnRestoreManager.emit`', () => {
       spyOn(component.columnRestoreManager, 'emit');
       const fakeColumns = ['name', 'age'];

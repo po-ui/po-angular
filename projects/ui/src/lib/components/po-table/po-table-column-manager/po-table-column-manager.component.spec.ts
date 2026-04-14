@@ -691,6 +691,29 @@ describe('PoTableColumnManagerComponent:', () => {
       expect(component.initialColumns.emit).toHaveBeenCalled();
     });
 
+    it(`restore: should emit 'changeFixedColumns' with empty array to signal fixed columns were cleared`, () => {
+      spyOn(component, <any>'getVisibleColumns').and.returnValue([]);
+      spyOn(component, <any>'checkChanges');
+      spyOn(component.initialColumns, 'emit');
+      spyOn(component.changeFixedColumns, 'emit');
+
+      component['restore']();
+
+      expect(component.changeFixedColumns.emit).toHaveBeenCalledWith([]);
+    });
+
+    it(`restore: should not emit 'changeFixedColumns' when hideActionFixedColumns is true`, () => {
+      spyOn(component, <any>'getVisibleColumns').and.returnValue([]);
+      spyOn(component, <any>'checkChanges');
+      spyOn(component.initialColumns, 'emit');
+      spyOn(component.changeFixedColumns, 'emit');
+      component.hideActionFixedColumns = true;
+
+      component['restore']();
+
+      expect(component.changeFixedColumns.emit).not.toHaveBeenCalled();
+    });
+
     describe('disableColumnsOptions:', () => {
       it('disableColumnsOptions: should return disable columns that exceeds the maximum value of columns', () => {
         component.maxColumns = 2;
@@ -1233,6 +1256,56 @@ describe('PoTableColumnManagerComponent:', () => {
         ]);
 
         expect(component.visibleColumnsChange.emit).toHaveBeenCalled();
+      });
+
+      it(`should emit changeFixedColumns with fixed column properties when a column is fixed`, () => {
+        component.columns = [
+          { property: 'Name', visible: true },
+          { property: 'City', visible: true }
+        ];
+        spyOn(component.changeFixedColumns, 'emit');
+
+        component.emitColumnFixed({ property: 'City', value: 'City', visible: true, fixed: true });
+
+        expect(component.changeFixedColumns.emit).toHaveBeenCalledWith(['City']);
+      });
+
+      it(`should emit changeFixedColumns with remaining fixed columns when a column is unfixed`, () => {
+        component.columns = [
+          { property: 'Name', visible: true, fixed: true },
+          { property: 'Age', visible: true, fixed: true },
+          { property: 'City', visible: true, fixed: true }
+        ];
+        spyOn(component.changeFixedColumns, 'emit');
+
+        component.emitColumnFixed({ property: 'Age', value: 'Age', visible: true, fixed: false });
+
+        expect(component.changeFixedColumns.emit).toHaveBeenCalledWith(['Name', 'City']);
+      });
+
+      it(`should emit changeFixedColumns with empty array when no columns are fixed`, () => {
+        component.columns = [
+          { property: 'Name', visible: true },
+          { property: 'City', visible: true }
+        ];
+        spyOn(component.changeFixedColumns, 'emit');
+
+        component.emitColumnFixed(null);
+
+        expect(component.changeFixedColumns.emit).toHaveBeenCalledWith([]);
+      });
+
+      it(`should not emit changeFixedColumns when hideActionFixedColumns is true`, () => {
+        component.columns = [
+          { property: 'Name', visible: true },
+          { property: 'City', visible: true }
+        ];
+        component.hideActionFixedColumns = true;
+        spyOn(component.changeFixedColumns, 'emit');
+
+        component.emitColumnFixed({ property: 'City', value: 'City', visible: true, fixed: true });
+
+        expect(component.changeFixedColumns.emit).not.toHaveBeenCalled();
       });
     });
 

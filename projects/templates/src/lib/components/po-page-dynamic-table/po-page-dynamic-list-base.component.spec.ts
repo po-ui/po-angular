@@ -1,10 +1,17 @@
+import { TestBed } from '@angular/core/testing';
+
 import { PoPageDynamicListBaseComponent } from './po-page-dynamic-list-base.component';
 
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 describe('PoPageDynamicListBaseComponent:', () => {
-  const component = new PoPageDynamicListBaseComponent();
+  let component: PoPageDynamicListBaseComponent;
   const cityOptions = [{ label: 'São Paulo', value: 'sp' }];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({}).compileComponents();
+    component = TestBed.runInInjectionContext(() => new PoPageDynamicListBaseComponent());
+  });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
@@ -86,6 +93,15 @@ describe('PoPageDynamicListBaseComponent:', () => {
 
       expect(component.columns).toEqual(columns);
       expect(component.columns).not.toBe(columns);
+    });
+
+    it('changeFixedColumns: should be an output signal with alias `p-change-fixed-columns`', () => {
+      spyOn(component.changeFixedColumns, 'emit');
+      const fakeColumns = ['name', 'age'];
+
+      component.changeFixedColumns.emit(fakeColumns);
+
+      expect(component.changeFixedColumns.emit).toHaveBeenCalledWith(fakeColumns);
     });
   });
 

@@ -9,7 +9,8 @@ import {
   Renderer2,
   SimpleChange,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  output
 } from '@angular/core';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -66,6 +67,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
   // Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
   // O po-table envia como parâmetro um array de string com as colunas visíveis atualizadas. Por exemplo: ["idCard", "name", "hireStatus", "age"].
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
+  // Evento disparado ao alterar o estado de fixação de uma coluna no gerenciador de colunas.
+  // O po-table envia como parâmetro um array de string com as propriedades das colunas fixas. Por exemplo: ["name", "age"].
+  changeFixedColumns = output<Array<string>>({ alias: 'p-change-fixed-columns' });
 
   @Output('p-initial-columns') initialColumns = new EventEmitter<Array<string>>();
 
@@ -166,6 +171,9 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     const defaultColumns = this.getVisibleColumns(this.defaultColumns);
     this.initialColumns.emit(this.getVisibleColumns(this.colunsDefault));
     this.checkChanges(defaultColumns, this.restoreDefaultEvent);
+    if (!this.hideActionFixedColumns) {
+      this.changeFixedColumns.emit([]);
+    }
   }
 
   changePosition({ option, direction }) {
@@ -202,6 +210,10 @@ export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {
     }
 
     this.visibleColumnsChange.emit(newColumn);
+    if (!this.hideActionFixedColumns) {
+      const fixedColumns = newColumn.filter(col => col.fixed === true).map(col => col.property);
+      this.changeFixedColumns.emit(fixedColumns);
+    }
   }
 
   private changePositionColumn(array: Array<PoTableColumn>, index: number, direction: Direction) {

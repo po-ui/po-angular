@@ -573,6 +573,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeVisibleColumns.emit(columns);
   }
 
+  onChangeFixedColumns(columns: Array<string>) {
+    if (!this.hideActionFixedColumns) {
+      this.changeFixedColumns.emit(columns);
+    }
+  }
+
   onColumnRestoreManager(value: Array<string>) {
     this.columnRestoreManager.emit(value);
   }

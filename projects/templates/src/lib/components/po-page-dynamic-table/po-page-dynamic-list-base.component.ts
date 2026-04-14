@@ -1,4 +1,4 @@
-import { Input, Directive, Output, EventEmitter } from '@angular/core';
+import { Input, Directive, Output, EventEmitter, output } from '@angular/core';
 
 import { InputBoolean, PoBreadcrumb, PoTableColumnSort } from '@po-ui/ng-components';
 
@@ -102,6 +102,19 @@ export class PoPageDynamicListBaseComponent {
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
   @Output('p-change-visible-columns') changeVisibleColumns = new EventEmitter<Array<string>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   * Evento disparado ao alterar o estado de fixação de uma coluna no gerenciador de colunas.
+   *
+   * O componente envia como parâmetro um array de string com as propriedades das colunas fixas.
+   * Por exemplo: ["name", "age"].
+   *
+   * > Incompatível com `p-hide-action-fixed-columns`. Quando esta propriedade estiver ativa, o evento não será disparado.
+   */
+  changeFixedColumns = output<Array<string>>({ alias: 'p-change-fixed-columns' });
 
   /**
    * @optional
