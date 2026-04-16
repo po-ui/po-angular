@@ -330,5 +330,98 @@ describe('PoCalendarBaseComponent:', () => {
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
+
+    describe('p-year-range:', () => {
+      it('should set yearRange with valid positive value', () => {
+        component.yearRange = 100;
+        expect(component.yearRange).toBe(100);
+      });
+
+      it('should default to 150 when value is 0', () => {
+        component.yearRange = 0;
+        expect(component.yearRange).toBe(150);
+      });
+
+      it('should default to 150 when value is negative', () => {
+        component.yearRange = -10;
+        expect(component.yearRange).toBe(150);
+      });
+
+      it('should default to 150 when value is null', () => {
+        component.yearRange = null;
+        expect(component.yearRange).toBe(150);
+      });
+
+      it('should default to 150 when value is undefined', () => {
+        component.yearRange = undefined;
+        expect(component.yearRange).toBe(150);
+      });
+    });
+
+    describe('isMonthYear:', () => {
+      it('should return true when mode is MonthYear', () => {
+        component['_mode'] = PoCalendarMode.MonthYear;
+        expect(component.isMonthYear).toBeTrue();
+      });
+
+      it('should return false when mode is Range', () => {
+        component['_mode'] = PoCalendarMode.Range;
+        expect(component.isMonthYear).toBeFalse();
+      });
+
+      it('should return false when mode is undefined', () => {
+        component['_mode'] = undefined;
+        expect(component.isMonthYear).toBeFalse();
+      });
+    });
+
+    describe('isYearOnly:', () => {
+      it('should return true when mode is Year', () => {
+        component['_mode'] = PoCalendarMode.Year;
+        expect(component.isYearOnly).toBeTrue();
+      });
+
+      it('should return false when mode is MonthYear', () => {
+        component['_mode'] = PoCalendarMode.MonthYear;
+        expect(component.isYearOnly).toBeFalse();
+      });
+
+      it('should return false when mode is Range', () => {
+        component['_mode'] = PoCalendarMode.Range;
+        expect(component.isYearOnly).toBeFalse();
+      });
+    });
+
+    describe('p-range-presets:', () => {
+      it('should accept boolean true', () => {
+        component.rangePresets = true;
+        expect(component.rangePresets).toBeTrue();
+      });
+
+      it('should accept string "true"', () => {
+        component.rangePresets = 'true';
+        expect(component.rangePresets).toBeTrue();
+      });
+
+      it('should accept empty string as true', () => {
+        component.rangePresets = '';
+        expect(component.rangePresets).toBeTrue();
+      });
+
+      it('should accept boolean false', () => {
+        component.rangePresets = false;
+        expect(component.rangePresets).toBeFalse();
+      });
+
+      it('should accept array of strings', () => {
+        component.rangePresets = ['today', '7days'];
+        expect(component.rangePresets).toEqual(['today', '7days']);
+      });
+
+      it('should set to false for invalid values', () => {
+        component.rangePresets = 'invalid' as any;
+        expect(component.rangePresets).toBeFalse();
+      });
+    });
   });
 });

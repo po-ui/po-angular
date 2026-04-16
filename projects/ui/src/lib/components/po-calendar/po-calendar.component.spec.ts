@@ -1155,6 +1155,190 @@ describe('PoCalendarComponent:', () => {
 
       expect(component.selectedPresetLabel).toBeNull();
     });
+
+    describe('onMonthYearSelect:', () => {
+      it('should set value and emit change for monthYear mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onMonthYearSelect({ month: 5, year: 2025 });
+
+        expect(component.selectedMonthValue).toBe(5);
+        expect(component.selectedYearValue).toBe(2025);
+        expect(component.value).toBe('06/2025');
+        expect(component['updateModel']).toHaveBeenCalledWith('06/2025');
+        expect(component.change.emit).toHaveBeenCalledWith('06/2025');
+      });
+
+      it('should set value and emit change for yearOnly mode', () => {
+        component.mode = PoCalendarMode.Year;
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onMonthYearSelect({ year: 2025 });
+
+        expect(component.selectedYearValue).toBe(2025);
+        expect(component.value).toBe('2025');
+        expect(component['updateModel']).toHaveBeenCalledWith('2025');
+        expect(component.change.emit).toHaveBeenCalledWith('2025');
+      });
+
+      it('should format single digit months with leading zero', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        spyOn(component.change, 'emit');
+        spyOn(component, <any>'updateModel');
+
+        component.onMonthYearSelect({ month: 0, year: 2025 });
+
+        expect(component.value).toBe('01/2025');
+      });
+
+      it('should not set value when mode is not monthYear or yearOnly', () => {
+        component.mode = PoCalendarMode.Range;
+        spyOn(component.change, 'emit');
+
+        component.onMonthYearSelect({ month: 5, year: 2025 });
+
+        expect(component.change.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onMonthYearClose:', () => {
+      it('should emit close event', () => {
+        spyOn(component.close, 'emit');
+
+        component.onMonthYearClose();
+
+        expect(component.close.emit).toHaveBeenCalled();
+      });
+    });
+
+    describe('writeValue:', () => {
+      it('should call writeMonthYearValue when isMonthYear and value is string', () => {
+        component.mode = PoCalendarMode.MonthYear;
+
+        component.writeValue('06/2025');
+
+        expect(component.selectedMonthValue).toBe(5);
+        expect(component.selectedYearValue).toBe(2025);
+        expect(component.value).toBe('06/2025');
+      });
+
+      it('should call writeYearValue when isYearOnly and value is string', () => {
+        component.mode = PoCalendarMode.Year;
+
+        component.writeValue('2025');
+
+        expect(component.selectedYearValue).toBe(2025);
+        expect(component.value).toBe('2025');
+      });
+
+      it('should call writeYearValue when isYearOnly and value is number', () => {
+        component.mode = PoCalendarMode.Year;
+
+        component.writeValue(2025);
+
+        expect(component.selectedYearValue).toBe(2025);
+        expect(component.value).toBe('2025');
+      });
+
+      it('should set value to null and clear month/year when value is falsy', () => {
+        component.selectedMonthValue = 5;
+        component.selectedYearValue = 2025;
+
+        component.writeValue(null);
+
+        expect(component.value).toBeNull();
+        expect(component.selectedMonthValue).toBeNull();
+        expect(component.selectedYearValue).toBeNull();
+      });
+
+      it('should not call setActivateDate when isMonthYear', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        spyOn(component, <any>'setActivateDate');
+
+        component.writeValue('06/2025');
+
+        expect(component['setActivateDate']).not.toHaveBeenCalled();
+      });
+
+      it('should not call setActivateDate when isYearOnly', () => {
+        component.mode = PoCalendarMode.Year;
+        spyOn(component, <any>'setActivateDate');
+
+        component.writeValue('2025');
+
+        expect(component['setActivateDate']).not.toHaveBeenCalled();
+      });
+
+      it('should handle writeMonthYearValue with invalid format', () => {
+        component.mode = PoCalendarMode.MonthYear;
+
+        component.writeValue('invalid');
+
+        expect(component.selectedMonthValue).toBeNull();
+        expect(component.selectedYearValue).toBeNull();
+      });
+    });
+
+    describe('clampDate:', () => {
+      it('should return date when within range', () => {
+        const date = new Date(2025, 5, 15);
+        const min = new Date(2025, 0, 1);
+        const max = new Date(2025, 11, 31);
+
+        const result = component['clampDate'](date, min, max);
+        expect(result.getTime()).toBe(date.getTime());
+      });
+
+      it('should clamp to min when date is before min', () => {
+        const date = new Date(2024, 11, 31);
+        const min = new Date(2025, 0, 1);
+
+        const result = component['clampDate'](date, min);
+        expect(result.getTime()).toBe(min.getTime());
+      });
+
+      it('should clamp to max when date is after max', () => {
+        const date = new Date(2026, 0, 1);
+        const max = new Date(2025, 11, 31);
+
+        const result = component['clampDate'](date, undefined, max);
+        expect(result.getTime()).toBe(max.getTime());
+      });
+
+      it('should return date when no min/max', () => {
+        const date = new Date(2025, 5, 15);
+
+        const result = component['clampDate'](date);
+        expect(result.getTime()).toBe(date.getTime());
+      });
+    });
+
+    describe('normalizeDate:', () => {
+      it('should strip time from date', () => {
+        const date = new Date(2025, 5, 15, 14, 30, 45);
+
+        const result = component['normalizeDate'](date);
+
+        expect(result.getHours()).toBe(0);
+        expect(result.getMinutes()).toBe(0);
+        expect(result.getSeconds()).toBe(0);
+        expect(result.getFullYear()).toBe(2025);
+        expect(result.getMonth()).toBe(5);
+        expect(result.getDate()).toBe(15);
+      });
+    });
+
+    it('ngOnInit: should call setActivateDate and set displayToClean', () => {
+      spyOn(component, <any>'setActivateDate');
+
+      component.ngOnInit();
+
+      expect(component['setActivateDate']).toHaveBeenCalled();
+      expect(component.displayToClean).toBeDefined();
+    });
   });
 
   describe('Templates:', () => {

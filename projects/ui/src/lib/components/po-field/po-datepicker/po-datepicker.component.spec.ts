@@ -13,6 +13,7 @@ import { PoDatepickerModule } from './po-datepicker.module';
 import { of, Subscription } from 'rxjs';
 import { PoKeyCodeEnum } from '../../../enums/po-key-code.enum';
 import { PoButtonComponent } from '../../po-button';
+import { PoCalendarMode } from '../../po-calendar/po-calendar-mode.enum';
 
 function keyboardEvents(event: string, keyCode: number) {
   const eventKeyBoard = document.createEvent('KeyboardEvent');
@@ -1792,6 +1793,106 @@ describe('PoDatepickerComponent:', () => {
       });
     });
 
+    describe('isMonthYearOrYearMode:', () => {
+      it('should return true when calendarMode is MonthYear', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        expect(component['isMonthYearOrYearMode']()).toBeTrue();
+      });
+
+      it('should return true when calendarMode is Year', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        expect(component['isMonthYearOrYearMode']()).toBeTrue();
+      });
+
+      it('should return false when calendarMode is undefined', () => {
+        component.calendarMode = undefined;
+        expect(component['isMonthYearOrYearMode']()).toBeFalse();
+      });
+
+      it('should return false when calendarMode is Range', () => {
+        component.calendarMode = PoCalendarMode.Range;
+        expect(component['isMonthYearOrYearMode']()).toBeFalse();
+      });
+    });
+
+    describe('focusMonthYearPicker:', () => {
+      it('should call focusFirstMonth for MonthYear mode', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        const mockPicker = {
+          focusFirstMonth: jasmine.createSpy('focusFirstMonth'),
+          focusFirstYear: jasmine.createSpy('focusFirstYear'),
+          scrollToSelectedYear: jasmine.createSpy('scrollToSelectedYear')
+        };
+        component.calendar = { monthYearPicker: mockPicker } as any;
+
+        component['focusMonthYearPicker']();
+
+        expect(mockPicker.focusFirstMonth).toHaveBeenCalled();
+        expect(mockPicker.focusFirstYear).not.toHaveBeenCalled();
+        expect(mockPicker.scrollToSelectedYear).toHaveBeenCalled();
+      });
+
+      it('should call focusFirstYear for Year mode', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        const mockPicker = {
+          focusFirstMonth: jasmine.createSpy('focusFirstMonth'),
+          focusFirstYear: jasmine.createSpy('focusFirstYear'),
+          scrollToSelectedYear: jasmine.createSpy('scrollToSelectedYear')
+        };
+        component.calendar = { monthYearPicker: mockPicker } as any;
+
+        component['focusMonthYearPicker']();
+
+        expect(mockPicker.focusFirstYear).toHaveBeenCalled();
+        expect(mockPicker.focusFirstMonth).not.toHaveBeenCalled();
+        expect(mockPicker.scrollToSelectedYear).toHaveBeenCalled();
+      });
+
+      it('should do nothing when calendar.monthYearPicker is null', () => {
+        component.calendar = { monthYearPicker: null } as any;
+
+        expect(() => component['focusMonthYearPicker']()).not.toThrow();
+      });
+
+      it('should do nothing when calendar is null', () => {
+        component.calendar = null;
+
+        expect(() => component['focusMonthYearPicker']()).not.toThrow();
+      });
+    });
+
+    describe('focusCalendar with monthYear/year mode:', () => {
+      it('should call focusMonthYearPicker when in MonthYear mode', () => {
+        const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.dialogPicker = {
+          nativeElement: { querySelector: () => null }
+        } as ElementRef;
+
+        spyOn(component as any, 'focusMonthYearPicker');
+
+        component['focusCalendar'](event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component['focusMonthYearPicker']).toHaveBeenCalled();
+      });
+
+      it('should call focusMonthYearPicker when in Year mode', () => {
+        const event = { preventDefault: jasmine.createSpy(), shiftKey: false } as unknown as KeyboardEvent;
+        component.calendarMode = PoCalendarMode.Year;
+        component.dialogPicker = {
+          nativeElement: { querySelector: () => null }
+        } as ElementRef;
+
+        spyOn(component as any, 'focusMonthYearPicker');
+
+        component['focusCalendar'](event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component['focusMonthYearPicker']).toHaveBeenCalled();
+      });
+    });
+
     describe('onCalendarKeyDown:', () => {
       it('should do nothing when calendar is not visible', () => {
         component.visible = false;
@@ -1835,6 +1936,46 @@ describe('PoDatepickerComponent:', () => {
         expect(event.stopPropagation).toHaveBeenCalled();
         expect(component.iconDatepicker.buttonElement.nativeElement.focus).toHaveBeenCalled();
         expect(component['closeCalendar']).toHaveBeenCalledWith(false);
+      });
+
+      it('should return early when in MonthYear mode and key is not Escape', () => {
+        component.visible = true;
+        component.calendarMode = PoCalendarMode.MonthYear;
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        spyOn(component as any, 'closeCalendar');
+        spyOn(component as any, 'isFocusOnFirstCombo');
+
+        component.onCalendarKeyDown(event);
+
+        expect(component['isFocusOnFirstCombo']).not.toHaveBeenCalled();
+        expect(component['closeCalendar']).not.toHaveBeenCalled();
+      });
+
+      it('should return early when in Year mode and key is not Escape', () => {
+        component.visible = true;
+        component.calendarMode = PoCalendarMode.Year;
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        spyOn(component as any, 'closeCalendar');
+        spyOn(component as any, 'isFocusOnFirstCombo');
+
+        component.onCalendarKeyDown(event);
+
+        expect(component['isFocusOnFirstCombo']).not.toHaveBeenCalled();
+        expect(component['closeCalendar']).not.toHaveBeenCalled();
       });
 
       it('should close calendar on Shift+Tab when focus is on first combo', () => {
@@ -1895,6 +2036,34 @@ describe('PoDatepickerComponent:', () => {
         component.onCalendarKeyDown(event);
 
         expect(component['closeCalendar']).not.toHaveBeenCalled();
+      });
+
+      it('should focus first combo on Shift+Tab when focus is on last combo', () => {
+        component.visible = true;
+
+        const mockFirstCombo = { focus: jasmine.createSpy('focus') };
+
+        const event = {
+          key: 'Tab',
+          shiftKey: true,
+          preventDefault: jasmine.createSpy(),
+          stopPropagation: jasmine.createSpy()
+        } as any;
+
+        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
+        spyOn(component as any, 'isFocusOnLastCombo').and.returnValue(true);
+
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: jasmine.createSpy().and.returnValue(mockFirstCombo)
+          }
+        } as any;
+
+        component.onCalendarKeyDown(event);
+
+        expect(mockFirstCombo.focus).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
       });
     });
 

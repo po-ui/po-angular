@@ -55,6 +55,11 @@ describe('PoCalendarMonthYearComponent:', () => {
       component.locale = 'pt';
       expect(component['setupMonths']).toHaveBeenCalled();
     });
+
+    it('locale: getter should return the current locale value', () => {
+      component.locale = 'en';
+      expect(component.locale).toBe('en');
+    });
   });
 
   describe('Methods:', () => {
@@ -827,6 +832,244 @@ describe('PoCalendarMonthYearComponent:', () => {
 
         expect(mockSelectedEl.scrollIntoView).toHaveBeenCalledWith({ block: 'center', behavior: 'smooth' });
       }));
+
+      it('should scroll to current year when no selected element', fakeAsync(() => {
+        const currentYear = new Date().getFullYear();
+        const currentYearIndex = component.displayYears.indexOf(currentYear);
+        const mockCurrentYearEl = { scrollIntoView: jasmine.createSpy('scrollIntoView') };
+        const mockItems = [];
+        for (let i = 0; i <= currentYearIndex; i++) {
+          mockItems.push(i === currentYearIndex ? mockCurrentYearEl : {});
+        }
+
+        const mockContainer = {
+          querySelector: jasmine.createSpy('querySelector').and.returnValue(null),
+          querySelectorAll: jasmine.createSpy('querySelectorAll').and.returnValue(mockItems)
+        };
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockContainer);
+
+        component.scrollToSelectedYear();
+        tick(200);
+
+        expect(mockCurrentYearEl.scrollIntoView).toHaveBeenCalledWith({ block: 'center', behavior: 'smooth' });
+      }));
+
+      it('should do nothing when container is null', fakeAsync(() => {
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(null);
+
+        component.scrollToSelectedYear();
+        tick(200);
+      }));
+
+      it('should do nothing when no selected element and currentYear not in display', fakeAsync(() => {
+        component.minDate = new Date(2060, 0, 1);
+        component.maxDate = new Date(2065, 11, 31);
+        component['setupYears']();
+
+        const mockContainer = {
+          querySelector: jasmine.createSpy('querySelector').and.returnValue(null),
+          querySelectorAll: jasmine.createSpy('querySelectorAll').and.returnValue([])
+        };
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockContainer);
+
+        component.scrollToSelectedYear();
+        tick(200);
+      }));
+    });
+
+    describe('focusMonthButton:', () => {
+      it('should call focus on the button at the given index', fakeAsync(() => {
+        const mockBtn = { focus: jasmine.createSpy('focus') };
+        const mockPoButton = { querySelector: jasmine.createSpy('querySelector').and.returnValue(mockBtn) };
+        const mockButtons = [mockPoButton];
+
+        spyOn(component['elementRef'].nativeElement, 'querySelectorAll').and.returnValue(mockButtons);
+
+        component['focusMonthButton'](0);
+        tick(10);
+
+        expect(mockBtn.focus).toHaveBeenCalled();
+      }));
+
+      it('should handle case when button element not found', fakeAsync(() => {
+        spyOn(component['elementRef'].nativeElement, 'querySelectorAll').and.returnValue([]);
+
+        component['focusMonthButton'](5);
+        tick(10);
+      }));
+
+      it('should handle case when inner button is null', fakeAsync(() => {
+        const mockPoButton = { querySelector: jasmine.createSpy('querySelector').and.returnValue(null) };
+        spyOn(component['elementRef'].nativeElement, 'querySelectorAll').and.returnValue([mockPoButton]);
+
+        component['focusMonthButton'](0);
+        tick(10);
+      }));
+    });
+
+    describe('focusYearButton:', () => {
+      it('should call focus and scrollIntoView on the year button', fakeAsync(() => {
+        const mockBtn = {
+          focus: jasmine.createSpy('focus'),
+          scrollIntoView: jasmine.createSpy('scrollIntoView')
+        };
+        const mockPoButton = { querySelector: jasmine.createSpy('querySelector').and.returnValue(mockBtn) };
+        const mockContainer = {
+          querySelectorAll: jasmine.createSpy('querySelectorAll').and.returnValue([mockPoButton])
+        };
+
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockContainer);
+
+        component['focusYearButton'](0);
+        tick(10);
+
+        expect(mockBtn.focus).toHaveBeenCalled();
+        expect(mockBtn.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', behavior: 'smooth' });
+      }));
+
+      it('should handle case when container is null', fakeAsync(() => {
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(null);
+
+        component['focusYearButton'](0);
+        tick(10);
+      }));
+
+      it('should handle case when buttons array is empty', fakeAsync(() => {
+        const mockContainer = {
+          querySelectorAll: jasmine.createSpy('querySelectorAll').and.returnValue([])
+        };
+
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockContainer);
+
+        component['focusYearButton'](5);
+        tick(10);
+      }));
+
+      it('should handle case when inner button is null', fakeAsync(() => {
+        const mockPoButton = { querySelector: jasmine.createSpy('querySelector').and.returnValue(null) };
+        const mockContainer = {
+          querySelectorAll: jasmine.createSpy('querySelectorAll').and.returnValue([mockPoButton])
+        };
+
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockContainer);
+
+        component['focusYearButton'](0);
+        tick(10);
+      }));
+    });
+
+    describe('setupMonths:', () => {
+      it('should populate displayMonths without setting language when locale is not set', () => {
+        component['_locale'] = undefined;
+        component['setupMonths']();
+        expect(component.displayMonths.length).toBe(12);
+      });
+    });
+
+    describe('setupYears with string minDate/maxDate:', () => {
+      it('should handle string minDate by converting to Date', () => {
+        const currentYear = new Date().getFullYear();
+        component.minDate = new Date(currentYear - 5, 0, 1);
+        component['setupYears']();
+        expect(component.displayYears[0]).toBe(currentYear - 5);
+      });
+
+      it('should handle string maxDate by converting to Date', () => {
+        const currentYear = new Date().getFullYear();
+        component.maxDate = new Date(currentYear + 3, 11, 31);
+        component['setupYears']();
+        expect(component.displayYears[component.displayYears.length - 1]).toBe(currentYear + 3);
+      });
+
+      it('should handle non-Date minDate by converting via new Date()', () => {
+        const currentYear = new Date().getFullYear();
+        component.minDate = `${currentYear - 3}-01-01` as any;
+        component['setupYears']();
+        expect(component.displayYears[0]).toBe(currentYear - 3);
+      });
+
+      it('should handle non-Date maxDate by converting via new Date()', () => {
+        const currentYear = new Date().getFullYear();
+        component.maxDate = `${currentYear + 2}-12-31` as any;
+        component['setupYears']();
+        expect(component.displayYears[component.displayYears.length - 1]).toBe(currentYear + 2);
+      });
+    });
+
+    describe('emitSelection edge cases:', () => {
+      it('should not emit in year mode when selectedYear is null', () => {
+        component.mode = 'year';
+        component.selectedYear = null;
+        spyOn(component.select, 'emit');
+        component['emitSelection']();
+        expect(component.select.emit).not.toHaveBeenCalled();
+      });
+
+      it('should not emit in year mode when selectedYear is undefined', () => {
+        component.mode = 'year';
+        component.selectedYear = undefined;
+        spyOn(component.select, 'emit');
+        component['emitSelection']();
+        expect(component.select.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('navigateMonth edge cases:', () => {
+      it('should skip all disabled months and not navigate if all are disabled', () => {
+        spyOn(component, 'isMonthDisabled').and.returnValue(true);
+        spyOn(component as any, 'focusMonthButton');
+        component.focusedMonthIndex = 5;
+
+        component['navigateMonth'](5, 1);
+
+        expect(component['focusMonthButton']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('navigateYear edge cases:', () => {
+      it('should skip all disabled years and not navigate if all are disabled', () => {
+        spyOn(component, 'isYearDisabled').and.returnValue(true);
+        spyOn(component as any, 'focusYearButton');
+        component.focusedYearIndex = 5;
+
+        component['navigateYear'](5, 1);
+
+        expect(component['focusYearButton']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onYearKeydown edge cases:', () => {
+      it('should not select year on Space when year is disabled', () => {
+        spyOn(component, 'isYearDisabled').and.returnValue(true);
+        spyOn(component, 'onSelectYear');
+        const event = new KeyboardEvent('keydown', { key: ' ' });
+
+        component.onYearKeydown(event, 5);
+
+        expect(component.onSelectYear).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('setInitialFocus edge cases:', () => {
+      it('should handle selectedMonth as negative number', () => {
+        component.selectedMonth = -1;
+        component['setInitialFocus']();
+        expect(component.focusedMonthIndex).toBe(0);
+      });
+
+      it('should handle selectedMonth as 12 (out of range)', () => {
+        component.selectedMonth = 12;
+        component['setInitialFocus']();
+        expect(component.focusedMonthIndex).toBe(0);
+      });
+
+      it('should handle selectedYear not in displayYears but currentYear is', () => {
+        const currentYear = new Date().getFullYear();
+        component.selectedYear = 1800;
+        component['setInitialFocus']();
+        const expectedIndex = component.displayYears.indexOf(currentYear);
+        expect(component.focusedYearIndex).toBe(expectedIndex);
+      });
     });
   });
 });
