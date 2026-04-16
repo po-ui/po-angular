@@ -89,6 +89,7 @@
           [attr.aria-selected]="i === selectedIndexMonth"
           [p-tabindex]="i === focusedIndex ? 0 : -1"
           [p-size]="size"
+          [p-disabled]="isMonthDisabled(i)"
           (p-click)="selectMonth(i, $event, true)"
           (keydown)="onKeydownMonth($event, i)"
         ></po-button>
@@ -110,6 +111,7 @@
           [attr.aria-selected]="i === selectedIndexYear"
           [p-tabindex]="i === focusedIndex ? 0 : -1"
           [p-size]="size"
+          [p-disabled]="isYearDisabled(year)"
           (p-click)="selectYear(i, $event, true, year)"
           (keydown)="onKeydownYear($event, i)"
         >

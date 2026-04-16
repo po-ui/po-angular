@@ -257,6 +257,41 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     }
   }
 
+  isMonthDisabled(monthIndex: number): boolean {
+    const month = monthIndex + 1;
+    const year = this.selectedYear || new Date().getFullYear();
+
+    if (this.minDate) {
+      const minYear = this.minDate.getFullYear();
+      const minMonth = this.minDate.getMonth() + 1;
+      if (year < minYear || (year === minYear && month < minMonth)) {
+        return true;
+      }
+    }
+
+    if (this.maxDate) {
+      const maxYear = this.maxDate.getFullYear();
+      const maxMonth = this.maxDate.getMonth() + 1;
+      if (year > maxYear || (year === maxYear && month > maxMonth)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  isYearDisabled(year: number): boolean {
+    if (this.minDate && year < this.minDate.getFullYear()) {
+      return true;
+    }
+
+    if (this.maxDate && year > this.maxDate.getFullYear()) {
+      return true;
+    }
+
+    return false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.minDate || changes.maxDate) {
       this.setActivateDate();
