@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.10.0](https://github.com/po-ui/po-angular/compare/v21.9.0...v21.10.0) (2026-04-16)
+
+
+### Features
+
+* **po-table:** adiciona output p-change-fixed-columns ([e0ac5a4](https://github.com/po-ui/po-angular/commit/e0ac5a432a1ebba0eb7c064c753ac2f1f4c055a9))
+* **tag:** adiciona suporte à nova paleta caption tag colors ([3255df0](https://github.com/po-ui/po-angular/commit/3255df087d95122d3521b30995a5fda480e90431))
+
+
+### Bug Fixes
+
+* **components:** aparta estilos ofensores ao CSP ([d809550](https://github.com/po-ui/po-angular/commit/d80955055f9d0322c22f9c166f56279d0429e2a3))
+
 ## [21.9.0](https://github.com/po-ui/po-angular/compare/v21.8.0...v21.9.0) (2026-04-09)
 
 
