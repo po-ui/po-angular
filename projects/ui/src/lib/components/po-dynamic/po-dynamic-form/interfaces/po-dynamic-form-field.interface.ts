@@ -27,6 +27,7 @@ import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums
 import { Observable } from 'rxjs';
 import { PoDynamicField } from '../../po-dynamic-field.interface';
 import { PoHelperOptions } from '../../../po-helper';
+import { PoCalendarRangePreset } from '../../../po-calendar/interfaces/po-calendar-range-preset.interface';
 
 /**
  * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
@@ -1016,4 +1017,60 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Compatível com todos os componentes**
    */
   compactLabel?: boolean;
+
+  /**
+   * Define o modo de seleção do `po-datepicker`.
+   *
+   * Valores aceitos:
+   * - `'month-year'`: exibe seleção de mês e ano (formato `MM/YYYY`)
+   * - `'year'`: exibe seleção apenas de ano (formato `YYYY`)
+   *
+   * **Componente compatível:** `po-datepicker`
+   */
+  mode?: 'month-year' | 'year';
+
+  /**
+   * Define o limite de anos exibidos na lista de anos do `po-datepicker` nos modos `month-year` e `year`.
+   *
+   * @default `150`
+   *
+   * **Componente compatível:** `po-datepicker`
+   */
+  yearRangeLimit?: number;
+
+  /**
+   * Habilita a exibição dos presets padrão de intervalos de data no painel lateral do calendário.
+   *
+   * Aceita os seguintes valores:
+   * - `true`: exibe todos os presets padrão.
+   * - `false`: não exibe os presets padrão.
+   * - `Array<string>`: exibe apenas os presets padrão cujos labels estejam no array informado.
+   *
+   * **Componente compatível:** `po-datepicker-range`
+   *
+   * @default `false`
+   */
+  rangePresets?: boolean | Array<string>;
+
+  /**
+   * Lista de presets customizados de intervalos de data exibidos no painel lateral do calendário.
+   *
+   * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
+   *
+   * **Componente compatível:** `po-datepicker-range`
+   */
+  rangePresetOptions?: Array<PoCalendarRangePreset>;
+
+  /**
+   * Define a ordenação dos presets na lista.
+   *
+   * Valores aceitos:
+   * - `'asc'`: ordenação crescente (passado → futuro)
+   * - `'desc'`: ordenação decrescente (futuro → passado)
+   *
+   * **Componente compatível:** `po-datepicker-range`
+   *
+   * @default `'asc'`
+   */
+  rangePresetsOrder?: 'asc' | 'desc';
 }
