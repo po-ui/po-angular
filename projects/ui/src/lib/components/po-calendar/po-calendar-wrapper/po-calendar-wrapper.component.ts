@@ -944,8 +944,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     return year;
   }
 
-  trackByMonth(index: number, month: string): number {
-    return index;
+  trackByMonth(index: number, month: string) {
+    return month;
   }
 
   trackByDay(index: number, day: Date): string {

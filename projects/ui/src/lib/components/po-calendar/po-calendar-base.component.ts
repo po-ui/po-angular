@@ -243,6 +243,17 @@ export class PoCalendarBaseComponent {
     return this.mode === PoCalendarMode.Range;
   }
 
+  get isMonthYear() {
+    return this.mode === PoCalendarMode.MonthYear;
+  }
+
+  get isYear() {
+    return this.mode === PoCalendarMode.Year;
+  }
+
+  // @Todo - DOCUMENTAR - Prop interna
+  @Input('p-year-range-limit') yearRangeLimit?: number = 150;
+
   // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
 

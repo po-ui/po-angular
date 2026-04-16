@@ -1,4 +1,13 @@
-@if (isRange) {
+@if (isMonthYear) {
+  <div class="po-calendar po-calendar-month-year">
+    <ng-container *ngTemplateOutlet="calendarMonth"></ng-container>
+    <ng-container *ngTemplateOutlet="calendarYear"></ng-container>
+  </div>
+} @else if (isYear) {
+  <div class="po-calendar po-calendar-year">
+    <ng-container *ngTemplateOutlet="calendarYear"></ng-container>
+  </div>
+} @else if (isRange) {
   <div
     class="po-calendar"
     [class.po-calendar-with-presets]="effectivePresets().length > 0"
@@ -65,4 +74,47 @@
     [p-size]="size"
   >
   </po-calendar-wrapper>
+</ng-template>
+
+<ng-template #calendarMonth>
+  <ul class="po-calendar-months">
+    @for (month of displayMonths; track month; let i = $index) {
+      <li class="po-calendar-month-item">
+        <po-button
+          #monthOption
+          [class.po-button-selected]="i === selectedIndexMonth"
+          role="option"
+          p-kind="tertiary"
+          p-label="{{ month }}"
+          [attr.aria-selected]="i === selectedIndexMonth"
+          [p-tabindex]="i === focusedIndex ? 0 : -1"
+          [p-size]="size"
+          (p-click)="selectMonth(i, $event, true)"
+          (keydown)="onKeydownMonth($event, i)"
+        ></po-button>
+      </li>
+    }
+  </ul>
+</ng-template>
+
+<ng-template #calendarYear>
+  <ul class="po-calendar-years">
+    @for (year of displayYears; track year; let i = $index) {
+      <li class="po-calendar-year-item">
+        <po-button
+          #yearOption
+          [class.po-button-selected]="i === selectedIndexYear"
+          role="option"
+          p-kind="tertiary"
+          p-label="{{ year }}"
+          [attr.aria-selected]="i === selectedIndexYear"
+          [p-tabindex]="i === focusedIndex ? 0 : -1"
+          [p-size]="size"
+          (p-click)="selectYear(i, $event, true, year)"
+          (keydown)="onKeydownYear($event, i)"
+        >
+        </po-button>
+      </li>
+    }
+  </ul>
 </ng-template>

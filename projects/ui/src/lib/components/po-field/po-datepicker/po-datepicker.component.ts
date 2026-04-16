@@ -273,8 +273,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (!focusInput && this.clean && this.inputEl.nativeElement.value) {
       setTimeout(() => {
         this.iconDatepicker.focus();
-      });
+      }, 0);
+      return;
     }
+
+    requestAnimationFrame(() => {
+      this.iconDatepicker?.buttonElement?.nativeElement?.focus();
+    });
   }
 
   dateSelected(event?: string) {
@@ -290,7 +295,16 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.focus();
     }
 
-    this.inputEl.nativeElement.value = this.formatToDate(this.date) || '';
+    if (this.mode === 'month-year' || this.mode === 'year') {
+      this.inputEl.nativeElement.value = event || '';
+      this.callOnChange(event);
+      this.controlChangeEmitter();
+      this.togglePicker();
+      return;
+    } else {
+      this.inputEl.nativeElement.value = this.formatToDate(this.date) || '';
+    }
+
     this.controlModel(this.date);
     this.controlChangeEmitter();
     this.togglePicker();
@@ -399,8 +413,20 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
   }
 
-  formatToDate(value: Date) {
+  formatToDate(value: any) {
     if (!value) {
+      return undefined;
+    }
+
+    if (this.mode === 'month-year' && typeof value === 'string') {
+      return value;
+    }
+
+    if (this.mode === 'year' && (typeof value === 'string' || typeof value === 'number')) {
+      return `${value}`;
+    }
+
+    if (!(value instanceof Date)) {
       return undefined;
     }
 
@@ -680,9 +706,30 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
 
     const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
+    const monthOption = this.dialogPicker.nativeElement.querySelector('.po-calendar-months .po-button');
+    const yearOption = this.dialogPicker.nativeElement.querySelector('.po-calendar-years .po-button');
+    const monthOptionSelected = this.dialogPicker.nativeElement.querySelector(
+      '.po-calendar-months .po-button-selected .po-button'
+    );
+    const yearOptionSelected = this.dialogPicker.nativeElement.querySelector(
+      '.po-calendar-years .po-button-selected .po-button'
+    );
+
     if (firstCombo) {
       event.preventDefault();
       firstCombo.focus();
+    } else if (monthOptionSelected) {
+      event.preventDefault();
+      monthOptionSelected.focus();
+    } else if (monthOption) {
+      event.preventDefault();
+      monthOption.focus();
+    } else if (yearOptionSelected) {
+      event.preventDefault();
+      yearOptionSelected.focus();
+    } else if (yearOption) {
+      event.preventDefault();
+      yearOption.focus();
     } else {
       this.togglePicker(false);
     }

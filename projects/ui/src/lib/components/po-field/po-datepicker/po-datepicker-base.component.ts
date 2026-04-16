@@ -112,6 +112,13 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
+  //@Todo - Documentar externo
+  @Input('p-mode') mode?: 'month-year' | 'year' = undefined;
+
+  //@Todo - Documentar externo
+  //Citar valor default 150 anos para mais e para menos a partir do ano atual, totalizando um range de 300 anos.
+  @Input('p-year-range-limit') yearRangeLimit?: number = 150;
+
   /**
    *
    * @deprecated v23.x.x use `p-helper`
@@ -619,7 +626,23 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   ) {}
 
   set date(value: any) {
-    this._date = typeof value === 'string' ? convertIsoToDate(value, false, false) : value;
+    if (!value) {
+      this._date = value;
+      return;
+    }
+
+    if (typeof value === 'string') {
+      if (this.mode === 'month-year') {
+        const [month, year] = value.split('/').map(Number);
+        this._date = new Date(year, month - 1, 1);
+      } else if (this.mode === 'year') {
+        this._date = new Date(Number(value), 0, 1);
+      } else {
+        this._date = convertIsoToDate(value, false, false);
+      }
+    } else {
+      this._date = value;
+    }
   }
 
   get date() {
