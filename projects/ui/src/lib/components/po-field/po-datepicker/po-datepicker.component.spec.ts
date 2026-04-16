@@ -2175,6 +2175,429 @@ describe('PoDatepickerComponent:', () => {
     });
   });
 
+  describe('MonthYear/Year input support:', () => {
+    describe('onKeyup with monthYear mode:', () => {
+      let mockEvent: any;
+
+      beforeEach(() => {
+        mockEvent = { target: component.inputEl.nativeElement };
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.locale = 'pt';
+        component.ngOnInit();
+        spyOn(component['objMask'], 'keyup');
+        spyOn(component, 'callOnChange');
+      });
+
+      it('should call handleMonthYearKeyup and parse valid mm/yyyy input', () => {
+        component['objMask'].valueToModel = '12/2025';
+        component.inputEl.nativeElement.value = '12/2025';
+
+        component.onKeyup(mockEvent);
+
+        expect(component['objMask'].keyup).toHaveBeenCalledWith(mockEvent);
+        expect(component.callOnChange).toHaveBeenCalledWith('12/2025');
+      });
+
+      it('should call callOnChange with empty string when input length < 7', () => {
+        component['objMask'].valueToModel = '12/20';
+        component.inputEl.nativeElement.value = '12/20';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+
+      it('should call callOnChange with Data inválida for invalid month', () => {
+        component['objMask'].valueToModel = '13/2025';
+        component.inputEl.nativeElement.value = '13/2025';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should not call callOnChange when valueToModel is null', () => {
+        component['objMask'].valueToModel = null;
+        component.inputEl.nativeElement.value = '';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onKeyup with year mode:', () => {
+      let mockEvent: any;
+
+      beforeEach(() => {
+        mockEvent = { target: component.inputEl.nativeElement };
+        component.calendarMode = PoCalendarMode.Year;
+        component.locale = 'pt';
+        component.ngOnInit();
+        spyOn(component['objMask'], 'keyup');
+        spyOn(component, 'callOnChange');
+      });
+
+      it('should parse valid yyyy input', () => {
+        component['objMask'].valueToModel = '2025';
+        component.inputEl.nativeElement.value = '2025';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).toHaveBeenCalledWith('2025');
+      });
+
+      it('should call callOnChange with empty string when input length < 4', () => {
+        component['objMask'].valueToModel = '202';
+        component.inputEl.nativeElement.value = '202';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+
+      it('should call callOnChange with Data inválida for year 0', () => {
+        component['objMask'].valueToModel = '0000';
+        component.inputEl.nativeElement.value = '0000';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should not call callOnChange when valueToModel is null', () => {
+        component['objMask'].valueToModel = null;
+        component.inputEl.nativeElement.value = '';
+
+        component.onKeyup(mockEvent);
+
+        expect(component.callOnChange).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('eventOnBlur with monthYear mode:', () => {
+      beforeEach(() => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.locale = 'pt';
+        component.ngOnInit();
+        component['onTouchedModel'] = () => {};
+        spyOn(component, 'callOnChange');
+        spyOn(component.onblur, 'emit');
+      });
+
+      it('should parse valid mm/yyyy on blur', () => {
+        component.inputEl.nativeElement.value = '06/2025';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('06/2025');
+      });
+
+      it('should call callOnChange with Data inválida for invalid month on blur', () => {
+        component.inputEl.nativeElement.value = '13/2025';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should call callOnChange with empty string when input is empty', () => {
+        component.inputEl.nativeElement.value = '';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+    });
+
+    describe('eventOnBlur with year mode:', () => {
+      beforeEach(() => {
+        component.calendarMode = PoCalendarMode.Year;
+        component.locale = 'pt';
+        component.ngOnInit();
+        component['onTouchedModel'] = () => {};
+        spyOn(component, 'callOnChange');
+        spyOn(component.onblur, 'emit');
+      });
+
+      it('should parse valid yyyy on blur', () => {
+        component.inputEl.nativeElement.value = '2025';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('2025');
+      });
+
+      it('should call callOnChange with Data inválida for incomplete year on blur', () => {
+        component.inputEl.nativeElement.value = '20';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should call callOnChange with empty string when input is empty', () => {
+        component.inputEl.nativeElement.value = '';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+    });
+
+    describe('dateSelected with monthYear/year mode:', () => {
+      it('should set input value and call callOnChange for monthYear mode', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component['onTouchedModel'] = () => {};
+        spyOn(component, <any>'verifyMobile').and.returnValue(null);
+        spyOn(component, 'callOnChange');
+        spyOn(component, 'togglePicker');
+
+        component.dateSelected('06/2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('06/2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('06/2025');
+        expect(component.togglePicker).toHaveBeenCalled();
+      });
+
+      it('should set input value and call callOnChange for year mode', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        component['onTouchedModel'] = () => {};
+        spyOn(component, <any>'verifyMobile').and.returnValue(null);
+        spyOn(component, 'callOnChange');
+        spyOn(component, 'togglePicker');
+
+        component.dateSelected('2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('2025');
+        expect(component.togglePicker).toHaveBeenCalled();
+      });
+
+      it('should handle empty event in monthYear mode', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        spyOn(component, 'clear');
+        spyOn(component.onchange, 'emit');
+
+        component.dateSelected('');
+
+        expect(component.clear).toHaveBeenCalled();
+        expect(component.onchange.emit).toHaveBeenCalledWith(undefined);
+      });
+    });
+
+    describe('formatToDate with monthYear/year mode:', () => {
+      it('should return string value for monthYear mode', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        expect(component.formatToDate('06/2025')).toBe('06/2025');
+      });
+
+      it('should return string value for year mode with string', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        expect(component.formatToDate('2025')).toBe('2025');
+      });
+
+      it('should return string value for year mode with number', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        expect(component.formatToDate(2025 as any)).toBe('2025');
+      });
+
+      it('should return undefined for null/undefined value', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        expect(component.formatToDate(null)).toBeUndefined();
+        expect(component.formatToDate(undefined)).toBeUndefined();
+      });
+
+      it('should return undefined for non-Date, non-string value in default mode', () => {
+        component.calendarMode = undefined;
+        expect(component.formatToDate(12345 as any)).toBeUndefined();
+      });
+    });
+
+    describe('writeValue with monthYear mode:', () => {
+      it('should write monthYear value to input', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.locale = 'pt';
+        component.ngOnInit();
+
+        component.writeValue('06/2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('06/2025');
+      });
+
+      it('should clear input for invalid monthYear value', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.locale = 'pt';
+        component.ngOnInit();
+        component.inputEl.nativeElement.value = 'something';
+
+        component.writeValue('invalid');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should clear input for out-of-range month', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.locale = 'pt';
+        component.ngOnInit();
+
+        component.writeValue('13/2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+    });
+
+    describe('writeValue with year mode:', () => {
+      it('should write year value to input', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        component.locale = 'pt';
+        component.ngOnInit();
+
+        component.writeValue('2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('2025');
+      });
+
+      it('should write numeric year value to input', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        component.locale = 'pt';
+        component.ngOnInit();
+
+        component.writeValue(2025);
+
+        expect(component.inputEl.nativeElement.value).toBe('2025');
+      });
+
+      it('should clear input for invalid year value', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        component.locale = 'pt';
+        component.ngOnInit();
+
+        component.writeValue('abc');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+    });
+
+    describe('parseMonthYearInput:', () => {
+      it('should parse valid mm/yyyy input', () => {
+        const result = component['parseMonthYearInput']('06/2025', '/');
+        expect(result).toBe('06/2025');
+      });
+
+      it('should parse single-digit month', () => {
+        const result = component['parseMonthYearInput']('1/2025', '/');
+        expect(result).toBe('01/2025');
+      });
+
+      it('should return null for month > 12', () => {
+        const result = component['parseMonthYearInput']('13/2025', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for month < 1', () => {
+        const result = component['parseMonthYearInput']('00/2025', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for year <= 0', () => {
+        const result = component['parseMonthYearInput']('01/0000', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for invalid format', () => {
+        const result = component['parseMonthYearInput']('abc', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for NaN values', () => {
+        const result = component['parseMonthYearInput']('ab/cdef', '/');
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('syncCalendarMonthYear:', () => {
+      it('should sync calendar with valid monthYear value', () => {
+        const mockCalendar = {
+          monthYearPicker: {
+            selectedMonth: null,
+            selectedYear: null
+          }
+        };
+        component.calendar = mockCalendar as any;
+
+        component['syncCalendarMonthYear']('06/2025');
+
+        expect(mockCalendar.monthYearPicker.selectedMonth).toBe(5);
+        expect(mockCalendar.monthYearPicker.selectedYear).toBe(2025);
+      });
+
+      it('should not fail when calendar is null', () => {
+        component.calendar = null as any;
+        expect(() => component['syncCalendarMonthYear']('06/2025')).not.toThrow();
+      });
+
+      it('should not fail when monthYearPicker is null', () => {
+        component.calendar = {} as any;
+        expect(() => component['syncCalendarMonthYear']('06/2025')).not.toThrow();
+      });
+    });
+
+    describe('syncCalendarYear:', () => {
+      it('should sync calendar with valid year value', () => {
+        const mockCalendar = {
+          monthYearPicker: {
+            selectedYear: null
+          }
+        };
+        component.calendar = mockCalendar as any;
+
+        component['syncCalendarYear'](2025);
+
+        expect(mockCalendar.monthYearPicker.selectedYear).toBe(2025);
+      });
+
+      it('should not fail when calendar is null', () => {
+        component.calendar = null as any;
+        expect(() => component['syncCalendarYear'](2025)).not.toThrow();
+      });
+    });
+
+    describe('handleMonthYearBlur edge cases:', () => {
+      it('should handle value with wrong separator', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        component.locale = 'pt';
+        component.ngOnInit();
+        component['onTouchedModel'] = () => {};
+        spyOn(component, 'callOnChange');
+        spyOn(component.onblur, 'emit');
+
+        component.inputEl.nativeElement.value = '06-2025';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+    });
+
+    describe('handleYearBlur edge cases:', () => {
+      it('should handle year 0000 as invalid', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        component.locale = 'pt';
+        component.ngOnInit();
+        component['onTouchedModel'] = () => {};
+        spyOn(component, 'callOnChange');
+        spyOn(component.onblur, 'emit');
+
+        component.inputEl.nativeElement.value = '0000';
+
+        component.eventOnBlur({ target: { value: '' } });
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+    });
+  });
+
   describe('Templates:', () => {
     it('should contain the `po-datepicker-popup-calendar` class if `verifyMobile` is false', () => {
       spyOn(component, <any>'verifyMobile').and.returnValue(false);

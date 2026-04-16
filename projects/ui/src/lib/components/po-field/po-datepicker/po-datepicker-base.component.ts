@@ -640,6 +640,14 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Input('p-year-range') yearRange: number = 150;
 
+  get isMonthYearMode(): boolean {
+    return this.calendarMode === PoCalendarMode.MonthYear;
+  }
+
+  get isYearMode(): boolean {
+    return this.calendarMode === PoCalendarMode.Year;
+  }
+
   constructor(
     protected languageService: PoLanguageService,
     protected cd: ChangeDetectorRef
@@ -657,9 +665,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.offset = new Date().getTimezoneOffset();
     this.formatTimezoneAndHour(this.offset);
     // Classe de máscara
-    this.objMask = this.buildMask(
-      replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
-    );
+    if (this.isMonthYearMode) {
+      this.objMask = this.buildMonthYearMask();
+    } else if (this.isYearMode) {
+      this.objMask = this.buildYearMask();
+    } else {
+      this.objMask = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -817,6 +831,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     mask = mask.replace(/YYYY/g, '9999');
 
     return new PoMask(mask, true);
+  }
+
+  protected buildMonthYearMask() {
+    const separator = this.languageService.getDateSeparator(this.locale);
+    return new PoMask(`99${separator}9999`, true);
+  }
+
+  protected buildYearMask() {
+    return new PoMask('9999', true);
   }
 
   formatTimezoneAndHour(offset: number) {
