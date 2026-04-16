@@ -9,7 +9,9 @@ import {
   OnInit,
   signal,
   SimpleChanges,
-  inject
+  inject,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -70,11 +72,21 @@ const providers = [
   standalone: false
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges, DoCheck {
+  @ViewChildren('monthOption') monthOptions: QueryList<HTMLButtonElement>;
+  @ViewChildren('yearOption') yearOptions: QueryList<HTMLButtonElement>;
+
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly poCalendarLangService = inject(PoCalendarLangService);
 
   hoverValue: Date;
   displayToClean: string;
+  displayMonths: Array<string> = [];
+  displayYears: Array<number> = [];
+  focusedIndex: number = 0;
+  selectedIndexMonth: number | null = null;
+  selectedIndexYear: number | null = null;
+  selectedMonth: number | null;
+  selectedYear: number | null;
 
   private readonly _isRange = signal(false);
   private readonly _rangePresetsValue = signal<boolean | Array<string>>(false);
@@ -139,6 +151,110 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   ngOnInit() {
     this.setActivateDate();
     this.displayToClean = this.poCalendarLangService.getToCleanLabel();
+
+    if (this.mode === 'month-year' || this.mode === 'year') {
+      this.displayMonths = this.poCalendarLangService.getMonthsArray();
+      const currentYear = new Date().getFullYear();
+      this.displayYears = Array.from(
+        { length: this.yearRangeLimit * 2 + 1 },
+        (_, i) => currentYear - this.yearRangeLimit + i
+      );
+    }
+  }
+
+  private getMonthOptions(): Array<HTMLButtonElement> {
+    return this.monthOptions.toArray();
+  }
+
+  private getYearOptions(): Array<HTMLButtonElement> {
+    return this.yearOptions.toArray();
+  }
+
+  selectMonth(index: number, event?: KeyboardEvent, selected = false): void {
+    const monthOptions = this.getMonthOptions();
+
+    if (event?.key === 'Enter' || event?.code === 'Space' || selected) {
+      this.selectedIndexMonth = index;
+    }
+
+    if (monthOptions[index]) {
+      this.focusedIndex = index;
+      monthOptions[index].focus();
+    }
+
+    this.selectedMonth = index + 1;
+
+    this.updateModel(this.selectedMonth);
+  }
+
+  selectYear(index: number, event?: KeyboardEvent, selected = false, year?): void {
+    const yearOptions = this.getYearOptions();
+
+    if (event?.key === 'Enter' || event?.code === 'Space' || selected) {
+      this.selectedIndexYear = index;
+    }
+
+    if (yearOptions[index]) {
+      this.focusedIndex = index;
+      yearOptions[index].focus();
+    }
+
+    this.selectedYear = year;
+    this.updateModel(this.selectedYear);
+  }
+
+  onKeydownMonth(event: KeyboardEvent, index: number): void {
+    const monthOptions = this.getMonthOptions();
+    const yearOptions = this.getYearOptions();
+
+    if (event.key === 'Enter' || event.code === 'Space') {
+      this.selectMonth(index, event);
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const nextIndex = index < monthOptions.length - 1 ? index + 1 : index;
+      this.selectMonth(nextIndex, event);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const prevIndex = index > 0 ? index - 1 : index;
+      this.selectMonth(prevIndex, event);
+    } else if (event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      const selected = yearOptions[this.selectedIndexYear];
+      selected ? selected.focus() : yearOptions[0].focus();
+    } else if (event.key === 'Tab' && event.shiftKey) {
+      this.focusedIndex = 0;
+      this.close.emit();
+    }
+  }
+
+  onKeydownYear(event: KeyboardEvent, index: number): void {
+    const monthOptions = this.getMonthOptions();
+    const yearOptions = this.getYearOptions();
+
+    if (event.key === 'Enter' || event.code === 'Space') {
+      this.selectYear(index, event);
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const nextIndex = index < yearOptions.length - 1 ? index + 1 : index;
+      this.selectYear(nextIndex, event);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const prevIndex = index > 0 ? index - 1 : index;
+      this.selectYear(prevIndex, event);
+    } else if (event.key === 'Tab' && !event.shiftKey) {
+      this.focusedIndex = 0;
+      this.close.emit();
+    } else if (event.key === 'Tab' && event.shiftKey && this.mode === 'month-year') {
+      event.preventDefault();
+      const selected = monthOptions[this.selectedIndexMonth];
+      selected ? selected.focus() : monthOptions[0].focus();
+    } else if (event.key === 'Tab' && event.shiftKey && this.mode === 'year') {
+      this.close.emit();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -416,8 +532,30 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private updateModel(value) {
+    const MODE_YEAR = this.mode === 'year';
+    const MODE_MONTH_YEAR = this.mode === 'month-year';
+
+    let finalValue = value;
+
+    if (MODE_MONTH_YEAR) {
+      if (this.selectedMonth && this.selectedYear) {
+        const month = String(this.selectedMonth).padStart(2, '0');
+        finalValue = `${month}-${this.selectedYear}`;
+        this.change.emit(finalValue);
+      } else {
+        return;
+      }
+    } else if (MODE_YEAR) {
+      if (this.selectedYear) {
+        finalValue = String(this.selectedYear);
+        this.change.emit(finalValue);
+      } else {
+        return;
+      }
+    }
+
     if (this.propagateChange) {
-      this.propagateChange(value);
+      this.propagateChange(finalValue);
     }
   }
 
