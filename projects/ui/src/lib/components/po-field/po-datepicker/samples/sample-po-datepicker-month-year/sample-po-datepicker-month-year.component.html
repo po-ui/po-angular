@@ -1,0 +1,17 @@
+<po-datepicker
+  name="monthYearPicker"
+  [(ngModel)]="selectedMonthYear"
+  p-label="Month/Year Picker"
+  p-placeholder="Select month and year"
+  p-mode="month-year"
+  (p-change)="changeEvent($event)"
+>
+</po-datepicker>
+
+<po-divider />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Model" [p-value]="selectedMonthYear"> </po-info>
+
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
+</div>

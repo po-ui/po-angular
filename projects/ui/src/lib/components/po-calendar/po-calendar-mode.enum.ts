@@ -7,5 +7,11 @@
  */
 export enum PoCalendarMode {
   /** Modo de seleção de intervalo (data inicial e final). */
-  Range = 'range'
+  Range = 'range',
+
+  // Modo de seleção de mês e ano.
+  MonthYear = 'month-year',
+
+  // Modo de seleção de ano.
+  Year = 'year'
 }

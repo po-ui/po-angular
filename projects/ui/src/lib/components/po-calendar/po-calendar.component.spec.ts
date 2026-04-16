@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { PoDateService } from '../../services/po-date/po-date.service';
 
@@ -21,13 +24,15 @@ describe('PoCalendarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [CommonModule, FormsModule],
       declarations: [
         PoCalendarComponent,
         PoCalendarWrapperComponent,
         PoCalendarHeaderComponent,
         PoCalendarPresetListComponent
       ],
-      providers: [PoCalendarService, PoDateService]
+      providers: [PoCalendarService, PoDateService],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
@@ -1157,29 +1162,802 @@ describe('PoCalendarComponent:', () => {
     });
   });
 
+  describe('Month-Year/Year mode:', () => {
+    describe('isMonthDisabled:', () => {
+      it('should return true when month is before minDate', () => {
+        component.minDate = new Date(2025, 5, 1); // June 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(3)).toBeTrue(); // April (index 3 = month 4)
+      });
+
+      it('should return false when month is equal to minDate month', () => {
+        component.minDate = new Date(2025, 5, 1); // June 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(5)).toBeFalse(); // June (index 5 = month 6)
+      });
+
+      it('should return false when month is after minDate', () => {
+        component.minDate = new Date(2025, 5, 1); // June 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(7)).toBeFalse(); // August (index 7 = month 8)
+      });
+
+      it('should return true when month is after maxDate', () => {
+        component.maxDate = new Date(2025, 8, 30); // September 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(10)).toBeTrue(); // November (index 10 = month 11)
+      });
+
+      it('should return false when month is equal to maxDate month', () => {
+        component.maxDate = new Date(2025, 8, 30); // September 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(8)).toBeFalse(); // September (index 8 = month 9)
+      });
+
+      it('should return false when no minDate or maxDate', () => {
+        component.minDate = undefined;
+        component.maxDate = undefined;
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(0)).toBeFalse();
+        expect(component.isMonthDisabled(11)).toBeFalse();
+      });
+
+      it('should return true when year is before minDate year', () => {
+        component.minDate = new Date(2025, 0, 1);
+        component['selectedYear'] = 2024;
+
+        expect(component.isMonthDisabled(11)).toBeTrue();
+      });
+
+      it('should return true when year is after maxDate year', () => {
+        component.maxDate = new Date(2025, 11, 31);
+        component['selectedYear'] = 2026;
+
+        expect(component.isMonthDisabled(0)).toBeTrue();
+      });
+    });
+
+    describe('isYearDisabled:', () => {
+      it('should return true when year is before minDate year', () => {
+        component.minDate = new Date(2020, 0, 1);
+
+        expect(component.isYearDisabled(2019)).toBeTrue();
+      });
+
+      it('should return false when year equals minDate year', () => {
+        component.minDate = new Date(2020, 0, 1);
+
+        expect(component.isYearDisabled(2020)).toBeFalse();
+      });
+
+      it('should return true when year is after maxDate year', () => {
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component.isYearDisabled(2031)).toBeTrue();
+      });
+
+      it('should return false when year equals maxDate year', () => {
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component.isYearDisabled(2030)).toBeFalse();
+      });
+
+      it('should return false when no minDate or maxDate', () => {
+        component.minDate = undefined;
+        component.maxDate = undefined;
+
+        expect(component.isYearDisabled(1900)).toBeFalse();
+        expect(component.isYearDisabled(2100)).toBeFalse();
+      });
+
+      it('should return false when year is within range', () => {
+        component.minDate = new Date(2020, 0, 1);
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component.isYearDisabled(2025)).toBeFalse();
+      });
+    });
+
+    describe('isYearDisabled with selectedMonth:', () => {
+      it('should return true when selectedMonth is set and year+month is before minDate', () => {
+        component.minDate = new Date(2025, 5, 1);
+        component['selectedMonth'] = 3;
+
+        expect(component.isYearDisabled(2025)).toBeTrue();
+      });
+
+      it('should return true when selectedMonth is set and year+month is after maxDate', () => {
+        component.maxDate = new Date(2025, 5, 30);
+        component['selectedMonth'] = 8;
+
+        expect(component.isYearDisabled(2025)).toBeTrue();
+      });
+
+      it('should return false when selectedMonth is set and year+month is within range', () => {
+        component.minDate = new Date(2020, 0, 1);
+        component.maxDate = new Date(2030, 11, 31);
+        component['selectedMonth'] = 6;
+
+        expect(component.isYearDisabled(2025)).toBeFalse();
+      });
+    });
+
+    describe('selectMonth:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should set selectedIndexMonth, selectedMonth and call updateModel on Enter key', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        component.selectMonth(3, event);
+
+        expect(component['selectedIndexMonth']).toBe(3);
+        expect(component['selectedMonth']).toBe(4);
+        expect(component['updateModel']).toHaveBeenCalledWith(4);
+      });
+
+      it('should set selectedIndexMonth, selectedMonth and call updateModel on Space key', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { code: 'Space' });
+
+        component.selectMonth(0, event);
+
+        expect(component['selectedIndexMonth']).toBe(0);
+        expect(component['selectedMonth']).toBe(1);
+        expect(component['updateModel']).toHaveBeenCalledWith(1);
+      });
+
+      it('should set selectedIndexMonth, selectedMonth and call updateModel when selected=true', () => {
+        spyOn(component as any, 'updateModel');
+
+        component.selectMonth(5, undefined, true);
+
+        expect(component['selectedIndexMonth']).toBe(5);
+        expect(component['selectedMonth']).toBe(6);
+        expect(component['updateModel']).toHaveBeenCalledWith(6);
+      });
+
+      it('should not call updateModel when event is not a select action', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+
+        component.selectMonth(3, event);
+
+        expect(component['updateModel']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('selectYear:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should use default selected=false and call updateModel only on Enter key', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        component.selectYear(2, event, undefined, 2022);
+
+        expect(component['selectedIndexYear']).toBe(2);
+        expect(component['selectedYear']).toBe(2022);
+        expect(component['updateModel']).toHaveBeenCalledWith(2022);
+      });
+
+      it('should set selectedIndexYear, selectedYear and call updateModel on Enter key', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        component.selectYear(10, event, false, 2025);
+
+        expect(component['selectedIndexYear']).toBe(10);
+        expect(component['selectedYear']).toBe(2025);
+        expect(component['updateModel']).toHaveBeenCalledWith(2025);
+      });
+
+      it('should set selectedIndexYear, selectedYear and call updateModel on Space key', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { code: 'Space' });
+
+        component.selectYear(5, event, false, 2020);
+
+        expect(component['selectedIndexYear']).toBe(5);
+        expect(component['selectedYear']).toBe(2020);
+        expect(component['updateModel']).toHaveBeenCalledWith(2020);
+      });
+
+      it('should set selectedIndexYear, selectedYear and call updateModel when selected=true', () => {
+        spyOn(component as any, 'updateModel');
+
+        component.selectYear(8, undefined, true, 2030);
+
+        expect(component['selectedIndexYear']).toBe(8);
+        expect(component['selectedYear']).toBe(2030);
+        expect(component['updateModel']).toHaveBeenCalledWith(2030);
+      });
+
+      it('should not call updateModel when event is not a select action', () => {
+        spyOn(component as any, 'updateModel');
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+
+        component.selectYear(3, event, false, 2025);
+
+        expect(component['updateModel']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onKeydownMonth:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should call selectMonth on Enter key', () => {
+        spyOn(component, 'selectMonth');
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        component.onKeydownMonth(event, 3);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(3, event);
+      });
+
+      it('should call selectMonth on Space key', () => {
+        spyOn(component, 'selectMonth');
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { code: 'Space' });
+
+        component.onKeydownMonth(event, 5);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(5, event);
+      });
+
+      it('should navigate down on ArrowDown key', () => {
+        spyOn(component, 'selectMonth');
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+
+        component.onKeydownMonth(event, 3);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(4, event);
+      });
+
+      it('should not exceed max index on ArrowDown key', () => {
+        spyOn(component, 'selectMonth');
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+
+        component.onKeydownMonth(event, 11);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(11, event);
+      });
+
+      it('should navigate up on ArrowUp key', () => {
+        spyOn(component, 'selectMonth');
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+
+        component.onKeydownMonth(event, 5);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(4, event);
+      });
+
+      it('should not go below 0 on ArrowUp key', () => {
+        spyOn(component, 'selectMonth');
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+
+        component.onKeydownMonth(event, 0);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(0, event);
+      });
+
+      it('should emit close on Shift+Tab', () => {
+        spyOn(component.close, 'emit');
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+
+        component.onKeydownMonth(event, 0);
+
+        expect(component.close.emit).toHaveBeenCalled();
+        expect(component['focusedIndex']).toBe(0);
+      });
+
+      it('should focus year list on Tab (no shift)', () => {
+        const mockYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
+        spyOn<any>(component, 'getYearOptions').and.returnValue([mockYearBtn]);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        component['selectedIndexYear'] = 0;
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.onKeydownMonth(event, 0);
+
+        expect(mockYearBtn.focus).toHaveBeenCalled();
+      });
+
+      it('should focus first enabled year option on Tab when no selected year', () => {
+        const mockYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
+        spyOn<any>(component, 'getYearOptions').and.returnValue([mockYearBtn]);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        component['selectedIndexYear'] = undefined;
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.onKeydownMonth(event, 0);
+
+        expect(mockYearBtn.focus).toHaveBeenCalled();
+      });
+    });
+
+    describe('onKeydownYear:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should call selectYear on Enter key', () => {
+        spyOn(component, 'selectYear');
+        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'Enter' });
+
+        component.onKeydownYear(event, 3);
+
+        expect(component.selectYear).toHaveBeenCalledWith(3, event);
+      });
+
+      it('should call selectYear on Space key', () => {
+        spyOn(component, 'selectYear');
+        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { code: 'Space' });
+
+        component.onKeydownYear(event, 5);
+
+        expect(component.selectYear).toHaveBeenCalledWith(5, event);
+      });
+
+      it('should navigate down on ArrowDown key', () => {
+        spyOn(component, 'selectYear');
+        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+
+        component.onKeydownYear(event, 3);
+
+        expect(component.selectYear).toHaveBeenCalledWith(4, event);
+      });
+
+      it('should navigate up on ArrowUp key', () => {
+        spyOn(component, 'selectYear');
+        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+
+        component.onKeydownYear(event, 5);
+
+        expect(component.selectYear).toHaveBeenCalledWith(4, event);
+      });
+
+      it('should not go below 0 on ArrowUp key', () => {
+        spyOn(component, 'selectYear');
+        const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+
+        component.onKeydownYear(event, 0);
+
+        expect(component.selectYear).toHaveBeenCalledWith(0, event);
+      });
+
+      it('should emit close on Tab key (no shift)', () => {
+        spyOn(component.close, 'emit');
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+
+        component.onKeydownYear(event, 3);
+
+        expect(component.close.emit).toHaveBeenCalled();
+        expect(component['focusedIndex']).toBe(0);
+      });
+
+      it('should emit close on Shift+Tab in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        spyOn(component.close, 'emit');
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+
+        component.onKeydownYear(event, 0);
+
+        expect(component.close.emit).toHaveBeenCalled();
+      });
+
+      it('should focus month list on Shift+Tab in month-year mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        const mockMonthBtn = { focus: jasmine.createSpy('focus') } as any;
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([mockMonthBtn]);
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        component['selectedIndexMonth'] = 0;
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        component.onKeydownYear(event, 0);
+
+        expect(mockMonthBtn.focus).toHaveBeenCalled();
+      });
+
+      it('should focus first month option on Shift+Tab when no selected month', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        const mockMonthBtn = { focus: jasmine.createSpy('focus') } as any;
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([mockMonthBtn]);
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        component['selectedIndexMonth'] = undefined;
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        component.onKeydownYear(event, 0);
+
+        expect(mockMonthBtn.focus).toHaveBeenCalled();
+      });
+
+      it('should not exceed max index on ArrowDown key', () => {
+        spyOn(component, 'selectYear');
+        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301));
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+        component.onKeydownYear(event, 300);
+
+        expect(component.selectYear).toHaveBeenCalledWith(300, event);
+      });
+    });
+
+    describe('updateModel for month-year mode:', () => {
+      it('should emit Date with month and year when both selected in month-year mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component['selectedMonth'] = 6;
+        component['selectedYear'] = 2025;
+
+        spyOn(component.change, 'emit');
+
+        component['updateModel'](6);
+
+        expect(component.change.emit).toHaveBeenCalled();
+        const emittedValue = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0];
+        expect(emittedValue instanceof Date).toBeTrue();
+        expect(emittedValue.getFullYear()).toBe(2025);
+        expect(emittedValue.getMonth()).toBe(5);
+      });
+
+      it('should return early when selectedMonth is missing in month-year mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component['selectedMonth'] = null;
+        component['selectedYear'] = 2025;
+
+        spyOn(component.change, 'emit');
+
+        component['updateModel'](null);
+
+        expect(component.change.emit).not.toHaveBeenCalled();
+      });
+
+      it('should emit Date with year when selectedYear exists in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        component['selectedYear'] = 2025;
+
+        spyOn(component.change, 'emit');
+
+        component['updateModel'](2025);
+
+        expect(component.change.emit).toHaveBeenCalled();
+        const emittedValue = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0];
+        expect(emittedValue instanceof Date).toBeTrue();
+        expect(emittedValue.getFullYear()).toBe(2025);
+        expect(emittedValue.getMonth()).toBe(0);
+      });
+
+      it('should return early when selectedYear is missing in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        component['selectedYear'] = null;
+
+        spyOn(component.change, 'emit');
+
+        component['updateModel'](null);
+
+        expect(component.change.emit).not.toHaveBeenCalled();
+      });
+
+      it('should call propagateChange with finalValue', () => {
+        component.mode = PoCalendarMode.Year;
+        component['selectedYear'] = 2025;
+        component['propagateChange'] = jasmine.createSpy('propagateChange');
+
+        component['updateModel'](2025);
+
+        expect(component['propagateChange']).toHaveBeenCalled();
+      });
+    });
+
+    describe('writeDate for month-year/year modes:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should set month and year when mode is month-year', () => {
+        const date = new Date(2025, 5, 1);
+        const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
+        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+
+        component['writeDate'](date);
+
+        expect(component['selectedMonth']).toBe(6);
+        expect(component['selectedIndexMonth']).toBe(5);
+        expect(component['selectedYear']).toBe(2025);
+      });
+
+      it('should set year when mode is year', () => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+        const date = new Date(2025, 0, 1);
+        const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
+        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+
+        component['writeDate'](date);
+
+        expect(component['selectedYear']).toBe(2025);
+      });
+
+      it('should set selectedIndexYear correctly via findIndex callback in month-year mode', () => {
+        const targetYear = new Date().getFullYear();
+        const date = new Date(targetYear, 3, 1);
+        const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
+        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+
+        component['writeDate'](date);
+
+        const expectedIndex = component.displayYears.indexOf(targetYear);
+        expect(component['selectedIndexYear']).toBe(expectedIndex);
+      });
+
+      it('should set selectedIndexYear correctly via findIndex callback in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+        const targetYear = new Date().getFullYear();
+        const date = new Date(targetYear, 0, 1);
+        const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
+        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+
+        component['writeDate'](date);
+
+        const expectedIndex = component.displayYears.indexOf(targetYear);
+        expect(component['selectedIndexYear']).toBe(expectedIndex);
+      });
+    });
+
+    describe('writeValue for month-year/year modes:', () => {
+      it('should clear selectedMonth, selectedYear, selectedIndexMonth, selectedIndexYear when value is falsy', () => {
+        component['selectedMonth'] = 6;
+        component['selectedYear'] = 2025;
+        component['selectedIndexMonth'] = 5;
+        component['selectedIndexYear'] = 10;
+
+        component.writeValue(null);
+
+        expect(component['selectedMonth']).toBeNull();
+        expect(component['selectedYear']).toBeNull();
+        expect(component['selectedIndexMonth']).toBeNull();
+        expect(component['selectedIndexYear']).toBeNull();
+      });
+    });
+
+    describe('isMonthDisabled when selectedYear is undefined:', () => {
+      it('should return false when selectedYear is not set', () => {
+        component['selectedYear'] = undefined;
+        component.minDate = new Date(2025, 0, 1);
+
+        expect(component.isMonthDisabled(0)).toBeFalse();
+      });
+    });
+
+    describe('selectMonth with DOM focus:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should set focusedIndex and call focus when monthOptions[index] exists', () => {
+        const mockBtn = { focus: jasmine.createSpy('focus') } as any;
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([mockBtn]);
+        spyOn<any>(component, 'updateModel');
+
+        component.selectMonth(0, undefined, true);
+
+        expect(component['focusedIndex']).toBe(0);
+        expect(mockBtn.focus).toHaveBeenCalled();
+      });
+
+      it('should not call focus when monthOptions[index] does not exist', () => {
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        spyOn<any>(component, 'updateModel');
+
+        component.selectMonth(5, undefined, true);
+
+        expect(component['focusedIndex']).not.toBe(5);
+      });
+    });
+
+    describe('selectYear with DOM focus:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
+
+      it('should set focusedIndex and call focus when yearOptions[index] exists', () => {
+        const mockBtn = { focus: jasmine.createSpy('focus') } as any;
+        spyOn<any>(component, 'getYearOptions').and.returnValue([mockBtn]);
+        spyOn<any>(component, 'updateModel');
+
+        component.selectYear(0, undefined, true, 2025);
+
+        expect(component['focusedIndex']).toBe(0);
+        expect(mockBtn.focus).toHaveBeenCalled();
+      });
+
+      it('should not call focus when yearOptions[index] does not exist', () => {
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        spyOn<any>(component, 'updateModel');
+
+        component.selectYear(5, undefined, true, 2025);
+
+        expect(component['focusedIndex']).not.toBe(5);
+      });
+    });
+
+    describe('onKeydownYear ArrowDown at boundary:', () => {
+      it('should increment index when not at last position', () => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        const mockBtns = new Array(5).fill(null);
+        spyOn<any>(component, 'getYearOptions').and.returnValue(mockBtns);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        spyOn(component, 'selectYear');
+
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+        component.onKeydownYear(event, 2);
+
+        expect(component.selectYear).toHaveBeenCalledWith(3, event);
+      });
+
+      it('should stay at max index on ArrowDown at last position', () => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        const mockBtns = new Array(5).fill(null);
+        spyOn<any>(component, 'getYearOptions').and.returnValue(mockBtns);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        spyOn(component, 'selectYear');
+
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+        component.onKeydownYear(event, 4);
+
+        expect(component.selectYear).toHaveBeenCalledWith(4, event);
+      });
+    });
+
+    describe('onKeydownMonth ArrowDown at boundary:', () => {
+      it('should increment index when not at last position', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        const mockBtns = new Array(12).fill(null);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(mockBtns);
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        spyOn(component, 'selectMonth');
+
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+        component.onKeydownMonth(event, 5);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(6, event);
+      });
+
+      it('should stay at max index on ArrowDown at last position', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        const mockBtns = new Array(12).fill(null);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue(mockBtns);
+        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        spyOn(component, 'selectMonth');
+
+        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+        component.onKeydownMonth(event, 11);
+
+        expect(component.selectMonth).toHaveBeenCalledWith(11, event);
+      });
+    });
+
+    describe('ngOnInit for month-year mode:', () => {
+      it('should initialize displayMonths and displayYears for month-year mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+
+        component.ngOnInit();
+
+        expect(component.displayMonths).toBeDefined();
+        expect(component.displayMonths.length).toBe(12);
+        expect(component.displayYears).toBeDefined();
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should initialize displayMonths and displayYears for year mode', () => {
+        component.mode = PoCalendarMode.Year;
+
+        component.ngOnInit();
+
+        expect(component.displayMonths).toBeDefined();
+        expect(component.displayYears).toBeDefined();
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should not initialize displayYears for default mode', () => {
+        component.mode = undefined;
+        component.displayYears = [];
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(0);
+      });
+    });
+  });
+
   describe('Templates:', () => {
-    it('should show `po-calendar` if isRange is true', () => {
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+    it('should show `po-calendar` if mode is range', () => {
+      component.mode = PoCalendarMode.Range;
 
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-calendar')).toBeTruthy();
     });
 
-    it('should show `po-calendar` if isRange is false ', () => {
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+    it('should show `po-calendar` if mode is not set', () => {
+      component.mode = undefined;
 
       fixture.detectChanges();
 
       expect(fixture.debugElement.nativeElement.querySelector('.po-calendar')).toBeTruthy();
     });
 
-    it('should show 1 po-calendar-wrapper when mode is range', () => {
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+    it('should show po-calendar container when mode is range', () => {
+      component.mode = PoCalendarMode.Range;
 
       fixture.detectChanges();
 
-      expect(fixture.debugElement.nativeElement.querySelectorAll('po-calendar-wrapper').length).toBe(1);
+      const calendarDiv = fixture.debugElement.nativeElement.querySelector('.po-calendar');
+      expect(calendarDiv).toBeTruthy();
+      expect(component.isRange).toBeTrue();
+      expect(component.isMonthYear).toBeFalse();
+      expect(component.isYear).toBeFalse();
     });
   });
 });
