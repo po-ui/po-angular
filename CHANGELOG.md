@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.8](https://github.com/po-ui/po-angular/compare/v19.39.7...v19.39.8) (2026-04-16)
+
+
+### Bug Fixes
+
+* **components:** aparta estilos ofensores ao CSP ([cd32de5](https://github.com/po-ui/po-angular/commit/cd32de5a9c96d3d070c35df82ab3190c6af989a6))
+
 ### [19.39.7](https://github.com/po-ui/po-angular/compare/v19.39.6...v19.39.7) (2026-03-26)
 
 
