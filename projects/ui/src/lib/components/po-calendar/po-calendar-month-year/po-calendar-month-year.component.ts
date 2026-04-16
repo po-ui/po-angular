@@ -21,10 +21,7 @@ import { PoButtonComponent } from '../../po-button/po-button.component';
 @Component({
   selector: 'po-calendar-month-year',
   template: `
-    <div
-      class="po-calendar-month-year-container"
-      [class.po-calendar-month-year-container--year-only]="isYearMode"
-    >
+    <div class="po-calendar-month-year-container" [class.po-calendar-month-year-container--year-only]="isYearMode">
       @if (isMonthYearMode) {
         <div class="po-calendar-month-year-month-list" role="listbox" aria-label="Months">
           @for (month of displayMonths; track trackByMonth($index); let i = $index) {
@@ -149,9 +146,9 @@ export class PoCalendarMonthYearComponent implements OnInit, OnChanges {
     if (this._locale) {
       this.poCalendarLangService.setLanguage(this._locale);
     }
-    this.displayMonths = this.poCalendarLangService.getMonthsArray().map(
-      (month: string) => month.charAt(0).toUpperCase() + month.slice(1)
-    );
+    this.displayMonths = this.poCalendarLangService
+      .getMonthsArray()
+      .map((month: string) => month.charAt(0).toUpperCase() + month.slice(1));
     this.cdr.markForCheck();
   }
 
@@ -161,14 +158,16 @@ export class PoCalendarMonthYearComponent implements OnInit, OnChanges {
     let maxYear = baseYear + this.yearRange;
 
     if (this.minDate) {
-      const minDateYear = this.minDate instanceof Date ? this.minDate.getFullYear() : new Date(this.minDate).getFullYear();
+      const minDateYear =
+        this.minDate instanceof Date ? this.minDate.getFullYear() : new Date(this.minDate).getFullYear();
       if (minDateYear > minYear) {
         minYear = minDateYear;
       }
     }
 
     if (this.maxDate) {
-      const maxDateYear = this.maxDate instanceof Date ? this.maxDate.getFullYear() : new Date(this.maxDate).getFullYear();
+      const maxDateYear =
+        this.maxDate instanceof Date ? this.maxDate.getFullYear() : new Date(this.maxDate).getFullYear();
       if (maxDateYear < maxYear) {
         maxYear = maxDateYear;
       }
@@ -182,7 +181,12 @@ export class PoCalendarMonthYearComponent implements OnInit, OnChanges {
   }
 
   private setInitialFocus(): void {
-    if (this.selectedMonth !== null && this.selectedMonth !== undefined && this.selectedMonth >= 0 && this.selectedMonth <= 11) {
+    if (
+      this.selectedMonth !== null &&
+      this.selectedMonth !== undefined &&
+      this.selectedMonth >= 0 &&
+      this.selectedMonth <= 11
+    ) {
       this.focusedMonthIndex = this.selectedMonth;
     } else {
       this.focusedMonthIndex = 0;
@@ -216,7 +220,12 @@ export class PoCalendarMonthYearComponent implements OnInit, OnChanges {
 
   private emitSelection(): void {
     if (this.isMonthYearMode) {
-      if (this.selectedMonth !== null && this.selectedMonth !== undefined && this.selectedYear !== null && this.selectedYear !== undefined) {
+      if (
+        this.selectedMonth !== null &&
+        this.selectedMonth !== undefined &&
+        this.selectedYear !== null &&
+        this.selectedYear !== undefined
+      ) {
         this.select.emit({ month: this.selectedMonth, year: this.selectedYear });
       }
     } else {
