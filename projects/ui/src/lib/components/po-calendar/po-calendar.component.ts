@@ -9,7 +9,9 @@ import {
   OnInit,
   signal,
   SimpleChanges,
-  inject
+  inject,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -70,11 +72,21 @@ const providers = [
   standalone: false
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges, DoCheck {
+  @ViewChildren('monthOption') monthOptions: QueryList<HTMLButtonElement>;
+  @ViewChildren('yearOption') yearOptions: QueryList<HTMLButtonElement>;
+
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly poCalendarLangService = inject(PoCalendarLangService);
 
   hoverValue: Date;
   displayToClean: string;
+  displayMonths: Array<string> = [];
+  displayYears: Array<number> = [];
+  focusedIndex: number = 0;
+  selectedIndexMonth: number | null = null;
+  selectedIndexYear: number | null = null;
+  selectedMonth: number | null;
+  selectedYear: number | null;
 
   private readonly _isRange = signal(false);
   private readonly _rangePresetsValue = signal<boolean | Array<string>>(false);
@@ -139,6 +151,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   ngOnInit() {
     this.setActivateDate();
     this.displayToClean = this.poCalendarLangService.getToCleanLabel();
+
+    if (this.mode === 'month-year' || this.mode === 'year') {
+      this.initializeYearAndMonthMode();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -154,6 +170,173 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this._rangePresetsOrderValue.set(this.rangePresetsOrder);
     this._minDateValue.set(this.minDate);
     this._maxDateValue.set(this.maxDate);
+  }
+
+  isMonthDisabled(monthIndex: number): boolean {
+    if (!this.selectedYear) return false;
+
+    const year = this.selectedYear;
+    const month = monthIndex + 1;
+
+    if (this.minDate) {
+      const minYear = this.minDate.getFullYear();
+      const minMonth = this.minDate.getMonth() + 1;
+
+      if (year < minYear || (year === minYear && month < minMonth)) {
+        return true;
+      }
+    }
+
+    if (this.maxDate) {
+      const maxYear = this.maxDate.getFullYear();
+      const maxMonth = this.maxDate.getMonth() + 1;
+
+      if (year > maxYear || (year === maxYear && month > maxMonth)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  isYearDisabled(year: number): boolean {
+    const selectedMonth = this.selectedMonth;
+
+    const minYear = this.minDate?.getFullYear();
+    const minMonth = this.minDate?.getMonth() + 1;
+
+    const maxYear = this.maxDate?.getFullYear();
+    const maxMonth = this.maxDate?.getMonth() + 1;
+
+    if (selectedMonth !== undefined) {
+      const month = selectedMonth;
+
+      if (minYear && (year < minYear || (year === minYear && month < minMonth))) {
+        return true;
+      }
+
+      if (maxYear !== undefined && (year > maxYear || (year === maxYear && month > maxMonth))) {
+        return true;
+      }
+
+      return false;
+    }
+
+    if (minYear !== undefined && year < minYear) return true;
+    if (maxYear !== undefined && year > maxYear) return true;
+
+    return false;
+  }
+
+  onKeydownMonth(event: KeyboardEvent, index: number): void {
+    const monthOptions = this.getMonthOptions();
+    const yearOptions = this.getYearOptions();
+
+    if (event.key === 'Enter' || event.code === 'Space') {
+      this.selectMonth(index, event);
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const nextIndex = index < monthOptions.length - 1 ? index + 1 : index;
+      this.selectMonth(nextIndex, event);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const prevIndex = index > 0 ? index - 1 : index;
+      this.selectMonth(prevIndex, event);
+    } else if (event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      const selected = yearOptions[this.selectedIndexYear];
+      const enabledOptions = yearOptions.filter(btn => !btn.disabled);
+
+      (selected || enabledOptions[0])?.focus();
+    } else if (event.key === 'Tab' && event.shiftKey) {
+      this.focusedIndex = 0;
+      this.close.emit();
+    }
+  }
+
+  onKeydownYear(event: KeyboardEvent, index: number): void {
+    const monthOptions = this.getMonthOptions();
+    const yearOptions = this.getYearOptions();
+
+    if (event.key === 'Enter' || event.code === 'Space') {
+      this.selectYear(index, event);
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const nextIndex = index < yearOptions.length - 1 ? index + 1 : index;
+      this.selectYear(nextIndex, event);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const prevIndex = index > 0 ? index - 1 : index;
+      this.selectYear(prevIndex, event);
+    } else if (event.key === 'Tab' && !event.shiftKey) {
+      this.focusedIndex = 0;
+      this.close.emit();
+    } else if (event.key === 'Tab' && event.shiftKey && this.mode === 'month-year') {
+      event.preventDefault();
+      const selected = monthOptions[this.selectedIndexMonth];
+      selected ? selected.focus() : monthOptions[0].focus();
+    } else if (event.key === 'Tab' && event.shiftKey && this.mode === 'year') {
+      this.close.emit();
+    }
+  }
+
+  selectMonth(index: number, event?: KeyboardEvent, selected = false): void {
+    const monthOptions = this.getMonthOptions();
+
+    const isSelectAction = event?.key === 'Enter' || event?.code === 'Space' || selected;
+
+    if (isSelectAction) {
+      this.selectedIndexMonth = index;
+      this.selectedMonth = index + 1;
+
+      this.updateModel(this.selectedMonth);
+    }
+
+    if (monthOptions[index]) {
+      this.focusedIndex = index;
+      monthOptions[index].focus();
+    }
+  }
+
+  selectYear(index: number, event?: KeyboardEvent, selected = false, year?): void {
+    const yearOptions = this.getYearOptions();
+
+    const isSelectAction = event?.key === 'Enter' || event?.code === 'Space' || selected;
+
+    if (isSelectAction) {
+      this.selectedIndexYear = index;
+      this.selectedYear = year;
+
+      this.updateModel(this.selectedYear);
+    }
+
+    if (yearOptions[index]) {
+      this.focusedIndex = index;
+      yearOptions[index].focus();
+    }
+  }
+
+  private getMonthOptions(): Array<HTMLButtonElement> {
+    return this.monthOptions.toArray();
+  }
+
+  private getYearOptions(): Array<HTMLButtonElement> {
+    return this.yearOptions.toArray();
+  }
+
+  private initializeYearAndMonthMode(): void {
+    this.displayMonths = this.poCalendarLangService.getMonthsArray();
+
+    const currentYear = new Date().getFullYear();
+
+    this.displayYears = Array.from(
+      { length: this.yearRangeLimit * 2 + 1 },
+      (_, i) => currentYear - this.yearRangeLimit + i
+    );
   }
 
   getActivateDate(partType) {
@@ -231,6 +414,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       this.writeDate(value);
     } else {
       this.value = null;
+      this.selectedMonth = null;
+      this.selectedYear = null;
+      this.selectedIndexMonth = null;
+      this.selectedIndexYear = null;
     }
 
     const activateDate = this.getValidateStartDate(value);
@@ -416,13 +603,64 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private updateModel(value) {
+    const MODE_YEAR = this.mode === 'year';
+    const MODE_MONTH_YEAR = this.mode === 'month-year';
+
+    let finalValue = value;
+
+    if (MODE_MONTH_YEAR) {
+      if (this.selectedMonth && this.selectedYear) {
+        finalValue = new Date(this.selectedYear, this.selectedMonth - 1, 1);
+        this.change.emit(finalValue);
+      } else {
+        return;
+      }
+    } else if (MODE_YEAR) {
+      if (this.selectedYear) {
+        finalValue = new Date(this.selectedYear, 0, 1);
+        this.change.emit(finalValue);
+      } else {
+        return;
+      }
+    }
+
     if (this.propagateChange) {
-      this.propagateChange(value);
+      this.propagateChange(finalValue);
     }
   }
 
+  private setMonth(index: number) {
+    this.selectedIndexMonth = index;
+    this.selectedMonth = index + 1;
+  }
+
+  private setYear(index: number, year: number) {
+    this.selectedIndexYear = index;
+    this.selectedYear = year;
+  }
+
   private writeDate(value: any) {
-    if (this.isRange) {
+    if (this.mode === 'month-year') {
+      const date = new Date(value);
+      const monthIndex = date.getMonth();
+      const year = date.getFullYear();
+      const yearOptions = this.getYearOptions();
+
+      const yearIndex = (yearOptions as Array<any>).findIndex(btn => Number(btn.label()) === year);
+
+      this.setMonth(monthIndex);
+      this.setYear(yearIndex, year);
+
+      return;
+    } else if (this.mode === 'year') {
+      const year = new Date(value).getFullYear();
+      const yearOptions = this.getYearOptions();
+
+      const yearIndex = (yearOptions as Array<any>).findIndex(btn => Number(btn.label()) === year);
+
+      this.setYear(yearIndex, year);
+      return;
+    } else if (this.isRange) {
       const start = value?.start;
       const end = value?.end;
 
