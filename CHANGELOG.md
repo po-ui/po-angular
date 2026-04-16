@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.9.0](https://github.com/po-ui/po-angular/compare/v21.8.0...v21.9.0) (2026-04-09)
+
+
+### Features
+
+* **calendar:** adiciona períodos pré-estabelecidos no modo range ([c32ca35](https://github.com/po-ui/po-angular/commit/c32ca35fe5d833085883b5ac2fad61809732468a))
+* **fields:** repassa propriedade loading para o componente Dynamic Form ([a432752](https://github.com/po-ui/po-angular/commit/a432752b29fff5ac2576114d52c148485cf34a72))
+* **timepicker:** implementa componente po-timepicker ([3c9cc5c](https://github.com/po-ui/po-angular/commit/3c9cc5c00e81046b2c265aa5a03ef0876070cab0))
+
+## [21.8.0](https://github.com/po-ui/po-angular/compare/v21.7.0...v21.8.0) (2026-04-01)
+
+
+### Features
+
+* **context-menu:** implementa componente po-context-menu ([cd0d303](https://github.com/po-ui/po-angular/commit/cd0d3033f2cd5646e44aed4c5dec06cf3e4da612))
+* **header:** implementa variação AA small ([e5f5ec6](https://github.com/po-ui/po-angular/commit/e5f5ec68d99b81e9b00032371ceddc9b2bf6e170))
+* **ia-tools:** adiciona servidor MCP @po-ui/mcp ([29fdcb4](https://github.com/po-ui/po-angular/commit/29fdcb440fbf4d1fb2ba490bd9c3f5437ae169a9))
+* **ia-tools:** adiciona suporte a llms ([b90d466](https://github.com/po-ui/po-angular/commit/b90d466df84897cff8ba62b6d2ea30697d0cd131))
+* **menu:** adiciona evento `p-expanded` ([4e7f2ad](https://github.com/po-ui/po-angular/commit/4e7f2ad7a6b2242505d9010b7b2c2287818d0867))
+* **tabs:** adiciona output `p-actived-tab` e o método `activateTab` ([bd2eed5](https://github.com/po-ui/po-angular/commit/bd2eed5193964fee227a60f1897660cadb8699ac))
+
 ## [21.7.0](https://github.com/po-ui/po-angular/compare/v21.6.0...v21.7.0) (2026-03-26)
 
 

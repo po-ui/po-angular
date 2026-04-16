@@ -959,7 +959,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(nativeElement.querySelector('po-datepicker')).toBeTruthy();
     });
 
-    it('should create a `po-input` component if type is `time`', () => {
+    it('should create a `po-timepicker` component if type is `time`', () => {
       component.fields = [{ property: 'age', type: 'time' }];
 
       component.ngOnChanges({
@@ -968,7 +968,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('po-input')).toBeTruthy();
+      expect(nativeElement.querySelector('po-timepicker')).toBeTruthy();
     });
 
     it('should create a `po-decimal` component if type is `currency`', () => {
@@ -1151,7 +1151,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(nativeElement.querySelectorAll('po-divider').length).toBe(2);
       expect(nativeElement.querySelectorAll('po-switch').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-decimal').length).toBe(1);
-      expect(nativeElement.querySelectorAll('po-input').length).toBe(3);
+      expect(nativeElement.querySelectorAll('po-input').length).toBe(2);
+      expect(nativeElement.querySelectorAll('po-timepicker').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-datepicker').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-number').length).toBe(1);
       expect(nativeElement.querySelectorAll('po-combo').length).toBe(3);

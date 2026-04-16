@@ -412,48 +412,12 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component['updateDisplay']).toHaveBeenCalledWith(currentYear, currentMonth);
     });
 
-    it('onTodayKeydown: should emit closeCalendar when key is Tab and shift is not pressed', () => {
-      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
-
+    it('onFooterCloseCalendar: should emit closeCalendar', () => {
       spyOn(component.closeCalendar, 'emit');
 
-      component.onTodayKeydown(event);
+      component.onFooterCloseCalendar();
 
       expect(component.closeCalendar.emit).toHaveBeenCalled();
-    });
-
-    it('onTodayKeydown: should not emit closeCalendar when key is not Tab or shift is pressed', () => {
-      const eventWithShift = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-      const eventNonTab = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: false });
-
-      spyOn(component.closeCalendar, 'emit');
-
-      component.onTodayKeydown(eventWithShift);
-      component.onTodayKeydown(eventNonTab);
-
-      expect(component.closeCalendar.emit).not.toHaveBeenCalled();
-    });
-
-    it('onTodayKeydownEnter: should prevent default and call onSelectDate with today', () => {
-      const event = { key: 'Enter', preventDefault: jasmine.createSpy('preventDefault') } as any;
-
-      spyOn(component, 'onSelectDate');
-
-      component.onTodayKeydownEnter(event);
-
-      expect(event.preventDefault).toHaveBeenCalled();
-      expect(component.onSelectDate).toHaveBeenCalledWith(component.today);
-    });
-
-    it('onTodayKeydownSpace: should prevent default and call onSelectDate with today', () => {
-      const event = { key: ' ', preventDefault: jasmine.createSpy('preventDefault') } as any;
-
-      spyOn(component, 'onSelectDate');
-
-      component.onTodayKeydownSpace(event);
-
-      expect(event.preventDefault).toHaveBeenCalled();
-      expect(component.onSelectDate).toHaveBeenCalledWith(component.today);
     });
 
     it('onDayKeydown: should not emit closeCalendar when range is false or shift is pressed', () => {
@@ -1784,12 +1748,6 @@ describe('PoCalendarWrapperComponent', () => {
         spyOn(component, <any>'updateDisplay');
         spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(false);
 
-        const event = {
-          key: 'PageUp',
-          shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
-        } as any as KeyboardEvent;
-
         const result = component['handlePageNavigation']('PageUp', false, 10, 9);
 
         expect(result).toBe(false);
@@ -1818,12 +1776,6 @@ describe('PoCalendarWrapperComponent', () => {
 
         spyOn(component, <any>'updateDisplay');
         spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(false);
-
-        const event = {
-          key: 'PageDown',
-          shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
-        } as any as KeyboardEvent;
 
         const result = component['handlePageNavigation']('PageDown', false, 10, 9);
 
@@ -3402,7 +3354,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
-      component.templateContext.monthIndex = NaN as any;
+      component.templateContext.monthIndex = Number.NaN as any;
 
       const mockComboComponent = {
         selectedOption: { value: 2, label: 'Fevereiro' },
@@ -3837,6 +3789,17 @@ describe('PoCalendarWrapperComponent', () => {
       component['restoreOriginalDisplay']();
 
       expect(updateSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('hasPresets input:', () => {
+    it('should default hasPresets to false', () => {
+      expect(component.hasPresets).toBe(false);
+    });
+
+    it('should accept hasPresets input', () => {
+      component.hasPresets = true;
+      expect(component.hasPresets).toBe(true);
     });
   });
 });

@@ -11,25 +11,25 @@
 >
   <div class="po-field-container-content" [attr.name]="name">
     <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
-      @if (loading) {
-        <div class="po-switch-loading-container">
-          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-        </div>
-      } @else {
-        <div
-          #switchContainer
-          class="po-switch-container"
-          role="switch"
-          [attr.aria-checked]="value"
-          [attr.aria-disabled]="isDisabled"
-          [attr.data-focused-element]="!isDisabled"
-          [attr.data-inactive-component]="isDisabled"
-          [id]="id"
-          [tabindex]="isDisabled ? -1 : 0"
-          (blur)="onBlur()"
-          (click)="eventClick()"
-          (keydown)="onKeyDown($event)"
-        >
+      <div
+        #switchContainer
+        class="po-switch-container"
+        role="switch"
+        [attr.aria-checked]="value"
+        [attr.aria-disabled]="isDisabled"
+        [attr.data-focused-element]="!isDisabled"
+        [attr.data-inactive-component]="isDisabled"
+        [id]="id"
+        [tabindex]="isDisabled ? -1 : 0"
+        (blur)="onBlur()"
+        (click)="eventClick()"
+        (keydown)="onKeyDown($event)"
+      >
+        @if (loading) {
+          <div class="po-switch-loading-container">
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          </div>
+        } @else {
           <div class="po-switch-track">
             <div class="po-switch-toggle" [attr.aria-label]="value === true ? labelOn : labelOff">
               @if (value === true) {
@@ -37,17 +37,16 @@
               }
             </div>
           </div>
-        </div>
-
-        @if (!hideLabelStatus) {
-          <po-label
-            class="po-switch-label"
-            [p-disabled]="isDisabled"
-            [p-label]="value === true ? labelOn : labelOff"
-            (click)="eventClick()"
-          >
-          </po-label>
         }
+      </div>
+      @if (!hideLabelStatus && !loading) {
+        <po-label
+          class="po-switch-label"
+          [p-disabled]="isDisabled"
+          [p-label]="value === true ? labelOn : labelOff"
+          (click)="eventClick()"
+        >
+        </po-label>
       }
     </div>
     @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {

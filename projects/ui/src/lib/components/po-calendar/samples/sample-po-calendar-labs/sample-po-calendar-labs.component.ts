@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoRadioGroupOption, PoCalendarMode } from '@po-ui/ng-components';
+import { PoRadioGroupOption, PoCalendarMode, PoCalendarRangePreset } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-calendar-labs',
@@ -17,6 +17,10 @@ export class SamplePoCalendarLabsComponent implements OnInit {
   mode: any;
   monthYearEvent: any;
   size: string = '';
+  rangePresets: boolean = false;
+  rangePresetsOrder: 'asc' | 'desc' = 'asc';
+  customPresets: Array<PoCalendarRangePreset> = [];
+  useCustomPresets: boolean = false;
 
   readonly localeOptions: Array<PoRadioGroupOption> = [
     { label: 'pt', value: 'pt' },
@@ -35,8 +39,37 @@ export class SamplePoCalendarLabsComponent implements OnInit {
     { label: 'medium', value: 'medium' }
   ];
 
+  public readonly presetsOrderOptions: Array<PoRadioGroupOption> = [
+    { label: 'ASC', value: 'asc' },
+    { label: 'DESC', value: 'desc' }
+  ];
+
+  readonly sampleCustomPresets: Array<PoCalendarRangePreset> = [
+    {
+      label: 'Próximos 3 meses',
+      dateRange: (today: Date) => {
+        const end = new Date(today);
+        end.setMonth(end.getMonth() + 3);
+        return { start: new Date(today.getFullYear(), today.getMonth(), today.getDate()), end };
+      }
+    },
+    {
+      label: 'Última semana',
+      dateRange: (today: Date) => {
+        const start = new Date(today);
+        start.setDate(start.getDate() - 7);
+        return { start, end: new Date(today.getFullYear(), today.getMonth(), today.getDate()) };
+      }
+    }
+  ];
+
   ngOnInit() {
     this.restore();
+  }
+
+  onCustomPresetsChange(value: boolean) {
+    this.useCustomPresets = value;
+    this.customPresets = value ? [...this.sampleCustomPresets] : [];
   }
 
   changeEvent(type: string, event?: any) {
@@ -62,5 +95,9 @@ export class SamplePoCalendarLabsComponent implements OnInit {
     this.minDate = '';
     this.mode = undefined;
     this.size = 'medium';
+    this.rangePresets = false;
+    this.rangePresetsOrder = 'asc';
+    this.customPresets = [];
+    this.useCustomPresets = false;
   }
 }
