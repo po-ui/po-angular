@@ -2051,4 +2051,537 @@ describe('PoDatepickerComponent:', () => {
       expect(fixture.debugElement.nativeElement.querySelector('po-clean')).toBe(null);
     });
   });
+
+  describe('Month-Year and Year mode:', () => {
+    describe('handleMonthYearKeyup:', () => {
+      it('should call callOnChange with parsed value when input is complete MM/YYYY', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '03/2025';
+        component['objMask'] = { valueToModel: '03/2025', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleMonthYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('03/2025');
+      });
+
+      it('should call callOnChange with empty string when input is incomplete', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '03/20';
+        component['objMask'] = { valueToModel: '03/20', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleMonthYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+
+      it('should call callOnChange with invalid date message for invalid month', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '13/2025';
+        component['objMask'] = { valueToModel: '13/2025', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleMonthYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+    });
+
+    describe('handleYearKeyup:', () => {
+      it('should call callOnChange with year string when input is complete', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '2025';
+        component['objMask'] = { valueToModel: '2025', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('2025');
+      });
+
+      it('should call callOnChange with empty string when input is incomplete', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '202';
+        component['objMask'] = { valueToModel: '202', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+
+      it('should call callOnChange with invalid date message for year 0', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '0000';
+        component['objMask'] = { valueToModel: '0000', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+    });
+
+    describe('handleMonthYearBlur:', () => {
+      it('should call callOnChange with parsed value on blur for valid MM/YYYY', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '06/2024';
+
+        component['handleMonthYearBlur']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('06/2024');
+      });
+
+      it('should call callOnChange with invalid date on blur for invalid month', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '15/2024';
+
+        component['handleMonthYearBlur']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should call callOnChange with empty string on blur when input is empty', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '';
+
+        component['handleMonthYearBlur']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+    });
+
+    describe('handleYearBlur:', () => {
+      it('should call callOnChange with year string on blur for valid year', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '2024';
+
+        component['handleYearBlur']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('2024');
+      });
+
+      it('should call callOnChange with invalid date on blur for incomplete year', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '20';
+
+        component['handleYearBlur']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should call callOnChange with empty string on blur when input is empty', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = '';
+
+        component['handleYearBlur']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('');
+      });
+    });
+
+    describe('parseMonthYearInput:', () => {
+      it('should return formatted MM/YYYY for valid input', () => {
+        const result = component['parseMonthYearInput']('3/2025', '/');
+        expect(result).toBe('03/2025');
+      });
+
+      it('should return null for invalid month > 12', () => {
+        const result = component['parseMonthYearInput']('13/2025', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for month 0', () => {
+        const result = component['parseMonthYearInput']('00/2025', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for year 0', () => {
+        const result = component['parseMonthYearInput']('01/0000', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for input with wrong number of parts', () => {
+        const result = component['parseMonthYearInput']('2025', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for non-numeric input', () => {
+        const result = component['parseMonthYearInput']('ab/cdef', '/');
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('syncCalendarMonthYear:', () => {
+      it('should update calendar selectedMonth and selectedYear', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        const calendarMock = {
+          selectedMonth: 0,
+          selectedYear: 0,
+          selectedIndexMonth: -1,
+          selectedIndexYear: -1,
+          displayYears: [2023, 2024, 2025, 2026]
+        };
+        component['calendar'] = calendarMock as any;
+
+        component['syncCalendarMonthYear']('06/2025');
+
+        expect(calendarMock.selectedMonth).toBe(6);
+        expect(calendarMock.selectedYear).toBe(2025);
+        expect(calendarMock.selectedIndexMonth).toBe(5);
+        expect(calendarMock.selectedIndexYear).toBe(2);
+      });
+
+      it('should not set selectedIndexYear when year is not in displayYears', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        const calendarMock = {
+          selectedMonth: 0,
+          selectedYear: 0,
+          selectedIndexMonth: -1,
+          selectedIndexYear: -1,
+          displayYears: [2023, 2024, 2025]
+        };
+        component['calendar'] = calendarMock as any;
+
+        component['syncCalendarMonthYear']('06/2030');
+
+        expect(calendarMock.selectedMonth).toBe(6);
+        expect(calendarMock.selectedYear).toBe(2030);
+        expect(calendarMock.selectedIndexYear).toBe(-1);
+      });
+
+      it('should do nothing when calendar is not available', () => {
+        component['calendar'] = undefined as any;
+        expect(() => component['syncCalendarMonthYear']('06/2025')).not.toThrow();
+      });
+    });
+
+    describe('syncCalendarYear:', () => {
+      it('should update calendar selectedYear and selectedIndexYear', () => {
+        const calendarMock = {
+          selectedYear: 0,
+          selectedIndexYear: -1,
+          displayYears: [2023, 2024, 2025, 2026]
+        };
+        component['calendar'] = calendarMock as any;
+
+        component['syncCalendarYear'](2025);
+
+        expect(calendarMock.selectedYear).toBe(2025);
+        expect(calendarMock.selectedIndexYear).toBe(2);
+      });
+
+      it('should not set selectedIndexYear when year is not in displayYears', () => {
+        const calendarMock = {
+          selectedYear: 0,
+          selectedIndexYear: -1,
+          displayYears: [2023, 2024, 2025]
+        };
+        component['calendar'] = calendarMock as any;
+
+        component['syncCalendarYear'](2030);
+
+        expect(calendarMock.selectedYear).toBe(2030);
+        expect(calendarMock.selectedIndexYear).toBe(-1);
+      });
+
+      it('should do nothing when calendar is not available', () => {
+        component['calendar'] = undefined as any;
+        expect(() => component['syncCalendarYear'](2025)).not.toThrow();
+      });
+    });
+
+    describe('formatCalendarEventToDisplay:', () => {
+      it('should replace dash with locale separator for month-year mode', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+
+        const result = component['formatCalendarEventToDisplay']('03-2025');
+        expect(result).toBe('03/2025');
+      });
+
+      it('should return event as-is for year mode', () => {
+        component.mode = 'year';
+
+        const result = component['formatCalendarEventToDisplay']('2025');
+        expect(result).toBe('2025');
+      });
+
+      it('should return empty string for empty event', () => {
+        component.mode = 'month-year';
+
+        const result = component['formatCalendarEventToDisplay']('');
+        expect(result).toBe('');
+      });
+
+      it('should return empty string for null/undefined event', () => {
+        component.mode = 'month-year';
+
+        const result = component['formatCalendarEventToDisplay'](undefined as any);
+        expect(result).toBe('');
+      });
+    });
+
+    describe('writeMonthYearValue:', () => {
+      it('should set input value and call callOnChange for valid MM/YYYY', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        component['writeMonthYearValue']('03/2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('03/2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('03/2025', false);
+      });
+
+      it('should accept dash separator and normalize to locale separator', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        component['writeMonthYearValue']('03-2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('03/2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('03/2025', false);
+      });
+
+      it('should clear input for invalid month', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        component['writeMonthYearValue']('13/2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should clear input for value with wrong format', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        component['writeMonthYearValue']('2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+    });
+
+    describe('writeYearValue:', () => {
+      it('should set input value and call callOnChange for valid year string', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        component['writeYearValue']('2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('2025', false);
+      });
+
+      it('should set input value and call callOnChange for valid year number', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        component['writeYearValue'](2025);
+
+        expect(component.inputEl.nativeElement.value).toBe('2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('2025', false);
+      });
+
+      it('should clear input for NaN year', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['writeYearValue']('abc');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should clear input for year 0', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['writeYearValue']('0');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+    });
+
+    describe('onKeyup with month-year mode:', () => {
+      it('should call handleMonthYearKeyup when mode is month-year', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'handleMonthYearKeyup');
+        const event = { target: component.inputEl.nativeElement, preventDefault: () => {} };
+        component.onKeyup(event);
+
+        expect(component['handleMonthYearKeyup']).toHaveBeenCalled();
+      });
+
+      it('should call handleYearKeyup when mode is year', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'handleYearKeyup');
+        const event = { target: component.inputEl.nativeElement, preventDefault: () => {} };
+        component.onKeyup(event);
+
+        expect(component['handleYearKeyup']).toHaveBeenCalled();
+      });
+    });
+
+    describe('eventOnBlur with month-year mode:', () => {
+      it('should call handleMonthYearBlur when mode is month-year', () => {
+        component.mode = 'month-year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'handleMonthYearBlur');
+        spyOn<any>(component, 'controlChangeEmitter');
+        const event = { target: component.inputEl.nativeElement, preventDefault: () => {} };
+        component.eventOnBlur(event);
+
+        expect(component['handleMonthYearBlur']).toHaveBeenCalled();
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+      });
+
+      it('should call handleYearBlur when mode is year', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'handleYearBlur');
+        spyOn<any>(component, 'controlChangeEmitter');
+        const event = { target: component.inputEl.nativeElement, preventDefault: () => {} };
+        component.eventOnBlur(event);
+
+        expect(component['handleYearBlur']).toHaveBeenCalled();
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+      });
+    });
+
+    describe('writeValue with month-year/year mode:', () => {
+      it('should call writeMonthYearValue for month-year mode with string value', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'writeMonthYearValue');
+        component.writeValue('03/2025');
+
+        expect(component['writeMonthYearValue']).toHaveBeenCalledWith('03/2025');
+      });
+
+      it('should call writeYearValue for year mode', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'writeYearValue');
+        component.writeValue('2025');
+
+        expect(component['writeYearValue']).toHaveBeenCalledWith('2025');
+      });
+
+      it('should call writeYearValue for year mode with number value', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'writeYearValue');
+        component.writeValue(2025);
+
+        expect(component['writeYearValue']).toHaveBeenCalledWith(2025);
+      });
+    });
+
+    describe('dateSelected with month-year/year mode:', () => {
+      it('should format and set input value for month-year mode', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        spyOn<any>(component, 'controlChangeEmitter');
+        spyOn(component, 'togglePicker');
+
+        component.dateSelected('03-2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('03/2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('03-2025');
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+        expect(component.togglePicker).toHaveBeenCalled();
+      });
+
+      it('should set input value for year mode', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        spyOn<any>(component, 'controlChangeEmitter');
+        spyOn(component, 'togglePicker');
+
+        component.dateSelected('2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('2025');
+        expect(component['controlChangeEmitter']).toHaveBeenCalled();
+        expect(component.togglePicker).toHaveBeenCalled();
+      });
+    });
+  });
 });

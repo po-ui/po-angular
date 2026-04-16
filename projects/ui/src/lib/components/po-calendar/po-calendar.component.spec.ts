@@ -1157,6 +1157,141 @@ describe('PoCalendarComponent:', () => {
     });
   });
 
+  describe('Month-Year/Year mode:', () => {
+    describe('isMonthDisabled:', () => {
+      it('should return true when month is before minDate', () => {
+        component.minDate = new Date(2025, 5, 1); // June 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(3)).toBeTrue(); // April (index 3 = month 4)
+      });
+
+      it('should return false when month is equal to minDate month', () => {
+        component.minDate = new Date(2025, 5, 1); // June 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(5)).toBeFalse(); // June (index 5 = month 6)
+      });
+
+      it('should return false when month is after minDate', () => {
+        component.minDate = new Date(2025, 5, 1); // June 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(7)).toBeFalse(); // August (index 7 = month 8)
+      });
+
+      it('should return true when month is after maxDate', () => {
+        component.maxDate = new Date(2025, 8, 30); // September 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(10)).toBeTrue(); // November (index 10 = month 11)
+      });
+
+      it('should return false when month is equal to maxDate month', () => {
+        component.maxDate = new Date(2025, 8, 30); // September 2025
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(8)).toBeFalse(); // September (index 8 = month 9)
+      });
+
+      it('should return false when no minDate or maxDate', () => {
+        component.minDate = undefined;
+        component.maxDate = undefined;
+        component['selectedYear'] = 2025;
+
+        expect(component.isMonthDisabled(0)).toBeFalse();
+        expect(component.isMonthDisabled(11)).toBeFalse();
+      });
+
+      it('should return true when year is before minDate year', () => {
+        component.minDate = new Date(2025, 0, 1);
+        component['selectedYear'] = 2024;
+
+        expect(component.isMonthDisabled(11)).toBeTrue();
+      });
+
+      it('should return true when year is after maxDate year', () => {
+        component.maxDate = new Date(2025, 11, 31);
+        component['selectedYear'] = 2026;
+
+        expect(component.isMonthDisabled(0)).toBeTrue();
+      });
+    });
+
+    describe('isYearDisabled:', () => {
+      it('should return true when year is before minDate year', () => {
+        component.minDate = new Date(2020, 0, 1);
+
+        expect(component.isYearDisabled(2019)).toBeTrue();
+      });
+
+      it('should return false when year equals minDate year', () => {
+        component.minDate = new Date(2020, 0, 1);
+
+        expect(component.isYearDisabled(2020)).toBeFalse();
+      });
+
+      it('should return true when year is after maxDate year', () => {
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component.isYearDisabled(2031)).toBeTrue();
+      });
+
+      it('should return false when year equals maxDate year', () => {
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component.isYearDisabled(2030)).toBeFalse();
+      });
+
+      it('should return false when no minDate or maxDate', () => {
+        component.minDate = undefined;
+        component.maxDate = undefined;
+
+        expect(component.isYearDisabled(1900)).toBeFalse();
+        expect(component.isYearDisabled(2100)).toBeFalse();
+      });
+
+      it('should return false when year is within range', () => {
+        component.minDate = new Date(2020, 0, 1);
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component.isYearDisabled(2025)).toBeFalse();
+      });
+    });
+
+    describe('ngOnInit for month-year mode:', () => {
+      it('should initialize displayMonths and displayYears for month-year mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+
+        component.ngOnInit();
+
+        expect(component.displayMonths).toBeDefined();
+        expect(component.displayMonths.length).toBe(12);
+        expect(component.displayYears).toBeDefined();
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should initialize displayMonths and displayYears for year mode', () => {
+        component.mode = PoCalendarMode.Year;
+
+        component.ngOnInit();
+
+        expect(component.displayMonths).toBeDefined();
+        expect(component.displayYears).toBeDefined();
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should not initialize displayYears for default mode', () => {
+        component.mode = undefined as any;
+        component.displayYears = [];
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(0);
+      });
+    });
+  });
+
   describe('Templates:', () => {
     it('should show `po-calendar` if isRange is true', () => {
       spyOnProperty(component, 'isRange').and.returnValue(true);

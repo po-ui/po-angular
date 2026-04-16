@@ -653,9 +653,16 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.offset = new Date().getTimezoneOffset();
     this.formatTimezoneAndHour(this.offset);
     // Classe de máscara
-    this.objMask = this.buildMask(
-      replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
-    );
+    if (this.mode === 'month-year') {
+      const separator = this.languageService.getDateSeparator(this.locale);
+      this.objMask = new PoMask(`99${separator}9999`, true);
+    } else if (this.mode === 'year') {
+      this.objMask = new PoMask('9999', true);
+    } else {
+      this.objMask = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
+    }
   }
 
   ngOnDestroy(): void {
