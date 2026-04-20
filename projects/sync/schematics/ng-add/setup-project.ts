@@ -137,7 +137,7 @@ function addProviderToModuleProvider(
     modulePath,
     `
     ${provider}`,
-    null as any
+    null
   );
 
   return insertChanges(tree, changes, modulePath);

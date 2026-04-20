@@ -1460,7 +1460,7 @@ describe('PoEventSourcingService:', () => {
       ];
 
       spyOn(eventSourcingService, <any>'createEventSourcingItem');
-      spyOn(Date.prototype, 'getTime').and.returnValue(<any>dateTime);
+      spyOn(Date.prototype, 'getTime').and.returnValue(dateTime);
 
       eventSourcingService['createEventSourcingList'](schemaCustumerMock.name, summaryEventList);
 
