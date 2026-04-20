@@ -902,12 +902,14 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     const firstCombo = this.dialogPicker.nativeElement.querySelector('.po-combo-first .po-combo-input');
     const monthOption = this.dialogPicker.nativeElement.querySelector('.po-calendar-months .po-button');
-    const yearOption = this.dialogPicker.nativeElement.querySelector('.po-calendar-years .po-button');
     const monthOptionSelected = this.dialogPicker.nativeElement.querySelector(
       '.po-calendar-months .po-button-selected .po-button'
     );
     const yearOptionSelected = this.dialogPicker.nativeElement.querySelector(
       '.po-calendar-years .po-button-selected .po-button'
+    );
+    const yearOptionEnabled = this.dialogPicker.nativeElement.querySelector(
+      '.po-calendar-years .po-button:not([disabled])'
     );
 
     if (firstCombo) {
@@ -922,9 +924,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     } else if (yearOptionSelected) {
       event.preventDefault();
       yearOptionSelected.focus();
-    } else if (yearOption) {
+    } else if (yearOptionEnabled) {
       event.preventDefault();
-      yearOption.focus();
+      yearOptionEnabled.focus();
     } else {
       this.togglePicker(false);
     }
