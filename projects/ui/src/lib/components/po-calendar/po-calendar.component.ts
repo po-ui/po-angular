@@ -222,7 +222,9 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     } else if (event.key === 'Tab' && !event.shiftKey) {
       event.preventDefault();
       const selected = yearOptions[this.selectedIndexYear];
-      selected ? selected.focus() : yearOptions[0].focus();
+      const enabledOptions = yearOptions.filter(btn => !btn.disabled);
+
+      (selected || enabledOptions[0])?.focus();
     } else if (event.key === 'Tab' && event.shiftKey) {
       this.focusedIndex = 0;
       this.close.emit();
@@ -258,12 +260,15 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   isMonthDisabled(monthIndex: number): boolean {
+    if (!this.selectedYear) return false;
+
+    const year = this.selectedYear;
     const month = monthIndex + 1;
-    const year = this.selectedYear || new Date().getFullYear();
 
     if (this.minDate) {
       const minYear = this.minDate.getFullYear();
       const minMonth = this.minDate.getMonth() + 1;
+
       if (year < minYear || (year === minYear && month < minMonth)) {
         return true;
       }
@@ -272,6 +277,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     if (this.maxDate) {
       const maxYear = this.maxDate.getFullYear();
       const maxMonth = this.maxDate.getMonth() + 1;
+
       if (year > maxYear || (year === maxYear && month > maxMonth)) {
         return true;
       }
@@ -281,13 +287,30 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   isYearDisabled(year: number): boolean {
-    if (this.minDate && year < this.minDate.getFullYear()) {
-      return true;
+    const selectedMonth = this.selectedMonth;
+
+    const minYear = this.minDate?.getFullYear();
+    const minMonth = this.minDate?.getMonth() + 1;
+
+    const maxYear = this.maxDate?.getFullYear();
+    const maxMonth = this.maxDate?.getMonth() + 1;
+
+    if (selectedMonth !== undefined) {
+      const month = selectedMonth;
+
+      if (minYear && (year < minYear || (year === minYear && month < minMonth))) {
+        return true;
+      }
+
+      if (maxYear !== undefined && (year > maxYear || (year === maxYear && month > maxMonth))) {
+        return true;
+      }
+
+      return false;
     }
 
-    if (this.maxDate && year > this.maxDate.getFullYear()) {
-      return true;
-    }
+    if (minYear !== undefined && year < minYear) return true;
+    if (maxYear !== undefined && year > maxYear) return true;
 
     return false;
   }
