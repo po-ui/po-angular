@@ -119,18 +119,18 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('placeholder: should duplicate string to both start and end', () => {
-      component.placeholder = 'placeholder string' as any;
+      component.placeholder = 'placeholder string';
       expect(component.placeholder).toEqual({ start: 'placeholder string', end: 'placeholder string' });
     });
 
     it('placeholder: should respect object values for start and end', () => {
       const value: PoDatepickerRange = { start: '01/01/2020', end: '31/12/2020' };
-      component.placeholder = value as any;
+      component.placeholder = value;
       expect(component.placeholder).toEqual(value);
     });
 
     it('placeholder: should reset to empty values when set to invalid', () => {
-      component.placeholder = null as any;
+      component.placeholder = null;
       expect(component.placeholder).toEqual({ start: '', end: '' });
     });
 
@@ -261,7 +261,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         markForCheck: jasmine.createSpy('markForCheck')
       } as any;
 
-      component.loading = null as any;
+      component.loading = null;
 
       expect(component['_loading']).toBeFalse();
       expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
@@ -427,7 +427,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
         expect((component as any)._rangePresets).toBeFalse();
 
-        component.rangePresets = null as any;
+        component.rangePresets = null;
 
         expect((component as any)._rangePresets).toBeFalse();
       });

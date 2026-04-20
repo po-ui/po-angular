@@ -1897,7 +1897,7 @@ describe('updateTooltip', () => {
       querySelector: jasmine.createSpy('querySelector').and.returnValue(inner)
     } as unknown as HTMLElement;
 
-    return { nativeElement: host } as ElementRef<HTMLElement>;
+    return { nativeElement: host };
   }
 
   it('should return false when measurable element is not available', () => {

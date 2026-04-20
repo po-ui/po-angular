@@ -454,7 +454,7 @@ describe('PoMultiselectComponent:', () => {
 
     it('should call closeHelperPopover and return early when helperIsVisible is true', () => {
       (component as any).label = '';
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
       component.displayAdditionalHelp = false;
 
       helperEl.helperIsVisible.and.returnValue(true);
@@ -545,7 +545,7 @@ describe('PoMultiselectComponent:', () => {
       helperEl.helperIsVisible.and.returnValue(false);
       component.helperEl = helperEl;
       spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
       spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
       spyOn(component.additionalHelp, 'emit');
 
@@ -776,7 +776,7 @@ describe('PoMultiselectComponent:', () => {
 
       spyOn(component, <any>'setService');
 
-      component.ngOnChanges(<any>changes);
+      component.ngOnChanges(changes);
 
       expect(component['setService']).not.toHaveBeenCalledWith(component.filterService);
     });

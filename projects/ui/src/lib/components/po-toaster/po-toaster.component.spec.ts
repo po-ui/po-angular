@@ -551,7 +551,7 @@ describe('PoToasterComponent', () => {
         component.sizeActions = undefined;
         expect(component.sizeActions).toBe('small');
 
-        component.configToaster(component as any);
+        component.configToaster(component);
 
         localStorage.setItem('po-default-size', 'medium');
         component['onThemeChange']();

@@ -488,6 +488,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const value = this.value as unknown as boolean;
     const isRequired = { required: true };
     if (this.invalidValue && this.fieldErrorMessage) {

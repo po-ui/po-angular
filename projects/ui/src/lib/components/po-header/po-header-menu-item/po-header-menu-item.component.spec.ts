@@ -107,7 +107,7 @@ describe('PoHeaderMenuItemComponent', () => {
       action: jasmine.createSpy('action')
     };
 
-    component.item = item as any;
+    component.item = item;
     spyOn(component.itemClick, 'emit');
 
     component.onKeyDownButtonList({ code: 'Enter', preventDefault: () => {} }, item);
@@ -122,7 +122,7 @@ describe('PoHeaderMenuItemComponent', () => {
       action: jasmine.createSpy('action')
     };
 
-    component.item = item as any;
+    component.item = item;
     spyOn(component, 'onAction');
 
     component.onKeyDownButtonList({ code: 'Enter', preventDefault: () => {} }, item);
@@ -172,7 +172,7 @@ describe('PoHeaderMenuItemComponent', () => {
       action: jasmine.createSpy('action')
     };
 
-    component.item = item as any;
+    component.item = item;
     spyOn(component, 'onAction');
 
     component.onKeyDownButtonList({ code: 'Space', preventDefault: () => {} }, item);
@@ -186,7 +186,7 @@ describe('PoHeaderMenuItemComponent', () => {
       action: jasmine.createSpy('action')
     };
 
-    component.item = item as any;
+    component.item = item;
     spyOn(component.itemClick, 'emit');
 
     component.onAction(item);

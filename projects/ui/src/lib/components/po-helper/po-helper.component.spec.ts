@@ -117,7 +117,7 @@ describe('PoHelperComponent', () => {
       (component as any).helper = () => ({ content: 'texto de ajuda' });
       popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
       (popover as any).isHidden = true;
-      component.popover = popover as any;
+      component.popover = popover;
       (component as any).disabled = () => false;
     });
 
@@ -231,7 +231,7 @@ describe('PoHelperComponent', () => {
     beforeEach(() => {
       popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
       (popover as any).isHidden = true;
-      component.popover = popover as any;
+      component.popover = popover;
       (component as any).disabled = () => false;
     });
 
@@ -315,7 +315,7 @@ describe('PoHelperComponent', () => {
     };
 
     fixture.componentRef.setInput('p-helper', options);
-    spyOnProperty(navigator, 'language', 'get').and.returnValue(undefined as any);
+    spyOnProperty(navigator, 'language', 'get').and.returnValue(undefined);
     expect(component['ariaLabel']()).toBe('Show Information');
   });
 
@@ -406,12 +406,12 @@ describe('PoHelperComponent', () => {
     beforeEach(() => {
       spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
         cb(0);
-        return 1 as any;
+        return 1;
       });
 
       popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
       (popover as any).isHidden = true;
-      component.popover = popover as any;
+      component.popover = popover;
 
       (component as any).helper = () => ({ content: 'texto de ajuda' });
     });
@@ -555,7 +555,7 @@ describe('PoHelperComponent', () => {
 
   describe('helperIsVisible', () => {
     it('should return falsy when popover is undefined', () => {
-      component.popover = undefined as any;
+      component.popover = undefined;
       const visible = (component as any).helperIsVisible();
       expect(visible).toBeFalsy();
     });

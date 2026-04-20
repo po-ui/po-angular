@@ -749,7 +749,7 @@ describe('PoUploadComponent:', () => {
 
       it('openModal: should not open modal if file is undefined', () => {
         const spyOpen = spyOn(component.modalComponent, 'open');
-        component.openModal(undefined as any);
+        component.openModal(undefined);
         expect(spyOpen).not.toHaveBeenCalled();
       });
 
@@ -1548,7 +1548,7 @@ describe('PoUploadComponent:', () => {
 
       it('should call closeHelperPopover and return early when helperIsVisible is true', () => {
         (component as any).label = '';
-        component.additionalHelpTooltip = undefined as any;
+        component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
 
         helperEl.helperIsVisible.and.returnValue(true);
@@ -1639,7 +1639,7 @@ describe('PoUploadComponent:', () => {
         helperEl.helperIsVisible.and.returnValue(false);
         component.helperEl = helperEl;
         spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
-        component.additionalHelpTooltip = undefined as any;
+        component.additionalHelpTooltip = undefined;
         spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
         spyOn(component.additionalHelp, 'emit');
 
@@ -1674,7 +1674,7 @@ describe('PoUploadComponent:', () => {
 
     it('customClick: should emit customActionClick with the provided file if customAction is defined', () => {
       const mockFile = { name: 'mock-file.txt' } as PoUploadFile;
-      component.customAction = { label: 'Download', icon: 'an-download' } as PoProgressAction;
+      component.customAction = { label: 'Download', icon: 'an-download' };
 
       spyOn(component.customActionClick, 'emit');
 

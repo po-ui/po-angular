@@ -349,6 +349,7 @@ export abstract class PoHeaderBaseComponent {
   size = computed(() => {
     this.themeChangeSignal();
     const value = this.sizeInput();
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return value ? (validateSizeFn(value, PoFieldSize) as string) : (getDefaultSizeFn(PoFieldSize) as string);
   });
 

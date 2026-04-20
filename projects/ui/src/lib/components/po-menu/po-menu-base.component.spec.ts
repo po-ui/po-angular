@@ -245,7 +245,7 @@ describe('PoMenuBaseComponent:', () => {
 
       const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
 
-      component['configService'](<any>service);
+      component['configService'](service);
 
       expect(component.filterService).toEqual(<any>service);
       expect(spyConfigPropeties).not.toHaveBeenCalled();

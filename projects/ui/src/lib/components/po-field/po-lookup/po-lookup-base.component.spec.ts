@@ -984,7 +984,7 @@ describe('PoLookupBaseComponent:', () => {
         }
       };
 
-      component.size = 'small' as any;
+      component.size = 'small';
       component['inputEl'] = inputElMock;
       component['isExpandedHeight'] = true;
 
@@ -1000,7 +1000,7 @@ describe('PoLookupBaseComponent:', () => {
         }
       };
 
-      component.size = 'medium' as any;
+      component.size = 'medium';
       component['inputEl'] = inputElMock;
       component['isExpandedHeight'] = false;
 
@@ -1016,7 +1016,7 @@ describe('PoLookupBaseComponent:', () => {
         }
       };
 
-      component.size = 'medium' as any;
+      component.size = 'medium';
       component['inputEl'] = inputElMock;
       component['isExpandedHeight'] = true;
 
@@ -1248,7 +1248,7 @@ describe('PoLookupBaseComponent:', () => {
         const defaultSpacing = PoTableColumnSpacing.Small;
         spyOn(component as any, 'getDefaultSpacing').and.returnValue(defaultSpacing);
 
-        component.spacing = 'invalid-spacing' as any;
+        component.spacing = 'invalid-spacing';
 
         expect(component.spacing).toBe(defaultSpacing);
       });

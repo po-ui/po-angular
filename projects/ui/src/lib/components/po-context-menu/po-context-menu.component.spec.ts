@@ -180,7 +180,7 @@ describe('PoContextMenuComponent:', () => {
         const span = document.createElement('span');
         li.appendChild(span);
 
-        component['handlerItemTooltip'](item as any, li);
+        component['handlerItemTooltip'](item, li);
         expect(item.tooltip).toBe('existing tooltip');
       });
 
@@ -197,7 +197,7 @@ describe('PoContextMenuComponent:', () => {
         Object.defineProperty(span, 'scrollHeight', { value: 40, configurable: true });
         Object.defineProperty(span, 'offsetHeight', { value: 20, configurable: true });
 
-        component['handlerItemTooltip'](item as any, li);
+        component['handlerItemTooltip'](item, li);
 
         const updatedItem = component['_items']().find(i => i.label === 'Long text that overflows');
         expect(updatedItem?.tooltip).toBe('Long text that overflows');
@@ -216,7 +216,7 @@ describe('PoContextMenuComponent:', () => {
         Object.defineProperty(span, 'scrollHeight', { value: 20, configurable: true });
         Object.defineProperty(span, 'offsetHeight', { value: 20, configurable: true });
 
-        component['handlerItemTooltip'](item as any, li);
+        component['handlerItemTooltip'](item, li);
 
         const updatedItem = component['_items']().find(i => i.label === 'Short text');
         expect(updatedItem?.tooltip).toBeUndefined();

@@ -425,7 +425,7 @@ describe('PoMenuComponent:', () => {
     const menuItem = { label: 'Teste', type: 'internalLink' };
 
     Object.defineProperty(component, 'menuItemsService', {
-      value: fakeMenuService(menuItem) as PoMenuItemsService,
+      value: fakeMenuService(menuItem),
       configurable: true
     });
     component.subscribeToMenuItem();
@@ -436,7 +436,7 @@ describe('PoMenuComponent:', () => {
     const menuItem = { label: 'Teste', type: 'subItems' };
 
     Object.defineProperty(component, 'menuItemsService', {
-      value: fakeMenuService(menuItem) as PoMenuItemsService,
+      value: fakeMenuService(menuItem),
       configurable: true
     });
     component.subscribeToMenuItem();
@@ -861,7 +861,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('should contain `po-menu-header-template` if `enableCollapse` is false and `menuHeaderTemplate` is defined', () => {
-      component.menuHeaderTemplate = <any>{ templateRef: null };
+      component.menuHeaderTemplate = { templateRef: null };
 
       spyOnProperty(component, 'enableCollapse').and.returnValue(false);
 
@@ -871,7 +871,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('shouldn`t contain `po-menu-header-template` if `enableCollapse` is true and `menuHeaderTemplate` is defined', () => {
-      component.menuHeaderTemplate = <any>{ templateRef: null };
+      component.menuHeaderTemplate = { templateRef: null };
 
       spyOnProperty(component, 'enableCollapse').and.returnValue(true);
 
@@ -1417,8 +1417,8 @@ describe('PoMenuComponent:', () => {
 
     it('activateCollapseSubMenuItem: should call `openParentMenu` with `activeMenuItem` if menu isn`t collapsed and has a subitem active', () => {
       component.collapsed = false;
-      component.activeMenuItem = <any>{ label: 'test', level: 2 };
-      component.groupedMenuItem = <any>{ label: 'test', level: 1 };
+      component.activeMenuItem = { label: 'test', level: 2 };
+      component.groupedMenuItem = { label: 'test', level: 1 };
 
       spyOn(component, <any>'openParentMenu');
 

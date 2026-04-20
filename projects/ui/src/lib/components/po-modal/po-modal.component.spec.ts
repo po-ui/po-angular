@@ -546,7 +546,7 @@ describe('PoModalComponent:', () => {
     });
 
     it('should not found `.po-button` if `modalFooter` is truthy', () => {
-      component.modalFooter = <any>{};
+      component.modalFooter = {};
       component.open();
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('.po-button:not([p-kind="tertiary"])'))).toBeNull();

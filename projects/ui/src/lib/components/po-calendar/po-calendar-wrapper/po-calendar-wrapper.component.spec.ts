@@ -472,7 +472,7 @@ describe('PoCalendarWrapperComponent', () => {
     it('handleNavigationKey: should return false when newDate is undefined', () => {
       component.displayMonthNumber = 5;
       component.displayYear = 2024;
-      component.displayDays = [new Date(2024, 5, 10), undefined as any];
+      component.displayDays = [new Date(2024, 5, 10), undefined];
 
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
@@ -516,7 +516,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       const disabledDay1 = new Date(2024, 5, 10);
       const disabledDay2 = new Date(2024, 5, 11);
-      component.displayDays = [disabledDay1, disabledDay2, null as any];
+      component.displayDays = [disabledDay1, disabledDay2, null];
 
       spyOn(component as any, 'isDayDisabled').and.returnValue(true);
       spyOn(component as any, 'findNextAvailableDay').and.returnValue(2);

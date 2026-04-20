@@ -678,7 +678,7 @@ describe('PoDatepickerBaseComponent:', () => {
     it('should set loading to false when value is falsy', () => {
       const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
 
-      component.loading = null as any;
+      component.loading = null;
 
       expect(component['_loading']).toBeFalse();
       expect(markForCheckSpy).toHaveBeenCalled();

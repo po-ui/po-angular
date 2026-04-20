@@ -407,7 +407,7 @@ describe('PoListViewComponent:', () => {
 
     it(`initShowDetail: shouldn't call 'showDetail' if property 'items' is undefined.`, () => {
       component.items = undefined;
-      component.listViewDetailTemplate = <any>{ showDetail: () => false, templateRef: undefined };
+      component.listViewDetailTemplate = { showDetail: () => false, templateRef: undefined };
 
       spyOn(component.listViewDetailTemplate, 'showDetail');
 

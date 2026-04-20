@@ -137,7 +137,8 @@ function addProviderToModuleProvider(
     modulePath,
     `
     ${provider}`,
-    null
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    null as any
   );
 
   return insertChanges(tree, changes, modulePath);

@@ -102,7 +102,7 @@ describe('PoMenuPanelComponent: ', () => {
       spyOn(component, <any>'clickMenuItem');
 
       Object.defineProperty(component, 'menuItemsService', {
-        value: fakeMenuPanelService(menuItem) as PoMenuPanelItemsService,
+        value: fakeMenuPanelService(menuItem),
         configurable: true
       });
       component['subscribeToMenuItem']();

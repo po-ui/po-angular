@@ -124,7 +124,7 @@ describe('PoChartGridUtils', () => {
     };
 
     it('should set pie config with radius 95% and center 50% 50% when legend is false', () => {
-      utils['component'].options = { legend: false } as any;
+      utils['component'].options = { legend: false };
 
       utils.setListTypeDonutPie(PoChartType.Pie);
 
@@ -201,7 +201,7 @@ describe('PoChartGridUtils', () => {
         innerRadius: 100,
         textCenterGraph: 'test',
         roseType: true
-      } as PoChartOptions;
+      };
 
       utils['component'].series = [
         { label: 'Serie 1', data: 10 },
@@ -232,7 +232,7 @@ describe('PoChartGridUtils', () => {
         innerRadius: 80,
         textCenterGraph: 'test',
         legendVerticalPosition: 'top'
-      } as PoChartOptions;
+      };
       utils['component'].series = [
         { label: 'Serie 1', data: 10 },
         { label: 'Serie 2', data: 30 }
@@ -323,7 +323,7 @@ describe('PoChartGridUtils', () => {
     });
 
     it('should use categories directly when isRadarOptions returns true', () => {
-      utils['component'].categories = { indicator: [{ name: 'Test' }] } as any;
+      utils['component'].categories = { indicator: [{ name: 'Test' }] };
 
       spyOn(utils as any, 'isRadarOptions').and.returnValue(true);
 

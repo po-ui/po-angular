@@ -55,7 +55,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         spyOn(component, <any>'initializeListeners');
 
-        component.ngOnChanges(<any>changes);
+        component.ngOnChanges(changes);
 
         expect(component['initializeListeners']).not.toHaveBeenCalled();
       });
@@ -113,7 +113,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         spyOn(component, <any>'updateValues');
 
-        component.ngOnChanges(<any>changes);
+        component.ngOnChanges(changes);
 
         expect(component['updateValues']).not.toHaveBeenCalled();
       });
@@ -123,7 +123,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         spyOn(component, <any>'onChangeColumns');
 
-        component.ngOnChanges(<any>changes);
+        component.ngOnChanges(changes);
 
         expect(component['onChangeColumns']).not.toHaveBeenCalled();
       });
@@ -1046,7 +1046,7 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`should set 'defaultColumns' with 'columns.currentValue' if 'lastVisibleColumnsSelected' is true and 'currentValue' not is empty`, () => {
-        component['defaultColumns'] = <any>[];
+        component['defaultColumns'] = [];
         component['lastVisibleColumnsSelected'] = undefined;
         const columns = {
           firstChange: true,
@@ -1061,7 +1061,7 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`should set 'defaultColumns' with empty array if 'lastVisibleColumnsSelected' is true and 'currentValue' is undefined`, () => {
-        component['defaultColumns'] = <any>[];
+        component['defaultColumns'] = [];
         component['lastVisibleColumnsSelected'] = undefined;
 
         const columns = {
@@ -1094,7 +1094,7 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`shouldn't set 'defaultColumns' if 'lastVisibleColumnsSelected' is true and 'currentValue' is undefined`, () => {
-        component['defaultColumns'] = <any>[];
+        component['defaultColumns'] = [];
         component['lastVisibleColumnsSelected'] = [
           { property: 'name', label: 'Name' },
           { property: 'total', label: 'Total' }

@@ -37,7 +37,7 @@ describe('PoBreadcrumbFavoriteComponent', () => {
     fixture.detectChanges();
 
     Object.defineProperty(component, 'service', {
-      value: fakeService({ isFavorite: true, url: 'test/123' }) as PoBreadcrumbFavoriteService
+      value: fakeService({ isFavorite: true, url: 'test/123' })
     });
   });
 

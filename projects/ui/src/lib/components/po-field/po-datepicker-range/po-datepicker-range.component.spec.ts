@@ -207,7 +207,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.literals = {
           open: 'Open calendar'
-        } as any;
+        };
 
         component.ngAfterViewInit();
 
@@ -233,7 +233,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.literals = {
           open: 'Open calendar'
-        } as any;
+        };
 
         component.ngAfterViewInit();
 
@@ -267,7 +267,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.literals = {
           open: 'Open calendar'
-        } as any;
+        };
 
         const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
 
@@ -550,7 +550,7 @@ describe('PoDatepickerRangeComponent:', () => {
         } as any;
 
         spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
-        spyOn(component, 'verifyMobile').and.returnValue(null as any);
+        spyOn(component, 'verifyMobile').and.returnValue(null);
 
         const event = {
           key: 'Tab',
@@ -1048,7 +1048,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.iconClean = {
           nativeElement: iconCleanMock
-        } as any;
+        };
 
         component.iconCalendar = {
           buttonElement: {
@@ -2353,7 +2353,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
       it('should call closeHelperPopover and return early when helperIsVisible is true', () => {
         (component as any).label = '';
-        component.additionalHelpTooltip = undefined as any;
+        component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
 
         helperEl.helperIsVisible.and.returnValue(true);
@@ -2444,7 +2444,7 @@ describe('PoDatepickerRangeComponent:', () => {
         helperEl.helperIsVisible.and.returnValue(false);
         component.helperEl = helperEl;
         spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
-        component.additionalHelpTooltip = undefined as any;
+        component.additionalHelpTooltip = undefined;
         spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
         spyOn(component.additionalHelp, 'emit');
 
@@ -3270,7 +3270,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     describe('ngAfterViewInit with optional chaining:', () => {
       it('should not throw when iconCalendar is undefined', () => {
-        component.iconCalendar = undefined as any;
+        component.iconCalendar = undefined;
 
         expect(() => component.ngAfterViewInit()).not.toThrow();
       });
@@ -3535,7 +3535,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDateInput.nativeElement.value = '24/11/2018';
       component.startDateInput.nativeElement.focus();
 
-      const digit8KeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 56 });
+      const digit8KeyEvent = new KeyboardEvent('keyup', { keyCode: 56 });
 
       component.startDateInput.nativeElement.dispatchEvent(digit8KeyEvent);
 
@@ -3546,7 +3546,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('should keep start date input active if typed key isn`t a number', () => {
       fixture.detectChanges();
-      const shiftKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
+      const shiftKeyEvent = new KeyboardEvent('keyup', { keyCode: 16 });
       spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.endDateInput.nativeElement.value = '';
@@ -3560,7 +3560,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should set cursor to end date input if typed key is arrowRight and cursor position is last number of start date', () => {
-      const arrowRightKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 39 });
+      const arrowRightKeyEvent = new KeyboardEvent('keyup', { keyCode: 39 });
       spyOn(component.endDateInput.nativeElement, 'focus');
       fixture.detectChanges();
       component.endDateInput.nativeElement.value = '';
@@ -3575,7 +3575,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should set cursor to start date input if typed key is arrowLeft and cursor position is first number of end date', () => {
-      const arrowLeftKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 37 });
+      const arrowLeftKeyEvent = new KeyboardEvent('keyup', { keyCode: 37 });
       spyOn(component.startDateInput.nativeElement, 'focus');
       fixture.detectChanges();
 
@@ -3591,7 +3591,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should set focus on end date input if cursor position is at the end of start date input', () => {
-      const arrowRightKeyEvent = new KeyboardEvent('keyup', <any>{ keyCode: 39 });
+      const arrowRightKeyEvent = new KeyboardEvent('keyup', { keyCode: 39 });
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
 
@@ -3612,7 +3612,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`should delete last caracter of start date input if element is end data input, typed key is backspace and cursor
       position is 0`, () => {
       // keyCode 8 is backspace
-      const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
+      const keydownBoardEventSetFocus = new KeyboardEvent('keydown', { keyCode: 8 });
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
       fixture.detectChanges();
@@ -3652,7 +3652,7 @@ describe('PoDatepickerRangeComponent:', () => {
       end date input has value`, () => {
       fixture.detectChanges();
       // keyCode 8 is backspace
-      const keydownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
+      const keydownBoardEventBackspace = new KeyboardEvent('keydown', { keyCode: 8 });
       spyOn(component.startDateInput.nativeElement, 'focus');
 
       // set value for start date input
@@ -3682,8 +3682,8 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should delete last caracter of start date input if typed key is backspace and start date input cursor position is 5', () => {
       fixture.detectChanges();
       // keyCode 8 is backspace
-      const keyupBoardEventBackspace = new KeyboardEvent('keyup', <any>{ keyCode: 8 });
-      const keyDownBoardEventBackspace = new KeyboardEvent('keydown', <any>{ keyCode: 8 });
+      const keyupBoardEventBackspace = new KeyboardEvent('keyup', { keyCode: 8 });
+      const keyDownBoardEventBackspace = new KeyboardEvent('keydown', { keyCode: 8 });
 
       component.startDateInput.nativeElement.value = '24/12';
       component.startDateInput.nativeElement.focus();
@@ -3732,7 +3732,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('shouldn`t set cursor to start date input if element is end data input, typed keys aren`t backspace and arrowLeft', () => {
       fixture.detectChanges();
       // keyCode 16 is shift
-      const keyupBoardEventSetFocus = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
+      const keyupBoardEventSetFocus = new KeyboardEvent('keyup', { keyCode: 16 });
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
         keyCode: 16,
         target: { name: component.endDateInputName }
@@ -3755,7 +3755,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('shouldn`t set cursor to end date input if element is start date input, typed keys aren`t backspace and arrowRight', () => {
       fixture.detectChanges();
       // keyCode 16 is shift
-      const keyupBoardEventSetFocus = new KeyboardEvent('keyup', <any>{ keyCode: 16 });
+      const keyupBoardEventSetFocus = new KeyboardEvent('keyup', { keyCode: 16 });
       const keydownBoardEventSetFocus = new KeyboardEvent('keydown', <any>{
         keyCode: 16,
         target: { name: component.endDateInputName }

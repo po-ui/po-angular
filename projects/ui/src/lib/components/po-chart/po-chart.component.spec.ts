@@ -1895,7 +1895,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should use literals.serie when firstColumnName is not provided', () => {
-      component.literals = { serie: 'Série Literal' } as any;
+      component.literals = { serie: 'Série Literal' };
 
       component.categories = {
         indicator: [{ name: 'Qualidade' }, { name: 'Velocidade' }, { name: 'Precisão' }]
@@ -1993,7 +1993,7 @@ describe('PoChartComponent', () => {
       component.valueGaugeMultiple = 999;
       component.series = [
         { data: 123, label: '', from: 0, to: 10 },
-        { data: 456, label: null as any, from: 11, to: 20 }
+        { data: 456, label: null, from: 11, to: 20 }
       ];
 
       component['setTablePropertiesTypeGauge']();
@@ -2013,7 +2013,7 @@ describe('PoChartComponent', () => {
   describe('setTableColumns:', () => {
     it('should correctly set columnsTable based on categories and use default label when firstColumnName is undefined', () => {
       const option = { xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }] };
-      component.options = {} as any;
+      component.options = {};
       component['literals'] = { serie: 'Série' };
 
       (component as any).setTableColumns(option, ['Jan', 'Fev', 'Mar']);
@@ -2052,7 +2052,7 @@ describe('PoChartComponent', () => {
         { serie: 'Série 2', valor1: 30 }
       ];
       component['columnsTable'] = [{ property: 'serie' }, { property: 'valor1' }, { property: 'valor2' }];
-      component.options = {} as any;
+      component.options = {};
 
       component['downloadCsv']();
 
@@ -2069,7 +2069,7 @@ describe('PoChartComponent', () => {
         { serie: 'Série 1', valor1: 10, valor2: undefined },
         { serie: 'Série 2', valor1: 30 }
       ];
-      component.options = {} as any;
+      component.options = {};
 
       component['downloadCsv']();
 

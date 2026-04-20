@@ -420,7 +420,7 @@ describe('PoSkeletonComponent', () => {
     });
 
     it('should return empty width and height for invalid variant', () => {
-      fixture.componentRef.setInput('p-variant', 'invalid-variant' as any);
+      fixture.componentRef.setInput('p-variant', 'invalid-variant');
       fixture.detectChanges();
       const styles = component.computedStyles();
       expect(styles['width']).toBe('');

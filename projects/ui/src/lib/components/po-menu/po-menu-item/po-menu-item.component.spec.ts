@@ -192,7 +192,7 @@ describe('PoMenuItemComponent:', () => {
   it('should call receiveFromParentMenuClicked Observable', () => {
     const menuItem = { label: 'Teste', type: 'subItems' };
     Object.defineProperty(component, 'menuItemsService', {
-      value: fakeMenuService(menuItem) as PoMenuItemsService,
+      value: fakeMenuService(menuItem),
       configurable: true
     });
 
@@ -492,7 +492,7 @@ describe('PoMenuItemComponent:', () => {
 
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = <any>[menuItem];
+    component.subItems = [menuItem];
 
     const menuOpened = menuItem;
     const menuActive = { id: '3', label: 'Register' };
@@ -512,7 +512,7 @@ describe('PoMenuItemComponent:', () => {
 
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = <any>[menuItem];
+    component.subItems = [menuItem];
 
     const menuOpened = menuItem;
     const menuActive = { id: '2', label: 'Search' };

@@ -127,7 +127,7 @@ describe('PoTabDropdownComponent:', () => {
     });
 
     it('setDropdownPosition: should set dropdownStyles with correct values when not inside a PoPage', () => {
-      Object.defineProperty(component, 'elementRef', { value: elementRefMock as ElementRef, configurable: true });
+      Object.defineProperty(component, 'elementRef', { value: elementRefMock, configurable: true });
 
       component.setDropdownPosition();
 
@@ -166,7 +166,7 @@ describe('PoTabDropdownComponent:', () => {
       };
 
       component.button.buttonElement = buttonElementRefMock as ElementRef;
-      Object.defineProperty(component, 'elementRef', { value: elementRefMock as ElementRef, configurable: true });
+      Object.defineProperty(component, 'elementRef', { value: elementRefMock, configurable: true });
 
       component.setDropdownPosition();
 

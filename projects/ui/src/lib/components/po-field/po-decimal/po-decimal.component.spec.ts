@@ -1606,7 +1606,7 @@ describe('PoDecimalComponent:', () => {
         component['cd'] = { detectChanges: () => {} } as any;
         component['inputEl'] = { nativeElement: { value: 'test' } } as ElementRef;
         Object.defineProperty(component, 'el', {
-          value: { nativeElement: document.createElement('div') } as ElementRef
+          value: { nativeElement: document.createElement('div') }
         });
 
         component.errorPattern = 'Erro de exemplo';

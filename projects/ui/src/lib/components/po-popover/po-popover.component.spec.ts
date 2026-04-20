@@ -436,7 +436,7 @@ describe('PoPopoverComponent:', () => {
       trigger: 'function',
       renderer: {
         listen: jasmine.createSpy('listen').and.callFake((_target, _event, callback) => {
-          callback({} as MouseEvent);
+          callback({});
           return fakeListener;
         })
       },
@@ -1191,7 +1191,7 @@ describe('PoPopoverComponent:', () => {
 
       it('should disconnect existing observer before creating a new one', () => {
         const disconnectSpy = jasmine.createSpy('disconnect');
-        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} } as any;
+        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} };
 
         (globalThis as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
           return {
@@ -1224,7 +1224,7 @@ describe('PoPopoverComponent:', () => {
         (component as any).observeContentResize();
 
         // First call (initial) should be skipped
-        capturedCallback([] as any, {} as any);
+        capturedCallback([], {} as any);
 
         expect(component['setElementsControlPosition']).not.toHaveBeenCalled();
         expect(component.setPopoverPosition).not.toHaveBeenCalled();
@@ -1249,10 +1249,10 @@ describe('PoPopoverComponent:', () => {
         (component as any).observeContentResize();
 
         // First call (initial) — skipped
-        capturedCallback([] as any, {} as any);
+        capturedCallback([], {} as any);
 
         // Second call — should recalculate
-        capturedCallback([] as any, {} as any);
+        capturedCallback([], {} as any);
 
         expect(component['setElementsControlPosition']).toHaveBeenCalled();
         expect(component.setPopoverPosition).toHaveBeenCalled();
@@ -1276,7 +1276,7 @@ describe('PoPopoverComponent:', () => {
     describe('disconnectResizeObserver:', () => {
       it('should disconnect and nullify the resizeObserver', () => {
         const disconnectSpy = jasmine.createSpy('disconnect');
-        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} } as any;
+        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} };
 
         (component as any).disconnectResizeObserver();
 

@@ -17,7 +17,7 @@ describe('PoRichTextBodyComponent:', () => {
       observe() {}
       unobserve() {}
       disconnect() {}
-    } as any;
+    };
 
     await TestBed.configureTestingModule({
       declarations: [PoRichTextBodyComponent],
@@ -1331,7 +1331,7 @@ describe('PoRichTextBodyComponent:', () => {
         const originalResizeObserver = (window as any).ResizeObserver;
         (window as any).ResizeObserver = undefined;
 
-        component['resizeObserver'] = undefined as any;
+        component['resizeObserver'] = undefined;
         component['initResizeObserver']();
 
         expect(component['resizeObserver']).toBeUndefined();
@@ -1342,7 +1342,7 @@ describe('PoRichTextBodyComponent:', () => {
       it('should return early if bodyEl is undefined', () => {
         Object.defineProperty(component, 'bodyEl', { value: undefined, writable: true });
 
-        component['resizeObserver'] = undefined as any;
+        component['resizeObserver'] = undefined;
 
         component['initResizeObserver']();
 

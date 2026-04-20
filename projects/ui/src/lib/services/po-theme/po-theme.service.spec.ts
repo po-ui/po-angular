@@ -110,7 +110,7 @@ describe('PoThemeService:', () => {
       ]
     });
 
-    renderer = TestBed.inject(RendererFactory2).createRenderer(null, null) as MockRenderer2;
+    renderer = TestBed.inject(RendererFactory2).createRenderer(null, null);
     service = TestBed.inject(PoThemeService);
 
     spyOn(renderer, 'createText').and.callFake(css => document.createTextNode(css));
@@ -640,7 +640,7 @@ describe('PoThemeService:', () => {
 
     describe('setCurrentThemeType', () => {
       beforeEach(() => {
-        spyOn(service, 'getThemeActive').and.returnValue({ ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme);
+        spyOn(service, 'getThemeActive').and.returnValue({ ...poThemeInit, active: PoThemeTypeEnum.light });
         spyOn(service, 'setThemeType');
       });
 
@@ -648,7 +648,7 @@ describe('PoThemeService:', () => {
         service.setCurrentThemeType();
 
         expect(service.setThemeType).toHaveBeenCalledWith(
-          { ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme,
+          { ...poThemeInit, active: PoThemeTypeEnum.light },
           PoThemeTypeEnum.light
         );
       });
@@ -657,7 +657,7 @@ describe('PoThemeService:', () => {
         service.setCurrentThemeType(PoThemeTypeEnum.dark);
 
         expect(service.setThemeType).toHaveBeenCalledWith(
-          { ...poThemeInit, active: PoThemeTypeEnum.light } as PoTheme,
+          { ...poThemeInit, active: PoThemeTypeEnum.light },
           PoThemeTypeEnum.dark
         );
       });
@@ -701,7 +701,7 @@ describe('PoThemeService:', () => {
         spyOn(service, 'getThemeActive').and.returnValue({
           ...poThemeInit,
           active: { type: PoThemeTypeEnum.light }
-        } as PoTheme);
+        });
         spyOn(service, 'setThemeA11y');
       });
 
@@ -709,7 +709,7 @@ describe('PoThemeService:', () => {
         service.setCurrentThemeA11y();
 
         expect(service.setThemeA11y).toHaveBeenCalledWith(
-          { ...poThemeInit, active: { type: PoThemeTypeEnum.light } } as PoTheme,
+          { ...poThemeInit, active: { type: PoThemeTypeEnum.light } },
           PoThemeA11yEnum.AAA
         );
       });
@@ -718,7 +718,7 @@ describe('PoThemeService:', () => {
         service.setCurrentThemeA11y(PoThemeA11yEnum.AA);
 
         expect(service.setThemeA11y).toHaveBeenCalledWith(
-          { ...poThemeInit, active: { type: PoThemeTypeEnum.light } } as PoTheme,
+          { ...poThemeInit, active: { type: PoThemeTypeEnum.light } },
           PoThemeA11yEnum.AA
         );
       });

@@ -172,7 +172,7 @@ describe('PoRichTextBaseComponent:', () => {
       it('should set `disabled` to true with valid values', () => {
         const validValues = [true, 'true', 1, ''];
         validValues.forEach(value => {
-          component.disabled = convertToBoolean(value) as any;
+          component.disabled = convertToBoolean(value);
           expect(component.disabled).toBeTrue();
         });
       });
@@ -180,7 +180,7 @@ describe('PoRichTextBaseComponent:', () => {
       it('should set `disabled` to false with invalid values', () => {
         const invalidValues = [undefined, null, 2, 'string'];
         invalidValues.forEach(value => {
-          component.disabled = convertToBoolean(value) as any;
+          component.disabled = convertToBoolean(value);
           expect(component.disabled).toBeFalse();
         });
       });
@@ -190,7 +190,7 @@ describe('PoRichTextBaseComponent:', () => {
       it('should set `loading` to true with valid values', () => {
         const validValues = [true, 'true', 1, ''];
         validValues.forEach(value => {
-          component.loading = convertToBoolean(value) as any;
+          component.loading = convertToBoolean(value);
           expect(component.loading).toBeTrue();
         });
       });
@@ -198,7 +198,7 @@ describe('PoRichTextBaseComponent:', () => {
       it('should set `loading` to false with invalid values', () => {
         const invalidValues = [undefined, null, 2, 'string'];
         invalidValues.forEach(value => {
-          component.loading = convertToBoolean(value) as any;
+          component.loading = convertToBoolean(value);
           expect(component.loading).toBeFalse();
         });
       });

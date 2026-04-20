@@ -3420,7 +3420,7 @@ describe('PoTableComponent:', () => {
   });
 
   it('should return 0 if columnMasterDetail is defined', () => {
-    component['columnMasterDetail'] = { property: 'detail' } as any;
+    component['columnMasterDetail'] = { property: 'detail' };
     spyOnProperty(component, 'hasItems').and.returnValue(true);
 
     const result = component['countExtraColumns']();
@@ -3534,7 +3534,7 @@ describe('PoTableComponent:', () => {
       component.sortedColumn = {
         property: undefined,
         ascending: false
-      } as any;
+      };
 
       spyOn(component, 'sortArray');
 

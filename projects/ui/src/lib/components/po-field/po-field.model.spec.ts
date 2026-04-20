@@ -143,7 +143,7 @@ describe('PoFieldModel', () => {
 
     it('should call closeHelperPopover and return early when helperHtmlElement is visible', () => {
       (component as any).label = '';
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
       component.displayAdditionalHelp = false;
 
       helperEl.helperIsVisible.and.returnValue(true);
@@ -160,7 +160,7 @@ describe('PoFieldModel', () => {
     it('should emit additionalHelp when isHelpEvt is true and then open popover if not visible', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
 
       spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
       spyOn(component.additionalHelp, 'emit');
@@ -178,7 +178,7 @@ describe('PoFieldModel', () => {
     it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
 
       const helperOpt = { eventOnClick: jasmine.createSpy('eventOnClick') };
 
@@ -212,7 +212,7 @@ describe('PoFieldModel', () => {
     it('should not call eventOnClick when helper is a string and should proceed to open popover', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
 
       const helperString = 'any string';
       spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
@@ -229,7 +229,7 @@ describe('PoFieldModel', () => {
     it('should enter the block via helperHtmlElement when others are falsy and open popover', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
 
       spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
 
@@ -258,7 +258,7 @@ describe('PoFieldModel', () => {
     it('should enter via isHelpEvt when helper and tooltip are falsy, emit and open popover', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
-      component.additionalHelpTooltip = undefined as any;
+      component.additionalHelpTooltip = undefined;
 
       spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
       spyOn(component.additionalHelp, 'emit');
