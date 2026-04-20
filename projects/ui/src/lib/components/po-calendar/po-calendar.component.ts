@@ -597,15 +597,14 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
     if (MODE_MONTH_YEAR) {
       if (this.selectedMonth && this.selectedYear) {
-        const month = String(this.selectedMonth).padStart(2, '0');
-        finalValue = `${month}-${this.selectedYear}`;
+        finalValue = new Date(this.selectedYear, this.selectedMonth - 1, 1);
         this.change.emit(finalValue);
       } else {
         return;
       }
     } else if (MODE_YEAR) {
       if (this.selectedYear) {
-        finalValue = String(this.selectedYear);
+        finalValue = new Date(this.selectedYear, 0, 1);
         this.change.emit(finalValue);
       } else {
         return;
