@@ -336,7 +336,7 @@ describe('PoPageDynamicDetailComponent:', () => {
 
       it('should configure properties based on the return of onload route', fakeAsync(() => {
         component.autoRouter = false;
-        component.actions = <any>{};
+        component.actions = {};
         component.breadcrumb = <any>{};
         component.fields = [];
         component.title = '';

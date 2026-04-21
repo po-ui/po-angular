@@ -919,6 +919,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
         return;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       this.router.config.unshift(<Route>{
         path: route.path,
         component: route.component,
