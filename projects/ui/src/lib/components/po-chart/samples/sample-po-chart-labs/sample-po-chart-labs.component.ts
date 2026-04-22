@@ -96,6 +96,7 @@ export class SamplePoChartLabsComponent implements OnInit {
   selectedValuesLegend: Array<string> = ['legend'];
   selectedLegendVerticalPosition: PoChartOptions['legendVerticalPosition'] = 'bottom';
   selectedLegendPosition: PoChartOptions['legendPosition'] = 'center';
+  selectedLegendType: PoChartOptions['legendPositionlegendType'] = 'plain';
   selectedRendererOption: PoChartOptions['rendererOption'] = 'canvas';
   selectedShapeOption = 'polygon';
   helpRadar = 'Example: ["Bold", "Keen", "Calm", "Wise"]';
@@ -128,6 +129,11 @@ export class SamplePoChartLabsComponent implements OnInit {
     { value: 'left', label: 'left' },
     { value: 'center', label: 'center' },
     { value: 'right', label: 'right' }
+  ];
+
+  optionsLegendType = [
+    { value: 'plain', label: 'plain' },
+    { value: 'scroll', label: 'scroll' }
   ];
 
   optionsRendererOption = [
@@ -253,6 +259,13 @@ export class SamplePoChartLabsComponent implements OnInit {
     this.options = {
       ...this.options,
       legendPosition: this.selectedLegendPosition
+    };
+  }
+
+  changeLegendType() {
+    this.options = {
+      ...this.options,
+      legendType: this.selectedLegendType
     };
   }
 

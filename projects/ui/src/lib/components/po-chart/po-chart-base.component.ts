@@ -59,6 +59,8 @@ const poChartDefaultHeight = 400;
  * | `--font-size-grid`                       | Tamanho da fonte usada nos valores dos eixos                            | `var(--font-size-xs)`                             |
  * | `--font-weight-grid`                     | Peso da fonte usada nos valores dos eixos                               | `var(--font-weight-normal)`                       |
  * | `--color-legend`                         | Cor da fonte da legenda                                                 | `var(--color-neutral-dark-70)`                    |
+ * | `--color-legend-scroll-icon-active`      | Cor do ícone de scroll da legenda no estado ativo, pro tipo `scroll`    | `var(--color-action-default)`                     |
+ * | `--color-legend-scroll-icon-inactive`    | Cor do ícone de scroll da legenda no estado inativo, pro tipo `scroll`  | `var(--color-action-disabled)`                    |
  * | `--border-radius-bar`                    | Tamanho da borda nos graficos `Bar` e `Column`                          | `var(--border-radius-none)`                       |
  * | `--border-color`                         | Cor da borda do gráfico nos Gráficos `Donut` e `Pie`                    | `var(--color-neutral-light-00)`                   |
  * | `--color-hightlight-value`               | Cor do valor de destaque nos Gráficos `Donut` e `Gauge`                 | `var(--color-neutral-dark-70)`                    |

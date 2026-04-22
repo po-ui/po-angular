@@ -1718,6 +1718,42 @@ describe('PoChartComponent', () => {
     });
   });
 
+  describe('setOptionLegend', () => {
+    it('should configure legend with scroll type', () => {
+      spyOn(component as any, 'getCSSVariable').and.returnValue('#000');
+
+      component.options = {
+        legendType: 'scroll'
+      };
+
+      const options: any = {};
+
+      component['setOptionLegend'](options);
+
+      expect(options.legend.type).toBe('scroll');
+      expect(options.legend.pageIconColor).toBe('#000');
+      expect(options.legend.pageIconInactiveColor).toBe('#000');
+      expect(options.legend.left).toBe(32);
+    });
+
+    it('should configure legend with default plain type when legendType is not scroll', () => {
+      spyOn(component as any, 'getCSSVariable').and.returnValue('#000');
+
+      component.options = {
+        legendPosition: 'right'
+      };
+
+      const options: any = {};
+
+      component['setOptionLegend'](options);
+
+      expect(options.legend.type).toBe('plain');
+      expect(options.legend.pageIconColor).toBe('');
+      expect(options.legend.pageIconInactiveColor).toBe('');
+      expect(options.legend.left).toBe('right');
+    });
+  });
+
   describe('setTableProperties:', () => {
     beforeEach(() => {
       component['chartInstance'] = {

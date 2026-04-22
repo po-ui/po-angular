@@ -567,10 +567,19 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
 
   private setOptionLegend(options) {
     options.legend = {
+      type: this.options?.legendType || 'plain',
+      pageIconColor:
+        this.options?.legendType === 'scroll'
+          ? this.getCSSVariable('--color-legend-scroll-icon-active', '.po-chart')
+          : '',
+      pageIconInactiveColor:
+        this.options?.legendType === 'scroll'
+          ? this.getCSSVariable('--color-legend-scroll-icon-inactive', '.po-chart')
+          : '',
       show: true,
       selectedMode: !this.isTypeGauge,
       orient: 'horizontal',
-      left: this.options?.legendPosition || 'center',
+      left: this.options?.legendType === 'scroll' ? 32 : this.options?.legendPosition || 'center',
       top: this.options?.legendVerticalPosition || 'bottom',
       bottom: 0,
       padding: [0, 16, 0, 16],

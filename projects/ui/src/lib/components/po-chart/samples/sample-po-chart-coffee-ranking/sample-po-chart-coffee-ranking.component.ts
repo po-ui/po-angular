@@ -53,7 +53,17 @@ export class SamplePoChartCoffeeRankingComponent {
     { label: 'Norway', data: 7.2, tooltip: 'Norway (Europe)' },
     { label: 'Netherlands', data: 6.7, tooltip: 'Netherlands (Europe)' },
     { label: 'Slovenia', data: 6.1, tooltip: 'Slovenia (Europe)' },
-    { label: 'Austria', data: 5.5, tooltip: 'Austria (Europe)' }
+    { label: 'Austria', data: 5.5, tooltip: 'Austria (Europe)' },
+    { label: 'Germany', data: 5.2, tooltip: 'Germany (Europe)' },
+    { label: 'Denmark', data: 5.1, tooltip: 'Denmark (Europe)' },
+    { label: 'Sweden', data: 4.9, tooltip: 'Sweden (Europe)' },
+    { label: 'Switzerland', data: 4.8, tooltip: 'Switzerland (Europe)' },
+    { label: 'Belgium', data: 4.6, tooltip: 'Belgium (Europe)' },
+    { label: 'Canada', data: 4.5, tooltip: 'Canada (North America)' },
+    { label: 'Brazil', data: 4.3, tooltip: 'Brazil (South America)' },
+    { label: 'Italy', data: 4.2, tooltip: 'Italy (Europe)' },
+    { label: 'France', data: 4.1, tooltip: 'France (Europe)' },
+    { label: 'USA', data: 4.0, tooltip: 'USA (North America)' }
   ];
 
   consumptionPerCapita: Array<PoChartSerie> = [
@@ -114,6 +124,10 @@ export class SamplePoChartCoffeeRankingComponent {
   coffeeProductionOptions: PoChartOptions = {
     roseType: true,
     borderRadius: 8
+  };
+
+  coffeeConsumptionOptions: PoChartOptions = {
+    legendType: 'scroll'
   };
 
   consumptionPerCapitaOptions: PoChartOptions = {

@@ -140,6 +140,22 @@ export interface PoChartOptions {
    *
    * @description
    *
+   * Define o tipo da legenda.
+   *
+   * - `plain`: exibe todas as legendas de forma estática.
+   * - `scroll`: habilita rolagem quando a quantidade de legendas exceder o espaço disponível no gráfico.
+   *
+   * > Propriedade inválida para o gráfico do tipo `Gauge`.
+   *
+   * @default `plain`
+   */
+  legendType?: 'plain' | 'scroll';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Define a posição vertical da legenda no gráfico.
    * > Quando utilizada com o valor `top`, recomenda-se configurar também a propriedade `bottomDataZoom` caso o `dataZoom` esteja habilitado, para evitar sobreposição entre os elementos.
    * > Propriedade inválida para o gráfico do tipo `Gauge`.

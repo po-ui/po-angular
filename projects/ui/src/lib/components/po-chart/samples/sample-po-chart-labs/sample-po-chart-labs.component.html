@@ -426,6 +426,16 @@
 
     <po-radio-group
       class="po-md-4"
+      name="radioLegendType"
+      p-label="LegendType"
+      [p-options]="optionsLegendType"
+      [(ngModel)]="selectedLegendType"
+      (p-change)="changeLegendType()"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-4"
       name="radioRendererOption"
       p-label="RendererOption"
       [p-options]="optionsRendererOption"
