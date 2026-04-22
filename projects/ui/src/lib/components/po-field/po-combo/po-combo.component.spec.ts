@@ -1167,7 +1167,7 @@ describe('PoComboComponent:', () => {
 
       it('should call closeHelperPopover and return early when helperIsVisible is true', () => {
         (component as any).label = '';
-        component.additionalHelpTooltip = undefined as any;
+        component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
         helperEl.helperIsVisible.and.returnValue(true);
         component.helperEl = helperEl;
@@ -1254,7 +1254,7 @@ describe('PoComboComponent:', () => {
         helperEl.helperIsVisible.and.returnValue(false);
         component.helperEl = helperEl;
         spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
-        component.additionalHelpTooltip = undefined as any;
+        component.additionalHelpTooltip = undefined;
         spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
         spyOn(component.additionalHelp, 'emit');
 
@@ -1933,7 +1933,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t have a child span tag inside `po-combo-item` if `comboOptionTemplate` is true', () => {
-      component.comboOptionTemplate = <any>{ templateRef: null };
+      component.comboOptionTemplate = { templateRef: null };
       component.options = [{ label: '1', value: '1' }];
 
       fixture.detectChanges();
@@ -1944,7 +1944,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('shouldn`t contain `po-combo-item` if `comboOptionTemplate` is true but combo options have groups', () => {
-      component.comboOptionTemplate = <any>{ templateRef: null };
+      component.comboOptionTemplate = { templateRef: null };
       component.options = [{ label: '1', options: [{ value: 'value' }] }];
 
       fixture.detectChanges();
@@ -2378,7 +2378,7 @@ describe('PoComboComponent - with service:', () => {
 
       spyOn(component, <any>'configAfterSetFilterService');
 
-      component.ngOnChanges(<any>changes);
+      component.ngOnChanges(changes);
 
       expect(component['configAfterSetFilterService']).not.toHaveBeenCalled();
     });
@@ -2401,7 +2401,7 @@ describe('PoComboComponent - with service:', () => {
       spyOn(component, <any>'unsubscribeKeyupObservable');
       spyOn(component, <any>'initInputObservable');
 
-      component.ngOnChanges(<any>changes);
+      component.ngOnChanges(changes);
 
       expect(component['unsubscribeKeyupObservable']).not.toHaveBeenCalled();
       expect(component['initInputObservable']).not.toHaveBeenCalled();

@@ -39,7 +39,7 @@ describe('PoItemListComponent', () => {
           searchValue: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true },
           label: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true }
         };
-        component.ngOnChanges(<any>changes);
+        component.ngOnChanges(changes);
 
         expect(component['shouldUpdateSelected'](changes)).toBeTrue();
       });

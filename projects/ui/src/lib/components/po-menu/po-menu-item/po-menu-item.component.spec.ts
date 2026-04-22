@@ -489,7 +489,7 @@ describe('PoMenuItemComponent:', () => {
 
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = <any>[menuItem];
+    component.subItems = [menuItem];
 
     const menuOpened = menuItem;
     const menuActive = { id: '3', label: 'Register' };
@@ -509,7 +509,7 @@ describe('PoMenuItemComponent:', () => {
 
     component.id = '1';
     component.type = 'subItems';
-    component.subItems = <any>[menuItem];
+    component.subItems = [menuItem];
 
     const menuOpened = menuItem;
     const menuActive = { id: '2', label: 'Search' };

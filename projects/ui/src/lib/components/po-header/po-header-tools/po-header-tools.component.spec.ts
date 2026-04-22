@@ -131,7 +131,7 @@ describe('PoHeaderToolsComponent', () => {
   });
 
   it('should open external link in new tab when isExternalLink is true', () => {
-    const item: PoHeaderActionTool = { link: 'http://external.com' } as any;
+    const item: PoHeaderActionTool = { link: 'http://external.com' };
 
     spyOn(util, 'isExternalLink').and.returnValue(true);
     const windowSpy = spyOn(window, 'open');
@@ -143,7 +143,7 @@ describe('PoHeaderToolsComponent', () => {
   });
 
   it('should navigate using router when isExternalLink is false', () => {
-    const item: PoHeaderActionTool = { link: '/internal' } as any;
+    const item: PoHeaderActionTool = { link: '/internal' };
 
     spyOn(util, 'isExternalLink').and.returnValue(false);
     const routerSpy = spyOn(router, 'navigateByUrl');
