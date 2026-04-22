@@ -1039,7 +1039,7 @@ describe('PoPageLoginComponent: ', () => {
       const loginLabel = 'Login label';
       const passwordLabel = 'Password label';
 
-      component.literals = <PoPageLoginLiterals>{ loginLabel, passwordLabel };
+      component.literals = { loginLabel, passwordLabel };
 
       fixture.detectChanges();
 
