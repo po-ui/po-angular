@@ -159,10 +159,12 @@ export function addProviderToModuleProvider(
 ) {
   const moduleSource = getSourceFile(tree, modulePath);
   const changes = addProviderToModule(
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     moduleSource as any,
     modulePath,
     `
     ${provider}`,
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     null as any
   );
 

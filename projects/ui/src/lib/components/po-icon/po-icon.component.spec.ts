@@ -138,7 +138,7 @@ describe('PoIconComponent: ', () => {
       it(`should concatenate 'po-fonts-icon' if it does not exist in the service`, () => {
         const iconName = 'ICON_BOOK';
         const mockIconService = { ICON_BOOK: 'book' };
-        component = new PoIconComponent(mockIconService as any);
+        component = new PoIconComponent(mockIconService);
         const result = component['getIcon'](iconName);
         expect(result).toEqual('po-fonts-icon book');
       });

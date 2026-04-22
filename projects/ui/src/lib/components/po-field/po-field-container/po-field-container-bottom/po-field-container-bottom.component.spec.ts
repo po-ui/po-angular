@@ -87,7 +87,7 @@ describe('PoFieldContainerBottomComponent', () => {
       it('should do nothing when `changes` does not contain `showHelperComponent`', () => {
         const otherChanges: SimpleChanges = {
           someOtherInput: new SimpleChange(undefined, 'x', false)
-        } as any;
+        };
         component.ngOnChanges(otherChanges);
 
         expect((component as any).helperEl.openHelperPopover).not.toHaveBeenCalled();

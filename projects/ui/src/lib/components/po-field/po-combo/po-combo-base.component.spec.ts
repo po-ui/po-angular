@@ -1249,8 +1249,8 @@ describe('PoComboBaseComponent:', () => {
     describe('VisibleOptions:', () => {
       beforeEach(async () => {
         component = TestBed.runInInjectionContext(() => new PoComboTest());
-        component.filterService = null as any;
-        component.defaultService = null as any;
+        component.filterService = null;
+        component.defaultService = null;
       });
 
       it(`should set 'visibleOptions' with 'options' with 'value' and 'label' dynamic`, () => {

@@ -84,7 +84,7 @@ describe('PoGaugeBaseComponent', () => {
       component.value = <any>'   ';
       expect(component.value).toBeUndefined();
 
-      component.value = <any>null;
+      component.value = null;
       expect(component.value).toBeUndefined();
     });
 

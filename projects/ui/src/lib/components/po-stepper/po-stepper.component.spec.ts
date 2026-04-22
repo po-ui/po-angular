@@ -681,11 +681,11 @@ describe('PoStepperComponent:', () => {
 
     it(`canActiveNextStep: should return throw error and set 'currentActiveStep.status'
       with 'PoStepperStatus.Error' if some problem in observable`, (done: DoneFn) => {
-      const currentActiveStep = <PoStepComponent>{
+      const currentActiveStep = {
         label: 'po-label',
-        canActiveNextStep: currentStep => <any>throwError(new Error('Error')),
+        canActiveNextStep: currentStep => throwError(new Error('Error')),
         status: PoStepperStatus.Default
-      };
+      } as unknown as PoStepComponent;
 
       component['canActiveNextStep'](currentActiveStep).subscribe(
         () => {},
