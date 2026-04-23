@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.9](https://github.com/po-ui/po-angular/compare/v19.39.8...v19.39.9) (2026-04-23)
+
+
+### Bug Fixes
+
+* **dependencies:** atualiza dependências Angular para ~19.2 ([4ce4bf4](https://github.com/po-ui/po-angular/commit/4ce4bf4a00e40794209c0f823e02d467c4290efd))
+
 ### [19.39.8](https://github.com/po-ui/po-angular/compare/v19.39.7...v19.39.8) (2026-04-16)
 
 
