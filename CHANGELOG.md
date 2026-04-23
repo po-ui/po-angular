@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.11.0](https://github.com/po-ui/po-angular/compare/v21.10.0...v21.11.0) (2026-04-23)
+
+
+### Bug Fixes
+
+* **dependencies:** atualiza dependências Angular para ~21.2 ([e22a819](https://github.com/po-ui/po-angular/commit/e22a819c40cf3bd9fde1bf7681bf7691e21cc6c5))
+
 ## [21.10.0](https://github.com/po-ui/po-angular/compare/v21.9.0...v21.10.0) (2026-04-16)
 
 
