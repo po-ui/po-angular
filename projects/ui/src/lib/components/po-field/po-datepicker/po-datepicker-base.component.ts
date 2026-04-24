@@ -112,11 +112,30 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   // Propriedade interna que define se o ícone de ajuda adicional terá cursor clicável (evento) ou padrão (tooltip).
   @Input() additionalHelpEventTrigger: string | undefined;
 
-  //@Todo - Documentar externo
+  /** Rótulo do campo. */
+  @Input('p-label') label?: string;
+
+  /** Texto de apoio do campo. */
+  @Input('p-help') help?: string;
+
+  /**
+   * Define o modo de operação do datepicker.
+   *
+   * Permite configurar o componente para seleção de:
+   * - Mês e ano (`month-year`);
+   * - Apenas ano (`year`).
+   */
   @Input('p-mode') mode?: 'month-year' | 'year' = undefined;
 
-  //@Todo - Documentar externo
-  //Citar valor default 150 anos para mais e para menos a partir do ano atual, totalizando um range de 300 anos.
+  /**
+   * Define o limite de anos exibidos nas variações `month-year` e `year`,
+   * considerando a data atual como referência.
+   *
+   * O valor informado determina o intervalo de anos anterior e posterior
+   * à data corrente que será disponibilizado para seleção.
+   *
+   * @default 150
+   */
   @Input('p-year-range-limit') yearRangeLimit?: number = 150;
 
   /**
@@ -511,6 +530,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *  - `mm/dd/yyyy`
    *  - `yyyy/mm/dd`
    *
+   * Propriedade incompatível com as variações month-year e year.
+   *
    * @default `dd/mm/yyyy`
    */
   @Input('p-format') set format(value: string) {
@@ -543,6 +564,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * Padrão de formatação para saída do *model*, independentemente do formato de entrada.
    *
    * > Veja os valores válidos no *enum* `PoDatepickerIsoFormat`.
+   *
+   * Propriedade incompatível com as variações month-year e year.
    */
   @Input('p-iso-format') set isoFormat(value: PoDatepickerIsoFormat) {
     if (Object.values(PoDatepickerIsoFormat).includes(value)) {

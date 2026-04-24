@@ -173,34 +173,37 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   selectMonth(index: number, event?: KeyboardEvent, selected = false): void {
     const monthOptions = this.getMonthOptions();
 
-    if (event?.key === 'Enter' || event?.code === 'Space' || selected) {
+    const isSelectAction = event?.key === 'Enter' || event?.code === 'Space' || selected;
+
+    if (isSelectAction) {
       this.selectedIndexMonth = index;
+      this.selectedMonth = index + 1;
+
+      this.updateModel(this.selectedMonth);
     }
 
     if (monthOptions[index]) {
       this.focusedIndex = index;
       monthOptions[index].focus();
     }
-
-    this.selectedMonth = index + 1;
-
-    this.updateModel(this.selectedMonth);
   }
 
   selectYear(index: number, event?: KeyboardEvent, selected = false, year?): void {
     const yearOptions = this.getYearOptions();
 
-    if (event?.key === 'Enter' || event?.code === 'Space' || selected) {
+    const isSelectAction = event?.key === 'Enter' || event?.code === 'Space' || selected;
+
+    if (isSelectAction) {
       this.selectedIndexYear = index;
+      this.selectedYear = year;
+
+      this.updateModel(this.selectedYear);
     }
 
     if (yearOptions[index]) {
       this.focusedIndex = index;
       yearOptions[index].focus();
     }
-
-    this.selectedYear = year;
-    this.updateModel(this.selectedYear);
   }
 
   onKeydownMonth(event: KeyboardEvent, index: number): void {
@@ -405,6 +408,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       this.writeDate(value);
     } else {
       this.value = null;
+      this.selectedMonth = null;
+      this.selectedYear = null;
+      this.selectedIndexMonth = null;
+      this.selectedIndexYear = null;
     }
 
     const activateDate = this.getValidateStartDate(value);
@@ -597,15 +604,14 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
     if (MODE_MONTH_YEAR) {
       if (this.selectedMonth && this.selectedYear) {
-        const month = String(this.selectedMonth).padStart(2, '0');
-        finalValue = `${month}-${this.selectedYear}`;
+        finalValue = new Date(this.selectedYear, this.selectedMonth - 1, 1);
         this.change.emit(finalValue);
       } else {
         return;
       }
     } else if (MODE_YEAR) {
       if (this.selectedYear) {
-        finalValue = String(this.selectedYear);
+        finalValue = new Date(this.selectedYear, 0, 1);
         this.change.emit(finalValue);
       } else {
         return;
@@ -617,8 +623,38 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     }
   }
 
+  private setMonth(index: number) {
+    this.selectedIndexMonth = index;
+    this.selectedMonth = index + 1;
+  }
+
+  private setYear(index: number, year: number) {
+    this.selectedIndexYear = index;
+    this.selectedYear = year;
+  }
+
   private writeDate(value: any) {
-    if (this.isRange) {
+    if (this.mode === 'month-year') {
+      const date = new Date(value);
+      const monthIndex = date.getMonth();
+      const year = date.getFullYear();
+      const yearOptions = this.getYearOptions();
+
+      const yearIndex = (yearOptions as any[]).findIndex(btn => Number(btn.label()) === year);
+
+      this.setMonth(monthIndex);
+      this.setYear(yearIndex, year);
+
+      return;
+    } else if (this.mode === 'year') {
+      const year = new Date(value).getFullYear();
+      const yearOptions = this.getYearOptions();
+
+      const yearIndex = (yearOptions as any[]).findIndex(btn => Number(btn.label()) === year);
+
+      this.setYear(yearIndex, year);
+      return;
+    } else if (this.isRange) {
       const start = value?.start;
       const end = value?.end;
 
