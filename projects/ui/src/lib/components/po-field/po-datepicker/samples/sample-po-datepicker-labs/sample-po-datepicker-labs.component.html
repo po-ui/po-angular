@@ -23,6 +23,7 @@
   [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   [p-loading]="properties.includes('loading')"
   [p-compact-label]="properties?.includes('compactLabel')"
+  [p-mode]="mode"
   [p-size]="size"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
@@ -111,6 +112,16 @@
     p-columns="4"
     p-label="Iso Format"
     [p-options]="isoFormatOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="mode"
+    [(ngModel)]="mode"
+    p-columns="4"
+    p-label="Mode"
+    [p-options]="modeOptions"
   >
   </po-radio-group>
 

@@ -1027,6 +1027,76 @@ describe('PoDatepickerBaseComponent:', () => {
       component['mode'] = 'month-year';
       expect(component['isMonthYearOrYearInvalid']('')).toBeFalse();
     });
+
+    it('should return false for null value', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid'](null)).toBeFalse();
+    });
+
+    it('should return false for undefined value', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid'](undefined)).toBeFalse();
+    });
+
+    it('should return true when month-year has no separator', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('2025')).toBeTrue();
+    });
+
+    it('should return true when month-year has too many parts', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('01/02/2025')).toBeTrue();
+    });
+
+    it('should return true when month-year year part is NaN', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('04/abc')).toBeTrue();
+    });
+
+    it('should return true when month-year month part is NaN', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('xx/2025')).toBeTrue();
+    });
+
+    it('should return true when month-year year is zero', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('04/0')).toBeTrue();
+    });
+
+    it('should return true when month-year year is negative', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('04/-1')).toBeTrue();
+    });
+
+    it('should return true for negative year in year mode', () => {
+      component['mode'] = 'year';
+      expect(component['isMonthYearOrYearInvalid']('-1')).toBeTrue();
+    });
+
+    it('should return false for valid boundary month 1 in month-year mode', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('01/2025')).toBeFalse();
+    });
+
+    it('should return false for valid boundary month 12 in month-year mode', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('12/2025')).toBeFalse();
+    });
+
+    it('should return false when mode is default (not month-year or year)', () => {
+      component['mode'] = undefined;
+      expect(component['isMonthYearOrYearInvalid']('anything')).toBeFalse();
+    });
+
+    it('should return true for boolean value', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid'](true)).toBeTrue();
+    });
+
+    it('should return true for array value', () => {
+      component['mode'] = 'year';
+      expect(component['isMonthYearOrYearInvalid']([2025])).toBeTrue();
+    });
   });
 
   describe('validateMonthYearRange:', () => {

@@ -2816,5 +2816,58 @@ describe('PoDatepickerComponent:', () => {
         }, 300);
       });
     });
+
+    describe('controlChangeEmitter - inputEl fallback to empty string:', () => {
+      it('should use empty string when inputEl is undefined for month-year mode', done => {
+        component.mode = 'month-year';
+        component['valueBeforeChange'] = '04/2025';
+
+        const originalInputEl = component.inputEl;
+        component.inputEl = undefined;
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).toHaveBeenCalledWith('');
+          component.inputEl = originalInputEl;
+          done();
+        }, 300);
+      });
+
+      it('should use empty string when inputEl.nativeElement is undefined for year mode', done => {
+        component.mode = 'year';
+        component['valueBeforeChange'] = '2025';
+
+        const originalInputEl = component.inputEl;
+        component.inputEl = { nativeElement: undefined } as any;
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).toHaveBeenCalledWith('');
+          component.inputEl = originalInputEl;
+          done();
+        }, 300);
+      });
+
+      it('should use empty string when inputEl.nativeElement.value is null for month-year mode', done => {
+        component.mode = 'month-year';
+        component['valueBeforeChange'] = '04/2025';
+
+        const originalInputEl = component.inputEl;
+        component.inputEl = { nativeElement: { value: null } } as any;
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).toHaveBeenCalledWith('');
+          component.inputEl = originalInputEl;
+          done();
+        }, 300);
+      });
+    });
   });
 });
