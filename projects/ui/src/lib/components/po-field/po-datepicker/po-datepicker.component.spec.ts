@@ -2561,5 +2561,121 @@ describe('PoDatepickerComponent:', () => {
         expect(component.togglePicker).toHaveBeenCalled();
       });
     });
+
+    describe('isValidInputForMode:', () => {
+      it('should return true for empty value', () => {
+        component.mode = 'month-year';
+        expect(component['isValidInputForMode']('')).toBeTrue();
+      });
+
+      it('should return true for valid month-year input', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+        expect(component['isValidInputForMode']('06/2025')).toBeTrue();
+      });
+
+      it('should return false for invalid month in month-year input', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+        expect(component['isValidInputForMode']('13/2025')).toBeFalse();
+      });
+
+      it('should return false for month-year input with wrong format', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+        expect(component['isValidInputForMode']('2025')).toBeFalse();
+      });
+
+      it('should return true for valid year input', () => {
+        component.mode = 'year';
+        expect(component['isValidInputForMode']('2025')).toBeTrue();
+      });
+
+      it('should return false for invalid year input', () => {
+        component.mode = 'year';
+        expect(component['isValidInputForMode']('0000')).toBeFalse();
+      });
+
+      it('should return false for year input with wrong length', () => {
+        component.mode = 'year';
+        expect(component['isValidInputForMode']('25')).toBeFalse();
+      });
+
+      it('should return true when mode is not set', () => {
+        component.mode = undefined;
+        expect(component['isValidInputForMode']('anything')).toBeTrue();
+      });
+    });
+
+    describe('controlChangeEmitter with invalid values:', () => {
+      it('should not emit p-change for invalid month-year input', done => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        component['valueBeforeChange'] = '';
+        component.inputEl.nativeElement.value = '13/2025';
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).not.toHaveBeenCalled();
+          done();
+        }, 300);
+      });
+
+      it('should emit p-change for valid month-year input', done => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        component['valueBeforeChange'] = '';
+        component.inputEl.nativeElement.value = '06/2025';
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).toHaveBeenCalledWith('06/2025');
+          done();
+        }, 300);
+      });
+
+      it('should not emit p-change for invalid year input', done => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['valueBeforeChange'] = '';
+        component.inputEl.nativeElement.value = '00';
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).not.toHaveBeenCalled();
+          done();
+        }, 300);
+      });
+
+      it('should emit p-change for valid year input', done => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['valueBeforeChange'] = '';
+        component.inputEl.nativeElement.value = '2025';
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).toHaveBeenCalledWith('2025');
+          done();
+        }, 300);
+      });
+    });
   });
 });
