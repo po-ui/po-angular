@@ -526,7 +526,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   // Função implementada do ControlValueAccessor
   writeValue(value: any) {
     if (this.inputEl && value) {
-      if (this.mode === 'month-year' && typeof value === 'string') {
+      if (this.mode === 'month-year') {
         this.writeMonthYearValue(value);
         return;
       }
@@ -722,23 +722,30 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     this.date = new Date(year, 1, 1);
   }
 
-  private writeMonthYearValue(value: string): void {
+  private writeMonthYearValue(value: any): void {
     const separator = this.languageService.getDateSeparator(this.locale);
-    // Accept both / and - as separators in input value
-    const normalizedValue = value.replace('-', '/');
-    const parts = normalizedValue.split('/');
-    if (parts.length === 2) {
-      const month = parseInt(parts[0], 10);
-      const year = parseInt(parts[1], 10);
-      if (!isNaN(month) && !isNaN(year) && month >= 1 && month <= 12) {
-        const displayValue = ('0' + month).slice(-2) + separator + year;
-        this.inputEl.nativeElement.value = displayValue;
-        const modelValue = ('0' + month).slice(-2) + '/' + year;
-        this.callOnChange(modelValue, false);
-        this.syncCalendarMonthYear(modelValue);
-      } else {
-        this.inputEl.nativeElement.value = '';
+
+    let month: number;
+    let year: number;
+
+    if (value instanceof Date) {
+      month = value.getMonth() + 1;
+      year = value.getFullYear();
+    } else if (typeof value === 'string') {
+      const normalizedValue = value.replace('-', '/');
+      const parts = normalizedValue.split('/');
+      if (parts.length === 2) {
+        month = parseInt(parts[0], 10);
+        year = parseInt(parts[1], 10);
       }
+    }
+
+    if (!isNaN(month) && !isNaN(year) && month >= 1 && month <= 12 && year > 0) {
+      const displayValue = ('0' + month).slice(-2) + separator + year;
+      this.inputEl.nativeElement.value = displayValue;
+      const modelValue = ('0' + month).slice(-2) + '/' + year;
+      this.callOnChange(modelValue, false);
+      this.syncCalendarMonthYear(modelValue);
     } else {
       this.inputEl.nativeElement.value = '';
     }

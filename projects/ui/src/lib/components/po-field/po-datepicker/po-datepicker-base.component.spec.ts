@@ -467,6 +467,151 @@ describe('PoDatepickerBaseComponent:', () => {
 
         expect(component['hasValidatorRequired']).toBeTrue();
       });
+
+      // Tests for month-year mode validation
+      it('should NOT return error for valid month-year string "04/2025" when mode is month-year', () => {
+        component.mode = 'month-year';
+        expect(component.validate(new UntypedFormControl('04/2025'))).toEqual(null);
+      });
+
+      it('should NOT return error for valid month-year string "12/2000" when mode is month-year', () => {
+        component.mode = 'month-year';
+        expect(component.validate(new UntypedFormControl('12/2000'))).toEqual(null);
+      });
+
+      it('should return date error for invalid month "13/2025" when mode is month-year', () => {
+        component.mode = 'month-year';
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('13/2025'));
+        expect(result).toEqual({ date: { valid: false } });
+      });
+
+      it('should return date error for invalid month "00/2025" when mode is month-year', () => {
+        component.mode = 'month-year';
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('00/2025'));
+        expect(result).toEqual({ date: { valid: false } });
+      });
+
+      it('should return date error for non-string value when mode is month-year', () => {
+        component.mode = 'month-year';
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl(12345));
+        expect(result).toEqual({ date: { valid: false } });
+      });
+
+      it('should NOT return error for empty value when mode is month-year', () => {
+        component.mode = 'month-year';
+        expect(component.validate(new UntypedFormControl(''))).toEqual(null);
+      });
+
+      it('should NOT return error for null value when mode is month-year', () => {
+        component.mode = 'month-year';
+        expect(component.validate(new UntypedFormControl(null))).toEqual(null);
+      });
+
+      // Tests for year mode validation
+      it('should NOT return error for valid year string "2025" when mode is year', () => {
+        component.mode = 'year';
+        expect(component.validate(new UntypedFormControl('2025'))).toEqual(null);
+      });
+
+      it('should return date error for invalid year "0000" when mode is year', () => {
+        component.mode = 'year';
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('0000'));
+        expect(result).toEqual({ date: { valid: false } });
+      });
+
+      it('should return date error for non-numeric year "abcd" when mode is year', () => {
+        component.mode = 'year';
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('abcd'));
+        expect(result).toEqual({ date: { valid: false } });
+      });
+
+      it('should NOT return error for empty value when mode is year', () => {
+        component.mode = 'year';
+        expect(component.validate(new UntypedFormControl(''))).toEqual(null);
+      });
+
+      // Tests for month-year date range validation
+      it('should return date error when month-year date is before minDate', () => {
+        component.mode = 'month-year';
+        component['date'] = new Date(2024, 0, 1);
+        component['_minDate'] = new Date(2025, 0, 1);
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('01/2024'));
+        expect(result).toEqual({ date: { valid: false } });
+        expect(component.errorPattern).toBe('Data fora do período');
+      });
+
+      it('should return date error when month-year date is after maxDate', () => {
+        component.mode = 'month-year';
+        component['date'] = new Date(2026, 5, 1);
+        component['_maxDate'] = new Date(2025, 11, 1);
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('06/2026'));
+        expect(result).toEqual({ date: { valid: false } });
+        expect(component.errorPattern).toBe('Data fora do período');
+      });
+
+      it('should NOT return error when month-year date is within range', () => {
+        component.mode = 'month-year';
+        component['date'] = new Date(2025, 5, 1);
+        component['_minDate'] = new Date(2025, 0, 1);
+        component['_maxDate'] = new Date(2025, 11, 1);
+        const result = component.validate(new UntypedFormControl('06/2025'));
+        expect(result).toEqual(null);
+      });
+
+      // Tests for year date range validation
+      it('should return date error when year date is before minDate year', () => {
+        component.mode = 'year';
+        component['date'] = new Date(2024, 0, 1);
+        component['_minDate'] = new Date(2025, 0, 1);
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('2024'));
+        expect(result).toEqual({ date: { valid: false } });
+        expect(component.errorPattern).toBe('Data fora do período');
+      });
+
+      it('should return date error when year date is after maxDate year', () => {
+        component.mode = 'year';
+        component['date'] = new Date(2026, 0, 1);
+        component['_maxDate'] = new Date(2025, 0, 1);
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('2026'));
+        expect(result).toEqual({ date: { valid: false } });
+        expect(component.errorPattern).toBe('Data fora do período');
+      });
+
+      it('should NOT return error when year date is within range', () => {
+        component.mode = 'year';
+        component['date'] = new Date(2025, 0, 1);
+        component['_minDate'] = new Date(2020, 0, 1);
+        component['_maxDate'] = new Date(2030, 0, 1);
+        const result = component.validate(new UntypedFormControl('2025'));
+        expect(result).toEqual(null);
+      });
+
+      // Ensures default mode still uses dateFailed
+      it('should still use dateFailed for default mode (no mode set)', () => {
+        component.mode = undefined;
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+        const result = component.validate(new UntypedFormControl('04/2025'));
+        expect(result).toEqual({ date: { valid: false } });
+      });
     });
 
     it('ngOnInit: should call buildMask', () => {

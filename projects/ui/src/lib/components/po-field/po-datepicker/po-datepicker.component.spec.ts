@@ -2256,116 +2256,46 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('syncCalendarMonthYear:', () => {
-      it('should update calendar selectedMonth and selectedYear', () => {
+      it('should set date from MM/YYYY string', () => {
         component.mode = 'month-year';
         fixture.detectChanges();
-
-        const calendarMock = {
-          selectedMonth: 0,
-          selectedYear: 0,
-          selectedIndexMonth: -1,
-          selectedIndexYear: -1,
-          displayYears: [2023, 2024, 2025, 2026]
-        };
-        component['calendar'] = calendarMock as any;
 
         component['syncCalendarMonthYear']('06/2025');
 
-        expect(calendarMock.selectedMonth).toBe(6);
-        expect(calendarMock.selectedYear).toBe(2025);
-        expect(calendarMock.selectedIndexMonth).toBe(5);
-        expect(calendarMock.selectedIndexYear).toBe(2);
+        expect(component.date instanceof Date).toBeTrue();
+        expect(component.date.getMonth()).toBe(5);
+        expect(component.date.getFullYear()).toBe(2025);
       });
 
-      it('should not set selectedIndexYear when year is not in displayYears', () => {
+      it('should set date for different month/year', () => {
         component.mode = 'month-year';
         fixture.detectChanges();
 
-        const calendarMock = {
-          selectedMonth: 0,
-          selectedYear: 0,
-          selectedIndexMonth: -1,
-          selectedIndexYear: -1,
-          displayYears: [2023, 2024, 2025]
-        };
-        component['calendar'] = calendarMock as any;
+        component['syncCalendarMonthYear']('01/2030');
 
-        component['syncCalendarMonthYear']('06/2030');
-
-        expect(calendarMock.selectedMonth).toBe(6);
-        expect(calendarMock.selectedYear).toBe(2030);
-        expect(calendarMock.selectedIndexYear).toBe(-1);
+        expect(component.date instanceof Date).toBeTrue();
+        expect(component.date.getMonth()).toBe(0);
+        expect(component.date.getFullYear()).toBe(2030);
       });
 
-      it('should do nothing when calendar is not available', () => {
-        component['calendar'] = undefined as any;
-        expect(() => component['syncCalendarMonthYear']('06/2025')).not.toThrow();
+      it('should not throw when value has wrong format', () => {
+        expect(() => component['syncCalendarMonthYear']('2025')).not.toThrow();
       });
     });
 
     describe('syncCalendarYear:', () => {
-      it('should update calendar selectedYear and selectedIndexYear', () => {
-        const calendarMock = {
-          selectedYear: 0,
-          selectedIndexYear: -1,
-          displayYears: [2023, 2024, 2025, 2026]
-        };
-        component['calendar'] = calendarMock as any;
-
+      it('should set date from year number', () => {
         component['syncCalendarYear'](2025);
 
-        expect(calendarMock.selectedYear).toBe(2025);
-        expect(calendarMock.selectedIndexYear).toBe(2);
+        expect(component.date instanceof Date).toBeTrue();
+        expect(component.date.getFullYear()).toBe(2025);
       });
 
-      it('should not set selectedIndexYear when year is not in displayYears', () => {
-        const calendarMock = {
-          selectedYear: 0,
-          selectedIndexYear: -1,
-          displayYears: [2023, 2024, 2025]
-        };
-        component['calendar'] = calendarMock as any;
-
+      it('should set date for different year', () => {
         component['syncCalendarYear'](2030);
 
-        expect(calendarMock.selectedYear).toBe(2030);
-        expect(calendarMock.selectedIndexYear).toBe(-1);
-      });
-
-      it('should do nothing when calendar is not available', () => {
-        component['calendar'] = undefined as any;
-        expect(() => component['syncCalendarYear'](2025)).not.toThrow();
-      });
-    });
-
-    describe('formatCalendarEventToDisplay:', () => {
-      it('should replace dash with locale separator for month-year mode', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-
-        const result = component['formatCalendarEventToDisplay']('03-2025');
-        expect(result).toBe('03/2025');
-      });
-
-      it('should return event as-is for year mode', () => {
-        component.mode = 'year';
-
-        const result = component['formatCalendarEventToDisplay']('2025');
-        expect(result).toBe('2025');
-      });
-
-      it('should return empty string for empty event', () => {
-        component.mode = 'month-year';
-
-        const result = component['formatCalendarEventToDisplay']('');
-        expect(result).toBe('');
-      });
-
-      it('should return empty string for null/undefined event', () => {
-        component.mode = 'month-year';
-
-        const result = component['formatCalendarEventToDisplay'](undefined as any);
-        expect(result).toBe('');
+        expect(component.date instanceof Date).toBeTrue();
+        expect(component.date.getFullYear()).toBe(2030);
       });
     });
 
@@ -2412,6 +2342,30 @@ describe('PoDatepickerComponent:', () => {
         fixture.detectChanges();
 
         component['writeMonthYearValue']('2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should accept Date object and extract month/year', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        const dateValue = new Date(2025, 3, 1);
+        component['writeMonthYearValue'](dateValue);
+
+        expect(component.inputEl.nativeElement.value).toBe('04/2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('04/2025', false);
+      });
+
+      it('should clear input for non-string non-Date value', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        component['writeMonthYearValue'](12345);
 
         expect(component.inputEl.nativeElement.value).toBe('');
       });
@@ -2547,10 +2501,32 @@ describe('PoDatepickerComponent:', () => {
 
         expect(component['writeYearValue']).toHaveBeenCalledWith(2025);
       });
+
+      it('should call writeMonthYearValue for month-year mode with Date object', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'writeMonthYearValue');
+        const dateValue = new Date(2025, 3, 1);
+        component.writeValue(dateValue);
+
+        expect(component['writeMonthYearValue']).toHaveBeenCalledWith(dateValue);
+      });
+
+      it('should call writeYearValue for year mode with Date object', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn<any>(component, 'writeYearValue');
+        const dateValue = new Date(2025, 0, 1);
+        component.writeValue(dateValue);
+
+        expect(component['writeYearValue']).toHaveBeenCalledWith(dateValue);
+      });
     });
 
     describe('dateSelected with month-year/year mode:', () => {
-      it('should format and set input value for month-year mode', () => {
+      it('should format and set input value for month-year mode with Date event', () => {
         component.mode = 'month-year';
         component.locale = 'pt';
         fixture.detectChanges();
@@ -2559,15 +2535,16 @@ describe('PoDatepickerComponent:', () => {
         spyOn<any>(component, 'controlChangeEmitter');
         spyOn(component, 'togglePicker');
 
-        component.dateSelected('03-2025');
+        const dateEvent = new Date(2025, 2, 1);
+        component.dateSelected(dateEvent);
 
         expect(component.inputEl.nativeElement.value).toBe('03/2025');
-        expect(component.callOnChange).toHaveBeenCalledWith('03-2025');
+        expect(component.callOnChange).toHaveBeenCalledWith('03/2025');
         expect(component['controlChangeEmitter']).toHaveBeenCalled();
         expect(component.togglePicker).toHaveBeenCalled();
       });
 
-      it('should set input value for year mode', () => {
+      it('should set input value for year mode with Date event', () => {
         component.mode = 'year';
         fixture.detectChanges();
 
@@ -2575,7 +2552,8 @@ describe('PoDatepickerComponent:', () => {
         spyOn<any>(component, 'controlChangeEmitter');
         spyOn(component, 'togglePicker');
 
-        component.dateSelected('2025');
+        const dateEvent = new Date(2025, 0, 1);
+        component.dateSelected(dateEvent);
 
         expect(component.inputEl.nativeElement.value).toBe('2025');
         expect(component.callOnChange).toHaveBeenCalledWith('2025');

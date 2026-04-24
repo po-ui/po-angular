@@ -780,7 +780,18 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       this.hasValidatorRequired = true;
     }
 
-    if (dateFailed(c.value)) {
+    if (this.mode === 'month-year' || this.mode === 'year') {
+      if (this.isMonthYearOrYearInvalid(c.value)) {
+        this.errorPattern = this.errorPattern || 'Data inválida';
+
+        this.cd?.markForCheck();
+        return {
+          date: {
+            valid: false
+          }
+        };
+      }
+    } else if (dateFailed(c.value)) {
       this.errorPattern = this.errorPattern || 'Data inválida';
 
       this.cd?.markForCheck();
@@ -800,7 +811,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       };
     }
 
-    if (this.date && !PoUtils.validateDateRange(this.date, this._minDate, this._maxDate)) {
+    if (this.date && !this.isDateRangeValidForMode()) {
       this.errorPattern = this.errorPattern || 'Data fora do período';
 
       this.cd?.markForCheck();
@@ -826,6 +837,78 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     }
 
     return null;
+  }
+
+  // Valida se o valor é inválido para modos month-year ou year
+  private isMonthYearOrYearInvalid(value: any): boolean {
+    if (!value || value === '') {
+      return false;
+    }
+
+    if (typeof value !== 'string') {
+      return true;
+    }
+
+    if (this.mode === 'month-year') {
+      const parts = value.split('/');
+      if (parts.length !== 2) {
+        return true;
+      }
+      const month = parseInt(parts[0], 10);
+      const year = parseInt(parts[1], 10);
+      return isNaN(month) || isNaN(year) || month < 1 || month > 12 || year <= 0;
+    }
+
+    if (this.mode === 'year') {
+      const year = parseInt(value, 10);
+      return isNaN(year) || year <= 0;
+    }
+
+    return false;
+  }
+
+  // Valida range de data considerando o modo
+  private isDateRangeValidForMode(): boolean {
+    if (this.mode === 'month-year') {
+      return this.validateMonthYearRange(this.date, this._minDate, this._maxDate);
+    }
+    if (this.mode === 'year') {
+      return this.validateYearRange(this.date, this._minDate, this._maxDate);
+    }
+    return PoUtils.validateDateRange(this.date, this._minDate, this._maxDate);
+  }
+
+  private validateMonthYearRange(date: Date, minDate: Date, maxDate: Date): boolean {
+    if (!date) {
+      return true;
+    }
+    const dateMonthYear = date.getFullYear() * 12 + date.getMonth();
+    if (minDate) {
+      const minMonthYear = minDate.getFullYear() * 12 + minDate.getMonth();
+      if (dateMonthYear < minMonthYear) {
+        return false;
+      }
+    }
+    if (maxDate) {
+      const maxMonthYear = maxDate.getFullYear() * 12 + maxDate.getMonth();
+      if (dateMonthYear > maxMonthYear) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private validateYearRange(date: Date, minDate: Date, maxDate: Date): boolean {
+    if (!date) {
+      return true;
+    }
+    if (minDate && date.getFullYear() < minDate.getFullYear()) {
+      return false;
+    }
+    if (maxDate && date.getFullYear() > maxDate.getFullYear()) {
+      return false;
+    }
+    return true;
   }
 
   protected validateModel(model: any) {
