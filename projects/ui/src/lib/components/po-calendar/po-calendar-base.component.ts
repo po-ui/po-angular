@@ -251,7 +251,12 @@ export class PoCalendarBaseComponent {
     return this.mode === PoCalendarMode.Year;
   }
 
-  // @Todo - DOCUMENTAR - Prop interna
+  //  Propriedade interna utilizada pelo po-datepicker.
+  //  Define o limite de anos exibidos nas variações `month-year` e `year`,
+  //  considerando a data atual como referência.
+  //
+  //  O valor informado determina o intervalo de anos anterior e posterior
+  //  à data corrente que será disponibilizado para seleção.
   @Input('p-year-range-limit') yearRangeLimit?: number = 150;
 
   // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
