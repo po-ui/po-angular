@@ -625,74 +625,65 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private handleMonthYearKeyup(): void {
-    const value = this.inputEl.nativeElement.value;
-    const separator = this.languageService.getDateSeparator(this.locale);
-    const expectedLength = 7; // mm/yyyy
-
-    if (this.objMask?.valueToModel || this.objMask?.valueToModel === '') {
-      if (value.length >= expectedLength) {
-        const parsed = this.parseMonthYearInput(value, separator);
-        if (parsed) {
-          this.callOnChange(parsed);
-          this.syncCalendarMonthYear(parsed);
-        } else {
-          this.callOnChange('Data inválida');
-        }
-      } else {
-        this.callOnChange('');
-      }
+    if (!(this.objMask?.valueToModel || this.objMask?.valueToModel === '')) {
+      return;
     }
+    const value = this.inputEl.nativeElement.value;
+    if (value.length < 7) {
+      this.callOnChange('');
+      return;
+    }
+    this.applyMonthYearValue(value);
   }
 
   private handleYearKeyup(): void {
-    const value = this.inputEl.nativeElement.value;
-    const expectedLength = 4; // yyyy
-
-    if (this.objMask?.valueToModel || this.objMask?.valueToModel === '') {
-      if (value.length >= expectedLength) {
-        const year = parseInt(value, 10);
-        if (!isNaN(year) && year > 0) {
-          this.callOnChange(`${year}`);
-          this.syncCalendarYear(year);
-        } else {
-          this.callOnChange('Data inválida');
-        }
-      } else {
-        this.callOnChange('');
-      }
+    if (!(this.objMask?.valueToModel || this.objMask?.valueToModel === '')) {
+      return;
     }
+    const value = this.inputEl.nativeElement.value;
+    if (value.length < 4) {
+      this.callOnChange('');
+      return;
+    }
+    this.applyYearValue(value);
   }
 
   private handleMonthYearBlur(): void {
     const value = this.inputEl.nativeElement.value;
-    const separator = this.languageService.getDateSeparator(this.locale);
-
-    if (value) {
-      const parsed = this.parseMonthYearInput(value, separator);
-      if (parsed) {
-        this.callOnChange(parsed);
-        this.syncCalendarMonthYear(parsed);
-      } else {
-        this.callOnChange('Data inválida');
-      }
-    } else {
+    if (!value) {
       this.callOnChange('');
+      return;
     }
+    this.applyMonthYearValue(value);
   }
 
   private handleYearBlur(): void {
     const value = this.inputEl.nativeElement.value;
-
-    if (value) {
-      const year = parseInt(value, 10);
-      if (!isNaN(year) && year > 0 && value.length === 4) {
-        this.callOnChange(`${year}`);
-        this.syncCalendarYear(year);
-      } else {
-        this.callOnChange('Data inválida');
-      }
-    } else {
+    if (!value) {
       this.callOnChange('');
+      return;
+    }
+    this.applyYearValue(value, true);
+  }
+
+  private applyMonthYearValue(value: string): void {
+    const separator = this.languageService.getDateSeparator(this.locale);
+    const parsed = this.parseMonthYearInput(value, separator);
+    if (parsed) {
+      this.callOnChange(parsed);
+      this.syncCalendarMonthYear(parsed);
+    } else {
+      this.callOnChange('Data inválida');
+    }
+  }
+
+  private applyYearValue(value: string, requireFullLength: boolean = false): void {
+    const year = parseInt(value, 10);
+    if (!isNaN(year) && year > 0 && (!requireFullLength || value.length === 4)) {
+      this.callOnChange(`${year}`);
+      this.syncCalendarYear(year);
+    } else {
+      this.callOnChange('Data inválida');
     }
   }
 
@@ -719,7 +710,7 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private syncCalendarYear(year: number): void {
-    this.date = new Date(year, 1, 1);
+    this.date = new Date(year, 0, 1);
   }
 
   private writeMonthYearValue(value: any): void {

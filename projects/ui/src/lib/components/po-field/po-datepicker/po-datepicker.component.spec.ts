@@ -2284,18 +2284,12 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('syncCalendarYear:', () => {
-      it('should set date from year number', () => {
+      it('should set date with January (month 0) from year number', () => {
         component['syncCalendarYear'](2025);
 
         expect(component.date instanceof Date).toBeTrue();
         expect(component.date.getFullYear()).toBe(2025);
-      });
-
-      it('should set date for different year', () => {
-        component['syncCalendarYear'](2030);
-
-        expect(component.date instanceof Date).toBeTrue();
-        expect(component.date.getFullYear()).toBe(2030);
+        expect(component.date.getMonth()).toBe(0);
       });
     });
 
@@ -2673,6 +2667,151 @@ describe('PoDatepickerComponent:', () => {
 
         setTimeout(() => {
           expect(component.onchange.emit).toHaveBeenCalledWith('2025');
+          done();
+        }, 300);
+      });
+    });
+
+    describe('formatToDate for month-year/year modes:', () => {
+      it('should return string value as-is for month-year mode', () => {
+        component.mode = 'month-year';
+        expect(component.formatToDate('04/2025')).toBe('04/2025');
+      });
+
+      it('should return string year for year mode', () => {
+        component.mode = 'year';
+        expect(component.formatToDate('2025')).toBe('2025');
+      });
+
+      it('should return string for numeric year in year mode', () => {
+        component.mode = 'year';
+        expect(component.formatToDate(2025)).toBe('2025');
+      });
+
+      it('should return undefined for non-Date non-string in default mode', () => {
+        component.mode = undefined;
+        expect(component.formatToDate(12345)).toBeUndefined();
+      });
+    });
+
+    describe('focusCalendar fallback branches:', () => {
+      let event: any;
+
+      beforeEach(() => {
+        event = { preventDefault: jasmine.createSpy('preventDefault'), shiftKey: false, key: 'Tab' } as any;
+        component['visible'] = true;
+      });
+
+      it('should focus monthOptionSelected when no firstCombo exists', () => {
+        const focusSpy = jasmine.createSpy('focus');
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: (selector: string) => {
+              if (selector.includes('po-combo-first')) return null;
+              if (selector.includes('po-button-selected') && selector.includes('months')) return { focus: focusSpy };
+              return null;
+            }
+          }
+        } as any;
+
+        component['focusCalendar'](event);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus monthOption when no firstCombo and no monthOptionSelected', () => {
+        const focusSpy = jasmine.createSpy('focus');
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: (selector: string) => {
+              if (selector.includes('po-combo-first')) return null;
+              if (selector.includes('po-button-selected')) return null;
+              if (selector.includes('months') && selector.includes('.po-button')) return { focus: focusSpy };
+              return null;
+            }
+          }
+        } as any;
+
+        component['focusCalendar'](event);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus yearOptionSelected when no combo and no month options', () => {
+        const focusSpy = jasmine.createSpy('focus');
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: (selector: string) => {
+              if (selector.includes('po-combo-first')) return null;
+              if (selector.includes('months')) return null;
+              if (selector.includes('po-button-selected') && selector.includes('years')) return { focus: focusSpy };
+              return null;
+            }
+          }
+        } as any;
+
+        component['focusCalendar'](event);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus yearOptionEnabled when no combo, no month, no yearSelected', () => {
+        const focusSpy = jasmine.createSpy('focus');
+        component.dialogPicker = {
+          nativeElement: {
+            querySelector: (selector: string) => {
+              if (selector.includes('po-combo-first')) return null;
+              if (selector.includes('months')) return null;
+              if (selector.includes('po-button-selected')) return null;
+              if (selector.includes('not([disabled])')) return { focus: focusSpy };
+              return null;
+            }
+          }
+        } as any;
+
+        component['focusCalendar'](event);
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+    });
+
+    describe('handleMonthYearKeyup when objMask is falsy:', () => {
+      it('should not call callOnChange when objMask is undefined', () => {
+        component.mode = 'month-year';
+        component['objMask'] = undefined;
+        component.inputEl.nativeElement.value = '04/2025';
+
+        spyOn(component, 'callOnChange' as any);
+        component['handleMonthYearKeyup']();
+        expect(component['callOnChange']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('handleYearKeyup when objMask is falsy:', () => {
+      it('should not call callOnChange when objMask is undefined', () => {
+        component.mode = 'year';
+        component['objMask'] = undefined;
+        component.inputEl.nativeElement.value = '2025';
+
+        spyOn(component, 'callOnChange' as any);
+        component['handleYearKeyup']();
+        expect(component['callOnChange']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('controlChangeEmitter - no emit when value unchanged:', () => {
+      it('should not emit p-change for month-year when value is unchanged', done => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        component.inputEl.nativeElement.value = '04/2025';
+        component['valueBeforeChange'] = '04/2025';
+
+        spyOn(component.onchange, 'emit');
+        component['controlChangeEmitter']();
+
+        setTimeout(() => {
+          expect(component.onchange.emit).not.toHaveBeenCalled();
           done();
         }, 300);
       });
