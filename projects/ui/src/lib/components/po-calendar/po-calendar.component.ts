@@ -650,8 +650,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
       this.setMonth(monthIndex);
       this.setYear(yearIndex, year);
-
-      return;
     } else if (this.mode === 'year') {
       const year = new Date(value).getFullYear();
       const yearOptions = this.getYearOptions();
@@ -659,7 +657,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       const yearIndex = (yearOptions as Array<any>).findIndex(btn => Number(btn.label()) === year);
 
       this.setYear(yearIndex, year);
-      return;
     } else if (this.isRange) {
       const start = value?.start;
       const end = value?.end;

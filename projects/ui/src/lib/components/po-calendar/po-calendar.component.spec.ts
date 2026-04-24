@@ -1565,7 +1565,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should emit close on Shift+Tab in year mode', () => {
-        component.mode = PoCalendarMode.Year as any;
+        component.mode = PoCalendarMode.Year;
         spyOn(component.close, 'emit');
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
 
@@ -1575,7 +1575,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should focus month list on Shift+Tab in month-year mode', () => {
-        component.mode = PoCalendarMode.MonthYear as any;
+        component.mode = PoCalendarMode.MonthYear;
         const mockMonthBtn = { focus: jasmine.createSpy('focus') } as any;
         spyOn<any>(component, 'getMonthOptions').and.returnValue([mockMonthBtn]);
         spyOn<any>(component, 'getYearOptions').and.returnValue([]);
@@ -1588,7 +1588,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should focus first month option on Shift+Tab when no selected month', () => {
-        component.mode = PoCalendarMode.MonthYear as any;
+        component.mode = PoCalendarMode.MonthYear;
         const mockMonthBtn = { focus: jasmine.createSpy('focus') } as any;
         spyOn<any>(component, 'getMonthOptions').and.returnValue([mockMonthBtn]);
         spyOn<any>(component, 'getYearOptions').and.returnValue([]);
@@ -1614,7 +1614,7 @@ describe('PoCalendarComponent:', () => {
 
     describe('updateModel for month-year mode:', () => {
       it('should emit Date with month and year when both selected in month-year mode', () => {
-        component.mode = PoCalendarMode.MonthYear as any;
+        component.mode = PoCalendarMode.MonthYear;
         component['selectedMonth'] = 6;
         component['selectedYear'] = 2025;
 
@@ -1630,7 +1630,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should return early when selectedMonth is missing in month-year mode', () => {
-        component.mode = PoCalendarMode.MonthYear as any;
+        component.mode = PoCalendarMode.MonthYear;
         component['selectedMonth'] = null;
         component['selectedYear'] = 2025;
 
@@ -1642,7 +1642,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should emit Date with year when selectedYear exists in year mode', () => {
-        component.mode = PoCalendarMode.Year as any;
+        component.mode = PoCalendarMode.Year;
         component['selectedYear'] = 2025;
 
         spyOn(component.change, 'emit');
@@ -1657,7 +1657,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should return early when selectedYear is missing in year mode', () => {
-        component.mode = PoCalendarMode.Year as any;
+        component.mode = PoCalendarMode.Year;
         component['selectedYear'] = null;
 
         spyOn(component.change, 'emit');
@@ -1668,7 +1668,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should call propagateChange with finalValue', () => {
-        component.mode = PoCalendarMode.Year as any;
+        component.mode = PoCalendarMode.Year;
         component['selectedYear'] = 2025;
         component['propagateChange'] = jasmine.createSpy('propagateChange');
 
@@ -1698,7 +1698,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set year when mode is year', () => {
-        component.mode = PoCalendarMode.Year as any;
+        component.mode = PoCalendarMode.Year;
         component.ngOnInit();
         fixture.detectChanges();
         const date = new Date(2025, 0, 1);
@@ -1723,7 +1723,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexYear correctly via findIndex callback in year mode', () => {
-        component.mode = PoCalendarMode.Year as any;
+        component.mode = PoCalendarMode.Year;
         component.ngOnInit();
         fixture.detectChanges();
         const targetYear = new Date().getFullYear();
@@ -1910,7 +1910,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not initialize displayYears for default mode', () => {
-        component.mode = undefined as any;
+        component.mode = undefined;
         component.displayYears = [];
 
         component.ngOnInit();
@@ -1930,7 +1930,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('should show `po-calendar` if mode is not set', () => {
-      component.mode = undefined as any;
+      component.mode = undefined;
 
       fixture.detectChanges();
 
