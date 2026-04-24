@@ -45,6 +45,16 @@ const poCalendarPositionDefault = 'bottom-left';
  *  <file name="sample-po-datepicker-labs/sample-po-datepicker-labs.component.ts"> </file>
  * </example>
  *
+ * <example name="po-datepicker-year" title="PO Datepicker Year">
+ *  <file name="sample-po-datepicker-year/sample-po-datepicker-year.component.html"> </file>
+ *  <file name="sample-po-datepicker-year/sample-po-datepicker-year.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-datepicker-month-year" title="PO Datepicker MonthYear">
+ *  <file name="sample-po-datepicker-month-year/sample-po-datepicker-month-year.component.html"> </file>
+ *  <file name="sample-po-datepicker-month-year/sample-po-datepicker-month-year.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-datepicker-airfare" title="PO Datepicker - Airfare">
  *  <file name="sample-po-datepicker-airfare/sample-po-datepicker-airfare.component.html"> </file>
  *  <file name="sample-po-datepicker-airfare/sample-po-datepicker-airfare.component.ts"> </file>

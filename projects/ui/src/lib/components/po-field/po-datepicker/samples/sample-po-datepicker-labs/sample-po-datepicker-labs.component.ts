@@ -18,7 +18,6 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
   isoFormat: PoDatepickerIsoFormat;
   label: string;
   locale: string;
-  mode: string;
   placeholder: string;
   properties: Array<string>;
   minDate: string | Date;
@@ -57,12 +56,6 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     { label: 'ru', value: 'ru' }
   ];
 
-  public readonly modeOptions: Array<PoRadioGroupOption> = [
-    { label: 'Default', value: undefined },
-    { label: 'Month/Year', value: 'month-year' },
-    { label: 'Year', value: 'year' }
-  ];
-
   public readonly sizeOptions: Array<PoRadioGroupOption> = [
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
@@ -90,7 +83,6 @@ export class SamplePoDatepickerLabsComponent implements OnInit {
     this.placeholder = undefined;
     this.properties = [];
     this.minDate = undefined;
-    this.mode = undefined;
     this.size = 'medium';
   }
 }
