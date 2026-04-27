@@ -928,6 +928,46 @@ describe('PoWidgetComponent with title and actions', () => {
       expect(footer).toBeFalsy();
     });
 
+    it('should add `po-widget-header--tag-top-actions` class when tagLabel, tagPosition is top and actions exist', () => {
+      component.tagLabel = 'Sales';
+      fixture.componentRef.setInput('p-tag-position', 'top');
+      component.actions = [{ label: 'Test' }];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-widget-header--tag-top-actions')).toBeTruthy();
+    });
+
+    it('should not add `po-widget-header--tag-top-actions` class when tagPosition is not top', () => {
+      component.tagLabel = 'Sales';
+      fixture.componentRef.setInput('p-tag-position', 'right');
+      component.actions = [{ label: 'Test' }];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-widget-header--tag-top-actions')).toBeFalsy();
+    });
+
+    it('should not add `po-widget-header--tag-top-actions` class when there are no actions', () => {
+      component.tagLabel = 'Sales';
+      fixture.componentRef.setInput('p-tag-position', 'top');
+      component.actions = [];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-widget-header--tag-top-actions')).toBeFalsy();
+    });
+
+    it('should not add `po-widget-header--tag-top-actions` class when there is no tagLabel', () => {
+      component.tagLabel = undefined;
+      fixture.componentRef.setInput('p-tag-position', 'top');
+      component.actions = [{ label: 'Test' }];
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-widget-header--tag-top-actions')).toBeFalsy();
+    });
+
     it('should find .po-widget-disabled if disabled is true', () => {
       component.disabled = true;
 
