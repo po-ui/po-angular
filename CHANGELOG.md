@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.12.0](https://github.com/po-ui/po-angular/compare/v21.11.0...v21.12.0) (2026-04-27)
+
+
+### Features
+
+* **chart:** adiciona variação para o tipo da legenda ([3b6b58b](https://github.com/po-ui/po-angular/commit/3b6b58bf9eb5ad7a5e1a59272e2e4de0e0daabad))
+* **progress:** implementa variação circular ([d7447e2](https://github.com/po-ui/po-angular/commit/d7447e2de64dba3e09ceb1fd5478d7e41140f473))
+
 ### [21.11.0](https://github.com/po-ui/po-angular/compare/v21.10.0...v21.11.0) (2026-04-23)
 
 
