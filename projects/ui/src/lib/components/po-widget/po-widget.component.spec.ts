@@ -951,6 +951,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('should not add `po-widget-header--tag-top-actions` class when there are no actions', () => {
       component.tagLabel = 'Sales';
       fixture.componentRef.setInput('p-tag-position', 'top');
+      component.help = undefined;
       component.actions = [];
 
       fixture.detectChanges();
