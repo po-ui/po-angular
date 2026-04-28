@@ -1299,6 +1299,60 @@ describe('PoTableComponent:', () => {
       expect(component.tooltipText).toBeUndefined();
     });
 
+    it(`tooltipMouseEnter: should not set tooltipText for type 'label' even with overflow`, () => {
+      const fakeEvent = {
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'truncated label'
+        }
+      };
+      const column = { type: 'label', property: 'status', labels: [] };
+
+      component.tooltipMouseEnter(fakeEvent, column);
+
+      expect(component.tooltipText).toBeUndefined();
+    });
+
+    it(`tooltipMouseEnter: should set tooltipText for non-label types with overflow`, () => {
+      const fakeEvent = {
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'truncated text'
+        }
+      };
+      const column = { type: 'text', property: 'description' };
+
+      component.tooltipMouseEnter(fakeEvent, column);
+
+      expect(component.tooltipText).toBe('truncated text');
+    });
+
+    it(`getColumnMaxWidth: should return null for label columns with width`, () => {
+      const column = { type: 'label', width: '200px' };
+
+      const result = component.getColumnMaxWidth(column);
+
+      expect(result).toBeNull();
+    });
+
+    it(`getColumnMaxWidth: should return width for non-label columns`, () => {
+      const column = { type: 'text', width: '150px' };
+
+      const result = component.getColumnMaxWidth(column);
+
+      expect(result).toBe('150px');
+    });
+
+    it(`getColumnMaxWidth: should return width for label columns without width`, () => {
+      const column = { type: 'label' };
+
+      const result = component.getColumnMaxWidth(column);
+
+      expect(result).toBeUndefined();
+    });
+
     it(`onOpenColumnManager: should update 'lastVisibleColumnsSelected' 'this.columns`, () => {
       component.columns = columns;
 

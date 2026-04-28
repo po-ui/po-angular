@@ -591,7 +591,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
     this.tooltipText = undefined;
 
-    if (event.target.offsetWidth < event.target.scrollWidth && event.target.innerText.trim()) {
+    if (
+      column?.type !== 'label' &&
+      event.target.offsetWidth < event.target.scrollWidth &&
+      event.target.innerText.trim()
+    ) {
       return (this.tooltipText = event.target.innerText);
     }
 
@@ -609,6 +613,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeDetector.detectChanges();
 
     this.poPopupComponent.toggle(row);
+  }
+
+  getColumnMaxWidth(column: PoTableColumn): string {
+    if (column.type === 'label' && column.width) {
+      return null;
+    }
+    return column.width;
+  }
+
+  getColumnMinWidth(column: PoTableColumn): string {
+    if (column.type === 'label' && !column.width) {
+      return 'max-content';
+    }
+    return column.width;
   }
 
   trackBy(index: number) {
