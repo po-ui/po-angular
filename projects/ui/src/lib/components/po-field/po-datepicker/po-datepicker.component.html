@@ -119,6 +119,8 @@
           [p-min-date]="minDate"
           [p-locale]="locale"
           [p-size]="size"
+          [p-mode]="calendarMode"
+          [p-year-range]="yearRange"
           (p-change)="dateSelected($event)"
           (p-change-month-year)="adjustCalendarPosition()"
           (keydown)="onCalendarKeyDown($event)"

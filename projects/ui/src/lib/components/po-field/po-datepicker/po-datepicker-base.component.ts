@@ -29,6 +29,7 @@ import { Observable, Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoCalendarMode } from '../../po-calendar/po-calendar-mode.enum';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoHelperOptions } from '../../po-helper';
 
@@ -613,6 +614,40 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   @Input({ alias: 'p-append-in-body', transform: convertToBoolean }) appendBox: boolean = false;
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o modo de exibição do calendário no datepicker.
+   *
+   * Valores válidos:
+   *  - `undefined`: modo padrão de seleção de data completa.
+   *  - `PoCalendarMode.MonthYear`: exibe listas de meses e anos para seleção.
+   *  - `PoCalendarMode.Year`: exibe apenas a lista de anos para seleção.
+   */
+  @Input('p-mode') calendarMode: PoCalendarMode;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o intervalo de anos exibidos nas variações `MonthYear` e `Year`.
+   * O valor representa a quantidade de anos anteriores e posteriores ao ano atual.
+   *
+   * @default `150`
+   */
+  @Input('p-year-range') yearRange: number = 150;
+
+  get isMonthYearMode(): boolean {
+    return this.calendarMode === PoCalendarMode.MonthYear;
+  }
+
+  get isYearMode(): boolean {
+    return this.calendarMode === PoCalendarMode.Year;
+  }
+
   constructor(
     protected languageService: PoLanguageService,
     protected cd: ChangeDetectorRef
@@ -630,9 +665,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     this.offset = new Date().getTimezoneOffset();
     this.formatTimezoneAndHour(this.offset);
     // Classe de máscara
-    this.objMask = this.buildMask(
-      replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
-    );
+    if (this.isMonthYearMode) {
+      this.objMask = this.buildMonthYearMask();
+    } else if (this.isYearMode) {
+      this.objMask = this.buildYearMask();
+    } else {
+      this.objMask = this.buildMask(
+        replaceFormatSeparator(this.format, this.languageService.getDateSeparator(this.locale))
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -790,6 +831,15 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     mask = mask.replace(/YYYY/g, '9999');
 
     return new PoMask(mask, true);
+  }
+
+  protected buildMonthYearMask() {
+    const separator = this.languageService.getDateSeparator(this.locale);
+    return new PoMask(`99${separator}9999`, true);
+  }
+
+  protected buildYearMask() {
+    return new PoMask('9999', true);
   }
 
   formatTimezoneAndHour(offset: number) {

@@ -9,6 +9,7 @@ import { PoCalendarFooterComponent } from './po-calendar-footer/po-calendar-foot
 import { PoCalendarHeaderComponent } from './po-calendar-header/po-calendar-header.component';
 import { PoCalendarPresetListComponent } from './po-calendar-preset-list/po-calendar-preset-list.component';
 import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wrapper.component';
+import { PoCalendarMonthYearComponent } from './po-calendar-month-year/po-calendar-month-year.component';
 
 /**
  * @description
@@ -20,6 +21,7 @@ import { PoCalendarWrapperComponent } from './po-calendar-wrapper/po-calendar-wr
     PoCalendarComponent,
     PoCalendarFooterComponent,
     PoCalendarHeaderComponent,
+    PoCalendarMonthYearComponent,
     PoCalendarPresetListComponent,
     PoCalendarWrapperComponent
   ],

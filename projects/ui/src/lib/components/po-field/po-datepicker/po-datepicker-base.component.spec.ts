@@ -12,6 +12,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 import { PoMask } from '../po-input/po-mask';
 import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoDatepickerBaseComponent } from './po-datepicker-base.component';
+import { PoCalendarMode } from '../../po-calendar/po-calendar-mode.enum';
 
 @Directive()
 class PoDatepickerComponent extends PoDatepickerBaseComponent {
@@ -771,6 +772,88 @@ describe('PoDatepickerBaseComponent:', () => {
         spyOn<any>(component, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
+    });
+
+    describe('isMonthYearMode:', () => {
+      it('should return true when calendarMode is MonthYear', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        expect(component.isMonthYearMode).toBeTrue();
+      });
+
+      it('should return false when calendarMode is Year', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        expect(component.isMonthYearMode).toBeFalse();
+      });
+
+      it('should return false when calendarMode is undefined', () => {
+        component.calendarMode = undefined;
+        expect(component.isMonthYearMode).toBeFalse();
+      });
+    });
+
+    describe('isYearMode:', () => {
+      it('should return true when calendarMode is Year', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        expect(component.isYearMode).toBeTrue();
+      });
+
+      it('should return false when calendarMode is MonthYear', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        expect(component.isYearMode).toBeFalse();
+      });
+
+      it('should return false when calendarMode is undefined', () => {
+        component.calendarMode = undefined;
+        expect(component.isYearMode).toBeFalse();
+      });
+    });
+
+    describe('ngOnInit:', () => {
+      it('should build monthYear mask when calendarMode is MonthYear', () => {
+        component.calendarMode = PoCalendarMode.MonthYear;
+        spyOn(component as any, 'buildMonthYearMask').and.callThrough();
+
+        component.ngOnInit();
+
+        expect((component as any).buildMonthYearMask).toHaveBeenCalled();
+        expect(component['objMask']).toBeDefined();
+      });
+
+      it('should build year mask when calendarMode is Year', () => {
+        component.calendarMode = PoCalendarMode.Year;
+        spyOn(component as any, 'buildYearMask').and.callThrough();
+
+        component.ngOnInit();
+
+        expect((component as any).buildYearMask).toHaveBeenCalled();
+        expect(component['objMask']).toBeDefined();
+      });
+
+      it('should build default mask when calendarMode is undefined', () => {
+        component.calendarMode = undefined;
+        spyOn(component as any, 'buildMask').and.callThrough();
+
+        component.ngOnInit();
+
+        expect((component as any).buildMask).toHaveBeenCalled();
+      });
+    });
+
+    describe('buildMonthYearMask:', () => {
+      it('should return a PoMask with mm/yyyy pattern', () => {
+        component.locale = 'pt';
+        const mask = component['buildMonthYearMask']();
+        expect(mask).toBeInstanceOf(PoMask);
+        expect(mask.mask).toBe('99/9999');
+      });
+    });
+
+    describe('buildYearMask:', () => {
+      it('should return a PoMask with yyyy pattern', () => {
+        const mask = component['buildYearMask']();
+        expect(mask).toBeInstanceOf(PoMask);
+        expect(mask.mask).toBe('9999');
       });
     });
   });
