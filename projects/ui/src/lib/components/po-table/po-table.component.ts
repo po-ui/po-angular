@@ -361,7 +361,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
    * Verifica se columns possuem a propriedade width.
    */
   applyFixedColumns(): boolean {
-    return !this.columns.some(column => !column.width);
+    return !this.columns.some(column => !column.width || column.type === 'label');
   }
 
   /**
@@ -631,7 +631,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
     this.tooltipText = undefined;
 
-    if (event.target.offsetWidth < event.target.scrollWidth && event.target.innerText.trim()) {
+    if (
+      column?.type !== 'label' &&
+      event.target.offsetWidth < event.target.scrollWidth &&
+      event.target.innerText.trim()
+    ) {
       return (this.tooltipText = event.target.innerText);
     }
 
