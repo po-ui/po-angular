@@ -466,7 +466,7 @@ export class PoTableComponent
    * nunca têm width definido e não participam do cálculo de layout.
    */
   applyFixedColumns(): boolean {
-    return !this.mainColumns.some(column => !column.width);
+    return !this.mainColumns.some(column => !column.width || column.type === 'label');
   }
 
   /**
@@ -758,7 +758,11 @@ export class PoTableComponent
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
     this.tooltipText = undefined;
 
-    if (event.target.offsetWidth < event.target.scrollWidth && event.target.innerText.trim()) {
+    if (
+      column?.type !== 'label' &&
+      event.target.offsetWidth < event.target.scrollWidth &&
+      event.target.innerText.trim()
+    ) {
       return (this.tooltipText = event.target.innerText);
     }
 
