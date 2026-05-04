@@ -2,7 +2,8 @@ import { PoPopupAction } from '../po-popup/po-popup-action.interface';
 
 /**
  * @description
- * Interface do componente po-dropdown
+ *
+ * Interface para as ações do componente `po-dropdown`.
  *
  * @docsExtends PoPopupAction
  *
@@ -10,13 +11,13 @@ import { PoPopupAction } from '../po-popup/po-popup-action.interface';
  */
 export interface PoDropdownAction extends PoPopupAction {
   /**
-   * Array de ações (`PoDropdownAction`) usado para criar agrupadores de subitens.
+   * @optional
    *
-   * - Permite a criação de menus aninhados (submenus).
+   * @description
    *
-   * > Boas práticas de desenvolvimento:
-   * Recomenda-se limitar a navegação a, no máximo, três níveis hierárquicos.
-   * Isso evita sobrecarga cognitiva, facilita a memorização da estrutura e garante uma melhor experiência de uso.
+   * Array de ações (`PoDropdownAction`) usado para criar agrupadores de subitens (submenus).
+   *
+   * > Recomenda-se limitar a navegação a, no máximo, três níveis hierárquicos.
    */
   subItems?: Array<PoDropdownAction>;
 }
