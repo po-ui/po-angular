@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, inject, OnChanges, Renderer2, SimpleChange } from '@angular/core';
+import { AfterContentInit, Component, inject, OnChanges, OnDestroy, Renderer2, SimpleChange } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -36,7 +36,10 @@ import { backNavigationAriaLabels, PoPageDefaultBaseComponent } from './po-page-
   templateUrl: './po-page-default.component.html',
   standalone: false
 })
-export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implements AfterContentInit, OnChanges {
+export class PoPageDefaultComponent
+  extends PoPageDefaultBaseComponent
+  implements AfterContentInit, OnChanges, OnDestroy
+{
   private readonly renderer = inject(Renderer2);
   private readonly router = inject(Router);
 
@@ -48,6 +51,8 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
   isMobile: boolean;
 
   private readonly maxWidthMobile: number = 480;
+  private _primaryKindUsed = false;
+  private resizeUnlisten: () => void;
 
   constructor() {
     const languageService = inject(PoLanguageService);
@@ -61,13 +66,19 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
     this.setIsMobile();
     this.setDropdownActions();
 
-    this.renderer.listen('window', 'resize', (event: Event) => {
+    this.resizeUnlisten = this.renderer.listen('window', 'resize', (event: Event) => {
       this.onResize(event);
     });
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     this.setDropdownActions();
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeUnlisten) {
+      this.resizeUnlisten();
+    }
   }
 
   actionIsDisabled(action: any) {
@@ -88,6 +99,7 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
 
   hasPageHeader() {
     this.visibleActions = this.getVisibleActions();
+    this._primaryKindUsed = false;
 
     if (this.pageHeaderType === 'secondary') {
       return true;
@@ -120,8 +132,18 @@ export class PoPageDefaultComponent extends PoPageDefaultBaseComponent implement
 
   // Retorna o kind validado da ação. Apenas 'primary' e 'secondary' são permitidos.
   // Valores inválidos são ignorados, retornando o fallback informado.
+  // Somente uma ação pode ter kind 'primary' — a primeira encontrada mantém,
+  // as demais caem para 'secondary'.
   getActionKind(action: PoPageAction, fallback: string): string {
-    return action.kind === 'primary' || action.kind === 'secondary' ? action.kind : fallback;
+    if (action.kind === 'primary') {
+      if (!this._primaryKindUsed) {
+        this._primaryKindUsed = true;
+        return 'primary';
+      }
+      return 'secondary';
+    }
+
+    return action.kind === 'secondary' ? action.kind : fallback;
   }
 
   private onResize(event: Event): void {

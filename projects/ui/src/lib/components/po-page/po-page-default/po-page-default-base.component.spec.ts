@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
@@ -105,6 +105,36 @@ describe('PoPageDefaultBaseComponent:', () => {
       tick();
 
       expect(component.title).toBe('teste');
+      expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
+    }));
+
+    it('p-subtitle: should call recalculateHeaderSize when set subtitle', fakeAsync(() => {
+      component.poPageContent = <any>{
+        recalculateHeaderSize: () => {}
+      };
+
+      spyOn(component.poPageContent, 'recalculateHeaderSize');
+
+      component.subtitle = 'sub teste';
+
+      tick();
+
+      expect(component.subtitle).toBe('sub teste');
+      expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
+    }));
+
+    it('p-breadcrumb: should call recalculateHeaderSize when set breadcrumb', fakeAsync(() => {
+      component.poPageContent = <any>{
+        recalculateHeaderSize: () => {}
+      };
+
+      spyOn(component.poPageContent, 'recalculateHeaderSize');
+
+      component.breadcrumb = { items: [{ label: 'Home' }] };
+
+      tick();
+
+      expect(component.breadcrumb.items.length).toBe(1);
       expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
     }));
 

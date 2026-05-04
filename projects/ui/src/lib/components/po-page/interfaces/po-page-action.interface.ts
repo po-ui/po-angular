@@ -5,11 +5,13 @@ import { PoDropdownAction } from '../../po-dropdown';
  *
  * Interface para as ações dos componentes `po-page-default` e `po-page-list`.
  *
- * As ações são exibidas como botões no cabeçalho e, caso excedam o limite de exibição ou o layout
- * seja configurado para tal, são agrupadas automaticamente em um *dropdown*.
+ * As ações podem ser exibidas como botões no cabeçalho ou agrupadas em um *dropdown*,
+ * conforme o `PoPageActionsLayout` e o tamanho da tela.
  *
  * > As propriedades `separator`, `selected` e `subItems` possuem efeito apenas quando
  * a ação é exibida dentro do *dropdown*.
+ *
+ * @docsExtends PoDropdownAction
  *
  * @ignoreExtendedDescription
  *
@@ -17,23 +19,22 @@ import { PoDropdownAction } from '../../po-dropdown';
  */
 export interface PoPageAction extends PoDropdownAction {
   /**
+   * @optional
+   *
    * @description
    *
-   * Define o estilo visual da ação quando ela é exibida como botão fora do *dropdown*.
+   * Define o estilo visual da ação quando exibida como botão fora do *dropdown*.
    *
    * Valores permitidos:
-   * - `primary`: Botão com maior destaque visual.
-   * - `secondary`: Estilo padrão para a maioria das ações.
+   * - `primary`: botão com maior destaque visual.
+   * - `secondary`: estilo padrão.
    *
-   * > Valores inválidos são ignorados, mantendo o valor padrão da posição da ação.
+   * > Valores inválidos são ignorados e o componente aplica o estilo padrão da posição.
    *
-   * > Aplicável apenas a ações exibidas como botões (fora do *dropdown*). Ações dentro do *dropdown* não utilizam esta propriedade.
+   * > Somente uma ação pode ter `kind` igual a `primary`. Caso mais de uma defina `primary`,
+   * apenas a primeira será mantida e as demais receberão `secondary`.
    *
-   * > Funciona independentemente da posição da ação e com qualquer `PoPageHeaderType` ou `PoPageActionsLayout`.
-   *
-   * **Valores padrão por posição (quando `kind` não é definido):**
-   * - Layout `default`: primeira ação = `primary`, demais = `secondary`.
-   * - Layout `mixed`: primeira ação = `primary` (header primary) ou `secondary` (header secondary/tertiary).
+   * > Quando não definido, o estilo é determinado pelo `PoPageActionsLayout`.
    */
   kind?: string;
 }
