@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class SamplePoDatepickerYearComponent {
-  selectedYear: string;
+  selectedYear = new Date('2026-04-30').getFullYear();
   event: string;
 
   changeEvent(event: string) {

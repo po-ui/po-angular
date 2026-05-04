@@ -64,25 +64,22 @@ const poCalendarPositionDefault = 'bottom-left';
  *  <file name="sample-po-datepicker-airfare-reactive-form/sample-po-datepicker-airfare-reactive-form.component.ts"> </file>
  * </example>
  */
-/* istanbul ignore next */
-const providers = [
-  {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PoDatepickerComponent),
-    multi: true
-  },
-  {
-    provide: NG_VALIDATORS,
-    useExisting: forwardRef(() => PoDatepickerComponent),
-    multi: true
-  },
-  PoControlPositionService
-];
-
 @Component({
   selector: 'po-datepicker',
   templateUrl: './po-datepicker.component.html',
-  providers,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PoDatepickerComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PoDatepickerComponent),
+      multi: true
+    },
+    PoControlPositionService
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
