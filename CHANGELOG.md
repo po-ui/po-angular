@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.13.0](https://github.com/po-ui/po-angular/compare/v21.12.0...v21.13.0) (2026-05-04)
+
+
+### Features
+
+* **datepicker:** adiciona modos de seleção monthYear e year ([6de0ea2](https://github.com/po-ui/po-angular/commit/6de0ea22908c1b5df20fe6bfb415ceaa6b92d1fb))
+* **page:** adiciona tipos de header e layout de ações ([c4235c3](https://github.com/po-ui/po-angular/commit/c4235c3c79180d0f988b7d2156d6b2ad769e37b6))
+
+
+### Bug Fixes
+
+* **page:** corrige cálculo de altura do po-page-content ([ae615d2](https://github.com/po-ui/po-angular/commit/ae615d267c6cd9c583eac6cc864f2426d030649d))
+
 ## [21.12.0](https://github.com/po-ui/po-angular/compare/v21.11.0...v21.12.0) (2026-04-27)
 
 
