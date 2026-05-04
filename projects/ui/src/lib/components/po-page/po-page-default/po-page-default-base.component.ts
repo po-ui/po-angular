@@ -37,18 +37,10 @@ export const backNavigationAriaLabels = {
 /**
  * @description
  *
- * O `po-page-default` é utilizado como o container principal para as telas sem um template definido.
+ * O `po-page-default` é utilizado como container principal para telas sem um template definido.
  *
- * Ele oferece uma estrutura robusta com suporte a:
- * - Cabeçalhos dinâmicos (`primary`, `secondary` ou `tertiary`).
- * - Sistema de navegação via *breadcrumb*.
- * - Gerenciamento inteligente de ações com suporte a *dropdown* responsivo.
- * - Controle total sobre o layout das ações, permitindo modos fixos ou mistos.
- *
- * **Responsividade:**
- *
- * O componente adapta automaticamente a exibição das ações e elementos do cabeçalho conforme a
- * largura de tela, garantindo a melhor experiência tanto em *desktop* quanto em dispositivos móveis.
+ * Oferece suporte a cabeçalhos dinâmicos via `p-page-header-type`, navegação por *breadcrumb*
+ * e gerenciamento de ações com agrupamento responsivo via `p-page-actions-layout`.
  *
  * #### Tokens customizáveis
  *
@@ -76,11 +68,13 @@ export abstract class PoPageDefaultBaseComponent {
   protected language: string;
 
   private _actions?: Array<PoPageAction> = [];
+  private _breadcrumb?: PoBreadcrumb;
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
   private _pageActionsLayout: string = PoPageActionsLayout.default;
   private _pageHeaderType: string = PoPageHeaderType.primary;
+  private _subtitle: string;
   private _title: string;
 
   /**
@@ -91,11 +85,6 @@ export abstract class PoPageDefaultBaseComponent {
    * Define a lista de ações que serão exibidas no cabeçalho da página.
    *
    * Recebe um array de objetos que implementam a interface `PoPageAction`.
-   *
-   * **Comportamento responsivo padrão:**
-   * - **Desktop:** Exibe até **3 ações** principais; as demais são agrupadas no *dropdown*.
-   * - **Mobile:** Exibe até **2 ações** principais; as demais são agrupadas no *dropdown*.
-   * - Em telas menores que **480px**, as ações fora do *dropdown* exibem apenas o ícone caso a propriedade `PoPageAction.icon` esteja definida.
    *
    * > O comportamento de exibição pode ser customizado através da propriedade `p-page-actions-layout`.
    *
@@ -123,7 +112,14 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * > Compatível com o cabeçalho (`p-page-header-type`) do tipo `primary`.
    */
-  @Input('p-breadcrumb') breadcrumb?: PoBreadcrumb;
+  @Input('p-breadcrumb') set breadcrumb(value: PoBreadcrumb) {
+    this._breadcrumb = value;
+    setTimeout(() => this.poPageContent?.recalculateHeaderSize());
+  }
+
+  get breadcrumb(): PoBreadcrumb {
+    return this._breadcrumb;
+  }
 
   /**
    * @optional
@@ -228,6 +224,7 @@ export abstract class PoPageDefaultBaseComponent {
   @Input('p-page-header-type') set pageHeaderType(value: string | PoPageHeaderType) {
     const strValue = typeof value === 'string' ? value : '';
     this._pageHeaderType = PoPageHeaderType[strValue] ? PoPageHeaderType[strValue] : PoPageHeaderType.primary;
+    setTimeout(() => this.poPageContent?.recalculateHeaderSize());
   }
 
   get pageHeaderType(): string {
@@ -243,7 +240,7 @@ export abstract class PoPageDefaultBaseComponent {
    */
   @Input('p-title') set title(title: string) {
     this._title = title;
-    setTimeout(() => this.poPageContent.recalculateHeaderSize());
+    setTimeout(() => this.poPageContent?.recalculateHeaderSize());
   }
 
   get title() {
@@ -259,7 +256,14 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * > Requer que`p-title` esteja definido.
    */
-  @Input('p-subtitle') subtitle: string;
+  @Input('p-subtitle') set subtitle(value: string) {
+    this._subtitle = value;
+    setTimeout(() => this.poPageContent?.recalculateHeaderSize());
+  }
+
+  get subtitle(): string {
+    return this._subtitle;
+  }
 
   /**
    * @optional
@@ -279,6 +283,9 @@ export abstract class PoPageDefaultBaseComponent {
   @HostListener('window:PoUiThemeChange')
   protected onThemeChange(): void {
     this.applySizeBasedOnA11y();
+
+    // Recalcula o height do content após os componentes reagirem à mudança de tema/a11y
+    setTimeout(() => this.poPageContent?.recalculateHeaderSize());
   }
 
   private applySizeBasedOnA11y(): void {

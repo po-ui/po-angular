@@ -615,7 +615,7 @@ blockquote {
 }
 
 .app-portal-home .po-page .po-page-content {
-  padding: 0 0 4.5rem;
+  padding: 0 0 var(--spacing-xs);
 }
 
 .guides-grid-system-box {

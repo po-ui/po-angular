@@ -1,51 +1,23 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component } from '@angular/core';
 
 import { changeBrowserInnerWidth, configureTestSuite } from '../../../util-test/util-expect.spec';
 
 import { PoPageContentComponent } from './po-page-content.component';
 
-@Component({
-  selector: 'po-page-content-div',
-  template: `
-    <div class="po-toolbar"></div>
-    <div class="po-page-header"></div>
-  `,
-  styles: [
-    `
-      .po-page-header {
-        height: 100px;
-        width: 100%;
-      }
-      .po-toolbar {
-        height: 33px;
-        width: 100%;
-      }
-    `
-  ],
-  standalone: false
-})
-class ContentDivComponent {}
-
 describe('PoPageContentComponent:', () => {
   let component: PoPageContentComponent;
   let fixture: ComponentFixture<PoPageContentComponent>;
-
-  let fixtureDiv: ComponentFixture<ContentDivComponent>;
 
   const eventResize = document.createEvent('Event');
   eventResize.initEvent('resize', false, true);
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentDivComponent, PoPageContentComponent]
+      declarations: [PoPageContentComponent]
     });
   });
 
   beforeEach(() => {
-    fixtureDiv = TestBed.createComponent(ContentDivComponent);
-    fixtureDiv.detectChanges();
-
     fixture = TestBed.createComponent(PoPageContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -55,7 +27,7 @@ describe('PoPageContentComponent:', () => {
     expect(component instanceof PoPageContentComponent).toBeTruthy();
   });
 
-  it('constructor: should call recalculateHeaderSize', () => {
+  it('constructor: should call recalculateHeaderSize on resize', () => {
     component['initializeListeners']();
     spyOn(component, 'recalculateHeaderSize');
 
@@ -66,12 +38,12 @@ describe('PoPageContentComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('recalculateHeaderSize: should call setHeightContent and set `contentOpacity` to equal 1.', fakeAsync(() => {
-      spyOn(component, 'setHeightContent');
+    it('recalculateHeaderSize: should set height and contentOpacity to 1', fakeAsync(() => {
       component.recalculateHeaderSize();
       tick(100);
-      expect(component.setHeightContent).toHaveBeenCalled();
+
       expect(component.contentOpacity).toBe(1);
+      expect(component.height).toBeTruthy();
     }));
 
     it('ngAfterViewInit: should call recalculateHeaderSize', () => {
@@ -82,24 +54,44 @@ describe('PoPageContentComponent:', () => {
       expect(component.recalculateHeaderSize).toHaveBeenCalled();
     });
 
-    it('setHeightContent: should calculate height without pageHeader', () => {
-      component.setHeightContent(undefined);
+    it('should calculate height based on viewport when no .po-page ancestor', fakeAsync(() => {
+      component.recalculateHeaderSize();
+      tick(100);
 
-      const bodyHeight = document.body.clientHeight;
-      const valueExpected = bodyHeight;
+      expect(component.height).toMatch(/^\d+px$|^auto$/);
+    }));
 
-      expect(component.height).toBe(`${valueExpected}px`);
-    });
+    it('should set height to auto when inside nested po-page-content', fakeAsync(() => {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('po-page-content');
+      const poPage = document.createElement('div');
+      poPage.classList.add('po-page');
+      wrapper.appendChild(poPage);
+      poPage.appendChild(fixture.nativeElement);
+      document.body.appendChild(wrapper);
 
-    it('setHeightContent: should calculate height with bottom actions', () => {
-      const pageHeaderElement = fixtureDiv.debugElement.nativeElement.querySelector('.po-page-header') as HTMLElement;
-      const pageHeaderHeight = pageHeaderElement.offsetTop + pageHeaderElement.offsetHeight;
-      const bodyHeight = document.body.clientHeight;
-      const valueExpected = bodyHeight - pageHeaderHeight;
+      component.recalculateHeaderSize();
+      tick(100);
 
-      component.setHeightContent(pageHeaderElement);
+      expect(component.height).toBe('auto');
 
-      expect(component.height).toBe(`${valueExpected}px`);
-    });
+      document.body.removeChild(wrapper);
+    }));
+
+    it('should fallback to 90% when calculated height is zero or negative without .po-page', fakeAsync(() => {
+      spyOn(fixture.nativeElement, 'getBoundingClientRect').and.returnValue({
+        top: window.innerHeight + 100,
+        bottom: window.innerHeight + 200,
+        left: 0,
+        right: 0,
+        width: 0,
+        height: 0
+      });
+
+      component.recalculateHeaderSize();
+      tick(100);
+
+      expect(component.height).toBe('90%');
+    }));
   });
 });
