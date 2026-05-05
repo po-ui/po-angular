@@ -715,6 +715,53 @@ describe('PoComboBaseComponent:', () => {
       expect(component['fromWriteValue']).toBe(false);
     });
 
+    it('should clear `selected` from previous option when writeValue is called with a new value', () => {
+      component.options = [
+        { label: 'Test 1', value: 1 },
+        { label: 'Test 2', value: 2 },
+        { label: 'Test 3', value: 3 }
+      ];
+
+      component.writeValue(1);
+
+      expect(component['comboOptionsList'].filter(o => o.selected).length).toBe(1);
+      expect(component['comboOptionsList'].find(o => o.value === 1).selected).toBe(true);
+
+      component.writeValue(3);
+
+      expect(component['comboOptionsList'].filter(o => o.selected).length).toBe(1);
+      expect(component['comboOptionsList'].find(o => o.value === 1).selected).toBe(false);
+      expect(component['comboOptionsList'].find(o => o.value === 3).selected).toBe(true);
+    });
+
+    it('should keep `cacheStaticOptions` in sync with `comboOptionsList` after writeValue, avoiding stale `selected` from previous manual clicks', () => {
+      component.options = [
+        { label: 'Florianópolis', value: 'florianopolis' },
+        { label: 'São Paulo', value: 'sao_paulo' },
+        { label: 'Curitiba', value: 'curitiba' }
+      ];
+
+      // simula clique manual em Florianópolis (po-listbox.optionClicked muta selected nos itens da lista)
+      component['comboOptionsList'].forEach(o => (o.selected = o.value === 'florianopolis'));
+
+      // simula clique manual em São Paulo
+      component['comboOptionsList'].forEach(o => (o.selected = o.value === 'sao_paulo'));
+
+      // troca via ngModel para Florianópolis
+      component.writeValue('florianopolis');
+
+      const cache = component['cacheStaticOptions'];
+      expect(cache.filter(o => o.selected).length).toBe(1);
+      expect(cache.find(o => o.value === 'florianopolis').selected).toBe(true);
+      expect(cache.find(o => o.value === 'sao_paulo').selected).toBe(false);
+
+      // garante que comboOptionsList e cacheStaticOptions continuam compartilhando referências
+      expect(component['comboOptionsList']).toBe(cache);
+      component['comboOptionsList'].forEach((option, index) => {
+        expect(option).toBe(cache[index]);
+      });
+    });
+
     describe('controlValueWithLabel', () => {
       it('should return the object when controlValueWithLabel is true', () => {
         const selectedOption = { value: 1, label: 'Xpto' };
@@ -1244,6 +1291,35 @@ describe('PoComboBaseComponent:', () => {
       expect(spyUpdateInternalVariables).toHaveBeenCalledWith(option);
 
       expect(spyUpdateModel).not.toHaveBeenCalled();
+    });
+
+    it('updateSelectedValue: should select only the selected group title by dynamicLabel', () => {
+      component['comboOptionsList'] = [
+        { label: 'Sul', options: true, selected: false },
+        { label: 'Paraná', value: 'PR', selected: false },
+        { label: 'Santa Catarina', value: 'SC', selected: false },
+        { label: 'Sudeste', options: true, selected: true },
+        { label: 'São Paulo', value: 'SP', selected: false },
+        { label: 'Rio de Janeiro', value: 'RJ', selected: false }
+      ];
+
+      component.updateSelectedValue({ label: 'Sul', options: true });
+
+      expect(component['comboOptionsList'].find(option => option.label === 'Sul').selected).toBeTrue();
+      expect(component['comboOptionsList'].find(option => option.label === 'Sudeste').selected).toBeFalse();
+      expect(component['comboOptionsList'].filter(option => option.options === true && option.selected).length).toBe(1);
+    });
+
+    it('updateSelectedValue(null): should clear `selected` from all previously selected options', () => {
+      component['comboOptionsList'] = [
+        { label: 'A', value: 'a', selected: true },
+        { label: 'B', value: 'b', selected: false },
+        { label: 'Grupo', options: true, selected: true }
+      ];
+
+      component.updateSelectedValue(null);
+
+      expect(component['comboOptionsList'].every(o => !o.selected)).toBeTrue();
     });
 
     describe('VisibleOptions:', () => {
