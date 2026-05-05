@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.13.1](https://github.com/po-ui/po-angular/compare/v21.13.0...v21.13.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* **datepicker:** corrige rotina de documentação ([91044c2](https://github.com/po-ui/po-angular/commit/91044c21d3a31673639c11bc9766d44449038ca1))
+
 ## [21.13.0](https://github.com/po-ui/po-angular/compare/v21.12.0...v21.13.0) (2026-05-04)
 
 
