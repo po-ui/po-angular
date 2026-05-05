@@ -979,9 +979,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
 
   updateSelectedValue(option: any, isUpdateModel: boolean = true) {
     const optionLabel = (option && option[this.dynamicLabel]) || '';
-
+    const optionValue = option?.[this.dynamicValue] !== undefined ? option[this.dynamicValue] : undefined;
     this.updateInternalVariables(option);
-
+    this.updateOptionsSelectedState(option, optionValue);
     // atualiza o valor do input quando for changeOnEnter apenas se for para atualizar o model.
     if (this.changeOnEnter && isUpdateModel) {
       this.setInputValue(optionLabel);
@@ -990,9 +990,26 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     }
 
     if (isUpdateModel) {
-      const optionValue = option?.[this.dynamicValue] !== undefined ? option[this.dynamicValue] : undefined;
       this.updateModel(optionValue);
     }
+  }
+
+  private isGroupTitle(option: any): boolean {
+    return option?.options === true;
+  }
+
+  private updateOptionsSelectedState(selectedOption: any, value: any): void {
+    this.comboOptionsList.forEach((option: any) => {
+      const isSelectedGroup =
+        this.isGroupTitle(option) &&
+        this.isGroupTitle(selectedOption) &&
+        option[this.dynamicLabel] === selectedOption[this.dynamicLabel];
+
+      const isSelectedOption =
+        !this.isGroupTitle(option) && validValue(value) && this.isEqual(option[this.dynamicValue], value);
+
+      option.selected = isSelectedGroup || isSelectedOption;
+    });
   }
 
   callModelChange(value: any) {
@@ -1136,12 +1153,6 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
       const option = this.getOptionFromValue(value, this.comboOptionsList);
       this.updateSelectedValue(option);
       this.normalizeModelIfNeeded(originalValue, option);
-      this.comboOptionsList = this.comboOptionsList.map((option: any) => {
-        if (this.isEqual(option[this.dynamicValue], value)) {
-          return { ...option, selected: true };
-        }
-        return option;
-      });
       this.updateComboList();
       if (!this.isRemoveInitialFilterSetByInput) {
         this.removeInitialFilter = false;
