@@ -13,7 +13,7 @@ export interface PoPopupAction {
    *
    * Rótulo da ação.
    *
-   * No componente `po-dropdown`, a label também pode representar o agrupador de subitens.
+   * A label também pode representar o agrupador de subitens quando a ação possuir `subItems`.
    */
   label: string;
 
@@ -24,7 +24,7 @@ export interface PoPopupAction {
    *
    * Ação que será executada, sendo possível passar o nome ou a referência da função.
    *
-   * No componente `po-dropdown`, a action também pode ser executada para o agrupador de subitens.
+   * A action também pode ser executada para o agrupador de subitens quando a ação possuir `subItems`.
    *
    * > Para que a função seja executada no contexto do componente, utilize *bind*:
    * `action: this.myFunction.bind(this)`
@@ -85,8 +85,9 @@ export interface PoPopupAction {
    *
    * URL para redirecionamento. Aceita rotas internas e links externos.
    *
-   * No componente `po-dropdown`, quando informada em um agrupador com `subItems`, o clique
-   * redireciona ao invés de abrir os subitens.
+   * A url também pode ser configurada para o agrupador de subitens.
+   * Entretanto, quando a `url` é informada em um agrupador, o clique **não abrirá os subitens**, pois o item será
+   * tratado como um link e o redirecionamento terá prioridade sobre a exibição da lista.
    *
    * > Quando informada, tem prioridade sobre a propriedade `action`.
    */
@@ -114,6 +115,24 @@ export interface PoPopupAction {
 
   // id interno
   $id?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma lista de subitens para criação de menus aninhados.
+   *
+   * Ao definir esta propriedade, o item exibirá um ícone indicador de subnível.
+   * Recomenda-se utilizar no máximo três níveis hierárquicos para garantir a usabilidade.
+   *
+   * > As propriedades `disabled`, `type` e `visible` não são aplicadas visualmente ao item agrupador.
+   *
+   * > Quando `url` é informada em um agrupador, o redirecionamento terá prioridade e os subitens não serão abertos.
+   *
+   * > Em subníveis aninhados, o `icon` do agrupador é substituído pelo indicador de navegação (seta).
+   */
+  subItems?: Array<PoPopupAction>;
 
   // template interno
   $subItemTemplate?: TemplateRef<any>;

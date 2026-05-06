@@ -14,6 +14,9 @@ const poPopupDefaultPosition = 'bottom-left';
  * O componente `po-popup` é um container pequeno recomendado para ações de navegação:
  * Ele abre sobreposto aos outros componentes.
  *
+ * Suporta subníveis (submenus) quando as ações possuem a propriedade `subItems`,
+ * habilitando navegação hierárquica automaticamente.
+ *
  * É possível escolher as posições do `po-popup` em relação ao componente alvo, para isto veja a propriedade `p-position`.
  *
  * Também é possível informar um _template_ _header_ para o `po-popup`, que será exibido acima das ações.
@@ -87,8 +90,14 @@ export class PoPopupBaseComponent {
   private _size?: string = undefined;
   private _target: any;
 
-  // Indica se há um listbox com subitens
-  @Input('p-listbox-subitems') listboxSubitems = false;
+  // Determina se o modo de subníveis deve ser ativado.
+  // Retorna true se alguma ação possuir subItems não vazio ou $subItemTemplate.
+  get computedListboxSubitems(): boolean {
+    if (!this._actions || this._actions.length === 0) {
+      return false;
+    }
+    return this._actions.some(action => (action.subItems && action.subItems.length > 0) || !!action.$subItemTemplate);
+  }
 
   // template-icon
   @Input('p-template-icon') templateIcon = false;
