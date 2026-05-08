@@ -1,33 +1,33 @@
+import { Observable } from 'rxjs';
 import { TemplateRef } from '@angular/core';
+
 import {
+  PoUploadFile,
+  PoComboFilter,
+  PoLookupFilter,
+  PoComboLiterals,
+  PoLookupLiterals,
+  PoUploadLiterals,
+  PoMultiselectFilter,
   ErrorAsyncProperties,
   PoCheckboxGroupOption,
-  PoComboFilter,
-  PoComboLiterals,
-  PoDatepickerIsoFormat,
-  PoDatepickerRangeLiterals,
-  PoTimepickerModelFormat,
-  PoLookupFilter,
-  PoLookupLiterals,
-  PoMultiselectFilter,
-  PoMultiselectFilterMode,
-  PoMultiselectLiterals,
   PoSwitchLabelPosition,
-  PoUploadFile,
+  PoDatepickerIsoFormat,
+  PoMultiselectLiterals,
+  PoTimepickerModelFormat,
+  PoMultiselectFilterMode,
   PoUploadFileRestrictions,
-  PoUploadLiterals
+  PoDatepickerRangeLiterals
 } from '../../../po-field';
-import { PoLookupAdvancedFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
-import { PoLookupColumn } from '../../../po-field/po-lookup/interfaces/po-lookup-column.interface';
-import { PoMultiselectOption } from '../../../po-field/po-multiselect/interfaces/po-multiselect-option.interface';
-import { PoSelectOption } from '../../../po-field/po-select/po-select-option.interface';
-import { PoProgressAction } from '../../../po-progress';
-import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
-
-import { Observable } from 'rxjs';
-import { PoDynamicField } from '../../po-dynamic-field.interface';
 import { PoHelperOptions } from '../../../po-helper';
+import { PoProgressAction } from '../../../po-progress';
+import { PoDynamicField } from '../../po-dynamic-field.interface';
+import { PoSelectOption } from '../../../po-field/po-select/po-select-option.interface';
+import { PoLookupColumn } from '../../../po-field/po-lookup/interfaces/po-lookup-column.interface';
 import { PoCalendarRangePreset } from '../../../po-calendar/interfaces/po-calendar-range-preset.interface';
+import { PoMultiselectOption } from '../../../po-field/po-multiselect/interfaces/po-multiselect-option.interface';
+import { PoLookupAdvancedFilter } from '../../../po-field/po-lookup/interfaces/po-lookup-advanced-filter.interface';
+import { ForceBooleanComponentEnum, ForceOptionComponentEnum } from '../../enums/po-dynamic-field-force-component.enum';
 
 /**
  * @usedBy PoDynamicFormComponent, PoAdvancedFilterComponent, PoPageDynamicSearchComponent
@@ -1073,4 +1073,27 @@ export interface PoDynamicFormField extends PoDynamicField {
    * @default `'asc'`
    */
   rangePresetsOrder?: 'asc' | 'desc';
+
+  /**
+   * Define o horário máximo permitido para seleção no timer.
+   * Formato: `HH:mm` ou `HH:mm:ss`.
+   *
+   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
+   */
+  maxTime?: string;
+
+  /**
+   * Define o horário mínimo permitido para seleção no timer.
+   * Formato: `HH:mm` ou `HH:mm:ss`.
+   *
+   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
+   */
+  minTime?: string;
+
+  /**
+   * Define o formato de exibição do timer (`'12'` ou `'24'`).
+   *
+   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
+   */
+  formatTime?: string;
 }

@@ -1,28 +1,30 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  computed,
-  DoCheck,
-  forwardRef,
-  OnChanges,
   OnInit,
   signal,
-  SimpleChanges,
   inject,
+  DoCheck,
+  computed,
+  Component,
+  OnChanges,
   QueryList,
-  ViewChildren
+  ViewChild,
+  forwardRef,
+  ViewChildren,
+  SimpleChanges,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { isMobile } from '../../utils/util';
 import { PoButtonComponent } from '../po-button';
+import { PoCalendarLangService } from './services';
+import { PoTimerComponent } from '../po-timer/po-timer.component';
 import { PoCalendarBaseComponent } from './po-calendar-base.component';
-import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
-import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { PoCalendarLangService } from './services';
-import { isMobile } from '../../utils/util';
+import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
+import { PO_CALENDAR_DEFAULT_RANGE_PRESETS } from './constants/po-calendar-range-presets.constant';
 
 /* istanbul ignore next */
 const providers = [
@@ -73,8 +75,10 @@ const providers = [
   standalone: false
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit, OnChanges, DoCheck {
-  @ViewChildren('monthOption') monthOptions: QueryList<PoButtonComponent>;
+  @ViewChild('timer') timerComponent: PoTimerComponent;
+
   @ViewChildren('yearOption') yearOptions: QueryList<PoButtonComponent>;
+  @ViewChildren('monthOption') monthOptions: QueryList<PoButtonComponent>;
 
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly poCalendarLangService = inject(PoCalendarLangService);
@@ -363,6 +367,13 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       this.value = null;
       this.updateModel('');
       this.change.emit('');
+
+      // Em modo date-time, limpar também reseta o timer
+      if (this.isDateTime && this.timerComponent) {
+        this.timerComponent.writeValue(null);
+        this.changeTime.emit('');
+      }
+
       this.changeDetector.markForCheck();
       return;
     }
@@ -381,6 +392,18 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     const newModel = this.convertDateToISO(this.value);
     this.updateModel(newModel);
     this.change.emit(newModel);
+
+    // Em modo date-time, se a data selecionada é "hoje", define a hora atual no timer
+    if (this.isDateTime && this.timerComponent && this.isToday(selectedDate)) {
+      const now = new Date();
+      const hours = ('0' + now.getHours()).slice(-2);
+      const minutes = ('0' + now.getMinutes()).slice(-2);
+      const seconds = ('0' + now.getSeconds()).slice(-2);
+      const currentTime = this.showSeconds ? `${hours}:${minutes}:${seconds}` : `${hours}:${minutes}`;
+
+      this.timerComponent.writeValue(currentTime);
+      this.changeTime.emit(currentTime);
+    }
   }
 
   onHoverDate(date) {
@@ -396,6 +419,14 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   onCloseCalendar() {
     this.change.emit(this.value);
     this.close.emit();
+  }
+
+  onTimeChange(time: string) {
+    this.changeTime.emit(time);
+  }
+
+  onTimerBoundaryTab(event: any) {
+    this.timerBoundaryTab.emit(event);
   }
 
   registerOnChange(fn: any): void {
@@ -494,6 +525,18 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   private normalizeDate(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  private isToday(date: Date): boolean {
+    if (!date || !(date instanceof Date)) {
+      return false;
+    }
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
   }
 
   private enrichPresetsWithDisabledState(

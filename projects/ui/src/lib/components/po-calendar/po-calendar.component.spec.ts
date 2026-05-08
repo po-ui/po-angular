@@ -705,6 +705,95 @@ describe('PoCalendarComponent:', () => {
       expect(component.close.emit).toHaveBeenCalled();
     });
 
+    it('onTimeChange: should emit changeTime with the time value', () => {
+      spyOn(component.changeTime, 'emit');
+
+      component.onTimeChange('14:30');
+
+      expect(component.changeTime.emit).toHaveBeenCalledWith('14:30');
+    });
+
+    it('onTimerBoundaryTab: should emit timerBoundaryTab event', () => {
+      spyOn(component.timerBoundaryTab, 'emit');
+      const event = { direction: 'forward', event: new KeyboardEvent('keydown'), column: 'minutes' };
+
+      component.onTimerBoundaryTab(event);
+
+      expect(component.timerBoundaryTab.emit).toHaveBeenCalledWith(event);
+    });
+
+    describe('onSelectDate in date-time mode:', () => {
+      beforeEach(() => {
+        component.mode = PoCalendarMode.DateTime;
+        component['timerComponent'] = { writeValue: jasmine.createSpy('writeValue') } as any;
+      });
+
+      it('should reset timer and emit changeTime with empty string when clearing in date-time mode', () => {
+        spyOn(component.changeTime, 'emit');
+        spyOn(component.change, 'emit');
+
+        component.onSelectDate(undefined);
+
+        expect(component['timerComponent'].writeValue).toHaveBeenCalledWith(null);
+        expect(component.changeTime.emit).toHaveBeenCalledWith('');
+        expect(component.change.emit).toHaveBeenCalledWith('');
+      });
+
+      it('should set current time on timer and emit changeTime when selecting today in date-time mode', () => {
+        spyOn(component.changeTime, 'emit');
+        const today = new Date();
+
+        component.onSelectDate(today);
+
+        expect(component['timerComponent'].writeValue).toHaveBeenCalled();
+        expect(component.changeTime.emit).toHaveBeenCalled();
+
+        const emittedTime = (component.changeTime.emit as jasmine.Spy).calls.mostRecent().args[0];
+        expect(emittedTime).toMatch(/^\d{2}:\d{2}$/);
+      });
+
+      it('should include seconds in time when showSeconds is true and selecting today', () => {
+        spyOn(component.changeTime, 'emit');
+        component.showSeconds = true;
+        const today = new Date();
+
+        component.onSelectDate(today);
+
+        const emittedTime = (component.changeTime.emit as jasmine.Spy).calls.mostRecent().args[0];
+        expect(emittedTime).toMatch(/^\d{2}:\d{2}:\d{2}$/);
+      });
+
+      it('should not set time on timer when selecting a date that is not today', () => {
+        spyOn(component.changeTime, 'emit');
+        const notToday = new Date(2020, 0, 1);
+
+        component.onSelectDate(notToday);
+
+        expect(component.changeTime.emit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('isToday:', () => {
+      it('should return true for today', () => {
+        const today = new Date();
+        expect(component['isToday'](today)).toBe(true);
+      });
+
+      it('should return false for yesterday', () => {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        expect(component['isToday'](yesterday)).toBe(false);
+      });
+
+      it('should return false for null', () => {
+        expect(component['isToday'](null)).toBe(false);
+      });
+
+      it('should return false for undefined', () => {
+        expect(component['isToday'](undefined)).toBe(false);
+      });
+    });
+
     describe('effectivePresets:', () => {
       it('should return default presets when rangePresets is true and rangePresetOptions is undefined', () => {
         component.mode = PoCalendarMode.Range;

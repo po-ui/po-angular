@@ -18,6 +18,8 @@ export * from './po-timepicker/po-timepicker.module';
 export * from './po-datepicker-range/interfaces/po-datepicker-range.interface';
 export * from './po-datepicker-range/interfaces/po-datepicker-range-literals.interface';
 export * from './po-datepicker-range/po-datepicker-range.component';
+export * from './po-datetimepicker/po-datetimepicker.component';
+export * from './po-datetimepicker/po-datetimepicker.module';
 export * from './po-decimal/po-decimal.component';
 export * from './po-email/po-email.component';
 export * from './po-input/po-input.component';

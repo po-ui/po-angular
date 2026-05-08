@@ -47,8 +47,17 @@
     }
   </div>
 } @else {
-  <div class="po-calendar">
-    <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'single' }"></ng-container>
+  <div
+    [class.po-calendar-date-time]="isDateTime"
+    [class.po-calendar-three-columns]="showSeconds || format === '12'"
+    [class.po-calendar-four-columns]="showSeconds && format === '12'"
+  >
+    <div class="po-calendar">
+      <ng-container *ngTemplateOutlet="calendarWrapper; context: { partType: 'single' }"></ng-container>
+    </div>
+    @if (isDateTime) {
+      <ng-container *ngTemplateOutlet="calendarTimer"></ng-container>
+    }
   </div>
 }
 
@@ -119,4 +128,21 @@
       </li>
     }
   </ul>
+</ng-template>
+
+<ng-template #calendarTimer>
+  <div class="po-calendar-vertical-divider"></div>
+  <po-timer
+    #timer
+    [p-format]="format"
+    [p-locale]="locale"
+    [p-min-time]="minTime"
+    [p-max-time]="maxTime"
+    [p-minute-interval]="minuteInterval"
+    [p-second-interval]="secondInterval"
+    [p-show-seconds]="showSeconds"
+    [p-size]="size"
+    (p-change)="onTimeChange($event)"
+    (p-boundary-tab)="onTimerBoundaryTab($event)"
+  ></po-timer>
 </ng-template>

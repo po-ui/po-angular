@@ -13,5 +13,8 @@ export enum PoCalendarMode {
   MonthYear = 'month-year',
 
   // Modo de seleção de ano.
-  Year = 'year'
+  Year = 'year',
+
+  // Modo de seleção do po-datetimepicker.
+  DateTime = 'date-time'
 }
