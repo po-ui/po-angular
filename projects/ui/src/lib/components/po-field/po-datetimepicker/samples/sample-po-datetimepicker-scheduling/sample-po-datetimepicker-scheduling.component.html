@@ -1,0 +1,59 @@
+<form #formScheduling="ngForm">
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="patient"
+      [(ngModel)]="patient"
+      p-label="Paciente"
+      p-placeholder="Nome do paciente"
+      p-required
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6"
+      name="doctor"
+      [(ngModel)]="doctor"
+      p-label="Médico"
+      p-placeholder="Nome do médico"
+      p-required
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-select
+      class="po-md-6"
+      name="specialty"
+      [(ngModel)]="specialty"
+      p-label="Especialidade"
+      p-required
+      [p-options]="specialtyOptions"
+    >
+    </po-select>
+
+    <po-datetimepicker
+      class="po-md-6"
+      name="appointment"
+      [(ngModel)]="appointment"
+      p-clean
+      p-label="Data e Hora da Consulta"
+      p-min-time="08:00"
+      p-max-time="18:00"
+      p-minute-interval="15"
+      p-required
+    >
+    </po-datetimepicker>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      class="po-md-3 po-offset-md-9 po-offset-lg-9"
+      name="confirmButton"
+      p-label="Agendar Consulta"
+      [p-disabled]="formScheduling.invalid"
+      (p-click)="confirm()"
+    >
+    </po-button>
+  </div>
+</form>

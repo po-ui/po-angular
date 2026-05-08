@@ -1,0 +1,130 @@
+<po-datetimepicker
+  class="po-sm-12"
+  name="datetimepicker"
+  [(ngModel)]="datetimepicker"
+  [p-clean]="properties.includes('clean')"
+  [p-compact-label]="properties?.includes('compactLabel')"
+  [p-disabled]="properties.includes('disabled')"
+  [p-error-limit]="properties?.includes('errorLimit')"
+  [p-error-pattern]="errorPattern"
+  [p-format-date]="formatDate"
+  [p-format-time]="formatTime"
+  [p-help]="help"
+  [p-helper]="helperText"
+  [p-label]="label"
+  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
+  [p-loading]="properties.includes('loading')"
+  [p-locale]="locale"
+  [p-max-date]="maxDate"
+  [p-max-time]="maxTime"
+  [p-min-date]="minDate"
+  [p-min-time]="minTime"
+  [p-minute-interval]="minuteInterval"
+  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
+  [p-optional]="properties.includes('optional')"
+  [p-placeholder]="placeholder"
+  [p-readonly]="properties.includes('readonly')"
+  [p-required]="properties.includes('required')"
+  [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
+  [p-second-interval]="secondInterval"
+  [p-show-required]="properties.includes('showRequired')"
+  [p-show-seconds]="properties.includes('showSeconds')"
+  [p-size]="size"
+  (p-blur)="changeEvent('p-blur')"
+  (p-change)="changeEvent('p-change')"
+  (p-keydown)="changeEvent('p-keydown')"
+>
+</po-datetimepicker>
+
+<po-divider />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Model" [p-value]="datetimepicker"> </po-info>
+
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
+</div>
+
+<po-divider />
+
+<form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern"> </po-input>
+
+  <po-number class="po-md-6" name="minuteInterval" [(ngModel)]="minuteInterval" p-clean p-label="Minute Interval">
+  </po-number>
+
+  <po-number class="po-md-6" name="secondInterval" [(ngModel)]="secondInterval" p-clean p-label="Second Interval">
+  </po-number>
+
+  <po-timepicker class="po-md-6" name="minTime" [(ngModel)]="minTime" p-clean p-label="Min Time"> </po-timepicker>
+
+  <po-timepicker class="po-md-6" name="maxTime" [(ngModel)]="maxTime" p-clean p-label="Max Time"> </po-timepicker>
+
+  <po-datepicker class="po-md-6" name="minDate" [(ngModel)]="minDate" p-clean p-label="Min Date" [p-max-date]="maxDate">
+  </po-datepicker>
+
+  <po-datepicker class="po-md-6" name="maxDate" [(ngModel)]="maxDate" p-clean p-label="Max Date" [p-min-date]="minDate">
+  </po-datepicker>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="locale"
+    [(ngModel)]="locale"
+    p-columns="4"
+    p-label="Locale"
+    [p-options]="localeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="formatDate"
+    [(ngModel)]="formatDate"
+    p-columns="4"
+    p-label="Format Date"
+    [p-options]="formatDateOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="formatTime"
+    [(ngModel)]="formatTime"
+    p-columns="4"
+    p-label="Format Time"
+    [p-options]="formatTimeOptions"
+  >
+  </po-radio-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
+  <div class="po-row">
+    <po-button class="po-lg-3 po-md-6" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+  </div>
+</form>

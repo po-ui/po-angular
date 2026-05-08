@@ -85,5 +85,30 @@ describe('PoCalendarService:', () => {
     it('monthDates: should get month days with year is greater than 101', () => {
       expect(service.monthDays(158, 7).length).toBe(5);
     });
+
+    describe('isToday:', () => {
+      it('should return true for today', () => {
+        const today = new Date();
+        expect(service.isToday(today)).toBe(true);
+      });
+
+      it('should return false for yesterday', () => {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        expect(service.isToday(yesterday)).toBe(false);
+      });
+
+      it('should return false for null', () => {
+        expect(service.isToday(null)).toBe(false);
+      });
+
+      it('should return false for undefined', () => {
+        expect(service.isToday(undefined)).toBe(false);
+      });
+
+      it('should return false for non-Date value', () => {
+        expect(service.isToday('2024-01-01' as any)).toBe(false);
+      });
+    });
   });
 });
