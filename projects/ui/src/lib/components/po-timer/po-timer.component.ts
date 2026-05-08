@@ -1,30 +1,29 @@
 import {
-  AfterViewInit,
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
   inject,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
   NgZone,
-  OnChanges,
-  OnDestroy,
   OnInit,
   Output,
+  Component,
+  OnChanges,
+  OnDestroy,
   QueryList,
+  ElementRef,
+  forwardRef,
+  EventEmitter,
+  ViewChildren,
   SimpleChanges,
-  ViewChildren
+  AfterViewInit,
+  AfterViewChecked,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { PoButtonComponent } from '../po-button/po-button.component';
-
-import { PoTimerBaseComponent } from './po-timer-base.component';
 import { PoTimerScrollHelper } from './po-timer-scroll.helper';
+import { PoTimerBaseComponent } from './po-timer-base.component';
+import { PoButtonComponent } from '../po-button/po-button.component';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
 
 /** Quantidade de itens visiveis por coluna. */
 const VISIBLE_ITEMS_PER_COLUMN = 6;

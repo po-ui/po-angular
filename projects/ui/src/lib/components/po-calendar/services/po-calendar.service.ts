@@ -100,4 +100,16 @@ export class PoCalendarService {
     }
     return startDate;
   }
+
+  isToday(date: Date): boolean {
+    if (!date || !(date instanceof Date)) {
+      return false;
+    }
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  }
 }

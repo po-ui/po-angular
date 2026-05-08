@@ -130,7 +130,7 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
     const control = this.getComponentControl(field);
     const options = !!field.options ? this.convertOptions(field.options) : undefined;
     const focus = this.hasFocus(field);
-    const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
+    const type = field?.type ? field.type.toLocaleLowerCase() : 'string';
 
     const componentClass = PoDynamicUtil.getGridColumnsClasses(
       field.gridColumns,
@@ -172,51 +172,119 @@ export class PoDynamicFormFieldsBaseComponent extends PoDynamicSharedBase {
 
   // recupera o componente de acordo com algumas regras do field.
   private getComponentControl(field: PoDynamicFormField = <any>{}) {
-    const type = field && field.type ? field.type.toLocaleLowerCase() : 'string';
+    const type = this.getFieldType(field);
 
+    const forcedComponent = this.getForcedComponent(field);
+
+    if (forcedComponent) {
+      return forcedComponent;
+    }
+
+    return this.getComponentByType(field, type);
+  }
+
+  private getFieldType(field: PoDynamicFormField): string {
+    return field?.type ? field.type.toLocaleLowerCase() : 'string';
+  }
+
+  private getForcedComponent(field: PoDynamicFormField): string | undefined {
     const { forceBooleanComponentType } = field;
-    const forceOptionComponent = this.verifyForceOptionComponent(field);
 
     if (forceBooleanComponentType) {
       return forceBooleanComponentType;
     }
 
-    if (forceOptionComponent) {
-      const { forceOptionsComponentType } = field;
-      return forceOptionsComponentType;
+    if (this.verifyForceOptionComponent(field)) {
+      return field.forceOptionsComponentType;
     }
 
+    return undefined;
+  }
+
+  private getComponentByType(field: PoDynamicFormField, type: string): string {
+    return (
+      this.getNumericComponent(field, type) ||
+      this.getSelectionComponent(field) ||
+      this.getDateComponent(field, type) ||
+      this.getTextComponent(field) ||
+      'input'
+    );
+  }
+
+  private getNumericComponent(field: PoDynamicFormField, type: string): string | undefined {
     if (this.isNumberType(field, type)) {
       return 'number';
-    } else if (this.isCurrencyType(field, type) || type === PoDynamicFieldType.Decimal) {
+    }
+
+    if (this.isCurrencyType(field, type) || type === PoDynamicFieldType.Decimal) {
       return 'decimal';
-    } else if (this.isSelect(field)) {
+    }
+
+    return undefined;
+  }
+
+  private getSelectionComponent(field: PoDynamicFormField): string | undefined {
+    if (this.isSelect(field)) {
       return 'select';
-    } else if (this.isRadioGroup(field)) {
+    }
+
+    if (this.isRadioGroup(field)) {
       return 'radioGroup';
-    } else if (this.isCheckboxGroup(field)) {
+    }
+
+    if (this.isCheckboxGroup(field)) {
       return 'checkboxGroup';
-    } else if (this.isMultiselect(field)) {
+    }
+
+    if (this.isMultiselect(field)) {
       return 'multiselect';
-    } else if (this.compareTo(type, PoDynamicFieldType.Boolean)) {
-      return 'switch';
-    } else if (this.compareTo(type, PoDynamicFieldType.Date) || this.compareTo(type, PoDynamicFieldType.DateTime)) {
-      return field.range ? 'datepickerrange' : 'datepicker';
-    } else if (this.compareTo(type, PoDynamicFieldType.Time)) {
-      return 'timepicker';
-    } else if (this.isCombo(field)) {
+    }
+
+    if (this.isCombo(field)) {
       return 'combo';
-    } else if (this.isLookup(field)) {
+    }
+
+    if (this.isLookup(field)) {
       return 'lookup';
-    } else if (this.isTextarea(field)) {
+    }
+
+    return undefined;
+  }
+
+  private getDateComponent(field: PoDynamicFormField, type: string): string | undefined {
+    if (this.compareTo(type, PoDynamicFieldType.Boolean)) {
+      return 'switch';
+    }
+
+    if (this.compareTo(type, PoDynamicFieldType.DateTime)) {
+      return 'datetimepicker';
+    }
+
+    if (this.compareTo(type, PoDynamicFieldType.Date)) {
+      return field.range ? 'datepickerrange' : 'datepicker';
+    }
+
+    if (this.compareTo(type, PoDynamicFieldType.Time)) {
+      return 'timepicker';
+    }
+
+    return undefined;
+  }
+
+  private getTextComponent(field: PoDynamicFormField): string | undefined {
+    if (this.isTextarea(field)) {
       return 'textarea';
-    } else if (this.isPassword(field)) {
+    }
+
+    if (this.isPassword(field)) {
       return 'password';
-    } else if (this.isUpload(field)) {
+    }
+
+    if (this.isUpload(field)) {
       return 'upload';
     }
 
-    return 'input';
+    return undefined;
   }
 
   private hasFocus(field: PoDynamicFormField) {

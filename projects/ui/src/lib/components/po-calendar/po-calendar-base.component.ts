@@ -1,13 +1,13 @@
 import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding, HostListener } from '@angular/core';
 
 import { PoDateService } from '../../services/po-date';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { poLocales } from '../../services/po-language/po-language.constant';
-
 import { PoCalendarMode } from './po-calendar-mode.enum';
-import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
-import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { PoTimerFormat } from '../po-timer/enums/po-timer-format.enum';
+import { poLocales } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.interface';
 
 /**
  * @description
@@ -101,29 +101,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 
 @Directive()
 export class PoCalendarBaseComponent {
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado ao alterar o valor do model.
-   * Em modo padrão, retorna uma `string` no formato ISO 8601 (`yyyy-mm-dd`).
-   * Em modo *range*, retorna um objeto contendo as datas de início (`start`) e fim (`end`).
-   */
-  @Output('p-change') change = new EventEmitter<string | { start; end }>();
-
-  /**
-   * @description
-   *
-   * Evento disparado ao alterar o mês ou o ano no cabeçalho do calendário.
-   * Retorna um objeto contendo os valores numéricos:
-   * - `month`: Mês selecionado (variando de 1 a 12).
-   * - `year`: Ano selecionado.
-   */
-  @Output('p-change-month-year') changeMonthYear = new EventEmitter<any>();
-
-  // Evento disparado ao fechar o calendário, seja por seleção de data ou por clique fora do componente.
-  @Output('p-close') close = new EventEmitter<void>();
+  // --- Propriedades ---
 
   activateDate;
   selectedPresetLabel: string | null = null;
@@ -138,8 +116,17 @@ export class PoCalendarBaseComponent {
   private _maxDate: Date;
   private _minDate: Date;
   private _mode: PoCalendarMode;
+  private _rangePresets: boolean | Array<string> = false;
   private _size?: string;
   private _initialSize?: string;
+
+  // --- Inputs ---
+
+  // Define o formato de exibição do timer quando o calendário está no modo `date-time`.
+  @Input('p-format') format: PoTimerFormat = PoTimerFormat.Format24;
+
+  // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
+  @Input('p-header-template') headerTemplate?: TemplateRef<any>;
 
   /**
    * @optional
@@ -153,6 +140,7 @@ export class PoCalendarBaseComponent {
   @Input('p-locale') set locale(locale: string) {
     this._locale = poLocales.includes(locale) ? locale : this.shortLanguage;
   }
+
   get locale() {
     return this._locale;
   }
@@ -185,9 +173,13 @@ export class PoCalendarBaseComponent {
   @Input('p-max-date') set maxDate(maxDate: any) {
     this._maxDate = this.poDate.getDateForDateRange(maxDate, false);
   }
+
   get maxDate() {
     return this._maxDate;
   }
+
+  // Define o horário máximo permitido para seleção no timer quando o calendário está no modo `date-time`.
+  @Input('p-max-time') maxTime: string;
 
   /**
    * @optional
@@ -216,9 +208,16 @@ export class PoCalendarBaseComponent {
   @Input('p-min-date') set minDate(minDate: any) {
     this._minDate = this.poDate.getDateForDateRange(minDate, true);
   }
+
   get minDate() {
     return this._minDate;
   }
+
+  // Define o horário mínimo permitido para seleção no timer quando o calendário está no modo `date-time`.
+  @Input('p-min-time') minTime: string;
+
+  // Define o intervalo entre os minutos exibidos no painel do timer quando o calendário está no modo `date-time`.
+  @Input('p-minute-interval') minuteInterval: number;
 
   /**
    * @optional
@@ -231,7 +230,6 @@ export class PoCalendarBaseComponent {
    */
   @Input('p-mode') set mode(value: PoCalendarMode) {
     this._mode = value;
-
     this.setActivateDate();
   }
 
@@ -239,28 +237,20 @@ export class PoCalendarBaseComponent {
     return this._mode;
   }
 
-  get isRange() {
-    return this.mode === PoCalendarMode.Range;
-  }
-
-  get isMonthYear() {
-    return this.mode === PoCalendarMode.MonthYear;
-  }
-
-  get isYear() {
-    return this.mode === PoCalendarMode.Year;
-  }
-
-  //  Propriedade interna utilizada pelo po-datepicker.
-  //  Define o limite de anos exibidos nas variações `month-year` e `year`,
-  //  considerando a data atual como referência.
-  //
-  //  O valor informado determina o intervalo de anos anterior e posterior
-  //  à data corrente que será disponibilizado para seleção.
-  @Input('p-year-range-limit') yearRangeLimit?: number = 150;
-
-  // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
-  @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Lista de presets customizados de intervalos de data exibidos no painel lateral do calendário em modo *range*.
+   *
+   * Quando informado sem `p-range-presets`, exibe apenas os presets customizados.
+   * Quando informado junto com `p-range-presets` habilitado, os presets customizados serão exibidos junto aos presets padrão,
+   * ordenados automaticamente por temporalidade com base na data início (Futuro → Presente → Passado).
+   *
+   * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
+   */
+  @Input('p-range-preset-options') rangePresetOptions?: Array<PoCalendarRangePreset>;
 
   /**
    * @optional
@@ -295,23 +285,6 @@ export class PoCalendarBaseComponent {
     return this._rangePresets;
   }
 
-  private _rangePresets: boolean | Array<string> = false;
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Lista de presets customizados de intervalos de data exibidos no painel lateral do calendário em modo *range*.
-   *
-   * Quando informado sem `p-range-presets`, exibe apenas os presets customizados.
-   * Quando informado junto com `p-range-presets` habilitado, os presets customizados serão exibidos junto aos presets padrão,
-   * ordenados automaticamente por temporalidade com base na data início (Futuro → Presente → Passado).
-   *
-   * Para utilizar presets customizados, informe um array de objetos que implementam a interface `PoCalendarRangePreset`.
-   */
-  @Input('p-range-preset-options') rangePresetOptions?: Array<PoCalendarRangePreset>;
-
   /**
    * @optional
    *
@@ -328,6 +301,13 @@ export class PoCalendarBaseComponent {
    * @default `asc`
    */
   @Input('p-range-presets-order') rangePresetsOrder: 'asc' | 'desc' = 'asc';
+
+  // Define o intervalo entre os segundos exibidos no painel do timer quando o calendário está no modo `date-time`.
+  // Utilizado apenas quando `p-show-seconds` está ativo.
+  @Input('p-second-interval') secondInterval: number;
+
+  // Exibe a coluna de segundos no painel de seleção do timer quando o calendário está no modo `date-time`.
+  @Input('p-show-seconds') showSeconds: boolean = false;
 
   /**
    * @optional
@@ -356,6 +336,67 @@ export class PoCalendarBaseComponent {
   // no po-datepicker-range, especialmente quando presets estão configurados.
   @Input('p-width-with-presets') widthWithPresets?: boolean;
 
+  //  Propriedade interna utilizada pelo po-datepicker.
+  //  Define o limite de anos exibidos nas variações `month-year` e `year`,
+  //  considerando a data atual como referência.
+  //
+  //  O valor informado determina o intervalo de anos anterior e posterior
+  //  à data corrente que será disponibilizado para seleção.
+  @Input('p-year-range-limit') yearRangeLimit?: number = 150;
+
+  // --- Outputs ---
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado ao alterar o valor do model.
+   * Em modo padrão, retorna uma `string` no formato ISO 8601 (`yyyy-mm-dd`).
+   * Em modo *range*, retorna um objeto contendo as datas de início (`start`) e fim (`end`).
+   */
+  @Output('p-change') change = new EventEmitter<string | { start; end }>();
+
+  /**
+   * @description
+   *
+   * Evento disparado ao alterar o mês ou o ano no cabeçalho do calendário.
+   * Retorna um objeto contendo os valores numéricos:
+   * - `month`: Mês selecionado (variando de 1 a 12).
+   * - `year`: Ano selecionado.
+   */
+  @Output('p-change-month-year') changeMonthYear = new EventEmitter<any>();
+
+  // Evento disparado ao selecionar um horário no timer quando o calendário está no modo `date-time`.
+  // Retorna uma `string` no formato ISO 8601 (`HH:mm` ou `HH:mm:ss`).
+  @Output('p-change-time') changeTime = new EventEmitter<string>();
+
+  // Evento disparado ao fechar o calendário, seja por seleção de data ou por clique fora do componente.
+  @Output('p-close') close = new EventEmitter<void>();
+
+  // Evento disparado quando Tab/ShiftTab atinge a última coluna do timer no modo date-time.
+  @Output('p-timer-boundary-tab') timerBoundaryTab = new EventEmitter<any>();
+
+  // --- Getters derivados do mode ---
+
+  get isDateTime() {
+    return this.mode === PoCalendarMode.DateTime;
+  }
+
+  get isRange() {
+    return this.mode === PoCalendarMode.Range;
+  }
+
+  get isMonthYear() {
+    return this.mode === PoCalendarMode.MonthYear;
+  }
+
+  get isYear() {
+    return this.mode === PoCalendarMode.Year;
+  }
+
+  // --- Constructor ---
+
   constructor(
     public poDate: PoDateService,
     private readonly languageService: PoLanguageService
@@ -363,6 +404,8 @@ export class PoCalendarBaseComponent {
     this.shortLanguage = languageService.getShortLanguage();
     this._locale = this.languageService.getShortLanguage();
   }
+
+  // --- Métodos ---
 
   @HostListener('window:PoUiThemeChange')
   protected onThemeChange(): void {
