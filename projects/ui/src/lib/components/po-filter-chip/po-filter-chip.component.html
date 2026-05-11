@@ -1,0 +1,18 @@
+<span
+  class="po-filter-chip-wrapper"
+  role="option"
+  aria-selected="false"
+  [attr.aria-selected]="isSelected()"
+  [attr.aria-disabled]="disabled() || null"
+  [attr.tabindex]="disabled() ? -1 : 0"
+  [class.po-filter-chip-selected]="isSelected()"
+  [class.po-filter-chip-disabled]="disabled()"
+  (click)="onClick()"
+  (keydown.enter)="onKeydown($event)"
+  (keydown.space)="onKeydown($event)"
+>
+  @if (isSelected()) {
+    <po-icon class="po-filter-chip-icon" p-icon="ICON_OK"></po-icon>
+  }
+  <span class="po-filter-chip-label">{{ label() }}</span>
+</span>

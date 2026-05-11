@@ -1,0 +1,33 @@
+<div class="po-row">
+  <po-filter-chip
+    [p-label]="label"
+    [p-selected]="selected"
+    [p-disabled]="disabled"
+    (p-selected-change)="onSelectedChange($event)"
+  >
+  </po-filter-chip>
+</div>
+
+<po-divider />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Model" [p-value]="model"></po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"></po-info>
+</div>
+
+<po-divider />
+
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input class="po-md-4" name="label" [(ngModel)]="label" p-label="Label"></po-input>
+  </div>
+
+  <div class="po-row">
+    <po-switch class="po-md-4" name="selected" [(ngModel)]="selected" p-label="Selected"></po-switch>
+    <po-switch class="po-md-4" name="disabled" [(ngModel)]="disabled" p-label="Disabled"></po-switch>
+  </div>
+
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"></po-button>
+  </div>
+</form>

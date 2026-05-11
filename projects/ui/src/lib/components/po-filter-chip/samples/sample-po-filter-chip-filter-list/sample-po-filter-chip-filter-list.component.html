@@ -1,0 +1,36 @@
+<div class="po-row">
+  <div class="po-md-12">
+    <p class="po-font-subtitle">Filter by category:</p>
+    <div class="po-mt-1">
+      @for (filter of filters; track filter.label) {
+        <po-filter-chip
+          class="po-mr-1"
+          [p-label]="filter.label"
+          [p-selected]="filter.selected"
+          (p-selected-change)="onFilterChange($event)"
+        >
+        </po-filter-chip>
+      }
+    </div>
+  </div>
+</div>
+
+<po-divider />
+
+<div class="po-row">
+  <div class="po-md-12">
+    <p class="po-font-subtitle">Products ({{ filteredProducts.length }}):</p>
+    <po-container>
+      @for (product of filteredProducts; track product.name) {
+        <div class="po-row po-p-1">
+          <span class="po-font-text-bold po-mr-1">{{ product.name }}</span>
+          <span class="po-font-text-small">({{ product.category }})</span>
+        </div>
+      } @empty {
+        <div class="po-row po-p-2">
+          <span class="po-font-text">No products found.</span>
+        </div>
+      }
+    </po-container>
+  </div>
+</div>
