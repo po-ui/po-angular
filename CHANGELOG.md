@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.15.0](https://github.com/po-ui/po-angular/compare/v21.14.0...v21.15.0) (2026-05-14)
+
+
+### Features
+
+* **popup:** adiciona suporte a subníveis ([bf79e17](https://github.com/po-ui/po-angular/commit/bf79e177b015e4d406bce74255ccacc4b9b4480c))
+
+
+### Bug Fixes
+
+* **combo:** limpa seleção anterior ao atualizar valor via ngModel ([1d860d7](https://github.com/po-ui/po-angular/commit/1d860d7964d091d90586dab5014d2426b47b06ff))
+
 ### [21.14.0](https://github.com/po-ui/po-angular/compare/v21.13.1...v21.14.0) (2026-05-08)
 
 Compatibilidade com @totvs/thf-components@21.14.0
