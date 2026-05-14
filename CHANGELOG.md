@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.11](https://github.com/po-ui/po-angular/compare/v19.39.10...v19.39.11) (2026-05-14)
+
+
+### Bug Fixes
+
+* **combo:** limpa seleção anterior ao atualizar valor via ngModel ([f61a1b2](https://github.com/po-ui/po-angular/commit/f61a1b25adb1de2dacb00cc2dc9fbce0ad0848f1))
+
 ### [19.39.10](https://github.com/po-ui/po-angular/compare/v19.39.9...v19.39.10) (2026-04-28)
 
 Compatibilidade com @totvs/thf-components@19.39.10
