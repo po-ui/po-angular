@@ -104,6 +104,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   close(): void {
     this.isHidden = true;
     this.disconnectResizeObserver();
+    this.widthPopover = undefined;
     this.closePopover.emit();
 
     if (this.trigger === 'function' && this.clickoutListener) {
@@ -124,25 +125,23 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     this.addScrollEventListener();
     this.setOpacity(0);
     this.isHidden = false;
-    setTimeout(() => {
-      this.setElementsControlPosition();
-      this.setPopoverPosition();
-      this.setOpacity(1);
-      this.openPopover.emit();
-      this.observeContentResize();
-      if (this.cornerAligned && !this.width) {
-        const el = this.popoverElement.nativeElement;
 
-        el.style.width = 'auto';
-        const width = el.scrollWidth;
-        this.widthPopover = width;
-
-        requestAnimationFrame(() => {
-          this.setPopoverPosition();
-        });
-      }
+    if (this.cornerAligned && !this.width && !this.widthPopover) {
+      const el = this.popoverElement.nativeElement;
+      el.style.visibility = 'hidden';
+      el.style.left = '-9999px';
+      el.style.width = '';
+      this.setOpacity(0);
       this.cd.detectChanges();
-    });
+
+      requestAnimationFrame(() => {
+        this.widthPopover = el.getBoundingClientRect().width;
+        el.style.visibility = '';
+        el.style.left = '';
+        this.cd.detectChanges();
+      });
+    }
+    this.showPopover();
 
     if (this.trigger === 'function') {
       this.clickoutListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
@@ -151,6 +150,17 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
     }
 
     this.cd.detectChanges();
+  }
+
+  private showPopover(): void {
+    requestAnimationFrame(() => {
+      this.setElementsControlPosition();
+      this.setPopoverPosition();
+      this.setOpacity(1);
+      this.openPopover.emit();
+      this.observeContentResize();
+      this.cd.detectChanges();
+    });
   }
 
   public ensurePopoverPosition(): void {
