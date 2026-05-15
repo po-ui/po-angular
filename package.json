@@ -81,6 +81,7 @@
     "@capacitor/network": "^5.0.7",
     "@po-ui/style": "21.15.0",
     "custom-idle-queue": "4.0.0",
+    "driver.js": "^1.4.0",
     "echarts": "^5.6.0",
     "http-status-codes": "^2.3.0",
     "localforage": "1.10.0",

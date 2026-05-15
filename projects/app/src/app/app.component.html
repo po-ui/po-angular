@@ -1,0 +1,60 @@
+<div class="po-wrapper">
+  <po-menu
+    id="tour-menu"
+    p-collapsed
+    p-filter
+    [p-menus]="menus"
+    [p-service]="samplePoMenuHumanResourcesService"
+    [p-automatic-toggle]="true"
+  >
+    <div *p-menu-header-template class="po-p-2 po-font-title sample-menu-header-text-color">
+      <p>Welcome,</p>
+      <p>
+        <b> John Doe </b>
+      </p>
+    </div>
+  </po-menu>
+
+  <po-toolbar id="tour-toolbar" p-title="PO - Human Resources" [p-show-notification]="false"></po-toolbar>
+
+  <po-page-default [p-title]="menuItemSelected">
+    <div class="po-row po-mb-2">
+      <po-button id="tour-start-button" p-label="Iniciar Tour" p-icon="an an-info" (p-click)="startTour()"></po-button>
+    </div>
+
+    <po-widget
+      id="tour-widget"
+      class="po-lg-6"
+      p-help="https://github.com/po-ui/po-angular/stargazers"
+      p-title="Days to Payment"
+      p-tag="Sales"
+      p-tag-icon="an an-arrow-circle-up"
+      [p-height]="190"
+    >
+      <div>Sales order</div>
+      <div>Scheduled to: <strong>05/04/2018</strong></div>
+      <div class="sample-finance-actions">
+        <po-button p-label="Cancel" p-danger></po-button>
+        <po-button
+          p-label="Confirm"
+          (p-click)="openExternalLink('https://github.com/po-ui/po-angular/stargazers')"
+        ></po-button>
+      </div>
+    </po-widget>
+    <po-dynamic-form
+      id="tour-form"
+      #dynamicForm
+      p-auto-focus="name"
+      [p-fields]="fields"
+      [p-load]="onLoadFields.bind(this)"
+      [p-validate]="this.onChangeFields.bind(this)"
+      [p-validate-fields]="validateFields"
+      [p-value]="person"
+    >
+    </po-dynamic-form>
+
+    <br />
+
+    <div class="po-row"></div>
+  </po-page-default>
+</div>

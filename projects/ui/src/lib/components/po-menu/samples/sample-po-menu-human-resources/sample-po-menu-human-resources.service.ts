@@ -3,8 +3,8 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { PoMenuFilter, PoMenuItemFiltered } from '@po-ui/ng-components';
+import { PoMenuFilter } from '../../po-menu-filter/po-menu-filter.interface';
+import { PoMenuItemFiltered } from '../../po-menu-item/po-menu-item-filtered.interface';
 
 @Injectable({
   providedIn: 'root'
