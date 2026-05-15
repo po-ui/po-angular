@@ -1192,11 +1192,12 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`getDayColor: should return today disabled color when today is in current month but outside date range`, () => {
-      const today = new Date();
+      const today = new Date(2026, 4, 10);
       const local = 'background';
       component.displayMonthNumber = today.getMonth();
       component.range = false;
-      component.value = new Date(today.getFullYear(), today.getMonth(), 15);
+      component.value = new Date(2026, 4, 15);
+      component['today'] = today;
 
       spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
 
@@ -1206,11 +1207,12 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`getDayColor: should return today color when today is in current month and within date range`, () => {
-      const today = new Date();
+      const today = new Date(2026, 4, 10);
       const local = 'background';
       component.displayMonthNumber = today.getMonth();
       component.range = false;
-      component.value = new Date(today.getFullYear(), today.getMonth(), 15);
+      component.value = new Date(2026, 4, 15);
+      component['today'] = today;
 
       spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
 

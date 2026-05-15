@@ -2092,6 +2092,10 @@ describe('PoDatepickerComponent:', () => {
   });
 
   describe('Month-Year and Year mode:', () => {
+    afterEach(() => {
+      clearTimeout(component['timeoutChange']);
+    });
+
     describe('handleMonthYearKeyup:', () => {
       it('should call callOnChange with parsed value when input is complete MM/YYYY', () => {
         component.mode = 'month-year';
@@ -2691,7 +2695,7 @@ describe('PoDatepickerComponent:', () => {
         setTimeout(() => {
           expect(component.onchange.emit).not.toHaveBeenCalled();
           done();
-        }, 300);
+        }, 250);
       });
 
       it('should emit p-change for valid year input', done => {
@@ -2852,7 +2856,7 @@ describe('PoDatepickerComponent:', () => {
         setTimeout(() => {
           expect(component.onchange.emit).not.toHaveBeenCalled();
           done();
-        }, 300);
+        }, 250);
       });
     });
 
