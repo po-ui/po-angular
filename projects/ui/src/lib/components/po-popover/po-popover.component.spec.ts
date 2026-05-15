@@ -323,6 +323,11 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('should open popover', fakeAsync(() => {
+    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
     const fakeThis = {
       addScrollEventListener: () => {},
       isHidden: true,
@@ -332,7 +337,19 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: arg => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: undefined as any
+    };
+
+    fakeThis.showPopover = () => {
+      requestAnimationFrame(() => {
+        fakeThis.setElementsControlPosition();
+        fakeThis.setPopoverPosition();
+        fakeThis.setOpacity(1);
+        fakeThis.openPopover.emit();
+        fakeThis.observeContentResize();
+        fakeThis.cd.detectChanges();
+      });
     };
 
     spyOn(fakeThis, 'addScrollEventListener');
@@ -342,8 +359,6 @@ describe('PoPopoverComponent:', () => {
     spyOn(fakeThis.cd, 'detectChanges');
     component.open.call(fakeThis);
 
-    tick(300);
-
     expect(fakeThis.isHidden).toBeFalsy();
     expect(fakeThis.addScrollEventListener).toHaveBeenCalled();
     expect(fakeThis.setOpacity).toHaveBeenCalledWith(1);
@@ -352,10 +367,15 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
   }));
 
-  it('open: should set widthPopover and call requestAnimationFrame when cornerAligned is true and width is undefined', fakeAsync(() => {
+  it('open: should set widthPopover from getBoundingClientRect when cornerAligned is true and width is undefined', fakeAsync(() => {
+    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
     const fakeNativeElement = {
-      style: { width: '', opacity: 0 },
-      scrollWidth: 250
+      style: { width: '', opacity: 0, visibility: '', left: '' },
+      getBoundingClientRect: () => ({ width: 250 })
     };
 
     const fakeThis: any = {
@@ -370,24 +390,19 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
     };
 
-    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
-      cb(0);
-      return 0;
-    });
-
     component.open.call(fakeThis);
-    tick(300);
 
-    expect(fakeNativeElement.style.width).toBe('auto');
+    expect(fakeNativeElement.style.visibility).toBe('');
+    expect(fakeNativeElement.style.left).toBe('');
     expect(fakeThis.widthPopover).toBe(250);
     expect(window.requestAnimationFrame).toHaveBeenCalled();
-    expect(fakeThis.setPopoverPosition).toHaveBeenCalled();
   }));
 
-  it('open: should NOT set widthPopover when cornerAligned is false', fakeAsync(() => {
+  it('open: should NOT set widthPopover when cornerAligned is false', () => {
     const fakeThis: any = {
       addScrollEventListener: () => {},
       isHidden: true,
@@ -399,16 +414,16 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
     };
 
     component.open.call(fakeThis);
-    tick(300);
 
     expect(fakeThis.widthPopover).toBeUndefined();
-  }));
+  });
 
-  it('open: should NOT set widthPopover when width input is defined', fakeAsync(() => {
+  it('open: should NOT set widthPopover when width input is defined', () => {
     const fakeThis: any = {
       addScrollEventListener: () => {},
       isHidden: true,
@@ -420,13 +435,63 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
     };
 
     component.open.call(fakeThis);
-    tick(300);
 
     expect(fakeThis.widthPopover).toBeUndefined();
+  });
+
+  it('open: should recalculate widthPopover on second open after close resets it when cornerAligned is true', fakeAsync(() => {
+    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
+    const fakeNativeElement = {
+      style: { width: '', opacity: 0, visibility: '', left: '' },
+      getBoundingClientRect: jasmine.createSpy('getBoundingClientRect').and.returnValue({ width: 200 })
+    };
+
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: true,
+      width: undefined,
+      widthPopover: undefined,
+      popoverElement: { nativeElement: fakeNativeElement },
+      openPopover: { emit: () => {} },
+      closePopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} },
+      showPopover: () => {},
+      disconnectResizeObserver: () => {},
+      mutationObserver: null,
+      clickoutListener: undefined,
+      trigger: 'click'
+    };
+
+    // First open — should calculate widthPopover
+    component.open.call(fakeThis);
+    expect(fakeThis.widthPopover).toBe(200);
+    expect(fakeNativeElement.getBoundingClientRect).toHaveBeenCalledTimes(1);
+
+    // Close — widthPopover is reset to undefined
+    component.close.call(fakeThis);
+    expect(fakeThis.widthPopover).toBeUndefined();
+
+    // Second open — should recalculate because close reset widthPopover
+    fakeThis.isHidden = true;
+    fakeNativeElement.getBoundingClientRect.calls.reset();
+    fakeNativeElement.getBoundingClientRect.and.returnValue({ width: 300 });
+    component.open.call(fakeThis);
+    expect(fakeThis.widthPopover).toBe(300);
+    expect(fakeNativeElement.getBoundingClientRect).toHaveBeenCalledTimes(1);
   }));
 
   it('open: should set clickoutListener when trigger is function', () => {
@@ -448,7 +513,8 @@ describe('PoPopoverComponent:', () => {
       observeContentResize: () => {},
       openPopover: { emit: () => {} },
       cd: { detectChanges: () => {} },
-      isHidden: true
+      isHidden: true,
+      showPopover: () => {}
     };
 
     component.open.call(fakeThis);
@@ -522,6 +588,26 @@ describe('PoPopoverComponent:', () => {
   });
 
   describe('Methods:', () => {
+    it('showPopover: should call setElementsControlPosition, setPopoverPosition, setOpacity, openPopover.emit, observeContentResize and detectChanges', () => {
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+      spyOn(component, 'setPopoverPosition');
+      spyOn(component, <any>'setElementsControlPosition');
+      spyOn(component, 'setOpacity');
+      spyOn(component, <any>'observeContentResize');
+      spyOn(component.openPopover, 'emit');
+
+      component['showPopover']();
+
+      expect(component['setElementsControlPosition']).toHaveBeenCalled();
+      expect(component.setPopoverPosition).toHaveBeenCalled();
+      expect(component.setOpacity).toHaveBeenCalledWith(1);
+      expect(component.openPopover.emit).toHaveBeenCalled();
+      expect(component['observeContentResize']).toHaveBeenCalled();
+    });
+
     it(`ngAfterViewInit: should call 'setElementsControlPosition'`, () => {
       spyOn(component, <any>'setElementsControlPosition');
 
