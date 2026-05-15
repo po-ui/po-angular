@@ -442,6 +442,32 @@ describe('PoMultiselectComponent:', () => {
     expect(component.selectedOptions.some(opt => opt.value === 0)).toBeFalse();
   });
 
+  it('closeTag: should remove items not in visibleTags when value is empty string', () => {
+    component.visibleTags = [
+      { label: 'label', value: 1 },
+      { label: 'label2', value: 2 },
+      { label: '+2', value: '' }
+    ];
+
+    component.selectedOptions = [
+      component.visibleTags[0],
+      component.visibleTags[1],
+      { label: 'label3', value: 3 },
+      { label: 'label4', value: 4 }
+    ];
+
+    spyOn(component, 'updateVisibleItems');
+    spyOn(component, 'callOnChange');
+
+    component['closeTag']('', 'click');
+
+    expect(component.updateVisibleItems).toHaveBeenCalled();
+    expect(component.callOnChange).toHaveBeenCalled();
+    expect(component.selectedOptions.length).toBe(2);
+    expect(component.selectedOptions[0].value).toBe(1);
+    expect(component.selectedOptions[1].value).toBe(2);
+  });
+
   describe('showAdditionalHelp:', () => {
     let helperEl: any;
     beforeEach(() => {
