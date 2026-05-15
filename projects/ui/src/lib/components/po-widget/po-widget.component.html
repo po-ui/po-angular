@@ -33,7 +33,10 @@
 
   <div class="po-widget-container__content">
     @if (hasTitleHelpOrSetting()) {
-      <div class="po-widget-header">
+      <div
+        class="po-widget-header"
+        [class.po-widget-header--tag-top-actions]="tagLabel && tagPosition() === 'top' && actions?.length"
+      >
         @if (tagLabel && tagPosition() === 'top') {
           <div class="po-widget-header__tag-top">
             <ng-template [ngTemplateOutlet]="tag"></ng-template>
