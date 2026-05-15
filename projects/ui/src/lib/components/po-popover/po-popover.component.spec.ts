@@ -24,6 +24,11 @@ describe('PoPopoverComponent:', () => {
   });
 
   beforeEach(() => {
+    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
     fixture = TestBed.createComponent(PoPopoverComponent);
     component = fixture.componentInstance;
 
@@ -332,7 +337,19 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: arg => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: undefined as any
+    };
+
+    fakeThis.showPopover = () => {
+      requestAnimationFrame(() => {
+        fakeThis.setElementsControlPosition();
+        fakeThis.setPopoverPosition();
+        fakeThis.setOpacity(1);
+        fakeThis.openPopover.emit();
+        fakeThis.observeContentResize();
+        fakeThis.cd.detectChanges();
+      });
     };
 
     spyOn(fakeThis, 'addScrollEventListener');
@@ -342,8 +359,6 @@ describe('PoPopoverComponent:', () => {
     spyOn(fakeThis.cd, 'detectChanges');
     component.open.call(fakeThis);
 
-    tick(300);
-
     expect(fakeThis.isHidden).toBeFalsy();
     expect(fakeThis.addScrollEventListener).toHaveBeenCalled();
     expect(fakeThis.setOpacity).toHaveBeenCalledWith(1);
@@ -352,10 +367,10 @@ describe('PoPopoverComponent:', () => {
     expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
   }));
 
-  it('open: should set widthPopover and call requestAnimationFrame when cornerAligned is true and width is undefined', fakeAsync(() => {
+  it('open: should set widthPopover from getBoundingClientRect when cornerAligned is true and width is undefined', fakeAsync(() => {
     const fakeNativeElement = {
-      style: { width: '', opacity: 0 },
-      scrollWidth: 250
+      style: { width: '', opacity: 0, visibility: '', left: '' },
+      getBoundingClientRect: () => ({ width: 250 })
     };
 
     const fakeThis: any = {
@@ -370,24 +385,19 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
     };
 
-    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
-      cb(0);
-      return 0;
-    });
-
     component.open.call(fakeThis);
-    tick(300);
 
-    expect(fakeNativeElement.style.width).toBe('auto');
+    expect(fakeNativeElement.style.visibility).toBe('');
+    expect(fakeNativeElement.style.left).toBe('');
     expect(fakeThis.widthPopover).toBe(250);
     expect(window.requestAnimationFrame).toHaveBeenCalled();
-    expect(fakeThis.setPopoverPosition).toHaveBeenCalled();
   }));
 
-  it('open: should NOT set widthPopover when cornerAligned is false', fakeAsync(() => {
+  it('open: should NOT set widthPopover when cornerAligned is false', () => {
     const fakeThis: any = {
       addScrollEventListener: () => {},
       isHidden: true,
@@ -399,16 +409,16 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
     };
 
     component.open.call(fakeThis);
-    tick(300);
 
     expect(fakeThis.widthPopover).toBeUndefined();
-  }));
+  });
 
-  it('open: should NOT set widthPopover when width input is defined', fakeAsync(() => {
+  it('open: should NOT set widthPopover when width input is defined', () => {
     const fakeThis: any = {
       addScrollEventListener: () => {},
       isHidden: true,
@@ -420,14 +430,14 @@ describe('PoPopoverComponent:', () => {
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
-      cd: { detectChanges: () => {} }
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
     };
 
     component.open.call(fakeThis);
-    tick(300);
 
     expect(fakeThis.widthPopover).toBeUndefined();
-  }));
+  });
 
   it('open: should set clickoutListener when trigger is function', () => {
     const fakeListener = jasmine.createSpy('listener');
@@ -448,7 +458,8 @@ describe('PoPopoverComponent:', () => {
       observeContentResize: () => {},
       openPopover: { emit: () => {} },
       cd: { detectChanges: () => {} },
-      isHidden: true
+      isHidden: true,
+      showPopover: () => {}
     };
 
     component.open.call(fakeThis);
@@ -542,10 +553,6 @@ describe('PoPopoverComponent:', () => {
 
     it('onThemeChange: should call setPopoverPosition inside requestAnimationFrame', () => {
       spyOn(component, 'setPopoverPosition');
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
-        cb(0);
-        return 0;
-      });
 
       component['onThemeChange']();
 
@@ -555,10 +562,6 @@ describe('PoPopoverComponent:', () => {
 
     it('onThemeChange: should be triggered by window PoUiThemeChange event', () => {
       spyOn(component, 'setPopoverPosition');
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
-        cb(0);
-        return 0;
-      });
 
       window.dispatchEvent(new Event('PoUiThemeChange'));
 
