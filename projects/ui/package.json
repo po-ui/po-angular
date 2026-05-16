@@ -24,6 +24,7 @@
     "@angular/cdk": "~21.2.4",
     "@po-ui/style": "0.0.0-PLACEHOLDER",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
+    "driver.js": "~1.4.0",
     "echarts": "^5.6.0",
     "tslib": "^2.6.2"
   },

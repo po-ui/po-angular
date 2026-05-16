@@ -18,7 +18,7 @@
       <div>
         {% for script in doc.scripts %}
         <label class="doc-label-path">{$ script.path $}</label>
-        <pre appCodeHighlight class="typescript">{$ script.fileContents | escape | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> 
+        <pre appCodeHighlight class="typescript">{$ script.fileContents | escape | replace('{{', "&#123; &#123;") | replace('}}', "&#125; &#125;") | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre>
         {% endfor %}
       </div>
     </po-tab>
@@ -27,7 +27,7 @@
       <div>
         {% for stylesheet in doc.stylesheets %}
         <label class="doc-label-path">{$ stylesheet.path $}</label>
-        <pre appCodeHighlight class="css">{$ stylesheet.fileContents | escape | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
+        <pre appCodeHighlight class="css">{$ stylesheet.fileContents | escape | replace('{{', "&#123; &#123;") | replace('}}', "&#125; &#125;") | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
       </div>
     </po-tab>
     {%- endif -%}
@@ -36,7 +36,7 @@
       <div>
         {% for test in doc.tests %}
         <label class="doc-label-path">{$ test.path $}</label>
-        <pre appCodeHighlight class="test">{$ test.fileContents | escape | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
+        <pre appCodeHighlight class="test">{$ test.fileContents | escape | replace('{{', "&#123; &#123;") | replace('}}', "&#125; &#125;") | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
       </div>
     </po-tab>
     {%- endif -%}
