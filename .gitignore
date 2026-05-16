@@ -25,6 +25,7 @@ speed-measure-plugin.json
 .settings/
 *.sublime-workspace
 .vscode
+.kiro
 
 # IDE - VSCode
 .vscode
