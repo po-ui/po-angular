@@ -10,6 +10,7 @@ import { PoLanguageModule } from './po-language/po-language.module';
 import { PoMediaQueryModule } from './po-media-query/po-media-query.module';
 import { PoNotificationModule } from './po-notification/po-notification.module';
 import { PoThemeModule } from './po-theme/po-theme.module';
+import { PoUserGuideModule } from './po-user-guide/po-user-guide.module';
 
 @NgModule({
   declarations: [PoI18nPipe],
@@ -22,7 +23,8 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoLanguageModule,
     PoMediaQueryModule,
     PoNotificationModule,
-    PoThemeModule
+    PoThemeModule,
+    PoUserGuideModule
   ],
   exports: [
     PoColorPaletteModule,
@@ -33,7 +35,8 @@ import { PoThemeModule } from './po-theme/po-theme.module';
     PoI18nPipe,
     PoMediaQueryModule,
     PoNotificationModule,
-    PoThemeModule
+    PoThemeModule,
+    PoUserGuideModule
   ],
   providers: [],
   bootstrap: []

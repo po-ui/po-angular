@@ -1,0 +1,64 @@
+<form #f="ngForm">
+  <div class="po-row">
+    <po-input
+      id="sample-po-user-guide-onboarding-name"
+      class="po-md-6"
+      name="name"
+      [(ngModel)]="name"
+      p-clean
+      p-label="Nome completo"
+      p-required
+    >
+    </po-input>
+
+    <po-input
+      id="sample-po-user-guide-onboarding-email"
+      class="po-md-6"
+      name="email"
+      [(ngModel)]="email"
+      p-clean
+      p-label="E-mail"
+      p-required
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-datepicker
+      id="sample-po-user-guide-onboarding-birthdate"
+      class="po-md-6"
+      name="birthDate"
+      [(ngModel)]="birthDate"
+      p-clean
+      p-label="Data de nascimento"
+    >
+    </po-datepicker>
+
+    <po-input
+      id="sample-po-user-guide-onboarding-jobtitle"
+      class="po-md-6"
+      name="jobTitle"
+      [(ngModel)]="jobTitle"
+      p-clean
+      p-label="Cargo"
+    >
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-textarea class="po-md-12" name="bio" [(ngModel)]="bio" p-clean p-label="Sobre você" p-rows="3"> </po-textarea>
+  </div>
+
+  <div class="po-row">
+    <po-button
+      id="sample-po-user-guide-onboarding-submit"
+      class="po-md-3"
+      p-label="Salvar"
+      p-kind="primary"
+      [p-disabled]="f.form.invalid"
+    >
+    </po-button>
+
+    <po-button class="po-md-3" p-label="Reiniciar tour" (p-click)="restartTour()"> </po-button>
+  </div>
+</form>
