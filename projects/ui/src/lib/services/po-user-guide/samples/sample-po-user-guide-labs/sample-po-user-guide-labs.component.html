@@ -1,0 +1,52 @@
+<po-button id="sample-po-user-guide-labs-cta" p-label="Iniciar Guia" p-kind="primary" (p-click)="startTour()">
+</po-button>
+
+<po-divider />
+
+<div id="sample-po-user-guide-labs-form" class="po-row">
+  <form #f="ngForm">
+    <po-input class="po-md-6" name="stepTitle" [(ngModel)]="stepTitle" p-clean p-label="Step title"> </po-input>
+
+    <po-input class="po-md-6" name="stepContent" [(ngModel)]="stepContent" p-clean p-label="Step content"> </po-input>
+
+    <po-input class="po-md-3" name="nextLabel" [(ngModel)]="nextLabel" p-clean p-label="Next label"> </po-input>
+
+    <po-input class="po-md-3" name="previousLabel" [(ngModel)]="previousLabel" p-clean p-label="Previous label">
+    </po-input>
+
+    <po-input class="po-md-3" name="doneLabel" [(ngModel)]="doneLabel" p-clean p-label="Done label"> </po-input>
+
+    <po-input
+      class="po-md-3"
+      name="progressTemplate"
+      [(ngModel)]="progressTemplate"
+      p-clean
+      p-label="Progress template"
+      [p-help]="progressTemplateHelp"
+    >
+    </po-input>
+
+    <po-number
+      class="po-md-3"
+      name="overlayOpacity"
+      [(ngModel)]="overlayOpacity"
+      p-clean
+      p-label="Overlay opacity"
+      p-min="0"
+      p-max="1"
+      p-step="0.1"
+    >
+    </po-number>
+
+    <po-switch class="po-md-3" name="allowClose" [(ngModel)]="allowClose" p-label="Allow close"> </po-switch>
+
+    <po-switch class="po-md-3" name="showProgress" [(ngModel)]="showProgress" p-label="Show progress"> </po-switch>
+
+    <po-switch class="po-md-3" name="keyboardControl" [(ngModel)]="keyboardControl" p-label="Keyboard control">
+    </po-switch>
+
+    <div class="po-row">
+      <po-button class="po-md-3" p-label="Sample Restore" (p-click)="restore()"> </po-button>
+    </div>
+  </form>
+</div>
