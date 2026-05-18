@@ -20,6 +20,14 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
   standalone: false
 })
 export class PoCleanComponent extends PoCleanBaseComponent {
+  focus() {
+    this.inputRef.nativeElement.focus();
+  }
+
+  blur() {
+    this.inputRef.nativeElement.blur();
+  }
+
   setInputValue(value?: string) {
     if (this.inputRef && this.inputRef.nativeElement) {
       this.inputRef.nativeElement.value = value;
