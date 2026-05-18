@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.16.0](https://github.com/po-ui/po-angular/compare/v21.15.0...v21.16.0) (2026-05-18)
+
+
+### Features
+
+* **filter-chip:** implementa componente po-filter-chip ([9e15565](https://github.com/po-ui/po-angular/commit/9e15565b4ba26960360bba71a767b5b10a26b2f4))
+
 ## [21.15.0](https://github.com/po-ui/po-angular/compare/v21.14.0...v21.15.0) (2026-05-14)
 
 
