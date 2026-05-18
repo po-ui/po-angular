@@ -12,6 +12,7 @@ import { PoContainerModule } from '../po-container/index';
 import { PoCalendarModule } from '../po-calendar/po-calendar.module';
 import { PoCleanModule } from './po-clean/po-clean.module';
 import { PoDatepickerModule } from './po-datepicker/po-datepicker.module';
+import { PoDatetimepickerModule } from './po-datetimepicker/po-datetimepicker.module';
 import { PoTimepickerModule } from './po-timepicker/po-timepicker.module';
 import { PoDisclaimerGroupModule } from './../po-disclaimer-group/po-disclaimer-group.module';
 import { PoDisclaimerModule } from './../po-disclaimer/po-disclaimer.module';
@@ -24,7 +25,6 @@ import { PoTableModule } from '../po-table/po-table.module';
 import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
 import { PoListBoxModule } from '../po-listbox/po-listbox.module';
-
 import { PoComboModule } from './po-combo/po-combo.module';
 import { PoMultiselectOptionTemplateDirective } from './po-multiselect/po-multiselect-option-template/po-multiselect-option-template.directive';
 import { PoDatepickerRangeComponent } from './po-datepicker-range/po-datepicker-range.component';
@@ -62,7 +62,7 @@ import { PoLinkModule } from '../po-link';
 /**
  * @description
  *
- * Módulo dos componentes: po-checkbox, po-checkbox-group, po-combo, po-datepicker, po-datepicker-range, po-email, po-input,
+ * Módulo dos componentes: po-checkbox, po-checkbox-group, po-combo, po-datepicker, po-datetimepicker, po-datepicker-range, po-email, po-input,
  * po-lookup, po-number, po-multiselect, po-password, po-radio-group, po-select, po-switch, po-textarea, po-upload
  * e po-url.
  *
@@ -79,67 +79,69 @@ import { PoLinkModule } from '../po-link';
     OverlayModule,
     PoButtonGroupModule,
     PoButtonModule,
-    PoCleanModule,
     PoCalendarModule,
-    PoComboModule,
     PoCheckboxGroupModule,
-    PoRadioGroupModule,
+    PoCheckboxModule,
+    PoCleanModule,
+    PoComboModule,
     PoContainerModule,
     PoDatepickerModule,
-    PoTimepickerModule,
+    PoDatetimepickerModule,
     PoDisclaimerGroupModule,
     PoDisclaimerModule,
     PoFieldContainerModule,
-    PoLoadingModule,
-    PoModalModule,
-    PoProgressModule,
-    PoServicesModule,
-    PoTableModule,
-    PoTooltipModule,
+    PoHelperModule,
     PoIconModule,
-    PoCheckboxModule,
-    PoRadioModule,
     PoLabelModule,
     PoLinkModule,
     PoListBoxModule,
+    PoLoadingModule,
+    PoModalModule,
+    PoProgressModule,
+    PoRadioGroupModule,
+    PoRadioModule,
+    PoServicesModule,
     PoSwitchModule,
+    PoTableModule,
     PoTagModule,
-    PoHelperModule
+    PoTimepickerModule,
+    PoTooltipModule
   ],
   exports: [
     PoCheckboxGroupModule,
-    PoRadioGroupModule,
+    PoCheckboxModule,
     PoCleanModule,
-    PoDatepickerModule,
-    PoTimepickerModule,
     PoComboModule,
-    PoMultiselectOptionTemplateDirective,
-    PoDecimalComponent,
+    PoDatepickerModule,
     PoDatepickerRangeComponent,
+    PoDatetimepickerModule,
+    PoDecimalComponent,
     PoEmailComponent,
     PoFieldContainerModule,
     PoInputComponent,
+    PoLabelModule,
+    PoLinkModule,
     PoLoginComponent,
     PoLookupComponent,
     PoLookupModalComponent,
     PoMultiselectComponent,
+    PoMultiselectOptionTemplateDirective,
     PoNumberComponent,
     PoPasswordComponent,
+    PoRadioGroupModule,
+    PoRadioModule,
     PoRichTextComponent,
     PoSelectComponent,
-    PoTextareaComponent,
-    PoUploadComponent,
-    PoUrlComponent,
-    PoCheckboxModule,
-    PoRadioModule,
-    PoLabelModule,
     PoSwitchModule,
-    PoTagModule
+    PoTagModule,
+    PoTextareaComponent,
+    PoTimepickerModule,
+    PoUploadComponent,
+    PoUrlComponent
   ],
   declarations: [
-    PoMultiselectOptionTemplateDirective,
-    PoDecimalComponent,
     PoDatepickerRangeComponent,
+    PoDecimalComponent,
     PoEmailComponent,
     PoInputComponent,
     PoLoginComponent,
@@ -147,6 +149,7 @@ import { PoLinkModule } from '../po-link';
     PoLookupModalComponent,
     PoMultiselectComponent,
     PoMultiselectDropdownComponent,
+    PoMultiselectOptionTemplateDirective,
     PoNumberComponent,
     PoPasswordComponent,
     PoRichTextBodyComponent,
@@ -157,10 +160,10 @@ import { PoLinkModule } from '../po-link';
     PoSelectComponent,
     PoTextareaComponent,
     PoUploadComponent,
+    PoUploadDragDropAreaComponent,
+    PoUploadDragDropAreaOverlayComponent,
     PoUploadDragDropComponent,
     PoUploadDragDropDirective,
-    PoUploadDragDropAreaOverlayComponent,
-    PoUploadDragDropAreaComponent,
     PoUploadFileRestrictionsComponent,
     PoUrlComponent
   ],

@@ -947,7 +947,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       expect(nativeElement.querySelector('po-datepicker')).toBeTruthy();
     });
 
-    it('should create a `po-datepicker` component if type is `datetime`', () => {
+    it('should create a `po-datetimepicker` component if type is `datetime`', () => {
       component.fields = [{ property: 'age', type: 'datetime' }];
 
       component.ngOnChanges({
@@ -956,7 +956,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('po-datepicker')).toBeTruthy();
+      expect(nativeElement.querySelector('po-datetimepicker')).toBeTruthy();
     });
 
     it('should create a `po-timepicker` component if type is `time`', () => {
