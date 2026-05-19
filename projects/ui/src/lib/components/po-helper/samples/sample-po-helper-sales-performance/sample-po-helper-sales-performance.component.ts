@@ -11,7 +11,7 @@ export class SamplePoHelperSalesPerformanceComponent {
   helperOptions: PoHelperOptions = {
     title: 'Sales Performance Overview',
     content:
-      'This section provides insights into employee turnover rate and sales performance. Hover over the chart for more details.',
+      'This section provides insights into <b>employee turnover rate</b> and <i>sales performance</i>. Hover over the chart for <u>more details</u>.',
     type: 'info'
   };
 

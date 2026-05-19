@@ -4,12 +4,18 @@ import {
   PoBreadcrumb,
   PoBreadcrumbItem,
   PoCheckboxGroupOption,
+  PoHelperOptions,
   PoNotificationService,
   PoPageAction,
   PoPageDefaultLiterals,
   PoRadioGroupOption,
   PoSelectOption
 } from '@po-ui/ng-components';
+
+interface EditableAction extends PoPageAction {
+  visible: boolean;
+  disabled?: boolean;
+}
 
 @Component({
   selector: 'sample-po-page-default-labs',
@@ -19,10 +25,10 @@ import {
 export class SamplePoPageDefaultLabsComponent implements OnInit {
   private poNotification = inject(PoNotificationService);
 
-  action: PoPageAction = { label: '' };
-  actions: Array<PoPageAction> = [];
+  action: EditableAction = { label: '', visible: true, disabled: false };
+  actions: Array<EditableAction> = [];
   breadcrumb: PoBreadcrumb = { items: [] };
-  breadcrumbItem: PoBreadcrumbItem = { label: undefined, link: undefined };
+  breadcrumbItem: PoBreadcrumbItem = { label: '', link: undefined };
   breadcrumbParams: { property?: string; value?: string } = {};
   componentsSize: string = 'medium';
   customLiterals: PoPageDefaultLiterals | undefined;
@@ -31,6 +37,27 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   pageHeaderType: string = 'primary';
   subtitle: string = '';
   title: string = 'PO Page Default';
+
+  helperContent: string = '';
+  helperTitle: string = '';
+  helperType: 'help' | 'info' = 'help';
+  showHelper: boolean = false;
+
+  public readonly helperTypeOptions: Array<PoSelectOption> = [
+    { label: 'help', value: 'help' },
+    { label: 'info', value: 'info' }
+  ];
+
+  get helper(): PoHelperOptions | undefined {
+    if (!this.showHelper || !this.helperContent) {
+      return undefined;
+    }
+    return {
+      title: this.helperTitle,
+      content: this.helperContent,
+      type: this.helperType
+    };
+  }
 
   public readonly actionKindOptions: Array<PoSelectOption> = [
     { label: 'primary', value: 'primary' },
@@ -77,8 +104,12 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.restore();
   }
 
-  addAction(action: PoPageAction) {
-    const newAction: PoPageAction = { ...action };
+  addAction(action: EditableAction) {
+    const newAction: EditableAction = {
+      ...action,
+      visible: action.visible !== undefined ? action.visible : true,
+      disabled: action.disabled !== undefined ? action.disabled : false
+    };
     newAction.action = newAction.action ? this.showAction.bind(this, newAction.action) : undefined;
     this.actions = [...this.actions, newAction];
 
@@ -87,11 +118,13 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
 
   addBreadcrumbItem() {
     this.breadcrumb.items = this.breadcrumb.items.concat([this.breadcrumbItem]);
-    this.breadcrumbItem = { label: undefined, link: undefined };
+    this.breadcrumbItem = { label: '', link: undefined };
   }
 
   addBreadcrumbParam() {
-    const newParam = { [this.breadcrumbParams.property || '']: this.breadcrumbParams.value };
+    const newParam = {
+      [this.breadcrumbParams.property || '']: this.breadcrumbParams.value
+    };
 
     if (this.breadcrumb.params) {
       this.breadcrumb.params = Object.assign(this.breadcrumb.params, newParam);
@@ -115,16 +148,19 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   }
 
   restore() {
-    this.action = { label: '' };
     this.actions = [];
     this.breadcrumb = { items: [] };
-    this.breadcrumbItem = { label: undefined, link: undefined };
+    this.breadcrumbItem = { label: '', link: undefined };
     this.breadcrumbParams = {};
     this.componentsSize = 'medium';
     this.customLiterals = undefined;
+    this.helperContent = '';
+    this.helperTitle = '';
+    this.helperType = 'help';
     this.literals = '';
     this.pageActionsLayout = 'default';
     this.pageHeaderType = 'primary';
+    this.showHelper = false;
     this.subtitle = '';
     this.title = 'PO Page Default';
     this.restoreActionForm();
@@ -133,7 +169,8 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   restoreActionForm() {
     this.action = {
       label: '',
-      visible: true
+      visible: true,
+      disabled: false
     };
   }
 

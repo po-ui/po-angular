@@ -6,6 +6,7 @@ import { PoLanguageService } from './../../../services/po-language/po-language.s
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
+import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageActionsLayout } from './enums/po-page-actions-layout.enum';
@@ -70,6 +71,7 @@ export abstract class PoPageDefaultBaseComponent {
   private _actions?: Array<PoPageAction> = [];
   private _breadcrumb?: PoBreadcrumb;
   private _componentsSize?: string = undefined;
+  private _helper: PoHelperOptions | string;
   private _initialComponentsSize?: string = undefined;
   private _literals: PoPageDefaultLiterals;
   private _pageActionsLayout: string = PoPageActionsLayout.default;
@@ -263,6 +265,41 @@ export abstract class PoPageDefaultBaseComponent {
 
   get subtitle(): string {
     return this._subtitle;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o conteúdo do po-helper informativo exibido ao lado do subtítulo da página.
+   *
+   * Quando não houver subtítulo (`p-subtitle`), o po-helper será exibido logo abaixo do título
+   * com as informações nele inputadas.
+   *
+   * Aceita uma string simples (exibida como conteúdo) ou um objeto do tipo `PoHelperOptions`
+   * para configuração avançada (título, conteúdo, tipo, ações).
+   *
+   * > O tipo padrão do helper no page-default é `info`.
+   *
+   * Exemplo de uso:
+   * ```html
+   * <po-page-default
+   *   p-title="Cadastro"
+   *   p-subtitle="Preencha os dados"
+   *   [p-helper]="{ title: 'Ajuda', content: 'Informações sobre o cadastro' }"
+   * ></po-page-default>
+   * ```
+   */
+  @Input('p-helper') set helper(value: PoHelperOptions | string) {
+    if (value && typeof value === 'object' && !value.type) {
+      value = { ...value, type: 'info' };
+    }
+    this._helper = value;
+  }
+
+  get helper(): PoHelperOptions | string {
+    return this._helper;
   }
 
   /**

@@ -282,7 +282,7 @@ describe('PoHelperComponent', () => {
     };
     fixture.componentRef.setInput('p-helper', options);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('en-US');
-    expect(component['ariaLabel']()).toBe('Show Information');
+    expect(component['ariaLabel']()).toBe('Additional information');
   });
 
   it('should return correct ariaLabel for help type', () => {
@@ -295,14 +295,14 @@ describe('PoHelperComponent', () => {
     };
     fixture.componentRef.setInput('p-helper', options);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('pt-BR');
-    expect(component['ariaLabel']()).toBe('Exibe ajuda');
+    expect(component['ariaLabel']()).toBe('Ajuda adicional');
   });
 
   it('should return correct ariaLabel for string helper', () => {
     const text = 'Texto explicativo';
     fixture.componentRef.setInput('p-helper', text);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('es-ES');
-    expect(component['ariaLabel']()).toBe('Muestra ayuda');
+    expect(component['ariaLabel']()).toBe('Ayuda adicional');
   });
 
   it('should fallback to EN when navigator.language is falsy', () => {
@@ -316,7 +316,7 @@ describe('PoHelperComponent', () => {
 
     fixture.componentRef.setInput('p-helper', options);
     spyOnProperty(navigator, 'language', 'get').and.returnValue(undefined);
-    expect(component['ariaLabel']()).toBe('Show Information');
+    expect(component['ariaLabel']()).toBe('Additional information');
   });
 
   it('should fallback to EN literals when lang is unsupported', () => {
@@ -331,7 +331,7 @@ describe('PoHelperComponent', () => {
     fixture.componentRef.setInput('p-helper', options);
     spyOnProperty(navigator, 'language', 'get').and.returnValue('fr-FR');
 
-    expect(component['ariaLabel']()).toBe('Show Information');
+    expect(component['ariaLabel']()).toBe('Additional information');
   });
 
   describe('closePopoverOnFocusOut', () => {
@@ -607,6 +607,66 @@ describe('PoHelperComponent', () => {
 
       expect(() => (component as any).handleClose()).not.toThrow();
       expect(removeSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('contentFragments', () => {
+    it('should return empty array when helper is undefined', () => {
+      fixture.componentRef.setInput('p-helper', undefined);
+      expect(component['contentFragments']()).toEqual([]);
+    });
+
+    it('should parse bold tags from helper content', () => {
+      fixture.componentRef.setInput('p-helper', { content: 'Texto <b>negrito</b> normal', type: 'info' });
+      const fragments = component['contentFragments']();
+      expect(fragments.length).toBe(3);
+      expect(fragments[0]).toEqual({ text: 'Texto ', bold: false, italic: false, underline: false });
+      expect(fragments[1]).toEqual({ text: 'negrito', bold: true, italic: false, underline: false });
+      expect(fragments[2]).toEqual({ text: ' normal', bold: false, italic: false, underline: false });
+    });
+
+    it('should parse italic and underline tags', () => {
+      fixture.componentRef.setInput('p-helper', { content: '<i>itálico</i> e <u>sublinhado</u>', type: 'help' });
+      const fragments = component['contentFragments']();
+      expect(fragments[0]).toEqual({ text: 'itálico', bold: false, italic: true, underline: false });
+      expect(fragments[2]).toEqual({ text: 'sublinhado', bold: false, italic: false, underline: true });
+    });
+
+    it('should normalize strong to bold and em to italic', () => {
+      fixture.componentRef.setInput('p-helper', { content: '<strong>bold</strong> <em>italic</em>', type: 'info' });
+      const fragments = component['contentFragments']();
+      expect(fragments[0]).toEqual({ text: 'bold', bold: true, italic: false, underline: false });
+      expect(fragments[2]).toEqual({ text: 'italic', bold: false, italic: true, underline: false });
+    });
+
+    it('should sanitize script tags (XSS protection)', () => {
+      fixture.componentRef.setInput('p-helper', {
+        content: '<script>alert("xss")</script>safe <b>text</b>',
+        type: 'info'
+      });
+      const fragments = component['contentFragments']();
+      const allText = fragments.map(f => f.text).join('');
+      expect(allText).toContain('safe');
+      expect(allText).toContain('text');
+      expect(allText).not.toContain('<script>');
+    });
+
+    it('should parse content from string helper', () => {
+      fixture.componentRef.setInput('p-helper', 'Texto <b>string</b> direto');
+      const fragments = component['contentFragments']();
+      expect(fragments[1]).toEqual({ text: 'string', bold: true, italic: false, underline: false });
+    });
+
+    it('should handle content property from object helper', () => {
+      fixture.componentRef.setInput('p-helper', { content: '<i>italic</i> text', type: 'info' });
+      const fragments = component['contentFragments']();
+      expect(fragments[0]).toEqual({ text: 'italic', bold: false, italic: true, underline: false });
+      expect(fragments[1]).toEqual({ text: ' text', bold: false, italic: false, underline: false });
+    });
+
+    it('should return empty array when helper content is empty', () => {
+      fixture.componentRef.setInput('p-helper', { content: '', type: 'info' });
+      expect(component['contentFragments']()).toEqual([]);
     });
   });
 });

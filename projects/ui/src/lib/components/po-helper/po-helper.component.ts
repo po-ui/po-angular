@@ -6,11 +6,14 @@ import {
   OnDestroy,
   OnChanges,
   SimpleChanges,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  computed
 } from '@angular/core';
 import { PoHelperBaseComponent } from './po-helper-base.component';
+import { PoHelperOptions } from './interfaces/po-helper.interface';
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
 import { PoButtonComponent } from '../po-button';
+import { parseHelperContent, PoHelperTextFragment } from './po-helper-content-utils';
 /**
  * @docsExtends PoHelperBaseComponent
  *
@@ -50,27 +53,36 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
   private boundFocusIn: (e: FocusEvent) => void;
   private readonly poHelperLiterals = {
     en: {
-      info: 'Show Information',
-      help: 'Show Help'
+      info: 'Additional information',
+      help: 'Additional help'
     },
     pt: {
-      info: 'Exibe informação',
-      help: 'Exibe ajuda'
+      info: 'Informação adicional',
+      help: 'Ajuda adicional'
     },
     es: {
-      info: 'Muestra información',
-      help: 'Muestra ayuda'
+      info: 'Información adicional',
+      help: 'Ayuda adicional'
     },
     ru: {
-      info: 'Показать информацию',
-      help: 'Показать справку'
+      info: 'Дополнительная информация',
+      help: 'Дополнительная помощь'
     }
   };
+
+  protected readonly contentFragments = computed<Array<PoHelperTextFragment>>(() => {
+    const helperValue = this.helper();
+    if (!helperValue) {
+      return [];
+    }
+    return parseHelperContent((helperValue as PoHelperOptions).content);
+  });
 
   constructor(private readonly cdr: ChangeDetectorRef) {
     super();
     this.id = 'po-helper-' + PoHelperComponent.idCounter++;
   }
+
   ngAfterViewInit(): void {
     PoHelperComponent.instances.push(this);
     queueMicrotask(() => {
