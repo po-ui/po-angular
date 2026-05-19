@@ -846,22 +846,77 @@ describe('Function sortValues:', () => {
       expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
     });
 
-    it('should return `-1` if `leftSide` is numeric value, `rightSide` is a character value and `ascending` is `true`', () => {
+    it('should convert numeric strings to numbers and sort correctly ascending', () => {
       const ascending: boolean = true;
-      const expectedReturn: number = -1;
-      const leftSide: string = '123';
-      const rightSide: string = 'ABC';
+      const leftSide: string = '10';
+      const rightSide: string = '100';
 
-      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(-1);
     });
 
-    it('should return `1` if `leftSide` is numeric value, `rightSide` is a character value and `ascending` is `false`', () => {
+    it('should convert numeric strings to numbers and sort correctly descending', () => {
       const ascending: boolean = false;
-      const expectedReturn: number = 1;
-      const leftSide: string = '123';
+      const leftSide: string = '10';
+      const rightSide: string = '100';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(1);
+    });
+
+    it('should handle numeric string comparison correctly (100 > 20 numerically)', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '100';
+      const rightSide: string = '20';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(1);
+    });
+
+    it('should not convert empty string to number', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '';
       const rightSide: string = 'ABC';
 
-      expect(sortValues(leftSide, rightSide, ascending)).toBe(expectedReturn);
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(-1);
+    });
+
+    it('should not convert string with only spaces to number', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '   ';
+      const rightSide: string = 'ABC';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(-1);
+    });
+
+    it('should handle decimal numeric strings', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '10.5';
+      const rightSide: string = '10.9';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(-1);
+    });
+
+    it('should handle negative numeric strings', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '-10';
+      const rightSide: string = '10';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(-1);
+    });
+
+    it('should compare equal numeric strings', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '123';
+      const rightSide: string = '123';
+
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(0);
+    });
+
+    it('should not convert alphanumeric string starting with number', () => {
+      const ascending: boolean = true;
+      const leftSide: string = '123abc';
+      const rightSide: string = 'ABC';
+
+      // '123abc' permanece string, então comparação alfabética
+      expect(sortValues(leftSide, rightSide, ascending)).toBe(-1);
     });
   });
 
