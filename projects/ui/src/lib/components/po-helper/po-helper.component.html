@@ -25,7 +25,16 @@
     (p-open)="handleOpen()"
   >
     <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
-      {{ helper()?.content }}
+      <span class="po-helper-content-text">
+        @for (fragment of contentFragments(); track $index) {
+          <span
+            [class.po-helper-text-bold]="fragment.bold"
+            [class.po-helper-text-italic]="fragment.italic"
+            [class.po-helper-text-underline]="fragment.underline"
+            >{{ fragment.text }}</span
+          >
+        }
+      </span>
       @if (helper()?.type === 'help' && helper()?.footerAction) {
         <po-divider></po-divider>
         <po-link

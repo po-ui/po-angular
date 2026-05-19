@@ -2,7 +2,8 @@
   [p-actions]="actions"
   [p-breadcrumb]="breadcrumb"
   [p-components-size]="componentsSize"
-  [p-literals]="customLiterals"
+  [p-helper]="helper || ''"
+  [p-literals]="customLiterals ?? {}"
   [p-page-actions-layout]="pageActionsLayout"
   [p-page-header-type]="pageHeaderType"
   [p-title]="title"
@@ -19,10 +20,58 @@
 
     <po-input class="po-md-6" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
 
+    <po-checkbox class="po-md-12 po-pt-2 po-pb-2" name="showHelper" [(ngModel)]="showHelper" p-label="Helper">
+    </po-checkbox>
+
+    @if (showHelper) {
+      <po-widget class="po-md-12 po-pb-3" p-title="Helper">
+        <div class="po-row">
+          <po-input class="po-md-6" name="helperTitle" [(ngModel)]="helperTitle" p-clean p-label="Title"> </po-input>
+
+          <po-input
+            class="po-md-6"
+            name="helperContent"
+            [(ngModel)]="helperContent"
+            p-clean
+            p-label="Content"
+            p-help="Consulte a <b>documentação</b> para mais detalhes."
+          >
+          </po-input>
+        </div>
+
+        <div class="po-row">
+          <po-radio-group
+            name="helperType"
+            class="po-md-12"
+            [p-columns]="4"
+            p-label="Type"
+            [ngModel]="helperType"
+            (ngModelChange)="helperType = $event"
+            [p-options]="helperTypeOptions"
+          >
+          </po-radio-group>
+        </div>
+
+        <div class="po-row">
+          @if (helperType === 'help') {
+            <po-input
+              class="po-md-6"
+              name="helperFooterLabel"
+              [(ngModel)]="helperFooterLabel"
+              p-clean
+              p-label="Footer Action"
+            >
+            </po-input>
+          }
+        </div>
+      </po-widget>
+    }
+
     <po-select
       class="po-lg-3 po-md-6"
       name="pageHeaderType"
-      [(ngModel)]="pageHeaderType"
+      [ngModel]="pageHeaderType"
+      (ngModelChange)="pageHeaderType = $event"
       p-label="Page Header Type"
       [p-options]="pageHeaderTypeOptions"
     >
@@ -31,7 +80,8 @@
     <po-select
       class="po-lg-3 po-md-6"
       name="pageActionsLayout"
-      [(ngModel)]="pageActionsLayout"
+      [ngModel]="pageActionsLayout"
+      (ngModelChange)="pageActionsLayout = $event"
       p-label="Page Actions Layout"
       [p-options]="pageActionsLayoutOptions"
     >
@@ -51,7 +101,7 @@
       class="po-md-12"
       name="size"
       [(ngModel)]="componentsSize"
-      p-columns="4"
+      [p-columns]="4"
       p-label="Components size"
       p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
       [p-options]="componentsSizeOptions"
@@ -62,51 +112,69 @@
 
 <po-divider></po-divider>
 
-<form #formAction="ngForm">
-  <div class="po-row">
-    <po-input class="po-md-6" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
+<po-widget p-title="Action">
+  <form #formAction="ngForm">
+    <div class="po-row">
+      <po-input class="po-md-6" name="actionLabel" [(ngModel)]="action.label" p-label="Label" p-required> </po-input>
 
-    <po-input class="po-md-6" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
+      <po-input class="po-md-6" name="actionAction" [(ngModel)]="action.action" p-clean p-label="Action"> </po-input>
 
-    <po-input class="po-md-6" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
+      <po-input class="po-md-6" name="actionURL" [(ngModel)]="action.url" p-label="URL"> </po-input>
 
-    <po-select class="po-lg-3 po-md-6" name="type" [(ngModel)]="action.type" p-label="Type" [p-options]="typeOptions">
-    </po-select>
+      <po-select
+        class="po-lg-3 po-md-6"
+        name="type"
+        [ngModel]="action.type"
+        (ngModelChange)="action.type = $event"
+        p-label="Type"
+        [p-options]="typeOptions"
+      >
+      </po-select>
 
-    <po-select class="po-lg-3 po-md-6" name="icon" [(ngModel)]="action.icon" p-label="Icon" [p-options]="iconOptions">
-    </po-select>
+      <po-select
+        class="po-lg-3 po-md-6"
+        name="icon"
+        [ngModel]="action.icon"
+        (ngModelChange)="action.icon = $event"
+        p-label="Icon"
+        [p-options]="iconOptions"
+      >
+      </po-select>
 
-    <po-select
-      class="po-lg-3 po-md-6"
-      name="kind"
-      [(ngModel)]="action.kind"
-      p-label="Kind"
-      [p-options]="actionKindOptions"
-    >
-    </po-select>
+      <po-select
+        class="po-lg-3 po-md-6"
+        name="kind"
+        [ngModel]="action.kind"
+        (ngModelChange)="action.kind = $event"
+        p-label="Kind"
+        [p-options]="actionKindOptions"
+      >
+      </po-select>
 
-    <po-checkbox-group
-      class="po-md-12"
-      name="action"
-      [(ngModel)]="action"
-      p-columns="4"
-      p-indeterminate
-      p-label="Action properties"
-      [p-options]="actionOptions"
-    >
-    </po-checkbox-group>
-  </div>
+      <po-checkbox-group
+        class="po-md-12"
+        name="action"
+        [ngModel]="action"
+        (ngModelChange)="action = $event"
+        [p-columns]="4"
+        [p-indeterminate]="true"
+        p-label="Properties"
+        [p-options]="actionOptions"
+      >
+      </po-checkbox-group>
+    </div>
 
-  <div class="po-row">
-    <po-button
-      class="po-lg-2 po-md-4"
-      p-label="Add Action"
-      [p-disabled]="formAction.form.invalid"
-      (p-click)="addAction(action)"
-    >
-    </po-button>
-  </div>
-</form>
+    <div class="po-row">
+      <po-button
+        class="po-lg-2 po-md-4"
+        p-label="Add Action"
+        [p-disabled]="formAction.form.invalid"
+        (p-click)="addAction(action)"
+      >
+      </po-button>
+    </div>
+  </form>
+</po-widget>
 
 <po-divider></po-divider>
 
@@ -151,7 +219,7 @@
     <po-button
       class="po-lg-3 po-md-4"
       p-label="Add breadcrumb item"
-      [p-disabled]="formBreadcrumbItems.invalid"
+      [p-disabled]="formBreadcrumbItems.invalid ?? false"
       (p-click)="addBreadcrumbItem()"
     >
     </po-button>
@@ -187,7 +255,7 @@
     <po-button
       class="po-lg-3 po-md-4"
       p-label="Add breadcrumb params"
-      [p-disabled]="formBreadcrumbParams.invalid"
+      [p-disabled]="formBreadcrumbParams.invalid ?? false"
       (p-click)="addBreadcrumbParam()"
     >
     </po-button>

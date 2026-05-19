@@ -5,6 +5,7 @@ import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
+import { PoHelperModule } from '../../po-helper/po-helper.module';
 import { PoPageHeaderComponent } from './po-page-header.component';
 
 @Component({
@@ -22,7 +23,7 @@ describe('PoPageHeaderComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PoBreadcrumbModule, RouterTestingModule.withRoutes(routes)],
+      imports: [PoBreadcrumbModule, PoHelperModule, RouterTestingModule.withRoutes(routes)],
       declarations: [PoPageHeaderComponent, GuidesComponent],
       providers: [HttpClient, HttpHandler]
     }).compileComponents();
@@ -64,6 +65,60 @@ describe('PoPageHeaderComponent:', () => {
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-page-header-breadcrumb')).toBeFalsy();
+    });
+  });
+
+  describe('Helper rendering:', () => {
+    it('should not render po-helper when helper is not provided', () => {
+      component.title = 'Title';
+      component.subtitle = 'Subtitle';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-helper')).toBeFalsy();
+    });
+
+    it('should render po-helper next to subtitle when both subtitle and helper are provided', () => {
+      component.title = 'Title';
+      component.subtitle = 'Subtitle';
+      fixture.componentRef.setInput('p-helper', { content: 'Help text', type: 'info' });
+
+      fixture.detectChanges();
+
+      expect(component.subtitle).toBe('Subtitle');
+      expect(nativeElement.querySelector('po-helper')).toBeTruthy();
+    });
+
+    it('should render po-helper below title when helper is provided but subtitle is not', () => {
+      component.title = 'Title';
+      component.subtitle = undefined;
+      fixture.componentRef.setInput('p-helper', { content: 'Help text', type: 'info' });
+
+      fixture.detectChanges();
+
+      expect(component.subtitle).toBeUndefined();
+      expect(nativeElement.querySelector('po-helper')).toBeTruthy();
+      expect(nativeElement.textContent).not.toContain('Subtitle');
+    });
+
+    it('should not render po-helper when title is not provided', () => {
+      component.title = undefined;
+      component.subtitle = undefined;
+      fixture.componentRef.setInput('p-helper', { content: 'Help text', type: 'info' });
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-helper')).toBeFalsy();
+    });
+
+    it('should render po-helper when helper is a string value', () => {
+      component.title = 'Title';
+      component.subtitle = 'Subtitle';
+      fixture.componentRef.setInput('p-helper', 'Simple help text');
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('po-helper')).toBeTruthy();
     });
   });
 });

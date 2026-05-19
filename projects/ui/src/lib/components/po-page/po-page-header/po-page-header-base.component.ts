@@ -1,6 +1,7 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, Input, input } from '@angular/core';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
+import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
 
 /**
  * @docsPrivate
@@ -14,6 +15,9 @@ import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 export class PoPageHeaderBaseComponent {
   /** Título da página. */
   @Input('p-title') title: string;
+
+  /** Define o conteúdo do po-helper. */
+  helper = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
 
   /** Define o tamanho dos componentes no header. */
   @Input('p-size') size: string;
