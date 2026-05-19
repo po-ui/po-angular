@@ -1,9 +1,15 @@
 import * as fc from 'fast-check';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+
 import { PoUserGuideBaseService } from './po-user-guide-base.service';
 import { PoUserGuideOptions, PoUserGuideStep } from './po-user-guide.interface';
 
 class PoUserGuideTestService extends PoUserGuideBaseService {
+  constructor(languageService: PoLanguageService) {
+    super(languageService);
+  }
+
   start(): void {}
   close(): void {}
   next(): void {}
@@ -25,11 +31,13 @@ class PoUserGuideTestService extends PoUserGuideBaseService {
   }
 }
 
+const mockLanguageService = { getShortLanguage: () => 'pt' } as PoLanguageService;
+
 describe('PoUserGuideBaseService:', () => {
   let service: PoUserGuideBaseService;
 
   beforeEach(() => {
-    service = new PoUserGuideTestService();
+    service = new PoUserGuideTestService(mockLanguageService);
   });
 
   it('should be an instance of PoUserGuideBaseService', () => {
@@ -213,7 +221,7 @@ describe('PoUserGuideBaseService:', () => {
       expect(() =>
         fc.assert(
           fc.property(fc.array(arbStep, { minLength: 1, maxLength: 10 }), origSteps => {
-            const localService = new PoUserGuideTestService();
+            const localService = new PoUserGuideTestService(mockLanguageService);
             const inputArray: Array<PoUserGuideStep> = [...origSteps];
             const initialLength = inputArray.length;
 
@@ -237,6 +245,75 @@ describe('PoUserGuideBaseService:', () => {
           { numRuns: 50 }
         )
       ).not.toThrow();
+    });
+  });
+
+  describe('literals:', () => {
+    it('should return pt literals by default when language is pt', () => {
+      expect(service.literals.next).toBe('Próximo');
+      expect(service.literals.previous).toBe('Anterior');
+      expect(service.literals.done).toBe('Finalizar');
+      expect(service.literals.close).toBe('Fechar');
+      expect(service.literals.progressTemplate).toBe('{{current}} de {{total}}');
+    });
+
+    it('should return en literals when language is en', () => {
+      const enService = new PoUserGuideTestService({ getShortLanguage: () => 'en' } as PoLanguageService);
+
+      expect(enService.literals.next).toBe('Next');
+      expect(enService.literals.previous).toBe('Previous');
+      expect(enService.literals.done).toBe('Done');
+      expect(enService.literals.close).toBe('Close');
+      expect(enService.literals.progressTemplate).toBe('{{current}} of {{total}}');
+    });
+
+    it('should return es literals when language is es', () => {
+      const esService = new PoUserGuideTestService({ getShortLanguage: () => 'es' } as PoLanguageService);
+
+      expect(esService.literals.next).toBe('Siguiente');
+      expect(esService.literals.done).toBe('Finalizar');
+      expect(esService.literals.close).toBe('Cerrar');
+    });
+
+    it('should return ru literals when language is ru', () => {
+      const ruService = new PoUserGuideTestService({ getShortLanguage: () => 'ru' } as PoLanguageService);
+
+      expect(ruService.literals.next).toBe('Следующий');
+      expect(ruService.literals.close).toBe('Закрыть');
+      expect(ruService.literals.progressTemplate).toBe('{{current}} из {{total}}');
+    });
+
+    it('should merge custom literals over the language defaults', () => {
+      service.literals = { next: 'Avançar' };
+
+      expect(service.literals.next).toBe('Avançar');
+      expect(service.literals.previous).toBe('Anterior');
+      expect(service.literals.done).toBe('Finalizar');
+    });
+
+    it('should fall back to language defaults when set with a non-object value', () => {
+      service.literals = 'invalid' as any;
+
+      expect(service.literals.next).toBe('Próximo');
+    });
+
+    it('should apply literals from setOptions without mutating the instance literals', () => {
+      const result = service['resolveOptions']({ literals: { next: 'Go' } });
+
+      expect(result.nextLabel).toBe('Go');
+      expect(result.previousLabel).toBe('Anterior');
+      // Instance literals remain unchanged
+      expect(service.literals.next).toBe('Próximo');
+    });
+
+    it('should use translated labels in defaultOptions', () => {
+      const opts = service['defaultOptions'];
+
+      expect(opts.nextLabel).toBe('Próximo');
+      expect(opts.previousLabel).toBe('Anterior');
+      expect(opts.doneLabel).toBe('Finalizar');
+      expect(opts.closeLabel).toBe('Fechar');
+      expect(opts.progressTemplate).toBe('{{current}} de {{total}}');
     });
   });
 
@@ -264,7 +341,8 @@ describe('PoUserGuideBaseService:', () => {
               fc.constant(Number.NEGATIVE_INFINITY)
             ),
             x => {
-              const result = service['resolveOptions']({ overlayOpacity: x });
+              const localService = new PoUserGuideTestService(mockLanguageService);
+              const result = localService['resolveOptions']({ overlayOpacity: x });
               return result.overlayOpacity === 0.7;
             }
           ),

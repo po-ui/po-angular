@@ -1,12 +1,18 @@
 import { Observable, Subject } from 'rxjs';
 
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+
+import { PoUserGuideLiterals } from './interfaces/po-user-guide-literals.interface';
+
+import { poUserGuideLiteralsDefault } from './po-user-guide.literals';
 import {
   PoUserGuideEndEvent,
-  PoUserGuideEvent,
   PoUserGuideOptions,
+  PoUserGuideStartEvent,
   PoUserGuideStep,
   PoUserGuideStepChangeEvent
-} from './po-user-guide.interface';
+} from './interfaces';
 
 /**
  * @description
@@ -106,17 +112,83 @@ import {
  *
  */
 export abstract class PoUserGuideBaseService {
-  protected static readonly DEFAULT_OPTIONS: PoUserGuideOptions = {
-    allowClose: true,
-    showProgress: true,
-    keyboardControl: true,
-    overlayOpacity: 0.7,
-    nextLabel: 'Próximo',
-    previousLabel: 'Anterior',
-    doneLabel: 'Finalizar',
-    closeLabel: 'Fechar',
-    progressTemplate: '{{current}} de {{total}}'
-  };
+  private _literals: PoUserGuideLiterals;
+  private readonly language: string = poLocaleDefault;
+
+  protected get defaultOptions(): PoUserGuideOptions {
+    const literals = this.literals;
+    return {
+      allowClose: true,
+      showProgress: true,
+      keyboardControl: true,
+      overlayOpacity: 0.7,
+      nextLabel: literals.next,
+      previousLabel: literals.previous,
+      doneLabel: literals.done,
+      closeLabel: literals.close,
+      progressTemplate: literals.progressTemplate
+    };
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com as literais usadas no `po-user-guide`.
+   *
+   * Existem duas maneiras de customizar o serviço, passando um objeto com todas as literais disponíveis:
+   *
+   * ```
+   *  const customLiterals: PoUserGuideLiterals = {
+   *    next: 'Próximo',
+   *    previous: 'Anterior',
+   *    done: 'Finalizar',
+   *    close: 'Fechar'
+   *  };
+   * ```
+   *
+   * Ou passando apenas as literais que deseja customizar:
+   *
+   * ```
+   *  const customLiterals: PoUserGuideLiterals = {
+   *    next: 'Avançar'
+   *  };
+   * ```
+   *
+   * E para carregar as literais customizadas, basta passá-las ao método `setOptions`:
+   *
+   * ```
+   * this.poUserGuide.setOptions({ literals: customLiterals }).start();
+   * ```
+   *
+   * > O objeto padrão de literais será traduzido de acordo com o idioma do
+   * [`PoI18nService`](/documentation/po-i18n) ou do browser.
+   */
+  get literals(): PoUserGuideLiterals {
+    return (
+      this._literals || {
+        ...poUserGuideLiteralsDefault[poLocaleDefault],
+        ...poUserGuideLiteralsDefault[this.language]
+      }
+    );
+  }
+
+  set literals(value: PoUserGuideLiterals) {
+    if (value instanceof Object && !(value instanceof Array)) {
+      this._literals = {
+        ...poUserGuideLiteralsDefault[poLocaleDefault],
+        ...poUserGuideLiteralsDefault[this.language],
+        ...value
+      };
+    } else {
+      this._literals = poUserGuideLiteralsDefault[this.language];
+    }
+  }
+
+  constructor(languageService: PoLanguageService) {
+    this.language = languageService.getShortLanguage();
+  }
 
   /**
    * @docsPrivate
@@ -150,7 +222,7 @@ export abstract class PoUserGuideBaseService {
    *
    * É exposto publicamente apenas como `Observable` somente leitura através da propriedade `tourStart$`.
    */
-  protected readonly _tourStart = new Subject<PoUserGuideEvent>();
+  protected readonly _tourStart = new Subject<PoUserGuideStartEvent>();
 
   /**
    * @docsPrivate
@@ -179,7 +251,7 @@ export abstract class PoUserGuideBaseService {
    * `Observable` para registrar telemetria do início do tour, exibir mensagens contextuais ou disparar
    * lógica de negócio dependente do início da jornada do usuário.
    */
-  readonly tourStart$: Observable<PoUserGuideEvent> = this._tourStart.asObservable();
+  readonly tourStart$: Observable<PoUserGuideStartEvent> = this._tourStart.asObservable();
 
   /**
    * `Observable` que emite um `PoUserGuideEndEvent` no encerramento de cada execução do tour.
@@ -237,17 +309,33 @@ export abstract class PoUserGuideBaseService {
   }
 
   protected resolveOptions(options?: PoUserGuideOptions): PoUserGuideOptions {
+    const effectiveLiterals = options?.literals
+      ? {
+          ...poUserGuideLiteralsDefault[poLocaleDefault],
+          ...poUserGuideLiteralsDefault[this.language],
+          ...options.literals
+        }
+      : this.literals;
+
     const userProgressTemplate = options?.progressTemplate;
 
     const resolved: PoUserGuideOptions = {
-      ...PoUserGuideBaseService.DEFAULT_OPTIONS,
+      allowClose: true,
+      showProgress: true,
+      keyboardControl: true,
+      overlayOpacity: 0.7,
+      nextLabel: effectiveLiterals.next,
+      previousLabel: effectiveLiterals.previous,
+      doneLabel: effectiveLiterals.done,
+      closeLabel: effectiveLiterals.close,
+      progressTemplate: effectiveLiterals.progressTemplate,
       ...(options ?? {})
     };
 
     const overlayOpacity = resolved.overlayOpacity;
 
     if (typeof overlayOpacity !== 'number' || !Number.isFinite(overlayOpacity)) {
-      resolved.overlayOpacity = PoUserGuideBaseService.DEFAULT_OPTIONS.overlayOpacity;
+      resolved.overlayOpacity = this.defaultOptions.overlayOpacity;
     } else {
       resolved.overlayOpacity = Math.min(1, Math.max(0, overlayOpacity));
     }

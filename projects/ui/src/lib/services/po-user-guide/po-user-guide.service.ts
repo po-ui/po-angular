@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+
 import { PoUserGuideBaseService } from './po-user-guide-base.service';
-import { PoUserGuideOptions, PoUserGuideStep, PoUserGuideStepChangeEvent } from './po-user-guide.interface';
+import { PoUserGuideOptions, PoUserGuideStep, PoUserGuideStepChangeEvent } from './interfaces';
 
 type DriverFactory = (config: any) => any;
 
@@ -36,6 +38,10 @@ export class PoUserGuideService extends PoUserGuideBaseService {
   private pendingEndReason: 'completed' | 'closed' | null = null;
 
   private static stylesInjected = false;
+
+  constructor(languageService: PoLanguageService) {
+    super(languageService);
+  }
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined' && typeof document !== 'undefined';
@@ -82,7 +88,7 @@ export class PoUserGuideService extends PoUserGuideBaseService {
     }
 
     const style = document.createElement('style');
-    style.dataset['PoUserGuideStyles'] = 'true';
+    style.dataset['poUserGuideStyles'] = 'true';
     style.textContent = `.po-user-guide-popover { font-family: var(--font-family-theme, system-ui, -apple-system, sans-serif); }`;
     document.head.appendChild(style);
 
@@ -189,7 +195,7 @@ export class PoUserGuideService extends PoUserGuideBaseService {
     if (closeButton) {
       closeButton.classList.add('po-user-guide-button-close');
       closeButton.setAttribute('type', 'button');
-      closeButton.setAttribute('aria-label', 'Fechar tour');
+      closeButton.setAttribute('aria-label', this.literals.close);
     }
   }
 

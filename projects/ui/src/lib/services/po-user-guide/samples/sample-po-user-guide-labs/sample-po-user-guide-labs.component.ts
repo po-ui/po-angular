@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoUserGuideOptions, PoUserGuideService, PoUserGuideStep } from '@po-ui/ng-components';
+import { PoUserGuideOptions, PoUserGuidePosition, PoUserGuideService, PoUserGuideStep } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-user-guide-labs',
@@ -21,7 +21,7 @@ export class SamplePoUserGuideLabsComponent implements OnInit {
   stepTitle: string;
   stepContent: string;
 
-  readonly progressTemplateHelp = 'Use {{ current }} e {{ total }} como placeholders.';
+  readonly progressTemplateHelp = 'Use { { current } } e { { total } } como placeholders.';
 
   constructor(private PoUserGuide: PoUserGuideService) {}
 
@@ -48,13 +48,13 @@ export class SamplePoUserGuideLabsComponent implements OnInit {
         element: '#sample-po-user-guide-labs-form',
         title: this.stepTitle,
         content: this.stepContent,
-        position: 'right'
+        position: PoUserGuidePosition.Right
       },
       {
         element: '#sample-po-user-guide-labs-cta',
         title: 'Botão de início',
         content: 'Reinicie o tour quantas vezes precisar para experimentar opções diferentes.',
-        position: 'top'
+        position: PoUserGuidePosition.Top
       },
       {
         title: 'Modal final',

@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import * as fc from 'fast-check';
 
 import { PoUserGuideService } from './po-user-guide.service';
+import { PoUserGuideAlignment, PoUserGuidePosition } from './enums';
 
 export interface MockDriverInstance {
   drive: jasmine.Spy;
@@ -94,6 +95,7 @@ describe('PoUserGuideService:', () => {
     service = TestBed.inject(PoUserGuideService);
 
     (PoUserGuideService as any).stylesInjected = false;
+    document.head.querySelectorAll('style[data-po-user-guide-styles="true"]').forEach(el => el.remove());
 
     mock = createMockDriverFactory();
     spyOn<any>(service, 'loadDriverFactory').and.returnValue(Promise.resolve(mock.factory));
@@ -198,6 +200,23 @@ describe('PoUserGuideService:', () => {
 
       const styles = document.head.querySelectorAll('style[data-po-user-guide-styles="true"]');
       expect(styles.length).toBe(1);
+    });
+
+    it('should detect an existing style in the DOM and set stylesInjected without creating a duplicate', () => {
+      document.head.querySelectorAll('style[data-po-user-guide-styles="true"]').forEach(element => element.remove());
+      (PoUserGuideService as any).stylesInjected = false;
+
+      // Manually inject a style to simulate a pre-existing element
+      const preExisting = document.createElement('style');
+      preExisting.dataset['poUserGuideStyles'] = 'true';
+      preExisting.textContent = '.po-user-guide-popover {}';
+      document.head.appendChild(preExisting);
+
+      (service as any).injectStyles();
+
+      const styles = document.head.querySelectorAll('style[data-po-user-guide-styles="true"]');
+      expect(styles.length).toBe(1);
+      expect((PoUserGuideService as any).stylesInjected).toBeTrue();
     });
   });
 
@@ -1000,7 +1019,11 @@ describe('PoUserGuideService:', () => {
 
   describe('mapStepsToDriveSteps - position handling:', () => {
     it('should map concrete step.position values to popover.side and omit when auto/undefined', async () => {
-      service.setSteps([{ content: 'a', position: 'top' }, { content: 'b', position: 'auto' }, { content: 'c' }]);
+      service.setSteps([
+        { content: 'a', position: PoUserGuidePosition.Top },
+        { content: 'b', position: PoUserGuidePosition.Auto },
+        { content: 'c' }
+      ]);
       service.start();
       await Promise.resolve();
       await Promise.resolve();
@@ -1011,7 +1034,7 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should map step.align to popover.align and default to undefined when absent', async () => {
-      service.setSteps([{ content: 'a', align: 'center' }, { content: 'b' }]);
+      service.setSteps([{ content: 'a', align: PoUserGuideAlignment.Center }, { content: 'b' }]);
       service.start();
       await Promise.resolve();
       await Promise.resolve();
@@ -1135,7 +1158,7 @@ describe('PoUserGuideService:', () => {
 
       expect(closeButton.classList.contains('po-user-guide-button-close')).toBeTrue();
       expect(closeButton.getAttribute('type')).toBe('button');
-      expect(closeButton.getAttribute('aria-label')).toBe('Fechar tour');
+      expect(closeButton.getAttribute('aria-label')).toBe('Fechar');
     });
   });
 
