@@ -261,5 +261,38 @@ describe('PoPageDefaultBaseComponent:', () => {
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
+
+    describe('p-helper:', () => {
+      it('should keep type when PoHelperOptions has type defined', () => {
+        const options = { title: 'Help', content: 'Content', type: 'help' as const };
+        const result = component['transformPageHelper'](options);
+        expect(result).toEqual(options);
+      });
+
+      it('should accept string value and transform to PoHelperOptions with type info', () => {
+        const result = component['transformPageHelper']('Simple text');
+        expect(result).toEqual({ content: 'Simple text', type: 'info' });
+      });
+
+      it('should default type to "info" when PoHelperOptions has no type', () => {
+        const result = component['transformPageHelper']({ title: 'Help', content: 'Content' });
+        expect((result as any).type).toBe('info');
+      });
+
+      it('should transform string values with HTML to PoHelperOptions with type info', () => {
+        const result = component['transformPageHelper']('<b>bold</b> text');
+        expect(result).toEqual({ content: '<b>bold</b> text', type: 'info' });
+      });
+
+      it('should handle undefined value', () => {
+        const result = component['transformPageHelper'](undefined);
+        expect(result).toBeUndefined();
+      });
+
+      it('should handle null value', () => {
+        const result = component['transformPageHelper'](null);
+        expect(result).toBeNull();
+      });
+    });
   });
 });

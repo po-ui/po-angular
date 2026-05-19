@@ -8,7 +8,8 @@ import { PoHelperOptions } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoHelperLabsComponent {
-  helperSize: 'medium';
+  helperDisabled: boolean = false;
+  helperSize: string = 'medium';
 
   helperOptions: PoHelperOptions = {
     title: '',
@@ -23,18 +24,29 @@ export class SamplePoHelperLabsComponent {
   }
 
   setFooterTitle(title: string) {
+    this.footerTitle = title;
     if (title.length === 0) {
-      this.footerTitle = '';
       delete this.helperOptions.footerAction;
     } else {
-      this.helperOptions.footerAction = {
-        label: this.footerTitle,
-        action: this.footerAction.bind(this)
+      this.helperOptions = {
+        ...this.helperOptions,
+        footerAction: {
+          label: this.footerTitle,
+          action: this.footerAction.bind(this)
+        }
       };
     }
   }
 
+  updateHelperType(type: string) {
+    this.helperOptions = {
+      ...this.helperOptions,
+      type: type as 'help' | 'info'
+    };
+  }
+
   reset() {
+    this.helperDisabled = false;
     this.helperOptions = {
       title: '',
       content: '',

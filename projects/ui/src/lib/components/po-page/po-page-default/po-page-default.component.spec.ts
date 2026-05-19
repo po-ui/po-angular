@@ -11,6 +11,7 @@ import { PoUtils as UtilsFunction } from '../../../utils/util';
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoButtonModule } from '../../po-button';
 import { PoDropdownModule } from '../../po-dropdown/po-dropdown.module';
+import { PoHelperModule } from '../../po-helper/po-helper.module';
 
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoPageDefaultComponent } from './po-page-default.component';
@@ -158,7 +159,14 @@ describe('PoPageDefaultComponent desktop', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
+      imports: [
+        CommonModule,
+        RouterTestingModule.withRoutes([]),
+        PoBreadcrumbModule,
+        PoButtonModule,
+        PoDropdownModule,
+        PoHelperModule
+      ],
       declarations: [
         DesktopComponent,
         PoPageDefaultComponent,
@@ -614,6 +622,56 @@ describe('PoPageDefaultComponent desktop', () => {
       component.hasPageHeader();
       expect(component.getActionKind({ label: 'A', kind: 'primary' }, 'secondary')).toBe('primary');
       expect(component.getActionKind({ label: 'B', kind: 'primary' }, 'secondary')).toBe('secondary');
+    });
+  });
+
+  describe('helper integration', () => {
+    beforeEach(() => {
+      component.title = 'Test Title';
+    });
+
+    it('should pass helper value to po-page-header when helper is a PoHelperOptions object', () => {
+      fixture.componentRef.setInput('p-helper', { content: 'Help content', type: 'info' });
+      fixture.detectChanges();
+
+      const nativeElement = fixture.debugElement.nativeElement;
+      expect(nativeElement.querySelector('po-helper')).toBeTruthy();
+    });
+
+    it('should pass helper value to po-page-header when helper is a string', () => {
+      fixture.componentRef.setInput('p-helper', 'Simple help text');
+      fixture.detectChanges();
+
+      const nativeElement = fixture.debugElement.nativeElement;
+      expect(nativeElement.querySelector('po-helper')).toBeTruthy();
+    });
+
+    it('should not render po-helper when helper is not provided', () => {
+      fixture.detectChanges();
+
+      const nativeElement = fixture.debugElement.nativeElement;
+      expect(nativeElement.querySelector('po-helper')).toBeFalsy();
+    });
+
+    it('should transform string helper to PoHelperOptions with type info', () => {
+      fixture.componentRef.setInput('p-helper', 'Text content');
+      fixture.detectChanges();
+
+      expect(component.helper()).toEqual({ content: 'Text content', type: 'info' });
+    });
+
+    it('should set type to info when PoHelperOptions object has no type defined', () => {
+      fixture.componentRef.setInput('p-helper', { content: 'Help content' });
+      fixture.detectChanges();
+
+      expect(component.helper()).toEqual(jasmine.objectContaining({ content: 'Help content', type: 'info' }));
+    });
+
+    it('should preserve type when PoHelperOptions object already has type defined', () => {
+      fixture.componentRef.setInput('p-helper', { content: 'Help content', type: 'help' });
+      fixture.detectChanges();
+
+      expect(component.helper()).toEqual(jasmine.objectContaining({ content: 'Help content', type: 'help' }));
     });
   });
 });

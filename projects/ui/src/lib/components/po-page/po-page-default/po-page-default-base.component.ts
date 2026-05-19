@@ -1,4 +1,4 @@
-import { Directive, HostBinding, HostListener, Input, ViewChild, output } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, ViewChild, input, output } from '@angular/core';
 
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -6,6 +6,7 @@ import { PoLanguageService } from './../../../services/po-language/po-language.s
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
+import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
 import { PoPageAction } from '../interfaces/po-page-action.interface';
 import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
 import { PoPageActionsLayout } from './enums/po-page-actions-layout.enum';
@@ -145,6 +146,34 @@ export abstract class PoPageDefaultBaseComponent {
   get componentsSize(): string {
     return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o conteúdo do po-helper informativo exibido ao lado do subtítulo da página.
+   *
+   * Quando não houver subtítulo (`p-subtitle`), o po-helper será exibido logo abaixo do título.
+   *
+   * Aceita uma string simples (exibida como conteúdo) ou um objeto do tipo `PoHelperOptions`
+   * para configuração avançada (título, conteúdo, tipo, ações).
+   *
+   * Exemplo de uso:
+   * ```html
+   * <po-page-default
+   *   p-title="Cadastro"
+   *   p-subtitle="Preencha os dados"
+   *   [p-helper]="{ title: 'Ajuda', content: 'Informações sobre o cadastro' }"
+   * ></po-page-default>
+   * ```
+   *
+   * @default `info`
+   */
+  helper = input<PoHelperOptions | string, PoHelperOptions | string>(undefined, {
+    alias: 'p-helper',
+    transform: this.transformPageHelper.bind(this)
+  });
 
   /**
    * @optional
@@ -291,6 +320,16 @@ export abstract class PoPageDefaultBaseComponent {
   private applySizeBasedOnA11y(): void {
     const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
     this._componentsSize = size;
+  }
+
+  private transformPageHelper(value: PoHelperOptions | string): PoHelperOptions | string {
+    if (value && typeof value === 'string') {
+      return { content: value, type: 'info' };
+    }
+    if (value && typeof value === 'object' && !value.type) {
+      return { ...value, type: 'info' };
+    }
+    return value;
   }
 
   // Seta a lista de ações no dropdown.

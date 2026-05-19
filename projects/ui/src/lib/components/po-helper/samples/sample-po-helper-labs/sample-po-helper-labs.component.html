@@ -1,14 +1,25 @@
-<po-helper [p-helper]="helperOptions" [p-size]="helperSize"></po-helper>
+<po-helper [p-helper]="helperOptions" [p-size]="helperSize" [p-disabled]="helperDisabled"></po-helper>
+
+<po-divider></po-divider>
 
 <div class="po-row">
-  <po-input class="po-lg-6 po-md-6" name="title" [(ngModel)]="helperOptions.title" p-clean p-label="Título do Helper">
+  <po-input
+    class="po-md-6"
+    name="title"
+    [ngModel]="helperOptions.title"
+    (ngModelChange)="helperOptions = { ...helperOptions, title: $event }"
+    p-clean
+    p-label="Title"
+  >
   </po-input>
   <po-input
-    class="po-lg-6 po-md-6"
-    name="type"
-    [(ngModel)]="helperOptions.content"
+    class="po-md-6"
+    name="content"
+    [ngModel]="helperOptions.content"
+    (ngModelChange)="helperOptions = { ...helperOptions, content: $event }"
     p-clean
-    p-label="Conteúdo do Helper"
+    p-label="Content"
+    p-help="Consulte a <b>documentação</b> para mais detalhes."
   >
   </po-input>
 </div>
@@ -16,24 +27,25 @@
 <div class="po-row">
   @if (helperOptions.type === 'help') {
     <po-input
-      class="po-lg-6 po-md-6"
+      class="po-md-6"
       name="footerTitle"
       [(ngModel)]="footerTitle"
       (ngModelChange)="setFooterTitle($event)"
       p-clean
-      p-label="Título do Footer"
+      p-label="Footer Action"
     >
     </po-input>
   }
 </div>
-<po-divider></po-divider>
+
 <div class="po-row">
   <po-radio-group
     name="type"
-    class="po-md-12 po-lg-12"
-    p-columns="4"
+    class="po-md-12"
+    [p-columns]="4"
     p-label="Type"
-    [(ngModel)]="helperOptions.type"
+    [ngModel]="helperOptions.type"
+    (ngModelChange)="updateHelperType($event)"
     [p-options]="[
       { label: 'Help', value: 'help' },
       { label: 'Info', value: 'info' }
@@ -44,10 +56,10 @@
 
 <div class="po-row">
   <po-radio-group
-    class="po-md-12 po-lg-12"
+    class="po-md-12"
     name="size"
     [(ngModel)]="helperSize"
-    p-columns="4"
+    [p-columns]="4"
     p-label="Size"
     p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
     [p-options]="[
@@ -57,7 +69,13 @@
   >
   </po-radio-group>
 </div>
-<po-divider></po-divider>
+
 <div class="po-row">
-  <po-button class="po-md-12 po-md-12" p-label="Reset" (p-click)="reset()"></po-button>
+  <po-checkbox class="po-md-12" name="disabled" [(ngModel)]="helperDisabled" p-label="Disabled"> </po-checkbox>
+</div>
+
+<po-divider></po-divider>
+
+<div class="po-row">
+  <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="reset()"></po-button>
 </div>
