@@ -1,6 +1,7 @@
 import { Directive, Input } from '@angular/core';
 
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
+import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
 
 /**
  * @docsPrivate
@@ -23,6 +24,19 @@ export class PoPageHeaderBaseComponent {
 
   /** Define o tipo de header: `primary`, `secondary` ou `tertiary`. */
   @Input('p-type') type: string = 'primary';
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o conteúdo do po-helper informativo exibido ao lado do subtítulo.
+   *
+   * Quando não houver subtítulo (`p-subtitle`), o po-helper será exibido logo abaixo do título.
+   *
+   * Aceita uma string simples ou um objeto do tipo `PoHelperOptions`.
+   */
+  @Input('p-helper') helper: PoHelperOptions | string;
 
   private _breadcrumb: PoBreadcrumb;
 

@@ -81,7 +81,13 @@
   @if (hasPageHeader()) {
     @switch (pageHeaderType) {
       @case ('secondary') {
-        <po-page-header [p-type]="'secondary'" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
+        <po-page-header
+          [p-type]="'secondary'"
+          [p-size]="componentsSize"
+          [p-subtitle]="subtitle"
+          [p-title]="title"
+          [p-helper]="helper"
+        >
           <!-- Back navigation button (icon-only, aria-label for screen readers) -->
           <po-button
             po-page-header-navigation
@@ -108,7 +114,13 @@
         </po-page-header>
       }
       @case ('tertiary') {
-        <po-page-header [p-type]="'tertiary'" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
+        <po-page-header
+          [p-type]="'tertiary'"
+          [p-size]="componentsSize"
+          [p-subtitle]="subtitle"
+          [p-title]="title"
+          [p-helper]="helper"
+        >
           <div class="po-page-header-actions">
             @switch (pageActionsLayout) {
               @case ('dropdown') {
@@ -125,7 +137,13 @@
         </po-page-header>
       }
       @default {
-        <po-page-header [p-breadcrumb]="breadcrumb" [p-size]="componentsSize" [p-subtitle]="subtitle" [p-title]="title">
+        <po-page-header
+          [p-breadcrumb]="breadcrumb"
+          [p-size]="componentsSize"
+          [p-subtitle]="subtitle"
+          [p-title]="title"
+          [p-helper]="helper"
+        >
           <div class="po-page-header-actions">
             @switch (pageActionsLayout) {
               @case ('dropdown') {

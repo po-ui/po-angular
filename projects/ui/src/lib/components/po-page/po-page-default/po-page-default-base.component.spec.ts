@@ -261,5 +261,45 @@ describe('PoPageDefaultBaseComponent:', () => {
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
+
+    describe('p-helper:', () => {
+      it('should set helper with PoHelperOptions object', () => {
+        const options = { title: 'Help', content: 'Content', type: 'help' as const };
+        component.helper = options;
+        expect(component.helper).toEqual(options);
+      });
+
+      it('should set helper with string value', () => {
+        component.helper = 'Simple text';
+        expect(component.helper).toBe('Simple text');
+      });
+
+      it('should default type to "info" when PoHelperOptions has no type', () => {
+        const options: any = { title: 'Help', content: 'Content' };
+        component.helper = options;
+        expect((component.helper as any).type).toBe('info');
+      });
+
+      it('should keep type when PoHelperOptions has type defined', () => {
+        const options = { title: 'Help', content: 'Content', type: 'help' as const };
+        component.helper = options;
+        expect((component.helper as any).type).toBe('help');
+      });
+
+      it('should not modify string values', () => {
+        component.helper = '<b>bold</b> text';
+        expect(component.helper).toBe('<b>bold</b> text');
+      });
+
+      it('should handle undefined value', () => {
+        component.helper = undefined;
+        expect(component.helper).toBeUndefined();
+      });
+
+      it('should handle null value', () => {
+        component.helper = null;
+        expect(component.helper).toBeNull();
+      });
+    });
   });
 });

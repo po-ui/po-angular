@@ -1,11 +1,15 @@
 import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoBreadcrumb } from '@po-ui/ng-components';
-import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
-import { PoNotificationService } from '@po-ui/ng-components';
-import { PoPageAction } from '@po-ui/ng-components';
-import { PoTableColumn } from '@po-ui/ng-components';
+import {
+  PoBreadcrumb,
+  PoHelperOptions,
+  PoModalAction,
+  PoModalComponent,
+  PoNotificationService,
+  PoPageAction,
+  PoTableColumn
+} from '@po-ui/ng-components';
 
 import { SampleDashboardService } from './sample-po-page-default-dashboard.service';
 
@@ -20,13 +24,13 @@ export class SamplePoPageDefaultDashboardComponent implements OnInit {
   private poNotification = inject(PoNotificationService);
   private sampleDashboardService = inject(SampleDashboardService);
 
-  @ViewChild('formShare', { static: true }) formShare: NgForm;
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+  @ViewChild('formShare', { static: true }) formShare!: NgForm;
+  @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
 
-  columns: Array<PoTableColumn>;
-  email: string = undefined;
+  columns!: Array<PoTableColumn>;
+  email: string = '';
   isSubscribed: boolean = false;
-  items: Array<object>;
+  items!: Array<object>;
 
   public readonly actions: Array<PoPageAction> = [
     { label: 'Share', action: this.modalOpen.bind(this), icon: 'an an-share' },
@@ -41,11 +45,21 @@ export class SamplePoPageDefaultDashboardComponent implements OnInit {
       ]
     },
     { label: 'Components', url: '/documentation' },
-    { label: 'Disable notification', action: this.disableNotification.bind(this), disabled: () => this.isSubscribed }
+    {
+      label: 'Disable notification',
+      action: this.disableNotification.bind(this),
+      disabled: () => this.isSubscribed
+    }
   ];
 
   public readonly breadcrumb: PoBreadcrumb = {
     items: [{ label: 'Home', link: '/' }, { label: 'Dashboard' }]
+  };
+
+  public readonly helper: PoHelperOptions = {
+    title: 'Dashboard Info',
+    content: 'View <b>real-time metrics</b> of your website. Data is updated <i>every 5 minutes</i>.',
+    type: 'info'
   };
 
   public readonly cancelAction: PoModalAction = {

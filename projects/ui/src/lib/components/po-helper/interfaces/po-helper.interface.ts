@@ -1,12 +1,9 @@
 /**
- * @usedBy PoHelperComponent
+ * @usedBy PoHelperComponent, PoPageDefaultComponent
  *
  * @description
  *
- * *Interface* que define as opções de configuração do componente po-helper.
- *
- * Permite customizar o conteúdo, título, tipo do ícone, modo de abertura do popover, ações customizadas e eventos.
- *
+ * Interface para configuração das opções de ajuda (*helper*).
  */
 export interface PoHelperOptions {
   /**
@@ -26,6 +23,14 @@ export interface PoHelperOptions {
    * @description
    *
    * Texto explicativo exibido no popover.
+   *
+   * Suporta formatação básica com as tags `<b>` (negrito), `<strong>` (negrito), `<i>` (itálico), `<em>` (itálico) e
+   * `<u>` (sublinhado).
+   *
+   * Exemplo:
+   * ```typescript
+   * content: 'Texto <b>importante</b> com <em>destaque</em> e <u>sublinhado</u>'
+   * ```
    */
   content?: string;
 
