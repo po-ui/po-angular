@@ -1,4 +1,9 @@
-<po-page-detail p-title="User Detail" [p-breadcrumb]="breadcrumb" (p-edit)="edit()">
+<po-page-detail
+  p-title="User Detail"
+  p-subtitle="Status: <b>Active</b> | Role: <i>Administrator</i>"
+  [p-breadcrumb]="breadcrumb"
+  (p-edit)="edit()"
+>
   <div class="po-row">
     <po-info class="po-md-4" p-label="User ID" [p-value]="userId"> </po-info>
 

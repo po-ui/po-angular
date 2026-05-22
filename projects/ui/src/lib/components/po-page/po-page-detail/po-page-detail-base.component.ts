@@ -192,7 +192,17 @@ export class PoPageDetailBaseComponent {
    *
    * @description
    *
-   * Subtitulo do Header da página
+   * Subtitulo do Header da página.
+   *
+   * Suporta formatação básica com as tags `<b>` (negrito), `<strong>` (negrito), `<i>` (itálico), `<em>` (itálico) e
+   * `<u>` (sublinhado).
+   *
+   * Exemplo:
+   * ```typescript
+   * subtitle = 'Status: <b>Active</b> | Role: <i>Administrator</i>';
+   * ```
+   *
+   * > Requer que `p-title` esteja definido.
    */
   @Input('p-subtitle') subtitle: string;
 

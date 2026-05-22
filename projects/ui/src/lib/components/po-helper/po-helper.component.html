@@ -28,9 +28,9 @@
       <span class="po-helper-content-text">
         @for (fragment of contentFragments(); track $index) {
           <span
-            [class.po-helper-text-bold]="fragment.bold"
-            [class.po-helper-text-italic]="fragment.italic"
-            [class.po-helper-text-underline]="fragment.underline"
+            [class.po-text-bold]="fragment.bold"
+            [class.po-text-italic]="fragment.italic"
+            [class.po-text-underline]="fragment.underline"
             >{{ fragment.text }}</span
           >
         }
