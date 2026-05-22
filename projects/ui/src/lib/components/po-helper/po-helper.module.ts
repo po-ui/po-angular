@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { PoHelperComponent } from './po-helper.component';
-import { PoHelperContentPipe } from './po-helper-content.pipe';
 
 import { PoIconModule } from '../po-icon/index';
 import { PoLinkModule } from '../po-link/index';
@@ -15,7 +14,7 @@ import { PoDividerModule } from '../po-divider/index';
  */
 @NgModule({
   imports: [CommonModule, PoIconModule, PoPopoverModule, PoLinkModule, PoDividerModule],
-  declarations: [PoHelperComponent, PoHelperContentPipe],
+  declarations: [PoHelperComponent],
   exports: [PoHelperComponent]
 })
 export class PoHelperModule {}

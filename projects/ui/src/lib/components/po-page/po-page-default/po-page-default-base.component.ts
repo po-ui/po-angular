@@ -283,7 +283,15 @@ export abstract class PoPageDefaultBaseComponent {
    *
    * Define um texto de apoio ou informações adicionais logo abaixo do título principal.
    *
-   * > Requer que`p-title` esteja definido.
+   * Suporta formatação básica com as tags `<b>` (negrito), `<strong>` (negrito), `<i>` (itálico), `<em>` (itálico) e
+   * `<u>` (sublinhado).
+   *
+   * Exemplo:
+   * ```typescript
+   * subtitle = 'Texto <b>importante</b> com <em>destaque</em> e <u>sublinhado</u>';
+   * ```
+   *
+   * > Requer que `p-title` esteja definido.
    */
   @Input('p-subtitle') set subtitle(value: string) {
     this._subtitle = value;

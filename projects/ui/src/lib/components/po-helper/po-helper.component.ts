@@ -13,7 +13,10 @@ import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
 import { PoButtonComponent } from '../po-button';
-import { parseHelperContent, PoHelperTextFragment } from './po-helper-content-utils';
+import { parseSafeText, PoTextFragment, PoFormattingTag } from '../../utils/safe-text-parser';
+
+/** Tags de formatação aceitas pelo po-helper. */
+const PO_HELPER_ALLOWED_TAGS: Array<PoFormattingTag> = ['b', 'i', 'u', 'strong', 'em'];
 /**
  * @docsExtends PoHelperBaseComponent
  *
@@ -70,12 +73,12 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     }
   };
 
-  protected readonly contentFragments = computed<Array<PoHelperTextFragment>>(() => {
+  protected readonly contentFragments = computed<Array<PoTextFragment>>(() => {
     const helperValue = this.helper();
     if (!helperValue) {
       return [];
     }
-    return parseHelperContent((helperValue as PoHelperOptions).content);
+    return parseSafeText((helperValue as PoHelperOptions).content, PO_HELPER_ALLOWED_TAGS);
   });
 
   constructor(private readonly cdr: ChangeDetectorRef) {

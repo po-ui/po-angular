@@ -121,4 +121,73 @@ describe('PoPageHeaderComponent:', () => {
       expect(nativeElement.querySelector('po-helper')).toBeTruthy();
     });
   });
+
+  describe('Subtitle formatting:', () => {
+    it('should render subtitle with bold formatting when <b> tag is used', () => {
+      component.title = 'Title';
+      component.subtitle = 'Texto <b>negrito</b> normal';
+
+      fixture.detectChanges();
+
+      const boldSpan = nativeElement.querySelector('.po-page-header-subtitle .po-text-bold');
+      expect(boldSpan).toBeTruthy();
+      expect(boldSpan.textContent).toBe('negrito');
+    });
+
+    it('should render subtitle with italic formatting when <i> tag is used', () => {
+      component.title = 'Title';
+      component.subtitle = 'Texto <i>itálico</i> normal';
+
+      fixture.detectChanges();
+
+      const italicSpan = nativeElement.querySelector('.po-page-header-subtitle .po-text-italic');
+      expect(italicSpan).toBeTruthy();
+      expect(italicSpan.textContent).toBe('itálico');
+    });
+
+    it('should render subtitle with underline formatting when <u> tag is used', () => {
+      component.title = 'Title';
+      component.subtitle = 'Texto <u>sublinhado</u> normal';
+
+      fixture.detectChanges();
+
+      const underlineSpan = nativeElement.querySelector('.po-page-header-subtitle .po-text-underline');
+      expect(underlineSpan).toBeTruthy();
+      expect(underlineSpan.textContent).toBe('sublinhado');
+    });
+
+    it('should render subtitle plain text without formatting classes', () => {
+      component.title = 'Title';
+      component.subtitle = 'Texto simples';
+
+      fixture.detectChanges();
+
+      const subtitleText = nativeElement.querySelector('.po-page-header-subtitle-text');
+      expect(subtitleText).toBeTruthy();
+      expect(subtitleText.textContent).toBe('Texto simples');
+      expect(nativeElement.querySelector('.po-text-bold')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-text-italic')).toBeFalsy();
+      expect(nativeElement.querySelector('.po-text-underline')).toBeFalsy();
+    });
+
+    it('should sanitize script tags in subtitle', () => {
+      component.title = 'Title';
+      component.subtitle = '<script>alert("xss")</script>seguro';
+
+      fixture.detectChanges();
+
+      const subtitleText = nativeElement.querySelector('.po-page-header-subtitle-text');
+      expect(subtitleText.textContent).toBe('alert("xss")seguro');
+    });
+
+    it('should render subtitle with combined formatting', () => {
+      component.title = 'Title';
+      component.subtitle = '<b>negrito</b> e <i>itálico</i>';
+
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-text-bold').textContent).toBe('negrito');
+      expect(nativeElement.querySelector('.po-text-italic').textContent).toBe('itálico');
+    });
+  });
 });

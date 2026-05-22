@@ -221,7 +221,17 @@ export abstract class PoPageListBaseComponent {
    *
    * @description
    *
-   * Subtitulo do Header da página
+   * Subtitulo do Header da página.
+   *
+   * Suporta formatação básica com as tags `<b>` (negrito), `<strong>` (negrito), `<i>` (itálico), `<em>` (itálico) e
+   * `<u>` (sublinhado).
+   *
+   * Exemplo:
+   * ```typescript
+   * subtitle = 'Manage <b>active</b> and <i>pending</i> processes';
+   * ```
+   *
+   * > Requer que `p-title` esteja definido.
    */
   @Input('p-subtitle') subtitle: string;
 

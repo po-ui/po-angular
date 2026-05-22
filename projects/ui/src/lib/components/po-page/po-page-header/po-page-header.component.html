@@ -36,7 +36,16 @@
         }
         @if (title && subtitle) {
           <div class="po-page-header-subtitle">
-            {{ subtitle }}
+            <span class="po-page-header-subtitle-text">
+              @for (fragment of subtitleFragments; track $index) {
+                <span
+                  [class.po-text-bold]="fragment.bold"
+                  [class.po-text-italic]="fragment.italic"
+                  [class.po-text-underline]="fragment.underline"
+                  >{{ fragment.text }}</span
+                >
+              }
+            </span>
             @if (helper()) {
               <po-helper [p-helper]="helper()" [p-size]="size"></po-helper>
             }
