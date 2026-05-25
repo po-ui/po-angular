@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.17.0](https://github.com/po-ui/po-angular/compare/v21.16.0...v21.17.0) (2026-05-25)
+
+
+### Features
+
+* **page-default:** adiciona propriedade p-helper no subtítulo ([20669cb](https://github.com/po-ui/po-angular/commit/20669cb8ea11e6439b02ac84d20ab3bbc719558d))
+* **page:** suporta tags HTML básicas no subtitle ([f93e550](https://github.com/po-ui/po-angular/commit/f93e55001d01796eaf7ba3b04db54f3b2efdc3b8))
+
+
+### Bug Fixes
+
+* **popover:** corrige crescimento automatico de width ([f144b03](https://github.com/po-ui/po-angular/commit/f144b0305b41512f5be5c9c5bbc69583deeaa23d))
+
 ## [21.16.0](https://github.com/po-ui/po-angular/compare/v21.15.0...v21.16.0) (2026-05-18)
 
 
