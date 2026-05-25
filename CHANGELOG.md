@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.12](https://github.com/po-ui/po-angular/compare/v19.39.11...v19.39.12) (2026-05-25)
+
+
+### Bug Fixes
+
+* **popover:** corrige crescimento automatico de width ([e29124f](https://github.com/po-ui/po-angular/commit/e29124f77df662b7b24a2a3e3a571a8ffa483819))
+
 ### [19.39.11](https://github.com/po-ui/po-angular/compare/v19.39.10...v19.39.11) (2026-05-14)
 
 
