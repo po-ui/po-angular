@@ -1,0 +1,136 @@
+@if (!showChat) {
+  <po-page-default p-title="PO-UI Chat" p-subtitle="Configure seu assistente de IA para tirar dúvidas sobre o PO-UI">
+    <div class="setup-container">
+      <po-stepper #stepper>
+        <po-step p-label="Dados Pessoais" [p-can-active-next-step]="canAdvanceStep1.bind(this)">
+          <div class="step-content">
+            <po-input
+              name="name"
+              p-label="Nome"
+              p-placeholder="Seu nome completo"
+              p-required
+              p-icon="an-user"
+              [(ngModel)]="name"
+            >
+            </po-input>
+
+            <po-input
+              name="email"
+              p-label="E-mail"
+              p-placeholder="seu@email.com"
+              p-required
+              p-icon="an-mail"
+              [(ngModel)]="email"
+            >
+            </po-input>
+          </div>
+        </po-step>
+
+        <po-step p-label="Configuração LLM" [p-can-active-next-step]="canAdvanceStep2.bind(this)">
+          <div class="step-content">
+            <po-select
+              name="provider"
+              p-label="Provedor de IA"
+              p-placeholder="Selecione o provedor"
+              p-required
+              [p-options]="providerOptions"
+              [(ngModel)]="provider"
+              (p-change)="onProviderChange($event)"
+            >
+            </po-select>
+
+            <po-input
+              name="modelName"
+              p-label="Modelo (opcional)"
+              [p-placeholder]="modelPlaceholder"
+              p-help="Deixe vazio para usar o modelo padrão do provedor selecionado."
+              [(ngModel)]="modelName"
+            >
+            </po-input>
+
+            <po-password
+              name="apiKey"
+              p-label="API Key do Provedor"
+              p-placeholder="Insira sua chave de API"
+              p-required
+              p-help="Sua chave é usada apenas nesta sessão e não será armazenada no servidor."
+              [(ngModel)]="apiKey"
+            >
+            </po-password>
+          </div>
+
+          <div class="step-actions">
+            <po-button
+              p-label="Iniciar Chat"
+              p-kind="primary"
+              p-icon="an-chat"
+              [p-disabled]="!canAdvanceStep2()"
+              (p-click)="onFinish()"
+            >
+            </po-button>
+          </div>
+        </po-step>
+      </po-stepper>
+    </div>
+  </po-page-default>
+} @else {
+  <po-page-default
+    p-title="PO-UI Chat"
+    [p-actions]="[{ label: 'Reconfigurar', icon: 'an-gear', action: onBackToSetup.bind(this) }]"
+  >
+    <div class="chat-wrapper">
+      <div class="chat-messages" #messagesContainer>
+        @for (msg of messages; track msg.timestamp) {
+          <div
+            class="message"
+            [class.message--user]="msg.role === 'user'"
+            [class.message--assistant]="msg.role === 'assistant'"
+          >
+            <po-avatar [p-label]="msg.role === 'user' ? name : 'AI'" p-size="sm"> </po-avatar>
+            <div>
+              <div class="message-bubble">{{ msg.content }}</div>
+              @if (msg.role === 'assistant') {
+                <div class="message-actions">
+                  <button class="copy-btn" title="Copiar resposta" (click)="copyMessage(msg.content)">📋 Copiar</button>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        @if (isLoading) {
+          <div class="message message--assistant">
+            <po-avatar p-label="AI" p-size="sm"></po-avatar>
+            <div class="message-bubble">
+              @if (streamingMessage) {
+                {{ streamingMessage }}
+              } @else {
+                <div class="typing-indicator"><span></span><span></span><span></span></div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input-area">
+        <po-textarea
+          name="chatInput"
+          p-placeholder="Digite sua dúvida sobre PO-UI..."
+          [p-rows]="2"
+          [(ngModel)]="currentMessage"
+          (p-keydown)="onKeydown($event)"
+        >
+        </po-textarea>
+        <po-button
+          p-label="Enviar"
+          p-kind="primary"
+          p-icon="an-arrow-right"
+          [p-disabled]="!currentMessage?.trim() || isLoading"
+          [p-loading]="isLoading"
+          (p-click)="sendMessage()"
+        >
+        </po-button>
+      </div>
+    </div>
+  </po-page-default>
+}

@@ -62,6 +62,20 @@
   margin: 3.5rem 0;
 }
 
+.section-ai-assistant {
+  margin-top: 48px;
+}
+
+.ai-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-icon {
+  font-size: 48px;
+}
+
 .ux-friendly {
   margin-top: 48px;
 }

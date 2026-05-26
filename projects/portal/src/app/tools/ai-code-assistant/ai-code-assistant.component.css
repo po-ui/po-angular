@@ -1,0 +1,13 @@
+.ai-assistant-container {
+  padding: 20px;
+  font-family: 'NunitoSans', sans-serif;
+}
+
+h1 {
+  color: #0c3759;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #6b7280;
+}
