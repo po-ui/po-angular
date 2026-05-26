@@ -1,0 +1,55 @@
+<po-page-default
+  p-title="PO-UI AI Assistant"
+  [p-actions]="[{ label: 'Configurações', icon: 'an-gear', action: goToSetup.bind(this) }]"
+>
+  <div class="chat-wrapper">
+    <div class="chat-messages" #messagesContainer>
+      @for (msg of messages; track msg.timestamp) {
+        <div
+          class="message"
+          [class.message--user]="msg.role === 'user'"
+          [class.message--assistant]="msg.role === 'assistant'"
+        >
+          <po-avatar [p-label]="msg.role === 'user' ? userName : 'AI'" p-size="sm"> </po-avatar>
+          <div>
+            <div class="message-bubble">{{ msg.content }}</div>
+            @if (msg.role === 'assistant') {
+              <div class="message-actions">
+                <button class="copy-btn" title="Copiar resposta" (click)="copyMessage(msg.content)">📋 Copiar</button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (isLoading) {
+        <div class="message message--assistant">
+          <po-avatar p-label="AI" p-size="sm"></po-avatar>
+          <div class="message-bubble">
+            <div class="typing-indicator"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="chat-input-area">
+      <po-textarea
+        name="chatInput"
+        p-placeholder="Digite sua dúvida sobre PO-UI..."
+        [p-rows]="2"
+        [(ngModel)]="currentMessage"
+        (p-keydown)="onKeydown($event)"
+      >
+      </po-textarea>
+      <po-button
+        p-label="Enviar"
+        p-kind="primary"
+        p-icon="an-arrow-right"
+        [p-disabled]="!currentMessage?.trim() || isLoading"
+        [p-loading]="isLoading"
+        (p-click)="sendMessage()"
+      >
+      </po-button>
+    </div>
+  </div>
+</po-page-default>

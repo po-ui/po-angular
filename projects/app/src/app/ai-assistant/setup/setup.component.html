@@ -1,0 +1,75 @@
+<po-page-default p-title="PO-UI AI Assistant" p-subtitle="Configure seu assistente de IA">
+  <div class="setup-container">
+    <po-stepper #stepper>
+      <po-step p-label="Dados Pessoais" [p-can-active-next-step]="canAdvanceStep1.bind(this)">
+        <div class="step-content">
+          <po-input
+            name="name"
+            p-label="Nome"
+            p-placeholder="Seu nome completo"
+            p-required
+            p-icon="an-user"
+            [(ngModel)]="name"
+          >
+          </po-input>
+
+          <po-input
+            name="email"
+            p-label="E-mail"
+            p-placeholder="seu@email.com"
+            p-required
+            p-icon="an-mail"
+            [(ngModel)]="email"
+          >
+          </po-input>
+        </div>
+      </po-step>
+
+      <po-step p-label="Configuração LLM" [p-can-active-next-step]="canAdvanceStep2.bind(this)">
+        <div class="step-content">
+          <po-select
+            name="provider"
+            p-label="Provedor de IA"
+            p-placeholder="Selecione o provedor"
+            p-required
+            [p-options]="providerOptions"
+            [(ngModel)]="provider"
+            (p-change)="onProviderChange($event)"
+          >
+          </po-select>
+
+          <po-combo
+            name="model"
+            p-label="Modelo"
+            p-placeholder="Selecione o modelo"
+            p-required
+            [p-options]="modelOptions"
+            [(ngModel)]="model"
+          >
+          </po-combo>
+
+          <po-password
+            name="apiKey"
+            p-label="API Key"
+            p-placeholder="Insira sua chave de API"
+            p-required
+            p-help="Sua chave será usada apenas nesta sessão e não será armazenada."
+            [(ngModel)]="apiKey"
+          >
+          </po-password>
+        </div>
+
+        <div class="step-actions">
+          <po-button
+            p-label="Iniciar Chat"
+            p-kind="primary"
+            p-icon="an-chat"
+            [p-disabled]="!canAdvanceStep2()"
+            (p-click)="onFinish()"
+          >
+          </po-button>
+        </div>
+      </po-step>
+    </po-stepper>
+  </div>
+</po-page-default>
