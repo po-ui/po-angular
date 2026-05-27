@@ -24,6 +24,7 @@ export class MenuGuidesService {
       { label: 'Schematics', link: 'guides/schematics' },
       { label: 'Fundamentos do PO Sync', link: 'guides/sync-fundamentals' },
       { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' },
+      { label: 'Telemetria', link: 'guides/telemetry' },
       { label: 'Customização de Temas usando o serviço PO-UI', link: 'guides/theme-service' },
       { label: 'Criando um tema para o PO UI', link: 'guides/create-theme-customization' },
       { label: 'Grid System', link: 'guides/grid-system' },
