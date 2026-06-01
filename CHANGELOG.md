@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.13](https://github.com/po-ui/po-angular/compare/v19.39.12...v19.39.13) (2026-06-01)
+
+
+### Bug Fixes
+
+* **table:** corrige tabela piscando ao realizar scroll ([ad861ae](https://github.com/po-ui/po-angular/commit/ad861ae16981050c93ad982198715ea60462b38e))
+
 ### [19.39.12](https://github.com/po-ui/po-angular/compare/v19.39.11...v19.39.12) (2026-05-25)
 
 
