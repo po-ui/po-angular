@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.18.0](https://github.com/po-ui/po-angular/compare/v21.17.0...v21.18.0) (2026-06-01)
+
+
+### Features
+
+* **datetimepicker:** implementa componente po-datetimepicker ([9e28d65](https://github.com/po-ui/po-angular/commit/9e28d6547cd55b05d3437f11584e1b72d8341821))
+* **user-guide:** implementa serviço po-user-guide ([f3460e1](https://github.com/po-ui/po-angular/commit/f3460e1d37291923b06a568c3019923123b2568d))
+
+
+### Bug Fixes
+
+* **table:** corrige tabela piscando ao realizar scroll ([295b419](https://github.com/po-ui/po-angular/commit/295b419b7eaa212fcd2b041501797d762d572a72))
+
 ## [21.17.0](https://github.com/po-ui/po-angular/compare/v21.16.0...v21.17.0) (2026-05-25)
 
 
