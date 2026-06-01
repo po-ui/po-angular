@@ -1,0 +1,44 @@
+{
+  "name": "@po-ui/user-guide",
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "PO UI - User Guide standalone bundle (vanilla JS + CSS, distribuído via CDN)",
+  "author": "PO UI",
+  "license": "MIT",
+  "homepage": "https://po-ui.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/po-ui/po-angular"
+  },
+  "main": "./dist/po-user-guide.umd.cjs",
+  "module": "./dist/po-user-guide.esm.js",
+  "browser": "./dist/po-user-guide.iife.js",
+  "types": "./dist/po-user-guide.d.ts",
+  "style": "./dist/po-user-guide.css",
+  "exports": {
+    ".": {
+      "types": "./dist/po-user-guide.d.ts",
+      "import": "./dist/po-user-guide.esm.js",
+      "require": "./dist/po-user-guide.umd.cjs",
+      "browser": "./dist/po-user-guide.iife.js",
+      "default": "./dist/po-user-guide.esm.js"
+    },
+    "./style": "./dist/po-user-guide.css",
+    "./dist/po-user-guide.css": "./dist/po-user-guide.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "keywords": [
+    "po-ui",
+    "user-guide",
+    "tour",
+    "onboarding",
+    "driver.js",
+    "cdn"
+  ]
+}

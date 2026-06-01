@@ -1,0 +1,83 @@
+/*
+ * Fallbacks de tokens globais do PO UI utilizados pelo popover do user-guide.
+ *
+ * Este arquivo é injetado APENAS no escopo `.po-user-guide-popover` e
+ * `.driver-overlay.po-user-guide-overlay`, garantindo que o bundle CDN funcione
+ * mesmo quando o tema completo do PO UI (`po-theme-default.css`) não estiver
+ * carregado na página. Quando o tema estiver presente, seus valores
+ * sobrescrevem estes via cascata normal.
+ *
+ * Os valores são equivalentes aos do `po-theme-default` (light theme).
+ */
+.po-user-guide-popover,
+.driver-overlay.po-user-guide-overlay {
+  /* Cores neutras */
+  --color-neutral-light-00: #fff;
+  --color-neutral-light-05: #fbfbfb;
+  --color-neutral-light-10: #eceeee;
+  --color-neutral-light-20: #dadedf;
+  --color-neutral-light-30: #b6bdbf;
+  --color-neutral-mid-40: #9da7a9;
+  --color-neutral-mid-60: #6e7c7f;
+  --color-neutral-dark-70: #4a5c60;
+  --color-neutral-dark-80: #2c3739;
+  --color-neutral-dark-90: #1d2426;
+  --color-neutral-dark-95: #0b0e0e;
+
+  /* Cores da marca (brand-01) */
+  --color-brand-01-lighter: #c2dde5;
+  --color-brand-01-light: #97c4d2;
+  --color-brand-01-base: #1f6f88;
+  --color-brand-01-dark: #1a5e74;
+  --color-brand-01-darker: #144658;
+  --color-brand-01-darkest: #0e3140;
+
+  /* Cores de ação */
+  --color-action-default: var(--color-brand-01-base);
+  --color-action-hover: var(--color-brand-01-dark);
+  --color-action-pressed: var(--color-brand-01-darker);
+  --color-action-disabled: var(--color-neutral-light-30);
+  --color-action-focus: var(--color-brand-01-darkest);
+  --color-transparent: transparent;
+
+  /* Tipografia */
+  --font-family-theme: Roboto, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-size-default: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-sm: 0.75rem;
+  --font-size-xs: 0.6875rem;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --line-height-none: 1;
+  --line-height-sm: 1.25;
+  --line-height-md: 1.5;
+  --letter-spacing-auto: normal;
+
+  /* Espaçamento */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+
+  /* Borda */
+  --border-width-sm: 1px;
+  --border-width-md: 2px;
+  --border-width-lg: 4px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --border-radius-pill: 9999px;
+  --border-radius-none: 0;
+
+  /* Sombra */
+  --shadow-none: none;
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  /* Acessibilidade */
+  --target-size-aa: 44px;
+  --outline-width: 2px;
+  --outline-color-focused: var(--color-action-focus);
+
+  /* Min height base do botão */
+  --button-min-height: 32px;
+}

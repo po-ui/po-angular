@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PO User Guide — CDN smoke test</title>
+
+    <!--
+      Aponta para o CSS e o IIFE locais gerados em projects/user-guide/dist.
+      Em produção via CDN, esses paths viram:
+        https://cdn.jsdelivr.net/npm/@po-ui/user-guide@latest/dist/po-user-guide.css
+        https://cdn.jsdelivr.net/npm/@po-ui/user-guide@latest/dist/po-user-guide.iife.js
+    -->
+    <link rel="stylesheet" href="../dist/po-user-guide.css" />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 32px;
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Helvetica,
+          Arial,
+          sans-serif;
+        background: #fbfbfb;
+        color: #1d2426;
+      }
+
+      header {
+        max-width: 720px;
+        margin: 0 auto 24px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        margin: 0 0 8px;
+      }
+
+      p {
+        margin: 0 0 16px;
+        color: #4a5c60;
+      }
+
+      .demo {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px;
+        background: #fff;
+        border: 1px solid #dadedf;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      }
+
+      .demo button {
+        cursor: pointer;
+        margin: 4px 8px 4px 0;
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        background: #1f6f88;
+        color: #fff;
+        border: 2px solid #1f6f88;
+        border-radius: 4px;
+      }
+
+      .demo .field {
+        margin: 16px 0;
+      }
+
+      .demo input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #dadedf;
+        border-radius: 4px;
+      }
+
+      #profile {
+        margin-top: 16px;
+        padding: 8px 12px;
+        border: 1px dashed #b6bdbf;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PO User Guide — CDN smoke test</h1>
+      <p>
+        Esta página carrega o bundle local <code>dist/po-user-guide.iife.js</code> e dispara um tour guiado usando a
+        classe global <code>PoUserGuide</code>. Use os botões abaixo para iniciar o tour ou navegar pelos passos.
+      </p>
+    </header>
+
+    <main class="demo">
+      <button id="start-tour" type="button">Iniciar tour</button>
+      <button id="prev" type="button">Anterior</button>
+      <button id="next" type="button">Próximo</button>
+      <button id="close" type="button">Fechar</button>
+
+      <div class="field">
+        <label for="username">Usuário</label>
+        <input id="username" type="text" placeholder="Digite seu nome" />
+      </div>
+
+      <div id="profile">Área do perfil</div>
+    </main>
+
+    <script src="../dist/po-user-guide.iife.js"></script>
+    <script>
+      const guide = PoUserGuide.create()
+        .setSteps([
+          {
+            element: '#start-tour',
+            title: 'Bem-vindo ao PO UI',
+            content: 'Clique aqui sempre que quiser ver o tour novamente.'
+          },
+          {
+            element: '#username',
+            title: 'Identificação',
+            content: 'Informe seu nome para personalizar a experiência.'
+          },
+          {
+            element: '#profile',
+            title: 'Seu perfil',
+            content: 'Aqui ficam os dados do seu perfil. Clique em <b>Finalizar</b> para encerrar o tour.'
+          }
+        ])
+        .setOptions({
+          showProgress: true,
+          allowClose: true,
+          overlayOpacity: 0.7,
+          onStepChange: function (event) {
+            console.log('[PO User Guide] step change:', event);
+          },
+          onTourStart: function (event) {
+            console.log('[PO User Guide] tour start:', event);
+          },
+          onTourEnd: function (event) {
+            console.log('[PO User Guide] tour end:', event);
+          }
+        });
+
+      document.getElementById('start-tour').addEventListener('click', function () {
+        guide.start();
+      });
+
+      document.getElementById('next').addEventListener('click', function () {
+        guide.next();
+      });
+
+      document.getElementById('prev').addEventListener('click', function () {
+        guide.previous();
+      });
+
+      document.getElementById('close').addEventListener('click', function () {
+        guide.close();
+      });
+    </script>
+  </body>
+</html>

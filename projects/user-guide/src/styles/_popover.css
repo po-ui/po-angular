@@ -1,0 +1,348 @@
+/*
+ * CSS do popover do PO User Guide.
+ *
+ * Sincronizado com `po-style/src/css/services/po-user-guide/po-user-guide.css`.
+ * Mantenha alterações alinhadas entre os dois arquivos.
+ */
+
+/*------------------------------------*\
+  POPOVER (caixa do passo)
+\*------------------------------------*/
+.po-user-guide-popover.driver-popover {
+  font-family: var(--font-family);
+  color: var(--color);
+
+  background-color: var(--background-color);
+  border-style: solid;
+  border-width: var(--border-width);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: var(--padding);
+  max-width: var(--max-width);
+}
+
+/*------------------------------------*\
+  SETA (arrow que aponta para o elemento)
+  O Driver.js desenha a seta com bordas: o lado visível recebe a cor
+  e os demais ficam transparentes. Customiza-se apenas o lado visível
+  de cada direção para preservar o formato do triângulo.
+\*------------------------------------*/
+.po-user-guide-popover .driver-popover-arrow-side-left {
+  border-left-color: var(--arrow-color, var(--background-color));
+}
+
+.po-user-guide-popover .driver-popover-arrow-side-right {
+  border-right-color: var(--arrow-color, var(--background-color));
+}
+
+.po-user-guide-popover .driver-popover-arrow-side-top {
+  border-top-color: var(--arrow-color, var(--background-color));
+}
+
+.po-user-guide-popover .driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--arrow-color, var(--background-color));
+}
+
+/*------------------------------------*\
+  TÍTULO
+\*------------------------------------*/
+.po-user-guide-popover .driver-popover-title {
+  font-family: var(--title-font-family, var(--font-family));
+  font-size: var(--title-font-size);
+  font-weight: var(--title-font-weight);
+  line-height: var(--title-line-height);
+  color: var(--title-color);
+
+  margin: 0 0 var(--title-margin-bottom) 0;
+}
+
+/*------------------------------------*\
+  DESCRIÇÃO
+\*------------------------------------*/
+.po-user-guide-popover .driver-popover-description {
+  font-family: var(--description-font-family, var(--font-family));
+  font-size: var(--description-font-size);
+  font-weight: var(--description-font-weight);
+  line-height: var(--description-line-height);
+  color: var(--description-color);
+
+  margin: 0 0 var(--description-margin-bottom) 0;
+}
+
+.po-user-guide-popover .driver-popover-description:focus-visible {
+  outline: none;
+}
+
+/*------------------------------------*\
+  PROGRESSO (ex.: "1/3")
+\*------------------------------------*/
+.po-user-guide-popover .driver-popover-progress-text {
+  font-family: var(--progress-font-family, var(--font-family));
+  font-size: var(--progress-font-size);
+  font-weight: var(--progress-font-weight);
+  line-height: var(--progress-line-height);
+  color: var(--progress-color);
+}
+
+/*------------------------------------*\
+  RODAPÉ (botões de navegação)
+\*------------------------------------*/
+.po-user-guide-popover .driver-popover-footer {
+  margin-top: var(--footer-margin-top);
+  display: flex;
+  align-items: center;
+}
+
+.po-user-guide-popover .driver-popover-navigation-btns {
+  display: flex;
+  gap: var(--footer-gap);
+}
+
+/* Remove espaçamentos herdados dos botões internos do Driver.js */
+.po-user-guide-popover .driver-popover-footer button {
+  margin: 0;
+}
+
+/*------------------------------------*\
+  BUTTON - BASE
+  Mesma arquitetura do po-button.css, porém aplicada a botões nativos
+  (fora do ciclo de vida do Angular) usados pelo Driver.js.
+\*------------------------------------*/
+.po-user-guide-popover .po-user-guide-button,
+.po-user-guide-popover .driver-popover-next-btn,
+.po-user-guide-popover .driver-popover-prev-btn,
+.po-user-guide-popover .driver-popover-close-btn {
+  font-family: var(--button-font-family, var(--font-family));
+  font-weight: var(--button-font-weight);
+  font-size: var(--button-font-size);
+  line-height: var(--button-line-height);
+  letter-spacing: var(--letter-spacing-auto);
+
+  border-style: solid;
+  border-width: var(--button-border-width);
+  border-radius: var(--button-border-radius);
+  padding: var(--button-padding);
+  min-height: var(--button-min-height);
+
+  cursor: pointer;
+  text-shadow: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+} /*------------------------------------*\
+  BUTTON - PRIMARY ("Próximo" / "Finalizar")
+\*------------------------------------*/
+.po-user-guide-popover .po-user-guide-button-primary,
+.po-user-guide-popover .driver-popover-next-btn {
+  color: var(--button-primary-text-color);
+  background-color: var(--button-primary-color);
+  border-color: var(--button-primary-border-color);
+  box-shadow: var(--button-primary-shadow);
+}
+
+.po-user-guide-popover .po-user-guide-button-primary:hover,
+.po-user-guide-popover .driver-popover-next-btn:hover {
+  color: var(--button-primary-text-color);
+  background-color: var(--button-primary-color-hover);
+  border-color: var(--button-primary-color-hover);
+}
+
+.po-user-guide-popover .po-user-guide-button-primary:active,
+.po-user-guide-popover .driver-popover-next-btn:active {
+  color: var(--button-primary-text-color);
+  background-color: var(--button-primary-color-pressed);
+  border-color: var(--button-primary-color-pressed);
+}
+
+.po-user-guide-popover .po-user-guide-button-primary:disabled,
+.po-user-guide-popover .driver-popover-next-btn:disabled,
+.po-user-guide-popover .po-user-guide-button-primary.driver-popover-btn-disabled,
+.po-user-guide-popover .driver-popover-next-btn.driver-popover-btn-disabled {
+  color: var(--button-primary-text-color-disabled);
+  background-color: var(--button-primary-color-disabled);
+  border-color: var(--button-primary-border-color-disabled);
+  cursor: not-allowed;
+}
+
+/*
+ * Corrige o :focus herdado do driver.css (cinza claro padrão),
+ * preservando a aparência do botão primário.
+ */
+.po-user-guide-popover .driver-popover-footer .po-user-guide-button-primary:focus,
+.po-user-guide-popover .driver-popover-footer .driver-popover-next-btn:focus {
+  color: var(--button-primary-text-color);
+  background-color: var(--button-primary-color);
+  border-color: var(--button-primary-border-color);
+  outline: none;
+}
+
+.po-user-guide-popover .driver-popover-footer .po-user-guide-button-primary:focus-visible,
+.po-user-guide-popover .driver-popover-footer .driver-popover-next-btn:focus-visible {
+  color: var(--button-primary-text-color);
+  background-color: var(--button-primary-color);
+  border-color: var(--button-primary-border-color);
+
+  outline-color: var(--outline-color-focused);
+  outline-width: var(--outline-width);
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
+/*------------------------------------*\
+  BUTTON - TERTIARY ("Anterior")
+\*------------------------------------*/
+.po-user-guide-popover .po-user-guide-button-tertiary,
+.po-user-guide-popover .driver-popover-prev-btn {
+  color: var(--button-tertiary-color);
+  background-color: var(--button-tertiary-background-color);
+  border-color: var(--button-tertiary-border-color);
+  box-shadow: var(--button-tertiary-shadow);
+}
+
+button.po-user-guide-button-tertiary {
+  margin-right: var(--footer-gap-tertiary, var(--spacing-sm));
+}
+
+.po-user-guide-popover .po-user-guide-button-tertiary:hover,
+.po-user-guide-popover .driver-popover-prev-btn:hover {
+  color: var(--button-tertiary-color-hover);
+  background-color: var(--button-tertiary-background-hover);
+  border-color: var(--button-tertiary-border-color-hover);
+}
+
+.po-user-guide-popover .po-user-guide-button-tertiary:active,
+.po-user-guide-popover .driver-popover-prev-btn:active {
+  color: var(--button-tertiary-color-pressed);
+  background-color: var(--button-tertiary-background-pressed);
+  border-color: var(--button-tertiary-border-color-pressed);
+}
+
+.po-user-guide-popover .po-user-guide-button-tertiary:disabled,
+.po-user-guide-popover .driver-popover-prev-btn:disabled,
+.po-user-guide-popover .po-user-guide-button-tertiary.driver-popover-btn-disabled,
+.po-user-guide-popover .driver-popover-prev-btn.driver-popover-btn-disabled {
+  color: var(--button-tertiary-color-disabled);
+  background-color: var(--button-tertiary-background-disabled);
+  border-color: var(--button-tertiary-border-color-disabled);
+  cursor: not-allowed;
+}
+
+.po-user-guide-popover .driver-popover-footer .po-user-guide-button-tertiary:focus,
+.po-user-guide-popover .driver-popover-footer .driver-popover-prev-btn:focus {
+  color: var(--button-tertiary-color);
+  background-color: var(--button-tertiary-background-color);
+  border-color: var(--button-tertiary-border-color);
+  outline: none;
+}
+
+.po-user-guide-popover .driver-popover-footer .po-user-guide-button-tertiary:focus-visible,
+.po-user-guide-popover .driver-popover-footer .driver-popover-prev-btn:focus-visible {
+  color: var(--button-tertiary-color);
+  background-color: var(--button-tertiary-background-color);
+  border-color: var(--button-tertiary-border-color);
+
+  outline-color: var(--outline-color-focused);
+  outline-width: var(--outline-width);
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
+/*------------------------------------*\
+  BUTTON - CLOSE ("X")
+\*------------------------------------*/
+.po-user-guide-popover .po-user-guide-button-close,
+.po-user-guide-popover .driver-popover-close-btn {
+  color: var(--button-close-color);
+  background-color: var(--button-close-background-color);
+  border-color: var(--button-close-border-color);
+
+  font-size: var(--button-close-font-size);
+  padding: var(--button-close-padding);
+}
+
+/*
+ * Ícone de fechar (po-ui substitui o "×" nativo do Driver.js por <i class="an an-x">).
+ */
+.po-user-guide-popover .po-user-guide-button-close-icon {
+  display: block;
+  line-height: 1;
+}
+
+.po-user-guide-popover .po-user-guide-button-close:hover,
+.po-user-guide-popover .driver-popover-close-btn:hover {
+  color: var(--button-close-color-hover);
+  background-color: var(--button-close-background-hover);
+  border-color: var(--button-close-border-color);
+}
+
+.po-user-guide-popover .po-user-guide-button-close:active,
+.po-user-guide-popover .driver-popover-close-btn:active {
+  color: var(--button-close-color-pressed);
+  background-color: var(--button-close-background-pressed);
+  border-color: var(--button-close-border-color);
+}
+
+.po-user-guide-popover .po-user-guide-button-close:disabled,
+.po-user-guide-popover .driver-popover-close-btn:disabled,
+.po-user-guide-popover .po-user-guide-button-close.driver-popover-btn-disabled,
+.po-user-guide-popover .driver-popover-close-btn.driver-popover-btn-disabled {
+  color: var(--button-close-color-disabled);
+  background-color: var(--button-close-background-disabled);
+  border-color: var(--button-close-border-color-disabled);
+  cursor: not-allowed;
+}
+
+.po-user-guide-popover .driver-popover-footer .po-user-guide-button-close:focus,
+.po-user-guide-popover .driver-popover-footer .driver-popover-close-btn:focus,
+.po-user-guide-popover .po-user-guide-button-close:focus,
+.po-user-guide-popover .driver-popover-close-btn:focus {
+  color: var(--button-close-color);
+  background-color: var(--button-close-background-color);
+  border-color: var(--button-close-border-color);
+  outline: none;
+}
+
+.po-user-guide-popover .driver-popover-footer .po-user-guide-button-close:focus-visible,
+.po-user-guide-popover .driver-popover-footer .driver-popover-close-btn:focus-visible,
+.po-user-guide-popover .po-user-guide-button-close:focus-visible,
+.po-user-guide-popover .driver-popover-close-btn:focus-visible {
+  color: var(--button-close-color-focused);
+  background-color: var(--button-close-background-hover);
+  border-color: var(--outline-color-focused);
+  outline: none;
+  outline-offset: 0;
+}
+
+[data-default-size='small'][data-a11y='AA'] .po-user-guide-popover,
+[data-a11y='AA'] .po-user-guide-popover.size-small {
+  --button-font-size: var(--font-size-sm);
+  --button-padding: var(--spacing-xxs) var(--spacing-xs);
+  --button-min-height: var(--target-size-aa);
+
+  --button-close-font-size: var(--font-size-default);
+  --button-close-padding: var(--spacing-xxs);
+}
+
+/*------------------------------------*\
+  OVERLAY (lightbox sobre a página)
+  Driver.js renderiza o overlay como um <path> SVG injetado no <body>,
+  por isso a customização via CSS é feita pela propriedade `fill`.
+  Ref.: https://driverjs.com/docs/styling-overlay
+\*------------------------------------*/
+.driver-overlay.po-user-guide-overlay path {
+  fill: var(--color-po-user-guide-overlay) !important;
+}
+
+/*------------------------------------*\
+  PRINT
+\*------------------------------------*/
+@media print {
+  .po-user-guide-popover .po-user-guide-button,
+  .po-user-guide-popover .driver-popover-next-btn,
+  .po-user-guide-popover .driver-popover-prev-btn,
+  .po-user-guide-popover .driver-popover-close-btn {
+    print-color-adjust: exact;
+  }
+}

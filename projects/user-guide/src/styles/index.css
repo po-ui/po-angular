@@ -1,0 +1,14 @@
+/*
+ * Entrada de estilos do bundle `@po-ui/user-guide`.
+ *
+ * Composição:
+ *  1. CSS base do `driver.js` (popover, overlay, transições) — necessário para o tour funcionar.
+ *  2. Fallback de tokens globais do PO UI — mantém o popover apresentável quando o tema completo
+ *     do PO UI não estiver carregado na página.
+ *  3. Tokens específicos do `.po-user-guide-popover`, copiados do `po-theme-default.css`.
+ *  4. Estilos do popover do PO UI, copiados do `po-style/src/css/services/po-user-guide/po-user-guide.css`.
+ */
+@import 'driver.js/dist/driver.css';
+@import './_globals-fallback.css';
+@import './_tokens.css';
+@import './_popover.css';

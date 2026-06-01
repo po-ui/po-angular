@@ -1,0 +1,105 @@
+﻿/*
+ * Tokens locais do popover do PO User Guide.
+ *
+ * Sincronizado com o bloco `.po-user-guide-popover { ... }` do
+ * `po-style/src/css/themes/po-theme-default.css`.
+ */
+.po-user-guide-popover {
+  /* Popover (caixa do passo) */
+  --font-family: var(--font-family-theme);
+  --color: var(--color-neutral-dark-70);
+  --background-color: var(--color-neutral-light-00);
+  --border-color: var(--color-neutral-light-20);
+  --border-width: var(--border-width-sm);
+  --border-radius: var(--border-radius-md);
+  --shadow: var(--shadow-lg);
+  --padding: var(--spacing-sm);
+  --max-width: 360px;
+  --arrow-color: var(--color-neutral-light-00);
+
+  /* Título */
+  --title-font-size: var(--font-size-default);
+  --title-font-weight: var(--font-weight-bold);
+  --title-line-height: var(--line-height-sm);
+  --title-color: var(--color-neutral-dark-95);
+  --title-margin-bottom: var(--spacing-xs);
+
+  /* Descrição */
+  --description-font-size: var(--font-size-sm);
+  --description-font-weight: var(--font-weight-normal);
+  --description-line-height: var(--line-height-md);
+  --description-color: var(--color-neutral-dark-70);
+  --description-margin-bottom: var(--spacing-xs);
+
+  /* Progresso (ex.: "1/3") */
+  --progress-font-size: var(--font-size-xs);
+  --progress-font-weight: var(--font-weight-normal);
+  --progress-line-height: var(--line-height-sm);
+  --progress-color: var(--color-neutral-mid-60);
+
+  /* Rodapé */
+  --footer-margin-top: var(--spacing-xs);
+  --footer-gap: var(--spacing-xxs);
+  --footer-gap-tertiary: var(--spacing-sm);
+
+  /* Botões - base */
+  --button-font-weight: var(--font-weight-bold);
+  --button-font-size: var(--font-size-sm);
+  --button-line-height: var(--line-height-none);
+  --button-border-width: var(--border-width-md);
+  --button-border-radius: var(--border-radius-md);
+  --button-padding: var(--spacing-xs) var(--spacing-sm);
+
+  /* Botão primary */
+  --button-primary-text-color: var(--color-neutral-light-00);
+  --button-primary-color: var(--color-action-default);
+  --button-primary-color-hover: var(--color-action-hover);
+  --button-primary-color-pressed: var(--color-action-pressed);
+  --button-primary-border-color: var(--color-action-default);
+  --button-primary-shadow: var(--shadow-none);
+  --button-primary-text-color-disabled: var(--color-neutral-dark-70);
+  --button-primary-color-disabled: var(--color-neutral-light-30);
+  --button-primary-border-color-disabled: var(--color-transparent);
+
+  /* Botão tertiary */
+  --button-tertiary-color: var(--color-action-default);
+  --button-tertiary-color-hover: var(--color-brand-01-darkest);
+  --button-tertiary-color-pressed: var(--color-brand-01-darker);
+  --button-tertiary-background-color: var(--color-transparent);
+  --button-tertiary-background-hover: var(--color-brand-01-lighter);
+  --button-tertiary-background-pressed: var(--color-brand-01-light);
+  --button-tertiary-border-color: var(--color-transparent);
+  --button-tertiary-border-color-hover: var(--color-transparent);
+  --button-tertiary-border-color-pressed: var(--color-transparent);
+  --button-tertiary-shadow: var(--shadow-none);
+  --button-tertiary-color-disabled: var(--color-neutral-light-30);
+  --button-tertiary-background-disabled: var(--color-transparent);
+  --button-tertiary-border-color-disabled: var(--color-transparent);
+
+  /* Botão close ("X") */
+  --button-close-color: var(--color-neutral-mid-60);
+  --button-close-color-hover: var(--color-action-hover);
+  --button-close-color-pressed: var(--color-action-pressed);
+  --button-close-color-focused: var(--color-action-focus);
+  --button-close-background-color: var(--color-transparent);
+  --button-close-background-hover: var(--color-neutral-light-10);
+  --button-close-background-pressed: var(--color-neutral-light-20);
+  --button-close-border-color: var(--color-transparent);
+  --button-close-font-size: var(--font-size-md);
+  --button-close-padding: var(--spacing-xxs) var(--spacing-xs);
+  --button-close-color-disabled: var(--color-neutral-light-30);
+  --button-close-background-disabled: var(--color-transparent);
+  --button-close-border-color-disabled: var(--color-transparent);
+
+  /* Foco (alinhado ao po-button) */
+  --outline-color-focused: var(--color-action-focus);
+}
+
+/*------------------------------------*\
+  USER GUIDE - OVERLAY
+  Driver.js injeta o overlay no <body>, fora do escopo do popover,
+  portanto o token vive em :root.
+\*------------------------------------*/
+:root {
+  --color-po-user-guide-overlay: var(--color-neutral-dark-80);
+}
