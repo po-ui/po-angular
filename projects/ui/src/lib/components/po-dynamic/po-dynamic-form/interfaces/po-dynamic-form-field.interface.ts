@@ -440,7 +440,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Também pode-se utilizar em conjunto com `searchService`, informando uma lista de propriedades que será utilizado
    * para formatação da exibição no campo, por exemplo: ["id", "name"].
    *
-   * **Componentes compatíveis:** `po-datepicker`, `po-timepicker`, `po-lookup`.
+   * **Componentes compatíveis:** `po-datepicker`, `po-datetimepicker`, `po-timepicker`, `po-lookup`.
    */
   format?: string | Array<string>;
 
@@ -627,7 +627,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * @default `false`
    *
-   * **Componente compatível:** `po-timepicker`
+   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
    */
   showSeconds?: boolean;
 
@@ -636,7 +636,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * @default `5`
    *
-   * **Componente compatível:** `po-timepicker`
+   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
    */
   minuteInterval?: number;
 
@@ -645,7 +645,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * @default `1`
    *
-   * **Componente compatível:** `po-timepicker`
+   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
    */
   secondInterval?: number;
 
@@ -1093,7 +1093,7 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**
    * Define o formato de exibição do timer (`'12'` ou `'24'`).
    *
-   * **Componente compatível:** `po-datetimepicker`, `po-timepicker`
+   * **Componente compatível:** `po-datetimepicker`
    */
   formatTime?: string;
 }

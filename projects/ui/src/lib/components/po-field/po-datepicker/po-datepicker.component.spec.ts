@@ -2648,10 +2648,12 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('controlChangeEmitter with invalid values:', () => {
-      it('should not emit p-change for invalid month-year input', done => {
+      it('should not emit p-change for invalid month-year input', () => {
         component.mode = 'month-year';
         component.locale = 'pt';
         fixture.detectChanges();
+
+        clearTimeout(component['timeoutChange']);
 
         component['valueBeforeChange'] = '';
         component.inputEl.nativeElement.value = '13/2025';
@@ -2659,10 +2661,8 @@ describe('PoDatepickerComponent:', () => {
         spyOn(component.onchange, 'emit');
         component['controlChangeEmitter']();
 
-        setTimeout(() => {
-          expect(component.onchange.emit).not.toHaveBeenCalled();
-          done();
-        }, 300);
+        expect(component['isValidInputForMode']('13/2025')).toBeFalse();
+        expect(component.onchange.emit).not.toHaveBeenCalled();
       });
 
       it('should emit p-change for valid month-year input', done => {
@@ -2682,9 +2682,11 @@ describe('PoDatepickerComponent:', () => {
         }, 300);
       });
 
-      it('should not emit p-change for invalid year input', done => {
+      it('should not emit p-change for invalid year input', () => {
         component.mode = 'year';
         fixture.detectChanges();
+
+        clearTimeout(component['timeoutChange']);
 
         component['valueBeforeChange'] = '';
         component.inputEl.nativeElement.value = '00';
@@ -2692,10 +2694,8 @@ describe('PoDatepickerComponent:', () => {
         spyOn(component.onchange, 'emit');
         component['controlChangeEmitter']();
 
-        setTimeout(() => {
-          expect(component.onchange.emit).not.toHaveBeenCalled();
-          done();
-        }, 250);
+        expect(component['isValidInputForMode']('00')).toBeFalse();
+        expect(component.onchange.emit).not.toHaveBeenCalled();
       });
 
       it('should emit p-change for valid year input', done => {
@@ -2843,9 +2843,11 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('controlChangeEmitter - no emit when value unchanged:', () => {
-      it('should not emit p-change for month-year when value is unchanged', done => {
+      it('should not emit p-change for month-year when value is unchanged', () => {
         component.mode = 'month-year';
         fixture.detectChanges();
+
+        clearTimeout(component['timeoutChange']);
 
         component.inputEl.nativeElement.value = '04/2025';
         component['valueBeforeChange'] = '04/2025';
@@ -2853,10 +2855,7 @@ describe('PoDatepickerComponent:', () => {
         spyOn(component.onchange, 'emit');
         component['controlChangeEmitter']();
 
-        setTimeout(() => {
-          expect(component.onchange.emit).not.toHaveBeenCalled();
-          done();
-        }, 250);
+        expect(component.onchange.emit).not.toHaveBeenCalled();
       });
     });
 

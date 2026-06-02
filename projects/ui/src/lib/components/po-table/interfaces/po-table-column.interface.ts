@@ -112,6 +112,7 @@ export interface PoTableColumn {
    * |------------|-----------------|-----------|----------|
    * | Monetário  | `currency`      | Formato para valores monetários. Informe o código da moeda (ISO 4217). | `'BRL'`, `'USD'`, `'EUR'`, `'RUB'` |
    * | Data       | `date`          | Aceita apenas os caracteres de dia(dd), mês(MM) e ano (yyyy ou yy), caso não seja informado um formato o mesmo será 'dd/MM/yyyy' | `'dd/MM/yyyy'`, `'dd-MM-yy'`, `'mm/dd/yyyy'` |
+   * | Data/Hora  | `dateTime`      | Aceita os caracteres de dia(dd), mês(MM), ano(yyyy), hora(HH para 24h ou hh para 12h), minutos(mm), segundos(ss), milissegundos(SSS) e período(a para AM/PM). Caso não seja informado um formato o mesmo será 'dd/MM/yyyy HH:mm:ss' | `'dd/MM/yyyy HH:mm'`, `'dd/MM/yyyy HH:mm:ss'`, `'dd/MM/yyyy HH:mm:ss.SSS'`, `'MM/dd/yyyy hh:mm a'`, `'yyyy-MM-dd HH:mm'`, `'short'`, `'medium'` |
    * | Hora       | `time`          | Aceita apenas os caracteres de hora(HH), minutos(mm), segundos(ss) e milisegundos(f-ffffff), os milisegundos são opcionais, caso não seja informado um formato o mesmo será 'HH:mm:ss' | `'HH:mm'`, `'HH:mm:ss.ffffff'`, `'HH:mm:ss.ff'`, `'mm:ss.fff'` |
    * | Número     | `number`        | Aceita um valor seguindo o padrão [**DecimalPipe**](https://angular.dev/api/common/DecimalPipe) para formatação, e caso não seja informado, o número será exibido na sua forma original. | `'1.2-5'` (ex.: `50` → `50.00`) |
    *
@@ -229,8 +230,10 @@ export interface PoTableColumn {
    *   por exemplo: `'2017-11-28'` ou `new Date(2017, 10, 28)`.
    *
    * - `dateTime`: valor de data com horário.
-   *   + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddThh:mm:ss+|-hh:mm'**
-   *   e o tipo _Date_ padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'` ou `new Date(2017, 10, 28)`.
+   *   + Aceita o tipo _string_ no formato **ISO-8601** extendido **'yyyy-mm-ddTHH:mm:ss+|-hh:mm'**
+   *   ou **'yyyy-mm-ddTHH:mm+|-hh:mm'** (sem segundos),
+   *   e o tipo _Date_ padrão do Javascript, por exemplo: `'2017-11-28T00:00:00-02:00'`, `'2017-11-28T14:30-02:00'` ou `new Date(2017, 10, 28)`.
+   *   + A formatação de exibição pode ser configurada pela propriedade `format`.
    *
    * - `detail`: array de objetos para o master-detail.
    *   + Incompatível com `virtual-scroll`, que requer altura fixa nas linhas.
