@@ -1915,6 +1915,24 @@ describe('PoTimepickerComponent:', () => {
         expect(component.closeTimer).not.toHaveBeenCalled();
         document.body.removeChild(externalEl);
       });
+
+      it('should NOT close timer when focus moves to a parent element that contains the component (grid cell scenario)', () => {
+        fixture.detectChanges();
+        component.visible = true;
+        spyOn(component.onblur, 'emit');
+        spyOn(component, 'closeTimer');
+
+        const parentCell = document.createElement('td');
+        parentCell.appendChild(component.el.nativeElement);
+
+        const event = new FocusEvent('focusout', { relatedTarget: parentCell });
+        component.onHostFocusOut(event);
+
+        expect(component.onblur.emit).not.toHaveBeenCalled();
+        expect(component.closeTimer).not.toHaveBeenCalled();
+
+        parentCell.removeChild(component.el.nativeElement);
+      });
     });
 
     describe('onFieldClick:', () => {

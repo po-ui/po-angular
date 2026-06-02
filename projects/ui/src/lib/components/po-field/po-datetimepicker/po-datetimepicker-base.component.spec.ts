@@ -156,7 +156,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
       component['_locale'] = 'xx';
       const control = new FormControl('invalid-date');
       component.validate(control);
-      expect(component['currentErrorPattern']()).toBe('Data/hora inválida');
+      expect(component.errorPattern()).toBe('Data/hora inválida');
     });
 
     it('should return required error when field is required and value is empty', () => {
@@ -296,47 +296,47 @@ describe('PoDatetimepickerBaseComponent:', () => {
       expect(result).toBe('14:30');
     });
 
-    it('should return 12:00 AM when time is empty in 12h format', () => {
+    it('should return 12:00 when time is empty in 12h format (AM/PM managed separately)', () => {
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('');
-      expect(result).toBe('12:00 AM');
+      expect(result).toBe('12:00');
     });
 
-    it('should convert 0 hours to 12 AM', () => {
+    it('should convert 0 hours to 12 in 12h format', () => {
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('00:30');
-      expect(result).toBe('12:30 AM');
+      expect(result).toBe('12:30');
     });
 
-    it('should convert 12 hours to 12 PM', () => {
+    it('should keep 12 hours as 12 in 12h format', () => {
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('12:00');
-      expect(result).toBe('12:00 PM');
+      expect(result).toBe('12:00');
     });
 
-    it('should convert 13 hours to 01 PM', () => {
+    it('should convert 13 hours to 01 in 12h format', () => {
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('13:45');
-      expect(result).toBe('01:45 PM');
+      expect(result).toBe('01:45');
     });
 
-    it('should convert 23 hours to 11 PM', () => {
+    it('should convert 23 hours to 11 in 12h format', () => {
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('23:59');
-      expect(result).toBe('11:59 PM');
+      expect(result).toBe('11:59');
     });
 
-    it('should keep AM for hours 1-11', () => {
+    it('should convert 9 hours to 09 in 12h format', () => {
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('09:15');
-      expect(result).toBe('09:15 AM');
+      expect(result).toBe('09:15');
     });
 
-    it('should include seconds in 12h format', () => {
+    it('should include seconds in 12h format without AM/PM', () => {
       Object.defineProperty(component, 'showSeconds', { value: () => true });
       Object.defineProperty(component, 'is12HourFormat', { get: () => true });
       const result = component.formatTimeForDisplay('14:30:45');
-      expect(result).toBe('02:30:45 PM');
+      expect(result).toBe('02:30:45');
     });
   });
 

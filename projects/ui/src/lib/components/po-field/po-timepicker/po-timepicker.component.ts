@@ -177,7 +177,8 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
       (this.timepickerFieldEl.nativeElement.contains(relatedTarget) ||
         dialogEl?.contains(relatedTarget) ||
         this.iconClean?.nativeElement?.contains(relatedTarget) ||
-        this.iconTimepicker?.buttonElement?.nativeElement?.contains(relatedTarget));
+        this.iconTimepicker?.buttonElement?.nativeElement?.contains(relatedTarget) ||
+        relatedTarget.contains(this.el.nativeElement));
 
     if (!isStillInsideComponent) {
       this.onblur.emit();

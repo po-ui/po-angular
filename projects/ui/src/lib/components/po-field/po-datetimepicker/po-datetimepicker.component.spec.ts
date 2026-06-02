@@ -381,13 +381,12 @@ describe('PoDatetimepickerComponent:', () => {
       expect(component.getErrorPattern()).toBe('');
     });
 
-    it('should return currentErrorPattern when hasInvalidClass is true', () => {
+    it('should return errorPattern value when hasInvalidClass is true', () => {
       component.el.nativeElement.classList.add('ng-invalid');
       component.el.nativeElement.classList.add('ng-dirty');
       component.inputEl.nativeElement.value = 'something';
       fixture.componentRef.setInput('p-error-pattern', 'Data/hora inválida');
       fixture.detectChanges();
-      component['currentErrorPattern'].set('Data/hora inválida');
 
       expect(component.getErrorPattern()).toBe('Data/hora inválida');
     });
@@ -405,23 +404,8 @@ describe('PoDatetimepickerComponent:', () => {
   });
 
   describe('closeCalendar - focus management:', () => {
-    it('should focus iconDatepicker when focusInput is false and clean is true with value', fakeAsync(() => {
-      component.visible = true;
-      component['_clean'] = true;
-      component.inputEl.nativeElement.value = '12/05/2026 14:30';
-      component['initializeListeners']();
-
-      spyOn(component.iconDatepicker, 'focus');
-      component.closeCalendar(false);
-      tick(10);
-
-      expect(component.iconDatepicker.focus).toHaveBeenCalled();
-      component['removeListeners']();
-    }));
-
     it('should focus iconDatepicker button via requestAnimationFrame when focusInput is false', fakeAsync(() => {
       component.visible = true;
-      component['_clean'] = false;
       component['initializeListeners']();
 
       const buttonEl = component.iconDatepicker?.buttonElement?.nativeElement;
@@ -436,6 +420,18 @@ describe('PoDatetimepickerComponent:', () => {
       }
       component['removeListeners']();
     }));
+
+    it('should call focus on input when focusInput is true and not mobile', () => {
+      component.visible = true;
+      component['initializeListeners']();
+      spyOn(component, 'verifyMobile').and.returnValue(null);
+      spyOn(component, 'focus');
+
+      component.closeCalendar(true);
+
+      expect(component.focus).toHaveBeenCalled();
+      component['removeListeners']();
+    });
   });
 
   describe('wasClickedOnPicker - edge cases:', () => {
@@ -590,6 +586,73 @@ describe('PoDatetimepickerComponent:', () => {
       expect(component['date']).toBeUndefined();
       expect(component['timeValue']).toBe('');
     });
+
+    it('should emit p-change with invalidDatetime when input is incomplete', () => {
+      component['objMask'] = {
+        blur: jasmine.createSpy('blur'),
+        valueToModel: '1234'
+      } as any;
+      component.inputEl.nativeElement.value = '12/1';
+      component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
+
+      spyOn(component.onchange, 'emit');
+      const event = { target: component.inputEl.nativeElement };
+      component.eventOnBlur(event);
+
+      expect(component.onchange.emit).toHaveBeenCalledWith(component.literals.invalidDatetime);
+    });
+  });
+
+  describe('parseInputAndSync - invalid value does not emit p-change directly:', () => {
+    it('should not emit p-change when called directly (emission happens on blur)', () => {
+      component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
+      spyOn(component.onchange, 'emit');
+
+      component['parseInputAndSync']('32/01/2026 10:00');
+
+      expect(component['date']).toBeUndefined();
+      expect(component['timeValue']).toBe('');
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+    });
+
+    it('should call onChange with invalidDatetime when date parse fails', () => {
+      spyOn(component, 'callOnChange');
+
+      component['parseInputAndSync']('32/01/2026 10:00');
+
+      expect(component.callOnChange).toHaveBeenCalledWith(component.literals.invalidDatetime);
+    });
+  });
+
+  describe('eventOnBlur - complete input but invalid value:', () => {
+    it('should emit p-change with invalidDatetime when value is complete but invalid', () => {
+      component['objMask'] = {
+        blur: jasmine.createSpy('blur'),
+        valueToModel: '999999999999'
+      } as any;
+      component.inputEl.nativeElement.value = '99/99/9999 99:99';
+      component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
+
+      spyOn(component.onchange, 'emit');
+      component.eventOnBlur({ target: component.inputEl.nativeElement });
+
+      expect(component['date']).toBeUndefined();
+      expect(component.onchange.emit).toHaveBeenCalledWith(component.literals.invalidDatetime);
+    });
+
+    it('should emit p-change with invalidDatetime when time part is invalid on blur', () => {
+      component['objMask'] = {
+        blur: jasmine.createSpy('blur'),
+        valueToModel: '150620262500'
+      } as any;
+      component.inputEl.nativeElement.value = '15/06/2026 25:00';
+      component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
+
+      spyOn(component.onchange, 'emit');
+      component.eventOnBlur({ target: component.inputEl.nativeElement });
+
+      expect(component.onchange.emit).toHaveBeenCalledWith(component.literals.invalidDatetime);
+    });
   });
 
   describe('eventOnBlur - complete input with valid date+time:', () => {
@@ -712,6 +775,53 @@ describe('PoDatetimepickerComponent:', () => {
       component.onDateChange(todayISO);
 
       expect(component.closeCalendar).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onDateChange - non-today date with existing timeValue:', () => {
+    it('should propagate model and emit change when selecting a date with existing timeValue', () => {
+      component['timeValue'] = '14:30';
+      component['valueBeforeChange'] = '2026-05-09T14:30:00-03:00';
+      component.visible = true;
+      spyOn(component, 'controlModel');
+      spyOn(component.onchange, 'emit');
+
+      component.onDateChange('2026-05-15');
+
+      expect(component['date'].getDate()).toBe(15);
+      expect(component.controlModel).toHaveBeenCalled();
+      expect(component.onchange.emit).toHaveBeenCalled();
+    });
+
+    it('should not close calendar when selecting a non-today date with existing timeValue', () => {
+      component['timeValue'] = '10:00';
+      component.visible = true;
+      spyOn(component, 'closeCalendar');
+
+      component.onDateChange('2026-05-15');
+
+      expect(component.closeCalendar).not.toHaveBeenCalled();
+      expect(component.visible).toBe(true);
+    });
+
+    it('should update display via refreshValue when selecting a non-today date with existing timeValue', () => {
+      component['timeValue'] = '08:45';
+      spyOn(component, 'refreshValue');
+
+      component.onDateChange('2026-06-20');
+
+      expect(component.refreshValue).toHaveBeenCalledWith(component['date']);
+    });
+
+    it('should not propagate model when selecting a date without existing timeValue', () => {
+      component['timeValue'] = '';
+      spyOn(component, 'controlModel');
+      spyOn(component.onchange, 'emit');
+
+      component.onDateChange('2026-05-15');
+
+      expect(component.controlModel).not.toHaveBeenCalled();
+      expect(component.onchange.emit).not.toHaveBeenCalled();
     });
   });
 
@@ -866,8 +976,16 @@ describe('PoDatetimepickerComponent:', () => {
         expect(result).toBe('12:00');
       });
 
-      it('should return null without AM/PM', () => {
-        expect(component['parseTimeFromInput']('02:30')).toBeNull();
+      it('should use currentPeriod when AM/PM is not in string', () => {
+        component.currentPeriod = 'PM';
+        const result = component['parseTimeFromInput']('02:30');
+        expect(result).toBe('14:30');
+      });
+
+      it('should use AM as default currentPeriod when AM/PM is not in string', () => {
+        component.currentPeriod = 'AM';
+        const result = component['parseTimeFromInput']('02:30');
+        expect(result).toBe('02:30');
       });
 
       it('should return null for invalid hours (>12)', () => {
@@ -946,20 +1064,20 @@ describe('PoDatetimepickerComponent:', () => {
       expect(component['getExpectedInputLength']()).toBe(14);
     });
 
-    it('should return 14 for 12h format without seconds', () => {
+    it('should return 12 for 12h format without seconds (AM/PM is separate input)', () => {
       fixture.componentRef.setInput('p-show-seconds', false);
       fixture.componentRef.setInput('p-format-time', '12');
       fixture.detectChanges();
 
-      expect(component['getExpectedInputLength']()).toBe(14);
+      expect(component['getExpectedInputLength']()).toBe(12);
     });
 
-    it('should return 16 for 12h format with seconds', () => {
+    it('should return 14 for 12h format with seconds (AM/PM is separate input)', () => {
       fixture.componentRef.setInput('p-show-seconds', true);
       fixture.componentRef.setInput('p-format-time', '12');
       fixture.detectChanges();
 
-      expect(component['getExpectedInputLength']()).toBe(16);
+      expect(component['getExpectedInputLength']()).toBe(14);
     });
   });
 
@@ -1042,6 +1160,555 @@ describe('PoDatetimepickerComponent:', () => {
       component['onScroll']();
 
       expect(component['controlPosition'].adjustPosition).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('eventOnButtonKeydown:', () => {
+    it('should focus first combo when Tab without Shift, calendar visible, no label, and helper exists', () => {
+      component.visible = true;
+      fixture.componentRef.setInput('p-label', undefined);
+      fixture.componentRef.setInput('p-helper', 'test helper');
+      fixture.detectChanges();
+
+      const comboInput = document.createElement('input');
+      comboInput.classList.add('po-combo-input');
+      const comboWrapper = document.createElement('div');
+      comboWrapper.classList.add('po-combo-first');
+      comboWrapper.appendChild(comboInput);
+
+      component['dialogPicker'] = {
+        nativeElement: { querySelector: () => comboInput }
+      } as any;
+
+      spyOn(comboInput, 'focus');
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+      spyOn(event, 'preventDefault');
+      spyOn(event, 'stopPropagation');
+
+      component.eventOnButtonKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+      expect(comboInput.focus).toHaveBeenCalled();
+    });
+
+    it('should not focus combo when calendar is not visible', () => {
+      component.visible = false;
+      fixture.componentRef.setInput('p-label', undefined);
+      fixture.componentRef.setInput('p-helper', 'test helper');
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+      spyOn(event, 'preventDefault');
+
+      component.eventOnButtonKeydown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('should not focus combo on Shift+Tab', () => {
+      component.visible = true;
+      fixture.componentRef.setInput('p-label', undefined);
+      fixture.componentRef.setInput('p-helper', 'test helper');
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+      spyOn(event, 'preventDefault');
+
+      component.eventOnButtonKeydown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onFieldClick:', () => {
+    it('should focus input when clicking on wrapper area', () => {
+      spyOn(component, 'focus');
+      const target = document.createElement('div');
+
+      component.onFieldClick({ target });
+
+      expect(component.focus).toHaveBeenCalled();
+    });
+
+    it('should not focus input when clicking on period input', () => {
+      spyOn(component, 'focus');
+      const periodEl = document.createElement('input');
+      const periodWrapper = document.createElement('div');
+      periodWrapper.classList.add('po-datetimepicker-field-period');
+      periodWrapper.appendChild(periodEl);
+      document.body.appendChild(periodWrapper);
+
+      component.onFieldClick({ target: periodEl });
+
+      expect(component.focus).not.toHaveBeenCalled();
+      document.body.removeChild(periodWrapper);
+    });
+
+    it('should not focus input when clicking on icon container', () => {
+      spyOn(component, 'focus');
+      const button = document.createElement('button');
+      const iconContainer = document.createElement('div');
+      iconContainer.classList.add('po-field-icon-container-right');
+      iconContainer.appendChild(button);
+      document.body.appendChild(iconContainer);
+
+      component.onFieldClick({ target: button });
+
+      expect(component.focus).not.toHaveBeenCalled();
+      document.body.removeChild(iconContainer);
+    });
+
+    it('should not focus when disabled', () => {
+      component['_disabled'] = true;
+      spyOn(component, 'focus');
+
+      component.onFieldClick({ target: document.createElement('div') });
+
+      expect(component.focus).not.toHaveBeenCalled();
+    });
+
+    it('should not focus when readonly', () => {
+      component['_readonly'] = true;
+      spyOn(component, 'focus');
+
+      component.onFieldClick({ target: document.createElement('div') });
+
+      expect(component.focus).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onPeriodKeydown:', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+    });
+
+    it('should toggle period on ArrowUp', () => {
+      component.currentPeriod = 'AM';
+      const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.currentPeriod).toBe('PM');
+    });
+
+    it('should toggle period on ArrowDown', () => {
+      component.currentPeriod = 'PM';
+      const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should not toggle period when disabled', () => {
+      component['_disabled'] = true;
+      component.currentPeriod = 'AM';
+      const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+
+      component.onPeriodKeydown(event);
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should not toggle period when readonly', () => {
+      component['_readonly'] = true;
+      component.currentPeriod = 'AM';
+      const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+
+      component.onPeriodKeydown(event);
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should prevent default on Backspace', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should prevent default on Delete', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should focus input on Shift+Tab', () => {
+      spyOn(component, 'focus');
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.focus).toHaveBeenCalled();
+    });
+
+    it('should allow natural tab on Tab without Shift', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('should block character input', () => {
+      const event = new KeyboardEvent('keydown', { key: 'a' });
+      spyOn(event, 'preventDefault');
+
+      component.onPeriodKeydown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+  });
+
+  describe('onPeriodClick:', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+    });
+
+    it('should toggle period on click', () => {
+      component.currentPeriod = 'AM';
+      component.onPeriodClick(new MouseEvent('click'));
+
+      expect(component.currentPeriod).toBe('PM');
+    });
+
+    it('should not toggle when disabled', () => {
+      component['_disabled'] = true;
+      component.currentPeriod = 'AM';
+      component.onPeriodClick(new MouseEvent('click'));
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should not toggle when readonly', () => {
+      component['_readonly'] = true;
+      component.currentPeriod = 'AM';
+      component.onPeriodClick(new MouseEvent('click'));
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+  });
+
+  describe('togglePeriod:', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+    });
+
+    it('should alternate between AM and PM', () => {
+      component.currentPeriod = 'AM';
+      component['togglePeriod']();
+      expect(component.currentPeriod).toBe('PM');
+
+      component['togglePeriod']();
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should emit change when value is complete and period changes', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '02:30';
+      component.inputEl.nativeElement.value = '12/05/2026 02:30';
+      component['objMask'] = { valueToModel: '120520260230' } as any;
+      component.currentPeriod = 'AM';
+      component['valueBeforeChange'] = '';
+
+      spyOn(component.onchange, 'emit');
+      component['togglePeriod']();
+
+      expect(component.currentPeriod).toBe('PM');
+      expect(component.onchange.emit).toHaveBeenCalled();
+    });
+
+    it('should not emit change when input is incomplete', () => {
+      component['objMask'] = { valueToModel: '1234' } as any;
+      component.inputEl.nativeElement.value = '12/3';
+      component.currentPeriod = 'AM';
+
+      spyOn(component.onchange, 'emit');
+      component['togglePeriod']();
+
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('clear - triggeredByKeyboard:', () => {
+    it('should focus immediately when not triggered by keyboard', () => {
+      spyOn(component, 'focus');
+      component.clear(false);
+
+      expect(component.focus).toHaveBeenCalled();
+    });
+
+    it('should focus after timeout when triggered by keyboard', fakeAsync(() => {
+      spyOn(component, 'focus');
+      component.clear(true);
+
+      expect(component.focus).not.toHaveBeenCalled();
+      tick(200);
+      expect(component.focus).toHaveBeenCalled();
+    }));
+
+    it('should reset currentPeriod to AM', () => {
+      component.currentPeriod = 'PM';
+      component.clear();
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+  });
+
+  describe('writeValue - valueBeforeChange sync:', () => {
+    it('should sync valueBeforeChange with model value to prevent spurious p-change on blur', () => {
+      component['valueBeforeChange'] = '';
+      component.writeValue('2026-06-20T08:30:00-03:00');
+
+      expect(component['valueBeforeChange']).toBe(component.getModelValue());
+    });
+
+    it('should set valueBeforeChange to empty string when writeValue receives falsy value', () => {
+      component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
+      component.writeValue(null);
+
+      expect(component['valueBeforeChange']).toBe('');
+    });
+
+    it('should not emit p-change on blur when value was not modified after writeValue', () => {
+      component.writeValue('2026-06-20T08:30:00-03:00');
+
+      const displayedValue = component.inputEl.nativeElement.value;
+      const valueToModel = displayedValue.replace(/\D/g, '');
+
+      spyOn(component.onchange, 'emit');
+      component['objMask'] = {
+        blur: jasmine.createSpy('blur'),
+        valueToModel: valueToModel
+      } as any;
+      component.inputEl.nativeElement.value = displayedValue;
+
+      component.eventOnBlur({ target: component.inputEl.nativeElement });
+
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('syncCalendarAndTimer - reset behavior:', () => {
+    it('should reset calendar when date is undefined', () => {
+      const writeValueSpy = jasmine.createSpy('writeValue');
+      component['calendarComponent'] = { writeValue: writeValueSpy, timerComponent: null } as any;
+      component['date'] = undefined;
+
+      component['syncCalendarAndTimer']();
+
+      expect(writeValueSpy).toHaveBeenCalledWith(null);
+    });
+
+    it('should reset both calendar and timer when date is undefined and timer exists', () => {
+      const calendarWriteValue = jasmine.createSpy('calendarWriteValue');
+      const timerWriteValue = jasmine.createSpy('timerWriteValue');
+      component['calendarComponent'] = {
+        writeValue: calendarWriteValue,
+        timerComponent: { writeValue: timerWriteValue }
+      } as any;
+      component['date'] = undefined;
+
+      component['syncCalendarAndTimer']();
+
+      expect(calendarWriteValue).toHaveBeenCalledWith(null);
+      expect(timerWriteValue).toHaveBeenCalledWith(null);
+    });
+
+    it('should sync calendar with date and timer with time when both exist', () => {
+      const calendarWriteValue = jasmine.createSpy('calendarWriteValue');
+      const timerWriteValue = jasmine.createSpy('timerWriteValue');
+      const date = new Date(2026, 4, 12);
+      component['calendarComponent'] = {
+        writeValue: calendarWriteValue,
+        timerComponent: { writeValue: timerWriteValue }
+      } as any;
+      component['date'] = date;
+      component['timeValue'] = '14:30';
+
+      component['syncCalendarAndTimer']();
+
+      expect(calendarWriteValue).toHaveBeenCalledWith(date);
+      expect(timerWriteValue).toHaveBeenCalledWith('14:30');
+    });
+
+    it('should reset timer when date exists but timeValue is empty', () => {
+      const calendarWriteValue = jasmine.createSpy('calendarWriteValue');
+      const timerWriteValue = jasmine.createSpy('timerWriteValue');
+      component['calendarComponent'] = {
+        writeValue: calendarWriteValue,
+        timerComponent: { writeValue: timerWriteValue }
+      } as any;
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '';
+
+      component['syncCalendarAndTimer']();
+
+      expect(calendarWriteValue).toHaveBeenCalledWith(component['date']);
+      expect(timerWriteValue).toHaveBeenCalledWith(null);
+    });
+
+    it('should return early when calendarComponent is undefined', () => {
+      component['calendarComponent'] = undefined;
+      expect(() => component['syncCalendarAndTimer']()).not.toThrow();
+    });
+  });
+
+  describe('refreshValue - currentPeriod sync:', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+    });
+
+    it('should set currentPeriod to PM when hours >= 12', () => {
+      component['timeValue'] = '14:30';
+      component.currentPeriod = 'AM';
+
+      component.refreshValue(new Date(2026, 4, 12));
+
+      expect(component.currentPeriod).toBe('PM');
+    });
+
+    it('should set currentPeriod to AM when hours < 12', () => {
+      component['timeValue'] = '09:30';
+      component.currentPeriod = 'PM';
+
+      component.refreshValue(new Date(2026, 4, 12));
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should not change currentPeriod when timeValue is empty', () => {
+      component['timeValue'] = '';
+      component.currentPeriod = 'PM';
+
+      component.refreshValue(new Date(2026, 4, 12));
+
+      expect(component.currentPeriod).toBe('PM');
+    });
+  });
+
+  describe('parseInputAndSync - currentPeriod sync:', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+    });
+
+    it('should set currentPeriod to PM when parsed time is >= 12:00', () => {
+      component.currentPeriod = 'AM';
+      component.inputEl.nativeElement.value = '12/05/2026 02:30 PM';
+
+      component['parseInputAndSync']('12/05/2026 02:30 PM');
+
+      expect(component.currentPeriod).toBe('PM');
+    });
+
+    it('should set currentPeriod to AM when parsed time is < 12:00', () => {
+      component.currentPeriod = 'PM';
+      component.inputEl.nativeElement.value = '12/05/2026 10:30 AM';
+
+      component['parseInputAndSync']('12/05/2026 10:30 AM');
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+  });
+
+  describe('isInputFocused:', () => {
+    it('should initialize as false', () => {
+      expect(component.isInputFocused).toBe(false);
+    });
+
+    it('should apply po-datetimepicker-field-focused class when isInputFocused is true', () => {
+      component.isInputFocused = true;
+      fixture.detectChanges();
+
+      const fieldElement = nativeElement.querySelector('.po-datetimepicker-field');
+      expect(fieldElement.classList.contains('po-datetimepicker-field-focused')).toBe(true);
+    });
+
+    it('should not apply po-datetimepicker-field-focused class when isInputFocused is false', () => {
+      component.isInputFocused = false;
+      fixture.detectChanges();
+
+      const fieldElement = nativeElement.querySelector('.po-datetimepicker-field');
+      expect(fieldElement.classList.contains('po-datetimepicker-field-focused')).toBe(false);
+    });
+  });
+
+  describe('onInputFocus:', () => {
+    it('should set isInputFocused to true', () => {
+      component.isInputFocused = false;
+
+      component.onInputFocus();
+
+      expect(component.isInputFocused).toBe(true);
+    });
+  });
+
+  describe('onPeriodBlur:', () => {
+    it('should set isInputFocused to false', () => {
+      component.isInputFocused = true;
+
+      component.onPeriodBlur();
+
+      expect(component.isInputFocused).toBe(false);
+    });
+  });
+
+  describe('eventOnBlur - isInputFocused:', () => {
+    it('should set isInputFocused to false on blur', () => {
+      component.isInputFocused = true;
+      component['objMask'] = { blur: jasmine.createSpy('blur'), valueToModel: '' } as any;
+      component.inputEl.nativeElement.value = '';
+
+      const event = { target: component.inputEl.nativeElement };
+      component.eventOnBlur(event);
+
+      expect(component.isInputFocused).toBe(false);
+    });
+  });
+
+  describe('focus integration with isInputFocused:', () => {
+    it('should set isInputFocused to true when onInputFocus is called via template binding', () => {
+      component.isInputFocused = false;
+      fixture.detectChanges();
+
+      component.onInputFocus();
+      fixture.detectChanges();
+
+      const fieldElement = nativeElement.querySelector('.po-datetimepicker-field');
+      expect(component.isInputFocused).toBe(true);
+      expect(fieldElement.classList.contains('po-datetimepicker-field-focused')).toBe(true);
+    });
+
+    it('should set isInputFocused to false when eventOnBlur is triggered', () => {
+      component.isInputFocused = true;
+      component['objMask'] = { blur: jasmine.createSpy('blur'), valueToModel: '' } as any;
+      component.inputEl.nativeElement.value = '';
+      fixture.detectChanges();
+
+      component.eventOnBlur({ target: component.inputEl.nativeElement });
+      fixture.detectChanges();
+
+      const fieldElement = nativeElement.querySelector('.po-datetimepicker-field');
+      expect(component.isInputFocused).toBe(false);
+      expect(fieldElement.classList.contains('po-datetimepicker-field-focused')).toBe(false);
     });
   });
 });

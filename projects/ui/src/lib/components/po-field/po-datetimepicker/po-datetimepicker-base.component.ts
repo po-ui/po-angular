@@ -1,8 +1,8 @@
 import {
-  effect,
+  model,
   input,
+  effect,
   Output,
-  signal,
   computed,
   Directive,
   HostBinding,
@@ -135,8 +135,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
   protected validatorChange: any;
   protected shortLanguage: string;
 
-  currentErrorPattern = signal('');
-
   // --- Inputs ---
 
   /**
@@ -212,7 +210,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
    *
    * Mensagem apresentada quando a data/hora for inválida ou fora do período.
    */
-  errorPattern = input<string>('', { alias: 'p-error-pattern' });
+  errorPattern = model<string>('', { alias: 'p-error-pattern' });
 
   /**
    * @optional
@@ -549,11 +547,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       this.validateModel(this.getModelValue());
     });
 
-    // p-error-pattern
-    effect(() => {
-      this.currentErrorPattern.set(this.errorPattern());
-    });
-
     // p-locale
     effect(() => {
       const value = this.localeInput();
@@ -692,8 +685,10 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     }
 
     if (dateFailed(c.value)) {
-      this.currentErrorPattern.set(
-        PoDatetimepickerLiterals[this.locale]?.invalidDatetime || PoDatetimepickerLiterals['pt'].invalidDatetime
+      this.errorPattern.set(
+        this.errorPattern() ||
+          PoDatetimepickerLiterals[this.locale]?.invalidDatetime ||
+          PoDatetimepickerLiterals['pt'].invalidDatetime
       );
       return { date: { valid: false } };
     }
@@ -874,10 +869,12 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
   // Formata o horário para exibição, incluindo AM/PM quando em formato 12h.
   //
   // @param time Horário no formato HH:mm ou HH:mm:ss (24h interno)
-  // @returns Horário formatado para exibição (ex: "02:30 PM" ou "14:30")
+  // @returns Horário formatado para exibição (ex: "02:30" ou "14:30")
+  // Nota: Para formato 12h, retorna apenas a parte numérica (sem AM/PM).
+  // O período é exibido no input separado gerenciado pelo componente.
   formatTimeForDisplay(time: string): string {
     if (!time) {
-      return this.is12HourFormat ? '12:00 AM' : '00:00';
+      return this.is12HourFormat ? '12:00' : '00:00';
     }
 
     // Trunca segundos se showSeconds está desabilitado
@@ -890,11 +887,10 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       return time;
     }
 
-    // Converte de 24h para 12h com AM/PM
+    // Converte de 24h para 12h (sem AM/PM — o período é gerenciado separadamente)
     let hours = Number.parseInt(parts[0], 10);
     const minutes = parts[1];
     const seconds = this.showSeconds() && parts.length > 2 ? parts[2] : null;
-    const period = hours >= 12 ? 'PM' : 'AM';
 
     if (hours === 0) {
       hours = 12;
@@ -903,16 +899,15 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     }
 
     const hoursStr = ('0' + hours).slice(-2);
-    const timeStr = seconds ? `${hoursStr}:${minutes}:${seconds}` : `${hoursStr}:${minutes}`;
-
-    return `${timeStr} ${period}`;
+    return seconds ? `${hoursStr}:${minutes}:${seconds}` : `${hoursStr}:${minutes}`;
   }
 
   // --- Protected / Private ---
 
   // Constrói a máscara para o input de datetime.
-  // Formato resultante: "99/99/9999 99:99" (24h) ou "99/99/9999 99:99 AA" (12h)
-  // Com segundos: "99/99/9999 99:99:99" ou "99/99/9999 99:99:99 AA"
+  // Formato resultante: "99/99/9999 99:99" (24h e 12h)
+  // Com segundos: "99/99/9999 99:99:99"
+  // Nota: O sufixo AM/PM em formato 12h é gerenciado separadamente (não faz parte da máscara).
   protected buildMask(format: string = this.format) {
     let mask = format.toUpperCase();
 
@@ -928,10 +923,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       mask += ' 99:99';
     }
 
-    // AM/PM para formato 12h
-    if (this.is12HourFormat) {
-      mask += ' AA';
-    }
+    // AM/PM NÃO é incluído na máscara — é gerenciado como sufixo fixo no componente.
 
     return new PoMask(mask, true);
   }

@@ -20,60 +20,98 @@
       class="po-field-container-content po-field-container-content-datetimepicker"
     >
       <div class="po-field-container-input">
-        <input
-          #inp
-          type="text"
-          class="po-input po-datetimepicker"
-          [class.po-input-icon-right]="isClean && inp.value && !isDisabled"
+        <div
+          #datetimepickerField
+          class="po-datetimepicker-field po-input"
+          [class.po-input-icon-right]="isClean && dateTimeInputValue && !isDisabled && !isReadonly"
           [class.po-datetimepicker-field-disabled]="isDisabled"
-          [attr.data-focused-element]="!isDisabled"
+          [class.po-datetimepicker-field-readonly]="isReadonly"
+          [class.po-datetimepicker-field-focused]="isInputFocused"
           [attr.data-inactive-component]="isDisabled || isReadonly"
-          [attr.name]="name()"
           [attr.p-size]="hostSize"
-          [id]="id"
-          [autocomplete]="isNoAutocomplete"
-          [disabled]="isDisabled"
-          [placeholder]="isDisabled ? '' : placeholderValue"
-          [readonly]="isReadonly"
-          [required]="isRequired"
-          [attr.data-append-in-body]="appendBox()"
-          (blur)="eventOnBlur($event)"
-          (click)="eventOnClick($event)"
-        />
-        @if (loading()) {
-          <po-loading-icon [p-size]="mapSizeToIcon(hostSize)"></po-loading-icon>
-        } @else {
-          <div class="po-field-icon-container-right">
-            @if (isClean && dateTimeInputValue && !isDisabled && !isReadonly) {
-              <po-clean
-                #iconClean
-                tabindex="0"
-                role="button"
-                [attr.aria-label]="literals.clean"
-                class="po-icon-input"
-                p-icon="ICON_FILL_CLEAR_CONTENT"
-                [p-element-ref]="inputEl"
-                [p-size]="hostSize"
-                (p-change-event)="clear()"
-                (keydown.enter)="clear(); $event.preventDefault()"
-                (keydown.space)="clear(); $event.preventDefault()"
-              >
-              </po-clean>
-              <div class="po-button-vertical-divider"></div>
-            }
-            <po-button
-              #iconCalendar
-              class="po-datetimepicker-button"
-              [class.po-button-tertiary-danger]="getErrorPattern()"
-              p-icon="ICON_CALENDAR_DOTS"
-              p-kind="tertiary"
-              [p-disabled]="isDisabled || isReadonly"
-              [p-size]="hostSize"
-              (p-click)="togglePicker(false)"
-            >
-            </po-button>
+          (keydown)="onFieldClick($event)"
+          (click)="onFieldClick($event)"
+        >
+          <div
+            class="po-datetimepicker-field-segment"
+            [attr.data-value]="dateTimeInputValue || placeholderValue || '                '"
+          >
+            <input
+              #inp
+              type="text"
+              class="po-datetimepicker-inner-input"
+              [attr.data-focused-element]="!isDisabled"
+              [attr.name]="name()"
+              [id]="id"
+              [autocomplete]="isNoAutocomplete"
+              [disabled]="isDisabled"
+              [placeholder]="isDisabled ? '' : placeholderValue"
+              [readonly]="isReadonly"
+              [required]="isRequired"
+              [attr.data-append-in-body]="appendBox()"
+              (blur)="eventOnBlur($event)"
+              (click)="eventOnClick($event)"
+              (focus)="onInputFocus()"
+            />
           </div>
-        }
+          @if (is12HourFormat && dateTimeInputValue) {
+            <div
+              class="po-datetimepicker-field-segment po-datetimepicker-field-period"
+              [attr.data-value]="currentPeriod"
+            >
+              <input
+                class="po-datetimepicker-segment-input po-datetimepicker-period-input"
+                type="text"
+                maxlength="2"
+                readonly
+                [value]="currentPeriod"
+                [disabled]="isDisabled"
+                [attr.tabindex]="isDisabled || isReadonly ? -1 : 0"
+                role="spinbutton"
+                [attr.aria-label]="currentPeriod"
+                (keydown)="onPeriodKeydown($event)"
+                (click)="onPeriodClick($event)"
+                (focus)="onInputFocus()"
+                (blur)="onPeriodBlur()"
+              />
+            </div>
+          }
+          @if (loading()) {
+            <po-loading-icon [p-size]="mapSizeToIcon(hostSize)"></po-loading-icon>
+          } @else {
+            <div class="po-field-icon-container-right">
+              @if (isClean && dateTimeInputValue && !isDisabled && !isReadonly) {
+                <po-clean
+                  #iconClean
+                  tabindex="0"
+                  role="button"
+                  [attr.aria-label]="literals.clean"
+                  class="po-icon-input"
+                  p-icon="ICON_FILL_CLEAR_CONTENT"
+                  [p-element-ref]="inputEl"
+                  [p-size]="hostSize"
+                  (p-change-event)="clear()"
+                  (keydown.enter)="clear(true); $event.preventDefault()"
+                  (keydown.space)="clear(true); $event.preventDefault()"
+                >
+                </po-clean>
+                <div class="po-button-vertical-divider"></div>
+              }
+              <po-button
+                #iconCalendar
+                class="po-datetimepicker-button"
+                [class.po-button-tertiary-danger]="getErrorPattern()"
+                p-icon="ICON_CALENDAR_DOTS"
+                p-kind="tertiary"
+                [p-disabled]="isDisabled || isReadonly"
+                [p-size]="hostSize"
+                (p-click)="togglePicker(false)"
+                (keydown)="eventOnButtonKeydown($event)"
+              >
+              </po-button>
+            </div>
+          }
+        </div>
       </div>
       @if ((!this.label() && poHelperComponent()) || (!this.label() && poHelper.hideAdditionalHelp)) {
         <po-helper
