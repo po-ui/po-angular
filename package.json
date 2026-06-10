@@ -26,7 +26,7 @@
     "test:sync": "ng test sync --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:sync:schematics": "gulp build:schematics --lib sync && jasmine \"dist/ng-sync/schematics/**/*.spec.js\"",
     "test:sync:browse": "ng test sync --code-coverage --browsers=Chrome --source-map",
-    "test:ui": "ng test ui --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
+    "test:ui": "ng test ui --watch=false --coverage",
     "test:ui:schematics": "gulp build:schematics --lib ui && jasmine \"./dist/ng-components/schematics/**/*.spec.js\"",
     "test:ui:browse": "ng test ui --code-coverage --browsers=Chrome --source-map",
     "test:templates": "ng test templates --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
@@ -112,6 +112,7 @@
     "@types/systemjs": "^6.13.5",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
+    "@vitest/coverage-v8": "^4.1.8",
     "capitalize": "^2.0.4",
     "colors": "1.4.0",
     "core-js": "3.33.3",
@@ -134,6 +135,7 @@
     "jasmine": "2.8.0",
     "jasmine-core": "5.1.1",
     "jasmine-spec-reporter": "7.0.0",
+    "jsdom": "^29.1.1",
     "karma": "6.4.2",
     "karma-chrome-launcher": "3.2.0",
     "karma-coverage": "2.2.1",
@@ -152,6 +154,7 @@
     "typemoq": "^2.1.0",
     "typescript": "~5.9.3",
     "validate.js": "file:libs/validate.js-v0.13.2.tgz",
+    "vitest": "^4.1.8",
     "yargs": "^17.7.2"
   },
   "overrides": {

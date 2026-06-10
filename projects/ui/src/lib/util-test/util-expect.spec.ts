@@ -1,4 +1,5 @@
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { beforeAll, afterEach, afterAll, expect } from 'vitest';
 
 /**
  * Reconfigura a suíte de testes atuais para impedir a recompilação de componentes angular após cada teste.
@@ -50,10 +51,8 @@ export const configureTestSuite = (configureModule?: any) => {
  */
 export const expectSettersMethod = (comp: any, setter: string, value: any, prop: string, expectValue: any) => {
   comp[setter] = value;
-  expect(comp[prop]).toBe(
-    expectValue,
-    `setter called with "${value}" (${typeof value}), returned "${comp[prop]}", but expected "${expectValue}"`
-  );
+  const errorMessage = `setter called with "${value}" (${typeof value}), returned "${comp[prop]}", but expected "${expectValue}"`;
+  expect(comp[prop], errorMessage).toBe(expectValue);
 };
 
 /**
@@ -88,9 +87,9 @@ export const expectPropertiesValues = (comp: any, property: string, testedValues
           }", but expected "${expectValue}"`;
 
     if (expectValue instanceof Array || expectValue instanceof Object) {
-      expect(comp[property]).toEqual(expectValue, errorMessage);
+      expect(comp[property], errorMessage).toEqual(expectValue);
     } else {
-      expect(comp[property]).toBe(expectValue, errorMessage);
+      expect(comp[property], errorMessage).toBe(expectValue);
     }
   });
 };
@@ -104,18 +103,8 @@ export const expectPropertiesValues = (comp: any, property: string, testedValues
  * @param expectValue valor esperado depois de ser tratado pelo método
  */
 export const expectBrowserLanguageMethod = (language: string, comp: any, method: any, expectValue: any) => {
-  if (browserInfo() === 'phantom') {
-    // Quando for Phantom zera o navigator
-    const originalNavigator = navigator;
-    (window as any).navigator = new Object();
-    changePhantomProperties(navigator, 'language', language);
-    expect(comp[method]()).toBe(expectValue);
-    navigator = originalNavigator;
-  } else {
-    // Demais navegadores
-    changeChromeProperties(navigator, 'language', language);
-    expect(comp[method]()).toBe(expectValue);
-  }
+  changeChromeProperties(navigator, 'language', language);
+  expect(comp[method]()).toBe(expectValue);
 };
 
 /**
@@ -132,7 +121,7 @@ export const expectArraysSameOrdering = (fieldsA: Array<any>, fieldsB: Array<any
 
   const failMessage = `Expected the arrays to be in the same order`;
 
-  expect(isEqualOrder).toBe(true, failMessage);
+  expect(isEqualOrder, failMessage).toBe(true);
   expect(fieldsA.length === fieldsB.length).toBe(true);
 };
 
@@ -155,18 +144,7 @@ export const changeBrowserInnerHeight = (expectedHeight: number) => {
 };
 
 /**
- * Muda as propriedades da página no navegador Phantom JS
- *
- * @param pageObject objeto da página ex: page ou navigator
- * @param property nome da propriedade a ser alterada
- * @param returnValue valor da propriedade alterada
- */
-export function changePhantomProperties(pageObject, property, returnValue) {
-  pageObject['__defineGetter__'](property, () => returnValue);
-}
-
-/**
- * Muda propriedades da página no navegador Chrome
+ * Muda propriedades da página no navegador Chrome / jsdom
  *
  * @param pageObject objeto da página ex: page ou navigator
  * @param property nome da propriedade a ser alterada
@@ -176,20 +154,9 @@ export function changeChromeProperties(pageObject, property, returnValue) {
   Object.defineProperty(pageObject, property, {
     get: function () {
       return returnValue;
-    }
+    },
+    configurable: true
   });
-}
-
-/**
- * Retorna o browser de acordo com o navigator.userAgent
- */
-function browserInfo() {
-  let browserName = navigator.userAgent.toLowerCase();
-  const browsers = ['chrome', 'phantom'];
-
-  browserName = browsers.find(f => browserName.includes(f));
-
-  return browserName;
 }
 
 /**
@@ -197,7 +164,7 @@ function browserInfo() {
  * Caso tenha retornado uma Promise.reject, o handleThrowError retornará uma função com o erro.
  *
  * Esta função é útil para testes onde se deseja verificar se o retorno foi uma exceção em uma função assíncrona e
- * poder utilizar o .toThrow() do jasmine.
+ * poder utilizar o .toThrow() do vitest.
  *
  * @param testFunction Função que será verificado o retorno.
  */

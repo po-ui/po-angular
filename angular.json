@@ -10,7 +10,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/ui/tsconfig.lib.json",
             "project": "projects/ui/ng-package.json"
@@ -18,15 +18,14 @@
           "configurations": {
             "production": {
               "tsConfig": "projects/ui/tsconfig.lib.prod.json"
-            }
+            },
+            "development": {}
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/ui/src/test.ts",
-            "tsConfig": "projects/ui/tsconfig.spec.json",
-            "karmaConfig": "projects/ui/karma.conf.js"
+            "tsConfig": "projects/ui/tsconfig.spec.json"
           }
         },
         "lint": {

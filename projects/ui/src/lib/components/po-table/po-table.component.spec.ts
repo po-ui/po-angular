@@ -45,23 +45,6 @@ export const routes: Routes = [
   { path: 'search', component: SearchComponent }
 ];
 
-class YourComponente {
-  private _columnManagerTargetFixed: ElementRef<any>;
-
-  public get columnManagerTargetFixed(): ElementRef<any> {
-    return this._columnManagerTargetFixed;
-  }
-}
-
-class YourComponent {
-  @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
-  private _columnManagerTargetFixed: ElementRef<any>;
-
-  public get columnManagerTargetFixed(): ElementRef<any> {
-    return this._columnManagerTargetFixed;
-  }
-}
-
 describe('PoTableComponent:', () => {
   let component: PoTableComponent;
   let fixture: ComponentFixture<PoTableComponent>;

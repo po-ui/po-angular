@@ -7,5 +7,9 @@
   },
   "files": ["src/test.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts", "src/lib/util-test/util-setup.ts"],
-  "exclude": ["schematics/**/*.spec.ts", "**/*.d.ts"]
+  "exclude": ["schematics/**/*.spec.ts", "**/*.d.ts"],
+  "angularCompilerOptions": {
+    "strictTemplates": false,
+    "compilationMode": "experimental-local"
+  }
 }
