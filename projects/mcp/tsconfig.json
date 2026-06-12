@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": ["es2022"],
     "declaration": true,
     "module": "commonjs",

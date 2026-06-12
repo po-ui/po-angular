@@ -10,7 +10,7 @@ import { PoMenuModule } from '../po-menu/po-menu.module';
 import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component';
 import { PoNavbarComponent } from './po-navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { changeBrowserInnerWidth } from 'projects/templates/src/lib/util-test/util-expect.spec';
+import { changeBrowserInnerWidth } from '../../../../../templates/src/lib/util-test/util-expect.spec';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
