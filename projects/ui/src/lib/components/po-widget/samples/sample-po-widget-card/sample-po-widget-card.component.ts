@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-widget-card',
   templateUrl: './sample-po-widget-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoWidgetCardComponent implements OnInit {

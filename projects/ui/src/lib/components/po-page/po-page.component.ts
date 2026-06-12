@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoPageBaseComponent } from './po-page-base.component';
 
@@ -10,6 +10,7 @@ import { PoPageBaseComponent } from './po-page-base.component';
 @Component({
   selector: 'po-page',
   templateUrl: './po-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageComponent extends PoPageBaseComponent {}

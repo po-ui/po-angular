@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SamplePoSearchListboxService } from './sample-po-search-listbox.service';
 
 @Component({
   selector: 'sample-po-search-listbox',
   templateUrl: './sample-po-search-listbox.component.html',
   providers: [SamplePoSearchListboxService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSearchListboxComponent implements OnInit {

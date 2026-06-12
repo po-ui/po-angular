@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoButtonGroupItem,
@@ -12,6 +12,7 @@ import {
   selector: 'sample-po-menu-labs',
   templateUrl: './sample-po-menu-labs.component.html',
   styleUrls: ['./sample-po-menu-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {

@@ -5,8 +5,8 @@
 >
   <ng-template
     p-job-scheduler-parameters-template
-    [p-disable-advance]="dynamicForm?.form.invalid"
-    [p-execution-parameter]="dynamicForm?.form.value"
+    [p-disable-advance]="$safeNavigationMigration(dynamicForm?.form.invalid)"
+    [p-execution-parameter]="$safeNavigationMigration(dynamicForm?.form.value)"
     p-title="1"
   >
     <h1>Etapa 1</h1>

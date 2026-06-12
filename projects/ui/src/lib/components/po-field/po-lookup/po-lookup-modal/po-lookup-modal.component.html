@@ -51,8 +51,8 @@
     @if (!!disclaimerGroup) {
       <po-disclaimer-group
         class="po-md-12"
-        [p-disclaimers]="disclaimerGroup?.disclaimers"
-        [p-title]="disclaimerGroup?.title"
+        [p-disclaimers]="$safeNavigationMigration(disclaimerGroup?.disclaimers)"
+        [p-title]="$safeNavigationMigration(disclaimerGroup?.title)"
         (p-change)="onChangeDisclaimerGroup()"
       >
       </po-disclaimer-group>

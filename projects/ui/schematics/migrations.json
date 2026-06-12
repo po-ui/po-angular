@@ -65,6 +65,11 @@
       "version": "21",
       "description": "Atualiza @po-ui/ng-components para v21",
       "factory": "./ng-update/v21/index"
+    },
+    "migration-v22": {
+      "version": "22",
+      "description": "Atualiza @po-ui/ng-components para v22",
+      "factory": "./ng-update/v22/index"
     }
   }
 }

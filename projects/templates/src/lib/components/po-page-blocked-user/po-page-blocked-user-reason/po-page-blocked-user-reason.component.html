@@ -5,7 +5,7 @@
   </div>
   <div class="po-page-blocked-user-text po-font-text po-row">
     <div class="po-mb-sm-2 po-mb-md-3 po-md-12 po-page-blocked-user-text-bold">
-      {{ literals?.firstPhrase | poI18n: literalParams }}
+      {{ $safeNavigationMigration(literals?.firstPhrase) | poI18n: literalParams }}
     </div>
     <div class="po-mb-sm-2 po-mb-md-3 po-md-12">{{ literals?.secondPhrase }}</div>
     @if (literals?.thirdPhrase) {

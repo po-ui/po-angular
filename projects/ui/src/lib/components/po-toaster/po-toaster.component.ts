@@ -8,7 +8,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -41,6 +42,7 @@ const SPACE_BETWEEN_TOASTERS = 8;
 @Component({
   selector: 'po-toaster',
   templateUrl: './po-toaster.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoToasterComponent extends PoToasterBaseComponent implements AfterViewInit, OnDestroy, OnChanges {

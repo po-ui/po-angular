@@ -24,7 +24,7 @@
   <li
     #menusubmenuitem
     tabindex="0"
-    [p-tooltip]="item?.label"
+    [p-tooltip]="$safeNavigationMigration(item?.label)"
     class="po-header-nav-submenu"
     (click)="onAction(item)"
     (keydown)="onKeyDownButtonList($event, item)"

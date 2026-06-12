@@ -55,7 +55,7 @@ Este guia tem por objetivo definir as regras para criação de *Issues* relacion
           <li>Crie uma nova aplicação em Angular incluindo o componente e o comportamento reportado para nossa análise.</li>
           <li>Adicione o mínimo de código necessário para reprodução do bug, facilitando assim a verificação da situação.</li>
           <li>Publique a aplicação no GitHub e inclua o link ao criar a issue.</li>
-          <li>Pode-se também usar o <a href="https://stackblitz.com/edit/po-ui">Stackblitz</a> para reproduzir o <em>bug</em> relatado na <em>issue</em>.</li>
+          <li>Pode-se também usar o <a href="https://stackblitz.com/edit/poui-module">Stackblitz</a> para reproduzir o <em>bug</em> relatado na <em>issue</em>.</li>
           <li>Certifique-se de incluir os passos para reprodução da issue. Estes passos devem ser claros e simples de seguir.</li>
         </ul>
       </div>

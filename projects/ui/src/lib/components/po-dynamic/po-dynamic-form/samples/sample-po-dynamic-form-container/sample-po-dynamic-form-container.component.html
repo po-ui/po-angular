@@ -15,7 +15,7 @@
   <po-button
     class="po-md-3"
     p-label="Save"
-    [p-disabled]="dynamicForm?.form.invalid"
+    [p-disabled]="$safeNavigationMigration(dynamicForm?.form.invalid)"
     (p-click)="poNotification.success('Data saved successfully!'); dynamicForm.form.reset()"
   >
   </po-button>

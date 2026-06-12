@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { PoToolbarBaseComponent } from './po-toolbar-base.component';
@@ -26,6 +26,7 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
 @Component({
   selector: 'po-toolbar',
   templateUrl: './po-toolbar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoToolbarComponent extends PoToolbarBaseComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Input, Output, input, Component } from '@angular/core';
+import { ElementRef, EventEmitter, Input, Output, input, Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { convertToBoolean } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -29,6 +29,7 @@ const PO_POPOVER_TRIGGERS = ['click', 'hover', 'function'];
 @Component({
   selector: 'po-popover-base',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPopoverBaseComponent {

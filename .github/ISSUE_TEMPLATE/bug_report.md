@@ -10,7 +10,7 @@ assignees: ''
 #### Reprodução
 
 <!-- ISSUES SEM REPRODUÇÃO NO STACKBLITZ TEM MENOR PRIORIDADE. -->
-Utilize StackBlitz (https://stackblitz.com/edit/po-ui) para reproduzir o bug relatado na issue.
+Utilize StackBlitz (https://stackblitz.com/edit/poui-module) para reproduzir o bug relatado na issue.
 
 <!-- ISSUES SEM REPRODUÇÃO TEM MENOR PRIORIDADE. -->
 Passos para reproduzir:

@@ -319,7 +319,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = false;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      spyOnProperty(component, 'hasFileNotUploaded', 'get').and.returnValue(true);
 
       expect(component.displaySendButton).toBeTruthy();
     });
@@ -329,7 +329,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = false;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      spyOnProperty(component, 'hasFileNotUploaded', 'get').and.returnValue(true);
 
       expect(component.displaySendButton).toBeFalsy();
     });
@@ -339,7 +339,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = true;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      spyOnProperty(component, 'hasFileNotUploaded', 'get').and.returnValue(true);
 
       expect(component.displaySendButton).toBeFalsy();
     });
@@ -349,7 +349,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = true;
       component.currentFiles = [];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      spyOnProperty(component, 'hasFileNotUploaded', 'get').and.returnValue(true);
 
       expect(component.displaySendButton).toBeFalsy();
     });
@@ -359,7 +359,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = true;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(false);
+      spyOnProperty(component, 'hasFileNotUploaded', 'get').and.returnValue(false);
 
       expect(component.displaySendButton).toBeFalsy();
     });

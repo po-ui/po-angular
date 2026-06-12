@@ -108,9 +108,9 @@
         @if (!!disclaimerGroup) {
           <po-disclaimer-group
             [class.po-page-list-disclaimer-group]="!!disclaimerGroup?.disclaimers?.length"
-            [p-disclaimers]="disclaimerGroup?.disclaimers"
-            [p-hide-remove-all]="disclaimerGroup?.hideRemoveAll"
-            [p-title]="disclaimerGroup?.title"
+            [p-disclaimers]="$safeNavigationMigration(disclaimerGroup?.disclaimers)"
+            [p-hide-remove-all]="$safeNavigationMigration(disclaimerGroup?.hideRemoveAll)"
+            [p-title]="$safeNavigationMigration(disclaimerGroup?.title)"
             (p-change)="onChangeDisclaimerGroup($event)"
             (p-remove)="onRemoveDisclaimer($event)"
             (p-remove-all)="onRemoveAllDisclaimers($event)"

@@ -1,6 +1,6 @@
 <po-disclaimer-group
   [p-disclaimers]="disclaimers"
-  [p-hide-remove-all]="properties?.includes('hideRemoveAll')"
+  [p-hide-remove-all]="$safeNavigationMigration(properties?.includes('hideRemoveAll'))"
   [p-title]="title"
   (p-change)="changeEvent('p-change')"
 >

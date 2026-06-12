@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoChartOptions, PoChartSerie, PoChartType } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-chart-summary',
   templateUrl: './sample-po-chart-summary.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoChartSummaryComponent {

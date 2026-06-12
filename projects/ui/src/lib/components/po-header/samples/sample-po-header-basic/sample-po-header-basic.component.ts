@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoHeaderBrand, PoNotificationService } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoHeaderBrand, PoNotificationService } from '@po-ui/ng-components';
   selector: 'sample-po-header-basic',
   templateUrl: './sample-po-header-basic.component.html',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     /* alterado apenas para demonstração no portal*/
     po-header {

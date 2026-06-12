@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoComboOption, PoDisclaimer, PoTableColumn } from '@po-ui/ng-components';
 
@@ -8,6 +8,7 @@ import { SamplePoDisclaimerGroupSwPlanetsService } from './sample-po-disclaimer-
   selector: 'sample-po-disclaimer-group-sw-planets',
   templateUrl: './sample-po-disclaimer-group-sw-planets.component.html',
   providers: [SamplePoDisclaimerGroupSwPlanetsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {

@@ -1,6 +1,7 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoPageLoginPopoverComponent } from './po-page-login-popover.component';
 
@@ -13,9 +14,9 @@ describe('ThPageLoginPopoverComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterModule.forRoot([])],
       declarations: [PoI18nPipe, PoPageLoginPopoverComponent],
-      providers: [provideNgReflectAttributes()]
+      providers: [provideLocationMocks(), provideNgReflectAttributes()]
     }).compileComponents();
   }));
 
