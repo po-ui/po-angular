@@ -101,7 +101,7 @@
     "@angular/cli": "~21.2.4",
     "@angular/compiler-cli": "~21.2.4",
     "@angular/language-service": "~21.2.4",
-    "@animaliads/animalia-icon": "1.0.5",
+    "@animaliads/animalia-icon": "^1.1.0",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-angular": "^18.4.3",
     "@po-ui/ng-schematics": "^18.0.0",
