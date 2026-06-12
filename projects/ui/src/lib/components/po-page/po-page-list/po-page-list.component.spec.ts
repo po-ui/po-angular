@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -37,6 +37,7 @@ eventSubmit.initEvent('submit', true, false);
 
 @Component({
   template: ` <po-page-list p-title="Unit Test" [p-actions]="actions"> </po-page-list> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class MobileComponent {
@@ -122,6 +123,7 @@ describe('PoPageListComponent - Mobile:', () => {
 
 @Component({
   template: ` <po-page-list p-title="Unit Test" [p-filter]="filter" [p-actions]="actions"> </po-page-list> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class DesktopComponent {

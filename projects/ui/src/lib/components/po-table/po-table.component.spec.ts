@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Routes } from '@angular/router';
@@ -13,7 +13,7 @@ import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoColorPaletteService } from './../../services/po-color-palette/po-color-palette.service';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
@@ -29,12 +29,14 @@ import { PoThemeA11yEnum } from '../../services';
 
 @Component({
   template: 'Search',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SearchComponent {}
 
 @Component({
   template: 'Home',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class TestMenuComponent {}
@@ -241,7 +243,7 @@ describe('PoTableComponent:', () => {
         { provide: PoTableService, useValue: poTableService },
         { provide: CdkVirtualScrollViewport, useValue: mockViewPort },
         { provide: changeDetector, useValue: changeDetector },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

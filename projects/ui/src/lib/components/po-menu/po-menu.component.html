@@ -105,8 +105,8 @@
         <po-menu-item
           [p-action]="menu.action"
           [p-badge-alert]="menu.badgeAlert"
-          [p-badge-color]="menu.badge?.color"
-          [p-badge-value]="menu.badge?.value"
+          [p-badge-color]="$safeNavigationMigration(menu.badge?.color)"
+          [p-badge-value]="$safeNavigationMigration(menu.badge?.value)"
           [p-collapsed-menu]="enableCollapse"
           [p-icon]="allowIcons ? menu.icon : null"
           [p-id]="menu.id"

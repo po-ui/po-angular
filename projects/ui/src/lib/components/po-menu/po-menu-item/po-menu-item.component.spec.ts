@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -14,12 +14,14 @@ import { PoMenuItemComponent } from './po-menu-item.component';
 
 @Component({
   template: 'Search',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SearchComponent {}
 
 @Component({
   template: 'Home',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class HomeComponent {}

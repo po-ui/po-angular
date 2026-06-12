@@ -251,7 +251,7 @@
               [ngClass]="{
                 'po-table-header-sorted':
                   sort &&
-                  JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                  JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
                   (sortedColumn.ascending || !sortedColumn.ascending)
               }"
               [ngStyle]="{
@@ -291,7 +291,7 @@
               [ngClass]="{
                 'po-table-header-sorted':
                   sort &&
-                  JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                  JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
                   (sortedColumn.ascending || !sortedColumn.ascending)
               }"
               [ngStyle]="{
@@ -412,7 +412,10 @@
                     @case ('cellTemplate') {
                       <span>
                         <ng-container
-                          *ngTemplateOutlet="tableCellTemplate?.templateRef; context: { row: row, column: column }"
+                          *ngTemplateOutlet="
+                            $safeNavigationMigration(tableCellTemplate?.templateRef);
+                            context: { row: row, column: column }
+                          "
                         >
                         </ng-container>
                       </span>
@@ -616,7 +619,7 @@
                 [ngClass]="{
                   'po-table-header-sorted':
                     sort &&
-                    JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                    JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
                     (sortedColumn.ascending || !sortedColumn.ascending)
                 }"
                 [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
@@ -654,7 +657,7 @@
                 [ngClass]="{
                   'po-table-header-sorted':
                     sort &&
-                    JSON.stringify(sortedColumn?.property) === JSON.stringify(column) &&
+                    JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
                     (sortedColumn.ascending || !sortedColumn.ascending)
                 }"
                 [ngStyle]="{ 'width': !hasItems ? '100%' : applyFixedColumns() ? column.width : 'auto' }"
@@ -775,7 +778,10 @@
                     @case ('cellTemplate') {
                       <span>
                         <ng-container
-                          *ngTemplateOutlet="tableCellTemplate?.templateRef; context: { row: row, column: column }"
+                          *ngTemplateOutlet="
+                            $safeNavigationMigration(tableCellTemplate?.templateRef);
+                            context: { row: row, column: column }
+                          "
                         >
                         </ng-container>
                       </span>
@@ -936,21 +942,31 @@
 
   @if (sort && column.sortable !== false) {
     <span
-      [class.po-table-header-icon-unselected]="JSON.stringify(sortedColumn?.property) !== JSON.stringify(column)"
+      [class.po-table-header-icon-unselected]="
+        JSON.stringify($safeNavigationMigration(sortedColumn?.property)) !== JSON.stringify(column)
+      "
       [class.po-table-header-icon-descending]="
-        JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && sortedColumn.ascending
+        JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
+        sortedColumn.ascending
       "
       [class.po-table-header-icon-ascending]="
-        JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && !sortedColumn.ascending
+        JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
+        !sortedColumn.ascending
       "
     >
-      @if (JSON.stringify(sortedColumn?.property) !== JSON.stringify(column)) {
+      @if (JSON.stringify($safeNavigationMigration(sortedColumn?.property)) !== JSON.stringify(column)) {
         <po-icon p-icon="ICON_SORT"></po-icon>
       }
-      @if (JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && sortedColumn.ascending) {
+      @if (
+        JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
+        sortedColumn.ascending
+      ) {
         <po-icon p-icon="ICON_SORT_ASC"></po-icon>
       }
-      @if (JSON.stringify(sortedColumn?.property) === JSON.stringify(column) && !sortedColumn.ascending) {
+      @if (
+        JSON.stringify($safeNavigationMigration(sortedColumn?.property)) === JSON.stringify(column) &&
+        !sortedColumn.ascending
+      ) {
         <po-icon cdkDragHandle p-icon="ICON_SORT_DESC"></po-icon>
       }
     </span>

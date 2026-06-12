@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnChanges, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoTabBaseComponent } from './po-tab-base.component';
 import { PoTabsService } from '../po-tabs.service';
@@ -9,6 +9,7 @@ import { PoTabsService } from '../po-tabs.service';
 @Component({
   selector: 'po-tab',
   templateUrl: './po-tab.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTabComponent extends PoTabBaseComponent implements AfterContentInit, OnChanges {

@@ -12,7 +12,8 @@
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
-    "fullTemplateTypeCheck": true
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": false
   },
   "exclude": ["node_modules", "src/test.ts", "**/*.spec.ts"]
 }

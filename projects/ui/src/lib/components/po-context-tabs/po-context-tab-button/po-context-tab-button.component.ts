@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoTabButtonComponent } from '../../po-tabs/po-tab-button/po-tab-button.component';
 
@@ -12,6 +12,7 @@ import { PoTabButtonComponent } from '../../po-tabs/po-tab-button/po-tab-button.
 @Component({
   selector: 'po-context-tab-button',
   templateUrl: './po-context-tab-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoContextTabButtonComponent extends PoTabButtonComponent implements OnChanges, AfterViewInit {

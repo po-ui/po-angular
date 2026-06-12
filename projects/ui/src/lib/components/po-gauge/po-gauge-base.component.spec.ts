@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoGaugeBaseComponent } from './po-gauge-base.component';
 import { poGaugeMinHeight } from './po-gauge-default-values.constant';
 import { PoGaugeRanges } from './interfaces/po-gauge-ranges.interface';
 
-@Component({ selector: 'po-gauge-base-test', template: '', standalone: false })
+@Component({ selector: 'po-gauge-base-test', template: '', changeDetection: ChangeDetectionStrategy.Eager,
+ standalone: false })
 class TestComponent extends PoGaugeBaseComponent {}
 
 describe('PoGaugeBaseComponent', () => {

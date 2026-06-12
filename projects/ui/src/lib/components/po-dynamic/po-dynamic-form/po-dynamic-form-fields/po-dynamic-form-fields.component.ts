@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
@@ -19,6 +19,7 @@ import { PoDynamicFormFieldsBaseComponent } from './po-dynamic-form-fields-base.
   templateUrl: 'po-dynamic-form-fields.component.html',
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
   providers: [PoDynamicFormValidationService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseComponent implements OnChanges {

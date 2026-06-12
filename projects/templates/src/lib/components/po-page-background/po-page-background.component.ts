@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
 
@@ -7,6 +7,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../util
 @Component({
   selector: 'po-page-background',
   templateUrl: './po-page-background.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDialogService } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoDialogService } from '@po-ui/ng-components';
   selector: 'sample-po-password-reset',
   templateUrl: './sample-po-password-reset.component.html',
   providers: [PoDialogService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPasswordResetComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
@@ -51,6 +51,7 @@ export const poPageBlockedUserButtonLiterals: object = {
 @Component({
   selector: 'po-page-blocked-user',
   templateUrl: './po-page-blocked-user.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageBlockedUserComponent extends PoPageBlockedUserBaseComponent implements OnInit {
