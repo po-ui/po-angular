@@ -36,7 +36,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: should call `getColorFromType` and return `color-01` if `value.color` is `primary`.', () => {
       const value = { color: 'primary' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color01);
       expect(service['getColorFromType']).toHaveBeenCalledWith('primary');
@@ -45,7 +45,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: shouldn`t call `getColorFromType` and return `color-05` if `value.color` in colors range.', () => {
       const value = { color: 'color-05' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color05);
       expect(service['getColorFromType']).not.toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: should call `getColorFromType` and return `color-01` if `value.color` isn`t in colors range.', () => {
       const value = { color: 'color-20' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color01);
       expect(service['getColorFromType']).toHaveBeenCalledWith('color-20');
@@ -63,7 +63,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: should call `getColorFromType` and return `color-07` if value type is `danger`.', () => {
       const value = { type: 'danger' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoColorPaletteEnum.Color07);
       expect(service['getColorFromType']).toHaveBeenCalledWith('danger');
@@ -72,7 +72,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: shouldn`t call `getColorFromType` and return `caption-tag-01` if `value.color` is a caption-tag color.', () => {
       const value = { color: 'caption-tag-01' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoCaptionTagColorEnum.CaptionTag01);
       expect(service['getColorFromType']).not.toHaveBeenCalled();
@@ -81,7 +81,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: shouldn`t call `getColorFromType` and return `caption-tag-35` if `value.color` is the last caption-tag color.', () => {
       const value = { color: 'caption-tag-35' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoCaptionTagColorEnum.CaptionTag35);
       expect(service['getColorFromType']).not.toHaveBeenCalled();
@@ -90,7 +90,7 @@ describe('PoColorPaletteService:', () => {
     it('getColor: shouldn`t call `getColorFromType` and return `caption-tag-18` if `value.color` is a middle caption-tag color.', () => {
       const value = { color: 'caption-tag-18' };
 
-      spyOn(service, <any>'getColorFromType').and.callThrough();
+      vi.spyOn(service as any, 'getColorFromType');
 
       expect(service['getColor'](value)).toBe(PoCaptionTagColorEnum.CaptionTag18);
       expect(service['getColorFromType']).not.toHaveBeenCalled();

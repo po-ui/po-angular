@@ -145,7 +145,7 @@ describe('PoTableBaseComponent:', () => {
   });
 
   it('should call setColumnLink when set columns', () => {
-    spyOn(component, <any>'setColumnLink');
+    vi.spyOn(component as any, 'setColumnLink');
     component.columns = columns;
 
     expect(component['setColumnLink']).toHaveBeenCalled();
@@ -235,7 +235,7 @@ describe('PoTableBaseComponent:', () => {
   it('validate if action can be called', () => {
     const tableAction = component.actions[0];
 
-    spyOn(tableAction, 'action');
+    vi.spyOn(tableAction as any, 'action');
 
     if (typeof tableAction.action === 'function') {
       tableAction.action();
@@ -247,7 +247,7 @@ describe('PoTableBaseComponent:', () => {
   it('validate if disabled action can be called', () => {
     const tableDisabledAction = component.actions[0];
 
-    spyOn(tableDisabledAction, <any>'disabled');
+    vi.spyOn(tableDisabledAction as any, 'disabled');
 
     if (typeof tableDisabledAction.disabled === 'function') {
       tableDisabledAction.disabled();
@@ -381,7 +381,7 @@ describe('PoTableBaseComponent:', () => {
     component.sort = true;
     const column = component.columns[1];
 
-    spyOn(component, <any>'sortArray').and.callThrough();
+    vi.spyOn(component as any, 'sortArray');
     component.sortColumn(column);
     expect(component['sortArray']).toHaveBeenCalledWith(column, true);
 
@@ -441,7 +441,7 @@ describe('PoTableBaseComponent:', () => {
   it('should call event emitter', () => {
     const newItem = { textDate: 'english text', numberData: 4, dateData: '2020-11-30' };
 
-    spyOn(component.showMore, 'emit').and.callFake(() => {
+    vi.spyOn(component.showMore as any, 'emit').mockImplementation(() => {
       component.items.push(newItem);
       component.showMoreDisabled = true;
     });
@@ -456,7 +456,7 @@ describe('PoTableBaseComponent:', () => {
     const columnDetail = component.columns[3];
 
     expect(component['getColumnMasterDetail']()).toEqual(component.columns[3]);
-    spyOn(component, <any>'sortArray');
+    vi.spyOn(component as any, 'sortArray');
 
     component.sortColumn(columnDetail);
 
@@ -518,14 +518,14 @@ describe('PoTableBaseComponent:', () => {
 
     describe('initializeData:', () => {
       it('getFilteredItems should be called when `p-service-api` is used', () => {
-        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+        vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of({ items: [], hasNext: false }));
         component.hasService = true;
         component.initializeData();
         expect(component.getFilteredItems).toHaveBeenCalled();
       });
 
       it('getFilteredItems should not be called when `p-service-api` is not used', () => {
-        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+        vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of({ items: [], hasNext: false }));
         component.hasService = false;
         component.initializeData();
         expect(component.getFilteredItems).not.toHaveBeenCalled();
@@ -533,7 +533,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('ngOnChanges: should call `calculateHeightTableContainer` if height is changed', () => {
-      spyOn(component, 'calculateHeightTableContainer');
+      vi.spyOn(component as any, 'calculateHeightTableContainer');
       const height = 400;
       const changes = <any>{ height };
       component.height = height;
@@ -544,7 +544,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('ngOnChanges: shouldn`t call `calculateHeightTableContainer` if height is not changed', () => {
-      spyOn(component, 'calculateHeightTableContainer');
+      vi.spyOn(component as any, 'calculateHeightTableContainer');
 
       const changes = <any>{};
 
@@ -554,7 +554,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('ngOnChanges: should call `changeSizeLoading` if height is changed', () => {
-      spyOn(component, 'changeSizeLoading');
+      vi.spyOn(component as any, 'changeSizeLoading');
       const height = 400;
       const changes = <any>{ height };
       component.height = height;
@@ -565,7 +565,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('ngOnChanges: should call `changeSizeLoading` if there is items', () => {
-      spyOn(component, 'changeSizeLoading');
+      vi.spyOn(component as any, 'changeSizeLoading');
       items = component.items;
       const changes = <any>{ items };
       component.items = items;
@@ -576,7 +576,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('ngOnChanges: should´n call `changeSizeLoading` if there is no items', () => {
-      spyOn(component, 'changeSizeLoading');
+      vi.spyOn(component as any, 'changeSizeLoading');
       items = null;
       const changes = <any>{ items };
       component.items = null;
@@ -630,8 +630,8 @@ describe('PoTableBaseComponent:', () => {
 
         const currentRow = rows[0];
 
-        spyOn(component, <any>'unselectOtherRows');
-        spyOn(component, <any>'isEverySelected');
+        vi.spyOn(component as any, 'unselectOtherRows');
+        vi.spyOn(component as any, 'isEverySelected');
 
         component['configAfterSelectRow'](rows, currentRow);
 
@@ -645,8 +645,8 @@ describe('PoTableBaseComponent:', () => {
 
         const currentRow = rows[0];
 
-        spyOn(component, <any>'unselectOtherRows');
-        spyOn(component, <any>'isEverySelected');
+        vi.spyOn(component as any, 'unselectOtherRows');
+        vi.spyOn(component as any, 'isEverySelected');
 
         component['configAfterSelectRow'](rows, currentRow);
 
@@ -660,8 +660,8 @@ describe('PoTableBaseComponent:', () => {
 
         const currentRow = rows[0];
 
-        spyOn(component, <any>'unselectOtherRows');
-        spyOn(component, <any>'isEverySelected');
+        vi.spyOn(component as any, 'unselectOtherRows');
+        vi.spyOn(component as any, 'isEverySelected');
 
         component['configAfterSelectRow'](rows, currentRow);
 
@@ -759,8 +759,8 @@ describe('PoTableBaseComponent:', () => {
     it('selectRow: should set $selected `true` at row and call `configAfterSelectRow` and `emitSelectEvents`', () => {
       const row = { id: 1, $selected: false };
 
-      spyOn(component, <any>'configAfterSelectRow');
-      spyOn(component, <any>'emitSelectEvents');
+      vi.spyOn(component as any, 'configAfterSelectRow');
+      vi.spyOn(component as any, 'emitSelectEvents');
 
       component.selectRow(row);
 
@@ -787,7 +787,7 @@ describe('PoTableBaseComponent:', () => {
     it('selectRow: should call setSelectedList after selecting a row', () => {
       const row = { id: 1, $selected: false };
 
-      spyOn(component, 'setSelectedList');
+      vi.spyOn(component as any, 'setSelectedList');
 
       component.selectRow(row);
 
@@ -811,7 +811,7 @@ describe('PoTableBaseComponent:', () => {
 
     it('emitSelectEvents: should emit `selected` if `row.$selected` is `true`', () => {
       const row = { id: 1, $selected: true };
-      spyOn(component.selected, 'emit');
+      vi.spyOn(component.selected as any, 'emit');
 
       component['emitSelectEvents'](row);
 
@@ -820,7 +820,7 @@ describe('PoTableBaseComponent:', () => {
 
     it('emitSelectEvents: should emit `unselected` if `row.$selected` is `false`', () => {
       const row = { id: 1, $selected: false };
-      spyOn(component.unselected, 'emit');
+      vi.spyOn(component.unselected as any, 'emit');
 
       component['emitSelectEvents'](row);
 
@@ -830,7 +830,7 @@ describe('PoTableBaseComponent:', () => {
     it('selectAllRows: should call `emitSelectEvents`', () => {
       component.hideSelectAll = false;
 
-      spyOn(component, <any>'emitSelectAllEvents');
+      vi.spyOn(component as any, 'emitSelectAllEvents');
 
       component.selectAllRows();
 
@@ -851,8 +851,8 @@ describe('PoTableBaseComponent:', () => {
         const row = { id: 1, $selected: false, detail: [{ id: 4 }] };
         const parentRow = { id: 2, detail: [row] };
 
-        spyOn(component, <any>'emitSelectEvents');
-        spyOn(component, <any>'updateParentRowSelection');
+        vi.spyOn(component as any, 'emitSelectEvents');
+        vi.spyOn(component as any, 'updateParentRowSelection');
 
         component.selectDetailRow({ item: row, parentRow });
 
@@ -863,11 +863,11 @@ describe('PoTableBaseComponent:', () => {
       it('should select all rows when selectAll is false', () => {
         component.selectAllRows();
 
-        expect(component.selectAll).toBeTrue();
+        expect(component.selectAll).toBe(true);
         component.items.forEach(item => {
-          expect(item.$selected).toBeTrue();
+          expect(item.$selected).toBe(true);
           item.detail.forEach(childItem => {
-            expect(childItem.$selected).toBeTrue();
+            expect(childItem.$selected).toBe(true);
           });
         });
       });
@@ -881,11 +881,11 @@ describe('PoTableBaseComponent:', () => {
 
         component.selectAllRows();
 
-        expect(component.selectAll).toBeFalse();
+        expect(component.selectAll).toBe(false);
         component.items.forEach(item => {
-          expect(item.$selected).toBeFalse();
+          expect(item.$selected).toBe(false);
           item.detail.forEach(childItem => {
-            expect(childItem.$selected).toBeFalse();
+            expect(childItem.$selected).toBe(false);
           });
         });
       });
@@ -896,17 +896,17 @@ describe('PoTableBaseComponent:', () => {
         component.selectAllRows();
 
         component.items.forEach(item => {
-          expect(item.$selected).toBeFalse();
+          expect(item.$selected).toBe(false);
         });
       });
 
       it('should emit selectAll events and update selected list', () => {
-        spyOn(component as any, 'emitSelectAllEvents');
-        spyOn(component, 'setSelectedList');
+        vi.spyOn(component as any, 'emitSelectAllEvents');
+        vi.spyOn(component as any, 'setSelectedList');
 
         component.selectAllRows();
 
-        expect((component as any).emitSelectAllEvents).toHaveBeenCalledWith(true, jasmine.any(Array));
+        expect((component as any).emitSelectAllEvents).toHaveBeenCalledWith(true, expect.any(Array));
         expect(component.setSelectedList).toHaveBeenCalled();
       });
     });
@@ -915,7 +915,7 @@ describe('PoTableBaseComponent:', () => {
       const rows = [{ id: 1, $selected: true }];
       const selectAll = true;
 
-      spyOn(component.allSelected, 'emit');
+      vi.spyOn(component.allSelected as any, 'emit');
 
       component['emitSelectAllEvents'](selectAll, rows);
 
@@ -926,7 +926,7 @@ describe('PoTableBaseComponent:', () => {
       const rows = [{ id: 1, $selected: true }];
       const selectAll = false;
 
-      spyOn(component.allUnselected, 'emit');
+      vi.spyOn(component.allUnselected as any, 'emit');
 
       component['emitSelectAllEvents'](selectAll, rows);
 
@@ -1011,7 +1011,7 @@ describe('PoTableBaseComponent:', () => {
     it(`sortArray: should call 'sortValues'`, () => {
       const columnDate = component.columns[3];
 
-      spyOn(utilsFunctions, 'sortValues');
+      vi.spyOn(utilsFunctions as any, 'sortValues');
 
       component['sortArray'](columnDate, true);
 
@@ -1059,8 +1059,8 @@ describe('PoTableBaseComponent:', () => {
       component.sort = true;
       component.sortBy.observers = <any>[{ next: () => {} }];
 
-      spyOn(component.sortBy, 'emit').and.callThrough();
-      spyOn(component, <any>'sortArray').and.callThrough();
+      vi.spyOn(component.sortBy as any, 'emit');
+      vi.spyOn(component as any, 'sortArray');
 
       component.sortColumn(column);
       expect(component.sortBy.emit).toHaveBeenCalledWith({ column, type: PoTableColumnSortType.Ascending });
@@ -1074,7 +1074,7 @@ describe('PoTableBaseComponent:', () => {
     it(`onShowMore: 'showMore' should emit an object parameter containing 'ascending' as value of property 'type'`, () => {
       const column = component.columns[1];
       component.sortedColumn.property = column;
-      spyOn(component.showMore, 'emit');
+      vi.spyOn(component.showMore as any, 'emit');
 
       component.onShowMore();
 
@@ -1085,8 +1085,8 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it(`OnShowMore: 'showMore' should call 'getFilteredItems' when has 'p-service-api' url`, () => {
-      spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
-      spyOn(component.showMore, 'emit');
+      vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of({ items: [], hasNext: false }));
+      vi.spyOn(component.showMore as any, 'emit');
 
       const column = component.columns[1];
       component.sortedColumn.property = column;
@@ -1108,7 +1108,7 @@ describe('PoTableBaseComponent:', () => {
       component.sortedColumn.property = column;
       component.sortedColumn.ascending = false;
 
-      spyOn(component.showMore, 'emit');
+      vi.spyOn(component.showMore as any, 'emit');
 
       component.onShowMore();
 
@@ -1121,7 +1121,7 @@ describe('PoTableBaseComponent:', () => {
     it(`onShowMore: 'showMore' should emit an object parameter containing 'undefined' if 'sortedColumn.property' is 'undefined'`, () => {
       component.sortedColumn.property = undefined;
 
-      spyOn(component.showMore, 'emit');
+      vi.spyOn(component.showMore as any, 'emit');
 
       component.onShowMore();
 
@@ -1158,7 +1158,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: false
       };
 
-      spyOn(component.expanded, 'emit');
+      vi.spyOn(component.expanded as any, 'emit');
 
       component.toggleDetail(currentRow);
       expect(component.expanded.emit).toHaveBeenCalled();
@@ -1172,7 +1172,7 @@ describe('PoTableBaseComponent:', () => {
         $showDetail: true
       };
 
-      spyOn(component.collapsed, 'emit');
+      vi.spyOn(component.collapsed as any, 'emit');
 
       component.toggleDetail(currentRow);
       expect(component.collapsed.emit).toHaveBeenCalled();
@@ -1201,9 +1201,9 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('onChangeColumns: should call `setMainColumns`, `setColumnMasterDetail` and `setSubtitleColumns`', () => {
-      const spySetMainColumns = spyOn(component, <any>'setMainColumns');
-      const spySetColumnMasterDetail = spyOn(component, <any>'setColumnMasterDetail');
-      const spySetSubtitleColumns = spyOn(component, <any>'setSubtitleColumns');
+      const spySetMainColumns = vi.spyOn(component as any, 'setMainColumns');
+      const spySetColumnMasterDetail = vi.spyOn(component as any, 'setColumnMasterDetail');
+      const spySetSubtitleColumns = vi.spyOn(component as any, 'setSubtitleColumns');
 
       component['onChangeColumns']();
 
@@ -1216,7 +1216,7 @@ describe('PoTableBaseComponent:', () => {
       const detailColumn: PoTableColumn = { property: 'detail', type: 'detail' };
       const expectedValue = { ...detailColumn };
 
-      const spyGetColumnMasterDetail = spyOn(component, <any>'getColumnMasterDetail').and.callThrough();
+      const spyGetColumnMasterDetail = vi.spyOn(component as any, 'getColumnMasterDetail');
 
       component.columns = [{ ...detailColumn }];
       component['setColumnMasterDetail']();
@@ -1275,7 +1275,7 @@ describe('PoTableBaseComponent:', () => {
 
       const expectedValue = [{ ...subTitleColumn }];
 
-      const spyGetSubtitleColumns = spyOn(component, <any>'getSubtitleColumns').and.callThrough();
+      const spyGetSubtitleColumns = vi.spyOn(component as any, 'getSubtitleColumns');
 
       component.columns = [{ property: 'name' }, { ...subTitleColumn }];
       component['setSubtitleColumns']();
@@ -1386,7 +1386,7 @@ describe('PoTableBaseComponent:', () => {
 
     describe('setService', () => {
       it('should be called with string url and set service url and method is GET', () => {
-        spyOn(component['poTableService'], 'setUrl');
+        vi.spyOn(component['poTableService'] as any, 'setUrl');
         const url = 'https://po-ui.io';
 
         component['setService'](url, 'GET');
@@ -1394,7 +1394,7 @@ describe('PoTableBaseComponent:', () => {
       });
 
       it("should be called with undefined and don't set url and method is GET", () => {
-        spyOn(component['poTableService'], 'setUrl');
+        vi.spyOn(component['poTableService'] as any, 'setUrl');
         const url = undefined;
 
         component['setService'](url, 'GET');
@@ -1403,7 +1403,7 @@ describe('PoTableBaseComponent:', () => {
       });
 
       it("should be called with empty string and don't set url and method is GET", () => {
-        spyOn(component['poTableService'], 'setUrl');
+        vi.spyOn(component['poTableService'] as any, 'setUrl');
         const url = '';
 
         component['setService'](url, 'GET');
@@ -1412,7 +1412,7 @@ describe('PoTableBaseComponent:', () => {
       });
 
       it('should be called with string url and set service url and method is DELETE', () => {
-        spyOn(component['poTableService'], 'setUrl');
+        vi.spyOn(component['poTableService'] as any, 'setUrl');
         const url = 'https://po-ui.io';
 
         component['setService'](url, 'DELETE');
@@ -1420,7 +1420,7 @@ describe('PoTableBaseComponent:', () => {
       });
 
       it("should be called with undefined and don't set url and method is DELETE", () => {
-        spyOn(component['poTableService'], 'setUrl');
+        vi.spyOn(component['poTableService'] as any, 'setUrl');
         const url = undefined;
 
         component['setService'](url, 'DELETE');
@@ -1491,12 +1491,12 @@ describe('PoTableBaseComponent:', () => {
         const pageSize = 10;
         const filter = {};
 
-        spyOn(component['poTableService'], <any>'getFilteredItems').and.returnValue(of({ items, hasNext: false }));
+        vi.spyOn(component['poTableService'] as any, 'getFilteredItems').mockReturnValue(of({ items, hasNext: false }));
 
         component.page = page;
         component.pageSize = pageSize;
 
-        spyOn(component, <any>'getFilteredParams').and.callThrough();
+        vi.spyOn(component as any, 'getFilteredParams');
 
         const filteredDataObservable = component['getFilteredItems'](filter);
 
@@ -1557,7 +1557,7 @@ describe('PoTableBaseComponent:', () => {
       const fakeSubscription = <any>{ unsubscribe: () => {} };
 
       it(`should unsubscribe 'poTableServiceSubscription'`, () => {
-        spyOn(fakeSubscription, <any>'unsubscribe');
+        vi.spyOn(fakeSubscription as any, 'unsubscribe');
         component['poTableServiceSubscription'] = fakeSubscription;
 
         component.ngOnDestroy();
@@ -1568,7 +1568,7 @@ describe('PoTableBaseComponent:', () => {
       it(`should not unsubscribe if 'poTableServiceSubscription' is falsy.`, () => {
         component['poTableServiceSubscription'] = fakeSubscription;
 
-        spyOn(fakeSubscription, <any>'unsubscribe');
+        vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
         component['poTableServiceSubscription'] = undefined;
         component.ngOnDestroy();
@@ -1729,14 +1729,14 @@ describe('PoTableBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
 
     it('p-columns: should call `setColumnLink` if has values', () => {
-      spyOn(component, <any>'setColumnLink');
+      vi.spyOn(component as any, 'setColumnLink');
 
       component.columns = [{ label: 'table', property: 'table' }];
 
@@ -1746,7 +1746,7 @@ describe('PoTableBaseComponent:', () => {
     it('p-columns, p-items: should call `getDefaultColumns` with item if doesn`t have columns but has items to set default column', () => {
       const item = { table: 'table' };
 
-      spyOn(component, <any>'getDefaultColumns').and.callThrough();
+      vi.spyOn(component as any, 'getDefaultColumns');
 
       component.items = [item];
       component.columns = [];
@@ -1755,7 +1755,7 @@ describe('PoTableBaseComponent:', () => {
     });
 
     it('p-columns, p-items: shouldn`t call `getDefaultColumns` to set default column if doesn`t have items and columns', () => {
-      spyOn(component, <any>'getDefaultColumns');
+      vi.spyOn(component as any, 'getDefaultColumns');
 
       component.items = [];
       component.columns = [];

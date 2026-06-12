@@ -35,7 +35,7 @@ describe('PoHeaderbrandComponent', () => {
     window.dispatchEvent(new Event('resize'));
 
     tick(200);
-    expect(component.smallLogo).toBeTrue();
+    expect(component.smallLogo).toBe(true);
   }));
 
   it('should set smallLogo to false if width is bigger than 960', fakeAsync(() => {
@@ -45,11 +45,11 @@ describe('PoHeaderbrandComponent', () => {
     window.dispatchEvent(new Event('resize'));
 
     tick(200);
-    expect(component.smallLogo).toBeFalse();
+    expect(component.smallLogo).toBe(false);
   }));
 
   it('should recalculate showTitleTooltip in ngOnChanges when brand changes', () => {
-    spyOn(component['cd'], 'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
 
     component.ngOnChanges({
       brand: {
@@ -66,8 +66,8 @@ describe('PoHeaderbrandComponent', () => {
   it('should open external link if brand link is external link', () => {
     component.brand = { link: 'http://external.com' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(true);
-    const windowSpy = spyOn(window, 'open');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(true);
+    const windowSpy = vi.spyOn(window as any, 'open');
 
     component.onClickLogo();
 
@@ -78,8 +78,8 @@ describe('PoHeaderbrandComponent', () => {
   it('should open intenral link if brand link is internal link', () => {
     component.brand = { link: '/test' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(false);
-    const routerSpy = spyOn(router, 'navigateByUrl');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(false);
+    const routerSpy = vi.spyOn(router as any, 'navigateByUrl');
 
     component.onClickLogo();
 

@@ -68,14 +68,14 @@ describe('PoTreeViewBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
 
     it('p-items: shouldn`t call getItemsByMaxLevel if items isn`t array and return empty array', () => {
-      const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel');
+      const spyGetItemsByMaxLevel = vi.spyOn(component as any, 'getItemsByMaxLevel');
 
       component.items = undefined;
 
@@ -86,7 +86,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('p-items: should call getItemsByMaxLevel if items is array and return items', () => {
       const expectedValue = [{ label: 'Nível 01', value: 1 }];
 
-      const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel').and.callThrough();
+      const spyGetItemsByMaxLevel = vi.spyOn(component as any, 'getItemsByMaxLevel');
 
       component.items = expectedValue;
 
@@ -139,7 +139,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('emitExpanded: should call collapsed.emit with tree view item if treeViewItem.expanded is false', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, expanded: false };
 
-      const spyCollapsedEmit = spyOn(component['collapsed'], 'emit');
+      const spyCollapsedEmit = vi.spyOn(component['collapsed'] as any, 'emit');
 
       component['emitExpanded'](treeViewItem);
 
@@ -149,7 +149,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('emitExpanded: should call expanded.emit with tree view item if treeViewItem.expanded is true', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, expanded: true };
 
-      const spyExpandedEmit = spyOn(component['expanded'], 'emit');
+      const spyExpandedEmit = vi.spyOn(component['expanded'] as any, 'emit');
 
       component['emitExpanded'](treeViewItem);
 
@@ -159,8 +159,8 @@ describe('PoTreeViewBaseComponent:', () => {
     it('emitSelected: should call unselected.emit with tree view item if treeViewItem.selected is false', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, selected: false };
 
-      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
-      const spyUnselectedEmit = spyOn(component['unselected'], 'emit');
+      const spyUpdateItemsOnSelect = vi.spyOn(component as any, 'updateItemsOnSelect');
+      const spyUnselectedEmit = vi.spyOn(component['unselected'] as any, 'emit');
 
       component['emitSelected'](treeViewItem);
 
@@ -171,8 +171,8 @@ describe('PoTreeViewBaseComponent:', () => {
     it('emitSelected: should call selected.emit with tree view item if treeViewItem.selected is true', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, selected: true };
 
-      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
-      const spySelectedEmit = spyOn(component['selected'], 'emit');
+      const spyUpdateItemsOnSelect = vi.spyOn(component as any, 'updateItemsOnSelect');
+      const spySelectedEmit = vi.spyOn(component['selected'] as any, 'emit');
 
       component['emitSelected'](treeViewItem);
 
@@ -184,8 +184,8 @@ describe('PoTreeViewBaseComponent:', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, selected: true, subItems: [{ label: 'Nivel 02', value: 2 }] };
       const expected = { label: 'Nível 01', value: 1, selected: true };
 
-      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
-      const spySelectedEmit = spyOn(component['selected'], 'emit');
+      const spyUpdateItemsOnSelect = vi.spyOn(component as any, 'updateItemsOnSelect');
+      const spySelectedEmit = vi.spyOn(component['selected'] as any, 'emit');
 
       component.singleSelect = true;
       component['emitSelected'](treeViewItem);
@@ -198,7 +198,7 @@ describe('PoTreeViewBaseComponent:', () => {
     it('getItemsByMaxLevel: should return and not call addItem if level is 4', () => {
       const items = [];
 
-      const spyAddItem = spyOn(component, <any>'addItem');
+      const spyAddItem = vi.spyOn(component as any, 'addItem');
 
       const itemsByMaxLavel = component['getItemsByMaxLevel'](items, 4);
 
@@ -264,8 +264,8 @@ describe('PoTreeViewBaseComponent:', () => {
         }
       ];
 
-      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-      const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel').and.callThrough();
+      const spyAddItem = vi.spyOn(component as any, 'addItem');
+      const spyGetItemsByMaxLevel = vi.spyOn(component as any, 'getItemsByMaxLevel');
 
       const itemsByMaxLavel = component['getItemsByMaxLevel'](unlimitedItems);
 
@@ -280,8 +280,8 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const expectedValue = [childItem];
 
-      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
+      const spyExpandParentItem = vi.spyOn(component as any, 'expandParentItem');
+      const spyAddChildItemInParent = vi.spyOn(component as any, 'addChildItemInParent');
 
       component['addItem'](items, childItem);
 
@@ -298,9 +298,9 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const expectedValue = [parentItem];
 
-      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
-      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
+      const spyExpandParentItem = vi.spyOn(component as any, 'expandParentItem');
+      const spyAddChildItemInParent = vi.spyOn(component as any, 'addChildItemInParent');
+      const spySelectItemBySubItems = vi.spyOn(component as any, 'selectItemBySubItems');
 
       component['addItem'](items, childItem, parentItem);
 
@@ -318,7 +318,7 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const expectedValue = [parentItem];
 
-      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
+      const spySelectItemBySubItems = vi.spyOn(component as any, 'selectItemBySubItems');
 
       component.singleSelect = true;
       component['addItem'](items, childItem, parentItem);
@@ -335,9 +335,9 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const expectedValue = [parentItem];
 
-      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
-      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
+      const spyExpandParentItem = vi.spyOn(component as any, 'expandParentItem');
+      const spyAddChildItemInParent = vi.spyOn(component as any, 'addChildItemInParent');
+      const spySelectItemBySubItems = vi.spyOn(component as any, 'selectItemBySubItems');
 
       component['addItem'](items, childItem, parentItem, true);
 
@@ -400,8 +400,10 @@ describe('PoTreeViewBaseComponent:', () => {
       const items = [selectedItem];
       component.items = items;
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any>'selectAllItems');
+      const spyGetItemsWithParentSelected = vi
+        .spyOn(component as any, 'getItemsWithParentSelected')
+        .mockReturnValue(items);
+      const spySelect = vi.spyOn(component as any, 'selectAllItems');
 
       component['updateItemsOnSelect'](selectedItem);
 
@@ -420,8 +422,10 @@ describe('PoTreeViewBaseComponent:', () => {
       component.items = items;
       component.singleSelect = true;
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any>'selectAllItems');
+      const spyGetItemsWithParentSelected = vi
+        .spyOn(component as any, 'getItemsWithParentSelected')
+        .mockReturnValue(items);
+      const spySelect = vi.spyOn(component as any, 'selectAllItems');
 
       component['updateItemsOnSelect'](selectedItem);
 
@@ -440,8 +444,10 @@ describe('PoTreeViewBaseComponent:', () => {
 
       component.items = items;
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any>'selectAllItems');
+      const spyGetItemsWithParentSelected = vi
+        .spyOn(component as any, 'getItemsWithParentSelected')
+        .mockReturnValue(items);
+      const spySelect = vi.spyOn(component as any, 'selectAllItems');
 
       component['updateItemsOnSelect'](selectedItem);
 
@@ -624,7 +630,7 @@ describe('PoTreeViewBaseComponent:', () => {
 
       const item = { label: 'Item 1', value: 1, subItems, selected: undefined };
 
-      spyOn(component, <any>'everyItemSelected').and.returnValue(true);
+      vi.spyOn(component as any, 'everyItemSelected').mockReturnValue(true);
 
       component['selectItemBySubItems'](<any>item);
 
@@ -698,7 +704,7 @@ describe('PoTreeViewBaseComponent:', () => {
 
     describe('getItemsWithParentSelected:', () => {
       it('should return [] and not call addItem if items is undefined', () => {
-        const spyAddItem = spyOn(component, <any>'addItem');
+        const spyAddItem = vi.spyOn(component as any, 'addItem');
 
         const items = component['getItemsWithParentSelected'](undefined, undefined, [1]);
 
@@ -709,8 +715,8 @@ describe('PoTreeViewBaseComponent:', () => {
       it('should call only 1 time getItemsWithParentSelected if items hasn`t subItems', () => {
         const items = [{ label: 'Item 1', value: '1' }];
 
-        const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-        const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
+        const spyAddItem = vi.spyOn(component as any, 'addItem');
+        const spyGetItemsWithParentSelected = vi.spyOn(component as any, 'getItemsWithParentSelected');
 
         const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 
@@ -725,8 +731,8 @@ describe('PoTreeViewBaseComponent:', () => {
           { label: 'Item 1', value: '1', selected: false, subItems: [{ label: 'Item 1.2', value: '1.2' }] }
         ];
 
-        const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-        const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
+        const spyAddItem = vi.spyOn(component as any, 'addItem');
+        const spyGetItemsWithParentSelected = vi.spyOn(component as any, 'getItemsWithParentSelected');
 
         const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
 

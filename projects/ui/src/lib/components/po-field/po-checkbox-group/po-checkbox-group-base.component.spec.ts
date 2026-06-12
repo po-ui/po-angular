@@ -67,8 +67,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
   });
 
   it('should call checkOptionModel and changeValue', () => {
-    spyOn(fakeInstance, 'checkOptionModel');
-    spyOn(fakeInstance, 'changeValue');
+    vi.spyOn(fakeInstance as any, 'checkOptionModel');
+    vi.spyOn(fakeInstance as any, 'changeValue');
 
     component.checkOption.call(fakeInstance, Object.assign({}, valuesObject));
 
@@ -80,8 +80,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     component.checkedOptions = Object.assign({}, valuesObject);
     component.indeterminate = true;
 
-    spyOn(component, 'propagateChange');
-    spyOn(component.change, 'emit');
+    vi.spyOn(component as any, 'propagateChange');
+    vi.spyOn(component.change as any, 'emit');
 
     component.changeValue();
 
@@ -94,8 +94,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     component.checkedOptionsList = [].concat(valuesList);
     component.indeterminate = false;
 
-    spyOn(component, 'propagateChange');
-    spyOn(component.change, 'emit');
+    vi.spyOn(component as any, 'propagateChange');
+    vi.spyOn(component.change as any, 'emit');
 
     component.changeValue();
 
@@ -110,8 +110,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
 
     component.propagateChange = undefined;
 
-    spyOn(component.ngModelChange, 'emit');
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.ngModelChange as any, 'emit');
+    vi.spyOn(component.change as any, 'emit');
 
     component.changeValue();
 
@@ -131,8 +131,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     component.indeterminate = false;
     component.propagateChange = undefined;
 
-    spyOn(component.ngModelChange, 'emit');
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.ngModelChange as any, 'emit');
+    vi.spyOn(component.change as any, 'emit');
 
     component.changeValue();
 
@@ -148,7 +148,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     component.writeValue(Object.assign({}, valuesObject));
 
     expect(component.checkedOptions).toEqual(
-      jasmine.objectContaining({
+      expect.objectContaining({
         1: true,
         2: false,
         3: null
@@ -233,8 +233,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('checkOption: shouldn´t call the methods checkOptionModel and changeValue when component disabled.', () => {
       const option = { label: '1', value: '1' };
       component.disabled = true;
-      spyOn(component, <any>'checkOptionModel');
-      spyOn(component, <any>'changeValue');
+      vi.spyOn(component as any, 'checkOptionModel');
+      vi.spyOn(component as any, 'changeValue');
 
       component.checkOption(option);
 
@@ -243,7 +243,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     });
 
     it('writeValue: should clear checkedOptions when optionsModel is empty', () => {
-      spyOn(component, <any>'generateCheckOptions').and.returnValue(null);
+      vi.spyOn(component as any, 'generateCheckOptions').mockReturnValue(null);
 
       component.writeValue(null);
 
@@ -278,7 +278,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
         }
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -292,8 +292,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
         }
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
-      spyOn(component, isInvalidIndeterminate).and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
+      vi.spyOn(component, isInvalidIndeterminate).mockReturnValue(true);
 
       expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(component[isInvalidIndeterminate]).toHaveBeenCalled();
@@ -301,8 +301,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     });
 
     it('validate: should return undefined when `requiredFailed` is false', () => {
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
-      spyOn(component, <any>'isInvalidIndeterminate').and.returnValue(false);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
+      vi.spyOn(component as any, 'isInvalidIndeterminate').mockReturnValue(false);
 
       expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -311,7 +311,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']([]);
 
@@ -369,7 +369,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     });
 
     it('setCheckboxGroupOptionsView: should set `checkboxGroupOptionsView` with an id property in each option item', () => {
-      spyOn(UtilsFunction, 'uuid');
+      vi.spyOn(UtilsFunction as any, 'uuid');
 
       component['setCheckboxGroupOptionsView'](options);
 
@@ -408,8 +408,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('p-options: should be update with valid values.', () => {
       const validValues = [[], [{ label: '1', value: '2' }]];
 
-      spyOn(component, <any>'removeDuplicatedOptions');
-      spyOn(component, <any>'setCheckboxGroupOptionsView');
+      vi.spyOn(component as any, 'removeDuplicatedOptions');
+      vi.spyOn(component as any, 'setCheckboxGroupOptionsView');
 
       expectPropertiesValues(component, 'options', validValues, validValues);
       expect(component['removeDuplicatedOptions']).toHaveBeenCalled();
@@ -430,8 +430,8 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     it('p-columns: should set `mdColumns` and call `convertToInt` and `getGridSystemColumns` when `p-columns` property is setted', () => {
       component.mdColumns = undefined;
 
-      spyOn(UtilsFunction, 'convertToInt');
-      spyOn(component, <any>'getGridSystemColumns').and.returnValue(6);
+      vi.spyOn(UtilsFunction as any, 'convertToInt');
+      vi.spyOn(component as any, 'getGridSystemColumns').mockReturnValue(6);
 
       expectPropertiesValues(component, 'columns', 2, 6);
       expect(component.mdColumns).toBe(6);
@@ -505,7 +505,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });

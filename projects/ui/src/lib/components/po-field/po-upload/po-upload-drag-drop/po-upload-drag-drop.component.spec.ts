@@ -59,7 +59,7 @@ describe('PoUploadDragDropAreaComponent:', () => {
 
   describe('Methods:', () => {
     it('focus: should call `dragDropAreaComponent.focus`', () => {
-      spyOn(component.dragDropAreaComponent, 'focus');
+      vi.spyOn(component.dragDropAreaComponent as any, 'focus');
 
       component.focus();
 
@@ -86,7 +86,7 @@ describe('PoUploadDragDropAreaComponent:', () => {
       const fakeFiles = 'fakeFile';
       component.isDragOver = true;
 
-      spyOn(component.fileChange, 'emit');
+      vi.spyOn(component.fileChange as any, 'emit');
 
       component.onFileChange(fakeFiles);
 
@@ -103,7 +103,7 @@ describe('PoUploadDragDropAreaComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.changeDetector, 'detectChanges');
+      vi.spyOn(fakeThis.changeDetector as any, 'detectChanges');
 
       component.onAreaElement.call(fakeThis, fakeElement);
 

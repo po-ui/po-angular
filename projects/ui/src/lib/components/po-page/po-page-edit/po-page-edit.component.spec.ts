@@ -70,7 +70,7 @@ describe('PoPageEditComponent', () => {
   it('should click on button to call action', () => {
     const poButton = containerFixture.debugElement.nativeElement.querySelector('po-button > button');
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
     poButton.dispatchEvent(event);
     expect(poButton.dispatchEvent).toHaveBeenCalled();
   });
@@ -83,13 +83,13 @@ describe('PoPageEditComponent', () => {
 
   describe('Methods:', () => {
     it('getIcon: should return "ICON_CLOSE" if icon is "cancel" and "cancel" is primary action', () => {
-      spyOn(component, <any>'isPrimaryAction').and.returnValue(true);
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
 
       expect(component.getIcon('cancel')).toBe('ICON_CLOSE');
     });
 
     it('getIcon: should return "ICON_OK" if icon is "saveNew" and "saveNew" is primary action', () => {
-      spyOn(component, <any>'isPrimaryAction').and.returnValue(true);
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
 
       expect(component.getIcon('saveNew')).toBe('ICON_OK');
     });
@@ -99,13 +99,13 @@ describe('PoPageEditComponent', () => {
     });
 
     it('getType: should return "primary" if type is "cancel" and "cancel" is primary action', () => {
-      spyOn(component, <any>'isPrimaryAction').and.returnValue(true);
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
 
       expect(component.getType('cancel')).toBe('primary');
     });
 
     it('getType: should return "primary" if type is "saveNew" and "saveNew" is primary action', () => {
-      spyOn(component, <any>'isPrimaryAction').and.returnValue(true);
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
 
       expect(component.getType('saveNew')).toBe('primary');
     });
@@ -115,19 +115,19 @@ describe('PoPageEditComponent', () => {
     });
 
     it('getType: should return "secondary" if type is "saveNew" and isn`t primary action', () => {
-      spyOn(component, <any>'isPrimaryAction').and.returnValue(false);
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(false);
 
       expect(component.getType('saveNew')).toBe('secondary');
     });
 
     it('getType: should return "secondary" if type is "cancel" and isn`t primary action', () => {
-      spyOn(component, <any>'isPrimaryAction').and.returnValue(false);
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(false);
 
       expect(component.getType('cancel')).toBe('secondary');
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(false);
 
       component.title = undefined;
       component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
@@ -139,13 +139,13 @@ describe('PoPageEditComponent', () => {
       component.breadcrumb = undefined;
       component.title = undefined;
 
-      spyOn(component, 'hasAnyAction').and.returnValue(true);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(true);
 
       expect(component.hasPageHeader()).toBe(true);
     });
 
     it('hasPageHeader: should return true if has title', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(false);
 
       component.breadcrumb = undefined;
       component.title = 'Title';
@@ -154,7 +154,7 @@ describe('PoPageEditComponent', () => {
     });
 
     it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(false);
 
       component.breadcrumb = undefined;
       component.title = undefined;
@@ -166,7 +166,9 @@ describe('PoPageEditComponent', () => {
       const hasSaveEvent = false;
       const hasSaveNewEvent = false;
 
-      spyOn(component, 'hasEvent').and.returnValues(hasSaveEvent, hasSaveNewEvent);
+      vi.spyOn(component as any, 'hasEvent')
+        .mockReturnValueOnce(hasSaveEvent)
+        .mockReturnValueOnce(hasSaveNewEvent);
 
       expect(component['isPrimaryAction']('saveNew')).toBeTruthy();
     });
@@ -175,7 +177,9 @@ describe('PoPageEditComponent', () => {
       const hasSaveEvent = true;
       const hasSaveNewEvent = true;
 
-      spyOn(component, 'hasEvent').and.returnValues(hasSaveEvent, hasSaveNewEvent);
+      vi.spyOn(component as any, 'hasEvent')
+        .mockReturnValueOnce(hasSaveEvent)
+        .mockReturnValueOnce(hasSaveNewEvent);
 
       expect(component['isPrimaryAction']('saveNew')).toBeFalsy();
     });
@@ -208,13 +212,13 @@ describe('PoPageEditComponent', () => {
 
   describe('Templates:', () => {
     it('should show page header if `hasPageHeader` return true', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(true);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(true);
       fixture.detectChanges();
       expect(debugElement.querySelector('po-page-header')).toBeTruthy();
     });
 
     it('should hide page header if `hasPageHeader` return false', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(false);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(false);
       fixture.detectChanges();
       expect(debugElement.querySelector('po-page-header')).toBeFalsy();
     });

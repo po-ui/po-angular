@@ -28,7 +28,7 @@ describe('PoBadgeComponent:', () => {
   describe('Methods:', () => {
     it('setStatus: should call setStatus when "status" changes', () => {
       const changesFake = { status: 'status' };
-      spyOn(component, 'setStatus');
+      vi.spyOn(component as any, 'setStatus');
 
       component.ngOnChanges(<any>changesFake);
 
@@ -144,8 +144,8 @@ describe('PoBadgeComponent:', () => {
     it('setBadgeNotification: should return true and set isNotification true when not status', () => {
       const setBadgeNotification = component['setBadgeNotification'](2);
 
-      expect(component.isNotification).toBeTrue();
-      expect(setBadgeNotification).toBeTrue();
+      expect(component.isNotification).toBe(true);
+      expect(setBadgeNotification).toBe(true);
     });
 
     it('setBadgeNotification: should return true and set isNotification true when status', () => {
@@ -154,13 +154,13 @@ describe('PoBadgeComponent:', () => {
 
       const setBadgeNotification = component['setBadgeNotification'](1);
 
-      expect(component.isNotification).toBeFalse();
+      expect(component.isNotification).toBe(false);
       expect(component.badgeValue).toBe(null);
-      expect(setBadgeNotification).toBeFalse();
+      expect(setBadgeNotification).toBe(false);
     });
 
     it('setBadgeValue: should call checkBadgeValue', () => {
-      spyOn(component, <any>'checkBadgeValue');
+      vi.spyOn(component as any, 'checkBadgeValue');
       component.value = 2;
 
       component['setBadgeValue']();
@@ -171,14 +171,14 @@ describe('PoBadgeComponent:', () => {
     it('checkBadgeValue: should called with value is valid', () => {
       component['checkBadgeValue'](2);
 
-      expect(component.isValidValue).toBeTrue();
+      expect(component.isValidValue).toBe(true);
       expect(component.badgeValue).toBe('2');
     });
 
     it('checkBadgeValue: should called with value is invalid', () => {
       component['checkBadgeValue'](-10);
 
-      expect(component.isValidValue).toBeFalse();
+      expect(component.isValidValue).toBe(false);
       expect(component.badgeValue).toBe('');
     });
 

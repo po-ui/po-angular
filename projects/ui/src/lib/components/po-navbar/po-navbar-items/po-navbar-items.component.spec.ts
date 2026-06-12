@@ -35,7 +35,7 @@ describe('PoNavbarItemsComponent:', () => {
 
   describe('Methods:', () => {
     it('ngOnDestroy: should call `unsubscribe` of the `routeSubscription`', () => {
-      spyOn(component['routeSubscription'], 'unsubscribe');
+      vi.spyOn(component['routeSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -43,7 +43,7 @@ describe('PoNavbarItemsComponent:', () => {
     });
 
     it('ngOnInit: should call `subscribeToRoute`', () => {
-      spyOn(component, <any>'subscribeToRoute');
+      vi.spyOn(component as any, 'subscribeToRoute');
 
       component.ngOnInit();
 
@@ -104,7 +104,7 @@ describe('PoNavbarItemsComponent:', () => {
     });
 
     it('checkRouterChildrenFragments: should return url without params and `#`', () => {
-      spyOnProperty(component['router'], 'url').and.returnValue('test/label#fragment?param=1');
+      vi.spyOn(component['router'] as any, 'url').mockReturnValue('test/label#fragment?param=1');
 
       const result = component['checkRouterChildrenFragments']();
 
@@ -112,7 +112,7 @@ describe('PoNavbarItemsComponent:', () => {
     });
 
     it('checkRouterChildrenFragments: should return `/` if `url` is `undefined`', () => {
-      spyOnProperty(component['router'], 'url').and.returnValue(undefined);
+      vi.spyOn(component['router'] as any, 'url').mockReturnValue(undefined);
 
       const result = component['checkRouterChildrenFragments']();
 
@@ -120,7 +120,7 @@ describe('PoNavbarItemsComponent:', () => {
     });
 
     it('checkRouterChildrenFragments: should return same url', () => {
-      spyOnProperty(component['router'], 'url').and.returnValue('test/label');
+      vi.spyOn(component['router'] as any, 'url').mockReturnValue('test/label');
 
       const result2 = component['checkRouterChildrenFragments']();
 
@@ -130,11 +130,11 @@ describe('PoNavbarItemsComponent:', () => {
     it(`subscribeToRoute: should call checkActiveItemByUrl with url router if router events return an instance of NavigationEnd`, () => {
       const navigation = new NavigationEnd(1, 'url/', undefined);
 
-      spyOn(component, <any>'checkRouterChildrenFragments').and.returnValue('test');
-      spyOn(component, <any>'checkActiveItemByUrl');
+      vi.spyOn(component as any, 'checkRouterChildrenFragments').mockReturnValue('test');
+      vi.spyOn(component as any, 'checkActiveItemByUrl');
 
       // Mock para poder entrar no subscribe
-      spyOn(component['router'].events, 'subscribe').and.callFake(callback => {
+      vi.spyOn(component['router'].events, 'subscribe').mockImplementation(callback => {
         callback(navigation);
         return new Subscription();
       });
@@ -147,11 +147,11 @@ describe('PoNavbarItemsComponent:', () => {
     it(`subscribeToRoute: should call checkActiveItemByUrl with url router if router events return an instance of NavigationCancel`, () => {
       const navigation = new NavigationCancel(1, 'url/', undefined);
 
-      spyOn(component, <any>'checkRouterChildrenFragments').and.returnValue('test');
-      spyOn(component, <any>'checkActiveItemByUrl');
+      vi.spyOn(component as any, 'checkRouterChildrenFragments').mockReturnValue('test');
+      vi.spyOn(component as any, 'checkActiveItemByUrl');
 
       // Mock para poder entrar no subscribe
-      spyOn(component['router'].events, 'subscribe').and.callFake(callback => {
+      vi.spyOn(component['router'].events, 'subscribe').mockImplementation(callback => {
         callback(navigation);
         return new Subscription();
       });
@@ -163,11 +163,11 @@ describe('PoNavbarItemsComponent:', () => {
 
     it(`subscribeToRoute: shouldn't call checkActiveItemByUrl with url router if router events not return an instance of
       NavigationCancel or NavigationEnd`, () => {
-      spyOn(component, <any>'checkRouterChildrenFragments').and.returnValue('test');
-      spyOn(component, <any>'checkActiveItemByUrl');
+      vi.spyOn(component as any, 'checkRouterChildrenFragments').mockReturnValue('test');
+      vi.spyOn(component as any, 'checkActiveItemByUrl');
 
       // Mock para poder entrar no subscribe
-      spyOn(component['router'].events, 'subscribe').and.callFake(callback => {
+      vi.spyOn(component['router'].events, 'subscribe').mockImplementation(callback => {
         callback(undefined);
         return new Subscription();
       });

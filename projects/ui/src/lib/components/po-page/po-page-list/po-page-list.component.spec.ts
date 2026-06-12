@@ -20,7 +20,7 @@ import { PoPageHeaderComponent } from '../po-page-header/po-page-header.componen
 import { PoPageListComponent } from './po-page-list.component';
 
 const routerStub = {
-  navigate: jasmine.createSpy('navigate')
+  navigate: vi.fn()
 };
 
 const eventClick = document.createEvent('Event');
@@ -207,7 +207,7 @@ describe('PoPageListComponent - Desktop:', () => {
     const element = desktopFixture.debugElement.nativeElement;
     const poButton = element.querySelectorAll('po-button > button')[0];
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
 
     poButton.click();
     poButton.dispatchEvent(event);
@@ -220,7 +220,7 @@ describe('PoPageListComponent - Desktop:', () => {
   it('should be call method of parent passing null', () => {
     const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[1];
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
 
     poButton.click();
     poButton.dispatchEvent(event);
@@ -231,7 +231,7 @@ describe('PoPageListComponent - Desktop:', () => {
   });
 
   it('should call callActionFilter on key press', () => {
-    spyOn(component, 'callActionFilter');
+    vi.spyOn(component as any, 'callActionFilter');
 
     component.onkeypress(15);
     expect(component.callActionFilter).not.toHaveBeenCalled();
@@ -239,15 +239,13 @@ describe('PoPageListComponent - Desktop:', () => {
     expect(component.callActionFilter).toHaveBeenCalled();
   });
 
-  it('should be change model', done => {
+  it('should be change model', async () => {
     const input = desktopFixture.nativeElement.querySelector('input');
-    desktopFixture.whenStable().then(() => {
+    await desktopFixture.whenStable().then(() => {
       input.value = 'Ola mundo';
 
       input.dispatchEvent(eventInput);
       expect(input.value).toEqual('Ola mundo');
-
-      done();
     });
   });
 
@@ -255,7 +253,7 @@ describe('PoPageListComponent - Desktop:', () => {
     component['isRecalculate'] = true;
     const disclaimers: Array<PoDisclaimer> = [{ value: 'hotel', label: 'Hotel', property: 'hotel' }];
 
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
+    vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
     component.onChangeDisclaimerGroup(disclaimers);
 
     expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
@@ -265,7 +263,7 @@ describe('PoPageListComponent - Desktop:', () => {
     component['isRecalculate'] = false;
     const disclaimers: Array<PoDisclaimer> = [];
 
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
+    vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
     component.onChangeDisclaimerGroup(disclaimers);
 
     expect(component.poPageContent.recalculateHeaderSize).toHaveBeenCalled();
@@ -279,7 +277,7 @@ describe('PoPageListComponent - Desktop:', () => {
       { value: 'teste3', label: 'teste3', property: 'teste3' }
     ];
 
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
+    vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
     component.onChangeDisclaimerGroup(disclaimers);
 
     expect(component.poPageContent.recalculateHeaderSize).not.toHaveBeenCalled();
@@ -289,8 +287,8 @@ describe('PoPageListComponent - Desktop:', () => {
     const disclaimers: Array<PoDisclaimer> = [];
     component.disclaimerGroup = { change: () => {}, disclaimers, title: 'teste' };
 
-    spyOn(component.poPageContent, 'recalculateHeaderSize');
-    spyOn(component.disclaimerGroup, 'change');
+    vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
+    vi.spyOn(component.disclaimerGroup as any, 'change');
 
     component.onChangeDisclaimerGroup(disclaimers);
 
@@ -311,7 +309,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
     const removeData = { removedDisclaimer, currentDisclaimers };
 
-    spyOn(component.disclaimerGroup, 'remove');
+    vi.spyOn(component.disclaimerGroup as any, 'remove');
 
     component.onRemoveDisclaimer(removeData);
 
@@ -351,7 +349,7 @@ describe('PoPageListComponent - Desktop:', () => {
       title: 'test'
     };
 
-    spyOn(component.disclaimerGroup, 'removeAll');
+    vi.spyOn(component.disclaimerGroup as any, 'removeAll');
 
     component.onRemoveAllDisclaimers(removedDisclaimers);
 
@@ -420,13 +418,13 @@ describe('PoPageListComponent - Desktop:', () => {
     });
 
     it('should show page header if `hasPageHeader` return true', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(true);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(true);
       fixture.detectChanges();
       expect(nativeElement.querySelector('po-page-header')).toBeTruthy();
     });
 
     it('should hide page header if `hasPageHeader` return false', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(false);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(false);
       fixture.detectChanges();
       expect(nativeElement.querySelector('po-page-header')).toBeFalsy();
     });
@@ -482,12 +480,14 @@ describe('PoPageListComponent - Desktop:', () => {
       };
       const fieldProperty = 'action';
 
-      const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
-      const filterActionSpy = spyOn(component.filter, <any>fieldProperty);
+      const changeDetectorSpy = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const filterActionSpy = vi.spyOn(component.filter as any, fieldProperty);
 
       component.callActionFilter(fieldProperty);
 
-      expect(filterActionSpy).toHaveBeenCalledBefore(changeDetectorSpy);
+      expect(Math.min(...vi.mocked(filterActionSpy).mock.invocationCallOrder)).toBeLessThan(
+        Math.min(...vi.mocked(changeDetectorSpy).mock.invocationCallOrder)
+      );
       expect(filterActionSpy).toHaveBeenCalledWith('test filter');
       expect(changeDetectorSpy).toHaveBeenCalled();
     });
@@ -505,7 +505,7 @@ describe('PoPageListComponent - Desktop:', () => {
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
       const url = 'http://po-ui.io';
 
-      spyOn(UtilsFunction, 'openExternalLink');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
 
       component.callAction({ label: 'PO', url });
 
@@ -517,7 +517,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
       const returnValue = component.actionIsDisabled(action);
 
-      expect(returnValue).toBeTruthy(true);
+      expect(returnValue).toBeTruthy();
     });
 
     it('actionIsDisabled: should return true in function result', () => {
@@ -525,7 +525,7 @@ describe('PoPageListComponent - Desktop:', () => {
 
       const returnValue = component.actionIsDisabled(action);
 
-      expect(returnValue).toBeTruthy(true);
+      expect(returnValue).toBeTruthy();
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {

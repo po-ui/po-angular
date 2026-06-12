@@ -27,7 +27,7 @@ describe('PoListBoxBaseComponent', () => {
     });
 
     it('emitActiveTabs: should emit `activatedTab` if tab is activated', () => {
-      spyOn(component.activatedTab, 'emit');
+      vi.spyOn(component.activatedTab as any, 'emit');
 
       component['emitActiveTabs']({ label: 'tab', active: true });
 
@@ -58,17 +58,17 @@ describe('PoListBoxBaseComponent', () => {
 
     it('should set _disabled if value is true', () => {
       component.disabled = true;
-      expect(component['_disabled']).toBeTrue();
+      expect(component['_disabled']).toBe(true);
     });
 
     it('should set true if value is null', () => {
       component.disabled = null;
-      expect(component['_disabled']).toBeFalse();
+      expect(component['_disabled']).toBe(false);
     });
 
     it('should set true if value is undefined', () => {
       component.disabled = undefined;
-      expect(component['_disabled']).toBeFalse();
+      expect(component['_disabled']).toBe(false);
     });
   });
 });

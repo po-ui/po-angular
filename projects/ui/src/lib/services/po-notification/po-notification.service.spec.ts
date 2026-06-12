@@ -16,8 +16,8 @@ describe('PoNotificationService:', () => {
   });
 
   beforeEach(() => {
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     notificationService = TestBed.inject(PoNotificationService);
     notificationService.stackTop = [];
@@ -27,7 +27,7 @@ describe('PoNotificationService:', () => {
   });
 
   afterEach(() => {
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('should be a create toaster top', fakeAsync(() => {
@@ -94,7 +94,7 @@ describe('PoNotificationService:', () => {
     }));
 
     it('should be a destroy toaster on close', () => {
-      const spy = spyOn(notificationService, 'destroyToaster');
+      const spy = vi.spyOn(notificationService as any, 'destroyToaster');
       const fakeRef = <any>{
         instance: {
           observableOnClose: { subscribe: callback => callback(fakeRef) }

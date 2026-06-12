@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectorRef } from '@angular/core';
 
@@ -32,18 +33,18 @@ describe('PoHelperComponent', () => {
 
   describe('emitClick', () => {
     it('should prevent default if disabled', () => {
-      spyOn(component, 'disabled').and.returnValue(true);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(true);
       const event = new MouseEvent('click', { bubbles: true, cancelable: true });
-      spyOn(event, 'preventDefault');
+      vi.spyOn(event as any, 'preventDefault');
       component.emitClick(event);
       expect(event.preventDefault).toHaveBeenCalled();
     });
 
     it('should call eventOnClick if defined', () => {
-      spyOn(component, 'disabled').and.returnValue(false);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(false);
       const event = new MouseEvent('click', { bubbles: true, cancelable: true });
-      spyOn(event, 'preventDefault');
-      const eventOnClick = jasmine.createSpy();
+      vi.spyOn(event as any, 'preventDefault');
+      const eventOnClick = vi.fn();
       const options: PoHelperOptions = {
         title: 'Ajuda',
         content: 'Conteúdo',
@@ -57,21 +58,21 @@ describe('PoHelperComponent', () => {
     });
 
     it('should not throw if helper is string', () => {
-      spyOn(component, 'disabled').and.returnValue(false);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(false);
       const event = new MouseEvent('click', { bubbles: true, cancelable: true });
-      spyOn(event, 'preventDefault');
+      vi.spyOn(event as any, 'preventDefault');
       const text = 'Texto explicativo';
       fixture.componentRef.setInput('p-helper', text);
       expect(() => component.emitClick(event)).not.toThrow();
     });
 
     it('should return early when helper is falsy (undefined) and not call handleEmitEvent', () => {
-      spyOn(component, 'disabled').and.returnValue(false);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(false);
       const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       (component as any).helper = () => undefined;
 
-      const handleSpy = spyOn<any>(component, 'handleEmitEvent');
+      const handleSpy = vi.spyOn(component as any, 'handleEmitEvent');
 
       component.emitClick(event);
 
@@ -79,24 +80,24 @@ describe('PoHelperComponent', () => {
     });
 
     it('should return early when helper is a string and not call handleEmitEvent', () => {
-      spyOn(component, 'disabled').and.returnValue(false);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(false);
       const event = new MouseEvent('click', { bubbles: true, cancelable: true });
 
       (component as any).helper = () => 'Texto explicativo';
 
-      const handleSpy = spyOn<any>(component, 'handleEmitEvent');
+      const handleSpy = vi.spyOn(component as any, 'handleEmitEvent');
       expect(() => component.emitClick(event)).not.toThrow();
       expect(handleSpy).not.toHaveBeenCalled();
     });
     it('should call emit when eventOnClick is an object with emit function', () => {
-      spyOn(component, 'disabled').and.returnValue(false);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(false);
 
       const event: any = {
-        preventDefault: jasmine.createSpy('preventDefault'),
-        stopPropagation: jasmine.createSpy('stopPropagation')
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn()
       };
 
-      const emitSpy = jasmine.createSpy('emit');
+      const emitSpy = vi.fn();
       (component as any).helper = () => ({
         content: 'conteúdo',
         eventOnClick: { emit: emitSpy }
@@ -104,30 +105,33 @@ describe('PoHelperComponent', () => {
 
       component.emitClick(event as MouseEvent);
 
-      expect(emitSpy).toHaveBeenCalledWith(jasmine.objectContaining({ content: 'conteúdo' }));
+      expect(emitSpy).toHaveBeenCalledWith(expect.objectContaining({ content: 'conteúdo' }));
       expect(event.preventDefault).toHaveBeenCalled();
       expect(event.stopPropagation).toHaveBeenCalled();
     });
   });
 
   describe('onKeyDown', () => {
-    let popover: jasmine.SpyObj<PoPopoverComponent>;
+    let popover: any;
 
     beforeEach(() => {
       (component as any).helper = () => ({ content: 'texto de ajuda' });
-      popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
+      popover = {
+        open: vi.fn().mockName('Popover.open'),
+        close: vi.fn().mockName('Popover.close')
+      };
       (popover as any).isHidden = true;
-      component.popover = popover;
+      (component as any).popover = popover;
       (component as any).disabled = () => false;
     });
 
     it('should prevent default and stop propagation if disabled', () => {
-      spyOn(component, 'disabled').and.returnValue(true);
+      vi.spyOn(component as any, 'disabled').mockReturnValue(true);
 
       const event: any = {
         code: 'Enter',
-        preventDefault: jasmine.createSpy('preventDefault'),
-        stopPropagation: jasmine.createSpy('stopPropagation')
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn()
       };
 
       component.onKeyDown(event);
@@ -143,8 +147,8 @@ describe('PoHelperComponent', () => {
 
       const event: any = {
         code: 'Enter',
-        preventDefault: jasmine.createSpy('preventDefault'),
-        stopPropagation: jasmine.createSpy('stopPropagation')
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn()
       };
 
       component.onKeyDown(event);
@@ -183,7 +187,7 @@ describe('PoHelperComponent', () => {
 
     it('should close other open popovers', () => {
       component.popover.isHidden = true;
-      const otherPopover = { isHidden: false, close: jasmine.createSpy() };
+      const otherPopover = { isHidden: false, close: vi.fn() };
       (PoHelperComponent as any).instances.push({ popover: otherPopover });
       const event = new KeyboardEvent('keydown', { code: 'Enter' });
       component.onKeyDown(event);
@@ -226,21 +230,24 @@ describe('PoHelperComponent', () => {
   });
 
   describe('onKeyDown - eventOnClick branch', () => {
-    let popover: jasmine.SpyObj<PoPopoverComponent>;
+    let popover: any;
 
     beforeEach(() => {
-      popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
+      popover = {
+        open: vi.fn().mockName('Popover.open'),
+        close: vi.fn().mockName('Popover.close')
+      };
       (popover as any).isHidden = true;
-      component.popover = popover;
+      (component as any).popover = popover;
       (component as any).disabled = () => false;
     });
 
     it('should call handleEmitEvent and return early when helper has eventOnClick (function)', () => {
       const event = new KeyboardEvent('keydown', { code: 'Enter' });
-      const handleSpy = spyOn<any>(component, 'handleEmitEvent').and.callThrough();
+      const handleSpy = vi.spyOn(component as any, 'handleEmitEvent');
       (component as any).helper = () => ({
         content: 'help',
-        eventOnClick: jasmine.createSpy('eventOnClick')
+        eventOnClick: vi.fn()
       });
 
       component.onKeyDown(event);
@@ -251,10 +258,10 @@ describe('PoHelperComponent', () => {
 
     it('should call handleEmitEvent and return early when helper has eventOnClick as an object (emit)', () => {
       const event = new KeyboardEvent('keydown', { code: 'Enter' });
-      const handleSpy = spyOn<any>(component, 'handleEmitEvent').and.callThrough();
+      const handleSpy = vi.spyOn(component as any, 'handleEmitEvent');
       (component as any).helper = () => ({
         content: 'help',
-        eventOnClick: { emit: jasmine.createSpy('emit') }
+        eventOnClick: { emit: vi.fn() }
       });
 
       component.onKeyDown(event);
@@ -265,7 +272,7 @@ describe('PoHelperComponent', () => {
   });
 
   it('should call detectChanges on ngOnChanges when size changes', () => {
-    const spy = spyOn(component['cdr'], 'detectChanges');
+    const spy = vi.spyOn(component['cdr'] as any, 'detectChanges');
     component.ngOnChanges({
       size: { previousValue: 'small', currentValue: 'medium', firstChange: false, isFirstChange: () => false }
     });
@@ -281,7 +288,7 @@ describe('PoHelperComponent', () => {
       footerAction: { label: 'Ação', action: () => {} }
     };
     fixture.componentRef.setInput('p-helper', options);
-    spyOnProperty(navigator, 'language', 'get').and.returnValue('en-US');
+    vi.spyOn(navigator, 'language', 'get').mockReturnValue('en-US');
     expect(component['ariaLabel']()).toBe('Additional information');
   });
 
@@ -294,14 +301,14 @@ describe('PoHelperComponent', () => {
       footerAction: { label: 'Ação', action: () => {} }
     };
     fixture.componentRef.setInput('p-helper', options);
-    spyOnProperty(navigator, 'language', 'get').and.returnValue('pt-BR');
+    vi.spyOn(navigator, 'language', 'get').mockReturnValue('pt-BR');
     expect(component['ariaLabel']()).toBe('Ajuda adicional');
   });
 
   it('should return correct ariaLabel for string helper', () => {
     const text = 'Texto explicativo';
     fixture.componentRef.setInput('p-helper', text);
-    spyOnProperty(navigator, 'language', 'get').and.returnValue('es-ES');
+    vi.spyOn(navigator, 'language', 'get').mockReturnValue('es-ES');
     expect(component['ariaLabel']()).toBe('Ayuda adicional');
   });
 
@@ -315,7 +322,7 @@ describe('PoHelperComponent', () => {
     };
 
     fixture.componentRef.setInput('p-helper', options);
-    spyOnProperty(navigator, 'language', 'get').and.returnValue(undefined);
+    vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined);
     expect(component['ariaLabel']()).toBe('Additional information');
   });
 
@@ -329,7 +336,7 @@ describe('PoHelperComponent', () => {
     };
 
     fixture.componentRef.setInput('p-helper', options);
-    spyOnProperty(navigator, 'language', 'get').and.returnValue('fr-FR');
+    vi.spyOn(navigator, 'language', 'get').mockReturnValue('fr-FR');
 
     expect(component['ariaLabel']()).toBe('Additional information');
   });
@@ -342,15 +349,16 @@ describe('PoHelperComponent', () => {
 
     beforeEach(() => {
       focusNode = document.createElement('div');
-      targetEl = { contains: jasmine.createSpy() };
-      popEl = { contains: jasmine.createSpy() };
+      targetEl = { contains: vi.fn() };
+      popEl = { contains: vi.fn() };
 
       component.target = { nativeElement: targetEl };
-      const popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['close'], {
+      const popover = {
+        close: vi.fn().mockName('Popover.close'),
         isHidden: false,
         popoverElement: { nativeElement: popEl }
-      });
-      component.popover = popover;
+      };
+      (component as any).popover = popover;
     });
 
     it('should not call close if popover is undefined', () => {
@@ -367,8 +375,8 @@ describe('PoHelperComponent', () => {
     });
 
     it('should not call close if focusNode is contained in target', () => {
-      targetEl.contains.and.returnValue(true);
-      popEl.contains.and.returnValue(false);
+      targetEl.contains.mockReturnValue(true);
+      popEl.contains.mockReturnValue(false);
       event = new FocusEvent('focusin', { relatedTarget: focusNode });
       Object.defineProperty(event, 'target', { value: focusNode });
       component.closePopoverOnFocusOut(event);
@@ -376,8 +384,8 @@ describe('PoHelperComponent', () => {
     });
 
     it('should not call close if focusNode is contained in popover', () => {
-      targetEl.contains.and.returnValue(false);
-      popEl.contains.and.returnValue(true);
+      targetEl.contains.mockReturnValue(false);
+      popEl.contains.mockReturnValue(true);
       event = new FocusEvent('focusin', { relatedTarget: focusNode });
       Object.defineProperty(event, 'target', { value: focusNode });
       component.closePopoverOnFocusOut(event);
@@ -385,8 +393,8 @@ describe('PoHelperComponent', () => {
     });
 
     it('should call close if focusNode is not contained in target or popover', () => {
-      targetEl.contains.and.returnValue(false);
-      popEl.contains.and.returnValue(false);
+      targetEl.contains.mockReturnValue(false);
+      popEl.contains.mockReturnValue(false);
       event = new FocusEvent('focusin', { relatedTarget: focusNode });
       Object.defineProperty(event, 'target', { value: focusNode });
       component.closePopoverOnFocusOut(event);
@@ -401,25 +409,28 @@ describe('PoHelperComponent', () => {
   });
 
   describe('openHelperPopover / closeHelperPopover', () => {
-    let popover: jasmine.SpyObj<PoPopoverComponent>;
+    let popover: any;
 
     beforeEach(() => {
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
         cb(0);
         return 1;
       });
 
-      popover = jasmine.createSpyObj<PoPopoverComponent>('Popover', ['open', 'close']);
+      popover = {
+        open: vi.fn().mockName('Popover.open'),
+        close: vi.fn().mockName('Popover.close')
+      };
       (popover as any).isHidden = true;
-      component.popover = popover;
+      (component as any).popover = popover;
 
       (component as any).helper = () => ({ content: 'texto de ajuda' });
     });
 
     afterEach(() => {
-      popover.open.calls.reset();
-      popover.close.calls.reset();
-      (window.requestAnimationFrame as jasmine.Spy).calls.reset();
+      popover.open.mockClear();
+      popover.close.mockClear();
+      (window.requestAnimationFrame as Mock).mockClear();
     });
 
     it('openHelperPopover: It should call open when popover.isHidden is true', () => {
@@ -540,7 +551,7 @@ describe('PoHelperComponent', () => {
     it('should use document.documentElement.clientWidth when window.innerWidth is falsy', () => {
       Object.defineProperty(window, 'innerWidth', { configurable: true, value: 0 });
 
-      spyOnProperty(document.documentElement, 'clientWidth', 'get').and.returnValue(900);
+      vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(900);
 
       const rect = { right: 400 } as DOMRect;
       (component as any).target = {
@@ -563,13 +574,13 @@ describe('PoHelperComponent', () => {
     it('should return false when popover.isHidden = true', () => {
       component.popover = { isHidden: true } as any;
       const visible = (component as any).helperIsVisible();
-      expect(visible).toBeFalse();
+      expect(visible).toBe(false);
     });
 
     it('should return true when popover.isHidden = false', () => {
       component.popover = { isHidden: false } as any;
       const visible = (component as any).helperIsVisible();
-      expect(visible).toBeTrue();
+      expect(visible).toBe(true);
     });
   });
 
@@ -579,18 +590,18 @@ describe('PoHelperComponent', () => {
     });
 
     it('should add focusin listener and store bound function', () => {
-      const addSpy = spyOn(window, 'addEventListener');
+      const addSpy = vi.spyOn(window as any, 'addEventListener');
 
       (component as any).handleOpen();
 
-      expect((component as any).boundFocusIn).toEqual(jasmine.any(Function));
+      expect((component as any).boundFocusIn).toEqual(expect.any(Function));
       expect(addSpy).toHaveBeenCalledWith('focusin', (component as any).boundFocusIn, true);
     });
   });
 
   describe('handleClose', () => {
     it('should remove focusin listener when boundFocusIn is defined', () => {
-      const removeSpy = spyOn(window, 'removeEventListener');
+      const removeSpy = vi.spyOn(window as any, 'removeEventListener');
       const boundFn = () => {};
 
       (component as any).boundFocusIn = boundFn;
@@ -601,7 +612,7 @@ describe('PoHelperComponent', () => {
     });
 
     it('should not remove focusin listener when boundFocusIn is undefined', () => {
-      const removeSpy = spyOn(window, 'removeEventListener');
+      const removeSpy = vi.spyOn(window as any, 'removeEventListener');
 
       (component as any).boundFocusIn = undefined;
 

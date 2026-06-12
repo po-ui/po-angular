@@ -45,9 +45,9 @@ describe('PoUploadDragDropDirective:', () => {
         stopPropagation: () => {}
       };
 
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(fakeEvent, 'stopPropagation');
-      spyOn(directive.dragLeave, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
+      vi.spyOn(directive.dragLeave as any, 'emit');
 
       directive.onDragLeave(fakeEvent);
 
@@ -67,9 +67,9 @@ describe('PoUploadDragDropDirective:', () => {
 
       directive.disabled = false;
 
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(fakeEvent, 'stopPropagation');
-      spyOn(directive.dragOver, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
+      vi.spyOn(directive.dragOver as any, 'emit');
 
       directive.onDragOver(fakeEvent);
 
@@ -87,9 +87,9 @@ describe('PoUploadDragDropDirective:', () => {
 
       directive.disabled = true;
 
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(fakeEvent, 'stopPropagation');
-      spyOn(directive.dragOver, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
+      vi.spyOn(directive.dragOver as any, 'emit');
 
       directive.onDragOver(fakeEvent);
 
@@ -105,9 +105,9 @@ describe('PoUploadDragDropDirective:', () => {
         stopPropagation: () => {}
       };
 
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(fakeEvent, 'stopPropagation');
-      spyOn(directive.dragOver, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
+      vi.spyOn(directive.dragOver as any, 'emit');
 
       directive.onDragOver(fakeEvent);
 
@@ -126,10 +126,10 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(fakeEvent, 'stopPropagation');
-      spyOn(directive, <any>'getFilesFromDataTransferItems');
-      spyOn(directive.dragLeave, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
+      vi.spyOn(directive as any, 'getFilesFromDataTransferItems');
+      vi.spyOn(directive.dragLeave as any, 'emit');
 
       directive.onDrop(fakeEvent);
 
@@ -149,9 +149,9 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(directive, <any>'getOnlyFiles');
-      spyOn(directive, <any>'sendFiles');
-      spyOn(directive, <any>'getOnlyDirectories');
+      vi.spyOn(directive as any, 'getOnlyFiles');
+      vi.spyOn(directive as any, 'sendFiles');
+      vi.spyOn(directive as any, 'getOnlyDirectories');
 
       directive['getFilesFromDataTransferItems'](fakeEvent);
 
@@ -178,9 +178,9 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(fakeThis, <any>'getOnlyDirectories').and.callThrough();
-      spyOn(fakeThis, <any>'sendFiles').and.callFake(() => {});
-      spyOn(fakeThis, <any>'getOnlyFiles');
+      vi.spyOn(fakeThis as any, 'getOnlyDirectories');
+      vi.spyOn(fakeThis as any, 'sendFiles').mockImplementation(() => {});
+      vi.spyOn(fakeThis as any, 'getOnlyFiles');
 
       directive['getFilesFromDataTransferItems'].call(fakeThis, fakeEvent);
 
@@ -197,10 +197,10 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(directive, <any>'getOnlyFiles');
-      spyOn(directive, <any>'sendFiles');
-      spyOn(directive, <any>'sendFeedback');
-      spyOn(directive, <any>'getOnlyDirectories');
+      vi.spyOn(directive as any, 'getOnlyFiles');
+      vi.spyOn(directive as any, 'sendFiles');
+      vi.spyOn(directive as any, 'sendFeedback');
+      vi.spyOn(directive as any, 'getOnlyDirectories');
 
       directive['getFilesFromDataTransferItems'](fakeEvent);
 
@@ -219,8 +219,8 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(directive, <any>'readFile');
-      spyOn(directive, <any>'readDirectory');
+      vi.spyOn(directive as any, 'readFile');
+      vi.spyOn(directive as any, 'readDirectory');
 
       directive['getFilesFromEntry'](entry);
 
@@ -237,8 +237,8 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(directive, <any>'readDirectory');
-      spyOn(directive, <any>'readFile');
+      vi.spyOn(directive as any, 'readDirectory');
+      vi.spyOn(directive as any, 'readFile');
 
       directive['getFilesFromEntry'](entry);
 
@@ -255,8 +255,8 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(directive, <any>'readDirectory');
-      spyOn(directive, <any>'readFile');
+      vi.spyOn(directive as any, 'readDirectory');
+      vi.spyOn(directive as any, 'readFile');
 
       directive['getFilesFromEntry'](entry);
 
@@ -272,8 +272,8 @@ describe('PoUploadDragDropDirective:', () => {
       ];
       directive['invalidFileType'] = 0;
 
-      spyOn(dataTransfer[0], 'webkitGetAsEntry').and.returnValue({ isFile: true });
-      spyOn(directive, <any>'getFilesFromEntry');
+      vi.spyOn(dataTransfer[0] as any, 'webkitGetAsEntry').mockReturnValue({ isFile: true });
+      vi.spyOn(directive as any, 'getFilesFromEntry');
 
       directive['getOnlyDirectories'](dataTransfer);
 
@@ -290,8 +290,8 @@ describe('PoUploadDragDropDirective:', () => {
       ];
       directive['invalidFileType'] = 0;
 
-      spyOn(dataTransfer[0], 'webkitGetAsEntry').and.returnValue({ isFile: false });
-      spyOn(directive, <any>'getFilesFromEntry');
+      vi.spyOn(dataTransfer[0] as any, 'webkitGetAsEntry').mockReturnValue({ isFile: false });
+      vi.spyOn(directive as any, 'getFilesFromEntry');
 
       directive['getOnlyDirectories'](dataTransfer);
 
@@ -304,7 +304,7 @@ describe('PoUploadDragDropDirective:', () => {
       const file = { name: 'name.jpg', lastModified: 1527109493000 };
       const fakeEntry = { file: callback => callback(file) };
 
-      spyOn(fakeEntry, 'file').and.callThrough();
+      vi.spyOn(fakeEntry as any, 'file');
 
       const result = await directive['readFile'](fakeEntry);
 
@@ -318,8 +318,8 @@ describe('PoUploadDragDropDirective:', () => {
         createReader: () => {}
       };
 
-      spyOn(fakeEntry, 'createReader');
-      spyOn(directive, <any>'readDirectoryEntries').and.returnValue(Promise.resolve(file));
+      vi.spyOn(fakeEntry as any, 'createReader');
+      vi.spyOn(directive as any, 'readDirectoryEntries').mockReturnValue(Promise.resolve(file));
 
       const result = await directive['readDirectory'](fakeEntry);
 
@@ -336,8 +336,8 @@ describe('PoUploadDragDropDirective:', () => {
         }
       };
 
-      spyOn(directoryReader, <any>'readEntries').and.callThrough();
-      spyOn(directive, <any>'getFilesFromEntry').and.returnValue(Promise.resolve(file));
+      vi.spyOn(directoryReader as any, 'readEntries');
+      vi.spyOn(directive as any, 'getFilesFromEntry').mockReturnValue(Promise.resolve(file));
 
       const result = await directive['readDirectoryEntries'](directoryReader);
 
@@ -349,7 +349,7 @@ describe('PoUploadDragDropDirective:', () => {
     it('sendFeedback: should call `setPipeArguments` if `invalidFileType` is higher than 0', () => {
       const invalidFiles = 1;
 
-      spyOn(directive, <any>'setPipeArguments');
+      vi.spyOn(directive as any, 'setPipeArguments');
 
       directive['sendFeedback'](invalidFiles);
 
@@ -359,7 +359,7 @@ describe('PoUploadDragDropDirective:', () => {
     it('sendFeedback: shouldn`t call `setPipeArguments` if `invalidFileType` is equal to 0', () => {
       const invalidFiles = 0;
 
-      spyOn(directive, <any>'setPipeArguments');
+      vi.spyOn(directive as any, 'setPipeArguments');
 
       directive['sendFeedback'](invalidFiles);
 
@@ -371,8 +371,8 @@ describe('PoUploadDragDropDirective:', () => {
         invalidFileType: 'fileType {0}'
       };
 
-      spyOn(directive.i18nPipe, 'transform').and.returnValue('fileType 2');
-      spyOn(directive.notification, 'information');
+      vi.spyOn(directive.i18nPipe as any, 'transform').mockReturnValue('fileType 2');
+      vi.spyOn(directive.notification as any, 'information');
 
       directive['setPipeArguments']('invalidFileType', 2);
 
@@ -444,9 +444,9 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis.fileChange, 'emit');
-      spyOn(fakeThis, 'setPipeArguments');
-      spyOn(fakeThis, 'sendFeedback');
+      vi.spyOn(fakeThis.fileChange as any, 'emit');
+      vi.spyOn(fakeThis as any, 'setPipeArguments');
+      vi.spyOn(fakeThis as any, 'sendFeedback');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
@@ -481,7 +481,7 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis.fileChange, 'emit');
+      vi.spyOn(fakeThis.fileChange as any, 'emit');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
@@ -512,8 +512,8 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis.fileChange, 'emit');
-      spyOn(fakeThis, 'sendFeedback');
+      vi.spyOn(fakeThis.fileChange as any, 'emit');
+      vi.spyOn(fakeThis as any, 'sendFeedback');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
@@ -547,7 +547,7 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis, 'setPipeArguments');
+      vi.spyOn(fakeThis as any, 'setPipeArguments');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
@@ -584,7 +584,7 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis, 'setPipeArguments');
+      vi.spyOn(fakeThis as any, 'setPipeArguments');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 
@@ -621,7 +621,7 @@ describe('PoUploadDragDropDirective:', () => {
         target: '<div></div>'
       };
 
-      spyOn(fakeThis, 'setPipeArguments');
+      vi.spyOn(fakeThis as any, 'setPipeArguments');
 
       directive['sendFiles'].call(fakeThis, fakeEvent, fakeFiles);
 

@@ -243,7 +243,7 @@ describe('PoMask', () => {
 
     fakeEvent.keyCode = 39;
 
-    spyOn(fakeMask, 'setSelectionRange');
+    vi.spyOn(fakeMask as any, 'setSelectionRange');
 
     fakeMask.keyup(fakeEvent);
 
@@ -307,7 +307,7 @@ describe('PoMask', () => {
     fakeEvent.keyCode = 82;
     fakeEvent.metaKey = true;
 
-    spyOn(fakeMask, 'revertPositions');
+    vi.spyOn(fakeMask as any, 'revertPositions');
 
     fakeMask.keydown(fakeEvent);
 
@@ -327,7 +327,7 @@ describe('PoMask', () => {
 
     fakeEvent.keyCode = 10;
 
-    spyOn(fakeMask, 'revertPositions');
+    vi.spyOn(fakeMask as any, 'revertPositions');
 
     fakeMask.keydown(fakeEvent);
 
@@ -617,7 +617,7 @@ describe('PoMask', () => {
       controlFormatting: function (val: any) {}
     };
 
-    spyOn(fakeThis, 'controlFormatting');
+    vi.spyOn(fakeThis as any, 'controlFormatting');
     mask.blur.call(fakeThis, fakeEvent);
     expect(fakeThis.controlFormatting).toHaveBeenCalled();
   });
@@ -626,7 +626,7 @@ describe('PoMask', () => {
     const fakeMask = mask;
     fakeMask.mask = '';
 
-    spyOn(fakeMask, 'controlFormatting');
+    vi.spyOn(fakeMask as any, 'controlFormatting');
 
     fakeMask.blur(fakeEvent);
 

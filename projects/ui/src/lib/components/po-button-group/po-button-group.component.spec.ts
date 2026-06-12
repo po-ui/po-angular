@@ -86,8 +86,8 @@ describe('PoButtonGroupComponent:', () => {
     const buttonEnabled = buttons[0];
     const buttonDisabled = buttons[1];
 
-    spyOn(fakeButtons[0], 'action');
-    spyOn(fakeButtons[1], 'action');
+    vi.spyOn(fakeButtons[0] as any, 'action');
+    vi.spyOn(fakeButtons[1] as any, 'action');
 
     buttonEnabled.click();
     buttonDisabled.click();

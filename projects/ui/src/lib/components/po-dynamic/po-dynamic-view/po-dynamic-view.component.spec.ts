@@ -37,7 +37,7 @@ describe('PoDynamicViewComponent:', () => {
         const changes = {};
         component.visibleFields = [];
 
-        spyOn(component, <any>'getVisibleFields');
+        vi.spyOn(component as any, 'getVisibleFields');
 
         component.ngOnChanges(changes);
 
@@ -49,7 +49,7 @@ describe('PoDynamicViewComponent:', () => {
         const changes = { fields: <any>{} };
         component.visibleFields = [];
 
-        spyOn(component, <any>'getVisibleFields').and.returnValue(returnedValue);
+        vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(returnedValue);
 
         component.ngOnChanges(changes);
 
@@ -61,7 +61,7 @@ describe('PoDynamicViewComponent:', () => {
         const changes = { value: <any>{} };
         component.visibleFields = [];
 
-        spyOn(component, <any>'getVisibleFields').and.returnValue(returnedValue);
+        vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(returnedValue);
 
         component.ngOnChanges(changes);
 
@@ -73,7 +73,7 @@ describe('PoDynamicViewComponent:', () => {
         const changes = { showAllValue: <any>{} };
         component.visibleFields = [];
 
-        spyOn(component, <any>'getVisibleFields').and.returnValue(returnedValue);
+        vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(returnedValue);
 
         component.ngOnChanges(changes);
 
@@ -86,7 +86,7 @@ describe('PoDynamicViewComponent:', () => {
         component.load = 'url.test.com';
         component.visibleFields = [];
 
-        spyOn(component, <any>'getVisibleFields');
+        vi.spyOn(component as any, 'getVisibleFields');
 
         component.ngOnChanges(changes);
 
@@ -97,7 +97,7 @@ describe('PoDynamicViewComponent:', () => {
     it('ngOnInit: should call `updateValuesAndFieldsOnLoad` if typeof `load` is truthy', fakeAsync(() => {
       component.load = 'teste';
 
-      spyOn(component, <any>'updateValuesAndFieldsOnLoad').and.returnValue(Promise.resolve());
+      vi.spyOn(component as any, 'updateValuesAndFieldsOnLoad').mockReturnValue(Promise.resolve());
 
       component.ngOnInit();
 
@@ -111,7 +111,7 @@ describe('PoDynamicViewComponent:', () => {
 
       component.load = 'teste';
 
-      spyOn(component['dynamicViewService'], 'onLoad').and.returnValue(of(expectedValue).toPromise());
+      vi.spyOn(component['dynamicViewService'] as any, 'onLoad').mockReturnValue(of(expectedValue).toPromise());
 
       expect(await component['getValuesAndFieldsFromLoad']()).toEqual(expectedValue);
       expect(component['dynamicViewService'].onLoad).toHaveBeenCalled();
@@ -129,7 +129,7 @@ describe('PoDynamicViewComponent:', () => {
       string or function`, async () => {
       component.load = <any>[];
 
-      spyOn(component['dynamicViewService'], 'onLoad').and.returnValue(of({}).toPromise());
+      vi.spyOn(component['dynamicViewService'] as any, 'onLoad').mockReturnValue(of({}).toPromise());
 
       expect(await component['getValuesAndFieldsFromLoad']()).toEqual({});
       expect(component['dynamicViewService'].onLoad).not.toHaveBeenCalled();
@@ -138,7 +138,7 @@ describe('PoDynamicViewComponent:', () => {
     it('getVisibleFields: should return `getMergedFields` if `showAllValue` is true', () => {
       component.showAllValue = true;
 
-      spyOn(component, <any>'getMergedFields');
+      vi.spyOn(component as any, 'getMergedFields');
 
       component['getVisibleFields']();
 
@@ -150,7 +150,7 @@ describe('PoDynamicViewComponent:', () => {
       component.value = { name: 'po', age: 2 };
       component.fields = [{ property: 'name' }];
 
-      spyOn(component, <any>'getConfiguredFields');
+      vi.spyOn(component as any, 'getConfiguredFields');
 
       component['getVisibleFields']();
 
@@ -163,7 +163,7 @@ describe('PoDynamicViewComponent:', () => {
       component.value = { name: 'po', age: 2 };
       component.fields = [];
 
-      spyOn(component, <any>'getValueFields');
+      vi.spyOn(component as any, 'getValueFields');
 
       component['getVisibleFields']();
 
@@ -203,7 +203,7 @@ describe('PoDynamicViewComponent:', () => {
       const fakeField = { property: 'name', tag: true };
       const fakeFieldsOnLoad = [{ ...fakeField }];
 
-      spyOn(component, <any>'setFieldOnLoad');
+      vi.spyOn(component as any, 'setFieldOnLoad');
 
       component['setFieldsOnLoad'](fakeFieldsOnLoad);
 
@@ -214,7 +214,7 @@ describe('PoDynamicViewComponent:', () => {
       const fakeFieldsOnLoad = undefined;
       const fakeField = { property: 'name', tag: true };
 
-      spyOn(component, <any>'setFieldOnLoad');
+      vi.spyOn(component as any, 'setFieldOnLoad');
 
       component['setFieldsOnLoad'](fakeFieldsOnLoad);
 
@@ -235,10 +235,10 @@ describe('PoDynamicViewComponent:', () => {
     it(`updateValuesAndFieldsOnLoad: should call 'getValuesAndFieldsFromLoad', 'setValueOnLoad', 'setFieldsOnLoad'
     and 'getVisibleFields'`, async () => {
       const fakeDataOnLoad = { value: { name: 'teste 2' }, fields: [{ property: 'name', tag: true }] };
-      spyOn(component, <any>'getValuesAndFieldsFromLoad').and.returnValue(fakeDataOnLoad);
-      spyOn(component, <any>'setValueOnLoad');
-      spyOn(component, <any>'setFieldsOnLoad');
-      spyOn(component, <any>'getVisibleFields');
+      vi.spyOn(component as any, 'getValuesAndFieldsFromLoad').mockReturnValue(fakeDataOnLoad);
+      vi.spyOn(component as any, 'setValueOnLoad');
+      vi.spyOn(component as any, 'setFieldsOnLoad');
+      vi.spyOn(component as any, 'getVisibleFields');
 
       await component['updateValuesAndFieldsOnLoad']();
 
@@ -351,7 +351,7 @@ describe('PoDynamicViewComponent:', () => {
 
     it('containsLineBreak: should return true if the string contains a newline character', () => {
       const value = 'Hello\nWorld';
-      expect(component['containsLineBreak'](value)).toBeTrue();
+      expect(component['containsLineBreak'](value)).toBe(true);
     });
   });
 

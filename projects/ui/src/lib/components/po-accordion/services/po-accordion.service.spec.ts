@@ -21,14 +21,14 @@ describe('PoAccordionService:', () => {
 
   describe('Methods:', () => {
     it('should call subjectChild.next with accordionItem in sendToParentAccordionItemClicked', () => {
-      spyOn(accordionService['subjectChild'], 'next');
+      vi.spyOn(accordionService['subjectChild'] as any, 'next');
       accordionService.sendToParentAccordionItemClicked(accordionItem as any);
 
       expect(accordionService['subjectChild'].next).toHaveBeenCalledWith(accordionItem as any);
     });
 
     it('should call subjectChild.asObservable in receiveFromChildAccordionClicked', () => {
-      spyOn(accordionService['subjectChild'], 'asObservable');
+      vi.spyOn(accordionService['subjectChild'] as any, 'asObservable');
       accordionService.receiveFromChildAccordionClicked();
 
       expect(accordionService['subjectChild'].asObservable).toHaveBeenCalled();

@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { UntypedFormControl } from '@angular/forms';
 
@@ -18,7 +19,7 @@ describe('PoDecimalComponent:', () => {
   let nativeElement: any;
   let languageService: PoLanguageService;
   let inputEl: any;
-  let spyService: jasmine.Spy;
+  let spyService: any;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -30,7 +31,7 @@ describe('PoDecimalComponent:', () => {
 
   beforeEach(() => {
     languageService = TestBed.inject(PoLanguageService);
-    spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
+    spyService = vi.spyOn(languageService as any, 'getShortLanguage').mockReturnValue('pt');
     fixture = TestBed.createComponent(PoDecimalComponent);
     component = fixture.componentInstance;
     component.label = 'Label de teste';
@@ -116,7 +117,7 @@ describe('PoDecimalComponent:', () => {
     });
 
     it('p-min: should update property with `undefined` if values are invalid.', () => {
-      component.min = <any>'one';
+      (component as any).min = 'one';
       expect(component.min).toBeUndefined();
     });
 
@@ -136,7 +137,7 @@ describe('PoDecimalComponent:', () => {
     });
 
     it('p-max: should update property with `undefined` if values are invalid.', () => {
-      component.max = <any>'one';
+      (component as any).max = 'one';
       expect(component.max).toBeUndefined();
     });
 
@@ -223,9 +224,9 @@ describe('PoDecimalComponent:', () => {
     };
     component['onTouched'] = () => {};
 
-    spyOn(component.blur, 'emit');
-    spyOn(component, <any>'controlChangeEmitter');
-    spyOn(component, <any>'onTouched');
+    vi.spyOn(component.blur as any, 'emit');
+    vi.spyOn(component as any, 'controlChangeEmitter');
+    vi.spyOn(component as any, 'onTouched');
 
     component.onBlur(fakeEvent);
 
@@ -240,9 +241,9 @@ describe('PoDecimalComponent:', () => {
     };
     component['onTouched'] = () => {};
 
-    spyOn(component.blur, 'emit');
-    spyOn(component, <any>'controlChangeEmitter');
-    spyOn(component, <any>'onTouched');
+    vi.spyOn(component.blur as any, 'emit');
+    vi.spyOn(component as any, 'controlChangeEmitter');
+    vi.spyOn(component as any, 'onTouched');
 
     component.onBlur(fakeEvent);
 
@@ -259,9 +260,9 @@ describe('PoDecimalComponent:', () => {
     };
     component['onTouched'] = () => {};
 
-    spyOn(component, <any>'setViewValue');
-    spyOn(component, <any>'callOnChange');
-    spyOn(component, <any>'onTouched');
+    vi.spyOn(component as any, 'setViewValue');
+    vi.spyOn(component as any, 'callOnChange');
+    vi.spyOn(component as any, 'onTouched');
 
     component.onBlur(fakeEvent);
 
@@ -278,10 +279,10 @@ describe('PoDecimalComponent:', () => {
     };
     component['onTouched'] = () => {};
 
-    spyOn(component, <any>'setViewValue');
-    spyOn(component, <any>'onTouched');
-    spyOn(component, <any>'callOnChange');
-    spyOn(component.blur, 'emit');
+    vi.spyOn(component as any, 'setViewValue');
+    vi.spyOn(component as any, 'onTouched');
+    vi.spyOn(component as any, 'callOnChange');
+    vi.spyOn(component.blur as any, 'emit');
 
     component.onBlur(fakeEvent);
 
@@ -304,9 +305,9 @@ describe('PoDecimalComponent:', () => {
       triggerMode: 'changeModel'
     };
 
-    spyOn(component, <any>'setViewValue');
-    spyOn(component, <any>'setCursorInput');
-    spyOn(component, <any>'callOnChange');
+    vi.spyOn(component as any, 'setViewValue');
+    vi.spyOn(component as any, 'setCursorInput');
+    vi.spyOn(component as any, 'callOnChange');
 
     component.onInput(fakeEvent);
 
@@ -327,7 +328,7 @@ describe('PoDecimalComponent:', () => {
       }
     };
 
-    spyOn(component, <any>'onInputKeyboardAndroid');
+    vi.spyOn(component as any, 'onInputKeyboardAndroid');
 
     component.onInput(fakeEvent);
 
@@ -350,7 +351,7 @@ describe('PoDecimalComponent:', () => {
       key: ','
     };
 
-    spyOn(fakeThis, 'isValidKey');
+    vi.spyOn(fakeThis as any, 'isValidKey');
 
     component.onInputKeyboardAndroid.call(fakeThis, fakeEvent);
 
@@ -366,9 +367,9 @@ describe('PoDecimalComponent:', () => {
       }
     };
 
-    spyOn(component, <any>'setViewValue');
-    spyOn(component, <any>'setCursorInput');
-    spyOn(component, <any>'callOnChange');
+    vi.spyOn(component as any, 'setViewValue');
+    vi.spyOn(component as any, 'setCursorInput');
+    vi.spyOn(component as any, 'callOnChange');
 
     component.onInput(fakeEvent);
     expect(component['setViewValue']).toHaveBeenCalled();
@@ -388,7 +389,7 @@ describe('PoDecimalComponent:', () => {
       preventDefault: () => {}
     };
 
-    spyOn(component, <any>'setPositionValue');
+    vi.spyOn(component as any, 'setPositionValue');
 
     component.onInputKeyboardAndroid(fakeEvent);
 
@@ -406,7 +407,7 @@ describe('PoDecimalComponent:', () => {
       preventDefault: () => {}
     };
 
-    spyOn(fakeEvent, 'preventDefault');
+    vi.spyOn(fakeEvent as any, 'preventDefault');
 
     component.onInputKeyboardAndroid(fakeEvent);
 
@@ -565,7 +566,7 @@ describe('PoDecimalComponent:', () => {
       }
     };
 
-    spyOn(fakeEvent.target, 'setSelectionRange');
+    vi.spyOn(fakeEvent.target as any, 'setSelectionRange');
 
     component['setCursorInput'](fakeEvent, 2, 5);
 
@@ -580,7 +581,7 @@ describe('PoDecimalComponent:', () => {
       }
     };
 
-    spyOn(fakeEvent.target, 'setSelectionRange');
+    vi.spyOn(fakeEvent.target as any, 'setSelectionRange');
 
     component['setCursorInput'](fakeEvent, 2, 2);
 
@@ -597,7 +598,7 @@ describe('PoDecimalComponent:', () => {
       }
     };
 
-    spyOn(fakeEvent.target, 'setSelectionRange');
+    vi.spyOn(fakeEvent.target as any, 'setSelectionRange');
 
     component['setCursorInput'](fakeEvent, 2, 2);
 
@@ -612,7 +613,7 @@ describe('PoDecimalComponent:', () => {
       }
     };
 
-    spyOn(fakeEvent.target, 'setSelectionRange');
+    vi.spyOn(fakeEvent.target as any, 'setSelectionRange');
 
     component['setCursorInput'](fakeEvent, 2, 2);
 
@@ -677,7 +678,7 @@ describe('PoDecimalComponent:', () => {
     const valueView = '12,345';
     const formatToModelValueExpected = 12.345;
     component.decimalsLength = 3;
-    spyOn(component, <any>'replaceCommaToDot').and.returnValue(formatToModelValueExpected);
+    vi.spyOn(component as any, 'replaceCommaToDot').mockReturnValue(formatToModelValueExpected);
 
     const valueFormatted = component['formatToModelValue'](valueView);
 
@@ -708,7 +709,7 @@ describe('PoDecimalComponent:', () => {
       verifyErrorAsync: () => {}
     };
 
-    spyOn(fakeThis.change, 'emit');
+    vi.spyOn(fakeThis.change as any, 'emit');
     component['controlChangeEmitter'].call(fakeThis);
     tick(200);
     expect(fakeThis.change.emit).not.toHaveBeenCalled();
@@ -765,7 +766,7 @@ describe('PoDecimalComponent:', () => {
       triggerMode: 'changeModel'
     };
 
-    spyOn(component, <any>'callOnChange');
+    vi.spyOn(component as any, 'callOnChange');
     component.clear('');
     expect(component['callOnChange']).toHaveBeenCalled();
   });
@@ -839,7 +840,7 @@ describe('PoDecimalComponent:', () => {
         }
       };
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -854,7 +855,7 @@ describe('PoDecimalComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -862,10 +863,10 @@ describe('PoDecimalComponent:', () => {
     });
 
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -886,7 +887,7 @@ describe('PoDecimalComponent:', () => {
         setSelectionRange: (start, end) => {}
       };
 
-      spyOn(fakeTarget, 'setSelectionRange');
+      vi.spyOn(fakeTarget as any, 'setSelectionRange');
       component['setInitialSelectionRange'](fakeTarget, 1, 1);
       expect(fakeTarget.setSelectionRange).toHaveBeenCalledWith(2, 2);
     });
@@ -896,7 +897,7 @@ describe('PoDecimalComponent:', () => {
         setSelectionRange: (start, end) => {}
       };
 
-      spyOn(fakeTarget, 'setSelectionRange');
+      vi.spyOn(fakeTarget as any, 'setSelectionRange');
       component['setInitialSelectionRange'](fakeTarget, 3, 3);
       expect(fakeTarget.setSelectionRange).toHaveBeenCalledWith(2, 2);
     });
@@ -913,7 +914,7 @@ describe('PoDecimalComponent:', () => {
         selectionEnd: 5
       };
 
-      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBeTrue();
+      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBe(true);
     });
 
     it('isSelectionStartDifferentSelectionEnd: should return false if have a selection', () => {
@@ -922,12 +923,12 @@ describe('PoDecimalComponent:', () => {
         selectionEnd: 1
       };
 
-      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBeFalse();
+      expect(component['isSelectionStartDifferentSelectionEnd'](fakeTarget)).toBe(false);
     });
 
     it('onFocus: should called `getScreenValue` and `enter.emit`', () => {
-      spyOn(component, 'getScreenValue');
-      spyOn(component.enter, 'emit');
+      vi.spyOn(component as any, 'getScreenValue');
+      vi.spyOn(component.enter as any, 'emit');
 
       component.onFocus(new FocusEvent(''));
 
@@ -936,7 +937,7 @@ describe('PoDecimalComponent:', () => {
     });
 
     it('onKeyPress: should called `isValidKey`', () => {
-      spyOn(component, <any>'isValidKey');
+      vi.spyOn(component as any, 'isValidKey');
 
       component.onKeyPress(new KeyboardEvent(''));
 
@@ -980,8 +981,8 @@ describe('PoDecimalComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(component, <any>'isInvalidKey').and.returnValue(true);
-      spyOn(fakeEvent, 'preventDefault');
+      vi.spyOn(component as any, 'isInvalidKey').mockReturnValue(true);
+      vi.spyOn(fakeEvent as any, 'preventDefault');
 
       const isValidKeyReturn = component['isValidKey'](fakeEvent, ',');
 
@@ -998,8 +999,8 @@ describe('PoDecimalComponent:', () => {
       };
       Object.defineProperty(component, 'isKeyboardAndroid', { value: true, configurable: true });
 
-      spyOn(component, <any>'isInvalidKey').and.returnValue(false);
-      spyOn(fakeEvent, 'preventDefault');
+      vi.spyOn(component as any, 'isInvalidKey').mockReturnValue(false);
+      vi.spyOn(fakeEvent as any, 'preventDefault');
 
       const isValidKeyReturn = component['isValidKey'](fakeEvent);
 
@@ -1036,7 +1037,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `verifyInsertComma` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1045,8 +1046,8 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `verifyThousandLength` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1055,9 +1056,9 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `verifyValueAfterComma` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1066,10 +1067,10 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `verifyInsertMinusSign` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyInsertMinusSign').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1078,11 +1079,11 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `hasMinusSignInvalidPosition` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
-        spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyInsertMinusSign').mockReturnValue(false);
+        vi.spyOn(component as any, 'hasMinusSignInvalidPosition').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1091,12 +1092,12 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `isInvalidNumber` is true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
-        spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(false);
-        spyOn(component, <any>'isValidNumber').and.returnValue(false);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyInsertMinusSign').mockReturnValue(false);
+        vi.spyOn(component as any, 'hasMinusSignInvalidPosition').mockReturnValue(false);
+        vi.spyOn(component as any, 'isValidNumber').mockReturnValue(false);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1105,13 +1106,13 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `validateCursorPositionBeforeSeparator` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
-        spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(false);
-        spyOn(component, <any>'isValidNumber').and.returnValue(true);
-        spyOn(component, <any>'validateCursorPositionBeforeSeparator').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyInsertMinusSign').mockReturnValue(false);
+        vi.spyOn(component as any, 'hasMinusSignInvalidPosition').mockReturnValue(false);
+        vi.spyOn(component as any, 'isValidNumber').mockReturnValue(true);
+        vi.spyOn(component as any, 'validateCursorPositionBeforeSeparator').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1120,14 +1121,14 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return true if `verifyDecimalLengthIsZeroAndKeyPressedIsComma` return true', () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
-        spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(false);
-        spyOn(component, <any>'isValidNumber').and.returnValue(true);
-        spyOn(component, <any>'validateCursorPositionBeforeSeparator').and.returnValue(false);
-        spyOn(component, <any>'verifyDecimalLengthIsZeroAndKeyPressedIsComma').and.returnValue(true);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyInsertMinusSign').mockReturnValue(false);
+        vi.spyOn(component as any, 'hasMinusSignInvalidPosition').mockReturnValue(false);
+        vi.spyOn(component as any, 'isValidNumber').mockReturnValue(true);
+        vi.spyOn(component as any, 'validateCursorPositionBeforeSeparator').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyDecimalLengthIsZeroAndKeyPressedIsComma').mockReturnValue(true);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1138,14 +1139,14 @@ describe('PoDecimalComponent:', () => {
       it(`should return false if verifyInsertComma, verifyThousandLength, verifyValueAfterComma,
           verifyInsertMinusSign, hasMinusSignInvalidPosition, isInvalidNumber, validateCursorPositionBeforeSeparator,
           verifyDecimalLengthIsZeroAndKeyPressedIsComma is false`, () => {
-        spyOn(component, <any>'verifyInsertComma').and.returnValue(false);
-        spyOn(component, <any>'verifyThousandLength').and.returnValue(false);
-        spyOn(component, <any>'verifyValueAfterComma').and.returnValue(false);
-        spyOn(component, <any>'verifyInsertMinusSign').and.returnValue(false);
-        spyOn(component, <any>'hasMinusSignInvalidPosition').and.returnValue(false);
-        spyOn(component, <any>'isValidNumber').and.returnValue(true);
-        spyOn(component, <any>'validateCursorPositionBeforeSeparator').and.returnValue(false);
-        spyOn(component, <any>'verifyDecimalLengthIsZeroAndKeyPressedIsComma').and.returnValue(false);
+        vi.spyOn(component as any, 'verifyInsertComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyThousandLength').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValueAfterComma').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyInsertMinusSign').mockReturnValue(false);
+        vi.spyOn(component as any, 'hasMinusSignInvalidPosition').mockReturnValue(false);
+        vi.spyOn(component as any, 'isValidNumber').mockReturnValue(true);
+        vi.spyOn(component as any, 'validateCursorPositionBeforeSeparator').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyDecimalLengthIsZeroAndKeyPressedIsComma').mockReturnValue(false);
 
         const isInvalidKeyReturn = component['isInvalidKey'](fakeEvent, fakeCharCode);
 
@@ -1168,7 +1169,7 @@ describe('PoDecimalComponent:', () => {
 
       it('should return true if all validators equal true', () => {
         fixture.detectChanges();
-        spyOn(component, <any>'isKeyDecimalSeparator');
+        vi.spyOn(component as any, 'isKeyDecimalSeparator');
 
         expect(component['validateCursorPositionBeforeSeparator'](fakeEvent)).toBeTruthy();
         expect(component['isKeyDecimalSeparator']).toHaveBeenCalled();
@@ -1177,7 +1178,7 @@ describe('PoDecimalComponent:', () => {
       it('should return false if have a selection range', () => {
         fakeEvent.target.selectionEnd = 2;
 
-        spyOn(component, <any>'isKeyDecimalSeparator');
+        vi.spyOn(component as any, 'isKeyDecimalSeparator');
 
         expect(component['validateCursorPositionBeforeSeparator'](fakeEvent)).toBeFalsy();
         expect(component['isKeyDecimalSeparator']).not.toHaveBeenCalled();
@@ -1203,7 +1204,7 @@ describe('PoDecimalComponent:', () => {
 
       it('should return false if isKeyDecimalSeparator is true', () => {
         fixture.detectChanges();
-        spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(true);
+        vi.spyOn(component as any, 'isKeyDecimalSeparator').mockReturnValue(true);
 
         expect(component['validateCursorPositionBeforeSeparator'](fakeEvent)).toBeFalsy();
         expect(component['isKeyDecimalSeparator']).toHaveBeenCalled();
@@ -1225,8 +1226,8 @@ describe('PoDecimalComponent:', () => {
 
       it('should return true if all validators equal true', () => {
         fixture.detectChanges();
-        spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(false);
-        spyOn(component, <any>'isPositionAfterDecimalSeparator').and.returnValue(true);
+        vi.spyOn(component as any, 'isKeyDecimalSeparator').mockReturnValue(false);
+        vi.spyOn(component as any, 'isPositionAfterDecimalSeparator').mockReturnValue(true);
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeTruthy();
         expect(component['isKeyDecimalSeparator']).toHaveBeenCalled();
@@ -1234,14 +1235,14 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should return false if isPositionAfterDecimalSeparator is false', () => {
-        spyOn(component, <any>'isPositionAfterDecimalSeparator').and.returnValue(false);
+        vi.spyOn(component as any, 'isPositionAfterDecimalSeparator').mockReturnValue(false);
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
       });
 
       it('should return false if isKeyDecimalSeparator is true', () => {
         fixture.detectChanges();
-        spyOn(component, <any>'isKeyDecimalSeparator').and.returnValue(true);
+        vi.spyOn(component as any, 'isKeyDecimalSeparator').mockReturnValue(true);
 
         expect(component['verifyThousandLength'](fakeEvent)).toBeFalsy();
       });
@@ -1267,7 +1268,7 @@ describe('PoDecimalComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
@@ -1281,9 +1282,9 @@ describe('PoDecimalComponent:', () => {
         };
         component['onTouched'] = () => {};
 
-        spyOn(component, <any>'setViewValue');
-        spyOn(component, <any>'callOnChange');
-        spyOn(component, <any>'onTouched');
+        vi.spyOn(component as any, 'setViewValue');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'onTouched');
 
         component.onBlur(fakeEvent);
 
@@ -1319,7 +1320,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -1350,7 +1351,7 @@ describe('PoDecimalComponent:', () => {
     describe('writeValueModel', () => {
       it('should call change.emit', () => {
         const value = '123456';
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component.writeValueModel(value);
         expect(component.change.emit).toHaveBeenCalledWith(value);
@@ -1359,8 +1360,8 @@ describe('PoDecimalComponent:', () => {
       it(`should show the value formated by locale 'pt'`, () => {
         const value = '1234567,82';
         const formated = '1.234.567,82';
-        const spy = spyOn(component, <any>'setViewValue');
-        spyService.and.returnValue('pt');
+        const spy = vi.spyOn(component as any, 'setViewValue');
+        spyService.mockReturnValue('pt');
         component.ngOnInit();
         component.writeValueModel(value);
         expect(spy).toHaveBeenCalledWith(formated);
@@ -1369,8 +1370,8 @@ describe('PoDecimalComponent:', () => {
       it(`should show the value formated by locale 'ru'`, () => {
         const value = '1234567,82';
         const formated = '1 234 567,82';
-        const spy = spyOn(component, <any>'setViewValue');
-        spyService.and.returnValue('ru');
+        const spy = vi.spyOn(component as any, 'setViewValue');
+        spyService.mockReturnValue('ru');
         component.ngOnInit();
         component.writeValueModel(value);
         expect(spy).toHaveBeenCalledWith(formated);
@@ -1379,22 +1380,22 @@ describe('PoDecimalComponent:', () => {
       it(`should show the value formated by locale 'en'`, () => {
         const value = '1234567.82';
         const formated = '1,234,567.82';
-        const spy = spyOn(component, <any>'setViewValue');
-        spyService.and.returnValue('en');
+        const spy = vi.spyOn(component as any, 'setViewValue');
+        spyService.mockReturnValue('en');
         component.ngOnInit();
         component.writeValueModel(value);
         expect(spy).toHaveBeenCalledWith(formated);
       });
 
       it('shouldn`t call change.emit if param is undefined', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component.writeValueModel(undefined);
         expect(component.change.emit).not.toHaveBeenCalled();
       });
 
       it('shouldn`t call setViewValue if inputEl is undefined', () => {
-        const spy = spyOn(component, <any>'setViewValue');
+        const spy = vi.spyOn(component as any, 'setViewValue');
         component.inputEl = undefined;
         component.writeValueModel('5555');
         expect(spy).not.toHaveBeenCalled();
@@ -1411,7 +1412,7 @@ describe('PoDecimalComponent:', () => {
         verifyErrorAsync: () => {}
       };
 
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
       component['controlChangeEmitter'].call(fakeThis);
       tick(250);
       expect(fakeThis.change.emit).toHaveBeenCalledWith(value);
@@ -1427,7 +1428,7 @@ describe('PoDecimalComponent:', () => {
         verifyErrorAsync: () => {}
       };
 
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
       component['controlChangeEmitter'].call(fakeThis);
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
     });
@@ -1439,8 +1440,8 @@ describe('PoDecimalComponent:', () => {
         }
       };
 
-      spyOn(component, <any>'setViewValue');
-      spyOn(component, <any>'setCursorInput');
+      vi.spyOn(component as any, 'setViewValue');
+      vi.spyOn(component as any, 'setCursorInput');
 
       component.onInput(fakeEvent);
 
@@ -1455,8 +1456,8 @@ describe('PoDecimalComponent:', () => {
         }
       };
 
-      spyOn(component, <any>'setViewValue');
-      spyOn(component, <any>'setCursorInput');
+      vi.spyOn(component as any, 'setViewValue');
+      vi.spyOn(component as any, 'setCursorInput');
 
       component.onInput(fakeEvent);
 
@@ -1473,8 +1474,8 @@ describe('PoDecimalComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputEl.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -1489,8 +1490,8 @@ describe('PoDecimalComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -1611,7 +1612,7 @@ describe('PoDecimalComponent:', () => {
 
         component.errorPattern = 'Erro de exemplo';
         component.errorAsyncProperties = {
-          errorAsync: jasmine.createSpy('errorAsync').and.returnValue(of(true))
+          errorAsync: vi.fn().mockReturnValue(of(true))
         };
 
         component['subscriptionValidator'] = new Subscription();
@@ -1622,18 +1623,18 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should add ng-invalid and ng-dirty classes when error is true', () => {
-        spyOn(component['cd'], 'detectChanges');
+        vi.spyOn(component['cd'] as any, 'detectChanges');
         component['verifyErrorAsync']('test');
 
         expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
-        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeTrue();
-        expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBeTrue();
+        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBe(true);
+        expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBe(true);
         expect(component['cd'].detectChanges).toHaveBeenCalled();
       });
 
       it('should remove ng-invalid class when error is false and isInvalid is false', () => {
-        spyOn(component['cd'], 'detectChanges');
-        component.errorAsyncProperties.errorAsync = jasmine.createSpy('errorAsync').and.returnValue(of(false));
+        vi.spyOn(component['cd'] as any, 'detectChanges');
+        component.errorAsyncProperties.errorAsync = vi.fn().mockReturnValue(of(false));
         component['el'].nativeElement.classList.add('ng-invalid');
         component['el'].nativeElement.classList.add('ng-dirty');
         component.isInvalid = false;
@@ -1641,12 +1642,12 @@ describe('PoDecimalComponent:', () => {
         component['verifyErrorAsync']('test');
 
         expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
-        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeFalse();
+        expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBe(false);
         expect(component['cd'].detectChanges).toHaveBeenCalled();
       });
 
       it('must cancel the previous subscription from subscriptionValidator', () => {
-        const unsubscribeSpy = spyOn(component['subscriptionValidator'], 'unsubscribe');
+        const unsubscribeSpy = vi.spyOn(component['subscriptionValidator'] as any, 'unsubscribe');
 
         component['verifyErrorAsync']('value');
 

@@ -20,7 +20,8 @@ import { PoPageSlideComponent } from './po-page-slide.component';
   standalone: false
 })
 class TestComponent {
-  @ViewChild(PoPageSlideComponent, { static: true }) poPage: PoPageSlideComponent;
+  @ViewChild(PoPageSlideComponent, { static: true })
+  poPage: PoPageSlideComponent;
 
   public username: string;
   public password: string;
@@ -85,7 +86,7 @@ describe('PoPageSlideComponent', () => {
       component['pageContent'] = { nativeElement: { contains: () => 0 } };
       component.hideClose = true;
 
-      const spyEvent = spyOn(fakeEvent, 'stopPropagation');
+      const spyEvent = vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component['initFocus']();
       fixture.detectChanges();
@@ -177,7 +178,7 @@ describe('PoPageSlideComponent', () => {
       close: () => {}
     };
 
-    spyOn(mockComponent, 'close');
+    vi.spyOn(mockComponent as any, 'close');
     component.onClickOut.call(mockComponent, mockEvent);
     fixture.detectChanges();
 
@@ -188,7 +189,7 @@ describe('PoPageSlideComponent', () => {
     const mockEvent = { target: 0 };
     const mockComponent = { pageContent: { nativeElement: { contains: () => true } }, clickOut: true, close: () => {} };
 
-    spyOn(mockComponent, 'close');
+    vi.spyOn(mockComponent as any, 'close');
     fixture.detectChanges();
     component.onClickOut.call(mockComponent, mockEvent);
 
@@ -203,7 +204,7 @@ describe('PoPageSlideComponent', () => {
       close: () => {}
     };
 
-    spyOn(mockComponent, 'close');
+    vi.spyOn(mockComponent as any, 'close');
     fixture.detectChanges();
     component.onClickOut.call(mockComponent, mockEvent);
 
@@ -211,7 +212,7 @@ describe('PoPageSlideComponent', () => {
   });
 
   it('should call focus on the page when opened', fakeAsync(() => {
-    spyOn(component, <any>'handleFocus');
+    vi.spyOn(component as any, 'handleFocus');
 
     component.open();
     fixture.detectChanges();
@@ -232,7 +233,7 @@ describe('PoPageSlideComponent', () => {
     component.open();
     fixture.detectChanges();
 
-    spyOn(component['sourceElement'], 'focus');
+    vi.spyOn(component['sourceElement'] as any, 'focus');
 
     component.close();
     expect(component['sourceElement'].focus).toHaveBeenCalled();

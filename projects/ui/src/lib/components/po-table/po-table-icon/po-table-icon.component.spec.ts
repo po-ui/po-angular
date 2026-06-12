@@ -52,7 +52,7 @@ describe('PoTableIconComponent:', () => {
       const event = {};
       component.clickable = true;
 
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       component.onClick(event);
 
@@ -63,7 +63,7 @@ describe('PoTableIconComponent:', () => {
       const event = {};
       component.clickable = false;
 
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       component.onClick(event);
 

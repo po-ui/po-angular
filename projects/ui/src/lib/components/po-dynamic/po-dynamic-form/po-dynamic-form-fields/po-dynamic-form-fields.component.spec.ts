@@ -49,7 +49,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const fields = [{ property: 'name' }];
       component.visibleFields = [];
 
-      spyOn(component, <any>'getVisibleFields').and.returnValue(fields);
+      vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(fields);
 
       component.ngOnChanges(<any>{ fields });
 
@@ -60,7 +60,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
     it('ngOnChanges: shouldn`t call `getVisibileFields` if `changes.fields` is undefined', () => {
       component.visibleFields = [];
 
-      spyOn(component, <any>'getVisibleFields');
+      vi.spyOn(component as any, 'getVisibleFields');
 
       component.ngOnChanges({});
 
@@ -77,10 +77,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       };
 
       const fields = [{ property: 'name' }];
-      spyOn(component, <any>'hasContainer').and.returnValue(true);
-      spyOn(component, <any>'getVisibleFields').and.returnValue(fields);
+      vi.spyOn(component as any, 'hasContainer').mockReturnValue(true);
+      vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(fields);
 
-      spyOn(component, <any>'hasChangeContainer');
+      vi.spyOn(component as any, 'hasChangeContainer');
 
       component.ngOnChanges(fieldsChange);
 
@@ -111,7 +111,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const fieldComponent = { focus: () => {}, name: 'newField' };
       component.components = <any>[fieldComponent];
 
-      const spyOnFocus = spyOn(fieldComponent, 'focus');
+      const spyOnFocus = vi.spyOn(fieldComponent as any, 'focus');
       component.focus('newField');
 
       expect(spyOnFocus).toHaveBeenCalled();
@@ -121,7 +121,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const fieldComponent = { focus: () => {}, name: 'newField' };
       component.components = <any>[fieldComponent];
 
-      const spyOnFocus = spyOn(fieldComponent, 'focus');
+      const spyOnFocus = vi.spyOn(fieldComponent as any, 'focus');
       component.focus('otherField');
 
       expect(spyOnFocus).not.toHaveBeenCalled();
@@ -142,7 +142,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
           get: () => ({ touched: false })
         });
 
-        spyOn(component, <any>'getField').and.returnValue(field);
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
         component.onChangeField(fakeVisibleField);
 
         expect(component['getField']).toHaveBeenCalledWith(fakeVisibleField.property);
@@ -160,7 +160,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
           get: () => ({ touched: false })
         });
 
-        spyOn(component, <any>'getField').and.returnValue(field);
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
         component.onChangeField(fakeVisibleField);
 
         expect(component['getField']).not.toHaveBeenCalledWith(fakeVisibleField.property);
@@ -174,7 +174,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         const field = { changedField: fakeVisibleField, changedFieldIndex };
 
-        spyOn(component, <any>'getField').and.returnValue(field);
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
         component.onChangeField(fakeVisibleField);
 
         expect(component['getField']).toHaveBeenCalledWith(fakeVisibleField.property);
@@ -188,8 +188,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['previousValue']['test1'] = 'value';
         component['value']['test1'] = 'new value';
 
-        spyOn(component, <any>'getField').and.returnValue(field);
-        spyOn(component, <any>'validateField');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
+        vi.spyOn(component as any, 'validateField');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -204,8 +204,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['previousValue']['test1'] = 'value';
         component['value']['test1'] = 'new value';
 
-        spyOn(component, <any>'triggerValidationOnForm');
-        spyOn(component, <any>'getField').and.returnValue(field);
+        vi.spyOn(component as any, 'triggerValidationOnForm');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
 
         await component.onChangeField(fakeVisibleField);
 
@@ -218,8 +218,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['previousValue']['test1'] = 'value';
         component['value']['test1'] = 'value';
 
-        spyOn(component, <any>'triggerValidationOnForm');
-        spyOn(component, <any>'getField');
+        vi.spyOn(component as any, 'triggerValidationOnForm');
+        vi.spyOn(component as any, 'getField');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -235,9 +235,9 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['previousValue'] = previousValue;
         component['value'] = newValue;
 
-        spyOn(component, <any>'triggerValidationOnForm');
-        spyOn(component, <any>'getField').and.returnValue({ changedField: {} });
-        spyOn(component, 'updatePreviousValue').and.callThrough();
+        vi.spyOn(component as any, 'triggerValidationOnForm');
+        vi.spyOn(component as any, 'getField').mockReturnValue({ changedField: {} });
+        vi.spyOn(component as any, 'updatePreviousValue');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -256,8 +256,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['value']['test1'] = 'new value';
         component.validateFields = ['test1'];
 
-        spyOn(component, <any>'getField').and.returnValue(field);
-        const spyEmit = spyOn(component.formValidate, 'emit');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
+        const spyEmit = vi.spyOn(component.formValidate as any, 'emit');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -274,8 +274,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['previousValue']['test1'] = 'value';
         component['value']['test1'] = 'new value';
 
-        spyOn(component, <any>'getField').and.returnValue(field);
-        const spyEmit = spyOn(component.formValidate, 'emit');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
+        const spyEmit = vi.spyOn(component.formValidate as any, 'emit');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -293,8 +293,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['value']['test1'] = 'new value';
         component.validateFields = ['test2', 'test3'];
 
-        spyOn(component, <any>'getField').and.returnValue(field);
-        const spyEmit = spyOn(component.formValidate, 'emit');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
+        const spyEmit = vi.spyOn(component.formValidate as any, 'emit');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -311,8 +311,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         component['previousValue']['test1'] = 'value';
         component['value']['test1'] = 'new value';
 
-        spyOn(component, <any>'getField').and.returnValue(field);
-        spyOn(component, <any>'validateField');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
+        vi.spyOn(component as any, 'validateField');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -327,7 +327,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         const fakeVisibleField = { property: 'test1', optionsService: 'url.com' };
         const objectValue = { label: 'Vancouver', value: 12343 };
 
-        const spyObjectValue = spyOn(component.objectValue, 'emit');
+        const spyObjectValue = vi.spyOn(component.objectValue as any, 'emit');
 
         await component.onChangeField(fakeVisibleField, objectValue);
 
@@ -338,7 +338,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         const fakeVisibleField = { property: 'test1' };
         const objectValue = { label: 'Vancouver', value: 12343 };
 
-        const spyObjectValue = spyOn(component.objectValue, 'emit');
+        const spyObjectValue = vi.spyOn(component.objectValue as any, 'emit');
 
         await component.onChangeField(fakeVisibleField, objectValue);
 
@@ -355,7 +355,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
           get: () => ({ touched: false })
         });
 
-        spyOn(component, <any>'triggerValidationOnForm');
+        vi.spyOn(component as any, 'triggerValidationOnForm');
 
         await component.onChangeField(fakeVisibleField);
 
@@ -370,8 +370,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         component.validateOnInput = true;
 
-        spyOn(component, <any>'getField').and.returnValue(field);
-        spyOn(component, <any>'triggerValidationOnForm');
+        vi.spyOn(component as any, 'getField').mockReturnValue(field);
+        vi.spyOn(component as any, 'triggerValidationOnForm');
 
         component.onChangeFieldModel(fakeVisibleField);
 
@@ -383,7 +383,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         component.validateOnInput = false;
 
-        spyOn(component, <any>'triggerValidationOnForm');
+        vi.spyOn(component as any, 'triggerValidationOnForm');
 
         component.onChangeFieldModel(fakeVisibleField);
 
@@ -393,7 +393,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     describe('showAdditionalHelp:', () => {
       it('should call `showAdditionalHelp` if find component.', () => {
-        const fieldComponent = { showAdditionalHelp: jasmine.createSpy(), name: 'name' };
+        const fieldComponent = { showAdditionalHelp: vi.fn(), name: 'name' };
         component.components = <any>[fieldComponent];
 
         component.showAdditionalHelp('name');
@@ -402,7 +402,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       });
 
       it('should not call `showAdditionalHelp` if component is not found', () => {
-        const fieldComponent = { showAdditionalHelp: jasmine.createSpy(), name: 'name' };
+        const fieldComponent = { showAdditionalHelp: vi.fn(), name: 'name' };
         component.components = <any>[fieldComponent];
 
         component.showAdditionalHelp('nickname');
@@ -450,7 +450,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
-      const spyChanges = spyOn(component['changes'], 'detectChanges');
+      const spyChanges = vi.spyOn(component['changes'] as any, 'detectChanges');
 
       component['applyFieldValidation'](index, validatedField);
 
@@ -470,7 +470,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
-      const spyFocus = spyOn(component, 'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
 
       component['applyFieldValidation'](index, validatedField);
 
@@ -490,7 +490,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
-      const spyFocus = spyOn(component, 'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
 
       component['applyFieldValidation'](index, validatedField);
 
@@ -506,7 +506,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'test2', required: true, visible: false, help: 'test help' }
       ];
 
-      const spyUpdateFields = spyOn(component, <any>'updateFields');
+      const spyUpdateFields = vi.spyOn(component as any, 'updateFields');
 
       component['applyFieldValidation'](index, validatedField);
 
@@ -532,7 +532,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.validate = 'http://fakeUrlPo.com';
       component.fields = [{ property: 'test1', validate: 'teste' }];
 
-      const spyEmit = spyOn(component.formValidate, 'emit');
+      const spyEmit = vi.spyOn(component.formValidate as any, 'emit');
       const fieldIndex = 0;
 
       component['triggerValidationOnForm'](fieldIndex);
@@ -544,7 +544,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.formValidate.observers.length = 0;
       component.fields = [{ property: 'test1', validate: 'teste' }];
 
-      const spyEmit = spyOn(component.formValidate, 'emit');
+      const spyEmit = vi.spyOn(component.formValidate as any, 'emit');
       const fieldIndex = 0;
 
       component['triggerValidationOnForm'](fieldIndex);
@@ -556,8 +556,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const fields = [{ property: 'test1', validate: 'teste' }];
       component.fields = fields;
 
-      spyOn(component.fieldsChange, 'emit');
-      spyOn(component, <any>'getVisibleFields');
+      vi.spyOn(component.fieldsChange as any, 'emit');
+      vi.spyOn(component as any, 'getVisibleFields');
 
       component['updateFields']();
 
@@ -568,7 +568,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       component.visibleFields = [];
       const visibleFields = [{ property: 'Teste 1' }];
 
-      spyOn(component, <any>'getVisibleFields').and.returnValue(visibleFields);
+      vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(visibleFields);
 
       component.fields = [{ property: 'Teste 1' }, { property: 'Teste 2', visible: false }];
 
@@ -585,9 +585,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
 
-      const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(field));
-      const spyChanges = spyOn(component['changes'], 'detectChanges');
-      const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
+      const spySendFieldChange = vi
+        .spyOn(component['validationService'] as any, 'sendFieldChange')
+        .mockReturnValue(of(field));
+      const spyChanges = vi.spyOn(component['changes'] as any, 'detectChanges');
+      const spyApplyFieldValidation = vi.spyOn(component as any, 'applyFieldValidation');
 
       await component['validateField'](field, index, fakeVisibleField);
 
@@ -603,8 +605,12 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.value = [{ name: 'user 1' }, { age: 'user 2' }, { rg: 'user 3' }];
 
-      const spySendFieldChange = spyOn(component['validationService'], 'sendFieldChange').and.throwError('Error');
-      const spyApplyFieldValidation = spyOn(component, <any>'applyFieldValidation');
+      const spySendFieldChange = vi
+        .spyOn(component['validationService'] as any, 'sendFieldChange')
+        .mockImplementation(() => {
+          throw new Error('Error');
+        });
+      const spyApplyFieldValidation = vi.spyOn(component as any, 'applyFieldValidation');
 
       await component['validateField'](field, index, fakeVisibleField);
 
@@ -642,7 +648,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.visibleFields = fieldCurrent;
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
 
       component['hasChangeContainer'](fieldPrevious, fieldCurrent);
 
@@ -678,7 +684,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.fields = fieldCurrent;
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
 
       component['hasChangeContainer'](fieldPrevious, fieldCurrent);
 
@@ -695,8 +701,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'property1', container: 'container1-modificado', clean: true }, // mudança de container
         { property: 'property2', container: 'container2' }
       ];
-      spyOn(component, <any>'diffObjectsArray').and.returnValue(current);
-      spyOn(component, <any>'updateFieldContainer').and.returnValue([current]);
+      vi.spyOn(component as any, 'diffObjectsArray').mockReturnValue(current);
+      vi.spyOn(component as any, 'updateFieldContainer').mockReturnValue([current]);
       component.fields = current;
       component.containerFields = [previous];
 
@@ -709,10 +715,10 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const previous: Array<PoDynamicFormField> = [{ property: 'property1' }, { property: 'property2' }];
 
       const current: Array<PoDynamicFormField> = [{ property: 'property1', order: 1 }, { property: 'property2' }];
-      spyOn(component, <any>'diffObjectsArray').and.returnValue(current);
-      spyOn(component, <any>'updateFieldContainer').and.returnValue([current]);
+      vi.spyOn(component as any, 'diffObjectsArray').mockReturnValue(current);
+      vi.spyOn(component as any, 'updateFieldContainer').mockReturnValue([current]);
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
       component['hasChangeContainer'](previous, current);
 
       component.fields = current;
@@ -730,7 +736,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.visibleFields = fieldCurrent;
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
 
       component['hasChangeContainer'](fieldPrevious, fieldCurrent);
 
@@ -747,7 +753,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       component.visibleFields = fieldCurrent.filter(x => x.visible === false);
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
 
       component['hasChangeContainer'](fieldPrevious, fieldCurrent);
 
@@ -764,8 +770,8 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         { property: 'campo 2', visible: true }
       ];
 
-      spyOn(component, <any>'getVisibleFields').and.returnValue(fieldCurrent.filter(x => x.visible === true));
-      spyOn(component, <any>'handleChangesContainer');
+      vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(fieldCurrent.filter(x => x.visible === true));
+      vi.spyOn(component as any, 'handleChangesContainer');
 
       component['hasChangeContainer'](fieldPrevious, fieldCurrent);
 
@@ -777,7 +783,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       const current: Array<PoDynamicFormField> = [{ property: 'property1', order: 2 }, { property: 'property2' }];
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
       component['handleChangesContainer'](previous, current, 'order');
 
       expect(component.setContainerFields).toHaveBeenCalled();
@@ -788,7 +794,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
       const current = [{ property: 'property3', order: 2, index: 1 }, { property: 'property2' }];
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
       component['handleChangesContainer'](previous, current, 'order');
 
       expect(component.setContainerFields).toHaveBeenCalled();
@@ -798,11 +804,11 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       const previous: Array<PoDynamicFormField> = [{ property: 'property1', order: 1 }, { property: 'property2' }];
 
       const current: Array<PoDynamicFormField> = [{ property: 'property1' }, { property: 'property2', order: 1 }];
-      spyOn(component, <any>'diffObjectsArray').and.returnValue(current);
-      spyOn(component, <any>'getVisibleFields').and.returnValue(current);
-      spyOn(component, <any>'updateFieldContainer').and.returnValue([current]);
+      vi.spyOn(component as any, 'diffObjectsArray').mockReturnValue(current);
+      vi.spyOn(component as any, 'getVisibleFields').mockReturnValue(current);
+      vi.spyOn(component as any, 'updateFieldContainer').mockReturnValue([current]);
 
-      spyOn(component, <any>'setContainerFields');
+      vi.spyOn(component as any, 'setContainerFields');
       component['hasChangeContainer'](previous, current);
 
       component.fields = current;
@@ -865,12 +871,12 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
     it('hasContainer: should return false if visibleFields is undefined', () => {
       component.visibleFields = undefined;
-      expect(component['hasContainer']()).toBeFalse();
+      expect(component['hasContainer']()).toBe(false);
     });
 
     it('hasContainer: should return false if visibleFields is null', () => {
       component.visibleFields = null;
-      expect(component['hasContainer']()).toBeFalse();
+      expect(component['hasContainer']()).toBe(false);
     });
   });
 
@@ -1180,7 +1186,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
         });
 
         component.fields[0].validate = validate;
-        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+        vi.spyOn(component['validationService'] as any, 'sendFieldChange').mockReturnValue(of(validate()));
 
         await component.onChangeField(component.visibleFields[0]);
 
@@ -1194,7 +1200,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         component.fields[0].validate = validate;
 
-        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+        vi.spyOn(component['validationService'] as any, 'sendFieldChange').mockReturnValue(of(validate()));
 
         await component.onChangeField(component.visibleFields[0]);
 
@@ -1211,7 +1217,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
 
         component.fields[0].validate = validate;
 
-        spyOn(component['validationService'], 'sendFieldChange').and.returnValue(of(validate()));
+        vi.spyOn(component['validationService'] as any, 'sendFieldChange').mockReturnValue(of(validate()));
         await component.onChangeField(component.visibleFields[0]);
 
         expect(component.value.name).toBe(expectedValue);

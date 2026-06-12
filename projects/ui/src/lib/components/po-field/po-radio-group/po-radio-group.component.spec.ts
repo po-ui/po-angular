@@ -46,8 +46,8 @@ describe('PoRadioGroupComponent:', () => {
 
   it('should call changeValue when clicked and enabled', () => {
     component['onTouched'] = value => {};
-    spyOn(component, <any>'onTouched');
-    spyOn(component, 'changeValue');
+    vi.spyOn(component as any, 'onTouched');
+    vi.spyOn(component as any, 'changeValue');
 
     component.eventClick('valor', false);
 
@@ -57,8 +57,8 @@ describe('PoRadioGroupComponent:', () => {
 
   it('shouldn`t call changeValue when clicked and disabled', () => {
     component['onTouched'] = value => {};
-    spyOn(component, <any>'onTouched');
-    spyOn(component, 'changeValue');
+    vi.spyOn(component as any, 'onTouched');
+    vi.spyOn(component as any, 'changeValue');
 
     component.eventClick('valor', true);
 
@@ -95,7 +95,7 @@ describe('PoRadioGroupComponent:', () => {
         markForCheck: () => {}
       }
     };
-    spyOn(UtilsFunctions, 'removeDuplicatedOptions');
+    vi.spyOn(UtilsFunctions as any, 'removeDuplicatedOptions');
     component.ngDoCheck.call(fakeThis);
     expect(UtilsFunctions.removeDuplicatedOptions).not.toHaveBeenCalled();
   });
@@ -109,7 +109,7 @@ describe('PoRadioGroupComponent:', () => {
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
       component.autoFocus = true;
 
-      const spyFocus = spyOn(component, 'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
       component.ngAfterViewInit();
 
       expect(spyFocus).toHaveBeenCalled();
@@ -118,7 +118,7 @@ describe('PoRadioGroupComponent:', () => {
     it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
       component.autoFocus = false;
 
-      const spyFocus = spyOn(component, 'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
       component.ngAfterViewInit();
 
       expect(spyFocus).not.toHaveBeenCalled();
@@ -146,8 +146,8 @@ describe('PoRadioGroupComponent:', () => {
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -155,8 +155,8 @@ describe('PoRadioGroupComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -164,7 +164,7 @@ describe('PoRadioGroupComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -182,7 +182,7 @@ describe('PoRadioGroupComponent:', () => {
 
         fixture.detectChanges();
 
-        spyOn(component.radioLabels.toArray()[0], 'focus');
+        vi.spyOn(component.radioLabels.toArray()[0], 'focus');
 
         component.focus();
 
@@ -198,8 +198,8 @@ describe('PoRadioGroupComponent:', () => {
 
         fixture.detectChanges();
 
-        spyOn(component.radioLabels.toArray()[0], 'focus');
-        spyOn(component.radioLabels.toArray()[1], 'focus');
+        vi.spyOn(component.radioLabels.toArray()[0], 'focus');
+        vi.spyOn(component.radioLabels.toArray()[1], 'focus');
 
         component.focus();
 
@@ -216,8 +216,8 @@ describe('PoRadioGroupComponent:', () => {
 
         fixture.detectChanges();
 
-        spyOn(component.radioLabels.toArray()[0], 'focus');
-        spyOn(component.radioLabels.toArray()[1], 'focus');
+        vi.spyOn(component.radioLabels.toArray()[0], 'focus');
+        vi.spyOn(component.radioLabels.toArray()[1], 'focus');
 
         component.focus();
 
@@ -231,7 +231,7 @@ describe('PoRadioGroupComponent:', () => {
 
         fixture.detectChanges();
 
-        const spy = spyOn(component.radioLabels.toArray()[0], 'focus');
+        const spy = vi.spyOn(component.radioLabels.toArray()[0], 'focus');
 
         component.focus();
 
@@ -241,7 +241,7 @@ describe('PoRadioGroupComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -251,7 +251,7 @@ describe('PoRadioGroupComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -260,7 +260,7 @@ describe('PoRadioGroupComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -277,7 +277,7 @@ describe('PoRadioGroupComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
 
         radioMock = { radioInput: { nativeElement: document.createElement('input') } } as PoRadioComponent;
@@ -303,10 +303,10 @@ describe('PoRadioGroupComponent:', () => {
 
     it('onKeyDown: should emit event when field is focused', () => {
       const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-      spyOn(component.keydown, 'emit');
+      vi.spyOn(component.keydown as any, 'emit');
 
       const radioMock = { radioInput: { nativeElement: document.createElement('input') } } as PoRadioComponent;
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(radioMock.radioInput.nativeElement);
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(radioMock.radioInput.nativeElement);
 
       component.onKeyDown(fakeEvent, radioMock);
 
@@ -315,7 +315,7 @@ describe('PoRadioGroupComponent:', () => {
 
     describe('onKeyUp:', () => {
       it('should call `changeValue` when `isArrowKey` is true.', () => {
-        spyOn(component, 'changeValue');
+        vi.spyOn(component as any, 'changeValue');
         component.onKeyUp(fakeEventArrowKey, 1);
         expect(component.changeValue).toHaveBeenCalled();
       });
@@ -326,8 +326,8 @@ describe('PoRadioGroupComponent:', () => {
           which: 20
         };
 
-        spyOn(component, <any>'isArrowKey').and.returnValue(false);
-        spyOn(component, 'changeValue');
+        vi.spyOn(component as any, 'isArrowKey').mockReturnValue(false);
+        vi.spyOn(component as any, 'changeValue');
 
         component.onKeyUp(fakeEvent, 1);
 
@@ -340,8 +340,8 @@ describe('PoRadioGroupComponent:', () => {
           which: 20
         };
 
-        spyOn(component, <any>'isArrowKey').and.returnValue(false);
-        spyOn(component, 'changeValue');
+        vi.spyOn(component as any, 'isArrowKey').mockReturnValue(false);
+        vi.spyOn(component as any, 'changeValue');
 
         component.onKeyUp(fakeEvent, 1);
 
@@ -366,9 +366,9 @@ describe('PoRadioGroupComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
 
@@ -376,11 +376,11 @@ describe('PoRadioGroupComponent:', () => {
         (component as any).label = '';
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -390,17 +390,17 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -409,18 +409,18 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -431,18 +431,18 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -452,18 +452,18 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -472,7 +472,7 @@ describe('PoRadioGroupComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -480,8 +480,8 @@ describe('PoRadioGroupComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -489,8 +489,8 @@ describe('PoRadioGroupComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 

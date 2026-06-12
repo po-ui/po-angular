@@ -94,7 +94,7 @@ describe('PoListViewBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -110,7 +110,7 @@ describe('PoListViewBaseComponent:', () => {
       const validValuesTrue = [true, 'true', 1, ''];
       const validValuesFalse = [false, 'false', 0];
 
-      spyOn(component, <any>'showMainHeader');
+      vi.spyOn(component as any, 'showMainHeader');
 
       expectPropertiesValues(component, 'hideSelectAll', validValuesTrue, true);
       expectPropertiesValues(component, 'hideSelectAll', validValuesFalse, false);
@@ -120,7 +120,7 @@ describe('PoListViewBaseComponent:', () => {
     it('p-hide-select-all: should update property with false if invalid values and call `showMainHeader`', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
-      spyOn(component, <any>'showMainHeader');
+      vi.spyOn(component as any, 'showMainHeader');
 
       expectPropertiesValues(component, 'hideSelectAll', invalidValues, false);
       expect(component['showMainHeader']).toHaveBeenCalled();
@@ -191,7 +191,7 @@ describe('PoListViewBaseComponent:', () => {
       const validValuesTrue = [true, 'true', 1, ''];
       const validValuesFalse = [false, 'false', 0];
 
-      spyOn(component, <any>'showMainHeader');
+      vi.spyOn(component as any, 'showMainHeader');
 
       expectPropertiesValues(component, 'select', validValuesTrue, true);
       expectPropertiesValues(component, 'select', validValuesFalse, false);
@@ -201,7 +201,7 @@ describe('PoListViewBaseComponent:', () => {
     it('p-select: should update property with false if invalid values and call `showMainHeader`', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
-      spyOn(component, <any>'showMainHeader');
+      vi.spyOn(component as any, 'showMainHeader');
 
       expectPropertiesValues(component, 'select', invalidValues, false);
       expect(component['showMainHeader']).toHaveBeenCalled();
@@ -226,8 +226,8 @@ describe('PoListViewBaseComponent:', () => {
     it('onClickAction: should call `listViewAction.action` with item parameter', () => {
       const listViewAction = { label: 'Action 1', action: arg => {} };
 
-      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(item);
-      spyOn(listViewAction, 'action');
+      vi.spyOn(component as any, 'deleteInternalAttrs').mockReturnValue(item);
+      vi.spyOn(listViewAction as any, 'action');
 
       component.onClickAction(listViewAction, item);
 
@@ -238,7 +238,7 @@ describe('PoListViewBaseComponent:', () => {
     it('onClickAction: should not call `listViewAction.action`', () => {
       const listViewAction = { label: 'Action 1' };
 
-      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(item);
+      vi.spyOn(component as any, 'deleteInternalAttrs').mockReturnValue(item);
 
       component.onClickAction(listViewAction, item);
 
@@ -246,7 +246,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('onShowMore: should call `showMore.emit`', () => {
-      spyOn(component.showMore, <any>'emit');
+      vi.spyOn(component.showMore as any, 'emit');
 
       component.onShowMore();
 
@@ -398,8 +398,8 @@ describe('PoListViewBaseComponent:', () => {
       const listItem = { label: 'item label', $showDetail: 'test' };
       const expectedItem = { label: 'item label' };
 
-      spyOn(component.titleAction, <any>'emit');
-      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
+      vi.spyOn(component.titleAction as any, 'emit');
+      vi.spyOn(component as any, 'deleteInternalAttrs').mockReturnValue(expectedItem);
 
       component.runTitleAction(listItem);
 

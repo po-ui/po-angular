@@ -18,7 +18,7 @@ describe('PoSelectComponent:', () => {
   let component: PoSelectComponent;
   let fixture: ComponentFixture<PoSelectComponent>;
   let nativeElement;
-  let changeDetectorRef: jasmine.SpyObj<any>;
+  let changeDetectorRef: any;
 
   const booleanValidFalseValues = [false, 'false'];
   const booleanValidTrueValues = [true, 'true', ''];
@@ -32,7 +32,10 @@ describe('PoSelectComponent:', () => {
       declarations: [PoSelectComponent, PoFieldContainerComponent, PoFieldContainerBottomComponent]
     });
 
-    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges']);
+    changeDetectorRef = {
+      markForCheck: vi.fn().mockName('ChangeDetectorRef.markForCheck'),
+      detectChanges: vi.fn().mockName('ChangeDetectorRef.detectChanges')
+    };
     fixture = TestBed.createComponent(PoSelectComponent);
     component = fixture.componentInstance;
     component.options = [{ value: 1, label: 'Teste2' }];
@@ -47,7 +50,7 @@ describe('PoSelectComponent:', () => {
 
   it('should click in document', () => {
     const documentBody = document.body;
-    spyOn(documentBody, 'dispatchEvent');
+    vi.spyOn(documentBody as any, 'dispatchEvent');
 
     documentBody.dispatchEvent(event);
     documentBody.click();
@@ -82,14 +85,14 @@ describe('PoSelectComponent:', () => {
     it('should set loading=true and call markForCheck', () => {
       component.loading = true;
 
-      expect(component.loading).toBeTrue();
+      expect(component.loading).toBe(true);
       expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
     });
 
     it('should set loading=false and call markForCheck', () => {
       component.loading = false;
 
-      expect(component.loading).toBeFalse();
+      expect(component.loading).toBe(false);
       expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
     });
 
@@ -97,26 +100,26 @@ describe('PoSelectComponent:', () => {
       component.disabled = false;
 
       component.loading = true;
-      expect(component.disabled).toBeFalse();
+      expect(component.disabled).toBe(false);
 
       component.disabled = true;
       component.loading = false;
-      expect(component.disabled).toBeTrue();
+      expect(component.disabled).toBe(true);
     });
 
     it('should set loading=true when input receives string empty', () => {
       component.loading = '' as any;
-      expect(component.loading).toBeTrue();
+      expect(component.loading).toBe(true);
     });
 
     it('should set loading=false when input receives string "false"', () => {
       component.loading = 'false' as any;
-      expect(component.loading).toBeFalse();
+      expect(component.loading).toBe(false);
     });
 
     it('should set loading=true when input receives string "true"', () => {
       component.loading = 'true' as any;
-      expect(component.loading).toBeTrue();
+      expect(component.loading).toBe(true);
     });
 
     it('should not throw when cd is undefined', () => {
@@ -138,39 +141,39 @@ describe('PoSelectComponent:', () => {
       component.disabled = false;
       component.loading = false;
 
-      expect(component.isDisabled).toBeFalse();
+      expect(component.isDisabled).toBe(false);
     });
 
     it('should return true when disabled is true and loading is false', () => {
       component.disabled = true;
       component.loading = false;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
 
     it('should return true when disabled is false and loading is true', () => {
       component.disabled = false;
       component.loading = true;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
 
     it('should return true when disabled and loading are true', () => {
       component.disabled = true;
       component.loading = true;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
 
     it('should keep disabled true after loading toggles from true to false', () => {
       component.disabled = true;
       component.loading = true;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
 
       component.loading = false;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
   });
 
@@ -228,7 +231,7 @@ describe('PoSelectComponent:', () => {
     });
 
     it('onThemeChange: should call applySizeBasedOnA11y', () => {
-      spyOn<any>(component, 'applySizeBasedOnA11y');
+      vi.spyOn(component as any, 'applySizeBasedOnA11y');
       component['onThemeChange']();
       expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
     });
@@ -242,7 +245,7 @@ describe('PoSelectComponent:', () => {
         }
       };
 
-      spyOn(component.selectElement.nativeElement, 'focus');
+      vi.spyOn(component.selectElement.nativeElement, 'focus');
 
       component.focus();
 
@@ -257,7 +260,7 @@ describe('PoSelectComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.selectElement.nativeElement, 'focus');
+      vi.spyOn(component.selectElement.nativeElement, 'focus');
 
       component.focus();
 
@@ -272,13 +275,13 @@ describe('PoSelectComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
       it('should be called when blur event', () => {
         component['onModelTouched'] = () => {};
-        spyOn(component, <any>'onModelTouched');
+        vi.spyOn(component as any, 'onModelTouched');
 
         component.onBlur(fakeEvent);
 
@@ -306,7 +309,7 @@ describe('PoSelectComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -315,7 +318,7 @@ describe('PoSelectComponent:', () => {
       });
 
       it('should emit blur event when event.type is "blur"', () => {
-        spyOn(component.blur, 'emit');
+        vi.spyOn(component.blur as any, 'emit');
 
         component.onBlur({ type: 'blur' });
 
@@ -323,7 +326,7 @@ describe('PoSelectComponent:', () => {
       });
 
       it('should not emit blur event when event.type is different from "blur"', () => {
-        spyOn(component.blur, 'emit');
+        vi.spyOn(component.blur as any, 'emit');
 
         component.onBlur({ type: 'focus' });
 
@@ -348,7 +351,7 @@ describe('PoSelectComponent:', () => {
         getValueUpdate: value => {}
       };
 
-      spyOn(fakeThis, 'emitChange');
+      vi.spyOn(fakeThis as any, 'emitChange');
       component['updateValues'].call(fakeThis, option);
 
       expect(fakeThis.emitChange).toHaveBeenCalledWith(option.value);
@@ -358,7 +361,7 @@ describe('PoSelectComponent:', () => {
     it('onUpdateOptions: should call `onSelectChange` if model is truthy.', () => {
       component.modelValue = '1';
 
-      spyOn(component, 'onSelectChange');
+      vi.spyOn(component as any, 'onSelectChange');
       component.onUpdateOptions();
 
       expect(component.onSelectChange).toHaveBeenCalled();
@@ -367,7 +370,7 @@ describe('PoSelectComponent:', () => {
     it('onUpdateOptions: shouldn´t call `onSelectChange` if model is falsy.', () => {
       component.modelValue = undefined;
 
-      spyOn(component, 'onSelectChange');
+      vi.spyOn(component as any, 'onSelectChange');
       component.onUpdateOptions();
 
       expect(component.onSelectChange).not.toHaveBeenCalled();
@@ -376,9 +379,9 @@ describe('PoSelectComponent:', () => {
     it('p-options: should call `removeDuplicatedOptions`, `removeUndefinedAndNullOptions` and `onUpdateOptions`.', () => {
       const options = [{ label: 'option', value: 'option' }];
 
-      spyOn(UtilsFunctions, 'removeUndefinedAndNullOptions');
-      spyOn(UtilsFunctions, 'removeDuplicatedOptions');
-      spyOn(component, 'onUpdateOptions');
+      vi.spyOn(UtilsFunctions as any, 'removeUndefinedAndNullOptions');
+      vi.spyOn(UtilsFunctions as any, 'removeDuplicatedOptions');
+      vi.spyOn(component as any, 'onUpdateOptions');
 
       component.options = options;
 
@@ -408,7 +411,7 @@ describe('PoSelectComponent:', () => {
         { label: 'Group 2', options: [{ label: 'Option 3', value: 3 }] }
       ];
 
-      spyOn(component, <any>'transformInArray').and.callThrough();
+      vi.spyOn(component as any, 'transformInArray');
       component.options = options;
 
       expect(component.listGroupOptions).toEqual(options);
@@ -440,7 +443,7 @@ describe('PoSelectComponent:', () => {
     });
 
     it('onSelectChange: shouldn`t call `updateValues` if value is undefined', () => {
-      spyOn(component, 'updateValues');
+      vi.spyOn(component as any, 'updateValues');
 
       component.onSelectChange(undefined);
       expect(component.updateValues).not.toHaveBeenCalled();
@@ -449,8 +452,8 @@ describe('PoSelectComponent:', () => {
     it('onSelectChange: should call `updateValues` if value is valid', () => {
       component['onModelTouched'] = () => {};
 
-      spyOn(component, 'updateValues');
-      spyOn(component, <any>'onModelTouched');
+      vi.spyOn(component as any, 'updateValues');
+      vi.spyOn(component as any, 'onModelTouched');
 
       component.onSelectChange(component.options[0].value);
       expect(component.updateValues).toHaveBeenCalledWith(component.options[0]);
@@ -458,7 +461,7 @@ describe('PoSelectComponent:', () => {
     });
 
     it('onSelectChange: shouldn`t call `updateValues` if value is invalid', () => {
-      spyOn(component, 'updateValues');
+      vi.spyOn(component as any, 'updateValues');
 
       component.onSelectChange(5);
       expect(component.updateValues).not.toHaveBeenCalled();
@@ -490,7 +493,7 @@ describe('PoSelectComponent:', () => {
     });
 
     it('writeValue: should set property values and call `setScrollPosition` if is a valid option', () => {
-      spyOn(component, <any>'findOptionValue').and.returnValue(component.options[0]);
+      vi.spyOn(component as any, 'findOptionValue').mockReturnValue(component.options[0]);
 
       component.writeValue(component.options[0]);
 
@@ -519,7 +522,9 @@ describe('PoSelectComponent:', () => {
     });
 
     it('showAdditionalHelp: should call `showAdditionalHelp` and return value', () => {
-      const spySuperMethod = spyOn(PoFieldValidateModel.prototype, 'showAdditionalHelp').and.returnValue(true);
+      const spySuperMethod = vi
+        .spyOn(PoFieldValidateModel.prototype as any, 'showAdditionalHelp')
+        .mockReturnValue(true);
 
       const result = component.showAdditionalHelp();
 
@@ -553,19 +558,19 @@ describe('PoSelectComponent:', () => {
     it('isItemGroup: should return true when the item has "options" property as an array', () => {
       const item: PoSelectOption = { label: 'Option 1', value: 'option1' };
 
-      expect(component.isItemGroup(item)).toBeFalse();
+      expect(component.isItemGroup(item)).toBe(false);
     });
 
     it('isItemGroup: should return true when the item has "options" property as an array', () => {
       const item: PoSelectOptionGroup = { label: 'Group', options: [{ label: 'Option 1', value: 'option1' }] };
 
-      expect(component.isItemGroup(item)).toBeTrue();
+      expect(component.isItemGroup(item)).toBe(true);
     });
 
     it('isItemGroup: isItemGroup: should return false when the item has "options" property as any other type', () => {
       const item = { label: 'Item with options', options: { option1: 'value1', option2: 'value2' } };
 
-      expect(component.isItemGroup(item)).toBeFalse();
+      expect(component.isItemGroup(item)).toBe(false);
     });
 
     describe('onKeyDown:', () => {
@@ -577,8 +582,8 @@ describe('PoSelectComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.selectElement.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.selectElement.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -591,8 +596,8 @@ describe('PoSelectComponent:', () => {
           nativeElement: document.createElement('input')
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('input'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('input'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -611,7 +616,7 @@ describe('PoSelectComponent:', () => {
 
       component.optionsDefault = [option1, optionGroup];
 
-      spyOn(component, <any>'validateOptions');
+      vi.spyOn(component as any, 'validateOptions');
 
       component['separateOptions']();
 

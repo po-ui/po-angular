@@ -90,7 +90,7 @@ describe('PoLookupModalComponent', () => {
     component.ngOnInit();
     component.items[0].$selected = true;
 
-    spyOn(component.model, 'emit');
+    vi.spyOn(component.model as any, 'emit');
 
     component.primaryAction.action();
     expect(component.model.emit).toHaveBeenCalled();
@@ -100,7 +100,7 @@ describe('PoLookupModalComponent', () => {
     component.ngOnInit();
     component.items[0].$selected = true;
 
-    spyOn(component.model, 'emit');
+    vi.spyOn(component.model as any, 'emit');
 
     component.secondaryAction.action();
     expect(component.model.emit).toHaveBeenCalled();
@@ -379,7 +379,7 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('secondaryActionAdvancedFilter should set isAdvancedFilter to false', () => {
-      const spyComponentRefDestroy = spyOn(component.componentRef, <any>'destroy');
+      const spyComponentRefDestroy = vi.spyOn(component.componentRef as any, 'destroy');
 
       component.secondaryActionAdvancedFilter.action();
       expect(component.isAdvancedFilter).toBe(false);
@@ -387,8 +387,8 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('primaryActionAdvancedFilter should set isAdvancedFilter to false and call createDisclaimer', () => {
-      const spyCreateDisclaimer = spyOn(component, <any>'createDisclaimer');
-      const spyComponentRefDestroy = spyOn(component.componentRef, <any>'destroy');
+      const spyCreateDisclaimer = vi.spyOn(component as any, 'createDisclaimer');
+      const spyComponentRefDestroy = vi.spyOn(component.componentRef as any, 'destroy');
       component.ngOnInit();
       component.primaryActionAdvancedFilter.action();
 
@@ -398,7 +398,7 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('should not destroy dynamicForm if its null', () => {
-      const spyDestroyDynamicForm = spyOn(component.componentRef, <any>'destroy');
+      const spyDestroyDynamicForm = vi.spyOn(component.componentRef as any, 'destroy');
       component.componentRef = null;
       component.destroyDynamicForm();
 
@@ -467,7 +467,7 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('onAllUnselectedTag: should be called and clean all items on table', () => {
-      spyOn(component['poTable'], 'unselectRows');
+      vi.spyOn(component['poTable'] as any, 'unselectRows');
 
       component.onAllUnselectedTag([]);
 
@@ -492,7 +492,7 @@ describe('PoLookupModalComponent', () => {
     });
 
     it('onAllUnselected: should remove all items', () => {
-      spyOn(component['poTable'], 'unselectRows');
+      vi.spyOn(component['poTable'] as any, 'unselectRows');
       component.selectedItems = [{ label: 'John', value: 1 }];
 
       const items = [{ label: 'John', value: 1 }];
@@ -510,7 +510,7 @@ describe('PoLookupModalComponent', () => {
 
       component.selecteds = [...component.selectedItems];
 
-      spyOn(component['poTable'], 'unselectRowItem').and.callThrough();
+      vi.spyOn(component['poTable'] as any, 'unselectRowItem');
 
       component.fieldValue = 'value';
       fixture.detectChanges();
@@ -526,7 +526,7 @@ describe('PoLookupModalComponent', () => {
       component.selectedItems = [{ label: 'John', value: 1 }];
       component.selecteds = [...component.selectedItems];
 
-      spyOn(component['poTable'], 'unselectRowItem').and.callThrough();
+      vi.spyOn(component['poTable'] as any, 'unselectRowItem');
 
       component.fieldValue = 'value';
       fixture.detectChanges();

@@ -31,10 +31,10 @@ describe('PoRichTextLinkModalComponent', () => {
 
   describe('Properties:', () => {
     it('modalCancelAction: should call modal.close and cleanUpFields', () => {
-      spyOn(component.modal, <any>'close');
-      spyOn(component.command, 'emit');
-      spyOn(component, <any>'retrieveCursorPosition');
-      spyOn(component, <any>'cleanUpFields');
+      vi.spyOn(component.modal as any, 'close');
+      vi.spyOn(component.command as any, 'emit');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
+      vi.spyOn(component as any, 'cleanUpFields');
 
       component.modalCancelAction.action();
 
@@ -45,8 +45,8 @@ describe('PoRichTextLinkModalComponent', () => {
     });
 
     it('modalConfirmAction: should call `toInsertLink` if `isLinkEditing` is false', () => {
-      spyOn(component, <any>'toInsertLink');
-      spyOn(component, <any>'toEditLink');
+      vi.spyOn(component as any, 'toInsertLink');
+      vi.spyOn(component as any, 'toEditLink');
 
       component['isLinkEditing'] = false;
 
@@ -57,8 +57,8 @@ describe('PoRichTextLinkModalComponent', () => {
     });
 
     it('modalConfirmAction: should call `toEditLink` if `isLinkEditing` is true', () => {
-      spyOn(component, <any>'toInsertLink');
-      spyOn(component, <any>'toEditLink');
+      vi.spyOn(component as any, 'toInsertLink');
+      vi.spyOn(component as any, 'toEditLink');
 
       component['isLinkEditing'] = true;
 
@@ -101,10 +101,10 @@ describe('PoRichTextLinkModalComponent', () => {
       const literal = 'link confirm action';
       const selectedLinkElement = undefined;
 
-      spyOn(component, 'linkConfirmAction').and.returnValue(literal);
-      spyOn(component.modal, 'open');
-      spyOn(component, <any>'saveCursorPosition');
-      spyOn(component, <any>'prepareModalForLink');
+      vi.spyOn(component as any, 'linkConfirmAction').mockReturnValue(literal);
+      vi.spyOn(component.modal as any, 'open');
+      vi.spyOn(component as any, 'saveCursorPosition');
+      vi.spyOn(component as any, 'prepareModalForLink');
 
       component.openModal(selectedLinkElement);
 
@@ -127,7 +127,7 @@ describe('PoRichTextLinkModalComponent', () => {
     it(`retrieveCursorPosition: should call 'selection.collapse'.`, () => {
       component.savedCursorPosition = [null, 1];
 
-      spyOn(component.selection, 'collapse');
+      vi.spyOn(component.selection as any, 'collapse');
 
       component['retrieveCursorPosition']();
 
@@ -147,9 +147,9 @@ describe('PoRichTextLinkModalComponent', () => {
       const urlLink = 'urlLink';
       const urlLinkText = 'url link text';
 
-      spyOn(component, <any>'restoreSelection');
-      spyOn(component, <any>'cleanUpFields');
-      spyOn(component.modal, 'close');
+      vi.spyOn(component as any, 'restoreSelection');
+      vi.spyOn(component as any, 'cleanUpFields');
+      vi.spyOn(component.modal as any, 'close');
 
       component['toInsertLink'](urlLink, urlLinkText);
 
@@ -163,8 +163,8 @@ describe('PoRichTextLinkModalComponent', () => {
       const urlAsExternalLink = 'http://urlLink';
       const urlLinkText = 'url link text';
 
-      spyOn(component, <any>'checkIfIsEmpty').and.callThrough();
-      spyOn(component.command, 'emit');
+      vi.spyOn(component as any, 'checkIfIsEmpty');
+      vi.spyOn(component.command as any, 'emit');
 
       component['toInsertLink'](urlLink, urlLinkText);
 
@@ -180,8 +180,8 @@ describe('PoRichTextLinkModalComponent', () => {
       const urlAsExternalLink = 'http://urlLink';
       const urlLinkText = 'url link text';
 
-      spyOn(component, <any>'checkIfIsEmpty').and.returnValue(urlLinkText);
-      spyOn(component.command, 'emit');
+      vi.spyOn(component as any, 'checkIfIsEmpty').mockReturnValue(urlLinkText);
+      vi.spyOn(component.command as any, 'emit');
 
       component['toInsertLink'](urlLink, urlLinkText);
 
@@ -195,8 +195,8 @@ describe('PoRichTextLinkModalComponent', () => {
       const urlLink = 'http://urlLink';
       const urlLinkText = 'url link text';
 
-      spyOn(component, <any>'checkIfIsEmpty').and.returnValue(urlLinkText);
-      spyOn(component.command, 'emit');
+      vi.spyOn(component as any, 'checkIfIsEmpty').mockReturnValue(urlLinkText);
+      vi.spyOn(component.command as any, 'emit');
 
       component['toInsertLink'](urlLink, urlLinkText);
 
@@ -279,8 +279,8 @@ describe('PoRichTextLinkModalComponent', () => {
         }
       };
 
-      spyOn(fakeThis.selection, 'removeAllRanges');
-      spyOn(fakeThis.selection, 'addRange');
+      vi.spyOn(fakeThis.selection as any, 'removeAllRanges');
+      vi.spyOn(fakeThis.selection as any, 'addRange');
 
       const expectedResult = component['restoreSelection'].call(fakeThis);
 
@@ -313,8 +313,8 @@ describe('PoRichTextLinkModalComponent', () => {
         }
       };
 
-      spyOn(fakeThis.selection, 'getRangeAt').and.callThrough();
-      spyOn(fakeThis.selection, 'toString').and.callThrough();
+      vi.spyOn(fakeThis.selection as any, 'getRangeAt');
+      vi.spyOn(fakeThis.selection as any, 'toString');
 
       component['saveSelectionText'].call(fakeThis);
 
@@ -358,9 +358,9 @@ describe('PoRichTextLinkModalComponent', () => {
         updateValueAndValidity: () => {}
       };
 
-      spyOn(fakeControl, 'markAsPristine');
-      spyOn(fakeControl, 'markAsUntouched');
-      spyOn(fakeControl, 'updateValueAndValidity');
+      vi.spyOn(fakeControl as any, 'markAsPristine');
+      vi.spyOn(fakeControl as any, 'markAsUntouched');
+      vi.spyOn(fakeControl as any, 'updateValueAndValidity');
 
       // component.recoveryModalElement.open();
       component['formReset'](<any>fakeControl);
@@ -373,10 +373,10 @@ describe('PoRichTextLinkModalComponent', () => {
     it('prepareModalForLink: should call `saveSelectionText`, `selectedLink`, `formModelValidate` and `formReset`', fakeAsync(() => {
       const selectedLinkElement = undefined;
 
-      spyOn(component, <any>'saveSelectionText');
-      spyOn(component, <any>'formReset');
-      spyOn(component, <any>'formModelValidate');
-      spyOn(component, <any>'selectedLink');
+      vi.spyOn(component as any, 'saveSelectionText');
+      vi.spyOn(component as any, 'formReset');
+      vi.spyOn(component as any, 'formModelValidate');
+      vi.spyOn(component as any, 'selectedLink');
 
       component.savedCursorPosition = ['<a href="">link</a>'];
 
@@ -392,12 +392,12 @@ describe('PoRichTextLinkModalComponent', () => {
     it('prepareModalForLink: should call `setLinkEditableForModal` and set `isLinkEditing` to true if `isSelectedLink` is `true`', () => {
       const selectedLinkElement = undefined;
 
-      spyOn(component, <any>'saveSelectionText');
-      spyOn(component, <any>'formReset');
-      spyOn(component, <any>'formModelValidate');
-      spyOn(component, <any>'selectedLink');
+      vi.spyOn(component as any, 'saveSelectionText');
+      vi.spyOn(component as any, 'formReset');
+      vi.spyOn(component as any, 'formModelValidate');
+      vi.spyOn(component as any, 'selectedLink');
 
-      spyOn(component, <any>'setLinkEditableForModal');
+      vi.spyOn(component as any, 'setLinkEditableForModal');
 
       component['isSelectedLink'] = true;
 
@@ -413,11 +413,11 @@ describe('PoRichTextLinkModalComponent', () => {
       if 'isLinkElement' return false`, () => {
       const selectedLinkElement = undefined;
 
-      spyOn(component, <any>'saveSelectionText');
-      spyOn(component, <any>'formReset');
-      spyOn(component, <any>'formModelValidate');
+      vi.spyOn(component as any, 'saveSelectionText');
+      vi.spyOn(component as any, 'formReset');
+      vi.spyOn(component as any, 'formModelValidate');
 
-      spyOn(component, <any>'setLinkEditableForModal');
+      vi.spyOn(component as any, 'setLinkEditableForModal');
 
       component['isSelectedLink'] = false;
 
@@ -433,7 +433,7 @@ describe('PoRichTextLinkModalComponent', () => {
     it(`prepareModalForLink: shouldn't call 'formReset' if 'modalLinkForm' is falsy`, () => {
       const selectedLinkElement = undefined;
 
-      spyOn(component, <any>'formReset');
+      vi.spyOn(component as any, 'formReset');
 
       component.modalLinkForm = undefined;
 
@@ -448,7 +448,7 @@ describe('PoRichTextLinkModalComponent', () => {
         getAttribute: () => {}
       };
 
-      spyOn(component['linkElement'], 'getAttribute').and.returnValue('test.com');
+      vi.spyOn(component['linkElement'] as any, 'getAttribute').mockReturnValue('test.com');
 
       component['setLinkEditableForModal']();
 
@@ -461,9 +461,9 @@ describe('PoRichTextLinkModalComponent', () => {
         parentNode: { removeChild: () => {} }
       };
 
-      spyOn(UtilsFunction, 'isIE').and.returnValue(true);
-      spyOn(component, <any>'toInsertLink');
-      spyOn(component['linkElement'].parentNode, 'removeChild');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(true);
+      vi.spyOn(component as any, 'toInsertLink');
+      vi.spyOn(component['linkElement'].parentNode, 'removeChild');
 
       const linkText = 'link text';
       const link = 'link.com';
@@ -482,8 +482,8 @@ describe('PoRichTextLinkModalComponent', () => {
         remove: () => {}
       };
 
-      spyOn(component['linkElement'], 'remove');
-      spyOn(component, <any>'toInsertLink');
+      vi.spyOn(component['linkElement'] as any, 'remove');
+      vi.spyOn(component as any, 'toInsertLink');
 
       const linkText = 'link text';
       const link = 'link.com';

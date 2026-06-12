@@ -66,7 +66,7 @@ describe('PoSlideCirclesComponent:', () => {
       fixture.detectChanges();
 
       const slideCircle = nativeElement.querySelector('.po-slide-circle');
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
       slideCircle.dispatchEvent(eventClick);
 
       expect(component.click.emit).toHaveBeenCalled();

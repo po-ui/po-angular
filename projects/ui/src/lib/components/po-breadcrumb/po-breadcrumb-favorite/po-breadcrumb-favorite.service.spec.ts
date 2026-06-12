@@ -39,10 +39,9 @@ describe('PoBreadcrumbFavoriteService:', () => {
     expect(breadcrumbFavoriteService.bodyParams).toEqual(bodyResquest);
   });
 
-  it('should return the favorite status of breadcrumb item', done => {
+  it('should return the favorite status of breadcrumb item', async () => {
     breadcrumbFavoriteService.getFavorite().subscribe(response => {
       expect(response).toEqual(statusBreadcrumbItem);
-      done();
     });
 
     httpMock
@@ -50,12 +49,11 @@ describe('PoBreadcrumbFavoriteService:', () => {
       .flush(statusBreadcrumbItem);
   });
 
-  it('should set breadcrumb item with favorite', done => {
+  it('should set breadcrumb item with favorite', async () => {
     statusBreadcrumbItem.isFavorite = true;
 
     breadcrumbFavoriteService.sendStatusFavorite(true).subscribe(response => {
       expect(response).toEqual(statusBreadcrumbItem);
-      done();
     });
 
     httpMock
@@ -63,12 +61,11 @@ describe('PoBreadcrumbFavoriteService:', () => {
       .flush(statusBreadcrumbItem);
   });
 
-  it('should set breadcrumb item with unfavorite', done => {
+  it('should set breadcrumb item with unfavorite', async () => {
     statusBreadcrumbItem.isFavorite = false;
 
     breadcrumbFavoriteService.sendStatusFavorite(false).subscribe(response => {
       expect(response).toEqual(statusBreadcrumbItem);
-      done();
     });
 
     httpMock

@@ -162,17 +162,17 @@ describe('PoUserGuideBaseService:', () => {
     });
 
     it('should warn when progressTemplate has no placeholders', () => {
-      const warnSpy = spyOn(console, 'warn');
+      const warnSpy = vi.spyOn(console as any, 'warn');
 
       service['resolveOptions']({ progressTemplate: 'sem placeholder' });
 
       expect(warnSpy).toHaveBeenCalledTimes(1);
-      const message = warnSpy.calls.mostRecent().args[0] as string;
+      const message = vi.mocked(warnSpy).mock.lastCall[0] as string;
       expect(message).toContain('sem placeholder');
     });
 
     it('should not warn when progressTemplate contains only the {{current}} placeholder', () => {
-      const warnSpy = spyOn(console, 'warn');
+      const warnSpy = vi.spyOn(console as any, 'warn');
 
       service['resolveOptions']({ progressTemplate: '{{current}}' });
 
@@ -180,7 +180,7 @@ describe('PoUserGuideBaseService:', () => {
     });
 
     it('should not warn when progressTemplate contains only the {{total}} placeholder', () => {
-      const warnSpy = spyOn(console, 'warn');
+      const warnSpy = vi.spyOn(console as any, 'warn');
 
       service['resolveOptions']({ progressTemplate: '{{total}}' });
 
@@ -188,7 +188,7 @@ describe('PoUserGuideBaseService:', () => {
     });
 
     it('should not warn when called with an empty options object (default template has placeholders)', () => {
-      const warnSpy = spyOn(console, 'warn');
+      const warnSpy = vi.spyOn(console as any, 'warn');
 
       service['resolveOptions']({});
 
@@ -196,7 +196,7 @@ describe('PoUserGuideBaseService:', () => {
     });
 
     it('should not warn when called without arguments', () => {
-      const warnSpy = spyOn(console, 'warn');
+      const warnSpy = vi.spyOn(console as any, 'warn');
 
       service['resolveOptions']();
 

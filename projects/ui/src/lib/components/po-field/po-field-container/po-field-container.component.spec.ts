@@ -203,11 +203,11 @@ describe('PoFieldContainerComponent:', () => {
   describe('ngOnChanges (helper popover):', () => {
     it('should call `openHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns true', () => {
       component['helperEl'] = {
-        openHelperPopover: jasmine.createSpy('openHelperPopover'),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        openHelperPopover: vi.fn(),
+        closeHelperPopover: vi.fn()
       } as any;
 
-      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
+      vi.spyOn(component as any, 'showHelperComponent').mockReturnValue(true);
 
       const changes: any = {
         showHelperComponent: {
@@ -226,11 +226,11 @@ describe('PoFieldContainerComponent:', () => {
 
     it('should call `closeHelperPopover` when `showHelperComponent` changes and `showHelperComponent()` returns false', () => {
       component['helperEl'] = {
-        openHelperPopover: jasmine.createSpy('openHelperPopover'),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        openHelperPopover: vi.fn(),
+        closeHelperPopover: vi.fn()
       } as any;
 
-      spyOn(component as any, 'showHelperComponent').and.returnValue(false);
+      vi.spyOn(component as any, 'showHelperComponent').mockReturnValue(false);
 
       const changes: any = {
         showHelperComponent: {
@@ -248,14 +248,14 @@ describe('PoFieldContainerComponent:', () => {
     });
 
     it('should call `poHelperComponent.eventOnClick` and not open/close popover when it is a function', () => {
-      const openSpy = jasmine.createSpy('openHelperPopover');
-      const closeSpy = jasmine.createSpy('closeHelperPopover');
+      const openSpy = vi.fn();
+      const closeSpy = vi.fn();
       component['helperEl'] = { openHelperPopover: openSpy, closeHelperPopover: closeSpy } as any;
 
-      const eventOnClickSpy = jasmine.createSpy('eventOnClick');
+      const eventOnClickSpy = vi.fn();
 
-      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
-      spyOn(component as any, 'poHelperComponent').and.returnValue({ eventOnClick: eventOnClickSpy });
+      vi.spyOn(component as any, 'showHelperComponent').mockReturnValue(true);
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({ eventOnClick: eventOnClickSpy });
 
       const changes: any = {
         showHelperComponent: {
@@ -274,12 +274,12 @@ describe('PoFieldContainerComponent:', () => {
     });
 
     it('should open popover when `eventOnClick` is not a function', () => {
-      const openSpy = jasmine.createSpy('openHelperPopover');
-      const closeSpy = jasmine.createSpy('closeHelperPopover');
+      const openSpy = vi.fn();
+      const closeSpy = vi.fn();
       component['helperEl'] = { openHelperPopover: openSpy, closeHelperPopover: closeSpy } as any;
 
-      spyOn(component as any, 'showHelperComponent').and.returnValue(true);
-      spyOn(component as any, 'poHelperComponent').and.returnValue({ eventOnClick: undefined });
+      vi.spyOn(component as any, 'showHelperComponent').mockReturnValue(true);
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({ eventOnClick: undefined });
 
       const changes: any = {
         showHelperComponent: {

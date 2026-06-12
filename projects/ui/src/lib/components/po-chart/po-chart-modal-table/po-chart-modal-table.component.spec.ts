@@ -27,7 +27,7 @@ describe('PoChartModalTableComponent', () => {
     const title = 'Meu título';
     const items = [{ name: 'Item 1' }, { name: 'Item 2' }];
     const columns = [{ property: 'name', label: 'Nome' }];
-    const action = { label: 'Fechar', action: jasmine.createSpy() };
+    const action = { label: 'Fechar', action: vi.fn() };
 
     component.title = title;
     component.itemsTable = items;

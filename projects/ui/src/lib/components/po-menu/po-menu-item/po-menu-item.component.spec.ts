@@ -159,7 +159,7 @@ describe('PoMenuItemComponent:', () => {
       ];
       component.isOpened = true;
 
-      spyOn(component, <any>'calcMenuSubItemsMaxHeight');
+      vi.spyOn(component as any, 'calcMenuSubItemsMaxHeight');
 
       component.subItems = result;
 
@@ -180,7 +180,7 @@ describe('PoMenuItemComponent:', () => {
       ];
       component.isOpened = false;
 
-      spyOn(component, <any>'calcMenuSubItemsMaxHeight');
+      vi.spyOn(component as any, 'calcMenuSubItemsMaxHeight');
 
       component.subItems = result;
 
@@ -196,7 +196,7 @@ describe('PoMenuItemComponent:', () => {
       configurable: true
     });
 
-    spyOn(component, <any>'processMenuItem');
+    vi.spyOn(component as any, 'processMenuItem');
 
     component.ngOnInit();
 
@@ -218,8 +218,8 @@ describe('PoMenuItemComponent:', () => {
       ctrlKey: false,
       preventDefault: () => {}
     };
-    spyOn(event, 'preventDefault');
-    spyOn(component['menuItemsService'], method);
+    vi.spyOn(event as any, 'preventDefault');
+    vi.spyOn(component['menuItemsService'], method);
 
     component.clickMenuItem(event);
 
@@ -233,8 +233,8 @@ describe('PoMenuItemComponent:', () => {
       metaKey: false,
       preventDefault: () => {}
     };
-    spyOn(event, 'preventDefault');
-    spyOn(component['menuItemsService'], method);
+    vi.spyOn(event as any, 'preventDefault');
+    vi.spyOn(component['menuItemsService'], method);
 
     component.clickMenuItem(event);
 
@@ -247,8 +247,8 @@ describe('PoMenuItemComponent:', () => {
     const eventClick = document.createEvent('MouseEvents');
     eventClick.initMouseEvent('click', false, true, window, 0, 0, 0, 0, 0, true, false, false, false, 0, null);
 
-    spyOn(eventClick, 'preventDefault');
-    spyOn(component['menuItemsService'], method);
+    vi.spyOn(eventClick as any, 'preventDefault');
+    vi.spyOn(component['menuItemsService'], method);
 
     const menuItem = nativeElement.querySelector('.po-menu-item');
     menuItem.dispatchEvent(eventClick);
@@ -262,8 +262,8 @@ describe('PoMenuItemComponent:', () => {
     const eventClick = document.createEvent('MouseEvents');
     eventClick.initMouseEvent('click', false, true, window, 0, 0, 0, 0, 0, false, false, false, true, 0, null);
 
-    spyOn(eventClick, 'preventDefault');
-    spyOn(component['menuItemsService'], method);
+    vi.spyOn(eventClick as any, 'preventDefault');
+    vi.spyOn(component['menuItemsService'], method);
 
     const menuItem = nativeElement.querySelector('.po-menu-item');
     menuItem.dispatchEvent(eventClick);
@@ -297,7 +297,7 @@ describe('PoMenuItemComponent:', () => {
     const fnSpy = 'activateMenu';
     const menu = { active: false, grouped: false };
 
-    spyOn(component, <any>fnSpy).and.returnValue(null);
+    vi.spyOn(component as any, fnSpy).mockReturnValue(null);
 
     component.type = 'internalLink';
     component['processMenuItem'](menu);
@@ -309,7 +309,7 @@ describe('PoMenuItemComponent:', () => {
     const fnSpy = 'groupedMenu';
     const menu = { active: false, grouped: false };
 
-    spyOn(component, <any>fnSpy).and.returnValue(null);
+    vi.spyOn(component as any, fnSpy).mockReturnValue(null);
 
     component.type = 'subItems';
     component['processMenuItem'](menu);
@@ -322,8 +322,8 @@ describe('PoMenuItemComponent:', () => {
     const activateMenuFn = 'activateMenu';
     const menu = { active: false, grouped: false };
 
-    spyOn(component, <any>groupedMenuFn);
-    spyOn(component, <any>activateMenuFn);
+    vi.spyOn(component as any, groupedMenuFn);
+    vi.spyOn(component as any, activateMenuFn);
 
     component.type = '';
     component['processMenuItem'](menu);
@@ -338,8 +338,8 @@ describe('PoMenuItemComponent:', () => {
     const hasSubItemFn = 'hasSubItem';
     const menu = { active: false, grouped: false, label: '' };
 
-    spyOn(component, <any>isMenuOpendFn);
-    spyOn(component, <any>hasSubItemFn);
+    vi.spyOn(component as any, isMenuOpendFn);
+    vi.spyOn(component as any, hasSubItemFn);
 
     component.type = 'subItems';
     component['groupedMenu'](menu, menu);
@@ -353,7 +353,7 @@ describe('PoMenuItemComponent:', () => {
     const hasSubItemFn = 'hasSubItem';
     const menu = { active: false, grouped: false, label: '' };
 
-    spyOn(component, <any>hasSubItemFn);
+    vi.spyOn(component as any, hasSubItemFn);
 
     component['groupedMenu'](undefined, menu);
 
@@ -475,7 +475,7 @@ describe('PoMenuItemComponent:', () => {
     component.isOpened = true;
     const accordionAnimation = 'accordionAnimation';
 
-    spyOn(component, <any>accordionAnimation);
+    vi.spyOn(component as any, accordionAnimation);
 
     component.type = 'subItems';
     component['groupedMenu'](undefined, undefined);
@@ -497,7 +497,7 @@ describe('PoMenuItemComponent:', () => {
     const menuOpened = menuItem;
     const menuActive = { id: '3', label: 'Register' };
 
-    spyOn(component, <any>'getMinimumHeight').and.callThrough();
+    vi.spyOn(component as any, 'getMinimumHeight');
 
     component['accordionAnimation'](menuActive, menuOpened, true, true);
     fixture.detectChanges();
@@ -517,7 +517,7 @@ describe('PoMenuItemComponent:', () => {
     const menuOpened = menuItem;
     const menuActive = { id: '2', label: 'Search' };
 
-    spyOn(component, <any>'getMinimumHeight').and.callThrough();
+    vi.spyOn(component as any, 'getMinimumHeight');
 
     component['accordionAnimation'](menuActive, menuOpened, true, true);
     fixture.detectChanges();
@@ -530,7 +530,7 @@ describe('PoMenuItemComponent:', () => {
   it('itemSubscription: should `unsubscribe` on destroy.', () => {
     component['itemSubscription'] = <any>{ unsubscribe: () => {} };
 
-    spyOn(component['itemSubscription'], <any>'unsubscribe');
+    vi.spyOn(component['itemSubscription'] as any, 'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -548,7 +548,7 @@ describe('PoMenuItemComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.menuSubItems.nativeElement, 'querySelectorAll').and.returnValue([
+      vi.spyOn(fakeThis.menuSubItems.nativeElement, 'querySelectorAll').mockReturnValue([
         { offsetHeight: 10 },
         { offsetHeight: 30 }
       ]);
@@ -638,7 +638,7 @@ describe('PoMenuItemComponent:', () => {
     });
 
     it('should show `po-badge` if `canShowBadge` is `true`', () => {
-      spyOnProperty(component, 'canShowBadge').and.returnValue(true);
+      vi.spyOn(component as any, 'canShowBadge').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -648,7 +648,7 @@ describe('PoMenuItemComponent:', () => {
     });
 
     it('shouldn`t show `po-badge` if `canShowBadge` is `false`', () => {
-      spyOnProperty(component, 'canShowBadge').and.returnValue(false);
+      vi.spyOn(component as any, 'canShowBadge').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -658,7 +658,7 @@ describe('PoMenuItemComponent:', () => {
     });
 
     it('should show `po-badge` with `po-menu-badge-align` if `collapsedMenu` is `false`', () => {
-      spyOnProperty(component, 'canShowBadge').and.returnValue(true);
+      vi.spyOn(component as any, 'canShowBadge').mockReturnValue(true);
       component.collapsedMenu = false;
 
       fixture.detectChanges();
@@ -669,7 +669,7 @@ describe('PoMenuItemComponent:', () => {
     });
 
     it('should show `po-badge` with `po-menu-badge-align-collapsed` if `collapsedMenu` is `true`', () => {
-      spyOnProperty(component, 'canShowBadge').and.returnValue(true);
+      vi.spyOn(component as any, 'canShowBadge').mockReturnValue(true);
       component.collapsedMenu = true;
 
       fixture.detectChanges();

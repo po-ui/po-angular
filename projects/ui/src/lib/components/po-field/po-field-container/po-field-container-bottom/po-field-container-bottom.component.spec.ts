@@ -38,19 +38,19 @@ describe('PoFieldContainerBottomComponent', () => {
       };
 
       (component as any).helperEl = {
-        openHelperPopover: jasmine.createSpy('openHelperPopover'),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover')
+        openHelperPopover: vi.fn(),
+        closeHelperPopover: vi.fn()
       } as any;
 
-      spyOn(component as any, 'poHelperComponent').and.returnValue({});
-      spyOn(component as any, 'showHelperComponent').and.returnValue(false);
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+      vi.spyOn(component as any, 'showHelperComponent').mockReturnValue(false);
     });
 
     describe('ngOnChanges', () => {
       it('should call `eventOnClick` when `showHelperComponent()` is true and `eventOnClick` is a function', () => {
-        const eventOnClickSpy = jasmine.createSpy('eventOnClick');
-        (component as any).poHelperComponent.and.returnValue({ eventOnClick: eventOnClickSpy });
-        (component as any).showHelperComponent.and.returnValue(true);
+        const eventOnClickSpy = vi.fn();
+        (component as any).poHelperComponent.mockReturnValue({ eventOnClick: eventOnClickSpy });
+        (component as any).showHelperComponent.mockReturnValue(true);
         component.ngOnChanges(changes);
 
         expect(eventOnClickSpy).toHaveBeenCalled();
@@ -59,8 +59,8 @@ describe('PoFieldContainerBottomComponent', () => {
       });
 
       it('should open the popover when `showHelperComponent()` is true and `eventOnClick` is not a function', () => {
-        (component as any).poHelperComponent.and.returnValue({ eventOnClick: undefined });
-        (component as any).showHelperComponent.and.returnValue(true);
+        (component as any).poHelperComponent.mockReturnValue({ eventOnClick: undefined });
+        (component as any).showHelperComponent.mockReturnValue(true);
         component.ngOnChanges(changes);
 
         expect((component as any).helperEl.openHelperPopover).toHaveBeenCalled();
@@ -68,8 +68,8 @@ describe('PoFieldContainerBottomComponent', () => {
       });
 
       it('should open the popover when `showHelperComponent()` is true and `poHelperComponent()` returns null/undefined', () => {
-        (component as any).poHelperComponent.and.returnValue(undefined);
-        (component as any).showHelperComponent.and.returnValue(true);
+        (component as any).poHelperComponent.mockReturnValue(undefined);
+        (component as any).showHelperComponent.mockReturnValue(true);
         component.ngOnChanges(changes);
 
         expect((component as any).helperEl.openHelperPopover).toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe('PoFieldContainerBottomComponent', () => {
       });
 
       it('should close the popover when `showHelperComponent()` is false', () => {
-        (component as any).showHelperComponent.and.returnValue(false);
+        (component as any).showHelperComponent.mockReturnValue(false);
         component.ngOnChanges(changes);
 
         expect((component as any).helperEl.closeHelperPopover).toHaveBeenCalled();
@@ -95,9 +95,9 @@ describe('PoFieldContainerBottomComponent', () => {
       });
 
       it('should not open/close the popover when `eventOnClick` is a function (since it returns after calling the function)', () => {
-        const eventOnClickSpy = jasmine.createSpy('eventOnClick');
-        (component as any).poHelperComponent.and.returnValue({ eventOnClick: eventOnClickSpy });
-        (component as any).showHelperComponent.and.returnValue(true);
+        const eventOnClickSpy = vi.fn();
+        (component as any).poHelperComponent.mockReturnValue({ eventOnClick: eventOnClickSpy });
+        (component as any).showHelperComponent.mockReturnValue(true);
         component.ngOnChanges(changes);
 
         expect(eventOnClickSpy).toHaveBeenCalled();

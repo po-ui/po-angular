@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { UntypedFormControl } from '@angular/forms';
 
@@ -40,10 +41,10 @@ describe('PoEmailComponent:', () => {
 
   describe('Methods:', () => {
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -61,7 +62,7 @@ describe('PoEmailComponent:', () => {
       it('should add keyup eventListener if `onChangePropagate` is null', fakeAsync(() => {
         component.onChangePropagate = null;
 
-        spyOn(component.inputEl.nativeElement, 'addEventListener');
+        vi.spyOn(component.inputEl.nativeElement, 'addEventListener');
 
         component.ngAfterViewInit();
         tick();
@@ -72,7 +73,7 @@ describe('PoEmailComponent:', () => {
       it('shouldn`t add keyup eventListener if `onChangePropagate` is not null', fakeAsync(() => {
         component.onChangePropagate = () => {};
 
-        spyOn(component.inputEl.nativeElement, 'addEventListener');
+        vi.spyOn(component.inputEl.nativeElement, 'addEventListener');
 
         component.ngAfterViewInit();
         tick();
@@ -84,7 +85,7 @@ describe('PoEmailComponent:', () => {
     it('ngOnDestroy: should remove keyup event listener if `onChangePropagate` is null', () => {
       component.onChangePropagate = null;
 
-      spyOn(component.inputEl.nativeElement, 'removeEventListener');
+      vi.spyOn(component.inputEl.nativeElement, 'removeEventListener');
 
       component.ngAfterViewInit();
       component.ngOnDestroy();
@@ -95,7 +96,7 @@ describe('PoEmailComponent:', () => {
     it('ngOnDestroy: shouldn`t remove keyup eventListener if `onChangePropagate` is not null', () => {
       component.onChangePropagate = () => {};
 
-      spyOn(component.inputEl.nativeElement, 'removeEventListener');
+      vi.spyOn(component.inputEl.nativeElement, 'removeEventListener');
 
       component.ngOnDestroy();
 
@@ -109,7 +110,7 @@ describe('PoEmailComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
   });
 
@@ -122,8 +123,8 @@ describe('PoEmailComponent:', () => {
     });
 
     it('should call `getScreenValue` and `verifyPattern` on input keyup', fakeAsync(() => {
-      spyOn(component, 'getScreenValue').and.returnValue('test');
-      spyOn(component, 'verifyPattern');
+      vi.spyOn(component as any, 'getScreenValue').mockReturnValue('test');
+      vi.spyOn(component as any, 'verifyPattern');
 
       component.onChangePropagate = null;
       component.ngAfterViewInit();

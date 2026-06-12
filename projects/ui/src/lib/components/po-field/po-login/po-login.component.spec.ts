@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -56,13 +57,13 @@ describe('PoLoginComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {

@@ -38,19 +38,19 @@ describe('PoTableColumnLabelComponent:', () => {
     it('should return false if value property contains a label with only whitespace', () => {
       component.value = labels[4];
       const result = component.checkValueHasLabel();
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
 
     it('should return true if value property contains a label', () => {
       component.value = labels[1];
       const result = component.checkValueHasLabel();
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
     });
 
     it('should returns false if value is undefined', () => {
       component.value = undefined;
       const result = component.checkValueHasLabel();
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
   });
 

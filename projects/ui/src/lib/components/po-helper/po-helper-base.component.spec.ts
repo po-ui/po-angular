@@ -69,13 +69,13 @@ describe('PoHelperBaseComponent:', () => {
         title: 'T',
         content: 'C',
         type: 'info',
-        footerAction: jasmine.createSpy('footerAction')
+        footerAction: vi.fn()
       };
 
       const result = (component as any).transformHelper(options);
 
       expect(result).toBe(options);
-      expect('footerAction' in options).toBeFalse();
+      expect('footerAction' in options).toBe(false);
       expect(options.footerAction).toBeUndefined();
     });
 
@@ -84,13 +84,13 @@ describe('PoHelperBaseComponent:', () => {
         title: 'T',
         content: 'C',
         type: 'warning',
-        footerAction: jasmine.createSpy('footerAction')
+        footerAction: vi.fn()
       };
 
       const result = (component as any).transformHelper(options);
 
       expect(result).toBe(options);
-      expect('footerAction' in options).toBeTrue();
+      expect('footerAction' in options).toBe(true);
       expect(typeof options.footerAction).toBe('function');
     });
 

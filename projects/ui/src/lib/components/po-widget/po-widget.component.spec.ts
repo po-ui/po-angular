@@ -163,7 +163,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should be call checkDefaultActions if help changes', () => {
-    spyOn(component, <any>'checkDefaultActions');
+    vi.spyOn(component as any, 'checkDefaultActions');
 
     const changes: SimpleChanges = {
       help: new SimpleChange(true, false, true)
@@ -175,7 +175,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should be call checkDefaultActions if actions changes', () => {
-    spyOn(component, <any>'checkDefaultActions');
+    vi.spyOn(component as any, 'checkDefaultActions');
     component.tagLabel = 'test';
     const changes: SimpleChanges = {
       actions: new SimpleChange([], [{ label: 'action' }], true)
@@ -187,7 +187,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should call detectChanges', () => {
-    spyOn(component['cd'], <any>'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
     component.tagLabel = 'test';
     const changes: SimpleChanges = {
       tagLabel: new SimpleChange('test', 'test1', true)
@@ -199,7 +199,7 @@ describe('PoWidgetComponent with title and actions', () => {
   });
 
   it('should be call toggle of poPopupComponent', () => {
-    spyOn(component, 'togglePopup');
+    vi.spyOn(component as any, 'togglePopup');
     component.actions = [{ label: 'teste', action: () => {} }];
 
     const div = fixture.debugElement.query(By.css('.po-widget-button-wrapper'));
@@ -219,7 +219,7 @@ describe('PoWidgetComponent with title and actions', () => {
 
   it('should simulate widget click.', () => {
     component.click.subscribe(() => {});
-    spyOn(component.click, 'emit');
+    vi.spyOn(component.click as any, 'emit');
 
     component.onClick(eventClick);
 
@@ -228,7 +228,7 @@ describe('PoWidgetComponent with title and actions', () => {
 
   it('should`t emit click if widget is not clickable', () => {
     component.click.unsubscribe();
-    spyOn(component.click, 'emit');
+    vi.spyOn(component.click as any, 'emit');
 
     component.onClick(eventClick);
 
@@ -241,7 +241,7 @@ describe('PoWidgetComponent with title and actions', () => {
       which: 32,
       preventDefault: () => {}
     };
-    spyOn(component.click, 'emit');
+    vi.spyOn(component.click as any, 'emit');
 
     component.onKeyDown(fakeEvent);
 
@@ -254,7 +254,7 @@ describe('PoWidgetComponent with title and actions', () => {
       keyCode: 32,
       preventDefault: () => {}
     };
-    spyOn(component.click, 'emit');
+    vi.spyOn(component.click as any, 'emit');
 
     component.onKeyDown(fakeEvent);
 
@@ -268,7 +268,7 @@ describe('PoWidgetComponent with title and actions', () => {
       preventDefault: () => {}
     };
 
-    spyOn(component.click, 'emit');
+    vi.spyOn(component.click as any, 'emit');
 
     component.onKeyDown(fakeEvent);
 
@@ -403,8 +403,8 @@ describe('PoWidgetComponent with title and actions', () => {
     });
 
     it('runTitleAction: should call event.stopPropagation and titleAction.emit', () => {
-      spyOn(eventClick, 'stopPropagation');
-      spyOn(component.titleAction, 'emit');
+      vi.spyOn(eventClick as any, 'stopPropagation');
+      vi.spyOn(component.titleAction as any, 'emit');
 
       component.runTitleAction(eventClick);
 
@@ -415,8 +415,8 @@ describe('PoWidgetComponent with title and actions', () => {
     it('runTitleAction: shouldn`t call event.stopPropagation and titleAction.emit if disabled is true', () => {
       component.disabled = true;
 
-      spyOn(eventClick, 'stopPropagation');
-      spyOn(component.titleAction, 'emit');
+      vi.spyOn(eventClick as any, 'stopPropagation');
+      vi.spyOn(component.titleAction as any, 'emit');
 
       component.runTitleAction(eventClick);
 
@@ -430,7 +430,7 @@ describe('PoWidgetComponent with title and actions', () => {
 
       component.disabled = false;
 
-      const spyClickEmit = spyOn(component.click, 'emit');
+      const spyClickEmit = vi.spyOn(component.click as any, 'emit');
 
       component.onClick(mouseEvent);
 
@@ -442,7 +442,7 @@ describe('PoWidgetComponent with title and actions', () => {
 
       component.disabled = true;
 
-      const spyClickEmit = spyOn(component.click, 'emit');
+      const spyClickEmit = vi.spyOn(component.click as any, 'emit');
 
       component.onClick(mouseEvent);
 
@@ -452,7 +452,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('openHelp: shouldn`t call event.stopPropagation and window.open if disabled is true', () => {
       component.disabled = true;
 
-      spyOn(window, 'open');
+      vi.spyOn(window as any, 'open');
 
       component.openHelp();
 
@@ -462,7 +462,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('openHelp: should call event.stopPropagation and window.open if disabled is false', () => {
       component.disabled = false;
 
-      const spyWindowOpen = spyOn(window, 'open');
+      const spyWindowOpen = vi.spyOn(window as any, 'open');
 
       component.openHelp();
 
@@ -472,7 +472,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('runPrimaryAction: shouldn`t call event.stopPropagation and primaryAction.emit if disabled is true', () => {
       component.disabled = true;
 
-      const spyPrimaryActionEmit = spyOn(component.primaryAction, 'emit');
+      const spyPrimaryActionEmit = vi.spyOn(component.primaryAction as any, 'emit');
 
       component.runPrimaryAction();
 
@@ -482,7 +482,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('runPrimaryAction: should call event.stopPropagation and primaryAction.emit if disabled is false', () => {
       component.disabled = false;
 
-      const spyPrimaryActionEmit = spyOn(component.primaryAction, 'emit');
+      const spyPrimaryActionEmit = vi.spyOn(component.primaryAction as any, 'emit');
 
       component.runPrimaryAction();
 
@@ -492,7 +492,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('runSecondaryAction: shouldn`t call event.stopPropagation and secondaryAction.emit if disabled is true', () => {
       component.disabled = true;
 
-      spyOn(component.secondaryAction, 'emit');
+      vi.spyOn(component.secondaryAction as any, 'emit');
 
       component.runSecondaryAction();
 
@@ -502,7 +502,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('runSecondaryAction: should call event.stopPropagation and secondaryAction.emit if disabled is false', () => {
       component.disabled = false;
 
-      const spySecondaryActionEmit = spyOn(component.secondaryAction, 'emit');
+      const spySecondaryActionEmit = vi.spyOn(component.secondaryAction as any, 'emit');
 
       component.runSecondaryAction();
 
@@ -512,7 +512,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('settingOutput: shouldn`t call event.stopPropagation and setting.emit if disabled is true', () => {
       component.disabled = true;
 
-      const spySettingEmit = spyOn(component.setting, 'emit');
+      const spySettingEmit = vi.spyOn(component.setting as any, 'emit');
 
       expect(spySettingEmit).not.toHaveBeenCalled();
     });
@@ -520,7 +520,7 @@ describe('PoWidgetComponent with title and actions', () => {
     it('settingOutput: should call event.stopPropagation and setting.emit if disabled is false', () => {
       component.disabled = false;
 
-      spyOn(component.setting, 'emit');
+      vi.spyOn(component.setting as any, 'emit');
 
       component.settingOutput();
 
@@ -847,7 +847,7 @@ describe('PoWidgetComponent with title and actions', () => {
       component.click.subscribe(() => {});
       const test = nativeElement.querySelector('.po-widget');
 
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       test.dispatchEvent(eventClick);
       fixture.detectChanges();
@@ -990,7 +990,7 @@ describe('PoWidgetComponent with actions', () => {
   });
 
   it('should not add action if "observed" is false', () => {
-    spyOn(component, 'settingOutput').and.callFake(() => {});
+    vi.spyOn(component as any, 'settingOutput').mockImplementation(() => {});
 
     Object.defineProperty(component.setting, 'observed', {
       get: () => false
@@ -1056,8 +1056,8 @@ describe('PoWidgetComponent with actions', () => {
 
     component['checkDefaultActions']();
 
-    expect(component.actions.some(a => a.$id === 'widget_help')).toBeFalse();
-    expect(component.actions.some(a => a.$id === 'another_action')).toBeTrue();
+    expect(component.actions.some(a => a.$id === 'widget_help')).toBe(false);
+    expect(component.actions.some(a => a.$id === 'another_action')).toBe(true);
   });
 
   it('should not add help if help already exists in actions', () => {
@@ -1074,8 +1074,10 @@ describe('PoWidgetComponent with actions', () => {
   });
 
   it('shoukd focus on po-button when action is closed', () => {
-    const mockButton = jasmine.createSpyObj('PoButtonComponent', ['focus']);
-    component.buttonPopUp = mockButton;
+    const mockButton = {
+      focus: vi.fn().mockName('PoButtonComponent.focus')
+    };
+    (component as any).buttonPopUp = mockButton;
 
     component.closePopUp();
 

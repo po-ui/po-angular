@@ -22,14 +22,14 @@ describe('Service: PoRichText', () => {
   describe('Methods:', () => {
     it('emitModel: should call model.next with value', () => {
       const value = 'test';
-      spyOn(richTextService['model'], 'next');
+      vi.spyOn(richTextService['model'] as any, 'next');
       richTextService.emitModel('test');
 
       expect(richTextService['model'].next).toHaveBeenCalledWith(value);
     });
 
     it('getModel: should call model.asObservable', () => {
-      spyOn(richTextService['model'], 'asObservable');
+      vi.spyOn(richTextService['model'] as any, 'asObservable');
       richTextService.getModel();
 
       expect(richTextService['model'].asObservable).toHaveBeenCalled();

@@ -60,7 +60,7 @@ describe('PoContextMenuBaseComponent:', () => {
     it('itemSelected: should emit value', () => {
       const item: PoContextMenuItem = { label: 'Item 1', action: () => {} };
 
-      spyOn(component.itemSelected, 'emit');
+      vi.spyOn(component.itemSelected as any, 'emit');
       component.itemSelected.emit(item);
 
       expect(component.itemSelected.emit).toHaveBeenCalledWith(item);

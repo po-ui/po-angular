@@ -229,7 +229,7 @@ describe('PoMenuBaseComponent:', () => {
     it('configService: should call `menuService.configProperties` and set `filterService` if service parameter is valid string', () => {
       const service = 'http://po.com.br';
 
-      const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
+      const spyConfigPropeties = vi.spyOn(component.menuService as any, 'configProperties');
 
       component['configService'](service);
 
@@ -243,7 +243,7 @@ describe('PoMenuBaseComponent:', () => {
         getFilteredData: (search, params) => of([{ label: 'Menu', link: '/', action: () => {} }])
       };
 
-      const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
+      const spyConfigPropeties = vi.spyOn(component.menuService as any, 'configProperties');
 
       component['configService'](service);
 
@@ -255,7 +255,7 @@ describe('PoMenuBaseComponent:', () => {
       service parameter is a custom service`, () => {
       const service: any = {};
 
-      const spyConfigPropeties = spyOn(component.menuService, <any>'configProperties');
+      const spyConfigPropeties = vi.spyOn(component.menuService as any, 'configProperties');
 
       component['configService'](service);
 
@@ -306,7 +306,7 @@ describe('PoMenuBaseComponent:', () => {
         { label: 'Menu Item', icon: 'clock', shortLabel: 'Menu Item' }
       ];
 
-      spyOn(component, <any>'removeBadgeAlert');
+      vi.spyOn(component as any, 'removeBadgeAlert');
 
       component['setMenuExtraProperties']();
 
@@ -317,8 +317,8 @@ describe('PoMenuBaseComponent:', () => {
       const menuItem2 = { label: 'Menu Item 2', subItems: undefined };
       const menus = { label: 'Menu Item 1', badgeAlert: false, subItems: [menuItem2] };
 
-      spyOn(component, <any>'setMenuItemProperties');
-      spyOn(component, <any>'setMenuBadgeAlert').and.returnValue(menus);
+      vi.spyOn(component as any, 'setMenuItemProperties');
+      vi.spyOn(component as any, 'setMenuBadgeAlert').mockReturnValue(menus);
 
       component['processSubItems'](menus);
 
@@ -331,7 +331,7 @@ describe('PoMenuBaseComponent:', () => {
       const menu = { label: 'Menu Item 1', subItems: [menuItem2] };
       const menuAssigned = { label: 'Menu Item 1', subItems: [menuItem2] };
 
-      spyOn(Object, 'assign').and.returnValue(menuAssigned);
+      vi.spyOn(Object as any, 'assign').mockReturnValue(menuAssigned);
 
       component['processSubItems'](menu);
 
@@ -368,7 +368,7 @@ describe('PoMenuBaseComponent:', () => {
       const parent = { label: 'item', subItems: [child] };
       const parentExpected = { label: 'item', badgeAlert: true, subItems: [child] };
 
-      const result = component['setMenuBadgeAlert'](parent, child);
+      const result = component['setMenuBadgeAlert'](parent as any, child as any);
 
       expect(result).toEqual(parentExpected);
     });
@@ -379,7 +379,7 @@ describe('PoMenuBaseComponent:', () => {
       const parent = { label: 'item', subItems: [child] };
       const parentExpected = { label: 'item', badgeAlert: true, subItems: [child] };
 
-      const result = component['setMenuBadgeAlert'](parent, child);
+      const result = component['setMenuBadgeAlert'](parent as any, child as any);
 
       expect(result).toEqual(parentExpected);
     });
@@ -390,7 +390,7 @@ describe('PoMenuBaseComponent:', () => {
       const parent = { label: 'item', subItems: [child] };
       const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
-      const result = component['setMenuBadgeAlert'](parent, child);
+      const result = component['setMenuBadgeAlert'](parent as any, child as any);
 
       expect(result).toEqual(parentExpected);
     });
@@ -401,18 +401,18 @@ describe('PoMenuBaseComponent:', () => {
       const parent = { label: 'item', subItems: [child] };
       const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
-      const result = component['setMenuBadgeAlert'](parent, child);
+      const result = component['setMenuBadgeAlert'](parent as any, child as any);
 
       expect(result).toEqual(parentExpected);
     });
 
     it(`setMenuBadgeAlert: should return parent with 'badgeAlert' false if 'child' contain badge with
       value is empty string`, () => {
-      const child = { label: 'child', badge: { value: <any>' ' }, subItems: [] };
+      const child = { label: 'child', badge: { value: ' ' }, subItems: [] };
       const parent = { label: 'item', subItems: [child] };
       const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
-      const result = component['setMenuBadgeAlert'](parent, child);
+      const result = component['setMenuBadgeAlert'](parent as any, child as any);
 
       expect(result).toEqual(parentExpected);
     });
@@ -423,7 +423,7 @@ describe('PoMenuBaseComponent:', () => {
       const parent = { label: 'item', subItems: [child] };
       const parentExpected = { label: 'item', badgeAlert: false, subItems: [child] };
 
-      const result = component['setMenuBadgeAlert'](parent, child);
+      const result = component['setMenuBadgeAlert'](parent as any, child as any);
 
       expect(result).toEqual(parentExpected);
     });
@@ -434,7 +434,7 @@ describe('PoMenuBaseComponent:', () => {
       const invalidValues = ['', 0, null, undefined, false];
       const expectedValue = undefined;
 
-      const spyCofingService = spyOn(component, <any>'configService');
+      const spyCofingService = vi.spyOn(component as any, 'configService');
 
       expectPropertiesValues(component, 'service', invalidValues, expectedValue);
 
@@ -444,7 +444,7 @@ describe('PoMenuBaseComponent:', () => {
     it('service: should set property with valid values', () => {
       const validValues = ['http://po.com', { getFilteredData: () => {} }];
 
-      const spyCofingService = spyOn(component, <any>'configService');
+      const spyCofingService = vi.spyOn(component as any, 'configService');
 
       expectPropertiesValues(component, 'service', validValues, validValues);
 
@@ -459,7 +459,7 @@ describe('PoMenuBaseComponent:', () => {
     });
 
     it('menuid: should call sendId', () => {
-      spyOn(component['menuGlobalService'], 'sendId');
+      vi.spyOn(component['menuGlobalService'] as any, 'sendId');
       component.menuid = 'my-id';
 
       expect(component['menuGlobalService'].sendId).toHaveBeenCalled();
@@ -479,7 +479,7 @@ describe('PoMenuBaseComponent:', () => {
     });
 
     it('collapsed: should call `validateCollapseClass`', () => {
-      spyOn(component, <any>'validateCollapseClass');
+      vi.spyOn(component as any, 'validateCollapseClass');
 
       component.collapsed = true;
 
@@ -546,7 +546,7 @@ describe('PoMenuBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -555,10 +555,10 @@ describe('PoMenuBaseComponent:', () => {
     it('menus: should update property with valid values.', fakeAsync(() => {
       const validValues = [[{ label: 'Level 1.1', link: '/level-1-1', icon: 'clock' }]];
 
-      const spyCheckingRouterChildrenFragments = spyOn(component, <any>'checkingRouterChildrenFragments');
-      const spyCheckActiveMenuByUrl = spyOn(component, <any>'checkActiveMenuByUrl');
+      const spyCheckingRouterChildrenFragments = vi.spyOn(component as any, 'checkingRouterChildrenFragments');
+      const spyCheckActiveMenuByUrl = vi.spyOn(component as any, 'checkActiveMenuByUrl');
 
-      const spySendMenus = spyOn(component.menuGlobalService, <any>'sendMenus');
+      const spySendMenus = vi.spyOn(component.menuGlobalService as any, 'sendMenus');
 
       expectPropertiesValues(component, 'menus', validValues, validValues);
 
@@ -622,7 +622,7 @@ describe('PoMenuBaseComponent:', () => {
         { label: 'Menu Item 10' }
       ];
 
-      spyOn(component, <any>'setMenuItemProperties');
+      vi.spyOn(component as any, 'setMenuItemProperties');
 
       component['setMenuExtraProperties']();
 

@@ -65,7 +65,7 @@ describe('PoUploadBaseComponent:', () => {
 
   it('should call setAllowedExtensions in fileRestrictions', () => {
     const restrictions = { allowedExtensions: ['.png', '.jpg'] };
-    spyOn(component, <any>'setAllowedExtensions');
+    vi.spyOn(component as any, 'setAllowedExtensions');
     component.fileRestrictions = restrictions;
 
     expect(component['setAllowedExtensions']).toHaveBeenCalledWith(restrictions);
@@ -127,14 +127,14 @@ describe('PoUploadBaseComponent:', () => {
         }
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined when `requiredFailed` is false', () => {
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
 
       expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -143,7 +143,7 @@ describe('PoUploadBaseComponent:', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']([]);
 
@@ -164,7 +164,7 @@ describe('PoUploadBaseComponent:', () => {
       const files: any = [{ name: 'file' }];
       component.currentFiles = [...files];
 
-      const parseFiles = spyOn(component, <any>'parseFiles');
+      const parseFiles = vi.spyOn(component as any, 'parseFiles');
 
       component.writeValue(files);
 
@@ -175,7 +175,7 @@ describe('PoUploadBaseComponent:', () => {
       const files: any = [{ name: 'file' }];
       component.currentFiles = [];
 
-      const parseFiles = spyOn(component, <any>'parseFiles');
+      const parseFiles = vi.spyOn(component as any, 'parseFiles');
 
       component.writeValue(files);
 
@@ -231,10 +231,10 @@ describe('PoUploadBaseComponent:', () => {
 
         const files = [new PoUploadFile(mockFile)];
 
-        spyOn(component as any, 'checkRestrictions').and.returnValue(true);
-        spyOn(component as any, 'insertFileInFiles').and.returnValue(files);
-        spyOn(utilsFunctions, 'convertImageToBase64').and.returnValue(Promise.resolve(mockBase64));
-        spyOn(component['cd'], 'detectChanges');
+        vi.spyOn(component as any, 'checkRestrictions').mockReturnValue(true);
+        vi.spyOn(component as any, 'insertFileInFiles').mockReturnValue(files);
+        vi.spyOn(utilsFunctions as any, 'convertImageToBase64').mockReturnValue(Promise.resolve(mockBase64));
+        vi.spyOn(component['cd'] as any, 'detectChanges');
 
         component.showThumbnail = true;
 
@@ -265,8 +265,12 @@ describe('PoUploadBaseComponent:', () => {
         component.fileRestrictions = { maxFiles: 3 };
         component.currentFiles = undefined;
 
-        spyOn(component, <any>'checkRestrictions').and.returnValue(true);
-        spyOn(component, <any>'insertFileInFiles').and.returnValues(expectedFiles, expectedFiles, expectedFiles, files);
+        vi.spyOn(component as any, 'checkRestrictions').mockReturnValue(true);
+        vi.spyOn(component as any, 'insertFileInFiles')
+          .mockReturnValueOnce(expectedFiles)
+          .mockReturnValueOnce(expectedFiles)
+          .mockReturnValueOnce(expectedFiles)
+          .mockReturnValueOnce(files);
 
         expect(component['parseFiles'](<any>files)).toEqual(<any>expectedFiles);
       });
@@ -279,13 +283,12 @@ describe('PoUploadBaseComponent:', () => {
         component.fileRestrictions = { maxFiles: undefined };
         component.currentFiles = undefined;
 
-        spyOn(component, <any>'checkRestrictions').and.returnValue(true);
-        spyOn(component, <any>'insertFileInFiles').and.returnValues(
-          incompletedFiles,
-          incompletedFiles,
-          incompletedFiles,
-          files
-        );
+        vi.spyOn(component as any, 'checkRestrictions').mockReturnValue(true);
+        vi.spyOn(component as any, 'insertFileInFiles')
+          .mockReturnValueOnce(incompletedFiles)
+          .mockReturnValueOnce(incompletedFiles)
+          .mockReturnValueOnce(incompletedFiles)
+          .mockReturnValueOnce(files);
 
         expect(component['parseFiles'](<any>files)).toEqual(<any>files);
       });
@@ -295,7 +298,7 @@ describe('PoUploadBaseComponent:', () => {
 
         component.fileRestrictions = { maxFiles: 2 };
 
-        spyOn(component, <any>'isExceededFileLimit').and.returnValue(true);
+        vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(true);
 
         component['parseFiles'](<any>files);
 
@@ -303,7 +306,7 @@ describe('PoUploadBaseComponent:', () => {
       });
 
       it('should call `sendFeedback`', () => {
-        spyOn(component, 'sendFeedback');
+        vi.spyOn(component as any, 'sendFeedback');
 
         component['parseFiles'](<any>[{ name: 'file1' }]);
 
@@ -316,12 +319,11 @@ describe('PoUploadBaseComponent:', () => {
 
       const poUploadFileInstance = { uid: 1, name: 'test.jpg', displayName: 'test.jpg', extension: 'jpg', size: 1000 };
 
-      const spyCheckRestrictions = spyOn(component as any, 'checkRestrictions').and.returnValue(false);
-      const spyInsertFileInFiles = spyOn(component as any, 'insertFileInFiles').and.callFake((file, files) => [
-        ...files,
-        file
-      ]);
-      const spySendFeedback = spyOn(component as any, 'sendFeedback');
+      const spyCheckRestrictions = vi.spyOn(component as any, 'checkRestrictions').mockReturnValue(false);
+      const spyInsertFileInFiles = vi
+        .spyOn(component as any, 'insertFileInFiles')
+        .mockImplementation((file: any, files: any) => [...files, file]);
+      const spySendFeedback = vi.spyOn(component as any, 'sendFeedback');
 
       component.currentFiles = [];
       component.showThumbnail = false;
@@ -337,7 +339,7 @@ describe('PoUploadBaseComponent:', () => {
       expect(result[0].status).toBe(2);
 
       expect(result[0]).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           uid: result[0].uid,
           displayName: 'test.jpg - 1 KB',
           name: poUploadFileInstance.name,
@@ -410,13 +412,13 @@ describe('PoUploadBaseComponent:', () => {
         extension: '.pdf'
       };
 
-      spyOn(component, <any>'isAllowedExtension').and.returnValue(false);
+      vi.spyOn(component as any, 'isAllowedExtension').mockReturnValue(false);
       component['fileRestrictions'] = { maxFileSize: 2, allowedExtensions: ['.png'] };
       component['sizeNotAllowed'] = 2;
 
       const response = component['checkRestrictions'](<any>mockFile);
 
-      expect(response).toBeFalse();
+      expect(response).toBe(false);
     });
 
     it('checkRestrictions: shouldn`t sum `sizeNotAllowed` if `isAcceptSize` is `true`', () => {
@@ -446,8 +448,8 @@ describe('PoUploadBaseComponent:', () => {
       const files = [];
       component.isMultiple = false;
 
-      spyOn(files, 'splice');
-      spyOn(component, <any>'existsFileSameName');
+      vi.spyOn(files as any, 'splice');
+      vi.spyOn(component as any, 'existsFileSameName');
 
       component['insertFileInFiles'](file, files);
 
@@ -459,9 +461,9 @@ describe('PoUploadBaseComponent:', () => {
       const files = [];
       component.isMultiple = true;
 
-      spyOn(files, 'push');
-      spyOn(component, <any>'existsFileSameName').and.returnValue(false);
-      spyOn(component, <any>'updateExistsFileInFiles');
+      vi.spyOn(files as any, 'push');
+      vi.spyOn(component as any, 'existsFileSameName').mockReturnValue(false);
+      vi.spyOn(component as any, 'updateExistsFileInFiles');
 
       component['insertFileInFiles'](file, files);
 
@@ -475,9 +477,9 @@ describe('PoUploadBaseComponent:', () => {
       component.directory = true;
       component.isMultiple = true;
 
-      spyOn(files, 'push');
-      spyOn(component, <any>'existsFileSameName').and.returnValue(false);
-      spyOn(component, <any>'updateExistsFileInFiles');
+      vi.spyOn(files as any, 'push');
+      vi.spyOn(component as any, 'existsFileSameName').mockReturnValue(false);
+      vi.spyOn(component as any, 'updateExistsFileInFiles');
 
       component['insertFileInFiles'](file, files);
 
@@ -489,10 +491,10 @@ describe('PoUploadBaseComponent:', () => {
     it('insertFileInFiles: should call `updateExistsFileInFiles` when `existsFileSameName` is true', () => {
       const files = [];
 
-      spyOn(component, <any>'updateExistsFileInFiles');
-      spyOn(component, <any>'existsFileSameName').and.returnValue(true);
-      spyOn(files, 'push');
-      spyOn(files, 'splice');
+      vi.spyOn(component as any, 'updateExistsFileInFiles');
+      vi.spyOn(component as any, 'existsFileSameName').mockReturnValue(true);
+      vi.spyOn(files as any, 'push');
+      vi.spyOn(files as any, 'splice');
 
       component['insertFileInFiles'](file, files);
 
@@ -544,7 +546,7 @@ describe('PoUploadBaseComponent:', () => {
     it('updateExistsFileInFiles: should call `files.splice` when exists file with same name and status uploaded in files', () => {
       const files = [file];
 
-      spyOn(files, 'splice');
+      vi.spyOn(files as any, 'splice');
 
       component['updateExistsFileInFiles'](file, files);
 
@@ -555,7 +557,7 @@ describe('PoUploadBaseComponent:', () => {
       const newFile = Object.assign({}, file, { name: 'po.png' });
       const files = [file];
 
-      spyOn(files, 'splice');
+      vi.spyOn(files as any, 'splice');
 
       component['updateExistsFileInFiles'](newFile, files);
 
@@ -564,7 +566,7 @@ describe('PoUploadBaseComponent:', () => {
 
     it('callCustomAction: should emit customActionClick event with the provided file', () => {
       const mockFile = { name: 'mock-file.txt', size: 12345 } as PoUploadFile;
-      spyOn(component.customActionClick, 'emit');
+      vi.spyOn(component.customActionClick as any, 'emit');
 
       component.customActionClick.emit(mockFile);
 
@@ -624,8 +626,8 @@ describe('PoUploadBaseComponent:', () => {
       const restrictions = { minFileSize: 2 };
       const expectedResult = { minFileSize: 2, maxFileSize: 31457280 };
 
-      spyOn(component, <any>'initRestrictions').and.callThrough();
-      spyOn(component, <any>'setAllowedExtensions');
+      vi.spyOn(component as any, 'initRestrictions');
+      vi.spyOn(component as any, 'setAllowedExtensions');
 
       component.fileRestrictions = restrictions;
 
@@ -710,7 +712,7 @@ describe('PoUploadBaseComponent:', () => {
     it('required: should set `required` with valid values', () => {
       const validValues = ['', true, 1, [], {}, 'true'];
 
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       expectPropertiesValues(component, 'required', validValues, true);
       expect(component['validateModel']).toHaveBeenCalled();
@@ -719,7 +721,7 @@ describe('PoUploadBaseComponent:', () => {
     it('required: should set `required` to false with invalid values', () => {
       const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
 
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       expectPropertiesValues(component, 'required', invalidValues, false);
       expect(component['validateModel']).toHaveBeenCalled();
@@ -776,8 +778,8 @@ describe('PoUploadBaseComponent:', () => {
     it('directory: should apply true to `canHandleDirectory` if directory is true and `isIE` plus `isMobile` return false', () => {
       component.canHandleDirectory = undefined;
 
-      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
 
       component.directory = true;
 
@@ -785,8 +787,8 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('directory: should apply false to `canHandleDirectory` if directory is true but `isIE` returns true', () => {
-      spyOn(utilsFunctions, <any>'isIE').and.returnValue(true);
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isIE').mockReturnValue(true);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
 
       component.directory = true;
 
@@ -794,8 +796,8 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('directory: should apply false to `canHandleDirectory` if directory is true but `isMobile` returns true', () => {
-      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      vi.spyOn(utilsFunctions as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(true);
 
       component.directory = true;
 
@@ -803,8 +805,8 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it('directory: should apply false to `canHandleDirectory` if directory is false', () => {
-      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
 
       component.directory = false;
 
@@ -812,9 +814,9 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it(`directory: call 'setDirectoryAttribute' passing true as parameter`, () => {
-      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
-      spyOn(component, 'setDirectoryAttribute');
+      vi.spyOn(utilsFunctions as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
+      vi.spyOn(component as any, 'setDirectoryAttribute');
 
       component.directory = true;
 
@@ -823,9 +825,9 @@ describe('PoUploadBaseComponent:', () => {
     });
 
     it(`directory: should call 'setDirectoryAttribute' passing false as parameter`, () => {
-      spyOn(utilsFunctions, <any>'isIE').and.returnValue(false);
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
-      spyOn(component, 'setDirectoryAttribute');
+      vi.spyOn(utilsFunctions as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(true);
+      vi.spyOn(component as any, 'setDirectoryAttribute');
 
       component.directory = false;
 
@@ -884,7 +886,7 @@ describe('PoUploadBaseComponent:', () => {
 
     it('p-custom-action-click: should emit event when called', () => {
       const mockFile = { name: 'mock-file.txt', size: 12345 } as PoUploadFile;
-      spyOn(component.customActionClick, 'emit');
+      vi.spyOn(component.customActionClick as any, 'emit');
 
       component.customActionClick.emit(mockFile);
 
@@ -945,7 +947,7 @@ describe('PoUploadBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -953,20 +955,20 @@ describe('PoUploadBaseComponent:', () => {
 
     describe('p-loading:', () => {
       it('should set loading=true and call cd.markForCheck', () => {
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         component.loading = true;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
         expect(component['cd'].markForCheck).toHaveBeenCalled();
       });
 
       it('should set loading=false and call cd.markForCheck', () => {
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         component.loading = false;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
         expect(component['cd'].markForCheck).toHaveBeenCalled();
       });
 
@@ -980,7 +982,7 @@ describe('PoUploadBaseComponent:', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
       });
     });
 
@@ -989,28 +991,28 @@ describe('PoUploadBaseComponent:', () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
 
       it('should return true when disabled is true and loading is false', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled is false and loading is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when both disabled and loading are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
     });
   });

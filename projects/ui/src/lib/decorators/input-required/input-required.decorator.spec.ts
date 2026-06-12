@@ -10,7 +10,8 @@ import { InputRequired } from './input-required.decorator';
   standalone: false
 })
 class PoMockComponent implements OnInit {
-  @InputRequired() myProperty: any;
+  @InputRequired()
+  myProperty: any;
   ngOnInit() {
     let a;
   }
@@ -32,7 +33,7 @@ describe('InputRequired:', () => {
   });
 
   it('should call console.warn if `myProperty` is null', () => {
-    spyOn(console, 'warn');
+    vi.spyOn(console as any, 'warn');
     const consoleMessage = 'PoMockComponent: myProperty is required, but was not provided';
 
     component.ngOnInit();
@@ -41,7 +42,7 @@ describe('InputRequired:', () => {
   });
 
   it('shouldn`t call console.warn if `myProperty` is defined', () => {
-    spyOn(console, 'warn');
+    vi.spyOn(console as any, 'warn');
     component.myProperty = 'value';
 
     component.ngOnInit();

@@ -34,7 +34,7 @@ describe('PoInfoComponent', () => {
     it('isExternalLink: should return true if `component.url` is truthy', () => {
       component.url = 'http://po-ui.io';
 
-      const spyIsExternalLink = spyOn(UtilsFunctions, 'isExternalLink').and.callThrough();
+      const spyIsExternalLink = vi.spyOn(UtilsFunctions as any, 'isExternalLink');
 
       expect(component.isExternalLink).toBe(true);
       expect(spyIsExternalLink).toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('PoInfoComponent', () => {
     it('isExternalLink: should return false if `component.url` is falsy', () => {
       component.url = '';
 
-      const spyIsExternalLink = spyOn(UtilsFunctions, 'isExternalLink').and.callThrough();
+      const spyIsExternalLink = vi.spyOn(UtilsFunctions as any, 'isExternalLink');
 
       expect(component.isExternalLink).toBe(false);
       expect(spyIsExternalLink).toHaveBeenCalled();

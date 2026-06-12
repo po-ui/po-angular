@@ -32,7 +32,7 @@ describe('PoSlideBaseComponent:', () => {
     });
 
     it('height: should update property if values are invalid.', () => {
-      component.height = <any>'one';
+      (component as any).height = 'one';
       expect(component.height).toBeUndefined();
 
       component.height = <any>false;
@@ -48,7 +48,7 @@ describe('PoSlideBaseComponent:', () => {
     it('interval: should update property with values greater or equal than 1000 and call `startInterval`.', () => {
       const validValues = [1001, 10000, 2000, 1280, 1000];
 
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       expectPropertiesValues(component, 'interval', validValues, validValues);
       expect(component['startInterval']).toHaveBeenCalledTimes(5);
@@ -57,7 +57,7 @@ describe('PoSlideBaseComponent:', () => {
     it('interval: should update property with valid values less than 1000 and call `cancelInterval`.', () => {
       const validValues = [1, 0, 155, 999];
 
-      spyOn(component, <any>'cancelInterval');
+      vi.spyOn(component as any, 'cancelInterval');
 
       expectPropertiesValues(component, 'interval', validValues, validValues);
       expect(component['cancelInterval']).toHaveBeenCalledTimes(4);
@@ -66,7 +66,7 @@ describe('PoSlideBaseComponent:', () => {
     it('interval: should update property with `4000` if values are invalid and call `startInterval`.', () => {
       const invalidValues = [null, undefined, [], {}, false, 'false', true, 'true', 'string'];
 
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       expectPropertiesValues(component, 'interval', invalidValues, 4000);
       expect(component['startInterval']).toHaveBeenCalledTimes(9);
@@ -79,7 +79,7 @@ describe('PoSlideBaseComponent:', () => {
         [{ label: '1' }, { label: '2' }]
       ];
 
-      spyOn(component, 'setSlideItems');
+      vi.spyOn(component as any, 'setSlideItems');
 
       expectPropertiesValues(component, 'slides', validValues, validValues);
       expect(component.setSlideItems).toHaveBeenCalledTimes(3);

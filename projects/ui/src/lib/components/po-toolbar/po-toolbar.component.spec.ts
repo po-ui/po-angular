@@ -33,7 +33,7 @@ describe('PoToolbarComponent:', () => {
     it('ngOnInit: should call `setTitle` on ngOnInit', () => {
       component.title = 'Novo programa';
 
-      spyOn(component, <any>'setTitle');
+      vi.spyOn(component as any, 'setTitle');
 
       component.ngOnInit();
 

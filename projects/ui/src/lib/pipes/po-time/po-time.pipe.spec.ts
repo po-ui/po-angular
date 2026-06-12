@@ -13,9 +13,9 @@ describe('PoTimePipe:', () => {
         if time is string type and valid regex.`, () => {
         const validTime = '23:12:55.12';
 
-        spyOn(pipe, <any>'formatValue');
-        spyOn(pipe, <any>'addDotMiliseconds');
-        spyOn(pipe, <any>'getFormatMiliseconds');
+        vi.spyOn(pipe as any, 'formatValue');
+        vi.spyOn(pipe as any, 'addDotMiliseconds');
+        vi.spyOn(pipe as any, 'getFormatMiliseconds');
 
         pipe.transform(validTime);
 
@@ -29,9 +29,9 @@ describe('PoTimePipe:', () => {
         const validTime = '23:12:55.12';
         const format = 'HH:mm';
 
-        spyOn(pipe, <any>'formatValue');
-        spyOn(pipe, <any>'addDotMiliseconds');
-        spyOn(pipe, <any>'getFormatMiliseconds');
+        vi.spyOn(pipe as any, 'formatValue');
+        vi.spyOn(pipe as any, 'addDotMiliseconds');
+        vi.spyOn(pipe as any, 'getFormatMiliseconds');
 
         pipe.transform(validTime, format);
 
@@ -44,9 +44,9 @@ describe('PoTimePipe:', () => {
         if time is string type and invalid regex.`, () => {
         const invalidTime = '23-12-55.12';
 
-        spyOn(pipe, <any>'formatValue');
-        spyOn(pipe, <any>'addDotMiliseconds');
-        spyOn(pipe, <any>'getFormatMiliseconds');
+        vi.spyOn(pipe as any, 'formatValue');
+        vi.spyOn(pipe as any, 'addDotMiliseconds');
+        vi.spyOn(pipe as any, 'getFormatMiliseconds');
 
         pipe.transform(invalidTime);
 
@@ -59,9 +59,9 @@ describe('PoTimePipe:', () => {
         if time is not string type and invalid regex.`, () => {
         const invalidTime = undefined;
 
-        spyOn(pipe, <any>'formatValue');
-        spyOn(pipe, <any>'addDotMiliseconds');
-        spyOn(pipe, <any>'getFormatMiliseconds');
+        vi.spyOn(pipe as any, 'formatValue');
+        vi.spyOn(pipe as any, 'addDotMiliseconds');
+        vi.spyOn(pipe as any, 'getFormatMiliseconds');
 
         pipe.transform(invalidTime);
 

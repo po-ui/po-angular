@@ -17,7 +17,7 @@ describe('PoMenuGlobalService', () => {
   it('sendApplicationMenu: should call applicationMenu.next with menu', () => {
     const menu = <any>{ id: '123', menus: [] };
 
-    spyOn(menuGlobalService['applicationMenu'], 'next');
+    vi.spyOn(menuGlobalService['applicationMenu'] as any, 'next');
 
     menuGlobalService.sendApplicationMenu(menu);
 
@@ -27,7 +27,7 @@ describe('PoMenuGlobalService', () => {
   it('sendChanges: should call menuChanges.next ', () => {
     const menus = [{ label: 'Item', link: '/item' }];
 
-    spyOn(menuGlobalService['menuChanges'], 'next');
+    vi.spyOn(menuGlobalService['menuChanges'] as any, 'next');
 
     menuGlobalService.sendChanges(menus);
 
@@ -37,7 +37,7 @@ describe('PoMenuGlobalService', () => {
   it('sendMenus: should call menus.next with menuItem', () => {
     const menus = [{ label: 'Item', link: '/item' }];
 
-    spyOn(menuGlobalService['menus'], 'next');
+    vi.spyOn(menuGlobalService['menus'] as any, 'next');
 
     menuGlobalService.sendMenus(menus);
 
@@ -47,7 +47,7 @@ describe('PoMenuGlobalService', () => {
   it('sendRemovedApplicationMenu: should call removedApplicationMenu.next with ID param', () => {
     const id = '1234';
 
-    spyOn(menuGlobalService['removedApplicationMenu'], 'next');
+    vi.spyOn(menuGlobalService['removedApplicationMenu'] as any, 'next');
 
     menuGlobalService.sendRemovedApplicationMenu(id);
 

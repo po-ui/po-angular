@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import {
   PoUserGuideScrollLock,
   ScrollLockSnapshot,
@@ -32,8 +33,8 @@ const buildSnapshot = (overrides: Partial<ScrollLockSnapshot> = {}): ScrollLockS
   ...overrides
 });
 
-const findListener = (spy: jasmine.Spy, eventName: string): ((event: any) => void) | undefined => {
-  const call = spy.calls.allArgs().find(args => args[0] === eventName);
+const findListener = (spy: any, eventName: string): ((event: any) => void) | undefined => {
+  const call = vi.mocked(spy).mock.calls.find(args => args[0] === eventName);
   return call ? (call[1] as (event: any) => void) : undefined;
 };
 
@@ -71,27 +72,27 @@ describe('PoUserGuideScrollLock:', () => {
   });
 
   it('should be an instance of PoUserGuideScrollLock', () => {
-    expect(scrollLock instanceof PoUserGuideScrollLock).toBeTrue();
+    expect(scrollLock instanceof PoUserGuideScrollLock).toBe(true);
   });
 
   describe('SCROLL_KEYS:', () => {
     it('should expose all expected scroll keys', () => {
-      expect(SCROLL_KEYS.has('ArrowUp')).toBeTrue();
-      expect(SCROLL_KEYS.has('ArrowDown')).toBeTrue();
-      expect(SCROLL_KEYS.has('ArrowLeft')).toBeTrue();
-      expect(SCROLL_KEYS.has('ArrowRight')).toBeTrue();
-      expect(SCROLL_KEYS.has('PageUp')).toBeTrue();
-      expect(SCROLL_KEYS.has('PageDown')).toBeTrue();
-      expect(SCROLL_KEYS.has('Home')).toBeTrue();
-      expect(SCROLL_KEYS.has('End')).toBeTrue();
-      expect(SCROLL_KEYS.has(' ')).toBeTrue();
+      expect(SCROLL_KEYS.has('ArrowUp')).toBe(true);
+      expect(SCROLL_KEYS.has('ArrowDown')).toBe(true);
+      expect(SCROLL_KEYS.has('ArrowLeft')).toBe(true);
+      expect(SCROLL_KEYS.has('ArrowRight')).toBe(true);
+      expect(SCROLL_KEYS.has('PageUp')).toBe(true);
+      expect(SCROLL_KEYS.has('PageDown')).toBe(true);
+      expect(SCROLL_KEYS.has('Home')).toBe(true);
+      expect(SCROLL_KEYS.has('End')).toBe(true);
+      expect(SCROLL_KEYS.has(' ')).toBe(true);
     });
 
     it('should not include keys that are not related to scrolling', () => {
-      expect(SCROLL_KEYS.has('Tab')).toBeFalse();
-      expect(SCROLL_KEYS.has('Enter')).toBeFalse();
-      expect(SCROLL_KEYS.has('Escape')).toBeFalse();
-      expect(SCROLL_KEYS.has('a')).toBeFalse();
+      expect(SCROLL_KEYS.has('Tab')).toBe(false);
+      expect(SCROLL_KEYS.has('Enter')).toBe(false);
+      expect(SCROLL_KEYS.has('Escape')).toBe(false);
+      expect(SCROLL_KEYS.has('a')).toBe(false);
     });
   });
 
@@ -130,37 +131,37 @@ describe('PoUserGuideScrollLock:', () => {
 
   describe('isActive:', () => {
     it('should return false when the lock is fresh', () => {
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
 
     it('should return true after lock() and false after unlock()', () => {
       scrollLock.lock();
-      expect(scrollLock.isActive()).toBeTrue();
+      expect(scrollLock.isActive()).toBe(true);
 
       scrollLock.unlock();
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
   });
 
   describe('lock:', () => {
     it('should be a no-op when not running in a browser environment', () => {
-      spyOn<any>(scrollLock, 'isBrowser').and.returnValue(false);
-      const captureSpy = spyOn<any>(scrollLock, 'captureSnapshot').and.callThrough();
+      vi.spyOn(scrollLock as any, 'isBrowser').mockReturnValue(false);
+      const captureSpy = vi.spyOn(scrollLock as any, 'captureSnapshot');
 
       scrollLock.lock();
 
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
       expect(captureSpy).not.toHaveBeenCalled();
     });
 
     it('should be a no-op when invoked while already active', () => {
       scrollLock.lock();
-      const captureSpy = spyOn<any>(scrollLock, 'captureSnapshot').and.callThrough();
+      const captureSpy = vi.spyOn(scrollLock as any, 'captureSnapshot');
 
       scrollLock.lock();
 
       expect(captureSpy).not.toHaveBeenCalled();
-      expect(scrollLock.isActive()).toBeTrue();
+      expect(scrollLock.isActive()).toBe(true);
     });
 
     it('should set overflow:hidden on documentElement when locking', () => {
@@ -228,7 +229,7 @@ describe('PoUserGuideScrollLock:', () => {
     });
 
     it('should attach wheel, touchmove and keydown listeners on document', () => {
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
 
       scrollLock.lock();
 
@@ -240,50 +241,50 @@ describe('PoUserGuideScrollLock:', () => {
     it('should mark the lock as active after a successful lock()', () => {
       scrollLock.lock();
 
-      expect(scrollLock.isActive()).toBeTrue();
+      expect(scrollLock.isActive()).toBe(true);
     });
   });
 
   describe('lock - listeners behavior:', () => {
     it('should call preventDefault on the wheel listener', () => {
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const wheelListener = findListener(addSpy, 'wheel');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       wheelListener({ preventDefault: preventSpy } as any);
 
       expect(preventSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should NOT call preventDefault on the wheel listener when ctrlKey is pressed (browser zoom)', () => {
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const wheelListener = findListener(addSpy, 'wheel');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       wheelListener({ ctrlKey: true, preventDefault: preventSpy } as any);
 
       expect(preventSpy).not.toHaveBeenCalled();
     });
 
     it('should call preventDefault on the touchmove listener', () => {
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const touchListener = findListener(addSpy, 'touchmove');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       touchListener({ preventDefault: preventSpy } as any);
 
       expect(preventSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call preventDefault on keydown when the key is a scroll key and the target is not editable in popover', () => {
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const keydownListener = findListener(addSpy, 'keydown');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       const div = document.createElement('div');
       keydownListener({ key: 'ArrowDown', target: div, preventDefault: preventSpy } as any);
 
@@ -291,11 +292,11 @@ describe('PoUserGuideScrollLock:', () => {
     });
 
     it('should NOT call preventDefault on keydown when the key is not a scroll key', () => {
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const keydownListener = findListener(addSpy, 'keydown');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       const div = document.createElement('div');
       keydownListener({ key: 'a', target: div, preventDefault: preventSpy } as any);
 
@@ -309,11 +310,11 @@ describe('PoUserGuideScrollLock:', () => {
       popover.appendChild(input);
       document.body.appendChild(popover);
 
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const keydownListener = findListener(addSpy, 'keydown');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       keydownListener({ key: 'ArrowDown', target: input, preventDefault: preventSpy } as any);
 
       expect(preventSpy).not.toHaveBeenCalled();
@@ -326,11 +327,11 @@ describe('PoUserGuideScrollLock:', () => {
       popover.appendChild(textarea);
       document.body.appendChild(popover);
 
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const keydownListener = findListener(addSpy, 'keydown');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       keydownListener({ key: 'ArrowDown', target: textarea, preventDefault: preventSpy } as any);
 
       expect(preventSpy).not.toHaveBeenCalled();
@@ -344,11 +345,11 @@ describe('PoUserGuideScrollLock:', () => {
       popover.appendChild(editable);
       document.body.appendChild(popover);
 
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const keydownListener = findListener(addSpy, 'keydown');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       keydownListener({ key: 'ArrowDown', target: editable, preventDefault: preventSpy } as any);
 
       expect(preventSpy).not.toHaveBeenCalled();
@@ -359,11 +360,11 @@ describe('PoUserGuideScrollLock:', () => {
       input.setAttribute('data-po-user-guide-scroll-lock-test', '1');
       document.body.appendChild(input);
 
-      const addSpy = spyOn(document, 'addEventListener').and.callThrough();
+      const addSpy = vi.spyOn(document as any, 'addEventListener');
       scrollLock.lock();
 
       const keydownListener = findListener(addSpy, 'keydown');
-      const preventSpy = jasmine.createSpy('preventDefault');
+      const preventSpy = vi.fn();
       keydownListener({ key: 'ArrowDown', target: input, preventDefault: preventSpy } as any);
 
       expect(preventSpy).toHaveBeenCalledTimes(1);
@@ -372,12 +373,12 @@ describe('PoUserGuideScrollLock:', () => {
 
   describe('unlock:', () => {
     it('should be a no-op when not active', () => {
-      const removeSpy = spyOn(document, 'removeEventListener').and.callThrough();
+      const removeSpy = vi.spyOn(document as any, 'removeEventListener');
 
       scrollLock.unlock();
 
       expect(removeSpy).not.toHaveBeenCalled();
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
 
     it('should restore documentElement and body inline styles to their pre-lock values', () => {
@@ -396,7 +397,7 @@ describe('PoUserGuideScrollLock:', () => {
     });
 
     it('should call window.scrollTo with the captured scroll position on unlock', () => {
-      const scrollSpy = spyOn(window, 'scrollTo');
+      const scrollSpy = vi.spyOn(window as any, 'scrollTo');
 
       scrollLock.lock();
       const snapshot = (scrollLock as any).snapshot as ScrollLockSnapshot;
@@ -407,11 +408,11 @@ describe('PoUserGuideScrollLock:', () => {
 
     it('should remove wheel, touchmove and keydown listeners from document', () => {
       scrollLock.lock();
-      const removeSpy = spyOn(document, 'removeEventListener').and.callThrough();
+      const removeSpy = vi.spyOn(document as any, 'removeEventListener');
 
       scrollLock.unlock();
 
-      const eventTypes = removeSpy.calls.allArgs().map(args => args[0]);
+      const eventTypes = vi.mocked(removeSpy).mock.calls.map(args => args[0]);
       expect(eventTypes).toContain('wheel');
       expect(eventTypes).toContain('touchmove');
       expect(eventTypes).toContain('keydown');
@@ -421,7 +422,7 @@ describe('PoUserGuideScrollLock:', () => {
       scrollLock.lock();
       scrollLock.unlock();
 
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
 
     it('should be safe to call unlock multiple times in a row', () => {
@@ -432,7 +433,7 @@ describe('PoUserGuideScrollLock:', () => {
         scrollLock.unlock();
         scrollLock.unlock();
       }).not.toThrow();
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
 
     it('should skip removeEventListener for listeners that are null when state is active (defensive branch)', () => {
@@ -440,26 +441,26 @@ describe('PoUserGuideScrollLock:', () => {
       (scrollLock as any).wheelListener = null;
       (scrollLock as any).touchListener = null;
       (scrollLock as any).keydownListener = null;
-      const removeSpy = spyOn(document, 'removeEventListener').and.callThrough();
+      const removeSpy = vi.spyOn(document as any, 'removeEventListener');
 
       scrollLock.unlock();
 
-      const eventTypes = removeSpy.calls.allArgs().map(args => args[0]);
+      const eventTypes = vi.mocked(removeSpy).mock.calls.map(args => args[0]);
       expect(eventTypes).not.toContain('wheel');
       expect(eventTypes).not.toContain('touchmove');
       expect(eventTypes).not.toContain('keydown');
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
 
     it('should skip restoreSnapshot when snapshot is null but the lock is active (defensive branch)', () => {
       scrollLock.lock();
       (scrollLock as any).snapshot = null;
-      const restoreSpy = spyOn<any>(scrollLock, 'restoreSnapshot').and.callThrough();
+      const restoreSpy = vi.spyOn(scrollLock as any, 'restoreSnapshot');
 
       scrollLock.unlock();
 
       expect(restoreSpy).not.toHaveBeenCalled();
-      expect(scrollLock.isActive()).toBeFalse();
+      expect(scrollLock.isActive()).toBe(false);
     });
 
     it('should clear listener references and snapshot after unlock', () => {
@@ -568,7 +569,7 @@ describe('PoUserGuideScrollLock:', () => {
         }
       });
 
-      const scrollSpy = spyOn(window, 'scrollTo');
+      const scrollSpy = vi.spyOn(window as any, 'scrollTo');
 
       (scrollLock as any).restoreSnapshot(snapshot);
 
@@ -594,43 +595,43 @@ describe('PoUserGuideScrollLock:', () => {
 
   describe('isBrowser:', () => {
     it('should return true in the karma browser test environment', () => {
-      expect((scrollLock as any).isBrowser()).toBeTrue();
+      expect((scrollLock as any).isBrowser()).toBe(true);
     });
   });
 
   describe('isScrollKey:', () => {
     it('should return true for known scroll keys', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-      expect((scrollLock as any).isScrollKey(event)).toBeTrue();
+      expect((scrollLock as any).isScrollKey(event)).toBe(true);
     });
 
     it('should return false for non-scroll keys', () => {
       const event = new KeyboardEvent('keydown', { key: 'a' });
-      expect((scrollLock as any).isScrollKey(event)).toBeFalse();
+      expect((scrollLock as any).isScrollKey(event)).toBe(false);
     });
 
     it('should return true for Space (" ") key', () => {
       const event = new KeyboardEvent('keydown', { key: ' ' });
-      expect((scrollLock as any).isScrollKey(event)).toBeTrue();
+      expect((scrollLock as any).isScrollKey(event)).toBe(true);
     });
   });
 
   describe('isWithinEditableInPopover:', () => {
     it('should return false when the target is null', () => {
       const event = { target: null } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeFalse();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(false);
     });
 
     it('should return false when the target is a non-editable HTMLElement', () => {
       const div = document.createElement('div');
       const event = { target: div } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeFalse();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(false);
     });
 
     it('should return false when the target is editable but not within a popover', () => {
       const input = document.createElement('input');
       const event = { target: input } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeFalse();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(false);
     });
 
     it('should return true when the target is an input within a popover', () => {
@@ -641,7 +642,7 @@ describe('PoUserGuideScrollLock:', () => {
       document.body.appendChild(popover);
 
       const event = { target: input } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeTrue();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(true);
     });
 
     it('should return true when the target is a textarea within a popover', () => {
@@ -652,7 +653,7 @@ describe('PoUserGuideScrollLock:', () => {
       document.body.appendChild(popover);
 
       const event = { target: textarea } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeTrue();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(true);
     });
 
     it('should return true when the target is a contentEditable element within a popover', () => {
@@ -664,12 +665,12 @@ describe('PoUserGuideScrollLock:', () => {
       document.body.appendChild(popover);
 
       const event = { target: editable } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeTrue();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(true);
     });
 
     it('should return false when the target is not an HTMLElement (e.g. plain object)', () => {
       const event = { target: { isContentEditable: true } } as unknown as Event;
-      expect((scrollLock as any).isWithinEditableInPopover(event)).toBeFalse();
+      expect((scrollLock as any).isWithinEditableInPopover(event)).toBe(false);
     });
   });
 });

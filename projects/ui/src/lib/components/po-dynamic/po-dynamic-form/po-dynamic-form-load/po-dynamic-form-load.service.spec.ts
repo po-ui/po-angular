@@ -22,39 +22,37 @@ describe('PoDynamicFormLoadService:', () => {
   });
 
   describe('Methods:', () => {
-    const spyLoadFunction = jasmine.createSpy('validateFunction');
+    const spyLoadFunction = vi.fn();
 
     it('executeLoad: should call `execute` with `load` and `value`', () => {
-      const spyExecute = spyOn(service, <any>'execute').and.returnValue(of());
+      const spyExecute = vi.spyOn(service as any, 'execute').mockReturnValue(of());
 
       service.executeLoad(spyLoadFunction, value);
 
       expect(spyExecute).toHaveBeenCalledWith(spyLoadFunction, value);
     });
 
-    it('executeLoad: should return default form if return of server is null', done => {
+    it('executeLoad: should return default form if return of server is null', async () => {
       const defaultForm = {
         value: {},
         fields: [],
         focus: undefined
       };
 
-      spyOn(service, <any>'execute').and.returnValue(of(null));
+      vi.spyOn(service as any, 'execute').mockReturnValue(of(null));
 
       service.executeLoad(mockURL, value).subscribe(loadedFormData => {
         expect(loadedFormData).toEqual(defaultForm);
-        done();
       });
     });
 
-    it('executeLoad: should return value if return of server is not null', done => {
+    it('executeLoad: should return value if return of server is not null', async () => {
       const loadedFormData = { fields: [{ property: 'name', label: 'Nome' }] };
 
-      spyOn(service, <any>'execute').and.returnValue(of(loadedFormData));
+      vi.spyOn(service as any, 'execute').mockReturnValue(of(loadedFormData));
 
       service.executeLoad(mockURL, value).subscribe(validateField => {
         expect(validateField).toEqual(loadedFormData);
-        done();
       });
     });
 

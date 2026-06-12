@@ -27,14 +27,12 @@ describe('PoComboFilterService ', () => {
     httpMock.verify();
   });
 
-  it('should return only filtered data', done => {
+  it('should return only filtered data', async () => {
     const items: any = 'items';
 
     comboService.getFilteredData({}).subscribe(response => {
       expect(response.length).toBe(1);
       expect(response[items]).toBeUndefined();
-
-      done();
     });
 
     httpMock
@@ -42,39 +40,33 @@ describe('PoComboFilterService ', () => {
       .flush({ items: [{ name: 'Angular', id: 'angular' }] });
   });
 
-  it('should not return any filtered data', done => {
+  it('should not return any filtered data', async () => {
     const items: any = 'items';
 
     comboService.getFilteredData({}).subscribe(response => {
       expect(response.length).toBe(0);
       expect(response[items]).toBeUndefined();
-
-      done();
     });
 
     httpMock.expectOne((req: HttpRequest<any>) => req.url === mockURL && req.method === 'GET').flush({ items: [] });
   });
 
-  it('should return the object converted to PoComboOption', done => {
+  it('should return the object converted to PoComboOption', async () => {
     const param = 'angular';
 
     comboService.getObjectByValue(param).subscribe(object => {
       expect('label' in object).toBeTruthy();
       expect('value' in object).toBeTruthy();
-
-      done();
     });
 
     httpMock.expectOne(`${mockURL}/${param}`).flush({ id: 'angular', name: 'Angular' });
   });
 
-  it('should return empty object', done => {
+  it('should return empty object', async () => {
     const param = 'react';
 
     comboService.getObjectByValue(param).subscribe(object => {
       expect(object).toEqual({ value: '' });
-
-      done();
     });
 
     httpMock.expectOne(`${mockURL}/${param}`).flush(null);
@@ -97,16 +89,15 @@ describe('PoComboFilterService ', () => {
   });
 
   describe('Methods:', () => {
-    it('getFilteredData: should contains X-PO-NO-MESSAGE in headers request', done => {
+    it('getFilteredData: should contains X-PO-NO-MESSAGE in headers request', async () => {
       const urlWithParams = 'http://mockurl.com?filter=test';
       const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
 
-      spyOn(comboService, <any>'parseToArrayComboOption').and.returnValue(parsedParams);
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'parseToArrayComboOption').mockReturnValue(parsedParams);
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getFilteredData({ value: 'test' }).subscribe(response => {
         expect(response).toEqual(parsedParams);
-        done();
       });
 
       const req = httpMock.expectOne((request: HttpRequest<any>) => request.urlWithParams === urlWithParams);
@@ -115,38 +106,36 @@ describe('PoComboFilterService ', () => {
       req.flush({});
     });
 
-    it('getFilteredData: should concatenate url with filter params', done => {
+    it('getFilteredData: should concatenate url with filter params', async () => {
       const urlWithParams = 'http://mockurl.com?param1=value1&param2=value2&filter=test';
       const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
 
-      spyOn(comboService, <any>'parseToArrayComboOption').and.returnValue(parsedParams);
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'parseToArrayComboOption').mockReturnValue(parsedParams);
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getFilteredData({ value: 'test' }, { param1: 'value1', param2: 'value2' }).subscribe(response => {
         expect(response).toEqual(parsedParams);
-        done();
       });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
-    it('getFilteredData: shouldn`t concatenate url with filter params if filter params is not an object', done => {
+    it('getFilteredData: shouldn`t concatenate url with filter params if filter params is not an object', async () => {
       const urlWithParams = 'http://mockurl.com?filter=test';
       const parsedParams: Array<PoComboOption> = [{ label: 'value1', value: 'value1' }];
 
-      spyOn(comboService, <any>'parseToArrayComboOption').and.returnValue(parsedParams);
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'parseToArrayComboOption').mockReturnValue(parsedParams);
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getFilteredData({ value: 'test' }, [{ param1: 'value1', param2: 'value2' }]).subscribe(response => {
         expect(response).toEqual(parsedParams);
-        done();
       });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
     it(`getFilteredData: should return array of object[value=""] if
-      fieldValue property not exists in items and display messages`, done => {
+      fieldValue property not exists in items and display messages`, async () => {
       const items = [
         { email: 'john@email.com', name: 'john' },
         { email: 'jane@email.com', name: 'jane' }
@@ -156,23 +145,21 @@ describe('PoComboFilterService ', () => {
 
       comboService.fieldValue = 'cpf';
 
-      spyOn(comboService, <any>'addMessage').and.callThrough();
-      spyOn(console, 'error').and.callThrough();
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'addMessage');
+      vi.spyOn(console as any, 'error');
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getFilteredData(filterParam).subscribe(response => {
         expect(response).toEqual(expectItems);
         expect(console.error).toHaveBeenCalledTimes(items.length);
         expect(comboService['addMessage']).toHaveBeenCalled();
         expect(comboService['messages']).toEqual([]);
-
-        done();
       });
 
       httpMock.expectOne(`http://mockurl.com?filter=`).flush({ items });
     });
 
-    it(`getFilteredData: shouldn't call console.error if returned items contains fieldValue property`, done => {
+    it(`getFilteredData: shouldn't call console.error if returned items contains fieldValue property`, async () => {
       comboService.fieldValue = 'name';
 
       const items = [
@@ -185,33 +172,30 @@ describe('PoComboFilterService ', () => {
         label: item[comboService.fieldValue]
       }));
 
-      spyOn(comboService, <any>'addMessage').and.callThrough();
-      spyOn(console, 'error').and.callThrough();
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'addMessage');
+      vi.spyOn(console as any, 'error');
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getFilteredData(filterParam).subscribe(response => {
         expect(response).toEqual(expectItems);
         expect(console.error).not.toHaveBeenCalled();
         expect(comboService['addMessage']).not.toHaveBeenCalled();
         expect(comboService['messages']).toEqual([]);
-
-        done();
       });
 
       httpMock.expectOne(`http://mockurl.com?filter=`).flush({ items });
     });
 
-    it('getObjectByValue: should contains X-PO-NO-MESSAGE in headers request', done => {
+    it('getObjectByValue: should contains X-PO-NO-MESSAGE in headers request', async () => {
       const filteredObject: PoComboOption = { label: 'value1', value: 'value1' };
       const param = 'angular';
       const urlWithParams = 'http://mockurl.com/angular';
 
-      spyOn(comboService, <any>'parseToComboOption').and.returnValue(filteredObject);
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'parseToComboOption').mockReturnValue(filteredObject);
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getObjectByValue(param).subscribe(response => {
         expect(response).toEqual(filteredObject);
-        done();
       });
 
       const req = httpMock.expectOne((request: HttpRequest<any>) => request.urlWithParams === urlWithParams);
@@ -220,35 +204,33 @@ describe('PoComboFilterService ', () => {
       req.flush({});
     });
 
-    it('getObjectByValue: should add filter params', done => {
+    it('getObjectByValue: should add filter params', async () => {
       const filteredObject: PoComboOption = { label: 'value1', value: 'value1' };
       const param = 'angular';
       const urlWithParams = 'http://mockurl.com/angular?param1=value1&param2=value2';
       const filterParams = { param1: 'value1', param2: 'value2' };
 
-      spyOn(comboService, <any>'parseToComboOption').and.returnValue(filteredObject);
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'parseToComboOption').mockReturnValue(filteredObject);
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getObjectByValue(param, filterParams).subscribe(response => {
         expect(response).toEqual(filteredObject);
-        done();
       });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});
     });
 
-    it('getObjectByValue: shouldn`t add filter params if filter params is not an object', done => {
+    it('getObjectByValue: shouldn`t add filter params if filter params is not an object', async () => {
       const filteredObject: PoComboOption = { label: 'value1', value: 'value1' };
       const param = 'angular';
       const urlWithParams = 'http://mockurl.com/angular';
       const filterParams = [{ param1: 'value1', param2: 'value2' }];
 
-      spyOn(comboService, <any>'parseToComboOption').and.returnValue(filteredObject);
-      spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
+      vi.spyOn(comboService as any, 'parseToComboOption').mockReturnValue(filteredObject);
+      vi.spyOn(comboService, 'url', 'get').mockReturnValue('http://mockurl.com');
 
       comboService.getObjectByValue(param, filterParams).subscribe(response => {
         expect(response).toEqual(filteredObject);
-        done();
       });
 
       httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({});

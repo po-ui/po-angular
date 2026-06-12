@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -58,7 +59,9 @@ describe('PoUploadComponent:', () => {
 
     fixture = TestBed.createComponent(PoUploadComponent);
     component = fixture.componentInstance;
-    spyOn(utilsFunctions, 'convertImageToBase64').and.callFake(() => Promise.resolve('data:image/png;base64,TEST'));
+    vi.spyOn(utilsFunctions as any, 'convertImageToBase64').mockImplementation(() =>
+      Promise.resolve('data:image/png;base64,TEST')
+    );
   });
 
   it('should be created', () => {
@@ -76,28 +79,28 @@ describe('PoUploadComponent:', () => {
 
   describe('Properties:', () => {
     it('displayDragDrop: should return true if `dragDrop` is `true` and `isMobile` is `false`', () => {
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
       component.dragDrop = true;
 
       expect(component.displayDragDrop).toBe(true);
     });
 
     it('displayDragDrop: should return false if `dragDrop` is `true` and `isMobile` is `true`', () => {
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(true);
       component.dragDrop = true;
 
       expect(component.displayDragDrop).toBe(false);
     });
 
     it('displayDragDrop: should return false if `dragDrop` is `false` and `isMobile` is `true`', () => {
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(true);
       component.dragDrop = false;
 
       expect(component.displayDragDrop).toBe(false);
     });
 
     it('displayDragDrop: should return false if `dragDrop` is `false` and `isMobile` is `false`', () => {
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
       component.dragDrop = false;
 
       expect(component.displayDragDrop).toBe(false);
@@ -124,8 +127,8 @@ describe('PoUploadComponent:', () => {
 
     it(`isDisabled: should return false if 'hasAnyFileUploading', 'disabled', 'isExceededFileLimit' are false and 'url'
       is defined`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = false;
       component['url'] = 'url.com';
@@ -134,8 +137,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'hasAnyFileUploading' is true`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(true);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(true);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = false;
       component['url'] = 'url.com';
@@ -144,8 +147,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'isExceededFileLimit' is true`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(true);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(true);
 
       component.disabled = false;
       component['url'] = 'url.com';
@@ -154,8 +157,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'disabled' is true`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = true;
       component['url'] = 'url.com';
@@ -164,8 +167,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'url' is undefined`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = true;
       component['url'] = undefined;
@@ -180,8 +183,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'requiredUrl' is true and 'url' is undefined`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = false;
       component.requiredUrl = true;
@@ -191,8 +194,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return false if 'requiredUrl' is true and 'url' is defined`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = false;
       component.requiredUrl = true;
@@ -202,8 +205,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'requiredUrl' is false and 'autoUpload' is true`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = false;
       component.requiredUrl = false;
@@ -214,8 +217,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'disabled' is true`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(false);
 
       component.disabled = true;
       component['url'] = 'url.com';
@@ -225,8 +228,8 @@ describe('PoUploadComponent:', () => {
     });
 
     it(`isDisabled: should return true if 'isExceededFileLimit' is true`, () => {
-      spyOn(component, <any>'hasAnyFileUploading').and.returnValue(false);
-      spyOn(component, <any>'isExceededFileLimit').and.returnValue(true);
+      vi.spyOn(component as any, 'hasAnyFileUploading').mockReturnValue(false);
+      vi.spyOn(component as any, 'isExceededFileLimit').mockReturnValue(true);
 
       component.disabled = false;
       component['url'] = 'url.com';
@@ -238,54 +241,54 @@ describe('PoUploadComponent:', () => {
     it('isSelectButtonDisabled: should enable select button when loading and disabled are false', () => {
       component.loading = false;
       component.disabled = false;
-      spyOnProperty(component, 'isDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDisabled').mockReturnValue(false);
 
-      expect(component.isSelectButtonDisabled).toBeFalse();
+      expect(component.isSelectButtonDisabled).toBe(false);
     });
 
     it('isSelectButtonDisabled: should disable select button when loading is true', () => {
       component.loading = true;
       component.disabled = false;
-      spyOnProperty(component, 'isDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDisabled').mockReturnValue(false);
 
-      expect(component.isSelectButtonDisabled).toBeTrue();
+      expect(component.isSelectButtonDisabled).toBe(true);
     });
 
     it('isSelectButtonDisabled: should disable select button when disabled is true', () => {
       component.loading = false;
       component.disabled = true;
-      spyOnProperty(component, 'isDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDisabled').mockReturnValue(true);
 
-      expect(component.isSelectButtonDisabled).toBeTrue();
+      expect(component.isSelectButtonDisabled).toBe(true);
     });
 
     it('isSelectButtonDisabled: should disable select button when both loading and disabled are true', () => {
       component.loading = true;
       component.disabled = true;
-      spyOnProperty(component, 'isDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDisabled').mockReturnValue(true);
 
-      expect(component.isSelectButtonDisabled).toBeTrue();
+      expect(component.isSelectButtonDisabled).toBe(true);
     });
 
     it('isFieldDisabled: should return false when loading and disabled are false', () => {
       component.loading = false;
       component.disabled = false;
 
-      expect(component.isFieldDisabled).toBeFalse();
+      expect(component.isFieldDisabled).toBe(false);
     });
 
     it('isFieldDisabled: should return true when loading is true', () => {
       component.loading = true;
       component.disabled = false;
 
-      expect(component.isFieldDisabled).toBeTrue();
+      expect(component.isFieldDisabled).toBe(true);
     });
 
     it('isFieldDisabled: should return true when disabled is true', () => {
       component.loading = false;
       component.disabled = true;
 
-      expect(component.isFieldDisabled).toBeTrue();
+      expect(component.isFieldDisabled).toBe(true);
     });
 
     it('maxFiles: should return false if `isMultiple` is false', () => {
@@ -319,7 +322,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = false;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      vi.spyOn(component as any, 'hasFileNotUploaded').mockReturnValue(true);
 
       expect(component.displaySendButton).toBeTruthy();
     });
@@ -329,7 +332,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = false;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      vi.spyOn(component as any, 'hasFileNotUploaded').mockReturnValue(true);
 
       expect(component.displaySendButton).toBeFalsy();
     });
@@ -339,7 +342,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = true;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      vi.spyOn(component as any, 'hasFileNotUploaded').mockReturnValue(true);
 
       expect(component.displaySendButton).toBeFalsy();
     });
@@ -349,7 +352,7 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = true;
       component.currentFiles = [];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(true);
+      vi.spyOn(component as any, 'hasFileNotUploaded').mockReturnValue(true);
 
       expect(component.displaySendButton).toBeFalsy();
     });
@@ -359,13 +362,13 @@ describe('PoUploadComponent:', () => {
       component.autoUpload = true;
       component.currentFiles = [file];
 
-      spyOn(component, <any>'hasFileNotUploaded').and.returnValue(false);
+      vi.spyOn(component as any, 'hasFileNotUploaded').mockReturnValue(false);
 
       expect(component.displaySendButton).toBeFalsy();
     });
 
     it(`displaySendButton: should display the button when 'displaySendButton' is true and 'url' is truthy`, () => {
-      spyOnProperty(component, 'displaySendButton').and.returnValue(true);
+      vi.spyOn(component as any, 'displaySendButton').mockReturnValue(true);
       component.url = 'http://example.com';
       fixture.detectChanges();
 
@@ -461,7 +464,7 @@ describe('PoUploadComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
 
     it('ngOnChanges: should set modalPrimaryAction and modalSecondaryAction when customModalActions has items', () => {
@@ -506,7 +509,7 @@ describe('PoUploadComponent:', () => {
     it('ngOnChanges: should call setPrimaryActionModal when customModalActions is empty', () => {
       component.customModalActions = [];
 
-      const spySetPrimary = spyOn(component, <any>'setPrimaryActionModal');
+      const spySetPrimary = vi.spyOn(component as any, 'setPrimaryActionModal');
 
       const changes = {
         customModalActions: {
@@ -523,10 +526,10 @@ describe('PoUploadComponent:', () => {
     });
 
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -544,9 +547,9 @@ describe('PoUploadComponent:', () => {
 
     it('clear: should be clear all current files.', () => {
       component.currentFiles = fileMock;
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'cleanInputValue');
-      spyOn(component['cd'], 'detectChanges');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'cleanInputValue');
+      vi.spyOn(component['cd'] as any, 'detectChanges');
 
       component.clear();
 
@@ -558,8 +561,8 @@ describe('PoUploadComponent:', () => {
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -567,8 +570,8 @@ describe('PoUploadComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -579,11 +582,11 @@ describe('PoUploadComponent:', () => {
     describe('focus:', () => {
       it('should call `uploadButton.focus` if `uploadButton` is defined', () => {
         component.hideSelectButton = false;
-        spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+        vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(false);
 
         fixture.detectChanges();
 
-        spyOn(component['uploadButton'], 'focus');
+        vi.spyOn(component['uploadButton'] as any, 'focus');
 
         component.focus();
 
@@ -593,11 +596,11 @@ describe('PoUploadComponent:', () => {
       it('should`t call `uploadButton.focus` if `disabled`', () => {
         component.hideSelectButton = false;
         component.disabled = true;
-        spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+        vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(false);
 
         fixture.detectChanges();
 
-        spyOn(component['uploadButton'], 'focus');
+        vi.spyOn(component['uploadButton'] as any, 'focus');
 
         component.focus();
 
@@ -605,11 +608,11 @@ describe('PoUploadComponent:', () => {
       });
 
       it('should call `poUploadDragDropComponent.focus` if `displayDragDrop` is defined', () => {
-        spyOnProperty(component, 'displayDragDrop').and.returnValue(true);
+        vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(true);
 
         fixture.detectChanges();
 
-        spyOn(component['poUploadDragDropComponent'], 'focus');
+        vi.spyOn(component['poUploadDragDropComponent'] as any, 'focus');
 
         component.focus();
 
@@ -618,10 +621,10 @@ describe('PoUploadComponent:', () => {
 
       it('should`t call `poUploadDragDropComponent.focus` if `disabled`', () => {
         component.disabled = true;
-        spyOnProperty(component, 'displayDragDrop').and.returnValue(true);
+        vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(true);
 
         fixture.detectChanges();
-        const spy = spyOn(component['poUploadDragDropComponent'], 'focus');
+        const spy = vi.spyOn(component['poUploadDragDropComponent'] as any, 'focus');
 
         component.focus();
 
@@ -637,9 +640,9 @@ describe('PoUploadComponent:', () => {
           },
           configurable: true
         });
-        spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+        vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(false);
 
-        const spy = spyOn(component['poUploadDragDropComponent'], 'focus');
+        const spy = vi.spyOn(component['poUploadDragDropComponent'] as any, 'focus');
 
         component.focus();
 
@@ -649,7 +652,7 @@ describe('PoUploadComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -659,7 +662,7 @@ describe('PoUploadComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -668,7 +671,7 @@ describe('PoUploadComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -679,7 +682,7 @@ describe('PoUploadComponent:', () => {
     it('onFileChangeDragDrop: should call `updateFiles` with files.', () => {
       const files = 'teste';
 
-      spyOn(component, <any>'updateFiles');
+      vi.spyOn(component as any, 'updateFiles');
 
       component.onFileChangeDragDrop(files);
 
@@ -697,10 +700,8 @@ describe('PoUploadComponent:', () => {
 
       it('should emit event when field is focused', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(
-          component.uploadButton.buttonElement.nativeElement
-        );
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.uploadButton.buttonElement.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -709,8 +710,8 @@ describe('PoUploadComponent:', () => {
 
       it('should not emit event when field is not focused', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -726,7 +727,7 @@ describe('PoUploadComponent:', () => {
       });
 
       it('closeModal: should call modalComponent.close and reset modalImageUrl', () => {
-        const spyClose = spyOn(component.modalComponent, 'close');
+        const spyClose = vi.spyOn(component.modalComponent as any, 'close');
         component['modalImageUrl'] = 'some-url';
 
         component.closeModal();
@@ -737,8 +738,8 @@ describe('PoUploadComponent:', () => {
 
       it('openModal: should not open modal if keydown code is not Enter or Space', () => {
         const file = { thumbnailUrl: 'url.jpg' } as any;
-        const spyOpen = spyOn(component.modalComponent, 'open');
-        const spyEmit = spyOn(component.onOpenModalPreview, 'emit');
+        const spyOpen = vi.spyOn(component.modalComponent as any, 'open');
+        const spyEmit = vi.spyOn(component.onOpenModalPreview as any, 'emit');
 
         const event = new KeyboardEvent('keydown', { code: 'Escape' });
         component.openModal(file, event);
@@ -748,29 +749,29 @@ describe('PoUploadComponent:', () => {
       });
 
       it('openModal: should not open modal if file is undefined', () => {
-        const spyOpen = spyOn(component.modalComponent, 'open');
+        const spyOpen = vi.spyOn(component.modalComponent as any, 'open');
         component.openModal(undefined);
         expect(spyOpen).not.toHaveBeenCalled();
       });
 
       it('openModal: should not open modal if file has no thumbnailUrl', () => {
         const file = {} as any;
-        const spyOpen = spyOn(component.modalComponent, 'open');
+        const spyOpen = vi.spyOn(component.modalComponent as any, 'open');
         component.openModal(file);
         expect(spyOpen).not.toHaveBeenCalled();
       });
 
       it('openModal: should not open modal if file has errorMessage', () => {
         const file = { thumbnailUrl: 'url.jpg', errorMessage: 'error' } as any;
-        const spyOpen = spyOn(component.modalComponent, 'open');
+        const spyOpen = vi.spyOn(component.modalComponent as any, 'open');
         component.openModal(file);
         expect(spyOpen).not.toHaveBeenCalled();
       });
 
       it('openModal: should open modal, set modalImageUrl and emit event when valid file', () => {
         const file = { thumbnailUrl: 'url.jpg' } as any;
-        const spyOpen = spyOn(component.modalComponent, 'open');
-        const spyEmit = spyOn(component.onOpenModalPreview, 'emit');
+        const spyOpen = vi.spyOn(component.modalComponent as any, 'open');
+        const spyEmit = vi.spyOn(component.onOpenModalPreview as any, 'emit');
 
         component.openModal(file);
 
@@ -786,7 +787,7 @@ describe('PoUploadComponent:', () => {
         updateModel: files => {}
       };
 
-      spyOn(fakeThis, 'updateModel');
+      vi.spyOn(fakeThis as any, 'updateModel');
 
       component.removeFile.call(fakeThis, file);
 
@@ -797,7 +798,7 @@ describe('PoUploadComponent:', () => {
     it('selectFiles: should click on input and set `calledByCleanInputValue` to false', () => {
       const calledByCleanInputValue = 'calledByCleanInputValue';
       component['onModelTouched'] = () => {};
-      spyOn(component, <any>'onModelTouched');
+      vi.spyOn(component as any, 'onModelTouched');
 
       component[calledByCleanInputValue] = true;
       component.selectFiles();
@@ -817,7 +818,7 @@ describe('PoUploadComponent:', () => {
 
     it('sendFiles: should call `uploadFiles` if currentFile is true.', () => {
       component.currentFiles = [fileMock];
-      const uploadFiles = spyOn(component, <any>'uploadFiles');
+      const uploadFiles = vi.spyOn(component as any, 'uploadFiles');
 
       component.sendFiles();
 
@@ -826,7 +827,7 @@ describe('PoUploadComponent:', () => {
 
     it('sendFiles: shouldn`t call `uploadFiles` if currentFile is false.', () => {
       component.currentFiles = undefined;
-      const uploadFiles = spyOn(component, <any>'uploadFiles');
+      const uploadFiles = vi.spyOn(component as any, 'uploadFiles');
 
       component.sendFiles();
 
@@ -836,7 +837,7 @@ describe('PoUploadComponent:', () => {
 
     it('sendFiles: shouldn`t call `uploadFiles` if currentFile is null.', () => {
       component.currentFiles = [];
-      const uploadFiles = spyOn(component, <any>'uploadFiles');
+      const uploadFiles = vi.spyOn(component as any, 'uploadFiles');
 
       component.sendFiles();
 
@@ -866,7 +867,7 @@ describe('PoUploadComponent:', () => {
         stopUploadHandler: function () {}
       };
 
-      spyOn(fakeThis, 'removeFile');
+      vi.spyOn(fakeThis as any, 'removeFile');
 
       component.stopUpload.call(fakeThis, file, 0);
 
@@ -888,7 +889,7 @@ describe('PoUploadComponent:', () => {
         stopUploadHandler: function () {}
       };
 
-      spyOn(fakeThis, 'stopUploadHandler');
+      vi.spyOn(fakeThis as any, 'stopUploadHandler');
 
       component.stopUpload.call(fakeThis, file, 0);
 
@@ -926,7 +927,7 @@ describe('PoUploadComponent:', () => {
             files
           }
         };
-        spyOn(component, <any>'cleanInputValue');
+        vi.spyOn(component as any, 'cleanInputValue');
 
         component.onFileChange(event);
 
@@ -937,7 +938,7 @@ describe('PoUploadComponent:', () => {
       describe('uploadFiles', () => {
         it('uploadFiles: should return if files lenght is 0', () => {
           component['uploadService'] = { upload: () => {} } as any;
-          const detectChangesSpy = spyOn(component['cd'], 'detectChanges');
+          const detectChangesSpy = vi.spyOn(component['cd'] as any, 'detectChanges');
 
           component['uploadFiles']([]);
 
@@ -948,13 +949,13 @@ describe('PoUploadComponent:', () => {
           const mockFile: any = { uid: 1, status: PoUploadStatus.None };
           const mockFiles = [mockFile];
 
-          const spyUpload = spyOn(component['uploadService'], 'upload').and.callFake(
-            (url, files, headers, onUpload, onProgress, onSuccess, onError) => {
+          const spyUpload = vi
+            .spyOn(component['uploadService'], 'upload')
+            .mockImplementation((url, files, headers, onUpload, onProgress, onSuccess, onError) => {
               onProgress(mockFile, 75);
-            }
-          );
+            });
 
-          const spyUploadingHandler = spyOn(component as any, 'uploadingHandler');
+          const spyUploadingHandler = vi.spyOn(component as any, 'uploadingHandler');
 
           component['uploadFiles'](mockFiles);
 
@@ -978,15 +979,15 @@ describe('PoUploadComponent:', () => {
           component.headers = {};
           component.currentFiles = [{ uid: '1', hideDoneContent: false } as any];
 
-          const responseHandlerSpy = spyOn(component, <any>'responseHandler');
-          const detectChangesSpy = spyOn(component['cd'], 'detectChanges');
-          const emitSuccessSpy = spyOn(component.onSuccess, 'emit');
+          const responseHandlerSpy = vi.spyOn(component as any, 'responseHandler');
+          const detectChangesSpy = vi.spyOn(component['cd'] as any, 'detectChanges');
+          const emitSuccessSpy = vi.spyOn(component.onSuccess as any, 'emit');
 
-          const uploadSpy = spyOn(component['uploadService'], 'upload').and.callFake(
-            (url, files, headers, onUpload, onProgress, onSuccess, onError) => {
+          const uploadSpy = vi
+            .spyOn(component['uploadService'], 'upload')
+            .mockImplementation((url, files, headers, onUpload, onProgress, onSuccess, onError) => {
               onSuccess(mockFile as any, eventResponse);
-            }
-          );
+            });
 
           component.uploadFiles([mockFile as any]);
 
@@ -1010,7 +1011,7 @@ describe('PoUploadComponent:', () => {
           responseHandler: function () {},
           onError: new EventEmitter<any>()
         };
-        spyOn(fakeThis, 'responseHandler');
+        vi.spyOn(fakeThis as any, 'responseHandler');
 
         component.uploadFiles.call(fakeThis, [file]);
 
@@ -1032,9 +1033,9 @@ describe('PoUploadComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(event, 'preventDefault');
-      spyOn(component, <any>'cleanInputValue');
-      spyOn(component, <any>'updateFiles').and.callThrough();
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(component as any, 'cleanInputValue');
+      vi.spyOn(component as any, 'updateFiles');
 
       component.onFileChange(event);
 
@@ -1054,8 +1055,8 @@ describe('PoUploadComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(event, 'preventDefault');
-      spyOn(component, <any>'cleanInputValue');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(component as any, 'cleanInputValue');
 
       component.onFileChange(event);
 
@@ -1065,7 +1066,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('cleanInputValue: should set input value to whitespace and set `calledByCleanInputValue` to true', () => {
-      spyOn(component['cd'], <any>'detectChanges');
+      vi.spyOn(component['cd'] as any, 'detectChanges');
       const calledByCleanInputValue = 'calledByCleanInputValue';
 
       component[calledByCleanInputValue] = false;
@@ -1079,8 +1080,8 @@ describe('PoUploadComponent:', () => {
     it('updateFiles: should call `parseFiles` with `files` and `updateModel` with `currentFiles`', () => {
       const files = ['fileMock'];
 
-      spyOn(component, <any>'parseFiles').and.returnValue(files);
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'parseFiles').mockReturnValue(files);
+      vi.spyOn(component as any, 'updateModel');
 
       component['updateFiles'](files);
 
@@ -1092,9 +1093,9 @@ describe('PoUploadComponent:', () => {
       const files = ['fileMock'];
       component.autoUpload = true;
 
-      spyOn(component, <any>'parseFiles').and.returnValue(files);
-      spyOn(component, <any>'uploadFiles');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'parseFiles').mockReturnValue(files);
+      vi.spyOn(component as any, 'uploadFiles');
+      vi.spyOn(component as any, 'updateModel');
 
       component['updateFiles'](files);
 
@@ -1106,9 +1107,9 @@ describe('PoUploadComponent:', () => {
       const files = ['fileMock'];
       component.autoUpload = false;
 
-      spyOn(component, <any>'parseFiles').and.returnValue(files);
-      spyOn(component, <any>'uploadFiles');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'parseFiles').mockReturnValue(files);
+      vi.spyOn(component as any, 'uploadFiles');
+      vi.spyOn(component as any, 'updateModel');
 
       component['updateFiles'](files);
 
@@ -1129,7 +1130,7 @@ describe('PoUploadComponent:', () => {
       const expectedValueMaxFileSize = '30.72 KB';
       const literalAttr = 'invalidSize';
 
-      spyOn(component, <any>'setPipeArguments');
+      vi.spyOn(component as any, 'setPipeArguments');
 
       component['sendFeedback']();
 
@@ -1152,7 +1153,7 @@ describe('PoUploadComponent:', () => {
       const expectedValueAllowedExtensionsFormatted = '.PNG, .ZIP';
       const literalAttr = 'invalidFormat';
 
-      spyOn(component, <any>'setPipeArguments');
+      vi.spyOn(component as any, 'setPipeArguments');
 
       component['sendFeedback']();
 
@@ -1174,7 +1175,7 @@ describe('PoUploadComponent:', () => {
       const literalAttr = 'invalidAmount';
       const expectedValueQuantityNotAllowed = 1;
 
-      spyOn(component, <any>'setPipeArguments');
+      vi.spyOn(component as any, 'setPipeArguments');
 
       component['sendFeedback']();
       expect(component['setPipeArguments']).toHaveBeenCalledWith(literalAttr, [expectedValueQuantityNotAllowed]);
@@ -1189,7 +1190,7 @@ describe('PoUploadComponent:', () => {
         allowedExtensions: ['.png', '.zip']
       };
 
-      spyOn(component, <any>'setPipeArguments');
+      vi.spyOn(component as any, 'setPipeArguments');
 
       component['sendFeedback']({ sizeNotAllowed: 1, extensionNotAllowed: 1, quantityNotAllowed: 1 });
       expect(component['setPipeArguments']).toHaveBeenCalled();
@@ -1205,7 +1206,7 @@ describe('PoUploadComponent:', () => {
         } as any
       });
 
-      spyOn(component['notification'], 'information').and.callThrough();
+      vi.spyOn(component['notification'] as any, 'information');
       const file = { uui: 1234, errorMessage: '' };
       component['setPipeArguments'](literalAttr, arg, file);
 
@@ -1216,7 +1217,7 @@ describe('PoUploadComponent:', () => {
       const arg = '';
       const literalAttr = '';
 
-      spyOn(component['i18nPipe'], 'transform').and.callThrough();
+      vi.spyOn(component['i18nPipe'] as any, 'transform');
 
       component['setPipeArguments'](literalAttr, arg);
 
@@ -1225,13 +1226,13 @@ describe('PoUploadComponent:', () => {
 
     describe('actionIsDisabled', () => {
       it('should call action.disabled function and return its result when it is a function', () => {
-        const disabledFn = jasmine.createSpy().and.returnValue(true);
+        const disabledFn = vi.fn().mockReturnValue(true);
         const action = { disabled: disabledFn };
 
         const result = component['actionIsDisabled'](action);
 
         expect(disabledFn).toHaveBeenCalledWith(action);
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return action.disabled when it is not a function', () => {
@@ -1239,7 +1240,7 @@ describe('PoUploadComponent:', () => {
 
         const result = component['actionIsDisabled'](action);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -1286,29 +1287,29 @@ describe('PoUploadComponent:', () => {
 
     describe('isActionVisible', () => {
       it('should return false if action is undefined', () => {
-        expect(component['isActionVisible'](undefined)).toBeFalse();
+        expect(component['isActionVisible'](undefined)).toBe(false);
       });
 
       it('should return false if action has no label and no icon', () => {
         const action = {};
-        expect(component['isActionVisible'](action)).toBeFalse();
+        expect(component['isActionVisible'](action)).toBe(false);
       });
 
       it('should return true if visible is undefined', () => {
         const action = { label: 'Action' };
-        expect(component['isActionVisible'](action)).toBeTrue();
+        expect(component['isActionVisible'](action)).toBe(true);
       });
 
       it('should return result of visible() if visible is a function', () => {
-        const visibleFn = jasmine.createSpy().and.returnValue(true);
+        const visibleFn = vi.fn().mockReturnValue(true);
         const action = { label: 'Action', visible: visibleFn };
-        expect(component['isActionVisible'](action)).toBeTrue();
+        expect(component['isActionVisible'](action)).toBe(true);
         expect(visibleFn).toHaveBeenCalled();
       });
 
       it('should return boolean value of visible if it is not a function', () => {
         const action = { label: 'Action', visible: 0 };
-        expect(component['isActionVisible'](action)).toBeFalse();
+        expect(component['isActionVisible'](action)).toBe(false);
       });
     });
 
@@ -1316,7 +1317,7 @@ describe('PoUploadComponent:', () => {
       it('should set file.imageError to true', () => {
         const file: any = { imageError: false };
         component['onImageError'](file);
-        expect(file.imageError).toBeTrue();
+        expect(file.imageError).toBe(true);
       });
     });
 
@@ -1337,7 +1338,7 @@ describe('PoUploadComponent:', () => {
 
       const currentFiles: any = [dirtyFile];
 
-      const spyOnModelChange = spyOn(component, 'onModelChange');
+      const spyOnModelChange = vi.spyOn(component as any, 'onModelChange');
 
       component['updateModel'](currentFiles);
 
@@ -1364,7 +1365,7 @@ describe('PoUploadComponent:', () => {
 
       const currentFiles: any = [dirtyFile];
 
-      const spyNgModelChange = spyOn(component.ngModelChange, 'emit');
+      const spyNgModelChange = vi.spyOn(component.ngModelChange as any, 'emit');
 
       component['updateModel'](currentFiles);
 
@@ -1374,8 +1375,8 @@ describe('PoUploadComponent:', () => {
     it('cancel: should call stopUpload with file if file.status is Uploading', () => {
       const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploading };
 
-      const spyRemoveFile = spyOn(component, 'removeFile');
-      const spyStopUpload = spyOn(component, 'stopUpload');
+      const spyRemoveFile = vi.spyOn(component as any, 'removeFile');
+      const spyStopUpload = vi.spyOn(component as any, 'stopUpload');
 
       component.cancel(localFile);
 
@@ -1386,8 +1387,8 @@ describe('PoUploadComponent:', () => {
     it('cancel: should call removeFile with file if file.status isn´t Uploading', () => {
       const localFile: any = { name: 'filename.jpg' };
 
-      const spyStopUpload = spyOn(component, 'stopUpload');
-      const spyRemoveFile = spyOn(component, 'removeFile');
+      const spyStopUpload = vi.spyOn(component as any, 'stopUpload');
+      const spyRemoveFile = vi.spyOn(component as any, 'removeFile');
 
       component.cancel(localFile);
 
@@ -1399,8 +1400,8 @@ describe('PoUploadComponent:', () => {
       const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploaded };
       component.disabledRemoveFile = true;
 
-      const spyStopUpload = spyOn(component, 'stopUpload');
-      const spyRemoveFile = spyOn(component, 'removeFile');
+      const spyStopUpload = vi.spyOn(component as any, 'stopUpload');
+      const spyRemoveFile = vi.spyOn(component as any, 'removeFile');
 
       component.cancel(localFile);
 
@@ -1412,8 +1413,8 @@ describe('PoUploadComponent:', () => {
       const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploaded };
       const event = new KeyboardEvent('keydown', { code: 'Escape' });
 
-      const spyStopUpload = spyOn(component, 'stopUpload');
-      const spyRemoveFile = spyOn(component, 'removeFile');
+      const spyStopUpload = vi.spyOn(component as any, 'stopUpload');
+      const spyRemoveFile = vi.spyOn(component as any, 'removeFile');
 
       component.cancel(localFile, event);
 
@@ -1423,9 +1424,9 @@ describe('PoUploadComponent:', () => {
 
     it('cancel: should emit onCancel if file.status is not Uploaded', () => {
       const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Error };
-      const spyEmitCancel = spyOn(component.onCancel, 'emit');
-      const spyEmitRemove = spyOn(component.onRemove, 'emit');
-      const spyRemoveFile = spyOn(component, 'removeFile');
+      const spyEmitCancel = vi.spyOn(component.onCancel as any, 'emit');
+      const spyEmitRemove = vi.spyOn(component.onRemove as any, 'emit');
+      const spyRemoveFile = vi.spyOn(component as any, 'removeFile');
 
       component.cancel(localFile);
 
@@ -1436,9 +1437,9 @@ describe('PoUploadComponent:', () => {
 
     it('cancel: should emit onRemove if file.status is Uploaded', () => {
       const localFile: any = { name: 'filename.jpg', status: PoUploadStatus.Uploaded };
-      const spyEmitCancel = spyOn(component.onCancel, 'emit');
-      const spyEmitRemove = spyOn(component.onRemove, 'emit');
-      const spyRemoveFile = spyOn(component, 'removeFile');
+      const spyEmitCancel = vi.spyOn(component.onCancel as any, 'emit');
+      const spyEmitRemove = vi.spyOn(component.onRemove as any, 'emit');
+      const spyRemoveFile = vi.spyOn(component as any, 'removeFile');
 
       component.cancel(localFile);
 
@@ -1462,7 +1463,7 @@ describe('PoUploadComponent:', () => {
     it(`setDirectoryAttribute: should call 'setAttribute' if canHandleDirectory is true`, () => {
       const canHandleDirectory = true;
 
-      spyOn(component.renderer, <any>'setAttribute');
+      vi.spyOn(component.renderer as any, 'setAttribute');
 
       component.setDirectoryAttribute(canHandleDirectory);
 
@@ -1472,7 +1473,7 @@ describe('PoUploadComponent:', () => {
     it(`setDirectoryAttribute: should call 'removeAttribute' if 'canHandleDirectory' is false`, () => {
       component.canHandleDirectory = false;
 
-      spyOn(component.renderer, <any>'removeAttribute');
+      vi.spyOn(component.renderer as any, 'removeAttribute');
 
       component.setDirectoryAttribute(component.canHandleDirectory);
 
@@ -1487,15 +1488,15 @@ describe('PoUploadComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
 
       it('setHelper should access this.additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const original = (component as any).additionalHelp;
         let accessed = false;
@@ -1510,7 +1511,7 @@ describe('PoUploadComponent:', () => {
         (component as any).setHelper('label', 'tooltip');
 
         expect((component as any).poHelperComponent).toHaveBeenCalled();
-        expect(accessed).toBeTrue();
+        expect(accessed).toBe(true);
 
         Object.defineProperty(component as any, 'additionalHelp', {
           value: original,
@@ -1520,8 +1521,8 @@ describe('PoUploadComponent:', () => {
       });
 
       it('setHelper should not access this.additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const original = (component as any).additionalHelp;
         let accessed = false;
@@ -1537,7 +1538,7 @@ describe('PoUploadComponent:', () => {
         (component as any).setHelper('label', 'tooltip');
 
         expect((component as any).poHelperComponent).toHaveBeenCalled();
-        expect(accessed).toBeFalse();
+        expect(accessed).toBe(false);
 
         Object.defineProperty(component as any, 'additionalHelp', {
           value: original,
@@ -1551,11 +1552,11 @@ describe('PoUploadComponent:', () => {
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1565,18 +1566,18 @@ describe('PoUploadComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1585,18 +1586,18 @@ describe('PoUploadComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1607,19 +1608,19 @@ describe('PoUploadComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1629,19 +1630,19 @@ describe('PoUploadComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1650,7 +1651,7 @@ describe('PoUploadComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -1658,8 +1659,8 @@ describe('PoUploadComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -1667,8 +1668,8 @@ describe('PoUploadComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
@@ -1676,7 +1677,7 @@ describe('PoUploadComponent:', () => {
       const mockFile = { name: 'mock-file.txt' } as PoUploadFile;
       component.customAction = { label: 'Download', icon: 'an-download' };
 
-      spyOn(component.customActionClick, 'emit');
+      vi.spyOn(component.customActionClick as any, 'emit');
 
       component.customClick(mockFile);
 
@@ -1687,7 +1688,7 @@ describe('PoUploadComponent:', () => {
       const mockFile = { name: 'mock-file.txt' } as PoUploadFile;
       component.customAction = undefined;
 
-      spyOn(component.customActionClick, 'emit');
+      vi.spyOn(component.customActionClick as any, 'emit');
 
       component.customClick(mockFile);
 
@@ -1713,7 +1714,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('shouldn´t show send files button if `displaySendButton` returns false', () => {
-      spyOnProperty(component, 'displaySendButton').and.returnValue(false);
+      vi.spyOn(component as any, 'displaySendButton').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -1721,7 +1722,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('should show `po-upload-drag-drop` and doesn`t show upload button if `displayDragDrop` return true', () => {
-      spyOnProperty(component, 'displayDragDrop').and.returnValue(true);
+      vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -1730,7 +1731,7 @@ describe('PoUploadComponent:', () => {
     });
 
     it('shouldn`t show `po-upload-drag-drop` and show upload button if `displayDragDrop` return false', () => {
-      spyOnProperty(component, 'displayDragDrop').and.returnValue(false);
+      vi.spyOn(component as any, 'displayDragDrop').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -1756,7 +1757,7 @@ describe('PoUploadComponent:', () => {
 
     it('shouldn`t add `po-upload-progress-container-area` class if `hasMoreThanFourItems` is false', () => {
       component.currentFiles = [file];
-      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(false);
+      vi.spyOn(component as any, 'hasMoreThanFourItems').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -1765,7 +1766,7 @@ describe('PoUploadComponent:', () => {
 
     it('should fix the height of `po-container` to `auto` if `hasMoreThanFourItems` is false', () => {
       component.currentFiles = [file];
-      spyOnProperty(component, 'hasMoreThanFourItems').and.returnValue(false);
+      vi.spyOn(component as any, 'hasMoreThanFourItems').mockReturnValue(false);
 
       fixture.detectChanges();
 

@@ -55,7 +55,7 @@ describe('PoSlideControlComponent:', () => {
     it('should call `click.emit` if `po-slide-arrow-circle` was clicked', () => {
       const arrowCircle = nativeElement.querySelector('.po-slide-arrow-circle');
 
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       const eventClick = document.createEvent('MouseEvents');
       eventClick.initEvent('click', false, true);

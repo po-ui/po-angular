@@ -54,7 +54,7 @@ describe('PoMenuFilterComponent:', () => {
     it('filterItems: should call `filter.emit` with search param', () => {
       const search = 'menu';
 
-      const spyFilter = spyOn(component.filter, 'emit');
+      const spyFilter = vi.spyOn(component.filter as any, 'emit');
 
       component['filterItems'](search);
 

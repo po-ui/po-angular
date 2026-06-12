@@ -29,7 +29,7 @@ describe('PoControlPositionService:', () => {
   });
 
   it('overflowAllSides: should call getOverflows()', () => {
-    spyOn(component, <any>'getOverflows');
+    vi.spyOn(component as any, 'getOverflows');
 
     component['overflowAllSides']('');
 
@@ -100,7 +100,7 @@ describe('PoControlPositionService:', () => {
 
   it('should call setTopPositions() in all top sides in setElementPosition()', () => {
     const fakeThis = getFakeSizesAndPositions(10, 10, 10, 10);
-    spyOn(fakeThis, 'setTopPositions');
+    vi.spyOn(fakeThis as any, 'setTopPositions');
     component['setElementPosition'].call(fakeThis, 'top');
     expect(fakeThis['setTopPositions']).toHaveBeenCalled();
     component['setElementPosition'].call(fakeThis, 'top-right');
@@ -111,7 +111,7 @@ describe('PoControlPositionService:', () => {
 
   it('should call setRightPositions() in all right sides in setElementPosition()', () => {
     const fakeThis = getFakeSizesAndPositions(10, 10, 10, 10);
-    spyOn(fakeThis, 'setRightPositions');
+    vi.spyOn(fakeThis as any, 'setRightPositions');
     component['setElementPosition'].call(fakeThis, 'right');
     expect(fakeThis['setRightPositions']).toHaveBeenCalled();
     component['setElementPosition'].call(fakeThis, 'right-top');
@@ -122,7 +122,7 @@ describe('PoControlPositionService:', () => {
 
   it('should call setBottomPositions() in all bottom sides in setElementPosition()', () => {
     const fakeThis = getFakeSizesAndPositions(10, 10, 10, 10);
-    spyOn(fakeThis, 'setBottomPositions');
+    vi.spyOn(fakeThis as any, 'setBottomPositions');
     component['setElementPosition'].call(fakeThis, 'bottom');
     expect(fakeThis['setBottomPositions']).toHaveBeenCalled();
     component['setElementPosition'].call(fakeThis, 'bottom-left');
@@ -133,7 +133,7 @@ describe('PoControlPositionService:', () => {
 
   it('should call setLeftPositions() in all left sides in setElementPosition()', () => {
     const fakeThis = getFakeSizesAndPositions(10, 10, 10, 10);
-    spyOn(fakeThis, 'setLeftPositions');
+    vi.spyOn(fakeThis as any, 'setLeftPositions');
     component['setElementPosition'].call(fakeThis, 'left');
     expect(fakeThis['setLeftPositions']).toHaveBeenCalled();
     component['setElementPosition'].call(fakeThis, 'left-top');
@@ -197,14 +197,14 @@ describe('PoControlPositionService:', () => {
       nextPosition: () => {}
     };
 
-    spyOn(fakeThis, 'elementPosition');
+    vi.spyOn(fakeThis as any, 'elementPosition');
     component['verifySubPositions'].call(fakeThis, 'top-left');
     expect(fakeThis['elementPosition']).toHaveBeenCalled();
     component['verifySubPositions'].call(fakeThis, 'top');
     expect(fakeThis['elementPosition']).toHaveBeenCalled();
 
-    spyOn(fakeThis, 'overflowAllSides').and.returnValue(true);
-    spyOn(fakeThis, 'nextPosition');
+    vi.spyOn(fakeThis as any, 'overflowAllSides').mockReturnValue(true);
+    vi.spyOn(fakeThis as any, 'nextPosition');
     component['verifySubPositions'].call(fakeThis, 'top');
     expect(fakeThis['overflowAllSides']).toHaveBeenCalledTimes(3);
     expect(fakeThis['nextPosition']).toHaveBeenCalled();
@@ -335,7 +335,7 @@ describe('PoControlPositionService:', () => {
       const expectedValue = ['top', 'right'];
       component['customPositions'] = ['top', 'top-right', 'right'];
 
-      spyOn(component, <any>'getMainPositionsByCustomPositions').and.callThrough();
+      vi.spyOn(component as any, 'getMainPositionsByCustomPositions');
 
       const mainPositions = component['getMainPositions']();
 
@@ -376,9 +376,9 @@ describe('PoControlPositionService:', () => {
     describe('adjustPosition:', () => {
       it('should call `elementPosition` with value if has value', () => {
         const position = 'left';
-        spyOn(component, <any>'elementPosition');
-        spyOn(component, <any>'adjustDefaultPosition');
-        spyOn(component, <any>'adjustCustomPosition');
+        vi.spyOn(component as any, 'elementPosition');
+        vi.spyOn(component as any, 'adjustDefaultPosition');
+        vi.spyOn(component as any, 'adjustCustomPosition');
 
         component.adjustPosition(position);
 
@@ -386,9 +386,9 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `elementPosition` with `bottom` if value is `undefined`', () => {
-        spyOn(component, <any>'elementPosition');
-        spyOn(component, <any>'adjustDefaultPosition');
-        spyOn(component, <any>'adjustCustomPosition');
+        vi.spyOn(component as any, 'elementPosition');
+        vi.spyOn(component as any, 'adjustDefaultPosition');
+        vi.spyOn(component as any, 'adjustCustomPosition');
 
         component.adjustPosition(undefined);
 
@@ -396,9 +396,9 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `elementPosition` with `bottom` if value is ``', () => {
-        spyOn(component, <any>'elementPosition');
-        spyOn(component, <any>'adjustDefaultPosition');
-        spyOn(component, <any>'adjustCustomPosition');
+        vi.spyOn(component as any, 'elementPosition');
+        vi.spyOn(component as any, 'adjustDefaultPosition');
+        vi.spyOn(component as any, 'adjustCustomPosition');
 
         component.adjustPosition('');
 
@@ -406,10 +406,10 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setElementPosition`, and `nextPosition` if `overflowMain` return true', () => {
-        spyOn(component, <any>'overflowMain').and.returnValue(true);
-        spyOn(component, <any>'setElementPosition');
-        spyOn(component, <any>'getMainPosition');
-        spyOn(component, <any>'nextPosition');
+        vi.spyOn(component as any, 'overflowMain').mockReturnValue(true);
+        vi.spyOn(component as any, 'setElementPosition');
+        vi.spyOn(component as any, 'getMainPosition');
+        vi.spyOn(component as any, 'nextPosition');
 
         component.adjustPosition('top-left');
 
@@ -421,11 +421,11 @@ describe('PoControlPositionService:', () => {
 
       it(`should call 'verifySubPositions' if 'overflowAllSides' return true and not call 'nextPosition' if 'overflowMain'
         return false`, () => {
-        spyOn(component, <any>'overflowMain').and.returnValue(false);
-        spyOn(component, <any>'overflowAllSides').and.returnValue(true);
-        spyOn(component, <any>'verifySubPositions');
-        spyOn(component, <any>'setElementPosition');
-        spyOn(component, <any>'nextPosition');
+        vi.spyOn(component as any, 'overflowMain').mockReturnValue(false);
+        vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifySubPositions');
+        vi.spyOn(component as any, 'setElementPosition');
+        vi.spyOn(component as any, 'nextPosition');
 
         component.adjustPosition('top-left');
 
@@ -438,12 +438,12 @@ describe('PoControlPositionService:', () => {
 
       it(`should call 'setElementPosition' and not call 'nextPosition', 'verifySubPositions' if 'overflowMain'
       return false`, () => {
-        spyOn(component, <any>'overflowMain').and.returnValue(false);
-        spyOn(component, <any>'overflowAllSides').and.returnValue(false);
-        spyOn(component, <any>'setElementPosition');
+        vi.spyOn(component as any, 'overflowMain').mockReturnValue(false);
+        vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(false);
+        vi.spyOn(component as any, 'setElementPosition');
 
-        spyOn(component, <any>'verifySubPositions');
-        spyOn(component, <any>'nextPosition');
+        vi.spyOn(component as any, 'verifySubPositions');
+        vi.spyOn(component as any, 'nextPosition');
 
         component.adjustPosition('top');
 
@@ -489,9 +489,9 @@ describe('PoControlPositionService:', () => {
     it('adjustCustomPosition: should call `overflowAllSides` twice if `customPosition.length` is 2', () => {
       component['customPositions'] = ['top', 'bottom'];
 
-      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(true);
-      const nextPosition = spyOn(component, <any>'nextPosition');
-      const elementPosition = spyOn(component, <any>'elementPosition');
+      const overflowAllSides = vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(true);
+      const nextPosition = vi.spyOn(component as any, 'nextPosition');
+      const elementPosition = vi.spyOn(component as any, 'elementPosition');
 
       component['adjustCustomPosition']('top');
 
@@ -502,9 +502,9 @@ describe('PoControlPositionService:', () => {
 
     it('adjustCustomPosition: should call `nextPosition` and `elementPosition` if `overflowAllSides` return true.', () => {
       component['customPositions'] = ['top', 'bottom'];
-      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(true);
-      const nextPosition = spyOn(component, <any>'nextPosition');
-      const elementPosition = spyOn(component, <any>'elementPosition');
+      const overflowAllSides = vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(true);
+      const nextPosition = vi.spyOn(component as any, 'nextPosition');
+      const elementPosition = vi.spyOn(component as any, 'elementPosition');
 
       component['adjustCustomPosition']('top');
 
@@ -515,9 +515,9 @@ describe('PoControlPositionService:', () => {
 
     it('adjustCustomPosition: should not call `nextPosition` and `elementPosition` if `overflowAllSides` return false.', () => {
       component['customPositions'] = ['top', 'bottom'];
-      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(false);
-      const nextPosition = spyOn(component, <any>'nextPosition');
-      const elementPosition = spyOn(component, <any>'elementPosition');
+      const overflowAllSides = vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(false);
+      const nextPosition = vi.spyOn(component as any, 'nextPosition');
+      const elementPosition = vi.spyOn(component as any, 'elementPosition');
 
       component['adjustCustomPosition']('top');
 
@@ -528,11 +528,11 @@ describe('PoControlPositionService:', () => {
 
     it(`adjustDefaultPosition: should call 'getMainPosition' and 'verifySubPositions' if 'overflowMain' return false and 'overflowAllSides'
       return true.`, () => {
-      const getMainPositions = spyOn(component, <any>'getMainPositions').and.returnValue('bottom');
-      const overflowMain = spyOn(component, <any>'overflowMain').and.returnValue(false);
-      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(true);
-      const verifySubPositions = spyOn(component, <any>'verifySubPositions');
-      spyOn(component, <any>'elementPosition');
+      const getMainPositions = vi.spyOn(component as any, 'getMainPositions').mockReturnValue('bottom');
+      const overflowMain = vi.spyOn(component as any, 'overflowMain').mockReturnValue(false);
+      const overflowAllSides = vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(true);
+      const verifySubPositions = vi.spyOn(component as any, 'verifySubPositions');
+      vi.spyOn(component as any, 'elementPosition');
 
       component['adjustDefaultPosition']('bottom');
 
@@ -543,12 +543,12 @@ describe('PoControlPositionService:', () => {
     });
 
     it(`adjustDefaultPosition: should return undefined if 'overflowMain' and 'overflowAllSides' return false.`, () => {
-      const getMainPositions = spyOn(component, <any>'getMainPositions').and.returnValue('left');
-      const overflowMain = spyOn(component, <any>'overflowMain').and.returnValue(false);
-      const overflowAllSides = spyOn(component, <any>'overflowAllSides').and.returnValue(false);
-      const nextPosition = spyOn(component, <any>'nextPosition');
-      const verifySubPositions = spyOn(component, <any>'verifySubPositions');
-      spyOn(component, <any>'elementPosition');
+      const getMainPositions = vi.spyOn(component as any, 'getMainPositions').mockReturnValue('left');
+      const overflowMain = vi.spyOn(component as any, 'overflowMain').mockReturnValue(false);
+      const overflowAllSides = vi.spyOn(component as any, 'overflowAllSides').mockReturnValue(false);
+      const nextPosition = vi.spyOn(component as any, 'nextPosition');
+      const verifySubPositions = vi.spyOn(component as any, 'verifySubPositions');
+      vi.spyOn(component as any, 'elementPosition');
 
       component['adjustDefaultPosition']('left');
 
@@ -561,14 +561,14 @@ describe('PoControlPositionService:', () => {
 
     it('elementPosition: should call `setAlignedElementPosition` if `isCornerAligned` is true.', () => {
       component['isCornerAligned'] = true;
-      const setAlignedElementPosition = spyOn(component, <any>'setAlignedElementPosition');
+      const setAlignedElementPosition = vi.spyOn(component as any, 'setAlignedElementPosition');
       component['elementPosition']('bottom');
       expect(setAlignedElementPosition).toHaveBeenCalled();
     });
 
     it('elementPosition: should call `setElementPosition` if `isCornerAligned` is false.', () => {
       component['isCornerAligned'] = false;
-      const setElementPosition = spyOn(component, <any>'setElementPosition');
+      const setElementPosition = vi.spyOn(component as any, 'setElementPosition');
       component['elementPosition']('bottom');
       expect(setElementPosition).toHaveBeenCalled();
     });
@@ -600,9 +600,9 @@ describe('PoControlPositionService:', () => {
 
     describe('setAlignedElementPosition:', () => {
       it('should always call `setElementWidth` and `setAlignedArrowDirection`.', () => {
-        const setElementWidth = spyOn(component, <any>'setElementWidth');
-        const setAlignedArrowDirection = spyOn(component, <any>'setAlignedArrowDirection');
-        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions');
+        const setElementWidth = vi.spyOn(component as any, 'setElementWidth');
+        const setAlignedArrowDirection = vi.spyOn(component as any, 'setAlignedArrowDirection');
+        const getSizesAndPositions = vi.spyOn(component as any, 'getSizesAndPositions');
 
         component['setAlignedElementPosition']('bottom');
 
@@ -612,8 +612,8 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedBottomPositions` if position is `bottom-left`.', () => {
-        const setAlignedBottomPositions = spyOn(component, <any>'setAlignedBottomPositions');
-        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions');
+        const setAlignedBottomPositions = vi.spyOn(component as any, 'setAlignedBottomPositions');
+        const getSizesAndPositions = vi.spyOn(component as any, 'getSizesAndPositions');
 
         component['setAlignedElementPosition']('bottom-left');
 
@@ -622,10 +622,10 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedBottomPositions` if position is `bottom-right`.', () => {
-        const setAlignedBottomPositions = spyOn(component, <any>'setAlignedBottomPositions');
-        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions').and.returnValue(
-          getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions()
-        );
+        const setAlignedBottomPositions = vi.spyOn(component as any, 'setAlignedBottomPositions');
+        const getSizesAndPositions = vi
+          .spyOn(component as any, 'getSizesAndPositions')
+          .mockReturnValue(getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions());
 
         component['setAlignedElementPosition']('bottom-right');
 
@@ -634,8 +634,8 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedTopPositions` if position is `top-left`.', () => {
-        const setAlignedTopPositions = spyOn(component, <any>'setAlignedTopPositions');
-        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions');
+        const setAlignedTopPositions = vi.spyOn(component as any, 'setAlignedTopPositions');
+        const getSizesAndPositions = vi.spyOn(component as any, 'getSizesAndPositions');
 
         component['setAlignedElementPosition']('top-left');
 
@@ -644,10 +644,10 @@ describe('PoControlPositionService:', () => {
       });
 
       it('should call `setAlignedTopPositions` if position is `top-right`.', () => {
-        const setAlignedTopPositions = spyOn(component, <any>'setAlignedTopPositions');
-        const getSizesAndPositions = spyOn(component, <any>'getSizesAndPositions').and.returnValue(
-          getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions()
-        );
+        const setAlignedTopPositions = vi.spyOn(component as any, 'setAlignedTopPositions');
+        const getSizesAndPositions = vi
+          .spyOn(component as any, 'getSizesAndPositions')
+          .mockReturnValue(getFakeSizesAndPositions(0, 0, 0, 0).getSizesAndPositions());
 
         component['setAlignedElementPosition']('top-right');
 

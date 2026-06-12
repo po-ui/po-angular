@@ -3,7 +3,9 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'jsdom',
+    isolate: false,
+    fileParallelism: false,
+    environment: 'happy-dom',
     setupFiles: ['src/lib/util-test/vitest-setup.ts'],
     include: ['src/**/*.spec.ts'],
     exclude: ['schematics/**/*.spec.ts'],
@@ -26,12 +28,6 @@ export default defineConfig({
     },
     testTimeout: 120000,
     hookTimeout: 50000,
-    reporters: ['default'],
-    restoreMocks: true,
-    server: {
-      deps: {
-        inline: [/@po-ui\/ng-components/, /@angular/], 
-      }
-    }
+    reporters: ['default']
   }
 });

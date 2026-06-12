@@ -94,7 +94,7 @@ describe('PoPopupComponent:', () => {
       component.open();
       fixture.detectChanges();
 
-      spyOn(component, <any>'closePopupOnClickout');
+      vi.spyOn(component as any, 'closePopupOnClickout');
 
       document.dispatchEvent(eventClick);
 
@@ -104,7 +104,7 @@ describe('PoPopupComponent:', () => {
     });
 
     it('resizeListener: should call `close` on resize window', () => {
-      spyOn(component, <any>'close');
+      vi.spyOn(component as any, 'close');
 
       component.open();
       fixture.detectChanges();
@@ -118,9 +118,9 @@ describe('PoPopupComponent:', () => {
       it('should call `popupItem.action` if has popupItem and popupItem.action', () => {
         popupItem.action = () => {};
 
-        const popupItemActionSpy = spyOn(popupItem, 'action');
-        spyOn(component, <any>'openUrl');
-        spyOn(component, 'close');
+        const popupItemActionSpy = vi.spyOn(popupItem as any, 'action');
+        vi.spyOn(component as any, 'openUrl');
+        vi.spyOn(component as any, 'close');
 
         component.onActionClick(popupItem);
 
@@ -132,9 +132,9 @@ describe('PoPopupComponent:', () => {
       it('shouldn`t call `popupItem.action` if receives undefined as param', () => {
         popupItem.action = () => {};
 
-        const popupItemActionSpy = spyOn(popupItem, 'action');
-        spyOn(component, <any>'openUrl');
-        spyOn(component, 'close');
+        const popupItemActionSpy = vi.spyOn(popupItem as any, 'action');
+        vi.spyOn(component as any, 'openUrl');
+        vi.spyOn(component as any, 'close');
 
         component.onActionClick(undefined);
 
@@ -144,8 +144,8 @@ describe('PoPopupComponent:', () => {
       });
 
       it('shouldn`t call `popupItem.action` if has popupItem but doesn`t have popupItem.action and popupItem URL', () => {
-        spyOn(component, <any>'openUrl');
-        spyOn(component, 'close');
+        vi.spyOn(component as any, 'openUrl');
+        vi.spyOn(component as any, 'close');
 
         const result = () => component.onActionClick(popupItem);
 
@@ -157,8 +157,8 @@ describe('PoPopupComponent:', () => {
       it('should call `openUrl` if has a popupItem with URL and without action', () => {
         popupItem.url = 'http://www.fakeUrlPo.com';
 
-        spyOn(component, <any>'openUrl');
-        spyOn(component, 'close');
+        vi.spyOn(component as any, 'openUrl');
+        vi.spyOn(component as any, 'close');
 
         component.onActionClick(popupItem);
 
@@ -170,8 +170,8 @@ describe('PoPopupComponent:', () => {
     it('openUrl: should call `openExternalLink` but shouldn`t call `router.navigate`', () => {
       const url = 'http://www.fakeUrlPo.com';
 
-      spyOn(UtilsFunctions, 'openExternalLink');
-      spyOn(component['router'], 'navigate');
+      vi.spyOn(UtilsFunctions as any, 'openExternalLink');
+      vi.spyOn(component['router'] as any, 'navigate');
 
       component['openUrl'](url);
 
@@ -182,8 +182,8 @@ describe('PoPopupComponent:', () => {
     it('openUrl: should call `router.navigate` if it`s an internal URL and shouldn`t call external URL', () => {
       const url = '/customers';
 
-      spyOn(component['router'], 'navigate');
-      spyOn(UtilsFunctions, 'openExternalLink');
+      vi.spyOn(component['router'] as any, 'navigate');
+      vi.spyOn(UtilsFunctions as any, 'openExternalLink');
 
       component['openUrl'](url);
 
@@ -192,8 +192,8 @@ describe('PoPopupComponent:', () => {
     });
 
     it('openUrl: shouldn`t call `router.navigate` and `openExternalLink` if URL is undefined ', () => {
-      spyOn(component['router'], 'navigate');
-      spyOn(UtilsFunctions, 'openExternalLink');
+      vi.spyOn(component['router'] as any, 'navigate');
+      vi.spyOn(UtilsFunctions as any, 'openExternalLink');
 
       component['openUrl'](undefined);
 
@@ -204,8 +204,8 @@ describe('PoPopupComponent:', () => {
     it('removeListeners: should call `resizeListener` and `clickoutListener`', () => {
       component['initializeListeners']();
 
-      spyOn(component, <any>'resizeListener');
-      spyOn(component, <any>'clickoutListener');
+      vi.spyOn(component as any, 'resizeListener');
+      vi.spyOn(component as any, 'clickoutListener');
 
       component['removeListeners']();
 
@@ -223,7 +223,7 @@ describe('PoPopupComponent:', () => {
     it('open: should set `showPopup` to `true` and call `validateInitialContent`.', () => {
       component.showPopup = false;
 
-      spyOn(component, <any>'validateInitialContent');
+      vi.spyOn(component as any, 'validateInitialContent');
 
       component.open();
 
@@ -235,7 +235,7 @@ describe('PoPopupComponent:', () => {
       component['param'] = undefined;
       component.target = 'targetValue';
 
-      spyOn(component, <any>'validateInitialContent');
+      vi.spyOn(component as any, 'validateInitialContent');
 
       component.open('paramValue');
 
@@ -248,8 +248,8 @@ describe('PoPopupComponent:', () => {
 
       component.showPopup = false;
 
-      spyOn(component, 'close');
-      spyOn(component, 'open');
+      vi.spyOn(component as any, 'close');
+      vi.spyOn(component as any, 'open');
 
       component.toggle(param);
 
@@ -260,8 +260,8 @@ describe('PoPopupComponent:', () => {
     it('toggle: should call `close` if showPopup is true and `oldTarget` is `target` and shouldn`t call `open` method', () => {
       component.showPopup = true;
 
-      spyOn(component, 'open');
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'open');
+      vi.spyOn(component as any, 'close');
 
       component.toggle();
 
@@ -304,7 +304,7 @@ describe('PoPopupComponent:', () => {
 
       component.showPopup = true;
 
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'close');
 
       component['onScroll']({ target: document.createElement('div') });
 
@@ -314,7 +314,7 @@ describe('PoPopupComponent:', () => {
     it('onScroll: shouldn`t call `close` if `showPopup` is false', () => {
       component.showPopup = false;
 
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'close');
 
       component['onScroll']({ target: {} });
 
@@ -325,7 +325,7 @@ describe('PoPopupComponent:', () => {
       const fakeEvent = { target: { className: 'po-popup-container' } };
       component.showPopup = true;
 
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'close');
 
       component['onScroll'](fakeEvent);
 
@@ -335,8 +335,8 @@ describe('PoPopupComponent:', () => {
     it('close: should set left style to 0, showPopup to false and emit close', () => {
       component.showPopup = true;
 
-      spyOn(component, <any>'removeListeners');
-      spyOn(component.closeEvent, <any>'emit');
+      vi.spyOn(component as any, 'removeListeners');
+      vi.spyOn(component.closeEvent as any, 'emit');
 
       component.close();
 
@@ -367,10 +367,10 @@ describe('PoPopupComponent:', () => {
 
     it(`closePopupOnClickout: should call 'close' if clickedOutDisabledItem, clickedOutTarget and
       clickedOutHeaderTemplate return true`, () => {
-      spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
-      spyOn(component, <any>'clickedOutTarget').and.returnValue(true);
-      spyOn(component, <any>'clickedOutHeaderTemplate').and.returnValue(true);
-      spyOn(component, <any>'close');
+      vi.spyOn(component as any, 'clickedOutDisabledItem').mockReturnValue(true);
+      vi.spyOn(component as any, 'clickedOutTarget').mockReturnValue(true);
+      vi.spyOn(component as any, 'clickedOutHeaderTemplate').mockReturnValue(true);
+      vi.spyOn(component as any, 'close');
 
       component['closePopupOnClickout'](event);
 
@@ -382,10 +382,10 @@ describe('PoPopupComponent:', () => {
 
     it(`closePopupOnClickout: shouldn't call 'close' if any condition clickedOutDisabledItem, clickedOutTarget and
       clickedOutHeaderTemplate returns false`, () => {
-      spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
-      spyOn(component, <any>'clickedOutTarget').and.returnValue(true);
-      spyOn(component, <any>'clickedOutHeaderTemplate').and.returnValue(false);
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'clickedOutDisabledItem').mockReturnValue(true);
+      vi.spyOn(component as any, 'clickedOutTarget').mockReturnValue(true);
+      vi.spyOn(component as any, 'clickedOutHeaderTemplate').mockReturnValue(false);
+      vi.spyOn(component as any, 'close');
 
       component['closePopupOnClickout'](event);
 
@@ -417,13 +417,13 @@ describe('PoPopupComponent:', () => {
     });
 
     it('clickedOutDisabledItem: should return false if element contains `po-popup-item-disabled` className', () => {
-      spyOn(component, <any>'elementContains').and.returnValue(true);
+      vi.spyOn(component as any, 'elementContains').mockReturnValue(true);
 
       expect(component['clickedOutDisabledItem'](event)).toBeFalsy();
     });
 
     it('clickedOutDisabledItem: should return true if element doesn`t contain `po-popup-item-disabled` className', () => {
-      spyOn(component, <any>'elementContains').and.returnValue(false);
+      vi.spyOn(component as any, 'elementContains').mockReturnValue(false);
 
       expect(component['clickedOutDisabledItem'](event)).toBeTruthy();
     });
@@ -436,7 +436,7 @@ describe('PoPopupComponent:', () => {
       const popupHeaderTemplate = { contains: (e?) => true };
       component.open();
 
-      spyOn(component.popupRef.nativeElement, 'querySelector').and.returnValue(popupHeaderTemplate);
+      vi.spyOn(component.popupRef.nativeElement, 'querySelector').mockReturnValue(popupHeaderTemplate);
 
       expect(component['clickedOutHeaderTemplate'](event)).toBeFalsy();
     });
@@ -461,9 +461,9 @@ describe('PoPopupComponent:', () => {
     });
 
     it('onClickItem: should emit clickItem when item has no goBack', () => {
-      const spyEmit = spyOn(component.clickItem, 'emit');
-      const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
-      const spyValidate = spyOn(component as any, 'validateInitialContent');
+      const spyEmit = vi.spyOn(component.clickItem as any, 'emit');
+      const spyDetect = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const spyValidate = vi.spyOn(component as any, 'validateInitialContent');
 
       component.onClickItem({ label: 'test' });
 
@@ -473,9 +473,9 @@ describe('PoPopupComponent:', () => {
     });
 
     it('onClickItem: should NOT emit clickItem when goBack is true, but should call detectChanges and validateInitialContent', () => {
-      const spyEmit = spyOn(component.clickItem, 'emit');
-      const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
-      const spyValidate = spyOn(component as any, 'validateInitialContent');
+      const spyEmit = vi.spyOn(component.clickItem as any, 'emit');
+      const spyDetect = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const spyValidate = vi.spyOn(component as any, 'validateInitialContent');
 
       component.onClickItem({ goBack: true });
 
@@ -485,9 +485,9 @@ describe('PoPopupComponent:', () => {
     });
 
     it('onClickItem: should emit and also call detectChanges and validateInitialContent when item has subItems', () => {
-      const spyEmit = spyOn(component.clickItem, 'emit');
-      const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
-      const spyValidate = spyOn(component as any, 'validateInitialContent');
+      const spyEmit = vi.spyOn(component.clickItem as any, 'emit');
+      const spyDetect = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const spyValidate = vi.spyOn(component as any, 'validateInitialContent');
 
       const item = { subItems: [{ label: 'child' }] };
       component.onClickItem(item);
@@ -500,7 +500,7 @@ describe('PoPopupComponent:', () => {
     describe('checkBooleanValue:', () => {
       it('checkBooleanValue: should return `true` if `action.disabled` is `true`.', () => {
         const action = { label: 'PO ', disabled: true };
-        spyOn(UtilsFunctions, 'isTypeof').and.returnValue(false);
+        vi.spyOn(UtilsFunctions as any, 'isTypeof').mockReturnValue(false);
 
         expect(component.returnBooleanValue(action, 'disabled')).toBe(true);
         expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
@@ -509,8 +509,8 @@ describe('PoPopupComponent:', () => {
       it('checkBooleanValue: should return `true` if `action.disabled` is a function.', () => {
         const action = { label: 'PO ', disabled: () => true };
 
-        spyOn(action, 'disabled').and.returnValue(true);
-        spyOn(UtilsFunctions, 'isTypeof').and.returnValue(true);
+        vi.spyOn(action as any, 'disabled').mockReturnValue(true);
+        vi.spyOn(UtilsFunctions as any, 'isTypeof').mockReturnValue(true);
 
         const result = component.returnBooleanValue(action, 'disabled');
 
@@ -539,9 +539,9 @@ describe('PoPopupComponent:', () => {
         position: undefined
       };
 
-      spyOn(fakeFunctions.poControlPosition, 'setElements');
-      spyOn(fakeFunctions.poControlPosition, 'adjustPosition');
-      spyOn(fakeFunctions.poControlPosition, 'getArrowDirection');
+      vi.spyOn(fakeFunctions.poControlPosition as any, 'setElements');
+      vi.spyOn(fakeFunctions.poControlPosition as any, 'adjustPosition');
+      vi.spyOn(fakeFunctions.poControlPosition as any, 'getArrowDirection');
 
       component['setPosition'].call(fakeFunctions);
 
@@ -551,9 +551,9 @@ describe('PoPopupComponent:', () => {
     });
 
     it('validateInitialContent: should call `setPosition` and `initializeListeners` if `hasContentToShow` is `true`', () => {
-      spyOn(component, <any>'hasContentToShow').and.returnValue(true);
-      spyOn(component, <any>'setPosition');
-      spyOn(component, <any>'initializeListeners');
+      vi.spyOn(component as any, 'hasContentToShow').mockReturnValue(true);
+      vi.spyOn(component as any, 'setPosition');
+      vi.spyOn(component as any, 'initializeListeners');
 
       component['validateInitialContent']();
 
@@ -562,8 +562,8 @@ describe('PoPopupComponent:', () => {
     });
 
     it('validateInitialContent: should call `close` if `hasContentToShow` is `false`', () => {
-      spyOn(component, <any>'hasContentToShow').and.returnValue(false);
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'hasContentToShow').mockReturnValue(false);
+      vi.spyOn(component as any, 'close');
 
       component['validateInitialContent']();
 

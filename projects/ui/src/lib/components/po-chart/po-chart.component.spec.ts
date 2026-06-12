@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ElementRef, NO_ERRORS_SCHEMA, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
@@ -16,16 +17,16 @@ import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartComponent } from './po-chart.component';
 class EChartsMock {
-  setOption = jasmine.createSpy('setOption');
-  resize = jasmine.createSpy('resize');
-  dispose = jasmine.createSpy('dispose');
-  clear = jasmine.createSpy('clear');
-  getDataURL = jasmine.createSpy('getDataURL').and.returnValue('data:image/png;base64,mock');
-  getOption = jasmine.createSpy('getOption').and.returnValue({
+  setOption = vi.fn();
+  resize = vi.fn();
+  dispose = vi.fn();
+  clear = vi.fn();
+  getDataURL = vi.fn().mockReturnValue('data:image/png;base64,mock');
+  getOption = vi.fn().mockReturnValue({
     xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }],
     series: [{ name: 'Serie 1', data: [1, 2, 3] }]
   });
-  on = jasmine.createSpy('on');
+  on = vi.fn();
 }
 export function createMockElementRef(querySelectorFn?: (selector: string) => any): ElementRef {
   return {
@@ -58,10 +59,13 @@ describe('PoChartComponent', () => {
     legend: true,
     dataZoom: true
   };
-  let mockVcr: jasmine.SpyObj<ViewContainerRef>;
+  let mockVcr: any;
 
   beforeEach(waitForAsync(() => {
-    mockVcr = jasmine.createSpyObj('ViewContainerRef', ['clear', 'createComponent']);
+    mockVcr = {
+      clear: vi.fn().mockName('ViewContainerRef.clear'),
+      createComponent: vi.fn().mockName('ViewContainerRef.createComponent')
+    };
 
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, PoTooltipModule],
@@ -87,7 +91,9 @@ describe('PoChartComponent', () => {
     window.getComputedStyle = () =>
       ({
         getPropertyValue: (prop: string) => {
-          const values: { [key: string]: string } = {
+          const values: {
+            [key: string]: string;
+          } = {
             '--border-width-sm': '1px',
             '--font-size-grid': '12px',
             '--background-color-grid': '#ffffff',
@@ -104,7 +110,7 @@ describe('PoChartComponent', () => {
       }) as CSSStyleDeclaration;
   }));
 
-  let querySelectorSpy: jasmine.Spy;
+  let querySelectorSpy: any;
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoChartComponent);
@@ -127,28 +133,30 @@ describe('PoChartComponent', () => {
 
     fixture.nativeElement.appendChild(chartDiv);
 
-    querySelectorSpy = spyOn(component['el'].nativeElement, 'querySelector').and.callFake((selector: string) => {
-      if (selector === '#chart-id') {
-        return chartDiv;
-      }
-      if (selector === '.po-chart-header') {
-        return headerElement;
-      }
-      if (selector === '.description-chart') {
-        return descriptionElement;
-      }
-      if (selector === '.po-chart-container') {
-        return { offsetLeft: 0, offsetTop: 0 };
-      }
-      return null;
-    });
+    querySelectorSpy = vi
+      .spyOn(component['el'].nativeElement, 'querySelector')
+      .mockImplementation((selector: string) => {
+        if (selector === '#chart-id') {
+          return chartDiv;
+        }
+        if (selector === '.po-chart-header') {
+          return headerElement;
+        }
+        if (selector === '.description-chart') {
+          return descriptionElement;
+        }
+        if (selector === '.po-chart-container') {
+          return { offsetLeft: 0, offsetTop: 0 };
+        }
+        return null;
+      });
 
     fixture.detectChanges();
   });
 
   afterEach(() => {
     if (querySelectorSpy) {
-      querySelectorSpy.and.callThrough();
+      querySelectorSpy;
     }
   });
 
@@ -208,15 +216,15 @@ describe('PoChartComponent', () => {
     const headerEl = { clientHeight: 100 } as HTMLDivElement;
     const descEl = { clientHeight: 50 } as HTMLDivElement;
 
-    querySelectorSpy.and.callFake((selector: string) => (selector === '.po-chart-header' ? headerEl : descEl));
+    querySelectorSpy.mockImplementation((selector: string) => (selector === '.po-chart-header' ? headerEl : descEl));
 
     component['headerHeight'] = 0;
     component['descriptionHeight'] = 0;
     component.options = { descriptionChart: 'test' };
 
-    spyOn(component['cdr'], 'detectChanges');
+    vi.spyOn(component['cdr'] as any, 'detectChanges');
     component['chartInstance'] = {
-      resize: jasmine.createSpy('resize')
+      resize: vi.fn()
     } as any;
 
     component['setHeightProperties']();
@@ -232,7 +240,7 @@ describe('PoChartComponent', () => {
     const descEl = {} as HTMLDivElement;
 
     component.options = { descriptionChart: 'test' };
-    querySelectorSpy.and.callFake((selector: string) => {
+    querySelectorSpy.mockImplementation((selector: string) => {
       if (selector === '.po-chart-header') return headerEl;
       if (selector === '.description-chart') return descEl;
       return null;
@@ -241,9 +249,9 @@ describe('PoChartComponent', () => {
     component['headerHeight'] = 0;
     component['descriptionHeight'] = 40;
 
-    spyOn(component['cdr'], 'detectChanges');
+    vi.spyOn(component['cdr'] as any, 'detectChanges');
     component['chartInstance'] = {
-      resize: jasmine.createSpy('resize')
+      resize: vi.fn()
     } as any;
 
     component['setHeightProperties']();
@@ -258,7 +266,7 @@ describe('PoChartComponent', () => {
     const headerEl = {} as HTMLDivElement;
     const descEl = { clientHeight: 50 } as HTMLDivElement;
 
-    querySelectorSpy.and.callFake((selector: string) => {
+    querySelectorSpy.mockImplementation((selector: string) => {
       if (selector === '.po-chart-header') return headerEl;
       if (selector === '.description-chart') return descEl;
       return null;
@@ -268,9 +276,9 @@ describe('PoChartComponent', () => {
     component['headerHeight'] = undefined;
     component['descriptionHeight'] = 0;
 
-    spyOn(component['cdr'], 'detectChanges');
+    vi.spyOn(component['cdr'] as any, 'detectChanges');
     component['chartInstance'] = {
-      resize: jasmine.createSpy('resize')
+      resize: vi.fn()
     } as any;
 
     component['setHeightProperties']();
@@ -343,7 +351,7 @@ describe('PoChartComponent', () => {
 
   describe('Lifecycle hooks:', () => {
     it('ngAfterViewInit: should initialize echarts', () => {
-      spyOn(component, <any>'initECharts');
+      vi.spyOn(component as any, 'initECharts');
       component.ngAfterViewInit();
       expect(component['initECharts']).toHaveBeenCalled();
     });
@@ -351,8 +359,8 @@ describe('PoChartComponent', () => {
     it('should call required methods for CSV export', () => {
       const csvExport = component['popupActions'][0];
 
-      spyOn(component as any, 'setTableProperties');
-      spyOn(component as any, 'downloadCsv');
+      vi.spyOn(component as any, 'setTableProperties');
+      vi.spyOn(component as any, 'downloadCsv');
 
       csvExport.action();
 
@@ -362,11 +370,11 @@ describe('PoChartComponent', () => {
 
     describe('observeContainerResize', () => {
       it('resized function is called when element is resized', () => {
-        spyOn(component, <any>'setChartsProperties');
+        vi.spyOn(component as any, 'setChartsProperties');
 
         component['resizeObserver'] = {
-          disconnect: jasmine.createSpy('disconnect'),
-          observe: jasmine.createSpy('observe')
+          disconnect: vi.fn(),
+          observe: vi.fn()
         } as any;
         component['series'] = [{}];
         component['observeContainerResize']();
@@ -385,9 +393,9 @@ describe('PoChartComponent', () => {
     });
 
     it('should handle PoUiThemeChange event by disposing and reinitializing the chart', () => {
-      const disposeSpy = jasmine.createSpy('dispose');
-      const initEChartsSpy = spyOn(component as any, 'initECharts');
-      const checkShowCEchartsSpy = spyOn(component as any, 'checkShowCEcharts');
+      const disposeSpy = vi.fn();
+      const initEChartsSpy = vi.spyOn(component as any, 'initECharts');
+      const checkShowCEchartsSpy = vi.spyOn(component as any, 'checkShowCEcharts');
 
       component['chartInstance'] = { dispose: disposeSpy } as any;
 
@@ -401,7 +409,7 @@ describe('PoChartComponent', () => {
 
     it('ngOnChanges: should handle series changes', () => {
       const newSeries = [...mockSeries, { label: 'New Serie', data: [7, 8, 9], type: PoChartType.Line }];
-      spyOn(component, <any>'setChartsProperties');
+      vi.spyOn(component as any, 'setChartsProperties');
 
       component.series = newSeries;
       component.ngOnChanges({ series: { currentValue: newSeries } } as any);
@@ -410,7 +418,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should call setPopupActions when customActions changes', () => {
-      const setPopupActionsSpy = spyOn(component as any, 'setPopupActions');
+      const setPopupActionsSpy = vi.spyOn(component as any, 'setPopupActions');
 
       const changes: SimpleChanges = {
         customActions: {
@@ -427,7 +435,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should return early when series change is firstChange', () => {
-      const initEChartsSpy = spyOn(component as any, 'initECharts');
+      const initEChartsSpy = vi.spyOn(component as any, 'initECharts');
 
       const changes: SimpleChanges = {
         series: {
@@ -445,7 +453,7 @@ describe('PoChartComponent', () => {
 
     it('should call resize after timeout when height changes', fakeAsync(() => {
       component['chartInstance'] = {
-        resize: jasmine.createSpy('resize')
+        resize: vi.fn()
       } as any;
 
       const changes: SimpleChanges = {
@@ -471,7 +479,7 @@ describe('PoChartComponent', () => {
         rendererOption: 'svg' as const
       };
 
-      const disposeSpy = jasmine.createSpy('dispose');
+      const disposeSpy = vi.fn();
       component['chartInstance'] = { dispose: disposeSpy } as any;
 
       component.options = newOptions;
@@ -489,7 +497,7 @@ describe('PoChartComponent', () => {
 
   describe('openModal', () => {
     it('should call createComponent and open modal', async () => {
-      const setTablePropertiesSpy = spyOn(component as any, 'setTableProperties');
+      const setTablePropertiesSpy = vi.spyOn(component as any, 'setTableProperties');
       component['chartInstance'] = undefined;
       await component.openModal();
 
@@ -497,7 +505,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should call createComponent and open modal', async () => {
-      const setTablePropertiesSpy = spyOn(component as any, 'setTableProperties');
+      const setTablePropertiesSpy = vi.spyOn(component as any, 'setTableProperties');
       (component as any).vcr = mockVcr;
       component['chartInstance'] = {} as any;
 
@@ -506,15 +514,15 @@ describe('PoChartComponent', () => {
       component['itemsTable'] = [];
 
       const mockModalInstance = {
-        modalComponent: { open: jasmine.createSpy('open') }
+        modalComponent: { open: vi.fn() }
       };
 
       const mockComponentRef = {
-        setInput: jasmine.createSpy('setInput'),
+        setInput: vi.fn(),
         instance: mockModalInstance
       };
 
-      mockVcr.createComponent.and.returnValue(mockComponentRef as any);
+      mockVcr.createComponent.mockReturnValue(mockComponentRef as any);
 
       await component.openModal();
 
@@ -535,11 +543,11 @@ describe('PoChartComponent', () => {
 
     it('should expand the chart with 100% radius when isTypeGauge is true and innerWidth < 1366', fakeAsync(() => {
       const mockChart = {
-        resize: jasmine.createSpy('resize'),
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        resize: vi.fn(),
+        getOption: vi.fn().mockReturnValue({
           series: [{ radius: '80%' }]
         }),
-        setOption: jasmine.createSpy('setOption')
+        setOption: vi.fn()
       };
 
       component['chartInstance'] = mockChart as Partial<EChartsType> as EChartsType;
@@ -574,9 +582,9 @@ describe('PoChartComponent', () => {
     it('should collapse the chart and restore original gauge radius when isTypeGauge is true and innerWidth < 1366', fakeAsync(() => {
       const originalRadius = '75%';
       const mockChart = {
-        resize: jasmine.createSpy('resize'),
-        getOption: jasmine.createSpy('getOption').and.returnValue({ series: [{ radius: originalRadius }] }),
-        setOption: jasmine.createSpy('setOption')
+        resize: vi.fn(),
+        getOption: vi.fn().mockReturnValue({ series: [{ radius: originalRadius }] }),
+        setOption: vi.fn()
       };
 
       component['chartInstance'] = mockChart as Partial<EChartsType> as EChartsType;
@@ -604,11 +612,11 @@ describe('PoChartComponent', () => {
 
     it('should collapse the chart and restore original properties', fakeAsync(() => {
       const mockChartInstance = {
-        resize: jasmine.createSpy('resize'),
-        dispose: jasmine.createSpy('dispose'),
-        clear: jasmine.createSpy('clear'),
-        getDataURL: jasmine.createSpy('getDataURL'),
-        on: jasmine.createSpy('on')
+        resize: vi.fn(),
+        dispose: vi.fn(),
+        clear: vi.fn(),
+        getDataURL: vi.fn(),
+        on: vi.fn()
       };
       component['chartInstance'] = mockChartInstance as Partial<EChartsType> as EChartsType;
       component['isExpanded'] = true;
@@ -617,12 +625,12 @@ describe('PoChartComponent', () => {
       component['headerHeight'] = 50;
       component.toggleExpand();
 
-      expect(component.height).withContext('Deveria restaurar a altura original').toBe(400);
-      expect(component['chartMarginTop']).withContext('Deveria resetar a margem superior').toBe('0px');
-      expect(component['isExpanded']).withContext('Deveria alternar o estado expandido').toBeFalse();
+      expect(component.height, 'Deveria restaurar a altura original').toBe(400);
+      expect(component['chartMarginTop'], 'Deveria resetar a margem superior').toBe('0px');
+      expect(component['isExpanded'], 'Deveria alternar o estado expandido').toBe(false);
 
       flush();
-      expect(mockChartInstance.resize).withContext('Deveria chamar resize após colapso').toHaveBeenCalled();
+      expect(mockChartInstance.resize, 'Deveria chamar resize após colapso').toHaveBeenCalled();
     }));
 
     it('should handle resize when chartInstance is not defined', () => {
@@ -632,7 +640,7 @@ describe('PoChartComponent', () => {
 
       expect(() => component.toggleExpand()).not.toThrow();
       expect(component.height).toBe(400);
-      expect(component['isExpanded']).toBeFalse();
+      expect(component['isExpanded']).toBe(false);
     });
 
     it('should not modify originalHeight when collapsing', () => {
@@ -651,13 +659,13 @@ describe('PoChartComponent', () => {
       const chartElement = document.createElement('div');
       chartElement.id = 'chart-id';
 
-      (component['el'].nativeElement.querySelector as jasmine.Spy).and.returnValue(chartElement);
+      (component['el'].nativeElement.querySelector as Mock).mockReturnValue(chartElement);
       component['hideDomEchartsDiv'] = true;
 
-      spyOn(component as any, 'initECharts');
+      vi.spyOn(component as any, 'initECharts');
 
-      const observeSpy = jasmine.createSpy('observe');
-      const disconnectSpy = jasmine.createSpy('disconnect');
+      const observeSpy = vi.fn();
+      const disconnectSpy = vi.fn();
 
       let callback: (entries: Array<IntersectionObserverEntry>) => void;
 
@@ -692,17 +700,17 @@ describe('PoChartComponent', () => {
 
     (component as any).setInitialPopupActions();
 
-    expect(component['showPopup']).toBeFalse();
+    expect(component['showPopup']).toBe(false);
     expect(component['paddingContainerGauge']).toBe(16);
   });
 
   describe('initECHarts:', () => {
     it('should not initialize the chart if #chart-id is not found', () => {
       const originalQuerySelector = component['el'].nativeElement.querySelector;
-      component['el'].nativeElement.querySelector = jasmine.createSpy('querySelector').and.returnValue(null);
+      component['el'].nativeElement.querySelector = vi.fn().mockReturnValue(null);
 
-      spyOn(component as any, 'initEChartsEvents');
-      spyOn(component as any, 'setChartsProperties');
+      vi.spyOn(component as any, 'initEChartsEvents');
+      vi.spyOn(component as any, 'setChartsProperties');
 
       component['initECharts']();
 
@@ -716,11 +724,11 @@ describe('PoChartComponent', () => {
       component['categories'] = [];
       component['series'] = [{ label: 'Série 1', data: [1, 2, 3] }];
       component['chartInstance'] = {
-        setOption: jasmine.createSpy('setOption')
+        setOption: vi.fn()
       } as any;
 
-      spyOn(component as any, 'setOptions').and.returnValue({});
-      spyOn(component['cdr'], 'detectChanges');
+      vi.spyOn(component as any, 'setOptions').mockReturnValue({});
+      vi.spyOn(component['cdr'] as any, 'detectChanges');
 
       (component as any).setChartsProperties();
 
@@ -728,7 +736,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should dispose chartInstance and return early when series is empty', () => {
-      const disposeSpy = jasmine.createSpy('dispose');
+      const disposeSpy = vi.fn();
 
       component['categories'] = ['A', 'B'];
       component['series'] = [];
@@ -743,25 +751,25 @@ describe('PoChartComponent', () => {
     });
 
     it('should emit seriesClick event when clicking on the chart', () => {
-      const onSpy = jasmine.createSpy('on');
+      const onSpy = vi.fn();
 
       component['chartInstance'] = {
         on: onSpy
       } as any;
 
-      spyOn(component.seriesClick, 'emit');
-      spyOn(component.seriesHover, 'emit');
+      vi.spyOn(component.seriesClick as any, 'emit');
+      vi.spyOn(component.seriesHover as any, 'emit');
 
       component['initEChartsEvents']();
 
-      expect(onSpy).toHaveBeenCalledWith('click', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('click', expect.any(Function));
 
-      const clickCallback = onSpy.calls.argsFor(0)[1];
+      const clickCallback = vi.mocked(onSpy).mock.calls[0][1];
 
       const mockParams = { seriesName: 'Exemplo', value: 100, name: 'Categoria X' };
       clickCallback(mockParams);
 
-      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
+      const mouseoverCallback = vi.mocked(onSpy).mock.calls[1][1];
       const mockParamsMouse = {};
       mouseoverCallback(mockParamsMouse);
 
@@ -779,20 +787,20 @@ describe('PoChartComponent', () => {
       tooltipElement.id = 'custom-tooltip';
       document.body.appendChild(tooltipElement);
 
-      (component['el'].nativeElement.querySelector as jasmine.Spy).and.callFake(selector =>
+      (component['el'].nativeElement.querySelector as Mock).mockImplementation(selector =>
         selector === '#custom-tooltip' ? tooltipElement : null
       );
 
-      const setTooltipSpy = spyOn<any>(component, 'setTooltipProperties');
+      const setTooltipSpy = vi.spyOn(component as any, 'setTooltipProperties');
 
-      const seriesHoverSpy = spyOn(component.seriesHover, 'emit');
+      const seriesHoverSpy = vi.spyOn(component.seriesHover as any, 'emit');
 
       const chartMock = new EChartsMock();
       component['chartInstance'] = chartMock as any;
 
       component['initEChartsEvents']();
 
-      const mouseoverCallback = chartMock.on.calls.allArgs().find(([event]) => event === 'mouseover')[1];
+      const mouseoverCallback = vi.mocked(chartMock.on).mock.calls.find(([event]) => event === 'mouseover')[1];
 
       const params = {
         value: 123,
@@ -809,21 +817,21 @@ describe('PoChartComponent', () => {
     });
 
     it('should emit seriesClick event when clicking on the chart', () => {
-      const onSpy = jasmine.createSpy('on');
+      const onSpy = vi.fn();
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
-      spyOn(component.seriesClick, 'emit');
-      spyOn(component.seriesHover, 'emit');
+      vi.spyOn(component.seriesClick as any, 'emit');
+      vi.spyOn(component.seriesHover as any, 'emit');
 
       component['initEChartsEvents']();
 
-      expect(onSpy).toHaveBeenCalledWith('click', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('click', expect.any(Function));
 
-      const clickCallback = onSpy.calls.argsFor(0)[1];
+      const clickCallback = vi.mocked(onSpy).mock.calls[0][1];
       const mockParams = { seriesName: 'Exemplo', value: 100, name: 'Categoria X' };
       clickCallback(mockParams);
 
-      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
+      const mouseoverCallback = vi.mocked(onSpy).mock.calls[1][1];
       const mockParamsMouse = {};
       mouseoverCallback(mockParamsMouse);
 
@@ -836,21 +844,21 @@ describe('PoChartComponent', () => {
     });
 
     it('should emit seriesClick event when clicking on the chart if params.seriesName is undefined', () => {
-      const onSpy = jasmine.createSpy('on');
+      const onSpy = vi.fn();
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
-      spyOn(component.seriesClick, 'emit');
-      spyOn(component.seriesHover, 'emit');
+      vi.spyOn(component.seriesClick as any, 'emit');
+      vi.spyOn(component.seriesHover as any, 'emit');
 
       component['initEChartsEvents']();
 
-      expect(onSpy).toHaveBeenCalledWith('click', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('click', expect.any(Function));
 
-      const clickCallback = onSpy.calls.argsFor(0)[1];
+      const clickCallback = vi.mocked(onSpy).mock.calls[0][1];
       const mockParams = { value: 100, name: 'Name X' };
       clickCallback(mockParams);
 
-      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
+      const mouseoverCallback = vi.mocked(onSpy).mock.calls[1][1];
       const mockParamsMouse = {};
       mouseoverCallback(mockParamsMouse);
 
@@ -870,19 +878,19 @@ describe('PoChartComponent', () => {
       chartElement.id = 'chart-id';
       document.body.appendChild(chartElement);
 
-      const onSpy = jasmine.createSpy('on');
+      const onSpy = vi.fn();
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
-      spyOn(component.seriesHover, 'emit');
-      spyOn(component.seriesClick, 'emit');
+      vi.spyOn(component.seriesHover as any, 'emit');
+      vi.spyOn(component.seriesClick as any, 'emit');
 
       component.series = [{ tooltip: 'test', label: 'Brazil', data: [35, 32, 25, 29, 33, 33], color: 'color-10' }];
 
       component['initEChartsEvents']();
 
-      expect(onSpy).toHaveBeenCalledWith('mouseover', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('mouseover', expect.any(Function));
 
-      const mouseoverCallback = onSpy.calls.argsFor(1)[1];
+      const mouseoverCallback = vi.mocked(onSpy).mock.calls[1][1];
 
       const mockParams = {
         seriesName: 'Exemplo',
@@ -906,7 +914,7 @@ describe('PoChartComponent', () => {
 
       expect(component['positionTooltip']).toBe('top');
 
-      const clickCallback = onSpy.calls.argsFor(0)[1];
+      const clickCallback = vi.mocked(onSpy).mock.calls[0][1];
       const mockParamsClick = {};
       clickCallback(mockParamsClick);
 
@@ -919,16 +927,16 @@ describe('PoChartComponent', () => {
     });
 
     it('should hide the tooltip when leaving the chart (mouseout)', () => {
-      const onSpy = jasmine.createSpy('on');
+      const onSpy = vi.fn();
       component['chartInstance'] = { on: onSpy } as Partial<EChartsType> as EChartsType;
 
-      spyOn(component.poTooltip.last, 'toggleTooltipVisibility');
+      vi.spyOn(component.poTooltip.last, 'toggleTooltipVisibility');
 
       component['initEChartsEvents']();
 
-      expect(onSpy).toHaveBeenCalledWith('mouseout', jasmine.any(Function));
+      expect(onSpy).toHaveBeenCalledWith('mouseout', expect.any(Function));
 
-      const mouseoutCallback = onSpy.calls.argsFor(2)[1];
+      const mouseoutCallback = vi.mocked(onSpy).mock.calls[2][1];
       mouseoutCallback();
 
       expect(component.poTooltip.last.toggleTooltipVisibility).toHaveBeenCalledWith(false);
@@ -978,7 +986,7 @@ describe('PoChartComponent', () => {
         seriesType: 'line'
       };
 
-      const tooltipFn = jasmine.createSpy().and.returnValue('Custom **tooltip**\nValue: __100__');
+      const tooltipFn = vi.fn().mockReturnValue('Custom **tooltip**\nValue: __100__');
 
       component.series = [{ label: 'Serie 1', data: [100], tooltip: tooltipFn }];
 
@@ -1001,11 +1009,11 @@ describe('PoChartComponent', () => {
 
       component.series = [{ label: 'Serie Radar', data: [10, 20, 30] }];
 
-      const radarTooltipSpy = spyOn(component['chartGridUtils'], 'buildRadarTooltip').and.returnValue(
-        'Radar Tooltip Gerado'
-      );
+      const radarTooltipSpy = vi
+        .spyOn(component['chartGridUtils'], 'buildRadarTooltip')
+        .mockReturnValue('Radar Tooltip Gerado');
 
-      const parseSpy = spyOn(component as any, 'parseTooltipText').and.callFake(text => text);
+      const parseSpy = vi.spyOn(component as any, 'parseTooltipText').mockImplementation(text => text);
 
       const result = (component as any).resolveCustomTooltip(
         params,
@@ -1106,9 +1114,9 @@ describe('PoChartComponent', () => {
 
   describe('getCSSVariable: ', () => {
     it('should return an empty string when element is not found or CSS variable is not set', () => {
-      spyOn(document, 'querySelector').and.returnValue(null);
+      vi.spyOn(document as any, 'querySelector').mockReturnValue(null);
 
-      spyOn(window, 'getComputedStyle').and.returnValue({
+      vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => ''
       } as unknown as CSSStyleDeclaration);
 
@@ -1186,8 +1194,8 @@ describe('PoChartComponent', () => {
       expect(result.yAxis.max).toBe(100);
       expect(result.yAxis.splitNumber).toBe(7);
       expect(result.grid.left).toBe(60);
-      expect(result.xAxis.splitLine.show).toBeFalse();
-      expect(result.yAxis.splitLine.show).toBeTrue();
+      expect(result.xAxis.splitLine.show).toBe(false);
+      expect(result.yAxis.splitLine.show).toBe(true);
     });
 
     it('should configure axes correctly when isTypeBar is true', () => {
@@ -1208,11 +1216,11 @@ describe('PoChartComponent', () => {
 
       expect(options.xAxis.type).toBe('value');
 
-      expect(options.xAxis.splitLine.show).toBeTrue();
+      expect(options.xAxis.splitLine.show).toBe(true);
 
       expect(options.yAxis.type).toBe('category');
 
-      expect(options.yAxis.splitLine.show).toBeFalse();
+      expect(options.yAxis.splitLine.show).toBe(false);
 
       expect(options.yAxis.data).toEqual(['Jan', 'Feb', 'Mar']);
     });
@@ -1261,11 +1269,11 @@ describe('PoChartComponent', () => {
     });
 
     it('should set fontSize to 12 when --font-size-grid is not defined', () => {
-      spyOn<any>(component['chartGridUtils'], 'resolvePx').and.callFake(variable =>
+      vi.spyOn(component['chartGridUtils'] as any, 'resolvePx').mockImplementation(variable =>
         variable === '--font-size-grid' ? undefined : 10
       );
 
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('');
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('');
 
       const options = (component as any).setOptions();
 
@@ -1279,10 +1287,10 @@ describe('PoChartComponent', () => {
       const mockOptions = {};
       const mockFontSize = 14;
 
-      spyOn(component['chartGridUtils'], 'resolvePx').and.returnValue(mockFontSize);
-      spyOn(component['chartGaugeUtils'], 'setGaugeOptions');
+      vi.spyOn(component['chartGridUtils'] as any, 'resolvePx').mockReturnValue(mockFontSize);
+      vi.spyOn(component['chartGaugeUtils'] as any, 'setGaugeOptions');
 
-      spyOn<any>(component, 'setSeries').and.returnValue([]);
+      vi.spyOn(component as any, 'setSeries').mockReturnValue([]);
 
       const result = component['setOptions']();
 
@@ -1309,7 +1317,7 @@ describe('PoChartComponent', () => {
           showAxisDetails: true
         }
       };
-      spyOn(component, 'getCSSVariable').and.returnValue('#4a5c60');
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('#4a5c60');
 
       const options: any = {};
 
@@ -1352,7 +1360,9 @@ describe('PoChartComponent', () => {
     let mockSeriesWithColor: Array<PoChartSerie>;
 
     function mockGetPropertyValue(prop: string): string {
-      const values: { [key: string]: string } = {
+      const values: {
+        [key: string]: string;
+      } = {
         '--color-01': '#0000ff',
         '--color-02': '#00ff00',
         '--color-neutral-light-00': '#ffffff',
@@ -1375,7 +1385,7 @@ describe('PoChartComponent', () => {
         { data: [10, 11, 12], color: '#abcdef' }
       ];
 
-      spyOn(colorService, 'getColors').and.callFake((series: Array<any>) => series);
+      vi.spyOn(colorService as any, 'getColors').mockImplementation((series: Array<any>) => series);
 
       window.getComputedStyle = mockGetComputedStyle;
     });
@@ -1388,12 +1398,12 @@ describe('PoChartComponent', () => {
 
       expect(result.length).toBe(1);
       expect(result[0].type).toBe('bar');
-      expect(result[0].isTypeColumn).toBeTrue();
+      expect(result[0].isTypeColumn).toBe(true);
       expect(result[0].name).toBe('Serie 1');
     });
 
     it('should call getComputedStyle with document.documentElement and use its value for var(...) color', () => {
-      const spyGetComputed = spyOn(window, 'getComputedStyle').and.returnValue({
+      const spyGetComputed = vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
         getPropertyValue: (prop: string) => '#112233'
       } as unknown as CSSStyleDeclaration);
 
@@ -1509,7 +1519,7 @@ describe('PoChartComponent', () => {
       component.dataLabel = { fixed: true };
 
       const result = component['setSeries']();
-      expect(result[0].label.show).toBeTrue();
+      expect(result[0].label.show).toBe(true);
       expect(result[0].emphasis.focus).toBe('series');
     });
 
@@ -1536,7 +1546,7 @@ describe('PoChartComponent', () => {
       component.type = PoChartType.Gauge;
       component.series = [{ label: 'A', data: [10] }];
 
-      const resolvePxSpy = spyOn(component['chartGridUtils'], 'resolvePx').and.callFake(
+      const resolvePxSpy = vi.spyOn(component['chartGridUtils'] as any, 'resolvePx').mockImplementation(
         (key: string) =>
           ({
             '--font-size-md': 12,
@@ -1545,12 +1555,12 @@ describe('PoChartComponent', () => {
           })[key] || 0
       );
 
-      const setListTypeGaugeSpy = spyOn(component['chartGaugeUtils'], 'setListTypeGauge').and.returnValue({
+      const setListTypeGaugeSpy = vi.spyOn(component['chartGaugeUtils'] as any, 'setListTypeGauge').mockReturnValue({
         processed: true
       });
-      const finalizeSerieTypeGaugeSpy = spyOn(component['chartGaugeUtils'], 'finalizeSerieTypeGauge').and.returnValue([
-        { name: 'Gauge' }
-      ]);
+      const finalizeSerieTypeGaugeSpy = vi
+        .spyOn(component['chartGaugeUtils'], 'finalizeSerieTypeGauge')
+        .mockReturnValue([{ name: 'Gauge' }]);
 
       const result = component['setSeries']();
 
@@ -1575,15 +1585,17 @@ describe('PoChartComponent', () => {
       component.type = PoChartType.Radar;
       component.options = {};
 
-      const spySetListTypeRadar = spyOn(component['chartGridUtils'], 'setListTypeRadar');
+      const spySetListTypeRadar = vi.spyOn(component['chartGridUtils'] as any, 'setListTypeRadar');
 
-      const spyFinalizeRadar = spyOn(component['chartGridUtils'], 'finalizeSerieTypeRadar').and.callFake(series => [
-        {
-          type: 'radar',
-          data: series,
-          _testFlag: true
-        } as any
-      ]);
+      const spyFinalizeRadar = vi
+        .spyOn(component['chartGridUtils'], 'finalizeSerieTypeRadar')
+        .mockImplementation(series => [
+          {
+            type: 'radar',
+            data: series,
+            _testFlag: true
+          } as any
+        ]);
 
       const result = component['setSeries']();
 
@@ -1720,7 +1732,7 @@ describe('PoChartComponent', () => {
 
   describe('setOptionLegend', () => {
     it('should configure legend with scroll type', () => {
-      spyOn(component as any, 'getCSSVariable').and.returnValue('#000');
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('#000');
 
       component.options = {
         legendType: 'scroll'
@@ -1737,7 +1749,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should configure legend with default plain type when legendType is not scroll', () => {
-      spyOn(component as any, 'getCSSVariable').and.returnValue('#000');
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('#000');
 
       component.options = {
         legendPosition: 'right'
@@ -1757,7 +1769,7 @@ describe('PoChartComponent', () => {
   describe('setTableProperties:', () => {
     beforeEach(() => {
       component['chartInstance'] = {
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        getOption: vi.fn().mockReturnValue({
           xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }],
           series: [
             { name: 'Série 1', data: [10, 20, 30] },
@@ -1765,7 +1777,7 @@ describe('PoChartComponent', () => {
           ]
         })
       } as any;
-      spyOn(component as any, 'setTableColumns');
+      vi.spyOn(component as any, 'setTableColumns');
     });
 
     it('should correctly populate itemsTable with series data', () => {
@@ -1775,20 +1787,20 @@ describe('PoChartComponent', () => {
         { serie: 'Série 1', Jan: 10, Fev: 20, Mar: 30 },
         { serie: 'Série 2', Jan: 40, Fev: 50, Mar: 60 }
       ]);
-      expect((component as any).setTableColumns).toHaveBeenCalledWith(jasmine.any(Object), ['Jan', 'Fev', 'Mar']);
+      expect((component as any).setTableColumns).toHaveBeenCalledWith(expect.any(Object), ['Jan', 'Fev', 'Mar']);
     });
   });
 
   describe('setTableProperties', () => {
     it('should rebuild categories with "-" when they do not exist and series[0].data is an array', () => {
       component['chartInstance'] = {
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        getOption: vi.fn().mockReturnValue({
           xAxis: [{}],
           yAxis: [{}],
           series: [{ name: 'Série 1', data: [10, 20, 30] }]
         })
       } as any;
-      spyOn(component as any, 'setTableColumns');
+      vi.spyOn(component as any, 'setTableColumns');
       component['isTypeBar'] = false;
 
       component['setTableProperties']();
@@ -1799,13 +1811,13 @@ describe('PoChartComponent', () => {
 
     it('should call setTablePropertiesTypeBar when isTypeBar is true', () => {
       component['chartInstance'] = {
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        getOption: vi.fn().mockReturnValue({
           xAxis: [{}],
           yAxis: [{ data: ['A', 'B'] }],
           series: [{ name: 'Série A', data: [1, 2] }]
         })
       } as any;
-      spyOn(component as any, 'setTableColumns');
+      vi.spyOn(component as any, 'setTableColumns');
       component['isTypeBar'] = true;
 
       component['setTableProperties']();
@@ -1823,7 +1835,7 @@ describe('PoChartComponent', () => {
       component['literals'] = { serie: 'Série' };
 
       component['chartInstance'] = {
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        getOption: vi.fn().mockReturnValue({
           series: [
             {
               name: 'Série A',
@@ -1835,7 +1847,7 @@ describe('PoChartComponent', () => {
           ]
         })
       } as any;
-      spyOn(component as any, 'setTableColumns');
+      vi.spyOn(component as any, 'setTableColumns');
 
       component['setTableProperties']();
 
@@ -1848,13 +1860,13 @@ describe('PoChartComponent', () => {
       component.isTypeBar = false;
 
       component['chartInstance'] = {
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        getOption: vi.fn().mockReturnValue({
           xAxis: [{ data: ['Jan', 'Feb'] }],
           series: [{ name: 'Series 1', data: [10, 20] }]
         })
       } as any;
 
-      const spySetTypeGauge = spyOn(component as any, 'setTablePropertiesTypeGauge');
+      const spySetTypeGauge = vi.spyOn(component as any, 'setTablePropertiesTypeGauge');
 
       component['setTableProperties']();
 
@@ -1865,7 +1877,7 @@ describe('PoChartComponent', () => {
   describe('setTablePropertiesTypeRadar', () => {
     it('should call setTablePropertiesTypeRadar and return when isTypeRadar is true', () => {
       component['chartInstance'] = {
-        getOption: jasmine.createSpy('getOption').and.returnValue({
+        getOption: vi.fn().mockReturnValue({
           xAxis: [{ data: ['Jan', 'Fev', 'Mar'] }],
           series: [{ name: 'Radar 1', data: [5, 10, 15] }]
         })
@@ -1873,8 +1885,8 @@ describe('PoChartComponent', () => {
 
       component['isTypeRadar'] = true;
 
-      const spyRadar = spyOn(component as any, 'setTablePropertiesTypeRadar');
-      const spyColumns = spyOn(component as any, 'setTableColumns');
+      const spyRadar = vi.spyOn(component as any, 'setTablePropertiesTypeRadar');
+      const spyColumns = vi.spyOn(component as any, 'setTableColumns');
 
       component['setTableProperties']();
 
@@ -2065,21 +2077,21 @@ describe('PoChartComponent', () => {
 
   describe('downloadCsv:', () => {
     beforeEach(() => {
-      spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
-      spyOn(URL, 'revokeObjectURL');
-      spyOn(document, 'createElement').and.callFake((tag: string) => {
+      vi.spyOn(URL as any, 'createObjectURL').mockReturnValue('blob:url');
+      vi.spyOn(URL as any, 'revokeObjectURL');
+      vi.spyOn(document as any, 'createElement').mockImplementation((tag: string) => {
         if (tag === 'a') {
           return {
-            click: jasmine.createSpy('click'),
-            setAttribute: jasmine.createSpy('setAttribute'),
+            click: vi.fn(),
+            setAttribute: vi.fn(),
             href: '',
             download: ''
           } as unknown as HTMLAnchorElement;
         }
         return document.createElement(tag);
       });
-      spyOn(document.body, 'appendChild');
-      spyOn(document.body, 'removeChild');
+      vi.spyOn(document.body as any, 'appendChild');
+      vi.spyOn(document.body as any, 'removeChild');
     });
 
     it('should generate and download a CSV file correctly, using default values when necessary', () => {
@@ -2119,7 +2131,7 @@ describe('PoChartComponent', () => {
 
   describe('exportImage:', () => {
     it('should not execute if chartInstance is undefined', () => {
-      spyOn<any>(component, 'exportImage').and.callThrough();
+      vi.spyOn(component as any, 'exportImage');
 
       (component as any)['chartInstance'] = undefined;
       (component as any)['exportImage']('png');
@@ -2129,7 +2141,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should call exportSvgAsImage if renderer mode is svg', () => {
-      spyOn<any>(component, 'exportSvgAsImage');
+      vi.spyOn(component as any, 'exportSvgAsImage');
 
       component['currentRenderer'] = 'svg';
       (component as any)['exportImage']('png');
@@ -2139,12 +2151,12 @@ describe('PoChartComponent', () => {
 
     it('should call configureImageCanvas with correct parameters when chartInstance is defined', () => {
       const mockChartInstance = {
-        getDataURL: jasmine.createSpy('getDataURL').and.returnValue('mockImageData')
+        getDataURL: vi.fn().mockReturnValue('mockImageData')
       };
 
       const mockImage = new Image();
-      spyOn(window, 'Image').and.returnValue(mockImage);
-      spyOn<any>(component, 'configureImageCanvas');
+      vi.spyOn(window as any, 'Image').mockReturnValue(mockImage);
+      vi.spyOn(component as any, 'configureImageCanvas');
 
       (component as any).chartInstance = mockChartInstance;
       (component as any).exportImage('jpeg');
@@ -2160,32 +2172,32 @@ describe('PoChartComponent', () => {
 
   it('exportSvgAsImage: should serialize svg, create blob, url and call configureImageCanvas', () => {
     const fakeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    (component['el'].nativeElement.querySelector as jasmine.Spy) = jasmine.createSpy().and.returnValue(fakeSvg);
+    (component['el'].nativeElement.querySelector as Mock) = vi.fn().mockReturnValue(fakeSvg);
 
-    spyOn(component as any, 'configureImageCanvas');
+    vi.spyOn(component as any, 'configureImageCanvas');
     const mockUrl = 'blob:http://localhost/fake-id';
-    spyOn(URL, 'createObjectURL').and.returnValue(mockUrl);
+    vi.spyOn(URL as any, 'createObjectURL').mockReturnValue(mockUrl);
 
     class FakeImage {
       set src(value: string) {}
     }
     (window as any).Image = FakeImage;
 
-    const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString').and.returnValue('<svg></svg>');
+    const serializerSpy = vi.spyOn(XMLSerializer.prototype as any, 'serializeToString').mockReturnValue('<svg></svg>');
 
     component['exportSvgAsImage']('jpeg');
 
     expect(serializerSpy).toHaveBeenCalledWith(fakeSvg);
     expect(URL.createObjectURL).toHaveBeenCalled();
-    expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', jasmine.any(FakeImage));
+    expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', expect.any(FakeImage));
   });
 
   it('exportSvgAsImage: should return if svg element is not found', () => {
-    (component['el'].nativeElement.querySelector as jasmine.Spy) = jasmine.createSpy().and.returnValue(null);
+    (component['el'].nativeElement.querySelector as Mock) = vi.fn().mockReturnValue(null);
 
-    const serializerSpy = spyOn(XMLSerializer.prototype, 'serializeToString');
-    const configureCanvasSpy = spyOn(component as any, 'configureImageCanvas');
-    const urlSpy = spyOn(URL, 'createObjectURL');
+    const serializerSpy = vi.spyOn(XMLSerializer.prototype as any, 'serializeToString');
+    const configureCanvasSpy = vi.spyOn(component as any, 'configureImageCanvas');
+    const urlSpy = vi.spyOn(URL as any, 'createObjectURL');
 
     component['exportSvgAsImage']('png');
 
@@ -2198,14 +2210,14 @@ describe('PoChartComponent', () => {
     it('should stop execution if the canvas context is null', () => {
       const mockImage = new Image();
       const canvas = document.createElement('canvas');
-      spyOn(canvas, 'getContext').and.returnValue(null);
+      vi.spyOn(canvas as any, 'getContext').mockReturnValue(null);
 
-      spyOn(document, 'createElement').and.callFake((tag: string) => {
+      vi.spyOn(document as any, 'createElement').mockImplementation((tag: string) => {
         if (tag === 'canvas') return canvas;
         return document.createElement(tag);
       });
 
-      spyOn<any>(component, 'setHeaderProperties');
+      vi.spyOn(component as any, 'setHeaderProperties');
 
       component['configureImageCanvas']('png', mockImage);
 
@@ -2214,7 +2226,7 @@ describe('PoChartComponent', () => {
       expect(component['setHeaderProperties']).not.toHaveBeenCalled();
     });
 
-    it('should create and download a PNG image correctly', done => {
+    it('should create and download a PNG image correctly', async () => {
       const chartElement = document.createElement('div');
       chartElement.style.width = '800px';
       chartElement.style.height = '600px';
@@ -2224,19 +2236,19 @@ describe('PoChartComponent', () => {
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      spyOn(canvas, 'getContext').and.returnValue(ctx);
+      vi.spyOn(canvas as any, 'getContext').mockReturnValue(ctx);
 
       const link = document.createElement('a');
 
       const originalCreateElement = document.createElement;
-      spyOn(document, 'createElement').and.callFake((tag: string) => {
+      vi.spyOn(document as any, 'createElement').mockImplementation((tag: string) => {
         if (tag === 'canvas') return canvas;
         if (tag === 'a') return link;
         return originalCreateElement.call(document, tag);
       });
 
-      spyOn(canvas, 'toDataURL').and.returnValue('data:image/png;base64,fakeImageData');
-      spyOn(link, 'click');
+      vi.spyOn(canvas as any, 'toDataURL').mockReturnValue('data:image/png;base64,fakeImageData');
+      vi.spyOn(link as any, 'click');
 
       const mockImage = document.createElement('img');
       Object.defineProperty(mockImage, 'width', { value: 800 });
@@ -2252,23 +2264,25 @@ describe('PoChartComponent', () => {
         expect(link.href).toBe('data:image/png;base64,fakeImageData');
         expect(link.download).toBe('grafico-exportado.png');
         expect(link.click).toHaveBeenCalled();
-        done();
       } catch (error) {
-        done.fail(error);
+        throw new Error(error);
       }
     });
   });
 
   describe('setHeaderProperties:', () => {
     it('should set header properties correctly with custom title', () => {
-      const ctx = jasmine.createSpyObj('CanvasRenderingContext2D', ['fillRect', 'fillText']);
+      const ctx = {
+        fillRect: vi.fn().mockName('CanvasRenderingContext2D.fillRect'),
+        fillText: vi.fn().mockName('CanvasRenderingContext2D.fillText')
+      };
       const headerDiv = document.createElement('div');
       headerDiv.classList.add('po-chart-header');
       const titleElement = document.createElement('strong');
       titleElement.innerText = 'Custom Title';
       headerDiv.appendChild(titleElement);
 
-      spyOn(headerDiv, 'querySelector').and.returnValue(titleElement);
+      vi.spyOn(headerDiv as any, 'querySelector').mockReturnValue(titleElement);
 
       component['setHeaderProperties'](ctx, headerDiv, 300, 50);
 
@@ -2277,11 +2291,14 @@ describe('PoChartComponent', () => {
     });
 
     it('should set header properties correctly with default title', () => {
-      const ctx = jasmine.createSpyObj('CanvasRenderingContext2D', ['fillRect', 'fillText']);
+      const ctx = {
+        fillRect: vi.fn().mockName('CanvasRenderingContext2D.fillRect'),
+        fillText: vi.fn().mockName('CanvasRenderingContext2D.fillText')
+      };
       const headerDiv = document.createElement('div');
       headerDiv.classList.add('po-chart-header');
 
-      spyOn(headerDiv, 'querySelector').and.returnValue(null);
+      vi.spyOn(headerDiv as any, 'querySelector').mockReturnValue(null);
 
       component['setHeaderProperties'](ctx, headerDiv, 300, 50);
 
@@ -2292,7 +2309,7 @@ describe('PoChartComponent', () => {
 
   describe('resolvePx:', () => {
     it('should return the numeric value when token ends with px', () => {
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('20px');
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('20px');
 
       const result = (component as any)['chartGridUtils'].resolvePx('--border-width-sm');
 
@@ -2300,7 +2317,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should convert rem to pixels correctly', () => {
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('2rem');
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('2rem');
 
       const result = (component as any)['chartGridUtils'].resolvePx('--font-size-grid');
 
@@ -2308,9 +2325,9 @@ describe('PoChartComponent', () => {
     });
 
     it('should use default font size of 16px if parent font size is undefined', () => {
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('2em');
-      spyOn(document, 'querySelector').and.returnValue(null);
-      spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '16px' } as CSSStyleDeclaration);
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('2em');
+      vi.spyOn(document as any, 'querySelector').mockReturnValue(null);
+      vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({ fontSize: '16px' } as CSSStyleDeclaration);
 
       const result = (component as any)['chartGridUtils'].resolvePx('2em');
 
@@ -2321,9 +2338,9 @@ describe('PoChartComponent', () => {
       const mockParentElement = document.createElement('div');
       mockParentElement.style.fontSize = '18px';
 
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
-      spyOn(document, 'querySelector').and.returnValue(mockParentElement);
-      spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '18px' } as CSSStyleDeclaration);
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('1.5em');
+      vi.spyOn(document as any, 'querySelector').mockReturnValue(mockParentElement);
+      vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({ fontSize: '18px' } as CSSStyleDeclaration);
 
       const result = (component as any)['chartGridUtils'].resolvePx('--some-size', '.some-selector');
 
@@ -2331,8 +2348,8 @@ describe('PoChartComponent', () => {
     });
 
     it('should return default 16px when em is used but parent element is not found', () => {
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
-      spyOn(document, 'querySelector').and.returnValue(null);
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('1.5em');
+      vi.spyOn(document as any, 'querySelector').mockReturnValue(null);
 
       const result = (component as any)['chartGridUtils'].resolvePx('--some-size');
 
@@ -2340,8 +2357,8 @@ describe('PoChartComponent', () => {
     });
 
     it('should default to 16px when getComputedStyle does not return fontSize', () => {
-      spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
-      spyOn(document, 'querySelector').and.returnValue(null);
+      vi.spyOn(component as any, 'getCSSVariable').mockReturnValue('1.5em');
+      vi.spyOn(document as any, 'querySelector').mockReturnValue(null);
 
       const result = (component as any)['chartGridUtils'].resolvePx('--some-size', '.some-selector');
       expect(result).toBe(24);
@@ -2372,7 +2389,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should add customActions to popupActions', () => {
-      const mockActions = [{ label: 'Ação 1', action: jasmine.createSpy('action1') }];
+      const mockActions = [{ label: 'Ação 1', action: vi.fn() }];
       component['customActions'] = mockActions;
 
       component['setPopupActions']();
@@ -2381,7 +2398,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should maintain existing popupActions while adding customActions', () => {
-      const newActions = [{ label: 'Nova Ação', action: jasmine.createSpy('actionNew') }];
+      const newActions = [{ label: 'Nova Ação', action: vi.fn() }];
       component['customActions'] = newActions;
 
       component['setPopupActions']();

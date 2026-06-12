@@ -53,24 +53,24 @@ describe('PoDialogBaseService ', () => {
   });
 
   it('should call `service.alert` with `alertOptions` correctly', () => {
-    spyOn(service, 'alert').and.callThrough();
-    spyOn(service, 'openDialog');
+    vi.spyOn(service as any, 'alert');
+    vi.spyOn(service as any, 'openDialog');
     service.alert(alertOptions);
     expect(service.alert).toHaveBeenCalled();
     expect(service.openDialog).toHaveBeenCalledWith(PoDialogType.Alert, alertOptions);
   });
 
   it('should call `service.confirm` with `confirmOptionsWithCancel` correctly', () => {
-    spyOn(service, 'confirm').and.callThrough();
-    spyOn(service, 'openDialog');
+    vi.spyOn(service as any, 'confirm');
+    vi.spyOn(service as any, 'openDialog');
     service.confirm(confirmOptionsWithCancel);
     expect(service.confirm).toHaveBeenCalled();
     expect(service.openDialog).toHaveBeenCalledWith(PoDialogType.Confirm, confirmOptionsWithCancel);
   });
 
   it('should call `service.confirm` with `confirmOptionsWithoutCancel` correctly', () => {
-    spyOn(service, 'confirm').and.callThrough();
-    spyOn(service, 'openDialog');
+    vi.spyOn(service as any, 'confirm');
+    vi.spyOn(service as any, 'openDialog');
     service.confirm(confirmOptionsWithoutCancel);
     expect(service.confirm).toHaveBeenCalled();
     expect(service.openDialog).toHaveBeenCalledWith(PoDialogType.Confirm, confirmOptionsWithoutCancel);

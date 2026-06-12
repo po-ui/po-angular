@@ -26,8 +26,8 @@ describe('PoMenuPanelBaseComponent: ', () => {
     it('menus: should set `menus` with a array empty when invalid values', () => {
       const invalidValues = [undefined, 'menu', 123, true, null, {}, false, NaN];
 
-      spyOn(component, <any>'setMenuExtraProperties');
-      spyOn(component, <any>'validateMenus');
+      vi.spyOn(component as any, 'setMenuExtraProperties');
+      vi.spyOn(component as any, 'validateMenus');
 
       expectPropertiesValues(component, 'menus', invalidValues, []);
 

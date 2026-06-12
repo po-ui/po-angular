@@ -85,7 +85,7 @@ describe('PoDisclaimerBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -103,7 +103,7 @@ describe('PoDisclaimerBaseComponent:', () => {
       const expectedOutputItems = [
         { label: 'Teste nível 1', url: '/test/nivel/1' },
         { label: 'Teste nível 2', url: '/test/nivel/2' },
-        { label: 'Teste nível 3', action: jasmine.any(Function) },
+        { label: 'Teste nível 3', action: expect.any(Function) },
         { label: 'Teste nível 4', url: '/test/nivel/4' }
       ];
       expect(newItem).toEqual(expectedOutputItems);

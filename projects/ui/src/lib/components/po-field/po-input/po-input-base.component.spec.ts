@@ -11,7 +11,9 @@ import { PoMask } from './po-mask';
 
 @Directive()
 class PoInput extends PoInputBaseComponent {
-  extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(c: AbstractControl): {
+    [key: string]: any;
+  } {
     return null;
   }
 
@@ -25,13 +27,16 @@ class PoInput extends PoInputBaseComponent {
 
 describe('PoInputBase:', async () => {
   let component: PoInput;
-  let changeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
+  let changeDetectorRef: any;
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({}).compileComponents();
 
-    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges']);
+    changeDetectorRef = {
+      markForCheck: vi.fn().mockName('ChangeDetectorRef.markForCheck'),
+      detectChanges: vi.fn().mockName('ChangeDetectorRef.detectChanges')
+    };
 
     component = TestBed.runInInjectionContext(() => new PoInput(changeDetectorRef as any));
   });
@@ -43,7 +48,7 @@ describe('PoInputBase:', async () => {
   it('ngOnDestroy: should unsubscribe `subscription` on destroy', () => {
     component['subscription'] = fakeSubscription;
 
-    spyOn(component['subscription'], <any>'unsubscribe');
+    vi.spyOn(component['subscription'] as any, 'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -51,7 +56,7 @@ describe('PoInputBase:', async () => {
   });
 
   it('should set disabled', () => {
-    spyOn(component, <any>'validateModel');
+    vi.spyOn(component as any, 'validateModel');
 
     expectSettersMethod(component, 'setDisabled', '', 'disabled', true);
     expectSettersMethod(component, 'setDisabled', 'true', 'disabled', true);
@@ -67,7 +72,7 @@ describe('PoInputBase:', async () => {
   });
 
   it('should set required', () => {
-    spyOn(component, <any>'validateModel');
+    vi.spyOn(component as any, 'validateModel');
 
     expectSettersMethod(component, 'setRequired', '', 'required', true);
     expectSettersMethod(component, 'setRequired', 'true', 'required', true);
@@ -83,7 +88,7 @@ describe('PoInputBase:', async () => {
   });
 
   it('should set pattern', () => {
-    spyOn(component, <any>'validateModel');
+    vi.spyOn(component as any, 'validateModel');
 
     expectSettersMethod(component, 'setPattern', '', 'pattern', '');
     expectSettersMethod(component, 'setPattern', '/d/', 'pattern', '/d/');
@@ -97,7 +102,7 @@ describe('PoInputBase:', async () => {
   });
 
   it('should set maskFormatModel', () => {
-    spyOn(component, <any>'validateModel');
+    vi.spyOn(component as any, 'validateModel');
 
     expectSettersMethod(component, 'setMaskFormatModel', '', 'maskFormatModel', true);
     expectSettersMethod(component, 'setMaskFormatModel', 'true', 'maskFormatModel', true);
@@ -115,7 +120,7 @@ describe('PoInputBase:', async () => {
     const fakeThis = component;
     fakeThis.type = 'text';
 
-    spyOn(component, 'onChangePropagate');
+    vi.spyOn(component as any, 'onChangePropagate');
     component.callOnChange.call(fakeThis, '123');
     expect(component.onChangePropagate).toHaveBeenCalledWith('123');
   });
@@ -126,7 +131,7 @@ describe('PoInputBase:', async () => {
     component.minlength = undefined;
     component.pattern = '';
 
-    spyOn(component, 'extraValidation');
+    vi.spyOn(component as any, 'extraValidation');
     component.validate(new UntypedFormControl());
     expect(component.extraValidation).toHaveBeenCalled();
   });
@@ -135,7 +140,7 @@ describe('PoInputBase:', async () => {
     component.required = true;
     component.disabled = false;
 
-    spyOn(component, 'extraValidation');
+    vi.spyOn(component as any, 'extraValidation');
     expect(component.validate(null)).not.toBeNull();
     expect(component.extraValidation).not.toHaveBeenCalled();
   });
@@ -144,7 +149,7 @@ describe('PoInputBase:', async () => {
     component.maxlength = 1;
     component.getScreenValue = () => 'teste';
 
-    spyOn(component, 'extraValidation');
+    vi.spyOn(component as any, 'extraValidation');
     expect(component.validate(null)).not.toBeNull();
     expect(component.extraValidation).not.toHaveBeenCalled();
   });
@@ -154,7 +159,7 @@ describe('PoInputBase:', async () => {
     component.minlength = 10;
     component.getScreenValue = () => 'teste';
 
-    spyOn(component, 'extraValidation');
+    vi.spyOn(component as any, 'extraValidation');
     expect(component.validate(null)).not.toBeNull();
     expect(component.extraValidation).not.toHaveBeenCalled();
   });
@@ -164,7 +169,7 @@ describe('PoInputBase:', async () => {
     component.minlength = 0;
     component.pattern = '[0-1]';
 
-    spyOn(component, 'extraValidation');
+    vi.spyOn(component as any, 'extraValidation');
     expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
     expect(component.extraValidation).not.toHaveBeenCalled();
   });
@@ -176,14 +181,14 @@ describe('PoInputBase:', async () => {
       statusChanges: new Subject<string>()
     } as any;
 
-    spyOn(component['cd'], 'markForCheck');
+    vi.spyOn(component['cd'] as any, 'markForCheck');
 
     component.validate(controlMock);
 
     controlMock.statusChanges.next('INVALID');
     tick();
 
-    expect(component.isInvalid).toBeTrue();
+    expect(component.isInvalid).toBe(true);
     expect(component['cd'].markForCheck).toHaveBeenCalled();
   }));
 
@@ -195,7 +200,7 @@ describe('PoInputBase:', async () => {
 
     component.validate(controlMock);
 
-    expect(component.hasValidatorRequired).toBeTrue();
+    expect(component.hasValidatorRequired).toBe(true);
   });
 
   it('should register function OnChangePropagate', () => {
@@ -215,7 +220,7 @@ describe('PoInputBase:', async () => {
   });
 
   it('should call writeValueModel', () => {
-    spyOn(component, 'writeValueModel');
+    vi.spyOn(component as any, 'writeValueModel');
     component.writeValue('1');
     expect(component.writeValueModel).toHaveBeenCalledWith('1');
   });
@@ -238,7 +243,7 @@ describe('PoInputBase:', async () => {
     });
 
     it('p-maxlength: should update property p-maxlength with valid values.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       const validValues = [105, 1, 7, 0, -5];
       expectPropertiesValues(component, 'maxlength', validValues, validValues);
@@ -252,7 +257,7 @@ describe('PoInputBase:', async () => {
     });
 
     it('p-minlength: should update property p-minlength with valid values.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       const validValues = [105, 1, 7, 0, -5];
       expectPropertiesValues(component, 'minlength', validValues, validValues);
@@ -507,7 +512,7 @@ describe('PoInputBase:', async () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -520,7 +525,7 @@ describe('PoInputBase:', async () => {
       component.modelLastUpdate = 1;
       component.emitAllChanges = false;
 
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
       component.controlChangeModelEmitter.call(component, newModelValue);
 
       expect(component.changeModel.emit).not.toHaveBeenCalled();
@@ -532,7 +537,7 @@ describe('PoInputBase:', async () => {
       component.modelLastUpdate = 1;
       component.emitAllChanges = true;
 
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
       component.controlChangeModelEmitter.call(component, newModelValue);
 
       expect(component.changeModel.emit).toHaveBeenCalledWith(newModelValue);
@@ -540,8 +545,8 @@ describe('PoInputBase:', async () => {
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         (component as any).label = 'this.label';
         component.emitAdditionalHelp();
 
@@ -549,8 +554,8 @@ describe('PoInputBase:', async () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -560,7 +565,7 @@ describe('PoInputBase:', async () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -570,7 +575,7 @@ describe('PoInputBase:', async () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -579,7 +584,7 @@ describe('PoInputBase:', async () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -596,7 +601,7 @@ describe('PoInputBase:', async () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']();
 
@@ -611,7 +616,7 @@ describe('PoInputBase:', async () => {
 
     it('setDisabledState: should call markForCheck if changeDetector is not undefined', () => {
       component['cd'] = <any>{ markForCheck: () => {} };
-      spyOn(component['cd'], 'markForCheck');
+      vi.spyOn(component['cd'] as any, 'markForCheck');
 
       component.setDisabledState(true);
 
@@ -620,7 +625,7 @@ describe('PoInputBase:', async () => {
 
     it('writeValue: should call markForCheck if changeDetector is not undefined', () => {
       component['cd'] = <any>{ markForCheck: () => {} };
-      spyOn(component['cd'], 'markForCheck');
+      vi.spyOn(component['cd'] as any, 'markForCheck');
 
       component.writeValue('1');
 
@@ -638,14 +643,14 @@ describe('PoInputBase:', async () => {
       it('should set loading=true and call markForCheck', () => {
         component.loading = true;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
       });
 
       it('should set loading=false and call markForCheck', () => {
         component.loading = false;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
       });
 
@@ -653,26 +658,26 @@ describe('PoInputBase:', async () => {
         component.disabled = false;
 
         component.loading = true;
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
 
         component.disabled = true;
         component.loading = false;
-        expect(component.disabled).toBeTrue();
+        expect(component.disabled).toBe(true);
       });
 
       it('should set loading=true when input receives string empty', () => {
         component.loading = '' as any;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should set loading=false when input receives string "false"', () => {
         component.loading = 'false' as any;
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
 
       it('should set loading=true when input receives string "true"', () => {
         component.loading = 'true' as any;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should not throw when cd is undefined', () => {
@@ -694,39 +699,39 @@ describe('PoInputBase:', async () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
 
       it('should return true when disabled is true and loading is false', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled is false and loading is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled and loading are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should keep disabled true after loading toggles from true to false', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
 
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
     });
 
@@ -734,17 +739,17 @@ describe('PoInputBase:', async () => {
       beforeEach(() => {
         (component as any).label = undefined;
         (component as any).helperEl = {
-          helperIsVisible: jasmine.createSpy('helperIsVisible'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          openHelperPopover: jasmine.createSpy('openHelperPopover')
+          helperIsVisible: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          openHelperPopover: vi.fn()
         };
       });
 
       it('should emit additionalHelp and call helper.eventOnClick when isHelpEvt=true and helper has eventOnClick', () => {
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -757,10 +762,10 @@ describe('PoInputBase:', async () => {
 
       it('should close the popover when helperEl.helperIsVisible() is true (without event and without clickable helper)', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue('qualquer-coisa');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('qualquer-coisa');
 
-        (component as any).helperEl.helperIsVisible.and.returnValue(true);
+        (component as any).helperEl.helperIsVisible.mockReturnValue(true);
 
         const result = component.showAdditionalHelp();
 
@@ -771,10 +776,10 @@ describe('PoInputBase:', async () => {
 
       it('should open the popover when helperEl.helperIsVisible() is false and there is additionalHelpTooltip', () => {
         component.additionalHelpTooltip = 'Ajuda extra';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
 
-        (component as any).helperEl.helperIsVisible.and.returnValue(false);
+        (component as any).helperEl.helperIsVisible.mockReturnValue(false);
 
         const result = component.showAdditionalHelp();
 
@@ -784,10 +789,10 @@ describe('PoInputBase:', async () => {
       });
 
       it('should not call eventOnClick when helper is string; should follow popover logic', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue('helper-em-string');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('helper-em-string');
 
-        (component as any).helperEl.helperIsVisible.and.returnValue(false);
+        (component as any).helperEl.helperIsVisible.mockReturnValue(false);
 
         const result = component.showAdditionalHelp();
 
@@ -800,8 +805,8 @@ describe('PoInputBase:', async () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -809,8 +814,8 @@ describe('PoInputBase:', async () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
@@ -818,7 +823,7 @@ describe('PoInputBase:', async () => {
       component.pattern = '[a-z]';
       component.getScreenValue = () => '2';
 
-      spyOn(component, <any>'validatePatternOnWriteValue');
+      vi.spyOn(component as any, 'validatePatternOnWriteValue');
       expect(component.validate(new UntypedFormControl('2'))).not.toBeNull();
       expect(component['validatePatternOnWriteValue']).toHaveBeenCalled();
     });
@@ -836,7 +841,7 @@ describe('PoInputBase:', async () => {
 
     it('validatePatternOnWriteValue: should call `updateModel` if value isn`t falsy and `passedWriteValue` is true', fakeAsync(() => {
       component['passedWriteValue'] = true;
-      spyOn(component, 'updateModel');
+      vi.spyOn(component as any, 'updateModel');
 
       component['validatePatternOnWriteValue']('input');
 
@@ -845,7 +850,7 @@ describe('PoInputBase:', async () => {
     }));
 
     it('validatePatternOnWriteValue: should not call `updateModel` if value is undefined', fakeAsync(() => {
-      spyOn(component, 'updateModel');
+      vi.spyOn(component as any, 'updateModel');
 
       component['validatePatternOnWriteValue'](undefined);
 
@@ -856,7 +861,7 @@ describe('PoInputBase:', async () => {
     it('validatePatternOnWriteValue: should not call `updateModel` if `passedWriteValue` is false', fakeAsync(() => {
       component['passedWriteValue'] = false;
 
-      spyOn(component, 'updateModel');
+      vi.spyOn(component as any, 'updateModel');
 
       component['validatePatternOnWriteValue'](undefined);
 
@@ -870,7 +875,7 @@ describe('PoInputBase:', async () => {
         controlChangeModelEmitter: () => true
       };
 
-      spyOn(component, 'onChangePropagate');
+      vi.spyOn(component as any, 'onChangePropagate');
       component.updateModel.call(fakeThis, '123');
       expect(component.onChangePropagate).not.toHaveBeenCalled();
     });
@@ -881,7 +886,7 @@ describe('PoInputBase:', async () => {
         controlChangeModelEmitter: () => true
       };
 
-      const updateModel = spyOn(component, 'updateModel');
+      const updateModel = vi.spyOn(component as any, 'updateModel');
 
       component.callUpdateModelWithTimeout(fakeThis);
 
@@ -890,8 +895,8 @@ describe('PoInputBase:', async () => {
     }));
 
     it('callOnChange: should call updateModel and controlChangeModelEmitter.', () => {
-      spyOn(component, 'updateModel');
-      spyOn(component, 'controlChangeModelEmitter');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'controlChangeModelEmitter');
       component.callOnChange('teste');
       expect(component.updateModel).toHaveBeenCalledWith('teste');
       expect(component.controlChangeModelEmitter).toHaveBeenCalledWith('teste');

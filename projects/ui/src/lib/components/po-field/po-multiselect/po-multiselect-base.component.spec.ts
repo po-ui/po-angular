@@ -49,11 +49,14 @@ class PoMultiselectTestComponent extends PoMultiselectBaseComponent {
 
 describe('PoMultiselectBaseComponent:', () => {
   let component;
-  let changeDetectorRef: jasmine.SpyObj<any>;
+  let changeDetectorRef: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({}).compileComponents();
-    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges']);
+    changeDetectorRef = {
+      markForCheck: vi.fn().mockName('ChangeDetectorRef.markForCheck'),
+      detectChanges: vi.fn().mockName('ChangeDetectorRef.detectChanges')
+    };
     component = TestBed.runInInjectionContext(() => new PoMultiselectTestComponent());
     component['cd'] = changeDetectorRef;
   });
@@ -71,7 +74,7 @@ describe('PoMultiselectBaseComponent:', () => {
     expectSettersMethod(component, 'required', 'undefined', 'required', false);
     expectSettersMethod(component, 'required', undefined, 'required', false);
 
-    spyOn(component, <any>'validateModel');
+    vi.spyOn(component as any, 'validateModel');
     component.disabled = true;
     expect(component['validateModel']).toHaveBeenCalled();
   });
@@ -85,8 +88,8 @@ describe('PoMultiselectBaseComponent:', () => {
     expectSettersMethod(component, 'disabled', 'undefined', 'disabled', false);
     expectSettersMethod(component, 'disabled', undefined, 'disabled', false);
 
-    spyOn(component, <any>'validateModel');
-    spyOn(component, 'updateVisibleItems');
+    vi.spyOn(component as any, 'validateModel');
+    vi.spyOn(component as any, 'updateVisibleItems');
     component.disabled = true;
     expect(component['validateModel']).toHaveBeenCalled();
     expect(component.updateVisibleItems).toHaveBeenCalled();
@@ -144,7 +147,7 @@ describe('PoMultiselectBaseComponent:', () => {
     expectSettersMethod(component, 'sort', 'undefined', 'sort', false);
     expectSettersMethod(component, 'sort', undefined, 'sort', false);
 
-    spyOn(component, 'validAndSortOptions');
+    vi.spyOn(component as any, 'validAndSortOptions');
     component.sort = true;
     expect(component.validAndSortOptions).toHaveBeenCalled();
   });
@@ -188,7 +191,7 @@ describe('PoMultiselectBaseComponent:', () => {
   });
 
   it('should call updateList in OnInit', () => {
-    spyOn(component, 'updateList');
+    vi.spyOn(component as any, 'updateList');
     component.options = [];
     component.ngOnInit();
     expect(component.updateList).toHaveBeenCalledWith([]);
@@ -196,8 +199,8 @@ describe('PoMultiselectBaseComponent:', () => {
 
   it('should call updateList in OnInit if has filterService', () => {
     component.filterService = poMultiselectFilterServiceStub;
-    spyOn(component, 'updateList');
-    spyOn(component.filterSubject, 'subscribe');
+    vi.spyOn(component as any, 'updateList');
+    vi.spyOn(component.filterSubject as any, 'subscribe');
 
     component.options = [];
     component.ngOnInit();
@@ -209,10 +212,10 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [{ label: '1', value: 1 }];
     component.sort = true;
 
-    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptionsWithFieldValue');
-    spyOn(UtilsFunctions, 'removeDuplicatedOptionsWithFieldValue');
-    spyOn(component, 'setUndefinedLabels');
-    spyOn(UtilsFunctions, 'sortOptionsByProperty');
+    vi.spyOn(UtilsFunctions as any, 'removeUndefinedAndNullOptionsWithFieldValue');
+    vi.spyOn(UtilsFunctions as any, 'removeDuplicatedOptionsWithFieldValue');
+    vi.spyOn(component as any, 'setUndefinedLabels');
+    vi.spyOn(UtilsFunctions as any, 'sortOptionsByProperty');
     component.validAndSortOptions();
     expect(UtilsFunctions.removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
     expect(UtilsFunctions.removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
@@ -224,10 +227,10 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [{ label: '1', value: 1 }];
     component.sort = false;
 
-    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptionsWithFieldValue');
-    spyOn(UtilsFunctions, 'removeDuplicatedOptionsWithFieldValue');
-    spyOn(component, 'setUndefinedLabels');
-    spyOn(UtilsFunctions, 'sortOptionsByProperty');
+    vi.spyOn(UtilsFunctions as any, 'removeUndefinedAndNullOptionsWithFieldValue');
+    vi.spyOn(UtilsFunctions as any, 'removeDuplicatedOptionsWithFieldValue');
+    vi.spyOn(component as any, 'setUndefinedLabels');
+    vi.spyOn(UtilsFunctions as any, 'sortOptionsByProperty');
     component.validAndSortOptions();
     expect(UtilsFunctions.removeUndefinedAndNullOptionsWithFieldValue).toHaveBeenCalled();
     expect(UtilsFunctions.removeDuplicatedOptionsWithFieldValue).toHaveBeenCalled();
@@ -239,10 +242,10 @@ describe('PoMultiselectBaseComponent:', () => {
     component.options = [];
     component.sort = false;
 
-    spyOn(UtilsFunctions, 'removeUndefinedAndNullOptionsWithFieldValue');
-    spyOn(UtilsFunctions, 'removeDuplicatedOptionsWithFieldValue');
-    spyOn(component, 'setUndefinedLabels');
-    spyOn(UtilsFunctions, 'sortOptionsByProperty');
+    vi.spyOn(UtilsFunctions as any, 'removeUndefinedAndNullOptionsWithFieldValue');
+    vi.spyOn(UtilsFunctions as any, 'removeDuplicatedOptionsWithFieldValue');
+    vi.spyOn(component as any, 'setUndefinedLabels');
+    vi.spyOn(UtilsFunctions as any, 'sortOptionsByProperty');
     component.validAndSortOptions();
     expect(UtilsFunctions.removeUndefinedAndNullOptionsWithFieldValue).not.toHaveBeenCalled();
     expect(UtilsFunctions.removeDuplicatedOptionsWithFieldValue).not.toHaveBeenCalled();
@@ -283,8 +286,8 @@ describe('PoMultiselectBaseComponent:', () => {
       getValueUpdate: v => []
     };
 
-    spyOn(fakeThis, 'onModelChange');
-    spyOn(fakeThis, 'eventChange');
+    vi.spyOn(fakeThis as any, 'onModelChange');
+    vi.spyOn(fakeThis as any, 'eventChange');
     component.callOnChange.call(fakeThis, []);
     expect(fakeThis.onModelChange).toHaveBeenCalledWith([]);
     expect(fakeThis.eventChange).toHaveBeenCalledWith([]);
@@ -297,7 +300,7 @@ describe('PoMultiselectBaseComponent:', () => {
       getValuesFromOptions: v => []
     };
 
-    spyOn(fakeThis, 'eventChange');
+    vi.spyOn(fakeThis as any, 'eventChange');
     component.callOnChange.call(fakeThis, []);
     expect(fakeThis.eventChange).not.toHaveBeenCalled();
   });
@@ -365,25 +368,25 @@ describe('PoMultiselectBaseComponent:', () => {
   it('should keep visibleOptionsDropdown', () => {
     component.visibleOptionsDropdown = [{ value: 1, label: 'Label 1' }];
 
-    spyOn(component, 'compareMethod');
+    vi.spyOn(component as any, 'compareMethod');
     component.searchByLabel('', [], PoMultiselectFilterMode.startsWith);
     expect(component.compareMethod).not.toHaveBeenCalled();
   });
 
   it('should call startsWith in compareMethod', () => {
-    spyOn(component, 'startsWith');
+    vi.spyOn(component as any, 'startsWith');
     component.compareMethod('Label', { value: 1, label: 'Label 1' }, PoMultiselectFilterMode.startsWith);
     expect(component.startsWith).toHaveBeenCalled();
   });
 
   it('should call contains in compareMethod', () => {
-    spyOn(component, 'contains');
+    vi.spyOn(component as any, 'contains');
     component.compareMethod('Label', { value: 1, label: 'Label 1' }, PoMultiselectFilterMode.contains);
     expect(component.contains).toHaveBeenCalled();
   });
 
   it('should call endsWith in compareMethod', () => {
-    spyOn(component, 'endsWith');
+    vi.spyOn(component as any, 'endsWith');
     component.compareMethod('Label', { value: 1, label: 'Label 1' }, PoMultiselectFilterMode.endsWith);
     expect(component.endsWith).toHaveBeenCalled();
   });
@@ -419,7 +422,7 @@ describe('PoMultiselectBaseComponent:', () => {
       { value: 2, label: '2' }
     ];
 
-    spyOn(component, 'updateVisibleItems');
+    vi.spyOn(component as any, 'updateVisibleItems');
     component.updateSelectedOptions([{ value: 1 }, { value: 3 }]);
     expect(component.updateVisibleItems).toHaveBeenCalled();
     expect(component.selectedOptions.length).toBe(1);
@@ -432,8 +435,8 @@ describe('PoMultiselectBaseComponent:', () => {
       { value: 2, label: '2' }
     ];
 
-    spyOn(component, 'updateSelectedOptions').and.callThrough();
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component as any, 'updateSelectedOptions');
+    vi.spyOn(component as any, 'callOnChange');
 
     component.writeValue([2, 3]);
 
@@ -462,7 +465,7 @@ describe('PoMultiselectBaseComponent:', () => {
       const value = [];
       component['lastLengthModel'] = 1;
 
-      spyOn(component.change, 'emit');
+      vi.spyOn(component.change as any, 'emit');
       component.eventChange(value);
       expect(component.change.emit).toHaveBeenCalledWith(value);
       expect(component['lastLengthModel']).toBe(0);
@@ -471,7 +474,7 @@ describe('PoMultiselectBaseComponent:', () => {
     it('eventChange: shouldn`t emit if model is the same', () => {
       component['lastLengthModel'] = 1;
 
-      spyOn(component.change, 'emit');
+      vi.spyOn(component.change as any, 'emit');
       component.eventChange([{ value: 1, label: '1' }]);
       expect(component.change.emit).not.toHaveBeenCalled();
     });
@@ -494,7 +497,7 @@ describe('PoMultiselectBaseComponent:', () => {
     it('validateModel: should call `validatorChange` to validateModel when `validatorChange` is a function', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']();
 
@@ -502,7 +505,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('writeValue: should call `updateSelectedOptions` with `[]` if model value is `invalid`.', () => {
-      spyOn(component, 'updateSelectedOptions');
+      vi.spyOn(component as any, 'updateSelectedOptions');
 
       component.writeValue(undefined);
 
@@ -510,7 +513,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('writeValue: should call `updateSelectedOptions` with values if model value is `valid`.', () => {
-      spyOn(component, 'updateSelectedOptions');
+      vi.spyOn(component as any, 'updateSelectedOptions');
       component.service = poMultiselectFilterServiceStub;
 
       const values = [{ label: '', value: '' }];
@@ -521,7 +524,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('writeValue: should call `updateSelectedOptions` with value if model value is `valid`.', () => {
-      spyOn(component, 'updateSelectedOptions');
+      vi.spyOn(component as any, 'updateSelectedOptions');
 
       const values = ['teste'];
 
@@ -533,7 +536,7 @@ describe('PoMultiselectBaseComponent:', () => {
     it('writeValue: should call `updateSelectedOptions` with value `undefined` and returns `[]`', () => {
       component.filterService = undefined;
 
-      spyOn(component, 'updateSelectedOptions');
+      vi.spyOn(component as any, 'updateSelectedOptions');
 
       component.writeValue(undefined);
 
@@ -572,7 +575,7 @@ describe('PoMultiselectBaseComponent:', () => {
       component.options = [];
       const value = 'abc';
       component.ngOnInit();
-      spyOn(component, 'applyFilter').and.returnValue(of([]));
+      vi.spyOn(component as any, 'applyFilter').mockReturnValue(of([]));
       component.filterSubject.next(value);
       tick(50);
       expect(component.applyFilter).toHaveBeenCalledWith(value);
@@ -588,7 +591,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('updateSelectedOptions: should call `updateVisibleItems` and set `selectedOptions`', () => {
-      spyOn(component, 'updateVisibleItems');
+      vi.spyOn(component as any, 'updateVisibleItems');
       const params = [1, 2, 3];
       component.options = [];
       component.filterService = poMultiselectFilterServiceStub;
@@ -598,7 +601,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('updateSelectedOptions: should be called with params, options and `service` and set `selectedOptions`', () => {
-      spyOn(component, 'updateVisibleItems');
+      vi.spyOn(component as any, 'updateVisibleItems');
       const params = [1, 2, 3];
       const options = [];
       component.filterService = poMultiselectFilterServiceStub;
@@ -608,7 +611,7 @@ describe('PoMultiselectBaseComponent:', () => {
     });
 
     it('updateSelectedOptions: should set `undefined` for `lastLengthModel` if `newOptions.lenght` is `0`', () => {
-      spyOn(component, 'updateVisibleItems');
+      vi.spyOn(component as any, 'updateVisibleItems');
       const params = [];
       const options = [];
       component.filterService = poMultiselectFilterServiceStub;
@@ -772,7 +775,7 @@ describe('PoMultiselectBaseComponent:', () => {
       component.autoHeightInitialValue = undefined;
 
       expect(component.filterService).toBe(value);
-      expect(component.autoHeight).toBeTrue();
+      expect(component.autoHeight).toBe(true);
       expect(component.options).toEqual([]);
     });
 
@@ -782,7 +785,7 @@ describe('PoMultiselectBaseComponent:', () => {
       component.filterService = value;
 
       expect(component.filterService).toBe(value);
-      expect(component.autoHeight).toBeFalse();
+      expect(component.autoHeight).toBe(false);
       expect(component.options).toEqual([]);
     });
 
@@ -859,7 +862,7 @@ describe('PoMultiselectBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        const spy = spyOn<any>(component, 'applySizeBasedOnA11y');
+        const spy = vi.spyOn(component as any, 'applySizeBasedOnA11y');
 
         component['onThemeChange']();
 
@@ -915,14 +918,14 @@ describe('PoMultiselectBaseComponent:', () => {
     it('should set loading=true and call markForCheck', () => {
       component.loading = true;
 
-      expect(component.loading).toBeTrue();
+      expect(component.loading).toBe(true);
       expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
     });
 
     it('should set loading=false and call markForCheck', () => {
       component.loading = false;
 
-      expect(component.loading).toBeFalse();
+      expect(component.loading).toBe(false);
       expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
     });
 
@@ -930,26 +933,26 @@ describe('PoMultiselectBaseComponent:', () => {
       component.disabled = false;
 
       component.loading = true;
-      expect(component.disabled).toBeFalse();
+      expect(component.disabled).toBe(false);
 
       component.disabled = true;
       component.loading = false;
-      expect(component.disabled).toBeTrue();
+      expect(component.disabled).toBe(true);
     });
 
     it('should set loading=true when input receives string empty', () => {
       component.loading = '' as any;
-      expect(component.loading).toBeTrue();
+      expect(component.loading).toBe(true);
     });
 
     it('should set loading=false when input receives string "false"', () => {
       component.loading = 'false' as any;
-      expect(component.loading).toBeFalse();
+      expect(component.loading).toBe(false);
     });
 
     it('should set loading=true when input receives string "true"', () => {
       component.loading = 'true' as any;
-      expect(component.loading).toBeTrue();
+      expect(component.loading).toBe(true);
     });
 
     it('should not throw when cd is undefined', () => {
@@ -971,39 +974,39 @@ describe('PoMultiselectBaseComponent:', () => {
       component.disabled = false;
       component.loading = false;
 
-      expect(component.isDisabled).toBeFalse();
+      expect(component.isDisabled).toBe(false);
     });
 
     it('should return true when disabled is true and loading is false', () => {
       component.disabled = true;
       component.loading = false;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
 
     it('should return true when disabled is false and loading is true', () => {
       component.disabled = false;
       component.loading = true;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
 
     it('should return true when disabled and loading are true', () => {
       component.disabled = true;
       component.loading = true;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
 
     it('should keep disabled true after loading toggles from true to false', () => {
       component.disabled = true;
       component.loading = true;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
 
       component.loading = false;
 
-      expect(component.isDisabled).toBeTrue();
+      expect(component.isDisabled).toBe(true);
     });
   });
 });

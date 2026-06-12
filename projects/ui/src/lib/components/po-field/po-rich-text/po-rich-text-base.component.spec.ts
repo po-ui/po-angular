@@ -80,7 +80,7 @@ describe('PoRichTextBaseComponent:', () => {
     });
 
     it('p-required: should update property with valid values, invalid values and call `validateModel`', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       expectPropertiesValues(component, 'required', booleanValidTrueValues, true);
       expectPropertiesValues(component, 'required', booleanInvalidValues, false);
@@ -173,7 +173,7 @@ describe('PoRichTextBaseComponent:', () => {
         const validValues = [true, 'true', 1, ''];
         validValues.forEach(value => {
           component.disabled = convertToBoolean(value);
-          expect(component.disabled).toBeTrue();
+          expect(component.disabled).toBe(true);
         });
       });
 
@@ -181,7 +181,7 @@ describe('PoRichTextBaseComponent:', () => {
         const invalidValues = [undefined, null, 2, 'string'];
         invalidValues.forEach(value => {
           component.disabled = convertToBoolean(value);
-          expect(component.disabled).toBeFalse();
+          expect(component.disabled).toBe(false);
         });
       });
     });
@@ -191,7 +191,7 @@ describe('PoRichTextBaseComponent:', () => {
         const validValues = [true, 'true', 1, ''];
         validValues.forEach(value => {
           component.loading = convertToBoolean(value);
-          expect(component.loading).toBeTrue();
+          expect(component.loading).toBe(true);
         });
       });
 
@@ -199,12 +199,12 @@ describe('PoRichTextBaseComponent:', () => {
         const invalidValues = [undefined, null, 2, 'string'];
         invalidValues.forEach(value => {
           component.loading = convertToBoolean(value);
-          expect(component.loading).toBeFalse();
+          expect(component.loading).toBe(false);
         });
       });
 
       it('should call `cd.markForCheck` when loading is set', () => {
-        spyOn(component.cd, 'markForCheck');
+        vi.spyOn(component.cd as any, 'markForCheck');
 
         component.loading = true;
 
@@ -217,28 +217,28 @@ describe('PoRichTextBaseComponent:', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when `loading` is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when both `disabled` and `loading` are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return false when both `disabled` and `loading` are false', () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
     });
   });
@@ -272,21 +272,21 @@ describe('PoRichTextBaseComponent:', () => {
         }
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined if `requiredFailed` is false', () => {
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
 
       expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('writeValue: should set value with the received param', () => {
-      spyOn(component['richTextService'], 'emitModel');
+      vi.spyOn(component['richTextService'] as any, 'emitModel');
       const model = 'value B';
       component.value = 'value A';
 
@@ -299,7 +299,7 @@ describe('PoRichTextBaseComponent:', () => {
     it('updateModel: should call onChangeModel method if onChangeModel isn`t false', () => {
       component.onChangeModel = true;
 
-      spyOn(component, <any>'onChangeModel');
+      vi.spyOn(component as any, 'onChangeModel');
 
       component['updateModel']('updated value');
 
@@ -317,7 +317,7 @@ describe('PoRichTextBaseComponent:', () => {
     it('validateModel: should call validatorChange method if validatorChange isn`t false', () => {
       component['validatorChange'] = true;
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']('updated value');
 
@@ -334,18 +334,18 @@ describe('PoRichTextBaseComponent:', () => {
 
     describe('setDisabledState:', () => {
       it('should set `disabled` with received value and call `cd.markForCheck`', () => {
-        spyOn(component.cd, 'markForCheck');
+        vi.spyOn(component.cd as any, 'markForCheck');
 
         component.setDisabledState(true);
 
-        expect(component.disabled).toBeTrue();
+        expect(component.disabled).toBe(true);
         expect(component.cd.markForCheck).toHaveBeenCalled();
       });
 
       it('should set `disabled` to false when called with false', () => {
         component.setDisabledState(false);
 
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
       });
     });
   });

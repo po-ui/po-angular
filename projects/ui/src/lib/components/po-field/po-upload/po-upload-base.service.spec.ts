@@ -17,7 +17,7 @@ describe('PoUploadBaseService:', () => {
   });
 
   it('should call removeRequest', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
-    spyOn(service, 'removeRequest');
+    vi.spyOn(service as any, 'removeRequest');
     const fakeThis = {
       requests: [
         {
@@ -32,7 +32,7 @@ describe('PoUploadBaseService:', () => {
   }));
 
   it('should not call removeRequest', inject([PoUploadBaseService], (service: PoUploadBaseService) => {
-    spyOn(service, 'removeRequest');
+    vi.spyOn(service as any, 'removeRequest');
     const fakeThis = {
       requests: [
         {
@@ -79,7 +79,7 @@ describe('PoUploadBaseService:', () => {
     const tOnUpload = new EventEmitter<any>();
     const callback = (file: PoUploadFile, event: any) => '';
 
-    spyOn(service, 'sendFile');
+    vi.spyOn(service as any, 'sendFile');
     service.upload('', files, headers, tOnUpload, callback, callback, callback);
     expect(service.sendFile).toHaveBeenCalled();
 
@@ -101,8 +101,8 @@ describe('PoUploadBaseService:', () => {
       const callback = (file: PoUploadFile, event: any) => '';
 
       const formData = new FormData();
-      spyOn(window, 'FormData').and.returnValue(formData);
-      spyOn(formData, 'append');
+      vi.spyOn(window as any, 'FormData').mockReturnValue(formData);
+      vi.spyOn(formData as any, 'append');
 
       const uploadEvent = {
         extraFormData: { param1: 'value1', param2: 'value2' },
@@ -111,11 +111,11 @@ describe('PoUploadBaseService:', () => {
         headers: { 'Content-Type': 'application/json' }
       };
 
-      spyOn(tOnUpload, 'emit').and.callFake(event => {
-        event.extraFormData = uploadEvent.extraFormData;
-        event.data = uploadEvent.data;
-        event.url = uploadEvent.url;
-        event.headers = uploadEvent.headers;
+      vi.spyOn(tOnUpload as any, 'emit').mockImplementation(event => {
+        (event as any).extraFormData = uploadEvent.extraFormData;
+        (event as any).data = uploadEvent.data;
+        (event as any).url = uploadEvent.url;
+        (event as any).headers = uploadEvent.headers;
       });
 
       service.upload('', files, headers, tOnUpload, callback, callback, callback);
@@ -136,7 +136,7 @@ describe('PoUploadBaseService:', () => {
       requests: service.requests
     };
 
-    spyOn(methods, 'uploadCallback');
+    vi.spyOn(methods as any, 'uploadCallback');
     service.sendFile.call(
       fakeThis,
       '',
@@ -162,7 +162,7 @@ describe('PoUploadBaseService:', () => {
       requests: service.requests
     };
 
-    spyOn(methods, 'successCallback');
+    vi.spyOn(methods as any, 'successCallback');
     service.sendFile.call(
       fakeThis,
       '',
@@ -189,7 +189,7 @@ describe('PoUploadBaseService:', () => {
       requests: service.requests
     };
 
-    spyOn(methods, 'successCallback');
+    vi.spyOn(methods as any, 'successCallback');
     service.sendFile.call(
       fakeThis,
       '',
@@ -215,7 +215,7 @@ describe('PoUploadBaseService:', () => {
       requests: service.requests
     };
 
-    spyOn(methods, 'errorCallback');
+    vi.spyOn(methods as any, 'errorCallback');
     service.sendFile.call(
       fakeThis,
       '',

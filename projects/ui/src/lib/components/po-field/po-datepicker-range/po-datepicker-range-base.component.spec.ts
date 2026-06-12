@@ -152,7 +152,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('disabled: should call `validateModel` with `dateRange`.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       component.disabled = true;
 
@@ -165,9 +165,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const endDate: PoDatepickerRange = { start: '', end: date };
       component['dateRange'] = { start: '', end: '' };
 
-      spyOn(component, <any>'convertPatternDateFormat').and.returnValue(date);
-      spyOn(component, 'updateScreenByModel');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'convertPatternDateFormat').mockReturnValue(date);
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModel');
 
       component.endDate = date;
 
@@ -247,23 +247,23 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('should convert value to boolean and call markForCheck', () => {
       component['changeDetector'] = {
-        markForCheck: jasmine.createSpy('markForCheck')
+        markForCheck: vi.fn()
       } as any;
 
       component.loading = 'true' as any;
 
-      expect(component['_loading']).toBeTrue();
+      expect(component['_loading']).toBe(true);
       expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
     });
 
     it('should set loading to false when value is falsy', () => {
       component['changeDetector'] = {
-        markForCheck: jasmine.createSpy('markForCheck')
+        markForCheck: vi.fn()
       } as any;
 
       component.loading = null;
 
-      expect(component['_loading']).toBeFalse();
+      expect(component['_loading']).toBe(false);
       expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
     });
 
@@ -286,7 +286,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('readonly: should call `validateModel`.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       component.readonly = true;
 
@@ -306,7 +306,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('required: should call `validateModel`.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       component.required = true;
 
@@ -319,9 +319,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       const start: PoDatepickerRange = { start: date, end: '' };
       component['dateRange'] = { start: '', end: '' };
 
-      spyOn(component, <any>'convertPatternDateFormat').and.returnValue(date);
-      spyOn(component, 'updateScreenByModel');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'convertPatternDateFormat').mockReturnValue(date);
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModel');
 
       component.startDate = date;
 
@@ -385,7 +385,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -403,33 +403,33 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       it('should set _rangePresets as true when value is empty string', () => {
         component.rangePresets = '';
 
-        expect((component as any)._rangePresets).toBeTrue();
+        expect((component as any)._rangePresets).toBe(true);
       });
 
       it('should set _rangePresets as true when value is boolean true', () => {
         component.rangePresets = true;
 
-        expect((component as any)._rangePresets).toBeTrue();
+        expect((component as any)._rangePresets).toBe(true);
       });
 
       it('should set _rangePresets as true when value is string "true"', () => {
         component.rangePresets = 'true';
 
-        expect((component as any)._rangePresets).toBeTrue();
+        expect((component as any)._rangePresets).toBe(true);
       });
 
       it('should set _rangePresets as false for any other value', () => {
         component.rangePresets = false;
 
-        expect((component as any)._rangePresets).toBeFalse();
+        expect((component as any)._rangePresets).toBe(false);
 
         component.rangePresets = 'false';
 
-        expect((component as any)._rangePresets).toBeFalse();
+        expect((component as any)._rangePresets).toBe(false);
 
         component.rangePresets = null;
 
-        expect((component as any)._rangePresets).toBeFalse();
+        expect((component as any)._rangePresets).toBe(false);
       });
     });
   });
@@ -438,7 +438,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it('ngOnDestroy: should unsubscribe `subscription` on destroy', () => {
       component['subscription'] = fakeSubscription;
 
-      spyOn(component['subscription'], <any>'unsubscribe');
+      vi.spyOn(component['subscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -483,11 +483,11 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       it('should call `convertPatternDateFormat` to have been called 2 times.', () => {
         const value = { value: { start: '2018-10-15', end: '2018-10-20' } };
 
-        spyOn(component, <any>'convertPatternDateFormat');
-        spyOn(component, <any>'requiredDateRangeFailed');
-        spyOn(component, <any>'verifyValidDate');
-        spyOn(component, <any>'dateRangeFormatFailed');
-        spyOn(component, <any>'dateRangeFailed');
+        vi.spyOn(component as any, 'convertPatternDateFormat');
+        vi.spyOn(component as any, 'requiredDateRangeFailed');
+        vi.spyOn(component as any, 'verifyValidDate');
+        vi.spyOn(component as any, 'dateRangeFormatFailed');
+        vi.spyOn(component as any, 'dateRangeFailed');
 
         component.validate(<any>value);
 
@@ -501,9 +501,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
           }
         };
 
-        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(true);
-        spyOn(component, <any>'dateRangeFormatFailed');
-        spyOn(component, <any>'dateRangeFailed');
+        vi.spyOn(component as any, 'requiredDateRangeFailed').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeFormatFailed');
+        vi.spyOn(component as any, 'dateRangeFailed');
 
         const validate = component.validate(new UntypedFormControl([]));
 
@@ -515,7 +515,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
         component['changeDetector'] = { markForCheck: () => {} } as any;
         const expectedValue = true;
-        const markForCheck = spyOn(component['changeDetector'], 'markForCheck');
+        const markForCheck = vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
         component.setDisabledState(expectedValue);
 
@@ -527,11 +527,11 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         and return 'invalidDateRangeError'.`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(true);
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'requiredDateRangeFailed');
-        spyOn(component, <any>'dateRangeFailed');
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'requiredDateRangeFailed');
+        vi.spyOn(component as any, 'dateRangeFailed');
 
         const validate = component.validate(new UntypedFormControl([]));
 
@@ -544,11 +544,11 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         and return 'invalidDateRangeError'.`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(true);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'requiredDateRangeFailed');
-        spyOn(component, <any>'dateRangeFailed');
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'requiredDateRangeFailed');
+        vi.spyOn(component as any, 'dateRangeFailed');
 
         const validate = component.validate(new UntypedFormControl([]));
 
@@ -561,11 +561,11 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         'invalidDateRangeError'.`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFailed').and.returnValue(true);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'requiredDateRangeFailed');
-        spyOn(component, <any>'dateRangeFormatFailed');
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'requiredDateRangeFailed');
+        vi.spyOn(component as any, 'dateRangeFormatFailed');
 
         const validate = component.validate(new UntypedFormControl([]));
 
@@ -579,10 +579,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         const spyOnReturns = false;
         const returnNull = null;
 
-        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(spyOnReturns);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(spyOnReturns);
-        spyOn(component, <any>'dateRangeFailed').and.returnValue(spyOnReturns);
+        vi.spyOn(component as any, 'requiredDateRangeFailed').mockReturnValue(spyOnReturns);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(spyOnReturns);
+        vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(spyOnReturns);
 
         const validate = component.validate(new UntypedFormControl(undefined));
 
@@ -595,12 +595,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       it(`should call 'validateDateInRange' if contain startDate and set 'errorMessage' with 'dateOutOfPeriod'`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
-        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+        vi.spyOn(component as any, 'requiredDateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'validateDateInRange').mockReturnValue(false);
 
         const value = { value: { start: '2021-10-14', end: '' } };
 
@@ -615,12 +615,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       it(`should call 'validateDateInRange' if contain endDate and set 'errorMessage' with 'dateOutOfPeriod'`, () => {
         component.literals = poDatepickerRangeLiteralsDefault.pt;
 
-        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+        vi.spyOn(component as any, 'requiredDateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'validateDateInRange').mockReturnValue(false);
 
         const value = { value: { start: '', end: '2021-10-14' } };
 
@@ -633,12 +633,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       });
 
       it('should call markForCheck when status is INVALID', fakeAsync(() => {
-        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+        vi.spyOn(component as any, 'requiredDateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'validateDateInRange').mockReturnValue(false);
 
         component['changeDetector'] = { markForCheck: () => {} } as any;
         component['hasValidatorRequired'] = true;
@@ -647,7 +647,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
           statusChanges: new Subject<string>()
         } as any;
 
-        spyOn(component['changeDetector'], 'markForCheck');
+        vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
         component.validate(controlMock);
 
@@ -658,12 +658,12 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       }));
 
       it('should set hasValidatorRequired to true if fieldErrorMessage is valid and control has required validator', () => {
-        spyOn(component, <any>'requiredDateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'verifyValidDate').and.returnValue(true);
-        spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFormatFailed').and.returnValue(false);
-        spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
-        spyOn(component, <any>'validateDateInRange').and.returnValue(false);
+        vi.spyOn(component as any, 'requiredDateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(true);
+        vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFormatFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(false);
+        vi.spyOn(component as any, 'validateDateInRange').mockReturnValue(false);
 
         component['hasValidatorRequired'] = false;
         component.fieldErrorMessage = 'Field Invalid';
@@ -672,7 +672,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
         component.validate(controlMock);
 
-        expect(component['hasValidatorRequired']).toBeTrue();
+        expect(component['hasValidatorRequired']).toBe(true);
       });
     });
 
@@ -681,9 +681,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
       const dateRangeExpeted = { start: '', end: '' };
 
-      spyOn(component, <any>'validateModel');
-      spyOn(component, <any>'isDateRangeObject').and.returnValue(false);
-      spyOn(component, 'updateScreenByModel');
+      vi.spyOn(component as any, 'validateModel');
+      vi.spyOn(component as any, 'isDateRangeObject').mockReturnValue(false);
+      vi.spyOn(component as any, 'updateScreenByModel');
 
       const value = undefined;
 
@@ -699,9 +699,9 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
       const dateRangeExpeted = { start: '', end: '' };
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(true);
-      spyOn(component, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(true);
+      vi.spyOn(component as any, 'updateScreenByModel');
 
       const value = 'invalid value';
 
@@ -716,10 +716,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       its is dateRange object`, () => {
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
 
-      spyOn(component, <any>'isDateRangeObject').and.returnValue(true);
-      spyOn(component, <any>'validateModel');
-      spyOn(component, <any>'updateModel');
-      spyOn(component, 'updateScreenByModel');
+      vi.spyOn(component as any, 'isDateRangeObject').mockReturnValue(true);
+      vi.spyOn(component as any, 'validateModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'updateScreenByModel');
 
       const value = { start: '2019-05-20', end: '2019-06-23' };
 
@@ -735,8 +735,10 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component['dateRange'] = { start: '2018-05-20', end: '2018-06-23' };
       const dateRangeExpeted = { start: '2019-05-20', end: '2019-06-23' };
 
-      spyOn(component, <any>'isDateRangeObject').and.returnValue(true);
-      spyOn(component, <any>'convertPatternDateFormat').and.returnValues('2019-05-20', '2019-06-23');
+      vi.spyOn(component as any, 'isDateRangeObject').mockReturnValue(true);
+      vi.spyOn(component as any, 'convertPatternDateFormat')
+        .mockReturnValueOnce('2019-05-20')
+        .mockReturnValueOnce('2019-06-23');
 
       const value = { start: new Date(), end: new Date() };
 
@@ -755,7 +757,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.poDateService, 'isValidIso');
+      vi.spyOn(fakeThis.poDateService as any, 'isValidIso');
 
       component['dateFormatFailed'].call(fakeThis, value);
 
@@ -773,7 +775,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.poDateService, 'isDateRangeValid').and.returnValue(true);
+      vi.spyOn(fakeThis.poDateService as any, 'isDateRangeValid').mockReturnValue(true);
 
       const dateRangeFailedReturn = component['dateRangeFailed'].call(fakeThis, startDate, endDate);
 
@@ -791,7 +793,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.poDateService, 'isDateRangeValid').and.returnValue(false);
+      vi.spyOn(fakeThis.poDateService as any, 'isDateRangeValid').mockReturnValue(false);
 
       const dateRangeFailedReturn = component['dateRangeFailed'].call(fakeThis, startDate, endDate);
 
@@ -809,7 +811,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.poDateService, 'isDateRangeValid').and.returnValue(true);
+      vi.spyOn(fakeThis.poDateService as any, 'isDateRangeValid').mockReturnValue(true);
 
       const dateRangeFailedReturn = component['dateRangeFailed'].call(fakeThis, startDate, endDate);
 
@@ -825,7 +827,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         dateFormatFailed: () => {}
       };
 
-      spyOn(fakeThis, <any>'dateFormatFailed').and.returnValue(true);
+      vi.spyOn(fakeThis as any, 'dateFormatFailed').mockReturnValue(true);
 
       const dateRangeFormatFailedReturn = component['dateRangeFormatFailed'].call(fakeThis, startDate, endDate);
 
@@ -840,7 +842,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         dateFormatFailed: () => {}
       };
 
-      spyOn(fakeThis, <any>'dateFormatFailed').and.returnValue(false);
+      vi.spyOn(fakeThis as any, 'dateFormatFailed').mockReturnValue(false);
 
       const dateRangeFormatFailedReturn = component['dateRangeFormatFailed'].call(fakeThis, startDate, endDate);
 
@@ -872,7 +874,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('dateRangeObjectFailed: should return true if value is defined and `isDateRangeObject` return is false', () => {
-      spyOn(component, <any>'isDateRangeObject').and.returnValue(false);
+      vi.spyOn(component as any, 'isDateRangeObject').mockReturnValue(false);
 
       const value = 'value';
 
@@ -880,7 +882,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('dateRangeObjectFailed: should return false if value is undefined and `isDateRangeObject` return is false', () => {
-      spyOn(component, <any>'isDateRangeObject').and.returnValue(false);
+      vi.spyOn(component as any, 'isDateRangeObject').mockReturnValue(false);
 
       const value = undefined;
 
@@ -888,7 +890,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('dateRangeObjectFailed: should return false if value is defined and `isDateRangeObject` return is true', () => {
-      spyOn(component, <any>'isDateRangeObject').and.returnValue(true);
+      vi.spyOn(component as any, 'isDateRangeObject').mockReturnValue(true);
 
       const value = 'value';
 
@@ -913,7 +915,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         isDateRangeInputValid: true
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       const requiredDateRangeFailedReturn = component['requiredDateRangeFailed'].call(fakeThis, startDate, endDate);
 
@@ -928,7 +930,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         isDateRangeInputValid: true
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
 
       const requiredDateRangeFailedReturn = component['requiredDateRangeFailed'].call(fakeThis, startDate, endDate);
 
@@ -943,7 +945,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
         isDateRangeInputValid: false
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       const requiredDateRangeFailedReturn = component['requiredDateRangeFailed'].call(fakeThis, startDate, endDate);
 
@@ -956,7 +958,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       };
       const value: any = 'value';
 
-      spyOn(fakeThis, 'onChangeModel');
+      vi.spyOn(fakeThis as any, 'onChangeModel');
 
       component['updateModel'].call(fakeThis, value);
 
@@ -969,7 +971,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       };
       const value: any = { key: 'value' };
 
-      spyOn(fakeThis, 'onChangeModel');
+      vi.spyOn(fakeThis as any, 'onChangeModel');
 
       component['updateModel'].call(fakeThis, value);
 
@@ -982,7 +984,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       };
       const value: any = 'value';
 
-      spyOn(fakeThis, 'validatorChange');
+      vi.spyOn(fakeThis as any, 'validatorChange');
 
       component['validateModel'].call(fakeThis, value);
 
@@ -997,7 +999,7 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       };
       const date = new Date('2018-10-25');
 
-      spyOn(fakeThis.poDateService, 'convertDateToISO');
+      vi.spyOn(fakeThis.poDateService as any, 'convertDateToISO');
 
       component['convertPatternDateFormat'].call(fakeThis, date);
 
@@ -1082,11 +1084,11 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     it(`should call 'verifyValidDate', set 'errorMessage' as 'literals.invalidFormat'`, () => {
       component.literals = poDatepickerRangeLiteralsDefault.pt;
 
-      spyOn(component, <any>'dateRangeObjectFailed').and.returnValue(false);
-      spyOn(component, <any>'dateRangeFailed').and.returnValue(false);
-      spyOn(component, <any>'verifyValidDate').and.returnValue(false);
-      spyOn(component, <any>'requiredDateRangeFailed');
-      spyOn(component, <any>'dateRangeFormatFailed');
+      vi.spyOn(component as any, 'dateRangeObjectFailed').mockReturnValue(false);
+      vi.spyOn(component as any, 'dateRangeFailed').mockReturnValue(false);
+      vi.spyOn(component as any, 'verifyValidDate').mockReturnValue(false);
+      vi.spyOn(component as any, 'requiredDateRangeFailed');
+      vi.spyOn(component as any, 'dateRangeFormatFailed');
 
       const value = { value: { start: '2021-02-29', end: '' } };
 

@@ -90,7 +90,7 @@ describe('PoContextMenuComponent:', () => {
       });
 
       it('should call the action of the selected item', () => {
-        const actionSpy = jasmine.createSpy('action');
+        const actionSpy = vi.fn();
         const items: Array<PoContextMenuItem> = [{ label: 'Item 1', action: actionSpy }];
         fixture.componentRef.setInput('p-items', items);
         fixture.detectChanges();
@@ -112,7 +112,7 @@ describe('PoContextMenuComponent:', () => {
         fixture.componentRef.setInput('p-items', items);
         fixture.detectChanges();
 
-        spyOn(component.itemSelected, 'emit');
+        vi.spyOn(component.itemSelected as any, 'emit');
         component.selectItem(items[0]);
 
         expect(component.itemSelected.emit).toHaveBeenCalledWith({ ...items[0], selected: true });
@@ -254,16 +254,16 @@ describe('PoContextMenuComponent:', () => {
 
     describe('handlerTitleTooltip', () => {
       it('should call applyTooltipIfOverflows only if _titleTooltipCalculated is false', () => {
-        const spy = spyOn<any>(component, 'applyTooltipIfOverflows');
+        const spy = vi.spyOn(component as any, 'applyTooltipIfOverflows');
         const mockElement = {} as HTMLElement;
 
         component['_titleTooltipCalculated'] = false;
         component['handlerTitleTooltip'](mockElement);
 
         expect(spy).toHaveBeenCalled();
-        expect(component['_titleTooltipCalculated']).toBeTrue();
+        expect(component['_titleTooltipCalculated']).toBe(true);
 
-        spy.calls.reset();
+        spy.mockClear();
         component['handlerTitleTooltip'](mockElement);
         expect(spy).not.toHaveBeenCalled();
       });
@@ -271,16 +271,16 @@ describe('PoContextMenuComponent:', () => {
 
     describe('handlerContextTitleTooltip', () => {
       it('should call applyTooltipIfOverflows only if _contextTitleTooltipCalculated is false', () => {
-        const spy = spyOn<any>(component, 'applyTooltipIfOverflows');
+        const spy = vi.spyOn(component as any, 'applyTooltipIfOverflows');
         const mockElement = {} as HTMLElement;
 
         component['_contextTitleTooltipCalculated'] = false;
         component['handlerContextTitleTooltip'](mockElement);
 
         expect(spy).toHaveBeenCalled();
-        expect(component['_contextTitleTooltipCalculated']).toBeTrue();
+        expect(component['_contextTitleTooltipCalculated']).toBe(true);
 
-        spy.calls.reset();
+        spy.mockClear();
         component['handlerContextTitleTooltip'](mockElement);
         expect(spy).not.toHaveBeenCalled();
       });
@@ -404,7 +404,7 @@ describe('PoContextMenuComponent:', () => {
       component.expanded.set(true);
       fixture.detectChanges();
 
-      spyOn(component, 'selectItem');
+      vi.spyOn(component as any, 'selectItem');
       const listItem: HTMLElement = nativeElement.querySelector('.po-context-menu-list-item');
       listItem.click();
 
@@ -417,7 +417,7 @@ describe('PoContextMenuComponent:', () => {
       component.expanded.set(true);
       fixture.detectChanges();
 
-      spyOn(component, 'selectItem');
+      vi.spyOn(component as any, 'selectItem');
       const listItem: HTMLElement = nativeElement.querySelector('.po-context-menu-list-item');
       listItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
@@ -430,7 +430,7 @@ describe('PoContextMenuComponent:', () => {
       component.expanded.set(true);
       fixture.detectChanges();
 
-      spyOn(component, 'selectItem');
+      vi.spyOn(component as any, 'selectItem');
       const listItem: HTMLElement = nativeElement.querySelector('.po-context-menu-list-item');
       listItem.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
 
@@ -441,7 +441,7 @@ describe('PoContextMenuComponent:', () => {
       component.expanded.set(true);
       fixture.detectChanges();
 
-      spyOn(component, 'toggleExpand');
+      vi.spyOn(component as any, 'toggleExpand');
       const toggleBtn: HTMLElement = nativeElement.querySelector('.po-context-menu-toggle');
       toggleBtn.click();
 

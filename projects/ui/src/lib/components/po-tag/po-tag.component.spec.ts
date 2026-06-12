@@ -97,7 +97,7 @@ describe('PoTagComponent:', () => {
       component.value = 'value';
       component.type = PoTagType.Danger;
 
-      spyOn(component.click, <any>'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       component.onClick();
 
@@ -112,7 +112,7 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
 
       const tagElement = fixture.debugElement.query(By.css('.po-tag-wrapper'));
-      const spyOnClick = spyOn(component, 'onClick');
+      const spyOnClick = vi.spyOn(component as any, 'onClick');
 
       tagElement.triggerEventHandler('keydown.enter', fakeEvent);
 
@@ -123,7 +123,7 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
 
       const tagElement = fixture.debugElement.query(By.css('.po-tag'));
-      const spyOnClick = spyOn(component, 'onClick');
+      const spyOnClick = vi.spyOn(component as any, 'onClick');
 
       tagElement.triggerEventHandler('keydown.space', fakeEvent);
 
@@ -134,7 +134,7 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
 
       const tagElement = fixture.debugElement.query(By.css('.po-tag-wrapper'));
-      const spyOnClick = spyOn(component, 'onClick');
+      const spyOnClick = vi.spyOn(component as any, 'onClick');
 
       tagElement.triggerEventHandler('keyup.space', fakeEvent);
 
@@ -145,7 +145,7 @@ describe('PoTagComponent:', () => {
       fixture.detectChanges();
 
       const tagElement = fixture.debugElement.query(By.css('.po-tag'));
-      const spyOnClick = spyOn(component, 'onClick');
+      const spyOnClick = vi.spyOn(component as any, 'onClick');
 
       tagElement.triggerEventHandler('keyup.enter', fakeEvent);
 
@@ -153,8 +153,8 @@ describe('PoTagComponent:', () => {
     });
 
     it('onClose: Should have been called onClose', () => {
-      spyOn(component, <any>'onRemove');
-      spyOn(component.remove, 'emit');
+      vi.spyOn(component as any, 'onRemove');
+      vi.spyOn(component.remove as any, 'emit');
 
       component.onClose();
 
@@ -165,7 +165,7 @@ describe('PoTagComponent:', () => {
     it('onRemove: Should remove the element if not disabled', () => {
       const mockElementRef = {
         nativeElement: {
-          remove: jasmine.createSpy('remove')
+          remove: vi.fn()
         }
       };
       Object.defineProperty(component, 'el', { value: mockElementRef, configurable: true });
@@ -368,7 +368,7 @@ describe('PoTagComponent:', () => {
     beforeEach(() => {
       originalClassName = document.documentElement.className;
       document.documentElement.className = originalClassName.replace(/-dark-/g, '');
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => 0);
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => 0);
     });
 
     afterEach(() => {
@@ -376,7 +376,7 @@ describe('PoTagComponent:', () => {
     });
 
     function mockGetComputedStyle(backgroundColor: string) {
-      spyOn(window, 'getComputedStyle').and.returnValue({
+      vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
         backgroundColor: backgroundColor,
         getPropertyValue: (token: string) => {
           const tokens = {

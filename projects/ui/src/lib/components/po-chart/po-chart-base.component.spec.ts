@@ -104,7 +104,7 @@ describe('PoChartBaseComponent', () => {
   describe('Outputs:', () => {
     it('p-series-click: should emit event', () => {
       const mockEvent = { label: 'Test', value: 10 };
-      spyOn(component.seriesClick, 'emit');
+      vi.spyOn(component.seriesClick as any, 'emit');
 
       component.seriesClick.emit(mockEvent);
       expect(component.seriesClick.emit).toHaveBeenCalledWith(mockEvent);
@@ -112,7 +112,7 @@ describe('PoChartBaseComponent', () => {
 
     it('p-series-hover: should emit event', () => {
       const mockEvent = { label: 'Test', value: 10 };
-      spyOn(component.seriesHover, 'emit');
+      vi.spyOn(component.seriesHover as any, 'emit');
 
       component.seriesHover.emit(mockEvent);
       expect(component.seriesHover.emit).toHaveBeenCalledWith(mockEvent);

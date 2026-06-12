@@ -24,7 +24,7 @@ describe('PoMenuPanelItemsService', () => {
 
   describe('Methods:', () => {
     it('sendToParentMenuClicked: should call subjectChild.next with menuItem', () => {
-      spyOn(menuItemsService['subjectChild'], 'next');
+      vi.spyOn(menuItemsService['subjectChild'] as any, 'next');
 
       menuItemsService.sendToParentMenuClicked(menuItem);
 
@@ -32,7 +32,7 @@ describe('PoMenuPanelItemsService', () => {
     });
 
     it('sendToChildMenuClicked: should call subjectParent with menuItem', () => {
-      spyOn(menuItemsService['subjectParent'], 'next');
+      vi.spyOn(menuItemsService['subjectParent'] as any, 'next');
 
       menuItemsService.sendToChildMenuClicked(menuItem);
 
@@ -40,7 +40,7 @@ describe('PoMenuPanelItemsService', () => {
     });
 
     it('receiveFromChildMenuClicked: should call subjectChild.asObservable', () => {
-      spyOn(menuItemsService['subjectChild'], 'asObservable');
+      vi.spyOn(menuItemsService['subjectChild'] as any, 'asObservable');
 
       menuItemsService.receiveFromChildMenuClicked();
 
@@ -54,7 +54,7 @@ describe('PoMenuPanelItemsService', () => {
     });
 
     it('receiveFromParentMenuClicked: should call subjectParent.asObservable', () => {
-      spyOn(menuItemsService['subjectParent'], 'asObservable');
+      vi.spyOn(menuItemsService['subjectParent'] as any, 'asObservable');
 
       menuItemsService.receiveFromParentMenuClicked();
 

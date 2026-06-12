@@ -162,7 +162,7 @@ describe('PoTableDetailComponent', () => {
       const propertyValue = 'label';
       const column: PoTableDetailColumn = { property: propertyValue };
 
-      spyOn(utilsFunctions, 'capitalizeFirstLetter').and.returnValue(label);
+      vi.spyOn(utilsFunctions as any, 'capitalizeFirstLetter').mockReturnValue(label);
 
       expect(component.getColumnTitleLabel(column)).toBe(label);
       expect(utilsFunctions.capitalizeFirstLetter).toHaveBeenCalledWith(propertyValue);
@@ -228,7 +228,7 @@ describe('PoTableDetailComponent', () => {
 
     it('onSelectRow: should set `$selected` property of row item to `true` and call `selectRow.emit`', () => {
       const row = { title: 'teste', $selected: false };
-      spyOn(component.selectRow, 'emit');
+      vi.spyOn(component.selectRow as any, 'emit');
 
       component.onSelectRow(row);
 

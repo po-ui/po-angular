@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -49,7 +50,7 @@ describe('PoCalendarComponent:', () => {
 
   describe('Methods:', () => {
     it('ngOnInit: should call `setActivateDate`', () => {
-      spyOn(component, <any>'setActivateDate');
+      vi.spyOn(component as any, 'setActivateDate');
 
       component.ngOnInit();
 
@@ -61,7 +62,7 @@ describe('PoCalendarComponent:', () => {
         minDate: '2021-08-08'
       };
 
-      const spy = spyOn(component, <any>'setActivateDate');
+      const spy = vi.spyOn(component as any, 'setActivateDate');
 
       component.ngOnChanges(changes);
 
@@ -73,7 +74,7 @@ describe('PoCalendarComponent:', () => {
         maxDate: '2021-08-08'
       };
 
-      const spy = spyOn(component, <any>'setActivateDate');
+      const spy = vi.spyOn(component as any, 'setActivateDate');
 
       component.ngOnChanges(changes);
 
@@ -83,7 +84,7 @@ describe('PoCalendarComponent:', () => {
     it(`ngOnChanges: shouldn't call 'setActivateDate' if 'changes' not contain maxDate ou minDate`, () => {
       const changes = {};
 
-      const spy = spyOn(component, <any>'setActivateDate');
+      const spy = vi.spyOn(component as any, 'setActivateDate');
 
       component.ngOnChanges(changes);
 
@@ -100,8 +101,8 @@ describe('PoCalendarComponent:', () => {
 
       component.ngDoCheck();
 
-      expect(component['_isRange']()).toBeTrue();
-      expect(component['_rangePresetsValue']()).toBeTrue();
+      expect(component['_isRange']()).toBe(true);
+      expect(component['_rangePresetsValue']()).toBe(true);
       expect(component['_rangePresetOptionsValue']()).toBeUndefined();
       expect(component['_rangePresetsOrderValue']()).toBe('desc');
       expect(component['_minDateValue']()).toEqual(component.minDate);
@@ -112,7 +113,7 @@ describe('PoCalendarComponent:', () => {
       const expectedValue = new Date(2020, 10, 10);
       component.activateDate = { start: expectedValue, end: new Date(2020, 11, 10) };
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component.getActivateDate('start')).toBe(expectedValue);
     });
@@ -120,7 +121,7 @@ describe('PoCalendarComponent:', () => {
     it('getActivateDate: should get `null` if range is true', () => {
       component.activateDate = null;
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component.getActivateDate('start')).toBe(null);
     });
@@ -128,7 +129,7 @@ describe('PoCalendarComponent:', () => {
     it('getActivateDate: should get `activateDate` if range is false', () => {
       component.activateDate = new Date();
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       expect(component.getActivateDate('start')).toEqual(component.activateDate);
     });
@@ -137,7 +138,7 @@ describe('PoCalendarComponent:', () => {
       const expectedValue = new Date(2020, 10, 10);
       component.value = { start: expectedValue, end: new Date(2021, 5, 10) };
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component.getValue('start')).toBe(expectedValue);
     });
@@ -145,7 +146,7 @@ describe('PoCalendarComponent:', () => {
     it('getValue: should get `null` if range is true and value is null', () => {
       component.value = null;
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component.getValue('start')).toBe(null);
     });
@@ -153,7 +154,7 @@ describe('PoCalendarComponent:', () => {
     it('getValue: should get `value` if range is false', () => {
       component.value = new Date();
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       expect(component.getValue('start')).toEqual(component.value);
     });
@@ -198,7 +199,7 @@ describe('PoCalendarComponent:', () => {
     it(`onSelectDate: should set component.value with selectedDate if isRange is false'`, () => {
       const selectedDate = new Date(2018, 6, 5);
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       component.onSelectDate(selectedDate);
 
@@ -209,8 +210,8 @@ describe('PoCalendarComponent:', () => {
       const selectedDate = new Date(2018, 6, 5);
       component.value = null;
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
-      spyOn(component, <any>'getValueFromSelectedDate').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+      vi.spyOn(component as any, 'getValueFromSelectedDate');
 
       component.onSelectDate(selectedDate);
 
@@ -222,7 +223,7 @@ describe('PoCalendarComponent:', () => {
       const selectedDate = new Date(2018, 6, 5);
       component.value = null;
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onSelectDate(selectedDate, 'end');
 
@@ -233,7 +234,7 @@ describe('PoCalendarComponent:', () => {
       const selectedDate = new Date(2018, 6, 5);
       component.value = { start: new Date(2018, 4, 5), end: new Date(2018, 5, 5) };
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onSelectDate(selectedDate, 'end');
 
@@ -244,9 +245,9 @@ describe('PoCalendarComponent:', () => {
       const selectedDate = new Date(2018, 6, 5);
       const isoDate = '2018-07-05';
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
-      spyOn(component.change, 'emit');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
+      vi.spyOn(component.change as any, 'emit');
+      vi.spyOn(component as any, 'updateModel');
 
       component.onSelectDate(selectedDate);
 
@@ -273,7 +274,7 @@ describe('PoCalendarComponent:', () => {
       const expectedValue = new Date();
       component['propagateChange'] = () => {};
 
-      spyOn(component, <any>'propagateChange');
+      vi.spyOn(component as any, 'propagateChange');
 
       component['updateModel'](expectedValue);
 
@@ -284,7 +285,7 @@ describe('PoCalendarComponent:', () => {
       const date = { start: 123, end: 12 };
       const expectedValue = { start: null, end: null };
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component['convertDateToISO'](date)).toEqual(expectedValue);
     });
@@ -293,7 +294,7 @@ describe('PoCalendarComponent:', () => {
       const date = null;
       const expectedValue = { start: null, end: null };
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component['convertDateToISO'](date)).toEqual(expectedValue);
     });
@@ -302,7 +303,7 @@ describe('PoCalendarComponent:', () => {
       const date = { start: new Date(2020, 6, 5), end: new Date(2021, 6, 5) };
       const expectedValue = { start: '2020-07-05', end: '2021-07-05' };
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component['convertDateToISO'](date)).toEqual(expectedValue);
     });
@@ -311,7 +312,7 @@ describe('PoCalendarComponent:', () => {
       const date = new Date(2020, 6, 5);
       const expectedValue = '2020-07-05';
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       expect(component['convertDateToISO'](date)).toBe(expectedValue);
     });
@@ -339,7 +340,7 @@ describe('PoCalendarComponent:', () => {
     it('writeValue: should call `writeDate` if value is defined', () => {
       const value = '2018-07-05T03:00:00.000Z';
 
-      spyOn(component, <any>'writeDate');
+      vi.spyOn(component as any, 'writeDate');
 
       component.writeValue(value);
 
@@ -349,7 +350,7 @@ describe('PoCalendarComponent:', () => {
     it('writeValue: should set component.value with null if value param is undefined', () => {
       const value = undefined;
 
-      spyOn(component, <any>'writeDate');
+      vi.spyOn(component as any, 'writeDate');
 
       component.writeValue(value);
 
@@ -357,8 +358,8 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`writeDate: should set { start, end } with null if param is undefined`, () => {
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
-      spyOn(component, <any>'convertDateFromIso').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+      vi.spyOn(component as any, 'convertDateFromIso');
 
       component['writeDate'](undefined);
 
@@ -370,8 +371,8 @@ describe('PoCalendarComponent:', () => {
     it(`writeDate: should set value and call 'convertDateFromIso' if value.start and value.end are not Date`, () => {
       const value = { start: '2018-07-05T03:00:00.000', end: '2019-04-05T03:00:00.000' };
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
-      spyOn(component, <any>'convertDateFromIso').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+      vi.spyOn(component as any, 'convertDateFromIso');
 
       component['writeDate'](value);
 
@@ -383,8 +384,8 @@ describe('PoCalendarComponent:', () => {
     it(`writeDate: should set value and not call 'convertDateFromIso' if value.start and value.end are Date`, () => {
       const value = { start: new Date(2018, 7, 5), end: new Date(2019, 9, 5) };
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
-      spyOn(component, <any>'convertDateFromIso').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+      vi.spyOn(component as any, 'convertDateFromIso');
 
       component['writeDate'](value);
 
@@ -396,8 +397,8 @@ describe('PoCalendarComponent:', () => {
     it(`writeDate: should set value and call 'convertDateFromIso' if value param is not a Date`, () => {
       const value = '2018-07-05T03:00:00.000';
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(false);
-      spyOn(component, <any>'convertDateFromIso').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
+      vi.spyOn(component as any, 'convertDateFromIso');
 
       component['writeDate'](value);
 
@@ -408,8 +409,8 @@ describe('PoCalendarComponent:', () => {
     it(`writeDate: should set value and not call 'convertDateFromIso' if value param is a Date`, () => {
       const value = new Date();
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(false);
-      spyOn(component, <any>'convertDateFromIso').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
+      vi.spyOn(component as any, 'convertDateFromIso');
 
       component['writeDate'](value);
 
@@ -418,7 +419,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it(`getValidateStartDate: should return null if range is true and value param is undefined`, () => {
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component['getValidateStartDate'](undefined)).toBe(null);
     });
@@ -427,27 +428,27 @@ describe('PoCalendarComponent:', () => {
       const today = new Date();
 
       const date = { start: today };
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       expect(component['getValidateStartDate'](date)).toEqual(today);
     });
 
     it(`getValidateStartDate: should return date if range is false and value param is Date`, () => {
       const date = new Date();
-      spyOnProperty(component, <any>'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       expect(component['getValidateStartDate'](date)).toEqual(date);
     });
 
     it(`getValidateStartDate:  should return date if range is false and value param is string`, () => {
       const date = '2010-10-10';
-      spyOnProperty(component, <any>'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       expect(component['getValidateStartDate'](date)).toEqual(date);
     });
 
     it(`getValidateStartDate: should return null if range is false and value param is undefined`, () => {
-      spyOnProperty(component, <any>'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       expect(component['getValidateStartDate'](undefined)).toEqual(null);
     });
@@ -460,7 +461,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 7;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'start');
 
@@ -479,7 +480,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 1;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
 
@@ -498,7 +499,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 1;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2023 }, 'start');
 
@@ -517,7 +518,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 11;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2022 }, 'start');
 
@@ -536,7 +537,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 1; // Janeiro em formato 1-indexed
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2024 }, 'end');
 
@@ -555,7 +556,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 11;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'start');
 
@@ -574,7 +575,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 1; // Janeiro em formato 1-indexed
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2011 }, 'end');
 
@@ -593,7 +594,7 @@ describe('PoCalendarComponent:', () => {
 
       const nextMonth = 9;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component.onHeaderChange({ month: nextMonth, year: 2010 }, 'end');
 
@@ -607,25 +608,25 @@ describe('PoCalendarComponent:', () => {
     it('onHeaderChange: should use new Date when activateDate.start is not a Date', () => {
       component.activateDate = { start: 'invalid', end: new Date(2010, 8, 10) } as any;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
-      const buildSpy = spyOn(component as any, 'buildDateWithMonthYear').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+      const buildSpy = vi.spyOn(component as any, 'buildDateWithMonthYear');
 
       component.onHeaderChange({ month: 5, year: 2010 }, 'start');
 
       expect(buildSpy).toHaveBeenCalled();
-      expect(buildSpy.calls.mostRecent().args[0] instanceof Date).toBeTrue();
+      expect(vi.mocked(buildSpy).mock.lastCall[0] instanceof Date).toBe(true);
     });
 
     it('onHeaderChange: should use new Date when activateDate.end is not a Date', () => {
       component.activateDate = { start: new Date(2010, 7, 10), end: 'invalid' } as any;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(true);
-      const buildSpy = spyOn(component as any, 'buildDateWithMonthYear').and.callThrough();
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+      const buildSpy = vi.spyOn(component as any, 'buildDateWithMonthYear');
 
       component.onHeaderChange({ month: 5, year: 2010 }, 'end');
 
       expect(buildSpy).toHaveBeenCalled();
-      expect(buildSpy.calls.mostRecent().args[0] instanceof Date).toBeTrue();
+      expect(vi.mocked(buildSpy).mock.lastCall[0] instanceof Date).toBe(true);
     });
 
     it('buildDateWithMonthYear: should default day to 1 when baseDate is not a Date', () => {
@@ -649,7 +650,7 @@ describe('PoCalendarComponent:', () => {
     it(`onHeaderChange: should set activateDate if isRange is false`, () => {
       component.activateDate = null;
 
-      spyOnProperty(component, <any>'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       component.onHeaderChange({ month: 10, year: 2010 }, 'start');
 
@@ -665,9 +666,9 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('onSelectDate: should clear value and emit empty string when selectedDate is empty or undefined', () => {
-      spyOn(component as any, 'updateModel');
-      spyOn(component.change, 'emit');
-      spyOn(component['changeDetector'], 'markForCheck');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component.change as any, 'emit');
+      vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
       component.value = new Date();
 
@@ -690,7 +691,7 @@ describe('PoCalendarComponent:', () => {
       const currentValue = new Date(2024, 4, 10);
 
       component.value = currentValue;
-      spyOn(component.change, 'emit');
+      vi.spyOn(component.change as any, 'emit');
 
       component.onCloseCalendar();
 
@@ -698,7 +699,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('onCloseCalendar: should emit close event', () => {
-      spyOn(component.close, 'emit');
+      vi.spyOn(component.close as any, 'emit');
 
       component.onCloseCalendar();
 
@@ -706,7 +707,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('onTimeChange: should emit changeTime with the time value', () => {
-      spyOn(component.changeTime, 'emit');
+      vi.spyOn(component.changeTime as any, 'emit');
 
       component.onTimeChange('14:30');
 
@@ -714,7 +715,7 @@ describe('PoCalendarComponent:', () => {
     });
 
     it('onTimerBoundaryTab: should emit timerBoundaryTab event', () => {
-      spyOn(component.timerBoundaryTab, 'emit');
+      vi.spyOn(component.timerBoundaryTab as any, 'emit');
       const event = { direction: 'forward', event: new KeyboardEvent('keydown'), column: 'minutes' };
 
       component.onTimerBoundaryTab(event);
@@ -725,12 +726,12 @@ describe('PoCalendarComponent:', () => {
     describe('onSelectDate in date-time mode:', () => {
       beforeEach(() => {
         component.mode = PoCalendarMode.DateTime;
-        component['timerComponent'] = { writeValue: jasmine.createSpy('writeValue') } as any;
+        component['timerComponent'] = { writeValue: vi.fn() } as any;
       });
 
       it('should reset timer and emit changeTime with empty string when clearing in date-time mode', () => {
-        spyOn(component.changeTime, 'emit');
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.changeTime as any, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component.onSelectDate(undefined);
 
@@ -740,7 +741,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set current time on timer and emit changeTime when selecting today in date-time mode', () => {
-        spyOn(component.changeTime, 'emit');
+        vi.spyOn(component.changeTime as any, 'emit');
         const today = new Date();
 
         component.onSelectDate(today);
@@ -748,23 +749,23 @@ describe('PoCalendarComponent:', () => {
         expect(component['timerComponent'].writeValue).toHaveBeenCalled();
         expect(component.changeTime.emit).toHaveBeenCalled();
 
-        const emittedTime = (component.changeTime.emit as jasmine.Spy).calls.mostRecent().args[0];
+        const emittedTime = vi.mocked(component.changeTime.emit as Mock).mock.lastCall[0];
         expect(emittedTime).toMatch(/^\d{2}:\d{2}$/);
       });
 
       it('should include seconds in time when showSeconds is true and selecting today', () => {
-        spyOn(component.changeTime, 'emit');
+        vi.spyOn(component.changeTime as any, 'emit');
         component.showSeconds = true;
         const today = new Date();
 
         component.onSelectDate(today);
 
-        const emittedTime = (component.changeTime.emit as jasmine.Spy).calls.mostRecent().args[0];
+        const emittedTime = vi.mocked(component.changeTime.emit as Mock).mock.lastCall[0];
         expect(emittedTime).toMatch(/^\d{2}:\d{2}:\d{2}$/);
       });
 
       it('should not set time on timer when selecting a date that is not today', () => {
-        spyOn(component.changeTime, 'emit');
+        vi.spyOn(component.changeTime as any, 'emit');
         const notToday = new Date(2020, 0, 1);
 
         component.onSelectDate(notToday);
@@ -803,7 +804,7 @@ describe('PoCalendarComponent:', () => {
         const result = component.effectivePresets();
         expect(result.length).toBe(PO_CALENDAR_DEFAULT_RANGE_PRESETS.length);
         PO_CALENDAR_DEFAULT_RANGE_PRESETS.forEach(preset => {
-          expect(result.some(p => p.label === preset.label)).toBeTrue();
+          expect(result.some(p => p.label === preset.label)).toBe(true);
         });
       });
 
@@ -831,7 +832,7 @@ describe('PoCalendarComponent:', () => {
 
         const result = component.effectivePresets();
         expect(result.length).toBe(PO_CALENDAR_DEFAULT_RANGE_PRESETS.length + customPresets.length);
-        expect(result.some(p => p.label === 'custom')).toBeTrue();
+        expect(result.some(p => p.label === 'custom')).toBe(true);
       });
 
       it('should return only custom presets when rangePresets is false and rangePresetOptions has values', () => {
@@ -843,8 +844,8 @@ describe('PoCalendarComponent:', () => {
 
         const result = component.effectivePresets();
         // custom + mandatory 'today'
-        expect(result.some(p => p.label === 'custom')).toBeTrue();
-        expect(result.some(p => p.label === 'today')).toBeTrue();
+        expect(result.some(p => p.label === 'custom')).toBe(true);
+        expect(result.some(p => p.label === 'today')).toBe(true);
       });
 
       it('should return empty array when rangePresets is true but mode is not Range', () => {
@@ -862,10 +863,10 @@ describe('PoCalendarComponent:', () => {
 
         const result = component.effectivePresets();
         // Should include 7days, 30days, and today (mandatory)
-        expect(result.some(p => p.label === 'today')).toBeTrue();
-        expect(result.some(p => p.label === '7days')).toBeTrue();
-        expect(result.some(p => p.label === '30days')).toBeTrue();
-        expect(result.some(p => p.label === 'yesterday')).toBeFalse();
+        expect(result.some(p => p.label === 'today')).toBe(true);
+        expect(result.some(p => p.label === '7days')).toBe(true);
+        expect(result.some(p => p.label === '30days')).toBe(true);
+        expect(result.some(p => p.label === 'yesterday')).toBe(false);
       });
 
       it('should always include today preset even if not in array', () => {
@@ -874,7 +875,7 @@ describe('PoCalendarComponent:', () => {
         component.ngDoCheck();
 
         const result = component.effectivePresets();
-        expect(result.some(p => p.label === 'today')).toBeTrue();
+        expect(result.some(p => p.label === 'today')).toBe(true);
       });
 
       it('should inject today preset when only custom presets exist without today', () => {
@@ -885,8 +886,8 @@ describe('PoCalendarComponent:', () => {
         component.ngDoCheck();
 
         const result = component.effectivePresets();
-        expect(result.some(p => p.label === 'today')).toBeTrue();
-        expect(result.some(p => p.label === 'myPreset')).toBeTrue();
+        expect(result.some(p => p.label === 'today')).toBe(true);
+        expect(result.some(p => p.label === 'myPreset')).toBe(true);
       });
 
       it('should combine filtered default presets with custom presets when rangePresets is Array<string> and rangePresetOptions has values', () => {
@@ -916,19 +917,19 @@ describe('PoCalendarComponent:', () => {
         const result = component.effectivePresets();
 
         // Should contain the filtered default presets
-        expect(result.some(p => p.label === 'today')).toBeTrue();
-        expect(result.some(p => p.label === 'yesterday')).toBeTrue();
-        expect(result.some(p => p.label === '7days')).toBeTrue();
+        expect(result.some(p => p.label === 'today')).toBe(true);
+        expect(result.some(p => p.label === 'yesterday')).toBe(true);
+        expect(result.some(p => p.label === '7days')).toBe(true);
 
         // Should contain custom presets
-        expect(result.some(p => p.label === 'custom1')).toBeTrue();
-        expect(result.some(p => p.label === 'custom2')).toBeTrue();
+        expect(result.some(p => p.label === 'custom1')).toBe(true);
+        expect(result.some(p => p.label === 'custom2')).toBe(true);
 
         // Should NOT contain default presets not in the array
-        expect(result.some(p => p.label === '14days')).toBeFalse();
-        expect(result.some(p => p.label === '30days')).toBeFalse();
-        expect(result.some(p => p.label === '3months')).toBeFalse();
-        expect(result.some(p => p.label === '6months')).toBeFalse();
+        expect(result.some(p => p.label === '14days')).toBe(false);
+        expect(result.some(p => p.label === '30days')).toBe(false);
+        expect(result.some(p => p.label === '3months')).toBe(false);
+        expect(result.some(p => p.label === '6months')).toBe(false);
 
         // Result should be sorted (all are past/present, sorted by proximity)
         // and enriched with isDisabled property
@@ -1050,7 +1051,7 @@ describe('PoCalendarComponent:', () => {
         ];
 
         const result = component['enrichPresetsWithDisabledState'](presets);
-        expect(result[0].isDisabled).toBeTrue();
+        expect(result[0].isDisabled).toBe(true);
       });
 
       it('should set isDisabled to true when preset end is after maxDate', () => {
@@ -1067,7 +1068,7 @@ describe('PoCalendarComponent:', () => {
         ];
 
         const result = component['enrichPresetsWithDisabledState'](presets);
-        expect(result[0].isDisabled).toBeTrue();
+        expect(result[0].isDisabled).toBe(true);
       });
 
       it('should set isDisabled to true when preset violates both minDate and maxDate', () => {
@@ -1085,7 +1086,7 @@ describe('PoCalendarComponent:', () => {
         ];
 
         const result = component['enrichPresetsWithDisabledState'](presets);
-        expect(result[0].isDisabled).toBeTrue();
+        expect(result[0].isDisabled).toBe(true);
       });
 
       it('should set isDisabled to false when preset is within min/max range', () => {
@@ -1103,7 +1104,7 @@ describe('PoCalendarComponent:', () => {
         ];
 
         const result = component['enrichPresetsWithDisabledState'](presets);
-        expect(result[0].isDisabled).toBeFalse();
+        expect(result[0].isDisabled).toBe(false);
       });
 
       it('should set isDisabled to false when no minDate/maxDate configured', () => {
@@ -1118,7 +1119,7 @@ describe('PoCalendarComponent:', () => {
         ];
 
         const result = component['enrichPresetsWithDisabledState'](presets);
-        expect(result[0].isDisabled).toBeFalse();
+        expect(result[0].isDisabled).toBe(false);
       });
 
       it('should correctly disable some presets and enable others', () => {
@@ -1144,8 +1145,8 @@ describe('PoCalendarComponent:', () => {
         const result = component['enrichPresetsWithDisabledState'](presets);
         const invalidPreset = result.find(p => p.label === 'invalid');
         const validPreset = result.find(p => p.label === 'valid');
-        expect(invalidPreset.isDisabled).toBeTrue();
-        expect(validPreset.isDisabled).toBeFalse();
+        expect(invalidPreset.isDisabled).toBe(true);
+        expect(validPreset.isDisabled).toBe(false);
       });
 
       it('should set isDisabled to false when only maxDate is set and preset end is within range', () => {
@@ -1162,7 +1163,7 @@ describe('PoCalendarComponent:', () => {
         ];
 
         const result = component['enrichPresetsWithDisabledState'](presets);
-        expect(result[0].isDisabled).toBeFalse();
+        expect(result[0].isDisabled).toBe(false);
       });
 
       it('should use explicit minDate/maxDate parameters when provided instead of component properties', () => {
@@ -1183,7 +1184,7 @@ describe('PoCalendarComponent:', () => {
         const explicitMax = new Date(2025, 5, 30);
 
         const result = component['enrichPresetsWithDisabledState'](presets, explicitMin, explicitMax);
-        expect(result[0].isDisabled).toBeTrue();
+        expect(result[0].isDisabled).toBe(true);
       });
     });
 
@@ -1192,9 +1193,9 @@ describe('PoCalendarComponent:', () => {
         const start = new Date(2025, 0, 1);
         const end = new Date(2025, 0, 31);
 
-        spyOnProperty(component, 'isRange').and.returnValue(true);
-        spyOn(component.change, 'emit');
-        spyOn(component, <any>'updateModel');
+        vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+        vi.spyOn(component.change as any, 'emit');
+        vi.spyOn(component as any, 'updateModel');
 
         component.onPresetSelected({ label: 'test', start, end });
 
@@ -1214,9 +1215,9 @@ describe('PoCalendarComponent:', () => {
         component['_minDate'] = minDate;
         component['_maxDate'] = maxDate;
 
-        spyOnProperty(component, 'isRange').and.returnValue(true);
-        spyOn(component.change, 'emit');
-        spyOn(component, <any>'updateModel');
+        vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+        vi.spyOn(component.change as any, 'emit');
+        vi.spyOn(component as any, 'updateModel');
 
         component.onPresetSelected({ label: 'test', start: new Date(2025, 0, 1), end: new Date(2025, 0, 31) });
 
@@ -1231,8 +1232,8 @@ describe('PoCalendarComponent:', () => {
         component['_minDate'] = minDate;
         component['_maxDate'] = maxDate;
 
-        spyOnProperty(component, 'isRange').and.returnValue(true);
-        spyOn(component.change, 'emit');
+        vi.spyOn(component as any, 'isRange').mockReturnValue(true);
+        vi.spyOn(component.change as any, 'emit');
 
         component.onPresetSelected({ label: 'test', start: new Date(2025, 0, 25), end: new Date(2025, 0, 5) });
 
@@ -1243,7 +1244,7 @@ describe('PoCalendarComponent:', () => {
     it('onSelectDate: should clear selectedPresetLabel', () => {
       component.selectedPresetLabel = 'today';
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       component.onSelectDate(new Date(2025, 0, 1));
 
@@ -1257,35 +1258,35 @@ describe('PoCalendarComponent:', () => {
         component.minDate = new Date(2025, 5, 1); // June 2025
         component['selectedYear'] = 2025;
 
-        expect(component.isMonthDisabled(3)).toBeTrue(); // April (index 3 = month 4)
+        expect(component.isMonthDisabled(3)).toBe(true); // April (index 3 = month 4)
       });
 
       it('should return false when month is equal to minDate month', () => {
         component.minDate = new Date(2025, 5, 1); // June 2025
         component['selectedYear'] = 2025;
 
-        expect(component.isMonthDisabled(5)).toBeFalse(); // June (index 5 = month 6)
+        expect(component.isMonthDisabled(5)).toBe(false); // June (index 5 = month 6)
       });
 
       it('should return false when month is after minDate', () => {
         component.minDate = new Date(2025, 5, 1); // June 2025
         component['selectedYear'] = 2025;
 
-        expect(component.isMonthDisabled(7)).toBeFalse(); // August (index 7 = month 8)
+        expect(component.isMonthDisabled(7)).toBe(false); // August (index 7 = month 8)
       });
 
       it('should return true when month is after maxDate', () => {
         component.maxDate = new Date(2025, 8, 30); // September 2025
         component['selectedYear'] = 2025;
 
-        expect(component.isMonthDisabled(10)).toBeTrue(); // November (index 10 = month 11)
+        expect(component.isMonthDisabled(10)).toBe(true); // November (index 10 = month 11)
       });
 
       it('should return false when month is equal to maxDate month', () => {
         component.maxDate = new Date(2025, 8, 30); // September 2025
         component['selectedYear'] = 2025;
 
-        expect(component.isMonthDisabled(8)).toBeFalse(); // September (index 8 = month 9)
+        expect(component.isMonthDisabled(8)).toBe(false); // September (index 8 = month 9)
       });
 
       it('should return false when no minDate or maxDate', () => {
@@ -1293,22 +1294,22 @@ describe('PoCalendarComponent:', () => {
         component.maxDate = undefined;
         component['selectedYear'] = 2025;
 
-        expect(component.isMonthDisabled(0)).toBeFalse();
-        expect(component.isMonthDisabled(11)).toBeFalse();
+        expect(component.isMonthDisabled(0)).toBe(false);
+        expect(component.isMonthDisabled(11)).toBe(false);
       });
 
       it('should return true when year is before minDate year', () => {
         component.minDate = new Date(2025, 0, 1);
         component['selectedYear'] = 2024;
 
-        expect(component.isMonthDisabled(11)).toBeTrue();
+        expect(component.isMonthDisabled(11)).toBe(true);
       });
 
       it('should return true when year is after maxDate year', () => {
         component.maxDate = new Date(2025, 11, 31);
         component['selectedYear'] = 2026;
 
-        expect(component.isMonthDisabled(0)).toBeTrue();
+        expect(component.isMonthDisabled(0)).toBe(true);
       });
     });
 
@@ -1316,40 +1317,40 @@ describe('PoCalendarComponent:', () => {
       it('should return true when year is before minDate year', () => {
         component.minDate = new Date(2020, 0, 1);
 
-        expect(component.isYearDisabled(2019)).toBeTrue();
+        expect(component.isYearDisabled(2019)).toBe(true);
       });
 
       it('should return false when year equals minDate year', () => {
         component.minDate = new Date(2020, 0, 1);
 
-        expect(component.isYearDisabled(2020)).toBeFalse();
+        expect(component.isYearDisabled(2020)).toBe(false);
       });
 
       it('should return true when year is after maxDate year', () => {
         component.maxDate = new Date(2030, 11, 31);
 
-        expect(component.isYearDisabled(2031)).toBeTrue();
+        expect(component.isYearDisabled(2031)).toBe(true);
       });
 
       it('should return false when year equals maxDate year', () => {
         component.maxDate = new Date(2030, 11, 31);
 
-        expect(component.isYearDisabled(2030)).toBeFalse();
+        expect(component.isYearDisabled(2030)).toBe(false);
       });
 
       it('should return false when no minDate or maxDate', () => {
         component.minDate = undefined;
         component.maxDate = undefined;
 
-        expect(component.isYearDisabled(1900)).toBeFalse();
-        expect(component.isYearDisabled(2100)).toBeFalse();
+        expect(component.isYearDisabled(1900)).toBe(false);
+        expect(component.isYearDisabled(2100)).toBe(false);
       });
 
       it('should return false when year is within range', () => {
         component.minDate = new Date(2020, 0, 1);
         component.maxDate = new Date(2030, 11, 31);
 
-        expect(component.isYearDisabled(2025)).toBeFalse();
+        expect(component.isYearDisabled(2025)).toBe(false);
       });
     });
 
@@ -1358,14 +1359,14 @@ describe('PoCalendarComponent:', () => {
         component.minDate = new Date(2025, 5, 1);
         component['selectedMonth'] = 3;
 
-        expect(component.isYearDisabled(2025)).toBeTrue();
+        expect(component.isYearDisabled(2025)).toBe(true);
       });
 
       it('should return true when selectedMonth is set and year+month is after maxDate', () => {
         component.maxDate = new Date(2025, 5, 30);
         component['selectedMonth'] = 8;
 
-        expect(component.isYearDisabled(2025)).toBeTrue();
+        expect(component.isYearDisabled(2025)).toBe(true);
       });
 
       it('should return false when selectedMonth is set and year+month is within range', () => {
@@ -1373,7 +1374,7 @@ describe('PoCalendarComponent:', () => {
         component.maxDate = new Date(2030, 11, 31);
         component['selectedMonth'] = 6;
 
-        expect(component.isYearDisabled(2025)).toBeFalse();
+        expect(component.isYearDisabled(2025)).toBe(false);
       });
     });
 
@@ -1385,7 +1386,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexMonth, selectedMonth and call updateModel on Enter key', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
         component.selectMonth(3, event);
@@ -1396,7 +1397,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexMonth, selectedMonth and call updateModel on Space key', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { code: 'Space' });
 
         component.selectMonth(0, event);
@@ -1407,7 +1408,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexMonth, selectedMonth and call updateModel when selected=true', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
 
         component.selectMonth(5, undefined, true);
 
@@ -1417,7 +1418,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not call updateModel when event is not a select action', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
 
         component.selectMonth(3, event);
@@ -1434,7 +1435,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should use default selected=false and call updateModel only on Enter key', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
         component.selectYear(2, event, undefined, 2022);
@@ -1445,7 +1446,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexYear, selectedYear and call updateModel on Enter key', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
         component.selectYear(10, event, false, 2025);
@@ -1456,7 +1457,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexYear, selectedYear and call updateModel on Space key', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { code: 'Space' });
 
         component.selectYear(5, event, false, 2020);
@@ -1467,7 +1468,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set selectedIndexYear, selectedYear and call updateModel when selected=true', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
 
         component.selectYear(8, undefined, true, 2030);
 
@@ -1477,7 +1478,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not call updateModel when event is not a select action', () => {
-        spyOn(component as any, 'updateModel');
+        vi.spyOn(component as any, 'updateModel');
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
 
         component.selectYear(3, event, false, 2025);
@@ -1494,9 +1495,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should call selectMonth on Enter key', () => {
-        spyOn(component, 'selectMonth');
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(new Array(12).fill(null));
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
         component.onKeydownMonth(event, 3);
@@ -1505,9 +1506,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should call selectMonth on Space key', () => {
-        spyOn(component, 'selectMonth');
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(new Array(12).fill(null));
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { code: 'Space' });
 
         component.onKeydownMonth(event, 5);
@@ -1516,9 +1517,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should navigate down on ArrowDown key', () => {
-        spyOn(component, 'selectMonth');
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(new Array(12).fill(null));
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
 
         component.onKeydownMonth(event, 3);
@@ -1527,9 +1528,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not exceed max index on ArrowDown key', () => {
-        spyOn(component, 'selectMonth');
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(new Array(12).fill(null));
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
 
         component.onKeydownMonth(event, 11);
@@ -1538,9 +1539,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should navigate up on ArrowUp key', () => {
-        spyOn(component, 'selectMonth');
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(new Array(12).fill(null));
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
 
         component.onKeydownMonth(event, 5);
@@ -1549,9 +1550,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not go below 0 on ArrowUp key', () => {
-        spyOn(component, 'selectMonth');
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(new Array(12).fill(null));
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(new Array(12).fill(null));
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
 
         component.onKeydownMonth(event, 0);
@@ -1560,7 +1561,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should emit close on Shift+Tab', () => {
-        spyOn(component.close, 'emit');
+        vi.spyOn(component.close as any, 'emit');
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
 
         component.onKeydownMonth(event, 0);
@@ -1570,9 +1571,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should focus year list on Tab (no shift)', () => {
-        const mockYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
-        spyOn<any>(component, 'getYearOptions').and.returnValue([mockYearBtn]);
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        const mockYearBtn = { focus: vi.fn(), disabled: false } as any;
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([mockYearBtn]);
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
         component['selectedIndexYear'] = 0;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
@@ -1582,9 +1583,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should focus first enabled year option on Tab when no selected year', () => {
-        const mockYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
-        spyOn<any>(component, 'getYearOptions').and.returnValue([mockYearBtn]);
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        const mockYearBtn = { focus: vi.fn(), disabled: false } as any;
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([mockYearBtn]);
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
         component['selectedIndexYear'] = undefined;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
@@ -1602,9 +1603,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should call selectYear on Enter key', () => {
-        spyOn(component, 'selectYear');
-        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(new Array(301).fill(null));
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
 
         component.onKeydownYear(event, 3);
@@ -1613,9 +1614,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should call selectYear on Space key', () => {
-        spyOn(component, 'selectYear');
-        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(new Array(301).fill(null));
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { code: 'Space' });
 
         component.onKeydownYear(event, 5);
@@ -1624,9 +1625,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should navigate down on ArrowDown key', () => {
-        spyOn(component, 'selectYear');
-        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(new Array(301).fill(null));
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
 
         component.onKeydownYear(event, 3);
@@ -1635,9 +1636,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should navigate up on ArrowUp key', () => {
-        spyOn(component, 'selectYear');
-        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301).fill(null));
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(new Array(301).fill(null));
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
 
         component.onKeydownYear(event, 5);
@@ -1646,7 +1647,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not go below 0 on ArrowUp key', () => {
-        spyOn(component, 'selectYear');
+        vi.spyOn(component as any, 'selectYear');
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
 
         component.onKeydownYear(event, 0);
@@ -1655,7 +1656,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should emit close on Tab key (no shift)', () => {
-        spyOn(component.close, 'emit');
+        vi.spyOn(component.close as any, 'emit');
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
 
         component.onKeydownYear(event, 3);
@@ -1666,7 +1667,7 @@ describe('PoCalendarComponent:', () => {
 
       it('should emit close on Shift+Tab in year mode', () => {
         component.mode = PoCalendarMode.Year;
-        spyOn(component.close, 'emit');
+        vi.spyOn(component.close as any, 'emit');
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
 
         component.onKeydownYear(event, 0);
@@ -1676,9 +1677,9 @@ describe('PoCalendarComponent:', () => {
 
       it('should focus month list on Shift+Tab in month-year mode', () => {
         component.mode = PoCalendarMode.MonthYear;
-        const mockMonthBtn = { focus: jasmine.createSpy('focus') } as any;
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([mockMonthBtn]);
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const mockMonthBtn = { focus: vi.fn() } as any;
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([mockMonthBtn]);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         component['selectedIndexMonth'] = 0;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
@@ -1689,9 +1690,9 @@ describe('PoCalendarComponent:', () => {
 
       it('should focus first month option on Shift+Tab when no selected month', () => {
         component.mode = PoCalendarMode.MonthYear;
-        const mockMonthBtn = { focus: jasmine.createSpy('focus') } as any;
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([mockMonthBtn]);
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+        const mockMonthBtn = { focus: vi.fn() } as any;
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([mockMonthBtn]);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
         component['selectedIndexMonth'] = undefined;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
@@ -1701,9 +1702,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not exceed max index on ArrowDown key', () => {
-        spyOn(component, 'selectYear');
-        spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301));
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        vi.spyOn(component as any, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(new Array(301));
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         component.onKeydownYear(event, 300);
@@ -1718,13 +1719,13 @@ describe('PoCalendarComponent:', () => {
         component['selectedMonth'] = 6;
         component['selectedYear'] = 2025;
 
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component['updateModel'](6);
 
         expect(component.change.emit).toHaveBeenCalled();
-        const emittedValue = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0];
-        expect(emittedValue instanceof Date).toBeTrue();
+        const emittedValue = vi.mocked(component.change.emit as Mock).mock.lastCall[0];
+        expect(emittedValue instanceof Date).toBe(true);
         expect(emittedValue.getFullYear()).toBe(2025);
         expect(emittedValue.getMonth()).toBe(5);
       });
@@ -1734,7 +1735,7 @@ describe('PoCalendarComponent:', () => {
         component['selectedMonth'] = null;
         component['selectedYear'] = 2025;
 
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component['updateModel'](null);
 
@@ -1745,13 +1746,13 @@ describe('PoCalendarComponent:', () => {
         component.mode = PoCalendarMode.Year;
         component['selectedYear'] = 2025;
 
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component['updateModel'](2025);
 
         expect(component.change.emit).toHaveBeenCalled();
-        const emittedValue = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0];
-        expect(emittedValue instanceof Date).toBeTrue();
+        const emittedValue = vi.mocked(component.change.emit as Mock).mock.lastCall[0];
+        expect(emittedValue instanceof Date).toBe(true);
         expect(emittedValue.getFullYear()).toBe(2025);
         expect(emittedValue.getMonth()).toBe(0);
       });
@@ -1760,7 +1761,7 @@ describe('PoCalendarComponent:', () => {
         component.mode = PoCalendarMode.Year;
         component['selectedYear'] = null;
 
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component['updateModel'](null);
 
@@ -1770,7 +1771,7 @@ describe('PoCalendarComponent:', () => {
       it('should call propagateChange with finalValue', () => {
         component.mode = PoCalendarMode.Year;
         component['selectedYear'] = 2025;
-        component['propagateChange'] = jasmine.createSpy('propagateChange');
+        component['propagateChange'] = vi.fn();
 
         component['updateModel'](2025);
 
@@ -1788,7 +1789,7 @@ describe('PoCalendarComponent:', () => {
       it('should set month and year when mode is month-year', () => {
         const date = new Date(2025, 5, 1);
         const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
-        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(mockYearBtns);
 
         component['writeDate'](date);
 
@@ -1803,7 +1804,7 @@ describe('PoCalendarComponent:', () => {
         fixture.detectChanges();
         const date = new Date(2025, 0, 1);
         const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
-        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(mockYearBtns);
 
         component['writeDate'](date);
 
@@ -1814,7 +1815,7 @@ describe('PoCalendarComponent:', () => {
         const targetYear = new Date().getFullYear();
         const date = new Date(targetYear, 3, 1);
         const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
-        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(mockYearBtns);
 
         component['writeDate'](date);
 
@@ -1829,7 +1830,7 @@ describe('PoCalendarComponent:', () => {
         const targetYear = new Date().getFullYear();
         const date = new Date(targetYear, 0, 1);
         const mockYearBtns = component.displayYears.map((y: number) => ({ label: () => String(y) }));
-        spyOn<any>(component, 'getYearOptions').and.returnValue(mockYearBtns);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(mockYearBtns);
 
         component['writeDate'](date);
 
@@ -1859,7 +1860,7 @@ describe('PoCalendarComponent:', () => {
         component['selectedYear'] = undefined;
         component.minDate = new Date(2025, 0, 1);
 
-        expect(component.isMonthDisabled(0)).toBeFalse();
+        expect(component.isMonthDisabled(0)).toBe(false);
       });
     });
 
@@ -1871,9 +1872,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set focusedIndex and call focus when monthOptions[index] exists', () => {
-        const mockBtn = { focus: jasmine.createSpy('focus') } as any;
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([mockBtn]);
-        spyOn<any>(component, 'updateModel');
+        const mockBtn = { focus: vi.fn() } as any;
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([mockBtn]);
+        vi.spyOn(component as any, 'updateModel');
 
         component.selectMonth(0, undefined, true);
 
@@ -1882,8 +1883,8 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not call focus when monthOptions[index] does not exist', () => {
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
-        spyOn<any>(component, 'updateModel');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
+        vi.spyOn(component as any, 'updateModel');
 
         component.selectMonth(5, undefined, true);
 
@@ -1899,9 +1900,9 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should set focusedIndex and call focus when yearOptions[index] exists', () => {
-        const mockBtn = { focus: jasmine.createSpy('focus') } as any;
-        spyOn<any>(component, 'getYearOptions').and.returnValue([mockBtn]);
-        spyOn<any>(component, 'updateModel');
+        const mockBtn = { focus: vi.fn() } as any;
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([mockBtn]);
+        vi.spyOn(component as any, 'updateModel');
 
         component.selectYear(0, undefined, true, 2025);
 
@@ -1910,8 +1911,8 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should not call focus when yearOptions[index] does not exist', () => {
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
-        spyOn<any>(component, 'updateModel');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
+        vi.spyOn(component as any, 'updateModel');
 
         component.selectYear(5, undefined, true, 2025);
 
@@ -1926,9 +1927,9 @@ describe('PoCalendarComponent:', () => {
         fixture.detectChanges();
 
         const mockBtns = new Array(5).fill(null);
-        spyOn<any>(component, 'getYearOptions').and.returnValue(mockBtns);
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
-        spyOn(component, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(mockBtns);
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
+        vi.spyOn(component as any, 'selectYear');
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         component.onKeydownYear(event, 2);
@@ -1942,9 +1943,9 @@ describe('PoCalendarComponent:', () => {
         fixture.detectChanges();
 
         const mockBtns = new Array(5).fill(null);
-        spyOn<any>(component, 'getYearOptions').and.returnValue(mockBtns);
-        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
-        spyOn(component, 'selectYear');
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue(mockBtns);
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue([]);
+        vi.spyOn(component as any, 'selectYear');
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         component.onKeydownYear(event, 4);
@@ -1960,9 +1961,9 @@ describe('PoCalendarComponent:', () => {
         fixture.detectChanges();
 
         const mockBtns = new Array(12).fill(null);
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(mockBtns);
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
-        spyOn(component, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(mockBtns);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         component.onKeydownMonth(event, 5);
@@ -1976,9 +1977,9 @@ describe('PoCalendarComponent:', () => {
         fixture.detectChanges();
 
         const mockBtns = new Array(12).fill(null);
-        spyOn<any>(component, 'getMonthOptions').and.returnValue(mockBtns);
-        spyOn<any>(component, 'getYearOptions').and.returnValue([]);
-        spyOn(component, 'selectMonth');
+        vi.spyOn(component as any, 'getMonthOptions').mockReturnValue(mockBtns);
+        vi.spyOn(component as any, 'getYearOptions').mockReturnValue([]);
+        vi.spyOn(component as any, 'selectMonth');
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         component.onKeydownMonth(event, 11);
@@ -2044,9 +2045,9 @@ describe('PoCalendarComponent:', () => {
 
       const calendarDiv = fixture.debugElement.nativeElement.querySelector('.po-calendar');
       expect(calendarDiv).toBeTruthy();
-      expect(component.isRange).toBeTrue();
-      expect(component.isMonthYear).toBeFalse();
-      expect(component.isYear).toBeFalse();
+      expect(component.isRange).toBe(true);
+      expect(component.isMonthYear).toBe(false);
+      expect(component.isYear).toBe(false);
     });
   });
 });

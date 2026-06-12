@@ -79,7 +79,7 @@ describe('PoPageSlideBaseComponent', () => {
     });
 
     it('onThemeChange: should call applySizeBasedOnA11y', () => {
-      spyOn<any>(component, 'applySizeBasedOnA11y');
+      vi.spyOn(component as any, 'applySizeBasedOnA11y');
       component['onThemeChange']();
       expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
     });
@@ -114,7 +114,7 @@ describe('PoPageSlideBaseComponent', () => {
   });
 
   it('close: should call close method and emit output p-close', () => {
-    spyOn(component.closePageSlide, 'emit');
+    vi.spyOn(component.closePageSlide as any, 'emit');
 
     component.close();
 

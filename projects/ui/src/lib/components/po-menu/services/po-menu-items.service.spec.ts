@@ -22,21 +22,21 @@ describe('PoMenuItemsService', () => {
   });
 
   it('should call subjectChild.next with menuItem in sendToParentMenuClicked', () => {
-    spyOn(menuItemsService['subjectChild'], 'next');
+    vi.spyOn(menuItemsService['subjectChild'] as any, 'next');
     menuItemsService.sendToParentMenuClicked(menuItem);
 
     expect(menuItemsService['subjectChild'].next).toHaveBeenCalledWith(menuItem);
   });
 
   it('should call sendToChildMenuClicked with menuItem', () => {
-    spyOn(menuItemsService['subjectParent'], 'next');
+    vi.spyOn(menuItemsService['subjectParent'] as any, 'next');
     menuItemsService.sendToChildMenuClicked(menuItem);
 
     expect(menuItemsService['subjectParent'].next).toHaveBeenCalledWith(menuItem);
   });
 
   it('should call subjectChild.asObservable in receiveFromChildMenuClicked', () => {
-    spyOn(menuItemsService['subjectChild'], 'asObservable');
+    vi.spyOn(menuItemsService['subjectChild'] as any, 'asObservable');
     menuItemsService.receiveFromChildMenuClicked();
 
     expect(menuItemsService['subjectChild'].asObservable).toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe('PoMenuItemsService', () => {
   });
 
   it('should call subjectParent.asObservable in receiveFromParentMenuClicked', () => {
-    spyOn(menuItemsService['subjectParent'], 'asObservable');
+    vi.spyOn(menuItemsService['subjectParent'] as any, 'asObservable');
     menuItemsService.receiveFromParentMenuClicked();
 
     expect(menuItemsService['subjectParent'].asObservable).toHaveBeenCalled();

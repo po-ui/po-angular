@@ -41,7 +41,7 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateHours when format is set', () => {
-        spyOn(component as any, 'generateHours');
+        vi.spyOn(component as any, 'generateHours');
         component.format = PoTimerFormat.Format12;
         expect(component['generateHours']).toHaveBeenCalled();
       });
@@ -137,7 +137,7 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateMinutes when set', () => {
-        spyOn(component as any, 'generateMinutes');
+        vi.spyOn(component as any, 'generateMinutes');
         component.minuteInterval = 15;
         expect(component['generateMinutes']).toHaveBeenCalled();
       });
@@ -174,7 +174,7 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateSeconds when set', () => {
-        spyOn(component as any, 'generateSeconds');
+        vi.spyOn(component as any, 'generateSeconds');
         component.secondInterval = 10;
         expect(component['generateSeconds']).toHaveBeenCalled();
       });
@@ -206,7 +206,7 @@ describe('PoTimerBaseComponent:', () => {
       });
 
       it('should call generateSeconds when set', () => {
-        spyOn(component as any, 'generateSeconds');
+        vi.spyOn(component as any, 'generateSeconds');
         component.showSeconds = true;
         expect(component['generateSeconds']).toHaveBeenCalled();
       });
@@ -874,19 +874,19 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('writeValue:', () => {
       it('should call setTimeFromString with the provided value', () => {
-        spyOn(component, 'setTimeFromString');
+        vi.spyOn(component as any, 'setTimeFromString');
         component.writeValue('14:30');
         expect(component.setTimeFromString).toHaveBeenCalledWith('14:30');
       });
 
       it('should handle null value', () => {
-        spyOn(component, 'setTimeFromString');
+        vi.spyOn(component as any, 'setTimeFromString');
         component.writeValue(null);
         expect(component.setTimeFromString).toHaveBeenCalledWith(null);
       });
 
       it('should handle undefined value', () => {
-        spyOn(component, 'setTimeFromString');
+        vi.spyOn(component as any, 'setTimeFromString');
         component.writeValue(undefined);
         expect(component.setTimeFromString).toHaveBeenCalledWith(undefined);
       });
@@ -894,7 +894,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('registerOnChange:', () => {
       it('should register the onChange function', () => {
-        const fn = jasmine.createSpy('onChange');
+        const fn = vi.fn();
         component.registerOnChange(fn);
         expect(component['onChangePropagate']).toBe(fn);
       });
@@ -902,7 +902,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('registerOnTouched:', () => {
       it('should register the onTouched function', () => {
-        const fn = jasmine.createSpy('onTouched');
+        const fn = vi.fn();
         component.registerOnTouched(fn);
         expect(component['onTouched']).toBe(fn);
       });
@@ -919,8 +919,8 @@ describe('PoTimerBaseComponent:', () => {
       it('should emit change and call updateModel when value is valid', () => {
         component.selectedHour = 14;
         component.selectedMinute = 30;
-        spyOn(component.change, 'emit');
-        const fn = jasmine.createSpy('onChange');
+        vi.spyOn(component.change as any, 'emit');
+        const fn = vi.fn();
         component.registerOnChange(fn);
 
         component['emitChange']();
@@ -932,7 +932,7 @@ describe('PoTimerBaseComponent:', () => {
       it('should not emit when selectedHour is null', () => {
         component.selectedHour = null;
         component.selectedMinute = 30;
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component['emitChange']();
 
@@ -942,7 +942,7 @@ describe('PoTimerBaseComponent:', () => {
       it('should not emit when selectedMinute is null', () => {
         component.selectedHour = 14;
         component.selectedMinute = null;
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component['emitChange']();
 
@@ -953,7 +953,7 @@ describe('PoTimerBaseComponent:', () => {
         component.selectedHour = 14;
         component.selectedMinute = 30;
         component['onChangePropagate'] = null;
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         expect(() => component['emitChange']()).not.toThrow();
         expect(component.change.emit).toHaveBeenCalledWith('14:30');
@@ -962,7 +962,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('callOnTouched:', () => {
       it('should call onTouched when registered', () => {
-        const fn = jasmine.createSpy('onTouched');
+        const fn = vi.fn();
         component.registerOnTouched(fn);
 
         component['callOnTouched']();
@@ -978,7 +978,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('onThemeChange:', () => {
       it('should call applySizeBasedOnA11y', () => {
-        spyOn(component as any, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect(component['applySizeBasedOnA11y']).toHaveBeenCalled();
       });
@@ -986,7 +986,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('value (getter/setter):', () => {
       it('should set value via writeValue', () => {
-        spyOn(component, 'writeValue');
+        vi.spyOn(component as any, 'writeValue');
         component.value = '14:30';
         expect(component.writeValue).toHaveBeenCalledWith('14:30');
       });
@@ -1224,7 +1224,7 @@ describe('PoTimerBaseComponent:', () => {
 
     describe('size setter:', () => {
       it('should set _initialSize and call applySizeBasedOnA11y', () => {
-        spyOn(component as any, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component.size = 'small';
         expect(component['_initialSize']).toBe('small');
         expect(component['applySizeBasedOnA11y']).toHaveBeenCalled();

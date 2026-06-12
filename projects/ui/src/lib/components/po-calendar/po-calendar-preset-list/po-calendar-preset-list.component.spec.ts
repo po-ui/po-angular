@@ -52,8 +52,8 @@ describe('PoCalendarPresetListComponent:', () => {
       fixture.detectChanges();
 
       const presets = nativeElement.querySelectorAll('.po-calendar-preset-item');
-      expect(presets[0].classList.contains('po-calendar-preset-item-selected')).toBeTrue();
-      expect(presets[1].classList.contains('po-calendar-preset-item-selected')).toBeFalse();
+      expect(presets[0].classList.contains('po-calendar-preset-item-selected')).toBe(true);
+      expect(presets[1].classList.contains('po-calendar-preset-item-selected')).toBe(false);
     });
 
     it('should set aria-selected="true" on the selected preset button', () => {
@@ -112,7 +112,7 @@ describe('PoCalendarPresetListComponent:', () => {
         })
       };
 
-      spyOn(component.selectPreset, 'emit');
+      vi.spyOn(component.selectPreset as any, 'emit');
 
       component.onPresetClick(mockPreset);
 
@@ -124,7 +124,7 @@ describe('PoCalendarPresetListComponent:', () => {
     });
 
     it('onPresetClick: should call preset.dateRange with a new Date', () => {
-      const dateRangeSpy = jasmine.createSpy('dateRange').and.returnValue({
+      const dateRangeSpy = vi.fn().mockReturnValue({
         start: new Date(),
         end: new Date()
       });
@@ -136,31 +136,31 @@ describe('PoCalendarPresetListComponent:', () => {
 
       component.onPresetClick(mockPreset);
 
-      expect(dateRangeSpy).toHaveBeenCalledWith(jasmine.any(Date));
+      expect(dateRangeSpy).toHaveBeenCalledWith(expect.any(Date));
     });
 
     it('isSelected: should return true when selectedPreset matches preset label', () => {
       component.selectedPreset = 'today';
 
-      expect(
-        component.isSelected({ label: 'today', dateRange: () => ({ start: new Date(), end: new Date() }) })
-      ).toBeTrue();
+      expect(component.isSelected({ label: 'today', dateRange: () => ({ start: new Date(), end: new Date() }) })).toBe(
+        true
+      );
     });
 
     it('isSelected: should return false when selectedPreset does not match preset label', () => {
       component.selectedPreset = 'yesterday';
 
-      expect(
-        component.isSelected({ label: 'today', dateRange: () => ({ start: new Date(), end: new Date() }) })
-      ).toBeFalse();
+      expect(component.isSelected({ label: 'today', dateRange: () => ({ start: new Date(), end: new Date() }) })).toBe(
+        false
+      );
     });
 
     it('isSelected: should return false when selectedPreset is null', () => {
       component.selectedPreset = null;
 
-      expect(
-        component.isSelected({ label: 'today', dateRange: () => ({ start: new Date(), end: new Date() }) })
-      ).toBeFalse();
+      expect(component.isSelected({ label: 'today', dateRange: () => ({ start: new Date(), end: new Date() }) })).toBe(
+        false
+      );
     });
 
     describe('onKeydown:', () => {
@@ -172,7 +172,7 @@ describe('PoCalendarPresetListComponent:', () => {
 
       it('should focus next preset on ArrowDown', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onKeydown(event, 0);
 
@@ -191,7 +191,7 @@ describe('PoCalendarPresetListComponent:', () => {
 
       it('should focus previous preset on ArrowUp', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onKeydown(event, 2);
 
@@ -209,7 +209,7 @@ describe('PoCalendarPresetListComponent:', () => {
 
       it('should emit closeCalendar on Shift+Tab from first preset', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onKeydown(event, 0);
 
@@ -218,7 +218,7 @@ describe('PoCalendarPresetListComponent:', () => {
 
       it('should emit closeCalendar on Shift+Tab from any preset', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onKeydown(event, 2);
 
@@ -228,7 +228,7 @@ describe('PoCalendarPresetListComponent:', () => {
       it('should not emit closeCalendar on Shift+Tab when responsive is true', () => {
         component.responsive = true;
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onKeydown(event, 0);
 
@@ -238,7 +238,7 @@ describe('PoCalendarPresetListComponent:', () => {
       it('should not emit closeCalendar on Shift+Tab from any preset when responsive is true', () => {
         component.responsive = true;
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onKeydown(event, 2);
 
@@ -259,7 +259,7 @@ describe('PoCalendarPresetListComponent:', () => {
       it('should set focusedIndex, sync tabindexes, and call focus when button exists', () => {
         const mockButton0 = document.createElement('button');
         const mockButton1 = document.createElement('button');
-        spyOn(mockButton1, 'focus');
+        vi.spyOn(mockButton1 as any, 'focus');
 
         component.presets = PO_CALENDAR_DEFAULT_RANGE_PRESETS;
         component.locale = 'pt';
@@ -286,7 +286,7 @@ describe('PoCalendarPresetListComponent:', () => {
           isDisabled: true
         };
 
-        expect(component.isPresetDisabled(preset)).toBeTrue();
+        expect(component.isPresetDisabled(preset)).toBe(true);
       });
 
       it('should return false when preset.isDisabled is false', () => {
@@ -296,7 +296,7 @@ describe('PoCalendarPresetListComponent:', () => {
           isDisabled: false
         };
 
-        expect(component.isPresetDisabled(preset)).toBeFalse();
+        expect(component.isPresetDisabled(preset)).toBe(false);
       });
 
       it('should return false when preset.isDisabled is undefined', () => {
@@ -305,7 +305,7 @@ describe('PoCalendarPresetListComponent:', () => {
           dateRange: () => ({ start: new Date(), end: new Date() })
         };
 
-        expect(component.isPresetDisabled(preset)).toBeFalse();
+        expect(component.isPresetDisabled(preset)).toBe(false);
       });
     });
 
@@ -320,7 +320,7 @@ describe('PoCalendarPresetListComponent:', () => {
           isDisabled: true
         };
 
-        spyOn(component.selectPreset, 'emit');
+        vi.spyOn(component.selectPreset as any, 'emit');
 
         component.onPresetClick(mockPreset);
 
@@ -337,7 +337,7 @@ describe('PoCalendarPresetListComponent:', () => {
           isDisabled: false
         };
 
-        spyOn(component.selectPreset, 'emit');
+        vi.spyOn(component.selectPreset as any, 'emit');
 
         component.onPresetClick(mockPreset);
 
@@ -366,7 +366,7 @@ describe('PoCalendarPresetListComponent:', () => {
       component.presets = [disabledPreset, enabledPreset];
       component.locale = 'pt';
 
-      spyOn(component, 'isPresetDisabled').and.callThrough();
+      vi.spyOn(component as any, 'isPresetDisabled');
       fixture.detectChanges();
 
       expect(component.isPresetDisabled).toHaveBeenCalledWith(disabledPreset);

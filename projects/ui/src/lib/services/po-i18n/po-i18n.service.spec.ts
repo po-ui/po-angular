@@ -98,7 +98,7 @@ describe('mergePoI18nConfigs', () => {
 
     expect(result.default?.language).toBe('pt-BR');
     expect(result.default?.context).toBe('general');
-    expect(result.default?.cache).toBeTrue();
+    expect(result.default?.cache).toBe(true);
 
     expect(result.contexts).toEqual({
       dashboard: {
@@ -127,17 +127,19 @@ describe('mergePoI18nConfigs', () => {
   });
 
   describe('PoI18nService', () => {
-    let httpMock: jasmine.SpyObj<HttpClient>;
-    let languageServiceMock: jasmine.SpyObj<PoLanguageService>;
+    let httpMock: any;
+    let languageServiceMock: any;
 
     beforeEach(() => {
-      httpMock = jasmine.createSpyObj('HttpClient', ['get']);
-      languageServiceMock = jasmine.createSpyObj('PoLanguageService', [
-        'getLanguage',
-        'getShortLanguage',
-        'setLanguage',
-        'setLanguageDefault'
-      ]);
+      httpMock = {
+        get: vi.fn().mockName('HttpClient.get')
+      };
+      languageServiceMock = {
+        getLanguage: vi.fn().mockName('PoLanguageService.getLanguage'),
+        getShortLanguage: vi.fn().mockName('PoLanguageService.getShortLanguage'),
+        setLanguage: vi.fn().mockName('PoLanguageService.setLanguage'),
+        setLanguageDefault: vi.fn().mockName('PoLanguageService.setLanguageDefault')
+      };
     });
 
     it('should call mergePoI18nConfigs when multiple configs are passed (Array)', () => {

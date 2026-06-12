@@ -47,7 +47,7 @@ describe('PoDisclaimerBaseComponent', () => {
     component.property = 'testeProperty';
     component.value = 'testeValue';
 
-    spyOn(component.closeAction, 'emit');
+    vi.spyOn(component.closeAction as any, 'emit');
     component.close();
 
     expect(component.closeAction.emit).toHaveBeenCalledWith({

@@ -36,7 +36,7 @@ describe('PoDynamicFormComponent:', () => {
 
   describe('Properties:', () => {
     it('form: should call `emitForm` and set property', fakeAsync(() => {
-      spyOn(component, <any>'emitForm');
+      vi.spyOn(component as any, 'emitForm');
 
       component.form = new NgForm(null, null);
 
@@ -55,7 +55,7 @@ describe('PoDynamicFormComponent:', () => {
     it('emitForm: should call `formOutput.emit` if contains `formOutput.observers`', () => {
       const fakeThis = { formOutput: { observers: [{}], emit: () => {} } };
 
-      spyOn(fakeThis.formOutput, 'emit');
+      vi.spyOn(fakeThis.formOutput as any, 'emit');
 
       component['emitForm'].call(fakeThis);
 
@@ -65,7 +65,7 @@ describe('PoDynamicFormComponent:', () => {
     it('emitForm: shouldn`t call `formOutput.emit` if `formOutput.observers.length` is falsy', () => {
       const fakeThis = { formOutput: { observers: [], emit: () => {} } };
 
-      spyOn(fakeThis.formOutput, 'emit');
+      vi.spyOn(fakeThis.formOutput as any, 'emit');
 
       component['emitForm'].call(fakeThis);
 
@@ -73,7 +73,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('focus: should call `fieldsComponent.focus`.', () => {
-      const spyFieldsComponentFocus = spyOn(component.fieldsComponent, 'focus');
+      const spyFieldsComponentFocus = vi.spyOn(component.fieldsComponent as any, 'focus');
 
       component.focus('field');
 
@@ -82,7 +82,7 @@ describe('PoDynamicFormComponent:', () => {
 
     it('showAdditionalHelp: should call `fieldsComponent.showAdditionalHelp` with the given property', () => {
       const property = 'name';
-      spyOn(component.fieldsComponent, 'showAdditionalHelp');
+      vi.spyOn(component.fieldsComponent as any, 'showAdditionalHelp');
 
       component.showAdditionalHelp(property);
 
@@ -96,8 +96,8 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test' }];
 
-      spyOn(component, <any>'disableForm');
-      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
+      vi.spyOn(component as any, 'disableForm');
+      vi.spyOn(component['validationService'] as any, 'sendFormChange').mockReturnValue(of());
 
       component['validateForm'](updatedField);
 
@@ -113,11 +113,11 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test' }];
 
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'disableForm');
 
-      spyOn(component['validationService'], 'sendFormChange').and.returnValue(throwError('error'));
+      vi.spyOn(component['validationService'] as any, 'sendFormChange').mockReturnValue(throwError('error'));
 
-      spyOn(component, <any>'applyFormValidation');
+      vi.spyOn(component as any, 'applyFormValidation');
 
       component['validateForm'](updatedField);
 
@@ -130,11 +130,11 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test' }];
 
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'disableForm');
 
-      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of(updatedFormField));
+      vi.spyOn(component['validationService'] as any, 'sendFormChange').mockReturnValue(of(updatedFormField));
 
-      spyOn(component, <any>'applyFormValidation');
+      vi.spyOn(component as any, 'applyFormValidation');
 
       component['validateForm'](updatedField);
 
@@ -146,9 +146,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test' }];
 
-      spyOn(component, <any>'disableForm');
-      spyOn(component['validationService'], 'sendFormChange').and.returnValue(of());
-      spyOn(component, <any>'applyFormValidation');
+      vi.spyOn(component as any, 'disableForm');
+      vi.spyOn(component['validationService'] as any, 'sendFormChange').mockReturnValue(of());
+      vi.spyOn(component as any, 'applyFormValidation');
 
       component['validateForm'](updatedField);
 
@@ -162,9 +162,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test1', required: true, visible: true }];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component, <any>'updateModelWithValidation');
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component as any, 'updateModelWithValidation');
+      vi.spyOn(component as any, 'disableForm');
 
       component['applyFormValidation'](previousFocusElement)(validatedFields);
 
@@ -178,9 +178,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test1', required: true, visible: true }];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component, <any>'updateModelWithValidation');
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component as any, 'updateModelWithValidation');
+      vi.spyOn(component as any, 'disableForm');
 
       component['applyFormValidation'](previousFocusElement)(validatedFields);
 
@@ -194,9 +194,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test1', required: true, visible: true }];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component, <any>'updateModelWithValidation');
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component as any, 'updateModelWithValidation');
+      vi.spyOn(component as any, 'disableForm');
 
       component['applyFormValidation'](previousFocusElement)(validatedFields);
 
@@ -220,9 +220,9 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'test5', required: true }
       ];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component['validationService'], 'updateFieldsForm').and.returnValue(expectedFields);
-      spyOn(component.fieldsComponent, 'updatePreviousValue').and.returnValue();
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component['validationService'] as any, 'updateFieldsForm').mockReturnValue(expectedFields);
+      vi.spyOn(component.fieldsComponent as any, 'updatePreviousValue').mockReturnValue(undefined);
 
       component['updateModelWithValidation'](validatedFields);
 
@@ -248,8 +248,8 @@ describe('PoDynamicFormComponent:', () => {
         age: '23'
       };
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component['validationService'], 'updateFieldsForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component['validationService'] as any, 'updateFieldsForm');
 
       component['updateModelWithValidation'](validatedFields);
 
@@ -271,7 +271,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('disableForm: should call detectChanges', () => {
-      spyOn(component['changes'], 'detectChanges');
+      vi.spyOn(component['changes'] as any, 'detectChanges');
 
       component['disableForm'](false);
 
@@ -282,7 +282,7 @@ describe('PoDynamicFormComponent:', () => {
       const property = 'name';
       const previousFocusElement = document.activeElement;
 
-      spyOn(component, 'focus');
+      vi.spyOn(component as any, 'focus');
 
       component['setFocusOnFieldByProperty'](property, previousFocusElement);
       tick();
@@ -294,7 +294,7 @@ describe('PoDynamicFormComponent:', () => {
       const property = undefined;
       const previousFocusElement = document.activeElement;
 
-      spyOn(previousFocusElement, <any>'focus');
+      vi.spyOn(previousFocusElement as any, 'focus');
 
       component['setFocusOnFieldByProperty'](property, previousFocusElement);
 
@@ -304,7 +304,7 @@ describe('PoDynamicFormComponent:', () => {
     it('ngOnInit: should call `loadDataOnInitialize` if `load` is truthy', () => {
       component.load = 'http://service/api';
 
-      const spyLoadDataOnInitialize = spyOn(component, <any>`loadDataOnInitialize`);
+      const spyLoadDataOnInitialize = vi.spyOn(component, <any>`loadDataOnInitialize`);
 
       component.ngOnInit();
 
@@ -314,7 +314,7 @@ describe('PoDynamicFormComponent:', () => {
     it('ngOnInit: shouldn`t call `loadDataOnInitialize` if `load` is falsy', () => {
       component.load = undefined;
 
-      const spyLoadDataOnInitialize = spyOn(component, <any>`loadDataOnInitialize`);
+      const spyLoadDataOnInitialize = vi.spyOn(component, <any>`loadDataOnInitialize`);
 
       component.ngOnInit();
 
@@ -322,7 +322,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('ngOnDestroy: should call `removeListeners`', () => {
-      const spyRemoveListeners = spyOn(component, <any>`removeListeners`);
+      const spyRemoveListeners = vi.spyOn(component, <any>`removeListeners`);
 
       component.ngOnDestroy();
 
@@ -334,8 +334,8 @@ describe('PoDynamicFormComponent:', () => {
       component['onLoadSubscription'] = <any>{ unsubscribe: () => {} };
       component['sendFormSubscription'] = <any>{ unsubscribe: () => {} };
 
-      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any>'unsubscribe');
-      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any>'unsubscribe');
+      const spyOnLoadSubscription = vi.spyOn(component['onLoadSubscription'] as any, 'unsubscribe');
+      const spySendFormSubscription = vi.spyOn(component['sendFormSubscription'] as any, 'unsubscribe');
 
       component['removeListeners']();
 
@@ -348,8 +348,8 @@ describe('PoDynamicFormComponent:', () => {
       component['onLoadSubscription'] = <any>{ unsubscribe: () => {} };
       component['sendFormSubscription'] = <any>{ unsubscribe: () => {} };
 
-      const spyOnLoadSubscription = spyOn(component['onLoadSubscription'], <any>'unsubscribe');
-      const spySendFormSubscription = spyOn(component['sendFormSubscription'], <any>'unsubscribe');
+      const spyOnLoadSubscription = vi.spyOn(component['onLoadSubscription'] as any, 'unsubscribe');
+      const spySendFormSubscription = vi.spyOn(component['sendFormSubscription'] as any, 'unsubscribe');
 
       component['onLoadSubscription'] = undefined;
       component['sendFormSubscription'] = undefined;
@@ -383,10 +383,7 @@ describe('PoDynamicFormComponent:', () => {
         { property: 'cpf', required: true }
       ];
 
-      const spyCreateAndUpdateFieldsForm = spyOn(
-        component['loadService'],
-        'createAndUpdateFieldsForm'
-      ).and.callThrough();
+      const spyCreateAndUpdateFieldsForm = vi.spyOn(component['loadService'] as any, 'createAndUpdateFieldsForm');
 
       component['updateModelOnLoad'](loadedFormData);
 
@@ -411,8 +408,8 @@ describe('PoDynamicFormComponent:', () => {
         age: '23'
       };
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component['loadService'], 'createAndUpdateFieldsForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component['loadService'] as any, 'createAndUpdateFieldsForm');
 
       component['updateModelOnLoad'](loadedFormData);
 
@@ -426,9 +423,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test1', required: true, visible: true }];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component, <any>'updateModelOnLoad');
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component as any, 'updateModelOnLoad');
+      vi.spyOn(component as any, 'disableForm');
 
       component['applyFormUpdatesOnLoad'](previousFocusElement)(validatedFields);
 
@@ -442,9 +439,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test1', required: true, visible: true }];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component, <any>'updateModelOnLoad');
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component as any, 'updateModelOnLoad');
+      vi.spyOn(component as any, 'disableForm');
 
       component['applyFormUpdatesOnLoad'](previousFocusElement)(validatedFields);
 
@@ -458,9 +455,9 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test1', required: true, visible: true }];
 
-      spyOn(component, <any>'setFocusOnFieldByProperty');
-      spyOn(component, <any>'updateModelOnLoad');
-      spyOn(component, <any>'disableForm');
+      vi.spyOn(component as any, 'setFocusOnFieldByProperty');
+      vi.spyOn(component as any, 'updateModelOnLoad');
+      vi.spyOn(component as any, 'disableForm');
 
       component['applyFormUpdatesOnLoad'](previousFocusElement)(loadedFormData);
 
@@ -471,8 +468,8 @@ describe('PoDynamicFormComponent:', () => {
       component.load = 'http://fakeUrlPo.com';
       component.value = { test: 'new value' };
 
-      spyOn(component, <any>'disableForm');
-      const spyExecuteLoad = spyOn(component['loadService'], 'executeLoad').and.returnValue(of());
+      vi.spyOn(component as any, 'disableForm');
+      const spyExecuteLoad = vi.spyOn(component['loadService'] as any, 'executeLoad').mockReturnValue(of());
 
       component['loadDataOnInitialize']();
 
@@ -483,8 +480,8 @@ describe('PoDynamicFormComponent:', () => {
       component.fields = [{ property: 'test' }];
       component.disabledForm = true;
 
-      spyOn(component['loadService'], 'executeLoad').and.returnValue(throwError('error'));
-      spyOn(component, <any>'applyFormUpdatesOnLoad');
+      vi.spyOn(component['loadService'] as any, 'executeLoad').mockReturnValue(throwError('error'));
+      vi.spyOn(component as any, 'applyFormUpdatesOnLoad');
 
       component['loadDataOnInitialize']();
 
@@ -496,8 +493,8 @@ describe('PoDynamicFormComponent:', () => {
 
       component.fields = [{ property: 'test' }];
 
-      spyOn(component['loadService'], 'executeLoad').and.returnValue(of(loadedFormData));
-      spyOn(component, <any>'applyFormUpdatesOnLoad');
+      vi.spyOn(component['loadService'] as any, 'executeLoad').mockReturnValue(of(loadedFormData));
+      vi.spyOn(component as any, 'applyFormUpdatesOnLoad');
 
       component['loadDataOnInitialize']();
 
@@ -507,8 +504,8 @@ describe('PoDynamicFormComponent:', () => {
     it('loadDataOnInitialize: should call applyFormUpdatesOnLoad', () => {
       component.fields = [{ property: 'test' }];
 
-      spyOn(component['loadService'], 'executeLoad').and.returnValue(of());
-      const spyApplyFormUpdatesOnLoad = spyOn(component, <any>'applyFormUpdatesOnLoad');
+      vi.spyOn(component['loadService'] as any, 'executeLoad').mockReturnValue(of());
+      const spyApplyFormUpdatesOnLoad = vi.spyOn(component as any, 'applyFormUpdatesOnLoad');
 
       component['loadDataOnInitialize']();
 
@@ -516,7 +513,7 @@ describe('PoDynamicFormComponent:', () => {
     });
 
     it('getObjectValue: should call comboOptionSubject.asObservable', () => {
-      const spyComboOptionSubjectObservable = spyOn(component['comboOptionSubject'], 'asObservable');
+      const spyComboOptionSubjectObservable = vi.spyOn(component['comboOptionSubject'] as any, 'asObservable');
 
       component.getObjectValue();
 
@@ -532,7 +529,7 @@ describe('PoDynamicFormComponent:', () => {
     it('sendObjectValue: should call comboOptionSubject.next with value', () => {
       const value = 'test';
 
-      const spyComboOptionSubjectNext = spyOn(component['comboOptionSubject'], 'next');
+      const spyComboOptionSubjectNext = vi.spyOn(component['comboOptionSubject'] as any, 'next');
 
       component.sendObjectValue('test');
 

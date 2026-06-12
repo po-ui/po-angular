@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentRef, EventEmitter, Injector } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, inject, TestBed, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
@@ -84,7 +85,7 @@ describe('PoLookupComponent:', () => {
     component.disabled = false;
     component.service = lookupFilterService;
 
-    spyOn(component, <any>'selectModel');
+    vi.spyOn(component as any, 'selectModel');
 
     component.openLookup();
     component['poLookupModalService'].selectValue({});
@@ -107,8 +108,8 @@ describe('PoLookupComponent:', () => {
       component.inputEl.nativeElement.value = 'po';
       component['onTouched'] = () => {};
 
-      spyOn(component, <any>'selectModel');
-      spyOn(component, <any>'onTouched');
+      vi.spyOn(component as any, 'selectModel');
+      vi.spyOn(component as any, 'onTouched');
 
       component.searchEvent();
 
@@ -123,8 +124,8 @@ describe('PoLookupComponent:', () => {
     component.fieldValue = 'id';
     component.fieldLabel = 'name';
 
-    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
-    spyOn(component, 'selectModel' as any).and.callThrough();
+    vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of(serviceResponse));
+    vi.spyOn(component, 'selectModel' as any);
 
     component.searchById(serviceResponse.id);
 
@@ -143,8 +144,8 @@ describe('PoLookupComponent:', () => {
     component.fieldValue = 'id';
     component.fieldLabel = 'name';
 
-    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
-    spyOn(component, 'selectModel' as any).and.callThrough();
+    vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of(serviceResponse));
+    vi.spyOn(component, 'selectModel' as any);
 
     component.searchById(serviceResponse.map(item => item.id));
 
@@ -166,8 +167,8 @@ describe('PoLookupComponent:', () => {
     component.fieldValue = 'id';
     component.fieldLabel = 'name';
 
-    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
-    spyOn(component, 'selectModel' as any).and.callThrough();
+    vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of(serviceResponse));
+    vi.spyOn(component, 'selectModel' as any);
 
     component.searchById(serviceResponse.map(item => item.id));
 
@@ -188,7 +189,7 @@ describe('PoLookupComponent:', () => {
     const serviceResponse = { id: 1234, name: 'Peter Parker', email: 'peterP@mail.com' };
     component.fieldValue = 'id';
     component.fieldLabel = 'name';
-    spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+    vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of(serviceResponse));
 
     component.searchById('.');
 
@@ -218,10 +219,10 @@ describe('PoLookupComponent:', () => {
     const objectSelected = { label: 'teste', value: 123 };
 
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -237,7 +238,7 @@ describe('PoLookupComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -254,7 +255,7 @@ describe('PoLookupComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
@@ -280,8 +281,8 @@ describe('PoLookupComponent:', () => {
         component['oldValue'] = 'po SP';
         component['onTouched'] = () => {};
 
-        spyOn(component, <any>'searchById');
-        spyOn(component, <any>'onTouched');
+        vi.spyOn(component as any, 'searchById');
+        vi.spyOn(component as any, 'onTouched');
 
         component.searchEvent();
 
@@ -299,8 +300,8 @@ describe('PoLookupComponent:', () => {
         component['oldValue'] = 'po';
         component['onTouched'] = () => {};
 
-        spyOn(component, <any>'searchById');
-        spyOn(component, <any>'onTouched');
+        vi.spyOn(component as any, 'searchById');
+        vi.spyOn(component as any, 'onTouched');
 
         component.searchEvent();
 
@@ -321,7 +322,7 @@ describe('PoLookupComponent:', () => {
     it(`searchEvent: should call searchById if 'oldValue' is null`, () => {
       fixture.detectChanges();
       component['oldValue'] = null;
-      const spySearchById = spyOn(component, 'searchById');
+      const spySearchById = vi.spyOn(component as any, 'searchById');
 
       component.searchEvent();
       expect(spySearchById).toHaveBeenCalled();
@@ -329,8 +330,8 @@ describe('PoLookupComponent:', () => {
 
     it(`searchEvent: should call searchById if 'oldValue' is different than value`, () => {
       component['oldValue'] = 'test';
-      const spySearchById = spyOn(component, 'searchById');
-      spyOn(component, 'getViewValue').and.returnValue('test1');
+      const spySearchById = vi.spyOn(component as any, 'searchById');
+      vi.spyOn(component as any, 'getViewValue').mockReturnValue('test1');
 
       component.searchEvent();
 
@@ -339,8 +340,8 @@ describe('PoLookupComponent:', () => {
 
     it(`searchEvent: shouldn´t call searchById if 'oldValue' is equal value`, () => {
       component['oldValue'] = 'test';
-      const spySearchById = spyOn(component, 'searchById');
-      spyOn(component, 'getViewValue').and.returnValue('test');
+      const spySearchById = vi.spyOn(component as any, 'searchById');
+      vi.spyOn(component as any, 'getViewValue').mockReturnValue('test');
 
       component.searchEvent();
 
@@ -350,7 +351,7 @@ describe('PoLookupComponent:', () => {
     it('modalSubscription: should `unsubscribe` on destroy.', () => {
       component['modalSubscription'] = fakeSubscription;
 
-      spyOn(component['modalSubscription'], <any>'unsubscribe');
+      vi.spyOn(component['modalSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -360,7 +361,7 @@ describe('PoLookupComponent:', () => {
     it('modalSubscription: should not `unsubscribe` if `modalSubscription` is falsy.', () => {
       component['modalSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['modalSubscription'] = undefined;
       component.ngOnDestroy();
@@ -375,7 +376,7 @@ describe('PoLookupComponent:', () => {
         }
       };
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -390,7 +391,7 @@ describe('PoLookupComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -400,8 +401,8 @@ describe('PoLookupComponent:', () => {
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -409,8 +410,8 @@ describe('PoLookupComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -420,7 +421,7 @@ describe('PoLookupComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -430,7 +431,7 @@ describe('PoLookupComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -439,7 +440,7 @@ describe('PoLookupComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -452,8 +453,8 @@ describe('PoLookupComponent:', () => {
       (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
 
-        spyOn(component['poLookupModalService'], 'openModal');
-        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+        vi.spyOn(component['poLookupModalService'] as any, 'openModal');
+        vi.spyOn(component as any, 'isAllowedOpenModal').mockReturnValue(true);
 
         component.openLookup();
 
@@ -466,8 +467,8 @@ describe('PoLookupComponent:', () => {
       (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
 
-        spyOn(component['poLookupModalService'], 'openModal');
-        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(false);
+        vi.spyOn(component['poLookupModalService'] as any, 'openModal');
+        vi.spyOn(component as any, 'isAllowedOpenModal').mockReturnValue(false);
 
         component.openLookup();
 
@@ -481,8 +482,8 @@ describe('PoLookupComponent:', () => {
         component.service = lookupFilterService;
         component['modalSubscription'] = fakeSubscription;
 
-        spyOn(component['poLookupModalService'].selectValueEvent, 'subscribe');
-        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+        vi.spyOn(component['poLookupModalService'].selectValueEvent, 'subscribe');
+        vi.spyOn(component as any, 'isAllowedOpenModal').mockReturnValue(true);
 
         component.openLookup();
 
@@ -496,8 +497,8 @@ describe('PoLookupComponent:', () => {
       component['modalSubscription'] = undefined;
       component['poLookupModalService'].selectValueEvent = <any>of([objectSelected]);
 
-      spyOn(component, <any>'selectModel');
-      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+      vi.spyOn(component as any, 'selectModel');
+      vi.spyOn(component as any, 'isAllowedOpenModal').mockReturnValue(true);
 
       component.openLookup();
 
@@ -511,10 +512,10 @@ describe('PoLookupComponent:', () => {
       component['modalSubscription'] = undefined;
       component['poLookupModalService'].selectValueEvent = <any>of([objectSelected, objectSelected]);
 
-      spyOn(component, 'setDisclaimers');
-      spyOn(component, 'updateVisibleItems');
-      spyOn(component, <any>'selectModel');
-      spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+      vi.spyOn(component as any, 'setDisclaimers');
+      vi.spyOn(component as any, 'updateVisibleItems');
+      vi.spyOn(component as any, 'selectModel');
+      vi.spyOn(component as any, 'isAllowedOpenModal').mockReturnValue(true);
 
       component.openLookup();
 
@@ -528,7 +529,7 @@ describe('PoLookupComponent:', () => {
       fixture.detectChanges();
       component.fieldFormat = valueFormated => `${valueFormated.value} - ${valueFormated.label}`;
 
-      spyOn(component, <any>'setInputValueWipoieldFormat');
+      vi.spyOn(component as any, 'setInputValueWipoieldFormat');
 
       component.setViewValue(123, objectSelected);
 
@@ -540,7 +541,7 @@ describe('PoLookupComponent:', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = 123;
 
-      spyOn(component, <any>'setInputValueWipoieldFormat');
+      vi.spyOn(component as any, 'setInputValueWipoieldFormat');
 
       component.setViewValue('valueTeste', objectSelected);
 
@@ -563,7 +564,7 @@ describe('PoLookupComponent:', () => {
       component.fieldFormat = undefined;
       component['valueToModel'] = undefined;
 
-      spyOn(component, <any>'setInputValueWipoieldFormat');
+      vi.spyOn(component as any, 'setInputValueWipoieldFormat');
 
       component.setViewValue('valueTeste', objectSelected);
 
@@ -576,7 +577,7 @@ describe('PoLookupComponent:', () => {
       component.inputEl = undefined;
       component['valueToModel'] = undefined;
 
-      spyOn(component, <any>'setInputValueWipoieldFormat');
+      vi.spyOn(component as any, 'setInputValueWipoieldFormat');
 
       component.setViewValue(null, null);
 
@@ -709,8 +710,8 @@ describe('PoLookupComponent:', () => {
         }
       ];
 
-      const spyUpdateVisibleItems = spyOn(component, 'updateVisibleItems');
-      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+      const spyUpdateVisibleItems = vi.spyOn(component as any, 'updateVisibleItems');
+      const spyCallOnChange = vi.spyOn(component as any, 'callOnChange');
 
       component.disclaimers = itemsDisclaimers;
       component['valueToModel'] = itemsDisclaimers;
@@ -734,8 +735,8 @@ describe('PoLookupComponent:', () => {
         }
       ];
 
-      const spyUpdateVisibleItems = spyOn(component, 'updateVisibleItems');
-      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+      const spyUpdateVisibleItems = vi.spyOn(component as any, 'updateVisibleItems');
+      const spyCallOnChange = vi.spyOn(component as any, 'callOnChange');
 
       component.disclaimers = itemsDisclaimers;
       component['valueToModel'] = [];
@@ -760,7 +761,7 @@ describe('PoLookupComponent:', () => {
         }
       ];
 
-      const spyDebounceResize = spyOn(component, 'debounceResize');
+      const spyDebounceResize = vi.spyOn(component as any, 'debounceResize');
 
       component.disclaimers = itemsDisclaimers;
       component.updateVisibleItems();
@@ -773,7 +774,7 @@ describe('PoLookupComponent:', () => {
 
     it(`updateVisibleItems: shouldn't concat 'visibleDisclaimers' with items of disclaimers`, fakeAsync(() => {
       fixture.detectChanges();
-      const spyDebounceResize = spyOn(component, 'debounceResize');
+      const spyDebounceResize = vi.spyOn(component as any, 'debounceResize');
 
       component.disclaimers = [];
       component.visibleDisclaimers = [{ value: 'test', label: 'test' }];
@@ -788,10 +789,10 @@ describe('PoLookupComponent:', () => {
 
     it('updateVisibleItems: should set true in `isCalculateVisibleItems` if `offsetWidth` is false', fakeAsync(() => {
       fixture.detectChanges();
-      const spyDebounceResize = spyOn(component, 'debounceResize');
+      const spyDebounceResize = vi.spyOn(component as any, 'debounceResize');
       component.disclaimers = [];
 
-      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(false);
+      vi.spyOn(component.inputEl.nativeElement, 'offsetWidth').mockReturnValue(false);
       component.updateVisibleItems();
 
       tick();
@@ -803,10 +804,10 @@ describe('PoLookupComponent:', () => {
     it('updateVisibleItems: should set false in `isCalculateVisibleItems` if `offsetWidth` is true', fakeAsync(() => {
       fixture.detectChanges();
       component['isCalculateVisibleItems'] = false;
-      const spyDebounceResize = spyOn(component, 'debounceResize');
+      const spyDebounceResize = vi.spyOn(component as any, 'debounceResize');
       component.disclaimers = [];
 
-      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(true);
+      vi.spyOn(component.inputEl.nativeElement, 'offsetWidth').mockReturnValue(true);
       component.updateVisibleItems();
 
       tick();
@@ -818,7 +819,7 @@ describe('PoLookupComponent:', () => {
     it(`debounceResize: should call 'calculateVisibleItems'`, fakeAsync(() => {
       component.autoHeight = false;
 
-      const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
+      const spyCalculateVisibleItems = vi.spyOn(component as any, 'calculateVisibleItems');
 
       component.debounceResize();
       tick(401);
@@ -829,7 +830,7 @@ describe('PoLookupComponent:', () => {
     it(`debounceResize: shouldn't call 'calculateVisibleItems'`, fakeAsync(() => {
       component.autoHeight = true;
 
-      const spyCalculateVisibleItems = spyOn(component, 'calculateVisibleItems');
+      const spyCalculateVisibleItems = vi.spyOn(component as any, 'calculateVisibleItems');
 
       component.debounceResize();
       tick(201);
@@ -839,7 +840,7 @@ describe('PoLookupComponent:', () => {
 
     it(`getInputWidth: should decrease by 40 the value of 'offsetWidth'`, () => {
       fixture.detectChanges();
-      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth').and.returnValue(100);
+      vi.spyOn(component.inputEl.nativeElement, 'offsetWidth').mockReturnValue(100);
 
       const inputWidthValue = component.getInputWidth();
 
@@ -864,7 +865,7 @@ describe('PoLookupComponent:', () => {
       component.visibleDisclaimers = itemsOfDisclaimer;
       component.disclaimers = itemsOfDisclaimer;
 
-      spyOnProperty(component.inputEl.nativeElement, 'offsetWidth');
+      vi.spyOn(component.inputEl.nativeElement, 'offsetWidth');
 
       fixture.detectChanges();
 
@@ -875,8 +876,10 @@ describe('PoLookupComponent:', () => {
 
     it(`calculateVisibleItems: should set 'visibleDisclaimers' with value and '+1' in input`, () => {
       const arrayDisclaimers: Array<number> = [116, 97];
-      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
-      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(186);
+      const spyGetDisclaimersWidth = vi
+        .spyOn(component as any, 'getDisclaimersWidth')
+        .mockReturnValue(arrayDisclaimers);
+      const spyGetInputWidth = vi.spyOn(component as any, 'getInputWidth').mockReturnValue(186);
       const expectValue = [
         {
           label: 'valueTest'
@@ -910,8 +913,10 @@ describe('PoLookupComponent:', () => {
 
     it(`calculateVisibleItems: should set empty array in'visibleDisclaimers' if 'InputWidth' is less than 0`, () => {
       const arrayDisclaimers: Array<number> = [116, 97];
-      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
-      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
+      const spyGetDisclaimersWidth = vi
+        .spyOn(component as any, 'getDisclaimersWidth')
+        .mockReturnValue(arrayDisclaimers);
+      const spyGetInputWidth = vi.spyOn(component as any, 'getInputWidth').mockReturnValue(0);
 
       const itemsOfDisclaimer = [
         {
@@ -936,8 +941,10 @@ describe('PoLookupComponent:', () => {
 
     it(`calculateVisibleItems: should set empty array in 'visibleDisclaimers' if 'disclaimers' are empty`, () => {
       const arrayDisclaimers: Array<number> = [116, 97];
-      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
-      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(0);
+      const spyGetDisclaimersWidth = vi
+        .spyOn(component as any, 'getDisclaimersWidth')
+        .mockReturnValue(arrayDisclaimers);
+      const spyGetInputWidth = vi.spyOn(component as any, 'getInputWidth').mockReturnValue(0);
 
       component.visibleDisclaimers = [];
       component.disclaimers = [];
@@ -953,8 +960,10 @@ describe('PoLookupComponent:', () => {
 
     it(`calculateVisibleItems: set 'Object' in 'disclaimers' when 'visibleDisclaimers' is empty but 'disclaimers' contain item`, () => {
       const arrayDisclaimers: Array<number> = [90];
-      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
-      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
+      const spyGetDisclaimersWidth = vi
+        .spyOn(component as any, 'getDisclaimersWidth')
+        .mockReturnValue(arrayDisclaimers);
+      const spyGetInputWidth = vi.spyOn(component as any, 'getInputWidth').mockReturnValue(1);
       const expectValue = [
         {
           value: '',
@@ -985,8 +994,10 @@ describe('PoLookupComponent:', () => {
 
     it(`calculateVisibleItems: set object in 'visibleDisclaimers' if disclaimers is empty `, () => {
       const arrayDisclaimers: Array<number> = [90];
-      const spyGetDisclaimersWidth = spyOn(component, 'getDisclaimersWidth').and.returnValue(arrayDisclaimers);
-      const spyGetInputWidth = spyOn(component, 'getInputWidth').and.returnValue(1);
+      const spyGetDisclaimersWidth = vi
+        .spyOn(component as any, 'getDisclaimersWidth')
+        .mockReturnValue(arrayDisclaimers);
+      const spyGetInputWidth = vi.spyOn(component as any, 'getInputWidth').mockReturnValue(1);
 
       const itemsOfDisclaimer = [
         {
@@ -1089,8 +1100,8 @@ describe('PoLookupComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputEl.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -1105,8 +1116,8 @@ describe('PoLookupComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -1117,17 +1128,17 @@ describe('PoLookupComponent:', () => {
       beforeEach(() => {
         (component as any).label = undefined;
         (component as any).helperEl = {
-          helperIsVisible: jasmine.createSpy('helperIsVisible'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          openHelperPopover: jasmine.createSpy('openHelperPopover')
+          helperIsVisible: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          openHelperPopover: vi.fn()
         };
       });
 
       it('should emit additionalHelp and call helper.eventOnClick when isHelpEvt=true and helper has eventOnClick', () => {
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1140,10 +1151,10 @@ describe('PoLookupComponent:', () => {
 
       it('should close the popover when helperEl.helperIsVisible() is true (without event and without clickable helper)', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue('qualquer-coisa');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('qualquer-coisa');
 
-        (component as any).helperEl.helperIsVisible.and.returnValue(true);
+        (component as any).helperEl.helperIsVisible.mockReturnValue(true);
 
         const result = component.showAdditionalHelp();
 
@@ -1154,10 +1165,10 @@ describe('PoLookupComponent:', () => {
 
       it('should open the popover when helperEl.helperIsVisible() is false and there is additionalHelpTooltip', () => {
         component.additionalHelpTooltip = 'Ajuda extra';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
 
-        (component as any).helperEl.helperIsVisible.and.returnValue(false);
+        (component as any).helperEl.helperIsVisible.mockReturnValue(false);
 
         const result = component.showAdditionalHelp();
 
@@ -1167,10 +1178,10 @@ describe('PoLookupComponent:', () => {
       });
 
       it('should not call eventOnClick when helper is string; should follow popover logic', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue('helper-em-string');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('helper-em-string');
 
-        (component as any).helperEl.helperIsVisible.and.returnValue(false);
+        (component as any).helperEl.helperIsVisible.mockReturnValue(false);
 
         const result = component.showAdditionalHelp();
 
@@ -1183,8 +1194,8 @@ describe('PoLookupComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -1192,8 +1203,8 @@ describe('PoLookupComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
@@ -1340,8 +1351,8 @@ describe('PoLookupComponent:', () => {
           columnRestoreManager
         };
 
-        spyOn(component['poLookupModalService'], 'openModal');
-        spyOn(component, <any>'isAllowedOpenModal').and.returnValue(true);
+        vi.spyOn(component['poLookupModalService'] as any, 'openModal');
+        vi.spyOn(component as any, 'isAllowedOpenModal').mockReturnValue(true);
 
         component.openLookup();
 
@@ -1368,7 +1379,7 @@ describe('PoLookupComponent:', () => {
       component.service = undefined;
       component.disabled = false;
 
-      spyOn(console, 'warn');
+      vi.spyOn(console as any, 'warn');
 
       expect(component['isAllowedOpenModal']()).toBe(false);
       expect(console.warn).toHaveBeenCalledWith('No service informed');
@@ -1379,7 +1390,7 @@ describe('PoLookupComponent:', () => {
       component.service = undefined;
       component.disabled = true;
 
-      spyOn(console, 'warn');
+      vi.spyOn(console as any, 'warn');
 
       expect(component['isAllowedOpenModal']()).toBe(false);
       expect(console.warn).toHaveBeenCalledWith('No service informed');
@@ -1391,7 +1402,7 @@ describe('PoLookupComponent:', () => {
       component.initialized = true;
       component['isCalculateVisibleItems'] = true;
 
-      spyOn(component, 'debounceResize');
+      vi.spyOn(component as any, 'debounceResize');
 
       component.ngDoCheck();
 
@@ -1447,7 +1458,7 @@ describe('PoLookupComponent:', () => {
       const serviceResponse = { id: 1234, name: 'Peter Parker', email: 'peterP@mail.com' };
       component.fieldValue = 'id';
       component.fieldLabel = 'name';
-      spyOn(component.service, 'getObjectByValue').and.returnValue(of(serviceResponse));
+      vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of(serviceResponse));
 
       component.searchById('Peter Parker');
 

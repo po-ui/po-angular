@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SimpleChange, SimpleChanges } from '@angular/core';
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -20,9 +21,9 @@ describe('PoCalendarWrapperComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoCalendarWrapperComponent);
     component = fixture.componentInstance;
-    spyOn(component.cdr, 'markForCheck');
-    spyOn(component.cdr, 'detectChanges');
-    spyOn(component as any, 'focusElement').and.callFake((index: number) => {
+    vi.spyOn(component.cdr as any, 'markForCheck');
+    vi.spyOn(component.cdr as any, 'detectChanges');
+    vi.spyOn(component as any, 'focusElement').mockImplementation((index: number) => {
       component.focusedDayIndex = index;
       component.cdr.detectChanges();
     });
@@ -88,7 +89,7 @@ describe('PoCalendarWrapperComponent', () => {
     it('ngOnChanges: shouldn`t call updateDisplay if activateDate.currentValue is falsy', () => {
       const changes = {};
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.ngOnChanges(changes);
 
@@ -102,7 +103,7 @@ describe('PoCalendarWrapperComponent', () => {
         activateDate: new SimpleChange(undefined, today, false)
       };
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.ngOnChanges(changes);
 
@@ -120,7 +121,7 @@ describe('PoCalendarWrapperComponent', () => {
         activateDate: new SimpleChange(undefined, { start: rangeStart, end: rangeEnd }, false)
       };
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.ngOnChanges(changes);
 
@@ -137,7 +138,7 @@ describe('PoCalendarWrapperComponent', () => {
         activateDate: new SimpleChange(undefined, sameMonthDate, false)
       };
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.ngOnChanges(changes);
 
@@ -171,17 +172,17 @@ describe('PoCalendarWrapperComponent', () => {
     it('getDateToUse: should return new Date when value is invalid', () => {
       const result = (component as any).getDateToUse({ start: 'invalid' });
 
-      expect(result instanceof Date).toBeTrue();
+      expect(result instanceof Date).toBe(true);
     });
 
     it('getDateToUse: should handle UTC midnight correctly', () => {
       const date = new Date(Date.UTC(2024, 5, 13, 0, 0, 0));
       date.setHours(3, 15, 0, 0);
-      spyOn(date, 'getUTCHours').and.returnValue(0);
-      spyOn(date, 'getUTCMinutes').and.returnValue(0);
-      spyOn(date, 'getUTCFullYear').and.callThrough();
-      spyOn(date, 'getUTCMonth').and.callThrough();
-      spyOn(date, 'getUTCDate').and.callThrough();
+      vi.spyOn(date as any, 'getUTCHours').mockReturnValue(0);
+      vi.spyOn(date as any, 'getUTCMinutes').mockReturnValue(0);
+      vi.spyOn(date as any, 'getUTCFullYear');
+      vi.spyOn(date as any, 'getUTCMonth');
+      vi.spyOn(date as any, 'getUTCDate');
       const result = (component as any).getDateToUse(date);
       expect(result.getFullYear()).toBe(2024);
       expect(result.getMonth()).toBe(5);
@@ -195,9 +196,9 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('deve incrementar comboKey e chamar cdr.detectChanges() quando o locale mudar (e não for a primeira mudança)', () => {
       const initialComboKey = component.comboKey;
-      const cdrSpy = component.cdr.detectChanges as jasmine.Spy;
+      const cdrSpy = component.cdr.detectChanges as Mock;
 
-      spyOn(component as any, 'updateTemplateContext');
+      vi.spyOn(component as any, 'updateTemplateContext');
 
       const changes: SimpleChanges = {
         locale: new SimpleChange('pt-BR', 'en-US', false)
@@ -215,13 +216,13 @@ describe('PoCalendarWrapperComponent', () => {
       const weekDays = ['sun', 'mon', 'tue'];
       const months = ['jan', 'feb', 'mar'];
 
-      spyOn(component['poCalendarLangService'], 'setLanguage');
-      spyOn(component['poCalendarLangService'], 'getWeekDaysArray').and.returnValue(weekDays);
-      spyOn(component['poCalendarLangService'], 'getMonthsArray').and.returnValue(months);
+      vi.spyOn(component['poCalendarLangService'] as any, 'setLanguage');
+      vi.spyOn(component['poCalendarLangService'] as any, 'getWeekDaysArray').mockReturnValue(weekDays);
+      vi.spyOn(component['poCalendarLangService'] as any, 'getMonthsArray').mockReturnValue(months);
 
-      spyOn(component['poCalendarLangService'], 'getTodayLabel').and.returnValue('Hoje');
-      spyOn(component['poCalendarLangService'], 'getToCleanLabel').and.returnValue('Limpar');
-      spyOn(component['poCalendarService'], 'getYearOptions').and.returnValue([]);
+      vi.spyOn(component['poCalendarLangService'] as any, 'getTodayLabel').mockReturnValue('Hoje');
+      vi.spyOn(component['poCalendarLangService'] as any, 'getToCleanLabel').mockReturnValue('Limpar');
+      vi.spyOn(component['poCalendarService'] as any, 'getYearOptions').mockReturnValue([]);
       component['_locale'] = 'en';
       component['setupOptions']();
 
@@ -239,7 +240,7 @@ describe('PoCalendarWrapperComponent', () => {
       const value = 10;
       const yearExpected = 2007;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       component.updateYear(value);
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(yearExpected, 11);
@@ -249,7 +250,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 1997;
       component.displayMonthNumber = 11;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       component.updateYear(-10);
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(1987, 11);
@@ -267,7 +268,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       const yearsOptions = component.templateContext.yearsOptions;
 
-      expect(yearsOptions.some(option => option.value === 2035)).toBeTrue();
+      expect(yearsOptions.some(option => option.value === 2035)).toBe(true);
     });
 
     it('updateTemplateContext: should not duplicate displayYear when it is already in yearsOptions', () => {
@@ -289,8 +290,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       component.displayMonthNumber = 5;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component.onNextMonth();
 
@@ -302,8 +303,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       component.displayMonthNumber = 11;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component.onNextMonth();
 
@@ -315,8 +316,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       component.displayMonthNumber = 5;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component.onPreviousMonth();
 
@@ -328,8 +329,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       component.displayMonthNumber = 0;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component.onPreviousMonth();
 
@@ -341,7 +342,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       component.displayMonthNumber = 6;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.updateYear(1);
 
@@ -352,7 +353,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2024;
       component.displayMonthNumber = 6;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.updateYear(-1);
 
@@ -375,7 +376,7 @@ describe('PoCalendarWrapperComponent', () => {
       const testDate = new Date(2025, 0, 15);
       component.activateDate = testDate;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component['initializeData']();
 
@@ -387,7 +388,7 @@ describe('PoCalendarWrapperComponent', () => {
     it(`initializeData: should create new Date when activateDate is undefined (branch coverage for line 141 - falsy path)`, () => {
       component.activateDate = undefined;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       const currentYear = new Date().getFullYear();
       const currentMonth = new Date().getMonth();
 
@@ -401,7 +402,7 @@ describe('PoCalendarWrapperComponent', () => {
     it(`initializeData: should create new Date when activateDate is null (branch coverage for line 141 - falsy path with null)`, () => {
       component.activateDate = null;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       const currentYear = new Date().getFullYear();
       const currentMonth = new Date().getMonth();
 
@@ -413,7 +414,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('onFooterCloseCalendar: should emit closeCalendar', () => {
-      spyOn(component.closeCalendar, 'emit');
+      vi.spyOn(component.closeCalendar as any, 'emit');
 
       component.onFooterCloseCalendar();
 
@@ -421,15 +422,15 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('onDayKeydown: should not emit closeCalendar when range is false or shift is pressed', () => {
-      const eventWithShift = { key: 'Tab', shiftKey: true, preventDefault: jasmine.createSpy('preventDefault') } as any;
+      const eventWithShift = { key: 'Tab', shiftKey: true, preventDefault: vi.fn() } as any;
       const eventRangeFalse = {
         key: 'Tab',
         shiftKey: false,
-        preventDefault: jasmine.createSpy('preventDefault')
+        preventDefault: vi.fn()
       } as any;
       const day = new Date(2024, 5, 10);
 
-      spyOn(component.closeCalendar, 'emit');
+      vi.spyOn(component.closeCalendar as any, 'emit');
       component.range = true;
       component.onDayKeydown(eventWithShift, day, 0);
 
@@ -446,7 +447,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       const result = component['handleNavigationKey']('ArrowUp', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
 
     it('handleNavigationKey: should return false when target date is outside current month/year', () => {
@@ -456,7 +457,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
 
     it('handleNavigationKey: should return false when key is not a navigation key', () => {
@@ -466,7 +467,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       const result = component['handleNavigationKey']('Enter', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
 
     it('handleNavigationKey: should return false when newDate is undefined', () => {
@@ -476,7 +477,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
 
     it('handleNavigationKey: should return false when findNextAvailableDay returns -1', () => {
@@ -485,12 +486,14 @@ describe('PoCalendarWrapperComponent', () => {
       const disabledDay = new Date(2024, 5, 10);
       component.displayDays = [disabledDay, new Date(2024, 5, 11)];
 
-      spyOn(component as any, 'isDayDisabled').and.returnValues(true, true);
-      spyOn(component as any, 'findNextAvailableDay').and.returnValue(-1);
+      vi.spyOn(component as any, 'isDayDisabled')
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true);
+      vi.spyOn(component as any, 'findNextAvailableDay').mockReturnValue(-1);
 
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       expect(component['findNextAvailableDay']).toHaveBeenCalled();
     });
 
@@ -501,12 +504,12 @@ describe('PoCalendarWrapperComponent', () => {
       const disabledDay2 = new Date(2024, 5, 11);
       component.displayDays = [disabledDay1, disabledDay2];
 
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
-      spyOn(component as any, 'findNextAvailableDay').and.returnValue(1);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
+      vi.spyOn(component as any, 'findNextAvailableDay').mockReturnValue(1);
 
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       expect(component['isDayDisabled']).toHaveBeenCalledWith(disabledDay2);
       expect(component['findNextAvailableDay']).toHaveBeenCalled();
     });
@@ -518,12 +521,12 @@ describe('PoCalendarWrapperComponent', () => {
       const disabledDay2 = new Date(2024, 5, 11);
       component.displayDays = [disabledDay1, disabledDay2, null];
 
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
-      spyOn(component as any, 'findNextAvailableDay').and.returnValue(2);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
+      vi.spyOn(component as any, 'findNextAvailableDay').mockReturnValue(2);
 
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       expect(component['findNextAvailableDay']).toHaveBeenCalled();
     });
 
@@ -535,11 +538,13 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [disabledDay, availableDay];
       component.focusedDayIndex = 0;
 
-      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
-      spyOn(component as any, 'findNextAvailableDay').and.returnValue(1);
+      vi.spyOn(component as any, 'isDayDisabled')
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
+      vi.spyOn(component as any, 'findNextAvailableDay').mockReturnValue(1);
       const result = component['handleNavigationKey']('ArrowRight', 0);
 
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
       expect(component.focusedDayIndex).toBe(1);
       expect(component['findNextAvailableDay']).toHaveBeenCalled();
       expect(component['focusElement']).toHaveBeenCalledWith(1);
@@ -548,8 +553,8 @@ describe('PoCalendarWrapperComponent', () => {
     it(`onSelectYear: should call 'updateDisplay' and 'selectDisplayMode' with 'month' if 'lastDisplay' is equal to 'month'`, () => {
       component['lastDisplay'] = 'month';
 
-      spyOn(component, 'selectDisplayMode');
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'selectDisplayMode');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.onSelectYear(2015, 10);
 
@@ -560,8 +565,8 @@ describe('PoCalendarWrapperComponent', () => {
     it(`onSelectYear: should call 'updateDisplay' and 'selectDisplayMode' with 'day' if 'lastDisplay' is different to 'month'`, () => {
       component['lastDisplay'] = '';
 
-      spyOn(component, 'selectDisplayMode');
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'selectDisplayMode');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.onSelectYear(2015, 10);
 
@@ -572,8 +577,8 @@ describe('PoCalendarWrapperComponent', () => {
     it(`onSelectYear: should set 'currentYear' to the value of 'yearParam'`, () => {
       const yearParam = 2018;
 
-      spyOn(component, 'selectDisplayMode');
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'selectDisplayMode');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.onSelectYear(yearParam, 10);
 
@@ -591,7 +596,7 @@ describe('PoCalendarWrapperComponent', () => {
     it('getDayBackgroundColor: should call `getDayColor` with `date` and `background`', () => {
       const date = new Date(2018, 5, 5);
 
-      spyOn(component, <any>'getDayColor');
+      vi.spyOn(component as any, 'getDayColor');
 
       component.getDayBackgroundColor(date);
 
@@ -605,7 +610,7 @@ describe('PoCalendarWrapperComponent', () => {
     it('getDayForegroundColor: should call `getDayColor` with `date` and `foreground`', () => {
       const date = new Date(2018, 5, 5);
 
-      spyOn(component, <any>'getDayColor');
+      vi.spyOn(component as any, 'getDayColor');
 
       component.getDayForegroundColor(date);
 
@@ -658,7 +663,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.minDate = minDate;
 
       expect(minDate.getTime()).toBeLessThan(date.getTime());
-      expect(component.isTodayUnavailable()).toBeFalse();
+      expect(component.isTodayUnavailable()).toBe(false);
     });
 
     it('isTodayUnavailable: should return `false` if minDate is equal date', () => {
@@ -668,7 +673,7 @@ describe('PoCalendarWrapperComponent', () => {
       component['today'] = date;
       component.minDate = minDate;
 
-      expect(component.isTodayUnavailable()).toBeFalse();
+      expect(component.isTodayUnavailable()).toBe(false);
     });
 
     it('isTodayUnavailable: should return `true` if minDate is greater than date', () => {
@@ -680,7 +685,7 @@ describe('PoCalendarWrapperComponent', () => {
       component['today'] = date;
       component.minDate = minDate;
 
-      expect(component.isTodayUnavailable()).toBeTrue();
+      expect(component.isTodayUnavailable()).toBe(true);
     });
 
     it('isTodayUnavailable: should return `false` if maxDate is greater than date', () => {
@@ -692,7 +697,7 @@ describe('PoCalendarWrapperComponent', () => {
       component['today'] = date;
       component.maxDate = maxDate;
 
-      expect(component.isTodayUnavailable()).toBeFalse();
+      expect(component.isTodayUnavailable()).toBe(false);
     });
 
     it('isTodayUnavailable: should return `false` if maxDate is equal date', () => {
@@ -702,7 +707,7 @@ describe('PoCalendarWrapperComponent', () => {
       component['today'] = date;
       component.maxDate = maxDate;
 
-      expect(component.isTodayUnavailable()).toBeFalse();
+      expect(component.isTodayUnavailable()).toBe(false);
     });
 
     it('isTodayUnavailable: should return `true` if maxDate is less than date', () => {
@@ -714,29 +719,29 @@ describe('PoCalendarWrapperComponent', () => {
       component['today'] = date;
       component.maxDate = maxDate;
 
-      expect(component.isTodayUnavailable()).toBeTrue();
+      expect(component.isTodayUnavailable()).toBe(true);
     });
 
     it('isDayDisabled: should return `false` when date is within range', () => {
       const date = new Date(2024, 1, 10);
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
-      expect(component.isDayDisabled(date)).toBeFalse();
+      expect(component.isDayDisabled(date)).toBe(false);
       expect(component['poDate'].validateDateRange).toHaveBeenCalledWith(date, component.minDate, component.maxDate);
     });
 
     it('isDayDisabled: should return `true` when date is outside range', () => {
       const date = new Date(2024, 1, 10);
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
-      expect(component.isDayDisabled(date)).toBeTrue();
+      expect(component.isDayDisabled(date)).toBe(true);
       expect(component['poDate'].validateDateRange).toHaveBeenCalledWith(date, component.minDate, component.maxDate);
     });
 
     it(`monthLabel: should call 'poCalendarLangService.getMonthLabel'`, () => {
-      spyOn(component['poCalendarLangService'], 'getMonthLabel').and.callThrough();
+      vi.spyOn(component['poCalendarLangService'] as any, 'getMonthLabel');
 
       const monthLabel = component.monthLabel;
       expect(typeof monthLabel === 'string').toBe(true);
@@ -744,7 +749,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`yearLabel: should call 'poCalendarLangService.getYearLabel'`, () => {
-      spyOn(component['poCalendarLangService'], 'getYearLabel').and.callThrough();
+      vi.spyOn(component['poCalendarLangService'] as any, 'getYearLabel');
 
       const yearLabel = component.yearLabel;
       expect(typeof yearLabel === 'string').toBe(true);
@@ -756,7 +761,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 1997;
       component.displayMonthNumber = 10;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       component.onNextMonth();
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(1997, 11);
@@ -767,7 +772,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 1997;
       component.displayMonthNumber = 11;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       component.onNextMonth();
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(1998, 0);
@@ -778,7 +783,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 1997;
       component.displayMonthNumber = 10;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       component.onPreviousMonth();
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(1997, 9);
@@ -788,15 +793,15 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 1997;
       component.displayMonthNumber = 0;
 
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       component.onPreviousMonth();
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(1996, 11);
     });
 
     it(`onSelectMonth: should call 'selectDisplayMode' with 'day' and 'updateDisplay' with year and month`, () => {
-      spyOn(component, 'selectDisplayMode');
-      spyOn(component, <any>'updateDisplay');
+      vi.spyOn(component as any, 'selectDisplayMode');
+      vi.spyOn(component as any, 'updateDisplay');
 
       component.onSelectMonth(2015, 10);
 
@@ -847,7 +852,7 @@ describe('PoCalendarWrapperComponent', () => {
       const year = 2000;
       component['displayDecade'] = undefined;
 
-      spyOn(component, <any>'updateDecade');
+      vi.spyOn(component as any, 'updateDecade');
 
       component['getDecadeArray'](year);
 
@@ -861,7 +866,7 @@ describe('PoCalendarWrapperComponent', () => {
       const yearMultipleTen = 1990;
       component['displayDecade'] = undefined;
 
-      spyOn(component, <any>'updateDecade');
+      vi.spyOn(component as any, 'updateDecade');
 
       component['getDecadeArray'](year);
 
@@ -871,7 +876,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForDate: should return 'po-calendar-box-background-selected' if 'poDate.validateDateRange'
       return 'true'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const result = component['getColorForDate'](new Date(), 'background');
 
@@ -880,7 +885,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForDate: should return 'po-calendar-box-background-selected-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const result = component['getColorForDate'](new Date(), 'background');
 
@@ -892,7 +897,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.minDate = new Date(2018, 4, 3);
       component.maxDate = new Date(2018, 4, 8);
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       component['getColorForDate'](date, 'background');
 
@@ -901,7 +906,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForDefaultDate: should return 'po-calendar-box-background' if 'poDate.validateDateRange'
       return 'true'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const result = component['getColorForDefaultDate'](new Date(), 'background');
 
@@ -910,7 +915,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForDefaultDate: should return 'po-calendar-box-background-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const result = component['getColorForDefaultDate'](new Date(), 'background');
 
@@ -922,7 +927,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.minDate = new Date(2018, 4, 3);
       component.maxDate = new Date(2018, 4, 8);
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       component['getColorForDefaultDate'](date, 'background');
 
@@ -931,7 +936,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForToday: should return 'po-calendar-box-background-today' if 'poDate.validateDateRange'
       return 'true'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const result = component['getColorForToday'](new Date(), 'background');
 
@@ -940,7 +945,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForToday: should return 'po-calendar-box-background-today-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const result = component['getColorForToday'](new Date(), 'background');
 
@@ -952,7 +957,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.minDate = new Date(2018, 4, 3);
       component.maxDate = new Date(2018, 4, 8);
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       component['getColorForToday'](date, 'background');
 
@@ -966,11 +971,11 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.range = false;
 
-      spyOn(component, <any>'equalsDate').and.callFake(
+      vi.spyOn(component as any, 'equalsDate').mockImplementation(
         (d1: Date, d2: Date) => d1 === dateParam && d2 === component['date']
       );
 
-      spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
+      vi.spyOn(component as any, 'getColorForDate').mockReturnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, 'background');
 
@@ -985,11 +990,11 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.range = false;
 
-      spyOn(component, <any>'equalsDate').and.callFake(
+      vi.spyOn(component as any, 'equalsDate').mockImplementation(
         (d1: Date, d2: Date) => d1 === dateParam && d2 === component['date']
       );
 
-      spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
+      vi.spyOn(component as any, 'getColorForDate').mockReturnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, 'background');
 
@@ -1005,10 +1010,10 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.range = false;
 
-      spyOn(component, <any>'equalsDate').and.callFake(
+      vi.spyOn(component as any, 'equalsDate').mockImplementation(
         (d1: Date, d2: Date) => d1 === dateParam && d2 === component['today']
       );
-      spyOn(component, <any>'getColorForToday').and.returnValue(colorClass);
+      vi.spyOn(component as any, 'getColorForToday').mockReturnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, 'background');
 
@@ -1023,8 +1028,8 @@ describe('PoCalendarWrapperComponent', () => {
       const local = 'background';
       component.displayMonthNumber = dateParam.getMonth();
 
-      spyOn(component, <any>'equalsDate').and.returnValue(false);
-      spyOn(component, <any>'getColorForDefaultDate').and.returnValue(colorClass);
+      vi.spyOn(component as any, 'equalsDate').mockReturnValue(false);
+      vi.spyOn(component as any, 'getColorForDefaultDate').mockReturnValue(colorClass);
 
       const result = component['getDayColor'](dateParam, local);
 
@@ -1038,7 +1043,7 @@ describe('PoCalendarWrapperComponent', () => {
       const dateParam = new Date(2020, 3, 10);
       component.displayMonthNumber = 4;
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       expect(component['getDayColor'](dateParam, 'background')).toBe('po-calendar-box-background-other-month');
     });
@@ -1047,7 +1052,7 @@ describe('PoCalendarWrapperComponent', () => {
       const dateParam = new Date(2020, 3, 10);
       component.displayMonthNumber = 4;
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       expect(component['getDayColor'](dateParam, 'background')).toBe('po-calendar-box-background-other-month-disabled');
     });
@@ -1061,8 +1066,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = true;
       component.displayMonthNumber = 5;
 
-      spyOn(component, <any>'equalsDate').and.callThrough();
-      spyOn(component, <any>'getColorForDate').and.callThrough();
+      vi.spyOn(component as any, 'equalsDate');
+      vi.spyOn(component as any, 'getColorForDate');
 
       expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
       expect(component['equalsDate']).toHaveBeenCalledWith(dateParam, component.selectedValue.start);
@@ -1078,8 +1083,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = true;
       component.displayMonthNumber = 5;
 
-      spyOn(component, <any>'equalsDate').and.callThrough();
-      spyOn(component, <any>'getColorForDate').and.callThrough();
+      vi.spyOn(component as any, 'equalsDate');
+      vi.spyOn(component as any, 'getColorForDate');
 
       expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
       expect(component['equalsDate']).toHaveBeenCalled();
@@ -1095,8 +1100,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = true;
       component.displayMonthNumber = 1;
 
-      spyOn(component, <any>'equalsDate').and.callThrough();
-      spyOn(component, <any>'getColorForDateRange').and.callThrough();
+      vi.spyOn(component as any, 'equalsDate');
+      vi.spyOn(component as any, 'getColorForDateRange');
 
       expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
       expect(component['equalsDate']).toHaveBeenCalled();
@@ -1154,7 +1159,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = otherDate;
       component.displayMonthNumber = today.getMonth();
 
-      spyOn(component, <any>'getColorForToday').and.returnValue('po-calendar-box-background-today');
+      vi.spyOn(component as any, 'getColorForToday').mockReturnValue('po-calendar-box-background-today');
 
       const result = component['getDayColor'](today, local);
 
@@ -1170,7 +1175,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.range = true;
       component.displayMonthNumber = 4;
 
-      spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
+      vi.spyOn(component as any, 'getColorForDate').mockReturnValue(colorClass);
 
       expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
       expect((component as any).getColorForDate).toHaveBeenCalledWith(dateParam, local);
@@ -1185,7 +1190,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = new Date(2019, 4, 15);
       component.displayMonthNumber = 4;
 
-      spyOn(component, <any>'getColorForDate').and.returnValue(colorClass);
+      vi.spyOn(component as any, 'getColorForDate').mockReturnValue(colorClass);
 
       expect(component['getDayColor'](dateParam, local)).toBe(colorClass);
       expect((component as any).getColorForDate).toHaveBeenCalledWith(dateParam, local);
@@ -1199,7 +1204,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = new Date(2026, 4, 15);
       component['today'] = today;
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const result = component['getDayColor'](today, local);
 
@@ -1214,7 +1219,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = new Date(2026, 4, 15);
       component['today'] = today;
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const result = component['getDayColor'](today, local);
 
@@ -1223,7 +1228,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForDateRange: should return 'po-calendar-box-background-in-range' if 'poDate.validateDateRange'
       return 'true'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const clazz = component['getColorForDateRange'](new Date(), 'background');
 
@@ -1232,7 +1237,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorForDateRange: should return 'po-calendar-box-background-in-range-disabled' if 'poDate.validateDateRange'
       return 'false'`, () => {
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const clazz = component['getColorForDateRange'](new Date(), 'background');
 
@@ -1241,7 +1246,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorState: should return '\${prefix}-\${state}' if date is valid`, () => {
       const date = new Date(2020, 5, 15);
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const result = component['getColorState'](date, 'po-calendar-box-background', 'selected');
 
@@ -1250,7 +1255,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorState: should return '\${prefix}-\${state}-disabled' if date is invalid`, () => {
       const date = new Date(2020, 5, 15);
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const result = component['getColorState'](date, 'po-calendar-box-background', 'selected');
 
@@ -1259,7 +1264,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorState: should work with 'foreground' prefix when date is valid`, () => {
       const date = new Date(2020, 5, 15);
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const result = component['getColorState'](date, 'po-calendar-box-foreground', 'today');
 
@@ -1268,7 +1273,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorState: should work with 'foreground' prefix when date is invalid`, () => {
       const date = new Date(2020, 5, 15);
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const result = component['getColorState'](date, 'po-calendar-box-foreground', 'today');
 
@@ -1277,7 +1282,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorState: should return correct format with different state values when valid`, () => {
       const date = new Date(2020, 5, 15);
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
 
       const resultSelected = component['getColorState'](date, 'po-calendar-box-background', 'selected');
       const resultInRange = component['getColorState'](date, 'po-calendar-box-background', 'in-range');
@@ -1290,7 +1295,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it(`getColorState: should return correct format with different state values when invalid`, () => {
       const date = new Date(2020, 5, 15);
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
 
       const resultSelected = component['getColorState'](date, 'po-calendar-box-background', 'selected');
       const resultInRange = component['getColorState'](date, 'po-calendar-box-background', 'in-range');
@@ -1304,8 +1309,8 @@ describe('PoCalendarWrapperComponent', () => {
     it(`init: should call 'updateDate' with activateDate, selectDisplayMode with 'day' and setupOptions`, () => {
       component['activateDate'] = new Date(2018, 5, 6);
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component, <any>'setupOptions');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component as any, 'setupOptions');
 
       component['initializeData']();
 
@@ -1317,8 +1322,8 @@ describe('PoCalendarWrapperComponent', () => {
       const year = 2020;
       const month = 5;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component['updateDate'](year, month);
 
@@ -1330,8 +1335,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2020;
       component.displayMonthNumber = 5;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component['updateDate'](2020, 5);
 
@@ -1343,8 +1348,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2020;
       component.displayMonthNumber = 5;
 
-      spyOn(component, <any>'updateDisplay');
-      spyOn(component.headerChange, 'emit');
+      vi.spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component.headerChange as any, 'emit');
 
       component['updateDate'](2020, 6);
 
@@ -1354,7 +1359,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`updateDecade: should call 'addAllYearsInDecade' and update 'displayStartDecade' and 'displayFinalDecade'`, () => {
-      spyOn(component, <any>'addAllYearsInDecade');
+      vi.spyOn(component as any, 'addAllYearsInDecade');
 
       component['updateDecade'](2000);
 
@@ -1368,7 +1373,7 @@ describe('PoCalendarWrapperComponent', () => {
       const year = 2018;
       const month = 2;
 
-      spyOn(component['poCalendarService'], 'monthDays').and.returnValue([...monthDays]);
+      vi.spyOn(component['poCalendarService'] as any, 'monthDays').mockReturnValue([...monthDays]);
       component['updateDisplay'](year, month);
 
       expect(component['displayDays']).toEqual(monthDays);
@@ -1381,8 +1386,8 @@ describe('PoCalendarWrapperComponent', () => {
       const year = 2018;
       const month = 2;
 
-      spyOn(component['poCalendarService'], 'monthDays').and.returnValue([...monthDays]);
-      spyOn(component, <any>'getDecadeArray');
+      vi.spyOn(component['poCalendarService'] as any, 'monthDays').mockReturnValue([...monthDays]);
+      vi.spyOn(component as any, 'getDecadeArray');
       component['updateDisplay'](year, month);
 
       expect(component.displayMonthNumber).toEqual(month);
@@ -1394,8 +1399,8 @@ describe('PoCalendarWrapperComponent', () => {
     it(`onSelectDate: should call 'selectDate.emit' with date param`, () => {
       const date = new Date();
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
-      spyOn(component.selectDate, 'emit');
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(true);
+      vi.spyOn(component.selectDate as any, 'emit');
 
       component['onSelectDate'](date);
 
@@ -1405,8 +1410,8 @@ describe('PoCalendarWrapperComponent', () => {
     it(`onSelectDate: should not emit when date is out of range`, () => {
       const date = new Date();
 
-      spyOn(component['poDate'], 'validateDateRange').and.returnValue(false);
-      spyOn(component.selectDate, 'emit');
+      vi.spyOn(component['poDate'] as any, 'validateDateRange').mockReturnValue(false);
+      vi.spyOn(component.selectDate as any, 'emit');
 
       component['onSelectDate'](date);
 
@@ -1416,7 +1421,7 @@ describe('PoCalendarWrapperComponent', () => {
     it(`onMouseEnter: should call 'hoverDate.next' with date param`, () => {
       const date = new Date(2021, 5, 5);
 
-      const spyHoverDate = spyOn(component.hoverDateSource, 'next');
+      const spyHoverDate = vi.spyOn(component.hoverDateSource as any, 'next');
 
       component['onMouseEnter'](date);
 
@@ -1424,7 +1429,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`onMouseLeave: should call 'hoverDate.next' with null`, () => {
-      const spyHoverDate = spyOn(component.hoverDateSource, 'next');
+      const spyHoverDate = vi.spyOn(component.hoverDateSource as any, 'next');
 
       component['onMouseLeave']();
 
@@ -1432,7 +1437,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it(`onClear: should call 'selectDate.emit' with undefined`, () => {
-      spyOn(component.selectDate, 'emit');
+      vi.spyOn(component.selectDate as any, 'emit');
       component['onClear']();
 
       expect(component.selectDate.emit).toHaveBeenCalledWith(undefined);
@@ -1444,10 +1449,10 @@ describe('PoCalendarWrapperComponent', () => {
 
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2)];
 
-      const emitSpy = spyOn(component.selectDate, 'emit');
-      const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+      const emitSpy = vi.spyOn(component.selectDate as any, 'emit');
+      const detectSpy = component.cdr.detectChanges as Mock;
 
-      spyOn(component, 'isDayDisabled').and.callFake((date: Date) => date.getDate() === 1);
+      vi.spyOn(component as any, 'isDayDisabled').mockImplementation((date: Date) => date.getDate() === 1);
 
       component.onClear();
 
@@ -1462,10 +1467,10 @@ describe('PoCalendarWrapperComponent', () => {
 
       component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2)];
 
-      const emitSpy = spyOn(component.selectDate, 'emit');
-      const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+      const emitSpy = vi.spyOn(component.selectDate as any, 'emit');
+      const detectSpy = component.cdr.detectChanges as Mock;
 
-      spyOn(component, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
       component.onClear();
 
@@ -1481,7 +1486,7 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayYear = 2024;
         component.focusedDayIndex = 2;
 
-        const event = { key: 'Tab', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'Tab', preventDefault: vi.fn() } as any as KeyboardEvent;
 
         component.onDayKeydown(event, component.displayDays[2], 2);
 
@@ -1503,9 +1508,9 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should handle Enter key', () => {
         const date = new Date(2024, 5, 10);
-        const event = { key: 'Enter', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'Enter', preventDefault: vi.fn() } as any as KeyboardEvent;
 
-        spyOn(component, 'onSelectDate');
+        vi.spyOn(component as any, 'onSelectDate');
         component.onDayKeydown(event, date, 5);
 
         expect(component.onSelectDate).toHaveBeenCalledWith(date);
@@ -1516,9 +1521,9 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should handle Space key', () => {
         const date = new Date(2024, 5, 10);
-        const event = { key: ' ', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: ' ', preventDefault: vi.fn() } as any as KeyboardEvent;
 
-        spyOn(component, 'onSelectDate');
+        vi.spyOn(component as any, 'onSelectDate');
 
         component.onDayKeydown(event, date, 6);
 
@@ -1536,8 +1541,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayYear = 2024;
         component.focusedDayIndex = 10;
 
-        const event = { key: 'ArrowUp', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+        const event = { key: 'ArrowUp', preventDefault: vi.fn() } as any as KeyboardEvent;
+        const detectSpy = component.cdr.detectChanges as Mock;
 
         component.onDayKeydown(event, component.displayDays[10], 10);
 
@@ -1556,8 +1561,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayYear = 2024;
         component.focusedDayIndex = 3;
 
-        const event = { key: 'ArrowUp', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+        const event = { key: 'ArrowUp', preventDefault: vi.fn() } as any as KeyboardEvent;
+        const detectSpy = component.cdr.detectChanges as Mock;
 
         component.onDayKeydown(event, component.displayDays[3], 3);
 
@@ -1573,8 +1578,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayYear = 2024;
         component.focusedDayIndex = 10;
-        const event = { key: 'ArrowDown', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+        const event = { key: 'ArrowDown', preventDefault: vi.fn() } as any as KeyboardEvent;
+        const detectSpy = component.cdr.detectChanges as Mock;
 
         component.onDayKeydown(event, component.displayDays[10], 10);
 
@@ -1593,8 +1598,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayYear = 2024;
         component.focusedDayIndex = 25;
 
-        const event = { key: 'ArrowDown', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+        const event = { key: 'ArrowDown', preventDefault: vi.fn() } as any as KeyboardEvent;
+        const detectSpy = component.cdr.detectChanges as Mock;
 
         component.onDayKeydown(event, component.displayDays[25], 25);
 
@@ -1605,7 +1610,7 @@ describe('PoCalendarWrapperComponent', () => {
       it('should handle ArrowRight key', () => {
         const event = {
           key: 'ArrowRight',
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
         component.onDayKeydown(event, new Date(2024, 5, 29), 28);
@@ -1623,8 +1628,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayYear = 2024;
         component.focusedDayIndex = 25;
 
-        const event = { key: 'ArrowLeft', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
-        const detectSpy = component.cdr.detectChanges as jasmine.Spy;
+        const event = { key: 'ArrowLeft', preventDefault: vi.fn() } as any as KeyboardEvent;
+        const detectSpy = component.cdr.detectChanges as Mock;
 
         component.onDayKeydown(event, component.displayDays[25], 25);
 
@@ -1635,7 +1640,7 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('should handle Home key', () => {
-        const event = { key: 'Home', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'Home', preventDefault: vi.fn() } as any as KeyboardEvent;
 
         component.onDayKeydown(event, new Date(2024, 5, 11), 10);
 
@@ -1644,7 +1649,7 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('should handle End key', () => {
-        const event = { key: 'End', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'End', preventDefault: vi.fn() } as any as KeyboardEvent;
 
         component.onDayKeydown(event, new Date(2024, 5, 11), 10);
 
@@ -1656,11 +1661,11 @@ describe('PoCalendarWrapperComponent', () => {
         const event = {
           key: 'PageUp',
           shiftKey: true,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component, <any>'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
@@ -1673,14 +1678,14 @@ describe('PoCalendarWrapperComponent', () => {
         const event = {
           key: 'PageUp',
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
         component.displayYear = 2024;
         component.displayMonthNumber = 0;
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component, <any>'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         component.onDayKeydown(event, new Date(2024, 0, 10), 9);
 
@@ -1693,11 +1698,11 @@ describe('PoCalendarWrapperComponent', () => {
         const event = {
           key: 'PageDown',
           shiftKey: true,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component, <any>'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
@@ -1710,14 +1715,14 @@ describe('PoCalendarWrapperComponent', () => {
         const event = {
           key: 'PageDown',
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
         component.displayYear = 2024;
         component.displayMonthNumber = 11;
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component, <any>'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         component.onDayKeydown(event, new Date(2024, 11, 10), 9);
 
@@ -1727,7 +1732,7 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('should handle Escape key', () => {
-        const event = { key: 'Escape', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'Escape', preventDefault: vi.fn() } as any as KeyboardEvent;
 
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
@@ -1735,7 +1740,7 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('should not prevent default for unsupported key', () => {
-        const event = { key: 'A', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'A', preventDefault: vi.fn() } as any as KeyboardEvent;
 
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
@@ -1747,8 +1752,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(false);
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'hasAvailableDaysInMonth').mockReturnValue(false);
 
         const result = component['handlePageNavigation']('PageUp', false, 10, 9);
 
@@ -1761,9 +1766,9 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(true);
-        spyOn(component as any, 'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'hasAvailableDaysInMonth').mockReturnValue(true);
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         const result = component['handlePageNavigation']('PageUp', false, 10, 9);
 
@@ -1776,8 +1781,8 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayDays = new Array(30).fill(null).map((_, i) => new Date(2024, 5, i + 1));
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component as any, 'hasAvailableDaysInMonth').and.returnValue(false);
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'hasAvailableDaysInMonth').mockReturnValue(false);
 
         const result = component['handlePageNavigation']('PageDown', false, 10, 9);
 
@@ -1786,7 +1791,10 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('hasAvailableDaysInMonth: should return true when month has available days', () => {
-        spyOn(component as any, 'isDayDisabled').and.returnValues(true, false, true);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(true);
 
         const result = component['hasAvailableDaysInMonth'](2024, 5);
 
@@ -1794,7 +1802,7 @@ describe('PoCalendarWrapperComponent', () => {
       });
 
       it('hasAvailableDaysInMonth: should return false when all days are disabled', () => {
-        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+        vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
         const result = component['hasAvailableDaysInMonth'](2024, 5);
 
@@ -1803,8 +1811,8 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('handleSelectKey: should not select disabled day', () => {
         const day = new Date(2024, 5, 10);
-        spyOn(component, 'onSelectDate');
-        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+        vi.spyOn(component as any, 'onSelectDate');
+        vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
         component['handleSelectKey'](day, 9);
 
@@ -1813,8 +1821,8 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('handleSelectKey: should select available day', () => {
         const day = new Date(2024, 5, 10);
-        spyOn(component, 'onSelectDate');
-        spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+        vi.spyOn(component as any, 'onSelectDate');
+        vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
         component['handleSelectKey'](day, 9);
 
@@ -1833,7 +1841,14 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 7)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false, false, false, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false);
 
         const result = component['getFirstAvailableDayInWeek'](3);
 
@@ -1852,7 +1867,14 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 7)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(false, false, false, false, true, true, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false);
 
         const result = component['getLastAvailableDayInWeek'](3);
 
@@ -1871,7 +1893,7 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 7)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+        vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
         const result = component['getFirstAvailableDayInWeek'](3);
 
@@ -1907,7 +1929,7 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 7)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+        vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
         const result = component['getLastAvailableDayInWeek'](3);
 
@@ -1940,7 +1962,10 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 4)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false);
 
         const result = component['findNextAvailableDay'](0, 'forward');
 
@@ -1991,7 +2016,10 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 4)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false);
 
         const result = component['findNextAvailableDay'](3, 'backward');
 
@@ -2007,7 +2035,7 @@ describe('PoCalendarWrapperComponent', () => {
           new Date(2024, 5, 4)
         ];
 
-        spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+        vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
         const result = component['findNextAvailableDay'](0, 'forward');
 
@@ -2027,11 +2055,15 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayYear = 2024;
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false);
 
         const event = {
           key: 'ArrowRight',
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
         component.onDayKeydown(event, new Date(2024, 5, 1), 0);
 
@@ -2052,9 +2084,13 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayYear = 2024;
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(true, true, false, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(false);
 
-        const event = { key: 'ArrowLeft', preventDefault: jasmine.createSpy('preventDefault') } as any as KeyboardEvent;
+        const event = { key: 'ArrowLeft', preventDefault: vi.fn() } as any as KeyboardEvent;
         component.onDayKeydown(event, new Date(2024, 5, 4), 3);
 
         expect(component.focusedDayIndex).toBe(0);
@@ -2074,11 +2110,16 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayMonthNumber = 5;
         component.displayYear = 2024;
 
-        spyOn(component as any, 'isDayDisabled').and.returnValues(false, true, true, true, false);
+        vi.spyOn(component as any, 'isDayDisabled')
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(false);
 
         const event = {
           key: 'ArrowRight',
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
         component.onDayKeydown(event, new Date(2024, 5, 1), 0);
 
@@ -2089,14 +2130,14 @@ describe('PoCalendarWrapperComponent', () => {
         const event = {
           key: 'PageUp',
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
         component.displayYear = 2024;
         component.displayMonthNumber = 5;
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component, <any>'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
@@ -2109,14 +2150,14 @@ describe('PoCalendarWrapperComponent', () => {
         const event = {
           key: 'PageDown',
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any as KeyboardEvent;
 
         component.displayYear = 2024;
         component.displayMonthNumber = 5;
 
-        spyOn(component, <any>'updateDisplay');
-        spyOn(component, <any>'focusOnSameDayAndWeek');
+        vi.spyOn(component as any, 'updateDisplay');
+        vi.spyOn(component as any, 'focusOnSameDayAndWeek');
 
         component.onDayKeydown(event, new Date(2024, 5, 10), 9);
 
@@ -2131,11 +2172,11 @@ describe('PoCalendarWrapperComponent', () => {
       const mockIndex = 15;
       const mockEvent = {
         key: 'Enter',
-        preventDefault: jasmine.createSpy('preventDefault')
+        preventDefault: vi.fn()
       } as unknown as KeyboardEvent;
 
-      spyOn(component as any, 'isSelectionKey').and.returnValue(true);
-      const handleSelectSpy = spyOn(component as any, 'handleSelectKey');
+      vi.spyOn(component as any, 'isSelectionKey').mockReturnValue(true);
+      const handleSelectSpy = vi.spyOn(component as any, 'handleSelectKey');
 
       component.onDayKeydown(mockEvent, mockDate, mockIndex);
 
@@ -2147,16 +2188,16 @@ describe('PoCalendarWrapperComponent', () => {
     describe('focusOnSameDayAndWeek', () => {
       beforeEach(() => {
         try {
-          jasmine.clock().uninstall();
+          vi.useRealTimers();
         } catch {
           // Clock may not be installed yet
         }
-        jasmine.clock().install();
+        vi.useFakeTimers();
       });
 
       afterEach(() => {
         try {
-          jasmine.clock().uninstall();
+          vi.useRealTimers();
         } catch {
           // Clock already uninstalled
         }
@@ -2186,9 +2227,9 @@ describe('PoCalendarWrapperComponent', () => {
           component.focusedDayIndex = -1;
 
           const mockElement = document.createElement('div');
-          const focusSpy = spyOn(mockElement, 'focus');
+          const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-          spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+          vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
           component['focusOnSameDayAndWeek'](10, 8);
 
           tick();
@@ -2218,9 +2259,9 @@ describe('PoCalendarWrapperComponent', () => {
           component.focusedDayIndex = -1;
 
           const mockElement = document.createElement('div');
-          const focusSpy = spyOn(mockElement, 'focus');
+          const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-          spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+          vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
           component['focusOnSameDayAndWeek'](30, 10);
 
           tick();
@@ -2253,12 +2294,12 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = -1;
 
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
 
         component['focusOnSameDayAndWeek'](30, 13);
-        jasmine.clock().tick(1);
+        vi.advanceTimersByTime(1);
 
         expect(component.focusedDayIndex).toBe(6);
         expect(focusSpy).toHaveBeenCalled();
@@ -2301,9 +2342,9 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = -1;
 
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
         component['focusOnSameDayAndWeek'](4, 24);
 
         tick();
@@ -2333,9 +2374,9 @@ describe('PoCalendarWrapperComponent', () => {
         component.focusedDayIndex = -1;
 
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
         component['focusOnSameDayAndWeek'](30, 3);
 
         tick();
@@ -2349,10 +2390,10 @@ describe('PoCalendarWrapperComponent', () => {
         component.displayDays = [];
         component.focusedDayIndex = 2;
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector');
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector');
 
         component['focusOnSameDayAndWeek'](10, 0);
-        jasmine.clock().tick(1);
+        vi.advanceTimersByTime(1);
 
         expect(component.focusedDayIndex).toBe(2);
         expect((component as any).elementRef.nativeElement.querySelector).not.toHaveBeenCalled();
@@ -2381,10 +2422,10 @@ describe('PoCalendarWrapperComponent', () => {
         component.maxDate = new Date(2024, 5, 8);
 
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        const getFirstAvailableSpy = spyOn(component as any, 'getFirstAvailableDayInWeek').and.returnValue(7);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
+        const getFirstAvailableSpy = vi.spyOn(component as any, 'getFirstAvailableDayInWeek').mockReturnValue(7);
 
         component['focusOnSameDayAndWeek'](9, 1);
 
@@ -2398,14 +2439,14 @@ describe('PoCalendarWrapperComponent', () => {
 
     describe('focusElement', () => {
       beforeEach(() => {
-        (component['focusElement'] as jasmine.Spy).and.callThrough();
+        component['focusElement'] as Mock;
       });
 
       it('should set focusedDayIndex and call element.focus() when element is found', fakeAsync(() => {
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
         component['focusElement'](5);
 
         tick();
@@ -2417,7 +2458,7 @@ describe('PoCalendarWrapperComponent', () => {
       }));
 
       it('should not call focus() when element is not found', fakeAsync(() => {
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(null);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(null);
         component['focusElement'](10);
 
         tick();
@@ -2428,8 +2469,8 @@ describe('PoCalendarWrapperComponent', () => {
       }));
 
       it('should handle element that is not an HTMLElement', fakeAsync(() => {
-        const mockElement = { focus: jasmine.createSpy('focus') } as unknown as HTMLElement;
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        const mockElement = { focus: vi.fn() } as unknown as HTMLElement;
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
         component['focusElement'](3);
 
         tick();
@@ -2441,9 +2482,9 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should focus on element with index 0', fakeAsync(() => {
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
         component['focusElement'](0);
 
         tick();
@@ -2455,9 +2496,9 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should focus on element with large index', fakeAsync(() => {
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
         component['focusElement'](365);
 
         tick();
@@ -2471,14 +2512,14 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should use setTimeout with 0 delay before focusing', fakeAsync(() => {
         const mockElement = document.createElement('div');
-        const focusSpy = spyOn(mockElement, 'focus');
+        const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-        spyOn((component as any).elementRef.nativeElement, 'querySelector').and.returnValue(mockElement);
-        spyOn(window, 'setTimeout').and.callThrough();
+        vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockReturnValue(mockElement);
+        vi.spyOn(window as any, 'setTimeout');
 
         component['focusElement'](7);
 
-        expect(window.setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 0);
+        expect(window.setTimeout).toHaveBeenCalledWith(expect.any(Function), 0);
 
         tick();
 
@@ -2487,7 +2528,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
   });
   it('should call updateDate with correct parameters', () => {
-    spyOn(component, 'updateDate').and.callThrough();
+    vi.spyOn(component as any, 'updateDate');
 
     const year = 2023;
     const month = 5;
@@ -2497,7 +2538,7 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   it('ngOnChanges: should use the current date if activateDate.currentValue is null', () => {
-    const spyUpdateDisplay = spyOn(component as any, 'updateDisplay');
+    const spyUpdateDisplay = vi.spyOn(component as any, 'updateDisplay');
     const changes: SimpleChanges = {
       activateDate: new SimpleChange(new Date(2023, 0, 1), null, false)
     };
@@ -2509,7 +2550,7 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   it('ngOnChanges: should use the new date if activateDate.currentValue is not null', () => {
-    const spyUpdateDisplay = spyOn(component as any, 'updateDisplay');
+    const spyUpdateDisplay = vi.spyOn(component as any, 'updateDisplay');
     const newDate = new Date(2028, 5, 15);
     const changes: SimpleChanges = {
       activateDate: new SimpleChange(null, newDate, false)
@@ -2522,10 +2563,10 @@ describe('PoCalendarWrapperComponent', () => {
 
   describe('ngOnChanges: ', () => {
     it('should update comboYearsOptions if minDate changes', () => {
-      const spyOptions = spyOn((component as any).poCalendarService, 'getYearOptions').and.returnValue([
-        { label: '2026', value: 2026 }
-      ]);
-      const spyContext = spyOn(component as any, 'updateTemplateContext');
+      const spyOptions = vi
+        .spyOn((component as any).poCalendarService, 'getYearOptions')
+        .mockReturnValue([{ label: '2026', value: 2026 }]);
+      const spyContext = vi.spyOn(component as any, 'updateTemplateContext');
 
       const changes: SimpleChanges = {
         minDate: new SimpleChange(null, new Date(2020, 0, 1), true)
@@ -2538,7 +2579,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should increment comboKey and call detectChanges if the locale changes after the first time', () => {
-      const spyCdr = component.cdr.detectChanges as jasmine.Spy;
+      const spyCdr = component.cdr.detectChanges as Mock;
       component.comboKey = 0;
 
       const changes: SimpleChanges = {
@@ -2554,7 +2595,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   it('should call updateTemplateContext when locale is changed to a different value', () => {
     component.locale = 'en-US';
-    spyOn(component as any, 'updateTemplateContext');
+    vi.spyOn(component as any, 'updateTemplateContext');
 
     component.ngOnChanges({
       locale: new SimpleChange('en-US', 'es-ES', false)
@@ -2566,7 +2607,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   it('should not call updateTemplateContext when locale is unchanged', () => {
     component.locale = 'en-US';
-    spyOn(component as any, 'updateTemplateContext');
+    vi.spyOn(component as any, 'updateTemplateContext');
 
     component.ngOnChanges({
       locale: new SimpleChange('en-US', 'en-US', false)
@@ -2578,7 +2619,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   it('should call updateTemplateContext when locale is set to undefined', () => {
     component.locale = 'en-US';
-    spyOn(component as any, 'updateTemplateContext');
+    vi.spyOn(component as any, 'updateTemplateContext');
 
     component.ngOnChanges({
       locale: new SimpleChange('en-US', undefined, false)
@@ -2590,7 +2631,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   it('should call updateTemplateContext when locale is set to an empty string', () => {
     component.locale = 'en-US';
-    spyOn(component as any, 'updateTemplateContext');
+    vi.spyOn(component as any, 'updateTemplateContext');
 
     component.ngOnChanges({
       locale: new SimpleChange('en-US', '', false)
@@ -2603,8 +2644,8 @@ describe('PoCalendarWrapperComponent', () => {
   it('should call updateDate when onHeaderDateChange is triggered', () => {
     const event = { year: 2023, month: 5 };
 
-    spyOn(component, <any>'updateDisplay').and.callThrough();
-    spyOn(component.headerChange, 'emit');
+    vi.spyOn(component as any, 'updateDisplay');
+    vi.spyOn(component.headerChange as any, 'emit');
 
     component.onHeaderDateChange(event);
 
@@ -2613,8 +2654,8 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   it('updateDate: should emit headerChange only once with 1-indexed month', () => {
-    spyOn(component, <any>'updateDisplay');
-    spyOn(component.headerChange, 'emit');
+    vi.spyOn(component as any, 'updateDisplay');
+    vi.spyOn(component.headerChange as any, 'emit');
 
     component.updateDate(2025, 5);
 
@@ -2626,8 +2667,8 @@ describe('PoCalendarWrapperComponent', () => {
     component.displayYear = 2025;
     component.displayMonthNumber = 5;
 
-    spyOn(component, <any>'updateDisplay');
-    spyOn(component.headerChange, 'emit');
+    vi.spyOn(component as any, 'updateDisplay');
+    vi.spyOn(component.headerChange as any, 'emit');
 
     component.updateDate(2025, 5);
 
@@ -2637,8 +2678,8 @@ describe('PoCalendarWrapperComponent', () => {
   it('updateDate: should call comboComponent.focus if comboComponent has focus function', fakeAsync(() => {
     component.displayYear = 2024;
     component.displayMonthNumber = 5;
-    const comboComponent = { focus: jasmine.createSpy('focus') };
-    spyOn(component as any, 'updateDisplay');
+    const comboComponent = { focus: vi.fn() };
+    vi.spyOn(component as any, 'updateDisplay');
     component.updateDate(2024, 5, comboComponent);
     tick();
     expect(comboComponent.focus).toHaveBeenCalled();
@@ -2647,8 +2688,8 @@ describe('PoCalendarWrapperComponent', () => {
 
   it('should update templateContext and return when year or month is invalid', () => {
     component.templateContext = { year: 2022, monthIndex: 5 };
-    spyOn(component as any, 'updateDisplay');
-    spyOn(component.headerChange, 'emit');
+    vi.spyOn(component as any, 'updateDisplay');
+    vi.spyOn(component.headerChange as any, 'emit');
 
     component.updateDate(undefined, 5);
     expect(component.templateContext.year).toBeUndefined();
@@ -2670,9 +2711,9 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   it('onSelectMonth: should not emit headerChange directly', () => {
-    spyOn(component, <any>'selectDisplayMode');
-    spyOn(component, <any>'updateDisplay');
-    spyOn(component.headerChange, 'emit');
+    vi.spyOn(component as any, 'selectDisplayMode');
+    vi.spyOn(component as any, 'updateDisplay');
+    vi.spyOn(component.headerChange as any, 'emit');
 
     component.onSelectMonth(2025, 5);
 
@@ -2684,9 +2725,9 @@ describe('PoCalendarWrapperComponent', () => {
   it('onSelectYear: should not emit headerChange directly', () => {
     component['lastDisplay'] = 'month';
 
-    spyOn(component, <any>'selectDisplayMode');
-    spyOn(component, <any>'updateDisplay');
-    spyOn(component.headerChange, 'emit');
+    vi.spyOn(component as any, 'selectDisplayMode');
+    vi.spyOn(component as any, 'updateDisplay');
+    vi.spyOn(component.headerChange as any, 'emit');
 
     component.onSelectYear(2025, 5);
 
@@ -2739,13 +2780,13 @@ describe('PoCalendarWrapperComponent', () => {
     it('equalsDate: should return true for the same dates', () => {
       const d1 = new Date(2026, 5, 10);
       const d2 = new Date(2026, 5, 10);
-      expect(component['equalsDate'](d1, d2)).toBeTrue();
+      expect(component['equalsDate'](d1, d2)).toBe(true);
     });
 
     it('equalsDate: should return false for different dates', () => {
       const d1 = new Date(2026, 5, 10);
       const d2 = new Date(2026, 5, 11);
-      expect(component['equalsDate'](d1, d2)).toBeFalse();
+      expect(component['equalsDate'](d1, d2)).toBe(false);
     });
   });
 
@@ -2774,7 +2815,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   describe('selectDisplayMode', () => {
     it('deve atualizar mode, salvar lastDisplay e disparar detectChanges', () => {
-      const cdrSpy = component.cdr.detectChanges as jasmine.Spy;
+      const cdrSpy = component.cdr.detectChanges as Mock;
       component.mode = 'day';
 
       component.selectDisplayMode('month');
@@ -2796,7 +2837,7 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   it('onSelectMonth: should update display and set mode to day', () => {
-    const updateSpy = spyOn(component as any, 'updateDisplay');
+    const updateSpy = vi.spyOn(component as any, 'updateDisplay');
 
     component.onSelectMonth(2026, 5);
 
@@ -2813,7 +2854,7 @@ describe('PoCalendarWrapperComponent', () => {
   });
 
   it('onClear: should emit undefined when clearing', () => {
-    spyOn(component.selectDate, 'emit');
+    vi.spyOn(component.selectDate as any, 'emit');
     component.onClear();
     expect(component.selectDate.emit).toHaveBeenCalledWith(undefined);
   });
@@ -2839,7 +2880,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       component.displayDays = [new Date(2026, 4, 30), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
 
-      spyOn(component as any, 'isDayDisabled').and.callFake((date: Date) => date.getDate() === 1);
+      vi.spyOn(component as any, 'isDayDisabled').mockImplementation((date: Date) => date.getDate() === 1);
 
       component.focusedDayIndex = 0;
 
@@ -2852,7 +2893,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = null;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
       component.focusedDayIndex = 2;
       (component as any).setInitialFocusedDay();
       const expectedIndex = component.displayDays.findIndex(
@@ -2868,7 +2909,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = null;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 4, 30), new Date(2026, 4, 31)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
       component.focusedDayIndex = 5;
       (component as any).setInitialFocusedDay();
       const expectedIndex = component.displayDays.findIndex(
@@ -2891,7 +2932,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
       component.focusedDayIndex = 0;
 
-      spyOn(component as any, 'isDayDisabled').and.callFake((date: Date) => date.getDate() === 1);
+      vi.spyOn(component as any, 'isDayDisabled').mockImplementation((date: Date) => date.getDate() === 1);
 
       (component as any).setInitialFocusedDay();
 
@@ -2902,7 +2943,7 @@ describe('PoCalendarWrapperComponent', () => {
     it('should not change focusedDayIndex if no available day in current month', () => {
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
       component.focusedDayIndex = 2;
       (component as any).setInitialFocusedDay();
       const expectedIndex = component.displayDays.findIndex(
@@ -2916,7 +2957,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should focus on selected day if available', () => {
       component.value = new Date(2026, 5, 2);
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2925,7 +2966,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should focus on first available day if no selection', () => {
       component.value = null;
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2936,7 +2977,9 @@ describe('PoCalendarWrapperComponent', () => {
       component.value = null;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
-      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+      vi.spyOn(component as any, 'isDayDisabled')
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2945,7 +2988,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should focus on value.start when value is range object', () => {
       component.value = { start: new Date(2026, 5, 2), end: new Date(2026, 5, 10) };
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2962,7 +3005,7 @@ describe('PoCalendarWrapperComponent', () => {
         new Date(2026, 5, 5)
       ];
       component.value = { start: new Date(2026, 5, 5), end: null };
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2971,7 +3014,9 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should fallback to first available when value.start is disabled', () => {
       component.value = { start: new Date(2026, 5, 2), end: null };
-      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+      vi.spyOn(component as any, 'isDayDisabled')
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2980,7 +3025,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should fallback to first available when value.start is in different month', () => {
       component.value = { start: new Date(2026, 4, 15), end: null };
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2989,7 +3034,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should handle value object with null start', () => {
       component.value = { start: null, end: null };
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -2998,7 +3043,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('setInitialFocusedDay: should handle value object with undefined start', () => {
       component.value = { start: undefined, end: undefined };
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).setInitialFocusedDay();
 
@@ -3010,7 +3055,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.focusedDayIndex = 0;
       component.displayDays = [new Date(2026, 4, 30), new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
       (component as any).setInitialFocusedDay();
 
@@ -3028,7 +3073,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.focusedDayIndex = 5;
       component.displayDays = [new Date(2026, 4, 30), new Date(2026, 4, 31)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
       (component as any).setInitialFocusedDay();
 
@@ -3039,7 +3084,7 @@ describe('PoCalendarWrapperComponent', () => {
       const disabledDay = new Date(2026, 5, 1);
       component.displayMonthNumber = 5;
       component.focusedDayIndex = 1;
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
       const tabIndex = component.getDayTabIndex(disabledDay, 1);
 
@@ -3058,7 +3103,7 @@ describe('PoCalendarWrapperComponent', () => {
     it('getDayTabIndex: should return 0 only for focused day', () => {
       const day = new Date(2026, 5, 2);
       component.focusedDayIndex = 2;
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       const tabIndexFocused = component.getDayTabIndex(day, 2);
       const tabIndexNotFocused = component.getDayTabIndex(day, 1);
@@ -3088,7 +3133,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.focusedDayIndex = 2;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).ensureValidFocusedDay();
 
@@ -3100,7 +3145,9 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2), new Date(2026, 5, 3), new Date(2026, 5, 4)];
 
-      spyOn(component as any, 'isDayDisabled').and.returnValues(true, false);
+      vi.spyOn(component as any, 'isDayDisabled')
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
 
       (component as any).ensureValidFocusedDay();
 
@@ -3111,7 +3158,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.focusedDayIndex = 0;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 4, 31), new Date(2026, 5, 1), new Date(2026, 5, 2)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(false);
 
       (component as any).ensureValidFocusedDay();
 
@@ -3122,7 +3169,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.focusedDayIndex = 0;
       component.displayMonthNumber = 5;
       component.displayDays = [new Date(2026, 5, 1), new Date(2026, 5, 2)];
-      spyOn(component as any, 'isDayDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDayDisabled').mockReturnValue(true);
 
       (component as any).ensureValidFocusedDay();
 
@@ -3132,9 +3179,9 @@ describe('PoCalendarWrapperComponent', () => {
 
   it('should focus on the same day and week', fakeAsync(() => {
     const mockElement = document.createElement('div');
-    const focusSpy = spyOn(mockElement, 'focus');
+    const focusSpy = vi.spyOn(mockElement as any, 'focus');
 
-    spyOn((component as any).elementRef.nativeElement, 'querySelector').and.callFake((selector: string) => {
+    vi.spyOn((component as any).elementRef.nativeElement, 'querySelector').mockImplementation((selector: string) => {
       if (selector.includes('data-day-index')) {
         return mockElement;
       }
@@ -3154,13 +3201,13 @@ describe('PoCalendarWrapperComponent', () => {
 
   describe('onComboBlur', () => {
     it('should call component.onComboBlur when templateContext.onComboBlur is invoked', () => {
-      const spy = spyOn(component, 'onComboBlur');
+      const spy = vi.spyOn(component as any, 'onComboBlur');
       component.templateContext.onComboBlur();
       expect(spy).toHaveBeenCalled();
     });
 
     it('should call updateDisplay when templateContext.onComboBlur is triggered and month is undefined', () => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2022;
       component.displayMonthNumber = 3;
       component.today = new Date(2022, 3, 10);
@@ -3171,7 +3218,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should call updateDisplay with today.getMonth() when month is undefined and displayMonthNumber is also undefined', () => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2022;
       component.displayMonthNumber = undefined;
       component.today = new Date(2022, 7, 20);
@@ -3182,7 +3229,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should call updateDisplay with safe values when year or month is undefined', () => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2025;
       component.displayMonthNumber = 6;
       component.today = new Date(2025, 6, 15);
@@ -3193,7 +3240,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should call updateDisplay with safe values when comboComponent is provided and year/month are undefined', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2027;
       component.displayMonthNumber = 4;
       component.templateContext.year = undefined;
@@ -3206,7 +3253,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should fallback to today when comboComponent is provided and display values are undefined', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = undefined;
       component.displayMonthNumber = undefined;
       component.today = new Date(2031, 9, 20);
@@ -3220,7 +3267,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should call updateDisplay with safe year when only year is undefined', () => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2023;
       component.displayMonthNumber = 4;
       component.today = new Date(2023, 4, 10);
@@ -3231,7 +3278,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should call updateDisplay with safe month when only month is undefined', () => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2022;
       component.displayMonthNumber = 8;
       component.today = new Date(2022, 8, 20);
@@ -3242,7 +3289,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should NOT call updateDisplay when both year and month are defined', () => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.templateContext.year = 2024;
       component.templateContext.monthIndex = 5;
       component.onComboBlur();
@@ -3253,7 +3300,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = undefined;
       component.templateContext.year = undefined;
       component.templateContext.monthIndex = 5;
-      spyOn(component, 'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       const todayYear = component.today.getFullYear();
       component.onComboBlur();
       expect((component as any).updateDisplay).toHaveBeenCalledWith(todayYear, 5);
@@ -3263,20 +3310,20 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = undefined;
       component.templateContext.year = undefined;
       component.templateContext.monthIndex = 5;
-      spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
       const todayYear = component.today.getFullYear();
       component.onComboBlur();
       expect((component as any).updateDisplay).toHaveBeenCalledWith(todayYear, 5);
     });
 
     it('should call onComboBlur from templateContext', () => {
-      const spy = spyOn(component, 'onComboBlur');
+      const spy = vi.spyOn(component as any, 'onComboBlur');
       component.templateContext.onComboBlur();
       expect(spy).toHaveBeenCalled();
     });
 
     it('should call onComboBlur after templateContext reassignment', () => {
-      const spy = spyOn(component, 'onComboBlur');
+      const spy = vi.spyOn(component as any, 'onComboBlur');
       component.templateContext = {
         ...component.templateContext,
         onComboBlur: () => component.onComboBlur()
@@ -3298,7 +3345,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should call onComboBlur with context bound to component', () => {
-      const spy = spyOn(component, 'onComboBlur');
+      const spy = vi.spyOn(component as any, 'onComboBlur');
       const fn = component.onComboBlur.bind(component);
       component.templateContext.onComboBlur = fn;
       component.templateContext.onComboBlur();
@@ -3306,14 +3353,14 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should not call component onComboBlur if context is bound to another object', () => {
-      const other = { onComboBlur: jasmine.createSpy('onComboBlur') };
+      const other = { onComboBlur: vi.fn() };
       component.templateContext.onComboBlur = other.onComboBlur;
       component.templateContext.onComboBlur();
       expect(other.onComboBlur).toHaveBeenCalled();
     });
 
     it('deve executar onComboBlur através do templateContext', () => {
-      spyOn(component, 'onComboBlur');
+      vi.spyOn(component as any, 'onComboBlur');
 
       component['updateTemplateContext']();
 
@@ -3323,7 +3370,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('deve executar updateDate através do templateContext', () => {
-      spyOn(component, 'updateDate');
+      vi.spyOn(component as any, 'updateDate');
 
       component['updateTemplateContext']();
 
@@ -3333,7 +3380,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('should handle invalid month value (string) and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3352,7 +3399,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle invalid month value (NaN) and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3371,7 +3418,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle out-of-range month value and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3390,7 +3437,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle invalid year value (string) and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 'invalid' as any;
@@ -3409,7 +3456,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle out-of-range year (below 1900) and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 1800;
@@ -3428,7 +3475,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle out-of-range year (above 2100) and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2150;
@@ -3447,7 +3494,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should restore currentYear from selectedVal when year is invalid and selectedVal is number > 11', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 'invalid' as any;
@@ -3466,7 +3513,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should always restore selectedOption value on blur even with valid values', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3485,7 +3532,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle complex invalid text like "teste0101" and restore from selectedOption', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3504,7 +3551,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should use empty string when selectedOption.label is undefined', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3523,7 +3570,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle comboComponent without selectedOption gracefully', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3541,7 +3588,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should handle comboComponent without inputEl gracefully', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3559,7 +3606,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should use setTimeout to ensure Angular change detection synchronizes before validation', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2026;
@@ -3578,7 +3625,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should use currentYear when year is valid but month is invalid', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = 2025;
@@ -3596,7 +3643,7 @@ describe('PoCalendarWrapperComponent', () => {
     }));
 
     it('should use currentMonth when month is valid but year is invalid', fakeAsync(() => {
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
       component.templateContext.year = undefined;
@@ -3623,7 +3670,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = 10;
       component.today = new Date(2026, 0, 1);
 
-      spyOn(component, 'updateDisplay');
+      vi.spyOn(component as any, 'updateDisplay');
     });
 
     describe('should use fallback values when year or month is invalid', () => {
@@ -3667,7 +3714,7 @@ describe('PoCalendarWrapperComponent', () => {
 
   describe('onSelectToday', () => {
     it('should call onComboBlur from templateContext', () => {
-      const spy = spyOn(component, 'onComboBlur');
+      const spy = vi.spyOn(component as any, 'onComboBlur');
       component.templateContext.onComboBlur();
       expect(spy).toHaveBeenCalled();
     });
@@ -3678,8 +3725,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2025;
       component.displayMonthNumber = 0;
       component.displayDays = [new Date(2026, 1, 25), new Date(2026, 1, 26), today, new Date(2026, 1, 28)];
-      spyOn(component, 'onSelectDate');
-      spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component as any, 'onSelectDate');
+      vi.spyOn(component as any, 'updateDisplay');
       component.onSelectToday();
 
       expect(component.onSelectDate).toHaveBeenCalledWith(today);
@@ -3694,8 +3741,8 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = today.getFullYear();
       component.displayMonthNumber = today.getMonth();
       component.displayDays = [today];
-      spyOn(component, 'onSelectDate');
-      const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
+      vi.spyOn(component as any, 'onSelectDate');
+      const updateDisplaySpy = vi.spyOn(component as any, 'updateDisplay');
       component.onSelectToday();
 
       expect(updateDisplaySpy).not.toHaveBeenCalled();
@@ -3711,7 +3758,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayMonthNumber = today.getMonth();
       component.displayDays = [new Date(2026, 1, 25), new Date(2026, 1, 26)];
       component.focusedDayIndex = 5;
-      spyOn(component, 'onSelectDate');
+      vi.spyOn(component as any, 'onSelectDate');
       component.onSelectToday();
 
       expect(component.onSelectDate).toHaveBeenCalledWith(today);
@@ -3723,9 +3770,9 @@ describe('PoCalendarWrapperComponent', () => {
     it('should call restoreOriginalDisplay if pressing Shift+Tab and focus leaves the component', fakeAsync(() => {
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
 
-      spyOn(component.elementRef.nativeElement, 'contains').and.returnValue(false);
+      vi.spyOn(component.elementRef.nativeElement, 'contains').mockReturnValue(false);
 
-      const restoreSpy = spyOn(component as any, 'restoreOriginalDisplay');
+      const restoreSpy = vi.spyOn(component as any, 'restoreOriginalDisplay');
 
       component.onHostKeydown(event);
 
@@ -3738,8 +3785,8 @@ describe('PoCalendarWrapperComponent', () => {
     it('should not call restoreOriginalDisplay if pressing Shift+Tab but focus remains inside the component', fakeAsync(() => {
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
 
-      spyOn(component.elementRef.nativeElement, 'contains').and.returnValue(true);
-      const restoreSpy = spyOn(component as any, 'restoreOriginalDisplay');
+      vi.spyOn(component.elementRef.nativeElement, 'contains').mockReturnValue(true);
+      const restoreSpy = vi.spyOn(component as any, 'restoreOriginalDisplay');
 
       component.onHostKeydown(event);
       tick(200);
@@ -3749,7 +3796,7 @@ describe('PoCalendarWrapperComponent', () => {
 
     it('should not do anything if the key pressed is not Shift + Tab', fakeAsync(() => {
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
-      const restoreSpy = spyOn(component as any, 'restoreOriginalDisplay');
+      const restoreSpy = vi.spyOn(component as any, 'restoreOriginalDisplay');
 
       component.onHostKeydown(event);
       tick(200);
@@ -3762,7 +3809,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2025;
       component.displayMonthNumber = 4;
 
-      const updateSpy = spyOn(component as any, 'updateDisplay');
+      const updateSpy = vi.spyOn(component as any, 'updateDisplay');
 
       component['restoreOriginalDisplay']();
 
@@ -3774,7 +3821,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2026;
       component.displayMonthNumber = 11;
 
-      const updateSpy = spyOn(component as any, 'updateDisplay');
+      const updateSpy = vi.spyOn(component as any, 'updateDisplay');
 
       component['restoreOriginalDisplay']();
 
@@ -3786,7 +3833,7 @@ describe('PoCalendarWrapperComponent', () => {
       component.displayYear = 2026;
       component.displayMonthNumber = 4;
 
-      const updateSpy = spyOn(component as any, 'updateDisplay');
+      const updateSpy = vi.spyOn(component as any, 'updateDisplay');
 
       component['restoreOriginalDisplay']();
 

@@ -19,11 +19,13 @@ class TestHostComponent extends PoHeaderBaseComponent {
 describe('PoHeaderBaseComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let languageServiceSpy: jasmine.SpyObj<PoLanguageService>;
+  let languageServiceSpy: any;
 
   beforeEach(() => {
-    languageServiceSpy = jasmine.createSpyObj('PoLanguageService', ['getShortLanguage']);
-    languageServiceSpy.getShortLanguage.and.returnValue('pt');
+    languageServiceSpy = {
+      getShortLanguage: vi.fn().mockName('PoLanguageService.getShortLanguage')
+    };
+    languageServiceSpy.getShortLanguage.mockReturnValue('pt');
 
     TestBed.configureTestingModule({
       declarations: [TestHostComponent],
@@ -65,12 +67,12 @@ describe('PoHeaderBaseComponent', () => {
 
     it('should set $internalRoute to true if link is not external', () => {
       component.menuItems = [{ label: 'Home', link: '/home' }];
-      expect(component.menuItems[0].$internalRoute).toBeTrue();
+      expect(component.menuItems[0].$internalRoute).toBe(true);
     });
 
     it('should set $internalRoute to false if link is external', () => {
       component.menuItems = [{ label: 'Google', link: 'http://google.com' }];
-      expect(component.menuItems[0].$internalRoute).toBeFalse();
+      expect(component.menuItems[0].$internalRoute).toBe(false);
     });
   });
 
@@ -152,7 +154,7 @@ describe('PoHeaderBaseComponent', () => {
     });
 
     it('onThemeChange: should recalculate size when theme changes', fakeAsync(() => {
-      const spy1 = spyOn<any>(component['themeChangeSignal'], 'update').and.callThrough();
+      const spy1 = vi.spyOn(component['themeChangeSignal'] as any, 'update');
       document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
 
       fixture.componentRef.setInput('p-size', 'small');
@@ -166,10 +168,12 @@ describe('PoHeaderBaseComponent', () => {
     }));
 
     it('onThemeChange: should return an error when calling updateMenu', () => {
-      const consoleSpy = spyOn(console, 'error');
-      spyOn(component, 'updateMenu').and.throwError('DOM not ready');
+      const consoleSpy = vi.spyOn(console as any, 'error');
+      vi.spyOn(component as any, 'updateMenu').mockImplementation(() => {
+        throw new Error('DOM not ready');
+      });
 
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
         cb(0);
         return 0;
       });
@@ -183,7 +187,7 @@ describe('PoHeaderBaseComponent', () => {
   });
 
   it('should emit event when calling collapsedMenuEvent.emit', () => {
-    spyOn(component.colapsedMenuEvent, 'emit');
+    vi.spyOn(component.colapsedMenuEvent as any, 'emit');
     component.colapsedMenuEvent.emit(true);
     expect(component.colapsedMenuEvent.emit).toHaveBeenCalledWith(true);
   });

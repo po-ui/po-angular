@@ -69,7 +69,7 @@ describe('PoHttpInterceptorBaseService', () => {
       const actionLabel = undefined;
       const action = undefined;
 
-      spyOn(service.notification, 'success');
+      vi.spyOn(service.notification as any, 'success');
 
       http.get('/data').subscribe(
         res => (response = res),
@@ -84,7 +84,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show success notifications', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'success');
+      vi.spyOn(service.notification as any, 'success');
 
       http.get('/data').subscribe(
         res => (response = res),
@@ -102,7 +102,7 @@ describe('PoHttpInterceptorBaseService', () => {
     (http: HttpClient, httpMock: HttpTestingController) => {
       messages.type = 'invalid type';
 
-      spyOn(mockNotification, 'success');
+      vi.spyOn(mockNotification as any, 'success');
 
       http.get('/data').subscribe(
         res => (response = res),
@@ -118,7 +118,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should not show notification', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(mockNotification, 'success');
+      vi.spyOn(mockNotification as any, 'success');
 
       http.get('/data').subscribe(
         res => (response = res),
@@ -134,7 +134,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'error');
+      vi.spyOn(service.notification as any, 'error');
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
@@ -157,7 +157,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show warning notification', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'warning');
+      vi.spyOn(service.notification as any, 'warning');
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
@@ -181,7 +181,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show information notification', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'information');
+      vi.spyOn(service.notification as any, 'information');
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
@@ -205,7 +205,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification when return invalid type', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'error');
+      vi.spyOn(service.notification as any, 'error');
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
@@ -229,7 +229,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification with details', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'error');
+      vi.spyOn(service.notification as any, 'error');
 
       poErrorMessage.details = [{ code: '1', message: 'detalhe' }];
 
@@ -244,7 +244,7 @@ describe('PoHttpInterceptorBaseService', () => {
       expect(service.notification.error).toHaveBeenCalledWith({
         message: poErrorMessage.message,
         actionLabel: service.literals.details,
-        action: jasmine.any(Function)
+        action: expect.any(Function)
       });
     }
   ));
@@ -252,7 +252,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification with help url', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'error');
+      vi.spyOn(service.notification as any, 'error');
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
@@ -269,7 +269,7 @@ describe('PoHttpInterceptorBaseService', () => {
       expect(service.notification.error).toHaveBeenCalledWith({
         message: poErrorMessage.message,
         actionLabel: service.literals.help,
-        action: jasmine.any(Function)
+        action: expect.any(Function)
       });
     }
   ));
@@ -277,7 +277,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should show error notification if server not responding', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(service.notification, 'error');
+      vi.spyOn(service.notification as any, 'error');
 
       poErrorMessage.details = undefined;
       poErrorMessage.detailedMessage = undefined;
@@ -292,7 +292,7 @@ describe('PoHttpInterceptorBaseService', () => {
       expect(service.notification.error).toHaveBeenCalledWith({
         message: service.literals.serverNotResponse,
         actionLabel: service.literals.details,
-        action: jasmine.any(Function)
+        action: expect.any(Function)
       });
     }
   ));
@@ -300,7 +300,7 @@ describe('PoHttpInterceptorBaseService', () => {
   it('should not show error notification', inject(
     [HttpClient, HttpTestingController],
     (http: HttpClient, httpMock: HttpTestingController) => {
-      spyOn(mockNotification, 'error');
+      vi.spyOn(mockNotification as any, 'error');
 
       http.get('/data').subscribe(
         res => (response = res),
@@ -314,7 +314,7 @@ describe('PoHttpInterceptorBaseService', () => {
   ));
 
   it('should open external help url', () => {
-    spyOn(window, 'open');
+    vi.spyOn(window as any, 'open');
 
     const helpUrl = 'https://fakeUrlPo.com.br';
 
@@ -328,7 +328,7 @@ describe('PoHttpInterceptorBaseService', () => {
     (http: HttpClient, httpMock: HttpTestingController) => {
       const headers = { 'X-PO-No-Error': 'true' };
 
-      spyOn(mockNotification, 'error');
+      vi.spyOn(mockNotification as any, 'error');
 
       http.get('/data', { headers: headers }).subscribe(
         res => (response = res),
@@ -366,14 +366,14 @@ describe('PoHttpInterceptorBaseService', () => {
     it('hasNoMessageParam should return true if `X-PO-No-Error` value is true in request header', () => {
       ['true', 'TRUE'].forEach(value => {
         const request = createHttpRequest('X-PO-No-Message', value);
-        expect(service['hasNoMessageParam'](request)).toBeTruthy(true);
+        expect(service['hasNoMessageParam'](request)).toBeTruthy();
       });
     });
 
     it('hasNoMessageParam should return false if `X-PO-No-Error` value is falsy in request header', () => {
       ['false', 'FALSE', ''].forEach(value => {
         const request = createHttpRequest('X-PO-No-Message', value);
-        expect(service['hasNoMessageParam'](request)).toBeFalsy(false);
+        expect(service['hasNoMessageParam'](request)).toBeFalsy();
       });
     });
 
@@ -394,9 +394,11 @@ describe('PoHttpInterceptorBaseService', () => {
         }
       };
 
-      spyOn(service['componentInjector'], 'createComponentInApplication').and.returnValue(detailComponentFake);
-      spyOn(service, 'destroyModal');
-      spyOn(detailComponentFake.instance, <any>'open');
+      vi.spyOn(service['componentInjector'] as any, 'createComponentInApplication').mockReturnValue(
+        detailComponentFake
+      );
+      vi.spyOn(service as any, 'destroyModal');
+      vi.spyOn(detailComponentFake.instance as any, 'open');
 
       service['createModal'](detail);
 
@@ -434,9 +436,11 @@ describe('PoHttpInterceptorBaseService', () => {
         }
       };
 
-      spyOn(service['componentInjector'], 'createComponentInApplication').and.returnValue(detailComponentFake);
-      spyOn(service, 'destroyModal');
-      spyOn(detailComponentFake.instance, <any>'open');
+      vi.spyOn(service['componentInjector'] as any, 'createComponentInApplication').mockReturnValue(
+        detailComponentFake
+      );
+      vi.spyOn(service as any, 'destroyModal');
+      vi.spyOn(detailComponentFake.instance as any, 'open');
 
       service['createModal'](detail);
 
@@ -451,7 +455,7 @@ describe('PoHttpInterceptorBaseService', () => {
     it('destroyModal: should destroy detail component if httpInterceptorDetailComponent is defined', () => {
       service.createModal({});
 
-      spyOn(service.componentInjector, 'destroyComponentInApplication');
+      vi.spyOn(service.componentInjector as any, 'destroyComponentInApplication');
 
       service['destroyModal']();
 
@@ -462,7 +466,7 @@ describe('PoHttpInterceptorBaseService', () => {
     it('destroyModal: shouldn`t call destroyComponentInApplication if httpInterceptorDetailComponent is undefined', () => {
       service.httpInterceptorDetailComponent = undefined;
 
-      spyOn(service.componentInjector, 'destroyComponentInApplication');
+      vi.spyOn(service.componentInjector as any, 'destroyComponentInApplication');
 
       service['destroyModal']();
 
@@ -472,7 +476,7 @@ describe('PoHttpInterceptorBaseService', () => {
     it('generateDetailModal: should call createModal if modal isn`t created', () => {
       service.httpInterceptorDetailComponent = undefined;
 
-      spyOn(service, <any>'createModal');
+      vi.spyOn(service as any, 'createModal');
 
       service.generateDetailModal({})();
 
@@ -482,7 +486,7 @@ describe('PoHttpInterceptorBaseService', () => {
     it('generateDetailModal: shouldn`t call createModal if modal is created', () => {
       service['createModal']({});
 
-      spyOn(service, <any>'createModal');
+      vi.spyOn(service as any, 'createModal');
 
       service.generateDetailModal()();
 
@@ -509,8 +513,8 @@ describe('PoHttpInterceptorBaseService', () => {
     });
 
     it('processResponse: shouldn`t call showNotification if hasNoMessageParam is true', () => {
-      spyOn(service, 'hasNoMessageParam').and.returnValue(true);
-      spyOn(service, <any>'showNotification');
+      vi.spyOn(service as any, 'hasNoMessageParam').mockReturnValue(true);
+      vi.spyOn(service as any, 'showNotification');
 
       const request = new HttpRequest('GET', 'http://fakeUrlPo.com', { headers: new HttpHeaders() });
       response = new HttpResponse({
@@ -524,8 +528,8 @@ describe('PoHttpInterceptorBaseService', () => {
     });
 
     it('processResponse: should call showNotification if hasNoMessageParam is false, body and _messages are true', () => {
-      spyOn(service, 'hasNoMessageParam').and.returnValue(false);
-      spyOn(service, <any>'showNotification');
+      vi.spyOn(service as any, 'hasNoMessageParam').mockReturnValue(false);
+      vi.spyOn(service as any, 'showNotification');
 
       const request = new HttpRequest('GET', 'http://fakeUrlPo.com', { headers: new HttpHeaders() });
       response = new HttpResponse({
@@ -541,7 +545,7 @@ describe('PoHttpInterceptorBaseService', () => {
     it('showNotification: shouldn`t call notification if no has message', () => {
       response = { message: '', code: '200', type: 'information' };
 
-      spyOn(service.notification, <any>'information');
+      vi.spyOn(service.notification as any, 'information');
 
       service.showNotification(response);
 
@@ -551,7 +555,7 @@ describe('PoHttpInterceptorBaseService', () => {
     it('showNotification: should call notification if has message', () => {
       response = { message: 'Created with success', code: '200', type: 'success' };
 
-      spyOn(service.notification, <any>'success');
+      vi.spyOn(service.notification as any, 'success');
 
       service.showNotification(response);
 

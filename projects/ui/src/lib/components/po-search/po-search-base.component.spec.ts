@@ -135,7 +135,7 @@ describe('PoSearchBaseComponent', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -152,42 +152,42 @@ describe('PoSearchBaseComponent', () => {
       it('should set loading to true', () => {
         component.loading = true;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should set loading to false', () => {
         component.loading = false;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
 
       it('loading should not affect disabled state', () => {
         component.disabled = false;
 
         component.loading = true;
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
 
         component.disabled = true;
         component.loading = false;
-        expect(component.disabled).toBeTrue();
+        expect(component.disabled).toBe(true);
       });
 
       it('should set loading=true when input receives empty string', () => {
         component.loading = '' as any;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should set loading=false when input receives string "false"', () => {
         component.loading = 'false' as any;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
 
       it('should set loading=true when input receives string "true"', () => {
         component.loading = 'true' as any;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should not throw when cd is undefined', () => {
@@ -215,28 +215,28 @@ describe('PoSearchBaseComponent', () => {
           component.disabled = false;
           component.loading = false;
 
-          expect(component.isDisabled).toBeFalse();
+          expect(component.isDisabled).toBe(false);
         });
 
         it('should return true when disabled is true and loading is false', () => {
           component.disabled = true;
           component.loading = false;
 
-          expect(component.isDisabled).toBeTrue();
+          expect(component.isDisabled).toBe(true);
         });
 
         it('should return true when disabled is false and loading is true', () => {
           component.disabled = false;
           component.loading = true;
 
-          expect(component.isDisabled).toBeTrue();
+          expect(component.isDisabled).toBe(true);
         });
 
         it('should return true when disabled and loading are true', () => {
           component.disabled = true;
           component.loading = true;
 
-          expect(component.isDisabled).toBeTrue();
+          expect(component.isDisabled).toBe(true);
         });
       });
 
@@ -249,14 +249,14 @@ describe('PoSearchBaseComponent', () => {
           component.disabled = false;
           component.loading = true;
 
-          expect(component.isDisabled).toBeFalse();
+          expect(component.isDisabled).toBe(false);
         });
 
         it('should return true when disabled is true', () => {
           component.disabled = true;
           component.loading = true;
 
-          expect(component.isDisabled).toBeTrue();
+          expect(component.isDisabled).toBe(true);
         });
       });
     });

@@ -76,14 +76,14 @@ describe('PoI18nService:', () => {
 
     it('should call getLiteralsFromContextService when servicesContext[context] exists', () => {
       const observerMock = {
-        next: jasmine.createSpy('next'),
-        error: jasmine.createSpy('error'),
-        complete: jasmine.createSpy('complete')
+        next: vi.fn(),
+        error: vi.fn(),
+        complete: vi.fn()
       };
 
       service['servicesContext'] = { meuContexto: {} };
 
-      spyOn(service, <any>'getLiteralsFromContextService').and.callFake(() => {
+      vi.spyOn(service as any, 'getLiteralsFromContextService').mockImplementation(() => {
         observerMock.complete();
       });
 
@@ -93,7 +93,7 @@ describe('PoI18nService:', () => {
         'pt',
         'meuContexto',
         [],
-        jasmine.any(Object)
+        expect.any(Object)
       );
     });
 
@@ -103,13 +103,11 @@ describe('PoI18nService:', () => {
       });
     });
 
-    it('should return empty object to unexist context', done => {
-      spyOn(service, 'getLanguage').and.returnValue('pt');
+    it('should return empty object to unexist context', async () => {
+      vi.spyOn(service as any, 'getLanguage').mockReturnValue('pt');
 
       service.getLiterals({ context: 'test' }).subscribe((literals: any) => {
         expect(Object.keys(literals).length).toBe(0);
-
-        done();
       });
     });
 
@@ -130,7 +128,7 @@ describe('PoI18nService:', () => {
 
     describe('Methods:', () => {
       it('getLanguage: should call `languageService.getLanguage`.', () => {
-        const languageServiceSpy = spyOn(service['languageService'], 'getLanguage');
+        const languageServiceSpy = vi.spyOn(service['languageService'] as any, 'getLanguage');
 
         service.getLanguage();
 
@@ -138,13 +136,13 @@ describe('PoI18nService:', () => {
       });
 
       it('getLanguage: should return `languageService.getLanguage` value.', () => {
-        spyOn(service['languageService'], 'getLanguage').and.returnValue('pt-BR');
+        vi.spyOn(service['languageService'] as any, 'getLanguage').mockReturnValue('pt-BR');
 
         expect(service.getLanguage()).toBe('pt-BR');
       });
 
       it('getShortLanguage: should call `languageService.getLanguage`.', () => {
-        const languageServiceSpy = spyOn(service['languageService'], 'getShortLanguage');
+        const languageServiceSpy = vi.spyOn(service['languageService'] as any, 'getShortLanguage');
 
         service.getShortLanguage();
 
@@ -152,7 +150,7 @@ describe('PoI18nService:', () => {
       });
 
       it('getShortLanguage: should return `languageService.getShortLanguage` value.', () => {
-        spyOn(service['languageService'], 'getShortLanguage').and.returnValue('pt');
+        vi.spyOn(service['languageService'] as any, 'getShortLanguage').mockReturnValue('pt');
 
         expect(service.getShortLanguage()).toBe('pt');
       });
@@ -160,8 +158,8 @@ describe('PoI18nService:', () => {
       it('setLanguage: should call `languageService.setLanguage` with value language param if value is a language.', () => {
         const valueParam = 'es';
 
-        spyOn(utils, 'isLanguage').and.returnValue(true);
-        spyOn(service['languageService'], 'setLanguage');
+        vi.spyOn(utils as any, 'isLanguage').mockReturnValue(true);
+        vi.spyOn(service['languageService'] as any, 'setLanguage');
 
         service.setLanguage(valueParam);
         expect(service['languageService'].setLanguage).toHaveBeenCalledWith(valueParam);
@@ -170,8 +168,8 @@ describe('PoI18nService:', () => {
       it(`setLanguage: shouldn't call 'languageService.setLanguage' with value language param if value not is a language.`, () => {
         const valueParam = 'es';
 
-        spyOn(utils, 'isLanguage').and.returnValue(false);
-        spyOn(service['languageService'], 'setLanguage');
+        vi.spyOn(utils as any, 'isLanguage').mockReturnValue(false);
+        vi.spyOn(service['languageService'] as any, 'setLanguage');
 
         service.setLanguage(valueParam);
         expect(service['languageService'].setLanguage).not.toHaveBeenCalled();
@@ -180,8 +178,8 @@ describe('PoI18nService:', () => {
       it(`setLanguage: shouldn't call 'reloadCurrentPage' if value not is a language.`, () => {
         const valueParam = 'es5555';
 
-        spyOn(utils, 'isLanguage').and.returnValue(false);
-        spyOn(utils, 'reloadCurrentPage');
+        vi.spyOn(utils as any, 'isLanguage').mockReturnValue(false);
+        vi.spyOn(utils as any, 'reloadCurrentPage');
 
         service.setLanguage(valueParam);
         expect(utils.reloadCurrentPage).not.toHaveBeenCalled();
@@ -191,8 +189,8 @@ describe('PoI18nService:', () => {
         const valueParam = 'es';
         const reload = true;
 
-        spyOn(utils, 'isLanguage').and.returnValue(true);
-        spyOn(utils, 'reloadCurrentPage');
+        vi.spyOn(utils as any, 'isLanguage').mockReturnValue(true);
+        vi.spyOn(utils as any, 'reloadCurrentPage');
 
         service.setLanguage(valueParam, reload);
         expect(utils.reloadCurrentPage).toHaveBeenCalled();
@@ -202,8 +200,8 @@ describe('PoI18nService:', () => {
         const valueParam = 'es';
         const reload = false;
 
-        spyOn(utils, 'isLanguage').and.returnValue(true);
-        spyOn(utils, 'reloadCurrentPage');
+        vi.spyOn(utils as any, 'isLanguage').mockReturnValue(true);
+        vi.spyOn(utils as any, 'reloadCurrentPage');
 
         service.setLanguage(valueParam, reload);
         expect(utils.reloadCurrentPage).not.toHaveBeenCalled();
@@ -235,7 +233,7 @@ describe('PoI18nService:', () => {
             }
           };
 
-          const languageServiceSpy = spyOn(service['languageService'], 'setLanguageDefault');
+          const languageServiceSpy = vi.spyOn(service['languageService'] as any, 'setLanguageDefault');
 
           service['setConfig'](<any>configMock);
 
@@ -247,7 +245,7 @@ describe('PoI18nService:', () => {
             default: undefined
           };
 
-          const languageServiceSpy = spyOn(service['languageService'], 'setLanguageDefault');
+          const languageServiceSpy = vi.spyOn(service['languageService'] as any, 'setLanguageDefault');
 
           service['setConfig'](<any>configMock);
 
@@ -265,15 +263,17 @@ describe('PoI18nService:', () => {
         });
       });
 
-      it('getLiterals: should call `getLanguage` to set language if `options.language` is undefined', done => {
+      it('getLiterals: should call `getLanguage` to set language if `options.language` is undefined', async () => {
         const storageLanguage = 'en';
         const params = [];
 
-        spyOn(service, 'getLanguage').and.returnValue(storageLanguage);
-        spyOn(service, <any>'getLiteralsFromContextConstant').and.callFake((language, context, literals, observer) => {
-          params.push(context, literals, observer);
-          observer.next();
-        });
+        vi.spyOn(service as any, 'getLanguage').mockReturnValue(storageLanguage);
+        vi.spyOn(service as any, 'getLiteralsFromContextConstant').mockImplementation(
+          (language, context, literals, observer) => {
+            params.push(context, literals, observer);
+            (observer as any).next();
+          }
+        );
 
         service.getLiterals().subscribe(() => {
           expect(service.getLanguage).toHaveBeenCalled();
@@ -281,20 +281,21 @@ describe('PoI18nService:', () => {
             storageLanguage,
             ...(params as [string, Array<string>, any])
           );
-          done();
         });
       });
 
       it(`getLiterals: shouldn't call 'getLanguage' and set language with 'options.language'
-        if 'options.language' is defined`, done => {
+        if 'options.language' is defined`, async () => {
         const options = { language: 'en' };
         const params = [];
 
-        spyOn(service, 'getLanguage');
-        spyOn(service, <any>'getLiteralsFromContextConstant').and.callFake((language, context, literals, observer) => {
-          params.push(context, literals, observer);
-          observer.next();
-        });
+        vi.spyOn(service as any, 'getLanguage');
+        vi.spyOn(service as any, 'getLiteralsFromContextConstant').mockImplementation(
+          (language, context, literals, observer) => {
+            params.push(context, literals, observer);
+            (observer as any).next();
+          }
+        );
 
         service.getLiterals(options).subscribe(() => {
           expect(service.getLanguage).not.toHaveBeenCalled();
@@ -302,7 +303,6 @@ describe('PoI18nService:', () => {
             options.language,
             ...(params as [string, Array<string>, any])
           );
-          done();
         });
       });
     });
@@ -340,7 +340,7 @@ describe('PoI18nService:', () => {
       service = TestBed.inject(PoI18nService);
       httpMock = TestBed.inject(HttpTestingController);
 
-      spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+      vi.spyOn(localStorage as any, 'getItem').mockImplementation((key: string) => {
         const mockStorage = {
           'en-general-label1': 'Label 1',
           'en-general-label2': 'Label 2'
@@ -363,9 +363,9 @@ describe('PoI18nService:', () => {
           const observer = { next: val => {} };
           const translations = { car: 'Carro', people: 'Pessoas' };
 
-          const spyGetLiteralsLocalStorageAndCache = spyOn(service, <any>'getLiteralsLocalStorageAndCache');
-          const spyMergeObject = spyOn(service, <any>'mergeObject').and.returnValue(translations);
-          const spyObserverNext = spyOn(observer, 'next');
+          const spyGetLiteralsLocalStorageAndCache = vi.spyOn(service as any, 'getLiteralsLocalStorageAndCache');
+          const spyMergeObject = vi.spyOn(service as any, 'mergeObject').mockReturnValue(translations);
+          const spyObserverNext = vi.spyOn(observer as any, 'next');
 
           service['getLiteralsFromContextService']('pt', 'general', [], observer);
 
@@ -378,9 +378,9 @@ describe('PoI18nService:', () => {
           and call 'getLiteralsLocalStorageAndCache'`, () => {
           const observer = { next: val => {} };
 
-          const spyGetLiteralsLocalStorageAndCache = spyOn(service, <any>'getLiteralsLocalStorageAndCache');
-          const spyMergeObject = spyOn(service, <any>'mergeObject').and.returnValue({});
-          const spyObserverNext = spyOn(observer, 'next');
+          const spyGetLiteralsLocalStorageAndCache = vi.spyOn(service as any, 'getLiteralsLocalStorageAndCache');
+          const spyMergeObject = vi.spyOn(service as any, 'mergeObject').mockReturnValue({});
+          const spyObserverNext = vi.spyOn(observer as any, 'next');
 
           service['getLiteralsFromContextService']('pt', 'general', [], observer);
 
@@ -394,13 +394,13 @@ describe('PoI18nService:', () => {
           const languageAlternative = 'es';
           const context = 'general';
           const literals = ['label1', 'label2'];
-          const observer = { next: jasmine.createSpy('next') };
+          const observer = { next: vi.fn() };
           const translations = {};
 
-          spyOn(service as any, 'mergeObject').and.callThrough();
-          spyOn(service, 'searchInVarI18n' as keyof PoI18nService).and.returnValue('');
-          spyOn(service, 'countObject' as keyof PoI18nService).and.returnValue('0');
-          spyOn(service, 'getLiteralsLocalStorageAndCache' as keyof PoI18nService);
+          vi.spyOn(service as any, 'mergeObject');
+          vi.spyOn(service, 'searchInVarI18n' as keyof PoI18nService).mockReturnValue('');
+          vi.spyOn(service, 'countObject' as keyof PoI18nService).mockReturnValue('0');
+          vi.spyOn(service, 'getLiteralsLocalStorageAndCache' as keyof PoI18nService);
 
           service['getLiteralsFromContextService'](
             language,
@@ -468,11 +468,11 @@ describe('PoI18nService:', () => {
 
           service['useCache'] = true;
 
-          const spyObserverNext = spyOn(observer, 'next');
-          const spySearchInLocalStorage = spyOn(service, <any>'searchInLocalStorage').and.returnValue(
-            storageTranslations
-          );
-          const spyHttpService = spyOn(service, <any>'getHttpService').and.returnValue(of(undefined));
+          const spyObserverNext = vi.spyOn(observer as any, 'next');
+          const spySearchInLocalStorage = vi
+            .spyOn(service as any, 'searchInLocalStorage')
+            .mockReturnValue(storageTranslations);
+          const spyHttpService = vi.spyOn(service as any, 'getHttpService').mockReturnValue(of(undefined));
 
           service['getLiteralsLocalStorageAndCache']('pt', 'general', [], observer, translations);
 
@@ -491,9 +491,9 @@ describe('PoI18nService:', () => {
 
           service['useCache'] = true;
 
-          const spyObserverNext = spyOn(observer, 'next');
-          const spySearchInLocalStorage = spyOn(service, <any>'searchInLocalStorage').and.returnValue([]);
-          const spyHttpService = spyOn(service, <any>'getHttpService').and.returnValue(of(undefined));
+          const spyObserverNext = vi.spyOn(observer as any, 'next');
+          const spySearchInLocalStorage = vi.spyOn(service as any, 'searchInLocalStorage').mockReturnValue([]);
+          const spyHttpService = vi.spyOn(service as any, 'getHttpService').mockReturnValue(of(undefined));
 
           service['getLiteralsLocalStorageAndCache']('pt', 'general', [], observer, translations);
 
@@ -513,8 +513,8 @@ describe('PoI18nService:', () => {
 
           service['useCache'] = false;
 
-          const spyObserverNext = spyOn(observer, 'next');
-          const spyHttpService = spyOn(service, <any>'getHttpService').and.returnValue(of(translationsService));
+          const spyObserverNext = vi.spyOn(observer as any, 'next');
+          const spyHttpService = vi.spyOn(service as any, 'getHttpService').mockReturnValue(of(translationsService));
 
           service['getLiteralsLocalStorageAndCache']('pt', 'general', [], observer, translations);
 
@@ -532,12 +532,10 @@ describe('PoI18nService:', () => {
 
           service['useCache'] = false;
 
-          const spyHttpService = spyOn(service, <any>'getHttpService').and.returnValue(of(translationsService));
-          const spyCompleteFaultLiterals = spyOn(service, <any>'completeFaultLiterals').and.returnValue([
-            'produtos',
-            'paises',
-            'tipos'
-          ]);
+          const spyHttpService = vi.spyOn(service as any, 'getHttpService').mockReturnValue(of(translationsService));
+          const spyCompleteFaultLiterals = vi
+            .spyOn(service as any, 'completeFaultLiterals')
+            .mockReturnValue(['produtos', 'paises', 'tipos']);
           service['getLiteralsLocalStorageAndCache'](
             'pt',
             'general',
@@ -561,8 +559,8 @@ describe('PoI18nService:', () => {
 
           service['useCache'] = false;
 
-          const spyHttpService = spyOn(service, <any>'getHttpService').and.returnValue(of(translationsService));
-          const spygetLiteralsFromContextService = spyOn(service, <any>'getLiteralsFromContextService');
+          const spyHttpService = vi.spyOn(service as any, 'getHttpService').mockReturnValue(of(translationsService));
+          const spygetLiteralsFromContextService = vi.spyOn(service as any, 'getLiteralsFromContextService');
           service['getLiteralsLocalStorageAndCache'](
             'pt',
             'general',
@@ -594,7 +592,7 @@ describe('PoI18nService:', () => {
       it('updateLocalStorage: should store values in localStorage when useCache is true', () => {
         service['useCache'] = true;
 
-        spyOn(localStorage, 'setItem').and.callFake(() => {});
+        vi.spyOn(localStorage as any, 'setItem').mockImplementation(() => {});
         const language = 'en';
         const context = 'general';
         const data = { label1: 'Label 1', label2: 'Label 2' };

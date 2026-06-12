@@ -99,7 +99,7 @@ describe('PoMenuPanelComponent: ', () => {
     it('subscribeToMenuItem: should receive from child active menu item', () => {
       const menuItem = component.menus[0];
 
-      spyOn(component, <any>'clickMenuItem');
+      vi.spyOn(component as any, 'clickMenuItem');
 
       Object.defineProperty(component, 'menuItemsService', {
         value: fakeMenuPanelService(menuItem),
@@ -111,7 +111,7 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('should call `menu.action` when menu has a defined action', () => {
-      const spyAction = jasmine.createSpy('action');
+      const spyAction = vi.fn();
       const menuWithAction = component.menus[3];
       menuWithAction.action = spyAction;
 
@@ -121,7 +121,7 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('should open link when menu has a link and it is an external link', () => {
-      spyOn(window, 'open');
+      vi.spyOn(window as any, 'open');
 
       const menuWithExternalLink = component.menus[2];
       component['clickMenuItem'](<any>menuWithExternalLink);
@@ -130,7 +130,7 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('should call `activateMenuItem` when menu has a link and it is an internal link', () => {
-      const spyActivateMenuItem = spyOn(component, <any>'activateMenuItem');
+      const spyActivateMenuItem = vi.spyOn(component as any, 'activateMenuItem');
 
       const menuWithInternalLink = component.menus[1];
       component['clickMenuItem'](<any>menuWithInternalLink);
@@ -145,7 +145,7 @@ describe('PoMenuPanelComponent: ', () => {
     });
 
     it('clickMenuItem: should open external link', () => {
-      spyOn(window, 'open');
+      vi.spyOn(window as any, 'open');
 
       component['clickMenuItem'](<any>component.menus[2]);
 
@@ -154,29 +154,27 @@ describe('PoMenuPanelComponent: ', () => {
 
     describe('checkActiveMenuByUrl', () => {
       it('should navigate if there is no linkActive', () => {
-        spyOn(component, <any>'activateMenuByUrl');
+        vi.spyOn(component as any, 'activateMenuByUrl');
         component.linkActive = undefined;
         component['checkActiveMenuByUrl']('search');
         expect(component['activateMenuByUrl']).toHaveBeenCalled();
       });
 
       it('should navigate if has not same link', () => {
-        spyOn(component, <any>'activateMenuByUrl');
+        vi.spyOn(component as any, 'activateMenuByUrl');
         component.linkActive = '/home';
         component['checkActiveMenuByUrl']('search');
         expect(component['activateMenuByUrl']).toHaveBeenCalled();
       });
 
-      it('should not navigate if has same link', done => {
-        spyOn(component, <any>'activateMenuByUrl');
+      it('should not navigate if has same link', async () => {
+        vi.spyOn(component as any, 'activateMenuByUrl');
 
         component.linkActive = '/search';
 
-        fixture.ngZone.run(() => {
-          router.navigate(['search']).then(() => {
+        fixture.ngZone.run(async () => {
+          await router.navigate(['search']).then(() => {
             expect(component['activateMenuByUrl']).not.toHaveBeenCalled();
-
-            done();
           });
         });
       });
@@ -185,7 +183,7 @@ describe('PoMenuPanelComponent: ', () => {
     describe('activateMenuByUrl:', () => {
       it('shouldn`t call activeMenuItem if menuItem no has same link of param', () => {
         const menuItem = { label: 'Search', link: '/search', icon: 'user' };
-        spyOn(component, <any>'activateMenuItem');
+        vi.spyOn(component as any, 'activateMenuItem');
 
         component['activateMenuByUrl']('home', [menuItem]);
 
@@ -193,7 +191,7 @@ describe('PoMenuPanelComponent: ', () => {
       });
 
       it('shouldn`t search by some menuItem that has the same link of param', () => {
-        spyOn(component, <any>'activateMenuItem');
+        vi.spyOn(component as any, 'activateMenuItem');
 
         component['activateMenuByUrl']('home', null);
 
@@ -202,7 +200,7 @@ describe('PoMenuPanelComponent: ', () => {
 
       it('shouldn call activeMenuItem if menuItem no has same link of param', () => {
         const menuItem = { label: 'Search', link: '/home', icon: 'user' };
-        spyOn(component, <any>'activateMenuItem');
+        vi.spyOn(component as any, 'activateMenuItem');
 
         component['activateMenuByUrl']('/home', [menuItem]);
 

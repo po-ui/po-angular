@@ -26,7 +26,7 @@ describe('PoHeaderComponent', () => {
       receiveApplicationMenu$: receiveApplicationMenu$.asObservable()
     };
 
-    changeDetectorRefMock = { detectChanges: jasmine.createSpy('detectChanges') };
+    changeDetectorRefMock = { detectChanges: vi.fn() };
 
     await TestBed.configureTestingModule({
       declarations: [PoHeaderComponent],
@@ -48,7 +48,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call updateButtonMore if amountMore was changed', () => {
-    spyOn(component, 'updateButtonMore');
+    vi.spyOn(component as any, 'updateButtonMore');
 
     component.ngOnChanges({
       amountMore: {
@@ -63,8 +63,8 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should keep currentWidth when receiveOnChange$ emits and width <= 960', () => {
-    spyOn(component, 'handleLargeSreen');
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleLargeSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
 
     component['applicationMenu'] = {} as any;
     Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
@@ -76,8 +76,8 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should keep currentWidth when receiveOnChange$ emits', () => {
-    spyOn(component, 'handleLargeSreen');
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleLargeSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
 
     component['applicationMenu'] = undefined;
     component['currentWidth'] = 800;
@@ -90,8 +90,8 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should keep currentWidth when receiveOnChange$ emits and width > 960', () => {
-    spyOn(component, 'handleLargeSreen');
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleLargeSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
 
     component['applicationMenu'] = {} as any;
     Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true, configurable: true });
@@ -103,7 +103,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call detectChanges when receiveApplicationMenu emits', () => {
-    spyOn(component['cd'], 'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '1';
     component.ngOnInit();
@@ -114,7 +114,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call detectChanges when receiveApplicationMenu emits and id is the same', () => {
-    spyOn(component['cd'], 'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
     Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
@@ -126,7 +126,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should not call detectChanges when receiveApplicationMenu has the same id and notChangeContext is true', () => {
-    spyOn(component, 'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
     component.notChangeContext = true;
@@ -138,7 +138,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should not call handleSmallSreen when receiveApplicationMenu emits', () => {
-    spyOn(component, 'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '2';
     Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
@@ -150,8 +150,8 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call detectChanges and handleSmallSreen when receiveRemovedApplicationMenu emits', fakeAsync(() => {
-    spyOn(component['cd'], 'detectChanges');
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
+    vi.spyOn(component as any, 'handleSmallSreen');
 
     Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     component.applicationMenu = {} as any;
@@ -168,8 +168,8 @@ describe('PoHeaderComponent', () => {
   }));
 
   it('should call detectChanges and handleLargeSreen when receiveRemovedApplicationMenu emits', fakeAsync(() => {
-    spyOn(component['cd'], 'detectChanges');
-    spyOn(component, 'handleLargeSreen');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
+    vi.spyOn(component as any, 'handleLargeSreen');
 
     Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
     component.applicationMenu = {} as any;
@@ -186,8 +186,8 @@ describe('PoHeaderComponent', () => {
   }));
 
   it('should call detectChanges and handleLargeSreen when receiveRemovedApplicationMenu emits and notChangeContext is true', fakeAsync(() => {
-    spyOn(component['cd'], 'detectChanges');
-    spyOn(component, 'handleLargeSreen');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
+    vi.spyOn(component as any, 'handleLargeSreen');
 
     Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
     component.applicationMenu = {} as any;
@@ -205,7 +205,7 @@ describe('PoHeaderComponent', () => {
   }));
 
   it('should set applicationMenu to undefined when id is equal', fakeAsync(() => {
-    spyOn(component['cd'], 'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
 
     Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
     component.applicationMenu = {} as any;
@@ -221,8 +221,8 @@ describe('PoHeaderComponent', () => {
   }));
 
   it('should subscribe to window resize and call handleLargeSreen when width > 960', fakeAsync(() => {
-    spyOn(component, 'handleSmallSreen');
-    spyOn(component, 'handleLargeSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleLargeSreen');
 
     component.ngOnInit();
 
@@ -236,7 +236,7 @@ describe('PoHeaderComponent', () => {
   }));
 
   it('ngAfterViewInit: should subscribe to resize event and call updateMenu after debounce', fakeAsync(() => {
-    const spyUpdateMenu = spyOn<any>(component, 'updateMenu');
+    const spyUpdateMenu = vi.spyOn(component as any, 'updateMenu');
 
     component.ngAfterViewInit();
 
@@ -270,11 +270,11 @@ describe('PoHeaderComponent', () => {
     component.ngOnInit();
     receiveId$.next('custom-id');
 
-    expect(component.existMenuExternal).toBeTrue();
+    expect(component.existMenuExternal).toBe(true);
   });
 
   it('should call handleSmallSreen if menuCollapse was changed and width is smaller than 960', () => {
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
     component['currentWidth'] = 950;
     component.afterViewInitWascalled = true;
 
@@ -291,7 +291,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call handleLargeSreen if menuCollapse was changed and width is bigger than 960', () => {
-    spyOn(component, 'handleLargeSreen');
+    vi.spyOn(component as any, 'handleLargeSreen');
     component['currentWidth'] = 970;
     component.afterViewInitWascalled = true;
 
@@ -308,7 +308,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call handleSmallSreen if menuItems was changed and width is smaller than 960', () => {
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
     component['currentWidth'] = 940;
     component.afterViewInitWascalled = true;
 
@@ -325,7 +325,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should call handleSmallSreen if menuItems was changed and width is smaller than 960', () => {
-    spyOn(component, 'handleSmallSreen');
+    vi.spyOn(component as any, 'handleSmallSreen');
     component['currentWidth'] = 950;
     component.afterViewInitWascalled = true;
 
@@ -431,7 +431,7 @@ describe('PoHeaderComponent', () => {
   it('should call toggleMenuMobile when existMenuExternal is true', () => {
     component.existMenuExternal = true;
     component.applicationMenu = { toggleMenuMobile: () => {} } as any;
-    spyOn(component.applicationMenu, 'toggleMenuMobile');
+    vi.spyOn(component.applicationMenu as any, 'toggleMenuMobile');
 
     component.onClickMenu();
 
@@ -446,8 +446,8 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should update selected property', () => {
-    spyOn(component, 'updateMenu');
-    spyOn(component, <any>'combineItems');
+    vi.spyOn(component as any, 'updateMenu');
+    vi.spyOn(component as any, 'combineItems');
     component.overflowButtonComponentEl = { onClosePopup: () => {} } as any;
 
     component.menuItems = [
@@ -476,7 +476,7 @@ describe('PoHeaderComponent', () => {
   it('should call updateButtonMore when amountMore is set', () => {
     const fake = {
       amountMore: 1,
-      updateButtonMore: jasmine.createSpy('updateButtonMore')
+      updateButtonMore: vi.fn()
     };
 
     PoHeaderComponent.prototype.updateMenu.call(fake);
@@ -497,7 +497,7 @@ describe('PoHeaderComponent', () => {
         { id: 3, label: 'Item 3' }
       ],
       overflowItems: [],
-      cd: { detectChanges: jasmine.createSpy('detectChanges') },
+      cd: { detectChanges: vi.fn() },
       menuSubItems: {
         toArray: () => [
           { nativeElement: { offsetWidth: 100 } },
@@ -516,7 +516,7 @@ describe('PoHeaderComponent', () => {
   });
 
   it('should use document.documentElement.clientWidth when parent width is not available', () => {
-    spyOnProperty(document.documentElement, 'clientWidth', 'get').and.returnValue(800);
+    vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(800);
 
     const fake = {
       amountMore: 0,
@@ -535,7 +535,7 @@ describe('PoHeaderComponent', () => {
         { id: 2, label: 'Item 2' }
       ],
       overflowItems: [],
-      cd: { detectChanges: jasmine.createSpy('detectChanges') },
+      cd: { detectChanges: vi.fn() },
       menuSubItems: {
         toArray: () => [{ nativeElement: { offsetWidth: 300 } }, { nativeElement: { offsetWidth: 300 } }]
       },
@@ -544,7 +544,7 @@ describe('PoHeaderComponent', () => {
 
     PoHeaderComponent.prototype.updateMenu.call(fake);
 
-    expect(fake.showOverflow).toBeTrue();
+    expect(fake.showOverflow).toBe(true);
     expect(fake.cd.detectChanges).toHaveBeenCalled();
   });
 

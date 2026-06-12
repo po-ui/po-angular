@@ -39,7 +39,7 @@ class PoComboTest extends PoComboBaseComponent {
 
 describe('PoComboBaseComponent:', () => {
   let component: PoComboTest;
-  let changeDetectorRef: jasmine.SpyObj<any>;
+  let changeDetectorRef: any;
 
   const defaultService: any = {
     url: '',
@@ -57,7 +57,10 @@ describe('PoComboBaseComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({}).compileComponents();
-    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges']);
+    changeDetectorRef = {
+      markForCheck: vi.fn().mockName('ChangeDetectorRef.markForCheck'),
+      detectChanges: vi.fn().mockName('ChangeDetectorRef.detectChanges')
+    };
     component = TestBed.runInInjectionContext(() => new PoComboTest());
     component['changeDetector'] = changeDetectorRef;
     component.filterService = service;
@@ -80,7 +83,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('p-required: should be update with valid and invalid values and call validateModel with selectedValue.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       expectPropertiesValues(component, 'required', trueValues, true);
       expectPropertiesValues(component, 'required', falseValues, false);
@@ -89,7 +92,7 @@ describe('PoComboBaseComponent:', () => {
     });
 
     it('p-disabled: should be update with valid and invalid values and call validateModel with selectedValue.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       expectPropertiesValues(component, 'disabled', trueValues, true);
       expectPropertiesValues(component, 'disabled', falseValues, false);
@@ -126,7 +129,7 @@ describe('PoComboBaseComponent:', () => {
     it('p-options: should set options and call `comboListDefinitions`', () => {
       const options = [{ label: '1', value: '1' }];
 
-      const spycomboListDefinitions = spyOn(component, <any>'comboListDefinitions');
+      const spycomboListDefinitions = vi.spyOn(component as any, 'comboListDefinitions');
 
       component.options = options;
 
@@ -217,7 +220,7 @@ describe('PoComboBaseComponent:', () => {
         });
 
         it('should call `comboListDefinitions`', () => {
-          const spycomboListDefinitions = spyOn(component, <any>'comboListDefinitions').and.callThrough();
+          const spycomboListDefinitions = vi.spyOn(component as any, 'comboListDefinitions');
 
           component.sort = true;
 
@@ -230,14 +233,14 @@ describe('PoComboBaseComponent:', () => {
       it('should set loading=true and call markForCheck', () => {
         component.loading = true;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
       });
 
       it('should set loading=false and call markForCheck', () => {
         component.loading = false;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
       });
 
@@ -245,26 +248,26 @@ describe('PoComboBaseComponent:', () => {
         component.disabled = false;
 
         component.loading = true;
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
 
         component.disabled = true;
         component.loading = false;
-        expect(component.disabled).toBeTrue();
+        expect(component.disabled).toBe(true);
       });
 
       it('should set loading=true when input receives string empty', () => {
         component.loading = '' as any;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should set loading=false when input receives string "false"', () => {
         component.loading = 'false' as any;
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
 
       it('should set loading=true when input receives string "true"', () => {
         component.loading = 'true' as any;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should not throw when cd is undefined', () => {
@@ -286,39 +289,39 @@ describe('PoComboBaseComponent:', () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
 
       it('should return true when disabled is true and loading is false', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled is false and loading is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled and loading are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should keep disabled true after loading toggles from true to false', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
 
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
     });
 
@@ -388,7 +391,7 @@ describe('PoComboBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -452,19 +455,19 @@ describe('PoComboBaseComponent:', () => {
   });
 
   it('should call the "startsWith" method', () => {
-    spyOn(component, 'startsWith');
+    vi.spyOn(component as any, 'startsWith');
     component.compareMethod('1', null, PoComboFilterMode.startsWith);
     expect(component.startsWith).toHaveBeenCalledWith('1', null);
   });
 
   it('should call the "contains" method', () => {
-    spyOn(component, 'contains');
+    vi.spyOn(component as any, 'contains');
     component.compareMethod('1', null, PoComboFilterMode.contains);
     expect(component.contains).toHaveBeenCalledWith('1', null);
   });
 
   it('should call the "endsWith" method', () => {
-    spyOn(component, 'endsWith');
+    vi.spyOn(component as any, 'endsWith');
     component.compareMethod('1', null, PoComboFilterMode.endsWith);
     expect(component.endsWith).toHaveBeenCalledWith('1', null);
   });
@@ -517,8 +520,8 @@ describe('PoComboBaseComponent:', () => {
   });
 
   it('updateSelectedValue: should update the values according with option', () => {
-    spyOn(component, 'callModelChange');
-    spyOn(component, 'setInputValue');
+    vi.spyOn(component as any, 'callModelChange');
+    vi.spyOn(component as any, 'setInputValue');
 
     component.updateSelectedValue({ label: 'label', value: 'value' });
 
@@ -533,7 +536,7 @@ describe('PoComboBaseComponent:', () => {
       onModelChange: (v: any) => {}
     };
 
-    spyOn(fakeThis, 'onModelChange');
+    vi.spyOn(fakeThis as any, 'onModelChange');
     component.callModelChange.call(fakeThis, 'value');
     expect(fakeThis.onModelChange).toHaveBeenCalledWith('value');
   });
@@ -546,7 +549,7 @@ describe('PoComboBaseComponent:', () => {
       }
     };
 
-    spyOn(fakeThis.ngModelChange, 'emit');
+    vi.spyOn(fakeThis.ngModelChange as any, 'emit');
     component.callModelChange.call(fakeThis, 'value');
     expect(fakeThis.ngModelChange.emit).toHaveBeenCalledWith('value');
   });
@@ -657,7 +660,7 @@ describe('PoComboBaseComponent:', () => {
   it('should unsubscribe keyupObservable', () => {
     component.keyupSubscribe = of('').subscribe();
 
-    spyOn(component.keyupSubscribe, 'unsubscribe');
+    vi.spyOn(component.keyupSubscribe as any, 'unsubscribe');
 
     component['unsubscribeKeyupObservable']();
 
@@ -667,11 +670,11 @@ describe('PoComboBaseComponent:', () => {
   describe('writeValue:', () => {
     it(`should call 'updateSelectedValue' with null and 'updateComboList'
       and not call 'getOptionFromValue' and 'getObjectByValue'`, () => {
-      spyOn(component, 'getOptionFromValue');
-      spyOn(component, 'getObjectByValue');
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'updateComboList');
-      spyOn(component, <any>'updateHasNext');
+      vi.spyOn(component as any, 'getOptionFromValue');
+      vi.spyOn(component as any, 'getObjectByValue');
+      vi.spyOn(component as any, 'updateSelectedValue');
+      vi.spyOn(component as any, 'updateComboList');
+      vi.spyOn(component as any, 'updateHasNext');
 
       component.writeValue(null);
 
@@ -684,9 +687,9 @@ describe('PoComboBaseComponent:', () => {
     it('should call `updateSelectedValue` when contains `options` and param is a `validValue` and set false in `removeInitialFilter`', () => {
       component.options = [{ label: '1', value: 'valor 1' }];
       component.removeInitialFilter = true;
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'getOptionFromValue');
-      spyOn(component, 'getObjectByValue');
+      vi.spyOn(component as any, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getOptionFromValue');
+      vi.spyOn(component as any, 'getObjectByValue');
 
       component.writeValue('1');
 
@@ -700,7 +703,7 @@ describe('PoComboBaseComponent:', () => {
       component.options = [{ label: '1', value: 'valor 1' }];
       component.changeOnEnter = false;
 
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.writeValue('1');
 
@@ -715,8 +718,8 @@ describe('PoComboBaseComponent:', () => {
         { label: 'Test 2', value: 2 }
       ];
 
-      spyOn(component, 'callModelChange');
-      spyOn(component, 'updateSelectedValue').and.callThrough();
+      vi.spyOn(component as any, 'callModelChange');
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.writeValue(newModel);
 
@@ -820,7 +823,7 @@ describe('PoComboBaseComponent:', () => {
       component.controlValueWithLabel = true;
       component.dynamicValue = 'value';
       component.dynamicLabel = 'label';
-      spyOn<any>(component, 'callModelChange');
+      vi.spyOn(component as any, 'callModelChange');
     });
 
     it('should return early if originalValue is NOT primitive (object, boolean, etc)', () => {
@@ -882,8 +885,8 @@ describe('PoComboBaseComponent:', () => {
 
       component.selectedValue = undefined;
 
-      spyOn(component, 'callModelChange');
-      spyOn(component.change, 'emit');
+      vi.spyOn(component as any, 'callModelChange');
+      vi.spyOn(component.change as any, 'emit');
 
       component['updateModel'](value);
 
@@ -897,8 +900,8 @@ describe('PoComboBaseComponent:', () => {
 
       component.emitObjectValue = false;
 
-      spyOn(component, 'callModelChange');
-      spyOn(component.change, 'emit');
+      vi.spyOn(component as any, 'callModelChange');
+      vi.spyOn(component.change as any, 'emit');
 
       component['updateModel'](value);
 
@@ -911,8 +914,8 @@ describe('PoComboBaseComponent:', () => {
       component.emitObjectValue = true;
       component.selectedOption = { label: '1', value: '1' };
 
-      spyOn(component, 'callModelChange');
-      spyOn(component.change, 'emit');
+      vi.spyOn(component as any, 'callModelChange');
+      vi.spyOn(component.change as any, 'emit');
 
       component['updateModel'](value);
 
@@ -924,8 +927,8 @@ describe('PoComboBaseComponent:', () => {
 
       component.selectedValue = value;
 
-      const spyCallModelChange = spyOn(component, 'callModelChange');
-      const spyChangeEmit = spyOn(component.change, 'emit');
+      const spyCallModelChange = vi.spyOn(component as any, 'callModelChange');
+      const spyChangeEmit = vi.spyOn(component.change as any, 'emit');
 
       component['updateModel'](value);
 
@@ -941,8 +944,8 @@ describe('PoComboBaseComponent:', () => {
       component.selectedValue = undefined;
       component['fromWriteValue'] = true;
 
-      const spyCallModelChange = spyOn(component, 'callModelChange');
-      const spyChangeEmit = spyOn(component.change, 'emit');
+      const spyCallModelChange = vi.spyOn(component as any, 'callModelChange');
+      const spyChangeEmit = vi.spyOn(component.change as any, 'emit');
 
       component['updateModel'](value);
 
@@ -965,8 +968,8 @@ describe('PoComboBaseComponent:', () => {
       component.selectedValue = 1;
       component.onModelChange = undefined;
 
-      spyOn(component, 'getOptionFromValue').and.returnValue(oldOption);
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getOptionFromValue').mockReturnValue(oldOption);
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component['updateSelectedValueWithOldOption']();
 
@@ -981,8 +984,8 @@ describe('PoComboBaseComponent:', () => {
       component.selectedValue = 1;
       component.onModelChange = () => {};
 
-      spyOn(component, 'getOptionFromValue').and.returnValue(oldOption);
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getOptionFromValue').mockReturnValue(oldOption);
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component['updateSelectedValueWithOldOption']();
 
@@ -993,8 +996,8 @@ describe('PoComboBaseComponent:', () => {
     it('updateSelectedValueWithOldOption: shouldn`t call `updateSelectedValue` when not found oldOption', () => {
       component.selectedValue = 1;
 
-      spyOn(component, 'getOptionFromValue').and.returnValue({});
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getOptionFromValue').mockReturnValue({});
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component['updateSelectedValueWithOldOption']();
 
@@ -1006,9 +1009,9 @@ describe('PoComboBaseComponent:', () => {
       const optionFound = { value: 1, label: '1' };
       component.selectedValue = undefined;
 
-      spyOn(component, 'getInputValue').and.returnValue('1');
-      spyOn(component, 'getOptionFromLabel').and.returnValue(optionFound);
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue('1');
+      vi.spyOn(component as any, 'getOptionFromLabel').mockReturnValue(optionFound);
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.verifyValidOption();
 
@@ -1023,10 +1026,10 @@ describe('PoComboBaseComponent:', () => {
       component.selectedValue = 1;
       component.selectedOption = { value: 1, label: '1' };
 
-      spyOn(component, 'getInputValue').and.returnValue('po');
-      spyOn(component, 'getOptionFromLabel').and.returnValue(undefined);
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, <any>'updateSelectedValueWithOldOption');
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue('po');
+      vi.spyOn(component as any, 'getOptionFromLabel').mockReturnValue(undefined);
+      vi.spyOn(component as any, 'updateSelectedValue');
+      vi.spyOn(component as any, 'updateSelectedValueWithOldOption');
 
       component.verifyValidOption();
 
@@ -1041,9 +1044,9 @@ describe('PoComboBaseComponent:', () => {
       'selectedOption.label' equal 'inputValue' and set 'previousSearchValue' with ''`, () => {
       component.onModelChange = () => {};
 
-      spyOn(component, 'getInputValue').and.returnValue('1');
-      spyOn(component, 'getOptionFromLabel').and.returnValue(undefined);
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue('1');
+      vi.spyOn(component as any, 'getOptionFromLabel').mockReturnValue(undefined);
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.verifyValidOption();
 
@@ -1056,9 +1059,9 @@ describe('PoComboBaseComponent:', () => {
     it(`verifyValidOption: should call 'updateSelectedValue' with null and 'true' when inputValue is truthy`, () => {
       component.selectedOption = { value: 2, label: '2' };
 
-      spyOn(component, 'getInputValue').and.returnValue('1');
-      spyOn(component, 'getOptionFromLabel').and.returnValue(undefined);
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue('1');
+      vi.spyOn(component as any, 'getOptionFromLabel').mockReturnValue(undefined);
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.verifyValidOption();
 
@@ -1070,9 +1073,9 @@ describe('PoComboBaseComponent:', () => {
     it('verifyValidOption: shouldn`t call `updateSelectedValue` when inputValue is falsy', () => {
       component.selectedOption = undefined;
 
-      spyOn(component, 'getInputValue').and.returnValue('');
-      spyOn(component, 'getOptionFromLabel').and.returnValue(undefined);
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue('');
+      vi.spyOn(component as any, 'getOptionFromLabel').mockReturnValue(undefined);
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.verifyValidOption();
 
@@ -1084,7 +1087,7 @@ describe('PoComboBaseComponent:', () => {
     it('verifyValidOption: should call `updateComboList` if itens service is undefined', () => {
       component.service = undefined;
 
-      spyOn(component, 'updateComboList');
+      vi.spyOn(component as any, 'updateComboList');
 
       component.verifyValidOption();
 
@@ -1095,7 +1098,7 @@ describe('PoComboBaseComponent:', () => {
       const urlService = 'https://po-ui.io/sample/api/new/heros';
       component.setService(urlService);
 
-      spyOn(component, 'updateComboList');
+      vi.spyOn(component as any, 'updateComboList');
 
       component.verifyValidOption();
 
@@ -1117,13 +1120,13 @@ describe('PoComboBaseComponent:', () => {
 
       component.validate(controlMock);
 
-      expect(component['hasValidatorRequired']).toBeTrue();
+      expect(component['hasValidatorRequired']).toBe(true);
     });
 
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']([]);
 
@@ -1141,8 +1144,8 @@ describe('PoComboBaseComponent:', () => {
       filterService is defined.`, () => {
       const filterService = 'https://po-ui.io/sample/api/new/heroes';
 
-      spyOn(component, <any>'unsubscribeKeyupObservable');
-      spyOn(component, 'onInitService');
+      vi.spyOn(component as any, 'unsubscribeKeyupObservable');
+      vi.spyOn(component as any, 'onInitService');
 
       component['configAfterSetFilterService'](filterService);
 
@@ -1212,9 +1215,9 @@ describe('PoComboBaseComponent:', () => {
 
       component.changeOnEnter = false;
 
-      const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any>'updateModel');
+      const spySetInputValue = vi.spyOn(component as any, 'setInputValue');
+      const spyUpdateInternalVariables = vi.spyOn(component as any, 'updateInternalVariables');
+      const spyUpdateModel = vi.spyOn(component as any, 'updateModel');
 
       component.updateSelectedValue(option);
 
@@ -1229,9 +1232,9 @@ describe('PoComboBaseComponent:', () => {
 
       component.changeOnEnter = true;
 
-      const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any>'updateModel');
+      const spySetInputValue = vi.spyOn(component as any, 'setInputValue');
+      const spyUpdateInternalVariables = vi.spyOn(component as any, 'updateInternalVariables');
+      const spyUpdateModel = vi.spyOn(component as any, 'updateModel');
 
       component.updateSelectedValue(option);
 
@@ -1246,9 +1249,9 @@ describe('PoComboBaseComponent:', () => {
 
       component.changeOnEnter = false;
 
-      const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any>'updateModel');
+      const spySetInputValue = vi.spyOn(component as any, 'setInputValue');
+      const spyUpdateInternalVariables = vi.spyOn(component as any, 'updateInternalVariables');
+      const spyUpdateModel = vi.spyOn(component as any, 'updateModel');
 
       component.updateSelectedValue(option);
 
@@ -1263,9 +1266,9 @@ describe('PoComboBaseComponent:', () => {
 
       component.changeOnEnter = true;
 
-      const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any>'updateModel');
+      const spySetInputValue = vi.spyOn(component as any, 'setInputValue');
+      const spyUpdateInternalVariables = vi.spyOn(component as any, 'updateInternalVariables');
+      const spyUpdateModel = vi.spyOn(component as any, 'updateModel');
 
       component.updateSelectedValue(option, false);
 
@@ -1278,9 +1281,9 @@ describe('PoComboBaseComponent:', () => {
     it('updateSelectedValue: shouldn`t call `updateModel` if `isUpdateModel` is false', () => {
       const option = { value: 1, label: '1' };
 
-      const spySetInputValue = spyOn(component, 'setInputValue');
-      const spyUpdateInternalVariables = spyOn(component, <any>'updateInternalVariables');
-      const spyUpdateModel = spyOn(component, <any>'updateModel');
+      const spySetInputValue = vi.spyOn(component as any, 'setInputValue');
+      const spyUpdateInternalVariables = vi.spyOn(component as any, 'updateInternalVariables');
+      const spyUpdateModel = vi.spyOn(component as any, 'updateModel');
 
       component.updateSelectedValue(option, false);
 
@@ -1302,8 +1305,8 @@ describe('PoComboBaseComponent:', () => {
 
       component.updateSelectedValue({ label: 'Sul', options: true });
 
-      expect(component['comboOptionsList'].find(option => option.label === 'Sul').selected).toBeTrue();
-      expect(component['comboOptionsList'].find(option => option.label === 'Sudeste').selected).toBeFalse();
+      expect(component['comboOptionsList'].find(option => option.label === 'Sul').selected).toBe(true);
+      expect(component['comboOptionsList'].find(option => option.label === 'Sudeste').selected).toBe(false);
       expect(component['comboOptionsList'].filter(option => option.options === true && option.selected).length).toBe(1);
     });
 
@@ -1316,7 +1319,7 @@ describe('PoComboBaseComponent:', () => {
 
       component.updateSelectedValue(null);
 
-      expect(component['comboOptionsList'].every(o => !o.selected)).toBeTrue();
+      expect(component['comboOptionsList'].every(o => !o.selected)).toBe(true);
     });
 
     describe('VisibleOptions:', () => {
@@ -1537,9 +1540,9 @@ describe('PoComboBaseComponent:', () => {
         { label: 'labelB', value: 'valueB' }
       ];
 
-      const spyVerifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
-      const spySortOptions = spyOn(component, <any>'sortOptions');
-      const spyVerifyComboOptionsGroup = spyOn(component, <any>'verifyComboOptionsGroup');
+      const spyVerifyComboOptions = vi.spyOn(component as any, 'verifyComboOptions');
+      const spySortOptions = vi.spyOn(component as any, 'sortOptions');
+      const spyVerifyComboOptionsGroup = vi.spyOn(component as any, 'verifyComboOptionsGroup');
       const expectedValue = component['listingComboOptions'](component.options);
 
       expect(spyVerifyComboOptions).toHaveBeenCalledWith(component.options);
@@ -1556,9 +1559,9 @@ describe('PoComboBaseComponent:', () => {
         { label: 'valueA', value: 'valueA' }
       ];
 
-      const spyVerifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
-      const spySortOptions = spyOn(component, <any>'sortOptions');
-      const spyVerifyComboOptionsGroup = spyOn(component, <any>'verifyComboOptionsGroup').and.callThrough();
+      const spyVerifyComboOptions = vi.spyOn(component as any, 'verifyComboOptions');
+      const spySortOptions = vi.spyOn(component as any, 'sortOptions');
+      const spyVerifyComboOptionsGroup = vi.spyOn(component as any, 'verifyComboOptionsGroup');
       const expectedValue = component['listingComboOptions'](component.options);
 
       expect(spyVerifyComboOptions).toHaveBeenCalledWith(component.options);
@@ -1573,9 +1576,9 @@ describe('PoComboBaseComponent:', () => {
         { label: 'labelB', value: 'valueB' }
       ];
 
-      const spyVerifyIfHasLabel = spyOn(component, <any>'verifyIfHasLabel').and.callThrough();
-      const spyhasDuplicatedOption = spyOn(component, <any>'hasDuplicatedOption').and.callThrough();
-      const spyvalidateValue = spyOn(component, <any>'validateValue').and.callThrough();
+      const spyVerifyIfHasLabel = vi.spyOn(component as any, 'verifyIfHasLabel');
+      const spyhasDuplicatedOption = vi.spyOn(component as any, 'hasDuplicatedOption');
+      const spyvalidateValue = vi.spyOn(component as any, 'validateValue');
 
       component['verifyComboOptions'](component.options);
 
@@ -1639,8 +1642,8 @@ describe('PoComboBaseComponent:', () => {
       component.options = [{ label: 'labelGroup', options: [] }];
       component['comboOptionsList'] = component.options;
 
-      const spyverifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
-      const spySortOptions = spyOn(component, <any>'sortOptions');
+      const spyverifyComboOptions = vi.spyOn(component as any, 'verifyComboOptions');
+      const spySortOptions = vi.spyOn(component as any, 'sortOptions');
       const expectedResult = component['verifyComboOptionsGroup'](<any>component['comboOptionsList']);
 
       expect(spyverifyComboOptions).toHaveBeenCalled();
@@ -1656,8 +1659,8 @@ describe('PoComboBaseComponent:', () => {
         { label: 'labelGroup', options: true },
         { value: 'value', label: 'value' }
       ];
-      const spyverifyComboOptions = spyOn(component, <any>'verifyComboOptions').and.callThrough();
-      const spySortOptions = spyOn(component, <any>'sortOptions');
+      const spyverifyComboOptions = vi.spyOn(component as any, 'verifyComboOptions');
+      const spySortOptions = vi.spyOn(component as any, 'sortOptions');
       const expectedResult = component['verifyComboOptionsGroup'](<any>component['comboOptionsList']);
 
       expect(spyverifyComboOptions).toHaveBeenCalled();
@@ -1742,7 +1745,7 @@ describe('PoComboBaseComponent:', () => {
     it('comboListDefinitions: should set `cacheStaticOptions` and call `updateComboList`', () => {
       component.options = [{ label: '1', value: '1' }];
 
-      const spyUpdateComboList = spyOn(component, 'updateComboList');
+      const spyUpdateComboList = vi.spyOn(component as any, 'updateComboList');
 
       component['comboListDefinitions']();
 
@@ -1753,7 +1756,7 @@ describe('PoComboBaseComponent:', () => {
     it('comboListDefinitions: should call `listingComboOptions` if options length is more than 0', () => {
       component.options = [{ label: '1', value: '1' }];
 
-      const spyListingComboOptions = spyOn(component, <any>'listingComboOptions').and.callThrough();
+      const spyListingComboOptions = vi.spyOn(component as any, 'listingComboOptions');
 
       component['comboListDefinitions']();
 
@@ -1763,7 +1766,7 @@ describe('PoComboBaseComponent:', () => {
     it('comboListDefinitions: shouldn`t call `listingComboOptions` if options length is 0', () => {
       component.options = [];
 
-      const spyListingComboOptions = spyOn(component, <any>'listingComboOptions');
+      const spyListingComboOptions = vi.spyOn(component as any, 'listingComboOptions');
 
       component['comboListDefinitions']();
 
@@ -1773,11 +1776,11 @@ describe('PoComboBaseComponent:', () => {
     it('clear: should call `callModelChange` and `updateSelectedValue` and `updateComboList` and `initInputObservable`', () => {
       component.clean = true;
       component.keyupSubscribe = of('').subscribe();
-      spyOn(component, 'callModelChange');
-      spyOn(component, 'updateSelectedValue');
-      spyOn(component, 'updateComboList');
-      spyOn(component, 'initInputObservable');
-      spyOn(component.keyupSubscribe, 'unsubscribe');
+      vi.spyOn(component as any, 'callModelChange');
+      vi.spyOn(component as any, 'updateSelectedValue');
+      vi.spyOn(component as any, 'updateComboList');
+      vi.spyOn(component as any, 'initInputObservable');
+      vi.spyOn(component.keyupSubscribe as any, 'unsubscribe');
 
       component.clear('');
 
@@ -1920,7 +1923,7 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should call the `updateComboList` if the` ngOnInit` is called.', () => {
-    spyOn(component, 'updateComboList');
+    vi.spyOn(component as any, 'updateComboList');
 
     component.ngOnInit();
 
@@ -1964,8 +1967,8 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should init service', () => {
-    spyOn(component, 'setService');
-    spyOn(component, 'initInputObservable');
+    vi.spyOn(component as any, 'setService');
+    vi.spyOn(component as any, 'initInputObservable');
 
     component.onInitService();
 
@@ -1974,8 +1977,8 @@ describe('PoComboBaseComponent using Service', () => {
   });
 
   it('should not init service', () => {
-    spyOn(component, 'setService');
-    spyOn(component, 'initInputObservable');
+    vi.spyOn(component as any, 'setService');
+    vi.spyOn(component as any, 'initInputObservable');
 
     component.filterService = undefined;
     component.onInitService();
@@ -1988,7 +1991,7 @@ describe('PoComboBaseComponent using Service', () => {
     const urlService = 'https://po-ui.io/sample/api/new/heros';
     component.setService(urlService);
 
-    spyOn(component, 'getObjectByValue');
+    vi.spyOn(component as any, 'getObjectByValue');
 
     component.writeValue('angular');
 

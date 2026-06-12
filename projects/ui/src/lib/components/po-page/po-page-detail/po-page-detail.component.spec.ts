@@ -72,7 +72,7 @@ describe('PoPageDetailComponent:', () => {
   it('should be execute method of parent.', fakeAsync(() => {
     const poButton = containerFixture.debugElement.nativeElement.querySelector('po-button > button');
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
 
     poButton.click();
     poButton.dispatchEvent(event);
@@ -172,7 +172,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(false);
 
       component.title = undefined;
       component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
@@ -181,7 +181,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return true if has actions', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(true);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(true);
 
       component.breadcrumb = undefined;
       component.title = undefined;
@@ -190,7 +190,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return true if has title', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(false);
 
       component.breadcrumb = undefined;
       component.title = 'Title';
@@ -199,7 +199,7 @@ describe('PoPageDetailComponent:', () => {
     });
 
     it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
-      spyOn(component, 'hasAnyAction').and.returnValue(false);
+      vi.spyOn(component as any, 'hasAnyAction').mockReturnValue(false);
 
       component.breadcrumb = undefined;
       component.title = undefined;
@@ -210,13 +210,13 @@ describe('PoPageDetailComponent:', () => {
 
   describe('Templates:', () => {
     it('should show page header if `hasPageHeader` return true', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(true);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(true);
       fixture.detectChanges();
       expect(debugElement.querySelector('po-page-header')).toBeTruthy();
     });
 
     it('should hide page header if `hasPageHeader` return false', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(false);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(false);
       fixture.detectChanges();
       expect(debugElement.querySelector('po-page-header')).toBeFalsy();
     });

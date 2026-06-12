@@ -117,7 +117,7 @@ describe('PoSlideItemComponent:', () => {
       const eventClick = document.createEvent('MouseEvents');
       eventClick.initEvent('click', false, true);
 
-      spyOn(component, 'action');
+      vi.spyOn(component as any, 'action');
 
       fixture.detectChanges();
 

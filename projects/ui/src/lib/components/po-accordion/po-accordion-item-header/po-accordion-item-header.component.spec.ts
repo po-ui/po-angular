@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from './../../../util-test/util-expect.spec';
-
+import { PoAccordionModule } from '../po-accordion.module';
 import { PoAccordionItemHeaderComponent } from './po-accordion-item-header.component';
 
 describe('PoAccordionItemHeaderComponent:', () => {
@@ -10,13 +9,11 @@ describe('PoAccordionItemHeaderComponent:', () => {
 
   let nativeElement: any;
 
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      declarations: [PoAccordionItemHeaderComponent]
-    });
-  });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoAccordionModule]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PoAccordionItemHeaderComponent);
     component = fixture.componentInstance;
 
@@ -31,7 +28,7 @@ describe('PoAccordionItemHeaderComponent:', () => {
     it('onClick: should toggle `expanded` and call `toggle.emit` with `expanded`', () => {
       const expectedValue = false;
       component.expanded = !expectedValue;
-      spyOn(component.toggle, 'emit');
+      vi.spyOn(component.toggle as any, 'emit');
 
       component.onClick();
 
@@ -41,9 +38,14 @@ describe('PoAccordionItemHeaderComponent:', () => {
 
     it('getTooltip: should return label', () => {
       component.label = 'my Label';
-      spyOnProperty(component.accordionElement.nativeElement, 'offsetWidth').and.returnValue(156);
-
-      spyOnProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth').and.returnValue(100);
+      Object.defineProperty(component.accordionElement.nativeElement, 'offsetWidth', {
+        value: 156,
+        configurable: true
+      });
+      Object.defineProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth', {
+        value: 100,
+        configurable: true
+      });
 
       const tooltip = component.getTooltip();
       expect(tooltip).toBe(component.label);
@@ -51,9 +53,14 @@ describe('PoAccordionItemHeaderComponent:', () => {
 
     it('getTooltip: should not return label', () => {
       component.label = 'my Label';
-      spyOnProperty(component.accordionElement.nativeElement, 'offsetWidth').and.returnValue(200);
-
-      spyOnProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth').and.returnValue(100);
+      Object.defineProperty(component.accordionElement.nativeElement, 'offsetWidth', {
+        value: 200,
+        configurable: true
+      });
+      Object.defineProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth', {
+        value: 100,
+        configurable: true
+      });
 
       const tooltip = component.getTooltip();
       expect(tooltip).toBe(null);
@@ -97,8 +104,8 @@ describe('PoAccordionItemHeaderComponent:', () => {
       component.label = 'Accordion 1';
       fixture.detectChanges();
 
-      const icon = nativeElement.querySelector('po-icon i.an');
-      expect(icon).toBeTruthy();
+      const poIcon = nativeElement.querySelector('po-icon[p-icon="ICON_ARROW_DOWN"]');
+      expect(poIcon).toBeTruthy();
     });
 
     it('should have a icon with class po-accordion-item-header-icon', () => {
@@ -130,7 +137,7 @@ describe('PoAccordionItemHeaderComponent:', () => {
     });
 
     it('should call `onClick` on button click', () => {
-      spyOn(component, 'onClick');
+      vi.spyOn(component as any, 'onClick');
 
       button.click();
 

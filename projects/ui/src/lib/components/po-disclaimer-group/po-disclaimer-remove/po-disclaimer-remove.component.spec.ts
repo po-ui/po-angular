@@ -46,7 +46,7 @@ describe('PoDisclaimerRemoveComponent', () => {
   });
 
   it('should emit removeAllAction', () => {
-    spyOn(component.removeAllAction, 'emit');
+    vi.spyOn(component.removeAllAction as any, 'emit');
     component.removeAction();
     expect(component.removeAllAction.emit).toHaveBeenCalled();
   });

@@ -46,9 +46,9 @@ describe('PoRichTextBodyComponent:', () => {
 
     it('onInit: should call `richTextService.getModel.subscribe`, update the model and add listeners to the anchor elements', fakeAsync(() => {
       const response = 'valor inicial';
-      spyOn(component['richTextService'], 'getModel').and.returnValue(of(response));
-      spyOn(component, <any>'updateValueWithModelValue');
-      spyOn(component, <any>'addClickListenerOnAnchorElements');
+      vi.spyOn(component['richTextService'] as any, 'getModel').mockReturnValue(of(response));
+      vi.spyOn(component as any, 'updateValueWithModelValue');
+      vi.spyOn(component as any, 'addClickListenerOnAnchorElements');
 
       component.ngOnInit();
 
@@ -65,7 +65,7 @@ describe('PoRichTextBodyComponent:', () => {
 
     describe('ngOnChanges:', () => {
       it('should call `checkScrollState` when `loading` changes', fakeAsync(() => {
-        spyOn<any>(component, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.ngOnChanges({
           loading: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false }
@@ -76,7 +76,7 @@ describe('PoRichTextBodyComponent:', () => {
       }));
 
       it('should not call `checkScrollState` when `loading` does not change', fakeAsync(() => {
-        spyOn<any>(component, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.ngOnChanges({});
         tick();
@@ -86,8 +86,8 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('should unsubscribe modelSubscription', () => {
-      component['modelSubscription'] = <any>{ unsubscribe: jasmine.createSpy('unsubscribe') };
-      component['resizeObserver'] = <any>{ disconnect: jasmine.createSpy('disconnect') };
+      component['modelSubscription'] = <any>{ unsubscribe: vi.fn() };
+      component['resizeObserver'] = <any>{ disconnect: vi.fn() };
 
       component.ngOnDestroy();
 
@@ -97,7 +97,7 @@ describe('PoRichTextBodyComponent:', () => {
     it('ngOnDestroy: should not unsubscribe if modelSubscription is falsy.', () => {
       component['modelSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['modelSubscription'] = undefined;
       component.ngOnDestroy();
@@ -106,7 +106,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('ngOnDestroy: should disconnect resizeObserver if it exists', () => {
-      const disconnectSpy = jasmine.createSpy('disconnect');
+      const disconnectSpy = vi.fn();
       component['resizeObserver'] = { disconnect: disconnectSpy } as any;
 
       component.ngOnDestroy();
@@ -122,7 +122,7 @@ describe('PoRichTextBodyComponent:', () => {
 
     describe('executeCommand:', () => {
       it('should call `focus`', () => {
-        const spyFocus = spyOn(component.bodyElement.nativeElement, <any>'focus');
+        const spyFocus = vi.spyOn(component.bodyElement.nativeElement, 'focus');
         const fakeValue = 'p';
 
         component.executeCommand(fakeValue);
@@ -131,7 +131,7 @@ describe('PoRichTextBodyComponent:', () => {
       });
 
       it('should call `execCommand` with string as parameter.', () => {
-        const spyExecCommand = spyOn(document, <any>'execCommand');
+        const spyExecCommand = vi.spyOn(document as any, 'execCommand');
         const fakeValue = 'p';
 
         component.executeCommand(fakeValue);
@@ -142,10 +142,10 @@ describe('PoRichTextBodyComponent:', () => {
       it('should call `execCommand` with object as parameter.', () => {
         const command = 'foreColor';
         const value = '#000000';
-        const spyExecCommand = spyOn(document, <any>'execCommand');
+        const spyExecCommand = vi.spyOn(document as any, 'execCommand');
         const fakeValue = { command, value };
 
-        spyOn(component, <any>'handleCommandLink');
+        vi.spyOn(component as any, 'handleCommandLink');
 
         component.executeCommand(fakeValue);
 
@@ -156,10 +156,10 @@ describe('PoRichTextBodyComponent:', () => {
       it('should call `handleCommandLink` with an object as parameter if command value is `InsertHTML`.', () => {
         const command = 'InsertHTML';
         const value = { urlLink: 'link', urlLinkText: 'link text' };
-        const spyExecCommand = spyOn(document, <any>'execCommand');
+        const spyExecCommand = vi.spyOn(document as any, 'execCommand');
         const fakeValue = { command, value };
 
-        spyOn(component, <any>'handleCommandLink');
+        vi.spyOn(component as any, 'handleCommandLink');
 
         component.executeCommand(fakeValue);
 
@@ -169,7 +169,7 @@ describe('PoRichTextBodyComponent:', () => {
 
       it('should call `updateModel`', () => {
         const fakeValue = 'p';
-        spyOn(component, <any>'updateModel');
+        vi.spyOn(component as any, 'updateModel');
 
         component.executeCommand(fakeValue);
 
@@ -180,7 +180,7 @@ describe('PoRichTextBodyComponent:', () => {
         component.modelValue = 'teste';
         const fakeValue = 'p';
 
-        spyOn(component.value, 'emit');
+        vi.spyOn(component.value as any, 'emit');
         component.executeCommand(fakeValue);
 
         expect(component.value.emit).toHaveBeenCalledWith(component.modelValue);
@@ -208,8 +208,8 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.change, 'emit');
-      spyOn(fakeThis.blur, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
+      vi.spyOn(fakeThis.blur as any, 'emit');
       component.onBlur.call(fakeThis);
       tick(250);
 
@@ -234,8 +234,8 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(fakeThis.blur, 'emit');
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.blur as any, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
 
       component.onBlur.call(fakeThis);
       tick(250);
@@ -245,7 +245,7 @@ describe('PoRichTextBodyComponent:', () => {
     }));
 
     it('focus: should call `focus` of rich-text', () => {
-      spyOn(component.bodyElement.nativeElement, 'focus');
+      vi.spyOn(component.bodyElement.nativeElement, 'focus');
 
       component.focus();
 
@@ -253,7 +253,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('onClick: should call `emitSelectionCommands`', () => {
-      spyOn(component, <any>'emitSelectionCommands');
+      vi.spyOn(component as any, 'emitSelectionCommands');
       component.onClick();
 
       expect(component['emitSelectionCommands']).toHaveBeenCalled();
@@ -274,9 +274,9 @@ describe('PoRichTextBodyComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(component.shortcutCommand, 'emit');
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(component, <any>'toggleCursorOnLink');
+      vi.spyOn(component.shortcutCommand as any, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
 
       component.onKeyDown(fakeEvent);
 
@@ -289,7 +289,7 @@ describe('PoRichTextBodyComponent:', () => {
         ctrlKey: false
       };
 
-      spyOn(component, <any>'toggleCursorOnLink');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
 
       component.onKeyDown(fakeEvent);
 
@@ -303,9 +303,9 @@ describe('PoRichTextBodyComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(component.shortcutCommand, 'emit');
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(component, <any>'toggleCursorOnLink');
+      vi.spyOn(component.shortcutCommand as any, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
 
       component.onKeyDown(fakeEvent);
 
@@ -320,9 +320,9 @@ describe('PoRichTextBodyComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(component.shortcutCommand, 'emit');
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(component, <any>'toggleCursorOnLink');
+      vi.spyOn(component.shortcutCommand as any, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
 
       component.onKeyDown(fakeEvent);
 
@@ -337,9 +337,9 @@ describe('PoRichTextBodyComponent:', () => {
         preventDefault: () => {}
       };
 
-      spyOn(component.shortcutCommand, 'emit');
-      spyOn(fakeEvent, 'preventDefault');
-      spyOn(component, <any>'toggleCursorOnLink');
+      vi.spyOn(component.shortcutCommand as any, 'emit');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
 
       component.onKeyDown(fakeEvent);
 
@@ -355,8 +355,8 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.bodyElement.nativeElement);
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.bodyElement.nativeElement);
 
       component.onKeyDown(fakeEvent);
 
@@ -371,31 +371,33 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
       component.onKeyDown(fakeEvent);
 
       expect(component.keydown.emit).not.toHaveBeenCalled();
     });
 
     it('onKeyUp: should call `toggleCursorOnLink` with `event` and `remove` before `updateModel`', () => {
-      spyOn(component, <any>'toggleCursorOnLink');
-      const updateModelSpy = spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'removeBrElement');
-      spyOn(component, <any>'emitSelectionCommands');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
+      const updateModelSpy = vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'removeBrElement');
+      vi.spyOn(component as any, 'emitSelectionCommands');
 
       const event = { metaKey: true };
 
       component.onKeyUp(event);
 
-      expect(component['toggleCursorOnLink']).toHaveBeenCalledBefore(updateModelSpy);
+      expect(Math.min(...vi.mocked(component['toggleCursorOnLink']).mock.invocationCallOrder)).toBeLessThan(
+        Math.min(...vi.mocked(updateModelSpy).mock.invocationCallOrder)
+      );
     });
 
     it('onKeyUp: should call `removeBrElement` and `emitSelectionCommands`', () => {
-      spyOn(component, <any>'toggleCursorOnLink');
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'removeBrElement');
-      spyOn(component, <any>'emitSelectionCommands');
+      vi.spyOn(component as any, 'toggleCursorOnLink');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'removeBrElement');
+      vi.spyOn(component as any, 'emitSelectionCommands');
 
       const event = { metaKey: true };
 
@@ -406,20 +408,22 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('onPaste: should call `addClickListenerOnAnchorElements` and `update`', fakeAsync(() => {
-      spyOn(component, <any>'addClickListenerOnAnchorElements');
-      spyOn(component, <any>'update');
+      vi.spyOn(component as any, 'addClickListenerOnAnchorElements');
+      vi.spyOn(component as any, 'update');
 
       component.onPaste();
       tick(50);
 
       expect(component['addClickListenerOnAnchorElements']).toHaveBeenCalled();
-      expect(component['update']).toHaveBeenCalledBefore(component['addClickListenerOnAnchorElements']);
+      expect(Math.min(...vi.mocked(component['update']).mock.invocationCallOrder)).toBeLessThan(
+        Math.min(...vi.mocked(component['addClickListenerOnAnchorElements']).mock.invocationCallOrder)
+      );
     }));
 
     it('update: should call `updateModel`', fakeAsync(() => {
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'removeBrElement');
-      spyOn(component, <any>'emitSelectionCommands');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'removeBrElement');
+      vi.spyOn(component as any, 'emitSelectionCommands');
 
       component.update();
       tick(50);
@@ -428,9 +432,9 @@ describe('PoRichTextBodyComponent:', () => {
     }));
 
     it('update: should call `removeBrElement` and `emitSelectionCommands`', fakeAsync(() => {
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'removeBrElement');
-      spyOn(component, <any>'emitSelectionCommands');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'removeBrElement');
+      vi.spyOn(component as any, 'emitSelectionCommands');
 
       component.update();
       tick(50);
@@ -441,7 +445,7 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`addClickListenerOnAnchorElements: should call 'addEventListener' with 'click' and 'onAnchorClick'
       based on the amount of anchor elements`, () => {
-      const spyListener = jasmine.createSpy('addEventListener');
+      const spyListener = vi.fn();
 
       const anchors = [
         { parentNode: `<a>link1</a>`, addEventListener: spyListener },
@@ -449,7 +453,7 @@ describe('PoRichTextBodyComponent:', () => {
         { parentNode: `<a>link3</a>`, addEventListener: spyListener }
       ];
 
-      spyOn(component.bodyElement.nativeElement, 'querySelectorAll').and.returnValue(<any>anchors);
+      vi.spyOn(component.bodyElement.nativeElement, 'querySelectorAll').mockReturnValue(<any>anchors);
 
       component['addClickListenerOnAnchorElements']();
 
@@ -458,7 +462,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('emitSelectionCommands: should call `commands.emit`', () => {
-      spyOn(component.commands, 'emit');
+      vi.spyOn(component.commands as any, 'emit');
 
       component['emitSelectionCommands']();
 
@@ -466,7 +470,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('emitSelectionCommands: should call `isCursorPositionedInALink`', () => {
-      spyOn(component, <any>'isCursorPositionedInALink');
+      vi.spyOn(component as any, 'isCursorPositionedInALink');
 
       component['emitSelectionCommands']();
 
@@ -474,7 +478,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('emitSelectionCommands: should call `selectedLink.emit`', () => {
-      spyOn(component.selectedLink, 'emit');
+      vi.spyOn(component.selectedLink as any, 'emit');
 
       component['emitSelectionCommands']();
 
@@ -483,11 +487,11 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`emitSelectionCommands: the object property 'commands'
     should contain 'Createlink' if 'isCursorPositionedInALink' returns 'true'`, () => {
-      spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
-      spyOn(document, 'queryCommandState').and.returnValue(false);
-      spyOn(document, 'queryCommandValue').and.returnValue('rgb');
-      spyOn(component, <any>'rgbToHex').and.returnValue('hex');
-      spyOn(component.commands, 'emit');
+      vi.spyOn(component as any, 'isCursorPositionedInALink').mockReturnValue(true);
+      vi.spyOn(document as any, 'queryCommandState').mockReturnValue(false);
+      vi.spyOn(document as any, 'queryCommandValue').mockReturnValue('rgb');
+      vi.spyOn(component as any, 'rgbToHex').mockReturnValue('hex');
+      vi.spyOn(component.commands as any, 'emit');
 
       component['emitSelectionCommands']();
 
@@ -496,12 +500,12 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`emitSelectionCommands: the object property 'commands'
     should contain 'Createlink' if 'isCursorPositionedInALink' returns 'true'`, () => {
-      spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
-      spyOn(document, 'queryCommandState').and.returnValue(false);
-      spyOn(document, 'queryCommandValue').and.returnValue('rgb');
-      spyOn(component, <any>'rgbToHex').and.returnValue('hex');
-      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
-      spyOn(component.commands, 'emit');
+      vi.spyOn(component as any, 'isCursorPositionedInALink').mockReturnValue(true);
+      vi.spyOn(document as any, 'queryCommandState').mockReturnValue(false);
+      vi.spyOn(document as any, 'queryCommandValue').mockReturnValue('rgb');
+      vi.spyOn(component as any, 'rgbToHex').mockReturnValue('hex');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(component.commands as any, 'emit');
 
       component['emitSelectionCommands']();
 
@@ -509,11 +513,11 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it(`emitSelectionCommands: should call 'commands.emit' with 'hexColor' undefined if browser is IE`, () => {
-      spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
-      spyOn(document, 'queryCommandState').and.returnValue(false);
-      spyOn(document, 'queryCommandValue').and.returnValue('rgb');
-      spyOn(UtilsFunction, 'isIE').and.returnValue(true);
-      spyOn(component.commands, 'emit');
+      vi.spyOn(component as any, 'isCursorPositionedInALink').mockReturnValue(true);
+      vi.spyOn(document as any, 'queryCommandState').mockReturnValue(false);
+      vi.spyOn(document as any, 'queryCommandValue').mockReturnValue('rgb');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(true);
+      vi.spyOn(component.commands as any, 'emit');
 
       component['emitSelectionCommands']();
 
@@ -522,11 +526,11 @@ describe('PoRichTextBodyComponent:', () => {
 
     it(`emitSelectionCommands: the object property 'commands'
     shouldn't contain 'Createlink' if 'isCursorPositionedInALink' returns 'false'`, () => {
-      spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(false);
-      spyOn(document, 'queryCommandState').and.returnValue(false);
-      spyOn(document, 'queryCommandValue').and.returnValue('rgb');
-      spyOn(component, <any>'rgbToHex').and.returnValue('hex');
-      spyOn(component.commands, 'emit');
+      vi.spyOn(component as any, 'isCursorPositionedInALink').mockReturnValue(false);
+      vi.spyOn(document as any, 'queryCommandState').mockReturnValue(false);
+      vi.spyOn(document as any, 'queryCommandValue').mockReturnValue('rgb');
+      vi.spyOn(component as any, 'rgbToHex').mockReturnValue('hex');
+      vi.spyOn(component.commands as any, 'emit');
 
       component['emitSelectionCommands']();
 
@@ -540,9 +544,9 @@ describe('PoRichTextBodyComponent:', () => {
         urlLinkText: 'url link text'
       };
 
-      spyOn(UtilsFunction, 'isIE').and.returnValue(true);
-      spyOn(component, <any>'insertHtmlLinkElement');
-      spyOn(document, <any>'execCommand');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(true);
+      vi.spyOn(component as any, 'insertHtmlLinkElement');
+      vi.spyOn(document as any, 'execCommand');
 
       component['handleCommandLink'](fakeValue.command, fakeValue.urlLink, fakeValue.urlLinkText);
 
@@ -558,10 +562,10 @@ describe('PoRichTextBodyComponent:', () => {
         urlLinkText: 'url link text'
       };
 
-      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
-      spyOn(component, <any>'insertHtmlLinkElement');
-      spyOn(document, <any>'execCommand');
-      spyOn(component, <any>'makeLinkTag');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(component as any, 'insertHtmlLinkElement');
+      vi.spyOn(document as any, 'execCommand');
+      vi.spyOn(component as any, 'makeLinkTag');
 
       component['handleCommandLink'](fakeValue.command, fakeValue.urlLink, fakeValue.urlLinkText);
 
@@ -579,9 +583,9 @@ describe('PoRichTextBodyComponent:', () => {
         urlLinkText: 'url link text'
       };
 
-      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
-      spyOn(component, <any>'insertHtmlLinkElement');
-      spyOn(document, <any>'execCommand');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(component as any, 'insertHtmlLinkElement');
+      vi.spyOn(document as any, 'execCommand');
 
       component['handleCommandLink'](fakeValue.command, fakeValue.urlLink, fakeValue.urlLinkText);
 
@@ -597,8 +601,8 @@ describe('PoRichTextBodyComponent:', () => {
         urlLinkText: undefined
       };
 
-      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
-      spyOn(document, <any>'execCommand');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(document as any, 'execCommand');
 
       component['handleCommandLink'](fakeValue.command, fakeValue.urlLink, fakeValue.urlLinkText);
 
@@ -613,9 +617,9 @@ describe('PoRichTextBodyComponent:', () => {
         urlLinkText: undefined
       };
 
-      spyOn(UtilsFunction, 'isIE').and.returnValue(false);
-      spyOn(UtilsFunction, 'isFirefox').and.returnValue(true);
-      spyOn(document, <any>'execCommand');
+      vi.spyOn(UtilsFunction as any, 'isIE').mockReturnValue(false);
+      vi.spyOn(UtilsFunction as any, 'isFirefox').mockReturnValue(true);
+      vi.spyOn(document as any, 'execCommand');
 
       component['handleCommandLink'](fakeValue.command, fakeValue.urlLink, fakeValue.urlLinkText);
 
@@ -623,7 +627,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('handleCommandLink: should call `addClickListenerOnAnchorElements`', () => {
-      spyOn(component, <any>'addClickListenerOnAnchorElements');
+      vi.spyOn(component as any, 'addClickListenerOnAnchorElements');
 
       component['handleCommandLink']('CreateLink', 'link text', 'link url');
 
@@ -644,7 +648,7 @@ describe('PoRichTextBodyComponent:', () => {
     });
 
     it('getTextSelection: should call `document.getSelection`', () => {
-      spyOn(document, <any>'getSelection');
+      vi.spyOn(document as any, 'getSelection');
 
       component['getTextSelection']();
 
@@ -655,7 +659,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeSelection = { anchorNode: { parentNode: { nodeName: 'A' } } };
       const expectedReturn = { node: { nodeName: 'A' }, tagName: 'A' };
 
-      spyOn(document, <any>'getSelection').and.returnValue(<any>fakeSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
 
       const expectedValue = component['getTextSelection']();
 
@@ -666,7 +670,7 @@ describe('PoRichTextBodyComponent:', () => {
       const fakeSelection = {};
       const expectedReturn = undefined;
 
-      spyOn(document, <any>'getSelection').and.returnValue(<any>fakeSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
 
       const expectedValue = component['getTextSelection']();
 
@@ -676,7 +680,7 @@ describe('PoRichTextBodyComponent:', () => {
     it('isCursorPositionedInALink: should return true if `focusNode.parentElement` is a link', () => {
       const fakeSelection = { node: { nodeName: 'A' }, tagName: 'A' };
 
-      spyOn(component, <any>'getTextSelection').and.returnValue(<any>fakeSelection);
+      vi.spyOn(component as any, 'getTextSelection').mockReturnValue(<any>fakeSelection);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -686,7 +690,7 @@ describe('PoRichTextBodyComponent:', () => {
     it('isCursorPositionedInALink: should return true if `anchorNode.parentNode` is a link', () => {
       const fakeSelection = { anchorNode: { parentNode: { nodeName: 'A' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -696,9 +700,9 @@ describe('PoRichTextBodyComponent:', () => {
     it(`isCursorPositionedInALink: should return true if browser is firefox and 'verifyCursorPositionInFirefoxIEEdge' return true`, () => {
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
-      spyOn(UtilsFunction, 'isFirefox').and.returnValue(true);
-      spyOn(component, <any>'verifyCursorPositionInFirefoxIEEdge').and.returnValue(true);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
+      vi.spyOn(UtilsFunction as any, 'isFirefox').mockReturnValue(true);
+      vi.spyOn(component as any, 'verifyCursorPositionInFirefoxIEEdge').mockReturnValue(true);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -708,9 +712,9 @@ describe('PoRichTextBodyComponent:', () => {
     it(`isCursorPositionedInALink: should return true if browser is IE and 'verifyCursorPositionInFirefoxIEEdge' return true`, () => {
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
-      spyOn(UtilsFunction, 'isIEOrEdge').and.returnValue(true);
-      spyOn(component, <any>'verifyCursorPositionInFirefoxIEEdge').and.returnValue(true);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
+      vi.spyOn(UtilsFunction as any, 'isIEOrEdge').mockReturnValue(true);
+      vi.spyOn(component as any, 'verifyCursorPositionInFirefoxIEEdge').mockReturnValue(true);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -720,10 +724,10 @@ describe('PoRichTextBodyComponent:', () => {
     it(`isCursorPositionedInALink: should return true if not tag A, firefox and IE, but 'isParentNodeAnchor' return true`, () => {
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
-      spyOn(UtilsFunction, 'isIEOrEdge').and.returnValue(false);
-      spyOn(UtilsFunction, 'isFirefox').and.returnValue(false);
-      spyOn(component, <any>'isParentNodeAnchor').and.returnValue(true);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
+      vi.spyOn(UtilsFunction as any, 'isIEOrEdge').mockReturnValue(false);
+      vi.spyOn(UtilsFunction as any, 'isFirefox').mockReturnValue(false);
+      vi.spyOn(component as any, 'isParentNodeAnchor').mockReturnValue(true);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -733,10 +737,10 @@ describe('PoRichTextBodyComponent:', () => {
     it(`isCursorPositionedInALink: should return false if not tag A, firefox, IE  and 'isParentNodeAnchor' return false`, () => {
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
-      spyOn(UtilsFunction, 'isIEOrEdge').and.returnValue(false);
-      spyOn(UtilsFunction, 'isFirefox').and.returnValue(false);
-      spyOn(component, <any>'isParentNodeAnchor').and.returnValue(false);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
+      vi.spyOn(UtilsFunction as any, 'isIEOrEdge').mockReturnValue(false);
+      vi.spyOn(UtilsFunction as any, 'isFirefox').mockReturnValue(false);
+      vi.spyOn(component as any, 'isParentNodeAnchor').mockReturnValue(false);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -747,9 +751,9 @@ describe('PoRichTextBodyComponent:', () => {
       return false`, () => {
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
-      spyOn(UtilsFunction, 'isFirefox').and.returnValue(true);
-      spyOn(component, <any>'verifyCursorPositionInFirefoxIEEdge').and.returnValue(false);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
+      vi.spyOn(UtilsFunction as any, 'isFirefox').mockReturnValue(true);
+      vi.spyOn(component as any, 'verifyCursorPositionInFirefoxIEEdge').mockReturnValue(false);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -760,9 +764,9 @@ describe('PoRichTextBodyComponent:', () => {
       return false`, () => {
       const fakeSelection = { focusNode: { parentElement: { tagName: 'B' } } };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>fakeSelection);
-      spyOn(UtilsFunction, 'isIEOrEdge').and.returnValue(true);
-      spyOn(component, <any>'verifyCursorPositionInFirefoxIEEdge').and.returnValue(false);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>fakeSelection);
+      vi.spyOn(UtilsFunction as any, 'isIEOrEdge').mockReturnValue(true);
+      vi.spyOn(component as any, 'verifyCursorPositionInFirefoxIEEdge').mockReturnValue(false);
 
       const expectedValue = component['isCursorPositionedInALink']();
 
@@ -835,7 +839,7 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(UtilsFunction, 'openExternalLink');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
 
       component['onAnchorClick'](event);
 
@@ -853,8 +857,8 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(UtilsFunction, 'openExternalLink');
-      spyOn(event.target.classList, 'remove');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
+      vi.spyOn(event.target.classList, 'remove');
 
       component['onAnchorClick'](event);
 
@@ -872,7 +876,7 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(UtilsFunction, 'openExternalLink');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
 
       component['onAnchorClick'](event);
 
@@ -889,7 +893,7 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(UtilsFunction, 'openExternalLink');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
 
       component['onAnchorClick'](event);
 
@@ -909,7 +913,7 @@ describe('PoRichTextBodyComponent:', () => {
         }
       };
 
-      spyOn(UtilsFunction, 'openExternalLink');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
 
       component['onAnchorClick'](event);
 
@@ -964,9 +968,9 @@ describe('PoRichTextBodyComponent:', () => {
     it('toggleCursorOnLink: shouldn`t call remove if focusNode is undefined', () => {
       const event = { key: 'Control' };
 
-      const removeSpy = jasmine.createSpy('remove');
+      const removeSpy = vi.fn();
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: undefined
       });
 
@@ -978,10 +982,10 @@ describe('PoRichTextBodyComponent:', () => {
     it('toggleCursorOnLink: should call remove of classList if `action` is remove, `element` is `anchor` and `key` is `Control`', () => {
       const event = { key: 'Control' };
 
-      const removeSpy = jasmine.createSpy('remove');
-      const containsSpy = jasmine.createSpy('contains').and.returnValue(true);
+      const removeSpy = vi.fn();
+      const containsSpy = vi.fn().mockReturnValue(true);
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'A',
@@ -1001,10 +1005,12 @@ describe('PoRichTextBodyComponent:', () => {
     it('toggleCursorOnLink: should call add of classList if `action` is add, `element` is `anchor` and `key` is `Control`', () => {
       const event = { key: 'Control' };
 
-      const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
+      const addSpy = vi.fn();
+      const isCursorPositionedInALinkSpy = vi
+        .spyOn(component as any, 'isCursorPositionedInALink')
+        .mockReturnValue(true);
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'A',
@@ -1024,10 +1030,12 @@ describe('PoRichTextBodyComponent:', () => {
     it('toggleCursorOnLink: should call add of classList if `action` is add, `element` is `anchor` and `key` is `Meta`', () => {
       const event = { key: 'Meta' };
 
-      const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
+      const addSpy = vi.fn();
+      const isCursorPositionedInALinkSpy = vi
+        .spyOn(component as any, 'isCursorPositionedInALink')
+        .mockReturnValue(true);
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'A',
@@ -1047,10 +1055,12 @@ describe('PoRichTextBodyComponent:', () => {
     it('toggleCursorOnLink: should call add of classList if `action` is add, `element` is `anchor` and `key` is `Control`', () => {
       const event = { key: 'Control' };
 
-      const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(true);
+      const addSpy = vi.fn();
+      const isCursorPositionedInALinkSpy = vi
+        .spyOn(component as any, 'isCursorPositionedInALink')
+        .mockReturnValue(true);
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'A',
@@ -1070,12 +1080,14 @@ describe('PoRichTextBodyComponent:', () => {
     it(`toggleCursorOnLink: shouldn't call add and call remove of classList if 'element' not is 'anchor'`, () => {
       const event = { key: 'Control' };
 
-      const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(false);
-      const removeSpy = jasmine.createSpy('remove');
-      const containsSpy = jasmine.createSpy('contains').and.returnValue(true);
+      const addSpy = vi.fn();
+      const isCursorPositionedInALinkSpy = vi
+        .spyOn(component as any, 'isCursorPositionedInALink')
+        .mockReturnValue(false);
+      const removeSpy = vi.fn();
+      const containsSpy = vi.fn().mockReturnValue(true);
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'DIV',
@@ -1098,12 +1110,14 @@ describe('PoRichTextBodyComponent:', () => {
     it(`toggleCursorOnLink: shouldn't call add and call remove of classList if 'isClickable'`, () => {
       const event = { key: 'Control' };
 
-      const addSpy = jasmine.createSpy('add');
-      const isCursorPositionedInALinkSpy = spyOn(component, <any>'isCursorPositionedInALink').and.returnValue(false);
-      const removeSpy = jasmine.createSpy('remove');
-      const containsSpy = jasmine.createSpy('contains').and.returnValue(false);
+      const addSpy = vi.fn();
+      const isCursorPositionedInALinkSpy = vi
+        .spyOn(component as any, 'isCursorPositionedInALink')
+        .mockReturnValue(false);
+      const removeSpy = vi.fn();
+      const containsSpy = vi.fn().mockReturnValue(false);
 
-      spyOn(document, 'getSelection').and.returnValue(<any>{
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>{
         focusNode: {
           parentNode: {
             nodeName: 'DIV',
@@ -1133,7 +1147,7 @@ describe('PoRichTextBodyComponent:', () => {
     it('updateModel: should call `value.emit` with `modelValue`', () => {
       component.modelValue = 'teste';
 
-      spyOn(component.value, 'emit');
+      vi.spyOn(component.value as any, 'emit');
       component['updateModel']();
 
       expect(component.value.emit).toHaveBeenCalledWith(component.modelValue);
@@ -1142,7 +1156,7 @@ describe('PoRichTextBodyComponent:', () => {
     it('updateValueWithModelValue: should call `bodyElement.nativeElement.insertAdjacentHTML`', () => {
       component.modelValue = 'teste';
 
-      spyOn(component.bodyElement.nativeElement, 'insertAdjacentHTML');
+      vi.spyOn(component.bodyElement.nativeElement, 'insertAdjacentHTML');
       component['updateValueWithModelValue']();
 
       expect(component.bodyElement.nativeElement.insertAdjacentHTML).toHaveBeenCalledWith(
@@ -1154,7 +1168,7 @@ describe('PoRichTextBodyComponent:', () => {
     it('updateValueWithModelValue: shouldn`t call `bodyElement.nativeElement.insertAdjacentHTML`', () => {
       component.modelValue = undefined;
 
-      spyOn(component.bodyElement.nativeElement, 'insertAdjacentHTML');
+      vi.spyOn(component.bodyElement.nativeElement, 'insertAdjacentHTML');
       component['updateValueWithModelValue']();
 
       expect(component.bodyElement.nativeElement.insertAdjacentHTML).not.toHaveBeenCalled();
@@ -1166,7 +1180,7 @@ describe('PoRichTextBodyComponent:', () => {
         focusNode: { nodeName: 'A' }
       };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>textSelection);
 
       expect(component['verifyCursorPositionInFirefoxIEEdge']()).toBe(true);
       expect(component['linkElement']).toEqual(element);
@@ -1180,7 +1194,7 @@ describe('PoRichTextBodyComponent:', () => {
         })
       };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>textSelection);
 
       expect(component['verifyCursorPositionInFirefoxIEEdge']()).toBe(true);
       expect(component['linkElement']).toEqual(element);
@@ -1197,7 +1211,7 @@ describe('PoRichTextBodyComponent:', () => {
         })
       };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>textSelection);
 
       expect(component['verifyCursorPositionInFirefoxIEEdge']()).toBe(true);
       expect(component['linkElement']).toEqual(element);
@@ -1214,7 +1228,7 @@ describe('PoRichTextBodyComponent:', () => {
         })
       };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>textSelection);
 
       expect(component['verifyCursorPositionInFirefoxIEEdge']()).toBe(false);
       expect(component['linkElement']).toBe(undefined);
@@ -1231,7 +1245,7 @@ describe('PoRichTextBodyComponent:', () => {
         })
       };
 
-      spyOn(document, 'getSelection').and.returnValue(<any>textSelection);
+      vi.spyOn(document as any, 'getSelection').mockReturnValue(<any>textSelection);
 
       expect(component['verifyCursorPositionInFirefoxIEEdge']()).toBe(false);
       expect(component['linkElement']).toBe(undefined);
@@ -1245,7 +1259,7 @@ describe('PoRichTextBodyComponent:', () => {
 
         component['checkScrollState']();
 
-        expect(component.hasScroll).toBeTrue();
+        expect(component.hasScroll).toBe(true);
       });
 
       it('should set `hasScroll` to false when content does not overflow', () => {
@@ -1255,11 +1269,11 @@ describe('PoRichTextBodyComponent:', () => {
 
         component['checkScrollState']();
 
-        expect(component.hasScroll).toBeFalse();
+        expect(component.hasScroll).toBe(false);
       });
 
       it('should call `cd.markForCheck`', () => {
-        spyOn<any>(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         component['checkScrollState']();
 
@@ -1267,7 +1281,7 @@ describe('PoRichTextBodyComponent:', () => {
       });
 
       it('should not throw if bodyEl is undefined', () => {
-        spyOnProperty<any>(component, 'bodyEl', 'get').and.returnValue(undefined);
+        vi.spyOn(component as any, 'bodyEl', 'get').mockReturnValue(undefined);
 
         expect(() => component['checkScrollState']()).not.toThrow();
       });
@@ -1279,7 +1293,7 @@ describe('PoRichTextBodyComponent:', () => {
 
         component['updateHasValue']();
 
-        expect(component.hasValue).toBeTrue();
+        expect(component.hasValue).toBe(true);
       });
 
       it('should set `hasValue` to false when body is empty', () => {
@@ -1287,13 +1301,13 @@ describe('PoRichTextBodyComponent:', () => {
 
         component['updateHasValue']();
 
-        expect(component.hasValue).toBeFalse();
+        expect(component.hasValue).toBe(false);
       });
     });
 
     describe('onWindowResize:', () => {
       it('should call `checkScrollState`', () => {
-        spyOn<any>(component, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.onWindowResize();
 
@@ -1303,7 +1317,7 @@ describe('PoRichTextBodyComponent:', () => {
 
     describe('initResizeObserver:', () => {
       it('should execute ResizeObserver callback and call `checkScrollState`', () => {
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         let observerCallback: any;
 
@@ -1361,7 +1375,7 @@ describe('PoRichTextBodyComponent:', () => {
       fixture.detectChanges();
 
       const bodyEl = nativeElement.querySelector('.po-rich-text-body');
-      expect(bodyEl.classList.contains('has-loading')).toBeTrue();
+      expect(bodyEl.classList.contains('has-loading')).toBe(true);
     });
 
     it('should not add `has-loading` class when `loading` is false', () => {
@@ -1369,7 +1383,7 @@ describe('PoRichTextBodyComponent:', () => {
       fixture.detectChanges();
 
       const bodyEl = nativeElement.querySelector('.po-rich-text-body');
-      expect(bodyEl.classList.contains('has-loading')).toBeFalse();
+      expect(bodyEl.classList.contains('has-loading')).toBe(false);
     });
 
     it('should add `po-rich-text-disabled` class when `disabled` is true', () => {
@@ -1377,7 +1391,7 @@ describe('PoRichTextBodyComponent:', () => {
       fixture.detectChanges();
 
       const bodyEl = nativeElement.querySelector('.po-rich-text-body');
-      expect(bodyEl.classList.contains('po-rich-text-disabled')).toBeTrue();
+      expect(bodyEl.classList.contains('po-rich-text-disabled')).toBe(true);
     });
 
     it('should render loading icon when `loading` is true', () => {

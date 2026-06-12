@@ -39,7 +39,7 @@ describe('PoTimerComponent:', () => {
     it('should provide NG_VALUE_ACCESSOR using the component instance', () => {
       const valueAccessors = fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
 
-      expect(Array.isArray(valueAccessors)).toBeTrue(); // multi: true
+      expect(Array.isArray(valueAccessors)).toBe(true); // multi: true
       expect(valueAccessors).toContain(component); // useExisting: PoCheckboxComponent
     });
   });
@@ -47,9 +47,9 @@ describe('PoTimerComponent:', () => {
   describe('Methods:', () => {
     describe('ngOnInit:', () => {
       it('should call generateHours, generateMinutes, and generateSeconds', () => {
-        spyOn(component as any, 'generateHours');
-        spyOn(component as any, 'generateMinutes');
-        spyOn(component as any, 'generateSeconds');
+        vi.spyOn(component as any, 'generateHours');
+        vi.spyOn(component as any, 'generateMinutes');
+        vi.spyOn(component as any, 'generateSeconds');
 
         component.ngOnInit();
 
@@ -61,7 +61,7 @@ describe('PoTimerComponent:', () => {
 
     describe('onSelectHour:', () => {
       it('should set selectedHour and emit change', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.selectedMinute = 30;
         component.onSelectHour(10);
         expect(component.selectedHour).toBe(10);
@@ -79,7 +79,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should emit change with correct time value', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.format = PoTimerFormat.Format24;
         component.selectedMinute = 30;
 
@@ -89,7 +89,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should normalize invalid selected minute when selecting hour and emit valid value', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
 
         component.format = PoTimerFormat.Format24;
         component.minuteInterval = 1;
@@ -108,7 +108,7 @@ describe('PoTimerComponent:', () => {
 
     describe('onSelectMinute:', () => {
       it('should set selectedMinute and emit change', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.selectedHour = 10;
         component.onSelectMinute(30);
         expect(component.selectedMinute).toBe(30);
@@ -127,7 +127,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should emit change with correct time value', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.format = PoTimerFormat.Format24;
         component.selectedHour = 14;
 
@@ -152,7 +152,7 @@ describe('PoTimerComponent:', () => {
 
     describe('onSelectSecond:', () => {
       it('should set selectedSecond and emit change', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.showSeconds = true;
         component.selectedHour = 10;
         component.selectedMinute = 30;
@@ -178,7 +178,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should emit change with correct time value including seconds', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.format = PoTimerFormat.Format24;
         component.showSeconds = true;
         component.selectedHour = 14;
@@ -202,7 +202,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should emit change when period is changed', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.format = PoTimerFormat.Format12;
         component.selectedHour = 3;
         component.selectedMinute = 30;
@@ -227,7 +227,7 @@ describe('PoTimerComponent:', () => {
         component.selectedHour = 14;
         component.selectedMinute = 30;
 
-        const initAllColumnOffsetsSpy = spyOn(component, 'initAllColumnOffsets');
+        const initAllColumnOffsetsSpy = vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component.writeValue('14:30');
 
@@ -245,7 +245,7 @@ describe('PoTimerComponent:', () => {
 
     describe('emitChange (private):', () => {
       it('should not emit when buildTimeValue returns empty string', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.selectedHour = null;
         component.selectedMinute = null;
 
@@ -255,7 +255,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should emit when buildTimeValue returns valid value', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.format = PoTimerFormat.Format24;
         component.selectedHour = 10;
         component.selectedMinute = 30;
@@ -269,9 +269,9 @@ describe('PoTimerComponent:', () => {
     describe('onPeriodKeydown:', () => {
       it('should move focus from AM to PM on ArrowDown without selecting', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-        spyOn(event, 'preventDefault');
-        spyOn<any>(component, 'focusButtonAt');
-        spyOn(component, 'onSelectPeriod');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusButtonAt');
+        vi.spyOn(component as any, 'onSelectPeriod');
         component['focusedDisplayIndex'].period = 0;
 
         component.onPeriodKeydown(event);
@@ -284,9 +284,9 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus from PM to AM on ArrowUp without selecting', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
-        spyOn(event, 'preventDefault');
-        spyOn<any>(component, 'focusButtonAt');
-        spyOn(component, 'onSelectPeriod');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusButtonAt');
+        vi.spyOn(component as any, 'onSelectPeriod');
         component['focusedDisplayIndex'].period = 1;
 
         component.onPeriodKeydown(event);
@@ -299,8 +299,8 @@ describe('PoTimerComponent:', () => {
 
       it('should select focused period on Enter', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(event, 'preventDefault');
-        spyOn(component, 'onSelectPeriod');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'onSelectPeriod');
         component['focusedDisplayIndex'].period = 0;
 
         component.onPeriodKeydown(event);
@@ -311,8 +311,8 @@ describe('PoTimerComponent:', () => {
 
       it('should select focused period on Space', () => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
-        spyOn(event, 'preventDefault');
-        spyOn(component, 'onSelectPeriod');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'onSelectPeriod');
         component['focusedDisplayIndex'].period = 1;
 
         component.onPeriodKeydown(event);
@@ -323,7 +323,7 @@ describe('PoTimerComponent:', () => {
 
       it('should do nothing for unhandled key', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onPeriodKeydown(event);
 
@@ -338,11 +338,11 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus to next item without translate when focused item remains visible', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-        spyOn(event, 'preventDefault');
-        spyOn<any>(component, 'getNextEnabledDisplayIndex').and.returnValue(10);
-        spyOn<any>(component, 'shouldTranslateToRevealFocusedItem').and.returnValue(false);
-        const scrollSpy = spyOn<any>(component, 'scrollColumnByStep');
-        const focusSpy = spyOn<any>(component, 'focusButtonAt');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'getNextEnabledDisplayIndex').mockReturnValue(10);
+        vi.spyOn(component as any, 'shouldTranslateToRevealFocusedItem').mockReturnValue(false);
+        const scrollSpy = vi.spyOn(component as any, 'scrollColumnByStep');
+        const focusSpy = vi.spyOn(component as any, 'focusButtonAt');
 
         component['focusedDisplayIndex'].hour = 9;
         component.onCellKeydown(event, 'hour');
@@ -355,12 +355,12 @@ describe('PoTimerComponent:', () => {
 
       it('should translate only when focused item goes out of view', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-        spyOn(event, 'preventDefault');
-        spyOn<any>(component, 'getNextEnabledDisplayIndex').and.returnValue(15);
-        spyOn<any>(component, 'shouldTranslateToRevealFocusedItem').and.returnValue(true);
-        spyOn<any>(component, 'getStepsToRevealFocusedItem').and.returnValue(2);
-        const scrollSpy = spyOn<any>(component, 'scrollColumnByStep');
-        const focusSpy = spyOn<any>(component, 'focusButtonAt');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'getNextEnabledDisplayIndex').mockReturnValue(15);
+        vi.spyOn(component as any, 'shouldTranslateToRevealFocusedItem').mockReturnValue(true);
+        vi.spyOn(component as any, 'getStepsToRevealFocusedItem').mockReturnValue(2);
+        const scrollSpy = vi.spyOn(component as any, 'scrollColumnByStep');
+        const focusSpy = vi.spyOn(component as any, 'focusButtonAt');
 
         component['focusedDisplayIndex'].hour = 14;
         component.onCellKeydown(event, 'hour');
@@ -383,11 +383,11 @@ describe('PoTimerComponent:', () => {
           parentElement: { clientHeight: 200 }
         } as any;
 
-        spyOn(event, 'preventDefault');
-        spyOn<any>(component, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn<any>(component, 'getCellStep').and.returnValue(40);
-        spyOn<any>(component, 'focusButtonAt');
-        const activeSpy = spyOn<any>(component, 'updateActiveDescendant').and.callThrough();
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
+        vi.spyOn(component as any, 'focusButtonAt');
+        const activeSpy = vi.spyOn(component as any, 'updateActiveDescendant');
 
         component['columnOffsets'].second = 0;
         component['focusedDisplayIndex'].second = 5;
@@ -400,8 +400,8 @@ describe('PoTimerComponent:', () => {
 
       it('should select focused item on Enter', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(event, 'preventDefault');
-        spyOn(component, 'onSelectHour');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'onSelectHour');
 
         component['focusedDisplayIndex'].hour = 7;
         component.onCellKeydown(event, 'hour');
@@ -413,8 +413,8 @@ describe('PoTimerComponent:', () => {
       it('should pick next repeated index near viewport when navigating down', () => {
         const mockItemsEl = { style: { transform: '' }, scrollHeight: 0 } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(1);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(1);
 
         component['columnOffsets'].hour = 42;
 
@@ -426,8 +426,8 @@ describe('PoTimerComponent:', () => {
       it('should pick previous repeated index near viewport when navigating up', () => {
         const mockItemsEl = { style: { transform: '' }, scrollHeight: 0 } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(1);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(1);
 
         component['columnOffsets'].hour = 42;
 
@@ -443,8 +443,8 @@ describe('PoTimerComponent:', () => {
           parentElement: { clientHeight: 239 }
         } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
         component['columnOffsets'].minute = 0;
 
@@ -462,8 +462,8 @@ describe('PoTimerComponent:', () => {
           parentElement: { clientHeight: 240 }
         } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
         component['columnOffsets'].minute = 0;
 
@@ -481,8 +481,8 @@ describe('PoTimerComponent:', () => {
           parentElement: { clientHeight: 240 }
         } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
         component['columnOffsets'].hour = 42 * 40;
 
@@ -503,8 +503,8 @@ describe('PoTimerComponent:', () => {
           parentElement: { clientHeight: 240 }
         } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
         component['columnOffsets'].minute = 680;
 
@@ -541,7 +541,7 @@ describe('PoTimerComponent:', () => {
         const fakeButton = document.createElement('button');
         fakeHost.appendChild(fakeButton);
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(fakeButton);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(fakeButton);
 
         component['focusedDisplayIndex'].minute = 25;
 
@@ -551,7 +551,7 @@ describe('PoTimerComponent:', () => {
 
       it('should emit backward boundary tab on Shift+Tab from first visible column', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.boundaryTab, 'emit');
+        vi.spyOn(component.boundaryTab as any, 'emit');
 
         component.onCellKeydown(event, 'hour');
 
@@ -564,7 +564,7 @@ describe('PoTimerComponent:', () => {
 
       it('should emit forward boundary tab on Tab from last visible column in 24h mode', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component.boundaryTab, 'emit');
+        vi.spyOn(component.boundaryTab as any, 'emit');
 
         component.onCellKeydown(event, 'minute');
 
@@ -726,7 +726,7 @@ describe('PoTimerComponent:', () => {
       it('should not rebuild on firstChange', () => {
         component.format = PoTimerFormat.Format24;
         component.ngOnInit();
-        spyOn(component as any, 'buildDisplayArrays');
+        vi.spyOn(component as any, 'buildDisplayArrays');
 
         const changes = {
           format: {
@@ -746,7 +746,7 @@ describe('PoTimerComponent:', () => {
         component.format = PoTimerFormat.Format24;
         component.ngOnInit();
         component['hasViewInitialized'] = true;
-        spyOn(component as any, 'realignColumnsToSelection');
+        vi.spyOn(component as any, 'realignColumnsToSelection');
 
         const changes = {
           minuteInterval: {
@@ -767,7 +767,7 @@ describe('PoTimerComponent:', () => {
         component.format = PoTimerFormat.Format24;
         component.ngOnInit();
         component['hasViewInitialized'] = false;
-        spyOn(component as any, 'realignColumnsToSelection');
+        vi.spyOn(component as any, 'realignColumnsToSelection');
 
         const changes = {
           minuteInterval: {
@@ -787,7 +787,7 @@ describe('PoTimerComponent:', () => {
       it('should call markForCheck when rebuilding display arrays', () => {
         component.format = PoTimerFormat.Format24;
         component.ngOnInit();
-        spyOn(component['changeDetector'], 'markForCheck');
+        vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
         const changes = {
           format: {
@@ -807,7 +807,7 @@ describe('PoTimerComponent:', () => {
 
     describe('ngAfterViewChecked:', () => {
       it('should realign columns when rendered size changes', fakeAsync(() => {
-        spyOn(component as any, 'initAllColumnOffsets');
+        vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component['hasViewInitialized'] = true;
         component['currentRenderedSize'] = 'medium';
@@ -820,7 +820,7 @@ describe('PoTimerComponent:', () => {
       }));
 
       it('should not realign when rendered size is unchanged', fakeAsync(() => {
-        spyOn(component as any, 'initAllColumnOffsets');
+        vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component['hasViewInitialized'] = true;
         component['_size'] = 'medium';
@@ -833,7 +833,7 @@ describe('PoTimerComponent:', () => {
       }));
 
       it('should not sync ARIA when not needed', () => {
-        spyOn<any>(component as any, 'syncAriaToNativeButtons');
+        vi.spyOn(component as any, 'syncAriaToNativeButtons');
 
         component['hasViewInitialized'] = true;
         component['ariaSyncNeeded'] = false;
@@ -844,7 +844,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should sync ARIA when needed', () => {
-        spyOn<any>(component as any, 'syncAriaToNativeButtons');
+        vi.spyOn(component as any, 'syncAriaToNativeButtons');
 
         component['hasViewInitialized'] = true;
         component['ariaSyncNeeded'] = true;
@@ -866,8 +866,8 @@ describe('PoTimerComponent:', () => {
 
         const mockItemsEl = { style: { transform: '' }, scrollHeight: 0 } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(1);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(1);
 
         component['initColumnOffset']('hour');
         component['initColumnOffset']('minute');
@@ -885,8 +885,8 @@ describe('PoTimerComponent:', () => {
 
         const mockItemsEl = { style: { transform: '' }, scrollHeight: 0 } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(1);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(1);
 
         component['initColumnOffset']('hour');
         component['initColumnOffset']('minute');
@@ -906,8 +906,8 @@ describe('PoTimerComponent:', () => {
 
         const mockItemsEl = { style: { transform: '' }, scrollHeight: 0 } as any;
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(1);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(1);
 
         component['initColumnOffset']('second');
 
@@ -916,7 +916,7 @@ describe('PoTimerComponent:', () => {
 
       it('should return early when getItemsElement returns null', () => {
         component.ngOnInit();
-        spyOn(component as any, 'getItemsElement').and.returnValue(null);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(null);
 
         expect(() => component['initColumnOffset']('hour')).not.toThrow();
       });
@@ -925,9 +925,9 @@ describe('PoTimerComponent:', () => {
         component.ngOnInit();
 
         const mockItemsEl = { style: { transform: '' } } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getSourceArray').and.returnValue([]);
-        spyOn(component as any, 'getDisplayArray').and.returnValue([0]);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([]);
+        vi.spyOn(component as any, 'getDisplayArray').mockReturnValue([0]);
 
         expect(() => component['initColumnOffset']('hour')).not.toThrow();
       });
@@ -936,9 +936,9 @@ describe('PoTimerComponent:', () => {
         component.ngOnInit();
 
         const mockItemsEl = { style: { transform: '' } } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getSourceArray').and.returnValue([0]);
-        spyOn(component as any, 'getDisplayArray').and.returnValue([]);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([0]);
+        vi.spyOn(component as any, 'getDisplayArray').mockReturnValue([]);
 
         expect(() => component['initColumnOffset']('hour')).not.toThrow();
       });
@@ -947,9 +947,9 @@ describe('PoTimerComponent:', () => {
         component.ngOnInit();
 
         const mockItemsEl = { style: { transform: '' } } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getSourceArray').and.returnValue([]);
-        spyOn(component as any, 'getDisplayArray').and.returnValue([0]);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([]);
+        vi.spyOn(component as any, 'getDisplayArray').mockReturnValue([0]);
 
         expect(() => component['initColumnOffset']('hour')).not.toThrow();
       });
@@ -1142,8 +1142,8 @@ describe('PoTimerComponent:', () => {
         parentElement: { clientHeight: 240 }
       } as any;
 
-      spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-      spyOn(component as any, 'getCellStep').and.returnValue(40);
+      vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+      vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
       const sectionHeight = 24 * 40;
       component['columnOffsets'].hour = sectionHeight;
@@ -1166,8 +1166,8 @@ describe('PoTimerComponent:', () => {
         parentElement: { clientHeight: 240 }
       } as any;
 
-      spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-      spyOn(component as any, 'getCellStep').and.returnValue(40);
+      vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+      vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
       const sectionHeight = 24 * 40;
       component['columnOffsets'].hour = 2 * sectionHeight - 40;
@@ -1189,8 +1189,8 @@ describe('PoTimerComponent:', () => {
         parentElement: { clientHeight: 240 }
       } as any;
 
-      spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-      spyOn(component as any, 'getCellStep').and.returnValue(40);
+      vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+      vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
       const sectionHeight = 24 * 40;
       component['columnOffsets'].hour = sectionHeight;
@@ -1218,8 +1218,8 @@ describe('PoTimerComponent:', () => {
       fixture.detectChanges();
 
       const mockItemsEl = { style: { transform: '' }, scrollHeight: 160, parentElement: { clientHeight: 160 } } as any;
-      spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-      spyOn(component as any, 'getCellStep').and.returnValue(40);
+      vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+      vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
       component['initColumnOffset']('minute');
 
@@ -1233,8 +1233,8 @@ describe('PoTimerComponent:', () => {
       fixture.detectChanges();
 
       const mockItemsEl = { style: { transform: '' }, scrollHeight: 160, parentElement: { clientHeight: 160 } } as any;
-      spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-      spyOn(component as any, 'getCellStep').and.returnValue(40);
+      vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+      vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
       component['focusedDisplayIndex'].minute = 0;
       component['scrollColumnByStep']('minute', 1);
@@ -1250,8 +1250,8 @@ describe('PoTimerComponent:', () => {
         fixture.detectChanges();
 
         const event = new WheelEvent('wheel', { deltaY: 100 });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'scrollColumnByStep');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'scrollColumnByStep');
 
         component.onColumnWheel(event, 'hour');
         tick(50);
@@ -1265,8 +1265,8 @@ describe('PoTimerComponent:', () => {
 
         const event1 = new WheelEvent('wheel', { deltaY: 100 });
         const event2 = new WheelEvent('wheel', { deltaY: 100 });
-        spyOn(event1, 'preventDefault');
-        spyOn(event2, 'preventDefault');
+        vi.spyOn(event1 as any, 'preventDefault');
+        vi.spyOn(event2 as any, 'preventDefault');
 
         component.onColumnWheel(event1, 'hour');
         component.onColumnWheel(event2, 'hour');
@@ -1292,7 +1292,7 @@ describe('PoTimerComponent:', () => {
       it('should focus active button of the first visible column', () => {
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.focusFirstVisibleCell();
 
@@ -1305,7 +1305,7 @@ describe('PoTimerComponent:', () => {
         component.format = PoTimerFormat.Format24;
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.focusLastVisibleCell();
 
@@ -1316,7 +1316,7 @@ describe('PoTimerComponent:', () => {
         component.format = PoTimerFormat.Format12;
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.focusLastVisibleCell();
 
@@ -1328,7 +1328,7 @@ describe('PoTimerComponent:', () => {
         component.showSeconds = true;
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.focusLastVisibleCell();
 
@@ -1338,7 +1338,7 @@ describe('PoTimerComponent:', () => {
 
     describe('ngOnDestroy:', () => {
       it('should cancel wheelRafId when set', () => {
-        spyOn(window, 'cancelAnimationFrame');
+        vi.spyOn(window as any, 'cancelAnimationFrame');
         component['wheelRafId'] = 42;
 
         component.ngOnDestroy();
@@ -1347,7 +1347,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should not cancel when wheelRafId is null', () => {
-        spyOn(window, 'cancelAnimationFrame');
+        vi.spyOn(window as any, 'cancelAnimationFrame');
         component['wheelRafId'] = null;
 
         component.ngOnDestroy();
@@ -1359,18 +1359,18 @@ describe('PoTimerComponent:', () => {
     describe('ngAfterViewInit:', () => {
       it('should set hasViewInitialized to true', () => {
         component['hasViewInitialized'] = false;
-        spyOn(component, 'initAllColumnOffsets');
+        vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component.ngAfterViewInit();
 
-        expect(component['hasViewInitialized']).toBeTrue();
+        expect(component['hasViewInitialized']).toBe(true);
       });
     });
 
     describe('ngAfterViewChecked:', () => {
       it('should not do anything when not initialized', () => {
         component['hasViewInitialized'] = false;
-        spyOn(component as any, 'initAllColumnOffsets');
+        vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component.ngAfterViewChecked();
 
@@ -1493,29 +1493,29 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should delegate to isHourDisabled for hour type', () => {
-        expect(component['isValueDisabledByType']('hour', 5)).toBeTrue();
-        expect(component['isValueDisabledByType']('hour', 10)).toBeFalse();
+        expect(component['isValueDisabledByType']('hour', 5)).toBe(true);
+        expect(component['isValueDisabledByType']('hour', 10)).toBe(false);
       });
 
       it('should return false for minute when no hour selected', () => {
         component.selectedHour = null;
-        expect(component['isValueDisabledByType']('minute', 30)).toBeFalse();
+        expect(component['isValueDisabledByType']('minute', 30)).toBe(false);
       });
 
       it('should delegate to isMinuteDisabled for minute when hour selected', () => {
         component.selectedHour = 8;
         component['rebuildDisabledCaches']();
-        expect(component['isValueDisabledByType']('minute', 30)).toBeFalse();
+        expect(component['isValueDisabledByType']('minute', 30)).toBe(false);
       });
 
       it('should return false for second when no hour or minute selected', () => {
         component.selectedHour = null;
         component.selectedMinute = null;
-        expect(component['isValueDisabledByType']('second', 30)).toBeFalse();
+        expect(component['isValueDisabledByType']('second', 30)).toBe(false);
       });
 
       it('should return false for unknown type', () => {
-        expect(component['isValueDisabledByType']('unknown' as any, 0)).toBeFalse();
+        expect(component['isValueDisabledByType']('unknown' as any, 0)).toBe(false);
       });
     });
 
@@ -1527,18 +1527,18 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should check hour disabled state', () => {
-        expect(component['isDisplayIndexDisabled']('hour', 5, component.displayHours)).toBeTrue();
+        expect(component['isDisplayIndexDisabled']('hour', 5, component.displayHours)).toBe(true);
       });
 
       it('should check minute disabled state', () => {
         component.selectedHour = 7;
         component['rebuildDisabledCaches']();
 
-        expect(component['isDisplayIndexDisabled']('minute', 0, component.displayMinutes)).toBeTrue();
+        expect(component['isDisplayIndexDisabled']('minute', 0, component.displayMinutes)).toBe(true);
       });
 
       it('should return false for default type', () => {
-        expect(component['isDisplayIndexDisabled']('unknown' as any, 0, [0])).toBeFalse();
+        expect(component['isDisplayIndexDisabled']('unknown' as any, 0, [0])).toBe(false);
       });
     });
 
@@ -1640,7 +1640,7 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should call onSelectMinute for minute type', () => {
-        spyOn(component, 'onSelectMinute');
+        vi.spyOn(component as any, 'onSelectMinute');
         component['focusedDisplayIndex'].minute = 0;
         component['selectFocusedItem']('minute');
         expect(component.onSelectMinute).toHaveBeenCalled();
@@ -1652,7 +1652,7 @@ describe('PoTimerComponent:', () => {
         component.ngOnInit();
         fixture.detectChanges();
 
-        spyOn(component, 'onSelectSecond');
+        vi.spyOn(component as any, 'onSelectSecond');
         component['focusedDisplayIndex'].second = 0;
         component['selectFocusedItem']('second');
         expect(component.onSelectSecond).toHaveBeenCalled();
@@ -1660,7 +1660,7 @@ describe('PoTimerComponent:', () => {
 
       it('should not call any selection for empty display array', () => {
         component.displayHours = [];
-        spyOn(component, 'onSelectHour');
+        vi.spyOn(component as any, 'onSelectHour');
         component['selectFocusedItem']('hour');
         expect(component.onSelectHour).not.toHaveBeenCalled();
       });
@@ -1669,7 +1669,7 @@ describe('PoTimerComponent:', () => {
         component.minTime = '08:00';
         component['rebuildDisabledCaches']();
 
-        spyOn(component, 'onSelectHour');
+        vi.spyOn(component as any, 'onSelectHour');
         component['focusedDisplayIndex'].hour = 3;
         component['selectFocusedItem']('hour');
         expect(component.onSelectHour).not.toHaveBeenCalled();
@@ -1679,8 +1679,8 @@ describe('PoTimerComponent:', () => {
     describe('ngOnChanges - minTime/maxTime changes:', () => {
       it('should rebuild disabled caches when minTime changes', () => {
         component.ngOnInit();
-        spyOn(component as any, 'rebuildDisabledCaches');
-        spyOn(component['changeDetector'], 'markForCheck');
+        vi.spyOn(component as any, 'rebuildDisabledCaches');
+        vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
         const changes = {
           minTime: {
@@ -1699,8 +1699,8 @@ describe('PoTimerComponent:', () => {
 
       it('should rebuild disabled caches when maxTime changes', () => {
         component.ngOnInit();
-        spyOn(component as any, 'rebuildDisabledCaches');
-        spyOn(component['changeDetector'], 'markForCheck');
+        vi.spyOn(component as any, 'rebuildDisabledCaches');
+        vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
         const changes = {
           maxTime: {
@@ -1763,8 +1763,8 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus from hour to minute on Tab', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.onCellKeydown(event, 'hour');
 
@@ -1774,8 +1774,8 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus from minute to second on Tab', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.onCellKeydown(event, 'minute');
 
@@ -1785,8 +1785,8 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus from second to minute on Shift+Tab', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.onCellKeydown(event, 'second');
 
@@ -1796,8 +1796,8 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus from minute to hour on Shift+Tab', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.onCellKeydown(event, 'minute');
 
@@ -1815,7 +1815,7 @@ describe('PoTimerComponent:', () => {
 
       it('should emit forward boundary on Tab from period', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component.boundaryTab, 'emit');
+        vi.spyOn(component.boundaryTab as any, 'emit');
 
         component.onPeriodKeydown(event);
 
@@ -1828,8 +1828,8 @@ describe('PoTimerComponent:', () => {
 
       it('should move focus to minute on Shift+Tab from period', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'focusActiveButton');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'focusActiveButton');
 
         component.onPeriodKeydown(event);
 
@@ -1844,8 +1844,8 @@ describe('PoTimerComponent:', () => {
         fixture.detectChanges();
 
         const event = new KeyboardEvent('keydown', { key: ' ' });
-        spyOn(event, 'preventDefault');
-        spyOn(component, 'onSelectMinute');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'onSelectMinute');
 
         component['focusedDisplayIndex'].minute = 0;
         component.onCellKeydown(event, 'minute');
@@ -1859,7 +1859,7 @@ describe('PoTimerComponent:', () => {
       it('should not prevent default for unhandled keys', () => {
         component.ngOnInit();
         const event = new KeyboardEvent('keydown', { key: 'a' });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onCellKeydown(event, 'hour');
 
@@ -1978,8 +1978,8 @@ describe('PoTimerComponent:', () => {
         component.selectedHour = 8;
         component['rebuildDisabledCaches']();
 
-        expect(component.disabledMinuteCache.has(15)).toBeTrue();
-        expect(component.disabledMinuteCache.has(30)).toBeFalse();
+        expect(component.disabledMinuteCache.has(15)).toBe(true);
+        expect(component.disabledMinuteCache.has(30)).toBe(false);
       });
     });
 
@@ -2032,7 +2032,7 @@ describe('PoTimerComponent:', () => {
     describe('scrollColumnByStep with empty arrays:', () => {
       it('should return early when getItemsElement returns null', () => {
         component.ngOnInit();
-        spyOn(component as any, 'getItemsElement').and.returnValue(null);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(null);
 
         expect(() => component['scrollColumnByStep']('hour', 1)).not.toThrow();
       });
@@ -2043,7 +2043,7 @@ describe('PoTimerComponent:', () => {
         component.displaySeconds = [];
 
         const mockItemsEl = { style: { transform: '' } } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
 
         expect(() => component['scrollColumnByStep']('second', 1)).not.toThrow();
       });
@@ -2054,21 +2054,21 @@ describe('PoTimerComponent:', () => {
         component.minuteInterval = 15;
         component.ngOnInit();
 
-        expect(component['shouldTranslateToRevealFocusedItem']('minute', 0)).toBeFalse();
+        expect(component['shouldTranslateToRevealFocusedItem']('minute', 0)).toBe(false);
       });
 
       it('should return false when getItemsElement is null', () => {
         component.ngOnInit();
-        spyOn(component as any, 'getItemsElement').and.returnValue(null);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(null);
 
-        expect(component['shouldTranslateToRevealFocusedItem']('hour', 0)).toBeFalse();
+        expect(component['shouldTranslateToRevealFocusedItem']('hour', 0)).toBe(false);
       });
     });
 
     describe('getStepsToRevealFocusedItem edge cases:', () => {
       it('should return 0 when getItemsElement is null', () => {
         component.ngOnInit();
-        spyOn(component as any, 'getItemsElement').and.returnValue(null);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(null);
 
         expect(component['getStepsToRevealFocusedItem']('hour', 0, 1)).toBe(0);
       });
@@ -2076,8 +2076,8 @@ describe('PoTimerComponent:', () => {
       it('should return 0 when step is 0', () => {
         component.ngOnInit();
         const mockItemsEl = { style: { transform: '' }, scrollHeight: 0, parentElement: { clientHeight: 240 } } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(0);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(0);
 
         expect(component['getStepsToRevealFocusedItem']('hour', 0, 1)).toBe(0);
       });
@@ -2089,8 +2089,8 @@ describe('PoTimerComponent:', () => {
           scrollHeight: 2880,
           parentElement: { clientHeight: 240 }
         } as any;
-        spyOn(component as any, 'getItemsElement').and.returnValue(mockItemsEl);
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(mockItemsEl);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
 
         component['columnOffsets'].hour = 400;
 
@@ -2119,8 +2119,8 @@ describe('PoTimerComponent:', () => {
       it('should call initColumnOffset for hour, minute, second', () => {
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'initColumnOffset');
-        spyOn(component as any, 'refreshRovingTabIndex');
+        vi.spyOn(component as any, 'initColumnOffset');
+        vi.spyOn(component as any, 'refreshRovingTabIndex');
 
         component.initAllColumnOffsets();
 
@@ -2249,7 +2249,7 @@ describe('PoTimerComponent:', () => {
     describe('onCellKeydown - ArrowUp branch:', () => {
       it('should call moveFocusByStep with -1 on ArrowUp', () => {
         component.ngOnInit();
-        spyOn(component as any, 'moveFocusByStep');
+        vi.spyOn(component as any, 'moveFocusByStep');
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
 
         component.onCellKeydown(event, 'hour');
@@ -2272,10 +2272,10 @@ describe('PoTimerComponent:', () => {
       it('should pass direction -1 when deltaY < 0', fakeAsync(() => {
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'scrollColumnByStep');
+        vi.spyOn(component as any, 'scrollColumnByStep');
 
         const event = new WheelEvent('wheel', { deltaY: -100 });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onColumnWheel(event, 'hour');
         tick(50);
@@ -2359,7 +2359,7 @@ describe('PoTimerComponent:', () => {
         component.secondInterval = 1;
         component.ngOnInit();
         component['buildDisplayArrays']();
-        spyOn(component, 'onSelectSecond');
+        vi.spyOn(component as any, 'onSelectSecond');
         component['focusedDisplayIndex']['second'] = 0;
 
         component['selectFocusedItem']('second');
@@ -2463,7 +2463,7 @@ describe('PoTimerComponent:', () => {
       it('should call initAllColumnOffsets via double rAF', fakeAsync(() => {
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component, 'initAllColumnOffsets');
+        vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component['realignColumnsToSelection']();
         tick(100);
@@ -2604,10 +2604,10 @@ describe('PoTimerComponent:', () => {
 
         const disabledButton = document.createElement('button');
         disabledButton.disabled = true;
-        spyOn(disabledButton, 'focus');
+        vi.spyOn(disabledButton as any, 'focus');
 
         const enabledButton = document.createElement('button');
-        spyOn(enabledButton, 'focus');
+        vi.spyOn(enabledButton as any, 'focus');
 
         const disabledHostEl = document.createElement('div');
         disabledHostEl.setAttribute('data-aria-role', 'option');
@@ -2625,9 +2625,9 @@ describe('PoTimerComponent:', () => {
           period: []
         } as any;
 
-        spyOn(component as any, 'getSourceArray').and.returnValue([0, 1]);
-        spyOn(component as any, 'syncAriaToNativeButtons');
-        spyOn(component as any, 'refreshRovingTabIndex');
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([0, 1]);
+        vi.spyOn(component as any, 'syncAriaToNativeButtons');
+        vi.spyOn(component as any, 'refreshRovingTabIndex');
 
         expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
 
@@ -2646,7 +2646,7 @@ describe('PoTimerComponent:', () => {
         hostEl.setAttribute('data-aria-selected', 'true');
 
         const nativeButton = document.createElement('button');
-        spyOn(nativeButton, 'focus');
+        vi.spyOn(nativeButton as any, 'focus');
 
         (component as any).cachedCellPairs = {
           hour: [{ hostEl, nativeButton }],
@@ -2654,9 +2654,9 @@ describe('PoTimerComponent:', () => {
           second: [],
           period: []
         } as any;
-        spyOn(component as any, 'getSourceArray').and.returnValue([0]);
-        spyOn(component as any, 'syncAriaToNativeButtons');
-        spyOn(component as any, 'refreshRovingTabIndex');
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([0]);
+        vi.spyOn(component as any, 'syncAriaToNativeButtons');
+        vi.spyOn(component as any, 'refreshRovingTabIndex');
 
         expect(() => component['focusButtonAt']('hour', 0)).not.toThrow();
 
@@ -2688,9 +2688,9 @@ describe('PoTimerComponent:', () => {
       it('should call normalizeFocusedIndex, focusButtonAt and updateActiveDescendant', () => {
         component.ngOnInit();
         fixture.detectChanges();
-        spyOn(component as any, 'normalizeFocusedIndex');
-        spyOn(component as any, 'focusButtonAt');
-        spyOn(component as any, 'updateActiveDescendant');
+        vi.spyOn(component as any, 'normalizeFocusedIndex');
+        vi.spyOn(component as any, 'focusButtonAt');
+        vi.spyOn(component as any, 'updateActiveDescendant');
 
         component['focusActiveButton']('hour');
 
@@ -2706,7 +2706,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(0);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(0);
 
         const result = component['getStepsToRevealFocusedItem']('hour', 0, 1);
         expect(result).toBe(0);
@@ -2717,8 +2717,8 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
-        spyOn(component as any, 'getColumnViewportHeight').and.returnValue(240);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
+        vi.spyOn(component as any, 'getColumnViewportHeight').mockReturnValue(240);
         component['columnOffsets']['hour'] = 400;
 
         const result = component['getStepsToRevealFocusedItem']('hour', 0, -1);
@@ -2733,7 +2733,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(40);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(40);
         component['columnOffsets']['hour'] = 40;
 
         const result = component['getDisplayIndexForSourceNearViewport']('hour', 0, 1);
@@ -2749,7 +2749,7 @@ describe('PoTimerComponent:', () => {
         component['focusedDisplayIndex']['period'] = 3;
 
         // Need to mock getDisplayArray to return non-empty for period
-        spyOn(component as any, 'getDisplayArray').and.callFake((type: string) => {
+        vi.spyOn(component as any, 'getDisplayArray').mockImplementation((type: string) => {
           if (type === 'period') {
             return ['AM', 'PM'];
           }
@@ -2806,8 +2806,8 @@ describe('PoTimerComponent:', () => {
         component.minuteInterval = 1;
         component.ngOnInit();
 
-        spyOn(component as any, 'getReferenceHourForConstraints').and.returnValue(10);
-        spyOn(component as any, 'isMinuteAllowedForHour').and.returnValue(false);
+        vi.spyOn(component as any, 'getReferenceHourForConstraints').mockReturnValue(10);
+        vi.spyOn(component as any, 'isMinuteAllowedForHour').mockReturnValue(false);
 
         const result = component['getFirstAvailableIndexByType']('minute', component.minutes);
         expect(result).toBe(0);
@@ -2819,9 +2819,9 @@ describe('PoTimerComponent:', () => {
         component.secondInterval = 1;
         component.ngOnInit();
 
-        spyOn(component as any, 'getReferenceHourForConstraints').and.returnValue(10);
-        spyOn(component as any, 'getReferenceMinuteForConstraints').and.returnValue(30);
-        spyOn(component as any, 'isSecondAllowed').and.returnValue(false);
+        vi.spyOn(component as any, 'getReferenceHourForConstraints').mockReturnValue(10);
+        vi.spyOn(component as any, 'getReferenceMinuteForConstraints').mockReturnValue(30);
+        vi.spyOn(component as any, 'isSecondAllowed').mockReturnValue(false);
 
         const result = component['getFirstAvailableIndexByType']('second', component.seconds);
         expect(result).toBe(0);
@@ -2899,7 +2899,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(0);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(0);
 
         const result = component['getFocusableDisplayIndex']('hour', 5, component.displayHours.length);
         expect(typeof result).toBe('number');
@@ -2913,7 +2913,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(0);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(0);
 
         const result = component['getDisplayIndexForSourceNearViewport']('hour', 0, 1);
         expect(typeof result).toBe('number');
@@ -2925,7 +2925,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getItemsElement').and.returnValue(null);
+        vi.spyOn(component as any, 'getItemsElement').mockReturnValue(null);
 
         const result = component['getDisplayIndexForSourceNearViewport']('hour', 0, 1);
         expect(typeof result).toBe('number');
@@ -2947,10 +2947,12 @@ describe('PoTimerComponent:', () => {
         component.ngOnInit();
         component['buildDisplayArrays']();
 
-        spyOn(component as any, 'getSourceArray').and.returnValue([]);
-        spyOn(component as any, 'getDisplayArray').and.returnValue([1, 2, 3]);
-        spyOn(component as any, 'isDisplayIndexDisabled').and.returnValue(false);
-        spyOn(component as any, 'getDisplayIndexForSourceNearViewport').and.callFake((_t: string, idx: number) => idx);
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([]);
+        vi.spyOn(component as any, 'getDisplayArray').mockReturnValue([1, 2, 3]);
+        vi.spyOn(component as any, 'isDisplayIndexDisabled').mockReturnValue(false);
+        vi.spyOn(component as any, 'getDisplayIndexForSourceNearViewport').mockImplementation(
+          (_t: string, idx: number) => idx
+        );
 
         const result = component['getNextEnabledDisplayIndex']('hour', 0, 1);
         expect(typeof result).toBe('number');
@@ -2974,9 +2976,9 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         component['focusedDisplayIndex']['hour'] = 0;
 
-        spyOn(component as any, 'getDisplayArray').and.returnValue([1, 2, 3]);
-        spyOn(component as any, 'getNormalizedDisplayIndex').and.returnValue(0);
-        spyOn(component as any, 'isDisplayIndexDisabled').and.returnValue(false);
+        vi.spyOn(component as any, 'getDisplayArray').mockReturnValue([1, 2, 3]);
+        vi.spyOn(component as any, 'getNormalizedDisplayIndex').mockReturnValue(0);
+        vi.spyOn(component as any, 'isDisplayIndexDisabled').mockReturnValue(false);
 
         expect(() => component['selectFocusedItem']('unknown' as any)).not.toThrow();
       });
@@ -3009,11 +3011,11 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'shouldTranslateToRevealFocusedItem').and.returnValue(true);
-        spyOn(component as any, 'getStepsToRevealFocusedItem').and.returnValue(2);
-        spyOn(component as any, 'scrollColumnByStep');
-        spyOn(component as any, 'focusButtonAt');
-        spyOn(component as any, 'updateActiveDescendant');
+        vi.spyOn(component as any, 'shouldTranslateToRevealFocusedItem').mockReturnValue(true);
+        vi.spyOn(component as any, 'getStepsToRevealFocusedItem').mockReturnValue(2);
+        vi.spyOn(component as any, 'scrollColumnByStep');
+        vi.spyOn(component as any, 'focusButtonAt');
+        vi.spyOn(component as any, 'updateActiveDescendant');
 
         component['moveFocusByStep']('hour', 1);
 
@@ -3062,7 +3064,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(0);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(0);
 
         const result = component['shouldTranslateToRevealFocusedItem']('hour', 0);
         expect(result).toBe(false);
@@ -3076,7 +3078,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         fixture.detectChanges();
 
-        spyOn(component as any, 'getCellStep').and.returnValue(0);
+        vi.spyOn(component as any, 'getCellStep').mockReturnValue(0);
 
         const result = component['getStepsToRevealFocusedItem']('hour', 0, 1);
         expect(result).toBe(0);
@@ -3091,7 +3093,7 @@ describe('PoTimerComponent:', () => {
         component.ngAfterViewInit();
         component['hasViewInitialized'] = true;
 
-        spyOn(component, 'initAllColumnOffsets');
+        vi.spyOn(component as any, 'initAllColumnOffsets');
 
         component.writeValue('10:30');
         tick(50);
@@ -3105,8 +3107,8 @@ describe('PoTimerComponent:', () => {
         fixture.detectChanges();
         component['hasViewInitialized'] = true;
 
-        spyOn(component as any, 'buildTimeValue').and.returnValue('10:30');
-        const superSpy = spyOn(Object.getPrototypeOf(PoTimerComponent.prototype), 'writeValue');
+        vi.spyOn(component as any, 'buildTimeValue').mockReturnValue('10:30');
+        const superSpy = vi.spyOn(Object.getPrototypeOf(PoTimerComponent.prototype), 'writeValue');
 
         component.writeValue('10:30');
 
@@ -3205,7 +3207,7 @@ describe('PoTimerComponent:', () => {
           second: null,
           period: null
         };
-        spyOn(component as any, 'getSourceArray').and.returnValue([0, 1, 2]);
+        vi.spyOn(component as any, 'getSourceArray').mockReturnValue([0, 1, 2]);
 
         expect(() => component['syncAriaToNativeButtons']()).not.toThrow();
       });
@@ -3227,31 +3229,33 @@ describe('PoTimerComponent:', () => {
         };
         component['focusedDisplayIndex'].hour = 0;
 
-        spyOn(component as any, 'getSourceArray').and.callFake((type: string) => (type === 'hour' ? sourceValues : []));
+        vi.spyOn(component as any, 'getSourceArray').mockImplementation((type: string) =>
+          type === 'hour' ? sourceValues : []
+        );
 
         component['syncAriaToNativeButtons']();
 
         // Duplicata (indice 26 = secao 1) deve ter role="none" e aria-hidden, mas sem inert
-        expect(hourPairs[26].hostEl.hasAttribute('inert')).toBeFalse();
+        expect(hourPairs[26].hostEl.hasAttribute('inert')).toBe(false);
         expect(hourPairs[26].nativeButton.getAttribute('role')).toBe('none');
         expect(hourPairs[26].nativeButton.getAttribute('aria-hidden')).toBe('true');
 
         // Item canonico (indice 0 = secao 0) deve ter role="option" e sem aria-hidden
-        expect(hourPairs[0].hostEl.hasAttribute('inert')).toBeFalse();
+        expect(hourPairs[0].hostEl.hasAttribute('inert')).toBe(false);
         expect(hourPairs[0].nativeButton.getAttribute('aria-hidden')).toBeNull();
       });
     });
 
     describe('subscribeToCellChanges and updateCachedCellPairs:', () => {
       it('should refresh cached cell pairs when hour cells emit a change', () => {
-        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
+        const updateSpy = vi.spyOn(component as any, 'updateCachedCellPairs');
         let capturedHourChangeCallback: (() => void) | undefined;
-        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe').and.callFake((callback: () => void) => {
+        const hourSubscribeSpy = vi.fn().mockImplementation((callback: () => void) => {
           capturedHourChangeCallback = callback;
         });
-        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe');
-        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe');
-        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe');
+        const minuteSubscribeSpy = vi.fn();
+        const secondSubscribeSpy = vi.fn();
+        const periodSubscribeSpy = vi.fn();
 
         component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
         component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
@@ -3266,13 +3270,13 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should refresh cached cell pairs when second cells emit a change', () => {
-        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
-        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe');
-        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe');
-        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe').and.callFake((callback: () => void) => {
+        const updateSpy = vi.spyOn(component as any, 'updateCachedCellPairs');
+        const hourSubscribeSpy = vi.fn();
+        const minuteSubscribeSpy = vi.fn();
+        const secondSubscribeSpy = vi.fn().mockImplementation((callback: () => void) => {
           callback();
         });
-        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe');
+        const periodSubscribeSpy = vi.fn();
 
         component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
         component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
@@ -3286,13 +3290,13 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should refresh cached cell pairs when minute cells emit a change', () => {
-        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
-        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe');
-        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe').and.callFake((callback: () => void) => {
+        const updateSpy = vi.spyOn(component as any, 'updateCachedCellPairs');
+        const hourSubscribeSpy = vi.fn();
+        const minuteSubscribeSpy = vi.fn().mockImplementation((callback: () => void) => {
           callback();
         });
-        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe');
-        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe');
+        const secondSubscribeSpy = vi.fn();
+        const periodSubscribeSpy = vi.fn();
 
         component.hourCells = { toArray: () => [], changes: { subscribe: hourSubscribeSpy } } as any;
         component.minuteCells = { toArray: () => [], changes: { subscribe: minuteSubscribeSpy } } as any;
@@ -3306,11 +3310,11 @@ describe('PoTimerComponent:', () => {
       });
 
       it('should refresh cached cell pairs when period cells emit a change', () => {
-        const updateSpy = spyOn(component as any, 'updateCachedCellPairs').and.callThrough();
-        const hourSubscribeSpy = jasmine.createSpy('hourSubscribe');
-        const minuteSubscribeSpy = jasmine.createSpy('minuteSubscribe');
-        const secondSubscribeSpy = jasmine.createSpy('secondSubscribe');
-        const periodSubscribeSpy = jasmine.createSpy('periodSubscribe').and.callFake((callback: () => void) => {
+        const updateSpy = vi.spyOn(component as any, 'updateCachedCellPairs');
+        const hourSubscribeSpy = vi.fn();
+        const minuteSubscribeSpy = vi.fn();
+        const secondSubscribeSpy = vi.fn();
+        const periodSubscribeSpy = vi.fn().mockImplementation((callback: () => void) => {
           callback();
         });
 
@@ -3558,7 +3562,7 @@ describe('PoTimerComponent:', () => {
       fixture.detectChanges();
 
       component['focusedDisplayIndex']['period'] = 0;
-      spyOn(component, 'onSelectPeriod');
+      vi.spyOn(component as any, 'onSelectPeriod');
 
       component['selectFocusedPeriod']();
 
@@ -3587,7 +3591,7 @@ describe('PoTimerComponent:', () => {
       component.selectedMinute = 30;
       component['rebuildDisabledCaches']();
 
-      expect(component['isDisplayIndexDisabled']('second', 0, component.displaySeconds)).toBeTrue();
+      expect(component['isDisplayIndexDisabled']('second', 0, component.displaySeconds)).toBe(true);
     });
   });
 

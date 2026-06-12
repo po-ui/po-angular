@@ -86,7 +86,7 @@ describe('PoNavbarComponent:', () => {
         component['applicationMenu'] = undefined;
         component['previousMenuComponentId'] = 'abcd';
 
-        spyOn(component, <any>'initNavbarMenu');
+        vi.spyOn(component as any, 'initNavbarMenu');
 
         component['menuGlobalService'].receiveApplicationMenu$ = of(fakeMenu);
 
@@ -104,7 +104,7 @@ describe('PoNavbarComponent:', () => {
         component['applicationMenu'] = undefined;
         component['previousMenuComponentId'] = '123';
 
-        spyOn(component, <any>'initNavbarMenu');
+        vi.spyOn(component as any, 'initNavbarMenu');
 
         component['menuGlobalService'].receiveApplicationMenu$ = of(fakeMenu);
 
@@ -125,7 +125,7 @@ describe('PoNavbarComponent:', () => {
         component['applicationMenu'] = fakeMenu;
         component['previousMenuComponentId'] = id;
 
-        spyOn(component['mediaQuery'], <any>'removeListener');
+        vi.spyOn(component['mediaQuery'] as any, 'removeListener');
 
         component['menuGlobalService'].receiveRemovedApplicationMenu$ = of(id);
 
@@ -144,7 +144,7 @@ describe('PoNavbarComponent:', () => {
         component['applicationMenu'] = fakeMenu;
         component['previousMenuComponentId'] = undefined;
 
-        spyOn(component['mediaQuery'], <any>'removeListener');
+        vi.spyOn(component['mediaQuery'] as any, 'removeListener');
 
         component['menuGlobalService'].receiveRemovedApplicationMenu$ = of(id);
 
@@ -165,7 +165,7 @@ describe('PoNavbarComponent:', () => {
         component['isNavbarUpdateMenu'] = true;
         component['previousMenusItems'] = undefined;
 
-        spyOnProperty(component, <any>'isCollapsedMedia').and.returnValue(true);
+        vi.spyOn(component as any, 'isCollapsedMedia').mockReturnValue(true);
 
         component['menuGlobalService'].receiveMenus$ = of(menus);
 
@@ -184,7 +184,7 @@ describe('PoNavbarComponent:', () => {
         component['isNavbarUpdateMenu'] = true;
         component['previousMenusItems'] = [{ label: 'Navbar Links', id: component['id'] }];
 
-        spyOnProperty(component, <any>'isCollapsedMedia').and.returnValue(true);
+        vi.spyOn(component as any, 'isCollapsedMedia').mockReturnValue(true);
 
         component['menuGlobalService'].receiveMenus$ = of(menus);
 
@@ -198,7 +198,7 @@ describe('PoNavbarComponent:', () => {
     });
 
     it('ngAfterViewInit: should call `displayItemsNavigation`', () => {
-      spyOn(component, <any>'displayItemsNavigation');
+      vi.spyOn(component as any, 'displayItemsNavigation');
 
       component.ngAfterViewInit();
 
@@ -208,7 +208,7 @@ describe('PoNavbarComponent:', () => {
     it('ngOnDestroy: should call `mediaQuery.removeListener` if has `mediaQuery` listener', () => {
       component['mediaQuery'] = { removeListener: () => {} };
 
-      spyOn(component['mediaQuery'], 'removeListener');
+      vi.spyOn(component['mediaQuery'] as any, 'removeListener');
 
       component.ngOnDestroy();
 
@@ -220,9 +220,9 @@ describe('PoNavbarComponent:', () => {
       component['applicationMenuSubscription'] = <any>{ unsubscribe: () => {} };
       component['menusSubscription'] = <any>{ unsubscribe: () => {} };
 
-      spyOn(component['removedMenuSubscription'], 'unsubscribe');
-      spyOn(component['applicationMenuSubscription'], 'unsubscribe');
-      spyOn(component['menusSubscription'], 'unsubscribe');
+      vi.spyOn(component['removedMenuSubscription'] as any, 'unsubscribe');
+      vi.spyOn(component['applicationMenuSubscription'] as any, 'unsubscribe');
+      vi.spyOn(component['menusSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -245,7 +245,7 @@ describe('PoNavbarComponent:', () => {
       it('should call `navigateLeft` if orientation is `left`', () => {
         const orientation = 'left';
 
-        spyOn(component, <any>'navigateLeft');
+        vi.spyOn(component as any, 'navigateLeft');
 
         component.navigateItems(orientation);
 
@@ -255,7 +255,7 @@ describe('PoNavbarComponent:', () => {
       it('should call `navigateRight` if orientation isn`t `left`', () => {
         const orientation = 'right';
 
-        spyOn(component, <any>'navigateRight');
+        vi.spyOn(component as any, 'navigateRight');
 
         component.navigateItems(orientation);
 
@@ -265,7 +265,7 @@ describe('PoNavbarComponent:', () => {
       it('should call `animate` with `offset`', () => {
         const orientation = 'right';
 
-        spyOn(component, <any>'animate');
+        vi.spyOn(component as any, 'animate');
 
         component.navigateItems(orientation);
 
@@ -297,7 +297,7 @@ describe('PoNavbarComponent:', () => {
     it(`animate: should call 'buildTransitionAnimation' with offset if has elements`, () => {
       const offset = 400;
 
-      spyOn(component, <any>'buildTransitionAnimation').and.callThrough();
+      vi.spyOn(component as any, 'buildTransitionAnimation');
 
       component['animate'](offset);
 
@@ -307,7 +307,7 @@ describe('PoNavbarComponent:', () => {
     it(`buildTransitionAnimation: should call builder`, () => {
       const offset = 400;
 
-      spyOn(component['builder'], 'build').and.callThrough();
+      vi.spyOn(component['builder'] as any, 'build');
 
       component['buildTransitionAnimation'](offset);
 
@@ -364,7 +364,7 @@ describe('PoNavbarComponent:', () => {
 
         component['offset'] = 5;
 
-        spyOn(component, <any>'navbarItemsWidth').and.returnValue(200);
+        vi.spyOn(component as any, 'navbarItemsWidth').mockReturnValue(200);
 
         const fakeNavbarItems = {
           allNavbarItems: [{ nativeElement: { offsetLeft: 10, offsetWidth: 15 } }]
@@ -407,9 +407,9 @@ describe('PoNavbarComponent:', () => {
     describe('displayItemsNavigation', () => {
       it(`should set 'showItemsNavigation' to 'true' if 'navbarItemsWidth' is less than the sum of the 'allNavbarItemsWidth'
       and 'poNavbarNavigationWidth' and call 'detectChanges'`, () => {
-        spyOn(component, <any>'navbarItemsWidth').and.returnValue(100);
-        spyOn(component, <any>'allNavbarItemsWidth').and.returnValue(120);
-        spyOn(component['changeDetector'], 'detectChanges');
+        vi.spyOn(component as any, 'navbarItemsWidth').mockReturnValue(100);
+        vi.spyOn(component as any, 'allNavbarItemsWidth').mockReturnValue(120);
+        vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
         component['displayItemsNavigation']();
 
@@ -419,9 +419,9 @@ describe('PoNavbarComponent:', () => {
 
       it(`should set 'showItemsNavigation' to 'false' if 'navbarItemsWidth' is greater than the sum of the 'allNavbarItemsWidth'
       and 'poNavbarNavigationWidth' and call 'detectChanges'`, () => {
-        spyOn(component, <any>'navbarItemsWidth').and.returnValue(500);
-        spyOn(component, <any>'allNavbarItemsWidth').and.returnValue(120);
-        spyOn(component['changeDetector'], 'detectChanges');
+        vi.spyOn(component as any, 'navbarItemsWidth').mockReturnValue(500);
+        vi.spyOn(component as any, 'allNavbarItemsWidth').mockReturnValue(120);
+        vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
         component['displayItemsNavigation']();
 
@@ -433,8 +433,8 @@ describe('PoNavbarComponent:', () => {
         const offset = 100;
         component['offset'] = offset;
 
-        spyOn(component, <any>'setOffsetToZero');
-        spyOn(component, <any>'animate');
+        vi.spyOn(component as any, 'setOffsetToZero');
+        vi.spyOn(component as any, 'animate');
 
         component['displayItemsNavigation']();
 
@@ -445,8 +445,8 @@ describe('PoNavbarComponent:', () => {
       it(`shouldn't call setOffsetToZero and animate if offset is equal to 0`, () => {
         component['offset'] = 0;
 
-        spyOn(component, <any>'setOffsetToZero');
-        spyOn(component, <any>'animate');
+        vi.spyOn(component as any, 'setOffsetToZero');
+        vi.spyOn(component as any, 'animate');
 
         component['displayItemsNavigation']();
 
@@ -466,8 +466,8 @@ describe('PoNavbarComponent:', () => {
 
       component.applicationMenu = <any>{ menus: [] };
 
-      spyOn(component, <any>'changeNavbarMenuItems');
-      spyOn(window, 'matchMedia').and.returnValue(fakeMediaQuery);
+      vi.spyOn(component as any, 'changeNavbarMenuItems');
+      vi.spyOn(window as any, 'matchMedia').mockReturnValue(fakeMediaQuery);
 
       component['initNavbarMenu']();
 
@@ -477,7 +477,7 @@ describe('PoNavbarComponent:', () => {
     it(`initNavbarMenu: should call changeNavbarMenuItems if window.innerWidth is less than poNavbarMenuMedia`, () => {
       component.applicationMenu = <any>{ menus: [] };
 
-      spyOn(component, <any>'changeNavbarMenuItems');
+      vi.spyOn(component as any, 'changeNavbarMenuItems');
 
       changeBrowserInnerWidth(700);
 
@@ -489,7 +489,7 @@ describe('PoNavbarComponent:', () => {
     it(`initNavbarMenu: shouldn't call changeNavbarMenuItems if window.innerWidth is greater than poNavbarMenuMedia`, () => {
       component.applicationMenu = <any>{ menus: [] };
 
-      spyOn(component, <any>'changeNavbarMenuItems');
+      vi.spyOn(component as any, 'changeNavbarMenuItems');
 
       changeBrowserInnerWidth(1500);
 
@@ -500,7 +500,7 @@ describe('PoNavbarComponent:', () => {
 
     it(`initNavbarMenu: should call 'validateMenuLogo'`, () => {
       component.applicationMenu = <any>{ menus: [] };
-      spyOn(component, <any>'validateMenuLogo');
+      vi.spyOn(component as any, 'validateMenuLogo');
 
       component['initNavbarMenu']();
 
@@ -523,7 +523,7 @@ describe('PoNavbarComponent:', () => {
     describe('navigateLeft', () => {
       it(`should set 'disableRight' to 'false' and call 'calculateLeftNavigation'`, () => {
         component.disableRight = true;
-        spyOn(component, <any>'calculateLeftNavigation');
+        vi.spyOn(component as any, 'calculateLeftNavigation');
 
         component['navigateLeft']();
 
@@ -532,8 +532,8 @@ describe('PoNavbarComponent:', () => {
       });
 
       it(`should call 'setOffsetToZero' if 'offset' is less than 0`, () => {
-        spyOn(component, <any>'calculateLeftNavigation').and.returnValue(-50);
-        spyOn(component, <any>'setOffsetToZero');
+        vi.spyOn(component as any, 'calculateLeftNavigation').mockReturnValue(-50);
+        vi.spyOn(component as any, 'setOffsetToZero');
 
         component['navigateLeft']();
 
@@ -541,8 +541,8 @@ describe('PoNavbarComponent:', () => {
       });
 
       it(`shouldn't call 'setOffsetToZero' if 'offset' is equal 0`, () => {
-        spyOn(component, <any>'calculateLeftNavigation').and.returnValue(0);
-        spyOn(component, <any>'setOffsetToZero');
+        vi.spyOn(component as any, 'calculateLeftNavigation').mockReturnValue(0);
+        vi.spyOn(component as any, 'setOffsetToZero');
 
         component['navigateLeft']();
 
@@ -550,8 +550,8 @@ describe('PoNavbarComponent:', () => {
       });
 
       it(`shouldn't call 'setOffsetToZero' if 'offset' is greater than 0`, () => {
-        spyOn(component, <any>'calculateLeftNavigation').and.returnValue(100);
-        spyOn(component, <any>'setOffsetToZero');
+        vi.spyOn(component as any, 'calculateLeftNavigation').mockReturnValue(100);
+        vi.spyOn(component as any, 'setOffsetToZero');
 
         component['navigateLeft']();
 
@@ -566,8 +566,8 @@ describe('PoNavbarComponent:', () => {
         const fakeItemBreakpoint = fakeOffset + fakeNavbarItemsWidth;
 
         component['offset'] = fakeOffset;
-        spyOn(component, <any>'navbarItemsWidth').and.returnValue(fakeNavbarItemsWidth);
-        spyOn(component, <any>'calculateRightNavigation');
+        vi.spyOn(component as any, 'navbarItemsWidth').mockReturnValue(fakeNavbarItemsWidth);
+        vi.spyOn(component as any, 'calculateRightNavigation');
 
         component['navigateRight']();
 
@@ -579,9 +579,9 @@ describe('PoNavbarComponent:', () => {
         const fakeAllNavbarItemsWidth = 100;
         const fakeMaxAllowedOffset = fakeAllNavbarItemsWidth - fakeNavbarItemsWidth;
 
-        spyOn(component, <any>'navbarItemsWidth').and.returnValue(fakeNavbarItemsWidth);
-        spyOn(component, <any>'allNavbarItemsWidth').and.returnValue(fakeAllNavbarItemsWidth);
-        spyOn(component, <any>'validateMaxOffset');
+        vi.spyOn(component as any, 'navbarItemsWidth').mockReturnValue(fakeNavbarItemsWidth);
+        vi.spyOn(component as any, 'allNavbarItemsWidth').mockReturnValue(fakeAllNavbarItemsWidth);
+        vi.spyOn(component as any, 'validateMaxOffset');
 
         component['navigateRight']();
 
@@ -591,7 +591,7 @@ describe('PoNavbarComponent:', () => {
 
     it(`onMediaQueryChange: should call 'changeNavbarMenuItems'`, () => {
       component.applicationMenu = <any>{ menus: [] };
-      spyOn(component, <any>'changeNavbarMenuItems');
+      vi.spyOn(component as any, 'changeNavbarMenuItems');
 
       component['onMediaQueryChange']({ changed: false });
 
@@ -656,7 +656,7 @@ describe('PoNavbarComponent:', () => {
           }
         };
 
-        spyOn(fakeThis.changeDetector, <any>'detectChanges');
+        vi.spyOn(fakeThis.changeDetector as any, 'detectChanges');
         component['validateMenuLogo'].call(fakeThis);
 
         expect(fakeThis.applicationMenu.logo).toBeUndefined();
@@ -674,7 +674,7 @@ describe('PoNavbarComponent:', () => {
           }
         };
 
-        spyOn(fakeThis.changeDetector, 'detectChanges');
+        vi.spyOn(fakeThis.changeDetector as any, 'detectChanges');
 
         component['validateMenuLogo'].call(fakeThis);
 
@@ -693,7 +693,7 @@ describe('PoNavbarComponent:', () => {
           }
         };
 
-        spyOn(fakeThis.changeDetector, 'detectChanges');
+        vi.spyOn(fakeThis.changeDetector as any, 'detectChanges');
 
         component['validateMenuLogo'].call(fakeThis);
 

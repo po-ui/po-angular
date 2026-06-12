@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClient, HttpHandler, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -32,7 +33,7 @@ eventClick.initEvent('click', false, true);
 describe('PoComboComponent:', () => {
   let component: PoComboComponent;
   let fixture: ComponentFixture<PoComboComponent>;
-  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
+  let controlPositionMock: any;
   let nativeElement: any;
 
   beforeEach(async () => {
@@ -47,7 +48,10 @@ describe('PoComboComponent:', () => {
     component.label = 'Label de teste';
     component.help = 'Help de teste';
 
-    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+    controlPositionMock = {
+      adjustPosition: vi.fn().mockName('PoControlPositionService.adjustPosition'),
+      setElements: vi.fn().mockName('PoControlPositionService.setElements')
+    };
     component['adjustContainerPosition'] = () => controlPositionMock.adjustPosition('bottom');
   });
 
@@ -71,7 +75,7 @@ describe('PoComboComponent:', () => {
     component.debounceTime = 10;
     component.initInputObservable();
 
-    spyOn(component, 'controlApplyFilter');
+    vi.spyOn(component as any, 'controlApplyFilter');
 
     component.inputEl.nativeElement.dispatchEvent(eventKeyBoard);
 
@@ -86,7 +90,7 @@ describe('PoComboComponent:', () => {
     component.debounceTime = 10;
     component.initInputObservable();
 
-    spyOn(component, 'controlApplyFilter');
+    vi.spyOn(component as any, 'controlApplyFilter');
 
     component.inputEl.nativeElement.dispatchEvent(eventKeyBoard);
 
@@ -97,14 +101,14 @@ describe('PoComboComponent:', () => {
 
   it('should call apply filter when is not processing "getObjectByValue"', () => {
     component.isProcessingValueByTab = false;
-    spyOn(component, 'applyFilter');
+    vi.spyOn(component as any, 'applyFilter');
     component.controlApplyFilter('valor');
     expect(component.applyFilter).toHaveBeenCalledWith('valor', true, undefined);
   });
 
   it('shouldn`t call apply filter when is processing "getObjectByValue"', () => {
     component.isProcessingValueByTab = true;
-    spyOn(component, 'applyFilter');
+    vi.spyOn(component as any, 'applyFilter');
     component.controlApplyFilter('valor');
     expect(component.applyFilter).not.toHaveBeenCalled();
   });
@@ -112,7 +116,7 @@ describe('PoComboComponent:', () => {
   it('should call apply filter when cache is false', () => {
     component.isProcessingValueByTab = true;
     component.cache = false;
-    spyOn(component, 'applyFilter');
+    vi.spyOn(component as any, 'applyFilter');
     component.controlApplyFilter('valor');
     expect(component.applyFilter).toHaveBeenCalled();
   });
@@ -121,7 +125,7 @@ describe('PoComboComponent:', () => {
     const fakeService: any = getFakeService(null);
     component.service = fakeService;
 
-    spyOn(component, 'searchForLabel');
+    vi.spyOn(component as any, 'searchForLabel');
     component.applyFilter('teste');
     expect(component.searchForLabel).toHaveBeenCalled();
   });
@@ -131,7 +135,7 @@ describe('PoComboComponent:', () => {
     component.service = fakeService;
     component.selectedValue = '';
 
-    spyOn(component, 'updateOptionByFilteredValue');
+    vi.spyOn(component as any, 'updateOptionByFilteredValue');
     component.getObjectByValue('value');
     expect(component.updateOptionByFilteredValue).toHaveBeenCalled();
   });
@@ -139,7 +143,7 @@ describe('PoComboComponent:', () => {
   it('should set options with item', () => {
     component.options = [];
 
-    spyOn(component, 'onOptionClick');
+    vi.spyOn(component as any, 'onOptionClick');
     component.updateOptionByFilteredValue({ label: 'label', value: 1 });
     expect(component.options.length).toBe(1);
     expect(component.onOptionClick).toHaveBeenCalledWith({ label: 'label', value: 1 });
@@ -150,7 +154,7 @@ describe('PoComboComponent:', () => {
     component.isProcessingValueByTab = true;
     component.selectedValue = null;
 
-    spyOn(component, 'updateSelectedValue');
+    vi.spyOn(component as any, 'updateSelectedValue');
     component.updateOptionByFilteredValue(null);
     expect(component.updateSelectedValue).toHaveBeenCalledWith(null);
 
@@ -167,8 +171,8 @@ describe('PoComboComponent:', () => {
       setScrollingControl: component['setScrollingControl']
     };
 
-    spyOn(fakeThis, 'applyFilter');
-    spyOn(fakeThis, 'setScrollingControl');
+    vi.spyOn(fakeThis as any, 'applyFilter');
+    vi.spyOn(fakeThis as any, 'setScrollingControl');
     component.applyFilterInFirstClick.call(fakeThis);
     expect(fakeThis.applyFilter).toHaveBeenCalled();
   });
@@ -183,8 +187,8 @@ describe('PoComboComponent:', () => {
       setScrollingControl: component['setScrollingControl']
     };
 
-    spyOn(fakeThis, 'applyFilter');
-    spyOn(fakeThis, 'setScrollingControl');
+    vi.spyOn(fakeThis as any, 'applyFilter');
+    vi.spyOn(fakeThis as any, 'setScrollingControl');
     component.applyFilterInFirstClick.call(fakeThis);
 
     expect(component.options).toEqual([]);
@@ -198,7 +202,7 @@ describe('PoComboComponent:', () => {
       applyFilter: component.applyFilter
     };
 
-    spyOn(fakeThis, 'applyFilter');
+    vi.spyOn(fakeThis as any, 'applyFilter');
     component.applyFilterInFirstClick.call(fakeThis);
     expect(fakeThis.applyFilter).not.toHaveBeenCalled();
   });
@@ -237,8 +241,8 @@ describe('PoComboComponent:', () => {
     const value = 'Option 1';
     const reset = true;
 
-    spyOn(component as any, 'prepareOptions').and.callThrough();
-    spyOn(component, 'controlComboVisibility').and.callThrough();
+    vi.spyOn(component as any, 'prepareOptions');
+    vi.spyOn(component as any, 'controlComboVisibility');
 
     component.setOptionsByApplyFilter(value, items, reset);
 
@@ -251,8 +255,8 @@ describe('PoComboComponent:', () => {
     component.options = [{ label: '1', value: '1' }];
     component.cacheOptions = [{ label: '2', value: '2' }];
 
-    spyOn(component, 'searchForLabel');
-    spyOn(component, 'controlComboVisibility');
+    vi.spyOn(component as any, 'searchForLabel');
+    vi.spyOn(component as any, 'controlComboVisibility');
     component.setOptionsByApplyFilter('', []);
     expect(component.searchForLabel).toHaveBeenCalled();
     expect(component.controlComboVisibility).toHaveBeenCalled();
@@ -264,8 +268,8 @@ describe('PoComboComponent:', () => {
     component.options = [{ label: '1', value: '1' }];
     component.cacheOptions = [{ label: '2', value: '2' }];
 
-    spyOn(component, 'searchForLabel');
-    spyOn(component, 'controlComboVisibility');
+    vi.spyOn(component as any, 'searchForLabel');
+    vi.spyOn(component as any, 'controlComboVisibility');
     component.setOptionsByApplyFilter('', []);
     expect(component.searchForLabel).toHaveBeenCalled();
     expect(component.controlComboVisibility).toHaveBeenCalled();
@@ -273,7 +277,7 @@ describe('PoComboComponent:', () => {
   });
 
   it('should toogle paramenter of the function', () => {
-    spyOn(component, 'controlComboVisibility');
+    vi.spyOn(component as any, 'controlComboVisibility');
     component.comboOpen = true;
     component.disabled = false;
     fixture.detectChanges();
@@ -282,7 +286,7 @@ describe('PoComboComponent:', () => {
   });
 
   it('should call applyFilterInFirstClick', () => {
-    spyOn(component, 'applyFilterInFirstClick');
+    vi.spyOn(component as any, 'applyFilterInFirstClick');
     component.comboOpen = true;
     component.disabled = false;
     component.service = component.defaultService;
@@ -293,7 +297,7 @@ describe('PoComboComponent:', () => {
 
   it('shouldn`t toogle case component is disabled', () => {
     component.disabled = true;
-    spyOn(component, 'controlComboVisibility');
+    vi.spyOn(component as any, 'controlComboVisibility');
 
     component.toggleComboVisibility();
     expect(component.controlComboVisibility).not.toHaveBeenCalledWith(false);
@@ -306,7 +310,7 @@ describe('PoComboComponent:', () => {
   });
 
   it('should have been called cleanListbox', () => {
-    spyOn(component, 'cleanListbox');
+    vi.spyOn(component as any, 'cleanListbox');
 
     component.setInputValue(null);
     fixture.detectChanges();
@@ -318,7 +322,7 @@ describe('PoComboComponent:', () => {
     component['initializeListeners']();
     const documentBody = document.body;
 
-    spyOn(component, 'wasClickedOnToggle');
+    vi.spyOn(component as any, 'wasClickedOnToggle');
     documentBody.dispatchEvent(eventClick);
     documentBody.click();
     expect(component.wasClickedOnToggle).toHaveBeenCalled();
@@ -327,7 +331,7 @@ describe('PoComboComponent:', () => {
   it('should hide the combo list when was click out of the input', () => {
     component.comboOpen = true;
 
-    spyOn(component, 'controlComboVisibility');
+    vi.spyOn(component as any, 'controlComboVisibility');
     component.wasClickedOnToggle(eventClick);
     expect(component.controlComboVisibility).toHaveBeenCalled();
   });
@@ -335,7 +339,7 @@ describe('PoComboComponent:', () => {
   it('should not hide combo list when was click in input', () => {
     component.inputEl.nativeElement.dispatchEvent(eventClick);
 
-    spyOn(component, 'controlComboVisibility');
+    vi.spyOn(component as any, 'controlComboVisibility');
     component.wasClickedOnToggle(eventClick);
     expect(component.controlComboVisibility).not.toHaveBeenCalled();
   });
@@ -361,7 +365,7 @@ describe('PoComboComponent:', () => {
 
     component['initializeListeners']();
 
-    const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
+    const spyAdjustContainerPosition = vi.spyOn(component as any, 'adjustContainerPosition');
 
     changeBrowserInnerWidth(450);
     window.dispatchEvent(eventResize);
@@ -387,7 +391,7 @@ describe('PoComboComponent:', () => {
         }
       };
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -402,7 +406,7 @@ describe('PoComboComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -418,13 +422,13 @@ describe('PoComboComponent:', () => {
       component.containerElement = { nativeElement: mockElement };
 
       component.renderer = {
-        removeClass: jasmine.createSpy('removeClass'),
-        addClass: jasmine.createSpy('addClass')
+        removeClass: vi.fn(),
+        addClass: vi.fn()
       } as any;
 
       component.inputEl = {
         nativeElement: {
-          focus: jasmine.createSpy('focus')
+          focus: vi.fn()
         }
       };
 
@@ -436,7 +440,7 @@ describe('PoComboComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -446,7 +450,7 @@ describe('PoComboComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -455,7 +459,7 @@ describe('PoComboComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -471,13 +475,13 @@ describe('PoComboComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
       it('should be called when blur event', () => {
         component['onModelTouched'] = () => {};
-        spyOn(component, <any>'onModelTouched');
+        vi.spyOn(component as any, 'onModelTouched');
 
         component.onBlur(fakeEvent);
 
@@ -507,7 +511,7 @@ describe('PoComboComponent:', () => {
       });
 
       it('should emit blur event when event.type is "blur"', () => {
-        spyOn(component.blur, 'emit');
+        vi.spyOn(component.blur as any, 'emit');
 
         component.onBlur({ type: 'blur' });
 
@@ -515,7 +519,7 @@ describe('PoComboComponent:', () => {
       });
 
       it('should not emit blur event when event.type is different from "blur"', () => {
-        spyOn(component.blur, 'emit');
+        vi.spyOn(component.blur as any, 'emit');
 
         component.onBlur({ type: 'focus' });
 
@@ -537,7 +541,7 @@ describe('PoComboComponent:', () => {
         const deleteKey = { which: 46, target: { value: '1' } };
         component.selectedValue = 'valueA';
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, deleteKey);
         expect(component.searchForLabel).toHaveBeenCalled();
       });
@@ -546,7 +550,7 @@ describe('PoComboComponent:', () => {
         const digit2Key = fakeKeypressEvent(50);
         component.selectedValue = 'valueA';
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, digit2Key);
         expect(component.searchForLabel).toHaveBeenCalled();
       });
@@ -555,7 +559,7 @@ describe('PoComboComponent:', () => {
         const keyP = fakeKeypressEvent(80);
         component.selectedValue = 'valueA';
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, keyP);
         expect(component.searchForLabel).toHaveBeenCalled();
       });
@@ -564,7 +568,7 @@ describe('PoComboComponent:', () => {
         const keyP = fakeKeypressEvent(80);
         component.service = component.defaultService;
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, keyP);
         expect(component.searchForLabel).not.toHaveBeenCalled();
       });
@@ -574,8 +578,8 @@ describe('PoComboComponent:', () => {
         component.changeOnEnter = false;
         component.selectedValue = 'Selected Value';
 
-        spyOn(component, 'updateComboList');
-        spyOn(component, 'updateSelectedValue');
+        vi.spyOn(component as any, 'updateComboList');
+        vi.spyOn(component as any, 'updateSelectedValue');
 
         component.onKeyUp.call(component, deleteKey);
 
@@ -588,8 +592,8 @@ describe('PoComboComponent:', () => {
         component.changeOnEnter = true;
         component.selectedValue = 'Selected Value';
 
-        spyOn(component, 'updateComboList');
-        spyOn(component, 'updateSelectedValue');
+        vi.spyOn(component as any, 'updateComboList');
+        vi.spyOn(component as any, 'updateSelectedValue');
 
         component.onKeyUp.call(component, deleteKey);
 
@@ -602,8 +606,8 @@ describe('PoComboComponent:', () => {
         component.selectedValue = undefined;
         component.service = component.defaultService;
 
-        spyOn(component, 'updateComboList');
-        spyOn(component, 'updateSelectedValue');
+        vi.spyOn(component as any, 'updateComboList');
+        vi.spyOn(component as any, 'updateSelectedValue');
         component.onKeyUp.call(component, deleteKey);
         expect(component.updateSelectedValue).toHaveBeenCalledWith(null);
         expect(component.updateComboList).not.toHaveBeenCalled();
@@ -616,7 +620,7 @@ describe('PoComboComponent:', () => {
         component.shouldMarkLetters = false;
         component.isFiltering = false;
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, keyM);
 
         expect(component.shouldMarkLetters).toBeFalsy();
@@ -629,8 +633,8 @@ describe('PoComboComponent:', () => {
         component.shouldMarkLetters = false;
         component.isFiltering = false;
 
-        spyOn(component, 'searchForLabel');
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'searchForLabel');
+        vi.spyOn(component as any, 'controlComboVisibility');
         component.onKeyUp.call(component, keyM);
 
         expect(component.shouldMarkLetters).toBeTruthy();
@@ -645,7 +649,7 @@ describe('PoComboComponent:', () => {
         component.shouldMarkLetters = false;
         component.isFiltering = false;
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, keyM);
 
         expect(component.shouldMarkLetters).toBeFalsy();
@@ -660,7 +664,7 @@ describe('PoComboComponent:', () => {
         component.shouldMarkLetters = false;
         component.isFiltering = false;
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp(keyM);
 
         expect(component.shouldMarkLetters).toBeFalsy();
@@ -674,7 +678,7 @@ describe('PoComboComponent:', () => {
         component.shouldMarkLetters = false;
         component.isFiltering = false;
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, ArrowUpKey);
 
         expect(component.shouldMarkLetters).toBeFalsy();
@@ -688,7 +692,7 @@ describe('PoComboComponent:', () => {
         component.shouldMarkLetters = false;
         component.isFiltering = false;
 
-        spyOn(component, 'searchForLabel');
+        vi.spyOn(component as any, 'searchForLabel');
         component.onKeyUp.call(component, ArrowDownKey);
 
         expect(component.shouldMarkLetters).toBeFalsy();
@@ -700,8 +704,8 @@ describe('PoComboComponent:', () => {
         const keyM = fakeKeypressEvent(77);
         component.visibleOptions = [{ label: 'M', value: 'M' }];
 
-        spyOn(component, 'searchForLabel');
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'searchForLabel');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyUp(keyM);
 
@@ -714,8 +718,8 @@ describe('PoComboComponent:', () => {
 
         component.previousSearchValue = '';
 
-        spyOn(component, 'searchForLabel');
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'searchForLabel');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyUp(kayBackspace);
 
@@ -728,8 +732,8 @@ describe('PoComboComponent:', () => {
 
         component.previousSearchValue = '';
 
-        spyOn(component, 'searchForLabel');
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'searchForLabel');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyUp(kayBackspace);
 
@@ -750,11 +754,11 @@ describe('PoComboComponent:', () => {
           }
         };
 
-        spyOn(component.contentElement.nativeElement, 'focus');
+        vi.spyOn(component.contentElement.nativeElement, 'focus');
         component.visibleOptions = [{ value: 'item 1', label: 'item 1' }];
         component.comboOpen = true;
         component.changeOnEnter = true;
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyDown(event);
 
@@ -767,7 +771,7 @@ describe('PoComboComponent:', () => {
 
         component.comboOpen = true;
         component.visibleOptions = [{ value: '1', label: '1' }];
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyDown(event);
 
@@ -780,8 +784,8 @@ describe('PoComboComponent:', () => {
 
         component.comboOpen = false;
         component.visibleOptions = [{ value: '1', label: '1' }];
-        spyOn(component, 'controlComboVisibility');
-        spyOn(component, 'toggleComboVisibility');
+        vi.spyOn(component as any, 'controlComboVisibility');
+        vi.spyOn(component as any, 'toggleComboVisibility');
 
         component.onKeyDown(event);
 
@@ -798,8 +802,8 @@ describe('PoComboComponent:', () => {
           }
         };
         component.service = component.defaultService;
-        spyOn(component, 'getObjectByValue');
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'getObjectByValue');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyDown.call(component, event);
 
@@ -816,8 +820,8 @@ describe('PoComboComponent:', () => {
         component.selectedValue = 2;
         component.comboOpen = true;
 
-        spyOn(component, 'controlComboVisibility');
-        spyOn(component, 'updateSelectedValue');
+        vi.spyOn(component as any, 'controlComboVisibility');
+        vi.spyOn(component as any, 'updateSelectedValue');
 
         component.onKeyDown(event);
 
@@ -828,7 +832,7 @@ describe('PoComboComponent:', () => {
 
       it('should call controlComboVisibility(false) when keyCode tab is pressed and shiftKey is true', () => {
         const event = { ...fakeEvent, keyCode: 9, shiftKey: true };
-        spyOn(component, 'controlComboVisibility');
+        vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyDown(event);
 
@@ -844,8 +848,8 @@ describe('PoComboComponent:', () => {
         component.selectedValue = 1;
         component.comboOpen = true;
 
-        spyOn(component, 'controlComboVisibility');
-        spyOn(component, 'updateSelectedValue');
+        vi.spyOn(component as any, 'controlComboVisibility');
+        vi.spyOn(component as any, 'updateSelectedValue');
 
         component.onKeyDown(event);
 
@@ -855,11 +859,12 @@ describe('PoComboComponent:', () => {
       });
 
       it('should call `toggleComboVisibility` if typed "enter"', () => {
-        const event = jasmine.createSpyObj<KeyboardEvent>('KeyboardEvent', ['preventDefault'], {
+        const event = {
+          preventDefault: vi.fn().mockName('KeyboardEvent.preventDefault'),
           keyCode: 13,
           key: 'Enter'
-        });
-        const spyToggleComboVisibility = spyOn(component, <any>'toggleComboVisibility');
+        };
+        const spyToggleComboVisibility = vi.spyOn(component as any, 'toggleComboVisibility');
 
         component.onKeyDown(event);
 
@@ -873,7 +878,7 @@ describe('PoComboComponent:', () => {
           key: 'Escape'
         });
 
-        spyOn(event, 'stopPropagation').and.callThrough();
+        vi.spyOn(event as any, 'stopPropagation');
 
         component.onListboxKeyDown(event);
 
@@ -887,7 +892,7 @@ describe('PoComboComponent:', () => {
         component.selectedView = { value: 1, label: 'Label 01' };
         component.comboOpen = true;
 
-        spyOn(component, 'updateComboList');
+        vi.spyOn(component as any, 'updateComboList');
 
         component.onKeyDown(event);
 
@@ -902,7 +907,7 @@ describe('PoComboComponent:', () => {
         component.comboOpen = true;
         component['lastKey'] = 27;
 
-        spyOn(component, 'clearAndFocus');
+        vi.spyOn(component as any, 'clearAndFocus');
 
         component.onKeyDown(event);
 
@@ -917,7 +922,7 @@ describe('PoComboComponent:', () => {
         component.comboOpen = true;
         component['lastKey'] = 20;
 
-        spyOn(component, 'onCloseCombo');
+        vi.spyOn(component as any, 'onCloseCombo');
 
         component.onKeyDown(event);
 
@@ -931,7 +936,7 @@ describe('PoComboComponent:', () => {
         component.selectedView = { value: 1, label: 'Label 01' };
         component.comboOpen = true;
 
-        spyOn(component, 'updateComboList');
+        vi.spyOn(component as any, 'updateComboList');
 
         component.onKeyDown(event);
 
@@ -941,7 +946,7 @@ describe('PoComboComponent:', () => {
       it('should not call `controlComboVisibility` if typed "a"', () => {
         const event = { ...fakeEvent, keyCode: 65 };
 
-        const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
+        const spyControlComboVisibility = vi.spyOn(component as any, 'controlComboVisibility');
 
         component.onKeyDown(event);
 
@@ -951,8 +956,8 @@ describe('PoComboComponent:', () => {
       it('should emit event when field is focused', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputEl.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -962,8 +967,8 @@ describe('PoComboComponent:', () => {
       it('should not emit event when field is not focused', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -989,7 +994,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('should call controlComboVisibility with false', () => {
-      spyOn(component, 'controlComboVisibility');
+      vi.spyOn(component as any, 'controlComboVisibility');
 
       component.onCloseCombo();
 
@@ -997,7 +1002,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('should focus on inputEl.nativeElement', () => {
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.onCloseCombo();
 
@@ -1005,8 +1010,8 @@ describe('PoComboComponent:', () => {
     });
 
     it('should call inputEl.nativeElement and clear', () => {
-      spyOn(component.inputEl.nativeElement, 'focus');
-      spyOn(component, 'clear');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component as any, 'clear');
 
       component.clearAndFocus();
 
@@ -1017,7 +1022,7 @@ describe('PoComboComponent:', () => {
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
       const option: PoComboOption = { value: 'value', label: 'label' };
 
-      spyOn(fakeEvent, 'stopPropagation');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.onOptionClick(option, fakeEvent);
 
@@ -1027,7 +1032,7 @@ describe('PoComboComponent:', () => {
     it('onOptionClick: shouldn`t call `stopPropagation` if doesn`t have an event parameter', () => {
       const option: PoComboOption = { value: 'value', label: 'label' };
 
-      spyOn(fakeEvent, 'stopPropagation');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.onOptionClick(option);
 
@@ -1038,8 +1043,8 @@ describe('PoComboComponent:', () => {
       const option: PoComboOption = { value: 'value', label: 'label' };
       component.selectedValue = 'different value';
 
-      spyOn(component, 'updateSelectedValue').and.callThrough();
-      spyOn(component, 'updateComboList');
+      vi.spyOn(component as any, 'updateSelectedValue');
+      vi.spyOn(component as any, 'updateComboList');
 
       component.onOptionClick(option);
 
@@ -1051,9 +1056,9 @@ describe('PoComboComponent:', () => {
       const option: PoComboOption = { value: 'value', label: 'label' };
       component.selectedValue = 'value';
 
-      spyOn(component, 'controlComboVisibility');
-      spyOn(component, 'updateComboList');
-      spyOn(component, 'updateSelectedValue').and.callThrough();
+      vi.spyOn(component as any, 'controlComboVisibility');
+      vi.spyOn(component as any, 'updateComboList');
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.onOptionClick(option);
 
@@ -1067,10 +1072,10 @@ describe('PoComboComponent:', () => {
       component.selectedValue = 'value';
       component.selectedView = { label: 'ABC', value: 'abc' };
 
-      spyOn(component, 'getInputValue').and.returnValue('a');
-      spyOn(component, 'controlComboVisibility');
-      spyOn(component, 'updateComboList');
-      spyOn(component, 'updateSelectedValue').and.callThrough();
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue('a');
+      vi.spyOn(component as any, 'controlComboVisibility');
+      vi.spyOn(component as any, 'updateComboList');
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.onOptionClick(option);
 
@@ -1085,7 +1090,7 @@ describe('PoComboComponent:', () => {
       component.selectedValue = 'value';
       component.service = undefined;
 
-      spyOn(component, 'updateComboList');
+      vi.spyOn(component as any, 'updateComboList');
 
       component.onOptionClick(option);
 
@@ -1097,7 +1102,7 @@ describe('PoComboComponent:', () => {
       component.selectedValue = 'value';
       component.service = component.defaultService;
 
-      spyOn(component, 'updateComboList');
+      vi.spyOn(component as any, 'updateComboList');
 
       component.onOptionClick(option);
 
@@ -1111,8 +1116,8 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.visibleOptions = [{ label: '1', value: '1' }];
 
-      const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
-      const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
+      const spyControlComboVisibility = vi.spyOn(component as any, 'controlComboVisibility');
+      const spyVerifyValidOption = vi.spyOn(component as any, 'verifyValidOption');
 
       component.wasClickedOnToggle(eventClick);
 
@@ -1131,10 +1136,10 @@ describe('PoComboComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component.contentElement.nativeElement, 'contains').and.returnValue(false);
+      vi.spyOn(component.contentElement.nativeElement, 'contains').mockReturnValue(false);
 
-      const spyControlComboVisibility = spyOn(component, 'controlComboVisibility');
-      const spyVerifyValidOption = spyOn(component, 'verifyValidOption');
+      const spyControlComboVisibility = vi.spyOn(component as any, 'controlComboVisibility');
+      const spyVerifyValidOption = vi.spyOn(component as any, 'verifyValidOption');
 
       component.wasClickedOnToggle(eventClick);
 
@@ -1147,8 +1152,8 @@ describe('PoComboComponent:', () => {
       component.comboOpen = false;
       component.service = getFakeService([{ label: 'label', value: 1 }]);
       component.isFirstFilter = false;
-      spyOn(component, 'getInputValue').and.returnValue(false);
-      const SpyApplyFilter = spyOn(component, 'applyFilter');
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue(false);
+      const SpyApplyFilter = vi.spyOn(component as any, 'applyFilter');
 
       component.wasClickedOnToggle(eventClick);
 
@@ -1159,9 +1164,9 @@ describe('PoComboComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
 
@@ -1169,11 +1174,11 @@ describe('PoComboComponent:', () => {
         (component as any).label = '';
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1183,17 +1188,17 @@ describe('PoComboComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1202,18 +1207,18 @@ describe('PoComboComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1224,18 +1229,18 @@ describe('PoComboComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1245,18 +1250,18 @@ describe('PoComboComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -1265,7 +1270,7 @@ describe('PoComboComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -1273,8 +1278,8 @@ describe('PoComboComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -1282,8 +1287,8 @@ describe('PoComboComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
@@ -1293,8 +1298,8 @@ describe('PoComboComponent:', () => {
       const customPositions = ['top', 'bottom'];
       const isSetElementWidth = true;
 
-      const spySetElements = spyOn(component['controlPosition'], 'setElements');
-      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
+      const spySetElements = vi.spyOn(component['controlPosition'] as any, 'setElements');
+      const spyAdjustContainerPosition = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component['setContainerPosition']();
 
@@ -1309,7 +1314,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('showMoreInfiniteScroll: should call `onShowMore` if `offsetHeight` + `scrollTop` is greater than `scrollHeight`', () => {
-      const spyOnShowMore = spyOn(component, <any>'applyFilter');
+      const spyOnShowMore = vi.spyOn(component as any, 'applyFilter');
 
       component.infiniteScrollDistance = 10;
 
@@ -1319,7 +1324,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('showMoreInfiniteScroll: shouldn`t call `onShowMore` if `offsetHeight` + `scrollTop` is less  than `scrollHeight`', () => {
-      const spyOnShowMore = spyOn(component, <any>'applyFilter');
+      const spyOnShowMore = vi.spyOn(component as any, 'applyFilter');
 
       component.infiniteScrollDistance = 110;
 
@@ -1331,8 +1336,8 @@ describe('PoComboComponent:', () => {
     it('initializeListeners: should call removeListeners and initialize click, resize and scroll listeners', () => {
       component['clickoutListener'] = undefined;
       component['eventResizeListener'] = undefined;
-      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
-      const spyRendererListen = spyOn(component.renderer, <any>'listen').and.returnValue(() => {});
+      const spyRemoveListeners = vi.spyOn(component as any, 'removeListeners');
+      const spyRendererListen = vi.spyOn(component.renderer as any, 'listen').mockReturnValue(() => {});
 
       component['initializeListeners']();
 
@@ -1348,10 +1353,10 @@ describe('PoComboComponent:', () => {
       component.comboIcon = 'po-icon-arrow-down';
       component.visibleOptions = [{ value: 'po', label: 'PO' }];
 
-      const spyInitializeListeners = spyOn(component, <any>'initializeListeners');
-      const spySetContainerPosition = spyOn(component, <any>'setContainerPosition');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
-      const spyInputFocus = spyOn(component.inputEl.nativeElement, <any>'focus');
+      const spyInitializeListeners = vi.spyOn(component as any, 'initializeListeners');
+      const spySetContainerPosition = vi.spyOn(component as any, 'setContainerPosition');
+      const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const spyInputFocus = vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component['open'](true);
 
@@ -1372,7 +1377,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('should open the input element', () => {
-      const focusSpy = spyOn(component.inputEl.nativeElement, 'focus');
+      const focusSpy = vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component['open'](true);
 
@@ -1380,7 +1385,7 @@ describe('PoComboComponent:', () => {
     });
 
     it('should add class to input element when isButton is true', () => {
-      const addClassSpy = spyOn(component.renderer, 'addClass');
+      const addClassSpy = vi.spyOn(component.renderer as any, 'addClass');
 
       component['open'](false, true);
 
@@ -1389,7 +1394,7 @@ describe('PoComboComponent:', () => {
 
     it('open: should set page and options when has inifity scroll', () => {
       component.infiniteScroll = true;
-      spyOn(component, 'getInputValue').and.returnValue(undefined);
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue(undefined);
 
       component['open'](false);
 
@@ -1432,7 +1437,7 @@ describe('PoComboComponent:', () => {
           selected: true
         }
       ];
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.cleanListbox();
 
@@ -1445,8 +1450,8 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.comboIcon = 'ICON_ARROW_UP';
 
-      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
+      const spyRemoveListeners = vi.spyOn(component as any, 'removeListeners');
+      const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component['close'](true);
 
@@ -1458,7 +1463,7 @@ describe('PoComboComponent:', () => {
     });
 
     it(`close: 'page' should be 1 when has 'infiniteScroll' and has inputValue`, () => {
-      spyOn(component, 'getInputValue').and.returnValue(1);
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue(1);
       component.infiniteScroll = true;
 
       component['close'](false);
@@ -1467,7 +1472,7 @@ describe('PoComboComponent:', () => {
     });
 
     it(`close: 'page' should be 1 when has 'infiniteScroll' and has inputValue`, () => {
-      spyOn(component, 'getInputValue').and.returnValue(undefined);
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue(undefined);
       component.infiniteScroll = true;
 
       component['close'](false);
@@ -1485,9 +1490,9 @@ describe('PoComboComponent:', () => {
     });
 
     it('isServerSearching: should call initializeListeners, detectChanges and setContainerPosition if isServerSearching is true', () => {
-      const spyInitializeListeners = spyOn(component, <any>'initializeListeners');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
-      const spySetContainerPosition = spyOn(component, <any>'setContainerPosition');
+      const spyInitializeListeners = vi.spyOn(component as any, 'initializeListeners');
+      const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const spySetContainerPosition = vi.spyOn(component as any, 'setContainerPosition');
 
       component.isServerSearching = true;
 
@@ -1506,7 +1511,7 @@ describe('PoComboComponent:', () => {
     it('controlComboVisibility: should call `close` if `toOpen` param is false', () => {
       const toOpen = false;
 
-      const spyClose = spyOn(component, <any>'close');
+      const spyClose = vi.spyOn(component as any, 'close');
 
       component.controlComboVisibility(toOpen);
 
@@ -1516,7 +1521,7 @@ describe('PoComboComponent:', () => {
     it('controlComboVisibility: should call `open` if `toOpen` param is true', () => {
       const toOpen = true;
 
-      const spyOpen = spyOn(component, <any>'open');
+      const spyOpen = vi.spyOn(component as any, 'open');
 
       component.controlComboVisibility(toOpen);
 
@@ -1536,7 +1541,7 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.appendBox = false;
 
-      spyOn(component as any, 'focusItem');
+      vi.spyOn(component as any, 'focusItem');
 
       component['handleCleanKeyboardTab'](event);
 
@@ -1548,7 +1553,7 @@ describe('PoComboComponent:', () => {
       component.comboOpen = false;
       component.appendBox = true;
 
-      spyOn(component as any, 'focusItem');
+      vi.spyOn(component as any, 'focusItem');
 
       component['handleCleanKeyboardTab'](event);
 
@@ -1560,8 +1565,8 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.appendBox = true;
 
-      spyOn(component as any, 'shouldHandleTab').and.returnValue(false);
-      spyOn(component as any, 'focusItem');
+      vi.spyOn(component as any, 'shouldHandleTab').mockReturnValue(false);
+      vi.spyOn(component as any, 'focusItem');
 
       component['handleCleanKeyboardTab'](event);
 
@@ -1569,19 +1574,19 @@ describe('PoComboComponent:', () => {
     });
 
     it('focusInput: should focus input element and not throw if event is undefined', () => {
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
       expect(() => component['focusInput']()).not.toThrow();
       expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
     });
 
     it('focusInput: should call preventDefault if event is provided', () => {
       const event = new KeyboardEvent('keydown');
-      spyOn(event, 'preventDefault' as any);
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(event, 'preventDefault' as any);
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component['focusInput'](event);
 
-      expect(event.preventDefault as jasmine.Spy).toHaveBeenCalled();
+      expect(event.preventDefault as Mock).toHaveBeenCalled();
       expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
     });
 
@@ -1590,7 +1595,7 @@ describe('PoComboComponent:', () => {
       component.comboOpen = false;
       component.appendBox = true;
 
-      expect((component as any).shouldHandleTab(event)).toBeFalse();
+      expect((component as any).shouldHandleTab(event)).toBe(false);
     });
 
     it('shouldHandleTab: should return false if appendBox is false', () => {
@@ -1598,7 +1603,7 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.appendBox = false;
 
-      expect((component as any).shouldHandleTab(event)).toBeFalse();
+      expect((component as any).shouldHandleTab(event)).toBe(false);
     });
 
     it('shouldHandleTab: should return false if shiftKey is true', () => {
@@ -1606,7 +1611,7 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.appendBox = true;
 
-      expect((component as any).shouldHandleTab(event)).toBeFalse();
+      expect((component as any).shouldHandleTab(event)).toBe(false);
     });
 
     it('shouldHandleTab: should return true if comboOpen and appendBox are true and shiftKey is false', () => {
@@ -1614,13 +1619,13 @@ describe('PoComboComponent:', () => {
       component.comboOpen = true;
       component.appendBox = true;
 
-      expect((component as any).shouldHandleTab(event)).toBeTrue();
+      expect((component as any).shouldHandleTab(event)).toBe(true);
     });
 
     it('onListboxKeyDown: should not call focusInput for Tab without shift', () => {
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
-      spyOn(component as any, 'focusInput');
-      spyOn(event, 'preventDefault' as any);
+      vi.spyOn(component as any, 'focusInput');
+      vi.spyOn(event, 'preventDefault' as any);
 
       component.onListboxKeyDown(event);
 
@@ -1629,8 +1634,8 @@ describe('PoComboComponent:', () => {
 
     it('onListboxKeyDown: should not call focusInput for non-Tab keys', () => {
       const event = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true });
-      spyOn(component as any, 'focusInput');
-      spyOn(event, 'preventDefault' as any);
+      vi.spyOn(component as any, 'focusInput');
+      vi.spyOn(event, 'preventDefault' as any);
 
       component.onListboxKeyDown(event);
 
@@ -1640,7 +1645,7 @@ describe('PoComboComponent:', () => {
     it('should not call focusItem when combo is closed', () => {
       const event = { shiftKey: false };
       component.comboOpen = false;
-      spyOn(component, <any>'focusItem');
+      vi.spyOn(component as any, 'focusItem');
 
       component['handleCleanKeyboardTab'](event as any);
 
@@ -1650,17 +1655,17 @@ describe('PoComboComponent:', () => {
     describe('focusInput', () => {
       it('should focus on input element', () => {
         const event = new KeyboardEvent('keydown');
-        spyOn(component.inputEl.nativeElement, 'focus');
-        spyOn(event, 'preventDefault' as any);
+        vi.spyOn(component.inputEl.nativeElement, 'focus');
+        vi.spyOn(event, 'preventDefault' as any);
 
         component['focusInput'](event);
 
         expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
-        expect(event.preventDefault as jasmine.Spy).toHaveBeenCalled();
+        expect(event.preventDefault as Mock).toHaveBeenCalled();
       });
 
       it('should work without event parameter', () => {
-        spyOn(component.inputEl.nativeElement, 'focus');
+        vi.spyOn(component.inputEl.nativeElement, 'focus');
 
         component['focusInput']();
 
@@ -1672,21 +1677,21 @@ describe('PoComboComponent:', () => {
         const mockListbox = {
           listboxItemList: {
             nativeElement: {
-              focus: jasmine.createSpy('focus')
+              focus: vi.fn()
             }
           }
         };
         component.poListbox = mockListbox as any;
         const mockFirstItem = {
-          focus: jasmine.createSpy('focus')
+          focus: vi.fn()
         };
         const mockNodeList = {
           length: 1,
           item: (index: number) => (index === 0 ? mockFirstItem : null),
           0: mockFirstItem
         } as unknown as NodeListOf<HTMLElement>;
-        spyOn(document, 'querySelector').and.returnValue(null);
-        spyOn(document, 'querySelectorAll').and.returnValue(mockNodeList);
+        vi.spyOn(document as any, 'querySelector').mockReturnValue(null);
+        vi.spyOn(document as any, 'querySelectorAll').mockReturnValue(mockNodeList);
 
         component['focusItem']();
         tick();
@@ -1697,7 +1702,7 @@ describe('PoComboComponent:', () => {
       }));
 
       it('should select first item using ternary operator when no item is selected', fakeAsync(() => {
-        const mockFirstItem = { focus: jasmine.createSpy('focus') } as any;
+        const mockFirstItem = { focus: vi.fn() } as any;
         const mockItems = {
           length: 1,
           item: (index: number) => (index === 0 ? mockFirstItem : null),
@@ -1706,13 +1711,13 @@ describe('PoComboComponent:', () => {
         const mockListbox = {
           listboxItemList: {
             nativeElement: {
-              focus: jasmine.createSpy('focus')
+              focus: vi.fn()
             }
           }
         };
         component['poListbox'] = mockListbox as any;
         component.selectedValue = undefined; // Nenhum item selecionado
-        spyOn(document, 'querySelectorAll').and.returnValue(mockItems);
+        vi.spyOn(document as any, 'querySelectorAll').mockReturnValue(mockItems);
 
         // Act
         component['focusItem']();
@@ -1731,7 +1736,7 @@ describe('PoComboComponent:', () => {
         component.comboOpen = true;
         component.appendBox = true;
 
-        expect(component['shouldHandleTab'](event)).toBeTrue();
+        expect(component['shouldHandleTab'](event)).toBe(true);
       });
 
       it('should return false when combo is closed', () => {
@@ -1739,7 +1744,7 @@ describe('PoComboComponent:', () => {
         component.comboOpen = false;
         component.appendBox = true;
 
-        expect(component['shouldHandleTab'](event)).toBeFalse();
+        expect(component['shouldHandleTab'](event)).toBe(false);
       });
 
       it('should return false when appendBox is false', () => {
@@ -1747,7 +1752,7 @@ describe('PoComboComponent:', () => {
         component.comboOpen = true;
         component.appendBox = false;
 
-        expect(component['shouldHandleTab'](event)).toBeFalse();
+        expect(component['shouldHandleTab'](event)).toBe(false);
       });
 
       it('should return false when shiftKey is true', () => {
@@ -1755,18 +1760,19 @@ describe('PoComboComponent:', () => {
         component.comboOpen = true;
         component.appendBox = true;
 
-        expect(component['shouldHandleTab'](event)).toBeFalse();
+        expect(component['shouldHandleTab'](event)).toBe(false);
       });
     });
 
     describe('onListboxKeyDown', () => {
       it('should call focusInput when Shift+Tab is pressed', () => {
-        const event = jasmine.createSpyObj<KeyboardEvent>('KeyboardEvent', ['preventDefault'], {
+        const event = {
+          preventDefault: vi.fn().mockName('KeyboardEvent.preventDefault'),
           keyCode: 9,
           shiftKey: true,
           key: 'Tab'
-        });
-        const spyFocusInput = spyOn(component, <any>'focusInput');
+        };
+        const spyFocusInput = vi.spyOn(component as any, 'focusInput');
 
         component.onListboxKeyDown(event);
 
@@ -1776,8 +1782,8 @@ describe('PoComboComponent:', () => {
 
       it('should not call focusInput for other key combinations', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
-        spyOn(component, <any>'focusInput');
-        spyOn(event, 'preventDefault' as any);
+        vi.spyOn(component as any, 'focusInput');
+        vi.spyOn(event, 'preventDefault' as any);
 
         component.onListboxKeyDown(event);
 
@@ -1786,8 +1792,8 @@ describe('PoComboComponent:', () => {
 
       it('should not call focusInput for non-Tab keys', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true });
-        spyOn(component, <any>'focusInput');
-        spyOn(event, 'preventDefault' as any);
+        vi.spyOn(component as any, 'focusInput');
+        vi.spyOn(event, 'preventDefault' as any);
 
         component.onListboxKeyDown(event);
 
@@ -1800,13 +1806,13 @@ describe('PoComboComponent:', () => {
         const event = {
           keyCode: PoKeyCodeEnum.tab,
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         };
 
         // Configurar condições para o if ser verdadeiro
-        spyOn(component, <any>'shouldHandleTab').and.returnValue(true);
-        spyOn(component, <any>'isCleanVisible').and.returnValue(false);
-        spyOn(component, <any>'focusItem');
+        vi.spyOn(component as any, 'shouldHandleTab').mockReturnValue(true);
+        vi.spyOn(component as any, 'isCleanVisible').mockReturnValue(false);
+        vi.spyOn(component as any, 'focusItem');
 
         component.onKeyDown(event);
 
@@ -1819,11 +1825,11 @@ describe('PoComboComponent:', () => {
         const event = {
           keyCode: PoKeyCodeEnum.tab,
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         };
 
-        spyOn(component, <any>'shouldHandleTab').and.returnValue(false);
-        spyOn(component, <any>'focusItem');
+        vi.spyOn(component as any, 'shouldHandleTab').mockReturnValue(false);
+        vi.spyOn(component as any, 'focusItem');
 
         component.onKeyDown(event);
 
@@ -1834,12 +1840,12 @@ describe('PoComboComponent:', () => {
         const event = {
           keyCode: PoKeyCodeEnum.tab,
           shiftKey: false,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         };
 
-        spyOn(component, <any>'shouldHandleTab').and.returnValue(true);
-        spyOn(component, <any>'isCleanVisible').and.returnValue(true);
-        spyOn(component, <any>'focusItem');
+        vi.spyOn(component as any, 'shouldHandleTab').mockReturnValue(true);
+        vi.spyOn(component as any, 'isCleanVisible').mockReturnValue(true);
+        vi.spyOn(component as any, 'focusItem');
 
         component.onKeyDown(event);
 
@@ -1850,11 +1856,11 @@ describe('PoComboComponent:', () => {
     describe('handleCleanKeyboardTab', () => {
       it('should call focusItem and preventDefault when shouldHandleTab returns true', () => {
         const event = {
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any;
 
-        spyOn(component, <any>'shouldHandleTab').and.returnValue(true);
-        spyOn(component, <any>'focusItem');
+        vi.spyOn(component as any, 'shouldHandleTab').mockReturnValue(true);
+        vi.spyOn(component as any, 'focusItem');
 
         component.handleCleanKeyboardTab(event);
 
@@ -1865,11 +1871,11 @@ describe('PoComboComponent:', () => {
 
       it('should not call focusItem when shouldHandleTab returns false', () => {
         const event = {
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as any;
 
-        spyOn(component, <any>'shouldHandleTab').and.returnValue(false);
-        spyOn(component, <any>'focusItem');
+        vi.spyOn(component as any, 'shouldHandleTab').mockReturnValue(false);
+        vi.spyOn(component as any, 'focusItem');
 
         component.handleCleanKeyboardTab(event);
 
@@ -1880,7 +1886,7 @@ describe('PoComboComponent:', () => {
 
     describe('onScroll', () => {
       it('should call adjustContainerPosition when triggered', () => {
-        const spyAdjustContainerPosition = spyOn(component as any, 'adjustContainerPosition');
+        const spyAdjustContainerPosition = vi.spyOn(component as any, 'adjustContainerPosition');
 
         component['onScroll']();
 
@@ -1901,7 +1907,7 @@ describe('PoComboComponent:', () => {
     });
 
     // TO-DO
-    xit('should includes an icon.', () => {
+    it.skip('should includes an icon.', () => {
       component.icon = 'ICON_NEWS';
       fixture.detectChanges();
 
@@ -2047,7 +2053,7 @@ describe('PoComboComponent - with service:', () => {
     component.service = getFakeService([{ label: 'label', value: 1 }]);
     component.selectedValue = 'po';
 
-    spyOn(component, 'updateOptionByFilteredValue');
+    vi.spyOn(component as any, 'updateOptionByFilteredValue');
     component.getObjectByValue('value');
 
     expect(component.updateOptionByFilteredValue).toHaveBeenCalled();
@@ -2057,7 +2063,7 @@ describe('PoComboComponent - with service:', () => {
     component.service = getFakeService([{ label: 'label', value: 1 }]);
     component.selectedValue = 1;
 
-    spyOn(component, 'updateOptionByFilteredValue');
+    vi.spyOn(component as any, 'updateOptionByFilteredValue');
 
     component.getObjectByValue(1);
     expect(component.updateOptionByFilteredValue).not.toHaveBeenCalled();
@@ -2068,7 +2074,7 @@ describe('PoComboComponent - with service:', () => {
     component.selectedValue = 1;
     component.selectedOption = { label: 'label', value: 1 };
 
-    spyOn(component, 'updateOptionByFilteredValue');
+    vi.spyOn(component as any, 'updateOptionByFilteredValue');
     component.getObjectByValue('label');
     expect(component.updateOptionByFilteredValue).not.toHaveBeenCalled();
   });
@@ -2081,7 +2087,7 @@ describe('PoComboComponent - with service:', () => {
     component.inputEl.nativeElement.value = 'po';
     component.initInputObservable();
 
-    spyOn(component, 'controlApplyFilter');
+    vi.spyOn(component as any, 'controlApplyFilter');
 
     component.inputEl.nativeElement.dispatchEvent(eventKeyBoard);
 
@@ -2093,7 +2099,7 @@ describe('PoComboComponent - with service:', () => {
   describe('Methods:', () => {
     const fakeSubscription = <any>{ unsubscribe: () => {}, subscribe: () => {} };
     it('should include additionalHelp when event is triggered', () => {
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
       component.additionalHelp = new EventEmitter<any>();
 
       const result = component.setHelper('label', 'tooltip');
@@ -2159,7 +2165,7 @@ describe('PoComboComponent - with service:', () => {
         }
       };
 
-      spyOn(fakeThis.service, 'getFilteredData').and.returnValue({ subscribe: callback => callback() });
+      vi.spyOn(fakeThis.service as any, 'getFilteredData').mockReturnValue({ subscribe: callback => callback() });
 
       component.applyFilter.apply(fakeThis, [applyFilterValue, isArrowDown]);
 
@@ -2167,9 +2173,9 @@ describe('PoComboComponent - with service:', () => {
     });
 
     it('applyFilter: should call focusItem if param `isArrowDown` is true', () => {
-      spyOn(component.service, 'getFilteredData').and.returnValue(of([{ value: 'test' }]));
-      spyOn(component, 'setOptionsByApplyFilter');
-      spyOn(component, <any>'focusItem');
+      vi.spyOn(component.service as any, 'getFilteredData').mockReturnValue(of([{ value: 'test' }]));
+      vi.spyOn(component as any, 'setOptionsByApplyFilter');
+      vi.spyOn(component as any, 'focusItem');
 
       component.defaultService.hasNext = true;
       component.applyFilter('test', false, true);
@@ -2195,7 +2201,7 @@ describe('PoComboComponent - with service:', () => {
       };
       fixture.detectChanges();
 
-      spyOn(fakeThis.service, 'getFilteredData').and.returnValue({ subscribe: callback => callback() });
+      vi.spyOn(fakeThis.service as any, 'getFilteredData').mockReturnValue({ subscribe: callback => callback() });
 
       component.applyFilter.apply(fakeThis, [applyFilterValue]);
 
@@ -2205,21 +2211,21 @@ describe('PoComboComponent - with service:', () => {
     it('applyFilter: should set hasNext true if removeInitialFilter is true', () => {
       const fakeThis: any = {
         removeInitialFilter: true,
-        controlComboVisibility: jasmine.createSpy('controlComboVisibility'),
-        setOptionsByApplyFilter: jasmine.createSpy('setOptionsByApplyFilter'),
+        controlComboVisibility: vi.fn(),
+        setOptionsByApplyFilter: vi.fn(),
         fieldLabel: 'label',
         filterParams: 'filterParams',
         isServerSearching: false,
         service: {
-          getFilteredData: jasmine.createSpy('getFilteredData').and.returnValue({
+          getFilteredData: vi.fn().mockReturnValue({
             subscribe: (success: Function, error: Function) => success([])
           })
         },
         defaultService: {
           hasNext: false
         },
-        focusItem: jasmine.createSpy('focusItem'),
-        onErrorFilteredData: jasmine.createSpy('onErrorFilteredData')
+        focusItem: vi.fn(),
+        onErrorFilteredData: vi.fn()
       };
 
       const applyFilterValue = 'applyFilterValue';
@@ -2234,8 +2240,8 @@ describe('PoComboComponent - with service:', () => {
     it('applyFilter: Should call the service getFilteredData method with the correct parameters when removeInitialFilter is true and infiniteScroll is enabled.', () => {
       const fakeThis: any = {
         removeInitialFilter: true,
-        controlComboVisibility: jasmine.createSpy('controlComboVisibility'),
-        setOptionsByApplyFilter: jasmine.createSpy('setOptionsByApplyFilter'),
+        controlComboVisibility: vi.fn(),
+        setOptionsByApplyFilter: vi.fn(),
         infiniteScroll: true,
         page: 1,
         pageSize: 1,
@@ -2243,15 +2249,15 @@ describe('PoComboComponent - with service:', () => {
         filterParams: 'filterParams',
         isServerSearching: false,
         service: {
-          getFilteredData: jasmine.createSpy('getFilteredData').and.returnValue({
+          getFilteredData: vi.fn().mockReturnValue({
             subscribe: (success: Function, error: Function) => success([])
           })
         },
         defaultService: {
           hasNext: false
         },
-        focusItem: jasmine.createSpy('focusItem'),
-        onErrorFilteredData: jasmine.createSpy('onErrorFilteredData')
+        focusItem: vi.fn(),
+        onErrorFilteredData: vi.fn()
       };
 
       const applyFilterValue = 'applyFilterValue';
@@ -2267,8 +2273,8 @@ describe('PoComboComponent - with service:', () => {
       const value = 'test';
       const error = { 'error': { 'message': 'message' } };
 
-      spyOn(component, 'controlComboVisibility');
-      spyOn(component.service, 'getFilteredData').and.returnValue(throwError(error));
+      vi.spyOn(component as any, 'controlComboVisibility');
+      vi.spyOn(component.service as any, 'getFilteredData').mockReturnValue(throwError(error));
 
       component.applyFilter(value);
       fixture.detectChanges();
@@ -2283,8 +2289,8 @@ describe('PoComboComponent - with service:', () => {
       const value = 'XPTO';
       const error = { 'error': { 'message': 'message' } };
 
-      spyOn(component.service, 'getObjectByValue').and.returnValue(throwError(error));
-      spyOn(component, 'updateSelectedValue');
+      vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(throwError(error));
+      vi.spyOn(component as any, 'updateSelectedValue');
 
       component.getObjectByValue(value);
 
@@ -2305,7 +2311,7 @@ describe('PoComboComponent - with service:', () => {
         selectedValue: undefined
       };
 
-      spyOn(fakeThis.service, 'getObjectByValue').and.returnValue({ subscribe: callback => callback() });
+      vi.spyOn(fakeThis.service as any, 'getObjectByValue').mockReturnValue({ subscribe: callback => callback() });
 
       component.getObjectByValue.apply(fakeThis, [param]);
 
@@ -2315,7 +2321,7 @@ describe('PoComboComponent - with service:', () => {
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
       component.autoFocus = true;
 
-      const spyFocus = spyOn(component, 'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
       component.ngAfterViewInit();
 
       expect(spyFocus).toHaveBeenCalled();
@@ -2324,7 +2330,7 @@ describe('PoComboComponent - with service:', () => {
     it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
       component.autoFocus = false;
 
-      const spyFocus = spyOn(component, 'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
       component.ngAfterViewInit();
 
       expect(spyFocus).not.toHaveBeenCalled();
@@ -2333,7 +2339,7 @@ describe('PoComboComponent - with service:', () => {
     it('ngOnDestroy: should not unsubscribe if getSubscription is falsy.', () => {
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -2345,7 +2351,7 @@ describe('PoComboComponent - with service:', () => {
       component.infiniteScroll = true;
       Object.defineProperty(component, 'subscriptionScrollEvent', { value: fakeSubscription, configurable: true });
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -2355,7 +2361,7 @@ describe('PoComboComponent - with service:', () => {
     it('ngOnDestroy: should not unsubscribe if filterSubscription is falsy.', () => {
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -2366,7 +2372,7 @@ describe('PoComboComponent - with service:', () => {
     it('ngOnChanges: should call `configAfterSetFilterService` if `filterService` has a value', () => {
       const changes = { filterService: 'filterServiceURL' };
 
-      spyOn(component, <any>'configAfterSetFilterService');
+      vi.spyOn(component as any, 'configAfterSetFilterService');
 
       component.ngOnChanges(<any>changes);
 
@@ -2376,7 +2382,7 @@ describe('PoComboComponent - with service:', () => {
     it('ngOnChanges: shouldn`t call `configAfterSetFilterService` if `filterService` doesn`t have a value', () => {
       const changes = {};
 
-      spyOn(component, <any>'configAfterSetFilterService');
+      vi.spyOn(component as any, 'configAfterSetFilterService');
 
       component.ngOnChanges(changes);
 
@@ -2386,8 +2392,8 @@ describe('PoComboComponent - with service:', () => {
     it('ngOnChanges: should call `unsubscribeKeyupObservable` and `initInputObservable` if `debounceTime` changes value', () => {
       const changes = { debounceTime: 200 };
 
-      spyOn(component, <any>'unsubscribeKeyupObservable');
-      spyOn(component, <any>'initInputObservable');
+      vi.spyOn(component as any, 'unsubscribeKeyupObservable');
+      vi.spyOn(component as any, 'initInputObservable');
 
       component.ngOnChanges(<any>changes);
 
@@ -2398,8 +2404,8 @@ describe('PoComboComponent - with service:', () => {
     it('ngOnChanges: shouldn`t call `unsubscribeKeyupObservable` and `initInputObservable` if `debounceTime` doesn`t have changes', () => {
       const changes = {};
 
-      spyOn(component, <any>'unsubscribeKeyupObservable');
-      spyOn(component, <any>'initInputObservable');
+      vi.spyOn(component as any, 'unsubscribeKeyupObservable');
+      vi.spyOn(component as any, 'initInputObservable');
 
       component.ngOnChanges(changes);
 
@@ -2409,8 +2415,8 @@ describe('PoComboComponent - with service:', () => {
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -2418,8 +2424,8 @@ describe('PoComboComponent - with service:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -2436,7 +2442,7 @@ describe('PoComboComponent - with service:', () => {
       component.selectedView = undefined;
       component.filterMinlength = 2;
 
-      spyOn(component, 'controlApplyFilter');
+      vi.spyOn(component as any, 'controlApplyFilter');
 
       component.searchOnEnterOrArrow(event, value);
 
@@ -2449,7 +2455,7 @@ describe('PoComboComponent - with service:', () => {
       const event = {
         key: 'Enter'
       };
-      spyOn(component, 'controlApplyFilter');
+      vi.spyOn(component as any, 'controlApplyFilter');
 
       component.searchOnEnterOrArrow(event, value);
 
@@ -2463,7 +2469,7 @@ describe('PoComboComponent - with service:', () => {
         key: 'Enter'
       };
 
-      spyOn(component, 'controlApplyFilter');
+      vi.spyOn(component as any, 'controlApplyFilter');
 
       component.searchOnEnterOrArrow(event, value);
 
@@ -2478,7 +2484,7 @@ describe('PoComboComponent - with service:', () => {
         key: 'Enter'
       };
 
-      spyOn(component, 'controlApplyFilter');
+      vi.spyOn(component as any, 'controlApplyFilter');
 
       component.searchOnEnterOrArrow(event, value);
 
@@ -2491,7 +2497,7 @@ describe('PoComboComponent - with service:', () => {
       component.isProcessingValueByTab = false;
       component.selectedOption = { label: 'po', value: 'po' };
 
-      spyOn(component, 'applyFilter');
+      vi.spyOn(component as any, 'applyFilter');
 
       component.controlApplyFilter(value);
 
@@ -2504,7 +2510,7 @@ describe('PoComboComponent - with service:', () => {
       component.isProcessingValueByTab = true;
       component.selectedOption = { label: 'abc', value: 'abc' };
 
-      spyOn(component, 'applyFilter');
+      vi.spyOn(component as any, 'applyFilter');
 
       component.controlApplyFilter(value);
 
@@ -2527,7 +2533,7 @@ describe('PoComboComponent - with service:', () => {
 
       component.service = component.defaultService;
 
-      const spyUpdateComboList = spyOn(component, 'updateComboList');
+      const spyUpdateComboList = vi.spyOn(component as any, 'updateComboList');
 
       component.onKeyUp(event);
 
@@ -2537,7 +2543,7 @@ describe('PoComboComponent - with service:', () => {
     it('removeListeners: should not unsubscribe from the scroll event when it does not exist and has infinity Scroll', () => {
       Object.defineProperty(component, 'subscriptionScrollEvent', { value: fakeSubscription, configurable: true });
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
       component.infiniteScroll = true;
       component['defaultService'].hasNext = false;
       Object.defineProperty(component, 'subscriptionScrollEvent', { value: undefined, configurable: true });
@@ -2548,7 +2554,7 @@ describe('PoComboComponent - with service:', () => {
     });
 
     it('setOptions: should be called and return object', () => {
-      spyOn(component, 'getInputValue').and.returnValue(1);
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue(1);
       const optionsList = [
         { label: 'Angular', value: 1 },
         { label: 'React', value: 2 }
@@ -2558,7 +2564,7 @@ describe('PoComboComponent - with service:', () => {
       expect(options).toBe(optionsList);
     });
     it('setOptions: should be called and return []', () => {
-      spyOn(component, 'getInputValue').and.returnValue(undefined);
+      vi.spyOn(component as any, 'getInputValue').mockReturnValue(undefined);
       const optionsList = [
         { label: 'Angular', value: 1 },
         { label: 'React', value: 2 }
@@ -2611,7 +2617,7 @@ describe('PoComboComponent - with service:', () => {
       ];
       component.options = mockOptions;
 
-      spyOn(component.service, 'getFilteredData').and.returnValue(throwError(error));
+      vi.spyOn(component.service as any, 'getFilteredData').mockReturnValue(throwError(error));
 
       component.applyFilter(value);
       fixture.detectChanges();
@@ -2622,9 +2628,9 @@ describe('PoComboComponent - with service:', () => {
     it('should focus on the listbox item when selectedValue is true', fakeAsync(() => {
       const listboxItem = document.createElement('div');
       listboxItem.setAttribute('aria-selected', 'true');
-      spyOn(document, 'querySelector').and.returnValue(listboxItem);
+      vi.spyOn(document as any, 'querySelector').mockReturnValue(listboxItem);
 
-      const focusSpy = spyOn(listboxItem, 'focus');
+      const focusSpy = vi.spyOn(listboxItem as any, 'focus');
 
       component.selectedValue = true;
       component['focusItem']();

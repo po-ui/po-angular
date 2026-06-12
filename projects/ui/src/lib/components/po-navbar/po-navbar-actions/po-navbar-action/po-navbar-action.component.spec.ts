@@ -30,7 +30,7 @@ describe('PoNavbarActionComponent:', () => {
     it('click: should call `action` if `action` is defined', () => {
       component.action = () => 'action';
 
-      const actionSpy = spyOn(component, 'action');
+      const actionSpy = vi.spyOn(component as any, 'action');
 
       component.click();
 
@@ -42,7 +42,7 @@ describe('PoNavbarActionComponent:', () => {
       component.link = 'http://fakeUrlPo.com';
       const linkReturn = 'test';
 
-      spyOn(component, <any>'openUrl').and.returnValue(linkReturn);
+      vi.spyOn(component as any, 'openUrl').mockReturnValue(linkReturn);
 
       const result = <any>component.click();
 
@@ -54,7 +54,7 @@ describe('PoNavbarActionComponent:', () => {
       component.action = undefined;
       component.link = undefined;
 
-      spyOn(component, <any>'openUrl');
+      vi.spyOn(component as any, 'openUrl');
 
       expect(component.click.bind(this)).not.toThrowError();
       expect(component['openUrl']).not.toHaveBeenCalled();
@@ -63,8 +63,8 @@ describe('PoNavbarActionComponent:', () => {
     it('openUrl: should call `openExternalLink` if url is external link', () => {
       const url = 'http://www.fakeUrlPo.com';
 
-      spyOn(utils, 'openExternalLink');
-      spyOn(component['router'], 'navigate');
+      vi.spyOn(utils as any, 'openExternalLink');
+      vi.spyOn(component['router'] as any, 'navigate');
 
       component['openUrl'](url);
 
@@ -75,8 +75,8 @@ describe('PoNavbarActionComponent:', () => {
     it('openUrl: should call `router.navigate` if url is internal link', () => {
       const url = '/customers';
 
-      spyOn(component['router'], 'navigate');
-      spyOn(utils, 'openExternalLink');
+      vi.spyOn(component['router'] as any, 'navigate');
+      vi.spyOn(utils as any, 'openExternalLink');
 
       component['openUrl'](url);
 
@@ -85,8 +85,8 @@ describe('PoNavbarActionComponent:', () => {
     });
 
     it('openUrl: shouldn`t call `router.navigate` and `openExternalLink` if url is undefined ', () => {
-      spyOn(component['router'], 'navigate');
-      spyOn(utils, 'openExternalLink');
+      vi.spyOn(component['router'] as any, 'navigate');
+      vi.spyOn(utils as any, 'openExternalLink');
 
       component['openUrl'](undefined);
 

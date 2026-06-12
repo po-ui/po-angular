@@ -59,7 +59,7 @@ describe('PoLookupFilterService', () => {
       const filter = undefined;
       const filterParams = { name: 'test' };
 
-      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(service as any, 'validateParams').mockReturnValue(filterParams);
 
       service.getFilteredItems({ filter, page, pageSize, filterParams }).subscribe(() => {
         expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
@@ -74,7 +74,7 @@ describe('PoLookupFilterService', () => {
       const value = 'test/encoding';
       const expectedResponse = { user: 'test' };
 
-      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(service as any, 'validateParams').mockReturnValue(filterParams);
 
       service.getObjectByValue(value, filterParams).subscribe(response => {
         expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
@@ -99,7 +99,7 @@ describe('PoLookupFilterService', () => {
       const filterParams = { name: 'test' };
       const value = '1';
 
-      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(service as any, 'validateParams').mockReturnValue(filterParams);
 
       service.getObjectByValue(value, filterParams).subscribe(() => {
         expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
@@ -114,7 +114,7 @@ describe('PoLookupFilterService', () => {
       const filterParams = { name: 'test' };
       const value = 1;
 
-      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(service as any, 'validateParams').mockReturnValue(filterParams);
 
       service.getObjectByValue(value, filterParams).subscribe(() => {
         expect(service['validateParams']).toHaveBeenCalledWith(filterParams);
@@ -129,7 +129,7 @@ describe('PoLookupFilterService', () => {
       const filterParams = { name: 'test' };
       const value = [1, 2];
 
-      spyOn(service, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(service as any, 'validateParams').mockReturnValue(filterParams);
 
       service.getObjectByValue(value, filterParams).subscribe(() => {
         expect(service['validateParams']).toHaveBeenCalledWith(filterParams);

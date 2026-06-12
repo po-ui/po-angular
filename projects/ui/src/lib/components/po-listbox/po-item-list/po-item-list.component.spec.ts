@@ -41,7 +41,7 @@ describe('PoItemListComponent', () => {
         };
         component.ngOnChanges(changes);
 
-        expect(component['shouldUpdateSelected'](changes)).toBeTrue();
+        expect(component['shouldUpdateSelected'](changes)).toBe(true);
       });
 
       it('should return false when searchValue and label from changes exist but have different values', () => {
@@ -50,7 +50,7 @@ describe('PoItemListComponent', () => {
           label: { currentValue: 'different', previousValue: null, firstChange: true, isFirstChange: () => true }
         };
 
-        expect(component['shouldUpdateSelected'](changes)).toBeFalse();
+        expect(component['shouldUpdateSelected'](changes)).toBe(false);
       });
 
       it('should return false when searchValue is not present in changes', () => {
@@ -58,7 +58,7 @@ describe('PoItemListComponent', () => {
           label: { currentValue: 'test', previousValue: null, firstChange: true, isFirstChange: () => true }
         };
 
-        expect(component['shouldUpdateSelected'](changes)).toBeFalse();
+        expect(component['shouldUpdateSelected'](changes)).toBe(false);
       });
     });
 
@@ -68,7 +68,7 @@ describe('PoItemListComponent', () => {
         const tabHideChanges = { tabHide: { currentValue: true } };
         const disabledChanges = { disabled: { currentValue: true } };
 
-        spyOn(component.tabsItem, 'emit');
+        vi.spyOn(component.tabsItem as any, 'emit');
 
         component.ngOnChanges(<any>tabHideChanges);
         component.ngOnChanges(<any>disabledChanges);
@@ -80,7 +80,7 @@ describe('PoItemListComponent', () => {
         component.isTabs = true;
         const activeTabsChanges = { activeTabs: { currentValue: true } };
 
-        spyOn(component, <any>'emitActiveTabs');
+        vi.spyOn(component as any, 'emitActiveTabs');
 
         component.ngOnChanges(<any>activeTabsChanges);
 
@@ -91,7 +91,7 @@ describe('PoItemListComponent', () => {
     describe('onCheckboxItemEmit:', () => {
       it('should call `onCheckboxItem` if event is `Enter`', () => {
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
-        spyOn(component, 'onCheckboxItem');
+        vi.spyOn(component as any, 'onCheckboxItem');
 
         component.onCheckboxItemEmit(eventEnterKey);
 
@@ -100,7 +100,7 @@ describe('PoItemListComponent', () => {
 
       it('should call `onCheckboxItem` if event is `Space`', () => {
         const eventSpaceKey = new KeyboardEvent('keydown', { 'code': 'Space' });
-        spyOn(component, 'onCheckboxItem');
+        vi.spyOn(component as any, 'onCheckboxItem');
 
         component.onCheckboxItemEmit(eventSpaceKey);
 
@@ -114,7 +114,7 @@ describe('PoItemListComponent', () => {
         component.value = 'testValue';
         component.label = 'testLabel';
         component.selectedView = optionTest;
-        spyOn(component.comboItem, 'emit');
+        vi.spyOn(component.comboItem as any, 'emit');
 
         component.onComboItem(optionTest, '');
 
@@ -137,7 +137,7 @@ describe('PoItemListComponent', () => {
         component.value = 'testValue';
         component.label = 'testLabel';
         component.checkboxValue = true;
-        spyOn(component.checkboxItem, 'emit');
+        vi.spyOn(component.checkboxItem as any, 'emit');
 
         component.onCheckboxItem();
 
@@ -160,7 +160,7 @@ describe('PoItemListComponent', () => {
 
         const result = component.validateForOptionsLabel();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return false if shouldMarkLetters is falsy', () => {
@@ -171,7 +171,7 @@ describe('PoItemListComponent', () => {
 
         const result = component.validateForOptionsLabel();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 

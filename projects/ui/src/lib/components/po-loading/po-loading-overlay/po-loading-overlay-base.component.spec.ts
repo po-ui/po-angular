@@ -32,14 +32,14 @@ describe('PoLoadingOverlayBaseComponent:', () => {
 
     it('p-text: should set with invalid values', () => {
       const textInvalidValues = [undefined, null, '', 0];
-      spyOn(component, <any>'getTextDefault').and.returnValue('pt');
+      vi.spyOn(component as any, 'getTextDefault').mockReturnValue('pt');
 
       expectPropertiesValues(component, 'text', textInvalidValues, 'pt');
     });
 
     it('p-text: should set with valid values', () => {
       const textValidValues = ['carregando', '0', ' '];
-      spyOn(component, <any>'getTextDefault');
+      vi.spyOn(component as any, 'getTextDefault');
       expectPropertiesValues(component, 'text', textValidValues, textValidValues);
     });
 

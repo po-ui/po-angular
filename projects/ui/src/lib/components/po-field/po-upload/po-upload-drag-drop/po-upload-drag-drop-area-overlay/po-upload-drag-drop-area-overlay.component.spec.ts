@@ -40,7 +40,7 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
 
       component.target = fakeTarget;
 
-      spyOn(component, <any>'setPosition');
+      vi.spyOn(component as any, 'setPosition');
 
       component.ngAfterViewInit();
 
@@ -50,7 +50,7 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
     it(`ngAfterViewInit: shouldn't call 'setPosition' if doesn't have target.`, () => {
       component.target = undefined;
 
-      spyOn(component, <any>'setPosition');
+      vi.spyOn(component as any, 'setPosition');
 
       component.ngAfterViewInit();
 
@@ -58,7 +58,7 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
     });
 
     it(`ngAfterViewInit: should call 'areaElement.emit' with 'DragDropAreaFixed.nativeElement'.`, () => {
-      spyOn(component.areaElement, 'emit');
+      vi.spyOn(component.areaElement as any, 'emit');
 
       component.ngAfterViewInit();
 
@@ -81,8 +81,8 @@ describe('PoUploadDragDropAreaOverlayComponent:', () => {
         }
       };
 
-      spyOn(component['renderer'], 'setStyle').and.callThrough();
-      spyOn(targetElement.nativeElement, 'getBoundingClientRect').and.callThrough();
+      vi.spyOn(component['renderer'] as any, 'setStyle');
+      vi.spyOn(targetElement.nativeElement as any, 'getBoundingClientRect');
 
       component['setPosition'](targetElement);
 

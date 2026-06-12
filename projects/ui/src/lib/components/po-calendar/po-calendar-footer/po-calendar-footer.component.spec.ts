@@ -37,7 +37,7 @@ describe('PoCalendarFooterComponent:', () => {
 
   describe('Methods:', () => {
     it('onClear: should emit clear event', () => {
-      spyOn(component.clear, 'emit');
+      vi.spyOn(component.clear as any, 'emit');
 
       component.onClear();
 
@@ -45,7 +45,7 @@ describe('PoCalendarFooterComponent:', () => {
     });
 
     it('onSelectToday: should emit selectToday event', () => {
-      spyOn(component.selectToday, 'emit');
+      vi.spyOn(component.selectToday as any, 'emit');
 
       component.onSelectToday();
 
@@ -56,7 +56,7 @@ describe('PoCalendarFooterComponent:', () => {
       it('should emit closeCalendar when Tab is pressed without Shift and hideTodayButton is true', () => {
         component.hideTodayButton = true;
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onClearKeydown(event);
 
@@ -66,7 +66,7 @@ describe('PoCalendarFooterComponent:', () => {
       it('should not emit closeCalendar when hideTodayButton is false', () => {
         component.hideTodayButton = false;
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onClearKeydown(event);
 
@@ -76,7 +76,7 @@ describe('PoCalendarFooterComponent:', () => {
       it('should not emit closeCalendar when Shift+Tab is pressed even with hideTodayButton true', () => {
         component.hideTodayButton = true;
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onClearKeydown(event);
 
@@ -86,7 +86,7 @@ describe('PoCalendarFooterComponent:', () => {
       it('should not emit closeCalendar when other keys are pressed with hideTodayButton true', () => {
         component.hideTodayButton = true;
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onClearKeydown(event);
 
@@ -97,7 +97,7 @@ describe('PoCalendarFooterComponent:', () => {
     describe('onTodayKeydown:', () => {
       it('should emit closeCalendar when Tab is pressed without Shift', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onTodayKeydown(event);
 
@@ -106,7 +106,7 @@ describe('PoCalendarFooterComponent:', () => {
 
       it('should not emit closeCalendar when Shift+Tab is pressed', () => {
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onTodayKeydown(event);
 
@@ -115,7 +115,7 @@ describe('PoCalendarFooterComponent:', () => {
 
       it('should not emit closeCalendar when other keys are pressed', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
-        spyOn(component.closeCalendar, 'emit');
+        vi.spyOn(component.closeCalendar as any, 'emit');
 
         component.onTodayKeydown(event);
 

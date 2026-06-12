@@ -49,7 +49,7 @@ describe('PoNavbarItemComponent:', () => {
       const label = 'label test';
       const link = 'test/';
 
-      spyOn(component, 'action');
+      vi.spyOn(component as any, 'action');
 
       component.itemClick(label, link);
 
@@ -57,7 +57,7 @@ describe('PoNavbarItemComponent:', () => {
     });
 
     it('itemClick: should call `click.emit`', () => {
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       component.itemClick();
 
@@ -81,7 +81,7 @@ describe('PoNavbarItemComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component, 'itemClick');
+      vi.spyOn(component as any, 'itemClick');
 
       const eventClick = document.createEvent('MouseEvents');
       eventClick.initEvent('click', false, true);
@@ -108,7 +108,7 @@ describe('PoNavbarItemComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component, 'itemClick');
+      vi.spyOn(component as any, 'itemClick');
 
       const eventClick = new Event('click');
 

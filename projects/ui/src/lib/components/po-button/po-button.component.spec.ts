@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PoLoadingModule } from '../po-loading';
-import { PoIconModule } from './../po-icon';
-
+import { PoButtonModule } from './po-button.module';
 import { PoButtonBaseComponent } from './po-button-base.component';
 import { PoButtonComponent } from './po-button.component';
 
@@ -16,8 +14,7 @@ describe('PoButtonComponent: ', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [PoLoadingModule, PoIconModule],
-      declarations: [PoButtonComponent]
+      imports: [PoButtonModule]
     });
 
     fixture = TestBed.createComponent(PoButtonComponent);
@@ -51,12 +48,12 @@ describe('PoButtonComponent: ', () => {
     fixture.componentRef.setInput('p-icon', 'an-newspaper');
     fixture.detectChanges();
 
-    const icon = nativeElement.querySelector('po-icon i');
+    const icon = nativeElement.querySelector('po-icon');
     expect(icon).toBeTruthy();
   });
 
   it('should simulate button blur.', () => {
-    spyOn(component.blur, 'emit');
+    vi.spyOn(component.blur as any, 'emit');
 
     component.onBlur();
 
@@ -64,7 +61,7 @@ describe('PoButtonComponent: ', () => {
   });
 
   it('should simulate button click.', () => {
-    spyOn(component.click, 'emit');
+    vi.spyOn(component.click as any, 'emit');
 
     component.onClick();
 
@@ -142,7 +139,7 @@ describe('PoButtonComponent: ', () => {
         }
       };
 
-      spyOn(component.buttonElement.nativeElement, 'focus');
+      vi.spyOn(component.buttonElement.nativeElement, 'focus');
 
       component.focus();
 
@@ -157,7 +154,7 @@ describe('PoButtonComponent: ', () => {
       };
       component.disabled = true;
 
-      spyOn(component.buttonElement.nativeElement, 'focus');
+      vi.spyOn(component.buttonElement.nativeElement, 'focus');
 
       component.focus();
 

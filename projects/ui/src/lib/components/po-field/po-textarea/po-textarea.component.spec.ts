@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -29,7 +30,7 @@ describe('PoTextareaComponent:', () => {
   });
 
   it('write values in the model', () => {
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
     component.writeValue('teste');
     expect(component.change.emit).toHaveBeenCalled();
   });
@@ -41,7 +42,7 @@ describe('PoTextareaComponent:', () => {
 
   it('attempting to write with the undefined element', () => {
     component['inputEl'] = undefined;
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
     component.writeValue('teste');
     expect(component['inputEl']).toBeUndefined();
   });
@@ -82,8 +83,8 @@ describe('PoTextareaComponent:', () => {
     });
 
     it('should call callOnChange with processed value', () => {
-      spyOn(component, 'callOnChange');
-      spyOn(component as any, 'checkScrollState');
+      vi.spyOn(component as any, 'callOnChange');
+      vi.spyOn(component as any, 'checkScrollState');
 
       component.maxlength = 5;
 
@@ -93,7 +94,7 @@ describe('PoTextareaComponent:', () => {
     });
 
     it('should update textarea value', () => {
-      spyOn(component as any, 'checkScrollState');
+      vi.spyOn(component as any, 'checkScrollState');
 
       component.eventOnInput({ target: { value: 'PO UI' } });
 
@@ -101,24 +102,24 @@ describe('PoTextareaComponent:', () => {
     });
 
     it('should set hasValue=true when value exists', () => {
-      spyOn(component as any, 'checkScrollState');
+      vi.spyOn(component as any, 'checkScrollState');
 
       component.eventOnInput({ target: { value: 'abc' } });
 
-      expect(component.hasValue).toBeTrue();
+      expect(component.hasValue).toBe(true);
     });
 
     it('should set hasValue=false when value is empty', () => {
-      spyOn(component as any, 'checkScrollState');
+      vi.spyOn(component as any, 'checkScrollState');
 
       component.eventOnInput({ target: { value: '' } });
 
-      expect(component.hasValue).toBeFalse();
+      expect(component.hasValue).toBe(false);
     });
   });
 
   it('enter event must be called', () => {
-    spyOn(component.enter, 'emit');
+    vi.spyOn(component.enter as any, 'emit');
 
     component.eventOnFocus();
     expect(component.enter.emit).toHaveBeenCalled();
@@ -127,9 +128,9 @@ describe('PoTextareaComponent:', () => {
   it('blur event must be called', () => {
     component['onTouched'] = () => {};
 
-    spyOn(component.blur, 'emit');
-    spyOn(component, 'controlChangeEmitter');
-    spyOn(component, <any>'onTouched');
+    vi.spyOn(component.blur as any, 'emit');
+    vi.spyOn(component as any, 'controlChangeEmitter');
+    vi.spyOn(component as any, 'onTouched');
 
     component.eventOnBlur();
 
@@ -146,7 +147,7 @@ describe('PoTextareaComponent:', () => {
         component.additionalHelpTooltip = tooltip;
         component.displayAdditionalHelp = displayHelp;
         component.additionalHelp = additionalHelpEvent;
-        spyOn(component, 'showAdditionalHelp');
+        vi.spyOn(component as any, 'showAdditionalHelp');
       };
     });
 
@@ -184,7 +185,7 @@ describe('PoTextareaComponent:', () => {
           emit: () => {}
         }
       };
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
 
       component.controlChangeEmitter.call(fakeThis);
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
@@ -202,19 +203,19 @@ describe('PoTextareaComponent:', () => {
           emit: arg => {}
         }
       };
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
       component.controlChangeEmitter.call(fakeThis);
 
       expect(fakeThis.change.emit).toHaveBeenCalledWith(fakeThis.inputEl.nativeElement.value);
     });
 
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
-      let initResizeObserverSpy: jasmine.Spy;
+      let inputFocus: any;
+      let initResizeObserverSpy: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
-        initResizeObserverSpy = spyOn(component as any, 'initResizeObserver');
+        inputFocus = vi.spyOn(component as any, 'focus');
+        initResizeObserverSpy = vi.spyOn(component as any, 'initResizeObserver');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -235,7 +236,7 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should add window resize event listener', () => {
-        spyOn(window, 'addEventListener');
+        vi.spyOn(window as any, 'addEventListener');
         component.ngAfterViewInit();
         expect(window.addEventListener).toHaveBeenCalledWith('resize', component['onWindowResize']);
       });
@@ -243,11 +244,11 @@ describe('PoTextareaComponent:', () => {
 
     describe('ngOnChanges:', () => {
       beforeEach(() => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: any) => cb());
       });
 
       it('should call `checkScrollState` when `loading` changes', () => {
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.ngOnChanges({
           loading: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false } as any
@@ -257,7 +258,7 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should not call `checkScrollState` when `loading` does not change', () => {
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.ngOnChanges({});
 
@@ -265,8 +266,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should call syncContainerWidth and checkScrollState when loading changes', () => {
-        spyOn(component as any, 'syncContainerWidth');
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'syncContainerWidth');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.ngOnChanges({
           loading: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false }
@@ -277,7 +278,7 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should not call syncContainerWidth when loading does not change', () => {
-        spyOn(component as any, 'syncContainerWidth');
+        vi.spyOn(component as any, 'syncContainerWidth');
 
         component.ngOnChanges({
           label: { currentValue: 'test', previousValue: '', firstChange: false, isFirstChange: () => false }
@@ -287,8 +288,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should call syncContainerWidth and checkScrollState via requestAnimationFrame on firstChange of loading', () => {
-        spyOn(component as any, 'syncContainerWidth');
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'syncContainerWidth');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.loading = true;
 
@@ -304,8 +305,8 @@ describe('PoTextareaComponent:', () => {
     describe('ngOnDestroy:', () => {
       it('should call resizeObserver.disconnect if resizeObserver exists', () => {
         component['resizeObserver'] = {
-          disconnect: jasmine.createSpy('disconnect'),
-          observe: jasmine.createSpy('observe')
+          disconnect: vi.fn(),
+          observe: vi.fn()
         } as any;
         component.ngOnDestroy();
         expect(component['resizeObserver'].disconnect).toHaveBeenCalled();
@@ -317,7 +318,7 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should call window.removeEventListener with onWindowResize', () => {
-        spyOn(window, 'removeEventListener');
+        vi.spyOn(window as any, 'removeEventListener');
         component.ngOnDestroy();
         expect(window.removeEventListener).toHaveBeenCalledWith('resize', component['onWindowResize']);
       });
@@ -325,9 +326,9 @@ describe('PoTextareaComponent:', () => {
 
     describe('initResizeObserver:', () => {
       it('should observe the input element', () => {
-        const observeSpy = jasmine.createSpy('observe');
-        const disconnectSpy = jasmine.createSpy('disconnect');
-        (window as any).ResizeObserver = jasmine.createSpy('ResizeObserver').and.returnValue({
+        const observeSpy = vi.fn();
+        const disconnectSpy = vi.fn();
+        (window as any).ResizeObserver = vi.fn().mockReturnValue({
           observe: observeSpy,
           disconnect: disconnectSpy
         });
@@ -347,8 +348,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should execute ResizeObserver callback and call `checkScrollState`', () => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: any) => cb());
+        vi.spyOn(component as any, 'checkScrollState');
 
         let observerCallback: any;
         (window as any).ResizeObserver = class {
@@ -369,8 +370,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should set body width to fit-content when loading is true and textarea has inline width', () => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: any) => cb());
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.loading = true;
 
@@ -397,8 +398,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should not set body width when textarea has no inline width', () => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: any) => cb());
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.loading = true;
 
@@ -425,8 +426,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should not set body width when loading is false', () => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => cb());
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: any) => cb());
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.loading = false;
 
@@ -456,8 +457,8 @@ describe('PoTextareaComponent:', () => {
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -465,8 +466,8 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -474,7 +475,7 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -490,7 +491,7 @@ describe('PoTextareaComponent:', () => {
         }
       };
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -505,7 +506,7 @@ describe('PoTextareaComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -514,7 +515,7 @@ describe('PoTextareaComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -524,7 +525,7 @@ describe('PoTextareaComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -533,7 +534,7 @@ describe('PoTextareaComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -555,8 +556,8 @@ describe('PoTextareaComponent:', () => {
         checkScrollState: () => {}
       };
 
-      spyOn(fakeThis.change, 'emit');
-      spyOn(fakeThis, 'checkScrollState');
+      vi.spyOn(fakeThis.change as any, 'emit');
+      vi.spyOn(fakeThis as any, 'checkScrollState');
 
       component.writeValueModel.call(fakeThis, value);
 
@@ -577,8 +578,8 @@ describe('PoTextareaComponent:', () => {
         checkScrollState: () => {}
       };
 
-      spyOn(fakeThis.change, 'emit');
-      spyOn(fakeThis, 'checkScrollState');
+      vi.spyOn(fakeThis.change as any, 'emit');
+      vi.spyOn(fakeThis as any, 'checkScrollState');
 
       component.writeValueModel.call(fakeThis);
 
@@ -596,20 +597,20 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should set hasValue=true and call checkScrollState when value exists', () => {
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.writeValueModel('abc');
 
-        expect(component.hasValue).toBeTrue();
+        expect(component.hasValue).toBe(true);
         expect(component['checkScrollState']).toHaveBeenCalled();
       });
 
       it('should set hasValue=false and call checkScrollState when value is empty', () => {
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         component.writeValueModel('');
 
-        expect(component.hasValue).toBeFalse();
+        expect(component.hasValue).toBe(false);
         expect(component['checkScrollState']).toHaveBeenCalled();
       });
     });
@@ -650,8 +651,8 @@ describe('PoTextareaComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputEl.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -666,8 +667,8 @@ describe('PoTextareaComponent:', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -678,9 +679,9 @@ describe('PoTextareaComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
 
@@ -689,11 +690,11 @@ describe('PoTextareaComponent:', () => {
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -703,18 +704,18 @@ describe('PoTextareaComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -723,18 +724,18 @@ describe('PoTextareaComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -745,19 +746,19 @@ describe('PoTextareaComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -767,19 +768,19 @@ describe('PoTextareaComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -788,7 +789,7 @@ describe('PoTextareaComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -796,8 +797,8 @@ describe('PoTextareaComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -805,15 +806,15 @@ describe('PoTextareaComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
     describe('isAdditionalHelpEventTriggered:', () => {
       it('should return true when additionalHelpEventTrigger is "event"', () => {
         component.additionalHelpEventTrigger = 'event';
-        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBe(true);
       });
 
       it('should return true when additionalHelpEventTrigger is undefined and additionalHelp is observed', () => {
@@ -822,20 +823,20 @@ describe('PoTextareaComponent:', () => {
           observed: true
         } as any;
 
-        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBe(true);
       });
 
       it('should return false when additionalHelpEventTrigger is not "event" and additionalHelp is not observed', () => {
         component.additionalHelpEventTrigger = 'noEvent';
-        expect((component as any).isAdditionalHelpEventTriggered()).toBeFalse();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBe(false);
       });
     });
 
     describe('onAfterThemeChange:', () => {
       it('should call syncContainerWidth and checkScrollState via requestAnimationFrame', () => {
-        spyOn(component as any, 'syncContainerWidth');
-        spyOn(component as any, 'checkScrollState');
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: any) => {
+        vi.spyOn(component as any, 'syncContainerWidth');
+        vi.spyOn(component as any, 'checkScrollState');
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: any) => {
           cb();
           return 0;
         });
@@ -847,9 +848,9 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should call requestAnimationFrame in onAfterThemeChange', () => {
-        spyOn(component as any, 'syncContainerWidth');
-        spyOn(component as any, 'checkScrollState');
-        const rafSpy = spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: any) => {
+        vi.spyOn(component as any, 'syncContainerWidth');
+        vi.spyOn(component as any, 'checkScrollState');
+        const rafSpy = vi.spyOn(globalThis as any, 'requestAnimationFrame').mockImplementation((cb: any) => {
           cb();
           return 123;
         });
@@ -864,8 +865,8 @@ describe('PoTextareaComponent:', () => {
 
     describe('onWindowResize:', () => {
       it('should call syncContainerWidth and checkScrollState', () => {
-        spyOn(component as any, 'syncContainerWidth');
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'syncContainerWidth');
+        vi.spyOn(component as any, 'checkScrollState');
         component['onWindowResize']();
         expect(component['syncContainerWidth']).toHaveBeenCalled();
         expect(component['checkScrollState']).toHaveBeenCalled();
@@ -873,14 +874,14 @@ describe('PoTextareaComponent:', () => {
     });
 
     describe('initResizeObserver:', () => {
-      let observeSpy: jasmine.Spy;
+      let observeSpy: any;
       let observerCallback: Function;
 
       beforeEach(() => {
-        observeSpy = jasmine.createSpy('observe');
+        observeSpy = vi.fn();
         (window as any).ResizeObserver = function (callback: Function) {
           observerCallback = callback;
-          return { observe: observeSpy, disconnect: jasmine.createSpy('disconnect') };
+          return { observe: observeSpy, disconnect: vi.fn() };
         };
       });
 
@@ -890,12 +891,12 @@ describe('PoTextareaComponent:', () => {
       });
 
       it('should call checkScrollState in the observer callback', fakeAsync(() => {
-        spyOn(component as any, 'checkScrollState');
+        vi.spyOn(component as any, 'checkScrollState');
 
         let observerCallback: Function;
         (window as any).ResizeObserver = function (callback: Function) {
           observerCallback = callback;
-          return { observe: jasmine.createSpy('observe'), disconnect: jasmine.createSpy('disconnect') };
+          return { observe: vi.fn(), disconnect: vi.fn() };
         };
 
         component['initResizeObserver']();
@@ -927,7 +928,7 @@ describe('PoTextareaComponent:', () => {
 
         component['checkScrollState']();
 
-        expect(component.hasScroll).toBeTrue();
+        expect(component.hasScroll).toBe(true);
       });
 
       it('should set hasScroll to false when scrollHeight <= clientHeight', () => {
@@ -936,11 +937,11 @@ describe('PoTextareaComponent:', () => {
 
         component['checkScrollState']();
 
-        expect(component.hasScroll).toBeFalse();
+        expect(component.hasScroll).toBe(false);
       });
 
       it('should call cd.markForCheck', () => {
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         component['checkScrollState']();
 
@@ -1002,7 +1003,7 @@ describe('PoTextareaComponent:', () => {
     describe('isAdditionalHelpEventTriggered:', () => {
       it('should return true when additionalHelpEventTrigger is "event"', () => {
         component.additionalHelpEventTrigger = 'event';
-        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBe(true);
       });
 
       it('should return true when additionalHelpEventTrigger is undefined and additionalHelp is observed', () => {
@@ -1011,12 +1012,12 @@ describe('PoTextareaComponent:', () => {
           observed: true
         } as any;
 
-        expect((component as any).isAdditionalHelpEventTriggered()).toBeTrue();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBe(true);
       });
 
       it('should return false when additionalHelpEventTrigger is not "event" and additionalHelp is not observed', () => {
         component.additionalHelpEventTrigger = 'noEvent';
-        expect((component as any).isAdditionalHelpEventTriggered()).toBeFalse();
+        expect((component as any).isAdditionalHelpEventTriggered()).toBe(false);
       });
     });
   });

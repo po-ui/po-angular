@@ -23,7 +23,7 @@ describe('PoLinkComponent', () => {
   });
 
   it('should emit action', () => {
-    spyOn(component.action, 'emit');
+    vi.spyOn(component.action as any, 'emit');
 
     component.onClick();
     expect(component.action.emit).toHaveBeenCalled();
@@ -31,7 +31,7 @@ describe('PoLinkComponent', () => {
 
   it('should`t emit action if exists `url`', () => {
     component.url = 'https://po-ui.io/';
-    spyOn(component.action, 'emit');
+    vi.spyOn(component.action as any, 'emit');
 
     component.onClick();
     expect(component.action.emit).not.toHaveBeenCalled();

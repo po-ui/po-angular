@@ -40,31 +40,30 @@ describe('PoListBoxComponent', () => {
       };
       component.infiniteScrollDistance = 80;
 
-      const updateInfiniteScroll = spyOn(component['UpdateInfiniteScroll'], 'emit');
+      const updateInfiniteScroll = vi.spyOn(component['UpdateInfiniteScroll'] as any, 'emit');
 
       component.showMoreInfiniteScroll({ target });
 
       expect(updateInfiniteScroll).toHaveBeenCalled();
     });
 
-    it('should call scrollListener and return', done => {
+    it('should call scrollListener and return', async () => {
       const fakeElement = document.createElement('div');
       const scrollEvent = new Event('scroll');
-      spyOn(fromEvent(fakeElement, 'scroll'), 'pipe').and.returnValue(of(scrollEvent).pipe(debounceTime(100)));
+      vi.spyOn(fromEvent(fakeElement, 'scroll'), 'pipe').mockReturnValue(of(scrollEvent).pipe(debounceTime(100)));
 
       const observable = component.scrollListener(fakeElement);
 
       observable.subscribe(event => {
         expect(event).toBe(scrollEvent);
-        done();
       });
 
       fakeElement.dispatchEvent(scrollEvent);
     });
 
     it('should include infinite scroll if hasInfiniteScroll returns true', () => {
-      spyOn(component, <any>'hasInfiniteScroll').and.returnValue(true);
-      spyOn(component, <any>'includeInfiniteScroll');
+      vi.spyOn(component as any, 'hasInfiniteScroll').mockReturnValue(true);
+      vi.spyOn(component as any, 'includeInfiniteScroll');
       component.listboxItemList = {
         nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 200 }
       };
@@ -75,8 +74,8 @@ describe('PoListBoxComponent', () => {
     });
 
     it('should not include infinite scroll if hasInfiniteScroll returns false', () => {
-      spyOn(component, <any>'hasInfiniteScroll').and.returnValue(false);
-      spyOn(component, <any>'includeInfiniteScroll');
+      vi.spyOn(component as any, 'hasInfiniteScroll').mockReturnValue(false);
+      vi.spyOn(component as any, 'includeInfiniteScroll');
 
       component['checkInfiniteScroll']();
 
@@ -89,7 +88,7 @@ describe('PoListBoxComponent', () => {
           focus: () => {}
         }
       };
-      const spyListBoxComponent = spyOn(component.listboxItemList.nativeElement, 'focus');
+      const spyListBoxComponent = vi.spyOn(component.listboxItemList.nativeElement, 'focus');
       component.items = [{ label: 'item 1', value: 'item 1' }];
 
       component.setFocus();
@@ -121,10 +120,10 @@ describe('PoListBoxComponent', () => {
       component.listboxItemList = {
         nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 200 }
       };
-      spyOn(component, 'scrollListener').and.returnValue(
+      vi.spyOn(component as any, 'scrollListener').mockReturnValue(
         of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 } })
       );
-      const showMoreInfiniteScroll = spyOn(component, 'showMoreInfiniteScroll');
+      const showMoreInfiniteScroll = vi.spyOn(component as any, 'showMoreInfiniteScroll');
       fixture.detectChanges();
 
       component['includeInfiniteScroll']();
@@ -134,11 +133,11 @@ describe('PoListBoxComponent', () => {
     });
 
     it('should cancel previous subscription before including infinite scroll', () => {
-      spyOn(component, 'showMoreInfiniteScroll');
+      vi.spyOn(component as any, 'showMoreInfiniteScroll');
       component.listboxItemList = {
         nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 200 }
       };
-      spyOn(component, 'scrollListener').and.returnValue(
+      vi.spyOn(component as any, 'scrollListener').mockReturnValue(
         of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 } })
       );
       component['includeInfiniteScroll']();
@@ -151,8 +150,8 @@ describe('PoListBoxComponent', () => {
     });
 
     it('should not unsubscribe if there is no previous subscription', () => {
-      spyOn(component, 'scrollListener').and.returnValue(of({}));
-      spyOn(component, 'showMoreInfiniteScroll');
+      vi.spyOn(component as any, 'scrollListener').mockReturnValue(of({}));
+      vi.spyOn(component as any, 'showMoreInfiniteScroll');
       fixture.detectChanges();
 
       component['includeInfiniteScroll']();
@@ -163,9 +162,9 @@ describe('PoListBoxComponent', () => {
 
     it('should not include infinite scroll if scrollEvent$ is not created', () => {
       component['scrollEvent'] = undefined;
-      spyOn(component, 'scrollListener').and.returnValue(of({}));
-      spyOn(component, 'showMoreInfiniteScroll');
-      spyOn<any>(component, 'includeInfiniteScroll');
+      vi.spyOn(component as any, 'scrollListener').mockReturnValue(of({}));
+      vi.spyOn(component as any, 'showMoreInfiniteScroll');
+      vi.spyOn(component as any, 'includeInfiniteScroll');
       fixture.detectChanges();
 
       component['includeInfiniteScroll']();
@@ -178,14 +177,14 @@ describe('PoListBoxComponent', () => {
         component.listboxSubitems = true;
 
         const mockElement = document.createElement('div');
-        spyOn(mockElement, 'focus');
-        spyOn(mockElement, 'dispatchEvent');
+        vi.spyOn(mockElement as any, 'focus');
+        vi.spyOn(mockElement as any, 'dispatchEvent');
 
         component.listboxItems = {
           first: new ElementRef(mockElement)
         } as QueryList<ElementRef>;
 
-        spyOn(globalThis, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        vi.spyOn(globalThis as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
           cb(0);
           return 0;
         });
@@ -195,11 +194,11 @@ describe('PoListBoxComponent', () => {
         tick();
 
         expect(mockElement.focus).toHaveBeenCalled();
-        expect(mockElement.dispatchEvent).toHaveBeenCalledWith(jasmine.any(FocusEvent));
+        expect(mockElement.dispatchEvent).toHaveBeenCalledWith(expect.any(FocusEvent));
       }));
 
       it('should have been called', () => {
-        spyOn(component, <any>'setListBoxMaxHeight');
+        vi.spyOn(component as any, 'setListBoxMaxHeight');
 
         component.ngAfterViewInit();
 
@@ -210,7 +209,7 @@ describe('PoListBoxComponent', () => {
         component.items = [{ label: 'Item 1', value: 1 }];
         fixture.detectChanges();
 
-        spyOn(component.listboxItemList.nativeElement, 'focus');
+        vi.spyOn(component.listboxItemList.nativeElement, 'focus');
 
         component.ngAfterViewInit();
 
@@ -233,15 +232,15 @@ describe('PoListBoxComponent', () => {
         });
         it('should be open a external link', () => {
           const url = 'http://google.com';
-          spyOn(UtilFunctions, <any>'openExternalLink');
+          vi.spyOn(UtilFunctions as any, 'openExternalLink');
           component['openUrl'](url);
 
           expect(UtilFunctions.openExternalLink).toHaveBeenCalledWith(url);
         });
 
         it('should be open a internal route', () => {
-          spyOn(UtilFunctions, 'isExternalLink');
-          spyOn(component['router'], <any>'navigate');
+          vi.spyOn(UtilFunctions as any, 'isExternalLink');
+          vi.spyOn(component['router'] as any, 'navigate');
           const url = '/home';
 
           component['openUrl'](url);
@@ -267,8 +266,8 @@ describe('PoListBoxComponent', () => {
       describe('onSelectItem:', () => {
         it('should be called and disabled is true', () => {
           const item = { label: 'a', action: () => {}, value: 'a', disabled: true };
-          spyOn(component, <any>'openUrl');
-          spyOn<any>(item, 'action');
+          vi.spyOn(component as any, 'openUrl');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -279,7 +278,7 @@ describe('PoListBoxComponent', () => {
         it('should be onClickTabs if `isTabs` and tab is not disabled or hide', () => {
           const item = { label: 'a', action: () => {}, value: 'a', disabled: false, hide: false };
           component.isTabs = true;
-          spyOn(component, 'onClickTabs');
+          vi.spyOn(component as any, 'onClickTabs');
 
           component.onSelectItem(item);
 
@@ -289,8 +288,8 @@ describe('PoListBoxComponent', () => {
         it('should`n called action if disabled is a function that returns true', () => {
           const fnTrue = () => true;
           const item = { label: 'a', action: () => {}, value: 'a', disabled: fnTrue };
-          spyOn(component, <any>'openUrl');
-          spyOn<any>(item, 'action');
+          vi.spyOn(component as any, 'openUrl');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -301,7 +300,7 @@ describe('PoListBoxComponent', () => {
         it('should called action if disabled is a function that returns false', () => {
           const fnFalse = () => false;
           const item = { label: 'a', action: () => {}, value: 'a', disabled: fnFalse };
-          spyOn<any>(item, 'action');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -311,7 +310,7 @@ describe('PoListBoxComponent', () => {
         it('should called action if disabled is a function that returns false and visible is undefined', () => {
           const fnFalse = () => false;
           const item = { label: 'a', action: () => {}, value: 'a', disabled: fnFalse, visible: undefined };
-          spyOn<any>(item, 'action');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -320,8 +319,8 @@ describe('PoListBoxComponent', () => {
 
         it('should be called with action', () => {
           const item = { label: 'a', action: () => {}, value: 'a' };
-          spyOn(component, <any>'openUrl');
-          spyOn<any>(item, 'action');
+          vi.spyOn(component as any, 'openUrl');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -332,7 +331,7 @@ describe('PoListBoxComponent', () => {
         it('should be called with url', () => {
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a' };
           const url = 'http://fakeurl.com';
-          spyOn(component, <any>'openUrl');
+          vi.spyOn(component as any, 'openUrl');
 
           component.onSelectItem(item);
 
@@ -342,7 +341,7 @@ describe('PoListBoxComponent', () => {
         it('should`n called openUrl if visible is false', () => {
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: false };
           const url = 'http://fakeurl.com';
-          spyOn(component, <any>'openUrl');
+          vi.spyOn(component as any, 'openUrl');
 
           component.onSelectItem(item);
 
@@ -353,7 +352,7 @@ describe('PoListBoxComponent', () => {
           const fnFalse = () => false;
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnFalse };
           const url = 'http://fakeurl.com';
-          spyOn(component, <any>'openUrl');
+          vi.spyOn(component as any, 'openUrl');
 
           component.onSelectItem(item);
 
@@ -364,7 +363,7 @@ describe('PoListBoxComponent', () => {
           const fnTrue = () => true;
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnTrue };
           const url = 'http://fakeurl.com';
-          spyOn(component, <any>'openUrl');
+          vi.spyOn(component as any, 'openUrl');
 
           component.onSelectItem(item);
 
@@ -375,7 +374,7 @@ describe('PoListBoxComponent', () => {
           const fnTrue = () => true;
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: fnTrue, disable: undefined };
           const url = 'http://fakeurl.com';
-          spyOn(component, <any>'openUrl');
+          vi.spyOn(component as any, 'openUrl');
 
           component.onSelectItem(item);
 
@@ -385,7 +384,7 @@ describe('PoListBoxComponent', () => {
         it('should`n called openUrl if visible is true and not disabled', () => {
           const item = { label: 'a', url: 'http://fakeurl.com', value: 'a', visible: true };
           const url = 'http://fakeurl.com';
-          spyOn(component, <any>'openUrl');
+          vi.spyOn(component as any, 'openUrl');
 
           component.onSelectItem(item);
 
@@ -394,8 +393,8 @@ describe('PoListBoxComponent', () => {
 
         it('should`n be called action if visible is false', () => {
           const item = { label: 'a', action: () => {}, value: 'a', visible: false };
-          spyOn(component, <any>'openUrl');
-          spyOn<any>(item, 'action');
+          vi.spyOn(component as any, 'openUrl');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -405,8 +404,8 @@ describe('PoListBoxComponent', () => {
 
         it('should be called action if visible is true and not disabled', () => {
           const item = { label: 'a', action: () => {}, value: 'a', visible: true };
-          spyOn(component, <any>'openUrl');
-          spyOn<any>(item, 'action');
+          vi.spyOn(component as any, 'openUrl');
+          vi.spyOn(item as any, 'action');
 
           component.onSelectItem(item);
 
@@ -422,7 +421,7 @@ describe('PoListBoxComponent', () => {
           };
           const event = new MouseEvent('click');
 
-          spyOn(component, 'openGroup');
+          vi.spyOn(component as any, 'openGroup');
 
           component.onSelectItem(item, event);
 
@@ -433,7 +432,7 @@ describe('PoListBoxComponent', () => {
           const mockItem = { label: 'Item sem subitems' } as any;
           component.listboxSubitems = true;
 
-          const emitSpy = spyOn(component.closeEvent, 'emit');
+          const emitSpy = vi.spyOn(component.closeEvent as any, 'emit');
 
           component.onSelectItem(mockItem);
 
@@ -444,20 +443,20 @@ describe('PoListBoxComponent', () => {
 
     describe('openGroup and goBack:', () => {
       beforeEach(() => {
-        spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
           cb(0);
           return 0;
         });
       });
 
-      it('openGroup should set currentGroup/currentItems and focus first item', done => {
+      it('openGroup should set currentGroup/currentItems and focus first item', async () => {
         component.listboxGroupHeader = new ElementRef(document.createElement('div'));
         component.currentGroup = null;
         component.currentItems = [];
 
         const group = { label: 'Group', subItems: [{ label: 'Sub' }] } as PoDropdownAction;
 
-        spyOn(component.listboxGroupHeader.nativeElement, 'focus');
+        vi.spyOn(component.listboxGroupHeader.nativeElement, 'focus');
 
         component.openGroup(group, new MouseEvent('click'));
 
@@ -466,18 +465,17 @@ describe('PoListBoxComponent', () => {
 
         setTimeout(() => {
           expect(component.listboxGroupHeader.nativeElement.focus).toHaveBeenCalled();
-          done();
         }, 20);
       });
 
-      it('goBack should restore previous group/items or default items and focus first item', done => {
+      it('goBack should restore previous group/items or default items and focus first item', async () => {
         const firstItemEl = document.createElement('li');
         component.listboxItems = {
           first: { nativeElement: firstItemEl }
         } as any;
         component.items = [{ label: 'Item1' }];
 
-        spyOn(firstItemEl, 'focus');
+        vi.spyOn(firstItemEl as any, 'focus');
 
         component.goBack(new MouseEvent('click'));
         expect(component.currentGroup).toBeNull();
@@ -485,13 +483,12 @@ describe('PoListBoxComponent', () => {
 
         setTimeout(() => {
           expect(firstItemEl.focus).toHaveBeenCalled();
-          done();
         }, 20);
       });
 
       it('should handle openGroup and goBack correctly even with multiple groups and empty subItems', () => {
         component.listboxGroupHeader = new ElementRef(document.createElement('div'));
-        spyOn(component.listboxGroupHeader.nativeElement, 'focus');
+        vi.spyOn(component.listboxGroupHeader.nativeElement, 'focus');
 
         const group1 = { label: 'Group1', subItems: [{ label: 'Sub1' }] } as PoDropdownAction;
         component.openGroup(group1);
@@ -521,8 +518,8 @@ describe('PoListBoxComponent', () => {
       });
 
       it('onKeydownTemplate: should emit closeEvent if press Tab out .po-listbox-dropdown', () => {
-        const emitSpy = spyOn(component.closeEvent, 'emit');
-        const stopSpy = jasmine.createSpy('stopPropagation');
+        const emitSpy = vi.spyOn(component.closeEvent as any, 'emit');
+        const stopSpy = vi.fn();
 
         const event = {
           code: 'Tab',
@@ -537,8 +534,8 @@ describe('PoListBoxComponent', () => {
       });
 
       it('onKeydownTemplate: should call stopPropagation and not emit closeEvent when press Tab in .po-listbox-dropdown', () => {
-        const emitSpy = spyOn(component.closeEvent, 'emit');
-        const stopSpy = jasmine.createSpy('stopPropagation');
+        const emitSpy = vi.spyOn(component.closeEvent as any, 'emit');
+        const stopSpy = vi.fn();
 
         const dropdown = document.createElement('div');
         dropdown.classList.add('po-listbox-dropdown');
@@ -564,7 +561,7 @@ describe('PoListBoxComponent', () => {
       it('onKeydownGoBack: should not emit closeEvent if subItemTemplate is true', () => {
         const eventTab = new KeyboardEvent('keydown', { code: 'Tab' });
 
-        spyOn(component.closeEvent, 'emit');
+        vi.spyOn(component.closeEvent as any, 'emit');
 
         component.onKeydownGoBack(eventTab, { label: 'item', $subItemTemplate: true as any });
         expect(component.closeEvent.emit).not.toHaveBeenCalled();
@@ -575,8 +572,8 @@ describe('PoListBoxComponent', () => {
         const eventEscape = new KeyboardEvent('keydown', { code: 'Escape' });
         const eventTab = new KeyboardEvent('keydown', { code: 'Tab' });
 
-        spyOn(component, 'goBack');
-        spyOn(component.closeEvent, 'emit');
+        vi.spyOn(component as any, 'goBack');
+        vi.spyOn(component.closeEvent as any, 'emit');
 
         component.onKeydownGoBack(eventEnter);
         expect(component.goBack).toHaveBeenCalledWith(eventEnter);
@@ -600,7 +597,7 @@ describe('PoListBoxComponent', () => {
     describe('onSelectTabs:', () => {
       it('Should emit if changeStateTabs if `isTabs` and has tab', () => {
         component.isTabs = true;
-        spyOn(component.changeStateTabs, 'emit');
+        vi.spyOn(component.changeStateTabs as any, 'emit');
 
         component.onSelectTabs({ label: 'tab', click: () => {} });
 
@@ -611,7 +608,7 @@ describe('PoListBoxComponent', () => {
     describe('onClickTabs:', () => {
       it('Should emit if clickTab if tabs is not disabled', () => {
         component.isTabs = true;
-        spyOn(component.clickTab, 'emit');
+        vi.spyOn(component.clickTab as any, 'emit');
 
         component.onClickTabs({ label: 'tab', click: () => {}, disabled: false });
 
@@ -626,7 +623,7 @@ describe('PoListBoxComponent', () => {
         component.infiniteScroll = true;
         component['subscriptionScrollEvent'] = mockSubscription;
 
-        spyOn(mockSubscription, <any>'unsubscribe');
+        vi.spyOn(mockSubscription as any, 'unsubscribe');
 
         component.ngOnDestroy();
 
@@ -636,7 +633,7 @@ describe('PoListBoxComponent', () => {
 
     describe('ngOnChanges:', () => {
       it(`should call 'setListBoxMaxHeight' when has changes`, () => {
-        spyOn(component, <any>'setListBoxMaxHeight');
+        vi.spyOn(component as any, 'setListBoxMaxHeight');
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -651,8 +648,8 @@ describe('PoListBoxComponent', () => {
       });
 
       it(`should'n call 'setListBoxMaxHeight' when has changes`, () => {
-        spyOn(component, <any>'checkInfiniteScroll');
-        spyOn(component, <any>'setListBoxMaxHeight');
+        vi.spyOn(component as any, 'checkInfiniteScroll');
+        vi.spyOn(component as any, 'setListBoxMaxHeight');
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -667,7 +664,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should call `checkInfiniteScroll` if infiniteScroll is true', () => {
-        const checkInfiniteScroll = spyOn<any>(component, 'checkInfiniteScroll');
+        const checkInfiniteScroll = vi.spyOn(component as any, 'checkInfiniteScroll');
         component.infiniteScroll = true;
         component.visible = true;
         component.items = [
@@ -684,7 +681,7 @@ describe('PoListBoxComponent', () => {
 
     describe('setListBoxMaxHeight', () => {
       it('should be call `renderer.setStyle` when has more than 6 items', () => {
-        spyOn<any>(component['renderer'], 'setStyle');
+        vi.spyOn(component['renderer'] as any, 'setStyle');
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -706,7 +703,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it(`should'n be call 'renderer.setStyle' when has less then 6 items`, () => {
-        spyOn<any>(component['renderer'], 'setStyle');
+        vi.spyOn(component['renderer'] as any, 'setStyle');
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -719,8 +716,8 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should call `renderer.setStyle` and `renderer.removeStyle` when has more than 6 items and popupHeaderContainer contains children', () => {
-        spyOn<any>(component['renderer'], 'setStyle');
-        spyOn<any>(component['renderer'], 'removeStyle');
+        vi.spyOn(component['renderer'] as any, 'setStyle');
+        vi.spyOn(component['renderer'] as any, 'removeStyle');
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -746,8 +743,8 @@ describe('PoListBoxComponent', () => {
       });
 
       it(`should'n call 'renderer.removeStyle' when has more than 6 items and popupHeaderContainer is undefined`, () => {
-        spyOn<any>(component['renderer'], 'setStyle');
-        spyOn<any>(component['renderer'], 'removeStyle');
+        vi.spyOn(component['renderer'] as any, 'setStyle');
+        vi.spyOn(component['renderer'] as any, 'removeStyle');
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -774,7 +771,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should set maxHeight to dropdownMaxHeight when listboxSubitems is true', () => {
-        spyOn<any>(component['renderer'], 'setStyle');
+        vi.spyOn(component['renderer'] as any, 'setStyle');
 
         component.listboxSubitems = true;
         component.listbox = new ElementRef(document.createElement('div'));
@@ -790,7 +787,7 @@ describe('PoListBoxComponent', () => {
     });
 
     it('should set minWidth and maxWidth when listboxSubitems is true and items exist', () => {
-      spyOn<any>(component['renderer'], 'setStyle');
+      vi.spyOn(component['renderer'] as any, 'setStyle');
 
       component.listboxSubitems = true;
       component.items = [
@@ -808,7 +805,7 @@ describe('PoListBoxComponent', () => {
 
     describe('checkboxClicked:', () => {
       it('should emit change ', () => {
-        spyOn(component.change, 'emit');
+        vi.spyOn(component.change as any, 'emit');
         component.type = 'check';
         component.checkboxClicked({ option: [{ value: 'test', label: 'test' }], selected: true });
 
@@ -818,7 +815,7 @@ describe('PoListBoxComponent', () => {
 
     describe('onSelectCheckBoxItem:', () => {
       it('should call `checkboxClicked`', () => {
-        spyOn(component, 'checkboxClicked');
+        vi.spyOn(component as any, 'checkboxClicked');
         component.type = 'check';
         component.onSelectCheckBoxItem({ option: [{ value: 'test', label: 'test' }], selected: true });
 
@@ -828,7 +825,7 @@ describe('PoListBoxComponent', () => {
 
     describe('onActivatedTabs:', () => {
       it('should emit activatedTab', () => {
-        spyOn(component.activatedTab, 'emit');
+        vi.spyOn(component.activatedTab as any, 'emit');
         component.onActivatedTabs({ label: 'tab' });
 
         expect(component.activatedTab.emit).toHaveBeenCalled();
@@ -838,7 +835,7 @@ describe('PoListBoxComponent', () => {
     describe('changeAllEmit:', () => {
       it('should emit changeAll if event is Enter', () => {
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
-        spyOn(component.changeAll, 'emit');
+        vi.spyOn(component.changeAll as any, 'emit');
 
         component.changeAllEmit(eventEnterKey);
 
@@ -847,7 +844,7 @@ describe('PoListBoxComponent', () => {
 
       it('should emit changeAll if event is Space', () => {
         const eventSpaceKey = new KeyboardEvent('keydown', { 'code': 'Space' });
-        spyOn(component.changeAll, 'emit');
+        vi.spyOn(component.changeAll as any, 'emit');
 
         component.changeAllEmit(eventSpaceKey);
 
@@ -857,7 +854,7 @@ describe('PoListBoxComponent', () => {
 
     describe('callChangeSearch:', () => {
       it('should emit changeSearch', () => {
-        spyOn(component.changeSearch, 'emit');
+        vi.spyOn(component.changeSearch as any, 'emit');
 
         component.callChangeSearch('test');
 
@@ -894,7 +891,7 @@ describe('PoListBoxComponent', () => {
         const item = { label: 'a', value: 'a' };
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
         component.type = 'check';
-        spyOn(component, 'onSelectCheckBoxItem');
+        vi.spyOn(component as any, 'onSelectCheckBoxItem');
 
         component.onKeyDown(item, eventEnterKey);
 
@@ -902,7 +899,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should call onSelectCheckBoxItem when type is "check" and Enter key is pressed', () => {
-        spyOn(component, 'onSelectCheckBoxItem');
+        vi.spyOn(component as any, 'onSelectCheckBoxItem');
 
         const keyboardEvent = new KeyboardEvent('keydown', {
           code: 'Enter'
@@ -915,7 +912,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should call comboClicked when type is "option" and Enter key is pressed', () => {
-        spyOn(component, 'optionClicked');
+        vi.spyOn(component as any, 'optionClicked');
 
         const keyboardEvent = new KeyboardEvent('keydown', {
           code: 'Enter'
@@ -928,7 +925,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should call onSelectItem when type is "action" and Enter key is pressed', () => {
-        spyOn(component, 'onSelectItem');
+        vi.spyOn(component as any, 'onSelectItem');
 
         const keyboardEvent = new KeyboardEvent('keydown', {
           code: 'Enter'
@@ -941,7 +938,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('should emit closeEvent when Escape key is pressed', () => {
-        spyOn(component.closeEvent, 'emit');
+        vi.spyOn(component.closeEvent as any, 'emit');
 
         const keyboardEvent = new KeyboardEvent('keydown', {
           code: 'Escape'
@@ -954,7 +951,7 @@ describe('PoListBoxComponent', () => {
 
       it('comboClicked: should emit selectCombo if `p-type` is option', () => {
         component.type = 'option';
-        spyOn(component.selectCombo, 'emit');
+        vi.spyOn(component.selectCombo as any, 'emit');
 
         component.items = [{ label: 'a', value: 'a' }];
         component.optionClicked(component.items[0]);
@@ -964,7 +961,7 @@ describe('PoListBoxComponent', () => {
       });
 
       it('comboClicked: should emit selectCombo if `p-type` is option', () => {
-        spyOn(component.selectCombo, 'emit');
+        vi.spyOn(component.selectCombo as any, 'emit');
         component.type = 'option';
         component.items = [
           { label: 'option 1', value: 'option 2' },
@@ -981,7 +978,7 @@ describe('PoListBoxComponent', () => {
         const item = { label: 'a', value: 'a' };
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'esc' });
 
-        spyOn(component, 'onSelectItem');
+        vi.spyOn(component as any, 'onSelectItem');
 
         component.onKeyDown(item, eventEnterKey);
 
@@ -992,7 +989,7 @@ describe('PoListBoxComponent', () => {
         const item = { label: 'a', value: 'a' };
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Escape' });
 
-        spyOn(component.closeEvent, 'emit');
+        vi.spyOn(component.closeEvent as any, 'emit');
 
         component.onKeyDown(item, eventEnterKey);
 
@@ -1002,7 +999,7 @@ describe('PoListBoxComponent', () => {
       it('should emit closeEvent on Tab keydown', () => {
         const mockEvent = new KeyboardEvent('keydown', { code: 'Tab' });
 
-        spyOn(component.closeEvent, 'emit');
+        vi.spyOn(component.closeEvent as any, 'emit');
 
         component.onSelectAllCheckboxKeyDown(mockEvent);
         expect(component.closeEvent.emit).toHaveBeenCalled();
@@ -1012,7 +1009,7 @@ describe('PoListBoxComponent', () => {
         const item = { type: 'footerAction' };
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
 
-        spyOn(component.footerActionListboxEvent, 'emit');
+        vi.spyOn(component.footerActionListboxEvent as any, 'emit');
 
         component.onKeyDown(item, eventEnterKey);
 
@@ -1027,7 +1024,7 @@ describe('PoListBoxComponent', () => {
         };
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
 
-        spyOn(component.selectCombo, 'emit');
+        vi.spyOn(component.selectCombo as any, 'emit');
 
         component.type = 'option';
         component.onKeyDown(item, eventEnterKey);

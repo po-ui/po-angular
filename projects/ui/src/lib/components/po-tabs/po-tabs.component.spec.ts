@@ -41,7 +41,7 @@ describe('PoTabsComponent:', () => {
 
   describe('Methods:', () => {
     it('ngOnInit: should call `handleKeyboardNavigationTab` if initializeComponent is true and tab has changed', () => {
-      spyOn(component, 'handleKeyboardNavigationTab');
+      vi.spyOn(component as any, 'handleKeyboardNavigationTab');
       component.initializeComponent = true;
       component.ngOnInit();
 
@@ -51,22 +51,24 @@ describe('PoTabsComponent:', () => {
     });
 
     it('ngOnInit: should call `onTabActiveByDropdown` if tab is active in tabsDropdown', () => {
-      const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab-id' });
+      const tabMock: any = {
+        id: 'tab-id'
+      };
 
-      spyOn(component, 'onTabActiveByDropdown');
+      vi.spyOn(component as any, 'onTabActiveByDropdown');
 
       component.tabsDropdown = [tabMock];
       component.ngOnInit();
 
-      component['tabsService'].triggerActiveOnChanges(tabMock);
+      component['tabsService'].triggerActiveOnChanges(tabMock as any);
 
       expect(component.onTabActiveByDropdown).toHaveBeenCalledWith(tabMock, false);
     });
 
     it('ngOnInit: should unsubscribe', () => {
-      spyOn(component['subscription'], 'unsubscribe');
-      spyOn(component['subscriptionTabsService'], 'unsubscribe');
-      spyOn(component['subscriptionTabActive'], 'unsubscribe');
+      vi.spyOn(component['subscription'] as any, 'unsubscribe');
+      vi.spyOn(component['subscriptionTabsService'] as any, 'unsubscribe');
+      vi.spyOn(component['subscriptionTabActive'] as any, 'unsubscribe');
       component.ngOnDestroy();
 
       expect(component['subscription'].unsubscribe).toHaveBeenCalled();
@@ -85,8 +87,8 @@ describe('PoTabsComponent:', () => {
     it('onTabChangeState: shouldn`t call `activeDistinctTab`, `detectChanges` if `tab.active` is false', () => {
       const tab = defaultTab;
 
-      spyOn(component, <any>'activeDistinctTab');
-      spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component as any, 'activeDistinctTab');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component.onTabChangeState(tab);
 
@@ -97,8 +99,8 @@ describe('PoTabsComponent:', () => {
     it('onTabChangeState: should set `tab.active` with false and call `activeDistinctTab`, `detectChanges` if `tab.active` is true', () => {
       const tab = activeTab;
 
-      spyOn(component, <any>'activeDistinctTab');
-      spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component as any, 'activeDistinctTab');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component.onTabChangeState(tab);
 
@@ -114,7 +116,7 @@ describe('PoTabsComponent:', () => {
       component.tabsChildren = <any>[defaultTab, activeTab];
       const tab = component.tabsChildren[0];
 
-      spyOn(component, <any>'deactivateTab');
+      vi.spyOn(component as any, 'deactivateTab');
 
       component.onTabActive(tab);
 
@@ -126,8 +128,8 @@ describe('PoTabsComponent:', () => {
       const tab = defaultTab;
       tab.click = { emit: () => {} };
 
-      spyOn(component['changeDetector'], 'detectChanges');
-      spyOn(tab.click, 'emit');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      vi.spyOn(tab.click as any, 'emit');
 
       component.selectedTab(tab);
 
@@ -139,7 +141,7 @@ describe('PoTabsComponent:', () => {
     it('selectedTab: should set `tab.active` with true and call `detectChanges`', () => {
       const tab = defaultTab;
 
-      spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component.selectedTab(tab);
 
@@ -156,7 +158,7 @@ describe('PoTabsComponent:', () => {
     it('activeFirstTab: should `active` first tab if it isn`t disabled or hide', () => {
       component.quantityTabsButton = 1;
 
-      spyOnProperty(component, 'tabs').and.returnValue([defaultTab]);
+      vi.spyOn(component as any, 'tabs').mockReturnValue([defaultTab]);
 
       component['activeFirstTab']();
       const tab = component.tabs[0];
@@ -192,7 +194,7 @@ describe('PoTabsComponent:', () => {
 
     it('activeFirstTab: shouldn`t `active` first tab if them are disabled or hide', () => {
       component.quantityTabsButton = 1;
-      spyOnProperty(component, 'tabs').and.returnValue([disabledTab, hiddenTab]);
+      vi.spyOn(component as any, 'tabs').mockReturnValue([disabledTab, hiddenTab]);
       component['activeFirstTab']();
       const tab = component.tabs[0];
 
@@ -206,7 +208,7 @@ describe('PoTabsComponent:', () => {
           closeDropdown: () => {}
         }
       };
-      const spyOnCloseDropdown = spyOn(fakeThis.tabDropdown, 'closeDropdown');
+      const spyOnCloseDropdown = vi.spyOn(fakeThis.tabDropdown as any, 'closeDropdown');
 
       component.closeListbox.call(fakeThis);
       expect(spyOnCloseDropdown).toHaveBeenCalled();
@@ -219,7 +221,7 @@ describe('PoTabsComponent:', () => {
           closeDropdown: () => {}
         }
       };
-      const spyOnCloseDropdown = spyOn(fakeThis.tabDropdown, 'closeDropdown');
+      const spyOnCloseDropdown = vi.spyOn(fakeThis.tabDropdown as any, 'closeDropdown');
 
       component.closeListbox.call(fakeThis);
       expect(spyOnCloseDropdown).not.toHaveBeenCalled();
@@ -228,7 +230,7 @@ describe('PoTabsComponent:', () => {
     it('deactivateTab: should deactive `previousActiveTab` if it`s truthy', () => {
       component['previousActiveTab'] = activeTab;
 
-      spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component['deactivateTab']();
 
@@ -239,7 +241,7 @@ describe('PoTabsComponent:', () => {
     it('deactivateTab: shouldn`t call `detectChanges` if `previousActiveTab` it`s falsy', () => {
       component['previousActiveTab'] = undefined;
 
-      spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component['deactivateTab']();
 
@@ -250,7 +252,7 @@ describe('PoTabsComponent:', () => {
     it('activeDistinctTab: shouldn`t call `activeFirstTab` when `previousActiveTab` is true', () => {
       component['previousActiveTab'] = defaultTab;
 
-      spyOn(component, <any>'activeFirstTab');
+      vi.spyOn(component as any, 'activeFirstTab');
 
       component['activeDistinctTab']();
 
@@ -261,7 +263,7 @@ describe('PoTabsComponent:', () => {
     it('activeDistinctTab: should call `activeFirstTab` when `previousActiveTab` is false', () => {
       component['previousActiveTab'] = undefined;
 
-      spyOn(component, <any>'activeFirstTab');
+      vi.spyOn(component as any, 'activeFirstTab');
 
       component['activeDistinctTab']();
 
@@ -271,8 +273,8 @@ describe('PoTabsComponent:', () => {
     it('handleArrowRight: should call setTabIndex in next tab if index is 1', () => {
       const indexArrow = 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[indexArrow + 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[indexArrow + 1], 'focus');
 
       component['handleArrowRight'](tabElements, indexArrow);
 
@@ -284,8 +286,8 @@ describe('PoTabsComponent:', () => {
     it('handleArrowRight: should call setTabIndex in the fisrt next tab if index is the last', () => {
       const indexArrow = tabElements.length - 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[0], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[0] as any, 'focus');
 
       component['handleArrowRight'](tabElements, indexArrow);
 
@@ -297,8 +299,8 @@ describe('PoTabsComponent:', () => {
     it('handleArrowLeft: should call setTabIndex in previous tab if index is 1', () => {
       const indexArrow = 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[indexArrow - 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[indexArrow - 1], 'focus');
 
       component['handleArrowLeft'](tabElements, indexArrow);
 
@@ -310,8 +312,8 @@ describe('PoTabsComponent:', () => {
     it('handleArrowLeft: should call setTabIndex in the last tab if index is 0', () => {
       const indexArrow = 0;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[tabElements.length - 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[tabElements.length - 1], 'focus');
 
       component['handleArrowLeft'](tabElements, indexArrow);
 
@@ -323,8 +325,8 @@ describe('PoTabsComponent:', () => {
     it('handleArrowLeft: should call setTabIndex in the last tab if index is 0', () => {
       const indexArrow = 0;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[tabElements.length - 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[tabElements.length - 1], 'focus');
 
       component['handleArrowLeft'](tabElements, indexArrow);
 
@@ -336,8 +338,8 @@ describe('PoTabsComponent:', () => {
     it('handleHomeKey: should focus in the first item', () => {
       const indexArrow = 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[0], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[0] as any, 'focus');
 
       component['handleHomeKey'](tabElements, indexArrow);
 
@@ -349,8 +351,8 @@ describe('PoTabsComponent:', () => {
     it('handleEndKey: should focus in the last item', () => {
       const indexArrow = 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tabElements[tabElements.length - 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tabElements[tabElements.length - 1], 'focus');
 
       component['handleEndKey'](tabElements, indexArrow);
 
@@ -362,9 +364,9 @@ describe('PoTabsComponent:', () => {
     it('should handleKeyDown correctly for Home key', () => {
       const event = new KeyboardEvent('keydown', { code: 'Home', key: 'Home' });
 
-      spyOn(event, 'preventDefault');
-      spyOn(event, 'stopPropagation');
-      spyOn(component as any, 'handleHomeKey');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(event as any, 'stopPropagation');
+      vi.spyOn(component as any, 'handleHomeKey');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -376,9 +378,9 @@ describe('PoTabsComponent:', () => {
     it('should handleKeyDown correctly for End key', () => {
       const event = new KeyboardEvent('keydown', { code: 'End', key: 'End' });
 
-      spyOn(event, 'preventDefault');
-      spyOn(event, 'stopPropagation');
-      spyOn(component as any, 'handleEndKey');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(event as any, 'stopPropagation');
+      vi.spyOn(component as any, 'handleEndKey');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -390,8 +392,8 @@ describe('PoTabsComponent:', () => {
     it('should handleKeyDown correctly for Space key', () => {
       const event = new KeyboardEvent('keydown', { code: 'Space' });
 
-      spyOn(event, 'preventDefault');
-      spyOn(event, 'stopPropagation');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(event as any, 'stopPropagation');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -401,7 +403,7 @@ describe('PoTabsComponent:', () => {
 
     it('should handleKeyDown correctly for ArrowLeft key', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-      spyOn(component as any, 'handleArrowLeft');
+      vi.spyOn(component as any, 'handleArrowLeft');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -410,7 +412,7 @@ describe('PoTabsComponent:', () => {
 
     it('should handleKeyDown correctly for ArrowRight key', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      spyOn(component as any, 'handleArrowRight');
+      vi.spyOn(component as any, 'handleArrowRight');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -420,7 +422,7 @@ describe('PoTabsComponent:', () => {
     it('should focus in previous tab if has next tab ', () => {
       const initialIndex = 3;
 
-      spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(component, 'setTabIndex' as any);
 
       component['initializeTabAccessibilityElements'](tabElements, initialIndex);
 
@@ -432,8 +434,8 @@ describe('PoTabsComponent:', () => {
       const initialIndex = 0;
       const fakeKeyboardEvent = new KeyboardEvent('keydown');
 
-      spyOn(component as any, 'setTabIndex');
-      spyOn(component as any, 'handleKeyDown');
+      vi.spyOn(component as any, 'setTabIndex');
+      vi.spyOn(component as any, 'handleKeyDown');
 
       component['initializeTabAccessibilityElements'](tabRemoveElements, initialIndex);
 
@@ -448,7 +450,7 @@ describe('PoTabsComponent:', () => {
       const tabRemoveElements = [document.createElement('div'), document.createElement('div')];
       const initialIndex = 0;
 
-      spyOn(component as any, 'setTabIndex');
+      vi.spyOn(component as any, 'setTabIndex');
 
       component['initializeTabAccessibilityElements'](tabRemoveElements, initialIndex);
 
@@ -474,7 +476,7 @@ describe('PoTabsComponent:', () => {
 
       component.tabButton.reset([divElement]);
       component.tabsChildren = <any>tabsChildren;
-      spyOn(component as any, 'initializeTabAccessibilityElements');
+      vi.spyOn(component as any, 'initializeTabAccessibilityElements');
 
       component.handleKeyboardNavigationTab();
 
@@ -514,15 +516,19 @@ describe('PoTabsComponent:', () => {
     });
 
     it('onTabActiveByDropdown: should correctly call methods and update styles when called', () => {
-      const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab-id' });
+      const tabMock: any = {
+        id: 'tab-id'
+      };
       tabMock.click = { emit: () => {} };
       tabMock.activatedTab = { emit: () => {} };
       component.defaultLastTabWidth = 100;
 
       const nativeElementMock = { style: { width: '' }, getBoundingClientRect: () => ({ width: 100 }) };
-      const queryListMock = jasmine.createSpyObj('QueryList', ['last'], { last: { nativeElement: nativeElementMock } });
+      const queryListMock = {
+        last: { nativeElement: nativeElementMock }
+      };
       queryListMock.last = { nativeElement: nativeElementMock };
-      component.tabButton = queryListMock;
+      (component as any).tabButton = queryListMock;
 
       component.tabsChildren = new QueryList<PoTabComponent>();
       component.tabsChildren.reset([tabMock]);
@@ -530,8 +536,8 @@ describe('PoTabsComponent:', () => {
       component.tabsDefault = [tabMock];
       component.tabsDropdown = [tabMock];
 
-      spyOn(tabMock.click, 'emit');
-      spyOn(component, 'handleKeyboardNavigationTab');
+      vi.spyOn(tabMock.click as any, 'emit');
+      vi.spyOn(component as any, 'handleKeyboardNavigationTab');
 
       component.onTabActiveByDropdown(tabMock);
 
@@ -551,8 +557,8 @@ describe('PoTabsComponent:', () => {
         reset: tabs => tabs
       } as any;
 
-      spyOn(component.tabsChildren, 'reset');
-      spyOn(component.changeDetector, 'detectChanges');
+      vi.spyOn(component.tabsChildren as any, 'reset');
+      vi.spyOn(component.changeDetector as any, 'detectChanges');
 
       component.reorderTabs(tabToReorder, lastTab);
 
@@ -566,23 +572,35 @@ describe('PoTabsComponent:', () => {
     });
 
     it('reorderTabs: should reorder tabs if tabIndex is not -1', () => {
-      const tabMock = jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab4', widthButton: '130' });
+      const tabMock: any = {
+        id: 'tab4',
+        widthButton: '130'
+      };
       tabMock.click = { emit: () => {} };
       const tabsArrayMock = [
-        jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab1', widthButton: '100' }),
-        jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab2', widthButton: '110' }),
-        jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab3', widthButton: '120' }),
+        {
+          id: 'tab1',
+          widthButton: '100'
+        },
+        {
+          id: 'tab2',
+          widthButton: '110'
+        },
+        {
+          id: 'tab3',
+          widthButton: '120'
+        },
         tabMock
       ];
 
       const tabsChildrenMock = new QueryList<PoTabComponent>();
-      tabsChildrenMock.reset(tabsArrayMock);
+      tabsChildrenMock.reset(tabsArrayMock as any);
       Object.defineProperty(component, 'tabsChildren', { value: tabsChildrenMock });
 
       component.quantityTabsButton = 3;
 
-      spyOn(tabMock.click, 'emit');
-      spyOn(component, <any>'changeTabPositionByDropdown').and.callFake((tab: PoTabComponent) => {
+      vi.spyOn(tabMock.click as any, 'emit');
+      vi.spyOn(component as any, 'changeTabPositionByDropdown').mockImplementation((tab: PoTabComponent) => {
         const tabIndex = component.tabsChildren.toArray().indexOf(tab);
         if (tabIndex !== -1) {
           const reorderedTabs = component.tabsChildren.toArray();
@@ -624,7 +642,7 @@ describe('PoTabsComponent:', () => {
 
       component['tabsDropdown'] = [{ id: 'tab-5' }, { id: 'tab-6' }];
 
-      spyOn(component as any, 'onTabActive');
+      vi.spyOn(component as any, 'onTabActive');
 
       component.changeTabPositionByDropdown(tabToActivate, true);
 
@@ -632,7 +650,7 @@ describe('PoTabsComponent:', () => {
 
       expect(component['tabsDropdown']).toEqual([{ id: 'tab-4' }, { id: 'tab-6' }]);
 
-      expect(tabToActivate.active).toBeTrue();
+      expect(tabToActivate.active).toBe(true);
       expect(component['onTabActive']).toHaveBeenCalled();
     });
 
@@ -642,17 +660,28 @@ describe('PoTabsComponent:', () => {
       };
       component.quantityTabsButton = 2;
 
-      const queryListMock = jasmine.createSpyObj('QueryList', [], { last: { nativeElement: nativeElementMock } });
-      component.tabButton = queryListMock;
+      const queryListMock = {
+        last: { nativeElement: nativeElementMock }
+      };
+      (component as any).tabButton = queryListMock;
 
       const tabsArrayMock = [
-        jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab1', widthButton: 0 }),
-        jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab2', widthButton: 100 }),
-        jasmine.createSpyObj('PoTabComponent', ['id'], { id: 'tab3', widthButton: 0 })
+        {
+          id: 'tab1',
+          widthButton: 0
+        },
+        {
+          id: 'tab2',
+          widthButton: 100
+        },
+        {
+          id: 'tab3',
+          widthButton: 0
+        }
       ];
 
       const tabsChildrenMock = new QueryList<PoTabComponent>();
-      tabsChildrenMock.reset(tabsArrayMock);
+      tabsChildrenMock.reset(tabsArrayMock as any);
       Object.defineProperty(component, 'tabsChildrenArray', { value: tabsArrayMock });
       component.quantityTabsButton = 2;
 
@@ -674,12 +703,12 @@ describe('PoTabsComponent:', () => {
       component['tabsDefault'] = [tabMock1, tabMock2];
       component.tabsChildren['_results'] = [tabMockInDropdown];
 
-      spyOn(component, 'onTabActiveByDropdown');
-      const changeDetectorSpy = spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component as any, 'onTabActiveByDropdown');
+      const changeDetectorSpy = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component.selectedTab(tabMockInDropdown);
 
-      expect(tabMockInDropdown.active).toBeTrue();
+      expect(tabMockInDropdown.active).toBe(true);
       expect(changeDetectorSpy).toHaveBeenCalled();
       clickEventMock.subscribe(tab => {
         expect(tab).toBe(tabMockInDropdown);
@@ -691,8 +720,10 @@ describe('PoTabsComponent:', () => {
       const nativeElementMock = {
         getBoundingClientRect: () => ({ width: 0 })
       };
-      const queryListMock = jasmine.createSpyObj('QueryList', [], { last: { nativeElement: nativeElementMock } });
-      component.tabButton = queryListMock;
+      const queryListMock = {
+        last: { nativeElement: nativeElementMock }
+      };
+      (component as any).tabButton = queryListMock;
 
       (component as any).updateTabsState();
 
@@ -720,7 +751,7 @@ describe('PoTabsComponent:', () => {
           configurable: true
         });
 
-        const spySelectedTab = spyOn(component, 'selectedTab');
+        const spySelectedTab = vi.spyOn(component as any, 'selectedTab');
 
         component.activateTab('tab-perfil');
 
@@ -735,7 +766,7 @@ describe('PoTabsComponent:', () => {
           configurable: true
         });
 
-        const spySelectedTab = spyOn(component, 'selectedTab');
+        const spySelectedTab = vi.spyOn(component as any, 'selectedTab');
 
         component.activateTab('id-inexistente');
 

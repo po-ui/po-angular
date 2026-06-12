@@ -45,7 +45,7 @@ describe('PoFilterChipComponent:', () => {
 
   describe('Default state:', () => {
     it('should not have po-filter-chip-selected class', () => {
-      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBeFalse();
+      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBe(false);
     });
 
     it('should have aria-selected="false"', () => {
@@ -73,7 +73,7 @@ describe('PoFilterChipComponent:', () => {
     });
 
     it('should have po-filter-chip-selected class', () => {
-      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBeTrue();
+      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBe(true);
     });
 
     it('should have aria-selected="true"', () => {
@@ -88,55 +88,55 @@ describe('PoFilterChipComponent:', () => {
 
   describe('Toggle on click:', () => {
     it('should toggle from default to selected on click', () => {
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
 
       wrapperElement.click();
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeTrue();
-      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBeTrue();
+      expect(component.isSelected()).toBe(true);
+      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBe(true);
     });
 
     it('should toggle from selected to default on click', () => {
       fixture.componentRef.setInput('p-selected', true);
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeTrue();
+      expect(component.isSelected()).toBe(true);
 
       wrapperElement.click();
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeFalse();
-      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBeFalse();
+      expect(component.isSelected()).toBe(false);
+      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBe(false);
     });
   });
 
   describe('Toggle on keyboard:', () => {
     it('should toggle on Enter key', () => {
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
 
       const event = new KeyboardEvent('keydown', { key: 'Enter' });
       component['onKeydown'](event);
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeTrue();
+      expect(component.isSelected()).toBe(true);
     });
 
     it('should toggle on Space key', () => {
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
 
       const event = new KeyboardEvent('keydown', { key: ' ' });
       component['onKeydown'](event);
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeTrue();
+      expect(component.isSelected()).toBe(true);
     });
 
     it('should call preventDefault when not disabled', () => {
       const event = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
       component['onKeydown'](event);
 
-      expect(event.defaultPrevented).toBeTrue();
+      expect(event.defaultPrevented).toBe(true);
     });
   });
 
@@ -147,23 +147,23 @@ describe('PoFilterChipComponent:', () => {
     });
 
     it('should block click interaction', () => {
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
 
       component['onClick']();
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
     });
 
     it('should block keyboard interaction', () => {
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
 
       const event = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
       component['onKeydown'](event);
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeFalse();
-      expect(event.defaultPrevented).toBeFalse();
+      expect(component.isSelected()).toBe(false);
+      expect(event.defaultPrevented).toBe(false);
     });
 
     it('should have aria-disabled="true"', () => {
@@ -175,7 +175,7 @@ describe('PoFilterChipComponent:', () => {
     });
 
     it('should have po-filter-chip-disabled class', () => {
-      expect(wrapperElement.classList.contains('po-filter-chip-disabled')).toBeTrue();
+      expect(wrapperElement.classList.contains('po-filter-chip-disabled')).toBe(true);
     });
   });
 
@@ -184,8 +184,8 @@ describe('PoFilterChipComponent:', () => {
       fixture.componentRef.setInput('p-selected', true);
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeTrue();
-      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBeTrue();
+      expect(component.isSelected()).toBe(true);
+      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBe(true);
       expect(wrapperElement.getAttribute('aria-selected')).toBe('true');
     });
 
@@ -196,8 +196,8 @@ describe('PoFilterChipComponent:', () => {
       fixture.componentRef.setInput('p-selected', false);
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeFalse();
-      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBeFalse();
+      expect(component.isSelected()).toBe(false);
+      expect(wrapperElement.classList.contains('po-filter-chip-selected')).toBe(false);
       expect(wrapperElement.getAttribute('aria-selected')).toBe('false');
     });
 
@@ -234,14 +234,14 @@ describe('PoFilterChipComponent:', () => {
       fixture.componentRef.setInput('p-disabled', 'true');
       fixture.detectChanges();
 
-      expect(component.disabled()).toBeTrue();
+      expect(component.disabled()).toBe(true);
     });
 
     it('should convert string "false" to boolean false', () => {
       fixture.componentRef.setInput('p-disabled', 'false');
       fixture.detectChanges();
 
-      expect(component.disabled()).toBeFalse();
+      expect(component.disabled()).toBe(false);
     });
   });
 
@@ -250,14 +250,14 @@ describe('PoFilterChipComponent:', () => {
       fixture.componentRef.setInput('p-selected', 'true');
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeTrue();
+      expect(component.isSelected()).toBe(true);
     });
 
     it('should convert string "false" to boolean false', () => {
       fixture.componentRef.setInput('p-selected', 'false');
       fixture.detectChanges();
 
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
     });
   });
 
@@ -297,25 +297,25 @@ describe('PoFilterChipComponent:', () => {
       fixture.detectChanges();
 
       component['onClick']();
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
     });
 
     it('toggle should invert state when not disabled', () => {
       component['onClick']();
-      expect(component.isSelected()).toBeTrue();
+      expect(component.isSelected()).toBe(true);
 
       component['onClick']();
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
     });
 
     it('onKeydown should call preventDefault and toggle when not disabled', () => {
       const event = new Event('keydown', { cancelable: true });
-      spyOn(event, 'preventDefault').and.callThrough();
+      vi.spyOn(event as any, 'preventDefault');
 
       component['onKeydown'](event);
 
       expect(event.preventDefault).toHaveBeenCalled();
-      expect(component.isSelected()).toBeTrue();
+      expect(component.isSelected()).toBe(true);
     });
 
     it('onKeydown should not call preventDefault or toggle when disabled', () => {
@@ -323,12 +323,12 @@ describe('PoFilterChipComponent:', () => {
       fixture.detectChanges();
 
       const event = new Event('keydown', { cancelable: true });
-      spyOn(event, 'preventDefault');
+      vi.spyOn(event as any, 'preventDefault');
 
       component['onKeydown'](event);
 
       expect(event.preventDefault).not.toHaveBeenCalled();
-      expect(component.isSelected()).toBeFalse();
+      expect(component.isSelected()).toBe(false);
     });
 
     it('toggle should emit empty string as label when p-label is undefined', () => {
@@ -344,7 +344,7 @@ describe('PoFilterChipComponent:', () => {
       fixture.detectChanges();
 
       expect(emittedValue.label).toBe('');
-      expect(emittedValue.selected).toBeTrue();
+      expect(emittedValue.selected).toBe(true);
     });
   });
 });

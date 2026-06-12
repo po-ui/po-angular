@@ -44,7 +44,7 @@ describe('PoDropdownComponent: ', () => {
     it(`onKeyDown: should call 'toggleDropdown' if enter is typed.`, () => {
       const eventEnterKey = { keyCode: 13 };
 
-      spyOn(component, 'toggleDropdown');
+      vi.spyOn(component as any, 'toggleDropdown');
       component.onKeyDown(eventEnterKey);
 
       expect(component['toggleDropdown']).toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('PoDropdownComponent: ', () => {
     it(`onKeyDown: should call 'isKeyCodeEnter' if typed key is enter.`, () => {
       const eventEnterKey = { keyCode: 13 };
 
-      spyOn(UtilsFunction, <any>'isKeyCodeEnter');
+      vi.spyOn(UtilsFunction as any, 'isKeyCodeEnter');
       component.onKeyDown(eventEnterKey);
 
       expect(UtilsFunction['isKeyCodeEnter']).toHaveBeenCalled();
@@ -62,8 +62,8 @@ describe('PoDropdownComponent: ', () => {
     it(`onKeyDown: shouldn't call 'toggleDropdown' if the typed key is not enter.`, () => {
       const eventDeleteKey = { keyCode: 46 };
 
-      spyOn(UtilsFunction, <any>'isKeyCodeEnter');
-      spyOn(component, 'toggleDropdown');
+      vi.spyOn(UtilsFunction as any, 'isKeyCodeEnter');
+      vi.spyOn(component as any, 'toggleDropdown');
       component.onKeyDown(eventDeleteKey);
 
       expect(component.toggleDropdown).not.toHaveBeenCalled();
@@ -75,8 +75,8 @@ describe('PoDropdownComponent: ', () => {
       component['open'] = false;
       component.disabled = false;
 
-      spyOn(component, <any>'showDropdown');
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'showDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component.toggleDropdown();
 
@@ -87,8 +87,8 @@ describe('PoDropdownComponent: ', () => {
     it(`toggleDropdown: shouldn't call 'showDropdown' and call 'hideDropdown' if dropdownRef is undefined.`, () => {
       component.dropdownRef = undefined;
 
-      spyOn(component, <any>'showDropdown');
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'showDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component.toggleDropdown();
 
@@ -100,8 +100,8 @@ describe('PoDropdownComponent: ', () => {
       component.dropdownRef = { nativeElement: 'value' };
       component['open'] = true;
 
-      spyOn(component, <any>'showDropdown');
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'showDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component.toggleDropdown();
 
@@ -114,8 +114,8 @@ describe('PoDropdownComponent: ', () => {
       component['open'] = false;
       component.disabled = true;
 
-      spyOn(component, <any>'showDropdown');
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'showDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component.toggleDropdown();
 
@@ -127,13 +127,13 @@ describe('PoDropdownComponent: ', () => {
     and call 'popupRef.close'.`, () => {
       const fakeThis = {
         icon: undefined,
-        removeListeners: jasmine.createSpy('removeListeners'),
+        removeListeners: vi.fn(),
         popupRef: {
-          close: jasmine.createSpy('close')
+          close: vi.fn()
         },
         open: undefined,
         changeDetector: {
-          detectChanges: jasmine.createSpy('detectChanges')
+          detectChanges: vi.fn()
         }
       };
 
@@ -147,12 +147,12 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it('initializeListeners: should initialize click, resize and scroll listeners.', () => {
-      const wasClickedOnDropdown = spyOn(component, <any>'wasClickedOnDropdown');
-      const hideDropdown = spyOn(component, <any>'hideDropdown');
-      const addEventListener = spyOn(window, 'addEventListener');
-      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
-        callback()
-      );
+      const wasClickedOnDropdown = vi.spyOn(component as any, 'wasClickedOnDropdown');
+      const hideDropdown = vi.spyOn(component as any, 'hideDropdown');
+      const addEventListener = vi.spyOn(window as any, 'addEventListener');
+      const listen = vi
+        .spyOn(component['renderer'], 'listen')
+        .mockImplementation((target: any, eventName: any, callback: any) => callback({}));
 
       component['initializeListeners']();
 
@@ -163,10 +163,10 @@ describe('PoDropdownComponent: ', () => {
     });
 
     it('onScroll: should call `hideDropdown` if `open` is `true`', () => {
-      spyOn(component, <any>'hideDropdown').and.callThrough();
+      vi.spyOn(component as any, 'hideDropdown');
 
       component['open'] = true;
-      spyOn(component, <any>'isDropdownClosed').and.returnValue(false);
+      vi.spyOn(component as any, 'isDropdownClosed').mockReturnValue(false);
 
       component['onScroll']({ target: {} });
 
@@ -175,7 +175,7 @@ describe('PoDropdownComponent: ', () => {
 
     it('onScroll: shouldn`t call `hideDropdown` if `open` is `false`', () => {
       component['open'] = false;
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component['onScroll']({ target: {} });
 
@@ -186,7 +186,7 @@ describe('PoDropdownComponent: ', () => {
       const fakeEvent = { target: { className: 'po-popup-container' } };
       component['open'] = true;
 
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component['onScroll'](fakeEvent);
 
@@ -197,7 +197,7 @@ describe('PoDropdownComponent: ', () => {
       const dropdownTop = 50;
       const dropdownHeight = 30;
 
-      spyOn(component.dropdownRef.nativeElement, 'getBoundingClientRect').and.returnValue({
+      vi.spyOn(component.dropdownRef.nativeElement, 'getBoundingClientRect').mockReturnValue({
         top: dropdownTop,
         bottom: dropdownTop + dropdownHeight
       });
@@ -217,9 +217,9 @@ describe('PoDropdownComponent: ', () => {
         component['clickoutListener'] = () => {};
         component['resizeListener'] = () => {};
 
-        spyOn(component, <any>'clickoutListener');
-        spyOn(component, <any>'resizeListener');
-        spyOn(window, 'removeEventListener');
+        vi.spyOn(component as any, 'clickoutListener');
+        vi.spyOn(component as any, 'resizeListener');
+        vi.spyOn(window as any, 'removeEventListener');
 
         component['removeListeners']();
 
@@ -232,7 +232,7 @@ describe('PoDropdownComponent: ', () => {
         component['clickoutListener'] = undefined;
         component['resizeListener'] = undefined;
 
-        spyOn(window, 'removeEventListener');
+        vi.spyOn(window as any, 'removeEventListener');
 
         component['removeListeners']();
 
@@ -254,8 +254,8 @@ describe('PoDropdownComponent: ', () => {
         }
       };
 
-      spyOn(fakeThis, 'initializeListeners');
-      spyOn(fakeThis.popupRef, 'open');
+      vi.spyOn(fakeThis as any, 'initializeListeners');
+      vi.spyOn(fakeThis.popupRef as any, 'open');
 
       component[`showDropdown`].call(fakeThis);
 
@@ -277,7 +277,7 @@ describe('PoDropdownComponent: ', () => {
       };
       component.dropdownRef = dropdownRef;
 
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'hideDropdown');
 
       component['wasClickedOnDropdown'](fakeEvent);
 
@@ -295,8 +295,8 @@ describe('PoDropdownComponent: ', () => {
       };
       component.dropdownRef = dropdownRef;
 
-      spyOn(component, <any>'checkClickArea').and.returnValue(true);
-      spyOn(component, <any>'hideDropdown');
+      vi.spyOn(component as any, 'checkClickArea').mockReturnValue(true);
+      vi.spyOn(component as any, 'hideDropdown');
 
       component['wasClickedOnDropdown'](fakeEvent);
 
@@ -328,7 +328,7 @@ describe('PoDropdownComponent: ', () => {
     it(`should call 'toggleDropdown' if click in 'po-dropdown'`, () => {
       const poDropdown = nativeElement.querySelector('.po-dropdown');
 
-      spyOn(component, 'toggleDropdown');
+      vi.spyOn(component as any, 'toggleDropdown');
 
       const clickEvent = new MouseEvent('click');
 
@@ -340,7 +340,7 @@ describe('PoDropdownComponent: ', () => {
     it(`should call 'toggleDropdown' if press enter key in 'po-dropdown'`, () => {
       const poDropdown = nativeElement.querySelector('.po-dropdown');
 
-      spyOn(component, 'onKeyDown');
+      vi.spyOn(component as any, 'onKeyDown');
 
       poDropdown.dispatchEvent(keyboardEvents('keydown', 13));
 
@@ -388,9 +388,9 @@ describe('PoDropdownComponent: ', () => {
       const poDropdown = nativeElement.querySelector('.po-dropdown');
       component.actions = [{ label: 'action1', action: () => {} }];
 
-      spyOn(component as any, 'showDropdown').and.callThrough();
+      vi.spyOn(component as any, 'showDropdown');
       if (component.popupRef) {
-        spyOn(component.popupRef, 'open').and.callThrough();
+        vi.spyOn(component.popupRef as any, 'open');
       }
 
       fixture.detectChanges();

@@ -23,7 +23,7 @@ describe('PoCalendarBaseComponent:', () => {
 
   describe('Properties:', () => {
     it('p-mode: should set mode and call `setActivateDate`', () => {
-      spyOn(component, <any>'setActivateDate');
+      vi.spyOn(component as any, 'setActivateDate');
 
       component.mode = PoCalendarMode.Range;
 
@@ -46,7 +46,7 @@ describe('PoCalendarBaseComponent:', () => {
       const maxDate = new Date(2018, 0, 1);
       const dateExpected = new Date(2018, 0, 1, 23, 59, 59);
 
-      spyOn(component.poDate, 'getDateForDateRange').and.returnValue(dateExpected);
+      vi.spyOn(component.poDate as any, 'getDateForDateRange').mockReturnValue(dateExpected);
 
       component.maxDate = maxDate;
 
@@ -58,7 +58,7 @@ describe('PoCalendarBaseComponent:', () => {
       const minDate = new Date(2018, 0, 1);
       const dateExpected = new Date(2018, 0, 1, 0, 0, 0);
 
-      spyOn(component.poDate, 'getDateForDateRange').and.returnValue(dateExpected);
+      vi.spyOn(component.poDate as any, 'getDateForDateRange').mockReturnValue(dateExpected);
 
       component.minDate = minDate;
 
@@ -69,7 +69,7 @@ describe('PoCalendarBaseComponent:', () => {
 
   describe('Methods:', () => {
     it('setActivateDate: should set { start, end } with today date if isRange is true and date param is undefined', () => {
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component['setActivateDate']();
 
@@ -86,7 +86,7 @@ describe('PoCalendarBaseComponent:', () => {
 
       const date = new Date(`${year}-${month}-${day}T00:00:00`);
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component['setActivateDate'](date);
 
@@ -110,7 +110,7 @@ describe('PoCalendarBaseComponent:', () => {
       const year = 2021;
       const month = 9;
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component['setActivateDate'](date);
       const { start, end } = component.activateDate;
@@ -130,7 +130,7 @@ describe('PoCalendarBaseComponent:', () => {
     it('setActivateDate: should set with date param if isRange is false', () => {
       const date = new Date(2019, 10, 5);
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       component['setActivateDate'](date);
 
@@ -142,7 +142,7 @@ describe('PoCalendarBaseComponent:', () => {
     it('setActivateDate: should set with today date if isRange is false and date param is undefined', () => {
       const today = new Date();
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       component['setActivateDate']();
 
@@ -154,7 +154,7 @@ describe('PoCalendarBaseComponent:', () => {
     it('setActivateDate: should set with date iso if isRange is false and date param is string', () => {
       const date = '2010-10-10';
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
 
       component['setActivateDate'](date);
 
@@ -166,7 +166,7 @@ describe('PoCalendarBaseComponent:', () => {
     it('setActivateDate: should keep the initial month and the following month when selecting the last day of the month', () => {
       const date = '2023-03-31';
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component['setActivateDate'](date);
 
@@ -185,7 +185,7 @@ describe('PoCalendarBaseComponent:', () => {
     it('setActivateDate: should keep the start month and the after month when selecting the first day of the month', () => {
       const date = '2023-03-01';
 
-      spyOnProperty(component, 'isRange').and.returnValue(true);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(true);
 
       component['setActivateDate'](date);
 
@@ -205,10 +205,10 @@ describe('PoCalendarBaseComponent:', () => {
       const today = new Date();
       component.minDate = new Date(new Date(today).setMonth(today.getMonth() + 1));
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
       component['setActivateDate'](null);
 
-      spyOn(component, <any>'verifyActivateDate').and.callThrough();
+      vi.spyOn(component as any, 'verifyActivateDate');
 
       expect(component.activateDate).toEqual(component.minDate);
     });
@@ -218,10 +218,10 @@ describe('PoCalendarBaseComponent:', () => {
       component.minDate = null;
       component.maxDate = new Date(new Date(today).setMonth(today.getMonth() - 1));
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
       component['setActivateDate'](null);
 
-      spyOn(component, <any>'verifyActivateDate').and.callThrough();
+      vi.spyOn(component as any, 'verifyActivateDate');
 
       expect(component.activateDate).toEqual(component.maxDate);
     });
@@ -231,10 +231,10 @@ describe('PoCalendarBaseComponent:', () => {
       component.minDate = null;
       component.maxDate = null;
 
-      spyOnProperty(component, 'isRange').and.returnValue(false);
+      vi.spyOn(component as any, 'isRange').mockReturnValue(false);
       component['setActivateDate'](null);
 
-      spyOn(component, <any>'verifyActivateDate').and.callThrough();
+      vi.spyOn(component as any, 'verifyActivateDate');
 
       expect(component.activateDate.getDate()).toEqual(today.getDate());
     });
@@ -325,7 +325,7 @@ describe('PoCalendarBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });

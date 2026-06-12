@@ -41,12 +41,11 @@ describe('PoMenuService:', () => {
       expect(menuService.url).toBe(url);
     });
 
-    it('getFilteredData: should call `http.get` and return items filtered', done => {
+    it('getFilteredData: should call `http.get` and return items filtered', async () => {
       menuService['_url'] = 'https://po-ui.io/sample/api/menus';
 
       menuService.getFilteredData(search).subscribe(response => {
         expect(response).toEqual(itemsFiltered);
-        done();
       });
 
       httpMock
@@ -54,7 +53,7 @@ describe('PoMenuService:', () => {
         .flush(expectedResponse);
     });
 
-    it('getFilteredData: should call `http.get` with search and params', done => {
+    it('getFilteredData: should call `http.get` with search and params', async () => {
       const params = { product: 'hcm' };
 
       const filterParams = {
@@ -62,12 +61,11 @@ describe('PoMenuService:', () => {
         ...params
       };
 
-      const spyHttpGet = spyOn(menuService['http'], 'get').and.callThrough();
+      const spyHttpGet = vi.spyOn(menuService['http'] as any, 'get');
 
       menuService.getFilteredData(search, params).subscribe(response => {
         expect(response).toEqual(itemsFiltered);
         expect(spyHttpGet).toHaveBeenCalledWith(menuService.url, { params: filterParams });
-        done();
       });
 
       httpMock

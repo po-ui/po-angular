@@ -22,7 +22,7 @@ describe('PoTreeViewService:', () => {
       value: 1
     };
 
-    const spyEmitExpandedEvent = spyOn(treeViewService['expandedEvent'], 'next');
+    const spyEmitExpandedEvent = vi.spyOn(treeViewService['expandedEvent'] as any, 'next');
 
     treeViewService.emitExpandedEvent(treeViewItem);
 
@@ -41,7 +41,7 @@ describe('PoTreeViewService:', () => {
       value: 1
     };
 
-    const spyEmitSelectedEvent = spyOn(treeViewService['selectedEvent'], 'next');
+    const spyEmitSelectedEvent = vi.spyOn(treeViewService['selectedEvent'] as any, 'next');
 
     treeViewService.emitSelectedEvent(treeViewItem);
 

@@ -28,7 +28,8 @@ import { PoModalFooterComponent } from '.';
   standalone: false
 })
 class ContentProjectionComponent {
-  @ViewChild(PoModalComponent, { static: true }) poModal;
+  @ViewChild(PoModalComponent, { static: true })
+  poModal;
   primaryAction: PoModalAction = { label: 'action', action: () => {} };
   teste;
   userName;
@@ -93,14 +94,14 @@ describe('PoModalComponent:', () => {
   });
 
   it('should call primaryAction() method', () => {
-    spyOn(component.primaryAction, 'action');
+    vi.spyOn(component.primaryAction as any, 'action');
     component.primaryAction.action();
     expect(component.primaryAction.action).toHaveBeenCalled();
   });
 
   it('should call secondaryAction() method', () => {
     component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
-    spyOn(component.secondaryAction, 'action');
+    vi.spyOn(component.secondaryAction as any, 'action');
     component.secondaryAction.action();
     expect(component.secondaryAction.action).toHaveBeenCalled();
   });
@@ -132,7 +133,7 @@ describe('PoModalComponent:', () => {
   }));
 
   it('should keep focus on element inside modal', fakeAsync(() => {
-    spyOn(component, <any>'handleFocus');
+    vi.spyOn(component as any, 'handleFocus');
     component.open();
     fixture.detectChanges();
     tick(0);
@@ -160,7 +161,7 @@ describe('PoModalComponent:', () => {
     const fixtureTest = TestBed.createComponent(ContentProjectionComponent);
     const testComponent = fixtureTest.componentInstance;
 
-    spyOn(testComponent.poModal, 'open');
+    vi.spyOn(testComponent.poModal as any, 'open');
     testComponent.openModal();
     fixtureTest.detectChanges();
 
@@ -250,7 +251,7 @@ describe('PoModalComponent:', () => {
     };
     component['setFirstElement'] = () => {};
 
-    const spyEvent = spyOn(fakeEvent, 'stopPropagation');
+    const spyEvent = vi.spyOn(fakeEvent as any, 'stopPropagation');
 
     component.hideClose = true;
     component['initFocus']();
@@ -278,7 +279,7 @@ describe('PoModalComponent:', () => {
         close: () => {}
       };
 
-      spyOn(fakeThis, 'close');
+      vi.spyOn(fakeThis as any, 'close');
 
       component.onClickOut.call(fakeThis, fakeEvent);
 
@@ -300,7 +301,7 @@ describe('PoModalComponent:', () => {
         close: () => {}
       };
 
-      spyOn(fakeThis, 'close');
+      vi.spyOn(fakeThis as any, 'close');
       fixture.detectChanges();
 
       component.onClickOut.call(fakeThis, fakeEvent);
@@ -323,7 +324,7 @@ describe('PoModalComponent:', () => {
         close: () => {}
       };
 
-      spyOn(fakeThis, 'close');
+      vi.spyOn(fakeThis as any, 'close');
       fixture.detectChanges();
 
       component.onClickOut.call(fakeThis, fakeEvent);
@@ -337,7 +338,7 @@ describe('PoModalComponent:', () => {
     });
 
     it(`open: should call 'handleFocus'.`, () => {
-      const spyOnHandleFocus = spyOn(component, <any>'handleFocus');
+      const spyOnHandleFocus = vi.spyOn(component as any, 'handleFocus');
 
       component.open();
 
@@ -354,7 +355,7 @@ describe('PoModalComponent:', () => {
 
     it('close: should focus on source element ', () => {
       component.open();
-      spyOn(component['sourceElement'], 'focus');
+      vi.spyOn(component['sourceElement'] as any, 'focus');
       component.close();
       expect(component['sourceElement'].focus).toHaveBeenCalled();
     });
@@ -379,7 +380,7 @@ describe('PoModalComponent:', () => {
         fixture.detectChanges();
 
         const modal = fixture.debugElement.query(By.css('.po-modal')).nativeElement;
-        spyOn(component, 'close');
+        vi.spyOn(component as any, 'close');
         modal.dispatchEvent(eventEscapeKey);
 
         expect(component.close).toHaveBeenCalled();
@@ -391,7 +392,7 @@ describe('PoModalComponent:', () => {
         fixture.detectChanges();
 
         const modal = fixture.debugElement.query(By.css('.po-modal')).nativeElement;
-        spyOn(component, 'close');
+        vi.spyOn(component as any, 'close');
         modal.dispatchEvent(eventEnterKey);
 
         expect(component.close).not.toHaveBeenCalled();
@@ -403,7 +404,7 @@ describe('PoModalComponent:', () => {
         fixture.detectChanges();
 
         const modal = fixture.debugElement.query(By.css('.po-modal')).nativeElement;
-        spyOn(component, 'close');
+        vi.spyOn(component as any, 'close');
         modal.dispatchEvent(eventEscapeKey);
 
         expect(component.close).not.toHaveBeenCalled();
@@ -415,8 +416,8 @@ describe('PoModalComponent:', () => {
           stopPropagation: () => {}
         };
 
-        spyOn(fakeEvent, 'preventDefault');
-        spyOn(fakeEvent, 'stopPropagation');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
+        vi.spyOn(fakeEvent as any, 'stopPropagation');
 
         component.closeModalOnEscapeKey(fakeEvent);
 
@@ -430,8 +431,8 @@ describe('PoModalComponent:', () => {
           stopPropagation: () => {}
         };
 
-        spyOn(fakeEvent, 'preventDefault');
-        spyOn(fakeEvent, 'stopPropagation');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
+        vi.spyOn(fakeEvent as any, 'stopPropagation');
 
         component.hideClose = true;
         component.closeModalOnEscapeKey(fakeEvent);
@@ -466,7 +467,7 @@ describe('PoModalComponent:', () => {
     });
 
     it(`removeEventListeners: should call 'removeEventListener' with 'focus', 'focusFunction' and 'true' params.`, () => {
-      const spyRemoveEventListener = spyOn(document, 'removeEventListener');
+      const spyRemoveEventListener = vi.spyOn(document as any, 'removeEventListener');
 
       component['removeEventListeners']();
 
@@ -538,7 +539,7 @@ describe('PoModalComponent:', () => {
 
       const containerElement = fixture.debugElement.query(By.css('.po-modal-overlay')).nativeElement;
 
-      spyOn(component, 'onClickOut');
+      vi.spyOn(component as any, 'onClickOut');
 
       containerElement.dispatchEvent(new Event('mousedown'));
 

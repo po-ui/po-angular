@@ -98,7 +98,7 @@ describe('PoAvatarComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('[loading="lazy"]')).toHaveClass('po-avatar-image');
+      expect(nativeElement.querySelector('[loading="lazy"]').classList.contains('po-avatar-image')).toBe(true);
     });
   });
 });

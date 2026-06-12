@@ -91,7 +91,7 @@ describe('PoLookupModalService:', () => {
 
     poLookupModalService.openModal(params);
 
-    spyOn(poLookupModalService['componentRef'], 'destroy');
+    vi.spyOn(poLookupModalService['componentRef'] as any, 'destroy');
     poLookupModalService.selectValue({});
     expect(poLookupModalService['componentRef'].destroy).toHaveBeenCalled();
   });
@@ -101,7 +101,7 @@ describe('PoLookupModalService:', () => {
 
     poLookupModalService.openModal(params);
 
-    spyOn(poLookupModalService.selectValueEvent, 'emit');
+    vi.spyOn(poLookupModalService.selectValueEvent as any, 'emit');
     poLookupModalService.selectValue(null);
     expect(poLookupModalService.selectValueEvent.emit).not.toHaveBeenCalled();
   });
@@ -112,7 +112,7 @@ describe('PoLookupModalService:', () => {
     poLookupModalService.openModal(params);
 
     poLookupModalService['componentRef'].instance.items[0].$selected = true;
-    spyOn(poLookupModalService, 'selectValue');
+    vi.spyOn(poLookupModalService as any, 'selectValue');
     poLookupModalService['componentRef'].instance['primaryAction'].action();
 
     expect(poLookupModalService.selectValue).toHaveBeenCalled();
@@ -121,7 +121,7 @@ describe('PoLookupModalService:', () => {
   it('should call a setChangeColumns function', () => {
     const columns = [{ label: 'apelido', property: 'nickname' }];
 
-    spyOn(poLookupModalService, 'setChangeColumns');
+    vi.spyOn(poLookupModalService as any, 'setChangeColumns');
 
     poLookupModalService.setChangeColumns(columns);
 

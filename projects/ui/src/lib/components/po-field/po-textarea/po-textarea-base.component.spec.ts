@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
@@ -21,10 +22,12 @@ class PoTextareaHostComponent extends PoTextareaBaseComponent {
 describe('PoTextareaBase:', () => {
   let component: PoTextareaHostComponent;
   let fixture: ComponentFixture<PoTextareaHostComponent>;
-  let changeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
+  let changeDetectorRef: any;
 
   beforeEach(() => {
-    changeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck']);
+    changeDetectorRef = {
+      markForCheck: vi.fn().mockName('ChangeDetectorRef.markForCheck')
+    };
 
     TestBed.configureTestingModule({
       declarations: [PoTextareaHostComponent]
@@ -93,12 +96,12 @@ describe('PoTextareaBase:', () => {
   });
 
   it('should call writeValueModel', () => {
-    spyOn(component, 'writeValueModel');
+    vi.spyOn(component as any, 'writeValueModel');
 
-    if (!(component.cd.markForCheck as jasmine.Spy)) {
-      spyOn(component.cd, 'markForCheck');
+    if (!(component.cd.markForCheck as Mock)) {
+      vi.spyOn(component.cd as any, 'markForCheck');
     } else {
-      (component.cd.markForCheck as jasmine.Spy).calls.reset();
+      (component.cd.markForCheck as Mock).mockClear();
     }
 
     component.writeValue(1);
@@ -109,7 +112,7 @@ describe('PoTextareaBase:', () => {
 
   it('should call onChangePropagate', () => {
     const fakeThis = component;
-    spyOn<any>(component, 'onChangePropagate');
+    vi.spyOn(component as any, 'onChangePropagate');
     component.callOnChange.call(fakeThis, '123');
     expect(component['onChangePropagate']).toHaveBeenCalledWith('123');
   });
@@ -120,7 +123,7 @@ describe('PoTextareaBase:', () => {
       controlChangeModelEmitter: () => true
     };
     component['modelLastUpdate'] = '123';
-    spyOn<any>(component, 'onChangePropagate');
+    vi.spyOn(component as any, 'onChangePropagate');
     component.callOnChange.call(fakeThis, '123');
     expect(component['onChangePropagate']).not.toHaveBeenCalled();
   });
@@ -140,7 +143,7 @@ describe('PoTextareaBase:', () => {
     it('p-maxlength: should update property p-maxlength with valid values.', () => {
       const validValues = [105, 1, 7, 0, -5];
 
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       expectPropertiesValues(component, 'maxlength', validValues, validValues);
       expect(component['validateModel']).toHaveBeenCalled();
@@ -152,7 +155,7 @@ describe('PoTextareaBase:', () => {
     });
 
     it('p-minlength: should update property p-minlength with valid values.', () => {
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'validateModel');
 
       const validValues = [105, 1, 7, 0, -5];
       expectPropertiesValues(component, 'minlength', validValues, validValues);
@@ -230,13 +233,13 @@ describe('PoTextareaBase:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
 
       it('onThemeChange: should call onAfterThemeChange', () => {
-        spyOn<any>(component, 'onAfterThemeChange');
+        vi.spyOn(component as any, 'onAfterThemeChange');
         component['onThemeChange']();
         expect((component as any).onAfterThemeChange).toHaveBeenCalled();
       });
@@ -250,14 +253,14 @@ describe('PoTextareaBase:', () => {
       it('should set loading=true and call markForCheck', () => {
         component.loading = true;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
       });
 
       it('should set loading=false and call markForCheck', () => {
         component.loading = false;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
       });
 
@@ -265,7 +268,7 @@ describe('PoTextareaBase:', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
       });
 
       it('should not throw when cd is undefined', () => {
@@ -279,39 +282,39 @@ describe('PoTextareaBase:', () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
 
       it('should return true when disabled is true and loading is false', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled is false and loading is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled and loading are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should keep disabled true after loading toggles from true to false', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
 
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
     });
   });
@@ -321,7 +324,7 @@ describe('PoTextareaBase:', () => {
       const newModelValue: number = 1;
       component['modelLastUpdate'] = 1;
 
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
       component.controlChangeModelEmitter.call(component, newModelValue);
       expect(component.changeModel.emit).not.toHaveBeenCalled();
     });
@@ -331,7 +334,7 @@ describe('PoTextareaBase:', () => {
       const newModelValue: number = 2;
       component['modelLastUpdate'] = 1;
 
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
       component.controlChangeModelEmitter.call(component, newModelValue);
 
       expect(component.changeModel.emit).toHaveBeenCalledWith(newModelValue);
@@ -352,16 +355,16 @@ describe('PoTextareaBase:', () => {
           }
         };
 
-        spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+        vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
         expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
         expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
       });
 
       it('should return undefined if `requiredFailed` is false', () => {
-        spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
-        spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(false);
-        spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'minlengpoailed').mockReturnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'maxlengpoailed').mockReturnValue(false);
 
         expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
         expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -370,10 +373,10 @@ describe('PoTextareaBase:', () => {
       it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
         const expectedValue = true;
 
-        if (!(component.cd.markForCheck as jasmine.Spy)) {
-          spyOn(component.cd, 'markForCheck');
+        if (!(component.cd.markForCheck as Mock)) {
+          vi.spyOn(component.cd as any, 'markForCheck');
         } else {
-          (component.cd.markForCheck as jasmine.Spy).calls.reset();
+          (component.cd.markForCheck as Mock).mockClear();
         }
 
         component.setDisabledState(expectedValue);
@@ -389,16 +392,16 @@ describe('PoTextareaBase:', () => {
           }
         };
 
-        spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(true);
+        vi.spyOn(ValidatorsFunctions as any, 'minlengpoailed').mockReturnValue(true);
 
         expect(component.validate(new UntypedFormControl())).toEqual(invalidMinlenghtError);
         expect(ValidatorsFunctions.minlengpoailed).toHaveBeenCalled();
       });
 
       it('shouldn`t invalidate form if number of digits is greater or equal than minLenght value', () => {
-        spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
-        spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(false);
-        spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'minlengpoailed').mockReturnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'maxlengpoailed').mockReturnValue(false);
 
         expect(component.validate(new UntypedFormControl())).toBeUndefined();
         expect(ValidatorsFunctions.minlengpoailed).toHaveBeenCalled();
@@ -411,16 +414,16 @@ describe('PoTextareaBase:', () => {
           }
         };
 
-        spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(true);
+        vi.spyOn(ValidatorsFunctions as any, 'maxlengpoailed').mockReturnValue(true);
 
         expect(component.validate(new UntypedFormControl())).toEqual(invalidMaxlenghtError);
         expect(ValidatorsFunctions.maxlengpoailed).toHaveBeenCalled();
       });
 
       it('shouldn`t invalidate form if number of digits is less or equal than maxLenght value', () => {
-        spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
-        spyOn(ValidatorsFunctions, 'minlengpoailed').and.returnValue(false);
-        spyOn(ValidatorsFunctions, 'maxlengpoailed').and.returnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'minlengpoailed').mockReturnValue(false);
+        vi.spyOn(ValidatorsFunctions as any, 'maxlengpoailed').mockReturnValue(false);
 
         expect(component.validate(new UntypedFormControl())).toBeUndefined();
         expect(ValidatorsFunctions.maxlengpoailed).toHaveBeenCalled();
@@ -434,14 +437,14 @@ describe('PoTextareaBase:', () => {
 
         component.validate(controlMock);
 
-        expect(component['hasValidatorRequired']).toBeTrue();
+        expect(component['hasValidatorRequired']).toBe(true);
       });
     });
 
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']();
 

@@ -98,7 +98,7 @@ describe('PoPageDefaultBaseComponent:', () => {
         recalculateHeaderSize: () => {}
       };
 
-      spyOn(component.poPageContent, 'recalculateHeaderSize');
+      vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
 
       component.title = 'teste';
 
@@ -113,7 +113,7 @@ describe('PoPageDefaultBaseComponent:', () => {
         recalculateHeaderSize: () => {}
       };
 
-      spyOn(component.poPageContent, 'recalculateHeaderSize');
+      vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
 
       component.subtitle = 'sub teste';
 
@@ -128,7 +128,7 @@ describe('PoPageDefaultBaseComponent:', () => {
         recalculateHeaderSize: () => {}
       };
 
-      spyOn(component.poPageContent, 'recalculateHeaderSize');
+      vi.spyOn(component.poPageContent as any, 'recalculateHeaderSize');
 
       component.breadcrumb = { items: [{ label: 'Home' }] };
 
@@ -256,7 +256,7 @@ describe('PoPageDefaultBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });

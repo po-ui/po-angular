@@ -197,7 +197,7 @@ describe('PoToasterComponent', () => {
       stopPropagation: () => {}
     };
     fixture.detectChanges();
-    spyOn(component, 'action');
+    vi.spyOn(component as any, 'action');
     component.poToasterAction(event);
     expect(component.action).toHaveBeenCalled();
   });
@@ -209,7 +209,7 @@ describe('PoToasterComponent', () => {
 
     tick(10301);
 
-    expect(component.alive).toBeFalse();
+    expect(component.alive).toBe(false);
   }));
 
   describe('Methods:', () => {
@@ -222,8 +222,8 @@ describe('PoToasterComponent', () => {
         stopPropagation: () => {}
       };
 
-      const spyClose = spyOn(component, 'close');
-      const spyToasterAction = spyOn(component, 'poToasterAction');
+      const spyClose = vi.spyOn(component as any, 'close');
+      const spyToasterAction = vi.spyOn(component as any, 'poToasterAction');
 
       component.onButtonClose(event);
 
@@ -240,7 +240,7 @@ describe('PoToasterComponent', () => {
         stopPropagation: () => {}
       };
 
-      const spyToasterAction = spyOn(component, 'poToasterAction');
+      const spyToasterAction = vi.spyOn(component as any, 'poToasterAction');
 
       component.onButtonClose(event);
 
@@ -257,7 +257,7 @@ describe('PoToasterComponent', () => {
         stopPropagation: () => {}
       };
 
-      const spyCloseCall = spyOn(component, 'close').and.callThrough();
+      const spyCloseCall = vi.spyOn(component as any, 'close');
 
       component.onButtonClose(event);
 
@@ -274,8 +274,8 @@ describe('PoToasterComponent', () => {
         stopPropagation: () => {}
       };
 
-      const spyCloseCall = spyOn(component, 'close').and.callThrough();
-      const spyHideCall = spyOn(component, 'hide').and.callThrough();
+      const spyCloseCall = vi.spyOn(component as any, 'close');
+      const spyHideCall = vi.spyOn(component as any, 'hide');
 
       component.onButtonClose(event);
 
@@ -292,8 +292,8 @@ describe('PoToasterComponent', () => {
         stopPropagation: () => {}
       };
 
-      const spyToasterAction = spyOn(component, 'poToasterAction');
-      const spyClose = spyOn(component, 'close');
+      const spyToasterAction = vi.spyOn(component as any, 'poToasterAction');
+      const spyClose = vi.spyOn(component as any, 'close');
 
       component.onButtonClose(event);
 
@@ -310,8 +310,8 @@ describe('PoToasterComponent', () => {
         stopPropagation: () => {}
       };
 
-      const spyToasterAction = spyOn(component, 'poToasterAction');
-      const spyClose = spyOn(component, 'close');
+      const spyToasterAction = vi.spyOn(component as any, 'poToasterAction');
+      const spyClose = vi.spyOn(component as any, 'close');
 
       component.onButtonClose(event);
 
@@ -365,7 +365,7 @@ describe('PoToasterComponent', () => {
 
       component.poToasterAction(event);
 
-      const spyAction = spyOn(component, 'action');
+      const spyAction = vi.spyOn(component as any, 'action');
 
       expect(spyAction).toBeTruthy();
     });
@@ -376,7 +376,7 @@ describe('PoToasterComponent', () => {
       component.toaster.nativeElement.className = 'po-toaster-visible';
       const position = 1;
 
-      spyOn<any>(component, 'returnHeightToaster').and.returnValue(62);
+      vi.spyOn(component as any, 'returnHeightToaster').mockReturnValue(62);
 
       component.changePosition(position);
       tick();
@@ -393,7 +393,7 @@ describe('PoToasterComponent', () => {
 
     it('changePosition: Margin should receive the default value plus the next toaster concatenated by the default margin value', fakeAsync(() => {
       const expectResult = 8 + 80 + 8 + 150 + 8;
-      spyOn(component, <any>'returnHeightToaster').and.callFake((position: number) => {
+      vi.spyOn(component as any, 'returnHeightToaster').mockImplementation((position: number) => {
         if (position === 1) {
           return 80;
         } else {
@@ -412,20 +412,20 @@ describe('PoToasterComponent', () => {
     it('show: should set isHide to true, call setFadeIn and remove hidden attribute from toaster element', () => {
       component.mode = PoToasterMode.Inline;
 
-      spyOn(component, 'setFadeIn').and.callThrough();
-      spyOn(renderer, 'removeAttribute').and.callThrough();
+      vi.spyOn(component as any, 'setFadeIn');
+      vi.spyOn(renderer as any, 'removeAttribute');
 
       component.show();
 
-      expect(component.isHide).toBeTrue();
+      expect(component.isHide).toBe(true);
       expect(component.setFadeIn).toHaveBeenCalled();
       expect(renderer.removeAttribute).toHaveBeenCalledWith(component.toaster.nativeElement, 'hidden');
     });
 
     it('ngOnChanges: should call hide() when isHide changes to true', () => {
-      spyOn(component, 'hide');
-      spyOn(component, 'show');
-      spyOn(component.changeDetector, 'detectChanges');
+      vi.spyOn(component as any, 'hide');
+      vi.spyOn(component as any, 'show');
+      vi.spyOn(component.changeDetector as any, 'detectChanges');
 
       const changes: SimpleChanges = {
         isHide: new SimpleChange(false, true, false)
@@ -439,9 +439,9 @@ describe('PoToasterComponent', () => {
     });
 
     it('ngOnChanges: should call show() when isHide changes to false', () => {
-      spyOn(component, 'hide');
-      spyOn(component, 'show');
-      spyOn(component.changeDetector, 'detectChanges');
+      vi.spyOn(component as any, 'hide');
+      vi.spyOn(component as any, 'show');
+      vi.spyOn(component.changeDetector as any, 'detectChanges');
 
       const changes: SimpleChanges = {
         isHide: new SimpleChange(true, false, false)
@@ -455,9 +455,9 @@ describe('PoToasterComponent', () => {
     });
 
     it('ngOnChanges: should not call hide() or show() if isHide previous value is undefined', () => {
-      spyOn(component, 'hide');
-      spyOn(component, 'show');
-      spyOn(component.changeDetector, 'detectChanges');
+      vi.spyOn(component as any, 'hide');
+      vi.spyOn(component as any, 'show');
+      vi.spyOn(component.changeDetector as any, 'detectChanges');
 
       const changes: SimpleChanges = {
         isHide: new SimpleChange(undefined, false, true)

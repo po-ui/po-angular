@@ -53,7 +53,7 @@ describe('PoTableColumnIconComponent:', () => {
         disabled: () => false
       };
 
-      spyOn(component, 'isDisabled').and.returnValue(false);
+      vi.spyOn(component as any, 'isDisabled').mockReturnValue(false);
 
       const expectedValue = component.isClickable(fakeColumn);
 
@@ -68,7 +68,7 @@ describe('PoTableColumnIconComponent:', () => {
         disabled: () => true
       };
 
-      spyOn(component, 'isDisabled').and.returnValue(true);
+      vi.spyOn(component as any, 'isDisabled').mockReturnValue(true);
 
       const expectedValue = component.isClickable(fakeColumn);
 
@@ -104,7 +104,7 @@ describe('PoTableColumnIconComponent:', () => {
       };
       const expectedColor = 'po-text-color-08';
 
-      spyOn(fakeColumn, 'color').and.returnValue('color-08');
+      vi.spyOn(fakeColumn as any, 'color').mockReturnValue('color-08');
 
       const expectedValue = component.getColor(fakeColumn);
 
@@ -173,10 +173,10 @@ describe('PoTableColumnIconComponent:', () => {
       };
       component.column = { property: 'columnIcon', type: 'icon', action: () => true };
 
-      spyOn(component, 'isDisabled').and.callThrough();
-      spyOn(fakeColumnIcon, 'action');
-      spyOn(component.column, 'action');
-      spyOn(fakeEvent, 'stopPropagation');
+      vi.spyOn(component as any, 'isDisabled');
+      vi.spyOn(fakeColumnIcon as any, 'action');
+      vi.spyOn(component.column as any, 'action');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.click(fakeColumnIcon, fakeEvent);
 
@@ -199,10 +199,10 @@ describe('PoTableColumnIconComponent:', () => {
       };
       component.column = { property: 'columnIcon', type: 'icon', action: () => {} };
 
-      spyOn(component, 'isDisabled').and.callThrough();
-      spyOn(component.column, 'action');
-      spyOn(fakeColumnIcon, 'action');
-      spyOn(fakeEvent, 'stopPropagation');
+      vi.spyOn(component as any, 'isDisabled');
+      vi.spyOn(component.column as any, 'action');
+      vi.spyOn(fakeColumnIcon as any, 'action');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.click(fakeColumnIcon, fakeEvent);
 
@@ -224,9 +224,9 @@ describe('PoTableColumnIconComponent:', () => {
       };
       component.column = { property: 'columnIcon', type: 'icon', action: () => {} };
 
-      spyOn(component, 'isDisabled').and.callThrough();
-      spyOn(component.column, 'action');
-      spyOn(fakeEvent, 'stopPropagation');
+      vi.spyOn(component as any, 'isDisabled');
+      vi.spyOn(component.column as any, 'action');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.click(fakeColumnIcon, fakeEvent);
 
@@ -247,8 +247,8 @@ describe('PoTableColumnIconComponent:', () => {
       };
       component.column = { property: 'columnIcon', type: 'icon' };
 
-      spyOn(component, 'isDisabled').and.callThrough();
-      spyOn(fakeEvent, 'stopPropagation');
+      vi.spyOn(component as any, 'isDisabled');
+      vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.click(fakeColumnIcon, fakeEvent);
 

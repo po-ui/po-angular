@@ -82,8 +82,8 @@ describe('PoHttpRequestInterceptorService: ', () => {
     it('intercept: should return `throwError` when call `catch` method.', inject(
       [HttpClient, HttpTestingController],
       (http: HttpClient, httpMock: HttpTestingController) => {
-        spyOn(httpRequestInterceptor, <any>'setCountPendingRequests');
-        spyOn(httpRequestInterceptor, <any>'setCountOverlayRequests');
+        vi.spyOn(httpRequestInterceptor as any, 'setCountPendingRequests');
+        vi.spyOn(httpRequestInterceptor as any, 'setCountOverlayRequests');
 
         http.get('/data').subscribe(
           res => {},
@@ -174,7 +174,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
       const requestWithHeaderParam = createHttpRequest('X-PO-No-Count-Pending-Requests', 'true');
       const readerParams = ['X-PO-No-Count-Pending-Requests', 'true'];
 
-      spyOn(requestWithHeaderParam.headers, 'delete');
+      vi.spyOn(requestWithHeaderParam.headers as any, 'delete');
 
       httpRequestInterceptor['requestCloneWithoutHeaderParam'](readerParams, requestWithHeaderParam);
 
@@ -186,7 +186,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
       const requestWithHeaderParam = createHttpRequest('X-PO-Screen-Lock', 'true');
       const readerParams = ['X-PO-Screen-Lock', 'true'];
 
-      spyOn(requestWithHeaderParam.headers, 'delete');
+      vi.spyOn(requestWithHeaderParam.headers as any, 'delete');
 
       httpRequestInterceptor['requestCloneWithoutHeaderParam'](readerParams, requestWithHeaderParam);
 
@@ -197,7 +197,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
       const requestWithHeaderParam = createHttpRequest('X-PO-Screen-Lock', 'false');
       const readerParams = [];
 
-      spyOn(requestWithHeaderParam.headers, 'delete');
+      vi.spyOn(requestWithHeaderParam.headers as any, 'delete');
 
       httpRequestInterceptor['requestCloneWithoutHeaderParam'](readerParams, requestWithHeaderParam);
 
@@ -208,7 +208,9 @@ describe('PoHttpRequestInterceptorService: ', () => {
       const componentRef = { instance: { screenLock: undefined, changeDetector: { detectChanges: () => {} } } };
       httpRequestInterceptor['loadingOverlayComponent'] = undefined;
 
-      spyOn(httpRequestInterceptor.poComponentInjector, 'createComponentInApplication').and.returnValue(componentRef);
+      vi.spyOn(httpRequestInterceptor.poComponentInjector as any, 'createComponentInApplication').mockReturnValue(
+        componentRef
+      );
 
       httpRequestInterceptor['buildLoading']();
 
@@ -220,7 +222,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
     it('buildLoading: shouldn`t create `PoLoadingOverlayComponent` when `loadingOverlayComponent` is defined', () => {
       httpRequestInterceptor['loadingOverlayComponent'] = PoLoadingOverlayComponent;
 
-      spyOn(httpRequestInterceptor.poComponentInjector, 'createComponentInApplication');
+      vi.spyOn(httpRequestInterceptor.poComponentInjector as any, 'createComponentInApplication');
 
       httpRequestInterceptor['buildLoading']();
 
@@ -231,8 +233,10 @@ describe('PoHttpRequestInterceptorService: ', () => {
       const componentRef = { instance: { screenLock: undefined, changeDetector: { detectChanges: () => {} } } };
       httpRequestInterceptor['loadingOverlayComponent'] = undefined;
 
-      spyOn(componentRef.instance.changeDetector, 'detectChanges').and.callThrough();
-      spyOn(httpRequestInterceptor.poComponentInjector, 'createComponentInApplication').and.returnValue(componentRef);
+      vi.spyOn(componentRef.instance.changeDetector, 'detectChanges');
+      vi.spyOn(httpRequestInterceptor.poComponentInjector as any, 'createComponentInApplication').mockReturnValue(
+        componentRef
+      );
 
       httpRequestInterceptor['buildLoading']();
 
@@ -242,7 +246,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
     it(`destroyLoading: should destroy component when 'loadingOverlayComponent' is defined.`, () => {
       httpRequestInterceptor['loadingOverlayComponent'] = PoLoadingOverlayComponent;
 
-      spyOn(httpRequestInterceptor.poComponentInjector, 'destroyComponentInApplication');
+      vi.spyOn(httpRequestInterceptor.poComponentInjector as any, 'destroyComponentInApplication');
 
       httpRequestInterceptor['destroyLoading']();
 
@@ -255,7 +259,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
     it(`destroyLoading: shouldn't destroy component when 'loadingOverlayComponent' is undefined.`, () => {
       httpRequestInterceptor['loadingOverlayComponent'] = undefined;
 
-      spyOn(httpRequestInterceptor.poComponentInjector, 'destroyComponentInApplication');
+      vi.spyOn(httpRequestInterceptor.poComponentInjector as any, 'destroyComponentInApplication');
 
       httpRequestInterceptor['destroyLoading']();
 

@@ -37,7 +37,7 @@ describe('PoStepperLabelComponent: ', () => {
     it('should handle vertical orientation property', () => {
       component.isVerticalOrientation = true;
       fixture.detectChanges();
-      expect(component.isVerticalOrientation).toBeTrue();
+      expect(component.isVerticalOrientation).toBe(true);
     });
 
     it('should handle status property', () => {
@@ -49,7 +49,7 @@ describe('PoStepperLabelComponent: ', () => {
 
   describe('Methods:', () => {
     it('should call `updateLabel` and detectChanges when content changes', () => {
-      const updateLabelSpy = spyOn(component as any, 'updateLabel').and.callThrough();
+      const updateLabelSpy = vi.spyOn(component as any, 'updateLabel');
 
       const changes = {
         content: new SimpleChange(null, 'Step 1', true),
@@ -64,7 +64,7 @@ describe('PoStepperLabelComponent: ', () => {
     });
 
     it('should call `updateLabel` and detectChanges when isVerticalOrientation changes', () => {
-      const updateLabelSpy = spyOn(component as any, 'updateLabel').and.callThrough();
+      const updateLabelSpy = vi.spyOn(component as any, 'updateLabel');
 
       const changes = {
         content: null,
@@ -79,7 +79,7 @@ describe('PoStepperLabelComponent: ', () => {
     });
 
     it('should call updateLabel and detectChanges when both content and isVerticalOrientation change', () => {
-      const updateLabelSpy = spyOn(component as any, 'updateLabel').and.callThrough();
+      const updateLabelSpy = vi.spyOn(component as any, 'updateLabel');
 
       const changes = {
         content: new SimpleChange(null, 'New Content', true),
@@ -94,7 +94,7 @@ describe('PoStepperLabelComponent: ', () => {
     });
 
     it('should not update label if labelElement is null', () => {
-      const updateLabelSpy = spyOn<any>(component, 'updateLabel').and.callThrough();
+      const updateLabelSpy = vi.spyOn(component as any, 'updateLabel');
       component.labelElement = null;
 
       (component as any).updateLabel();
@@ -167,8 +167,8 @@ describe('PoStepperLabelComponent: ', () => {
     });
 
     it('should call updateTooltip and add class on mouseover', () => {
-      const updateTooltipSpy = spyOn<any>(component, 'updateTooltip').and.callThrough();
-      const addClassSpy = spyOn((component as any).renderer, 'addClass').and.callThrough();
+      const updateTooltipSpy = vi.spyOn(component as any, 'updateTooltip');
+      const addClassSpy = vi.spyOn((component as any).renderer, 'addClass');
 
       component.onMouseOver();
 
@@ -177,7 +177,7 @@ describe('PoStepperLabelComponent: ', () => {
     });
 
     it('should remove class on mouseout', () => {
-      const removeClassSpy = spyOn((component as any).renderer, 'removeClass').and.callThrough();
+      const removeClassSpy = vi.spyOn((component as any).renderer, 'removeClass');
 
       component.onMouseOut();
 
@@ -210,7 +210,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-stepper-label-vertical')).toBeTrue();
+      expect(element.nativeElement.classList.contains('po-stepper-label-vertical')).toBe(true);
     });
 
     it('should apply `po-stepper-label-active` when status is active', () => {
@@ -219,7 +219,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-stepper-label-active')).toBeTrue();
+      expect(element.nativeElement.classList.contains('po-stepper-label-active')).toBe(true);
     });
 
     it('should apply `po-stepper-label-active` when status is error', () => {
@@ -228,7 +228,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-stepper-label-active')).toBeTrue();
+      expect(element.nativeElement.classList.contains('po-stepper-label-active')).toBe(true);
     });
 
     it('should apply `po-stepper-label` when content is set', () => {
@@ -237,7 +237,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-stepper-label')).toBeTrue();
+      expect(element.nativeElement.classList.contains('po-stepper-label')).toBe(true);
     });
 
     it('should apply `po-stepper-label-done` when status is done', () => {
@@ -246,7 +246,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-stepper-label-done')).toBeTrue();
+      expect(element.nativeElement.classList.contains('po-stepper-label-done')).toBe(true);
     });
 
     it('should add `po-link` class when status is not `disabled`.', () => {
@@ -255,7 +255,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-link')).toBeTrue();
+      expect(element.nativeElement.classList.contains('po-link')).toBe(true);
     });
 
     it('should not add `po-link` class when status is `disabled`.', () => {
@@ -264,7 +264,7 @@ describe('PoStepperLabelComponent: ', () => {
 
       const element = fixture.debugElement.query(By.css('div'));
 
-      expect(element.nativeElement.classList.contains('po-link')).toBeFalse();
+      expect(element.nativeElement.classList.contains('po-link')).toBe(false);
     });
   });
 });

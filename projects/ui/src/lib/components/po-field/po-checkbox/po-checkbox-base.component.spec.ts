@@ -118,7 +118,7 @@ describe('PoCheckboxBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -131,8 +131,8 @@ describe('PoCheckboxBaseComponent:', () => {
 
       component.propagateChange = () => {};
 
-      spyOn(component, 'propagateChange');
-      spyOn(component.change, 'emit');
+      vi.spyOn(component as any, 'propagateChange');
+      vi.spyOn(component.change as any, 'emit');
 
       component.changeValue();
 
@@ -142,7 +142,7 @@ describe('PoCheckboxBaseComponent:', () => {
 
     it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
       const expectedValue = true;
-      const markForCheck = spyOn(component['cd'], 'markForCheck');
+      const markForCheck = vi.spyOn(component['cd'] as any, 'markForCheck');
 
       component.setDisabledState(expectedValue);
 
@@ -154,7 +154,7 @@ describe('PoCheckboxBaseComponent:', () => {
       component.checkboxValue = true;
       component.propagateChange = null;
 
-      spyOn(component.change, 'emit');
+      vi.spyOn(component.change as any, 'emit');
 
       component.changeValue();
 
@@ -168,8 +168,8 @@ describe('PoCheckboxBaseComponent:', () => {
           closest: (sel: string) => null
         }
       };
-      const spyOnChangeValue = spyOn(component, 'changeValue');
-      const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
+      const spyOnChangeValue = vi.spyOn(component as any, 'changeValue');
+      const spyOnChangeModelValue = vi.spyOn(component as any, 'changeModelValue');
 
       component.checkOption(event, true);
 
@@ -184,8 +184,8 @@ describe('PoCheckboxBaseComponent:', () => {
           closest: (sel: string) => null
         }
       };
-      const spyOnChangeValue = spyOn(component, 'changeValue');
-      const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
+      const spyOnChangeValue = vi.spyOn(component as any, 'changeValue');
+      const spyOnChangeModelValue = vi.spyOn(component as any, 'changeModelValue');
 
       component.checkOption(event, true);
 
@@ -199,8 +199,8 @@ describe('PoCheckboxBaseComponent:', () => {
           closest: (sel: string) => null
         }
       };
-      const spyOnChangeValue = spyOn(component, 'changeValue');
-      const spyOnChangeModelValue = spyOn(component, <any>'changeModelValue');
+      const spyOnChangeValue = vi.spyOn(component as any, 'changeValue');
+      const spyOnChangeModelValue = vi.spyOn(component as any, 'changeModelValue');
 
       component.checkOption(event, 'mixed');
 
@@ -216,8 +216,8 @@ describe('PoCheckboxBaseComponent:', () => {
         }
       };
 
-      const spyOnChangeValue = spyOn(component, 'changeValue');
-      const spyOnChangeModelValue = spyOn(component as any, 'changeModelValue');
+      const spyOnChangeValue = vi.spyOn(component as any, 'changeValue');
+      const spyOnChangeModelValue = vi.spyOn(component as any, 'changeModelValue');
 
       component.checkOption(event, true);
 
@@ -233,8 +233,8 @@ describe('PoCheckboxBaseComponent:', () => {
         }
       };
 
-      const spyOnChangeValue = spyOn(component, 'changeValue');
-      const spyOnChangeModelValue = spyOn(component as any, 'changeModelValue');
+      const spyOnChangeValue = vi.spyOn(component as any, 'changeValue');
+      const spyOnChangeModelValue = vi.spyOn(component as any, 'changeModelValue');
 
       component.checkOption(event, 'mixed');
 
@@ -254,7 +254,7 @@ describe('PoCheckboxBaseComponent:', () => {
       const valueParam = true;
       component.checkboxValue = undefined;
 
-      spyOn(component, <any>'changeModelValue');
+      vi.spyOn(component as any, 'changeModelValue');
 
       component.writeValue(valueParam);
 
@@ -265,7 +265,7 @@ describe('PoCheckboxBaseComponent:', () => {
       const valueParam = undefined;
       component.checkboxValue = undefined;
 
-      spyOn(component, <any>'changeModelValue');
+      vi.spyOn(component as any, 'changeModelValue');
 
       component.writeValue(valueParam);
 

@@ -43,7 +43,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const changes = { target: { firstChange: true } };
 
-        spyOn(component, <any>'initializeListeners');
+        vi.spyOn(component as any, 'initializeListeners');
 
         component.ngOnChanges(<any>changes);
 
@@ -53,7 +53,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: shouldn't call 'initializeListeners' if 'target' is undefined`, () => {
         const changes = { target: undefined };
 
-        spyOn(component, <any>'initializeListeners');
+        vi.spyOn(component as any, 'initializeListeners');
 
         component.ngOnChanges(changes);
 
@@ -63,7 +63,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: shouldn't call 'initializeListeners' if 'target.firstChange' is false`, () => {
         const changes = { target: { firstChange: false } };
 
-        spyOn(component, <any>'initializeListeners');
+        vi.spyOn(component as any, 'initializeListeners');
 
         component.ngOnChanges(<any>changes);
 
@@ -73,7 +73,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: should call 'onChangeColumns' if 'columns' is defined`, () => {
         const changes = { columns: { currentValue: [] } };
 
-        spyOn(component, <any>'onChangeColumns');
+        vi.spyOn(component as any, 'onChangeColumns');
 
         component.ngOnChanges(<any>changes);
 
@@ -91,7 +91,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const changes = { maxColumns: 2 };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component.ngOnChanges(<any>changes);
 
@@ -101,7 +101,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: should open page slide if 'lastVisibleColumnsSelected.currentValue' is defined`, () => {
         const changes = { lastVisibleColumnsSelected: { currentValue: ['table'] } };
 
-        spyOn(component.pageSlideColumnsManager, 'open');
+        vi.spyOn(component.pageSlideColumnsManager as any, 'open');
 
         component.ngOnChanges(<any>changes);
 
@@ -111,7 +111,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: shouldn't call 'updateValues' if 'maxColumns' is undefined`, () => {
         const changes = { maxColumns: undefined };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component.ngOnChanges(changes);
 
@@ -121,7 +121,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: shouldn't call 'onChangeColumns' if 'columns' is undefined`, () => {
         const changes = { columns: undefined };
 
-        spyOn(component, <any>'onChangeColumns');
+        vi.spyOn(component as any, 'onChangeColumns');
 
         component.ngOnChanges(changes);
 
@@ -131,7 +131,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`ngOnChanges: shouldn't call page slide if 'lastVisibleColumnsSelected.current' is undefined`, () => {
         const changes = { lastVisibleColumnsSelected: { currentValue: undefined } };
 
-        spyOn(component.pageSlideColumnsManager, 'open');
+        vi.spyOn(component.pageSlideColumnsManager as any, 'open');
 
         component.ngOnChanges(<any>changes);
 
@@ -140,7 +140,7 @@ describe('PoTableColumnManagerComponent:', () => {
     });
 
     it('ngOnDestroy: should call `removeListeners`', () => {
-      spyOn(component, <any>'removeListeners');
+      vi.spyOn(component as any, 'removeListeners');
 
       component.ngOnDestroy();
 
@@ -150,7 +150,7 @@ describe('PoTableColumnManagerComponent:', () => {
     describe('checkChanges:', () => {
       it('should call `verifyToEmitChange`', () => {
         const fakeEvent = [];
-        spyOn(component, <any>'verifyToEmitChange');
+        vi.spyOn(component as any, 'verifyToEmitChange');
 
         component.checkChanges();
 
@@ -160,7 +160,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it('should call `verifyToEmitVisibleColumns` if emit is true', () => {
         const fakeEvent = [];
         const fakeEmit = true;
-        spyOn(component, <any>'verifyToEmitVisibleColumns');
+        vi.spyOn(component as any, 'verifyToEmitVisibleColumns');
 
         component.checkChanges(fakeEvent, fakeEmit);
 
@@ -168,7 +168,7 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it('shouldn`t call `verifyToEmitVisibleColumns` if emit is false', () => {
-        spyOn(component, <any>'verifyToEmitVisibleColumns');
+        vi.spyOn(component as any, 'verifyToEmitVisibleColumns');
 
         component.checkChanges();
 
@@ -178,8 +178,8 @@ describe('PoTableColumnManagerComponent:', () => {
 
     describe('verifyToEmitChange:', () => {
       it('should call `emitChangesToSelectedColumns` if allowsChangeVisibleColumns is true', () => {
-        spyOn(component, <any>'allowsChangeVisibleColumns').and.returnValue(true);
-        spyOn(component, <any>'emitChangesToSelectedColumns');
+        vi.spyOn(component as any, 'allowsChangeVisibleColumns').mockReturnValue(true);
+        vi.spyOn(component as any, 'emitChangesToSelectedColumns');
 
         const fakeEvent = ['test1', 'test2'];
 
@@ -189,8 +189,8 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it('should call `disabledLastColumn` and `mapTableColumnsToCheckboxOptions` if columns length is 1', () => {
-        spyOn(component, <any>'mapTableColumnsToCheckboxOptions');
-        spyOn(component, <any>'disabledLastColumn');
+        vi.spyOn(component as any, 'mapTableColumnsToCheckboxOptions');
+        vi.spyOn(component as any, 'disabledLastColumn');
 
         const fakeEvent = ['test1'];
 
@@ -217,8 +217,8 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it('shouldn`t call `emitChangesToSelectedColumns` if allowsChangeVisibleColumns is false', () => {
-        spyOn(component, <any>'allowsChangeVisibleColumns').and.returnValue(false);
-        spyOn(component, <any>'emitChangesToSelectedColumns');
+        vi.spyOn(component as any, 'allowsChangeVisibleColumns').mockReturnValue(false);
+        vi.spyOn(component as any, 'emitChangesToSelectedColumns');
 
         const fakeEvent = ['test1', 'test2'];
 
@@ -241,8 +241,8 @@ describe('PoTableColumnManagerComponent:', () => {
         { property: 'test2', label: 'initial' }
       ];
 
-      spyOn(component, <any>'getVisibleTableColumns').and.returnValue(fakeVisibleTableColumns);
-      spyOn(component.visibleColumnsChange, 'emit');
+      vi.spyOn(component as any, 'getVisibleTableColumns').mockReturnValue(fakeVisibleTableColumns);
+      vi.spyOn(component.visibleColumnsChange as any, 'emit');
 
       component['emitChangesToSelectedColumns'](fakeEvent);
 
@@ -264,12 +264,12 @@ describe('PoTableColumnManagerComponent:', () => {
 
         component.columns = [{ property: 'test1', label: 'Code' }];
 
-        spyOn(component, <any>'getVisibleTableColumns').and.returnValue(fakeVisibleTableColumns);
+        vi.spyOn(component as any, 'getVisibleTableColumns').mockReturnValue(fakeVisibleTableColumns);
 
         const result = component['allowsChangeVisibleColumns']();
 
         expect(component['getVisibleTableColumns']).toHaveBeenCalledWith(fakeEvent);
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should call `getVisibleTableColumns` and return true if `visibleTableColumns`is different from `this.columns`', () => {
@@ -287,12 +287,12 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'test2', label: 'initial' }
         ];
 
-        spyOn(component, <any>'getVisibleTableColumns').and.returnValue(fakeVisibleTableColumns);
+        vi.spyOn(component as any, 'getVisibleTableColumns').mockReturnValue(fakeVisibleTableColumns);
 
         const result = component['allowsChangeVisibleColumns']();
 
         expect(component['getVisibleTableColumns']).toHaveBeenCalledWith(fakeEvent);
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -300,8 +300,8 @@ describe('PoTableColumnManagerComponent:', () => {
       it('should call `verifyRestoreValues` if `restoreDefaultEvent` is true', () => {
         component['restoreDefaultEvent'] = true;
 
-        spyOn(component, <any>'verifyRestoreValues');
-        spyOn(component, <any>'verifyOnClose');
+        vi.spyOn(component as any, 'verifyRestoreValues');
+        vi.spyOn(component as any, 'verifyOnClose');
 
         component['verifyToEmitVisibleColumns']();
 
@@ -312,8 +312,8 @@ describe('PoTableColumnManagerComponent:', () => {
       it('should call `verifyOnClose` if `restoreDefaultEvent` is false', () => {
         component['restoreDefaultEvent'] = false;
 
-        spyOn(component, <any>'verifyRestoreValues');
-        spyOn(component, <any>'verifyOnClose');
+        vi.spyOn(component as any, 'verifyRestoreValues');
+        vi.spyOn(component as any, 'verifyOnClose');
 
         component['verifyToEmitVisibleColumns']();
 
@@ -331,16 +331,16 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const fakeVisible = ['test1', 'test2'];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeVisible);
-        spyOn(component, <any>'allowsChangeSelectedColumns').and.returnValue(true);
-        spyOn(component.visibleColumnsChange, 'emit');
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeVisible);
+        vi.spyOn(component as any, 'allowsChangeSelectedColumns').mockReturnValue(true);
+        vi.spyOn(component.visibleColumnsChange as any, 'emit');
 
         component['verifyRestoreValues']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['allowsChangeSelectedColumns']).toHaveBeenCalled();
         expect(component.visibleColumnsChange.emit).toHaveBeenCalledWith(component['defaultColumns']);
-        expect(component['restoreDefaultEvent']).toBeFalse();
+        expect(component['restoreDefaultEvent']).toBe(false);
       });
 
       it('shouldn`t emit `visibleColumnsChange` if `allowsChangeSelectedColumns` is false', () => {
@@ -351,16 +351,16 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const fakeVisible = ['test1', 'test2'];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeVisible);
-        spyOn(component, <any>'allowsChangeSelectedColumns').and.returnValue(false);
-        spyOn(component.visibleColumnsChange, 'emit');
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeVisible);
+        vi.spyOn(component as any, 'allowsChangeSelectedColumns').mockReturnValue(false);
+        vi.spyOn(component.visibleColumnsChange as any, 'emit');
 
         component['verifyRestoreValues']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['allowsChangeSelectedColumns']).toHaveBeenCalled();
         expect(component.visibleColumnsChange.emit).not.toHaveBeenCalledWith(component['defaultColumns']);
-        expect(component['restoreDefaultEvent']).toBeFalse();
+        expect(component['restoreDefaultEvent']).toBe(false);
       });
     });
 
@@ -374,14 +374,14 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const fakeDefaultVisibleColumns = ['test1', 'test2'];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-        spyOn(component, <any>'isEqualArrays').and.returnValue(false);
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(false);
 
         const result = component['allowsChangeSelectedColumns'](fakeDefaultVisibleColumns);
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['isEqualArrays']).toHaveBeenCalled();
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should call 'getVisibleColumns' and 'isEqualArrays' and should return false if 'defaultVisibleColumns' is equal
@@ -393,21 +393,21 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const fakeDefaultVisibleColumns = ['test1', 'test2'];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-        spyOn(component, <any>'isEqualArrays').and.returnValue(true);
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(true);
 
         const result = component['allowsChangeSelectedColumns'](fakeDefaultVisibleColumns);
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['isEqualArrays']).toHaveBeenCalled();
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
     describe('verifyOnClose:', () => {
       it(`should call 'emitVisibleColumns' if 'allowsEmission' is true`, () => {
-        spyOn(component, <any>'allowsEmission').and.returnValue(true);
-        spyOn(component, <any>'emitVisibleColumns');
+        vi.spyOn(component as any, 'allowsEmission').mockReturnValue(true);
+        vi.spyOn(component as any, 'emitVisibleColumns');
 
         component['verifyOnClose']();
 
@@ -416,8 +416,8 @@ describe('PoTableColumnManagerComponent:', () => {
       });
 
       it(`shouldn't call 'emitVisibleColumns' if 'allowsEmission' is false`, () => {
-        spyOn(component, <any>'allowsEmission').and.returnValue(false);
-        spyOn(component, <any>'emitVisibleColumns');
+        vi.spyOn(component as any, 'allowsEmission').mockReturnValue(false);
+        vi.spyOn(component as any, 'emitVisibleColumns');
 
         component['verifyOnClose']();
 
@@ -429,7 +429,7 @@ describe('PoTableColumnManagerComponent:', () => {
     it(`emitVisibleColumns: should update 'lastEmittedValue' and should call 'changeVisibleColumns.emit'`, () => {
       const fakeVisible = ['test1', 'test2'];
       component.visibleColumns = fakeVisible;
-      spyOn(component.changeVisibleColumns, 'emit');
+      vi.spyOn(component.changeVisibleColumns as any, 'emit');
 
       component['verifyOnClose']();
 
@@ -468,16 +468,16 @@ describe('PoTableColumnManagerComponent:', () => {
         component['lastEmittedValue'] = undefined;
         component['lastVisibleColumnsSelected'] = undefined;
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-        spyOn(component, <any>'isUpdate').and.returnValue(false);
-        spyOn(component, <any>'isFirstTime').and.returnValue(true);
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+        vi.spyOn(component as any, 'isUpdate').mockReturnValue(false);
+        vi.spyOn(component as any, 'isFirstTime').mockReturnValue(true);
 
         const result = component['allowsEmission']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['isUpdate']).toHaveBeenCalled();
         expect(component['isFirstTime']).toHaveBeenCalled();
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should call 'getVisibleColumns' and should return true if 'isUpdate' is true`, () => {
@@ -489,16 +489,16 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'test2', label: 'initial' }
         ];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-        spyOn(component, <any>'isUpdate').and.returnValue(true);
-        spyOn(component, <any>'isFirstTime').and.returnValue(false);
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+        vi.spyOn(component as any, 'isUpdate').mockReturnValue(true);
+        vi.spyOn(component as any, 'isFirstTime').mockReturnValue(false);
 
         const result = component['allowsEmission']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['isUpdate']).toHaveBeenCalled();
         expect(component['isFirstTime']).not.toHaveBeenCalled();
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should call 'getVisibleColumns' and should return true if 'isUpdate' and 'isFirstTime' is true`, () => {
@@ -510,16 +510,16 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'test2', label: 'initial' }
         ];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-        spyOn(component, <any>'isUpdate').and.returnValue(true);
-        spyOn(component, <any>'isFirstTime').and.returnValue(true);
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+        vi.spyOn(component as any, 'isUpdate').mockReturnValue(true);
+        vi.spyOn(component as any, 'isFirstTime').mockReturnValue(true);
 
         const result = component['allowsEmission']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['isUpdate']).toHaveBeenCalled();
         expect(component['isFirstTime']).not.toHaveBeenCalled();
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should call 'getVisibleColumns' and should return false if 'isUpdate' and 'isFirstTime' is false`, () => {
@@ -531,16 +531,16 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'test2', label: 'initial' }
         ];
 
-        spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-        spyOn(component, <any>'isUpdate').and.returnValue(false);
-        spyOn(component, <any>'isFirstTime').and.returnValue(false);
+        vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+        vi.spyOn(component as any, 'isUpdate').mockReturnValue(false);
+        vi.spyOn(component as any, 'isFirstTime').mockReturnValue(false);
 
         const result = component['allowsEmission']();
 
         expect(component['getVisibleColumns']).toHaveBeenCalled();
         expect(component['isUpdate']).toHaveBeenCalled();
         expect(component['isFirstTime']).toHaveBeenCalled();
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -550,12 +550,12 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastVisibleColumns = ['test1', 'test2', 'test3'];
         component['lastEmittedValue'] = undefined;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(false);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(false);
 
         const result = component['isFirstTime'](fakeUpdatedVisibleColumns, fakeLastVisibleColumns);
 
         expect(component['isEqualArrays']).toHaveBeenCalled();
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`shouldn't call 'isEqualArrays' and should return false if 'lastEmittedValue' is defined`, () => {
@@ -563,12 +563,12 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastVisibleColumns = ['test1', 'test2', 'test3'];
         component['lastEmittedValue'] = fakeUpdatedVisibleColumns;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(false);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(false);
 
         const result = component['isFirstTime'](fakeUpdatedVisibleColumns, fakeLastVisibleColumns);
 
         expect(component['isEqualArrays']).not.toHaveBeenCalled();
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it(`should call 'isEqualArrays' and should return false if 'isEqualArrays' return true`, () => {
@@ -576,12 +576,12 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastVisibleColumns = ['test1', 'test2'];
         component['lastEmittedValue'] = undefined;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(true);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(true);
 
         const result = component['isFirstTime'](fakeUpdatedVisibleColumns, fakeLastVisibleColumns);
 
         expect(component['isEqualArrays']).toHaveBeenCalled();
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it(`shouldn't call 'isEqualArrays' and should return false`, () => {
@@ -589,12 +589,12 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastVisibleColumns = ['test1', 'test2'];
         component['lastEmittedValue'] = fakeUpdatedVisibleColumns;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(true);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(true);
 
         const result = component['isFirstTime'](fakeUpdatedVisibleColumns, fakeLastVisibleColumns);
 
         expect(component['isEqualArrays']).not.toHaveBeenCalled();
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -604,12 +604,12 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastEmittedValue = ['test1', 'test2', 'test3'];
         component['lastEmittedValue'] = fakeLastEmittedValue;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(false);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(false);
 
         const result = component['isUpdate'](fakeUpdatedVisibleColumns, fakeLastEmittedValue);
 
         expect(component['isEqualArrays']).toHaveBeenCalled();
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should call 'isEqualArrays' and should return false if 'lastEmittedValue' is undefined`, () => {
@@ -617,7 +617,7 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastEmittedValue = [];
         component['lastEmittedValue'] = undefined;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(false);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(false);
 
         const result = component['isUpdate'](fakeUpdatedVisibleColumns, fakeLastEmittedValue);
 
@@ -630,7 +630,7 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeLastEmittedValue = ['test1', 'test2'];
         component['lastEmittedValue'] = fakeLastEmittedValue;
 
-        spyOn(component, <any>'isEqualArrays').and.returnValue(true);
+        vi.spyOn(component as any, 'isEqualArrays').mockReturnValue(true);
 
         const result = component['isUpdate'](fakeUpdatedVisibleColumns, fakeLastEmittedValue);
 
@@ -646,7 +646,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isEqualArrays'](first, second);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should return false if arrays are diferrent`, () => {
@@ -655,7 +655,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isEqualArrays'](first, second);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it(`should return false if arrays are equals but they are in different order`, () => {
@@ -664,7 +664,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isEqualArrays'](first, second);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it(`should return true if arrays are undefined`, () => {
@@ -673,16 +673,16 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isEqualArrays'](first, second);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
     });
 
     it(`restore: should update 'restoreDefaultEvent' and should call 'getVisibleColumns' and 'checkChanges'`, () => {
       const fakeDefaultVisibleColumns = ['test1', 'test2'];
 
-      spyOn(component, <any>'getVisibleColumns').and.returnValue(fakeDefaultVisibleColumns);
-      spyOn(component, <any>'checkChanges');
-      spyOn(component.initialColumns, 'emit');
+      vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(fakeDefaultVisibleColumns);
+      vi.spyOn(component as any, 'checkChanges');
+      vi.spyOn(component.initialColumns as any, 'emit');
 
       component['restore']();
 
@@ -692,10 +692,10 @@ describe('PoTableColumnManagerComponent:', () => {
     });
 
     it(`restore: should emit 'changeFixedColumns' with empty array to signal fixed columns were cleared`, () => {
-      spyOn(component, <any>'getVisibleColumns').and.returnValue([]);
-      spyOn(component, <any>'checkChanges');
-      spyOn(component.initialColumns, 'emit');
-      spyOn(component.changeFixedColumns, 'emit');
+      vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue([]);
+      vi.spyOn(component as any, 'checkChanges');
+      vi.spyOn(component.initialColumns as any, 'emit');
+      vi.spyOn(component.changeFixedColumns as any, 'emit');
 
       component['restore']();
 
@@ -703,10 +703,10 @@ describe('PoTableColumnManagerComponent:', () => {
     });
 
     it(`restore: should not emit 'changeFixedColumns' when hideActionFixedColumns is true`, () => {
-      spyOn(component, <any>'getVisibleColumns').and.returnValue([]);
-      spyOn(component, <any>'checkChanges');
-      spyOn(component.initialColumns, 'emit');
-      spyOn(component.changeFixedColumns, 'emit');
+      vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue([]);
+      vi.spyOn(component as any, 'checkChanges');
+      vi.spyOn(component.initialColumns as any, 'emit');
+      vi.spyOn(component.changeFixedColumns as any, 'emit');
       component.hideActionFixedColumns = true;
 
       component['restore']();
@@ -764,7 +764,7 @@ describe('PoTableColumnManagerComponent:', () => {
         const fakeColumn = { property: 'name' };
         const label = 'Name';
 
-        spyOn(utilsFunctions, <any>'capitalizeFirstLetter').and.returnValue(label);
+        vi.spyOn(utilsFunctions as any, 'capitalizeFirstLetter').mockReturnValue(label);
 
         expect(component['getColumnTitleLabel'](fakeColumn)).toBe(label);
         expect(utilsFunctions.capitalizeFirstLetter).toHaveBeenCalledWith(fakeColumn.property);
@@ -773,7 +773,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`should return false if 'column.label' and 'column.property' are undefined`, () => {
         const fakeColumn = { value: 'name' };
 
-        spyOn(utilsFunctions, <any>'capitalizeFirstLetter').and.returnValue(false);
+        vi.spyOn(utilsFunctions as any, 'capitalizeFirstLetter').mockReturnValue(false);
 
         expect(component['getColumnTitleLabel'](<any>fakeColumn)).toBeFalsy();
       });
@@ -846,7 +846,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isVisibleColumn'](column, visibleColumns);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it(`should return false if 'maxColumns' is two
@@ -858,7 +858,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isVisibleColumn'](columns, visibleColumns);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it(`should return false if 'maxColumns' is one`, () => {
@@ -869,7 +869,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isVisibleColumn'](columns, visibleColumns);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it(`should return false if 'column.type' is different from 'detail'`, () => {
@@ -880,7 +880,7 @@ describe('PoTableColumnManagerComponent:', () => {
 
         const result = component['isVisibleColumn'](column, visibleColumns);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -924,7 +924,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`should call 'renderer.listen' to set 'resizeListener'`, () => {
         const resizeListenerFunction = () => {};
 
-        spyOn(component['renderer'], 'listen').and.returnValue(resizeListenerFunction);
+        vi.spyOn(component['renderer'] as any, 'listen').mockReturnValue(resizeListenerFunction);
 
         component['initializeListeners']();
 
@@ -933,8 +933,10 @@ describe('PoTableColumnManagerComponent:', () => {
 
       it(`should call 'popover.close' into callback of renderer.listen`, () => {
         component.popover = <any>{ close: () => {}, isHidden: false };
-        spyOn(component.popover, 'close');
-        spyOn(component['renderer'], 'listen').and.callFake((window, resize, callback: any) => callback());
+        vi.spyOn(component.popover as any, 'close');
+        vi.spyOn(component['renderer'] as any, 'listen').mockImplementation((window, resize, callback: any) =>
+          callback()
+        );
 
         component['initializeListeners']();
 
@@ -943,8 +945,10 @@ describe('PoTableColumnManagerComponent:', () => {
 
       it(`shouldn't call 'popover.close' into callback of renderer.listen`, () => {
         component.popover = <any>{ close: () => {}, isHidden: true };
-        spyOn(component.popover, 'close');
-        spyOn(component['renderer'], 'listen').and.callFake((window, resize, callback: any) => callback());
+        vi.spyOn(component.popover as any, 'close');
+        vi.spyOn(component['renderer'] as any, 'listen').mockImplementation((window, resize, callback: any) =>
+          callback()
+        );
 
         component['initializeListeners']();
 
@@ -953,9 +957,11 @@ describe('PoTableColumnManagerComponent:', () => {
 
       it(`should not call 'popover.close' into callback of renderer.listen if it is undefined`, () => {
         component.popover = <any>{ close: () => {} };
-        const spy = spyOn(component.popover, 'close');
+        const spy = vi.spyOn(component.popover as any, 'close');
         component.popover = undefined;
-        spyOn(component['renderer'], 'listen').and.callFake((window, resize, callback: any) => callback());
+        vi.spyOn(component['renderer'] as any, 'listen').mockImplementation((window, resize, callback: any) =>
+          callback()
+        );
 
         component['initializeListeners']();
 
@@ -1005,7 +1011,11 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'atualization', label: 'Atualization', type: 'date', visible: true }
         ];
 
-        spyOn(component, <any>'isDisableColumn').and.returnValues(false, true, true, true);
+        vi.spyOn(component as any, 'isDisableColumn')
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true);
 
         const checkboxOptions = [
           { value: 'id', label: 'Code', disabled: false, visible: true },
@@ -1038,7 +1048,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: ['column 3', 'column 4']
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1053,7 +1063,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: ['column 1']
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1069,7 +1079,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: undefined
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1086,7 +1096,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: ['column 3', 'column 4']
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1105,7 +1115,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: undefined
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1121,7 +1131,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: [{ property: 'name', label: 'Name' }]
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1134,7 +1144,7 @@ describe('PoTableColumnManagerComponent:', () => {
           currentValue: [{ property: 'name', label: 'Name' }]
         };
 
-        spyOn(component, <any>'updateValues');
+        vi.spyOn(component as any, 'updateValues');
 
         component['onChangeColumns'](<any>columns);
 
@@ -1149,10 +1159,10 @@ describe('PoTableColumnManagerComponent:', () => {
       const checkboxOptions = [{ value: 'name', label: 'Name', disabled: false }];
       const columnsOptionsExpected = [{ value: 'id', label: 'Code', disabled: false }];
 
-      spyOn(component, <any>'getVisibleColumns').and.returnValue(visible);
-      spyOn(component, <any>'mapTableColumnsToCheckboxOptions').and.returnValue(checkboxOptions);
-      spyOn(component, <any>'disableColumnsOptions').and.returnValue(columnsOptionsExpected);
-      spyOn(component, <any>'checkChanges');
+      vi.spyOn(component as any, 'getVisibleColumns').mockReturnValue(visible);
+      vi.spyOn(component as any, 'mapTableColumnsToCheckboxOptions').mockReturnValue(checkboxOptions);
+      vi.spyOn(component as any, 'disableColumnsOptions').mockReturnValue(columnsOptionsExpected);
+      vi.spyOn(component as any, 'checkChanges');
 
       component['updateValues'](fakeCurrentValue);
 
@@ -1167,7 +1177,7 @@ describe('PoTableColumnManagerComponent:', () => {
     it('removeListeners: should call `resizeListener` if it`s defined', () => {
       component['resizeListener'] = () => {};
 
-      spyOn(component, <any>'resizeListener');
+      vi.spyOn(component as any, 'resizeListener');
 
       component['removeListeners']();
 
@@ -1186,7 +1196,7 @@ describe('PoTableColumnManagerComponent:', () => {
             visible: true
           }
         ];
-        spyOn(component.visibleColumnsChange, 'emit');
+        vi.spyOn(component.visibleColumnsChange as any, 'emit');
 
         component.emitColumnFixed({
           property: 'City',
@@ -1228,7 +1238,7 @@ describe('PoTableColumnManagerComponent:', () => {
             fixed: true
           }
         ];
-        spyOn(component.visibleColumnsChange, 'emit');
+        vi.spyOn(component.visibleColumnsChange as any, 'emit');
 
         component.emitColumnFixed({
           property: 'Age',
@@ -1263,7 +1273,7 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'Name', visible: true },
           { property: 'City', visible: true }
         ];
-        spyOn(component.changeFixedColumns, 'emit');
+        vi.spyOn(component.changeFixedColumns as any, 'emit');
 
         component.emitColumnFixed({ property: 'City', value: 'City', visible: true, fixed: true });
 
@@ -1276,7 +1286,7 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'Age', visible: true, fixed: true },
           { property: 'City', visible: true, fixed: true }
         ];
-        spyOn(component.changeFixedColumns, 'emit');
+        vi.spyOn(component.changeFixedColumns as any, 'emit');
 
         component.emitColumnFixed({ property: 'Age', value: 'Age', visible: true, fixed: false });
 
@@ -1288,7 +1298,7 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'Name', visible: true },
           { property: 'City', visible: true }
         ];
-        spyOn(component.changeFixedColumns, 'emit');
+        vi.spyOn(component.changeFixedColumns as any, 'emit');
 
         component.emitColumnFixed(null);
 
@@ -1301,7 +1311,7 @@ describe('PoTableColumnManagerComponent:', () => {
           { property: 'City', visible: true }
         ];
         component.hideActionFixedColumns = true;
-        spyOn(component.changeFixedColumns, 'emit');
+        vi.spyOn(component.changeFixedColumns as any, 'emit');
 
         component.emitColumnFixed({ property: 'City', value: 'City', visible: true, fixed: true });
 

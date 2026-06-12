@@ -48,7 +48,7 @@ describe('PoDynamicViewService:', () => {
       const value = 'test/encoding';
       const expectedResponse = { user: 'test' };
 
-      spyOn(poDynamicViewService, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(poDynamicViewService as any, 'validateParams').mockReturnValue(filterParams);
 
       poDynamicViewService.getObjectByValue(value, filterParams).subscribe(response => {
         expect(poDynamicViewService['validateParams']).toHaveBeenCalledWith(filterParams);
@@ -73,7 +73,7 @@ describe('PoDynamicViewService:', () => {
       const filterParams = { name: 'test' };
       const value = '1';
 
-      spyOn(poDynamicViewService, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(poDynamicViewService as any, 'validateParams').mockReturnValue(filterParams);
 
       poDynamicViewService.getObjectByValue(value, filterParams).subscribe(() => {
         expect(poDynamicViewService['validateParams']).toHaveBeenCalledWith(filterParams);
@@ -88,7 +88,7 @@ describe('PoDynamicViewService:', () => {
       const filterParams = { name: 'test' };
       const value = [1, 2];
 
-      spyOn(poDynamicViewService, <any>'validateParams').and.returnValue(filterParams);
+      vi.spyOn(poDynamicViewService as any, 'validateParams').mockReturnValue(filterParams);
 
       poDynamicViewService.getObjectByValue(value, filterParams).subscribe(() => {
         expect(poDynamicViewService['validateParams']).toHaveBeenCalledWith(filterParams);

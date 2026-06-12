@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interface';
 import { PoChartGridUtils } from './po-chart-grid-utils';
@@ -15,8 +16,8 @@ describe('PoChartGridUtils', () => {
         axis: { rotateLegend: 45, showXAxis: true, showYAxis: true },
         fillPoints: true
       },
-      resolvePx: jasmine.createSpy('resolvePx').and.returnValue(10),
-      getCSSVariable: jasmine.createSpy('getCSSVariable').and.callFake((key: string) => {
+      resolvePx: vi.fn().mockReturnValue(10),
+      getCSSVariable: vi.fn().mockImplementation((key: string) => {
         const vars = {
           '--color-neutral-light-00': '#fff',
           '--color-grid': '#ccc',
@@ -61,7 +62,7 @@ describe('PoChartGridUtils', () => {
     });
 
     it('should set areaStyle.color using computedStyle when serie.color is var(...)', () => {
-      const spyGetComputed = spyOn(globalThis, 'getComputedStyle').and.returnValue({
+      const spyGetComputed = vi.spyOn(globalThis as any, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '#445566'
       } as unknown as CSSStyleDeclaration);
 
@@ -266,7 +267,7 @@ describe('PoChartGridUtils', () => {
         other: 'x'
       });
 
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
     });
 
     it('should return false when value does not have indicator property', () => {
@@ -274,7 +275,7 @@ describe('PoChartGridUtils', () => {
         other: 'x'
       });
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
   });
 
@@ -284,7 +285,7 @@ describe('PoChartGridUtils', () => {
         indicator: [{ name: 'A' }]
       };
 
-      mockCtx.getCSSVariable.and.callFake((key: string) => '#test');
+      mockCtx.getCSSVariable.mockImplementation((key: string) => '#test');
 
       const result = utils.setListTypeRadar();
 
@@ -302,33 +303,33 @@ describe('PoChartGridUtils', () => {
       utils['component'].categories = ['A', 'B'];
       utils['component'].options = {};
 
-      spyOn(utils as any, 'isRadarOptions').and.returnValue(false);
+      vi.spyOn(utils as any, 'isRadarOptions').mockReturnValue(false);
 
-      spyOn(utils as any, 'convertRadarConfig').and.returnValue({
+      vi.spyOn(utils as any, 'convertRadarConfig').mockReturnValue({
         shape: undefined,
         splitArea: undefined,
         indicator: []
       });
 
-      (utils['component'].getCSSVariable as jasmine.Spy).and.returnValue('#000000');
+      (utils['component'].getCSSVariable as Mock).mockReturnValue('#000000');
 
-      spyOn(utils, 'resolvePx').and.returnValue(1);
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(1);
 
       const result = utils.setListTypeRadar();
 
       expect(result.shape).toBe('polygon');
       expect(result.splitArea.show).toBe(false);
       expect(result.indicator).toEqual([]);
-      expect(utils['component'].options.fillPoints).toBeTrue();
+      expect(utils['component'].options.fillPoints).toBe(true);
     });
 
     it('should use categories directly when isRadarOptions returns true', () => {
       utils['component'].categories = { indicator: [{ name: 'Test' }] };
 
-      spyOn(utils as any, 'isRadarOptions').and.returnValue(true);
+      vi.spyOn(utils as any, 'isRadarOptions').mockReturnValue(true);
 
-      (utils['component'].getCSSVariable as jasmine.Spy).and.returnValue('#000000');
-      spyOn(utils, 'resolvePx').and.returnValue(1);
+      (utils['component'].getCSSVariable as Mock).mockReturnValue('#000000');
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(1);
 
       const result = utils.setListTypeRadar();
 
@@ -338,15 +339,15 @@ describe('PoChartGridUtils', () => {
     it('should fallback to empty indicator array when radar.indicator is missing', () => {
       utils['component'].categories = ['A', 'B'];
 
-      spyOn(utils as any, 'isRadarOptions').and.returnValue(false);
+      vi.spyOn(utils as any, 'isRadarOptions').mockReturnValue(false);
 
-      spyOn(utils as any, 'convertRadarConfig').and.returnValue({
+      vi.spyOn(utils as any, 'convertRadarConfig').mockReturnValue({
         shape: undefined,
         splitArea: undefined
       });
 
-      (utils['component'].getCSSVariable as jasmine.Spy).and.returnValue('#000000');
-      spyOn(utils, 'resolvePx').and.returnValue(1);
+      (utils['component'].getCSSVariable as Mock).mockReturnValue('#000000');
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(1);
 
       const result = utils.setListTypeRadar();
 
@@ -358,12 +359,12 @@ describe('PoChartGridUtils', () => {
       mockCtx.series = [{ name: 'Serie 1' }, { name: 'Serie 2', areaStyle: {} }];
 
       mockCtx.radar = { indicator: [] };
-      mockCtx.getCSSVariable.and.returnValue('#333');
-      spyOn(utils, 'resolvePx').and.returnValue(5);
+      mockCtx.getCSSVariable.mockReturnValue('#333');
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(5);
 
       utils.setListTypeRadar();
 
-      expect(mockCtx.options.fillPoints).toBeTrue();
+      expect(mockCtx.options.fillPoints).toBe(true);
     });
 
     it('should set fillPoints to true when options.areaStyle is true', () => {
@@ -371,12 +372,12 @@ describe('PoChartGridUtils', () => {
       mockCtx.series = [{ name: 'Serie 1' }];
 
       mockCtx.radar = { indicator: [] };
-      mockCtx.getCSSVariable.and.returnValue('#333');
-      spyOn(utils, 'resolvePx').and.returnValue(5);
+      mockCtx.getCSSVariable.mockReturnValue('#333');
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(5);
 
       utils.setListTypeRadar();
 
-      expect(mockCtx.options.fillPoints).toBeTrue();
+      expect(mockCtx.options.fillPoints).toBe(true);
     });
 
     it('should fallback fillPoints when no series has areaStyle and no global areaStyle', () => {
@@ -384,25 +385,25 @@ describe('PoChartGridUtils', () => {
       mockCtx.series = [{ name: 'Serie 1' }, { name: 'Serie 2' }];
 
       mockCtx.radar = { indicator: [] };
-      mockCtx.getCSSVariable.and.returnValue('#333');
-      spyOn(utils, 'resolvePx').and.returnValue(5);
+      mockCtx.getCSSVariable.mockReturnValue('#333');
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(5);
 
       utils.setListTypeRadar();
 
-      expect(mockCtx.options.fillPoints).toBeTrue();
+      expect(mockCtx.options.fillPoints).toBe(true);
     });
 
     it('should fallback to empty object when component.options is undefined (cover ?? {})', () => {
       mockCtx.options = undefined as any;
 
       mockCtx.radar = { indicator: [] };
-      mockCtx.getCSSVariable.and.returnValue('#333');
-      spyOn(utils, 'resolvePx').and.returnValue(5);
+      mockCtx.getCSSVariable.mockReturnValue('#333');
+      vi.spyOn(utils as any, 'resolvePx').mockReturnValue(5);
 
       utils.setListTypeRadar();
 
       expect(mockCtx.options).toBeDefined();
-      expect(mockCtx.options.fillPoints).toBeTrue();
+      expect(mockCtx.options.fillPoints).toBe(true);
       expect(mockCtx.options.radar).toBeDefined();
     });
   });
@@ -415,9 +416,9 @@ describe('PoChartGridUtils', () => {
     beforeEach(() => {
       mockCtx.options = {};
       mockCtx.dataLabel = undefined;
-      mockCtx.getCSSVariable.calls.reset();
+      mockCtx.getCSSVariable.mockClear();
 
-      mockCtx.getCSSVariable.and.callFake((key: string, selector?: string) => {
+      mockCtx.getCSSVariable.mockImplementation((key: string, selector?: string) => {
         if (key === '--color-chart-line-point-fill') {
           return mockFillColor;
         }

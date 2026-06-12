@@ -36,7 +36,7 @@ describe('PoIconComponent: ', () => {
   describe('Properties: ', () => {
     describe('p-icon: ', () => {
       it('should call `addClasses` if value is a string.', () => {
-        spyOn(component, <any>'addClasses');
+        vi.spyOn(component as any, 'addClasses');
 
         const iconString = 'po-icon-user';
         component.icon = iconString;
@@ -45,7 +45,7 @@ describe('PoIconComponent: ', () => {
       });
 
       it('should update `icon` value if value is a TemplateRef.', () => {
-        spyOn(component, <any>'addClasses');
+        vi.spyOn(component as any, 'addClasses');
 
         const expectedResult = new TemplateA();
         component.icon = expectedResult;
@@ -55,7 +55,7 @@ describe('PoIconComponent: ', () => {
       });
 
       it('shouldn`t update `icon` value if value isn`t a TemplateRef or string.', () => {
-        spyOn(component, <any>'addClasses');
+        vi.spyOn(component as any, 'addClasses');
 
         component.icon = <any>2;
 
@@ -212,7 +212,7 @@ describe('PoIconComponent - optional parameter', () => {
   });
 
   // TO-DO
-  xit('should return the icon name if it exists in the service', () => {
+  it.skip('should return the icon name if it exists in the service', () => {
     const iconName = 'ICON_BOOK';
     const result = component['getIcon'](iconName);
     expect(result).toEqual('po-icon po-icon-book');

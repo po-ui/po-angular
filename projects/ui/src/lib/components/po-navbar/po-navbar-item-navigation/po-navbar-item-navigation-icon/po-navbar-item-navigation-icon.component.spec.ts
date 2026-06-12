@@ -54,7 +54,7 @@ describe('PoNavbarItemNavigationIconComponent:', () => {
     });
 
     it('should emit the icon if disabled is false', () => {
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       const icon = true;
       component.disabled = false;
@@ -72,7 +72,7 @@ describe('PoNavbarItemNavigationIconComponent:', () => {
     });
 
     it('shouldn`t emit the icon if disabled is true', () => {
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       const icon = true;
       component.disabled = true;

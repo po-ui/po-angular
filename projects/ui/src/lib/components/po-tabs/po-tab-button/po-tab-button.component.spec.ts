@@ -29,7 +29,7 @@ describe('PoTabButtonComponent:', () => {
 
   describe('Properties:', () => {
     it('active: should call `emitActivated`', () => {
-      spyOn(component, <any>'emitActivated');
+      vi.spyOn(component as any, 'emitActivated');
       component.active = true;
       expect(component['emitActivated']).toHaveBeenCalled();
     });
@@ -47,7 +47,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('hide: should call `setDisplayOnHide`', () => {
-      spyOn(component, <any>'setDisplayOnHide');
+      vi.spyOn(component as any, 'setDisplayOnHide');
       component.hide = true;
       expect(component['setDisplayOnHide']).toHaveBeenCalled();
     });
@@ -55,7 +55,7 @@ describe('PoTabButtonComponent:', () => {
 
   describe('Methods:', () => {
     it('ngOnChanges: should emit `changeState` if hide currentValue is true', () => {
-      spyOn(component.changeState, 'emit');
+      vi.spyOn(component.changeState as any, 'emit');
 
       component.ngOnChanges(<any>{ hide: { currentValue: true } });
 
@@ -63,7 +63,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('ngOnChanges: should emit `changeState` if disabled currentValue is true', () => {
-      spyOn(component.changeState, 'emit');
+      vi.spyOn(component.changeState as any, 'emit');
 
       component.ngOnChanges(<any>{ disabled: { currentValue: true } });
 
@@ -71,7 +71,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('ngOnChanges: shouldn`t emit `changeState` if hide or disabled currentValue is false', () => {
-      spyOn(component.changeState, 'emit');
+      vi.spyOn(component.changeState as any, 'emit');
 
       component.ngOnChanges(<any>{ disabled: { currentValue: false }, hide: { currentValue: false } });
 
@@ -79,7 +79,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('onClick: should emit `click` if `disabled` is false', () => {
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       component.disabled = false;
       component.onClick();
@@ -88,7 +88,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('onClick: shouldn`t emit `click` if `disabled` is true', () => {
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
 
       component.disabled = true;
       component.onClick();
@@ -97,7 +97,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('emitActivated: should emit `activated` if `active` is true', () => {
-      spyOn(component.activated, 'emit');
+      vi.spyOn(component.activated as any, 'emit');
 
       component.active = true;
       component['emitActivated']();
@@ -106,7 +106,7 @@ describe('PoTabButtonComponent:', () => {
     });
 
     it('emitActivated: shouldn`t emit `activated` if `active` is false', () => {
-      spyOn(component.activated, 'emit');
+      vi.spyOn(component.activated as any, 'emit');
 
       component.active = false;
       component['emitActivated']();
@@ -173,7 +173,7 @@ describe('PoTabButtonComponent:', () => {
       const eventEnterKey = new KeyboardEvent('keyup', { 'key': 'Enter' });
       const poTabButton = fixture.debugElement.query(By.css('.po-tab-button-default')).nativeElement;
 
-      spyOn(component, <any>'onClick');
+      vi.spyOn(component as any, 'onClick');
       poTabButton.dispatchEvent(eventEnterKey);
 
       expect(component['onClick']).toHaveBeenCalled();

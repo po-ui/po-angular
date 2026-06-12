@@ -137,7 +137,7 @@ describe('PoStepperCircleComponent:', () => {
     it('isMediumStep: should return `true` if `size` is greater than `32` and `isLargeStep` is `false`.', () => {
       component.size = 40;
 
-      spyOnProperty(component, 'isLargeStep').and.returnValue(false);
+      vi.spyOn(component as any, 'isLargeStep').mockReturnValue(false);
 
       expect(component.isMediumStep).toBe(true);
     });
@@ -145,7 +145,7 @@ describe('PoStepperCircleComponent:', () => {
     it('isMediumStep: should return `true` if `size` is equal than `32` and `isLargeStep` is `false`.', () => {
       component.size = 32;
 
-      spyOnProperty(component, 'isLargeStep').and.returnValue(false);
+      vi.spyOn(component as any, 'isLargeStep').mockReturnValue(false);
 
       expect(component.isMediumStep).toBe(true);
     });
@@ -153,7 +153,7 @@ describe('PoStepperCircleComponent:', () => {
     it('isMediumStep: should return `false` if `size` is greater than `32` and `isLargeStep` is `true`.', () => {
       component.size = 64;
 
-      spyOnProperty(component, 'isLargeStep').and.returnValue(true);
+      vi.spyOn(component as any, 'isLargeStep').mockReturnValue(true);
 
       expect(component.isMediumStep).toBe(false);
     });
@@ -161,7 +161,7 @@ describe('PoStepperCircleComponent:', () => {
     it('isMediumStep: should return `false` if `size` is less than `32` and `isLargeStep` is `false`.', () => {
       component.size = 31;
 
-      spyOnProperty(component, 'isLargeStep').and.returnValue(false);
+      vi.spyOn(component as any, 'isLargeStep').mockReturnValue(false);
 
       expect(component.isMediumStep).toBe(false);
     });
@@ -169,7 +169,7 @@ describe('PoStepperCircleComponent:', () => {
 
   describe('Templates:', () => {
     it('should find `po-stepper-circle-content-md` in `span` if `isMediumStep` is `true`.', () => {
-      spyOnProperty(component, 'isMediumStep').and.returnValue(true);
+      vi.spyOn(component as any, 'isMediumStep').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -179,7 +179,7 @@ describe('PoStepperCircleComponent:', () => {
     });
 
     it('should find `po-stepper-circle-content-lg` in `span` if `isLargeStep` is `true`.', () => {
-      spyOnProperty(component, 'isLargeStep').and.returnValue(true);
+      vi.spyOn(component as any, 'isLargeStep').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -206,8 +206,8 @@ describe('PoStepperCircleComponent:', () => {
     });
 
     it('should find `po-stepper-circle-active` if `isActive` is true.', () => {
-      spyOnProperty(component, 'isError').and.returnValue(false);
-      spyOnProperty(component, 'isActive').and.returnValue(true);
+      vi.spyOn(component as any, 'isError').mockReturnValue(false);
+      vi.spyOn(component as any, 'isActive').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -217,8 +217,8 @@ describe('PoStepperCircleComponent:', () => {
     });
 
     it('should find `po-stepper-circle-active` if `isError` is true.', () => {
-      spyOnProperty(component, 'isError').and.returnValue(true);
-      spyOnProperty(component, 'isActive').and.returnValue(false);
+      vi.spyOn(component as any, 'isError').mockReturnValue(true);
+      vi.spyOn(component as any, 'isActive').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -228,8 +228,8 @@ describe('PoStepperCircleComponent:', () => {
     });
 
     it('shouldn`t find `po-stepper-circle-active` if `isError` and `isActive` is false.', () => {
-      spyOnProperty(component, 'isError').and.returnValue(false);
-      spyOnProperty(component, 'isActive').and.returnValue(false);
+      vi.spyOn(component as any, 'isError').mockReturnValue(false);
+      vi.spyOn(component as any, 'isActive').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -240,7 +240,7 @@ describe('PoStepperCircleComponent:', () => {
 
     it('should find `po-icon` if `isDone` is true.', () => {
       component.icons = false;
-      spyOnProperty(component, 'isDone').and.returnValue(true);
+      vi.spyOn(component as any, 'isDone').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -250,7 +250,7 @@ describe('PoStepperCircleComponent:', () => {
 
     it('shouldn`t find `po-icon` if `isDone` and `icons` is false.', () => {
       component.icons = false;
-      spyOnProperty(component, 'isDone').and.returnValue(false);
+      vi.spyOn(component as any, 'isDone').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -265,7 +265,7 @@ describe('PoStepperCircleComponent:', () => {
 
       const activeIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(activeIcon).toBeTruthy();
-      expect(activeIcon.classList.contains('an-anchor')).toBeTrue();
+      expect(activeIcon.classList.contains('an-anchor')).toBe(true);
     });
 
     it('should apply `iconActive` from Icons library if `status` is `Active` and `iconActive` is set.', () => {
@@ -275,7 +275,7 @@ describe('PoStepperCircleComponent:', () => {
 
       const activeIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(activeIcon).toBeTruthy();
-      expect(activeIcon.classList.contains('po-icon-device-notebook')).toBeTrue();
+      expect(activeIcon.classList.contains('po-icon-device-notebook')).toBe(true);
     });
 
     it('should apply `ICON_EDIT` if `status` is `Active` and `iconActive` is not set.', () => {
@@ -286,7 +286,7 @@ describe('PoStepperCircleComponent:', () => {
       const activeIcon = PoIconEdit();
 
       expect(activeIcon).toBeTruthy();
-      expect(activeIcon.classList.contains('an-pencil-simple')).toBeTrue();
+      expect(activeIcon.classList.contains('an-pencil-simple')).toBe(true);
     });
 
     it('should apply `iconDone` from Phosphor library if `status` is `Done` and `iconDone` is set.', () => {
@@ -297,7 +297,7 @@ describe('PoStepperCircleComponent:', () => {
       const doneIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
 
       expect(doneIcon).toBeTruthy();
-      expect(doneIcon.classList.contains('an-check-circle')).toBeTrue();
+      expect(doneIcon.classList.contains('an-check-circle')).toBe(true);
     });
 
     it('should apply `iconDone` from Icons library if `status` is `Done` and `iconDone` is set.', () => {
@@ -307,7 +307,7 @@ describe('PoStepperCircleComponent:', () => {
 
       const doneIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
 
-      expect(doneIcon.classList.contains('po-icon-clock')).toBeTrue();
+      expect(doneIcon.classList.contains('po-icon-clock')).toBe(true);
     });
 
     it('should apply `ICON_OK` if `status` is `Done` and `iconDone` is not set.', () => {
@@ -326,14 +326,14 @@ describe('PoStepperCircleComponent:', () => {
 
       let defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('an-first-aid')).toBeTrue();
+      expect(defaultIcon.classList.contains('an-first-aid')).toBe(true);
 
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
 
       defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('an-first-aid')).toBeTrue();
+      expect(defaultIcon.classList.contains('an-first-aid')).toBe(true);
     });
 
     it('should apply `iconDefault` from Icons library if `status` is `Default` or `Disabled` and `iconDefault` is set.', () => {
@@ -343,14 +343,14 @@ describe('PoStepperCircleComponent:', () => {
 
       let defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('po-icon-user')).toBeTrue();
+      expect(defaultIcon.classList.contains('po-icon-user')).toBe(true);
 
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
 
       defaultIcon = nativeElement.querySelector('po-icon')?.querySelector('i');
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('po-icon-user')).toBeTrue();
+      expect(defaultIcon.classList.contains('po-icon-user')).toBe(true);
     });
 
     it('should apply `ICON_INFO` if `status` is `Default` or `Disabled`, `iconDefault` is not set, and `icons` is true.', () => {
@@ -361,14 +361,14 @@ describe('PoStepperCircleComponent:', () => {
 
       const defaultIcon = PoIconInfo();
       expect(defaultIcon).toBeTruthy();
-      expect(defaultIcon.classList.contains('an-info')).toBeTrue();
+      expect(defaultIcon.classList.contains('an-info')).toBe(true);
 
       component.status = PoStepperStatus.Disabled;
       fixture.detectChanges();
 
       const disabledIcon = PoIconInfo();
       expect(disabledIcon).toBeTruthy();
-      expect(disabledIcon.classList.contains('an-info')).toBeTrue();
+      expect(disabledIcon.classList.contains('an-info')).toBe(true);
     });
 
     it('should display an empty string if `status` is `Default` or `Disabled`, `iconDefault` is not set, and `icons` is false.', () => {

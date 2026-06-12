@@ -61,9 +61,9 @@ describe('PoTreeviewItemComponent:', () => {
         stopPropagation: () => {}
       };
 
-      const spyPreventDefault = spyOn(fakeEvent, 'preventDefault');
-      const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
-      const spyEmitEvent = spyOn(component['treeViewService'], 'emitExpandedEvent');
+      const spyPreventDefault = vi.spyOn(fakeEvent as any, 'preventDefault');
+      const spyStopPropagation = vi.spyOn(fakeEvent as any, 'stopPropagation');
+      const spyEmitEvent = vi.spyOn(component['treeViewService'] as any, 'emitExpandedEvent');
 
       component.onClick(<any>fakeEvent);
 
@@ -76,7 +76,7 @@ describe('PoTreeviewItemComponent:', () => {
     it('onSelect: should call treeViewService.emitSelectedEvent with item', () => {
       component.item = { label: 'Label 01', value: 12 };
 
-      const spyEmitEvent = spyOn(component['treeViewService'], 'emitSelectedEvent');
+      const spyEmitEvent = vi.spyOn(component['treeViewService'] as any, 'emitSelectedEvent');
 
       component.onSelect(component.item);
 

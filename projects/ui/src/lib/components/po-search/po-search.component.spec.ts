@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ElementRef, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
@@ -12,7 +13,7 @@ import { PoSearchComponent } from './po-search.component';
 describe('PoSearchComponent', () => {
   let component: PoSearchComponent;
   let fixture: ComponentFixture<PoSearchComponent>;
-  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
+  let controlPositionMock: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,7 +24,10 @@ describe('PoSearchComponent', () => {
   });
 
   beforeEach(() => {
-    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+    controlPositionMock = {
+      adjustPosition: vi.fn().mockName('PoControlPositionService.adjustPosition'),
+      setElements: vi.fn().mockName('PoControlPositionService.setElements')
+    };
 
     fixture = TestBed.createComponent(PoSearchComponent);
 
@@ -36,8 +40,8 @@ describe('PoSearchComponent', () => {
     component.items = [{ text: 'Text 1' }, { text: 'Text 2' }, { text: 'Other Text' }];
     component.filterKeys = ['text'];
 
-    spyOn(component.filteredItemsChange, 'emit');
-    spyOn(component.listboxOnClick, 'emit');
+    vi.spyOn(component.filteredItemsChange as any, 'emit');
+    vi.spyOn(component.listboxOnClick as any, 'emit');
 
     fixture.detectChanges();
   });
@@ -62,12 +66,12 @@ describe('PoSearchComponent', () => {
   describe('onCleanKeydown', () => {
     it('should clear search, focus input, prevent default and stop propagation when escape is pressed and type is locate', () => {
       component.type = 'locate';
-      spyOn(component, 'clearSearch');
-      const focusSpy = jasmine.createSpy('focus');
+      vi.spyOn(component as any, 'clearSearch');
+      const focusSpy = vi.fn();
       const event = {
         key: 'Escape',
-        preventDefault: jasmine.createSpy('preventDefault'),
-        stopPropagation: jasmine.createSpy('stopPropagation')
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn()
       } as any;
       component.poSearchInput = { nativeElement: { focus: focusSpy } } as any;
 
@@ -80,12 +84,12 @@ describe('PoSearchComponent', () => {
     });
 
     it('should do nothing if escape is pressed and type is not locate', () => {
-      spyOn(component, 'clearSearch');
-      const focusSpy = jasmine.createSpy('focus');
+      vi.spyOn(component as any, 'clearSearch');
+      const focusSpy = vi.fn();
       const event = {
         key: 'Escape',
-        preventDefault: jasmine.createSpy('preventDefault'),
-        stopPropagation: jasmine.createSpy('stopPropagation')
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn()
       } as any;
       component.poSearchInput = { nativeElement: { focus: focusSpy } } as any;
 
@@ -103,8 +107,8 @@ describe('PoSearchComponent', () => {
 
     beforeEach(() => {
       event = { target: { value: 'test' } };
-      spyOn(component, 'closeListbox');
-      spyOn(component, 'onSearchChange');
+      vi.spyOn(component as any, 'closeListbox');
+      vi.spyOn(component as any, 'onSearchChange');
     });
 
     it('should do nothing if type is locate', () => {
@@ -150,8 +154,8 @@ describe('PoSearchComponent', () => {
   describe('onSearchChange', () => {
     it('should emit changeModel and return if type is locate and changeModel is observed', () => {
       component.type = 'locate';
-      spyOnProperty(component.changeModel, 'observed', 'get').and.returnValue(true);
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel, 'observed', 'get').mockReturnValue(true);
+      vi.spyOn(component.changeModel as any, 'emit');
 
       component.onSearchChange('abc', true);
 
@@ -298,8 +302,8 @@ describe('PoSearchComponent', () => {
 
   describe('onFocus', () => {
     beforeEach(() => {
-      component['updateShowSearchLocateControls'] = jasmine.createSpy('updateShowSearchLocateControls');
-      component['updatePaddingRightLocate'] = jasmine.createSpy('updatePaddingRightLocate');
+      component['updateShowSearchLocateControls'] = vi.fn();
+      component['updatePaddingRightLocate'] = vi.fn();
     });
 
     it('should call updateShowSearchLocateControls and updatePaddingRightLocate(true) when type is locate', () => {
@@ -322,7 +326,7 @@ describe('PoSearchComponent', () => {
 
     it('should emit focusEvent when it is observed', () => {
       component.focusEvent = new EventEmitter<void>();
-      spyOn(component.focusEvent, 'emit');
+      vi.spyOn(component.focusEvent as any, 'emit');
 
       Object.defineProperty(component.focusEvent, 'observed', { value: true });
 
@@ -333,7 +337,7 @@ describe('PoSearchComponent', () => {
 
     it('should not emit focusEvent when it is not observed', () => {
       component.focusEvent = new EventEmitter<void>();
-      spyOn(component.focusEvent, 'emit');
+      vi.spyOn(component.focusEvent as any, 'emit');
 
       Object.defineProperty(component.focusEvent, 'observed', { value: false });
 
@@ -345,13 +349,13 @@ describe('PoSearchComponent', () => {
 
   describe('onInputHandler', () => {
     beforeEach(() => {
-      component['updateShowSearchLocateControls'] = jasmine.createSpy('updateShowSearchLocateControls');
-      component['updatePaddingRightLocate'] = jasmine.createSpy('updatePaddingRightLocate');
+      component['updateShowSearchLocateControls'] = vi.fn();
+      component['updatePaddingRightLocate'] = vi.fn();
     });
 
     it('should call onSearchChange once with (value, false) if type is locate', () => {
       component.type = 'locate';
-      const spy = spyOn(component, 'onSearchChange');
+      const spy = vi.spyOn(component as any, 'onSearchChange');
 
       component.onInputHandler('abc');
 
@@ -379,31 +383,31 @@ describe('PoSearchComponent', () => {
 
     it('should call onSearchChange twice if type is not locate and type is "action"', () => {
       component.type = 'action';
-      const spy = spyOn(component, 'onSearchChange');
+      const spy = vi.spyOn(component as any, 'onSearchChange');
 
       component.onInputHandler('abc');
 
       expect(spy).toHaveBeenCalledTimes(2);
-      expect(spy.calls.argsFor(0)).toEqual(['abc', false]);
-      expect(spy.calls.argsFor(1)).toEqual(['abc', true]);
+      expect(vi.mocked(spy).mock.calls[0]).toEqual(['abc', false]);
+      expect(vi.mocked(spy).mock.calls[1]).toEqual(['abc', true]);
     });
 
     it('should call onSearchChange twice if type is not locate and type is not "action"', () => {
       component.type = 'trigger';
-      const spy = spyOn(component, 'onSearchChange');
+      const spy = vi.spyOn(component as any, 'onSearchChange');
 
       component.onInputHandler('abc');
 
       expect(spy).toHaveBeenCalledTimes(2);
-      expect(spy.calls.argsFor(0)).toEqual(['abc', false]);
-      expect(spy.calls.argsFor(1)).toEqual(['abc', false]);
+      expect(vi.mocked(spy).mock.calls[0]).toEqual(['abc', false]);
+      expect(vi.mocked(spy).mock.calls[1]).toEqual(['abc', false]);
     });
   });
 
   describe('onBlur', () => {
     beforeEach(() => {
-      component['updateShowSearchLocateControls'] = jasmine.createSpy('updateShowSearchLocateControls');
-      component['updatePaddingRightLocate'] = jasmine.createSpy('updatePaddingRightLocate');
+      component['updateShowSearchLocateControls'] = vi.fn();
+      component['updatePaddingRightLocate'] = vi.fn();
     });
 
     it('should call updateShowSearchLocateControls and updatePaddingRightLocate(true) when type is locate', () => {
@@ -425,8 +429,8 @@ describe('PoSearchComponent', () => {
     });
 
     it('should emit blur event if observed', () => {
-      spyOnProperty(component.blur, 'observed', 'get').and.returnValue(true);
-      spyOn(component.blur, 'emit');
+      vi.spyOn(component.blur, 'observed', 'get').mockReturnValue(true);
+      vi.spyOn(component.blur as any, 'emit');
 
       component.onBlur();
 
@@ -434,8 +438,8 @@ describe('PoSearchComponent', () => {
     });
 
     it('should not emit blur event if not observed', () => {
-      spyOnProperty(component.blur, 'observed', 'get').and.returnValue(false);
-      spyOn(component.blur, 'emit');
+      vi.spyOn(component.blur, 'observed', 'get').mockReturnValue(false);
+      vi.spyOn(component.blur as any, 'emit');
 
       component.onBlur();
 
@@ -598,7 +602,7 @@ describe('PoSearchComponent', () => {
     it('initializeListeners: should call removeListeners and initialize click, resize and scroll listeners', () => {
       component['clickoutListener'] = undefined;
       component['eventResizeListener'] = undefined;
-      const spyRemoveListeners = spyOn(component, <any>'removeListeners');
+      const spyRemoveListeners = vi.spyOn(component as any, 'removeListeners');
 
       component['initializeListeners']();
 
@@ -613,7 +617,7 @@ describe('PoSearchComponent', () => {
     it('should hide the listbox when was click out of the input', () => {
       component.listboxOpen = true;
 
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.clickedOutsideInput(eventClick);
       expect(component.closeListbox).toHaveBeenCalled();
     });
@@ -621,7 +625,7 @@ describe('PoSearchComponent', () => {
     it('should not hide listbox when was click in input', () => {
       component.poSearchInput.nativeElement.dispatchEvent(eventClick);
 
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.clickedOutsideInput(eventClick);
       expect(component.closeListbox).not.toHaveBeenCalled();
     });
@@ -639,7 +643,7 @@ describe('PoSearchComponent', () => {
       component.listboxOpen = true;
       component['showFooterActionListbox'] = true;
 
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
 
       component.clickedOutsideInput(event);
 
@@ -649,8 +653,8 @@ describe('PoSearchComponent', () => {
     });
 
     it('should initialize all Listeners correctly', fakeAsync(() => {
-      spyOn(component, <any>'removeListeners').and.callThrough();
-      spyOn(component, <any>'adjustContainerPosition');
+      vi.spyOn(component as any, 'removeListeners');
+      vi.spyOn(component as any, 'adjustContainerPosition');
 
       component['initializeListeners']();
 
@@ -666,7 +670,7 @@ describe('PoSearchComponent', () => {
     }));
 
     it('should adjustContainerPosition if the screen is resizing', () => {
-      spyOn(component, <any>'adjustContainerPosition');
+      vi.spyOn(component as any, 'adjustContainerPosition');
 
       component['initializeListeners']();
 
@@ -684,11 +688,11 @@ describe('PoSearchComponent', () => {
 
       const event = new KeyboardEvent('keydown', { keyCode: 40, code: 'ArrowDown' });
 
-      spyOn(component, <any>'focusItem');
+      vi.spyOn(component as any, 'focusItem');
 
       component.onKeyDown(event);
 
-      expect(component.listboxOpen).toBeTrue();
+      expect(component.listboxOpen).toBe(true);
       expect(component['focusItem']).toHaveBeenCalled();
     });
 
@@ -699,11 +703,11 @@ describe('PoSearchComponent', () => {
       const event = new KeyboardEvent('keydown', { keyCode: 40, code: 'ArrowDown' });
       component.onKeyDown(event);
 
-      expect(component.listboxOpen).toBeFalse();
+      expect(component.listboxOpen).toBe(false);
     });
 
     it('should hide the listbox if the input has a shift+tab keypress', () => {
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.type = 'trigger';
 
       const event = new KeyboardEvent('keydown', { keyCode: 9, code: 'Tab', shiftKey: true });
@@ -714,7 +718,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should hide the listbox if the input has a tab keypress', () => {
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.type = 'trigger';
 
       const event = new KeyboardEvent('keydown', { keyCode: 9, code: 'Tab' });
@@ -725,7 +729,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should close the listbox if the input has a esc keypress', () => {
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.type = 'trigger';
       component.listboxOpen = true;
 
@@ -737,8 +741,8 @@ describe('PoSearchComponent', () => {
     });
 
     it('should close the listbox and focus the search input if the input has a keydown event with the Escape key', () => {
-      spyOn(component, 'closeListbox');
-      const focusSpy = spyOn(component.poSearchInput.nativeElement, 'focus');
+      vi.spyOn(component as any, 'closeListbox');
+      const focusSpy = vi.spyOn(component.poSearchInput.nativeElement, 'focus');
 
       component.listboxOpen = true;
 
@@ -750,7 +754,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should close the listbox if the input has a keydown event with the Enter key and the listbox is open', () => {
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.listboxOpen = true;
 
       const event = new KeyboardEvent('keydown', { keyCode: 13, code: 'Enter' });
@@ -760,7 +764,7 @@ describe('PoSearchComponent', () => {
     });
 
     it('should call controlListboxVisibility(false) when the input loses focus and the listbox is open and poListbox.items is empty', () => {
-      spyOn(component, 'closeListbox');
+      vi.spyOn(component as any, 'closeListbox');
       component.listboxOpen = true;
       component.poListbox.items = [];
 
@@ -771,7 +775,7 @@ describe('PoSearchComponent', () => {
     it('should call focusItem() when the input loses focus and the listbox is open and poListbox.items is not empty', () => {
       component.listboxOpen = true;
       component.poListbox.items = [{ label: 'Item 1' }];
-      spyOn(component, <any>'focusItem');
+      vi.spyOn(component as any, 'focusItem');
 
       component.onBlur();
       expect(component['focusItem']).toHaveBeenCalled();
@@ -790,15 +794,15 @@ describe('PoSearchComponent', () => {
 
       (component as any).poListboxElement = { nativeElement: container };
 
-      spyOn(mockListboxItem, 'focus');
+      vi.spyOn(mockListboxItem as any, 'focus');
 
       component['focusItem']();
 
       tick(100);
 
       expect(mockListboxItem.focus).toHaveBeenCalled();
-      expect(mockListboxItem2.classList.contains('cdk-option-active')).toBeFalse();
-      expect(mockListboxItem2.classList.contains('cdk-option-active')).toBeFalse();
+      expect(mockListboxItem2.classList.contains('cdk-option-active')).toBe(false);
+      expect(mockListboxItem2.classList.contains('cdk-option-active')).toBe(false);
     }));
 
     it('should consider the items received', () => {
@@ -848,7 +852,7 @@ describe('PoSearchComponent', () => {
 
       const expectedFilterKeys = ['name', 'gender', 'planet', 'father'];
       expect(component.filterKeys).toEqual(expectedFilterKeys);
-      expect(component.searchFilterSelectActions.some(action => action.label === component.literals.all)).toBeTrue();
+      expect(component.searchFilterSelectActions.some(action => action.label === component.literals.all)).toBe(true);
     });
 
     it('should change `filterKeys` when clicking `personal`', () => {
@@ -908,7 +912,7 @@ describe('PoSearchComponent', () => {
 
       expect(component.filterKeys).toEqual(['name', 'gender']);
 
-      spyOn(component as any, 'createDropdownFilterSelect').and.callThrough();
+      vi.spyOn(component as any, 'createDropdownFilterSelect');
 
       const changes: SimpleChanges = {
         filterSelect: new SimpleChange(null, [{ label: 'planet', value: 'planet' }], false)
@@ -928,9 +932,9 @@ describe('PoSearchComponent', () => {
       component['createDropdownFilterSelect']();
 
       const expectedActions = [
-        { label: 'All', action: jasmine.any(Function), selected: true },
-        { label: 'name', action: jasmine.any(Function), selected: false },
-        { label: 'gender', action: jasmine.any(Function), selected: false }
+        { label: 'All', action: expect.any(Function), selected: true },
+        { label: 'name', action: expect.any(Function), selected: false },
+        { label: 'gender', action: expect.any(Function), selected: false }
       ];
 
       expect(component.searchFilterSelectActions).toEqual(expectedActions);
@@ -942,7 +946,7 @@ describe('PoSearchComponent', () => {
         { label: 'gender', value: 'gender' }
       ];
 
-      const changeFilterSelectSpy = spyOn(component as any, 'changeFilterSelect').and.callThrough();
+      const changeFilterSelectSpy = vi.spyOn(component as any, 'changeFilterSelect');
 
       component['createDropdownFilterSelect']();
 
@@ -1077,7 +1081,7 @@ describe('PoSearchComponent', () => {
 
       component['updateShowSearchLocateControls']();
 
-      expect(component.showSearchLocateControls).toBeTrue();
+      expect(component.showSearchLocateControls).toBe(true);
     });
 
     it('should set showSearchLocateControls to true if input has focus and has not value  and not disabled', () => {
@@ -1090,7 +1094,7 @@ describe('PoSearchComponent', () => {
 
       component['updateShowSearchLocateControls']();
 
-      expect(component.showSearchLocateControls).toBeTrue();
+      expect(component.showSearchLocateControls).toBe(true);
     });
 
     it('should set showSearchLocateControls to false if component is disabled', () => {
@@ -1102,7 +1106,7 @@ describe('PoSearchComponent', () => {
 
       component['updateShowSearchLocateControls']();
 
-      expect(component.showSearchLocateControls).toBeFalse();
+      expect(component.showSearchLocateControls).toBe(false);
     });
 
     it('should set showSearchLocateControls to false if poSearchInput is missing and has not focus', () => {
@@ -1113,7 +1117,7 @@ describe('PoSearchComponent', () => {
 
       component['updateShowSearchLocateControls']();
 
-      expect(component.showSearchLocateControls).toBeFalse();
+      expect(component.showSearchLocateControls).toBe(false);
     });
 
     it('should set showSearchLocateControls to false if type is not locate', () => {
@@ -1125,15 +1129,15 @@ describe('PoSearchComponent', () => {
 
       component['updateShowSearchLocateControls']();
 
-      expect(component.showSearchLocateControls).toBeFalse();
+      expect(component.showSearchLocateControls).toBe(false);
     });
   });
 
   describe('locateCounter ViewChild setter', () => {
-    let observeSpy: jasmine.Spy;
+    let observeSpy: any;
 
     beforeEach(() => {
-      observeSpy = jasmine.createSpy('observe');
+      observeSpy = vi.fn();
       (window as any).ResizeObserver = function (callback) {
         callback();
         return { observe: observeSpy };
@@ -1144,7 +1148,7 @@ describe('PoSearchComponent', () => {
       const element = document.createElement('span');
       const elementRef = new ElementRef(element);
 
-      const updateSpy = spyOn(component as any, 'updatePaddingRightLocate');
+      const updateSpy = vi.spyOn(component as any, 'updatePaddingRightLocate');
 
       component.locateCounter = elementRef;
 
@@ -1167,8 +1171,8 @@ describe('PoSearchComponent', () => {
 
   describe('ngOnChanges', () => {
     it('should call updateShowSearchLocateControls and updatePaddingRightLocate when type changes', () => {
-      const updateShowSpy = spyOn(component as any, 'updateShowSearchLocateControls');
-      const updatePaddingSpy = spyOn(component as any, 'updatePaddingRightLocate');
+      const updateShowSpy = vi.spyOn(component as any, 'updateShowSearchLocateControls');
+      const updatePaddingSpy = vi.spyOn(component as any, 'updatePaddingRightLocate');
 
       component.type = 'locate';
 
@@ -1186,8 +1190,8 @@ describe('PoSearchComponent', () => {
     });
 
     it('should call updateShowSearchLocateControls and updatePaddingRightLocate when disabled changes', () => {
-      const updateShowSpy = spyOn(component as any, 'updateShowSearchLocateControls');
-      const updatePaddingSpy = spyOn(component as any, 'updatePaddingRightLocate');
+      const updateShowSpy = vi.spyOn(component as any, 'updateShowSearchLocateControls');
+      const updatePaddingSpy = vi.spyOn(component as any, 'updatePaddingRightLocate');
 
       component.type = 'locate';
 
@@ -1212,7 +1216,7 @@ describe('PoSearchComponent', () => {
       component.keysLabel = ['name', 'nickname'];
       component['ngOnChanges'](changes);
 
-      expect(component['showSeparator']).toBeTrue();
+      expect(component['showSeparator']).toBe(true);
     });
   });
 
@@ -1230,7 +1234,7 @@ describe('PoSearchComponent', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.showListbox).toBeTrue();
+      expect(component.showListbox).toBe(true);
     });
 
     it('should set keysLabel with up to 3 items from filterKeys when keysLabel is empty', () => {
@@ -1267,14 +1271,14 @@ describe('PoSearchComponent', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.showListbox).toBeFalse();
+      expect(component.showListbox).toBe(false);
       expect(component.keysLabel).toEqual([]);
     });
   });
 
   it('should emit footerAction and call closeListbox', () => {
-    spyOn(component.footerAction, 'emit');
-    spyOn(component, 'closeListbox');
+    vi.spyOn(component.footerAction as any, 'emit');
+    vi.spyOn(component as any, 'closeListbox');
 
     component.handlerFooterActionListbox();
 
@@ -1300,7 +1304,7 @@ describe('PoSearchComponent', () => {
 
       expect(component.listboxFilteredItems).toEqual([]);
       expect(component['placeholderListbox']).toEqual(literals.placeholderListbox);
-      expect(component.listboxOpen).toBeTrue();
+      expect(component.listboxOpen).toBe(true);
     });
 
     it('should do nothing if conditions are not met', () => {
@@ -1315,7 +1319,7 @@ describe('PoSearchComponent', () => {
 
       expect(component.listboxFilteredItems).toEqual(['item1']);
       expect(component['placeholderListbox']).toBeUndefined();
-      expect(component.listboxOpen).toBeFalse();
+      expect(component.listboxOpen).toBe(false);
     });
   });
 });

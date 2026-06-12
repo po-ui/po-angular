@@ -83,7 +83,7 @@ describe('PoTimepickerComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
 
     it('should not change displayAdditionalHelp when label is not in changes', () => {
@@ -100,11 +100,11 @@ describe('PoTimepickerComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('ngOnDestroy: should call `removeListeners`', () => {
-      const removeListener = spyOn(component, <any>'removeListeners');
+      const removeListener = vi.spyOn(component as any, 'removeListeners');
       component.ngOnDestroy();
       expect(removeListener).toHaveBeenCalled();
     });
@@ -115,13 +115,13 @@ describe('PoTimepickerComponent:', () => {
 
       (component as any).onLocaleChange();
 
-      expect(component.literals).toEqual(jasmine.objectContaining(poTimepickerLiterals.pt));
+      expect(component.literals).toEqual(expect.objectContaining(poTimepickerLiterals.pt));
     });
 
     describe('focus:', () => {
       it('should call `focus` of timepicker', () => {
         fixture.detectChanges();
-        spyOn(component.inputEl.nativeElement, 'focus');
+        vi.spyOn(component.inputEl.nativeElement, 'focus');
 
         component.focus();
 
@@ -132,7 +132,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.disabled = true;
 
-        spyOn(component.inputEl.nativeElement, 'focus');
+        vi.spyOn(component.inputEl.nativeElement, 'focus');
 
         component.focus();
 
@@ -143,7 +143,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.loading = true;
 
-        spyOn(component.inputEl.nativeElement, 'focus');
+        vi.spyOn(component.inputEl.nativeElement, 'focus');
 
         component.focus();
 
@@ -159,7 +159,7 @@ describe('PoTimepickerComponent:', () => {
 
         component.togglePicker();
 
-        expect(component.visible).toBeFalse();
+        expect(component.visible).toBe(false);
       });
 
       it('should not open picker when disabled is true', () => {
@@ -169,7 +169,7 @@ describe('PoTimepickerComponent:', () => {
 
         component.togglePicker();
 
-        expect(component.visible).toBeFalse();
+        expect(component.visible).toBe(false);
       });
 
       it('should not open picker when readonly is true', () => {
@@ -179,13 +179,13 @@ describe('PoTimepickerComponent:', () => {
 
         component.togglePicker();
 
-        expect(component.visible).toBeFalse();
+        expect(component.visible).toBe(false);
       });
     });
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -193,7 +193,7 @@ describe('PoTimepickerComponent:', () => {
       });
 
       it('should return null when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -208,8 +208,8 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '30';
         component.secondDisplay = '00';
 
-        spyOn(component, <any>'callOnChange');
-        spyOn(component, <any>'controlChangeEmitter');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         component.clear();
 
@@ -235,8 +235,8 @@ describe('PoTimepickerComponent:', () => {
     describe('clearAndFocus:', () => {
       it('should call clear method and focus on input element', fakeAsync(() => {
         fixture.detectChanges();
-        const clearSpy = spyOn(component, 'clear');
-        const focusSpy = spyOn(component, 'focus');
+        const clearSpy = vi.spyOn(component as any, 'clear');
+        const focusSpy = vi.spyOn(component as any, 'focus');
 
         component.clearAndFocus();
 
@@ -254,8 +254,8 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '';
         component.minuteDisplay = '';
         component.secondDisplay = '';
-        const closeTimerSpy = spyOn(component, 'closeTimer');
-        const iconFocusSpy = spyOn(component.iconTimepicker, 'focus');
+        const closeTimerSpy = vi.spyOn(component as any, 'closeTimer');
+        const iconFocusSpy = vi.spyOn(component.iconTimepicker as any, 'focus');
 
         component.timerSelected('10:30');
 
@@ -269,7 +269,7 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '08';
         component.minuteDisplay = '15';
         component.secondDisplay = '';
-        const closeTimerSpy = spyOn(component, 'closeTimer');
+        const closeTimerSpy = vi.spyOn(component as any, 'closeTimer');
 
         component.timerSelected('10:30');
 
@@ -280,7 +280,7 @@ describe('PoTimepickerComponent:', () => {
       it('should not close picker after selecting a valid time with seconds', () => {
         fixture.detectChanges();
         component.showSeconds = true;
-        const togglePickerSpy = spyOn(component, 'togglePicker');
+        const togglePickerSpy = vi.spyOn(component as any, 'togglePicker');
 
         component.timerSelected('10:30:45');
 
@@ -305,7 +305,7 @@ describe('PoTimepickerComponent:', () => {
         component.showSeconds = false;
         component.modelFormat = PoTimepickerModelFormat.HourMinuteSecond;
 
-        const changeSpy = jasmine.createSpy('onChange');
+        const changeSpy = vi.fn();
         component.registerOnChange(changeSpy);
 
         component.timerSelected('14:30');
@@ -318,7 +318,7 @@ describe('PoTimepickerComponent:', () => {
         component.showSeconds = true;
         component.modelFormat = PoTimepickerModelFormat.HourMinuteSecond;
 
-        const changeSpy = jasmine.createSpy('onChange');
+        const changeSpy = vi.fn();
         component.registerOnChange(changeSpy);
 
         component.timerSelected('14:30:45');
@@ -334,8 +334,8 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
         component.timeValue = '10:30';
 
-        spyOn(component, <any>'callOnChange');
-        spyOn(component, <any>'controlChangeEmitter');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         component.closeTimer();
 
@@ -352,7 +352,7 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '';
         component.secondDisplay = '';
 
-        expect(component.hasValue()).toBeTrue();
+        expect(component.hasValue()).toBe(true);
       });
 
       it('should return false when all segments are empty', () => {
@@ -360,7 +360,7 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '';
         component.secondDisplay = '';
 
-        expect(component.hasValue()).toBeFalse();
+        expect(component.hasValue()).toBe(false);
       });
     });
 
@@ -373,7 +373,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should return error pattern when hasInvalidClass returns true', () => {
         component.errorPattern = 'Hora inválida';
-        spyOn(component, 'hasInvalidClass').and.returnValue(true);
+        vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(true);
 
         expect(component.getErrorPattern()).toBe('Hora inválida');
       });
@@ -382,8 +382,8 @@ describe('PoTimepickerComponent:', () => {
     describe('emitAdditionalHelp:', () => {
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         component.label = 'Test';
-        spyOn((component as any).additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn((component as any).additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -391,8 +391,8 @@ describe('PoTimepickerComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn((component as any).additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn((component as any).additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -404,8 +404,8 @@ describe('PoTimepickerComponent:', () => {
       it('should call onblur emit', () => {
         component['onTouchedModel'] = () => {};
 
-        spyOn(component.onblur, 'emit');
-        spyOn(component, <any>'onTouchedModel');
+        vi.spyOn(component.onblur as any, 'emit');
+        vi.spyOn(component as any, 'onTouchedModel');
 
         fixture.detectChanges();
         component.eventOnBlur({});
@@ -930,7 +930,7 @@ describe('PoTimepickerComponent:', () => {
       const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
 
       inputs.forEach((input: HTMLInputElement) => {
-        expect(input.disabled).toBeTrue();
+        expect(input.disabled).toBe(true);
       });
     });
 
@@ -941,7 +941,7 @@ describe('PoTimepickerComponent:', () => {
       const inputs = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input');
 
       inputs.forEach((input: HTMLInputElement) => {
-        expect(input.disabled).toBeFalse();
+        expect(input.disabled).toBe(false);
       });
     });
 
@@ -950,7 +950,7 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
 
       const field = fixture.nativeElement.querySelector('.po-timepicker-field');
-      expect(field.classList.contains('po-timepicker-field-disabled')).toBeTrue();
+      expect(field.classList.contains('po-timepicker-field-disabled')).toBe(true);
     });
 
     it('should render readonly period input with default AM in 12h format', () => {
@@ -978,7 +978,7 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
 
       const field = fixture.nativeElement.querySelector('.po-timepicker-field');
-      expect(field.classList.contains('po-timepicker-field-readonly')).toBeTrue();
+      expect(field.classList.contains('po-timepicker-field-readonly')).toBe(true);
     });
   });
 
@@ -990,7 +990,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
 
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
-        spyOn(component, 'togglePicker');
+        vi.spyOn(component as any, 'togglePicker');
 
         component.onKeydown(event);
 
@@ -1003,9 +1003,9 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
 
         const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
-        spyOn(event, 'preventDefault');
-        spyOn(event, 'stopPropagation');
-        spyOn(component, 'togglePicker');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(event as any, 'stopPropagation');
+        vi.spyOn(component as any, 'togglePicker');
 
         component.onKeydown(event);
 
@@ -1020,7 +1020,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = false;
 
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
-        spyOn(component, 'togglePicker');
+        vi.spyOn(component as any, 'togglePicker');
 
         component.onKeydown(event);
 
@@ -1035,7 +1035,7 @@ describe('PoTimepickerComponent:', () => {
         const nonSegmentInput = document.createElement('input');
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
         Object.defineProperty(event, 'target', { value: nonSegmentInput });
-        spyOn(component, 'togglePicker');
+        vi.spyOn(component as any, 'togglePicker');
 
         component.onKeydown(event);
 
@@ -1051,7 +1051,7 @@ describe('PoTimepickerComponent:', () => {
         segmentInput.classList.add('po-timepicker-segment-input');
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
         Object.defineProperty(event, 'target', { value: segmentInput });
-        spyOn(component, 'togglePicker');
+        vi.spyOn(component as any, 'togglePicker');
 
         component.onKeydown(event);
 
@@ -1061,7 +1061,7 @@ describe('PoTimepickerComponent:', () => {
 
     describe('ngAfterViewInit:', () => {
       it('should set dialog picker display to none', () => {
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
 
         component.ngAfterViewInit();
 
@@ -1070,8 +1070,8 @@ describe('PoTimepickerComponent:', () => {
 
       it('should call focus when autoFocus is true', () => {
         component.autoFocus = true;
-        spyOn(component, 'focus');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'focus');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
 
         component.ngAfterViewInit();
 
@@ -1096,16 +1096,16 @@ describe('PoTimepickerComponent:', () => {
         component.loading = false;
         component.readonly = false;
 
-        spyOn(component as any, 'setTimerPosition');
-        spyOn(component as any, 'initializeListeners');
-        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+        vi.spyOn(component as any, 'setTimerPosition');
+        vi.spyOn(component as any, 'initializeListeners');
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
           callback(0);
           return 0;
         });
 
         component.togglePicker();
 
-        expect(component.visible).toBeTrue();
+        expect(component.visible).toBe(true);
         expect(component['setTimerPosition']).toHaveBeenCalled();
         expect(component['initializeListeners']).toHaveBeenCalled();
 
@@ -1119,7 +1119,7 @@ describe('PoTimepickerComponent:', () => {
         component.loading = false;
         component.readonly = false;
 
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.togglePicker();
 
@@ -1132,14 +1132,14 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
-        spyOn(component as any, 'completeSecondsOnClose');
-        spyOn(component, 'focus');
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'completeSecondsOnClose');
+        vi.spyOn(component as any, 'focus');
 
         component.closeTimer();
 
-        expect(component.visible).toBeFalse();
+        expect(component.visible).toBe(false);
         expect(component['removeListeners']).toHaveBeenCalled();
         expect(component['setDialogPickerStyleDisplay']).toHaveBeenCalledWith('none');
       });
@@ -1148,11 +1148,11 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component, 'verifyMobile').and.returnValue(null);
-        spyOn(component, 'focus');
-        spyOn(component as any, 'completeSecondsOnClose');
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
+        vi.spyOn(component as any, 'focus');
+        vi.spyOn(component as any, 'completeSecondsOnClose');
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
 
         component.closeTimer(true);
 
@@ -1163,11 +1163,11 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component, 'verifyMobile').and.returnValue(null);
-        spyOn(component, 'focus');
-        spyOn(component as any, 'completeSecondsOnClose');
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
+        vi.spyOn(component as any, 'focus');
+        vi.spyOn(component as any, 'completeSecondsOnClose');
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
 
         component.closeTimer(false);
 
@@ -1180,12 +1180,12 @@ describe('PoTimepickerComponent:', () => {
         component.clean = true;
         component.hourDisplay = '10';
 
-        spyOn(component, 'verifyMobile').and.returnValue(null);
-        spyOn(component, 'focus');
-        spyOn(component as any, 'completeSecondsOnClose');
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
-        spyOn(component.iconTimepicker, 'focus');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
+        vi.spyOn(component as any, 'focus');
+        vi.spyOn(component as any, 'completeSecondsOnClose');
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component.iconTimepicker as any, 'focus');
 
         component.closeTimer(false, false);
 
@@ -1199,12 +1199,12 @@ describe('PoTimepickerComponent:', () => {
         component.clean = true;
         component.hourDisplay = '10';
 
-        spyOn(component, 'verifyMobile').and.returnValue(null);
-        spyOn(component, 'focus');
-        spyOn(component as any, 'completeSecondsOnClose');
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
-        spyOn(component.iconTimepicker, 'focus');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
+        vi.spyOn(component as any, 'focus');
+        vi.spyOn(component as any, 'completeSecondsOnClose');
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component.iconTimepicker as any, 'focus');
 
         component.closeTimer(false, true);
 
@@ -1218,11 +1218,11 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
         component.timeValue = '10:30';
 
-        spyOn(component as any, 'callOnChange');
-        spyOn(component as any, 'controlChangeEmitter');
-        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(['mobile'] as any);
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
 
         component.closeTimer();
 
@@ -1236,11 +1236,11 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
         component.timeValue = '10:30:45';
 
-        spyOn(component as any, 'callOnChange');
-        spyOn(component as any, 'controlChangeEmitter');
-        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
-        spyOn(component as any, 'removeListeners');
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(['mobile'] as any);
+        vi.spyOn(component as any, 'removeListeners');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
 
         component.closeTimer();
 
@@ -1252,9 +1252,9 @@ describe('PoTimepickerComponent:', () => {
     describe('timerSelected:', () => {
       it('should call clear and close when time is empty', fakeAsync(() => {
         fixture.detectChanges();
-        spyOn(component, 'clear');
-        spyOn(component.onchange, 'emit');
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'clear');
+        vi.spyOn(component.onchange as any, 'emit');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.timerSelected('');
 
@@ -1266,7 +1266,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should call onTouchedModel when provided', () => {
         fixture.detectChanges();
-        const touchedSpy = jasmine.createSpy('onTouched');
+        const touchedSpy = vi.fn();
         component['onTouchedModel'] = touchedSpy;
 
         component.timerSelected('10:30');
@@ -1276,8 +1276,8 @@ describe('PoTimepickerComponent:', () => {
 
       it('should call callOnChange and controlChangeEmitter with output', () => {
         fixture.detectChanges();
-        spyOn(component as any, 'callOnChange');
-        spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         component.timerSelected('14:30');
 
@@ -1290,7 +1290,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.modelFormat = PoTimepickerModelFormat.HourMinute;
 
-        const changeSpy = jasmine.createSpy('onChange');
+        const changeSpy = vi.fn();
         component.registerOnChange(changeSpy);
 
         component.timerSelected('14:30:45');
@@ -1302,7 +1302,7 @@ describe('PoTimepickerComponent:', () => {
     describe('wasClickedOnPicker:', () => {
       it('should close timer when click outside picker and icon', () => {
         fixture.detectChanges();
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component['dialogPicker'] = {
           nativeElement: document.createElement('div')
@@ -1323,7 +1323,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not close when dialogPicker is null', () => {
         component['dialogPicker'] = null;
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.wasClickedOnPicker({ target: document.body });
 
@@ -1338,14 +1338,14 @@ describe('PoTimepickerComponent:', () => {
         component.el.nativeElement.classList.add('ng-invalid');
         component.el.nativeElement.classList.add('ng-dirty');
 
-        expect(component.hasInvalidClass()).toBeTrue();
+        expect(component.hasInvalidClass()).toBe(true);
       });
 
       it('should return true when hasValidationValue returns true', () => {
         fixture.detectChanges();
         component['setValidationValue']('invalid');
 
-        expect(component.hasInvalidClass()).toBeTrue();
+        expect(component.hasInvalidClass()).toBe(true);
       });
 
       it('should return false when pristine', () => {
@@ -1354,18 +1354,18 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '';
         component.secondDisplay = '';
 
-        expect(component.hasInvalidClass()).toBeFalse();
+        expect(component.hasInvalidClass()).toBe(false);
       });
     });
 
     describe('eventOnClick:', () => {
       it('should blur and toggle picker when mobile', fakeAsync(() => {
         fixture.detectChanges();
-        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
-        spyOn(component, 'togglePicker');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(['mobile'] as any);
+        vi.spyOn(component as any, 'togglePicker');
 
         const input = fixture.nativeElement.querySelector('.po-timepicker-segment-input');
-        spyOn(input, 'blur');
+        vi.spyOn(input as any, 'blur');
         component.eventOnClick({ target: input });
 
         tick();
@@ -1376,8 +1376,8 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not toggle picker when not mobile', () => {
         fixture.detectChanges();
-        spyOn(component, 'verifyMobile').and.returnValue(null);
-        spyOn(component, 'togglePicker');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
+        vi.spyOn(component as any, 'togglePicker');
 
         const input = fixture.nativeElement.querySelector('.po-timepicker-segment-input');
         component.eventOnClick({ target: input });
@@ -1389,8 +1389,8 @@ describe('PoTimepickerComponent:', () => {
     describe('onKeyDown:', () => {
       it('should emit keydown event when field is focused', () => {
         fixture.detectChanges();
-        spyOn(component.keydown, 'emit');
-        spyOn(component.el.nativeElement, 'contains').and.returnValue(true);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(component.el.nativeElement, 'contains').mockReturnValue(true);
 
         const event = new KeyboardEvent('keydown', { key: 'a' });
         component.onKeyDown(event);
@@ -1400,7 +1400,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not emit keydown event when field is not focused', () => {
         fixture.detectChanges();
-        spyOn(component.keydown, 'emit');
+        vi.spyOn(component.keydown as any, 'emit');
 
         document.body.focus();
         const event = new KeyboardEvent('keydown', { key: 'a' });
@@ -1418,11 +1418,11 @@ describe('PoTimepickerComponent:', () => {
         component.visible = false;
         fixture.detectChanges();
 
-        const fakeCleanEl = { nativeElement: { focus: jasmine.createSpy('focus') } };
+        const fakeCleanEl = { nativeElement: { focus: vi.fn() } };
         (component as any).iconClean = fakeCleanEl;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onKeyPress(event);
 
@@ -1437,9 +1437,9 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '';
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
-        spyOn(event, 'preventDefault');
-        spyOn(event, 'stopPropagation');
-        spyOn(component as any, 'focusLastSegment');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(event as any, 'stopPropagation');
+        vi.spyOn(component as any, 'focusLastSegment');
 
         component.onKeyPress(event);
 
@@ -1452,7 +1452,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = false;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onKeyPress(event);
 
@@ -1494,7 +1494,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should advance to next segment on 2 digits', () => {
         fixture.detectChanges();
-        spyOn(component as any, 'advanceToNextSegment');
+        vi.spyOn(component as any, 'advanceToNextSegment');
 
         const input = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
         input.value = '12';
@@ -1517,8 +1517,8 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true });
         Object.defineProperty(event, 'target', { value: minuteInput });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'advanceToPreviousSegment');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'advanceToPreviousSegment');
 
         component.onSegmentKeydown(event, 'minute');
 
@@ -1536,8 +1536,8 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true });
         Object.defineProperty(event, 'target', { value: minuteInput });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'advanceToPreviousSegment');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'advanceToPreviousSegment');
 
         component.onSegmentKeydown(event, 'minute');
 
@@ -1554,8 +1554,8 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
         Object.defineProperty(event, 'target', { value: hourInput });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'advanceToNextSegment');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'advanceToNextSegment');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1572,8 +1572,8 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true });
         Object.defineProperty(event, 'target', { value: input });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'incrementSegment');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'incrementSegment');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1590,8 +1590,8 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
         Object.defineProperty(event, 'target', { value: input });
-        spyOn(event, 'preventDefault');
-        spyOn(component as any, 'incrementSegment');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component as any, 'incrementSegment');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1605,7 +1605,7 @@ describe('PoTimepickerComponent:', () => {
         const input = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true });
         Object.defineProperty(event, 'target', { value: input });
-        spyOn(component as any, 'incrementSegment');
+        vi.spyOn(component as any, 'incrementSegment');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1621,7 +1621,7 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'a', cancelable: true });
         Object.defineProperty(event, 'target', { value: input });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1637,7 +1637,7 @@ describe('PoTimepickerComponent:', () => {
 
         const event = new KeyboardEvent('keydown', { key: 'c', ctrlKey: true, cancelable: true });
         Object.defineProperty(event, 'target', { value: input });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1646,7 +1646,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not emit keydown event from onSegmentKeydown', () => {
         fixture.detectChanges();
-        spyOn(component.keydown, 'emit');
+        vi.spyOn(component.keydown as any, 'emit');
 
         const input = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
         input.value = '10';
@@ -1674,11 +1674,11 @@ describe('PoTimepickerComponent:', () => {
           shiftKey: false,
           cancelable: true,
           target: input,
-          preventDefault: jasmine.createSpy('preventDefault')
+          preventDefault: vi.fn()
         } as unknown as KeyboardEvent;
 
-        spyOn(component as any, 'isLastSegment').and.returnValue(true);
-        spyOn(component as any, 'focusTimer');
+        vi.spyOn(component as any, 'isLastSegment').mockReturnValue(true);
+        vi.spyOn(component as any, 'focusTimer');
 
         component.onSegmentKeydown(event, 'minute');
 
@@ -1697,11 +1697,11 @@ describe('PoTimepickerComponent:', () => {
           shiftKey: true,
           cancelable: true,
           target: input,
-          preventDefault: jasmine.createSpy('preventDefault'),
-          stopPropagation: jasmine.createSpy('stopPropagation')
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as unknown as KeyboardEvent;
 
-        spyOn(component as any, 'advanceToPreviousSegment');
+        vi.spyOn(component as any, 'advanceToPreviousSegment');
 
         component.onSegmentKeydown(event, 'minute');
 
@@ -1719,11 +1719,11 @@ describe('PoTimepickerComponent:', () => {
           shiftKey: false,
           cancelable: true,
           target: input,
-          preventDefault: jasmine.createSpy('preventDefault'),
-          stopPropagation: jasmine.createSpy('stopPropagation')
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as unknown as KeyboardEvent;
 
-        spyOn(component as any, 'advanceToNextSegment').and.returnValue(true);
+        vi.spyOn(component as any, 'advanceToNextSegment').mockReturnValue(true);
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -1741,16 +1741,16 @@ describe('PoTimepickerComponent:', () => {
         const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
         component.onSegmentBlur({ target: hourInput, relatedTarget: null } as unknown as FocusEvent);
 
-        expect(component.isSegmentFocused).toBeFalse();
+        expect(component.isSegmentFocused).toBe(false);
       });
 
       it('should call onTouchedModel and validateAndUpdateModel when focus leaves the component but NOT emit onblur directly', () => {
         fixture.detectChanges();
-        const touchedSpy = jasmine.createSpy('touched');
+        const touchedSpy = vi.fn();
         component['onTouchedModel'] = touchedSpy;
-        spyOn(component.onblur, 'emit');
-        spyOn(component as any, 'validateAndUpdateModel');
-        spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component.onblur as any, 'emit');
+        vi.spyOn(component as any, 'validateAndUpdateModel');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
         const externalEl = document.createElement('div');
@@ -1768,7 +1768,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
         component['onTouchedModel'] = () => {};
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
         const externalEl = document.createElement('div');
@@ -1784,7 +1784,7 @@ describe('PoTimepickerComponent:', () => {
     describe('onHostFocusOut:', () => {
       it('should emit onblur when focus moves to an element outside the component', () => {
         fixture.detectChanges();
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const externalEl = document.createElement('input');
         document.body.appendChild(externalEl);
@@ -1798,7 +1798,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should NOT emit onblur when focus moves to an element inside the component', () => {
         fixture.detectChanges();
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const minuteInput = fixture.nativeElement.querySelectorAll(
           '.po-timepicker-segment-input'
@@ -1812,7 +1812,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should emit onblur when relatedTarget is null (focus leaves the document)', () => {
         fixture.detectChanges();
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const event = new FocusEvent('focusout', { relatedTarget: null });
         component.onHostFocusOut(event);
@@ -1822,7 +1822,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should NOT emit onblur when focus moves to the dialogPicker (appendBox mode)', () => {
         fixture.detectChanges();
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const dialogEl = document.createElement('div');
         component['dialogPicker'] = { nativeElement: dialogEl } as any;
@@ -1839,7 +1839,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should emit onblur when Tab moves focus from the timepicker button to an external element', () => {
         fixture.detectChanges();
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const externalEl = document.createElement('input');
         document.body.appendChild(externalEl);
@@ -1854,7 +1854,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should NOT emit onblur when focus moves to the iconTimepicker button', () => {
         fixture.detectChanges();
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
         if (buttonEl) {
@@ -1871,7 +1871,7 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '30';
         fixture.detectChanges();
 
-        spyOn(component.onblur, 'emit');
+        vi.spyOn(component.onblur as any, 'emit');
 
         const cleanEl = component.iconClean?.nativeElement;
         if (cleanEl) {
@@ -1885,8 +1885,8 @@ describe('PoTimepickerComponent:', () => {
       it('should close timer when focus moves outside and picker is visible', () => {
         fixture.detectChanges();
         component.visible = true;
-        spyOn(component.onblur, 'emit');
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component.onblur as any, 'emit');
+        vi.spyOn(component as any, 'closeTimer');
 
         const externalEl = document.createElement('input');
         document.body.appendChild(externalEl);
@@ -1902,8 +1902,8 @@ describe('PoTimepickerComponent:', () => {
       it('should NOT close timer when focus moves outside and picker is not visible', () => {
         fixture.detectChanges();
         component.visible = false;
-        spyOn(component.onblur, 'emit');
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component.onblur as any, 'emit');
+        vi.spyOn(component as any, 'closeTimer');
 
         const externalEl = document.createElement('input');
         document.body.appendChild(externalEl);
@@ -1920,7 +1920,7 @@ describe('PoTimepickerComponent:', () => {
     describe('onFieldClick:', () => {
       it('should focus when clicking on field wrapper', () => {
         fixture.detectChanges();
-        spyOn(component, 'focus');
+        vi.spyOn(component as any, 'focus');
 
         const fieldEl = fixture.nativeElement.querySelector('.po-timepicker-field') as HTMLElement;
         component.onFieldClick({ target: fieldEl } as unknown as MouseEvent);
@@ -1930,7 +1930,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not focus when clicking on segment input', () => {
         fixture.detectChanges();
-        spyOn(component, 'focus');
+        vi.spyOn(component as any, 'focus');
 
         const input = fixture.nativeElement.querySelector('.po-timepicker-segment-input') as HTMLElement;
         component.onFieldClick({ target: input } as unknown as MouseEvent);
@@ -1941,7 +1941,7 @@ describe('PoTimepickerComponent:', () => {
       it('should not focus when disabled', () => {
         fixture.detectChanges();
         component.disabled = true;
-        spyOn(component, 'focus');
+        vi.spyOn(component as any, 'focus');
 
         const fieldEl = fixture.nativeElement.querySelector('.po-timepicker-field') as HTMLElement;
         component.onFieldClick({ target: fieldEl } as unknown as MouseEvent);
@@ -1956,7 +1956,7 @@ describe('PoTimepickerComponent:', () => {
 
         component.onSegmentFocus();
 
-        expect(component.isSegmentFocused).toBeTrue();
+        expect(component.isSegmentFocused).toBe(true);
       });
     });
 
@@ -1968,7 +1968,7 @@ describe('PoTimepickerComponent:', () => {
         component.periodDisplay = 'AM';
 
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
         component.onPeriodSegmentKeydown(event);
 
         expect(component.periodDisplay).toBe('AM');
@@ -1990,7 +1990,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
 
         const event = new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onPeriodSegmentKeydown(event);
 
@@ -2002,8 +2002,8 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
-        spyOn(event, 'preventDefault');
-        spyOn(component.secondInputEl.nativeElement, 'focus');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component.secondInputEl.nativeElement, 'focus');
 
         component.onPeriodSegmentKeydown(event);
 
@@ -2015,8 +2015,8 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
-        spyOn(event, 'preventDefault');
-        spyOn(component.minuteInputEl.nativeElement, 'focus');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(component.minuteInputEl.nativeElement, 'focus');
 
         component.onPeriodSegmentKeydown(event);
 
@@ -2028,7 +2028,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
-        spyOn(component as any, 'focusTimer');
+        vi.spyOn(component as any, 'focusTimer');
 
         component.onPeriodSegmentKeydown(event);
 
@@ -2041,7 +2041,7 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '30';
         fixture.detectChanges();
 
-        const fakeCleanEl = { nativeElement: { focus: jasmine.createSpy('focus') } } as any;
+        const fakeCleanEl = { nativeElement: { focus: vi.fn() } } as any;
         (component as any).iconClean = fakeCleanEl;
 
         component.onPeriodSegmentKeydown(new KeyboardEvent('keydown', { key: 'Tab', cancelable: true }));
@@ -2055,7 +2055,7 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '30';
         fixture.detectChanges();
 
-        spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
+        vi.spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
 
         component.onPeriodSegmentKeydown(new KeyboardEvent('keydown', { key: 'Tab', cancelable: true }));
 
@@ -2073,7 +2073,7 @@ describe('PoTimepickerComponent:', () => {
           preventDefault: () => {}
         } as unknown as KeyboardEvent;
 
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component.onSegmentKeydown(event, 'hour');
 
@@ -2110,7 +2110,7 @@ describe('PoTimepickerComponent:', () => {
     describe('refreshValue:', () => {
       it('should call updateInputDisplay when value and inputEl exist', () => {
         fixture.detectChanges();
-        spyOn(component as any, 'updateInputDisplay');
+        vi.spyOn(component as any, 'updateInputDisplay');
 
         component.refreshValue('14:30');
 
@@ -2120,7 +2120,7 @@ describe('PoTimepickerComponent:', () => {
       it('should normalize HH:mm to HH:mm:00 when showSeconds is true', () => {
         component.showSeconds = true;
         fixture.detectChanges();
-        spyOn(component as any, 'updateInputDisplay');
+        vi.spyOn(component as any, 'updateInputDisplay');
 
         component.refreshValue('14:30');
 
@@ -2129,7 +2129,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not call updateInputDisplay when value is empty', () => {
         fixture.detectChanges();
-        spyOn(component as any, 'updateInputDisplay');
+        vi.spyOn(component as any, 'updateInputDisplay');
 
         component.refreshValue('');
 
@@ -2144,8 +2144,8 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(component.displayAdditionalHelp).toBeTrue();
-        expect(result).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
+        expect(result).toBe(true);
       });
 
       it('should return false after second toggle', () => {
@@ -2154,8 +2154,8 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(component.displayAdditionalHelp).toBeFalse();
-        expect(result).toBeFalse();
+        expect(component.displayAdditionalHelp).toBe(false);
+        expect(result).toBe(false);
       });
     });
 
@@ -2223,7 +2223,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
+        vi.spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
         component.handleCleanKeyboardTab(event);
@@ -2235,7 +2235,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = false;
 
-        spyOn(component as any, 'focusTimer');
+        vi.spyOn(component as any, 'focusTimer');
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
         component.handleCleanKeyboardTab(event);
@@ -2247,7 +2247,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component as any, 'focusTimer');
+        vi.spyOn(component as any, 'focusTimer');
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
         component.handleCleanKeyboardTab(event);
@@ -2261,7 +2261,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component as any, 'focusTimer');
+        vi.spyOn(component as any, 'focusTimer');
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
         component.handleTimepickerButtonKeyboardTab(event);
@@ -2273,7 +2273,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = false;
 
-        spyOn(component as any, 'focusTimer');
+        vi.spyOn(component as any, 'focusTimer');
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
         component.handleTimepickerButtonKeyboardTab(event);
@@ -2288,9 +2288,9 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
 
         const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
-        spyOn(event, 'preventDefault');
-        spyOn(event, 'stopPropagation');
-        spyOn(component, 'closeTimer');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(event as any, 'stopPropagation');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.onTimerKeyDown(event);
 
@@ -2304,7 +2304,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = false;
 
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.onTimerKeyDown(event);
 
@@ -2316,7 +2316,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.onTimerKeyDown(event);
 
@@ -2330,9 +2330,9 @@ describe('PoTimepickerComponent:', () => {
         component.visible = true;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
-        spyOn(event, 'preventDefault');
-        spyOn(event, 'stopPropagation');
-        spyOn(component, 'closeTimer');
+        vi.spyOn(event as any, 'preventDefault');
+        vi.spyOn(event as any, 'stopPropagation');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.onTimerBoundaryTab({ direction: 'forward', event });
 
@@ -2346,7 +2346,7 @@ describe('PoTimepickerComponent:', () => {
         component.visible = false;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.onTimerBoundaryTab({ direction: 'backward', event });
 
@@ -2359,7 +2359,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = false;
 
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
         component.onTimerFocusOut({ relatedTarget: document.body } as unknown as FocusEvent);
 
         expect(component.closeTimer).not.toHaveBeenCalled();
@@ -2371,7 +2371,7 @@ describe('PoTimepickerComponent:', () => {
 
         const dialogEl = document.createElement('div');
         component['dialogPicker'] = { nativeElement: dialogEl } as any;
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         const outsideEl = document.createElement('div');
         document.body.appendChild(outsideEl);
@@ -2388,7 +2388,7 @@ describe('PoTimepickerComponent:', () => {
 
         const dialogEl = document.createElement('div');
         component['dialogPicker'] = { nativeElement: dialogEl } as any;
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         const outsideEl = document.createElement('div');
         document.body.appendChild(outsideEl);
@@ -2403,7 +2403,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component.visible = true;
 
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         const insideEl = component.inputEl.nativeElement;
         component.onTimerFocusOut({ relatedTarget: insideEl } as unknown as FocusEvent);
@@ -2417,7 +2417,7 @@ describe('PoTimepickerComponent:', () => {
 
         const dialogEl = document.createElement('div');
         component['dialogPicker'] = { nativeElement: dialogEl } as any;
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         component.onTimerFocusOut({ relatedTarget: null } as unknown as FocusEvent);
         tick(100);
@@ -2574,8 +2574,8 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '10';
         component.minuteDisplay = '';
 
-        spyOn(component as any, 'callOnChange');
-        spyOn(component as any, 'applyInputValidationError');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'applyInputValidationError');
         component['updateCombinedValue']();
 
         expect(component['callOnChange']).toHaveBeenCalledWith('');
@@ -2587,8 +2587,8 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '';
         component.minuteDisplay = '';
 
-        spyOn(component as any, 'callOnChange');
-        spyOn(component as any, 'applyInputValidationError');
+        vi.spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'applyInputValidationError');
         component['updateCombinedValue']();
 
         expect(component['callOnChange']).toHaveBeenCalledWith('');
@@ -2695,11 +2695,11 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '';
         component['setValidationValue']('10:');
 
-        spyOn(component as any, 'callOnChange');
+        vi.spyOn(component as any, 'callOnChange');
         component['updateCombinedValue']();
 
         expect(component['callOnChange']).not.toHaveBeenCalled();
-        expect(component['hasValidationValue']()).toBeTrue();
+        expect(component['hasValidationValue']()).toBe(true);
       });
     });
 
@@ -2709,7 +2709,7 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '10';
         component.minuteDisplay = '';
 
-        spyOn(component as any, 'applyInputValidationError');
+        vi.spyOn(component as any, 'applyInputValidationError');
         component['validateAndUpdateModel']();
 
         expect(component['applyInputValidationError']).toHaveBeenCalledWith('10:', false);
@@ -2720,7 +2720,7 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '';
         component.minuteDisplay = '30';
 
-        spyOn(component as any, 'applyInputValidationError');
+        vi.spyOn(component as any, 'applyInputValidationError');
         component['validateAndUpdateModel']();
 
         expect(component['applyInputValidationError']).toHaveBeenCalledWith(':30', false);
@@ -2733,7 +2733,7 @@ describe('PoTimepickerComponent:', () => {
         component.minuteDisplay = '30';
         component.secondDisplay = '';
 
-        spyOn(component as any, 'applyInputValidationError');
+        vi.spyOn(component as any, 'applyInputValidationError');
         component['validateAndUpdateModel']();
 
         expect(component['applyInputValidationError']).toHaveBeenCalledWith('10:30:', false);
@@ -2744,7 +2744,7 @@ describe('PoTimepickerComponent:', () => {
         component.hourDisplay = '';
         component.minuteDisplay = '';
 
-        spyOn(component as any, 'applyInputValidationError');
+        vi.spyOn(component as any, 'applyInputValidationError');
         component['validateAndUpdateModel']();
 
         expect(component['applyInputValidationError']).not.toHaveBeenCalled();
@@ -2818,7 +2818,7 @@ describe('PoTimepickerComponent:', () => {
     describe('controlChangeEmitter (private):', () => {
       it('should emit onchange when value changes', fakeAsync(() => {
         fixture.detectChanges();
-        spyOn(component.onchange, 'emit');
+        vi.spyOn(component.onchange as any, 'emit');
 
         component['valueBeforeChange'] = '';
         component.timeValue = '10:30';
@@ -2832,7 +2832,7 @@ describe('PoTimepickerComponent:', () => {
 
       it('should not emit onchange when value has not changed', fakeAsync(() => {
         fixture.detectChanges();
-        spyOn(component.onchange, 'emit');
+        vi.spyOn(component.onchange as any, 'emit');
 
         component['valueBeforeChange'] = '10:30';
         component.timeValue = '10:30';
@@ -2902,8 +2902,8 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component['onTouchedModel'] = () => {};
 
-        spyOn(component as any, 'validateAndUpdateModel');
-        spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component as any, 'validateAndUpdateModel');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         component.eventOnBlur({});
 
@@ -2940,7 +2940,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format12;
         fixture.detectChanges();
 
-        spyOn(component.periodInputEl.nativeElement, 'focus');
+        vi.spyOn(component.periodInputEl.nativeElement, 'focus');
 
         component['focusLastSegment']();
 
@@ -2951,7 +2951,7 @@ describe('PoTimepickerComponent:', () => {
         component.showSeconds = true;
         fixture.detectChanges();
 
-        spyOn(component.secondInputEl.nativeElement, 'focus');
+        vi.spyOn(component.secondInputEl.nativeElement, 'focus');
 
         component['focusLastSegment']();
 
@@ -2963,7 +2963,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format24;
         fixture.detectChanges();
 
-        spyOn(component.minuteInputEl.nativeElement, 'focus');
+        vi.spyOn(component.minuteInputEl.nativeElement, 'focus');
 
         component['focusLastSegment']();
 
@@ -2975,32 +2975,32 @@ describe('PoTimepickerComponent:', () => {
       it('should return false in 12h format', () => {
         component.format = PoTimerFormat.Format12;
 
-        expect(component['isLastSegment']('minute')).toBeFalse();
-        expect(component['isLastSegment']('second')).toBeFalse();
-        expect(component['isLastSegment']('hour')).toBeFalse();
+        expect(component['isLastSegment']('minute')).toBe(false);
+        expect(component['isLastSegment']('second')).toBe(false);
+        expect(component['isLastSegment']('hour')).toBe(false);
       });
 
       it('should return true for second when showSeconds in 24h format', () => {
         component.format = PoTimerFormat.Format24;
         component.showSeconds = true;
 
-        expect(component['isLastSegment']('second')).toBeTrue();
-        expect(component['isLastSegment']('minute')).toBeFalse();
+        expect(component['isLastSegment']('second')).toBe(true);
+        expect(component['isLastSegment']('minute')).toBe(false);
       });
 
       it('should return true for minute when no seconds in 24h format', () => {
         component.format = PoTimerFormat.Format24;
         component.showSeconds = false;
 
-        expect(component['isLastSegment']('minute')).toBeTrue();
-        expect(component['isLastSegment']('hour')).toBeFalse();
+        expect(component['isLastSegment']('minute')).toBe(true);
+        expect(component['isLastSegment']('hour')).toBe(false);
       });
     });
 
     describe('advanceToNextSegment (private):', () => {
       it('should focus minute when current is hour', () => {
         fixture.detectChanges();
-        spyOn(component.minuteInputEl.nativeElement, 'focus');
+        vi.spyOn(component.minuteInputEl.nativeElement, 'focus');
 
         component['advanceToNextSegment']('hour');
 
@@ -3010,7 +3010,7 @@ describe('PoTimepickerComponent:', () => {
       it('should focus second when current is minute and showSeconds', () => {
         component.showSeconds = true;
         fixture.detectChanges();
-        spyOn(component.secondInputEl.nativeElement, 'focus');
+        vi.spyOn(component.secondInputEl.nativeElement, 'focus');
 
         component['advanceToNextSegment']('minute');
 
@@ -3021,7 +3021,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format12;
         component.showSeconds = false;
         fixture.detectChanges();
-        spyOn(component.periodInputEl.nativeElement, 'focus');
+        vi.spyOn(component.periodInputEl.nativeElement, 'focus');
 
         component['advanceToNextSegment']('minute');
 
@@ -3032,7 +3032,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format12;
         component.showSeconds = true;
         fixture.detectChanges();
-        spyOn(component.periodInputEl.nativeElement, 'focus');
+        vi.spyOn(component.periodInputEl.nativeElement, 'focus');
 
         component['advanceToNextSegment']('second');
 
@@ -3047,7 +3047,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format24;
         fixture.detectChanges();
 
-        const fakeCleanEl = { nativeElement: { focus: jasmine.createSpy('focus') } } as any;
+        const fakeCleanEl = { nativeElement: { focus: vi.fn() } } as any;
         (component as any).iconClean = fakeCleanEl;
 
         component['advanceToNextSegment']('minute');
@@ -3063,7 +3063,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format24;
         fixture.detectChanges();
 
-        spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
+        vi.spyOn(component.iconTimepicker.buttonElement.nativeElement, 'focus');
 
         component['advanceToNextSegment']('minute');
 
@@ -3074,7 +3074,7 @@ describe('PoTimepickerComponent:', () => {
     describe('advanceToPreviousSegment (private):', () => {
       it('should focus hour when current is minute', () => {
         fixture.detectChanges();
-        spyOn(component.inputEl.nativeElement, 'focus');
+        vi.spyOn(component.inputEl.nativeElement, 'focus');
 
         component['advanceToPreviousSegment']('minute');
 
@@ -3084,7 +3084,7 @@ describe('PoTimepickerComponent:', () => {
       it('should focus minute when current is second', () => {
         component.showSeconds = true;
         fixture.detectChanges();
-        spyOn(component.minuteInputEl.nativeElement, 'focus');
+        vi.spyOn(component.minuteInputEl.nativeElement, 'focus');
 
         component['advanceToPreviousSegment']('second');
 
@@ -3101,7 +3101,7 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component['normalizeSingleDigitSegment'](input);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(input.value).toBe('01');
         expect(component.hourDisplay).toBe('01');
       });
@@ -3113,7 +3113,7 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component['normalizeSingleDigitSegment'](input);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(input.value).toBe('05');
         expect(component.minuteDisplay).toBe('05');
       });
@@ -3126,7 +3126,7 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component['normalizeSingleDigitSegment'](input);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(input.value).toBe('09');
         expect(component.secondDisplay).toBe('09');
       });
@@ -3134,7 +3134,7 @@ describe('PoTimepickerComponent:', () => {
       it('should return false for null input', () => {
         const result = component['normalizeSingleDigitSegment'](null);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when input value is not single digit', () => {
@@ -3145,7 +3145,7 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component['normalizeSingleDigitSegment'](input);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false for non-segment input', () => {
@@ -3154,7 +3154,7 @@ describe('PoTimepickerComponent:', () => {
 
         const result = component['normalizeSingleDigitSegment'](input);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -3163,11 +3163,11 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         const button = component.iconTimepicker.buttonElement.nativeElement;
 
-        expect(component['shouldCommitForInternalFocusTarget'](button)).toBeTrue();
+        expect(component['shouldCommitForInternalFocusTarget'](button)).toBe(true);
       });
 
       it('should return false for null', () => {
-        expect(component['shouldCommitForInternalFocusTarget'](null)).toBeFalse();
+        expect(component['shouldCommitForInternalFocusTarget'](null)).toBe(false);
       });
 
       it('should return true for helper button', () => {
@@ -3178,13 +3178,13 @@ describe('PoTimepickerComponent:', () => {
         wrapper.classList.add('po-field-helper-button');
         wrapper.appendChild(helperBtn);
 
-        expect(component['shouldCommitForInternalFocusTarget'](helperBtn)).toBeTrue();
+        expect(component['shouldCommitForInternalFocusTarget'](helperBtn)).toBe(true);
       });
 
       it('should return false for unrelated element', () => {
         const el = document.createElement('div');
 
-        expect(component['shouldCommitForInternalFocusTarget'](el)).toBeFalse();
+        expect(component['shouldCommitForInternalFocusTarget'](el)).toBe(false);
       });
     });
 
@@ -3192,20 +3192,20 @@ describe('PoTimepickerComponent:', () => {
       it('should return true when additionalHelpEventTrigger is event', () => {
         component.additionalHelpEventTrigger = 'event';
 
-        expect(component['isAdditionalHelpEventTriggered']()).toBeTrue();
+        expect(component['isAdditionalHelpEventTriggered']()).toBe(true);
       });
 
       it('should return false when additionalHelpEventTrigger is undefined', () => {
         component.additionalHelpEventTrigger = undefined;
 
-        expect(component['isAdditionalHelpEventTriggered']()).toBeFalse();
+        expect(component['isAdditionalHelpEventTriggered']()).toBe(false);
       });
     });
 
     describe('getErrorPattern (extended):', () => {
       it('should return empty when errorPattern is set but hasInvalidClass is false', () => {
         component.errorPattern = 'Some error';
-        spyOn(component, 'hasInvalidClass').and.returnValue(false);
+        vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(false);
 
         expect(component.getErrorPattern()).toBe('');
       });
@@ -3265,9 +3265,9 @@ describe('PoTimepickerComponent:', () => {
       it('should handle no label with eventOnClick helper', () => {
         fixture.detectChanges();
         component.label = '';
-        const mockHelper = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(mockHelper);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        const mockHelper = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(mockHelper);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.showAdditionalHelp();
 
@@ -3277,31 +3277,31 @@ describe('PoTimepickerComponent:', () => {
       it('should handle no label with string helper and visible popover', () => {
         fixture.detectChanges();
         component.label = '';
-        spyOn(component as any, 'poHelperComponent').and.returnValue('some string');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('some string');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         if (component['helperEl']) {
-          spyOn(component['helperEl'], 'helperIsVisible').and.returnValue(true);
-          spyOn(component['helperEl'], 'closeHelperPopover');
+          vi.spyOn(component['helperEl'] as any, 'helperIsVisible').mockReturnValue(true);
+          vi.spyOn(component['helperEl'] as any, 'closeHelperPopover');
         }
 
         const result = component.showAdditionalHelp();
-        expect(result === undefined || typeof result === 'boolean').toBeTrue();
+        expect(result === undefined || typeof result === 'boolean').toBe(true);
       });
 
       it('should handle no label with isHelpEvt and no visible popover', () => {
         fixture.detectChanges();
         component.label = '';
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         if (component['helperEl']) {
-          spyOn(component['helperEl'], 'helperIsVisible').and.returnValue(false);
-          spyOn(component['helperEl'], 'openHelperPopover');
+          vi.spyOn(component['helperEl'] as any, 'helperIsVisible').mockReturnValue(false);
+          vi.spyOn(component['helperEl'] as any, 'openHelperPopover');
         }
 
         const result = component.showAdditionalHelp();
-        expect(result === undefined || typeof result === 'boolean').toBeTrue();
+        expect(result === undefined || typeof result === 'boolean').toBe(true);
       });
     });
 
@@ -3367,8 +3367,8 @@ describe('PoTimepickerComponent:', () => {
     describe('setTimerPosition (private):', () => {
       it('should call setDialogPickerStyleDisplay and adjustTimerPosition', fakeAsync(() => {
         fixture.detectChanges();
-        spyOn(component as any, 'setDialogPickerStyleDisplay');
-        spyOn(component as any, 'adjustTimerPosition');
+        vi.spyOn(component as any, 'setDialogPickerStyleDisplay');
+        vi.spyOn(component as any, 'adjustTimerPosition');
 
         component['setTimerPosition']();
 
@@ -3387,15 +3387,15 @@ describe('PoTimepickerComponent:', () => {
         Object.defineProperty(mockTimerEl, 'scrollWidth', { value: 200 });
 
         const dialogEl = document.createElement('div');
-        spyOn(dialogEl, 'querySelector').and.returnValue(mockTimerEl);
+        vi.spyOn(dialogEl as any, 'querySelector').mockReturnValue(mockTimerEl);
 
         component['dialogPicker'] = { nativeElement: dialogEl } as any;
-        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
           callback(0);
           return 0;
         });
-        spyOn(component['controlPosition'], 'setElements');
-        spyOn(component['controlPosition'], 'adjustPosition');
+        vi.spyOn(component['controlPosition'] as any, 'setElements');
+        vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
         component['adjustTimerPosition']();
         tick(0);
@@ -3415,9 +3415,9 @@ describe('PoTimepickerComponent:', () => {
         Object.defineProperty(dialogEl, 'scrollHeight', { value: 450 });
         Object.defineProperty(dialogEl, 'scrollWidth', { value: 350 });
 
-        spyOn(dialogEl, 'querySelector').and.returnValue(null);
-        spyOn(component['controlPosition'], 'setElements');
-        spyOn(component['controlPosition'], 'adjustPosition');
+        vi.spyOn(dialogEl as any, 'querySelector').mockReturnValue(null);
+        vi.spyOn(component['controlPosition'] as any, 'setElements');
+        vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
         console.warn('component.dialogPicker.nativeElement:', component['dialogPicker'].nativeElement);
         component['adjustTimerPosition']();
@@ -3440,13 +3440,13 @@ describe('PoTimepickerComponent:', () => {
         Object.defineProperty(dialogEl, 'scrollHeight', { value: 280 });
         Object.defineProperty(dialogEl, 'scrollWidth', { value: 180 });
 
-        spyOn(dialogEl, 'querySelector').and.returnValue(null);
-        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+        vi.spyOn(dialogEl as any, 'querySelector').mockReturnValue(null);
+        vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
           callback(0);
           return 0;
         });
-        spyOn(component['controlPosition'], 'setElements');
-        spyOn(component['controlPosition'], 'adjustPosition');
+        vi.spyOn(component['controlPosition'] as any, 'setElements');
+        vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
         component['adjustTimerPosition']();
 
@@ -3467,7 +3467,7 @@ describe('PoTimepickerComponent:', () => {
         component['timerComponent'] = null;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component['focusTimer'](event);
 
@@ -3476,11 +3476,11 @@ describe('PoTimepickerComponent:', () => {
 
       it('should call focusFirstVisibleCell on timerComponent', () => {
         fixture.detectChanges();
-        const mockTimer = { focusFirstVisibleCell: jasmine.createSpy('focusFirstVisibleCell') };
+        const mockTimer = { focusFirstVisibleCell: vi.fn() };
         component['timerComponent'] = mockTimer as any;
 
         const event = new KeyboardEvent('keydown', { key: 'Tab' });
-        spyOn(event, 'preventDefault');
+        vi.spyOn(event as any, 'preventDefault');
 
         component['focusTimer'](event);
 
@@ -3492,7 +3492,7 @@ describe('PoTimepickerComponent:', () => {
     describe('onScroll (private):', () => {
       it('should call controlPosition.adjustPosition', () => {
         fixture.detectChanges();
-        spyOn(component['controlPosition'], 'adjustPosition');
+        vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
         component['onScroll']();
 
@@ -3507,7 +3507,7 @@ describe('PoTimepickerComponent:', () => {
         component['hourDisplay'] = '10';
         component['minuteDisplay'] = '30';
         component['readonly'] = false;
-        spyOn(component as any, 'incrementIntervalSegment').and.callThrough();
+        vi.spyOn(component as any, 'incrementIntervalSegment');
 
         component['incrementSegment']('minute', 1);
 
@@ -3527,7 +3527,7 @@ describe('PoTimepickerComponent:', () => {
         component['minuteDisplay'] = '30';
         component['secondDisplay'] = '30';
         component['readonly'] = false;
-        spyOn(component as any, 'incrementIntervalSegment').and.callThrough();
+        vi.spyOn(component as any, 'incrementIntervalSegment');
 
         component['incrementSegment']('second', 1);
 
@@ -3609,7 +3609,7 @@ describe('PoTimepickerComponent:', () => {
         fixture.detectChanges();
         component['visible'] = true;
         component['dialogPicker'] = { nativeElement: document.createElement('div') } as any;
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         const outside = document.createElement('div');
         document.body.appendChild(outside);
@@ -3638,7 +3638,7 @@ describe('PoTimepickerComponent:', () => {
           tick(100);
         }
 
-        expect(true).toBeTrue();
+        expect(true).toBe(true);
       }));
     });
 
@@ -3682,7 +3682,7 @@ describe('PoTimepickerComponent:', () => {
         if (component['secondInputEl']?.nativeElement) {
           expect(component['secondInputEl'].nativeElement.value).toBe('45');
         }
-        expect(true).toBeTrue();
+        expect(true).toBe(true);
       }));
     });
 
@@ -3716,13 +3716,13 @@ describe('PoTimepickerComponent:', () => {
         component.label = '';
 
         const mockHelperEl = {
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(true),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          openHelperPopover: jasmine.createSpy('openHelperPopover')
+          helperIsVisible: vi.fn().mockReturnValue(true),
+          closeHelperPopover: vi.fn(),
+          openHelperPopover: vi.fn()
         };
         Object.defineProperty(component, 'helperEl', { value: mockHelperEl, writable: true });
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue('some tooltip');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('some tooltip');
 
         component.showAdditionalHelp();
 
@@ -3735,13 +3735,13 @@ describe('PoTimepickerComponent:', () => {
         component.label = '';
 
         const mockHelperEl = {
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          openHelperPopover: jasmine.createSpy('openHelperPopover')
+          helperIsVisible: vi.fn().mockReturnValue(false),
+          closeHelperPopover: vi.fn(),
+          openHelperPopover: vi.fn()
         };
         Object.defineProperty(component, 'helperEl', { value: mockHelperEl, writable: true });
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component as any, 'poHelperComponent').and.returnValue('some tooltip');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue('some tooltip');
 
         component.showAdditionalHelp();
 
@@ -3824,7 +3824,7 @@ describe('PoTimepickerComponent:', () => {
         component.format = PoTimerFormat.Format12;
         fixture.detectChanges();
 
-        spyOn(component as any, 'isValidTimeString').and.returnValue(true);
+        vi.spyOn(component as any, 'isValidTimeString').mockReturnValue(true);
 
         component['updateInputDisplay']('10');
 
@@ -3842,8 +3842,8 @@ describe('PoTimepickerComponent:', () => {
         const minuteInput = component['minuteInputEl']?.nativeElement;
         if (minuteInput) {
           const blurEvent = new FocusEvent('blur', { relatedTarget: minuteInput });
-          spyOn(component.onblur, 'emit');
-          spyOn(component, 'focus');
+          vi.spyOn(component.onblur as any, 'emit');
+          vi.spyOn(component as any, 'focus');
 
           component.onSegmentBlur(blurEvent);
           tick(100);
@@ -3851,7 +3851,7 @@ describe('PoTimepickerComponent:', () => {
           // isInternalFocus=true, shouldCommitForInternalFocusTarget=false => else branch (no-op, just falls through)
           expect(component.onblur.emit).not.toHaveBeenCalled();
         }
-        expect(true).toBeTrue();
+        expect(true).toBe(true);
       }));
     });
 
@@ -3914,7 +3914,7 @@ describe('PoTimepickerComponent:', () => {
 
         component['initializeListeners']();
 
-        spyOn(component, 'closeTimer');
+        vi.spyOn(component as any, 'closeTimer');
 
         window.dispatchEvent(new Event('resize'));
         tick(100);
@@ -3941,7 +3941,7 @@ describe('PoTimepickerComponent:', () => {
         if (secondInput) {
           expect(secondInput.value).toBe('45');
         }
-        expect(true).toBeTrue();
+        expect(true).toBe(true);
       }));
     });
 
@@ -3954,7 +3954,7 @@ describe('PoTimepickerComponent:', () => {
         Object.defineProperty(component, 'secondInputEl', { value: undefined, writable: true });
         Object.defineProperty(component, 'periodInputEl', { value: undefined, writable: true });
 
-        spyOn(component, 'focus');
+        vi.spyOn(component as any, 'focus');
 
         component['focusLastSegment']();
 
@@ -4114,9 +4114,9 @@ describe('PoTimepickerComponent:', () => {
       tick();
       fixture.detectChanges();
 
-      const focusFirstVisibleCell = spyOn(component.timerComponent as any, 'focusFirstVisibleCell');
+      const focusFirstVisibleCell = vi.spyOn(component.timerComponent as any, 'focusFirstVisibleCell');
       const event = new KeyboardEvent('keydown', { key: 'Tab' });
-      Object.defineProperty(event, 'preventDefault', { value: jasmine.createSpy('preventDefault') });
+      Object.defineProperty(event, 'preventDefault', { value: vi.fn() });
 
       (component as any).focusTimer(event);
 
@@ -4133,8 +4133,8 @@ describe('PoTimepickerComponent:', () => {
       component.minuteDisplay = '';
       component.secondDisplay = '';
 
-      const callOnChange = spyOn(component as any, 'callOnChange');
-      const validateModel = spyOn(component as any, 'validateModel');
+      const callOnChange = vi.spyOn(component as any, 'callOnChange');
+      const validateModel = vi.spyOn(component as any, 'validateModel');
 
       (component as any).updateCombinedValue();
 
@@ -4201,13 +4201,13 @@ describe('PoTimepickerComponent:', () => {
         shiftKey: false,
         cancelable: true,
         target: input,
-        preventDefault: jasmine.createSpy('preventDefault'),
-        stopPropagation: jasmine.createSpy('stopPropagation')
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn()
       } as unknown as KeyboardEvent;
 
       const result = component['handleSegmentNavigation'](event, 'minute');
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       expect(event.preventDefault).not.toHaveBeenCalled();
     });
   });
@@ -4221,10 +4221,10 @@ describe('PoTimepickerComponent:', () => {
 
       const cleanEl = component.iconClean?.nativeElement;
       if (cleanEl) {
-        spyOn(component['timepickerFieldEl'].nativeElement, 'contains').and.returnValue(false);
+        vi.spyOn(component['timepickerFieldEl'].nativeElement, 'contains').mockReturnValue(false);
 
         const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
-        spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         component.onSegmentBlur({ target: hourInput, relatedTarget: cleanEl } as unknown as FocusEvent);
 
@@ -4238,10 +4238,10 @@ describe('PoTimepickerComponent:', () => {
 
       const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
       if (buttonEl) {
-        spyOn(component['timepickerFieldEl'].nativeElement, 'contains').and.returnValue(false);
+        vi.spyOn(component['timepickerFieldEl'].nativeElement, 'contains').mockReturnValue(false);
 
         const hourInput = fixture.nativeElement.querySelectorAll('.po-timepicker-segment-input')[0] as HTMLInputElement;
-        spyOn(component as any, 'controlChangeEmitter');
+        vi.spyOn(component as any, 'controlChangeEmitter');
 
         component.onSegmentBlur({ target: hourInput, relatedTarget: buttonEl } as unknown as FocusEvent);
 
@@ -4258,11 +4258,11 @@ describe('PoTimepickerComponent:', () => {
 
       const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
       expect(buttonEl).toBeTruthy();
-      spyOn(buttonEl, 'focus');
+      vi.spyOn(buttonEl as any, 'focus');
 
       const result = component['advanceToNextSegment']('minute');
 
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
       expect(buttonEl.focus).toHaveBeenCalled();
     });
 
@@ -4272,11 +4272,11 @@ describe('PoTimepickerComponent:', () => {
 
       const buttonEl = component.iconTimepicker?.buttonElement?.nativeElement;
       expect(buttonEl).toBeTruthy();
-      spyOn(buttonEl, 'focus');
+      vi.spyOn(buttonEl as any, 'focus');
 
       const result = component['advanceToNextSegment']('second');
 
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
       expect(buttonEl.focus).toHaveBeenCalled();
     });
 
@@ -4287,14 +4287,14 @@ describe('PoTimepickerComponent:', () => {
 
       const result = component['advanceToNextSegment']('minute');
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
 
     it('should return false via focusCleanOrButton when disabled', () => {
       fixture.detectChanges();
       const result = component['advanceToNextSegment']('-' as any);
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
   });
 
@@ -4308,11 +4308,11 @@ describe('PoTimepickerComponent:', () => {
 
       const cleanEl = component.iconClean?.nativeElement;
       if (cleanEl) {
-        spyOn(cleanEl, 'focus');
+        vi.spyOn(cleanEl as any, 'focus');
 
         const result = component['focusCleanOrButton']();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(cleanEl.focus).toHaveBeenCalled();
       }
     });
@@ -4324,7 +4324,7 @@ describe('PoTimepickerComponent:', () => {
 
       const result = component['advanceToPreviousSegment']('hour');
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
   });
 
@@ -4357,14 +4357,14 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
       component.minTime = '08:00';
 
-      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+      expect(component['isPeriodBlocked']('AM')).toBe(false);
     });
 
     it('should return false when no min/max is set', () => {
       component.format = PoTimerFormat.Format12;
       fixture.detectChanges();
 
-      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+      expect(component['isPeriodBlocked']('AM')).toBe(false);
     });
 
     it('should return true when PM is blocked by maxTime before noon', () => {
@@ -4372,7 +4372,7 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
       component.maxTime = '11:00';
 
-      expect(component['isPeriodBlocked']('PM')).toBeTrue();
+      expect(component['isPeriodBlocked']('PM')).toBe(true);
     });
 
     it('should return true when AM is blocked by minTime after noon', () => {
@@ -4380,7 +4380,7 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
       component.minTime = '13:00';
 
-      expect(component['isPeriodBlocked']('AM')).toBeTrue();
+      expect(component['isPeriodBlocked']('AM')).toBe(true);
     });
 
     it('should return false when period is within range', () => {
@@ -4389,8 +4389,8 @@ describe('PoTimepickerComponent:', () => {
       component.minTime = '08:00';
       component.maxTime = '18:00';
 
-      expect(component['isPeriodBlocked']('AM')).toBeFalse();
-      expect(component['isPeriodBlocked']('PM')).toBeFalse();
+      expect(component['isPeriodBlocked']('AM')).toBe(false);
+      expect(component['isPeriodBlocked']('PM')).toBe(false);
     });
 
     it('should fallback maxHour to 0 when maxTime hour is 00', () => {
@@ -4398,7 +4398,7 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
       component.maxTime = '00:30';
 
-      expect(component['isPeriodBlocked']('PM')).toBeTrue();
+      expect(component['isPeriodBlocked']('PM')).toBe(true);
     });
 
     it('should fallback minHour to 0 when minTime hour is 00', () => {
@@ -4406,7 +4406,7 @@ describe('PoTimepickerComponent:', () => {
       fixture.detectChanges();
       component.minTime = '00:00';
 
-      expect(component['isPeriodBlocked']('AM')).toBeFalse();
+      expect(component['isPeriodBlocked']('AM')).toBe(false);
     });
   });
 

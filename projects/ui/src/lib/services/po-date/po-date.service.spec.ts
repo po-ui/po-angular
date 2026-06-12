@@ -22,8 +22,8 @@ describe('PoDateTimeService:', () => {
         const dateParse = 1234;
         const newDate = new Date(dateParse + hour);
 
-        spyOn(Date.prototype, 'getTimezoneOffset').and.returnValue(timezoneOffset);
-        spyOn(Date, 'parse').and.returnValue(dateParse);
+        vi.spyOn(Date.prototype as any, 'getTimezoneOffset').mockReturnValue(timezoneOffset);
+        vi.spyOn(Date as any, 'parse').mockReturnValue(dateParse);
 
         const result = dateService.splitDate(dateService.convertIsoToDate(stringDate, false, false));
 
@@ -117,7 +117,7 @@ describe('PoDateTimeService:', () => {
       const splitDate = { year: 2018, month: 2, day: 15 };
       const newDate = new Date(splitDate.year, splitDate.month, splitDate.day, 0, 0, 0);
 
-      spyOn(dateService, 'splitDate').and.returnValue(splitDate);
+      vi.spyOn(dateService as any, 'splitDate').mockReturnValue(splitDate);
 
       const result = dateService.getDateForDateRange(dateParam, isMinDate);
 
@@ -131,7 +131,7 @@ describe('PoDateTimeService:', () => {
       const splitDate = { year: 2018, month: 2, day: 15 };
       const newDate = new Date(splitDate.year, splitDate.month, splitDate.day, 23, 59, 59);
 
-      spyOn(dateService, 'splitDate').and.returnValue(splitDate);
+      vi.spyOn(dateService as any, 'splitDate').mockReturnValue(splitDate);
 
       const result = dateService.getDateForDateRange(dateParam, isMinDate);
 
@@ -144,8 +144,8 @@ describe('PoDateTimeService:', () => {
       const date = new Date(2018, 2, 15);
       const isMinDate = false;
 
-      spyOn(dateService, 'convertIsoToDate').and.returnValue(date);
-      spyOn(dateService, 'isValidIso').and.returnValue(true);
+      vi.spyOn(dateService as any, 'convertIsoToDate').mockReturnValue(date);
+      vi.spyOn(dateService as any, 'isValidIso').mockReturnValue(true);
 
       const result = dateService.getDateForDateRange(dateParam, isMinDate);
 
@@ -157,8 +157,8 @@ describe('PoDateTimeService:', () => {
     it(`getDateForDateRange: should return undefined if date param not is instance of Date and isValidIso is false`, () => {
       const dateParam = '2018-03-15T03:00:00.000Z';
 
-      spyOn(dateService, 'convertIsoToDate');
-      spyOn(dateService, 'isValidIso').and.returnValue(false);
+      vi.spyOn(dateService as any, 'convertIsoToDate');
+      vi.spyOn(dateService as any, 'isValidIso').mockReturnValue(false);
 
       const result = dateService.getDateForDateRange(dateParam, false);
 

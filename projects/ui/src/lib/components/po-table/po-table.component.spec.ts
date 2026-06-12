@@ -52,7 +52,9 @@ describe('PoTableComponent:', () => {
   let tableHeaderElement;
   let tableElement;
   let tableFooterElement;
-  const poTableService: jasmine.SpyObj<PoTableService> = jasmine.createSpyObj('PoTableService', ['scrollListener']);
+  const poTableService: any = {
+    scrollListener: vi.fn().mockName('PoTableService.scrollListener')
+  };
   // mocks
   let actions: Array<PoTableAction>;
   let columns: Array<PoTableColumn>;
@@ -68,7 +70,7 @@ describe('PoTableComponent:', () => {
   let labels: PoTableColumn;
   let mockTableDetailDiretive;
   let singleAction: Array<PoTableAction>;
-  let mockViewPort: jasmine.SpyObj<CdkVirtualScrollViewport>;
+  let mockViewPort: any;
   let changeDetector: any;
 
   function initializeMocks() {
@@ -207,11 +209,14 @@ describe('PoTableComponent:', () => {
   }
 
   beforeEach(async () => {
-    mockViewPort = jasmine.createSpyObj('CdkVirtualScrollViewport', ['elementRef'], {
+    mockViewPort = {
+      elementRef: vi.fn().mockName('CdkVirtualScrollViewport.elementRef'),
       _renderedContentOffset: 100
-    });
+    };
 
-    changeDetector = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
+    changeDetector = {
+      detectChanges: vi.fn().mockName('ChangeDetectorRef.detectChanges')
+    };
 
     await TestBed.configureTestingModule({
       declarations: [TestMenuComponent, SearchComponent],
@@ -283,8 +288,8 @@ describe('PoTableComponent:', () => {
     const tableAction = component.actions[1];
     const tableRow = component.items[0];
 
-    spyOn(tableAction, 'action');
-    spyOn(component, 'toggleRowAction');
+    vi.spyOn(tableAction as any, 'action');
+    vi.spyOn(component as any, 'toggleRowAction');
 
     component['executeTableAction'](tableRow, tableAction);
     expect(tableAction.action).toHaveBeenCalled();
@@ -296,7 +301,7 @@ describe('PoTableComponent:', () => {
     const tableAction = component.actions[2];
     const tableRow = component.items[0];
 
-    spyOn(tableAction, 'action');
+    vi.spyOn(tableAction as any, 'action');
 
     component['executeTableAction'](tableRow, tableAction);
     expect(tableAction.action).not.toHaveBeenCalled();
@@ -307,7 +312,7 @@ describe('PoTableComponent:', () => {
     const tableAction = component.actions[2];
     const tableRow = component.items[0];
 
-    spyOn(tableAction, <any>'disabled');
+    vi.spyOn(tableAction as any, 'disabled');
 
     component.validateTableAction(tableRow, tableAction);
     expect(tableAction.disabled).toHaveBeenCalled();
@@ -551,7 +556,7 @@ describe('PoTableComponent:', () => {
     component.columns[2].type = 'link';
     component.items[0].link = undefined;
 
-    spyOn(window, 'open');
+    vi.spyOn(window as any, 'open');
 
     fixture.detectChanges();
 
@@ -587,7 +592,7 @@ describe('PoTableComponent:', () => {
 
   it('should set table height', () => {
     component.columns = [...columns];
-    spyOn(component, <any>'getHeightTableFooter').and.returnValue(0);
+    vi.spyOn(component as any, 'getHeightTableFooter').mockReturnValue(0);
     component.height = 150;
 
     fixture.detectChanges();
@@ -595,7 +600,7 @@ describe('PoTableComponent:', () => {
   });
 
   it('should call setTableOpacity in debounceResize', fakeAsync(() => {
-    spyOn(component, <any>'setTableOpacity');
+    vi.spyOn(component as any, 'setTableOpacity');
 
     component['debounceResize']();
     tick(500);
@@ -627,14 +632,14 @@ describe('PoTableComponent:', () => {
 
   it('should return true in verifyChangeHeightInFooter', () => {
     component['footerHeight'] = 1;
-    spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
+    vi.spyOn(component as any, 'getHeightTableFooter').mockReturnValue(10);
 
     expect(component['verifyChangeHeightInFooter']()).toBeTruthy();
   });
 
   it('should return false in verifyChangeHeightInFooter', () => {
     component['footerHeight'] = 10;
-    spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
+    vi.spyOn(component as any, 'getHeightTableFooter').mockReturnValue(10);
 
     expect(component['verifyChangeHeightInFooter']()).toBeFalsy();
   });
@@ -643,9 +648,9 @@ describe('PoTableComponent:', () => {
     component['_height'] = 100;
     component['footerHeight'] = 100;
 
-    spyOn(component, <any>'verifyChangeHeightInFooter').and.returnValue(true);
-    spyOn(component, <any>'getHeightTableFooter').and.returnValue(10);
-    spyOn(component, <any>'calculateHeightTableContainer');
+    vi.spyOn(component as any, 'verifyChangeHeightInFooter').mockReturnValue(true);
+    vi.spyOn(component as any, 'getHeightTableFooter').mockReturnValue(10);
+    vi.spyOn(component as any, 'calculateHeightTableContainer');
 
     component['verifyCalculateHeightTableContainer']();
 
@@ -657,8 +662,8 @@ describe('PoTableComponent:', () => {
     component['_height'] = 100;
     component['footerHeight'] = 100;
 
-    spyOn(component, <any>'verifyChangeHeightInFooter').and.returnValue(false);
-    spyOn(component, <any>'calculateHeightTableContainer');
+    vi.spyOn(component as any, 'verifyChangeHeightInFooter').mockReturnValue(false);
+    vi.spyOn(component as any, 'calculateHeightTableContainer');
 
     component['verifyCalculateHeightTableContainer']();
 
@@ -712,7 +717,7 @@ describe('PoTableComponent:', () => {
   it('should not call debounceResize in ngDoCheck when visibleElement is true', () => {
     fakeThisDoCheck.visibleElement = true;
 
-    spyOn(fakeThisDoCheck, 'debounceResize');
+    vi.spyOn(fakeThisDoCheck as any, 'debounceResize');
     component.ngDoCheck.call(fakeThisDoCheck);
     expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
   });
@@ -721,7 +726,7 @@ describe('PoTableComponent:', () => {
     fakeThisDoCheck.initialized = false;
     fakeThisDoCheck.visibleElement = false;
 
-    spyOn(fakeThisDoCheck, 'debounceResize');
+    vi.spyOn(fakeThisDoCheck as any, 'debounceResize');
     component.ngDoCheck.call(fakeThisDoCheck);
     expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
     expect(fakeThisDoCheck.visibleElement).toBeFalsy();
@@ -732,7 +737,7 @@ describe('PoTableComponent:', () => {
     fakeThisDoCheck.visibleElement = false;
     fakeThisDoCheck.tableWrapperElement.nativeElement.offsetWidth = null;
 
-    spyOn(fakeThisDoCheck, 'debounceResize');
+    vi.spyOn(fakeThisDoCheck as any, 'debounceResize');
     component.ngDoCheck.call(fakeThisDoCheck);
     expect(fakeThisDoCheck.debounceResize).not.toHaveBeenCalled();
     expect(fakeThisDoCheck.visibleElement).toBeFalsy();
@@ -743,7 +748,7 @@ describe('PoTableComponent:', () => {
     fakeThisDoCheck.visibleElement = false;
     fakeThisDoCheck.tableWrapperElement = null;
 
-    spyOn(fakeThisDoCheck, 'debounceResize');
+    vi.spyOn(fakeThisDoCheck as any, 'debounceResize');
 
     component.ngDoCheck.call(fakeThisDoCheck);
 
@@ -756,7 +761,7 @@ describe('PoTableComponent:', () => {
     fakeThisDoCheck.visibleElement = false;
     fakeThisDoCheck.tableWrapperElement.nativeElement.offsetWidth = 15;
 
-    spyOn(fakeThisDoCheck, 'debounceResize');
+    vi.spyOn(fakeThisDoCheck as any, 'debounceResize');
     component.ngDoCheck.call(fakeThisDoCheck);
     expect(fakeThisDoCheck.debounceResize).toHaveBeenCalled();
     expect(fakeThisDoCheck.visibleElement).toBeTruthy();
@@ -828,7 +833,7 @@ describe('PoTableComponent:', () => {
         };
         const tableRow = component.items[0];
 
-        spyOn(linkColumn, 'disabled');
+        vi.spyOn(linkColumn as any, 'disabled');
 
         component.checkDisabled(tableRow, linkColumn);
         expect(linkColumn.disabled).toHaveBeenCalled();
@@ -860,7 +865,7 @@ describe('PoTableComponent:', () => {
 
       component.columns = mockColumns;
       component.mainColumns = mockColumns;
-      spyOn(component, 'onVisibleColumnsChange');
+      vi.spyOn(component as any, 'onVisibleColumnsChange');
 
       component.drop(event as any);
 
@@ -894,7 +899,7 @@ describe('PoTableComponent:', () => {
       it(`should call 'convertToBoolean' if 'rowValue' is valid value.`, () => {
         const rowValue: boolean = true;
 
-        spyOn(utilsFunctions, <any>'convertToBoolean');
+        vi.spyOn(utilsFunctions as any, 'convertToBoolean');
 
         component.getBooleanLabel(rowValue, simpleColumnBoolean);
 
@@ -1091,7 +1096,7 @@ describe('PoTableComponent:', () => {
       const eventResize = document.createEvent('Event');
       eventResize.initEvent('resize', false, true);
 
-      spyOn(component, <any>'debounceResize');
+      vi.spyOn(component as any, 'debounceResize');
       window.dispatchEvent(eventResize);
 
       expect(component['debounceResize']).toHaveBeenCalled();
@@ -1108,8 +1113,8 @@ describe('PoTableComponent:', () => {
     it('ngDoCheck: should call checkChangesItems and verifyCalculateHeightTableContainer', () => {
       fakeThisDoCheck.visibleElement = true;
 
-      spyOn(fakeThisDoCheck, 'checkChangesItems');
-      spyOn(fakeThisDoCheck, 'verifyCalculateHeightTableContainer');
+      vi.spyOn(fakeThisDoCheck as any, 'checkChangesItems');
+      vi.spyOn(fakeThisDoCheck as any, 'verifyCalculateHeightTableContainer');
 
       component.ngDoCheck.call(fakeThisDoCheck);
 
@@ -1121,7 +1126,7 @@ describe('PoTableComponent:', () => {
       it('should call `mergeCustomIcons` if has `column.icons` and `rowIcons` is an array.', () => {
         const row: any = { po: ['favorite', 'documentation'] };
 
-        const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons').and.callThrough();
+        const spyOnMergeCustomIcons = vi.spyOn(component as any, 'mergeCustomIcons');
         const expectedReturn = component.getColumnIcons(row, columnIcons);
 
         expect(spyOnMergeCustomIcons).toHaveBeenCalled();
@@ -1131,7 +1136,7 @@ describe('PoTableComponent:', () => {
       it('should call `findCustomIcon` if has `column.icons` and `rowIcons` isn´t an array.', () => {
         const row: any = { po: 'favorite' };
 
-        const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon').and.callThrough();
+        const spyOFindCustomIcon = vi.spyOn(component as any, 'findCustomIcon');
         const expectedReturn = component.getColumnIcons(row, columnIcons);
 
         expect(spyOFindCustomIcon).toHaveBeenCalled();
@@ -1142,8 +1147,8 @@ describe('PoTableComponent:', () => {
         const row: any = { po: 'favorite' };
         const column: any = { property: 'po', type: 'icon' };
 
-        const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
-        const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon');
+        const spyOnMergeCustomIcons = vi.spyOn(component as any, 'mergeCustomIcons');
+        const spyOFindCustomIcon = vi.spyOn(component as any, 'findCustomIcon');
         const expectedReturn = component.getColumnIcons(row, column);
 
         expect(spyOnMergeCustomIcons).not.toHaveBeenCalled();
@@ -1155,8 +1160,8 @@ describe('PoTableComponent:', () => {
         const row: any = { po: 'favorite' };
         const column: any = { property: 'po', type: 'icon' };
 
-        const spyOnMergeCustomIcons = spyOn(component, <any>'mergeCustomIcons');
-        const spyOFindCustomIcon = spyOn(component, <any>'findCustomIcon');
+        const spyOnMergeCustomIcons = vi.spyOn(component as any, 'mergeCustomIcons');
+        const spyOFindCustomIcon = vi.spyOn(component as any, 'findCustomIcon');
         const expectedReturn = component.getColumnIcons(row, column);
 
         expect(spyOnMergeCustomIcons).not.toHaveBeenCalled();
@@ -1262,7 +1267,7 @@ describe('PoTableComponent:', () => {
       const column = { type: 'label', tooltip: 'Label Tooltip Value' };
       const row = {};
 
-      spyOn(component, <any>'getColumnLabel').and.returnValue({ tooltip: column.tooltip });
+      vi.spyOn(component as any, 'getColumnLabel').mockReturnValue({ tooltip: column.tooltip });
 
       component['checkingIfColumnHasTooltip'](column, row);
 
@@ -1274,7 +1279,7 @@ describe('PoTableComponent:', () => {
       const column = { type: 'label', tooltip: 'Label Tooltip Value' };
       const row = {};
 
-      spyOn(component, <any>'getColumnLabel').and.returnValue(undefined);
+      vi.spyOn(component as any, 'getColumnLabel').mockReturnValue(undefined);
 
       component['checkingIfColumnHasTooltip'](column, row);
 
@@ -1291,7 +1296,7 @@ describe('PoTableComponent:', () => {
     });
 
     it(`calculateHeightTableContainer: should call 'setTableOpacity' with 1`, () => {
-      spyOn(component, <any>'setTableOpacity');
+      vi.spyOn(component as any, 'setTableOpacity');
 
       component['calculateHeightTableContainer'](400);
 
@@ -1310,7 +1315,7 @@ describe('PoTableComponent:', () => {
         getHeightTableHeader: () => {}
       };
 
-      spyOn(fakeThis.changeDetector, 'markForCheck');
+      vi.spyOn(fakeThis.changeDetector as any, 'markForCheck');
 
       component['calculateHeightTableContainer'].call(fakeThis, 400);
 
@@ -1425,7 +1430,7 @@ describe('PoTableComponent:', () => {
       const row = { name: 'po' };
       const target = new ElementRef('<span></span>');
 
-      spyOn(component.poPopupComponent, 'toggle');
+      vi.spyOn(component.poPopupComponent as any, 'toggle');
 
       component.popupTarget = undefined;
       component.togglePopup(row, target);
@@ -1436,7 +1441,7 @@ describe('PoTableComponent:', () => {
 
     it('ngOnDestroy: should call `removeListeners` on destroy', () => {
       const removeListeners: any = 'removeListeners';
-      spyOn(component, removeListeners);
+      vi.spyOn(component, removeListeners);
 
       component.ngOnDestroy();
 
@@ -1468,7 +1473,7 @@ describe('PoTableComponent:', () => {
       component.columns = [];
       component.items.push(item);
 
-      spyOn(component, <any>'getDefaultColumns').and.callThrough();
+      vi.spyOn(component as any, 'getDefaultColumns');
 
       component['checkChangesItems']();
 
@@ -1477,7 +1482,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('checkChangesItems: shouldn`t call `getDefaultColumns` if has columns after items are changed', () => {
-      spyOn(component, <any>'getDefaultColumns');
+      vi.spyOn(component as any, 'getDefaultColumns');
 
       const item = {
         id: 2,
@@ -1499,7 +1504,7 @@ describe('PoTableComponent:', () => {
 
       component.columns = [];
 
-      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+      const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component.onVisibleColumnsChange(newColumns);
 
@@ -1526,7 +1531,7 @@ describe('PoTableComponent:', () => {
         disabled: () => false
       };
 
-      const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
+      const spyStopPropagation = vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.onClickLink(fakeEvent, tableRow, columnLink);
 
@@ -1546,7 +1551,7 @@ describe('PoTableComponent:', () => {
         disabled: () => true
       };
 
-      const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
+      const spyStopPropagation = vi.spyOn(fakeEvent as any, 'stopPropagation');
 
       component.onClickLink(fakeEvent, tableRow, columnLink);
 
@@ -1554,7 +1559,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('onChangeVisibleColumns: should call `changeVisibleColumns.emit`', () => {
-      spyOn(component.changeVisibleColumns, 'emit');
+      vi.spyOn(component.changeVisibleColumns as any, 'emit');
       const fakeColumns = ['name', 'age'];
 
       component.onChangeVisibleColumns(fakeColumns);
@@ -1563,7 +1568,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('onChangeFixedColumns: should call `changeFixedColumns.emit`', () => {
-      spyOn(component.changeFixedColumns, 'emit');
+      vi.spyOn(component.changeFixedColumns as any, 'emit');
       const fakeColumns = ['name', 'age'];
 
       component.onChangeFixedColumns(fakeColumns);
@@ -1572,7 +1577,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('onChangeFixedColumns: should not call `changeFixedColumns.emit` when hideActionFixedColumns is true', () => {
-      spyOn(component.changeFixedColumns, 'emit');
+      vi.spyOn(component.changeFixedColumns as any, 'emit');
       component.hideActionFixedColumns = true;
       const fakeColumns = ['name', 'age'];
 
@@ -1582,7 +1587,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('onColumnRestoreManager: should call `columnRestoreManager.emit`', () => {
-      spyOn(component.columnRestoreManager, 'emit');
+      vi.spyOn(component.columnRestoreManager as any, 'emit');
       const fakeColumns = ['name', 'age'];
 
       component.onColumnRestoreManager(fakeColumns);
@@ -1592,7 +1597,7 @@ describe('PoTableComponent:', () => {
 
     describe('applyFilters', () => {
       it('should be called when `p-service-api` is used', () => {
-        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: [], hasNext: false }));
+        vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of({ items: [], hasNext: false }));
         component.hasService = true;
         component.applyFilters({});
         expect(component.getFilteredItems).toHaveBeenCalled();
@@ -1663,7 +1668,7 @@ describe('PoTableComponent:', () => {
 
       component.items = [currentRow];
 
-      spyOn(component.collapsed, 'emit');
+      vi.spyOn(component.collapsed as any, 'emit');
 
       component.collapse(0);
 
@@ -1710,7 +1715,7 @@ describe('PoTableComponent:', () => {
 
       component.items = [currentRow];
 
-      spyOn(component.expanded, 'emit');
+      vi.spyOn(component.expanded as any, 'emit');
 
       component.expand(0);
 
@@ -1804,7 +1809,7 @@ describe('PoTableComponent:', () => {
       it('remove: should not remove item if received a value different from an object or a number', () => {
         component.items = items;
         const numberItems = component.items.length;
-        component.removeItem(<any>'item');
+        component.removeItem('item' as any);
         expect(component.items.length).toEqual(numberItems);
       });
     });
@@ -1938,7 +1943,7 @@ describe('PoTableComponent:', () => {
           { id: 1, name: 'teste', $selected: true },
           { id: 2, name: 'teste2' }
         ];
-        spyOn(component['eventDelete'], 'emit');
+        vi.spyOn(component['eventDelete'] as any, 'emit');
 
         component.deleteItems();
 
@@ -1954,7 +1959,7 @@ describe('PoTableComponent:', () => {
           { id: 1, name: 'teste', $selected: true },
           { id: 2, name: 'teste2' }
         ];
-        spyOn(component, 'removeItem');
+        vi.spyOn(component as any, 'removeItem');
 
         component.deleteItems();
 
@@ -1972,9 +1977,9 @@ describe('PoTableComponent:', () => {
         ];
         component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
 
-        spyOn(component, 'setTableResponseProperties');
-        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
-        spyOn(component['defaultService'], <any>'getFilteredItems').and.returnValue(
+        vi.spyOn(component as any, 'setTableResponseProperties');
+        vi.spyOn(component['defaultService'] as any, 'deleteItem').mockReturnValue(of({}));
+        vi.spyOn(component['defaultService'] as any, 'getFilteredItems').mockReturnValue(
           of({ items: [component.items[1]], hasNext: false })
         );
         component.deleteItems();
@@ -1992,9 +1997,9 @@ describe('PoTableComponent:', () => {
           { id: 2, name: 'teste2' }
         ];
         component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
-        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
+        vi.spyOn(component['defaultService'] as any, 'deleteItem').mockReturnValue(of({}));
 
-        spyOn(component['eventDelete'], 'emit');
+        vi.spyOn(component['eventDelete'] as any, 'emit');
         component.deleteItems();
 
         expect(component.eventDelete.emit).toHaveBeenCalled();
@@ -2009,12 +2014,12 @@ describe('PoTableComponent:', () => {
           { id: 1, name: 'teste', $selected: true },
           { id: 2, name: 'teste2' }
         ];
-        spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(
+        vi.spyOn(component['defaultService'] as any, 'deleteItem').mockReturnValue(
           throwError(() => 'Internal Server Error')
         );
 
-        spyOn(component['poNotification'], 'success');
-        spyOn(component['poNotification'], 'error');
+        vi.spyOn(component['poNotification'] as any, 'success');
+        vi.spyOn(component['poNotification'] as any, 'error');
         component.deleteItems();
 
         expect(component.poNotification.success).not.toHaveBeenCalled();
@@ -2051,7 +2056,9 @@ describe('PoTableComponent:', () => {
       });
 
       it('getWidthColumnManager: should return the value of _columnManagerTargetFixed', () => {
-        const expectedValue = jasmine.createSpyObj('ElementRef', ['nativeElement']);
+        const expectedValue = {
+          nativeElement: vi.fn().mockName('ElementRef.nativeElement')
+        };
         component['_columnManagerTargetFixed'] = expectedValue;
 
         const result = component.columnManagerTargetFixed;
@@ -2101,7 +2108,7 @@ describe('PoTableComponent:', () => {
           { id: 1, name: 'item1' }
         ];
 
-        spyOn(component, 'sortArray');
+        vi.spyOn(component as any, 'sortArray');
         component.onFilteredItemsChange(items);
 
         expect(component.sortArray).toHaveBeenCalled();
@@ -2493,14 +2500,14 @@ describe('PoTableComponent:', () => {
 
   describe('Properties:', () => {
     it('cancel: should call modal.close ', () => {
-      spyOn(component.modalDelete, <any>'close');
+      vi.spyOn(component.modalDelete as any, 'close');
       component.close.action();
 
       expect(component.modalDelete.close).toHaveBeenCalled();
     });
 
     it('confirm: should call modal.confirm', () => {
-      spyOn(component, <any>'deleteItems');
+      vi.spyOn(component as any, 'deleteItems');
       component.confirm.action();
 
       expect(component.deleteItems).toHaveBeenCalled();
@@ -2520,7 +2527,7 @@ describe('PoTableComponent:', () => {
     });
 
     it('columnManagerTarget: should set property and call `detectChanges`', () => {
-      const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
+      const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component.columnManagerTarget = new ElementRef('<th></th>');
 
@@ -2533,7 +2540,7 @@ describe('PoTableComponent:', () => {
         component.selectable = true;
         component.columns = [...columns];
 
-        spyOnProperty(component, 'hasItems').and.returnValue(true);
+        vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
         expect(component.hasSelectableColumn).toBe(true);
       });
@@ -2542,7 +2549,7 @@ describe('PoTableComponent:', () => {
         component.selectable = false;
         component.columns = [];
 
-        spyOnProperty(component, 'hasItems').and.returnValue(false);
+        vi.spyOn(component as any, 'hasItems').mockReturnValue(false);
 
         expect(component.hasSelectableColumn).toBe(false);
       });
@@ -2551,7 +2558,7 @@ describe('PoTableComponent:', () => {
         component.selectable = true;
         component.hasMainColumns = false;
 
-        spyOnProperty(component, 'hasItems').and.returnValue(true);
+        vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
         expect(component.hasSelectableColumn).toBe(false);
       });
@@ -2560,7 +2567,7 @@ describe('PoTableComponent:', () => {
         component.selectable = true;
         component.hasMainColumns = true;
 
-        spyOnProperty(component, 'hasItems').and.returnValue(false);
+        vi.spyOn(component as any, 'hasItems').mockReturnValue(false);
 
         expect(component.hasSelectableColumn).toBe(false);
       });
@@ -2569,36 +2576,36 @@ describe('PoTableComponent:', () => {
         component.selectable = false;
         component.hasMainColumns = true;
 
-        spyOnProperty(component, 'hasItems').and.returnValue(true);
+        vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
         expect(component.hasSelectableColumn).toBe(false);
       });
     });
 
     it(`hasFooter: should return false if 'hasItems' and 'hasVisibleSubtitleColumns' are false`, () => {
-      spyOnProperty(component, 'hasItems').and.returnValue(false);
-      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(false);
+      vi.spyOn(component as any, 'hasVisibleSubtitleColumns').mockReturnValue(false);
 
       expect(component.hasFooter).toBe(false);
     });
 
     it(`hasFooter: should return true if 'hasItems' and 'hasVisibleSubtitleColumns' are true`, () => {
-      spyOnProperty(component, 'hasItems').and.returnValue(true);
-      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
+      vi.spyOn(component as any, 'hasVisibleSubtitleColumns').mockReturnValue(true);
 
       expect(component.hasFooter).toBe(true);
     });
 
     it(`hasFooter: should return false if 'hasItems' is true and 'hasVisibleSubtitleColumns' is false`, () => {
-      spyOnProperty(component, 'hasItems').and.returnValue(true);
-      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(false);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
+      vi.spyOn(component as any, 'hasVisibleSubtitleColumns').mockReturnValue(false);
 
       expect(component.hasFooter).toBe(false);
     });
 
     it(`hasFooter: should return false if 'hasItems' is false and 'hasVisibleSubtitleColumns' is true`, () => {
-      spyOnProperty(component, 'hasItems').and.returnValue(false);
-      spyOnProperty(component, 'hasVisibleSubtitleColumns').and.returnValue(true);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(false);
+      vi.spyOn(component as any, 'hasVisibleSubtitleColumns').mockReturnValue(true);
 
       expect(component.hasFooter).toBe(false);
     });
@@ -2634,7 +2641,7 @@ describe('PoTableComponent:', () => {
       component.columnMasterDetail = columnsDetail[0];
       component.hideDetail = false;
 
-      spyOnProperty(component, 'hasItems').and.returnValue(true);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(true);
     });
@@ -2645,8 +2652,8 @@ describe('PoTableComponent:', () => {
       component.columnMasterDetail = undefined;
       component.hideDetail = false;
 
-      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-      spyOnProperty(component, 'hasItems').and.returnValue(true);
+      vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(true);
     });
@@ -2657,8 +2664,8 @@ describe('PoTableComponent:', () => {
       component.columnMasterDetail = undefined;
       component.hideDetail = false;
 
-      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-      spyOnProperty(component, 'hasItems').and.returnValue(true);
+      vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(false);
     });
@@ -2667,14 +2674,14 @@ describe('PoTableComponent:', () => {
       component.hasMainColumns = false;
       component.hideDetail = true;
 
-      spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-      spyOnProperty(component, 'hasItems').and.returnValue(true);
+      vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+      vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
       expect(component.hasMasterDetailColumn).toBe(false);
     });
 
     it(`hasRowTemplate: should return true if 'tableRowTemplate' is defined`, () => {
-      component.tableRowTemplate = <any>'mock tableRowTemplate';
+      (component as any).tableRowTemplate = 'mock tableRowTemplate';
 
       expect(component.hasRowTemplate).toBe(true);
     });
@@ -2976,12 +2983,12 @@ describe('PoTableComponent:', () => {
 
     component['removeListeners']();
 
-    expect(component.infiniteScroll).toBeTrue();
+    expect(component.infiniteScroll).toBe(true);
   });
 
   it(`ngOnDestroy: should unsubscribe 'subscriptionService'`, () => {
     const fakeSubscription = <any>{ unsubscribe: () => {} };
-    spyOn(fakeSubscription, <any>'unsubscribe');
+    vi.spyOn(fakeSubscription as any, 'unsubscribe');
     Object.defineProperty(component, 'subscriptionService', { value: fakeSubscription, configurable: true });
 
     component.ngOnDestroy();
@@ -2993,7 +3000,7 @@ describe('PoTableComponent:', () => {
     const fakeSubscription = <any>{ unsubscribe: () => {} };
     Object.defineProperty(component, 'subscriptionService', { value: fakeSubscription, configurable: true });
 
-    spyOn(fakeSubscription, <any>'unsubscribe');
+    vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
     Object.defineProperty(component, 'subscriptionService', { value: undefined, configurable: true });
     component.ngOnDestroy();
@@ -3003,7 +3010,7 @@ describe('PoTableComponent:', () => {
 
   it('showMoreInfiniteScroll: should call `onShowMore` if showMoreDisabled is false ', () => {
     const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } };
-    const spyOnShowMore = spyOn(component, 'onShowMore');
+    const spyOnShowMore = vi.spyOn(component as any, 'onShowMore');
 
     component.infiniteScrollDistance = 10;
     component['showMoreDisabled'] = false;
@@ -3015,7 +3022,7 @@ describe('PoTableComponent:', () => {
 
   it('showMoreInfiniteScroll: should call `onShowMore` if scrollPosition is close to the scrollHeight', () => {
     const event = { target: { offsetHeight: 100, scrollTop: 199, scrollHeight: 300 } };
-    const spyOnShowMore = spyOn(component, 'onShowMore');
+    const spyOnShowMore = vi.spyOn(component as any, 'onShowMore');
 
     component.infiniteScrollDistance = 100;
 
@@ -3026,7 +3033,7 @@ describe('PoTableComponent:', () => {
 
   it('showMoreInfiniteScroll: should not call `onShowMore` if showMoreDisabled is false but scrollPosition smaller then scrollHeight', () => {
     const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1000 } };
-    const spyOnShowMore = spyOn(component, 'onShowMore');
+    const spyOnShowMore = vi.spyOn(component as any, 'onShowMore');
 
     component.infiniteScrollDistance = 100;
 
@@ -3037,7 +3044,7 @@ describe('PoTableComponent:', () => {
 
   it('showMoreInfiniteScroll: should call `onShowMore` when showMoreDisabled Disabled ', () => {
     const event = { target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } };
-    const spy = spyOn(component, 'onShowMore');
+    const spy = vi.spyOn(component as any, 'onShowMore');
 
     component.infiniteScrollDistance = 10;
     component['showMoreDisabled'] = true;
@@ -3054,16 +3061,16 @@ describe('PoTableComponent:', () => {
 
     const mockScrollableElement = {
       scrollHeight: 200,
-      closest: jasmine.createSpy('closest').and.returnValue({}),
-      addEventListener: jasmine.createSpy('addEventListener'),
-      removeEventListener: jasmine.createSpy('removeEventListener')
+      closest: vi.fn().mockReturnValue({}),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
     };
 
     component.tableScrollable = new ElementRef(mockScrollableElement);
 
-    const spyScrollListener = spyOn(component['defaultService'], 'scrollListener').and.returnValue(
-      of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
-    );
+    const spyScrollListener = vi
+      .spyOn(component['defaultService'], 'scrollListener')
+      .mockReturnValue(of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } }));
 
     component['includeInfiniteScroll']();
 
@@ -3084,9 +3091,9 @@ describe('PoTableComponent:', () => {
 
     component.tableVirtualScroll = mockTableVirtualScroll;
 
-    const spyScrollListener = spyOn(component['defaultService'], 'scrollListener').and.returnValue(
-      of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } })
-    );
+    const spyScrollListener = vi
+      .spyOn(component['defaultService'], 'scrollListener')
+      .mockReturnValue(of({ target: { offsetHeight: 100, scrollTop: 100, scrollHeight: 1 } }));
 
     component['includeInfiniteScroll']();
 
@@ -3094,12 +3101,12 @@ describe('PoTableComponent:', () => {
   });
 
   it('checkInfiniteScroll: should use tableScrollable scrollHeight when virtualScroll is false', () => {
-    const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
-    const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
+    const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+    const spyIncludeInfiniteScroll = vi.spyOn(component as any, 'includeInfiniteScroll');
 
     component.height = 100;
     component.virtualScroll = false;
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
     component.infiniteScroll = true;
 
     const mockTableScrollable = new ElementRef({
@@ -3115,11 +3122,11 @@ describe('PoTableComponent:', () => {
   });
 
   it('checkInfiniteScroll: should call includeInfiniteScroll if height is smaller than scrollHeight', () => {
-    const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
-    const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
+    const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+    const spyIncludeInfiniteScroll = vi.spyOn(component as any, 'includeInfiniteScroll');
 
     component.height = 10;
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
     component.infiniteScroll = true;
 
     component['checkInfiniteScroll']();
@@ -3129,11 +3136,11 @@ describe('PoTableComponent:', () => {
   });
 
   it('checkInfiniteScroll: should not call `includeInfiniteScroll` if height is bigger than scrollHeight', () => {
-    const spyDetectChanges = spyOn(component['changeDetector'], 'detectChanges');
-    const spyIncludeInfiniteScroll = spyOn(component, <any>'includeInfiniteScroll');
+    const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+    const spyIncludeInfiniteScroll = vi.spyOn(component as any, 'includeInfiniteScroll');
 
     component.height = 1000;
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
     component.infiniteScroll = true;
 
     component['checkInfiniteScroll']();
@@ -3264,17 +3271,17 @@ describe('PoTableComponent:', () => {
       nativeElement: { offsetHeight: 100, scrollTop: 100, scrollHeight: 100 }
     };
 
-    spyOnProperty(component, 'hasItems').and.returnValue(false);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(false);
 
     component.height = 200;
 
-    expect(component['hasInfiniteScroll']()).toBeFalse();
+    expect(component['hasInfiniteScroll']()).toBe(false);
   });
 
   it('draggable: should return false if draggable is false', () => {
     component.draggable = false;
 
-    expect(component['isDraggable']).toBeFalse();
+    expect(component['isDraggable']).toBe(false);
   });
 
   it('changeSizeLoading: should set sm  if height of parent element is smaller or equal 150px', () => {
@@ -3404,7 +3411,7 @@ describe('PoTableComponent:', () => {
 
   it('should return 0 if columnMasterDetail is defined', () => {
     component['columnMasterDetail'] = { property: 'detail' };
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
     const result = component['countExtraColumns']();
 
@@ -3413,9 +3420,9 @@ describe('PoTableComponent:', () => {
 
   it('should return 1 if hasRowTemplate is true, hasRowTemplateWithArrowDirectionRight is false, and hasItems is true', () => {
     component['columnMasterDetail'] = undefined;
-    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(false);
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplateWithArrowDirectionRight').mockReturnValue(false);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
     const result = component['countExtraColumns']();
 
@@ -3424,10 +3431,10 @@ describe('PoTableComponent:', () => {
 
   it('should return 1 if hasRowTemplateWithArrowDirectionRight is true, hasVisibleActions is true, and hasItems is true', () => {
     component['columnMasterDetail'] = undefined;
-    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
-    spyOnProperty(component, 'hasVisibleActions').and.returnValue(true);
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplateWithArrowDirectionRight').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasVisibleActions').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
     const result = component['countExtraColumns']();
 
@@ -3436,10 +3443,10 @@ describe('PoTableComponent:', () => {
 
   it('should return 1 if hasRowTemplateWithArrowDirectionRight is true, hideColumnsManager is true, and hasItems is true', () => {
     component['columnMasterDetail'] = undefined;
-    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplateWithArrowDirectionRight').mockReturnValue(true);
     component['hideColumnsManager'] = true;
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
     const result = component['countExtraColumns']();
 
@@ -3448,11 +3455,11 @@ describe('PoTableComponent:', () => {
 
   it('should return 0 if no conditions are met and hasItems is true', () => {
     component['columnMasterDetail'] = undefined;
-    spyOnProperty(component, 'hasRowTemplate').and.returnValue(false);
-    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(false);
-    spyOnProperty(component, 'hasVisibleActions').and.returnValue(false);
+    vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(false);
+    vi.spyOn(component as any, 'hasRowTemplateWithArrowDirectionRight').mockReturnValue(false);
+    vi.spyOn(component as any, 'hasVisibleActions').mockReturnValue(false);
     component['hideColumnsManager'] = false;
-    spyOnProperty(component, 'hasItems').and.returnValue(true);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(true);
 
     const result = component['countExtraColumns']();
 
@@ -3461,11 +3468,11 @@ describe('PoTableComponent:', () => {
 
   it('should return 0 if hasItems is false, regardless of other conditions', () => {
     component['columnMasterDetail'] = undefined;
-    spyOnProperty(component, 'hasRowTemplate').and.returnValue(true);
-    spyOnProperty(component, 'hasRowTemplateWithArrowDirectionRight').and.returnValue(true);
-    spyOnProperty(component, 'hasVisibleActions').and.returnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplate').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasRowTemplateWithArrowDirectionRight').mockReturnValue(true);
+    vi.spyOn(component as any, 'hasVisibleActions').mockReturnValue(true);
     component['hideColumnsManager'] = true;
-    spyOnProperty(component, 'hasItems').and.returnValue(false);
+    vi.spyOn(component as any, 'hasItems').mockReturnValue(false);
 
     const result = component['countExtraColumns']();
 
@@ -3483,7 +3490,7 @@ describe('PoTableComponent:', () => {
       component.filteredItems = [mockfilteredItems];
       component.sortedColumn = mockColumn;
 
-      spyOn(component, 'sortArray');
+      vi.spyOn(component as any, 'sortArray');
 
       component['reapplySort']();
 
@@ -3494,7 +3501,7 @@ describe('PoTableComponent:', () => {
       component.filteredItems = [];
       component.sortedColumn = mockColumn;
 
-      spyOn(component, 'sortArray');
+      vi.spyOn(component as any, 'sortArray');
 
       component['reapplySort']();
 
@@ -3505,7 +3512,7 @@ describe('PoTableComponent:', () => {
       component.filteredItems = [mockfilteredItems];
       component.sortedColumn = null;
 
-      spyOn(component, 'sortArray');
+      vi.spyOn(component as any, 'sortArray');
 
       component['reapplySort']();
 
@@ -3519,7 +3526,7 @@ describe('PoTableComponent:', () => {
         ascending: false
       };
 
-      spyOn(component, 'sortArray');
+      vi.spyOn(component as any, 'sortArray');
 
       component['reapplySort']();
 

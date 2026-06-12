@@ -7,7 +7,7 @@ describe('validatePropertyOnLifeCycle:', () => {
       myProperty: undefined
     };
 
-    const callback = jasmine.createSpy('callback');
+    const callback = vi.fn();
 
     const decoratorProperties = { target, property: 'myProperty' };
     UtilsDecorators.validatePropertyOnLifeCycle(decoratorProperties, 'ngOnInit', callback);
@@ -24,7 +24,7 @@ describe('validatePropertyOnLifeCycle:', () => {
       myProperty: undefined
     };
 
-    const callback = jasmine.createSpy('callback');
+    const callback = vi.fn();
 
     const decoratorProperties = { target, property: 'myProperty' };
     UtilsDecorators.validatePropertyOnLifeCycle(decoratorProperties, 'ngOnInit', callback);
@@ -44,7 +44,7 @@ describe('validatePropertyOnLifeCycle:', () => {
       }
     };
 
-    const callback = jasmine.createSpy('callback');
+    const callback = vi.fn();
 
     const decoratorProperties = { target, property: 'myProperty' };
     UtilsDecorators.validatePropertyOnLifeCycle(decoratorProperties, 'ngOnInit', callback);
@@ -83,7 +83,7 @@ describe('changeValueByCallback:', () => {
       myProperty: undefined
     };
 
-    const originalSetSpy = jasmine.createSpy('set');
+    const originalSetSpy = vi.fn();
     const decoratorProperties = { target, originalDescriptor: { set: originalSetSpy } };
 
     const descriptor = UtilsDecorators.changeValueByCallback(decoratorProperties, 'decoratorName', validation);
@@ -148,7 +148,7 @@ describe('createPrivateProperty:', () => {
       $$__property: 'value'
     };
 
-    spyOn(console, 'warn');
+    vi.spyOn(console as any, 'warn');
 
     UtilsDecorators['createPrivateProperty'](target, propertyName, undefined);
 

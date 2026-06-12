@@ -31,19 +31,19 @@ describe('PoContextTabsComponent:', () => {
     it('isShowTabDropdown: should return true when number of visible tabs exceeds quantityTabsButton', () => {
       component.quantityTabsButton = 2;
 
-      expect(component.isShowTabDropdown).toBeTrue();
+      expect(component.isShowTabDropdown).toBe(true);
     });
 
     it('isShowTabDropdown: should return false when number of visible tabs is equal to quantityTabsButton', () => {
       component.quantityTabsButton = 4;
 
-      expect(component.isShowTabDropdown).toBeFalse();
+      expect(component.isShowTabDropdown).toBe(false);
     });
 
     it('isShowTabDropdown: should return false when number of visible tabs is less than quantityTabsButton', () => {
       component.quantityTabsButton = 10;
 
-      expect(component.isShowTabDropdown).toBeFalse();
+      expect(component.isShowTabDropdown).toBe(false);
     });
 
     it('overflowedTabs: should return overflowedTabs', () => {
@@ -63,7 +63,7 @@ describe('PoContextTabsComponent:', () => {
         hide: false,
         elementRef: {
           nativeElement: {
-            remove: jasmine.createSpy('remove')
+            remove: vi.fn()
           }
         }
       } as any;
@@ -77,15 +77,15 @@ describe('PoContextTabsComponent:', () => {
         ]
       } as any;
 
-      const emitSpy = spyOn(tabMock.closeTab, 'emit');
-      const onTabChangeStateSpy = spyOn(component, 'onTabChangeState');
-      const afterRemoveTabSpy = spyOn(component as any, 'afterRemoveTab');
+      const emitSpy = vi.spyOn(tabMock.closeTab as any, 'emit');
+      const onTabChangeStateSpy = vi.spyOn(component as any, 'onTabChangeState');
+      const afterRemoveTabSpy = vi.spyOn(component as any, 'afterRemoveTab');
 
       component.closeTab(tabMock);
 
       expect(emitSpy).toHaveBeenCalled();
-      expect(tabMock.removed).toBeTrue();
-      expect(tabMock.hide).toBeTrue();
+      expect(tabMock.removed).toBe(true);
+      expect(tabMock.hide).toBe(true);
       expect(onTabChangeStateSpy).toHaveBeenCalled();
       expect(tabMock.elementRef.nativeElement.remove).toHaveBeenCalled();
       expect(afterRemoveTabSpy).toHaveBeenCalledWith(100);
@@ -99,14 +99,14 @@ describe('PoContextTabsComponent:', () => {
         hide: false,
         elementRef: {
           nativeElement: {
-            remove: jasmine.createSpy('remove')
+            remove: vi.fn()
           }
         }
       } as any;
       component.initialTabsWidth = [{ id: 1, width: 100 }];
 
-      const onTabChangeStateSpy = spyOn(component, 'onTabChangeState');
-      const afterRemoveTabSpy = spyOn(component as any, 'afterRemoveTab');
+      const onTabChangeStateSpy = vi.spyOn(component as any, 'onTabChangeState');
+      const afterRemoveTabSpy = vi.spyOn(component as any, 'afterRemoveTab');
 
       component.closeTab(tabMock);
 
@@ -151,7 +151,7 @@ describe('PoContextTabsComponent:', () => {
         { id: 'tab2', width: 100 }
       ];
 
-      spyOn(component, 'handleKeyboardNavigationTab');
+      vi.spyOn(component as any, 'handleKeyboardNavigationTab');
 
       component['afterRemoveTab'](widthTab);
 
@@ -197,7 +197,7 @@ describe('PoContextTabsComponent:', () => {
         { id: 'tab2', width: 100 }
       ];
 
-      spyOn(component, 'handleKeyboardNavigationTab');
+      vi.spyOn(component as any, 'handleKeyboardNavigationTab');
 
       component['afterRemoveTab'](widthTab);
 
@@ -236,10 +236,10 @@ describe('PoContextTabsComponent:', () => {
 
       expect(component.initialTabsWidth.length).toBe(4);
       expect(component.quantityTabsButton).toBe(1);
-      expect(tabElements[0].nativeElement.hidden).toBeFalse();
-      expect(tabElements[1].nativeElement.hidden).toBeTrue();
-      expect(tabElements[2].nativeElement.hidden).toBeTrue();
-      expect(tabElements[3].nativeElement.hidden).toBeTrue();
+      expect(tabElements[0].nativeElement.hidden).toBe(false);
+      expect(tabElements[1].nativeElement.hidden).toBe(true);
+      expect(tabElements[2].nativeElement.hidden).toBe(true);
+      expect(tabElements[3].nativeElement.hidden).toBe(true);
     });
 
     it('calculateTabs: should calculate 2 visible tabs if byQuantityFunction is 2', () => {
@@ -272,16 +272,16 @@ describe('PoContextTabsComponent:', () => {
 
       expect(component.initialTabsWidth.length).toBe(4);
       expect(component.quantityTabsButton).toBe(2);
-      expect(tabElements[0].nativeElement.hidden).toBeFalse();
-      expect(tabElements[1].nativeElement.hidden).toBeTrue();
-      expect(tabElements[2].nativeElement.hidden).toBeFalse();
-      expect(tabElements[3].nativeElement.hidden).toBeTrue();
+      expect(tabElements[0].nativeElement.hidden).toBe(false);
+      expect(tabElements[1].nativeElement.hidden).toBe(true);
+      expect(tabElements[2].nativeElement.hidden).toBe(false);
+      expect(tabElements[3].nativeElement.hidden).toBe(true);
     });
 
     it('onTabActiveByDropdown: should handle tab activation by dropdown correctly', () => {
       const tabMock = {
         id: 'tab1',
-        click: { emit: jasmine.createSpy('emit') },
+        click: { emit: vi.fn() },
         widthButton: 0,
         showTooltip: false
       } as any;
@@ -307,20 +307,20 @@ describe('PoContextTabsComponent:', () => {
         toArray: () => tabButtonArray
       } as any;
 
-      spyOn(component, 'changeTabPositionByDropdown');
-      spyOn(component, 'reorderTabs');
-      spyOn(component, 'handleKeyboardNavigationTab');
+      vi.spyOn(component as any, 'changeTabPositionByDropdown');
+      vi.spyOn(component as any, 'reorderTabs');
+      vi.spyOn(component as any, 'handleKeyboardNavigationTab');
 
       component.onTabActiveByDropdown(tabMock);
 
       expect(component.changeTabPositionByDropdown).toHaveBeenCalledWith(tabMock, true);
       expect(lastTabElement.style.display).toBe('none');
-      expect(lastTabElement.hidden).toBeTrue();
-      expect(currentTabElement.hidden).toBeFalse();
+      expect(lastTabElement.hidden).toBe(true);
+      expect(currentTabElement.hidden).toBe(false);
       expect(currentTabElement.style.display).toBe('inline-block');
       expect(component.reorderTabs).toHaveBeenCalledWith(tabMock, lastTabElement);
       expect(tabMock.widthButton).toBe(150);
-      expect(tabMock.showTooltip).toBeTrue();
+      expect(tabMock.showTooltip).toBe(true);
       expect(currentTabElement.style.width).toBe('150px');
       expect(component.handleKeyboardNavigationTab).toHaveBeenCalled();
       expect(tabMock.click.emit).toHaveBeenCalledWith(tabMock);
@@ -329,14 +329,14 @@ describe('PoContextTabsComponent:', () => {
     it('onTabActiveByDropdown: should return if tab is disabled', () => {
       const tabMock = {
         id: 'tab1',
-        click: { emit: jasmine.createSpy('emit') },
+        click: { emit: vi.fn() },
         widthButton: 0,
         showTooltip: false,
         disabled: true
       } as any;
 
-      spyOn(component, 'onTabChangeState');
-      spyOn(component, 'changeTabPositionByDropdown');
+      vi.spyOn(component as any, 'onTabChangeState');
+      vi.spyOn(component as any, 'changeTabPositionByDropdown');
 
       component.onTabActiveByDropdown(tabMock);
 
@@ -358,8 +358,8 @@ describe('PoContextTabsComponent:', () => {
       component.initialTabsWidth = [{ id: 'tab-1', width: 100 }];
       component.tabButton = [mockTabElement as any] as any;
 
-      spyOn(component.changeDetector, 'detectChanges');
-      spyOn(component, 'calculateTabs');
+      vi.spyOn(component.changeDetector as any, 'detectChanges');
+      vi.spyOn(component as any, 'calculateTabs');
 
       component.onChangeVisibilityTab(mockTab);
 
@@ -377,7 +377,7 @@ describe('PoContextTabsComponent:', () => {
       } as any;
 
       component.initialTabsWidth = [{ id: 'tab-2', width: 200 }];
-      const afterMethod = spyOn(component as any, 'afterRemoveTab');
+      const afterMethod = vi.spyOn(component as any, 'afterRemoveTab');
 
       component.onChangeVisibilityTab(mockTab);
 
@@ -411,19 +411,19 @@ describe('PoContextTabsComponent:', () => {
 
       component.tabButton = [mockTab1, mockTab2Hidden, mockTab2, mockTab3] as any;
 
-      spyOn(component as any, 'calculateTabs');
-      spyOn(component as any, 'executeTabsState');
+      vi.spyOn(component as any, 'calculateTabs');
+      vi.spyOn(component as any, 'executeTabsState');
 
       component.updateTabsState(false, { id: 'tab-2', hide: true, widthButton: undefined } as any);
 
-      expect(mockTab3.nativeElement.hidden).toBeFalse();
+      expect(mockTab3.nativeElement.hidden).toBe(false);
       expect(mockTab3.nativeElement.style.display).toBe('inline-block');
 
-      expect(mockTab2Hidden.nativeElement.hidden).toBeTrue();
+      expect(mockTab2Hidden.nativeElement.hidden).toBe(true);
       expect(mockTab2Hidden.nativeElement.style.display).toBe('');
 
-      expect(mockTab1.nativeElement.hidden).toBeFalse();
-      expect(mockTab2.nativeElement.hidden).toBeFalse();
+      expect(mockTab1.nativeElement.hidden).toBe(false);
+      expect(mockTab2.nativeElement.hidden).toBe(false);
 
       expect((component as any).calculateTabs).toHaveBeenCalled();
       expect((component as any).executeTabsState).not.toHaveBeenCalled();
@@ -449,15 +449,15 @@ describe('PoContextTabsComponent:', () => {
         ]
       } as any;
 
-      spyOn(component as any, 'calculateTabs');
+      vi.spyOn(component as any, 'calculateTabs');
 
       component['checkChangesTabs']();
 
-      expect(mockTab4.nativeElement.hidden).toBeTrue();
+      expect(mockTab4.nativeElement.hidden).toBe(true);
       expect(mockTab4.nativeElement.style.display).toBe('none');
 
-      expect(mockTab1.nativeElement.hidden).toBeFalse();
-      expect(mockTab2.nativeElement.hidden).toBeFalse();
+      expect(mockTab1.nativeElement.hidden).toBe(false);
+      expect(mockTab2.nativeElement.hidden).toBe(false);
 
       expect((component as any).calculateTabs).toHaveBeenCalled();
     });
@@ -495,8 +495,8 @@ describe('PoContextTabsComponent:', () => {
 
       component.tabButton = [mockTab1, mockTab2, mockTab3] as any;
 
-      spyOn(component as any, 'calculateTabs');
-      spyOn(component as any, 'executeTabsState');
+      vi.spyOn(component as any, 'calculateTabs');
+      vi.spyOn(component as any, 'executeTabsState');
 
       component.updateTabsState(false);
 
@@ -558,19 +558,19 @@ describe('PoContextTabsComponent:', () => {
 
       component.tabButton = [mockTab1, mockTab2, mockTab3] as any;
 
-      spyOn(component as any, 'calculateTabs').and.callThrough();
+      vi.spyOn(component as any, 'calculateTabs');
 
       component.updateTabsState(false, { id: 'tab-3', hide: false } as any);
 
-      expect(mockTab3.nativeElement.hidden).toBeFalse();
-      expect(component.tabsDefault.some(t => t.id === 'tab-3')).toBeTrue();
-      expect(component.overflowedTabs.some(t => t.id === 'tab-3')).toBeFalse();
+      expect(mockTab3.nativeElement.hidden).toBe(false);
+      expect(component.tabsDefault.some(t => t.id === 'tab-3')).toBe(true);
+      expect(component.overflowedTabs.some(t => t.id === 'tab-3')).toBe(false);
 
       expect((component as any).calculateTabs).toHaveBeenCalled();
     });
 
     it('setQuantityTabsButton: should values valid', () => {
-      spyOn(component as any, 'calculateTabs');
+      vi.spyOn(component as any, 'calculateTabs');
 
       component.quantityTabsButton = 5;
       component.setQuantityTabsButton(2);
@@ -581,8 +581,8 @@ describe('PoContextTabsComponent:', () => {
     });
 
     it('setQuantityTabsButton: should call afterRemoveTab', () => {
-      spyOn(component as any, 'calculateTabs');
-      spyOn(component as any, 'afterRemoveTab');
+      vi.spyOn(component as any, 'calculateTabs');
+      vi.spyOn(component as any, 'afterRemoveTab');
 
       component.byQuantityFunction = 2;
       component.setQuantityTabsButton(4);

@@ -168,7 +168,7 @@ describe('PoListboxBaseComponent', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -181,7 +181,7 @@ describe('PoListboxBaseComponent', () => {
 
       const result = component.isItemListGroup;
 
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
     });
 
     it('should return false when first item does not have "options"', () => {
@@ -189,7 +189,7 @@ describe('PoListboxBaseComponent', () => {
 
       const result = component.isItemListGroup;
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
   });
 });

@@ -138,7 +138,7 @@ describe('PoListViewComponent:', () => {
 
   describe('Methods:', () => {
     it('ngDoCheck: should call `checkItemsChange`.', () => {
-      spyOn(component, <any>'checkItemsChange');
+      vi.spyOn(component as any, 'checkItemsChange');
 
       component.ngDoCheck();
 
@@ -146,7 +146,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('ngAfterContentInit: should call `initShowDetail`.', () => {
-      spyOn(component, <any>'initShowDetail');
+      vi.spyOn(component as any, 'initShowDetail');
 
       component.ngAfterContentInit();
 
@@ -156,7 +156,7 @@ describe('PoListViewComponent:', () => {
     it('returnBooleanValue: should return `false` if `listViewAction.disabled` is `false`.', () => {
       const listViewAction = { label: 'PO ', disabled: false };
 
-      spyOn(UtilsFunctions, 'isTypeof').and.returnValue(false);
+      vi.spyOn(UtilsFunctions as any, 'isTypeof').mockReturnValue(false);
 
       expect(component.returnBooleanValue(listViewAction, item, 'disabled')).toBe(listViewAction.disabled);
       expect(UtilsFunctions.isTypeof).toHaveBeenCalled();
@@ -165,8 +165,8 @@ describe('PoListViewComponent:', () => {
     it('returnBooleanValue: should return `true` if `listViewAction.disabled` function return `true`.', () => {
       const listViewAction = { label: 'PO ', disabled: () => true };
 
-      spyOn(listViewAction, 'disabled').and.returnValue(true);
-      spyOn(UtilsFunctions, 'isTypeof').and.returnValue(true);
+      vi.spyOn(listViewAction as any, 'disabled').mockReturnValue(true);
+      vi.spyOn(UtilsFunctions as any, 'isTypeof').mockReturnValue(true);
 
       expect(component.returnBooleanValue(listViewAction, item, 'disabled')).toBe(true);
       expect(listViewAction.disabled).toHaveBeenCalled();
@@ -177,8 +177,8 @@ describe('PoListViewComponent:', () => {
       set 'popupTarget' with target param `, () => {
       const targetRef = '<span></span>';
 
-      spyOn(component['changeDetector'], 'detectChanges');
-      spyOn(component.poPopupComponent, 'toggle');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      vi.spyOn(component.poPopupComponent as any, 'toggle');
 
       component.popupTarget = undefined;
       component.togglePopup(item, <any>targetRef);
@@ -189,7 +189,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it(`onAnimationEvent: should emit detail on showDetail`, () => {
-      spyOn(component.showDetail, 'emit');
+      vi.spyOn(component.showDetail as any, 'emit');
 
       component.onAnimationEvent(event, detail);
 
@@ -335,8 +335,8 @@ describe('PoListViewComponent:', () => {
 
       component.listViewContentTemplate = { title: () => '', templateRef: undefined };
 
-      spyOn(component.listViewContentTemplate, 'title').and.returnValue(title);
-      spyOnProperty(component, 'hasContentTemplate').and.returnValue(true);
+      vi.spyOn(component.listViewContentTemplate as any, 'title').mockReturnValue(title);
+      vi.spyOn(component as any, 'hasContentTemplate').mockReturnValue(true);
 
       const result = component.getItemTitle(item);
 
@@ -349,8 +349,8 @@ describe('PoListViewComponent:', () => {
       component.propertyTitle = 'name';
       component.listViewContentTemplate = { title: () => '', templateRef: undefined };
 
-      spyOn(component.listViewContentTemplate, 'title');
-      spyOnProperty(component, 'hasContentTemplate').and.returnValue(false);
+      vi.spyOn(component.listViewContentTemplate as any, 'title');
+      vi.spyOn(component as any, 'hasContentTemplate').mockReturnValue(false);
 
       const result = component.getItemTitle(item);
 
@@ -363,7 +363,7 @@ describe('PoListViewComponent:', () => {
       component.propertyTitle = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
-      spyOnProperty(component, 'hasContentTemplate').and.returnValue(true);
+      vi.spyOn(component as any, 'hasContentTemplate').mockReturnValue(true);
 
       const result = component.getItemTitle(item);
 
@@ -375,7 +375,7 @@ describe('PoListViewComponent:', () => {
       component.propertyTitle = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
-      spyOnProperty(component, 'hasContentTemplate').and.returnValue(false);
+      vi.spyOn(component as any, 'hasContentTemplate').mockReturnValue(false);
 
       const result = component.getItemTitle(item);
 
@@ -398,7 +398,7 @@ describe('PoListViewComponent:', () => {
       component.items = [{ name: '1', $showDetail: true }];
       component.listViewDetailTemplate = <any>{ showDetail: () => true, templateRef: '<span></span>' };
 
-      spyOn(component.listViewDetailTemplate, 'showDetail');
+      vi.spyOn(component.listViewDetailTemplate as any, 'showDetail');
 
       component['initShowDetail']();
 
@@ -409,7 +409,7 @@ describe('PoListViewComponent:', () => {
       component.items = undefined;
       component.listViewDetailTemplate = { showDetail: () => false, templateRef: undefined };
 
-      spyOn(component.listViewDetailTemplate, 'showDetail');
+      vi.spyOn(component.listViewDetailTemplate as any, 'showDetail');
 
       component['initShowDetail']();
 
@@ -586,8 +586,8 @@ describe('PoListViewComponent:', () => {
     });
 
     it('should contain the attributes `href` and `target` if title is an external link and call getItemTitle with lisItem', () => {
-      spyOn(component, 'getItemTitle');
-      spyOn(component, 'checkTitleType').and.returnValue('externalLink');
+      vi.spyOn(component as any, 'getItemTitle');
+      vi.spyOn(component as any, 'checkTitleType').mockReturnValue('externalLink');
 
       const listItem = { id: 1, name: 'register', url: 'http://po.com.br' };
       component.propertyLink = 'url';
@@ -608,8 +608,8 @@ describe('PoListViewComponent:', () => {
     });
 
     it('should contain the attribute `routerLink` if title is an internal link and call getItemTitle with lisItem', () => {
-      spyOn(component, 'getItemTitle');
-      spyOn(component, 'checkTitleType').and.returnValue('internalLink');
+      vi.spyOn(component as any, 'getItemTitle');
+      vi.spyOn(component as any, 'checkTitleType').mockReturnValue('internalLink');
 
       const listItem = { id: 1, name: 'register', url: '/home' };
       component.propertyLink = 'url';
@@ -630,8 +630,8 @@ describe('PoListViewComponent:', () => {
     });
 
     it('should contain class `po-list-view-title-no-link` if title doesn`t have link and call getItemTitle with lisItem', () => {
-      spyOn(component, 'getItemTitle');
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
+      vi.spyOn(component as any, 'getItemTitle');
+      vi.spyOn(component as any, 'checkTitleType').mockReturnValue('noLink');
 
       const listItem = { id: 1, name: 'register', url: 'http://po.com.br' };
       component.items = [listItem];
@@ -669,9 +669,9 @@ describe('PoListViewComponent:', () => {
       const clickableItem = { label: 'item label' };
       component.items = [clickableItem];
 
-      spyOn(component, 'runTitleAction');
-      spyOnProperty(component, 'titleHasAction').and.returnValue(true);
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
+      vi.spyOn(component as any, 'runTitleAction');
+      vi.spyOn(component as any, 'titleHasAction').mockReturnValue(true);
+      vi.spyOn(component as any, 'checkTitleType').mockReturnValue('noLink');
 
       fixture.detectChanges();
 
@@ -685,9 +685,9 @@ describe('PoListViewComponent:', () => {
 
     it(`should not call 'runTitleAction' if 'titleAction' is clicked, 'titleHasAction' return false and 'checkTitleType' return
       noLink`, waitForAsync(() => {
-      spyOnProperty(component, 'titleHasAction').and.returnValue(false);
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
-      spyOn(component, 'runTitleAction');
+      vi.spyOn(component as any, 'titleHasAction').mockReturnValue(false);
+      vi.spyOn(component as any, 'checkTitleType').mockReturnValue('noLink');
+      vi.spyOn(component as any, 'runTitleAction');
 
       fixture.detectChanges();
 

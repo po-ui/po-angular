@@ -57,7 +57,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
 
   describe('Methods:', () => {
     it('ngOnInit: should call `setLiterals`', () => {
-      spyOn(component, <any>'setLiterals');
+      vi.spyOn(component as any, 'setLiterals');
 
       component.ngOnInit();
 
@@ -135,7 +135,7 @@ describe('PoUploadFileRestrictionsComponent:', () => {
     });
 
     it('setLiterals: should call `detectChanges`', () => {
-      spyOn(component['changeDetector'], 'detectChanges');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       component['setLiterals']();
 

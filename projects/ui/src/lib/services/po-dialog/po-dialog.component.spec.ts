@@ -38,7 +38,7 @@ describe('PoDialogComponent:', () => {
   });
 
   it('should call primaryAction and close', () => {
-    spyOn(component, 'close');
+    vi.spyOn(component as any, 'close');
     component.primaryAction.action();
     component.close();
     expect(component.primaryAction.label).toBe('ok');
@@ -53,7 +53,7 @@ describe('PoDialogComponent:', () => {
       () => {}
     );
 
-    spyOn(component, 'close');
+    vi.spyOn(component as any, 'close');
     component.primaryAction.action();
     expect(component.close).toHaveBeenCalled();
 
@@ -64,7 +64,7 @@ describe('PoDialogComponent:', () => {
   it('should call primaryAction and secondaryAction with undefined functions', () => {
     component.configDialog('teste', undefined, 'teste');
 
-    spyOn(component, 'close');
+    vi.spyOn(component as any, 'close');
     component.primaryAction.action();
     expect(component.close).toHaveBeenCalled();
 
@@ -80,8 +80,8 @@ describe('PoDialogComponent:', () => {
       destroy: () => {}
     };
 
-    spyOn(fakeThis.poModal, 'close');
-    spyOn(fakeThis, 'destroy');
+    vi.spyOn(fakeThis.poModal as any, 'close');
+    vi.spyOn(fakeThis as any, 'destroy');
 
     component.close.call(fakeThis);
 
@@ -90,7 +90,7 @@ describe('PoDialogComponent:', () => {
   });
 
   it('Should call destroy if was closed with X', waitForAsync(() => {
-    spyOn(component, 'destroy');
+    vi.spyOn(component as any, 'destroy');
 
     component.poModal.close(true);
     fixture.detectChanges();
@@ -100,7 +100,7 @@ describe('PoDialogComponent:', () => {
 
   it('Should call closeAction if has closeAction callback and was closed with X', waitForAsync(() => {
     component.closeAction = () => {};
-    spyOn(component, 'closeAction');
+    vi.spyOn(component as any, 'closeAction');
 
     component.poModal.close(true);
     fixture.detectChanges();
@@ -128,7 +128,7 @@ describe('PoDialogComponent:', () => {
     const sourceObject = { componentRef: { destroy: function () {} } };
     Object.assign(component, sourceObject);
 
-    spyOn(sourceObject.componentRef, 'destroy');
+    vi.spyOn(sourceObject.componentRef as any, 'destroy');
 
     component.destroy();
 
@@ -192,7 +192,7 @@ describe('PoDialogComponent:', () => {
     });
 
     it('onThemeChange: should call applySizeBasedOnA11y', () => {
-      spyOn<any>(component, 'applySizeBasedOnA11y');
+      vi.spyOn(component as any, 'applySizeBasedOnA11y');
       component['onThemeChange']();
       expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
     });
@@ -202,7 +202,7 @@ describe('PoDialogComponent:', () => {
     it('closeSubscription: should unsubscribe closeSubscription on destroy.', () => {
       component['closeSubscription'] = <any>{ unsubscribe: () => {} };
 
-      spyOn(component['closeSubscription'], <any>'unsubscribe');
+      vi.spyOn(component['closeSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -214,9 +214,9 @@ describe('PoDialogComponent:', () => {
       component.title = undefined;
       component.message = undefined;
 
-      spyOn(component, <any>'setDialogLiterals');
-      spyOn(component, 'configDialog');
-      spyOn(component.poModal, 'open');
+      vi.spyOn(component as any, 'setDialogLiterals');
+      vi.spyOn(component as any, 'configDialog');
+      vi.spyOn(component.poModal as any, 'open');
 
       component.open(confirmOptions, PoDialogType.Confirm);
 
@@ -227,9 +227,9 @@ describe('PoDialogComponent:', () => {
     it('open: should call `setDialogLiterals()` with `dialogOptions` and `dialogType`.', () => {
       component.literalsConfirm = { 'cancel': 'Cancel', 'confirm': 'Confirm' };
 
-      spyOn(component, <any>'setDialogLiterals');
-      spyOn(component, 'configDialog');
-      spyOn(component.poModal, 'open');
+      vi.spyOn(component as any, 'setDialogLiterals');
+      vi.spyOn(component as any, 'configDialog');
+      vi.spyOn(component.poModal as any, 'open');
 
       component.open(confirmOptions, PoDialogType.Confirm);
 
@@ -239,9 +239,9 @@ describe('PoDialogComponent:', () => {
     it(`open: should call 'configDialog()' with 'literals.ok', 'dialogOptions.ok()' if 'dialogType' is 'PoDialogType.Alert'.`, () => {
       component.literalsAlert = { 'ok': 'Ok' };
 
-      spyOn(component, <any>'setDialogLiterals');
-      spyOn(component, 'configDialog');
-      spyOn(component.poModal, 'open');
+      vi.spyOn(component as any, 'setDialogLiterals');
+      vi.spyOn(component as any, 'configDialog');
+      vi.spyOn(component.poModal as any, 'open');
 
       component.open(alertOptions, PoDialogType.Alert);
 
@@ -252,9 +252,9 @@ describe('PoDialogComponent:', () => {
         'dialogOptions.cancel()', and 'dialogOptions.close()' if 'dialogType' is 'PoDialogType.Confirm'.`, () => {
       component.literalsConfirm = { 'cancel': 'Cancel', 'confirm': 'Confirm' };
 
-      spyOn(component, <any>'setDialogLiterals');
-      spyOn(component, 'configDialog');
-      spyOn(component.poModal, 'open');
+      vi.spyOn(component as any, 'setDialogLiterals');
+      vi.spyOn(component as any, 'configDialog');
+      vi.spyOn(component.poModal as any, 'open');
 
       component.open(confirmOptions, PoDialogType.Confirm);
 
@@ -270,9 +270,9 @@ describe('PoDialogComponent:', () => {
     it('open: should call `PoModal.open()`.', () => {
       component.literalsAlert = { 'ok': 'Ok' };
 
-      spyOn(component, <any>'setDialogLiterals');
-      spyOn(component, 'configDialog');
-      spyOn(component.poModal, 'open');
+      vi.spyOn(component as any, 'setDialogLiterals');
+      vi.spyOn(component as any, 'configDialog');
+      vi.spyOn(component.poModal as any, 'open');
 
       component.open(alertOptions, PoDialogType.Alert);
 

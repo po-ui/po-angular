@@ -100,14 +100,14 @@ describe('PoModalBaseComponent:', () => {
     });
 
     it('onThemeChange: should call applySizeBasedOnA11y', () => {
-      spyOn<any>(component, 'applySizeBasedOnA11y');
+      vi.spyOn(component as any, 'applySizeBasedOnA11y');
       component['onThemeChange']();
       expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
     });
   });
 
   it('should emit `onClosedX` if xClosed is true', () => {
-    spyOn(component.onXClosed, 'emit');
+    vi.spyOn(component.onXClosed as any, 'emit');
 
     component.close(true);
 
@@ -115,7 +115,7 @@ describe('PoModalBaseComponent:', () => {
   });
 
   it('should not emit `onClosedX` if xClosed is false', () => {
-    spyOn(component.onXClosed, 'emit');
+    vi.spyOn(component.onXClosed as any, 'emit');
 
     component.close(false);
 
@@ -133,7 +133,7 @@ describe('PoModalBaseComponent:', () => {
     expect(component.primaryAction.label).toBe(component.literals.close);
     expect(component.primaryAction.action).not.toBeUndefined();
 
-    spyOn(component, 'close');
+    vi.spyOn(component as any, 'close');
     component.primaryAction.action();
     expect(component.close).toHaveBeenCalled();
   });
@@ -144,7 +144,7 @@ describe('PoModalBaseComponent:', () => {
     expect(component.primaryAction.label).toBe(component.literals.close);
     expect(component.primaryAction.action).not.toBeUndefined();
 
-    spyOn(component, 'close');
+    vi.spyOn(component as any, 'close');
     component.primaryAction.action();
     expect(component.close).toHaveBeenCalled();
   });

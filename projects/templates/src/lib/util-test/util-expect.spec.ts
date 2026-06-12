@@ -13,10 +13,10 @@ import { Observable } from 'rxjs';
  */
 export const expectSettersMethod = (comp: any, setter: string, value: any, prop: string, expectValue: any) => {
   comp[setter] = value;
-  expect(comp[prop]).toBe(
-    expectValue,
+  expect(
+    comp[prop],
     `setter called with "${value}" (${typeof value}), returned "${comp[prop]}", but expected "${expectValue}"`
-  );
+  ).toBe(expectValue);
 };
 
 /**
@@ -51,9 +51,9 @@ export const expectPropertiesValues = (comp: any, property: string, testedValues
           }", but expected "${expectValue}"`;
 
     if (expectValue instanceof Array || expectValue instanceof Object) {
-      expect(comp[property]).toEqual(expectValue, errorMessage);
+      expect(comp[property], errorMessage).toEqual(expectValue);
     } else {
-      expect(comp[property]).toBe(expectValue, errorMessage);
+      expect(comp[property], errorMessage).toBe(expectValue);
     }
   });
 };

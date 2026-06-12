@@ -47,7 +47,7 @@ describe('PoButtonGroupBaseComponent', () => {
     fixture.componentRef.setInput('p-buttons', fakeButtons);
 
     const buttons = component.buttons();
-    spyOn(buttons[0], 'action');
+    vi.spyOn(buttons[0] as any, 'action');
     buttons[0].action();
 
     expect(buttons[0].action).toHaveBeenCalled();
@@ -120,7 +120,7 @@ describe('PoButtonGroupBaseComponent', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -194,7 +194,7 @@ describe('PoButtonGroupBaseComponent', () => {
     });
 
     it('checkSelecteds: should call deselectAllButtons when toggle is none', () => {
-      spyOn(component, <any>'deselectAllButtons');
+      vi.spyOn(component as any, 'deselectAllButtons');
 
       component['checkSelecteds']('none');
 
@@ -202,7 +202,7 @@ describe('PoButtonGroupBaseComponent', () => {
     });
 
     it('checkSelecteds: should call deselectAllButtons when toggle is single', () => {
-      spyOn(component, <any>'deselectAllButtons');
+      vi.spyOn(component as any, 'deselectAllButtons');
 
       component['checkSelecteds']('single');
 
@@ -210,7 +210,7 @@ describe('PoButtonGroupBaseComponent', () => {
     });
 
     it('checkSelecteds: should not call deselectAllButtons when toggle is single', () => {
-      spyOn(component, <any>'deselectAllButtons');
+      vi.spyOn(component as any, 'deselectAllButtons');
 
       component['checkSelecteds']('multiple');
 

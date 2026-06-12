@@ -51,7 +51,7 @@ describe('PoToolbarNotificationComponent: ', () => {
   });
 
   it('should call detectChanges after view init', async () => {
-    const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
+    const detectChangesSpy = vi.spyOn(component['cdr'] as any, 'detectChanges');
 
     component.ngAfterViewInit();
 

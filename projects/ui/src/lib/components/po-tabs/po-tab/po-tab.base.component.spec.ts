@@ -44,7 +44,7 @@ describe('PoTabBaseComponent', () => {
     });
 
     it('active: should call `setDisplayOnActive`', () => {
-      spyOn(component, <any>'setDisplayOnActive');
+      vi.spyOn(component as any, 'setDisplayOnActive');
       component.active = true;
       expect(component['setDisplayOnActive']).toHaveBeenCalled();
     });
@@ -89,7 +89,7 @@ describe('PoTabBaseComponent', () => {
     });
 
     it('activatedTab: should emit the component instance', () => {
-      spyOn(component.activatedTab, 'emit');
+      vi.spyOn(component.activatedTab as any, 'emit');
       component.activatedTab.emit(component);
 
       expect(component.activatedTab.emit).toHaveBeenCalledWith(component);

@@ -28,7 +28,7 @@ describe('PoAccordionItemComponent:', () => {
 
   describe('Methods:', () => {
     it('collapse: should set `expanded` to `false` and emits `p-collapse` event', () => {
-      spyOn(component.collapseEvent, 'emit');
+      vi.spyOn(component.collapseEvent as any, 'emit');
 
       component.disabledItem = false;
       component.collapse();
@@ -38,7 +38,7 @@ describe('PoAccordionItemComponent:', () => {
     });
 
     it('expand: should set `expanded` to `true` and emits `p-expand` event', () => {
-      spyOn(component.expandEvent, 'emit');
+      vi.spyOn(component.expandEvent as any, 'emit');
 
       component.disabledItem = false;
       component.expand();

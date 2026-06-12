@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -119,7 +120,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`getErrorMessage: should return 'errorMessage' if 'hasInvalidClass' is true and 'errorMessage' has value`, () => {
       component.errorMessage = 'Invalid date';
 
-      spyOn(component, <any>'hasInvalidClass').and.returnValue(true);
+      vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(true);
 
       expect(component.getErrorMessage).toBe('Invalid date');
     });
@@ -127,7 +128,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`getErrorMessage: should return a empty string if 'hasInvalidClass' is true and 'errorMessage' have no value`, () => {
       component.errorMessage = '';
 
-      spyOn(component, <any>'hasInvalidClass').and.returnValue(true);
+      vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(true);
 
       expect(component.getErrorMessage).toBe('');
     });
@@ -135,36 +136,36 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`getErrorMessage: should return a empty string if 'hasInvalidClass' is false and 'errorMessage' has value`, () => {
       component.errorMessage = 'Invalid date';
 
-      spyOn(component, <any>'hasInvalidClass').and.returnValue(false);
+      vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(false);
 
       expect(component.getErrorMessage).toBe('');
     });
 
     it(`isDateRangeInputUncompleted: should return true if length of 'endDateInputValue' and 'startDateInputValue' is
       less than  10`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue('01/12');
-      spyOnProperty(component, 'startDateInputValue').and.returnValue('01');
+      vi.spyOn(component as any, 'endDateInputValue').mockReturnValue('01/12');
+      vi.spyOn(component as any, 'startDateInputValue').mockReturnValue('01');
 
       expect(component.isDateRangeInputUncompleted).toBeTruthy();
     });
 
     it(`isDateRangeInputUncompleted: should return false if length of 'endDateInputValue' is 10`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue('01/12/2023');
-      spyOnProperty(component, 'startDateInputValue').and.returnValue('01');
+      vi.spyOn(component as any, 'endDateInputValue').mockReturnValue('01/12/2023');
+      vi.spyOn(component as any, 'startDateInputValue').mockReturnValue('01');
 
       expect(component.isDateRangeInputUncompleted).toBeFalsy();
     });
 
     it(`isDateRangeInputUncompleted: should return false if length of 'startDateInputValue' is 10`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue('02/12');
-      spyOnProperty(component, 'startDateInputValue').and.returnValue('01/12/2023');
+      vi.spyOn(component as any, 'endDateInputValue').mockReturnValue('02/12');
+      vi.spyOn(component as any, 'startDateInputValue').mockReturnValue('01/12/2023');
 
       expect(component.isDateRangeInputUncompleted).toBeFalsy();
     });
 
     it(`isDirtyDateRangeInput: should return false if length of 'endDateInputValue' and 'startDateInputValue' are 0`, () => {
-      spyOnProperty(component, 'endDateInputValue').and.returnValue('');
-      spyOnProperty(component, 'startDateInputValue').and.returnValue('');
+      vi.spyOn(component as any, 'endDateInputValue').mockReturnValue('');
+      vi.spyOn(component as any, 'startDateInputValue').mockReturnValue('');
 
       expect(component.isDirtyDateRangeInput).toBeFalsy();
     });
@@ -184,10 +185,10 @@ describe('PoDatepickerRangeComponent:', () => {
     const poCalendarContentOffset = 8;
 
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call focus method if autoFocus is true.', () => {
@@ -201,7 +202,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         Object.defineProperty(component, 'renderer', {
           value: {
-            setAttribute: jasmine.createSpy('setAttribute')
+            setAttribute: vi.fn()
           } as any
         });
 
@@ -217,7 +218,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should not call focus if autoFocus is false', () => {
         component.autoFocus = false;
 
-        (component.focus as jasmine.Spy).calls.reset();
+        (component.focus as Mock).mockClear();
 
         component.iconCalendar = {
           buttonElement: {
@@ -227,7 +228,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         Object.defineProperty(component, 'renderer', {
           value: {
-            setAttribute: jasmine.createSpy('setAttribute')
+            setAttribute: vi.fn()
           } as any
         });
 
@@ -251,7 +252,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should not call renderer.setAttribute when iconCalendar is undefined', () => {
         component.iconCalendar = undefined;
 
-        const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
+        const setAttributeSpy = vi.spyOn(component['renderer'] as any, 'setAttribute');
 
         component.ngAfterViewInit();
 
@@ -269,7 +270,7 @@ describe('PoDatepickerRangeComponent:', () => {
           open: 'Open calendar'
         };
 
-        const setAttributeSpy = spyOn(component['renderer'], 'setAttribute');
+        const setAttributeSpy = vi.spyOn(component['renderer'] as any, 'setAttribute');
 
         component.ngAfterViewInit();
 
@@ -282,7 +283,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('ngOnDestroy: should call `removeListeners`.', () => {
-      const removeListener = spyOn(component, <any>'removeListeners');
+      const removeListener = vi.spyOn(component as any, 'removeListeners');
 
       component.ngOnDestroy();
 
@@ -291,12 +292,12 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('closeCalendar: should set isCalendarVisible to false and focus iconCalendar when available', fakeAsync(() => {
       component.isCalendarVisible = true;
-      component.iconCalendar = { focus: jasmine.createSpy('focus') } as any;
+      component.iconCalendar = { focus: vi.fn() } as any;
 
       component.closeCalendar();
       tick();
 
-      expect(component.isCalendarVisible).toBeFalse();
+      expect(component.isCalendarVisible).toBe(false);
       expect(component.iconCalendar.focus).toHaveBeenCalled();
     }));
 
@@ -307,14 +308,14 @@ describe('PoDatepickerRangeComponent:', () => {
       component.closeCalendar();
       tick();
 
-      expect(component.isCalendarVisible).toBeFalse();
+      expect(component.isCalendarVisible).toBe(false);
     }));
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -322,8 +323,8 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -331,7 +332,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -344,7 +345,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component['poMaskObject'] = undefined;
       const buildMaskReturn = new PoMask(undefined, false);
 
-      spyOn(component, <any>'buildMask').and.returnValue(buildMaskReturn);
+      vi.spyOn(component as any, 'buildMask').mockReturnValue(buildMaskReturn);
 
       component.ngOnInit();
 
@@ -358,7 +359,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
 
     it('ngOnChanges: should call `validateModel` if `changes` contain minDate', () => {
@@ -366,7 +367,7 @@ describe('PoDatepickerRangeComponent:', () => {
         minDate: '2021-08-08'
       };
 
-      const spy = spyOn(component, <any>'validateModel');
+      const spy = vi.spyOn(component as any, 'validateModel');
 
       component.ngOnChanges(changes);
 
@@ -378,7 +379,7 @@ describe('PoDatepickerRangeComponent:', () => {
         maxDate: '2021-08-08'
       };
 
-      const spy = spyOn(component, <any>'validateModel');
+      const spy = vi.spyOn(component as any, 'validateModel');
 
       component.ngOnChanges(changes);
 
@@ -388,7 +389,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`ngOnChanges: shouldn't call 'validateModel' if 'changes' not contain maxDate ou minDate`, () => {
       const changes = {};
 
-      const spy = spyOn(component, <any>'validateModel');
+      const spy = vi.spyOn(component as any, 'validateModel');
 
       component.ngOnChanges(changes);
 
@@ -400,7 +401,7 @@ describe('PoDatepickerRangeComponent:', () => {
         locale: 'pt'
       };
 
-      const spy = spyOn(component, <any>'buildMask');
+      const spy = vi.spyOn(component as any, 'buildMask');
 
       component.ngOnChanges(changes);
 
@@ -413,8 +414,8 @@ describe('PoDatepickerRangeComponent:', () => {
       };
       component.dateRange = { start: '2023-01-25', end: '2023-02-21' };
 
-      const spyBuildMask = spyOn(component, <any>'buildMask');
-      const spyUpdateScreenByModel = spyOn(component, <any>'updateScreenByModel');
+      const spyBuildMask = vi.spyOn(component as any, 'buildMask');
+      const spyUpdateScreenByModel = vi.spyOn(component as any, 'updateScreenByModel');
 
       component.ngOnChanges(changes);
 
@@ -423,9 +424,9 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('clear: should call `updateScreenByModel`, `resetDateRangeInputValidation` and `updateModel`', () => {
-      spyOn(component, 'updateScreenByModel');
-      spyOn(component, <any>'resetDateRangeInputValidation');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'resetDateRangeInputValidation');
+      vi.spyOn(component as any, 'updateModel');
 
       const dateRange = { start: '', end: '' };
 
@@ -444,7 +445,7 @@ describe('PoDatepickerRangeComponent:', () => {
         component.iconCalendar = {
           buttonElement: {
             nativeElement: {
-              focus: jasmine.createSpy('focus')
+              focus: vi.fn()
             }
           }
         } as any;
@@ -455,15 +456,15 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const event = {
           key: 'Escape',
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
 
         expect(event.preventDefault).not.toHaveBeenCalled();
         expect(event.stopPropagation).not.toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
 
       it('should close calendar on Escape key', () => {
@@ -471,8 +472,8 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const event = {
           key: 'Escape',
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
@@ -480,7 +481,7 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
         expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
 
       it('should close calendar on Shift+Tab when focus is on first combo', () => {
@@ -489,24 +490,24 @@ describe('PoDatepickerRangeComponent:', () => {
         component.iconCalendar = {
           buttonElement: {
             nativeElement: {
-              focus: jasmine.createSpy('focus')
+              focus: vi.fn()
             }
           }
         } as any;
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(null)
+            querySelector: vi.fn().mockReturnValue(null)
           }
         } as any;
 
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
+        vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
 
         const event = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
@@ -514,7 +515,7 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
         expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
 
       it('should not close calendar on Shift+Tab when focus is not on first combo', () => {
@@ -523,40 +524,40 @@ describe('PoDatepickerRangeComponent:', () => {
         const event = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(false);
+        vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(false);
 
         component.onCalendarKeyDown(event);
 
         expect(event.preventDefault).not.toHaveBeenCalled();
         expect(event.stopPropagation).not.toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeTrue();
+        expect(component.isCalendarVisible).toBe(true);
       });
 
       it('should focus first preset on Shift+Tab when it exists', () => {
         component.isCalendarVisible = true;
 
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({
+            querySelector: vi.fn().mockReturnValue({
               focus: focusSpy
             })
           }
         } as any;
 
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
-        spyOn(component, 'verifyMobile').and.returnValue(null);
+        vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
 
         const event = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
@@ -565,7 +566,7 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(event.stopPropagation).toHaveBeenCalled();
         expect(focusSpy).toHaveBeenCalled();
 
-        expect(component.isCalendarVisible).toBeTrue();
+        expect(component.isCalendarVisible).toBe(true);
 
         expect(component.iconCalendar.buttonElement.nativeElement.focus).not.toHaveBeenCalled();
       });
@@ -576,19 +577,19 @@ describe('PoDatepickerRangeComponent:', () => {
         component.iconCalendar = {
           buttonElement: {
             nativeElement: {
-              focus: jasmine.createSpy('focus')
+              focus: vi.fn()
             }
           }
         } as any;
 
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
-        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+        vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(['mobile'] as any);
 
         const event = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
@@ -596,28 +597,30 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
         expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
     });
 
     describe('clearAndFocus', () => {
       it('should call clear method and focus on input element', () => {
-        const clearSpy = spyOn(component, 'clear');
-        const focusSpy = spyOn(component.startDateInput.nativeElement, 'focus');
+        const clearSpy = vi.spyOn(component as any, 'clear');
+        const focusSpy = vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
         component.clearAndFocus();
 
         expect(clearSpy).toHaveBeenCalled();
         expect(focusSpy).toHaveBeenCalled();
-        expect(clearSpy).toHaveBeenCalledBefore(focusSpy);
+        expect(Math.min(...vi.mocked(clearSpy).mock.invocationCallOrder)).toBeLessThan(
+          Math.min(...vi.mocked(focusSpy).mock.invocationCallOrder)
+        );
       });
     });
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -625,8 +628,8 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -636,7 +639,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('eventOnClick: should click when select text and edit model', () => {
       fixture.detectChanges();
-      spyOn(component['poMaskObject'], 'click');
+      vi.spyOn(component['poMaskObject'] as any, 'click');
       const eventMock = { target: { name: '' } };
 
       component.eventOnClick(eventMock);
@@ -651,7 +654,7 @@ describe('PoDatepickerRangeComponent:', () => {
         }
       };
 
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.focus();
 
@@ -666,7 +669,7 @@ describe('PoDatepickerRangeComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.focus();
 
@@ -675,7 +678,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -685,7 +688,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -694,7 +697,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -710,15 +713,15 @@ describe('PoDatepickerRangeComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
       it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `true`', () => {
         component['onTouchedModel'] = () => {};
-        spyOn(component, <any>'removeFocusFromDatePickerRangeField');
-        spyOn(component, <any>'updateModelByScreen');
-        spyOn(component, <any>'onTouchedModel');
+        vi.spyOn(component as any, 'removeFocusFromDatePickerRangeField');
+        vi.spyOn(component as any, 'updateModelByScreen');
+        vi.spyOn(component as any, 'onTouchedModel');
 
         const eventMock = { target: { name: 'start-date' } };
 
@@ -731,9 +734,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
       it('onBlur: should call `removeFocusFromDatePickerRangeField` and `updateModelByScreen` with `false`', () => {
         component['onTouchedModel'] = () => {};
-        spyOn(component, <any>'removeFocusFromDatePickerRangeField');
-        spyOn(component, <any>'updateModelByScreen');
-        spyOn(component, <any>'onTouchedModel');
+        vi.spyOn(component as any, 'removeFocusFromDatePickerRangeField');
+        vi.spyOn(component as any, 'updateModelByScreen');
+        vi.spyOn(component as any, 'onTouchedModel');
 
         const eventMock = { target: { name: 'end-date' } };
 
@@ -773,8 +776,8 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onFocus: should call `applyFocusOnDatePickerRangeField`', () => {
       fixture.detectChanges();
-      spyOn(component, <any>'applyFocusOnDatePickerRangeField');
-      spyOn(component['poMaskObject'], 'resetPositions');
+      vi.spyOn(component as any, 'applyFocusOnDatePickerRangeField');
+      vi.spyOn(component['poMaskObject'] as any, 'resetPositions');
       const eventMock = { target: { name: '' } };
 
       component.onFocus(eventMock);
@@ -786,7 +789,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const eventMock = { target: { name: '' } };
       component.readonly = false;
       fixture.detectChanges();
-      spyOn(component['poMaskObject'], 'keydown');
+      vi.spyOn(component['poMaskObject'] as any, 'keydown');
 
       component.onKeydown(eventMock);
 
@@ -797,7 +800,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const eventMock = {};
       fixture.detectChanges();
       component.readonly = true;
-      spyOn(component['poMaskObject'], 'keydown');
+      vi.spyOn(component['poMaskObject'] as any, 'keydown');
 
       component.onKeydown(eventMock);
 
@@ -810,10 +813,10 @@ describe('PoDatepickerRangeComponent:', () => {
       };
       fixture.detectChanges();
 
-      spyOn(component, <any>['isSetFocusOnBackspace']).and.returnValue(true);
-      spyOn(component, <any>['setFocusOnBackspace']);
-      spyOn(component['poMaskObject'], 'keydown');
-      spyOn(fakeEvent, 'preventDefault');
+      vi.spyOn(component, <any>['isSetFocusOnBackspace']).mockReturnValue(true);
+      vi.spyOn(component, <any>['setFocusOnBackspace']);
+      vi.spyOn(component['poMaskObject'] as any, 'keydown');
+      vi.spyOn(fakeEvent as any, 'preventDefault');
 
       component.onKeydown(fakeEvent);
 
@@ -825,9 +828,9 @@ describe('PoDatepickerRangeComponent:', () => {
     it('onKeydown: shouldn`t call `setFocusOnBackspace` if `isSetFocusOnBackspace` returns false.', () => {
       const fakeEvent: any = {};
       fixture.detectChanges();
-      spyOn(component, <any>['isSetFocusOnBackspace']).and.returnValue(false);
-      spyOn(component, <any>['setFocusOnBackspace']);
-      spyOn(component['poMaskObject'], 'keydown');
+      vi.spyOn(component, <any>['isSetFocusOnBackspace']).mockReturnValue(false);
+      vi.spyOn(component, <any>['setFocusOnBackspace']);
+      vi.spyOn(component['poMaskObject'] as any, 'keydown');
 
       component.onKeydown(fakeEvent);
 
@@ -841,16 +844,16 @@ describe('PoDatepickerRangeComponent:', () => {
       const combinedEvent = { ...fakeEvent, target: { ...fakeEvent.target, ...eventMock.target } };
       component['poMaskObject'] = new PoMask('99/99/9999', true);
 
-      spyOn(component['poMaskObject'], 'keydown');
-      spyOn(component.keydown, 'emit');
+      vi.spyOn(component['poMaskObject'] as any, 'keydown');
+      vi.spyOn(component.keydown as any, 'emit');
 
       component.startDateInput = {
         nativeElement: {
-          focus: jasmine.createSpy('focus')
+          focus: vi.fn()
         }
       };
 
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.startDateInput.nativeElement);
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.startDateInput.nativeElement);
 
       component.onKeydown(combinedEvent);
 
@@ -860,7 +863,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     describe('onKeyPress', () => {
       it('should call toggleCalendar when button is clicked', () => {
-        spyOn(component, 'toggleCalendar');
+        vi.spyOn(component as any, 'toggleCalendar');
 
         component.toggleCalendar();
 
@@ -868,9 +871,9 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should focus iconClean when Shift+Tab, calendar hidden and enableCleaner true', () => {
-        const focusSpy = jasmine.createSpy();
+        const focusSpy = vi.fn();
 
-        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(true);
+        vi.spyOn(component, 'enableCleaner', 'get').mockReturnValue(true);
 
         component.isCalendarVisible = false;
 
@@ -881,7 +884,7 @@ describe('PoDatepickerRangeComponent:', () => {
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         component.onKeyPress(event);
@@ -891,16 +894,16 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should call focus when Shift+Tab and calendar hidden without cleaner', () => {
-        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(false);
-        spyOn(component, 'focus');
+        vi.spyOn(component, 'enableCleaner', 'get').mockReturnValue(false);
+        vi.spyOn(component as any, 'focus');
 
         component.isCalendarVisible = false;
 
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         };
 
         component.onKeyPress(event);
@@ -913,11 +916,11 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should focus first combo when Tab and calendar visible', () => {
         component.isCalendarVisible = true;
 
-        const focusSpy = jasmine.createSpy();
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({
+            querySelector: vi.fn().mockReturnValue({
               focus: focusSpy
             })
           }
@@ -926,7 +929,7 @@ describe('PoDatepickerRangeComponent:', () => {
         const event: any = {
           key: 'Tab',
           shiftKey: false,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         component.onKeyPress(event);
@@ -938,11 +941,11 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should focus first combo when Tab and calendar visible and no preset', () => {
         component.isCalendarVisible = true;
 
-        const focusSpy = jasmine.createSpy();
+        const focusSpy = vi.fn();
 
-        const querySelectorSpy = jasmine.createSpy();
+        const querySelectorSpy = vi.fn();
 
-        querySelectorSpy.and.returnValues(null, { focus: focusSpy });
+        querySelectorSpy.mockReturnValueOnce(null).mockReturnValueOnce({ focus: focusSpy });
 
         component.calendarPicker = {
           nativeElement: {
@@ -953,7 +956,7 @@ describe('PoDatepickerRangeComponent:', () => {
         const event: any = {
           key: 'Tab',
           shiftKey: false,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         component.onKeyPress(event);
@@ -966,20 +969,20 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should focus first combo on mobile when Tab and calendar visible', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(['mobile'] as any);
 
-        const focusSpy = jasmine.createSpy();
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+            querySelector: vi.fn().mockReturnValue({ focus: focusSpy })
           }
         } as any;
 
         const event: any = {
           key: 'Tab',
           shiftKey: false,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         component.onKeyPress(event);
@@ -994,7 +997,7 @@ describe('PoDatepickerRangeComponent:', () => {
         component.readonly = true;
 
         component['poMaskObject'] = {
-          keydown: jasmine.createSpy()
+          keydown: vi.fn()
         } as any;
 
         component.onKeydownDatepickerRange({});
@@ -1008,13 +1011,13 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const event: any = {
           key: 'Escape',
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         };
 
         component.onKeydownDatepickerRange(event);
 
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
       });
@@ -1037,14 +1040,14 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.onKeydownDatepickerRange(event);
 
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
 
       it('should prevent default and focus calendar button on Tab from iconClean', () => {
         component.readonly = false;
 
         const iconCleanMock = document.createElement('button');
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
         component.iconClean = {
           nativeElement: iconCleanMock
@@ -1062,8 +1065,8 @@ describe('PoDatepickerRangeComponent:', () => {
           key: 'Tab',
           shiftKey: false,
           target: iconCleanMock,
-          preventDefault: jasmine.createSpy('preventDefault'),
-          stopPropagation: jasmine.createSpy('stopPropagation')
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         };
 
         component.onKeydownDatepickerRange(event);
@@ -1079,9 +1082,9 @@ describe('PoDatepickerRangeComponent:', () => {
       component.readonly = true;
       fixture.detectChanges();
 
-      spyOn(component['poMaskObject'], 'keyup');
-      spyOn(component, <any>'setFocus');
-      spyOn(component, <any>'updateModelWhenComplete');
+      vi.spyOn(component['poMaskObject'] as any, 'keyup');
+      vi.spyOn(component as any, 'setFocus');
+      vi.spyOn(component as any, 'updateModelWhenComplete');
 
       component.onKeyup(eventMock);
 
@@ -1097,9 +1100,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component['poMaskObject'], 'keyup');
-      spyOn(component, <any>'setFocus');
-      spyOn(component, <any>'updateModelWhenComplete');
+      vi.spyOn(component['poMaskObject'] as any, 'keyup');
+      vi.spyOn(component as any, 'setFocus');
+      vi.spyOn(component as any, 'updateModelWhenComplete');
 
       component.onKeyup(eventMock);
 
@@ -1119,9 +1122,9 @@ describe('PoDatepickerRangeComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component['poMaskObject'], 'keyup');
-      spyOn(component, <any>'setFocus');
-      spyOn(component, <any>'updateModelWhenComplete');
+      vi.spyOn(component['poMaskObject'] as any, 'keyup');
+      vi.spyOn(component as any, 'setFocus');
+      vi.spyOn(component as any, 'updateModelWhenComplete');
 
       component.onKeyup(eventMock);
 
@@ -1181,10 +1184,10 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('updateScreenByModel: should call `poDateService.isDateRangeValid`, `formatModelToScreen`, `this.dateFormatFailed` and `detectChanges`', () => {
-      spyOn(component, <any>'dateFormatFailed').and.returnValue(false);
-      spyOn(component['poDateService'], 'isDateRangeValid').and.returnValue(true);
-      spyOn(component, <any>'formatModelToScreen');
-      const spyDetectChanges = spyOn(component['changeDetector'], <any>'detectChanges');
+      vi.spyOn(component as any, 'dateFormatFailed').mockReturnValue(false);
+      vi.spyOn(component['poDateService'] as any, 'isDateRangeValid').mockReturnValue(true);
+      vi.spyOn(component as any, 'formatModelToScreen');
+      const spyDetectChanges = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
 
       const dateRangeModel = { start: '2018-04-12', end: '2018-08-15' };
 
@@ -1203,7 +1206,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`applyFocusOnDatePickerRangeField: should call 'dateRangeField.nativeElement.classList.add' with
       'po-datepicker-range-field-focused'`, () => {
-      spyOn(component.dateRangeField.nativeElement.classList, 'add');
+      vi.spyOn(component.dateRangeField.nativeElement.classList, 'add');
 
       component['applyFocusOnDatePickerRangeField']();
 
@@ -1279,7 +1282,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const value = '12/03/2018';
       const dateFormatted = '2018-03-12';
 
-      spyOn(component, <any>'formatDate').and.returnValue(dateFormatted);
+      vi.spyOn(component as any, 'formatDate').mockReturnValue(dateFormatted);
 
       expect(component['formatScreenToModel'](value)).toBe(dateFormatted);
       expect(component['formatDate']).toHaveBeenCalledWith('yyyy-mm-dd', '12', '03', '2018');
@@ -1289,7 +1292,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const value = '2018-03-12';
       const dateFormatted = '12/03/2018';
 
-      spyOn(component, <any>'formatDate').and.returnValue(dateFormatted);
+      vi.spyOn(component as any, 'formatDate').mockReturnValue(dateFormatted);
 
       expect(component['formatModelToScreen'](value)).toBe(dateFormatted);
       expect(component['formatDate']).toHaveBeenCalledWith(component['format'], '12', '03', '2018');
@@ -1311,7 +1314,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = true;
       component['isStartDateRangeInputValid'] = true;
 
-      spyOn(component, <any>'getValidatedModel').and.returnValue(valitedModel);
+      vi.spyOn(component as any, 'getValidatedModel').mockReturnValue(valitedModel);
 
       const result = component['getDateRangeFormatValidation'](startDate, endDate, isStartDateTargetEvent);
 
@@ -1329,8 +1332,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = false;
       component['isStartDateRangeInputValid'] = true;
 
-      spyOn(component, <any>'getValidatedModel').and.returnValue(valitedModel);
-      spyOn(component, <any>'setDateRangeInputValidation');
+      vi.spyOn(component as any, 'getValidatedModel').mockReturnValue(valitedModel);
+      vi.spyOn(component as any, 'setDateRangeInputValidation');
 
       const result = component['getDateRangeFormatValidation'](startDate, endDate, false);
 
@@ -1347,8 +1350,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = true;
       component['isStartDateRangeInputValid'] = false;
 
-      spyOn(component, <any>'getValidatedModel').and.returnValue(valitedModel);
-      spyOn(component, <any>'setDateRangeInputValidation');
+      vi.spyOn(component as any, 'getValidatedModel').mockReturnValue(valitedModel);
+      vi.spyOn(component as any, 'setDateRangeInputValidation');
 
       const result = component['getDateRangeFormatValidation'](startDate, endDate, false);
 
@@ -1360,7 +1363,7 @@ describe('PoDatepickerRangeComponent:', () => {
       const startDate = '2018-05-29';
       const endDate = '2018-05-22';
 
-      spyOn(component, <any>'setDateRangeInputValidation');
+      vi.spyOn(component as any, 'setDateRangeInputValidation');
 
       component['getDateRangeFormatValidation'](startDate, endDate, false);
 
@@ -1477,7 +1480,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it(`removeFocusFromDatePickerRangeField: should call 'dateRangeField.nativeElement.classList.remove' with
       'po-datepicker-range-field-focused'`, () => {
-      spyOn(component.dateRangeField.nativeElement.classList, 'remove');
+      vi.spyOn(component.dateRangeField.nativeElement.classList, 'remove');
 
       component['removeFocusFromDatePickerRangeField']();
 
@@ -1579,9 +1582,9 @@ describe('PoDatepickerRangeComponent:', () => {
       const inputElement = component.endDateInput.nativeElement;
       const eventMock = { keyCode, target: inputElement };
       fixture.detectChanges();
-      spyOn(component, <any>'setFocusOnArrowLeft');
-      spyOn(component, <any>'setFocusOnArrowRight');
-      spyOn(component, <any>'setFocusOnStartDateCompleted');
+      vi.spyOn(component as any, 'setFocusOnArrowLeft');
+      vi.spyOn(component as any, 'setFocusOnArrowRight');
+      vi.spyOn(component as any, 'setFocusOnStartDateCompleted');
 
       component['setFocus'](eventMock);
       expect(component['setFocusOnArrowLeft']).toHaveBeenCalledWith(keyCode, inputName);
@@ -1595,8 +1598,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const dateRange = { start: '2018-06-12', end: '2018-08-15' };
       const isStartDateTargetEvent = false;
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component.onChange, 'emit');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component.onChange as any, 'emit');
 
       component['updateModelByScreen'](isStartDateTargetEvent);
 
@@ -1613,9 +1616,9 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = true;
       component['dateRange'] = { start: '2018-06-12', end: '2018-08-15' };
 
-      spyOn(component, <any>'getDateRangeFormatValidation');
-      spyOn(component, <any>'resetDateRangeInputValidation');
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'getDateRangeFormatValidation');
+      vi.spyOn(component as any, 'resetDateRangeInputValidation');
+      vi.spyOn(component as any, 'validateModel');
 
       component['updateModelByScreen'](isStartDateTargetEvent);
 
@@ -1630,12 +1633,12 @@ describe('PoDatepickerRangeComponent:', () => {
       const isStartDateTargetEvent = false;
       component['dateRange'] = { start: '', end: '' };
 
-      spyOnProperty(component, 'isDirtyDateRangeInput').and.returnValue(true);
-      spyOnProperty(component, 'isDateRangeInputUncompleted').and.returnValue(true);
+      vi.spyOn(component as any, 'isDirtyDateRangeInput').mockReturnValue(true);
+      vi.spyOn(component as any, 'isDateRangeInputUncompleted').mockReturnValue(true);
 
-      spyOn(component, <any>'getDateRangeFormatValidation');
-      spyOn(component, <any>'isEqualBeforeValue');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'getDateRangeFormatValidation');
+      vi.spyOn(component as any, 'isEqualBeforeValue');
+      vi.spyOn(component as any, 'updateModel');
 
       component['updateModelByScreen'](isStartDateTargetEvent);
 
@@ -1653,9 +1656,12 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = false;
       component['dateRange'] = { start: '2018-06-12', end: '2018-08-15' };
 
-      spyOn(component, <any>'getDateRangeFormatValidation').and.returnValue({ isValid: false, dateRangeModel: {} });
-      spyOn(component, <any>'resetDateRangeInputValidation');
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'getDateRangeFormatValidation').mockReturnValue({
+        isValid: false,
+        dateRangeModel: {}
+      });
+      vi.spyOn(component as any, 'resetDateRangeInputValidation');
+      vi.spyOn(component as any, 'validateModel');
 
       component['updateModelByScreen'](isStartDateTargetEvent);
 
@@ -1673,9 +1679,12 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = true;
       component['dateRange'] = { start: '', end: '' };
 
-      spyOn(component, <any>'getDateRangeFormatValidation').and.returnValue({ isValid: false, dateRangeModel: {} });
-      spyOn(component, <any>'resetDateRangeInputValidation');
-      spyOn(component, <any>'validateModel');
+      vi.spyOn(component as any, 'getDateRangeFormatValidation').mockReturnValue({
+        isValid: false,
+        dateRangeModel: {}
+      });
+      vi.spyOn(component as any, 'resetDateRangeInputValidation');
+      vi.spyOn(component as any, 'validateModel');
 
       component['updateModelByScreen'](isStartDateTargetEvent);
 
@@ -1691,8 +1700,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const isStartDateTargetEvent = true;
       component['dateRange'] = { start: '2018-06-12', end: '2018-08-15' };
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component.onChange, 'emit');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component.onChange as any, 'emit');
 
       component['updateModelByScreen'](isStartDateTargetEvent);
 
@@ -1707,10 +1716,13 @@ describe('PoDatepickerRangeComponent:', () => {
       component['isDateRangeInputFormatValid'] = false;
       component['dateRange'] = { start: '2018-08-15', end: '2018-08-15' };
 
-      spyOn(component, <any>'getDateRangeFormatValidation').and.returnValue({ isValid: false, dateRangeModel: {} });
-      spyOn(component, <any>'resetDateRangeInputValidation');
-      spyOn(component, <any>'validateModel');
-      spyOn(component, <any>'isEqualBeforeValue').and.returnValue(true);
+      vi.spyOn(component as any, 'getDateRangeFormatValidation').mockReturnValue({
+        isValid: false,
+        dateRangeModel: {}
+      });
+      vi.spyOn(component as any, 'resetDateRangeInputValidation');
+      vi.spyOn(component as any, 'validateModel');
+      vi.spyOn(component as any, 'isEqualBeforeValue').mockReturnValue(true);
 
       component['updateModelWhenComplete'](
         isStartDateTargetEvent,
@@ -1768,8 +1780,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const elementPosition = 0;
       fixture.detectChanges();
       const inputStart = component.startDateInput;
-      spyOn(component, <any>'focusOnElement');
-      spyOn(inputStart.nativeElement, 'setSelectionRange');
+      vi.spyOn(component as any, 'focusOnElement');
+      vi.spyOn(inputStart.nativeElement as any, 'setSelectionRange');
 
       component['setFocusAndPosition'](elementPosition, inputStart, elementPosition);
 
@@ -1788,7 +1800,7 @@ describe('PoDatepickerRangeComponent:', () => {
         }
       };
 
-      spyOn(fakeElement.nativeElement, 'focus');
+      vi.spyOn(fakeElement.nativeElement as any, 'focus');
 
       component['focusOnElement'](fakeElement);
 
@@ -1807,7 +1819,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should call `setFocusAndPosition` if input name is `end date` and key code is `arrow left`.', () => {
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](arrowLeftkeyCode, inputEndDateName);
 
         expect(component['setFocusAndPosition']).toHaveBeenCalled();
@@ -1816,7 +1828,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('shouldn`t call `setFocusAndPosition` if input name isn`t `end date`.', () => {
         const inputStartDateName = component.startDateInputName;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](arrowLeftkeyCode, inputStartDateName);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1827,7 +1839,7 @@ describe('PoDatepickerRangeComponent:', () => {
         component.endDateInput.nativeElement.value = '19/12/2';
         component.endDateInput.nativeElement.focus();
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](arrowLeftkeyCode, inputEndDateName);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1836,7 +1848,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('shouldn`t call `setFocusAndPosition` if key code isn`t `arrow left`.', () => {
         const keyCode = 32;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](keyCode, inputEndDateName);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1855,7 +1867,7 @@ describe('PoDatepickerRangeComponent:', () => {
       });
 
       it('should call `setFocusAndPosition` if input name is `start date` and key code is `arrow left`.', () => {
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowRight'](arrowRightkeyCode, inputStartDateName, startDateElement);
 
         expect(component['setFocusAndPosition']).toHaveBeenCalled();
@@ -1864,7 +1876,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('shouldn`t call `setFocusAndPosition` if input name isn`t start date.', () => {
         const inputEndDateName = component.endDateInputName;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowRight'](arrowRightkeyCode, inputEndDateName, startDateElement);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1876,7 +1888,7 @@ describe('PoDatepickerRangeComponent:', () => {
         startDateElement.focus();
         startDateElement.selectionEnd = 0;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowRight'](arrowRightkeyCode, inputStartDateName, startDateElement);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1885,7 +1897,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('shouldn`t call `setFocusAndPosition` if key code isn`t `arrow left`.', () => {
         const keyCode = 32;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowRight'](keyCode, inputStartDateName, startDateElement);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1909,7 +1921,7 @@ describe('PoDatepickerRangeComponent:', () => {
         startDateElement.focus();
         startDateElement.selectionStart = 10;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnStartDateCompleted'](digit7keyCode, inputStartDateName);
 
         expect(component['setFocusAndPosition']).toHaveBeenCalled();
@@ -1918,7 +1930,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('shouldn`t call `setFocusAndPosition` if input name isn`t start date.', () => {
         const inputEndDateName = component.endDateInputName;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](digit7keyCode, inputEndDateName);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1930,7 +1942,7 @@ describe('PoDatepickerRangeComponent:', () => {
         startDateElement.focus();
         startDateElement.selectionStart = 9;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](digit7keyCode, inputStartDateName);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1939,7 +1951,7 @@ describe('PoDatepickerRangeComponent:', () => {
       it('shouldn`t call `setFocusAndPosition` if key code isn`t `arrow left`.', () => {
         const keyCode = 32;
 
-        spyOn(component, <any>'setFocusAndPosition');
+        vi.spyOn(component as any, 'setFocusAndPosition');
         component['setFocusOnArrowLeft'](keyCode, inputStartDateName);
 
         expect(component['setFocusAndPosition']).not.toHaveBeenCalled();
@@ -1997,7 +2009,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('setFocusOnBackspace: should call `setFocusAndPosition`.', () => {
       const inputPosition = 0;
-      spyOn(component, <any>'setFocusAndPosition');
+      vi.spyOn(component as any, 'setFocusAndPosition');
       component['setFocusOnBackspace']();
 
       expect(component['setFocusAndPosition']).toHaveBeenCalledWith(
@@ -2013,15 +2025,15 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(fakeElement)
+            querySelector: vi.fn().mockReturnValue(fakeElement)
           }
         } as any;
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(fakeElement);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(fakeElement);
 
         const result = (component as any).isFocusOnFirstCombo();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return false when first combo is not the active element', () => {
@@ -2030,15 +2042,15 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(fakeElement)
+            querySelector: vi.fn().mockReturnValue(fakeElement)
           }
         } as any;
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(anotherElement);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(anotherElement);
 
         const result = (component as any).isFocusOnFirstCombo();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -2108,11 +2120,11 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('initializeListeners: should initialize listeners and call `wasClickedOnPicker` and `addEventListener`.', () => {
-      const wasClickedOnPicker = spyOn(component, <any>'wasClickedOnPicker');
-      const addEventListener = spyOn(window, 'addEventListener');
-      const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
-        callback()
-      );
+      const wasClickedOnPicker = vi.spyOn(component as any, 'wasClickedOnPicker');
+      const addEventListener = vi.spyOn(window as any, 'addEventListener');
+      const listen = vi
+        .spyOn(component['renderer'], 'listen')
+        .mockImplementation((target: any, eventName: any, callback: any) => callback({}));
 
       component['initializeListeners']();
 
@@ -2123,7 +2135,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onScroll: should call `controlPosition.adjustPosition()`', () => {
       component.isCalendarVisible = true;
-      spyOn(component['controlPosition'], 'adjustPosition');
+      vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
       component['onScroll']();
 
@@ -2132,7 +2144,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('onScroll: should not call `controlPosition.adjustPosition()` if `isCalendarVisible` is falsy', () => {
       component.isCalendarVisible = false;
-      spyOn(component['controlPosition'], 'adjustPosition');
+      vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
       component['onScroll']();
 
@@ -2142,13 +2154,13 @@ describe('PoDatepickerRangeComponent:', () => {
     it('setCalendarPosition: should return early when verifyMobile is true', () => {
       component.isCalendarVisible = true;
 
-      spyOn(component as any, 'verifyMobile').and.returnValue(true);
+      vi.spyOn(component as any, 'verifyMobile').mockReturnValue(true);
 
-      const rafSpy = spyOn(window, 'requestAnimationFrame');
+      const rafSpy = vi.spyOn(window as any, 'requestAnimationFrame');
 
       (component as any).controlPosition = {
-        setElements: jasmine.createSpy('setElements'),
-        adjustPosition: jasmine.createSpy('adjustPosition')
+        setElements: vi.fn(),
+        adjustPosition: vi.fn()
       };
 
       component.setCalendarPosition();
@@ -2161,7 +2173,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it(`setCalendarPosition: should call controlPosition methods`, () => {
       component.isCalendarVisible = true;
 
-      spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback): number => {
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback): number => {
         callback(0);
         return 0;
       });
@@ -2173,11 +2185,11 @@ describe('PoDatepickerRangeComponent:', () => {
       component.dateRangeField = new ElementRef(document.createElement('div'));
 
       (component as any).controlPosition = {
-        setElements: jasmine.createSpy('setElements'),
-        adjustPosition: jasmine.createSpy('adjustPosition')
+        setElements: vi.fn(),
+        adjustPosition: vi.fn()
       };
 
-      spyOn(component.calendarPicker.nativeElement, 'querySelector').and.returnValue(document.createElement('div'));
+      vi.spyOn(component.calendarPicker.nativeElement, 'querySelector').mockReturnValue(document.createElement('div'));
 
       component.setCalendarPosition();
 
@@ -2188,7 +2200,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('setCalendarPosition: should use nativeElement scroll when .po-calendar is not found', () => {
       component.isCalendarVisible = true;
 
-      spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback): number => {
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback): number => {
         callback(0);
         return 0;
       });
@@ -2205,11 +2217,11 @@ describe('PoDatepickerRangeComponent:', () => {
       component.dateRangeField = new ElementRef(document.createElement('div'));
 
       (component as any).controlPosition = {
-        setElements: jasmine.createSpy('setElements'),
-        adjustPosition: jasmine.createSpy('adjustPosition')
+        setElements: vi.fn(),
+        adjustPosition: vi.fn()
       };
 
-      spyOn(nativeElementMock, 'querySelector').and.returnValue(null);
+      vi.spyOn(nativeElementMock as any, 'querySelector').mockReturnValue(null);
 
       component.setCalendarPosition();
 
@@ -2245,13 +2257,13 @@ describe('PoDatepickerRangeComponent:', () => {
           }
         } as any;
 
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
       });
 
       it('shouldn`t call calendarPickerElement.contains if isCalendarVisible is false', () => {
         component.isCalendarVisible = false;
 
-        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains');
+        const spyCalendarPickerContains = vi.spyOn(component.calendarPicker.nativeElement, 'contains');
 
         component['wasClickedOnPicker'](event);
 
@@ -2261,68 +2273,66 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should not set isCalendarVisible with false if calendarPicker contains event.target', () => {
         component.isCalendarVisible = true;
 
-        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
-          true
-        );
+        const spyCalendarPickerContains = vi
+          .spyOn(component.calendarPicker.nativeElement, 'contains')
+          .mockReturnValue(true);
 
-        const spyIconCalendarContains = spyOn(
-          component.iconCalendar.buttonElement.nativeElement,
-          'contains'
-        ).and.returnValue(false);
+        const spyIconCalendarContains = vi
+          .spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains')
+          .mockReturnValue(false);
 
         component['wasClickedOnPicker'](event);
 
         expect(spyCalendarPickerContains).toHaveBeenCalled();
         expect(spyIconCalendarContains).not.toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeTrue();
+        expect(component.isCalendarVisible).toBe(true);
       });
 
       it('should not set isCalendarVisible with false if iconCalendar contains event.target', () => {
         component.isCalendarVisible = true;
 
-        const spyCalendarPickerContains = spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(
-          false
-        );
+        const spyCalendarPickerContains = vi
+          .spyOn(component.calendarPicker.nativeElement, 'contains')
+          .mockReturnValue(false);
 
-        const spyIconCalendarContains = spyOn(
-          component.iconCalendar.buttonElement.nativeElement,
-          'contains'
-        ).and.returnValue(true);
+        const spyIconCalendarContains = vi
+          .spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains')
+          .mockReturnValue(true);
 
         component['wasClickedOnPicker'](event);
 
         expect(spyCalendarPickerContains).toHaveBeenCalled();
         expect(spyIconCalendarContains).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeTrue();
+        expect(component.isCalendarVisible).toBe(true);
       });
 
       it('should not set isCalendarVisible with false if event.target hasAttrCalendar', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(false);
+        vi.spyOn(component.calendarPicker.nativeElement, 'contains').mockReturnValue(false);
 
-        spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains').and.returnValue(false);
+        vi.spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains').mockReturnValue(false);
 
-        const spyHasAttrCalendar = spyOn(component as any, 'hasAttrCalendar').and.returnValue(true);
+        const spyHasAttrCalendar = vi.spyOn(component as any, 'hasAttrCalendar').mockReturnValue(true);
 
         component['wasClickedOnPicker'](event);
 
         expect(spyHasAttrCalendar).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeTrue();
+        expect(component.isCalendarVisible).toBe(true);
       });
 
       it('should set isCalendarVisible with false if calendarPickerElement and iconElement do not contain event.target', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component.calendarPicker.nativeElement, 'contains').and.returnValue(false);
+        vi.spyOn(component.calendarPicker.nativeElement, 'contains').mockReturnValue(false);
 
-        spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains').and.returnValue(false);
+        vi.spyOn(component.iconCalendar.buttonElement.nativeElement, 'contains').mockReturnValue(false);
 
-        spyOn(component as any, 'hasAttrCalendar').and.returnValue(false);
+        vi.spyOn(component as any, 'hasAttrCalendar').mockReturnValue(false);
 
         component['wasClickedOnPicker'](event);
 
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
     });
 
@@ -2330,9 +2340,9 @@ describe('PoDatepickerRangeComponent:', () => {
       component['clickListener'] = () => {};
       component['eventResizeListener'] = () => {};
 
-      spyOn(component, <any>'clickListener');
-      spyOn(component, <any>'eventResizeListener');
-      spyOn(window, 'removeEventListener');
+      vi.spyOn(component as any, 'clickListener');
+      vi.spyOn(component as any, 'eventResizeListener');
+      vi.spyOn(window as any, 'removeEventListener');
 
       component['removeListeners']();
 
@@ -2345,9 +2355,9 @@ describe('PoDatepickerRangeComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
 
@@ -2356,11 +2366,11 @@ describe('PoDatepickerRangeComponent:', () => {
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -2370,18 +2380,18 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -2390,18 +2400,18 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -2412,19 +2422,19 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -2434,19 +2444,19 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -2455,7 +2465,7 @@ describe('PoDatepickerRangeComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -2463,8 +2473,8 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -2472,16 +2482,16 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
     it('toggleCalendar: should not call initializeListeners if component.disabled is true', () => {
       component.disabled = true;
 
-      spyOn(component, <any>'removeListeners');
-      spyOn(component, <any>'initializeListeners');
+      vi.spyOn(component as any, 'removeListeners');
+      vi.spyOn(component as any, 'initializeListeners');
 
       component['toggleCalendar']();
 
@@ -2492,8 +2502,8 @@ describe('PoDatepickerRangeComponent:', () => {
     it('toggleCalendar: should not call initializeListeners if component.readonly is true', () => {
       component.readonly = true;
 
-      spyOn(component, <any>'removeListeners');
-      spyOn(component, <any>'initializeListeners');
+      vi.spyOn(component as any, 'removeListeners');
+      vi.spyOn(component as any, 'initializeListeners');
 
       component['toggleCalendar']();
 
@@ -2505,8 +2515,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.readonly = false;
       component.disabled = false;
 
-      spyOn(component, <any>'setCalendarPosition');
-      spyOn(component, <any>'initializeListeners');
+      vi.spyOn(component as any, 'setCalendarPosition');
+      vi.spyOn(component as any, 'initializeListeners');
 
       component['toggleCalendar']();
 
@@ -2519,7 +2529,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.readonly = false;
       component.disabled = false;
 
-      spyOn(component, <any>'removeListeners');
+      vi.spyOn(component as any, 'removeListeners');
 
       component['toggleCalendar']();
 
@@ -2533,8 +2543,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const start = new Date(10, 10, 2021);
       const end = null;
 
-      spyOn(component, <any>'updateScreenByModel');
-      spyOn(component, <any>'updateModelByScreen');
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModelByScreen');
 
       component.onCalendarChange({ start, end });
 
@@ -2552,9 +2562,9 @@ describe('PoDatepickerRangeComponent:', () => {
       const start = new Date(2021, 10, 10);
       const end = new Date(2021, 11, 11);
 
-      spyOn(component, <any>'updateScreenByModel');
-      spyOn(component, <any>'updateModelByScreen');
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModelByScreen');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.onCalendarChange({ start, end });
 
@@ -2570,9 +2580,9 @@ describe('PoDatepickerRangeComponent:', () => {
       const start = new Date(2021, 10, 10);
       const end = new Date(2021, 11, 11);
 
-      spyOn(component, <any>'updateScreenByModel');
-      spyOn(component, <any>'updateModelByScreen');
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModelByScreen');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.onCalendarChange({ start, end });
 
@@ -2587,8 +2597,8 @@ describe('PoDatepickerRangeComponent:', () => {
       const start = null;
       const end = null;
 
-      spyOn(component, <any>'updateScreenByModel');
-      spyOn(component, <any>'updateModelByScreen');
+      vi.spyOn(component as any, 'updateScreenByModel');
+      vi.spyOn(component as any, 'updateModelByScreen');
 
       component.onCalendarChange({ start, end });
 
@@ -2621,7 +2631,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when rangePresets is falsy and rangePresetOptions is empty', () => {
@@ -2630,7 +2640,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when size does not match any key in MIN_CALENDAR_WIDTH_WITH_PRESETS', () => {
@@ -2639,7 +2649,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return true when rangePresets is true and window.innerWidth < minWidth for medium size', () => {
@@ -2654,7 +2664,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return false when rangePresets is true and window.innerWidth >= minWidth for medium size', () => {
@@ -2669,7 +2679,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return true when rangePresetOptions has items and window.innerWidth < minWidth', () => {
@@ -2684,7 +2694,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return true when both rangePresets and rangePresetOptions are set and window.innerWidth < minWidth', () => {
@@ -2700,7 +2710,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['calculateWidthWithPresets']();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
     });
 
@@ -2708,27 +2718,27 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should update widthWithPresets with the result of calculateWidthWithPresets', () => {
         component.widthWithPresets = false;
 
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(true);
 
         component['updateWidthWithPresets']();
 
-        expect(component.widthWithPresets).toBeTrue();
+        expect(component.widthWithPresets).toBe(true);
       });
 
       it('should set widthWithPresets to false when calculateWidthWithPresets returns false', () => {
         component.widthWithPresets = true;
 
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(false);
 
         component['updateWidthWithPresets']();
 
-        expect(component.widthWithPresets).toBeFalse();
+        expect(component.widthWithPresets).toBe(false);
       });
     });
 
     describe('onResize:', () => {
       it('should call updateWidthWithPresets', () => {
-        spyOn(component as any, 'updateWidthWithPresets');
+        vi.spyOn(component as any, 'updateWidthWithPresets');
 
         component.onResize();
 
@@ -2738,7 +2748,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     describe('enableHorizontalMouseWheel:', () => {
       it('should add wheel event listener to preset list element', () => {
-        const addEventListenerSpy = jasmine.createSpy('addEventListener');
+        const addEventListenerSpy = vi.fn();
         const fakeEl = {
           addEventListener: addEventListenerSpy,
           scrollLeft: 0
@@ -2746,32 +2756,32 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(fakeEl)
+            querySelector: vi.fn().mockReturnValue(fakeEl)
           }
         } as any;
 
         component.enableHorizontalMouseWheel();
 
         expect(component.calendarPicker.nativeElement.querySelector).toHaveBeenCalledWith('.po-calendar-preset-list');
-        expect(addEventListenerSpy).toHaveBeenCalledWith('wheel', jasmine.any(Function));
+        expect(addEventListenerSpy).toHaveBeenCalledWith('wheel', expect.any(Function));
       });
 
       it('should prevent default and update scrollLeft on wheel event', () => {
         const fakeEl = {
-          addEventListener: jasmine.createSpy('addEventListener'),
+          addEventListener: vi.fn(),
           scrollLeft: 0
         };
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(fakeEl)
+            querySelector: vi.fn().mockReturnValue(fakeEl)
           }
         } as any;
 
         component.enableHorizontalMouseWheel();
 
-        const wheelCallback = fakeEl.addEventListener.calls.mostRecent().args[1];
-        const wheelEvent = { preventDefault: jasmine.createSpy(), deltaY: 50 };
+        const wheelCallback = vi.mocked(fakeEl.addEventListener).mock.lastCall[1];
+        const wheelEvent = { preventDefault: vi.fn(), deltaY: 50 };
         wheelCallback(wheelEvent);
 
         expect(wheelEvent.preventDefault).toHaveBeenCalled();
@@ -2783,84 +2793,84 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should return the result of isMobile()', () => {
         const result = component.verifyMobile();
 
-        expect(typeof result === 'boolean' || result === null || result !== undefined).toBeTrue();
+        expect(typeof result === 'boolean' || result === null || result !== undefined).toBe(true);
       });
     });
 
     describe('handleMobileNavigation:', () => {
       it('should return true and focus first combo when mobile and combo exists', () => {
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
-        spyOn(component, 'verifyMobile').and.returnValue(true as any);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(true as any);
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+            querySelector: vi.fn().mockReturnValue({ focus: focusSpy })
           }
         } as any;
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleMobileNavigation'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(focusSpy).toHaveBeenCalled();
       });
 
       it('should return true without focusing when mobile but combo does not exist', () => {
-        spyOn(component, 'verifyMobile').and.returnValue(true as any);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(true as any);
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(null)
+            querySelector: vi.fn().mockReturnValue(null)
           }
         } as any;
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleMobileNavigation'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(event.preventDefault).not.toHaveBeenCalled();
       });
 
       it('should return false when not mobile', () => {
-        spyOn(component, 'verifyMobile').and.returnValue(false as any);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(false as any);
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleMobileNavigation'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
     describe('handlePresetNavigation:', () => {
       it('should return true and focus preset when preset exists and calculateWidthWithPresets is false', () => {
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+            querySelector: vi.fn().mockReturnValue({ focus: focusSpy })
           }
         } as any;
 
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(false);
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handlePresetNavigation'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(focusSpy).toHaveBeenCalled();
       });
@@ -2868,56 +2878,56 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should return false when preset exists but calculateWidthWithPresets is true', () => {
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: jasmine.createSpy() })
+            querySelector: vi.fn().mockReturnValue({ focus: vi.fn() })
           }
         } as any;
 
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(true);
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handlePresetNavigation'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
         expect(event.preventDefault).not.toHaveBeenCalled();
       });
 
       it('should return false when no preset element found', () => {
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(null)
+            querySelector: vi.fn().mockReturnValue(null)
           }
         } as any;
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handlePresetNavigation'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
     describe('handleComboNavigation:', () => {
       it('should return true and focus combo when combo exists', () => {
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+            querySelector: vi.fn().mockReturnValue({ focus: focusSpy })
           }
         } as any;
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleComboNavigation'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(focusSpy).toHaveBeenCalled();
       });
@@ -2925,17 +2935,17 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should return false when no combo found', () => {
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue(null)
+            querySelector: vi.fn().mockReturnValue(null)
           }
         } as any;
 
         const event: any = {
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleComboNavigation'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -2945,7 +2955,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['handleTabWithCalendarVisible'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when shiftKey is true', () => {
@@ -2955,7 +2965,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['handleTabWithCalendarVisible'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when calendar is not visible', () => {
@@ -2965,48 +2975,48 @@ describe('PoDatepickerRangeComponent:', () => {
 
         const result = component['handleTabWithCalendarVisible'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should delegate to handleMobileNavigation first when Tab and calendar visible', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component as any, 'handleMobileNavigation').and.returnValue(true);
+        vi.spyOn(component as any, 'handleMobileNavigation').mockReturnValue(true);
 
         const event: any = { key: 'Tab', shiftKey: false };
 
         const result = component['handleTabWithCalendarVisible'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(component['handleMobileNavigation']).toHaveBeenCalledWith(event);
       });
 
       it('should delegate to handlePresetNavigation when mobile returns false', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component as any, 'handleMobileNavigation').and.returnValue(false);
-        spyOn(component as any, 'handlePresetNavigation').and.returnValue(true);
+        vi.spyOn(component as any, 'handleMobileNavigation').mockReturnValue(false);
+        vi.spyOn(component as any, 'handlePresetNavigation').mockReturnValue(true);
 
         const event: any = { key: 'Tab', shiftKey: false };
 
         const result = component['handleTabWithCalendarVisible'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(component['handlePresetNavigation']).toHaveBeenCalledWith(event);
       });
 
       it('should delegate to handleComboNavigation when both mobile and preset return false', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component as any, 'handleMobileNavigation').and.returnValue(false);
-        spyOn(component as any, 'handlePresetNavigation').and.returnValue(false);
-        spyOn(component as any, 'handleComboNavigation').and.returnValue(true);
+        vi.spyOn(component as any, 'handleMobileNavigation').mockReturnValue(false);
+        vi.spyOn(component as any, 'handlePresetNavigation').mockReturnValue(false);
+        vi.spyOn(component as any, 'handleComboNavigation').mockReturnValue(true);
 
         const event: any = { key: 'Tab', shiftKey: false };
 
         const result = component['handleTabWithCalendarVisible'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(component['handleComboNavigation']).toHaveBeenCalledWith(event);
       });
     });
@@ -3015,66 +3025,66 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should return true when Shift+Tab, calendar hidden, and enableCleaner true', () => {
         component.isCalendarVisible = false;
 
-        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(true);
+        vi.spyOn(component, 'enableCleaner', 'get').mockReturnValue(true);
 
         component.iconClean = {
-          nativeElement: { focus: jasmine.createSpy() }
+          nativeElement: { focus: vi.fn() }
         } as any;
 
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleShiftTabWithCleaner'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(event.preventDefault).toHaveBeenCalled();
       });
 
       it('should return false when enableCleaner is false', () => {
         component.isCalendarVisible = false;
 
-        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(false);
+        vi.spyOn(component, 'enableCleaner', 'get').mockReturnValue(false);
 
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleShiftTabWithCleaner'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when calendar is visible', () => {
         component.isCalendarVisible = true;
 
-        spyOnProperty(component, 'enableCleaner', 'get').and.returnValue(true);
+        vi.spyOn(component, 'enableCleaner', 'get').mockReturnValue(true);
 
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleShiftTabWithCleaner'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when key is not Tab', () => {
         const event: any = {
           key: 'Enter',
           shiftKey: true,
-          preventDefault: jasmine.createSpy()
+          preventDefault: vi.fn()
         };
 
         const result = component['handleShiftTabWithCleaner'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -3082,18 +3092,18 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should return true and call focus when Shift+Tab and calendar hidden', () => {
         component.isCalendarVisible = false;
 
-        spyOn(component, 'focus');
+        vi.spyOn(component as any, 'focus');
 
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         };
 
         const result = component['handleShiftTabWithoutCleaner'](event);
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
         expect(component.focus).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
@@ -3105,26 +3115,26 @@ describe('PoDatepickerRangeComponent:', () => {
         const event: any = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         };
 
         const result = component['handleShiftTabWithoutCleaner'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when key is not Tab', () => {
         const event: any = {
           key: 'Enter',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         };
 
         const result = component['handleShiftTabWithoutCleaner'](event);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -3134,10 +3144,10 @@ describe('PoDatepickerRangeComponent:', () => {
         component.disabled = false;
         component.readonly = false;
 
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
-        spyOn(component, 'enableHorizontalMouseWheel');
-        spyOn(component, 'setCalendarPosition');
-        spyOn(component as any, 'initializeListeners');
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(true);
+        vi.spyOn(component as any, 'enableHorizontalMouseWheel');
+        vi.spyOn(component as any, 'setCalendarPosition');
+        vi.spyOn(component as any, 'initializeListeners');
 
         component.toggleCalendar();
 
@@ -3149,10 +3159,10 @@ describe('PoDatepickerRangeComponent:', () => {
         component.disabled = false;
         component.readonly = false;
 
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
-        spyOn(component, 'enableHorizontalMouseWheel');
-        spyOn(component, 'setCalendarPosition');
-        spyOn(component as any, 'initializeListeners');
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(false);
+        vi.spyOn(component as any, 'enableHorizontalMouseWheel');
+        vi.spyOn(component as any, 'setCalendarPosition');
+        vi.spyOn(component as any, 'initializeListeners');
 
         component.toggleCalendar();
 
@@ -3165,7 +3175,7 @@ describe('PoDatepickerRangeComponent:', () => {
         component.iconCalendar = {
           buttonElement: {
             nativeElement: {
-              focus: jasmine.createSpy('focus')
+              focus: vi.fn()
             }
           }
         } as any;
@@ -3174,58 +3184,58 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should not focus preset when Shift+Tab from first combo and calculateWidthWithPresets returns true', () => {
         component.isCalendarVisible = true;
 
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+            querySelector: vi.fn().mockReturnValue({ focus: focusSpy })
           }
         } as any;
 
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
-        spyOn(component, 'verifyMobile').and.returnValue(false as any);
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(true);
+        vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(false as any);
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(true);
 
         const event = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
 
         expect(focusSpy).not.toHaveBeenCalled();
         expect(component.iconCalendar.buttonElement.nativeElement.focus).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeFalse();
+        expect(component.isCalendarVisible).toBe(false);
       });
 
       it('should focus preset when Shift+Tab from first combo and calculateWidthWithPresets returns false', () => {
         component.isCalendarVisible = true;
 
-        const focusSpy = jasmine.createSpy('focus');
+        const focusSpy = vi.fn();
 
         component.calendarPicker = {
           nativeElement: {
-            querySelector: jasmine.createSpy().and.returnValue({ focus: focusSpy })
+            querySelector: vi.fn().mockReturnValue({ focus: focusSpy })
           }
         } as any;
 
-        spyOn(component as any, 'isFocusOnFirstCombo').and.returnValue(true);
-        spyOn(component, 'verifyMobile').and.returnValue(false as any);
-        spyOn(component as any, 'calculateWidthWithPresets').and.returnValue(false);
+        vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(false as any);
+        vi.spyOn(component as any, 'calculateWidthWithPresets').mockReturnValue(false);
 
         const event = {
           key: 'Tab',
           shiftKey: true,
-          preventDefault: jasmine.createSpy(),
-          stopPropagation: jasmine.createSpy()
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
         } as any;
 
         component.onCalendarKeyDown(event);
 
         expect(focusSpy).toHaveBeenCalled();
-        expect(component.isCalendarVisible).toBeTrue();
+        expect(component.isCalendarVisible).toBe(true);
       });
     });
 
@@ -3233,8 +3243,8 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should call adjustPosition when calendar is visible and not mobile', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component, 'verifyMobile').and.returnValue(false as any);
-        spyOn(component['controlPosition'], 'adjustPosition');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(false as any);
+        vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
         component['onScroll']();
 
@@ -3244,8 +3254,8 @@ describe('PoDatepickerRangeComponent:', () => {
       it('should not call adjustPosition when calendar is visible and is mobile', () => {
         component.isCalendarVisible = true;
 
-        spyOn(component, 'verifyMobile').and.returnValue(true as any);
-        spyOn(component['controlPosition'], 'adjustPosition');
+        vi.spyOn(component as any, 'verifyMobile').mockReturnValue(true as any);
+        vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
         component['onScroll']();
 
@@ -3264,7 +3274,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
         component.ngOnInit();
 
-        expect(component.widthWithPresets).toBeTrue();
+        expect(component.widthWithPresets).toBe(true);
       });
     });
 
@@ -3318,7 +3328,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('should contain `po-clean` if `enableCleaner` is true', () => {
-      spyOnProperty(component, 'enableCleaner').and.returnValue(true);
+      vi.spyOn(component as any, 'enableCleaner').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -3326,7 +3336,7 @@ describe('PoDatepickerRangeComponent:', () => {
     });
 
     it('shouldn`t contain `po-clean` if `enableCleaner` is false', () => {
-      spyOnProperty(component, 'enableCleaner').and.returnValue(false);
+      vi.spyOn(component as any, 'enableCleaner').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -3347,8 +3357,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3365,8 +3375,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '2018-12-24';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3385,8 +3395,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '2018-12-24';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3405,8 +3415,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component['dateRange'] = { start: '', end: '' };
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '24/12/201';
@@ -3423,8 +3433,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '2018-12-24';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3444,8 +3454,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '2018-12-24';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3463,8 +3473,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '2018-12-24';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3482,8 +3492,8 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDate = '2018-12-24';
       component['onTouchedModel'] = () => {};
 
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'onTouchedModel');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'onTouchedModel');
 
       fixture.detectChanges();
 
@@ -3500,7 +3510,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
 
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'updateModel');
 
       fixture.detectChanges();
 
@@ -3516,7 +3526,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDate = '2018-12-24T02:00:00-03:00';
       component.endDate = '2018-12-24';
 
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component as any, 'updateModel');
 
       fixture.detectChanges();
 
@@ -3530,7 +3540,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('should set cursor to end date input if last letter of start date is typed', () => {
       fixture.detectChanges();
-      spyOn(component.endDateInput.nativeElement, 'focus');
+      vi.spyOn(component.endDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/11/2018';
       component.startDateInput.nativeElement.focus();
@@ -3547,7 +3557,7 @@ describe('PoDatepickerRangeComponent:', () => {
     it('should keep start date input active if typed key isn`t a number', () => {
       fixture.detectChanges();
       const shiftKeyEvent = new KeyboardEvent('keyup', { keyCode: 16 });
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.endDateInput.nativeElement.value = '';
       component.startDateInput.nativeElement.value = '24/11/2018';
@@ -3561,7 +3571,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('should set cursor to end date input if typed key is arrowRight and cursor position is last number of start date', () => {
       const arrowRightKeyEvent = new KeyboardEvent('keyup', { keyCode: 39 });
-      spyOn(component.endDateInput.nativeElement, 'focus');
+      vi.spyOn(component.endDateInput.nativeElement, 'focus');
       fixture.detectChanges();
       component.endDateInput.nativeElement.value = '';
       component.startDateInput.nativeElement.value = '24/11/2018';
@@ -3576,7 +3586,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
     it('should set cursor to start date input if typed key is arrowLeft and cursor position is first number of end date', () => {
       const arrowLeftKeyEvent = new KeyboardEvent('keyup', { keyCode: 37 });
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
       fixture.detectChanges();
 
       component.startDateInput.nativeElement.value = '24/11/2018';
@@ -3596,7 +3606,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.endDateInput.nativeElement.value = '';
 
       fixture.detectChanges();
-      spyOn(component.endDateInput.nativeElement, 'focus');
+      vi.spyOn(component.endDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.focus();
       component.startDateInput.nativeElement.setSelectionRange(4, 4);
@@ -3616,7 +3626,7 @@ describe('PoDatepickerRangeComponent:', () => {
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
       fixture.detectChanges();
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.endDateInput.nativeElement.focus();
       component.endDateInput.nativeElement.dispatchEvent(keydownBoardEventSetFocus);
@@ -3653,7 +3663,7 @@ describe('PoDatepickerRangeComponent:', () => {
       fixture.detectChanges();
       // keyCode 8 is backspace
       const keydownBoardEventBackspace = new KeyboardEvent('keydown', { keyCode: 8 });
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       // set value for start date input
       component.startDateInput.nativeElement.value = '24/1';
@@ -3713,7 +3723,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.focus();
@@ -3738,7 +3748,7 @@ describe('PoDatepickerRangeComponent:', () => {
         target: { name: component.endDateInputName }
       });
 
-      spyOn(component.startDateInput.nativeElement, 'focus');
+      vi.spyOn(component.startDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';
@@ -3761,7 +3771,7 @@ describe('PoDatepickerRangeComponent:', () => {
         target: { name: component.endDateInputName }
       });
 
-      spyOn(component.endDateInput.nativeElement, 'focus');
+      vi.spyOn(component.endDateInput.nativeElement, 'focus');
 
       component.startDateInput.nativeElement.value = '24/1';
       component.endDateInput.nativeElement.value = '';

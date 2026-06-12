@@ -22,7 +22,9 @@ class ContentProjectionComponent extends PoInputGeneric {
     super(el);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(c: AbstractControl): {
+    [key: string]: any;
+  } {
     return null;
   }
 }
@@ -65,7 +67,7 @@ describe('PoInputGeneric:', () => {
       mask: '99999-999',
       validateClassesForMask: () => {}
     };
-    spyOn(fakeThis, 'validateClassesForMask');
+    vi.spyOn(fakeThis as any, 'validateClassesForMask');
 
     component.validateInitMask.call(fakeThis);
 
@@ -73,7 +75,7 @@ describe('PoInputGeneric:', () => {
   });
 
   it('should call afterViewInit', () => {
-    spyOn(component, 'afterViewInit');
+    vi.spyOn(component as any, 'afterViewInit');
     component.ngAfterViewInit();
     expect(component.afterViewInit).toHaveBeenCalled();
   });
@@ -88,7 +90,7 @@ describe('PoInputGeneric:', () => {
       eventOnBlur: e => {},
       validateClassesForMask: (value: boolean) => {}
     };
-    spyOn(fakeThis.objMask, 'keydown');
+    vi.spyOn(fakeThis.objMask as any, 'keydown');
     component.onKeydown.call(fakeThis, fakeEvent);
     expect(fakeThis.objMask.keydown).toHaveBeenCalled();
   });
@@ -102,8 +104,8 @@ describe('PoInputGeneric:', () => {
       },
       eventOnBlur: e => {}
     };
-    spyOn(fakeThis.objMask, 'keydown');
-    spyOn(fakeThis, 'eventOnBlur');
+    vi.spyOn(fakeThis.objMask as any, 'keydown');
+    vi.spyOn(fakeThis as any, 'eventOnBlur');
     component.onKeydown.call(fakeThis, fakeEvent);
     expect(fakeThis.objMask.keydown).not.toHaveBeenCalled();
     expect(fakeThis.eventOnBlur).not.toHaveBeenCalled();
@@ -124,8 +126,8 @@ describe('PoInputGeneric:', () => {
         keyCode: 229
       }
     };
-    spyOn(fakeThis.objMask, 'keydown');
-    spyOn(fakeThis, 'eventOnBlur');
+    vi.spyOn(fakeThis.objMask as any, 'keydown');
+    vi.spyOn(fakeThis as any, 'eventOnBlur');
     component.onKeydown.call(fakeThis, fakeEventLocal);
     expect(fakeThis.objMask.keydown).not.toHaveBeenCalled();
     expect(fakeThis.eventOnBlur).not.toHaveBeenCalled();
@@ -152,8 +154,8 @@ describe('PoInputGeneric:', () => {
       }
     };
 
-    spyOn(fakeThis, 'callOnChange');
-    spyOn(fakeThis.objMask, 'keyup');
+    vi.spyOn(fakeThis as any, 'callOnChange');
+    vi.spyOn(fakeThis.objMask as any, 'keyup');
     component.onKeyup.call(fakeThis, fakeEventLocal);
     expect(fakeThis.callOnChange).toHaveBeenCalled();
     expect(fakeThis.objMask.keyup).toHaveBeenCalled();
@@ -177,8 +179,8 @@ describe('PoInputGeneric:', () => {
       }
     };
 
-    spyOn(fakeThis.objMask, 'keyup');
-    spyOn(fakeThis, 'eventOnBlur');
+    vi.spyOn(fakeThis.objMask as any, 'keyup');
+    vi.spyOn(fakeThis as any, 'eventOnBlur');
 
     component.onKeyup.call(fakeThis, fakeEventLocal);
 
@@ -196,8 +198,8 @@ describe('PoInputGeneric:', () => {
       callOnChange: () => {}
     };
 
-    spyOn(fakeThis, 'callOnChange');
-    spyOn(fakeThis.objMask, 'keyup');
+    vi.spyOn(fakeThis as any, 'callOnChange');
+    vi.spyOn(fakeThis.objMask as any, 'keyup');
     component.onKeyup.call(fakeThis, event);
     expect(fakeThis.callOnChange).not.toHaveBeenCalled();
     expect(fakeThis.objMask.keyup).not.toHaveBeenCalled();
@@ -218,7 +220,7 @@ describe('PoInputGeneric:', () => {
     };
     fakeEvent.target.value = '1234567890';
 
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis as any, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
     expect(fakeThis.callOnChange).toHaveBeenCalledWith('12345');
     expect(fakeThis.inputEl.nativeElement.value).toBe('12345');
@@ -233,7 +235,7 @@ describe('PoInputGeneric:', () => {
     };
     fakeEvent.target.value = 'teste';
 
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis as any, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
     expect(fakeThis.callOnChange).toHaveBeenCalledWith('teste');
     expect(fakeThis.inputEl.nativeElement.value).toBe('teste');
@@ -248,7 +250,7 @@ describe('PoInputGeneric:', () => {
     };
     fakeEvent.target.value = 'teste';
 
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis as any, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
     expect(fakeThis.callOnChange).toHaveBeenCalledWith('TESTE');
     expect(fakeThis.inputEl.nativeElement.value).toBe('TESTE');
@@ -268,8 +270,8 @@ describe('PoInputGeneric:', () => {
 
     fakeEvent.target.value = '1234567890';
 
-    spyOn(fakeThis.objMask, 'blur');
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis.objMask as any, 'blur');
+    vi.spyOn(fakeThis as any, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
     expect(fakeThis.callOnChange).toHaveBeenCalled();
     expect(fakeThis.objMask.blur).toHaveBeenCalled();
@@ -298,7 +300,7 @@ describe('PoInputGeneric:', () => {
   });
 
   it('should emit enter in eventOnFocus', () => {
-    spyOn(component.enter, 'emit');
+    vi.spyOn(component.enter as any, 'emit');
     component.eventOnFocus(fakeEvent);
     expect(component.enter.emit).toHaveBeenCalled();
   });
@@ -313,7 +315,7 @@ describe('PoInputGeneric:', () => {
       verifyErrorAsync: () => {}
     };
 
-    spyOn(fakeThis.change, 'emit');
+    vi.spyOn(fakeThis.change as any, 'emit');
     component.controlChangeEmitter.call(fakeThis);
     tick(250);
     expect(fakeThis.change.emit).toHaveBeenCalled();
@@ -327,7 +329,7 @@ describe('PoInputGeneric:', () => {
       }
     };
 
-    spyOn(fakeThis.objMask, 'click');
+    vi.spyOn(fakeThis.objMask as any, 'click');
     component.eventOnClick.call(fakeThis, fakeEvent);
     expect(fakeThis.objMask.click).toHaveBeenCalledWith(fakeEvent);
   });
@@ -340,7 +342,7 @@ describe('PoInputGeneric:', () => {
       }
     };
 
-    spyOn(fakeThis.objMask, 'click');
+    vi.spyOn(fakeThis.objMask as any, 'click');
     component.eventOnClick.call(fakeThis, fakeEvent);
     expect(fakeThis.objMask.click).not.toHaveBeenCalledWith(fakeEvent);
   });
@@ -400,8 +402,8 @@ describe('PoInputGeneric:', () => {
       triggerMode: 'changeModel'
     };
 
-    spyOn(component, 'callOnChange');
-    spyOn(component, 'controlChangeEmitter');
+    vi.spyOn(component as any, 'callOnChange');
+    vi.spyOn(component as any, 'controlChangeEmitter');
     component.clear('');
     expect(component.callOnChange).toHaveBeenCalled();
     expect(component.controlChangeEmitter).toHaveBeenCalled();
@@ -488,7 +490,7 @@ describe('PoInputGeneric:', () => {
         }
       };
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -503,7 +505,7 @@ describe('PoInputGeneric:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
 
       component.focus();
 
@@ -531,7 +533,7 @@ describe('PoInputGeneric:', () => {
         },
         eventOnBlur: e => {}
       };
-      spyOn(fakeThis.objMask, 'keydown');
+      vi.spyOn(fakeThis.objMask as any, 'keydown');
       component.onKeydown.call(fakeThis, fakeEvent);
       expect(fakeThis.objMask.keydown).not.toHaveBeenCalled();
     });
@@ -544,8 +546,8 @@ describe('PoInputGeneric:', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputEl.nativeElement);
 
       component.onKeyDown(fakeEvent);
 
@@ -560,8 +562,8 @@ describe('PoInputGeneric:', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
       component.onKeyDown(fakeEvent);
 
       expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -579,7 +581,7 @@ describe('PoInputGeneric:', () => {
         eventOnBlur: e => {}
       };
 
-      spyOn(fakeThis.objMask, 'keyup');
+      vi.spyOn(fakeThis.objMask as any, 'keyup');
       component.onKeyup.call(fakeThis, fakeEvent);
       expect(fakeThis.objMask.keyup).not.toHaveBeenCalled();
     });
@@ -590,7 +592,7 @@ describe('PoInputGeneric:', () => {
         focus: () => {}
       };
 
-      spyOn(fakeThis, 'focus');
+      vi.spyOn(fakeThis as any, 'focus');
 
       component.verifyAutoFocus.call(fakeThis);
 
@@ -604,7 +606,7 @@ describe('PoInputGeneric:', () => {
         getAdditionalHelpTooltip: () => false
       };
 
-      spyOn(fakeThis, 'focus');
+      vi.spyOn(fakeThis as any, 'focus');
 
       component.verifyAutoFocus.call(fakeThis);
 
@@ -619,7 +621,7 @@ describe('PoInputGeneric:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
@@ -636,7 +638,7 @@ describe('PoInputGeneric:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -647,8 +649,8 @@ describe('PoInputGeneric:', () => {
       it('should call `objMask.blur` when exists a `mask`.', () => {
         const fakeThis = createFakeThis(true);
 
-        spyOn(fakeThis.objMask, 'blur');
-        spyOn(fakeThis, <any>'onTouched');
+        vi.spyOn(fakeThis.objMask as any, 'blur');
+        vi.spyOn(fakeThis as any, 'onTouched');
 
         component.eventOnBlur.call(fakeThis, fakeEvent);
 
@@ -659,8 +661,8 @@ describe('PoInputGeneric:', () => {
       it('shouldn´t call `objMask.blur` when not exists a `mask`.', () => {
         const fakeThis = createFakeThis(false);
 
-        spyOn(fakeThis.objMask, 'blur');
-        spyOn(fakeThis, <any>'onTouched');
+        vi.spyOn(fakeThis.objMask as any, 'blur');
+        vi.spyOn(fakeThis as any, 'onTouched');
 
         component.eventOnBlur.call(fakeThis, fakeEvent);
 
@@ -671,9 +673,9 @@ describe('PoInputGeneric:', () => {
       it('should call `blur.emit` and `controlChangeEmitter` when `event.type` is blur.', () => {
         const fakeThis = createFakeThis(false);
 
-        spyOn(fakeThis.blur, 'emit');
-        spyOn(fakeThis, 'controlChangeEmitter');
-        spyOn(fakeThis, <any>'onTouched');
+        vi.spyOn(fakeThis.blur as any, 'emit');
+        vi.spyOn(fakeThis as any, 'controlChangeEmitter');
+        vi.spyOn(fakeThis as any, 'onTouched');
 
         component.eventOnBlur.call(fakeThis, { type: 'blur' });
 
@@ -685,9 +687,9 @@ describe('PoInputGeneric:', () => {
       it('shouldn`t call `blur.emit` and `controlChangeEmitter` when `event.type` is undefined.', () => {
         const fakeThis = createFakeThis(false);
 
-        spyOn(fakeThis.blur, 'emit');
-        spyOn(fakeThis, 'controlChangeEmitter');
-        spyOn(fakeThis, <any>'onTouched');
+        vi.spyOn(fakeThis.blur as any, 'emit');
+        vi.spyOn(fakeThis as any, 'controlChangeEmitter');
+        vi.spyOn(fakeThis as any, 'onTouched');
 
         component.eventOnBlur.call(fakeThis, fakeEvent);
 
@@ -766,7 +768,7 @@ describe('PoInputGeneric:', () => {
         },
         mask: '99999-999'
       };
-      spyOn(fakeThis.el.nativeElement.classList, 'remove');
+      vi.spyOn(fakeThis.el.nativeElement.classList, 'remove');
 
       component.validateClassesForMask.call(fakeThis);
 
@@ -787,7 +789,7 @@ describe('PoInputGeneric:', () => {
         verifyErrorAsync: () => {}
       };
 
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
       component.controlChangeEmitter.call(fakeThis);
       tick(250);
       expect(fakeThis.change.emit).toHaveBeenCalledWith(inputValue);
@@ -808,7 +810,7 @@ describe('PoInputGeneric:', () => {
         }
       };
 
-      spyOn(fakeThis.change, 'emit');
+      vi.spyOn(fakeThis.change as any, 'emit');
       component.controlChangeEmitter.call(fakeThis);
       tick(250);
       expect(fakeThis.change.emit).not.toHaveBeenCalled();
@@ -825,7 +827,7 @@ describe('PoInputGeneric:', () => {
         validateInitMask: () => {},
         verifyErrorAsync: () => {}
       };
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
       component.writeValueModel.call(fakeThis, value);
       expect(component.changeModel.emit).toHaveBeenCalledWith(value);
       expect(fakeThis.passedWriteValue).toBeTruthy();
@@ -839,7 +841,7 @@ describe('PoInputGeneric:', () => {
         passedWriteValue: false,
         validateClassesForMask: () => {}
       };
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
       component.writeValueModel.call(fakeThis, '');
       expect(component.changeModel.emit).not.toHaveBeenCalled();
       expect(fakeThis.passedWriteValue).toBeTruthy();
@@ -894,7 +896,7 @@ describe('PoInputGeneric:', () => {
         validateInitMask: () => {},
         verifyErrorAsync: () => {}
       };
-      const callUpdateModelWithTimeout = spyOn(fakeThis, <any>'callUpdateModelWithTimeout');
+      const callUpdateModelWithTimeout = vi.spyOn(fakeThis as any, 'callUpdateModelWithTimeout');
       component.writeValueModel.call(fakeThis, 'valor');
       expect(component.inputEl.nativeElement.value).toBe('valor formatted');
       expect(callUpdateModelWithTimeout).toHaveBeenCalled();
@@ -910,7 +912,7 @@ describe('PoInputGeneric:', () => {
 
       component.errorPattern = 'Erro de exemplo';
       component.errorAsyncProperties = {
-        errorAsync: jasmine.createSpy('errorAsync').and.returnValue(of(true))
+        errorAsync: vi.fn().mockReturnValue(of(true))
       };
 
       component['subscriptionValidator'] = new Subscription();
@@ -921,18 +923,18 @@ describe('PoInputGeneric:', () => {
     });
 
     it('should add ng-invalid and ng-dirty classes when error is true', () => {
-      spyOn(component['cd'], 'detectChanges');
+      vi.spyOn(component['cd'] as any, 'detectChanges');
       component.verifyErrorAsync();
 
       expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
-      expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeTrue();
-      expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBeTrue();
+      expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBe(true);
+      expect(component['el'].nativeElement.classList.contains('ng-dirty')).toBe(true);
       expect(component['cd'].detectChanges).toHaveBeenCalled();
     });
 
     it('should remove ng-invalid class when error is false and isInvalid is false', () => {
-      spyOn(component['cd'], 'detectChanges');
-      component.errorAsyncProperties.errorAsync = jasmine.createSpy('errorAsync').and.returnValue(of(false));
+      vi.spyOn(component['cd'] as any, 'detectChanges');
+      component.errorAsyncProperties.errorAsync = vi.fn().mockReturnValue(of(false));
       component['el'].nativeElement.classList.add('ng-invalid');
       component['el'].nativeElement.classList.add('ng-dirty');
       component.isInvalid = false;
@@ -940,12 +942,12 @@ describe('PoInputGeneric:', () => {
       component.verifyErrorAsync();
 
       expect(component.errorAsyncProperties.errorAsync).toHaveBeenCalledWith('test');
-      expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBeFalse();
+      expect(component['el'].nativeElement.classList.contains('ng-invalid')).toBe(false);
       expect(component['cd'].detectChanges).toHaveBeenCalled();
     });
 
     it('must cancel the previous subscription from subscriptionValidator', () => {
-      const unsubscribeSpy = spyOn(component['subscriptionValidator'], 'unsubscribe');
+      const unsubscribeSpy = vi.spyOn(component['subscriptionValidator'] as any, 'unsubscribe');
 
       component.verifyErrorAsync();
 

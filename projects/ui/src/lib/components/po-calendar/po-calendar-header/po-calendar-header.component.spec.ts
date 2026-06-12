@@ -25,8 +25,8 @@ describe('PoCalendarHeaderComponent', () => {
   it('should call markForCheck and detectChanges when templateContext changes', () => {
     const cdr = (component as any).cdr;
 
-    spyOn(cdr, 'markForCheck');
-    spyOn(cdr, 'detectChanges');
+    vi.spyOn(cdr as any, 'markForCheck');
+    vi.spyOn(cdr as any, 'detectChanges');
 
     component.ngOnChanges({
       templateContext: { currentValue: {}, previousValue: {}, firstChange: false, isFirstChange: () => false }
@@ -39,8 +39,8 @@ describe('PoCalendarHeaderComponent', () => {
   it('should call markForCheck and detectChanges when monthOptions changes', () => {
     const cdr = (component as any).cdr;
 
-    spyOn(cdr, 'markForCheck');
-    spyOn(cdr, 'detectChanges');
+    vi.spyOn(cdr as any, 'markForCheck');
+    vi.spyOn(cdr as any, 'detectChanges');
 
     component.ngOnChanges({
       monthOptions: { currentValue: [], previousValue: [], firstChange: false, isFirstChange: () => false }
@@ -53,8 +53,8 @@ describe('PoCalendarHeaderComponent', () => {
   it('should call markForCheck and detectChanges when headerTemplate changes', () => {
     const cdr = (component as any).cdr;
 
-    spyOn(cdr, 'markForCheck');
-    spyOn(cdr, 'detectChanges');
+    vi.spyOn(cdr as any, 'markForCheck');
+    vi.spyOn(cdr as any, 'detectChanges');
 
     component.ngOnChanges({
       headerTemplate: { currentValue: null, previousValue: null, firstChange: false, isFirstChange: () => false }
@@ -72,8 +72,8 @@ describe('PoCalendarHeaderComponent', () => {
     });
 
     it('should initialize labels on ngOnInit', () => {
-      spyOn(langService, 'getPreviousMonthLabel').and.returnValue('Mês anterior');
-      spyOn(langService, 'getNextMonthLabel').and.returnValue('Próximo mês');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel').mockReturnValue('Mês anterior');
+      vi.spyOn(langService as any, 'getNextMonthLabel').mockReturnValue('Próximo mês');
 
       component.ngOnInit();
 
@@ -82,9 +82,9 @@ describe('PoCalendarHeaderComponent', () => {
     });
 
     it('should update labels when locale changes to Portuguese', () => {
-      spyOn(langService, 'setLanguage');
-      spyOn(langService, 'getPreviousMonthLabel').and.returnValue('Mês anterior');
-      spyOn(langService, 'getNextMonthLabel').and.returnValue('Próximo mês');
+      vi.spyOn(langService as any, 'setLanguage');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel').mockReturnValue('Mês anterior');
+      vi.spyOn(langService as any, 'getNextMonthLabel').mockReturnValue('Próximo mês');
 
       component.locale = 'pt';
 
@@ -94,9 +94,9 @@ describe('PoCalendarHeaderComponent', () => {
     });
 
     it('should update labels when locale changes to English', () => {
-      spyOn(langService, 'setLanguage');
-      spyOn(langService, 'getPreviousMonthLabel').and.returnValue('Previous month');
-      spyOn(langService, 'getNextMonthLabel').and.returnValue('Next month');
+      vi.spyOn(langService as any, 'setLanguage');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel').mockReturnValue('Previous month');
+      vi.spyOn(langService as any, 'getNextMonthLabel').mockReturnValue('Next month');
 
       component.locale = 'en';
 
@@ -106,9 +106,9 @@ describe('PoCalendarHeaderComponent', () => {
     });
 
     it('should update labels when locale changes to Spanish', () => {
-      spyOn(langService, 'setLanguage');
-      spyOn(langService, 'getPreviousMonthLabel').and.returnValue('Mes anterior');
-      spyOn(langService, 'getNextMonthLabel').and.returnValue('Próximo mes');
+      vi.spyOn(langService as any, 'setLanguage');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel').mockReturnValue('Mes anterior');
+      vi.spyOn(langService as any, 'getNextMonthLabel').mockReturnValue('Próximo mes');
 
       component.locale = 'es';
 
@@ -118,9 +118,9 @@ describe('PoCalendarHeaderComponent', () => {
     });
 
     it('should update labels when locale changes to Russian', () => {
-      spyOn(langService, 'setLanguage');
-      spyOn(langService, 'getPreviousMonthLabel').and.returnValue('Предыдущий месяц');
-      spyOn(langService, 'getNextMonthLabel').and.returnValue('Следующий месяц');
+      vi.spyOn(langService as any, 'setLanguage');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel').mockReturnValue('Предыдущий месяц');
+      vi.spyOn(langService as any, 'getNextMonthLabel').mockReturnValue('Следующий месяц');
 
       component.locale = 'ru';
 
@@ -130,7 +130,7 @@ describe('PoCalendarHeaderComponent', () => {
     });
 
     it('should not call setupLabels if locale remains the same', () => {
-      spyOn(langService, 'setLanguage');
+      vi.spyOn(langService as any, 'setLanguage');
 
       component.locale = 'pt';
       component.locale = 'pt';
@@ -140,7 +140,7 @@ describe('PoCalendarHeaderComponent', () => {
 
     it('should mark for check when labels are updated', () => {
       const cdr = (component as any).cdr;
-      spyOn(cdr, 'markForCheck');
+      vi.spyOn(cdr as any, 'markForCheck');
 
       component.locale = 'en';
 
@@ -157,9 +157,9 @@ describe('PoCalendarHeaderComponent', () => {
       (component as any)._locale = undefined;
       (component as any).labelsInitialized = false;
 
-      spyOn(langService, 'setLanguage');
-      spyOn(langService, 'getPreviousMonthLabel').and.returnValue('Previous');
-      spyOn(langService, 'getNextMonthLabel').and.returnValue('Next');
+      vi.spyOn(langService as any, 'setLanguage');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel').mockReturnValue('Previous');
+      vi.spyOn(langService as any, 'getNextMonthLabel').mockReturnValue('Next');
 
       (component as any).setupLabels();
 
@@ -171,8 +171,8 @@ describe('PoCalendarHeaderComponent', () => {
     it('should not call setupLabels on ngOnInit if labels already initialized', () => {
       (component as any).labelsInitialized = true;
 
-      spyOn(langService, 'setLanguage');
-      spyOn(langService, 'getPreviousMonthLabel');
+      vi.spyOn(langService as any, 'setLanguage');
+      vi.spyOn(langService as any, 'getPreviousMonthLabel');
 
       component.ngOnInit();
 
@@ -184,8 +184,8 @@ describe('PoCalendarHeaderComponent', () => {
   it('should handle multiple changes at once in ngOnChanges', () => {
     const cdr = (component as any).cdr;
 
-    spyOn(cdr, 'markForCheck');
-    spyOn(cdr, 'detectChanges');
+    vi.spyOn(cdr as any, 'markForCheck');
+    vi.spyOn(cdr as any, 'detectChanges');
 
     component.ngOnChanges({
       templateContext: { currentValue: {}, previousValue: {}, firstChange: false, isFirstChange: () => false },
@@ -200,8 +200,10 @@ describe('PoCalendarHeaderComponent', () => {
   it('should silently catch errors in detectChanges', () => {
     const cdr = (component as any).cdr;
 
-    spyOn(cdr, 'markForCheck');
-    spyOn(cdr, 'detectChanges').and.throwError('ExpressionChangedAfterItHasBeenCheckedError');
+    vi.spyOn(cdr as any, 'markForCheck');
+    vi.spyOn(cdr as any, 'detectChanges').mockImplementation(() => {
+      throw new Error('ExpressionChangedAfterItHasBeenCheckedError');
+    });
 
     expect(() => {
       component.ngOnChanges({
@@ -216,8 +218,8 @@ describe('PoCalendarHeaderComponent', () => {
   it('should not call markForCheck when ngOnChanges receives unrelated changes', () => {
     const cdr = (component as any).cdr;
 
-    spyOn(cdr, 'markForCheck');
-    spyOn(cdr, 'detectChanges');
+    vi.spyOn(cdr as any, 'markForCheck');
+    vi.spyOn(cdr as any, 'detectChanges');
 
     component.ngOnChanges({
       displayMonth: { currentValue: 5, previousValue: 4, firstChange: false, isFirstChange: () => false }

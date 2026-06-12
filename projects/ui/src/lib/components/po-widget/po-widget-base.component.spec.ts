@@ -131,7 +131,7 @@ describe('PoWidgetBaseComponent:', () => {
       it('should update property with true if valid values and call `onDisabled.emit`', () => {
         const validValues = [true, '', 'true'];
 
-        const spyOnDisabled = spyOn(component.onDisabled, 'emit');
+        const spyOnDisabled = vi.spyOn(component.onDisabled as any, 'emit');
 
         expectPropertiesValues(component, 'disabled', validValues, true);
 
@@ -141,7 +141,7 @@ describe('PoWidgetBaseComponent:', () => {
       it('should update property with false if invalid values and call `onDisabled.emit`', () => {
         const invalidValues = [false, 'po', null, undefined, NaN];
 
-        const spyOnDisabled = spyOn(component.onDisabled, 'emit');
+        const spyOnDisabled = vi.spyOn(component.onDisabled as any, 'emit');
 
         expectPropertiesValues(component, 'disabled', invalidValues, false);
 
@@ -203,7 +203,7 @@ describe('PoWidgetBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });

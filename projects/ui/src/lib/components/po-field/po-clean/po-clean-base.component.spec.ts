@@ -25,8 +25,8 @@ describe('PoCleanBaseComponent', () => {
   it('should call setInputValue and changeEvent emit in clear()', () => {
     component.defaultValue = '123';
 
-    spyOn(component, 'setInputValue');
-    spyOn(component.changeEvent, 'emit');
+    vi.spyOn(component as any, 'setInputValue');
+    vi.spyOn(component.changeEvent as any, 'emit');
     component.clear();
     expect(component.setInputValue).toHaveBeenCalledWith('123');
     expect(component.changeEvent.emit).toHaveBeenCalledWith('123');

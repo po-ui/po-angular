@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -43,8 +44,8 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('ngOnChanges: should call removeListeners and initEvents when target is changed', () => {
-    spyOn(component, <any>'removeListeners');
-    spyOn(component, 'initEvents');
+    vi.spyOn(component as any, 'removeListeners');
+    vi.spyOn(component as any, 'initEvents');
 
     component.afterViewInitWasCalled = true;
 
@@ -62,7 +63,7 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('ngOnChanges: should call attachPopoverKeydown when appendBox is changed', () => {
-    spyOn(component, <any>'attachPopoverKeydown');
+    vi.spyOn(component as any, 'attachPopoverKeydown');
     component.afterViewInitWasCalled = true;
     component.ngOnChanges({
       appendBox: {
@@ -77,8 +78,8 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('should call setElement and setRendererListenInit in ngAfterViewInit', () => {
-    spyOn(component['poControlPosition'], 'setElements');
-    spyOn(component, 'setRendererListenInit');
+    vi.spyOn(component['poControlPosition'] as any, 'setElements');
+    vi.spyOn(component as any, 'setRendererListenInit');
     component.ngAfterViewInit();
     expect(component['poControlPosition'].setElements).toHaveBeenCalled();
     expect(component.setRendererListenInit).toHaveBeenCalled();
@@ -90,7 +91,7 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('should call setPopoverPosition in debounceResize', fakeAsync(() => {
-    spyOn(component, 'setPopoverPosition');
+    vi.spyOn(component as any, 'setPopoverPosition');
     component.debounceResize();
 
     tick(300);
@@ -108,7 +109,7 @@ describe('PoPopoverComponent:', () => {
       arrowDirection: ''
     };
 
-    spyOn(fakeThis.poControlPosition, 'adjustPosition');
+    vi.spyOn(fakeThis.poControlPosition as any, 'adjustPosition');
 
     component.setPopoverPosition.call(fakeThis);
 
@@ -121,7 +122,7 @@ describe('PoPopoverComponent:', () => {
       const fakeEvent = getFakeToSetRendererListenInit('hover', component);
       component.targetElement = component.popoverElement.nativeElement;
 
-      spyOn(fakeEvent, 'open');
+      vi.spyOn(fakeEvent as any, 'open');
 
       component.setRendererListenInit.call(fakeEvent);
 
@@ -135,7 +136,7 @@ describe('PoPopoverComponent:', () => {
     it(`should listen for 'mouseleave' `, () => {
       const fakeEvent = getFakeToSetRendererListenInit('hover', component);
 
-      spyOn(fakeEvent, 'close').and.callFake(() => {});
+      vi.spyOn(fakeEvent as any, 'close').mockImplementation(() => {});
 
       component.setRendererListenInit.call(fakeEvent);
 
@@ -149,7 +150,7 @@ describe('PoPopoverComponent:', () => {
     it(`should listen for 'click'`, () => {
       const fakeEvent = getFakeToSetRendererListenInit('click', component);
 
-      spyOn(fakeEvent, 'togglePopup').and.callFake(() => {});
+      vi.spyOn(fakeEvent as any, 'togglePopup').mockImplementation(() => {});
 
       component.setRendererListenInit.call(fakeEvent);
 
@@ -163,7 +164,7 @@ describe('PoPopoverComponent:', () => {
     it(`should listen for 'resize' `, () => {
       const fakeEvent = getFakeToSetRendererListenInit('resize', component);
       const fakeThis = { ...fakeEvent, isHidden: false };
-      spyOn(fakeThis, 'debounceResize').and.callFake(() => {});
+      vi.spyOn(fakeThis as any, 'debounceResize').mockImplementation(() => {});
 
       component.setRendererListenInit.call(fakeThis);
 
@@ -178,8 +179,8 @@ describe('PoPopoverComponent:', () => {
         ...fake,
         appendBox: true,
         isHidden: false,
-        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
-        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
       };
 
       fakeThis.targetElement = document.body;
@@ -191,7 +192,7 @@ describe('PoPopoverComponent:', () => {
       const defaultPreventedBefore = ev.defaultPrevented;
       fakeThis.targetElement.dispatchEvent(ev);
 
-      expect(defaultPreventedBefore).toBeFalse();
+      expect(defaultPreventedBefore).toBe(false);
       expect(fakeThis.focusOnFirstFocusable).toHaveBeenCalled();
       expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
     });
@@ -202,8 +203,8 @@ describe('PoPopoverComponent:', () => {
         ...fake,
         appendBox: true,
         isHidden: false,
-        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
-        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
       };
       fakeThis.targetElement = document.body;
       component.setRendererListenInit.call(fakeThis);
@@ -224,8 +225,8 @@ describe('PoPopoverComponent:', () => {
         ...fake,
         appendBox: false,
         isHidden: false,
-        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
-        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
       };
       fakeThis.targetElement = document.body;
       component.setRendererListenInit.call(fakeThis);
@@ -235,7 +236,7 @@ describe('PoPopoverComponent:', () => {
       });
       fakeThis.targetElement.dispatchEvent(ev);
 
-      expect(ev.defaultPrevented).toBeFalse();
+      expect(ev.defaultPrevented).toBe(false);
       expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
       expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
     });
@@ -246,8 +247,8 @@ describe('PoPopoverComponent:', () => {
         ...fake,
         appendBox: true,
         isHidden: true,
-        focusOnFirstFocusable: jasmine.createSpy('focusOnFirstFocusable'),
-        focusPrevBeforeTarget: jasmine.createSpy('focusPrevBeforeTarget')
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
       };
       fakeThis.targetElement = document.body;
       component.setRendererListenInit.call(fakeThis);
@@ -257,7 +258,7 @@ describe('PoPopoverComponent:', () => {
       });
 
       fakeThis.targetElement.dispatchEvent(ev);
-      expect(ev.defaultPrevented).toBeFalse();
+      expect(ev.defaultPrevented).toBe(false);
       expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
       expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
     });
@@ -268,7 +269,7 @@ describe('PoPopoverComponent:', () => {
     component.target = component.popoverElement;
     component.targetElement = component.popoverElement.nativeElement;
 
-    spyOn(component, 'open');
+    vi.spyOn(component as any, 'open');
 
     eventClick.initEvent('click', false, true);
 
@@ -285,7 +286,7 @@ describe('PoPopoverComponent:', () => {
     component.target = component.popoverElement;
     component.targetElement = component.popoverElement.nativeElement;
 
-    spyOn(component, 'close');
+    vi.spyOn(component as any, 'close');
 
     eventClick.initEvent('click', false, true);
 
@@ -308,8 +309,8 @@ describe('PoPopoverComponent:', () => {
       open: () => {}
     };
 
-    spyOn(fakePopover, 'close');
-    spyOn(fakePopover, 'open');
+    vi.spyOn(fakePopover as any, 'close');
+    vi.spyOn(fakePopover as any, 'open');
 
     eventClick.initEvent('click', false, true);
 
@@ -323,7 +324,7 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('should open popover', fakeAsync(() => {
-    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+    vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
       cb(0);
       return 0;
     });
@@ -352,11 +353,11 @@ describe('PoPopoverComponent:', () => {
       });
     };
 
-    spyOn(fakeThis, 'addScrollEventListener');
-    spyOn(fakeThis, 'setOpacity');
-    spyOn(fakeThis, 'setElementsControlPosition');
-    spyOn(fakeThis, 'observeContentResize');
-    spyOn(fakeThis.cd, 'detectChanges');
+    vi.spyOn(fakeThis as any, 'addScrollEventListener');
+    vi.spyOn(fakeThis as any, 'setOpacity');
+    vi.spyOn(fakeThis as any, 'setElementsControlPosition');
+    vi.spyOn(fakeThis as any, 'observeContentResize');
+    vi.spyOn(fakeThis.cd as any, 'detectChanges');
     component.open.call(fakeThis);
 
     expect(fakeThis.isHidden).toBeFalsy();
@@ -368,7 +369,7 @@ describe('PoPopoverComponent:', () => {
   }));
 
   it('open: should set widthPopover from getBoundingClientRect when cornerAligned is true and width is undefined', fakeAsync(() => {
-    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+    vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
       cb(0);
       return 0;
     });
@@ -386,7 +387,7 @@ describe('PoPopoverComponent:', () => {
       widthPopover: undefined,
       popoverElement: { nativeElement: fakeNativeElement },
       openPopover: { emit: () => {} },
-      setPopoverPosition: jasmine.createSpy('setPopoverPosition'),
+      setPopoverPosition: vi.fn(),
       setElementsControlPosition: () => {},
       setOpacity: () => {},
       observeContentResize: () => {},
@@ -445,14 +446,14 @@ describe('PoPopoverComponent:', () => {
   });
 
   it('open: should recalculate widthPopover on second open after close resets it when cornerAligned is true', fakeAsync(() => {
-    spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+    vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
       cb(0);
       return 0;
     });
 
     const fakeNativeElement = {
       style: { width: '', opacity: 0, visibility: '', left: '' },
-      getBoundingClientRect: jasmine.createSpy('getBoundingClientRect').and.returnValue({ width: 200 })
+      getBoundingClientRect: vi.fn().mockReturnValue({ width: 200 })
     };
 
     const fakeThis: any = {
@@ -487,25 +488,25 @@ describe('PoPopoverComponent:', () => {
 
     // Second open — should recalculate because close reset widthPopover
     fakeThis.isHidden = true;
-    fakeNativeElement.getBoundingClientRect.calls.reset();
-    fakeNativeElement.getBoundingClientRect.and.returnValue({ width: 300 });
+    fakeNativeElement.getBoundingClientRect.mockClear();
+    fakeNativeElement.getBoundingClientRect.mockReturnValue({ width: 300 });
     component.open.call(fakeThis);
     expect(fakeThis.widthPopover).toBe(300);
     expect(fakeNativeElement.getBoundingClientRect).toHaveBeenCalledTimes(1);
   }));
 
   it('open: should set clickoutListener when trigger is function', () => {
-    const fakeListener = jasmine.createSpy('listener');
+    const fakeListener = vi.fn();
 
     const fakeThis: any = {
       trigger: 'function',
       renderer: {
-        listen: jasmine.createSpy('listen').and.callFake((_target, _event, callback) => {
+        listen: vi.fn().mockImplementation((_target, _event, callback) => {
           callback({});
           return fakeListener;
         })
       },
-      togglePopup: jasmine.createSpy('togglePopup'),
+      togglePopup: vi.fn(),
       addScrollEventListener: () => {},
       setOpacity: () => {},
       setElementsControlPosition: () => {},
@@ -519,14 +520,14 @@ describe('PoPopoverComponent:', () => {
 
     component.open.call(fakeThis);
 
-    expect(fakeThis.renderer.listen).toHaveBeenCalledWith('document', 'click', jasmine.any(Function));
+    expect(fakeThis.renderer.listen).toHaveBeenCalledWith('document', 'click', expect.any(Function));
     expect(fakeThis.togglePopup).toHaveBeenCalled();
     expect(fakeThis.clickoutListener).toBe(fakeListener);
   });
 
   it('should close popover and call `closePopover.emit` and `disconnectResizeObserver`', () => {
-    spyOn(component.closePopover, 'emit');
-    spyOn<any>(component, 'disconnectResizeObserver');
+    vi.spyOn(component.closePopover as any, 'emit');
+    vi.spyOn(component as any, 'disconnectResizeObserver');
     component.isHidden = false;
 
     component.close();
@@ -546,10 +547,10 @@ describe('PoPopoverComponent:', () => {
       cd: { detectChanges: () => {} }
     };
 
-    spyOn(fakeThis.closePopover, 'emit');
-    spyOn(fakeThis, 'clickoutListener');
-    spyOn(fakeThis, 'disconnectResizeObserver');
-    spyOn(fakeThis.cd, 'detectChanges');
+    vi.spyOn(fakeThis.closePopover as any, 'emit');
+    vi.spyOn(fakeThis as any, 'clickoutListener');
+    vi.spyOn(fakeThis as any, 'disconnectResizeObserver');
+    vi.spyOn(fakeThis.cd as any, 'detectChanges');
 
     component.close.call(fakeThis);
 
@@ -578,7 +579,7 @@ describe('PoPopoverComponent:', () => {
     const eventScroll = document.createEvent('MouseEvents');
     eventScroll.initEvent('scroll', false, true);
 
-    spyOn(component, 'setPopoverPosition');
+    vi.spyOn(component as any, 'setPopoverPosition');
 
     component.open();
 
@@ -589,15 +590,15 @@ describe('PoPopoverComponent:', () => {
 
   describe('Methods:', () => {
     it('showPopover: should call setElementsControlPosition, setPopoverPosition, setOpacity, openPopover.emit, observeContentResize and detectChanges', () => {
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
         cb(0);
         return 0;
       });
-      spyOn(component, 'setPopoverPosition');
-      spyOn(component, <any>'setElementsControlPosition');
-      spyOn(component, 'setOpacity');
-      spyOn(component, <any>'observeContentResize');
-      spyOn(component.openPopover, 'emit');
+      vi.spyOn(component as any, 'setPopoverPosition');
+      vi.spyOn(component as any, 'setElementsControlPosition');
+      vi.spyOn(component as any, 'setOpacity');
+      vi.spyOn(component as any, 'observeContentResize');
+      vi.spyOn(component.openPopover as any, 'emit');
 
       component['showPopover']();
 
@@ -609,7 +610,7 @@ describe('PoPopoverComponent:', () => {
     });
 
     it(`ngAfterViewInit: should call 'setElementsControlPosition'`, () => {
-      spyOn(component, <any>'setElementsControlPosition');
+      vi.spyOn(component as any, 'setElementsControlPosition');
 
       component.ngAfterViewInit();
 
@@ -617,8 +618,8 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('ngOnDestroy: should call disconnectResizeObserver and removeListeners.', () => {
-      spyOn(component, <any>'disconnectResizeObserver');
-      spyOn(component, <any>'removeListeners');
+      vi.spyOn(component as any, 'disconnectResizeObserver');
+      vi.spyOn(component as any, 'removeListeners');
 
       component.ngOnDestroy();
 
@@ -627,8 +628,8 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('onThemeChange: should call setPopoverPosition inside requestAnimationFrame', () => {
-      spyOn(component, 'setPopoverPosition');
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      vi.spyOn(component as any, 'setPopoverPosition');
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
         cb(0);
         return 0;
       });
@@ -640,8 +641,8 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('onThemeChange: should be triggered by window PoUiThemeChange event', () => {
-      spyOn(component, 'setPopoverPosition');
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      vi.spyOn(component as any, 'setPopoverPosition');
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
         cb(0);
         return 0;
       });
@@ -658,9 +659,9 @@ describe('PoPopoverComponent:', () => {
         cd: { detectChanges: () => {} }
       };
 
-      spyOn(fakeThis, 'setElementsControlPosition');
-      spyOn(fakeThis, 'setPopoverPosition');
-      spyOn(fakeThis.cd, 'detectChanges');
+      vi.spyOn(fakeThis as any, 'setElementsControlPosition');
+      vi.spyOn(fakeThis as any, 'setPopoverPosition');
+      vi.spyOn(fakeThis.cd as any, 'detectChanges');
 
       component.ensurePopoverPosition.call(fakeThis);
 
@@ -672,8 +673,8 @@ describe('PoPopoverComponent:', () => {
 
     describe('removeListeners:', () => {
       it('should remove click and resize listeners.', () => {
-        spyOn(component, <any>'clickoutListener');
-        spyOn(component, <any>'resizeListener');
+        vi.spyOn(component as any, 'clickoutListener');
+        vi.spyOn(component as any, 'resizeListener');
 
         component['removeListeners']();
 
@@ -685,8 +686,8 @@ describe('PoPopoverComponent:', () => {
         component.trigger = 'hover';
         component.setRendererListenInit();
         component['clickoutListener'] = undefined;
-        spyOn(component, <any>'mouseEnterListener');
-        spyOn(component, <any>'mouseLeaveListener');
+        vi.spyOn(component as any, 'mouseEnterListener');
+        vi.spyOn(component as any, 'mouseLeaveListener');
 
         component['removeListeners']();
 
@@ -714,7 +715,7 @@ describe('PoPopoverComponent:', () => {
         }
       };
 
-      spyOn(fakeThis, 'close');
+      vi.spyOn(fakeThis as any, 'close');
 
       component.togglePopup.call(fakeThis, {});
 
@@ -747,7 +748,7 @@ describe('PoPopoverComponent:', () => {
         open: () => {}
       };
 
-      spyOn(fakeThis, 'close');
+      vi.spyOn(fakeThis as any, 'close');
 
       component.togglePopup.call(fakeThis, fakeEvent);
 
@@ -758,9 +759,9 @@ describe('PoPopoverComponent:', () => {
      target and popoverOffset equals to 8`, () => {
       const popoverOffset = 8;
       component.popoverElement.nativeElement = '<po-popover></po-popover>';
-      component.target = <any>'<div></div>';
+      (component as any).target = '<div></div>';
 
-      spyOn(component['poControlPosition'], 'setElements');
+      vi.spyOn(component['poControlPosition'] as any, 'setElements');
 
       component['setElementsControlPosition']();
 
@@ -777,10 +778,10 @@ describe('PoPopoverComponent:', () => {
     it(`setElementsControlPosition: should pass cornerAligned=true when cornerAligned is true`, () => {
       const popoverOffset = 8;
       component.popoverElement.nativeElement = '<po-popover></po-popover>';
-      component.target = <any>'<div></div>';
+      (component as any).target = '<div></div>';
       component.cornerAligned = true;
 
-      spyOn(component['poControlPosition'], 'setElements');
+      vi.spyOn(component['poControlPosition'] as any, 'setElements');
 
       component['setElementsControlPosition']();
 
@@ -823,7 +824,7 @@ describe('PoPopoverComponent:', () => {
         targetElement: targetBtn
       } as any;
 
-      spyOn(targetBtn, 'focus');
+      vi.spyOn(targetBtn as any, 'focus');
       (component as any).focusOnTarget.call(fakeThis);
       expect(targetBtn.focus).toHaveBeenCalled();
     });
@@ -833,7 +834,7 @@ describe('PoPopoverComponent:', () => {
       const fakeThis = {
         popoverElement: undefined,
         targetElement: targetBtn,
-        focusOnTarget: jasmine.createSpy('focusOnTarget')
+        focusOnTarget: vi.fn()
       } as any;
 
       (component as any).focusOnFirstFocusable.call(fakeThis);
@@ -848,7 +849,7 @@ describe('PoPopoverComponent:', () => {
       footer.appendChild(innerBtn);
       host.appendChild(footer);
 
-      spyOn(innerBtn, 'focus');
+      vi.spyOn(innerBtn as any, 'focus');
 
       (component as any).focusOnFirstFocusable.call(component);
 
@@ -860,8 +861,8 @@ describe('PoPopoverComponent:', () => {
       dialog.setAttribute('role', 'dialog');
       host.appendChild(dialog);
 
-      const closeSpy = spyOn(component, 'close');
-      const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+      const closeSpy = vi.spyOn(component as any, 'close');
+      const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget');
 
       (component as any).focusOnFirstFocusable.call(component);
 
@@ -870,9 +871,9 @@ describe('PoPopoverComponent:', () => {
     });
 
     it('focusOnFirstFocusable: should set temporary tabindex and focus host as fallback, removing tabindex on blur', () => {
-      expect(host.hasAttribute('tabindex')).toBeFalse();
+      expect(host.hasAttribute('tabindex')).toBe(false);
 
-      const focusSpy = spyOn(host, 'focus').and.callFake(() => {
+      const focusSpy = vi.spyOn(host as any, 'focus').mockImplementation(() => {
         setTimeout(() => host.dispatchEvent(new Event('blur')), 0);
       });
 
@@ -882,7 +883,7 @@ describe('PoPopoverComponent:', () => {
       expect(focusSpy).toHaveBeenCalled();
       host.dispatchEvent(new Event('blur'));
 
-      expect(host.hasAttribute('tabindex')).toBeFalse();
+      expect(host.hasAttribute('tabindex')).toBe(false);
     });
 
     // ---------------- attachPopoverKeydown ----------------
@@ -920,15 +921,15 @@ describe('PoPopoverComponent:', () => {
         (component as any).isHidden = false;
         (component as any).popoverElement = { nativeElement: host };
 
-        spyOn<any>(component, 'getTabbablesIn').and.returnValue([btn, document.createElement('button')]);
+        vi.spyOn(component as any, 'getTabbablesIn').mockReturnValue([btn, document.createElement('button')]);
 
-        const spyFocusNext = spyOn<any>(component, 'focusNextAfterTarget');
+        const spyFocusNext = vi.spyOn(component as any, 'focusNextAfterTarget');
 
         (component as any).attachPopoverKeydown.call(component);
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(btn);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(btn);
         const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
-        const spyPrevent = spyOn(ev, 'preventDefault').and.callThrough();
+        const spyPrevent = vi.spyOn(ev as any, 'preventDefault');
 
         host.dispatchEvent(ev);
 
@@ -937,13 +938,13 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('Shift+Tab on first should preventDefault and focus target', () => {
-        const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
+        const focusOnTargetSpy = vi.spyOn(component as any, 'focusOnTarget');
         (component as any).attachPopoverKeydown.call(component);
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(firstEl);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(firstEl);
 
         const ev = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
-        const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
+        const preventedSpy = vi.spyOn(ev as any, 'preventDefault');
 
         host.dispatchEvent(ev);
         expect(preventedSpy).toHaveBeenCalled();
@@ -951,14 +952,14 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('Tab on last should preventDefault and call focusNextAfterTarget', () => {
-        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget');
 
         (component as any).attachPopoverKeydown.call(component);
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(lastEl);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(lastEl);
 
         const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
-        const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
+        const preventedSpy = vi.spyOn(ev as any, 'preventDefault');
 
         host.dispatchEvent(ev);
 
@@ -967,7 +968,7 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('Tab when active element id includes "popover-content" should forward focusNextAfterTarget', () => {
-        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget');
 
         (component as any).attachPopoverKeydown.call(component);
 
@@ -975,10 +976,10 @@ describe('PoPopoverComponent:', () => {
         special.id = 'popover-content-action';
         host.appendChild(special);
 
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(special);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(special);
 
         const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
-        const preventedSpy = spyOn(ev, 'preventDefault').and.callThrough();
+        const preventedSpy = vi.spyOn(ev as any, 'preventDefault');
 
         host.dispatchEvent(ev);
 
@@ -987,8 +988,8 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('should NOT intercept when key is not Tab', () => {
-        const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
-        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+        const focusOnTargetSpy = vi.spyOn(component as any, 'focusOnTarget');
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget');
 
         (component as any).attachPopoverKeydown.call(component);
 
@@ -1002,8 +1003,8 @@ describe('PoPopoverComponent:', () => {
       it('should do nothing if appendBox=false', () => {
         (component as any).appendBox = false;
 
-        const focusOnTargetSpy = spyOn<any>(component, 'focusOnTarget');
-        const focusNextAfterTargetSpy = spyOn<any>(component, 'focusNextAfterTarget');
+        const focusOnTargetSpy = vi.spyOn(component as any, 'focusOnTarget');
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget');
 
         (component as any).attachPopoverKeydown.call(component);
 
@@ -1046,7 +1047,7 @@ describe('PoPopoverComponent:', () => {
         const child = document.createElement('button');
         parent.appendChild(child);
 
-        spyOn(window, 'getComputedStyle').and.callFake((el: Element) => {
+        vi.spyOn(window as any, 'getComputedStyle').mockImplementation((el: Element) => {
           if (el === parent) {
             return { display: 'none', visibility: 'visible' } as any;
           }
@@ -1054,7 +1055,7 @@ describe('PoPopoverComponent:', () => {
         });
 
         const res = (component as any).isVisible(child);
-        expect(res).toBeFalse();
+        expect(res).toBe(false);
         parent.remove();
       });
 
@@ -1062,30 +1063,30 @@ describe('PoPopoverComponent:', () => {
         const el = document.createElement('button');
         document.body.appendChild(el);
 
-        spyOn(window, 'getComputedStyle').and.returnValue({ display: 'block', visibility: 'visible' } as any);
-        spyOn(el, 'getBoundingClientRect').and.returnValue({ width: 10, height: 10 } as any);
-        spyOn(el, 'getClientRects').and.returnValue({ length: 1 } as any);
+        vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({ display: 'block', visibility: 'visible' } as any);
+        vi.spyOn(el as any, 'getBoundingClientRect').mockReturnValue({ width: 10, height: 10 } as any);
+        vi.spyOn(el as any, 'getClientRects').mockReturnValue({ length: 1 } as any);
 
         const res = (component as any).isVisible(el);
 
-        expect(res).toBeTrue();
+        expect(res).toBe(true);
         el.remove();
       });
 
       it('should return false when the element itself has visibility:hidden', () => {
         const el = document.createElement('button');
         document.body.appendChild(el);
-        spyOn(window, 'getComputedStyle').and.callFake((node: Element) => {
+        vi.spyOn(window as any, 'getComputedStyle').mockImplementation((node: Element) => {
           if (node === el) {
             return { display: 'block', visibility: 'hidden' } as any;
           }
           return { display: 'block', visibility: 'visible' } as any;
         });
 
-        spyOn(el, 'getBoundingClientRect').and.returnValue({ width: 10, height: 10 } as any);
-        spyOn(el, 'getClientRects').and.returnValue({ length: 1 } as any);
+        vi.spyOn(el as any, 'getBoundingClientRect').mockReturnValue({ width: 10, height: 10 } as any);
+        vi.spyOn(el as any, 'getClientRects').mockReturnValue({ length: 1 } as any);
         const res = (component as any).isVisible(el);
-        expect(res).toBeFalse();
+        expect(res).toBe(false);
         el.remove();
       });
 
@@ -1095,7 +1096,7 @@ describe('PoPopoverComponent:', () => {
         parent.appendChild(child);
         document.body.appendChild(parent);
 
-        spyOn(window, 'getComputedStyle').and.callFake((node: Element) => {
+        vi.spyOn(window as any, 'getComputedStyle').mockImplementation((node: Element) => {
           if (node === parent) {
             return { display: 'block', visibility: 'hidden' } as any;
           }
@@ -1103,7 +1104,7 @@ describe('PoPopoverComponent:', () => {
         });
 
         const res = (component as any).isVisible(child);
-        expect(res).toBeFalse();
+        expect(res).toBe(false);
 
         parent.remove();
       });
@@ -1111,12 +1112,12 @@ describe('PoPopoverComponent:', () => {
       it('should return true when width/height are 0 but getClientRects().length > 0', () => {
         const el = document.createElement('button');
         document.body.appendChild(el);
-        spyOn(window, 'getComputedStyle').and.returnValue({ display: 'block', visibility: 'visible' } as any);
-        spyOn(el, 'getBoundingClientRect').and.returnValue({ width: 0, height: 0 } as any);
-        spyOn(el, 'getClientRects').and.returnValue({ length: 1 } as any);
+        vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({ display: 'block', visibility: 'visible' } as any);
+        vi.spyOn(el as any, 'getBoundingClientRect').mockReturnValue({ width: 0, height: 0 } as any);
+        vi.spyOn(el as any, 'getClientRects').mockReturnValue({ length: 1 } as any);
 
         const res = (component as any).isVisible(el);
-        expect(res).toBeTrue();
+        expect(res).toBe(true);
         el.remove();
       });
     });
@@ -1133,7 +1134,7 @@ describe('PoPopoverComponent:', () => {
       host.appendChild(btn2);
       host.appendChild(link);
 
-      spyOn<any>(component, 'isVisible').and.returnValue(true);
+      vi.spyOn(component as any, 'isVisible').mockReturnValue(true);
 
       const items = (component as any).getTabbablesIn(host);
       expect(items).toContain(btn1);
@@ -1152,7 +1153,7 @@ describe('PoPopoverComponent:', () => {
       document.body.appendChild(docDisabled);
       document.body.appendChild(docLink);
 
-      spyOn<any>(component, 'isVisible').and.returnValue(true);
+      vi.spyOn(component as any, 'isVisible').mockReturnValue(true);
 
       const all = (component as any).getDocumentTabbables();
 
@@ -1175,15 +1176,15 @@ describe('PoPopoverComponent:', () => {
         document.body.appendChild(second);
         document.body.appendChild(third);
 
-        const focusSpySecond = spyOn(second, 'focus');
-        const focusSpyFirst = spyOn(first, 'focus');
+        const focusSpySecond = vi.spyOn(second as any, 'focus');
+        const focusSpyFirst = vi.spyOn(first as any, 'focus');
 
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([first, second, third]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([first, second, third]);
         (component as any).targetElement = first;
         (component as any).focusNextAfterTarget();
 
         expect(focusSpySecond).toHaveBeenCalled();
-        (focusSpySecond as jasmine.Spy).calls.reset();
+        (focusSpySecond as Mock).mockClear();
         (component as any).targetElement = third;
         (component as any).focusNextAfterTarget();
 
@@ -1201,14 +1202,14 @@ describe('PoPopoverComponent:', () => {
         document.body.appendChild(b);
         document.body.appendChild(c);
 
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([a, b, c]);
-        spyOn<any>(component, 'getTabbablesIn').and.returnValue([b, c]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([a, b, c]);
+        vi.spyOn(component as any, 'getTabbablesIn').mockReturnValue([b, c]);
 
         (component.popoverElement as any) = { nativeElement: host };
 
         (component as any).targetElement = document.createElement('button');
 
-        const focusSpy = spyOn(a, 'focus');
+        const focusSpy = vi.spyOn(a as any, 'focus');
         (component as any).focusNextAfterTarget();
         expect(focusSpy).toHaveBeenCalled();
         a.remove();
@@ -1217,11 +1218,11 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('should early-return when there are no document tabbables', () => {
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([]);
-        const getTabbablesInSpy = spyOn<any>(component, 'getTabbablesIn');
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([]);
+        const getTabbablesInSpy = vi.spyOn(component as any, 'getTabbablesIn');
 
         const fakeTarget = document.createElement('button');
-        const focusSpy = spyOn(fakeTarget, 'focus');
+        const focusSpy = vi.spyOn(fakeTarget as any, 'focus');
         (component as any).targetElement = fakeTarget;
 
         expect(() => (component as any).focusNextAfterTarget()).not.toThrow();
@@ -1237,10 +1238,10 @@ describe('PoPopoverComponent:', () => {
         document.body.appendChild(a);
         document.body.appendChild(b);
 
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([a, b]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([a, b]);
 
         (component as any).targetElement = null;
-        const focusSpy = spyOn(a, 'focus');
+        const focusSpy = vi.spyOn(a as any, 'focus');
 
         (component as any).focusNextAfterTarget();
         expect(focusSpy).toHaveBeenCalled();
@@ -1262,11 +1263,11 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('should create a ResizeObserver and observe the popoverElement', () => {
-        const observeSpy = jasmine.createSpy('observe');
-        const disconnectSpy = jasmine.createSpy('disconnect');
+        const observeSpy = vi.fn();
+        const disconnectSpy = vi.fn();
 
         (window as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
-          return { observe: observeSpy, disconnect: disconnectSpy, unobserve: jasmine.createSpy('unobserve') };
+          return { observe: observeSpy, disconnect: disconnectSpy, unobserve: vi.fn() };
         };
 
         (component as any).observeContentResize();
@@ -1276,14 +1277,14 @@ describe('PoPopoverComponent:', () => {
       });
 
       it('should disconnect existing observer before creating a new one', () => {
-        const disconnectSpy = jasmine.createSpy('disconnect');
+        const disconnectSpy = vi.fn();
         component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} };
 
         (globalThis as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
           return {
-            observe: jasmine.createSpy('observe'),
-            disconnect: jasmine.createSpy('disconnect'),
-            unobserve: jasmine.createSpy('unobserve')
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+            unobserve: vi.fn()
           };
         };
 
@@ -1298,14 +1299,14 @@ describe('PoPopoverComponent:', () => {
         (globalThis as any).ResizeObserver = function (callback: ResizeObserverCallback) {
           capturedCallback = callback;
           return {
-            observe: jasmine.createSpy('observe'),
-            disconnect: jasmine.createSpy('disconnect'),
-            unobserve: jasmine.createSpy('unobserve')
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+            unobserve: vi.fn()
           };
         };
 
-        spyOn<any>(component, 'setElementsControlPosition');
-        spyOn(component, 'setPopoverPosition');
+        vi.spyOn(component as any, 'setElementsControlPosition');
+        vi.spyOn(component as any, 'setPopoverPosition');
 
         (component as any).observeContentResize();
 
@@ -1322,15 +1323,15 @@ describe('PoPopoverComponent:', () => {
         (globalThis as any).ResizeObserver = function (callback: ResizeObserverCallback) {
           capturedCallback = callback;
           return {
-            observe: jasmine.createSpy('observe'),
-            disconnect: jasmine.createSpy('disconnect'),
-            unobserve: jasmine.createSpy('unobserve')
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+            unobserve: vi.fn()
           };
         };
 
-        spyOn<any>(component, 'setElementsControlPosition');
-        spyOn(component, 'setPopoverPosition');
-        spyOn(component['cd'], 'detectChanges');
+        vi.spyOn(component as any, 'setElementsControlPosition');
+        vi.spyOn(component as any, 'setPopoverPosition');
+        vi.spyOn(component['cd'] as any, 'detectChanges');
 
         (component as any).observeContentResize();
 
@@ -1348,7 +1349,7 @@ describe('PoPopoverComponent:', () => {
       it('should not create observer when popoverElement is undefined', () => {
         (component as any).popoverElement = undefined;
 
-        const constructorSpy = jasmine.createSpy('ResizeObserverConstructor');
+        const constructorSpy = vi.fn();
         (window as any).ResizeObserver = constructorSpy;
 
         (component as any).observeContentResize();
@@ -1361,7 +1362,7 @@ describe('PoPopoverComponent:', () => {
     // ---------------- disconnectResizeObserver ----------------
     describe('disconnectResizeObserver:', () => {
       it('should disconnect and nullify the resizeObserver', () => {
-        const disconnectSpy = jasmine.createSpy('disconnect');
+        const disconnectSpy = vi.fn();
         component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} };
 
         (component as any).disconnectResizeObserver();
@@ -1396,17 +1397,17 @@ describe('PoPopoverComponent:', () => {
         document.body.appendChild(second);
         document.body.appendChild(third);
 
-        const focusSpyFirst = spyOn(first, 'focus');
-        const focusSpyThird = spyOn(third, 'focus');
+        const focusSpyFirst = vi.spyOn(first as any, 'focus');
+        const focusSpyThird = vi.spyOn(third as any, 'focus');
 
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([first, second, third]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([first, second, third]);
         (component as any).targetElement = second;
 
         (component as any).focusPrevBeforeTarget();
 
         expect(focusSpyFirst).toHaveBeenCalled();
 
-        (focusSpyFirst as jasmine.Spy).calls.reset();
+        (focusSpyFirst as Mock).mockClear();
         (component as any).targetElement = first;
 
         (component as any).focusPrevBeforeTarget();
@@ -1417,10 +1418,10 @@ describe('PoPopoverComponent:', () => {
         third.remove();
       });
       it('should early-return when there are no document tabbables', () => {
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([]);
 
         const fakeTarget = document.createElement('button');
-        const focusSpy = spyOn(fakeTarget, 'focus');
+        const focusSpy = vi.spyOn(fakeTarget as any, 'focus');
         (component as any).targetElement = fakeTarget;
 
         expect(() => (component as any).focusPrevBeforeTarget()).not.toThrow();
@@ -1435,10 +1436,10 @@ describe('PoPopoverComponent:', () => {
         document.body.appendChild(first);
         document.body.appendChild(second);
 
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([first, second]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([first, second]);
 
         (component as any).targetElement = null;
-        const focusSpy = spyOn(second, 'focus');
+        const focusSpy = vi.spyOn(second as any, 'focus');
 
         (component as any).focusPrevBeforeTarget();
 
@@ -1454,9 +1455,9 @@ describe('PoPopoverComponent:', () => {
         document.body.appendChild(a);
         document.body.appendChild(b);
 
-        spyOn<any>(component, 'getDocumentTabbables').and.returnValue([a, b]);
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([a, b]);
         (component as any).targetElement = document.createElement('button');
-        const focusSpy = spyOn(b, 'focus');
+        const focusSpy = vi.spyOn(b as any, 'focus');
         (component as any).focusPrevBeforeTarget();
         expect(focusSpy).toHaveBeenCalled();
 

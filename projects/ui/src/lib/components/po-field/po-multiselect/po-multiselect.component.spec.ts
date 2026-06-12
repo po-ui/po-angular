@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpHandler, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
@@ -32,7 +33,7 @@ describe('PoMultiselectComponent:', () => {
   let fnAdjustContainerPosition;
   let component: PoMultiselectComponent;
   let fixture: ComponentFixture<PoMultiselectComponent>;
-  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
+  let controlPositionMock: any;
 
   let multiSelectService: PoMultiselectFilterService;
   let httpMock: HttpTestingController;
@@ -74,7 +75,10 @@ describe('PoMultiselectComponent:', () => {
     component = fixture.componentInstance;
     renderer = TestBed.inject(Renderer2);
     fnAdjustContainerPosition = component['adjustContainerPosition'];
-    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', ['adjustPosition', 'setElements']);
+    controlPositionMock = {
+      adjustPosition: vi.fn().mockName('PoControlPositionService.adjustPosition'),
+      setElements: vi.fn().mockName('PoControlPositionService.setElements')
+    };
     component['adjustContainerPosition'] = () => controlPositionMock.adjustPosition('bottom');
 
     component.options = [{ label: 'label', value: 1 }];
@@ -100,7 +104,7 @@ describe('PoMultiselectComponent:', () => {
     const event = document.createEvent('MouseEvents');
     event.initEvent('click', false, true);
 
-    spyOn(component, 'wasClickedOnToggle');
+    vi.spyOn(component as any, 'wasClickedOnToggle');
     documentBody.dispatchEvent(event);
     documentBody.click();
     expect(component.wasClickedOnToggle).toHaveBeenCalled();
@@ -136,7 +140,7 @@ describe('PoMultiselectComponent:', () => {
       initCalculateItems: true,
       handleKeyboardNavigationTag: () => {}
     };
-    spyOn(fakeThis, 'handleKeyboardNavigationTag');
+    vi.spyOn(fakeThis as any, 'handleKeyboardNavigationTag');
 
     component.calculateVisibleItems.call(fakeThis);
 
@@ -151,7 +155,7 @@ describe('PoMultiselectComponent:', () => {
   it('should set focus on input', () => {
     component.initialized = false;
     component.autoFocus = true;
-    spyOn(component.inputElement.nativeElement, 'focus');
+    vi.spyOn(component.inputElement.nativeElement, 'focus');
     component.ngAfterViewInit();
 
     fixture.detectChanges();
@@ -161,12 +165,10 @@ describe('PoMultiselectComponent:', () => {
     expect(component.initialized).toBeTruthy();
   });
 
-  it('shouldn`t set focus on input', done => {
+  it('shouldn`t set focus on input', async () => {
     component.initialized = false;
     component.autoFocus = false;
-    spyOn(component.inputElement.nativeElement, 'focus');
-
-    done();
+    vi.spyOn(component.inputElement.nativeElement, 'focus');
 
     component.ngAfterViewInit();
     expect(component.inputElement.nativeElement.focus).not.toHaveBeenCalled();
@@ -178,15 +180,15 @@ describe('PoMultiselectComponent:', () => {
     component.selectedOptions = [{ label: 'label', value: 1 }];
     component.visibleTags = [];
 
-    spyOn(component, 'debounceResize');
+    vi.spyOn(component as any, 'debounceResize');
     component.updateVisibleItems();
     expect(component.visibleTags.length).toBe(1);
     expect(component.debounceResize).toHaveBeenCalled();
   });
 
   it('should call preventDefault and controlDropdownVisibility(false) when keyCode esc is pressed', () => {
-    const event = { preventDefault: jasmine.createSpy(), keyCode: 27 };
-    spyOn(component, 'controlDropdownVisibility');
+    const event = { preventDefault: vi.fn(), keyCode: 27 };
+    vi.spyOn(component as any, 'controlDropdownVisibility');
 
     component.onKeyDown(event);
 
@@ -202,8 +204,8 @@ describe('PoMultiselectComponent:', () => {
       tagRemovable.setAttribute('class', 'po-tag-remove');
       component.visibleTags = [tagRemovable, tagRemovable];
 
-      spyOn(component, 'controlDropdownVisibility');
-      spyOn(event, 'preventDefault');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
+      vi.spyOn(event as any, 'preventDefault');
 
       component.controlDropdownVisibility(true);
       const onKeyDown = component.onKeyDown(event);
@@ -221,8 +223,8 @@ describe('PoMultiselectComponent:', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputElement.nativeElement);
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputElement.nativeElement);
 
       component.onKeyDown(fakeEvent);
 
@@ -237,8 +239,8 @@ describe('PoMultiselectComponent:', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
       component.onKeyDown(fakeEvent);
 
       expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -248,7 +250,7 @@ describe('PoMultiselectComponent:', () => {
   it('should call controlDropdownVisibility when enabled', () => {
     component.disabled = false;
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     component.toggleDropdownVisibility();
     expect(component.controlDropdownVisibility).toHaveBeenCalled();
   });
@@ -257,7 +259,7 @@ describe('PoMultiselectComponent:', () => {
     component.disabled = false;
     component.filterService = poMultiselectFilterServiceStub;
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     component.toggleDropdownVisibility();
 
     expect(component.controlDropdownVisibility).toHaveBeenCalled();
@@ -266,7 +268,7 @@ describe('PoMultiselectComponent:', () => {
   it('shouldn`t call controlDropdownVisibility when disabled', () => {
     component.disabled = true;
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     component.toggleDropdownVisibility();
     expect(component.controlDropdownVisibility).not.toHaveBeenCalled();
   });
@@ -276,7 +278,7 @@ describe('PoMultiselectComponent:', () => {
 
     fixture.detectChanges();
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     component.openDropdown(true);
     expect(component.controlDropdownVisibility).toHaveBeenCalledWith(true);
   });
@@ -286,7 +288,7 @@ describe('PoMultiselectComponent:', () => {
 
     fixture.detectChanges();
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     component.openDropdown(false);
     expect(component.controlDropdownVisibility).not.toHaveBeenCalled();
   });
@@ -305,7 +307,7 @@ describe('PoMultiselectComponent:', () => {
 
   it('should call controlDropdownVisibility(false) when keyCode tab is pressed and shiftKey is true', () => {
     const event = { keyCode: PoKeyCodeEnum.tab, shiftKey: true };
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
 
     component.onKeyDown(event);
 
@@ -313,8 +315,8 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should call preventDefault and controlDropdownVisibility(true) when keyCode space is pressed', () => {
-    const event = { preventDefault: jasmine.createSpy(), keyCode: 32 };
-    spyOn(component, 'controlDropdownVisibility');
+    const event = { preventDefault: vi.fn(), keyCode: 32 };
+    vi.spyOn(component as any, 'controlDropdownVisibility');
 
     component.onKeyDown(event);
 
@@ -323,12 +325,12 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should call focusOnFirstItem when pressed Tab with list box open', () => {
-    const event = { preventDefault: jasmine.createSpy(), keyCode: 9 };
+    const event = { preventDefault: vi.fn(), keyCode: 9 };
     component.visibleTags = [];
     component.appendBox = true;
     component.dropdownOpen = true;
 
-    spyOn(component, 'focusOnFirstItem');
+    vi.spyOn(component as any, 'focusOnFirstItem');
 
     component.onKeyDown(event);
 
@@ -336,10 +338,10 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should call focus and controlDropdownVisibility(true) when keyCode enter is pressed', () => {
-    const event = { preventDefault: jasmine.createSpy(), keyCode: 13 };
+    const event = { preventDefault: vi.fn(), keyCode: 13 };
     component.visibleTags = [];
-    spyOn(component, 'controlDropdownVisibility');
-    spyOn(component, 'focus');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'focus');
 
     component.onKeyDown(event);
 
@@ -348,11 +350,11 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('shouldn`t call focus and controlDropdownVisibility(true) when keyCode enter is pressed', () => {
-    const event = { preventDefault: jasmine.createSpy(), keyCode: 13 };
+    const event = { preventDefault: vi.fn(), keyCode: 13 };
     const tagRemovable = document.createElement('span');
     tagRemovable.setAttribute('class', 'po-tag-remove');
     component.visibleTags = [tagRemovable, tagRemovable];
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
 
     component.onKeyDown(event);
 
@@ -367,7 +369,7 @@ describe('PoMultiselectComponent:', () => {
     ];
     component.selectedOptions = [{ label: 'label2', value: 2 }];
     fixture.detectChanges();
-    spyOn(component.dropdown, 'scrollTo');
+    vi.spyOn(component.dropdown as any, 'scrollTo');
     component.scrollToSelectedOptions();
     expect(component.dropdown.scrollTo).toHaveBeenCalledWith(1);
   });
@@ -375,7 +377,7 @@ describe('PoMultiselectComponent:', () => {
   it('shouldn`t call dropdown.scrollTo', () => {
     component.selectedOptions = [];
     fixture.detectChanges();
-    spyOn(component.dropdown, 'scrollTo');
+    vi.spyOn(component.dropdown as any, 'scrollTo');
     component.scrollToSelectedOptions();
     expect(component.dropdown.scrollTo).not.toHaveBeenCalled();
   });
@@ -392,8 +394,8 @@ describe('PoMultiselectComponent:', () => {
       { label: 'label2', value: 2 }
     ];
 
-    spyOn(component, 'updateVisibleItems');
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component as any, 'updateVisibleItems');
+    vi.spyOn(component as any, 'callOnChange');
     component['closeTag'](1, 'click');
     expect(component.updateVisibleItems).toHaveBeenCalled();
     expect(component.callOnChange).toHaveBeenCalled();
@@ -420,8 +422,8 @@ describe('PoMultiselectComponent:', () => {
       { label: 'label9', value: 9 }
     ];
 
-    spyOn(component, 'updateVisibleItems');
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component as any, 'updateVisibleItems');
+    vi.spyOn(component as any, 'callOnChange');
     component['closeTag']('1+', 'click');
     expect(component.updateVisibleItems).toHaveBeenCalled();
     expect(component.callOnChange).toHaveBeenCalled();
@@ -432,23 +434,23 @@ describe('PoMultiselectComponent:', () => {
     component.visibleTags = [{ label: 'label0', value: 0 }];
     component.selectedOptions = [{ label: 'label0', value: 0 }];
 
-    spyOn(component, 'updateVisibleItems');
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component as any, 'updateVisibleItems');
+    vi.spyOn(component as any, 'callOnChange');
 
     component['closeTag'](0, 'click');
 
     expect(component.updateVisibleItems).toHaveBeenCalled();
     expect(component.callOnChange).toHaveBeenCalled();
-    expect(component.selectedOptions.some(opt => opt.value === 0)).toBeFalse();
+    expect(component.selectedOptions.some(opt => opt.value === 0)).toBe(false);
   });
 
   describe('showAdditionalHelp:', () => {
     let helperEl: any;
     beforeEach(() => {
       helperEl = {
-        openHelperPopover: jasmine.createSpy('openHelperPopover'),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-        helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+        openHelperPopover: vi.fn(),
+        closeHelperPopover: vi.fn(),
+        helperIsVisible: vi.fn().mockReturnValue(false)
       };
     });
 
@@ -457,11 +459,11 @@ describe('PoMultiselectComponent:', () => {
       component.additionalHelpTooltip = undefined;
       component.displayAdditionalHelp = false;
 
-      helperEl.helperIsVisible.and.returnValue(true);
+      helperEl.helperIsVisible.mockReturnValue(true);
       component.helperEl = helperEl;
-      spyOn(component as any, 'poHelperComponent').and.returnValue({});
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-      spyOn(component.additionalHelp, 'emit');
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp();
 
@@ -471,18 +473,18 @@ describe('PoMultiselectComponent:', () => {
       expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
       expect(component.additionalHelp.emit).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
 
-      helperEl.helperIsVisible.and.returnValue(false);
+      helperEl.helperIsVisible.mockReturnValue(false);
       component.helperEl = helperEl;
-      spyOn(component as any, 'poHelperComponent').and.returnValue({});
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-      spyOn(component.additionalHelp, 'emit');
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp();
 
@@ -491,18 +493,18 @@ describe('PoMultiselectComponent:', () => {
       expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
       expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
-      helperEl.helperIsVisible.and.returnValue(false);
+      helperEl.helperIsVisible.mockReturnValue(false);
       component.helperEl = helperEl;
-      const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-      spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-      spyOn(component.additionalHelp, 'emit');
+      const helperMock = { eventOnClick: vi.fn() };
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp();
 
@@ -513,19 +515,19 @@ describe('PoMultiselectComponent:', () => {
       expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
 
-      helperEl.helperIsVisible.and.returnValue(false);
+      helperEl.helperIsVisible.mockReturnValue(false);
       component.helperEl = helperEl;
-      spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
       component.additionalHelpTooltip = 'any text';
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-      spyOn(component.additionalHelp, 'emit');
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp();
 
@@ -535,19 +537,19 @@ describe('PoMultiselectComponent:', () => {
       expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(component.additionalHelp.emit).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
       (component as any).label = '';
       component.displayAdditionalHelp = false;
 
-      helperEl.helperIsVisible.and.returnValue(false);
+      helperEl.helperIsVisible.mockReturnValue(false);
       component.helperEl = helperEl;
-      spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+      vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
       component.additionalHelpTooltip = undefined;
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-      spyOn(component.additionalHelp, 'emit');
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp();
 
@@ -556,7 +558,7 @@ describe('PoMultiselectComponent:', () => {
       expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
       expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -564,8 +566,8 @@ describe('PoMultiselectComponent:', () => {
 
       const result = component.showAdditionalHelp();
 
-      expect(result).toBeTrue();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(result).toBe(true);
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -573,8 +575,8 @@ describe('PoMultiselectComponent:', () => {
 
       const result = component.showAdditionalHelp();
 
-      expect(result).toBeFalse();
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(result).toBe(false);
+      expect(component.displayAdditionalHelp).toBe(false);
     });
   });
 
@@ -584,7 +586,7 @@ describe('PoMultiselectComponent:', () => {
     const event = document.createEvent('MouseEvents');
     event.initEvent('click', false, true);
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     document.body.dispatchEvent(event);
     component.wasClickedOnToggle(event);
     expect(component.controlDropdownVisibility).toHaveBeenCalledWith(false);
@@ -596,7 +598,7 @@ describe('PoMultiselectComponent:', () => {
     const event = document.createEvent('MouseEvents');
     event.initEvent('click', false, true);
 
-    spyOn(component, 'controlDropdownVisibility');
+    vi.spyOn(component as any, 'controlDropdownVisibility');
     document.body.dispatchEvent(event);
     component.wasClickedOnToggle(event);
     expect(component.controlDropdownVisibility).not.toHaveBeenCalledWith(false);
@@ -604,10 +606,10 @@ describe('PoMultiselectComponent:', () => {
 
   describe('Methods:', () => {
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -630,7 +632,7 @@ describe('PoMultiselectComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
 
     it('ngDoCheck: should call debounceResize', () => {
@@ -646,7 +648,7 @@ describe('PoMultiselectComponent:', () => {
         debounceResize: () => true
       };
 
-      spyOn(fakeThis, 'debounceResize');
+      vi.spyOn(fakeThis as any, 'debounceResize');
 
       component.ngDoCheck.call(fakeThis);
 
@@ -667,7 +669,7 @@ describe('PoMultiselectComponent:', () => {
         debounceResize: () => true
       };
 
-      spyOn(fakeThis, 'debounceResize');
+      vi.spyOn(fakeThis as any, 'debounceResize');
 
       component.ngDoCheck.call(fakeThis);
 
@@ -688,7 +690,7 @@ describe('PoMultiselectComponent:', () => {
         debounceResize: () => {}
       };
 
-      spyOn(fakeThis, 'debounceResize');
+      vi.spyOn(fakeThis as any, 'debounceResize');
 
       component.ngDoCheck.call(fakeThis);
 
@@ -697,12 +699,12 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('ngOnDestroy: should call removeListeners and call unsubscribe from subscription', () => {
-      const removeListenersSpy = spyOn(component, <any>'removeListeners');
+      const removeListenersSpy = vi.spyOn(component as any, 'removeListeners');
       component['getObjectsByValuesSubscription'] = <any>{ unsubscribe: () => {} };
       component['filterSubject'] = <any>{ unsubscribe: () => {} };
 
-      spyOn(component['getObjectsByValuesSubscription'], 'unsubscribe');
-      spyOn(component['filterSubject'], 'unsubscribe');
+      vi.spyOn(component['getObjectsByValuesSubscription'] as any, 'unsubscribe');
+      vi.spyOn(component['filterSubject'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -723,8 +725,8 @@ describe('PoMultiselectComponent:', () => {
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
         (component as any).label = 'this.label';
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -732,8 +734,8 @@ describe('PoMultiselectComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -744,7 +746,7 @@ describe('PoMultiselectComponent:', () => {
     it('Should call `setService` if a change occurs in `filterService` and contain `filterService`', () => {
       const changes = { filterService: 'filterServiceURL' };
       component.filterService = 'http://localhost:4200/test';
-      spyOn(component, <any>'setService');
+      vi.spyOn(component as any, 'setService');
 
       component.ngOnChanges(<any>changes);
 
@@ -754,7 +756,7 @@ describe('PoMultiselectComponent:', () => {
     it('Should call `setService` if a change occurs in `fieldValue` and contain `filterService`', () => {
       const changes = { fieldValue: 'valueTest' };
       component.filterService = 'http://localhost:4200/test';
-      spyOn(component, <any>'setService');
+      vi.spyOn(component as any, 'setService');
 
       component.ngOnChanges(<any>changes);
 
@@ -764,7 +766,7 @@ describe('PoMultiselectComponent:', () => {
     it('Should call `setService` if a change occurs in `fieldLabel` and contain `filterService`', () => {
       const changes = { fieldLabel: 'labelTest' };
       component.filterService = 'http://localhost:4200/test';
-      spyOn(component, <any>'setService');
+      vi.spyOn(component as any, 'setService');
 
       component.ngOnChanges(<any>changes);
 
@@ -774,7 +776,7 @@ describe('PoMultiselectComponent:', () => {
     it(`Shouldn't call 'setService' if not a change occurs`, () => {
       const changes = {};
 
-      spyOn(component, <any>'setService');
+      vi.spyOn(component as any, 'setService');
 
       component.ngOnChanges(changes);
 
@@ -788,7 +790,7 @@ describe('PoMultiselectComponent:', () => {
         }
       };
 
-      spyOn(component.inputElement.nativeElement, 'focus');
+      vi.spyOn(component.inputElement.nativeElement, 'focus');
 
       component.focus();
 
@@ -803,7 +805,7 @@ describe('PoMultiselectComponent:', () => {
       };
       component.disabled = true;
 
-      spyOn(component.inputElement.nativeElement, 'focus');
+      vi.spyOn(component.inputElement.nativeElement, 'focus');
 
       component.focus();
 
@@ -812,7 +814,7 @@ describe('PoMultiselectComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -822,7 +824,7 @@ describe('PoMultiselectComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -831,7 +833,7 @@ describe('PoMultiselectComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -840,7 +842,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('should include additionalHelp when event is triggered', () => {
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
       component.additionalHelp = new EventEmitter<any>();
 
       const result = component.setHelper('label', 'tooltip');
@@ -951,7 +953,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('controlDropdownVisibility: should call `open` if `toOpen` param is `true`.', () => {
-      const openSpy = spyOn(component, <any>'open');
+      const openSpy = vi.spyOn(component as any, 'open');
 
       component.controlDropdownVisibility(true);
 
@@ -959,7 +961,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('controlDropdownVisibility: should call `close` if `toOpen` param is `false`.', () => {
-      const closeSpy = spyOn(component, <any>'close');
+      const closeSpy = vi.spyOn(component as any, 'close');
 
       component.controlDropdownVisibility(false);
 
@@ -968,8 +970,8 @@ describe('PoMultiselectComponent:', () => {
 
     it('onKeyDownDropdown: should control dropdown visibility', fakeAsync(() => {
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
-      const controlDropdownVisibilitySpy = spyOn(component, 'controlDropdownVisibility');
-      const inputFocus = spyOn(component.inputElement.nativeElement, 'focus');
+      const controlDropdownVisibilitySpy = vi.spyOn(component as any, 'controlDropdownVisibility');
+      const inputFocus = vi.spyOn(component.inputElement.nativeElement, 'focus');
 
       component.onKeyDownDropdown(event, 0);
 
@@ -986,7 +988,7 @@ describe('PoMultiselectComponent:', () => {
         preventDefault: () => {}
       } as any;
 
-      const inputFocus = spyOn(component.inputElement.nativeElement, 'focus');
+      const inputFocus = vi.spyOn(component.inputElement.nativeElement, 'focus');
 
       component.onKeyDownDropdown(event, 0);
 
@@ -995,9 +997,9 @@ describe('PoMultiselectComponent:', () => {
 
     it('onKeyDownDropdown: should do nothing for non-Escape key', () => {
       const event = new KeyboardEvent('keydown', { key: 'Enter' });
-      const preventDefaultSpy = spyOn(event, 'preventDefault');
-      const controlDropdownVisibilitySpy = spyOn(component, 'controlDropdownVisibility');
-      const focusSpy = spyOn(component.inputElement.nativeElement, 'focus');
+      const preventDefaultSpy = vi.spyOn(event as any, 'preventDefault');
+      const controlDropdownVisibilitySpy = vi.spyOn(component as any, 'controlDropdownVisibility');
+      const focusSpy = vi.spyOn(component.inputElement.nativeElement, 'focus');
 
       component.onKeyDownDropdown(event, 0);
 
@@ -1014,7 +1016,7 @@ describe('PoMultiselectComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
@@ -1034,7 +1036,7 @@ describe('PoMultiselectComponent:', () => {
         const inputEl = component.inputElement.nativeElement;
         inputEl.setAttribute('aria-label', 'Unselected');
         component.label = 'New Label';
-        spyOn(component, <any>'onModelTouched');
+        vi.spyOn(component as any, 'onModelTouched');
 
         component.onBlur(fakeEvent);
 
@@ -1046,7 +1048,7 @@ describe('PoMultiselectComponent:', () => {
         const inputEl = component.inputElement.nativeElement;
         inputEl.setAttribute('aria-label', 'Unselected');
         component.label = '';
-        spyOn(component, <any>'onModelTouched');
+        vi.spyOn(component as any, 'onModelTouched');
 
         component.onBlur(fakeEvent);
 
@@ -1058,7 +1060,7 @@ describe('PoMultiselectComponent:', () => {
         const inputElement = component.inputElement.nativeElement;
         inputElement.setAttribute('aria-label', 'Something Selected');
         component.label = 'New Label';
-        spyOn(component, <any>'onModelTouched');
+        vi.spyOn(component as any, 'onModelTouched');
 
         component.onBlur(fakeEvent);
 
@@ -1066,7 +1068,7 @@ describe('PoMultiselectComponent:', () => {
       });
 
       it('should emit blur event when event.type is "blur"', () => {
-        spyOn(component.blur, 'emit');
+        vi.spyOn(component.blur as any, 'emit');
 
         component.onBlur({ type: 'blur' });
 
@@ -1074,7 +1076,7 @@ describe('PoMultiselectComponent:', () => {
       });
 
       it('should not emit blur event when event.type is different from "blur"', () => {
-        spyOn(component.blur, 'emit');
+        vi.spyOn(component.blur as any, 'emit');
 
         component.onBlur({ type: 'focus' });
 
@@ -1082,22 +1084,21 @@ describe('PoMultiselectComponent:', () => {
       });
     });
 
-    it('debounceResize: should call `calculateVisibleItems` after 200 milliseconds', done => {
+    it('debounceResize: should call `calculateVisibleItems` after 200 milliseconds', async () => {
       component.autoHeight = false;
 
-      spyOn(component, 'calculateVisibleItems');
+      vi.spyOn(component as any, 'calculateVisibleItems');
       component.debounceResize();
 
       setTimeout(() => {
         expect(component.calculateVisibleItems).toHaveBeenCalled();
-        done();
       }, 210);
     });
 
-    it('debounceResize: should call `calculateVisibleItems` just once', done => {
+    it('debounceResize: should call `calculateVisibleItems` just once', async () => {
       component.autoHeight = false;
 
-      spyOn(component, 'calculateVisibleItems');
+      vi.spyOn(component as any, 'calculateVisibleItems');
       component.debounceResize();
 
       setTimeout(null, 100);
@@ -1106,18 +1107,16 @@ describe('PoMultiselectComponent:', () => {
 
       setTimeout(() => {
         expect(component.calculateVisibleItems).toHaveBeenCalledTimes(1);
-        done();
       }, 210);
     });
 
-    it('debounceResize: shouldn`t call `calculateVisibleItems` if `autoHeight` is true', done => {
-      spyOn(component, 'calculateVisibleItems');
+    it('debounceResize: shouldn`t call `calculateVisibleItems` if `autoHeight` is true', async () => {
+      vi.spyOn(component as any, 'calculateVisibleItems');
 
       component.debounceResize();
 
       setTimeout(() => {
         expect(component.calculateVisibleItems).not.toHaveBeenCalled();
-        done();
       }, 210);
     });
 
@@ -1134,7 +1133,7 @@ describe('PoMultiselectComponent:', () => {
         isCalculateVisibleItems: false
       };
 
-      spyOn(fakeThis, 'debounceResize');
+      vi.spyOn(fakeThis as any, 'debounceResize');
 
       component.updateVisibleItems.call(fakeThis);
 
@@ -1156,7 +1155,7 @@ describe('PoMultiselectComponent:', () => {
         isCalculateVisibleItems: false
       };
 
-      spyOn(fakeThis, 'debounceResize');
+      vi.spyOn(fakeThis as any, 'debounceResize');
 
       component.updateVisibleItems.call(fakeThis);
 
@@ -1166,7 +1165,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('openDropdown: should call `controlDropdownVisibility` when recive true on call and `disabled` is false.', () => {
-      spyOn(component, <any>'controlDropdownVisibility');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
 
       component.disabled = false;
       component.openDropdown(true);
@@ -1175,7 +1174,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('openDropdown: shouldn´t call `controlDropdownVisibility` when recive false on call and `disabled` is false.', () => {
-      spyOn(component, <any>'controlDropdownVisibility');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
 
       component.disabled = false;
       component.openDropdown(false);
@@ -1184,7 +1183,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('openDropdown: shouldn´t call `controlDropdownVisibility` when recive true on call but `disabled` is true.', () => {
-      spyOn(component, <any>'controlDropdownVisibility');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
 
       component.disabled = true;
       component.openDropdown(true);
@@ -1195,8 +1194,8 @@ describe('PoMultiselectComponent:', () => {
     it(`changeSearch: should call 'searchByLabel' with 'event.value', 'options' and 'filterMode' if 'event.value' is 'valid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
       const event = { value: '1', event: { keyCode: '1' } };
-      const searchByLabelSpy = spyOn(component, 'searchByLabel');
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
+      const searchByLabelSpy = vi.spyOn(component as any, 'searchByLabel');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component.changeSearch(event);
 
@@ -1210,7 +1209,7 @@ describe('PoMultiselectComponent:', () => {
       const event = { value: 'abc', event: { keyCode: '1' } };
       component.filterService = <any>{};
 
-      spyOn(component.filterSubject, 'next');
+      vi.spyOn(component.filterSubject as any, 'next');
 
       component.changeSearch(event);
 
@@ -1221,8 +1220,8 @@ describe('PoMultiselectComponent:', () => {
       const event = { value: 'abc', event: { keyCode: 40 } };
       component.filterService = <any>{};
 
-      spyOn(component.filterSubject, 'next');
-      spyOn(component, 'focusOnFirstItem');
+      vi.spyOn(component.filterSubject as any, 'next');
+      vi.spyOn(component as any, 'focusOnFirstItem');
 
       component.changeSearch(event);
 
@@ -1233,8 +1232,8 @@ describe('PoMultiselectComponent:', () => {
     it(`changeSearch: should call 'setVisibleOptionsDropdown' with 'options' if 'event.value' is 'invalid'
       and call 'adjustContainerPosition'.`, fakeAsync(() => {
       const event = { event: { keyCode: '1' } };
-      const setVisibleOptionsDropdownSpy = spyOn(component, 'setVisibleOptionsDropdown');
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
+      const setVisibleOptionsDropdownSpy = vi.spyOn(component as any, 'setVisibleOptionsDropdown');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component.changeSearch(event);
 
@@ -1247,7 +1246,7 @@ describe('PoMultiselectComponent:', () => {
     it(`adjustContainerPosition: should call 'controlPosition.adjustPosition' with 'poMultiselectContainerPositionDefault'.`, () => {
       component['adjustContainerPosition'] = fnAdjustContainerPosition;
       const poMultiselectContainerPositionDefault = 'bottom';
-      const adjustPositionSpy = spyOn(component['controlPosition'], 'adjustPosition');
+      const adjustPositionSpy = vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
       component['adjustContainerPosition']();
 
@@ -1259,9 +1258,9 @@ describe('PoMultiselectComponent:', () => {
       component.dropdownIcon = undefined;
       component.dropdownOpen = undefined;
       fixture.detectChanges();
-      const controlVisibilitySpy = spyOn(component.dropdown, 'controlVisibility');
-      const setVisibleOptionsDropdownSpy = spyOn(component, 'setVisibleOptionsDropdown');
-      const removeListenersSpy = spyOn(component, <any>'removeListeners');
+      const controlVisibilitySpy = vi.spyOn(component.dropdown as any, 'controlVisibility');
+      const setVisibleOptionsDropdownSpy = vi.spyOn(component as any, 'setVisibleOptionsDropdown');
+      const removeListenersSpy = vi.spyOn(component as any, 'removeListeners');
 
       component['close']();
 
@@ -1274,15 +1273,15 @@ describe('PoMultiselectComponent:', () => {
 
     it(`initializeListeners: should initialize clickOut, resize and scroll listeners
       and if isMobile is true initialize resize listener calls adjustContainerPosition.`, () => {
-      const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
-      const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
-      const addEventListenerSpy = spyOn(window, 'addEventListener');
-      const listenSpy = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
-        callback()
-      );
+      const wasClickedOnToggleSpy = vi.spyOn(component as any, 'wasClickedOnToggle');
+      const updateVisibleItemsSpy = vi.spyOn(component as any, 'updateVisibleItems');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
+      const addEventListenerSpy = vi.spyOn(window as any, 'addEventListener');
+      const listenSpy = vi
+        .spyOn(component['renderer'], 'listen')
+        .mockImplementation((target: any, eventName: any, callback: any) => callback({}));
 
-      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(true);
+      vi.spyOn(UtilsFunction as any, 'isMobile').mockReturnValue(true);
 
       component['initializeListeners']();
 
@@ -1295,15 +1294,15 @@ describe('PoMultiselectComponent:', () => {
 
     it(`initializeListeners: should initialize clickOut, resize and scroll listeners
       and if isMobile is 'false' initialize resize listener calls 'close'.`, () => {
-      const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
-      const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
-      const closeSpy = spyOn(component, <any>'close');
-      const addEventListenerSpy = spyOn(window, 'addEventListener');
-      const listenSpy = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
-        callback()
-      );
+      const wasClickedOnToggleSpy = vi.spyOn(component as any, 'wasClickedOnToggle');
+      const updateVisibleItemsSpy = vi.spyOn(component as any, 'updateVisibleItems');
+      const closeSpy = vi.spyOn(component as any, 'close');
+      const addEventListenerSpy = vi.spyOn(window as any, 'addEventListener');
+      const listenSpy = vi
+        .spyOn(component['renderer'], 'listen')
+        .mockImplementation((target: any, eventName: any, callback: any) => callback({}));
 
-      spyOn(UtilsFunction, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(UtilsFunction as any, 'isMobile').mockReturnValue(false);
 
       component['initializeListeners']();
 
@@ -1329,7 +1328,7 @@ describe('PoMultiselectComponent:', () => {
 
       const firstItem = document.createElement('div');
       firstItem.classList.add('po-listbox-item-type-check');
-      spyOn(firstItem, 'focus');
+      vi.spyOn(firstItem as any, 'focus');
 
       const secondItem = document.createElement('div');
       secondItem.classList.add('po-listbox-item-type-check');
@@ -1355,8 +1354,8 @@ describe('PoMultiselectComponent:', () => {
         nativeElement: document.createElement('input')
       };
 
-      const inputFocusSpy = spyOn(component.inputElement.nativeElement, 'focus');
-      const closeSpy = spyOn(component, <any>'close');
+      const inputFocusSpy = vi.spyOn(component.inputElement.nativeElement, 'focus');
+      const closeSpy = vi.spyOn(component as any, 'close');
 
       component.dropdown.listbox.element.nativeElement.innerHTML = '';
 
@@ -1367,7 +1366,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('onScroll: should call `adjustContainerPosition`.', () => {
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component['onScroll']();
 
@@ -1380,12 +1379,12 @@ describe('PoMultiselectComponent:', () => {
       component.dropdownIcon = undefined;
       component.dropdownOpen = undefined;
       fixture.detectChanges();
-      const controlVisibilitySpy = spyOn(component.dropdown, 'controlVisibility');
-      const setVisibleOptionsDropdownSpy = spyOn(component, 'setVisibleOptionsDropdown');
-      const initializeListenersSpy = spyOn(component, <any>'initializeListeners');
-      const scrollToSelectedOptionsSpy = spyOn(component, 'scrollToSelectedOptions');
-      const detectChangesSpy = spyOn(component['changeDetector'], <any>'detectChanges');
-      const setPositionDropdownSpy = spyOn(component, <any>'setPositionDropdown');
+      const controlVisibilitySpy = vi.spyOn(component.dropdown as any, 'controlVisibility');
+      const setVisibleOptionsDropdownSpy = vi.spyOn(component as any, 'setVisibleOptionsDropdown');
+      const initializeListenersSpy = vi.spyOn(component as any, 'initializeListeners');
+      const scrollToSelectedOptionsSpy = vi.spyOn(component as any, 'scrollToSelectedOptions');
+      const detectChangesSpy = vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      const setPositionDropdownSpy = vi.spyOn(component as any, 'setPositionDropdown');
 
       component['open']();
 
@@ -1403,9 +1402,9 @@ describe('PoMultiselectComponent:', () => {
       component['clickOutListener'] = () => {};
       component['resizeListener'] = () => {};
 
-      spyOn(component, <any>'clickOutListener');
-      spyOn(component, <any>'resizeListener');
-      spyOn(window, 'removeEventListener');
+      vi.spyOn(component as any, 'clickOutListener');
+      vi.spyOn(component as any, 'resizeListener');
+      vi.spyOn(window as any, 'removeEventListener');
 
       component['removeListeners']();
 
@@ -1419,8 +1418,8 @@ describe('PoMultiselectComponent:', () => {
       const isSetElementWidth = true;
       const poMultiselectContainerOffset = 8;
       fixture.detectChanges();
-      const setElementsSpy = spyOn(component['controlPosition'], 'setElements');
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
+      const setElementsSpy = vi.spyOn(component['controlPosition'] as any, 'setElements');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component['setPositionDropdown']();
 
@@ -1435,8 +1434,8 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('changeItems: should call updateSelectedOptions and callOnChange', () => {
-      const spyUpdateSelectedOptions = spyOn(component, 'updateSelectedOptions');
-      const spyCallOnChange = spyOn(component, 'callOnChange');
+      const spyUpdateSelectedOptions = vi.spyOn(component as any, 'updateSelectedOptions');
+      const spyCallOnChange = vi.spyOn(component as any, 'callOnChange');
 
       component.changeItems([]);
 
@@ -1448,7 +1447,7 @@ describe('PoMultiselectComponent:', () => {
       component.autoHeight = true;
       component.dropdownOpen = true;
 
-      const spyAdjustContainerPosition = spyOn(component, <any>'adjustContainerPosition');
+      const spyAdjustContainerPosition = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component.changeItems([]);
 
@@ -1457,8 +1456,8 @@ describe('PoMultiselectComponent:', () => {
 
     it('applyFilter: should be called', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;
-      spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
-      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+      vi.spyOn(component as any, 'setOptionsByApplyFilter');
+      vi.spyOn(component.filterService as any, 'getFilteredData').mockReturnValue(throwError([]));
 
       component.applyFilter('').subscribe(
         () => {},
@@ -1470,8 +1469,8 @@ describe('PoMultiselectComponent:', () => {
 
     it('should call service.getFilteredData and set options on success', () => {
       const options: Array<PoMultiselectOption> = [{ label: 'Option 1', value: '1' }];
-      spyOn(multiSelectService, 'getFilteredData').and.returnValue(of(options));
-      spyOn(component, <any>'setOptionsByApplyFilter');
+      vi.spyOn(multiSelectService as any, 'getFilteredData').mockReturnValue(of(options));
+      vi.spyOn(component as any, 'setOptionsByApplyFilter');
 
       component.applyFilter('test').subscribe(result => {
         expect(result).toEqual(options);
@@ -1480,20 +1479,20 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it('should handle error and set isServerSearching to false', () => {
-      spyOn(multiSelectService, 'getFilteredData').and.returnValue(throwError(() => new Error('error')));
-      spyOn(component, <any>'setOptionsByApplyFilter');
+      vi.spyOn(multiSelectService as any, 'getFilteredData').mockReturnValue(throwError(() => new Error('error')));
+      vi.spyOn(component as any, 'setOptionsByApplyFilter');
 
       component.applyFilter('test').subscribe(result => {
         expect(result).toEqual([]);
-        expect(component.isServerSearching).toBeFalse();
+        expect(component.isServerSearching).toBe(false);
         expect(component['setOptionsByApplyFilter']).toHaveBeenCalledWith([]);
       });
     });
 
     it('applyFilter: should be called with undefined', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;
-      spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
-      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+      vi.spyOn(component as any, 'setOptionsByApplyFilter');
+      vi.spyOn(component.filterService as any, 'getFilteredData').mockReturnValue(throwError([]));
 
       component.applyFilter(undefined).subscribe(
         () => {},
@@ -1510,10 +1509,10 @@ describe('PoMultiselectComponent:', () => {
         <div class="po-tag-remove"></div>
         <div class="po-tag-remove"></div>
       `;
-      spyOn(component.inputElement.nativeElement, 'focus');
-      spyOn(component.inputElement.nativeElement, 'setAttribute');
-      spyOn(component, 'controlDropdownVisibility');
-      spyOn(component, <any>'focusOnRemoveTag');
+      vi.spyOn(component.inputElement.nativeElement, 'focus');
+      vi.spyOn(component.inputElement.nativeElement, 'setAttribute');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
+      vi.spyOn(component as any, 'focusOnRemoveTag');
 
       component.options = [tags];
       component['focusOnNextTag'](0, 'enter');
@@ -1534,10 +1533,10 @@ describe('PoMultiselectComponent:', () => {
         <div class="po-tag-remove"></div>
         <div class="po-tag-remove"></div>
       `;
-      spyOn(component.inputElement.nativeElement, 'focus');
-      spyOn(component.inputElement.nativeElement, 'setAttribute');
-      spyOn(component, 'controlDropdownVisibility');
-      spyOn(component, <any>'focusOnRemoveTag');
+      vi.spyOn(component.inputElement.nativeElement, 'focus');
+      vi.spyOn(component.inputElement.nativeElement, 'setAttribute');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
+      vi.spyOn(component as any, 'focusOnRemoveTag');
 
       component.options = [tags];
       component['focusOnNextTag'](null, 'enter');
@@ -1558,10 +1557,10 @@ describe('PoMultiselectComponent:', () => {
         <div class="po-tag-remove"></div>
         <div class="po-tag-remove"></div>
       `;
-      spyOn(component.inputElement.nativeElement, 'focus');
-      spyOn(component.inputElement.nativeElement, 'setAttribute');
-      spyOn(component, 'controlDropdownVisibility');
-      spyOn(component, <any>'focusOnRemoveTag');
+      vi.spyOn(component.inputElement.nativeElement, 'focus');
+      vi.spyOn(component.inputElement.nativeElement, 'setAttribute');
+      vi.spyOn(component as any, 'controlDropdownVisibility');
+      vi.spyOn(component as any, 'focusOnRemoveTag');
 
       component.options = [tags];
       component['focusOnNextTag'](2, 'enter');
@@ -1582,7 +1581,7 @@ describe('PoMultiselectComponent:', () => {
         document.createElement('div')
       ];
       const indexClosed = 3;
-      spyOn(tagRemoveElements[indexClosed - 1], 'focus');
+      vi.spyOn(tagRemoveElements[indexClosed - 1], 'focus');
 
       component['focusOnRemoveTag'](tagRemoveElements, indexClosed);
 
@@ -1596,7 +1595,7 @@ describe('PoMultiselectComponent:', () => {
         document.createElement('div')
       ];
       const indexClosed = 1;
-      spyOn(tagRemoveElements[indexClosed], 'focus');
+      vi.spyOn(tagRemoveElements[indexClosed], 'focus');
 
       component['focusOnRemoveTag'](tagRemoveElements, indexClosed);
 
@@ -1621,8 +1620,8 @@ describe('PoMultiselectComponent:', () => {
 
       const indexArrow = 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tagRemoveElements[indexArrow - 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tagRemoveElements[indexArrow - 1], 'focus');
 
       component['handleArrowLeft'](tagRemoveElements, indexArrow);
 
@@ -1640,8 +1639,8 @@ describe('PoMultiselectComponent:', () => {
 
       const indexArrow = 1;
 
-      spyOn(component, 'setTabIndex' as any);
-      spyOn(tagRemoveElements[indexArrow + 1], 'focus');
+      vi.spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(tagRemoveElements[indexArrow + 1], 'focus');
 
       component['handleArrowRight'](tagRemoveElements, indexArrow);
 
@@ -1653,8 +1652,8 @@ describe('PoMultiselectComponent:', () => {
     it('should handleKeyDown correctly for Space key', () => {
       const event = new KeyboardEvent('keydown', { code: 'Space' });
 
-      spyOn(event, 'preventDefault');
-      spyOn(event, 'stopPropagation');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(event as any, 'stopPropagation');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -1664,7 +1663,7 @@ describe('PoMultiselectComponent:', () => {
 
     it('should handleKeyDown correctly for ArrowLeft key', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-      spyOn(component as any, 'handleArrowLeft');
+      vi.spyOn(component as any, 'handleArrowLeft');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -1673,7 +1672,7 @@ describe('PoMultiselectComponent:', () => {
 
     it('should handleKeyDown correctly for ArrowRight key', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      spyOn(component as any, 'handleArrowRight');
+      vi.spyOn(component as any, 'handleArrowRight');
 
       component['handleKeyDown'](event, [], 0);
 
@@ -1689,7 +1688,7 @@ describe('PoMultiselectComponent:', () => {
 
       const initialIndex = 3;
 
-      spyOn(component, 'setTabIndex' as any);
+      vi.spyOn(component, 'setTabIndex' as any);
 
       component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -1701,8 +1700,8 @@ describe('PoMultiselectComponent:', () => {
       const initialIndex = 0;
       const fakeKeyboardEvent = new KeyboardEvent('keydown');
 
-      spyOn(component as any, 'setTabIndex');
-      spyOn(component as any, 'handleKeyDown');
+      vi.spyOn(component as any, 'setTabIndex');
+      vi.spyOn(component as any, 'handleKeyDown');
 
       component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -1717,7 +1716,7 @@ describe('PoMultiselectComponent:', () => {
       const tagRemoveElements = [document.createElement('div'), document.createElement('div')];
       const initialIndex = 1;
 
-      spyOn(component as any, 'setTabIndex');
+      vi.spyOn(component as any, 'setTabIndex');
 
       component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -1736,7 +1735,7 @@ describe('PoMultiselectComponent:', () => {
     it('setOptionsByApplyFilter: should be called', () => {
       const items = [{ label: '123', value: 1 }];
       component.isFirstFilter = false;
-      spyOn(component, 'setVisibleOptionsDropdown');
+      vi.spyOn(component as any, 'setVisibleOptionsDropdown');
       component['setOptionsByApplyFilter'](items);
 
       expect(component.options).toEqual(items);
@@ -1748,7 +1747,7 @@ describe('PoMultiselectComponent:', () => {
         next: () => {},
         unsubscribe: () => {}
       };
-      spyOn(component['filterSubject'], 'next');
+      vi.spyOn(component['filterSubject'] as any, 'next');
       component.isFirstFilter = true;
 
       component['applyFilterInFirstClick']();
@@ -1819,7 +1818,7 @@ describe('PoMultiselectComponent:', () => {
     };
 
     it(`shouldn't call 'wasClickedOnToggle' if dropdown list is closed and click window.`, () => {
-      const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
+      const wasClickedOnToggleSpy = vi.spyOn(component as any, 'wasClickedOnToggle');
 
       clickOutEvent();
 
@@ -1828,7 +1827,7 @@ describe('PoMultiselectComponent:', () => {
 
     it(`shouldn't call 'wasClickedOnToggle' if dropdown list is closed and click out of component
       and should call 'wasClickedOnToggle' if dropdown list is opened and click out of component.`, () => {
-      const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
+      const wasClickedOnToggleSpy = vi.spyOn(component as any, 'wasClickedOnToggle');
 
       clickOutEvent();
       fixture.detectChanges();
@@ -1842,7 +1841,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it(`shouldn't call 'updateVisibleItems' if dropdown list is closed and resize window.`, () => {
-      const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
+      const updateVisibleItemsSpy = vi.spyOn(component as any, 'updateVisibleItems');
 
       newEvent('resize');
 
@@ -1850,7 +1849,7 @@ describe('PoMultiselectComponent:', () => {
     });
 
     it(`shouldn't call 'adjustContainerPosition' if dropdown list is closed and scroll window.`, () => {
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
 
       newEvent('scroll');
 
@@ -1859,7 +1858,7 @@ describe('PoMultiselectComponent:', () => {
 
     it(`open: should call 'wasClickedOnToggle' if dropdown list is opened and click window.`, () => {
       fixture.detectChanges();
-      const wasClickedOnToggleSpy = spyOn(component, 'wasClickedOnToggle');
+      const wasClickedOnToggleSpy = vi.spyOn(component as any, 'wasClickedOnToggle');
 
       component['open']();
       clickOutEvent();
@@ -1870,7 +1869,7 @@ describe('PoMultiselectComponent:', () => {
     it(`open: should call 'updateVisibleItems' if dropdown list is opened and resize window.`, () => {
       fixture.detectChanges();
 
-      const updateVisibleItemsSpy = spyOn(component, 'updateVisibleItems');
+      const updateVisibleItemsSpy = vi.spyOn(component as any, 'updateVisibleItems');
       component['open']();
       newEvent('resize');
 
@@ -1879,7 +1878,7 @@ describe('PoMultiselectComponent:', () => {
 
     it(`open: should call 'adjustContainerPosition' if dropdown list is opened and scroll window.`, () => {
       fixture.detectChanges();
-      const adjustContainerPositionSpy = spyOn(component, <any>'adjustContainerPosition');
+      const adjustContainerPositionSpy = vi.spyOn(component as any, 'adjustContainerPosition');
 
       component['open']();
       newEvent('scroll');

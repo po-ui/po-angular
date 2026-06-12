@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
@@ -25,7 +26,9 @@ class ContentProjectionComponent extends PoNumberBaseComponent {
     super(el, cd);
   }
 
-  extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(c: AbstractControl): {
+    [key: string]: any;
+  } {
     return null;
   }
 }
@@ -71,7 +74,7 @@ describe('PoNumberBaseComponent', () => {
         component.additionalHelpTooltip = tooltip;
         component.displayAdditionalHelp = displayHelp;
         component.additionalHelp = additionalHelpEvent;
-        spyOn(component, 'showAdditionalHelp');
+        vi.spyOn(component as any, 'showAdditionalHelp');
       };
 
       fakeThis = {
@@ -100,9 +103,9 @@ describe('PoNumberBaseComponent', () => {
       fakeEvent.target.value = '';
       fakeEvent.target.validity.valid = true;
 
-      spyOn(fakeThis, 'callOnChange');
-      spyOn(fakeThis, 'eventOnBlur');
-      spyOn(fakeThis, 'getAdditionalHelpTooltip').and.returnValue(false);
+      vi.spyOn(fakeThis as any, 'callOnChange');
+      vi.spyOn(fakeThis as any, 'eventOnBlur');
+      vi.spyOn(fakeThis as any, 'getAdditionalHelpTooltip').mockReturnValue(false);
 
       component.onBlur.call(fakeThis, fakeEvent);
 
@@ -114,9 +117,9 @@ describe('PoNumberBaseComponent', () => {
       fakeEvent.target.value = '1234567890';
       fakeEvent.target.validity.valid = true;
 
-      spyOn(fakeThis, 'callOnChange');
-      spyOn(fakeThis, 'eventOnBlur');
-      spyOn(fakeThis, 'getAdditionalHelpTooltip').and.returnValue(false);
+      vi.spyOn(fakeThis as any, 'callOnChange');
+      vi.spyOn(fakeThis as any, 'eventOnBlur');
+      vi.spyOn(fakeThis as any, 'getAdditionalHelpTooltip').mockReturnValue(false);
 
       component.onBlur.call(fakeThis, fakeEvent);
 
@@ -128,9 +131,9 @@ describe('PoNumberBaseComponent', () => {
       fakeEvent.target.value = '';
       fakeEvent.target.validity.valid = false;
 
-      spyOn(fakeThis, 'callOnChange');
-      spyOn(fakeThis, 'eventOnBlur');
-      spyOn(fakeThis, 'getAdditionalHelpTooltip').and.returnValue(false);
+      vi.spyOn(fakeThis as any, 'callOnChange');
+      vi.spyOn(fakeThis as any, 'eventOnBlur');
+      vi.spyOn(fakeThis as any, 'getAdditionalHelpTooltip').mockReturnValue(false);
 
       component.onBlur.call(fakeThis, fakeEvent);
 
@@ -148,8 +151,8 @@ describe('PoNumberBaseComponent', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.inputEl.nativeElement);
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.inputEl.nativeElement);
 
       component.onKeyDown(fakeEvent);
 
@@ -164,8 +167,8 @@ describe('PoNumberBaseComponent', () => {
         }
       };
 
-      spyOn(component.keydown, 'emit');
-      spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+      vi.spyOn(component.keydown as any, 'emit');
+      vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
       component.onKeyDown(fakeEvent);
 
       expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -179,9 +182,9 @@ describe('PoNumberBaseComponent', () => {
       key: 'e'
     };
 
-    spyOn(fakeKeyboardEvent, 'preventDefault');
-    spyOn(fakeKeyboardEvent, 'stopPropagation');
-    spyOn(component, <any>'isKeyAllowed').and.returnValue(false);
+    vi.spyOn(fakeKeyboardEvent as any, 'preventDefault');
+    vi.spyOn(fakeKeyboardEvent as any, 'stopPropagation');
+    vi.spyOn(component as any, 'isKeyAllowed').mockReturnValue(false);
 
     component.onKeyDown(fakeKeyboardEvent);
 
@@ -197,9 +200,9 @@ describe('PoNumberBaseComponent', () => {
       key: '1'
     };
 
-    spyOn(fakeKeyboardEvent, 'preventDefault');
-    spyOn(fakeKeyboardEvent, 'stopPropagation');
-    spyOn(component, <any>'isKeyAllowed').and.returnValue(true);
+    vi.spyOn(fakeKeyboardEvent as any, 'preventDefault');
+    vi.spyOn(fakeKeyboardEvent as any, 'stopPropagation');
+    vi.spyOn(component as any, 'isKeyAllowed').mockReturnValue(true);
 
     component.onKeyDown(fakeKeyboardEvent);
 
@@ -211,24 +214,24 @@ describe('PoNumberBaseComponent', () => {
     const fakeKeyboardEvent = {
       key: 'e'
     };
-    spyOn(component, <any>'isShortcut').and.returnValue(false);
-    spyOn(component, <any>'isControlKeys').and.returnValue(false);
-    spyOn(component, <any>'isInvalidKey').and.returnValue(true);
+    vi.spyOn(component as any, 'isShortcut').mockReturnValue(false);
+    vi.spyOn(component as any, 'isControlKeys').mockReturnValue(false);
+    vi.spyOn(component as any, 'isInvalidKey').mockReturnValue(true);
 
     const result = component['isKeyAllowed'](fakeKeyboardEvent);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('isKeyAllowed: should return true if isn`t a letter', () => {
     const fakeKeyboardEvent = {
       key: '1'
     };
-    spyOn(component, <any>'isShortcut').and.returnValue(false);
-    spyOn(component, <any>'isControlKeys').and.returnValue(false);
-    spyOn(component, <any>'isInvalidKey').and.returnValue(false);
+    vi.spyOn(component as any, 'isShortcut').mockReturnValue(false);
+    vi.spyOn(component as any, 'isControlKeys').mockReturnValue(false);
+    vi.spyOn(component as any, 'isInvalidKey').mockReturnValue(false);
 
     const result = component['isKeyAllowed'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isShortcut: should return true if is an copy event', () => {
@@ -238,7 +241,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isShortcut'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isShortcut: should return true if is a paste event', () => {
@@ -248,7 +251,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isShortcut'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isShortcut: should return true if is a select all event', () => {
@@ -258,7 +261,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isShortcut'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isShortcut: should return true if is a cut event', () => {
@@ -268,7 +271,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isShortcut'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isShortcut: should return false if isn`t a allowed shortcut', () => {
@@ -278,7 +281,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isShortcut'](fakeKeyboardEvent);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('isControlKeys: should return true if is a control key', () => {
@@ -287,7 +290,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isControlKeys'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isControlKeys: should return true if the key is Enter', () => {
@@ -296,7 +299,7 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isControlKeys'](fakeKeyboardEvent);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isControlKeys: should return false if isn`t a control key', () => {
@@ -305,21 +308,21 @@ describe('PoNumberBaseComponent', () => {
     };
 
     const result = component['isControlKeys'](fakeKeyboardEvent);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('isInvalidKey: should return true if is invalid', () => {
     const key = 'e';
 
     const result = component['isInvalidKey'](key);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('isInvalidKey: should return false if is valid', () => {
     const key = '1';
 
     const result = component['isInvalidKey'](key);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('eventOnInput: should call "callOnChange" if doesn`t contain mask and set invalidInputValueOnBlur with false', () => {
@@ -340,7 +343,7 @@ describe('PoNumberBaseComponent', () => {
       verifyErrorAsync: () => {}
     };
 
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis as any, 'callOnChange');
 
     component.eventOnInput.call(fakeThis, fakeEvent);
 
@@ -361,7 +364,7 @@ describe('PoNumberBaseComponent', () => {
       isEndWithDot: () => {}
     };
 
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis as any, 'callOnChange');
 
     component.eventOnInput.call(fakeThis, fakeEvent);
 
@@ -376,7 +379,7 @@ describe('PoNumberBaseComponent', () => {
       maxlength: ''
     };
 
-    spyOn(fakeThis, 'callOnChange');
+    vi.spyOn(fakeThis as any, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
     expect(fakeThis.callOnChange).not.toHaveBeenCalled();
   });
@@ -409,7 +412,7 @@ describe('PoNumberBaseComponent', () => {
   });
 
   it('should format value string in number', () => {
-    expect(component['formatNumber']('1234')).toBeTruthy(1234);
+    expect(component['formatNumber']('1234')).toBeTruthy();
   });
 
   it('shouldn`t format value string in number when is a falsy value', () => {
@@ -418,10 +421,10 @@ describe('PoNumberBaseComponent', () => {
 
   describe('Methods:', () => {
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -445,7 +448,7 @@ describe('PoNumberBaseComponent', () => {
         changeModel: component.changeModel,
         verifyErrorAsync: () => {}
       };
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
 
       component.writeValueModel.call(fakeThis, value);
 
@@ -516,7 +519,7 @@ describe('PoNumberBaseComponent', () => {
         onChangePropagate: component.onChangePropagate
       };
 
-      spyOn(fakeThis, 'onChangePropagate');
+      vi.spyOn(fakeThis as any, 'onChangePropagate');
 
       component.writeValueModel.call(fakeThis, '100');
 

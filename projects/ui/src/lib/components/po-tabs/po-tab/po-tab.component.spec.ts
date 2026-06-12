@@ -27,7 +27,7 @@ describe('PoTabComponent:', () => {
 
   describe('Methods:', () => {
     it('ngAfterContentInit: shoud call `setDisplayOnActive`', () => {
-      spyOn(component, <any>'setDisplayOnActive');
+      vi.spyOn(component as any, 'setDisplayOnActive');
       component.ngAfterContentInit();
       expect(component['setDisplayOnActive']).toHaveBeenCalled();
     });
@@ -47,7 +47,7 @@ describe('PoTabComponent:', () => {
     });
 
     it('should trigger onChanges after 100ms delay', fakeAsync(() => {
-      spyOn(tabsService, 'triggerOnChanges');
+      vi.spyOn(tabsService as any, 'triggerOnChanges');
 
       const changes: SimpleChanges = {
         active: new SimpleChange(null, true, true)

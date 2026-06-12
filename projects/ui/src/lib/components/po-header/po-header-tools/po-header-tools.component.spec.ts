@@ -14,12 +14,12 @@ describe('PoHeaderToolsComponent', () => {
 
   class MockPoPopupComponent {
     showPopup = false;
-    toggle = jasmine.createSpy('toggle');
+    toggle = vi.fn();
   }
 
   class MockPoPopoverComponent {
     isHidden = true;
-    close = jasmine.createSpy('close');
+    close = vi.fn();
   }
 
   beforeEach(async () => {
@@ -63,7 +63,7 @@ describe('PoHeaderToolsComponent', () => {
     popupList.reset([mockPopup as any]);
     component.poPopupActions = popupList;
 
-    const actionSpy = jasmine.createSpy('action');
+    const actionSpy = vi.fn();
     component._actionTools = [{ action: actionSpy, items: [{}], popover: false } as any];
 
     component.onClickAction(0);
@@ -78,7 +78,7 @@ describe('PoHeaderToolsComponent', () => {
     popupList.reset([mockPopup as any]);
     component.poPopupActions = popupList;
 
-    const actionSpy = jasmine.createSpy('action');
+    const actionSpy = vi.fn();
     component._actionTools = [{ action: actionSpy, items: [{}], popover: true } as any];
 
     component.onClickAction(0);
@@ -96,7 +96,7 @@ describe('PoHeaderToolsComponent', () => {
 
     component._actionTools = [{ items: [{}], popover: false } as any];
 
-    expect(component.checkSelected(0)).toBeTrue();
+    expect(component.checkSelected(0)).toBe(true);
   });
 
   it('checkSelected should return true if popover is visible', () => {
@@ -108,7 +108,7 @@ describe('PoHeaderToolsComponent', () => {
 
     component._actionTools = [{ popover: true } as any];
 
-    expect(component.checkSelected(0)).toBeTrue();
+    expect(component.checkSelected(0)).toBe(true);
   });
 
   it('checkSelected should return false if nothing is open', () => {
@@ -126,15 +126,15 @@ describe('PoHeaderToolsComponent', () => {
 
     component._actionTools = [{ items: [{}], popover: false } as any, { popover: true } as any];
 
-    expect(component.checkSelected(0)).toBeFalse();
-    expect(component.checkSelected(1)).toBeFalse();
+    expect(component.checkSelected(0)).toBe(false);
+    expect(component.checkSelected(1)).toBe(false);
   });
 
   it('should open external link in new tab when isExternalLink is true', () => {
     const item: PoHeaderActionTool = { link: 'http://external.com' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(true);
-    const windowSpy = spyOn(window, 'open');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(true);
+    const windowSpy = vi.spyOn(window as any, 'open');
 
     (component as any).checkLink(item);
 
@@ -145,8 +145,8 @@ describe('PoHeaderToolsComponent', () => {
   it('should navigate using router when isExternalLink is false', () => {
     const item: PoHeaderActionTool = { link: '/internal' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(false);
-    const routerSpy = spyOn(router, 'navigateByUrl');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(false);
+    const routerSpy = vi.spyOn(router as any, 'navigateByUrl');
 
     (component as any).checkLink(item);
 
@@ -173,7 +173,7 @@ describe('PoHeaderToolsComponent', () => {
   });
 
   it('should call focus of popup', () => {
-    const focusSpy = jasmine.createSpy('focus');
+    const focusSpy = vi.fn();
 
     const fakethis = {
       buttonActionComponents: {

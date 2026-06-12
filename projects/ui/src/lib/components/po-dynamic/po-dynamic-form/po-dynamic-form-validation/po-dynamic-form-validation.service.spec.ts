@@ -34,77 +34,73 @@ describe('PoDynamicFormValidationService:', () => {
   });
 
   describe('Methods:', () => {
-    const spyValidateFunction = jasmine.createSpy('validateFunction');
+    const spyValidateFunction = vi.fn();
 
     it('sendFieldChange: should call `execute` with `field.validate`, `field` and `value`', () => {
       const changedValue = { property: field.property, value };
 
       field.validate = mockURL;
 
-      const spyExecute = spyOn(service, <any>'execute').and.returnValue(of());
+      const spyExecute = vi.spyOn(service as any, 'execute').mockReturnValue(of());
 
       service.sendFieldChange(field, value);
 
       expect(spyExecute).toHaveBeenCalledWith(field.validate, changedValue);
     });
 
-    it('sendFieldChange: should return value if return of server is not null', done => {
+    it('sendFieldChange: should return value if return of server is not null', async () => {
       const validatedField = { field: { disabled: false } };
 
-      spyOn(service, <any>'execute').and.returnValue(of(validatedField));
+      vi.spyOn(service as any, 'execute').mockReturnValue(of(validatedField));
 
       service.sendFieldChange(field, value).subscribe(validateField => {
         expect(validateField).toEqual(validatedField);
-        done();
       });
     });
 
-    it('sendFieldChange: should return default field if return of server is null', done => {
+    it('sendFieldChange: should return default field if return of server is null', async () => {
       const defaultField = {
         field: {}
       };
 
-      spyOn(service, <any>'execute').and.returnValue(of(null));
+      vi.spyOn(service as any, 'execute').mockReturnValue(of(null));
 
       service.sendFieldChange(field, value).subscribe(validateField => {
         expect(validateField).toEqual(defaultField);
-        done();
       });
     });
 
     it('sendFormChange: should call `execute` with `validate` and `changedValue`', () => {
       const changedValue = { property: field.property, value };
 
-      const spyExecute = spyOn(service, <any>'execute').and.returnValue(of());
+      const spyExecute = vi.spyOn(service as any, 'execute').mockReturnValue(of());
 
       service.sendFormChange(spyValidateFunction, field, value);
 
       expect(spyExecute).toHaveBeenCalledWith(spyValidateFunction, changedValue);
     });
 
-    it('sendFormChange: should return default form if return of server is null', done => {
+    it('sendFormChange: should return default form if return of server is null', async () => {
       const defaultForm = {
         value: {},
         fields: [],
         focus: undefined
       };
 
-      spyOn(service, <any>'execute').and.returnValue(of(null));
+      vi.spyOn(service as any, 'execute').mockReturnValue(of(null));
 
       service.sendFormChange('validate', field, value).subscribe(validateField => {
         expect(validateField).toEqual(defaultForm);
-        done();
       });
     });
 
-    it('sendFormChange: should return value if return of server is not null', done => {
+    it('sendFormChange: should return value if return of server is not null', async () => {
       const validatedField = { fields: [{ ...field }] };
 
-      spyOn(service, <any>'execute').and.returnValue(of(validatedField));
+      vi.spyOn(service as any, 'execute').mockReturnValue(of(validatedField));
 
       service.sendFormChange('validate', field, value).subscribe(validateField => {
         expect(validateField).toEqual(validatedField);
-        done();
       });
     });
 

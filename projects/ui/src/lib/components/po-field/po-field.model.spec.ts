@@ -36,7 +36,7 @@ describe('PoFieldModel', () => {
     const expectedValue = 'newValue';
     component['propagateChange'] = () => {};
 
-    const spyPropagateChange = spyOn(component, <any>'propagateChange');
+    const spyPropagateChange = vi.spyOn(component as any, 'propagateChange');
 
     component['updateModel'](expectedValue);
 
@@ -55,7 +55,7 @@ describe('PoFieldModel', () => {
 
   it('setDisabledState: should set disabled property', () => {
     const isDisabled = true;
-    const markForCheck = spyOn(component['cd'], 'markForCheck');
+    const markForCheck = vi.spyOn(component['cd'] as any, 'markForCheck');
 
     component.setDisabledState(isDisabled);
 
@@ -66,7 +66,7 @@ describe('PoFieldModel', () => {
   it('writeValue: should call onWriteValue with value', () => {
     const expectedValue = false;
 
-    const spyOnWriteValue = spyOn(component, <any>'onWriteValue');
+    const spyOnWriteValue = vi.spyOn(component as any, 'onWriteValue');
 
     component.writeValue(expectedValue);
 
@@ -76,8 +76,8 @@ describe('PoFieldModel', () => {
   describe('emitAdditionalHelp:', () => {
     it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
       (component as any).label = 'this.label';
-      spyOn(component.additionalHelp, 'emit');
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+      vi.spyOn(component.additionalHelp as any, 'emit');
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
       component.emitAdditionalHelp();
 
@@ -85,8 +85,8 @@ describe('PoFieldModel', () => {
     });
 
     it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-      spyOn(component.additionalHelp, 'emit');
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component.additionalHelp as any, 'emit');
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       component.emitAdditionalHelp();
 
@@ -95,7 +95,7 @@ describe('PoFieldModel', () => {
   });
 
   it('should emit change', () => {
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
     component.emitChange('test');
 
     expect(component.change.emit).toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe('PoFieldModel', () => {
 
   describe('getAdditionalHelpTooltip:', () => {
     it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
       const result = component.getAdditionalHelpTooltip();
 
@@ -113,7 +113,7 @@ describe('PoFieldModel', () => {
     it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
       const tooltip = 'Test Tooltip';
       component.additionalHelpTooltip = tooltip;
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       const result = component.getAdditionalHelpTooltip();
 
@@ -122,7 +122,7 @@ describe('PoFieldModel', () => {
 
     it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
       component.additionalHelpTooltip = undefined;
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       const result = component.getAdditionalHelpTooltip();
 
@@ -135,9 +135,9 @@ describe('PoFieldModel', () => {
 
     beforeEach(() => {
       helperEl = {
-        openHelperPopover: jasmine.createSpy('openHelperPopover'),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-        helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+        openHelperPopover: vi.fn(),
+        closeHelperPopover: vi.fn(),
+        helperIsVisible: vi.fn().mockReturnValue(false)
       };
     });
 
@@ -146,7 +146,7 @@ describe('PoFieldModel', () => {
       component.additionalHelpTooltip = undefined;
       component.displayAdditionalHelp = false;
 
-      helperEl.helperIsVisible.and.returnValue(true);
+      helperEl.helperIsVisible.mockReturnValue(true);
 
       const result = component.showAdditionalHelp(helperEl, undefined);
 
@@ -154,7 +154,7 @@ describe('PoFieldModel', () => {
       expect(helperEl.closeHelperPopover).toHaveBeenCalledTimes(1);
       expect(helperEl.openHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should emit additionalHelp when isHelpEvt is true and then open popover if not visible', () => {
@@ -162,8 +162,8 @@ describe('PoFieldModel', () => {
       component.displayAdditionalHelp = false;
       component.additionalHelpTooltip = undefined;
 
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-      spyOn(component.additionalHelp, 'emit');
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp(helperEl, undefined);
 
@@ -172,7 +172,7 @@ describe('PoFieldModel', () => {
       expect(helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
@@ -180,9 +180,9 @@ describe('PoFieldModel', () => {
       component.displayAdditionalHelp = false;
       component.additionalHelpTooltip = undefined;
 
-      const helperOpt = { eventOnClick: jasmine.createSpy('eventOnClick') };
+      const helperOpt = { eventOnClick: vi.fn() };
 
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       const result = component.showAdditionalHelp(helperEl, helperOpt);
 
@@ -191,7 +191,7 @@ describe('PoFieldModel', () => {
       expect(helperEl.openHelperPopover).not.toHaveBeenCalled();
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should enter the block via additionalHelpTooltip and open popover', () => {
@@ -199,14 +199,14 @@ describe('PoFieldModel', () => {
       component.displayAdditionalHelp = false;
 
       component.additionalHelpTooltip = 'any text';
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       const result = component.showAdditionalHelp(helperEl, undefined);
       expect(helperEl.helperIsVisible).toHaveBeenCalled();
       expect(helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should not call eventOnClick when helper is a string and should proceed to open popover', () => {
@@ -215,7 +215,7 @@ describe('PoFieldModel', () => {
       component.additionalHelpTooltip = undefined;
 
       const helperString = 'any string';
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       const result = component.showAdditionalHelp(helperEl, helperString);
 
@@ -223,7 +223,7 @@ describe('PoFieldModel', () => {
       expect(helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should enter the block via helperHtmlElement when others are falsy and open popover', () => {
@@ -231,7 +231,7 @@ describe('PoFieldModel', () => {
       component.displayAdditionalHelp = false;
       component.additionalHelpTooltip = undefined;
 
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
       const result = component.showAdditionalHelp(helperEl, undefined);
 
@@ -239,7 +239,7 @@ describe('PoFieldModel', () => {
       expect(helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should just toggle and return when label is truthy (outer if is false)', () => {
@@ -248,8 +248,8 @@ describe('PoFieldModel', () => {
 
       const result = component.showAdditionalHelp(helperEl, undefined);
 
-      expect(result).toBeTrue();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(result).toBe(true);
+      expect(component.displayAdditionalHelp).toBe(true);
       expect(helperEl.helperIsVisible).not.toHaveBeenCalled();
       expect(helperEl.openHelperPopover).not.toHaveBeenCalled();
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
@@ -260,8 +260,8 @@ describe('PoFieldModel', () => {
       component.displayAdditionalHelp = false;
       component.additionalHelpTooltip = undefined;
 
-      spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-      spyOn(component.additionalHelp, 'emit');
+      vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+      vi.spyOn(component.additionalHelp as any, 'emit');
 
       const result = component.showAdditionalHelp(helperEl, undefined);
 
@@ -270,7 +270,7 @@ describe('PoFieldModel', () => {
       expect(helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
       expect(helperEl.closeHelperPopover).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -278,8 +278,8 @@ describe('PoFieldModel', () => {
 
       const result = component.showAdditionalHelp();
 
-      expect(result).toBeTrue();
-      expect(component.displayAdditionalHelp).toBeTrue();
+      expect(result).toBe(true);
+      expect(component.displayAdditionalHelp).toBe(true);
     });
 
     it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -287,8 +287,8 @@ describe('PoFieldModel', () => {
 
       const result = component.showAdditionalHelp();
 
-      expect(result).toBeFalse();
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(result).toBe(false);
+      expect(component.displayAdditionalHelp).toBe(false);
     });
   });
 });

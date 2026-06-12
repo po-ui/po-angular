@@ -102,7 +102,7 @@ describe('PoTableColumnFrozenDirective', () => {
     el.style.width = '300px';
     el.style.margin = '10px';
 
-    spyOn(window, 'getComputedStyle').and.callThrough();
+    vi.spyOn(window as any, 'getComputedStyle');
 
     directiveInstance.getOuterWidth(el, true);
 
@@ -122,7 +122,7 @@ describe('PoTableColumnFrozenDirective', () => {
       }
     };
 
-    spyOn(directiveInstance, 'resizeColumns');
+    vi.spyOn(directiveInstance as any, 'resizeColumns');
 
     directiveInstance.ngOnChanges(changes);
 
@@ -144,7 +144,7 @@ describe('PoTableColumnFrozenDirective', () => {
       }
     };
 
-    spyOn(directiveInstance, 'resizeColumns');
+    vi.spyOn(directiveInstance as any, 'resizeColumns');
 
     directiveInstance.ngOnChanges(changes);
 

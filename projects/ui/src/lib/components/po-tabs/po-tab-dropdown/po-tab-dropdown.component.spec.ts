@@ -65,8 +65,8 @@ describe('PoTabDropdownComponent:', () => {
     component.button = buttom.componentInstance;
     component.button.buttonElement = buttonElementRefMock as ElementRef;
     const popoverStub = {
-      open: jasmine.createSpy('open'),
-      close: jasmine.createSpy('close'),
+      open: vi.fn(),
+      close: vi.fn(),
       isOpen: false
     } as any;
 
@@ -80,8 +80,8 @@ describe('PoTabDropdownComponent:', () => {
 
   describe('Methods:', () => {
     it('closeAndReturnToButtom: should close dropdown and focus on the button', () => {
-      spyOn(component, 'closeDropdown');
-      spyOn(component.button, 'focus');
+      vi.spyOn(component as any, 'closeDropdown');
+      vi.spyOn(component.button as any, 'focus');
 
       component.closeAndReturnToButtom();
 
@@ -90,16 +90,16 @@ describe('PoTabDropdownComponent:', () => {
     });
 
     it('toggleDropdown: should toggle isDropdownOpen and call setDropdownPosition if isDropdownOpen is true', () => {
-      spyOn(component, 'setDropdownPosition');
+      vi.spyOn(component as any, 'setDropdownPosition');
 
-      expect(component.isDropdownOpen).toBeFalse();
+      expect(component.isDropdownOpen).toBe(false);
 
       component.toggleDropdown();
-      expect(component.isDropdownOpen).toBeTrue();
+      expect(component.isDropdownOpen).toBe(true);
       expect(component.setDropdownPosition).toHaveBeenCalled();
 
       component.toggleDropdown();
-      expect(component.isDropdownOpen).toBeFalse();
+      expect(component.isDropdownOpen).toBe(false);
       expect(component.setDropdownPosition).toHaveBeenCalledTimes(1);
     });
 
@@ -107,11 +107,11 @@ describe('PoTabDropdownComponent:', () => {
       component.isDropdownOpen = true;
       component.closeDropdown();
 
-      expect(component.isDropdownOpen).toBeFalse();
+      expect(component.isDropdownOpen).toBe(false);
     });
 
     it('onClickOutside: should call closeDropdown if click is outside and dropdown is open', () => {
-      spyOn(component, 'closeDropdown');
+      vi.spyOn(component as any, 'closeDropdown');
 
       component.isDropdownOpen = true;
 

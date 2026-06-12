@@ -81,7 +81,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('ngDoCheck: should call `checkChanges`.', () => {
-      spyOn(component, <any>'checkChanges');
+      vi.spyOn(component as any, 'checkChanges');
 
       component.ngDoCheck();
 
@@ -102,8 +102,8 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
         }
       };
 
-      spyOn(fakeThis, 'emitChangeDisclaimers');
-      spyOn(fakeThis.changeDetector, 'detectChanges');
+      vi.spyOn(fakeThis as any, 'emitChangeDisclaimers');
+      vi.spyOn(fakeThis.changeDetector as any, 'detectChanges');
 
       component['checkChanges'].call(fakeThis);
 
@@ -122,7 +122,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
           detectChanges: () => {}
         }
       };
-      spyOn(fakeThis.changeDetector, 'detectChanges');
+      vi.spyOn(fakeThis.changeDetector as any, 'detectChanges');
 
       component['checkChanges'].call(fakeThis);
 
@@ -140,7 +140,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
         emitChangeDisclaimers: () => {}
       };
 
-      spyOn(fakeThis, 'emitChangeDisclaimers');
+      vi.spyOn(fakeThis as any, 'emitChangeDisclaimers');
 
       component['checkChanges'].call(fakeThis);
 
@@ -158,7 +158,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
         emitChangeDisclaimers: () => {}
       };
 
-      spyOn(fakeThis, 'emitChangeDisclaimers');
+      vi.spyOn(fakeThis as any, 'emitChangeDisclaimers');
 
       component['checkChanges'].call(fakeThis);
 
@@ -166,7 +166,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     });
 
     it('checkChanges: shouldn`t call `emitChangeDisclaimers` if property `differ` is undefined.', () => {
-      spyOn(component, <any>'emitChangeDisclaimers');
+      vi.spyOn(component as any, 'emitChangeDisclaimers');
 
       component['checkChanges']();
 
@@ -210,7 +210,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     it('removeAllItems: should call `emitChangeDisclaimers` only once.', () => {
       component.disclaimers = validDisclaimers;
 
-      spyOn(component, <any>'emitChangeDisclaimers');
+      vi.spyOn(component as any, 'emitChangeDisclaimers');
       component.removeAllItems();
 
       expect(component['emitChangeDisclaimers']).toHaveBeenCalledTimes(1);
@@ -219,7 +219,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     it('removeAllItems: should emit removeAll with removed disclaimers', () => {
       component.disclaimers = [...validDisclaimers];
 
-      spyOn(component.removeAll, <any>'emit');
+      vi.spyOn(component.removeAll as any, 'emit');
       component.removeAllItems();
 
       expect(component.removeAll.emit).toHaveBeenCalledWith(validDisclaimers);
@@ -256,17 +256,16 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
       expect(checkedDisclaimers.length).toBe(validDisclaimers.length);
     });
 
-    it('emitChangeDisclaimers: should call `change.emit` and set `previousDisclaimers` with `disclaimers`', done => {
+    it('emitChangeDisclaimers: should call `change.emit` and set `previousDisclaimers` with `disclaimers`', async () => {
       component.disclaimers = disclaimers;
 
-      spyOn(component.change, 'emit');
+      vi.spyOn(component.change as any, 'emit');
 
       component['emitChangeDisclaimers']();
 
       setTimeout(() => {
         expect(component.change.emit).toHaveBeenCalled();
         expect(component['previousDisclaimers']).toEqual(component.disclaimers);
-        done();
       });
     });
 
@@ -339,7 +338,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     it(`onKeyPress: should call 'removeAllItems' if enter is typed.`, () => {
       const eventEnterKey = { keyCode: 13 };
 
-      spyOn(component, 'removeAllItems');
+      vi.spyOn(component as any, 'removeAllItems');
       component.onKeyPress(eventEnterKey);
 
       expect(component['removeAllItems']).toHaveBeenCalled();
@@ -348,7 +347,7 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     it(`onKeyPress: should call 'isKeyCodeEnter' if typed key is enter.`, () => {
       const eventEnterKey = { keyCode: 13 };
 
-      spyOn(UtilsFunction, <any>'isKeyCodeEnter');
+      vi.spyOn(UtilsFunction as any, 'isKeyCodeEnter');
       component.onKeyPress(eventEnterKey);
 
       expect(UtilsFunction['isKeyCodeEnter']).toHaveBeenCalled();
@@ -357,8 +356,8 @@ describe('PoDisclaimerGroupBaseComponent:', () => {
     it(`onKeyPress: shouldn't call 'removeAllItems' if the typed key is not enter.`, () => {
       const eventDeleteKey = { keyCode: 46 };
 
-      spyOn(UtilsFunction, <any>'isKeyCodeEnter');
-      spyOn(component, 'removeAllItems');
+      vi.spyOn(UtilsFunction as any, 'isKeyCodeEnter');
+      vi.spyOn(component as any, 'removeAllItems');
       component.onKeyPress(eventDeleteKey);
 
       expect(component.removeAllItems).not.toHaveBeenCalled();

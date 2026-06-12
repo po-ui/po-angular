@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import * as fc from 'fast-check';
 
@@ -7,12 +8,12 @@ import { PoUserGuideService } from './po-user-guide.service';
 import { PoUserGuideAlignment, PoUserGuidePosition } from './enums';
 
 export interface MockDriverInstance {
-  drive: jasmine.Spy;
-  destroy: jasmine.Spy;
-  moveNext: jasmine.Spy;
-  movePrevious: jasmine.Spy;
-  moveTo: jasmine.Spy;
-  getActiveIndex: jasmine.Spy;
+  drive: any;
+  destroy: any;
+  moveNext: any;
+  movePrevious: any;
+  moveTo: any;
+  getActiveIndex: any;
   config: any;
   triggerHighlight: (index: number) => void;
   triggerDestroyed: () => void;
@@ -20,46 +21,46 @@ export interface MockDriverInstance {
 }
 
 export function createMockDriverFactory(): {
-  factory: jasmine.Spy;
+  factory: any;
   instances: Array<MockDriverInstance>;
   lastInstance(): MockDriverInstance | null;
 } {
   const instances: Array<MockDriverInstance> = [];
-  const factory = jasmine.createSpy('driverFactory').and.callFake((config: any) => {
+  const factory = vi.fn().mockImplementation((config: any) => {
     let activeIndex = -1;
     const instance: MockDriverInstance = {
       config,
-      drive: jasmine.createSpy('drive').and.callFake((index?: number) => {
+      drive: vi.fn().mockImplementation((index?: number) => {
         activeIndex = typeof index === 'number' ? index : 0;
         if (typeof config.onHighlightStarted === 'function') {
           config.onHighlightStarted(null, null, { state: { activeIndex } });
         }
       }),
-      destroy: jasmine.createSpy('destroy').and.callFake(() => {
+      destroy: vi.fn().mockImplementation(() => {
         if (typeof config.onDestroyed === 'function') {
           config.onDestroyed();
         }
         activeIndex = -1;
       }),
-      moveNext: jasmine.createSpy('moveNext').and.callFake(() => {
+      moveNext: vi.fn().mockImplementation(() => {
         activeIndex += 1;
         if (typeof config.onHighlightStarted === 'function') {
           config.onHighlightStarted(null, null, { state: { activeIndex } });
         }
       }),
-      movePrevious: jasmine.createSpy('movePrevious').and.callFake(() => {
+      movePrevious: vi.fn().mockImplementation(() => {
         activeIndex -= 1;
         if (typeof config.onHighlightStarted === 'function') {
           config.onHighlightStarted(null, null, { state: { activeIndex } });
         }
       }),
-      moveTo: jasmine.createSpy('moveTo').and.callFake((index: number) => {
+      moveTo: vi.fn().mockImplementation((index: number) => {
         activeIndex = index;
         if (typeof config.onHighlightStarted === 'function') {
           config.onHighlightStarted(null, null, { state: { activeIndex } });
         }
       }),
-      getActiveIndex: jasmine.createSpy('getActiveIndex').and.callFake(() => activeIndex),
+      getActiveIndex: vi.fn().mockImplementation(() => activeIndex),
       triggerHighlight: (index: number) => {
         activeIndex = index;
         if (typeof config.onHighlightStarted === 'function') {
@@ -102,7 +103,7 @@ describe('PoUserGuideService:', () => {
     document.head.querySelectorAll('style[data-po-user-guide-styles="true"]').forEach(el => el.remove());
 
     mock = createMockDriverFactory();
-    spyOn<any>(service, 'loadDriverFactory').and.returnValue(Promise.resolve(mock.factory));
+    vi.spyOn(service as any, 'loadDriverFactory').mockReturnValue(Promise.resolve(mock.factory));
   });
 
   it('should be created', () => {
@@ -126,26 +127,26 @@ describe('PoUserGuideService:', () => {
 
   describe('Lazy load:', () => {
     it('should NOT call loadDriverFactory before start() is invoked', () => {
-      const loaderSpy = (service as any).loadDriverFactory as jasmine.Spy;
-      expect(loaderSpy.calls.count()).toBe(0);
+      const loaderSpy = (service as any).loadDriverFactory as Mock;
+      expect(vi.mocked(loaderSpy).mock.calls.length).toBe(0);
     });
 
     it('should load the driver factory at most once per start() invocation across re-entrant starts', async () => {
       service.setSteps([{ content: 'a' }, { content: 'b' }]);
 
-      const loaderSpy = (service as any).loadDriverFactory as jasmine.Spy;
+      const loaderSpy = (service as any).loadDriverFactory as Mock;
 
       service.start();
       // Aguarda o microtask para que a cadeia `.then(factory => ...)` execute.
       await Promise.resolve();
       await Promise.resolve();
-      const countAfterFirst = loaderSpy.calls.count();
+      const countAfterFirst = vi.mocked(loaderSpy).mock.calls.length;
       expect(countAfterFirst).toBeGreaterThanOrEqual(1);
 
       service.start();
       await Promise.resolve();
       await Promise.resolve();
-      const countAfterSecond = loaderSpy.calls.count();
+      const countAfterSecond = vi.mocked(loaderSpy).mock.calls.length;
 
       expect(countAfterSecond).toBeGreaterThanOrEqual(1);
       expect(countAfterSecond).toBeLessThanOrEqual(2);
@@ -154,13 +155,13 @@ describe('PoUserGuideService:', () => {
 
   describe('Driver.js failure:', () => {
     it('should log a descriptive error when driver.js fails to load', async () => {
-      const loaderSpy = (service as any).loadDriverFactory as jasmine.Spy;
+      const loaderSpy = (service as any).loadDriverFactory as Mock;
       const failure = new Error(
         'PoUserGuideService: não foi possível carregar driver.js. Verifique se a dependência está instalada.'
       );
-      loaderSpy.and.returnValue(Promise.reject(failure));
+      loaderSpy.mockReturnValue(Promise.reject(failure));
 
-      const errorSpy = spyOn(console, 'error');
+      const errorSpy = vi.spyOn(console as any, 'error');
 
       service.setSteps([{ content: 'a' }]);
       service.start();
@@ -170,7 +171,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       expect(errorSpy).toHaveBeenCalled();
-      const errArg = errorSpy.calls.mostRecent().args[0];
+      const errArg = vi.mocked(errorSpy).mock.lastCall[0];
       const message = errArg instanceof Error ? errArg.message : String(errArg);
       expect(message).toContain('driver.js');
     });
@@ -178,8 +179,8 @@ describe('PoUserGuideService:', () => {
 
   describe('SSR no-op:', () => {
     it('should be a no-op and emit console.warn in SSR environments', () => {
-      spyOn<any>(service, 'isBrowser').and.returnValue(false);
-      const warnSpy = spyOn(console, 'warn');
+      vi.spyOn(service as any, 'isBrowser').mockReturnValue(false);
+      const warnSpy = vi.spyOn(console as any, 'warn');
       let tourStarted = false;
       service.tourStart$.subscribe(() => {
         tourStarted = true;
@@ -220,7 +221,7 @@ describe('PoUserGuideService:', () => {
 
       const styles = document.head.querySelectorAll('style[data-po-user-guide-styles="true"]');
       expect(styles.length).toBe(1);
-      expect((PoUserGuideService as any).stylesInjected).toBeTrue();
+      expect((PoUserGuideService as any).stylesInjected).toBe(true);
     });
   });
 
@@ -229,13 +230,13 @@ describe('PoUserGuideService:', () => {
       document.head.querySelectorAll('style[data-po-user-guide-styles="true"]').forEach(element => element.remove());
       (PoUserGuideService as any).stylesInjected = false;
 
-      spyOn<any>(service, 'isBrowser').and.returnValue(false);
+      vi.spyOn(service as any, 'isBrowser').mockReturnValue(false);
 
       (service as any).injectStyles();
 
       const styles = document.head.querySelectorAll('style[data-po-user-guide-styles="true"]');
       expect(styles.length).toBe(0);
-      expect((PoUserGuideService as any).stylesInjected).toBeFalse();
+      expect((PoUserGuideService as any).stylesInjected).toBe(false);
     });
   });
 
@@ -288,9 +289,9 @@ describe('PoUserGuideService:', () => {
 
   describe('per-step hooks:', () => {
     it('should invoke onBeforeHighlight, onHighlighted, onDeselected with (step, index)', async () => {
-      const before = jasmine.createSpy('onBeforeHighlight');
-      const highlighted = jasmine.createSpy('onHighlighted');
-      const deselected = jasmine.createSpy('onDeselected');
+      const before = vi.fn();
+      const highlighted = vi.fn();
+      const deselected = vi.fn();
       const stepA = {
         content: 'a',
         onBeforeHighlight: before,
@@ -327,7 +328,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
       service.next(); // move to last (index 1)
       const inst = mock.lastInstance();
-      inst.destroy.calls.reset(); // reset to count only this call
+      inst.destroy.mockClear(); // reset to count only this call
       service.next(); // should trigger completion
       expect(inst.destroy).toHaveBeenCalledTimes(1);
     });
@@ -340,7 +341,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
       await Promise.resolve();
       const inst = mock.lastInstance();
-      inst.movePrevious.calls.reset();
+      inst.movePrevious.mockClear();
       service.previous();
       expect(inst.movePrevious).not.toHaveBeenCalled();
     });
@@ -371,14 +372,14 @@ describe('PoUserGuideService:', () => {
       service.setSteps([{ content: 'a' }, { content: 'b' }]);
       expect(service.getCurrentStep()).toBeNull();
       expect(service.getCurrentIndex()).toBe(-1);
-      expect(service.isActive()).toBeFalse();
+      expect(service.isActive()).toBe(false);
 
       service.start();
       await Promise.resolve();
       await Promise.resolve();
       expect(service.getCurrentIndex()).toBe(0);
       expect(service.getCurrentStep()).toBe((service as any)['steps'][0]);
-      expect(service.isActive()).toBeTrue();
+      expect(service.isActive()).toBe(true);
 
       service.next();
       expect(service.getCurrentIndex()).toBe(1);
@@ -386,13 +387,13 @@ describe('PoUserGuideService:', () => {
       service.close();
       expect(service.getCurrentIndex()).toBe(-1);
       expect(service.getCurrentStep()).toBeNull();
-      expect(service.isActive()).toBeFalse();
+      expect(service.isActive()).toBe(false);
     });
   });
 
   describe('stepChange$ count - PBT:', () => {
     it('should emit stepChange$ exactly N+1 times for N distinct goTo calls after start', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(fc.integer({ min: 2, max: 6 }), async n => {
             const localService = TestBed.inject(PoUserGuideService);
@@ -403,9 +404,7 @@ describe('PoUserGuideService:', () => {
             (localService as any).options = {};
 
             const localMock = createMockDriverFactory();
-            (localService as any).loadDriverFactory = jasmine
-              .createSpy('loadDriverFactory_local')
-              .and.returnValue(Promise.resolve(localMock.factory));
+            (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
             const events: Array<any> = [];
             const sub = localService.stepChange$.subscribe(e => events.push(e));
@@ -430,13 +429,13 @@ describe('PoUserGuideService:', () => {
           }),
           { numRuns: 20 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('event order - PBT:', () => {
     it('should emit tourStart$ first and tourEnd$ last in any complete run', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(fc.integer({ min: 2, max: 5 }), async n => {
             const localService = TestBed.inject(PoUserGuideService);
@@ -445,9 +444,7 @@ describe('PoUserGuideService:', () => {
             (localService as any).pendingEndReason = null;
 
             const localMock = createMockDriverFactory();
-            (localService as any).loadDriverFactory = jasmine
-              .createSpy('loader')
-              .and.returnValue(Promise.resolve(localMock.factory));
+            (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
             const timeline: Array<string> = [];
             const subStart = localService.tourStart$.subscribe(() => timeline.push('start'));
@@ -469,13 +466,13 @@ describe('PoUserGuideService:', () => {
           }),
           { numRuns: 20 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('currentIndex invariant - PBT:', () => {
     it('should keep currentIndex in [0, n-1] during any valid sequence of next/previous/goTo', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(
             fc.integer({ min: 2, max: 5 }),
@@ -487,9 +484,7 @@ describe('PoUserGuideService:', () => {
               (localService as any).pendingEndReason = null;
 
               const localMock = createMockDriverFactory();
-              (localService as any).loadDriverFactory = jasmine
-                .createSpy('loader')
-                .and.returnValue(Promise.resolve(localMock.factory));
+              (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
               const steps = Array.from({ length: n }, (_, i) => ({ content: `s${i}` }));
               localService.setSteps(steps);
@@ -528,13 +523,13 @@ describe('PoUserGuideService:', () => {
           ),
           { numRuns: 20 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('state after close - PBT:', () => {
     it('should reset state after close() in any sequence', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(fc.integer({ min: 1, max: 4 }), async n => {
             const localService = TestBed.inject(PoUserGuideService);
@@ -543,9 +538,7 @@ describe('PoUserGuideService:', () => {
             (localService as any).pendingEndReason = null;
 
             const localMock = createMockDriverFactory();
-            (localService as any).loadDriverFactory = jasmine
-              .createSpy('loader')
-              .and.returnValue(Promise.resolve(localMock.factory));
+            (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
             const steps = Array.from({ length: n }, (_, i) => ({ content: `s${i}` }));
             localService.setSteps(steps);
@@ -557,13 +550,13 @@ describe('PoUserGuideService:', () => {
           }),
           { numRuns: 20 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('close() idempotency - PBT:', () => {
     it('should be idempotent across any state', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(fc.integer({ min: 1, max: 4 }), fc.boolean(), async (n, startedFirst) => {
             const localService = TestBed.inject(PoUserGuideService);
@@ -572,9 +565,7 @@ describe('PoUserGuideService:', () => {
             (localService as any).pendingEndReason = null;
 
             const localMock = createMockDriverFactory();
-            (localService as any).loadDriverFactory = jasmine
-              .createSpy('loader')
-              .and.returnValue(Promise.resolve(localMock.factory));
+            (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
             const events: Array<any> = [];
             const sub = localService.tourEnd$.subscribe(e => events.push(e));
@@ -597,13 +588,13 @@ describe('PoUserGuideService:', () => {
           }),
           { numRuns: 20 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('start() reentrance - PBT:', () => {
     it('should close the previous tour before starting a new one', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(fc.integer({ min: 2, max: 4 }), async n => {
             const localService = TestBed.inject(PoUserGuideService);
@@ -612,9 +603,7 @@ describe('PoUserGuideService:', () => {
             (localService as any).pendingEndReason = null;
 
             const localMock = createMockDriverFactory();
-            (localService as any).loadDriverFactory = jasmine
-              .createSpy('loader')
-              .and.returnValue(Promise.resolve(localMock.factory));
+            (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
             const startEvents: Array<any> = [];
             const endEvents: Array<any> = [];
@@ -638,7 +627,7 @@ describe('PoUserGuideService:', () => {
           }),
           { numRuns: 15 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
@@ -674,7 +663,7 @@ describe('PoUserGuideService:', () => {
 
   describe('progressTemplate substitution - PBT:', () => {
     it('should preserve placeholders {{current}} and {{total}} in the resolved options for any input', async () => {
-      await expectAsync(
+      await expect(
         fc.assert(
           fc.asyncProperty(
             fc.integer({ min: 1, max: 100 }),
@@ -685,9 +674,7 @@ describe('PoUserGuideService:', () => {
               (localService as any).currentIndex = -1;
               (localService as any).pendingEndReason = null;
               const localMock = createMockDriverFactory();
-              (localService as any).loadDriverFactory = jasmine
-                .createSpy('loader')
-                .and.returnValue(Promise.resolve(localMock.factory));
+              (localService as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(localMock.factory));
 
               const template = '{{current}}/{{total}}';
               localService.setOptions({ progressTemplate: template });
@@ -697,16 +684,16 @@ describe('PoUserGuideService:', () => {
           ),
           { numRuns: 30 }
         )
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('progressTemplate warning:', () => {
     it('should warn when progressTemplate has no placeholders', () => {
-      const warnSpy = spyOn(console, 'warn');
+      const warnSpy = vi.spyOn(console as any, 'warn');
       service.setOptions({ progressTemplate: 'sem placeholder' });
       expect(warnSpy).toHaveBeenCalled();
-      const message = warnSpy.calls.mostRecent().args[0] as string;
+      const message = vi.mocked(warnSpy).mock.lastCall[0] as string;
       expect(message).toContain('sem placeholder');
     });
   });
@@ -801,7 +788,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
       await Promise.resolve();
       const inst = mock.lastInstance();
-      inst.destroy.calls.reset();
+      inst.destroy.mockClear();
       service.close();
       expect(inst.destroy).toHaveBeenCalledTimes(1);
     });
@@ -953,12 +940,10 @@ describe('PoUserGuideService:', () => {
 
   describe('loadDriverFactory - real body:', () => {
     it('should return the cached driver factory without calling importDriver when cache is populated', async () => {
-      ((service as any).loadDriverFactory as jasmine.Spy).and.callThrough();
-      const importSpy = spyOn<any>(service, 'importDriver').and.returnValue(
-        Promise.resolve({ driver: jasmine.createSpy('shouldNotBeUsed') })
-      );
+      (service as any).loadDriverFactory as Mock;
+      const importSpy = vi.spyOn(service as any, 'importDriver').mockReturnValue(Promise.resolve({ driver: vi.fn() }));
 
-      const fakeFactory = jasmine.createSpy('cachedFactory');
+      const fakeFactory = vi.fn();
       (service as any).driverFactoryCache = fakeFactory;
 
       const result = await (service as any).loadDriverFactory();
@@ -967,11 +952,11 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should call importDriver on first call and cache the resolved driver factory', async () => {
-      ((service as any).loadDriverFactory as jasmine.Spy).and.callThrough();
+      (service as any).loadDriverFactory as Mock;
       (service as any).driverFactoryCache = null;
 
-      const driverFn = jasmine.createSpy('resolvedDriver');
-      const importSpy = spyOn<any>(service, 'importDriver').and.returnValue(Promise.resolve({ driver: driverFn }));
+      const driverFn = vi.fn();
+      const importSpy = vi.spyOn(service as any, 'importDriver').mockReturnValue(Promise.resolve({ driver: driverFn }));
 
       const first = await (service as any).loadDriverFactory();
       const second = await (service as any).loadDriverFactory();
@@ -983,15 +968,13 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should throw standardized Error when importDriver rejects with Error', async () => {
-      ((service as any).loadDriverFactory as jasmine.Spy).and.callThrough();
+      (service as any).loadDriverFactory as Mock;
       (service as any).driverFactoryCache = null;
 
       const originalError = new Error('Cannot find module driver.js');
-      spyOn<any>(service, 'importDriver').and.returnValue(Promise.reject(originalError));
+      vi.spyOn(service as any, 'importDriver').mockReturnValue(Promise.reject(originalError));
 
-      await expectAsync((service as any).loadDriverFactory()).toBeRejectedWithError(
-        /não foi possível carregar driver\.js/
-      );
+      await expect((service as any).loadDriverFactory()).rejects.toThrowError(/não foi possível carregar driver\.js/);
 
       expect((service as any).driverFactoryCache).toBeNull();
     });
@@ -1003,14 +986,12 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should throw standardized Error when importDriver rejects with non-Error value', async () => {
-      ((service as any).loadDriverFactory as jasmine.Spy).and.callThrough();
+      (service as any).loadDriverFactory as Mock;
       (service as any).driverFactoryCache = null;
 
-      spyOn<any>(service, 'importDriver').and.returnValue(Promise.reject('falha-bruta'));
+      vi.spyOn(service as any, 'importDriver').mockReturnValue(Promise.reject('falha-bruta'));
 
-      await expectAsync((service as any).loadDriverFactory()).toBeRejectedWithError(
-        /não foi possível carregar driver\.js/
-      );
+      await expect((service as any).loadDriverFactory()).rejects.toThrowError(/não foi possível carregar driver\.js/);
     });
   });
 
@@ -1050,10 +1031,10 @@ describe('PoUserGuideService:', () => {
       const inst = mock.lastInstance();
 
       const description = document.createElement('p');
-      const focusSpy = spyOn(description, 'focus');
+      const focusSpy = vi.spyOn(description as any, 'focus');
       const wrapper = document.createElement('div');
 
-      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+      vi.spyOn(window as any, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
         cb(0);
         return 0;
       });
@@ -1145,15 +1126,15 @@ describe('PoUserGuideService:', () => {
         closeButton
       });
 
-      expect(previousButton.classList.contains('po-user-guide-button')).toBeTrue();
-      expect(previousButton.classList.contains('po-user-guide-button-secondary')).toBeTrue();
+      expect(previousButton.classList.contains('po-user-guide-button')).toBe(true);
+      expect(previousButton.classList.contains('po-user-guide-button-secondary')).toBe(true);
       expect(previousButton.getAttribute('type')).toBe('button');
 
-      expect(nextButton.classList.contains('po-user-guide-button')).toBeTrue();
-      expect(nextButton.classList.contains('po-user-guide-button-primary')).toBeTrue();
+      expect(nextButton.classList.contains('po-user-guide-button')).toBe(true);
+      expect(nextButton.classList.contains('po-user-guide-button-primary')).toBe(true);
       expect(nextButton.getAttribute('type')).toBe('button');
 
-      expect(closeButton.classList.contains('po-user-guide-button-close')).toBeTrue();
+      expect(closeButton.classList.contains('po-user-guide-button-close')).toBe(true);
       expect(closeButton.getAttribute('type')).toBe('button');
       expect(closeButton.getAttribute('aria-label')).toBe('Fechar');
     });
@@ -1178,8 +1159,8 @@ describe('PoUserGuideService:', () => {
       const icon = closeButton.querySelector('.po-user-guide-button-close-icon');
       expect(closeButton.textContent).toBe('');
       expect(icon).not.toBeNull();
-      expect(icon.classList.contains('an')).toBeTrue();
-      expect(icon.classList.contains('an-x')).toBeTrue();
+      expect(icon.classList.contains('an')).toBe(true);
+      expect(icon.classList.contains('an-x')).toBe(true);
       expect(icon.getAttribute('aria-hidden')).toBe('true');
     });
 
@@ -1208,7 +1189,7 @@ describe('PoUserGuideService:', () => {
 
   describe('options.onStepChange callback:', () => {
     it('should invoke options.onStepChange on start and on each navigation', async () => {
-      const cb = jasmine.createSpy('onStepChange');
+      const cb = vi.fn();
       service.setOptions({ onStepChange: cb });
       service.setSteps([{ content: 'a' }, { content: 'b' }]);
       service.start();
@@ -1216,14 +1197,14 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       expect(cb).toHaveBeenCalledTimes(1);
-      const startEvent = cb.calls.mostRecent().args[0];
+      const startEvent = vi.mocked(cb).mock.lastCall[0];
       expect(startEvent.index).toBe(0);
       expect(startEvent.direction).toBe('start');
       expect(startEvent.totalSteps).toBe(2);
 
       service.next();
       expect(cb).toHaveBeenCalledTimes(2);
-      expect(cb.calls.mostRecent().args[0].direction).toBe('next');
+      expect(vi.mocked(cb).mock.lastCall[0].direction).toBe('next');
     });
   });
 
@@ -1235,7 +1216,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const inst = mock.lastInstance();
-      inst.getActiveIndex.and.returnValue(99); // fora do intervalo
+      inst.getActiveIndex.mockReturnValue(99); // fora do intervalo
 
       const indexBefore = service.getCurrentIndex();
       const events: Array<any> = [];
@@ -1336,7 +1317,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
       await Promise.resolve();
       const inst = mock.lastInstance();
-      inst.destroy.calls.reset();
+      inst.destroy.mockClear();
 
       const events: Array<any> = [];
       service.tourEnd$.subscribe(e => events.push(e));
@@ -1368,7 +1349,7 @@ describe('PoUserGuideService:', () => {
       ).not.toThrow();
       await Promise.resolve();
       await Promise.resolve();
-      expect(service.isActive()).toBeTrue();
+      expect(service.isActive()).toBe(true);
     });
   });
 
@@ -1501,7 +1482,7 @@ describe('PoUserGuideService:', () => {
 
   describe('allowScroll - scroll lock integration:', () => {
     it('should activate scroll lock when allowScroll is not set (default)', async () => {
-      const lockSpy = spyOn((service as any).scrollLock, 'lock');
+      const lockSpy = vi.spyOn((service as any).scrollLock, 'lock');
       service.setSteps([{ content: 'a' }]);
       service.start();
       await Promise.resolve();
@@ -1510,7 +1491,7 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should activate scroll lock when allowScroll is false', async () => {
-      const lockSpy = spyOn((service as any).scrollLock, 'lock');
+      const lockSpy = vi.spyOn((service as any).scrollLock, 'lock');
       service.setOptions({ allowScroll: false });
       service.setSteps([{ content: 'a' }]);
       service.start();
@@ -1520,7 +1501,7 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should NOT activate scroll lock when allowScroll is true', async () => {
-      const lockSpy = spyOn((service as any).scrollLock, 'lock');
+      const lockSpy = vi.spyOn((service as any).scrollLock, 'lock');
       service.setOptions({ allowScroll: true });
       service.setSteps([{ content: 'a' }]);
       service.start();
@@ -1530,7 +1511,7 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should unlock scroll on close()', async () => {
-      const unlockSpy = spyOn((service as any).scrollLock, 'unlock');
+      const unlockSpy = vi.spyOn((service as any).scrollLock, 'unlock');
       service.setSteps([{ content: 'a' }]);
       service.start();
       await Promise.resolve();
@@ -1540,7 +1521,7 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should unlock scroll on tour completion via next()', async () => {
-      const unlockSpy = spyOn((service as any).scrollLock, 'unlock');
+      const unlockSpy = vi.spyOn((service as any).scrollLock, 'unlock');
       service.setSteps([{ content: 'a' }]);
       service.start();
       await Promise.resolve();
@@ -1603,7 +1584,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
       await Promise.resolve();
       expect(service.getCurrentIndex()).toBe(1);
-      expect(service.getCurrentStep()).toEqual(jasmine.objectContaining({ content: 'b' }));
+      expect(service.getCurrentStep()).toEqual(expect.objectContaining({ content: 'b' }));
     });
 
     it('should emit tourStart$ with the correct startIndex', async () => {
@@ -1696,19 +1677,19 @@ describe('PoUserGuideService:', () => {
 
   describe('start() error recovery:', () => {
     it('should reset internal state when driver factory throws during start', async () => {
-      const errorFactory = jasmine.createSpy('errorFactory').and.throwError('factory-crash');
-      (service as any).loadDriverFactory = jasmine
-        .createSpy('loadDriverFactory')
-        .and.returnValue(Promise.resolve(errorFactory));
+      const errorFactory = vi.fn().mockImplementation(() => {
+        throw new Error('factory-crash');
+      });
+      (service as any).loadDriverFactory = vi.fn().mockReturnValue(Promise.resolve(errorFactory));
 
-      const errorSpy = spyOn(console, 'error');
+      const errorSpy = vi.spyOn(console as any, 'error');
       service.setSteps([{ content: 'a' }]);
       service.start();
       await Promise.resolve();
       await Promise.resolve();
       await Promise.resolve();
 
-      expect(service.isActive()).toBeFalse();
+      expect(service.isActive()).toBe(false);
       expect(service.getCurrentIndex()).toBe(-1);
       expect(errorSpy).toHaveBeenCalled();
     });
@@ -1761,7 +1742,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const event = events[0];
-      expect(event.step).toEqual(jasmine.objectContaining({ content: 'step-a' }));
+      expect(event.step).toEqual(expect.objectContaining({ content: 'step-a' }));
       expect(event.index).toBe(0);
       expect(event.direction).toBe('start');
       expect(event.totalSteps).toBe(2);
@@ -1833,7 +1814,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const inst = mock.lastInstance();
-      inst.getActiveIndex.and.returnValue(2);
+      inst.getActiveIndex.mockReturnValue(2);
 
       const events: Array<any> = [];
       service.stepChange$.subscribe(e => events.push(e));
@@ -1851,7 +1832,9 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const inst = mock.lastInstance();
-      inst.getActiveIndex.and.throwError('not available');
+      inst.getActiveIndex.mockImplementation(() => {
+        throw new Error('not available');
+      });
 
       const events: Array<any> = [];
       service.stepChange$.subscribe(e => events.push(e));
@@ -1869,7 +1852,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const inst = mock.lastInstance();
-      inst.getActiveIndex.and.returnValue(-5);
+      inst.getActiveIndex.mockReturnValue(-5);
 
       const events: Array<any> = [];
       service.stepChange$.subscribe(e => events.push(e));
@@ -1886,7 +1869,7 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const inst = mock.lastInstance();
-      inst.getActiveIndex.and.returnValue(1);
+      inst.getActiveIndex.mockReturnValue(1);
 
       const events: Array<any> = [];
       service.stepChange$.subscribe(e => events.push(e));
@@ -1919,10 +1902,12 @@ describe('PoUserGuideService:', () => {
       await Promise.resolve();
 
       const inst = mock.lastInstance();
-      inst.destroy.and.throwError('destroy-crash');
+      inst.destroy.mockImplementation(() => {
+        throw new Error('destroy-crash');
+      });
 
-      const unlockSpy = spyOn((service as any).scrollLock, 'unlock');
-      spyOn((service as any).scrollLock, 'isActive').and.returnValue(true);
+      const unlockSpy = vi.spyOn((service as any).scrollLock, 'unlock');
+      vi.spyOn((service as any).scrollLock, 'isActive').mockReturnValue(true);
 
       expect(() => service.close()).toThrow();
       expect(unlockSpy).toHaveBeenCalled();

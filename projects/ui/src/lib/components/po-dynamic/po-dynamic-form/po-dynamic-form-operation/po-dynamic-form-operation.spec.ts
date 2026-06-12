@@ -12,7 +12,7 @@ describe('PoDynamicFormOperation:', () => {
   const mockURL: string = 'http://po.com.br/api';
   const value = { name: 'username' };
 
-  const spyLoadFunction = jasmine.createSpy('loadFunction');
+  const spyLoadFunction = vi.fn();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,7 +29,7 @@ describe('PoDynamicFormOperation:', () => {
 
   describe('Methods:', () => {
     it('execute: should call `post` if `load` param is a string', () => {
-      const spyPost = spyOn(dynamicFormOperation, 'post');
+      const spyPost = vi.spyOn(dynamicFormOperation as any, 'post');
 
       dynamicFormOperation['execute'](mockURL, value);
 
@@ -37,7 +37,7 @@ describe('PoDynamicFormOperation:', () => {
     });
 
     it('execute: should call the function passed as param if `load` isn`t a string', () => {
-      const spyPost = spyOn(dynamicFormOperation, <any>'post');
+      const spyPost = vi.spyOn(dynamicFormOperation as any, 'post');
 
       dynamicFormOperation['execute'](spyLoadFunction, value);
 

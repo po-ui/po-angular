@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -38,10 +39,10 @@ describe('PoUrlComponent:', () => {
 
   describe('Methods:', () => {
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should call `focus` if autoFocus is true.', () => {
@@ -59,7 +60,7 @@ describe('PoUrlComponent:', () => {
       it('should add keyup eventListener if `onChangePropagate` is null', fakeAsync(() => {
         component.onChangePropagate = null;
 
-        spyOn(component.inputEl.nativeElement, 'addEventListener');
+        vi.spyOn(component.inputEl.nativeElement, 'addEventListener');
 
         component.ngAfterViewInit();
         tick();
@@ -70,7 +71,7 @@ describe('PoUrlComponent:', () => {
       it('shouldn`t add keyup eventListener if `onChangePropagate` is not null', fakeAsync(() => {
         component.onChangePropagate = () => {};
 
-        spyOn(component.inputEl.nativeElement, 'addEventListener');
+        vi.spyOn(component.inputEl.nativeElement, 'addEventListener');
 
         component.ngAfterViewInit();
         tick();
@@ -82,7 +83,7 @@ describe('PoUrlComponent:', () => {
     it('ngOnDestroy: should remove keyup event listener if `onChangePropagate` is null', () => {
       component.onChangePropagate = null;
 
-      spyOn(component.inputEl.nativeElement, 'removeEventListener');
+      vi.spyOn(component.inputEl.nativeElement, 'removeEventListener');
 
       component.ngOnDestroy();
 
@@ -92,7 +93,7 @@ describe('PoUrlComponent:', () => {
     it('ngOnDestroy: shouldn`t remove keyup eventListener if `onChangePropagate` is not null', () => {
       component.onChangePropagate = () => {};
 
-      spyOn(component.inputEl.nativeElement, 'removeEventListener');
+      vi.spyOn(component.inputEl.nativeElement, 'removeEventListener');
 
       component.ngOnDestroy();
 
@@ -122,7 +123,7 @@ describe('PoUrlComponent:', () => {
       const regExpUrl = new RegExp(component.pattern);
 
       urls.forEach(url => {
-        expect(regExpUrl.test(url)).toBeTruthy(`URL ${url} is not a valid URL.`);
+        expect(regExpUrl.test(url), `URL ${url} is not a valid URL.`).toBeTruthy();
       });
     }));
 
@@ -180,7 +181,7 @@ describe('PoUrlComponent:', () => {
       const regExpUrl = new RegExp(component.pattern);
 
       urls.forEach(url => {
-        expect(regExpUrl.test(url)).toBeFalsy(`URL ${url} is a valid URL.`);
+        expect(regExpUrl.test(url), `URL ${url} is a valid URL.`).toBeFalsy();
       });
     }));
   });
@@ -194,8 +195,8 @@ describe('PoUrlComponent:', () => {
     });
 
     it('should call `getScreenValue` and `verifyPattern` on input keyup', fakeAsync(() => {
-      spyOn(component, 'getScreenValue').and.returnValue('test');
-      spyOn(component, 'verifyPattern');
+      vi.spyOn(component as any, 'getScreenValue').mockReturnValue('test');
+      vi.spyOn(component as any, 'verifyPattern');
 
       component.onChangePropagate = null;
       component.ngAfterViewInit();

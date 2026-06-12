@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ElementRef } from '@angular/core';
 import { PoDensityMode } from '../enums/po-density-mode.enum';
 import { PoFieldSize } from '../enums/po-field-size.enum';
@@ -56,32 +57,32 @@ describe('Language:', () => {
   });
 
   beforeEach(() => {
-    navigatorLanguageSpy = spyOnProperty(window.navigator, 'language', 'get');
-    navigatorUserLanguageSpy = spyOnProperty(window.navigator, <any>'userLanguage', 'get');
+    navigatorLanguageSpy = vi.spyOn(window.navigator, 'language', 'get');
+    navigatorUserLanguageSpy = vi.spyOn(window.navigator as any, 'userLanguage', 'get');
   });
 
   afterEach(() => {
-    navigatorLanguageSpy.calls.reset();
-    navigatorUserLanguageSpy.calls.reset();
+    navigatorLanguageSpy.mockClear();
+    navigatorUserLanguageSpy.mockClear();
   });
 
   describe('Function getBrowserLanguage:', () => {
     it('should return the value of `navigator.language` if it`s defined', () => {
-      navigatorLanguageSpy.and.returnValue('pt');
+      navigatorLanguageSpy.mockReturnValue('pt');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return the value of `navigator.userLanguage` if it`s defined and `navigator.language` is undefined', () => {
-      navigatorLanguageSpy.and.returnValue(undefined);
-      navigatorUserLanguageSpy.and.returnValue('en');
+      navigatorLanguageSpy.mockReturnValue(undefined);
+      navigatorUserLanguageSpy.mockReturnValue('en');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
     });
 
     it('should return undefined if `navigator.language` and `navigator.userLanguage` are undefined', () => {
-      navigatorLanguageSpy.and.returnValue(undefined);
-      navigatorUserLanguageSpy.and.returnValue(undefined);
+      navigatorLanguageSpy.mockReturnValue(undefined);
+      navigatorUserLanguageSpy.mockReturnValue(undefined);
 
       expect(UtilFunctions.getBrowserLanguage()).toBe(undefined);
     });
@@ -89,61 +90,61 @@ describe('Language:', () => {
 
   describe('Function getShortBrowserLanguage:', () => {
     it('should return `pt` as default language if language is undefined', () => {
-      navigatorLanguageSpy.and.returnValue(undefined);
+      navigatorLanguageSpy.mockReturnValue(undefined);
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `pt` as default language if language is invalid', () => {
-      navigatorLanguageSpy.and.returnValue('wz');
+      navigatorLanguageSpy.mockReturnValue('wz');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `pt` if browser language is `pt`', () => {
-      navigatorLanguageSpy.and.returnValue('pt');
+      navigatorLanguageSpy.mockReturnValue('pt');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `pt` if browser language is `pt-BR`', () => {
-      navigatorLanguageSpy.and.returnValue('pt-BR');
+      navigatorLanguageSpy.mockReturnValue('pt-BR');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('pt');
     });
 
     it('should return `en` if browser language is `en`', () => {
-      navigatorLanguageSpy.and.returnValue('en');
+      navigatorLanguageSpy.mockReturnValue('en');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
     });
 
     it('should return `en` if browser language is `en-US`', () => {
-      navigatorLanguageSpy.and.returnValue('en-US');
+      navigatorLanguageSpy.mockReturnValue('en-US');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('en');
     });
 
     it('should return `es` if browser language is `es`', () => {
-      navigatorLanguageSpy.and.returnValue('es');
+      navigatorLanguageSpy.mockReturnValue('es');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('es');
     });
 
     it('should return `es` if browser language is `es-ES`', () => {
-      navigatorLanguageSpy.and.returnValue('es-ES');
+      navigatorLanguageSpy.mockReturnValue('es-ES');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('es');
     });
 
     it('should return `ru` if browser language is `ru`', () => {
-      navigatorLanguageSpy.and.returnValue('ru');
+      navigatorLanguageSpy.mockReturnValue('ru');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('ru');
     });
 
     it('should return `ru` if browser language is `ru-RU`', () => {
-      navigatorLanguageSpy.and.returnValue('ru-RU');
+      navigatorLanguageSpy.mockReturnValue('ru-RU');
 
       expect(UtilFunctions.getShortBrowserLanguage()).toBe('ru');
     });
@@ -356,7 +357,7 @@ describe('Function callFunction:', () => {
   };
 
   it('should call function of context', () => {
-    spyOn(context, 'getName');
+    vi.spyOn(context as any, 'getName');
 
     callFunction(context.getName, context);
 
@@ -364,7 +365,7 @@ describe('Function callFunction:', () => {
   });
 
   it('should call function of context passing attribute name', () => {
-    spyOn(context, 'getAge');
+    vi.spyOn(context as any, 'getAge');
 
     callFunction('getAge', context);
 
@@ -574,7 +575,7 @@ describe('Function isExternalLink:', () => {
 
 describe('Function openExternalLink:', () => {
   it('should open external link', () => {
-    spyOn(window, 'open');
+    vi.spyOn(window as any, 'open');
     openExternalLink('http://fakeUrlPo.com.br');
     expect(window.open).toHaveBeenCalledWith('http://fakeUrlPo.com.br', '_blank');
   });
@@ -1382,15 +1383,15 @@ describe('Function convertImageToBase64:', () => {
   it(`should resolve of promise if file is defined.`, async () => {
     const file = new File([''], 'filename', { type: 'text/html' });
 
-    const result = await convertImageToBase64(file);
+    const result = await convertImageToBase64(file as any);
 
     expect(result).toBeDefined();
   });
 
   it(`should return a error if file is invalid.`, async () => {
-    const file = <any>'invalid file';
+    const file = 'invalid file';
 
-    const result = await handleThrowError(convertImageToBase64(file));
+    const result = await handleThrowError(convertImageToBase64(file as any));
 
     expect(result).toThrow();
   });
@@ -1670,10 +1671,13 @@ describe('replaceFormatSeparator: ', () => {
 
 describe('accessibility level: ', () => {
   describe('getDefaultSize', () => {
-    let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+    let poThemeServiceMock: any;
 
     beforeEach(() => {
-      poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+      poThemeServiceMock = {
+        getA11yLevel: vi.fn().mockName('PoThemeService.getA11yLevel'),
+        getA11yDefaultSize: vi.fn().mockName('PoThemeService.getA11yDefaultSize')
+      };
     });
 
     beforeEach(() => {
@@ -1687,8 +1691,8 @@ describe('accessibility level: ', () => {
     });
 
     it('should return `small` when the default component size is `small` in accessibility level AA (Service)', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
-      poThemeServiceMock.getA11yDefaultSize.and.returnValue('small');
+      poThemeServiceMock.getA11yLevel.mockReturnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yDefaultSize.mockReturnValue('small');
 
       expect(UtilFunctions.getDefaultSize(poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Small);
     });
@@ -1701,7 +1705,7 @@ describe('accessibility level: ', () => {
     });
 
     it('should return `medium` if accessibility AA and default size is not set (Service)', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yLevel.mockReturnValue(PoThemeA11yEnum.AA);
 
       expect(UtilFunctions.getDefaultSize(poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
     });
@@ -1714,7 +1718,7 @@ describe('accessibility level: ', () => {
     });
 
     it('should return `medium` when the accessibility level is AAA (Service)', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      poThemeServiceMock.getA11yLevel.mockReturnValue(PoThemeA11yEnum.AAA);
 
       expect(UtilFunctions.getDefaultSize(poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
     });
@@ -1727,10 +1731,13 @@ describe('accessibility level: ', () => {
   });
 
   describe('validateSize', () => {
-    let poThemeServiceMock: jasmine.SpyObj<PoThemeService>;
+    let poThemeServiceMock: any;
 
     beforeEach(() => {
-      poThemeServiceMock = jasmine.createSpyObj('PoThemeService', ['getA11yLevel', 'getA11yDefaultSize']);
+      poThemeServiceMock = {
+        getA11yLevel: vi.fn().mockName('PoThemeService.getA11yLevel'),
+        getA11yDefaultSize: vi.fn().mockName('PoThemeService.getA11yDefaultSize')
+      };
     });
 
     beforeEach(() => {
@@ -1744,7 +1751,7 @@ describe('accessibility level: ', () => {
     });
 
     it('should return valid values based on accessibility level (Service)', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yLevel.mockReturnValue(PoThemeA11yEnum.AA);
 
       expect(UtilFunctions.validateSize(PoFieldSize.Small, poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Small);
       expect(UtilFunctions.validateSize(PoFieldSize.Medium, poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
@@ -1758,7 +1765,7 @@ describe('accessibility level: ', () => {
     });
 
     it('should return `medium` when the value is `small` but the accessibility level is not AA (Service)', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AAA);
+      poThemeServiceMock.getA11yLevel.mockReturnValue(PoThemeA11yEnum.AAA);
 
       expect(UtilFunctions.validateSize(PoFieldSize.Small, poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
     });
@@ -1770,7 +1777,7 @@ describe('accessibility level: ', () => {
     });
 
     it('should return the default size when an invalid value is provided (Service)', () => {
-      poThemeServiceMock.getA11yLevel.and.returnValue(PoThemeA11yEnum.AA);
+      poThemeServiceMock.getA11yLevel.mockReturnValue(PoThemeA11yEnum.AA);
 
       expect(UtilFunctions.validateSize('xxg', poThemeServiceMock, PoFieldSize)).toBe(PoFieldSize.Medium);
     });
@@ -1789,7 +1796,7 @@ describe('setHelperSettings', () => {
 
     const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
 
-    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.hideAdditionalHelp).toBe(true);
     expect(result.helperSettings).toEqual({
       content: tooltip,
       type: 'help',
@@ -1804,19 +1811,19 @@ describe('setHelperSettings', () => {
 
     const result = UtilFunctions.setHelperSettings(label, tooltip, poHelperComponent);
 
-    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.hideAdditionalHelp).toBe(true);
     expect(result.helperSettings).toEqual(poHelperComponent);
   });
 
   it('should return hideAdditionalHelp false when additionalHelpTooltip is missing', () => {
     const result = UtilFunctions.setHelperSettings('Label', undefined);
-    expect(result.hideAdditionalHelp).toBeFalse();
+    expect(result.hideAdditionalHelp).toBe(false);
     expect(result.helperSettings).toBeNull();
   });
 
   it('should return hideAdditionalHelp false when neither label nor additionalHelpTooltip nor poHelperComponent are provided', () => {
     const result = UtilFunctions.setHelperSettings(undefined, undefined);
-    expect(result.hideAdditionalHelp).toBeFalse();
+    expect(result.hideAdditionalHelp).toBe(false);
     expect(result.helperSettings).toBeNull();
   });
 
@@ -1827,7 +1834,7 @@ describe('setHelperSettings', () => {
 
     const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, size);
 
-    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.hideAdditionalHelp).toBe(true);
     expect(result.helperSettings).toEqual({
       content: tooltip,
       type: 'help',
@@ -1838,11 +1845,11 @@ describe('setHelperSettings', () => {
   it('should return helperSettings with eventOnClick when onClick is provided', () => {
     const label = 'Label';
     const tooltip = 'Tooltip';
-    const onClick = jasmine.createSpy('onClick');
+    const onClick = vi.fn();
 
     const result = UtilFunctions.setHelperSettings(label, tooltip, undefined, undefined, onClick);
 
-    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.hideAdditionalHelp).toBe(true);
     expect(result.helperSettings).toEqual({
       type: 'help',
       eventOnClick: onClick,
@@ -1852,11 +1859,11 @@ describe('setHelperSettings', () => {
 
   it('should return helperSettings with eventOnClick and default size "medium" when poHelperComponent.eventOnClick is provided without size', () => {
     const label = 'Label';
-    const poHelperComponent = { eventOnClick: jasmine.createSpy('onClick') };
+    const poHelperComponent = { eventOnClick: vi.fn() };
 
     const result = UtilFunctions.setHelperSettings(label, undefined, poHelperComponent);
 
-    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.hideAdditionalHelp).toBe(true);
     expect(result.helperSettings).toEqual({
       type: 'help',
       eventOnClick: poHelperComponent.eventOnClick,
@@ -1870,7 +1877,7 @@ describe('setHelperSettings', () => {
 
     const result = UtilFunctions.setHelperSettings(label, undefined, poHelperComponent);
 
-    expect(result.hideAdditionalHelp).toBeTrue();
+    expect(result.hideAdditionalHelp).toBe(true);
     expect(result.helperSettings).toEqual({
       content: poHelperComponent,
       size: 'medium'
@@ -1882,7 +1889,12 @@ describe('updateTooltip', () => {
   function createElementRef(
     scrollWidth: number,
     clientWidth: number,
-    opts?: { inner?: { scrollWidth: number; clientWidth: number } }
+    opts?: {
+      inner?: {
+        scrollWidth: number;
+        clientWidth: number;
+      };
+    }
   ): ElementRef<HTMLElement> {
     const inner = opts?.inner
       ? ({
@@ -1894,7 +1906,7 @@ describe('updateTooltip', () => {
     const host = {
       scrollWidth,
       clientWidth,
-      querySelector: jasmine.createSpy('querySelector').and.returnValue(inner)
+      querySelector: vi.fn().mockReturnValue(inner)
     } as unknown as HTMLElement;
 
     return { nativeElement: host };
@@ -1904,49 +1916,49 @@ describe('updateTooltip', () => {
     const labelEl = { nativeElement: null } as unknown as ElementRef<HTMLElement>;
     const result = UtilFunctions.updateTooltip(false, labelEl);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should activate tooltip when text is ellipsed and it was previously inactive', () => {
     const labelEl = createElementRef(120, 100);
     const result = UtilFunctions.updateTooltip(false, labelEl);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should keep tooltip active when text remains ellipsed and it was already active', () => {
     const labelEl = createElementRef(200, 150);
     const result = UtilFunctions.updateTooltip(true, labelEl);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should deactivate tooltip when text is not ellipsed and it was previously active', () => {
     const labelEl = createElementRef(100, 120);
     const result = UtilFunctions.updateTooltip(true, labelEl);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should keep tooltip inactive when text is not ellipsed and it was already inactive', () => {
     const labelEl = createElementRef(80, 80);
     const result = UtilFunctions.updateTooltip(false, labelEl);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should measure inner element when available (prefers inner over host)', () => {
     const labelEl = createElementRef(80, 120, { inner: { scrollWidth: 150, clientWidth: 100 } });
     const result = UtilFunctions.updateTooltip(false, labelEl);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return previous state when there is no state change needed (ellipsed + already active)', () => {
     const labelEl = createElementRef(300, 100);
     const result = UtilFunctions.updateTooltip(true, labelEl);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return previous state when there is no state change needed (not ellipsed + already inactive)', () => {
     const labelEl = createElementRef(90, 120);
     const result = UtilFunctions.updateTooltip(false, labelEl);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 });
 
@@ -1979,10 +1991,10 @@ describe('density mode: ', () => {
 });
 
 describe('getTextColor:', () => {
-  let getComputedStyleSpy: jasmine.Spy;
+  let getComputedStyleSpy: any;
 
   beforeEach(() => {
-    getComputedStyleSpy = spyOn(window, 'getComputedStyle').and.returnValue({
+    getComputedStyleSpy = vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
       getPropertyValue: (token: string) => {
         const tokens = {
           '--color-neutral-light-00': '#ffffff',
@@ -2049,7 +2061,7 @@ describe('getTextColor:', () => {
 
 describe('getTextColorFromBackgroundColor:', () => {
   beforeEach(() => {
-    spyOn(window, 'getComputedStyle').and.returnValue({
+    vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
       getPropertyValue: (token: string) => {
         const tokens = {
           '--color-neutral-light-00': '#ffffff',

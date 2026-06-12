@@ -38,7 +38,7 @@ describe('PoTableSubtitleCircleComponent:', () => {
 
   describe('Properties:', () => {
     it('subtitle: should call `getColor` if subtitle is defined', () => {
-      spyOn(component['poColorPaletteService'], 'getColor');
+      vi.spyOn(component['poColorPaletteService'] as any, 'getColor');
 
       component.subtitle = subtitle;
 
@@ -46,7 +46,7 @@ describe('PoTableSubtitleCircleComponent:', () => {
     });
 
     it('subtitle: shouldn`t call `getColor` if subtitle is undefined', () => {
-      spyOn(component['poColorPaletteService'], 'getColor');
+      vi.spyOn(component['poColorPaletteService'] as any, 'getColor');
 
       component.subtitle = undefined;
 

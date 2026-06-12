@@ -119,7 +119,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -152,7 +152,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       const fields = [{ property: 'name' }];
       component.fields = [...fields, ...fields];
 
-      spyOn(component, <any>'printError');
+      vi.spyOn(component as any, 'printError');
 
       const visibleFields = component['getVisibleFields']();
 
@@ -177,7 +177,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
         component.fields = [...fields];
 
-        spyOn(component, <any>'printError');
+        vi.spyOn(component as any, 'printError');
 
         const visibleFields = component['getVisibleFields']();
 
@@ -203,7 +203,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
         component.fields = [...fields];
 
-        spyOn(component, <any>'printError');
+        vi.spyOn(component as any, 'printError');
 
         const visibleFields = component['getVisibleFields']();
 
@@ -231,7 +231,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
         component.fields = [...fields];
 
-        spyOn(component, <any>'printError');
+        vi.spyOn(component as any, 'printError');
 
         const visibleFields = component['getVisibleFields']();
 
@@ -242,8 +242,8 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const fields = [{ label: 'name' }];
         component.fields = <any>fields;
 
-        spyOn(PoDynamicUtil, 'isVisibleField');
-        spyOn(component, <any>'printError');
+        vi.spyOn(PoDynamicUtil as any, 'isVisibleField');
+        vi.spyOn(component as any, 'printError');
 
         const visibleFields = component['getVisibleFields']();
 
@@ -274,7 +274,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
     it('convertOptions: shouldn`t call `map` and not convert options to object if optios is a object', () => {
       const options = [{ property: 'po' }, { property: 'angular' }];
 
-      spyOn(options, 'map');
+      vi.spyOn(options as any, 'map');
 
       const convertedOptions = component['convertOptions'](options);
 
@@ -287,10 +287,12 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       object that overrides the values of the same properties.`, () => {
       const field = { property: 'propertyName', label: 'labelName' };
 
-      const spyTitleCasePipeTransform = spyOn(component['titleCasePipe'], 'transform').and.returnValue('propertyName');
-      const spyGetGridColumnsClasses = spyOn(PoDynamicUtil, 'getGridColumnsClasses').and.callThrough();
-      const spyConvertOptions = spyOn(component, <any>'convertOptions').and.callThrough();
-      const spyHasFocus = spyOn(component, <any>'hasFocus');
+      const spyTitleCasePipeTransform = vi
+        .spyOn(component['titleCasePipe'], 'transform')
+        .mockReturnValue('propertyName');
+      const spyGetGridColumnsClasses = vi.spyOn(PoDynamicUtil as any, 'getGridColumnsClasses');
+      const spyConvertOptions = vi.spyOn(component as any, 'convertOptions');
+      const spyHasFocus = vi.spyOn(component as any, 'hasFocus');
 
       const newField = component['createField'](field);
 
@@ -308,10 +310,12 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
       object that overrides the values of the same properties`, () => {
       const field = { property: 'propertyName', label: 'labelName', options: ['Option 1', 'Option 2'] };
 
-      const spyTitleCasePipeTransform = spyOn(component['titleCasePipe'], 'transform').and.returnValue('propertyName');
-      const spyGetGridColumnsClasses = spyOn(PoDynamicUtil, 'getGridColumnsClasses').and.callThrough();
-      const spyConvertOptions = spyOn(component, <any>'convertOptions').and.callThrough();
-      const spyHasFocus = spyOn(component, <any>'hasFocus');
+      const spyTitleCasePipeTransform = vi
+        .spyOn(component['titleCasePipe'], 'transform')
+        .mockReturnValue('propertyName');
+      const spyGetGridColumnsClasses = vi.spyOn(PoDynamicUtil as any, 'getGridColumnsClasses');
+      const spyConvertOptions = vi.spyOn(component as any, 'convertOptions');
+      const spyHasFocus = vi.spyOn(component as any, 'hasFocus');
 
       const newField = component['createField'](field);
 
@@ -395,7 +399,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'number';
         const field = { type: 'number', property: 'code' };
 
-        spyOn(component, <any>'isNumberType').and.returnValue(true);
+        vi.spyOn(component as any, 'isNumberType').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isNumberType']).toHaveBeenCalled();
@@ -405,7 +409,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'input';
         const field = { type: 'number', property: 'code', mask: '99:99:99' };
 
-        spyOn(component, <any>'isNumberType').and.callThrough();
+        vi.spyOn(component as any, 'isNumberType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isNumberType']).toHaveBeenCalled();
@@ -415,7 +419,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'input';
         const field = { type: 'number', property: 'code', mask: '99:99:99' };
 
-        spyOn(component, <any>'isNumberType').and.callThrough();
+        vi.spyOn(component as any, 'isNumberType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isNumberType']).toHaveBeenCalled();
@@ -425,7 +429,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'input';
         const field = { type: 'number', property: 'code', pattern: '99:99:99' };
 
-        spyOn(component, <any>'isNumberType').and.callThrough();
+        vi.spyOn(component as any, 'isNumberType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isNumberType']).toHaveBeenCalled();
@@ -435,7 +439,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'decimal';
         const field = { type: 'decimal', property: 'code' };
 
-        spyOn(component, <any>'isCurrencyType').and.returnValue(true);
+        vi.spyOn(component as any, 'isCurrencyType').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCurrencyType']).toHaveBeenCalled();
@@ -445,7 +449,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'decimal';
         const field = { type: 'decimal', property: 'code' };
 
-        spyOn(component, <any>'isCurrencyType').and.returnValue(true);
+        vi.spyOn(component as any, 'isCurrencyType').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCurrencyType']).toHaveBeenCalled();
@@ -455,7 +459,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'input';
         const field = { type: 'currency', property: 'code', mask: '99:99:99' };
 
-        spyOn(component, <any>'isCurrencyType').and.callThrough();
+        vi.spyOn(component as any, 'isCurrencyType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCurrencyType']).toHaveBeenCalled();
@@ -465,7 +469,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'decimal';
         const field = { type: 'decimal', property: 'code', pattern: '99:99:99' };
 
-        spyOn(component, <any>'isCurrencyType').and.callThrough();
+        vi.spyOn(component as any, 'isCurrencyType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCurrencyType']).toHaveBeenCalled();
@@ -475,7 +479,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'decimal';
         const field = { type: 'decimal', property: 'code', mask: '99:99:99' };
 
-        spyOn(component, <any>'isCurrencyType').and.callThrough();
+        vi.spyOn(component as any, 'isCurrencyType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCurrencyType']).toHaveBeenCalled();
@@ -485,7 +489,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'input';
         const field = { type: 'currency', property: 'code', pattern: '99:99:99' };
 
-        spyOn(component, <any>'isCurrencyType').and.callThrough();
+        vi.spyOn(component as any, 'isCurrencyType');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCurrencyType']).toHaveBeenCalled();
@@ -495,8 +499,8 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'select';
         const field = { options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'], property: 'code' };
 
-        spyOn(component, <any>'isSelect').and.callThrough();
-        spyOn(component, <any>'isRadioGroup');
+        vi.spyOn(component as any, 'isSelect');
+        vi.spyOn(component as any, 'isRadioGroup');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isSelect']).toHaveBeenCalled();
@@ -507,7 +511,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'radioGroup';
         const field = { options: ['Option 1', 'Option 2'], property: 'code' };
 
-        spyOn(component, <any>'isRadioGroup').and.returnValue(true);
+        vi.spyOn(component as any, 'isRadioGroup').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isRadioGroup']).toHaveBeenCalled();
@@ -518,8 +522,8 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'checkboxGroup';
         const field = { optionsMulti: true, options: ['Option 1', 'Option 2', 'Option 3'], property: 'codes' };
 
-        const spyIsCheckboxGroup = spyOn(component, <any>'isCheckboxGroup').and.callThrough();
-        const spyIsMultiselect = spyOn(component, <any>'isMultiselect').and.callThrough();
+        const spyIsCheckboxGroup = vi.spyOn(component as any, 'isCheckboxGroup');
+        const spyIsMultiselect = vi.spyOn(component as any, 'isMultiselect');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(spyIsCheckboxGroup).toHaveBeenCalled();
@@ -534,7 +538,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
           property: 'codes'
         };
 
-        const spyIsMultiselect = spyOn(component, <any>'isMultiselect').and.callThrough();
+        const spyIsMultiselect = vi.spyOn(component as any, 'isMultiselect');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(spyIsMultiselect).toHaveBeenCalled();
@@ -544,7 +548,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'switch';
         const field = { type: 'boolean', property: 'code' };
 
-        spyOn(component, <any>'compareTo').and.callThrough();
+        vi.spyOn(component as any, 'compareTo');
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Boolean);
       });
@@ -553,7 +557,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'datepicker';
         const field = { type: 'date', property: 'code' };
 
-        spyOn(component, <any>'compareTo').and.callThrough();
+        vi.spyOn(component as any, 'compareTo');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Date);
@@ -563,7 +567,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'datepickerrange';
         const field = { type: 'date', property: 'code', range: true };
 
-        spyOn(component, <any>'compareTo').and.callThrough();
+        vi.spyOn(component as any, 'compareTo');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Date);
@@ -573,7 +577,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'datetimepicker';
         const field = { type: 'dateTime', property: 'code' };
 
-        spyOn(component, <any>'compareTo').and.callThrough();
+        vi.spyOn(component as any, 'compareTo');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith('datetime', PoDynamicFieldType.DateTime);
@@ -583,7 +587,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'datetimepicker';
         const field = { type: 'dateTime', property: 'code', range: true };
 
-        spyOn(component, <any>'compareTo').and.callThrough();
+        vi.spyOn(component as any, 'compareTo');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith('datetime', PoDynamicFieldType.DateTime);
@@ -593,7 +597,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'timepicker';
         const field = <any>{ type: 'time', property: 'code' };
 
-        spyOn(component, <any>'compareTo').and.callThrough();
+        vi.spyOn(component as any, 'compareTo');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['compareTo']).toHaveBeenCalledWith(field.type, PoDynamicFieldType.Time);
@@ -603,7 +607,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'combo';
         const field = { optionService: 'http://api.example/1', property: 'code' };
 
-        spyOn(component, <any>'isCombo').and.returnValue(true);
+        vi.spyOn(component as any, 'isCombo').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCombo']).toHaveBeenCalledWith(field);
@@ -617,7 +621,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         };
         const field = { optionService: mockService, property: 'code' };
 
-        spyOn(component, <any>'isCombo').and.returnValue(true);
+        vi.spyOn(component as any, 'isCombo').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isCombo']).toHaveBeenCalledWith(field);
@@ -627,7 +631,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'lookup';
         const field = { searchService: 'http://api.example/1', property: 'code' };
 
-        spyOn(component, <any>'isLookup').and.returnValue(true);
+        vi.spyOn(component as any, 'isLookup').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isLookup']).toHaveBeenCalledWith(field);
@@ -641,7 +645,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         };
         const field = { searchService: mockService, property: 'code' };
 
-        spyOn(component, <any>'isLookup').and.returnValue(true);
+        vi.spyOn(component as any, 'isLookup').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isLookup']).toHaveBeenCalledWith(field);
@@ -651,7 +655,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'textarea';
         const field = { property: 'property', rows: 5 };
 
-        spyOn(component, <any>'isTextarea').and.returnValue(true);
+        vi.spyOn(component as any, 'isTextarea').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isTextarea']).toHaveBeenCalledWith(field);
@@ -668,7 +672,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'password';
         const field = { property: 'code', secret: true };
 
-        spyOn(component, <any>'isPassword').and.returnValue(true);
+        vi.spyOn(component as any, 'isPassword').mockReturnValue(true);
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isPassword']).toHaveBeenCalledWith(field);
@@ -719,7 +723,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
           ]
         };
 
-        spyOn(component, <any>'verifyForceOptionComponent').and.callThrough();
+        vi.spyOn(component as any, 'verifyForceOptionComponent');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['verifyForceOptionComponent']).toHaveBeenCalled();
@@ -751,7 +755,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
           ]
         };
 
-        spyOn(component, <any>'verifyForceOptionComponent').and.callThrough();
+        vi.spyOn(component as any, 'verifyForceOptionComponent');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['verifyForceOptionComponent']).toHaveBeenCalled();
@@ -761,7 +765,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'upload';
         const field = { type: 'upload', property: 'upload', url: 'http://fakeurl.com' };
 
-        spyOn(component, <any>'isUpload').and.callThrough();
+        vi.spyOn(component as any, 'isUpload');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isUpload']).toHaveBeenCalled();
@@ -771,7 +775,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
         const expectedValue = 'input';
         const field = { type: 'upload', property: 'upload' };
 
-        spyOn(component, <any>'isUpload').and.callThrough();
+        vi.spyOn(component as any, 'isUpload');
 
         expect(component['getComponentControl'](field)).toBe(expectedValue);
         expect(component['isUpload']).toHaveBeenCalled();
@@ -1049,7 +1053,7 @@ describe('PoDynamicFormFieldsBaseComponent:', () => {
 
     it('printError: should call console.error with error message', () => {
       const error = 'error';
-      spyOn(console, 'error');
+      vi.spyOn(console as any, 'error');
 
       component['printError'](error);
 

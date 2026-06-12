@@ -39,8 +39,8 @@ describe('PoTableSubtitleFooterComponent:', () => {
     eventResize.initEvent('resize', false, true);
 
     it('ngAfterViewInit: should call `initializeResizeListener` and `debounceResize`', () => {
-      spyOn(component, <any>'initializeResizeListener');
-      spyOn(component, <any>'debounceResize');
+      vi.spyOn(component as any, 'initializeResizeListener');
+      vi.spyOn(component as any, 'debounceResize');
 
       component.ngAfterViewInit();
 
@@ -49,7 +49,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     it('ngOnDestroy: should call `removeResizeListener`', () => {
-      spyOn(component, <any>'removeResizeListener');
+      vi.spyOn(component as any, 'removeResizeListener');
 
       component.ngOnDestroy();
 
@@ -61,8 +61,8 @@ describe('PoTableSubtitleFooterComponent:', () => {
       and 'isVisible' is 'false'`, () => {
         component['isVisible'] = false;
 
-        spyOn(component, <any>'getContainerSize').and.returnValue(100);
-        spyOn(component, <any>'toggleShowCompleteSubtitle');
+        vi.spyOn(component as any, 'getContainerSize').mockReturnValue(100);
+        vi.spyOn(component as any, 'toggleShowCompleteSubtitle');
 
         component.ngDoCheck();
 
@@ -73,7 +73,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
       it('shouldn`t call `toggleShowCompleteSubtitle` if `isVisible` is `true`', () => {
         component['isVisible'] = true;
 
-        spyOn(component, <any>'toggleShowCompleteSubtitle');
+        vi.spyOn(component as any, 'toggleShowCompleteSubtitle');
 
         component.ngDoCheck();
 
@@ -83,8 +83,8 @@ describe('PoTableSubtitleFooterComponent:', () => {
       it('shouldn`t call `toggleShowCompleteSubtitle` if `getContainerSize` returns 0', () => {
         component['isVisible'] = false;
 
-        spyOn(component, <any>'getContainerSize').and.returnValue(0);
-        spyOn(component, <any>'toggleShowCompleteSubtitle');
+        vi.spyOn(component as any, 'getContainerSize').mockReturnValue(0);
+        vi.spyOn(component as any, 'toggleShowCompleteSubtitle');
 
         component.ngDoCheck();
 
@@ -93,7 +93,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     it('debounceResize: should call `toggleShowCompleteSubtitle`', fakeAsync(() => {
-      spyOn(component, <any>'toggleShowCompleteSubtitle');
+      vi.spyOn(component as any, 'toggleShowCompleteSubtitle');
 
       component['debounceResize']();
 
@@ -128,7 +128,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     it('initializeResizeListener: should call `debounceResize` if window resize.', () => {
-      spyOn(component, <any>'debounceResize');
+      vi.spyOn(component as any, 'debounceResize');
 
       component['initializeResizeListener']();
       window.dispatchEvent(eventResize);
@@ -137,7 +137,7 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     it('removeResizeListener: should call `resizeListener`', () => {
-      spyOn(component, <any>'resizeListener');
+      vi.spyOn(component as any, 'resizeListener');
 
       component['removeResizeListener']();
 
@@ -145,8 +145,8 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     it('toggleShowCompleteSubtitle: should set `showSubtitle` to `true` if `getItemsSize` is greater than `getContainerSize`.', () => {
-      spyOn(component, <any>'getContainerSize').and.returnValue(10);
-      spyOn(component, <any>'getItemsSize').and.returnValue(20);
+      vi.spyOn(component as any, 'getContainerSize').mockReturnValue(10);
+      vi.spyOn(component as any, 'getItemsSize').mockReturnValue(20);
 
       component['toggleShowCompleteSubtitle']();
 
@@ -154,8 +154,8 @@ describe('PoTableSubtitleFooterComponent:', () => {
     });
 
     it('toggleShowCompleteSubtitle: should set `showSubtitle` to `false` if `getItemsSize` is less than `getContainerSize`.', () => {
-      spyOn(component, <any>'getContainerSize').and.returnValue(10);
-      spyOn(component, <any>'getItemsSize').and.returnValue(8);
+      vi.spyOn(component as any, 'getContainerSize').mockReturnValue(10);
+      vi.spyOn(component as any, 'getItemsSize').mockReturnValue(8);
 
       component['toggleShowCompleteSubtitle']();
 

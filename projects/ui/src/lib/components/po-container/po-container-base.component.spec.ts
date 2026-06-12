@@ -17,7 +17,7 @@ describe('PoContainerBaseComponent:', () => {
     });
 
     it('p-height: should update property with `undefined` if values are invalid.', () => {
-      component.height = <any>'one';
+      (component as any).height = 'one';
       expect(component.height).toBeUndefined();
 
       component.height = <any>false;

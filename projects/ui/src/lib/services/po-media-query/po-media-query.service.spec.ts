@@ -142,10 +142,10 @@ describe('PoMediaQueryService:', () => {
       };
 
       const dynamicSheet = {
-        insertRule: jasmine.createSpy('insertRule')
+        insertRule: vi.fn()
       } as unknown as CSSStyleSheet;
 
-      spyOn<any>(service, 'buildMediaQuery').and.returnValue('(min-width: 1026px)');
+      vi.spyOn(service as any, 'buildMediaQuery').mockReturnValue('(min-width: 1026px)');
 
       service['updateTokensMediaRule'](mediaRule, tokens, dynamicSheet);
 
@@ -173,21 +173,21 @@ describe('PoMediaQueryService:', () => {
         expect(insertedRule.media.mediaText).toBe(mediaQuery);
         expect(actualCssText).toBe(expectedCssText);
 
-        spyOn<any>(service, 'updateTokensMediaRule').and.callThrough();
+        vi.spyOn(service as any, 'updateTokensMediaRule');
         service.updateTokens(tokens);
 
         expect(service['updateTokensMediaRule']).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            media: jasmine.objectContaining({
+          expect.objectContaining({
+            media: expect.objectContaining({
               mediaText: '(min-width: var(--gridSystemMdMinWidth)) and (max-width: var(--gridSystemMdMaxWidth))'
             }),
-            cssText: jasmine.any(String)
+            cssText: expect.any(String)
           }),
           tokens,
           styleSheet
         );
       } else {
-        fail('The rule entered is not a MediaRule');
+        throw new Error('The rule entered is not a MediaRule');
       }
     });
 
@@ -197,7 +197,7 @@ describe('PoMediaQueryService:', () => {
         cssRules: undefined
       } as unknown as CSSStyleSheet;
 
-      const consoleWarnSpy = spyOn(console, 'warn');
+      const consoleWarnSpy = vi.spyOn(console as any, 'warn');
       const tokensMock: PoMediaQueryTokens = {};
 
       service['processStyleSheet'](styleSheetMock, tokensMock, styleSheet);
@@ -215,7 +215,7 @@ describe('PoMediaQueryService:', () => {
         writable: true
       });
 
-      const spyConsoleError = spyOn(console, 'error');
+      const spyConsoleError = vi.spyOn(console as any, 'error');
 
       (service as any).updateTokensMediaRule(mockMediaRule, mockTokens, null);
 

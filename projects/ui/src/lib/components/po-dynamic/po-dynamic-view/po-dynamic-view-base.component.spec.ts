@@ -219,7 +219,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -231,7 +231,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('should call `isVisibleField` and return an configured array', () => {
         component.fields = [{ property: 'name' }, { property: 'age' }];
 
-        spyOn(PoDynamicUtil, <any>'isVisibleField').and.returnValue(true);
+        vi.spyOn(PoDynamicUtil as any, 'isVisibleField').mockReturnValue(true);
 
         const configuredFields = component['getConfiguredFields']();
 
@@ -242,7 +242,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('shouldn`t call `createField` if method `isVisibleField` return false and return empty array', () => {
         component.fields = [{ property: 'name', visible: false }];
 
-        spyOn(component, <any>'createField');
+        vi.spyOn(component as any, 'createField');
 
         const configuredFields = component['getConfiguredFields']();
 
@@ -335,8 +335,8 @@ describe('PoDynamicViewBaseComponent:', () => {
             { property: 'test 5', order: 4 }
           ];
           component.value[fields[1].property] = '123';
-          spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
-          spyOn(component, <any>'searchById').and.returnValue(of([{ id: 1, name: 'po' }]));
+          vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of([{ id: 1, name: 'po' }]));
+          vi.spyOn(component as any, 'searchById').mockReturnValue(of([{ id: 1, name: 'po' }]));
 
           const expectedFields = [
             { property: 'test 3' },
@@ -371,7 +371,7 @@ describe('PoDynamicViewBaseComponent:', () => {
           component.value[fields[2].property] = [{ test: 123 }];
           component.value[fields[3].property] = { test: 123 };
 
-          spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
+          vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of([{ id: 1, name: 'po' }]));
 
           const expectedFields = [
             { property: 'test 1', value: undefined },
@@ -406,7 +406,7 @@ describe('PoDynamicViewBaseComponent:', () => {
           component.value[fields[2].property] = [{ test: 123 }];
           component.value[fields[3].property] = { test: 123 };
 
-          spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
+          vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of([{ id: 1, name: 'po' }]));
 
           const expectedFields = [
             { property: 'test 1', value: undefined },
@@ -447,7 +447,7 @@ describe('PoDynamicViewBaseComponent:', () => {
           component.value[fields[2].property] = [{ test: 123 }];
           component.value[fields[3].property] = { test: 123 };
 
-          spyOn(component.service, 'getObjectsByValues').and.returnValue(of([{ id: 1, name: 'po' }]));
+          vi.spyOn(component.service as any, 'getObjectsByValues').mockReturnValue(of([{ id: 1, name: 'po' }]));
 
           const expectedFields = [
             { property: 'test 1', value: undefined },
@@ -593,7 +593,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('should process fields with optionsService', () => {
         component.fields = [{ property: 'category', optionsService: 'url.optionsService.com' }];
         component.value = { 'category': '123' };
-        spyOn(component, <any>'createFieldWithService').and.callThrough();
+        vi.spyOn(component as any, 'createFieldWithService');
         const configuredFields = component['getConfiguredFields']();
         expect(component['createFieldWithService']).toHaveBeenCalled();
         expect(configuredFields.length).toBeGreaterThan(0);
@@ -602,7 +602,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('should process fields with optionsMulti', () => {
         component.fields = [{ property: 'tags', optionsMulti: true, optionsService: 'url.optionsMultiService.com' }];
         component.value = { 'tags': ['tag1', 'tag2'] };
-        spyOn(component, <any>'createFieldWithService').and.callThrough();
+        vi.spyOn(component as any, 'createFieldWithService');
         const configuredFields = component['getConfiguredFields']();
         expect(component['createFieldWithService']).toHaveBeenCalled();
         expect(configuredFields.length).toBeGreaterThan(0);
@@ -611,7 +611,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('should not process fields with optionsService when there is no value', () => {
         component.fields = [{ property: 'category', optionsService: 'url.optionsService.com' }];
         component.value = { 'category': null };
-        spyOn(component, <any>'createFieldWithService');
+        vi.spyOn(component as any, 'createFieldWithService');
         const configuredFields = component['getConfiguredFields']();
         expect(component['createFieldWithService']).not.toHaveBeenCalled();
         expect(configuredFields.length).toBe(0);
@@ -620,7 +620,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('should handle fields with empty array values correctly', () => {
         component.fields = [{ property: 'emptyArray', optionsMulti: true }];
         component.value = { 'emptyArray': [] };
-        spyOn(component, <any>'createField');
+        vi.spyOn(component as any, 'createField');
         const configuredFields = component['getConfiguredFields']();
         expect(component['createField']).toHaveBeenCalled();
         expect(configuredFields.length).toBeGreaterThan(0);
@@ -629,14 +629,14 @@ describe('PoDynamicViewBaseComponent:', () => {
       it('should handle fields without defined values correctly', () => {
         component.fields = [{ property: 'undefinedValue' }];
         component.value = {};
-        spyOn(component, <any>'createField');
+        vi.spyOn(component as any, 'createField');
         const configuredFields = component['getConfiguredFields']();
         expect(component['createField']).toHaveBeenCalled();
         expect(configuredFields.length).toBeGreaterThan(0);
       });
 
       it('should call ensureFieldHasContainer', () => {
-        spyOn(component, 'ensureFieldHasContainer').and.callThrough();
+        vi.spyOn(component as any, 'ensureFieldHasContainer');
 
         component['getConfiguredFields']();
 
@@ -655,9 +655,12 @@ describe('PoDynamicViewBaseComponent:', () => {
         ];
         component.value = { empresa: null };
 
-        spyOn(component, <any>'searchById').and.returnValue(of('Test Value'));
-        spyOn(component, <any>'returnValues').and.callFake((field, value) => ({ ...field, value }));
-        spyOn(component, <any>'setContainerFields');
+        vi.spyOn(component as any, 'searchById').mockReturnValue(of('Test Value'));
+        vi.spyOn(component as any, 'returnValues').mockImplementation((field: any, value: any) => ({
+          ...field,
+          value
+        }));
+        vi.spyOn(component as any, 'setContainerFields');
 
         const newFields = [];
         const oldField = { property: 'empresa' };
@@ -679,7 +682,7 @@ describe('PoDynamicViewBaseComponent:', () => {
           component.value[fields[0].property] = '123';
           component.fields = [...fields];
 
-          spyOn(component.service, 'configProperties');
+          vi.spyOn(component.service as any, 'configProperties');
 
           component['getConfiguredFields']();
           tick(500);
@@ -689,13 +692,12 @@ describe('PoDynamicViewBaseComponent:', () => {
       ));
     });
 
-    it('searchById: should return null if value is empty', done => {
+    it('searchById: should return null if value is empty', async () => {
       const value = '';
       const field: any = { property: 'test' };
 
       component['searchById'](value, field).subscribe(result => {
         expect(result).toBeNull(); // Verifique se o resultado é nulo
-        done();
       });
     });
 
@@ -707,7 +709,7 @@ describe('PoDynamicViewBaseComponent:', () => {
       const valueToSearch = '123';
       const expectedResult = 'transformedValue';
 
-      const mockSearchById = spyOn(component, <any>'searchById').and.returnValue(of(expectedResult));
+      const mockSearchById = vi.spyOn(component as any, 'searchById').mockReturnValue(of(expectedResult));
 
       component.value[field.property] = valueToSearch;
       component['createFieldWithService'](field, newFields, index);
@@ -722,8 +724,8 @@ describe('PoDynamicViewBaseComponent:', () => {
       const configuredFields = [{ property: 'name', value: 'po' }];
       const valueFields = [{ property: 'email' }];
 
-      spyOn(component, <any>'getConfiguredFields').and.returnValue(configuredFields);
-      spyOn(component, <any>'getValueFields').and.returnValue(valueFields);
+      vi.spyOn(component as any, 'getConfiguredFields').mockReturnValue(configuredFields);
+      vi.spyOn(component as any, 'getValueFields').mockReturnValue(valueFields);
 
       const mergedFields = component['getMergedFields']();
 
@@ -736,9 +738,9 @@ describe('PoDynamicViewBaseComponent:', () => {
       const configuredFields = [{ property: 'name', value: 'po' }];
       const valueFields = [{ property: 'name' }];
 
-      spyOn(component, <any>'getConfiguredFields').and.returnValue(configuredFields);
-      spyOn(component, <any>'getValueFields').and.returnValue(valueFields);
-      spyOn(component, <any>'createField');
+      vi.spyOn(component as any, 'getConfiguredFields').mockReturnValue(configuredFields);
+      vi.spyOn(component as any, 'getValueFields').mockReturnValue(valueFields);
+      vi.spyOn(component as any, 'createField');
 
       const mergedFields = component['getMergedFields']();
 
@@ -752,8 +754,8 @@ describe('PoDynamicViewBaseComponent:', () => {
     object that overrides the values of the same properties`, () => {
       const field = { property: 'name', label: 'Nome' };
 
-      spyOn(component['titleCasePipe'], 'transform').and.returnValue('Name');
-      spyOn(component, <any>'transformValue');
+      vi.spyOn(component['titleCasePipe'] as any, 'transform').mockReturnValue('Name');
+      vi.spyOn(component as any, 'transformValue');
 
       const newField = component['createField'](field);
 
@@ -871,7 +873,7 @@ describe('PoDynamicViewBaseComponent:', () => {
     it('getValueFields: should return an array converting the value object', () => {
       component.value = { name: 'Po' };
 
-      spyOn(component, <any>'createField');
+      vi.spyOn(component as any, 'createField');
 
       const valueFields = component['getValueFields']();
 
@@ -883,7 +885,7 @@ describe('PoDynamicViewBaseComponent:', () => {
     it('getValueFields: shouldn`t call `createField` and return an empty array if value is an empty object', () => {
       component.value = {};
 
-      spyOn(component, <any>'createField');
+      vi.spyOn(component as any, 'createField');
 
       const valueFields = component['getValueFields']();
 
@@ -898,7 +900,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = 1244.5;
         const format = 'CAD';
 
-        spyOn(component['currencyPipe'], 'transform');
+        vi.spyOn(component['currencyPipe'] as any, 'transform');
 
         component['transformValue'](type, value, format);
 
@@ -910,7 +912,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = 1244.5;
         const defaultFormat = 'BRL';
 
-        spyOn(component['currencyPipe'], 'transform');
+        vi.spyOn(component['currencyPipe'] as any, 'transform');
 
         component['transformValue'](type, value, undefined);
 
@@ -922,7 +924,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = new Date();
         const defaultFormat = 'dd/MM/yyyy';
 
-        spyOn(component['datePipe'], 'transform');
+        vi.spyOn(component['datePipe'] as any, 'transform');
 
         component['transformValue'](type, value, undefined);
 
@@ -934,7 +936,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = new Date();
         const format = 'MM/dd/yyyy';
 
-        spyOn(component['datePipe'], 'transform');
+        vi.spyOn(component['datePipe'] as any, 'transform');
 
         component['transformValue'](type, value, format);
 
@@ -946,7 +948,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = new Date();
         const defaultFormat = 'dd/MM/yyyy HH:mm:ss';
 
-        spyOn(component['datePipe'], 'transform');
+        vi.spyOn(component['datePipe'] as any, 'transform');
 
         component['transformValue'](type, value, undefined);
 
@@ -958,7 +960,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = new Date();
         const format = 'MM/dd/yyyy HH:mm:ss';
 
-        spyOn(component['datePipe'], 'transform');
+        vi.spyOn(component['datePipe'] as any, 'transform');
 
         component['transformValue'](type, value, format);
 
@@ -970,7 +972,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = 150;
         const format = '1.2-2';
 
-        spyOn(component['decimalPipe'], 'transform');
+        vi.spyOn(component['decimalPipe'] as any, 'transform');
 
         component['transformValue'](type, value, format);
 
@@ -982,7 +984,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = '150';
         const defaultFormat = 'HH:mm:ss.ffffff';
 
-        spyOn(component['timePipe'], 'transform');
+        vi.spyOn(component['timePipe'] as any, 'transform');
 
         component['transformValue'](type, value, undefined);
 
@@ -994,7 +996,7 @@ describe('PoDynamicViewBaseComponent:', () => {
         const value = '150';
         const format = 'HH:mm:ss';
 
-        spyOn(component['timePipe'], 'transform');
+        vi.spyOn(component['timePipe'] as any, 'transform');
 
         component['transformValue'](type, value, format);
 
@@ -1005,10 +1007,10 @@ describe('PoDynamicViewBaseComponent:', () => {
         const type = '';
         const value = 150;
 
-        spyOn(component['currencyPipe'], 'transform');
-        spyOn(component['datePipe'], 'transform');
-        spyOn(component['decimalPipe'], 'transform');
-        spyOn(component['timePipe'], 'transform');
+        vi.spyOn(component['currencyPipe'] as any, 'transform');
+        vi.spyOn(component['datePipe'] as any, 'transform');
+        vi.spyOn(component['decimalPipe'] as any, 'transform');
+        vi.spyOn(component['timePipe'] as any, 'transform');
 
         const transformedValue = component['transformValue'](type, value, '');
 

@@ -39,7 +39,7 @@ describe('PoUploadDragDropAreaComponent:', () => {
         }
       };
 
-      spyOn(component.selectFilesLinkElement.nativeElement, 'focus');
+      vi.spyOn(component.selectFilesLinkElement.nativeElement, 'focus');
 
       component.focus();
 

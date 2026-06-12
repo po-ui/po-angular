@@ -25,11 +25,9 @@ describe('PoMultiSelectFilterService ', () => {
     httpMock.verify();
   });
 
-  it('should return all items if param is empty', done => {
+  it('should return all items if param is empty', async () => {
     multiSelectService.getFilteredData({}).subscribe(response => {
       expect(response.length).toBe(2);
-
-      done();
     });
 
     httpMock
@@ -42,23 +40,19 @@ describe('PoMultiSelectFilterService ', () => {
       });
   });
 
-  it('should not return any filtered data', done => {
+  it('should not return any filtered data', async () => {
     multiSelectService.getFilteredData({ property: 'test' }).subscribe(response => {
       expect(response.length).toBe(0);
       expect(response['items']).toBeUndefined();
-
-      done();
     });
 
     httpMock.expectOne((req: HttpRequest<any>) => req.url === mockURL && req.method === 'GET').flush({ items: [] });
   });
 
-  it('should return only filtered data ', done => {
+  it('should return only filtered data ', async () => {
     const param = { property: 'label', value: 'angular' };
     multiSelectService.getFilteredData(param).subscribe(response => {
       expect(response.length).toBe(1);
-
-      done();
     });
 
     httpMock
@@ -66,14 +60,12 @@ describe('PoMultiSelectFilterService ', () => {
       .flush({ items: [{ label: 'Angular', value: 'angular' }] });
   });
 
-  it('should return the object converted to PoMultiSelectOption', done => {
+  it('should return the object converted to PoMultiSelectOption', async () => {
     const value = ['angular'];
 
     multiSelectService.getObjectsByValues(value).subscribe(object => {
       expect('label' in object[0]).toBeTruthy();
       expect('value' in object[0]).toBeTruthy();
-
-      done();
     });
 
     httpMock
@@ -85,18 +77,17 @@ describe('PoMultiSelectFilterService ', () => {
     expect(multiSelectService['parseToArrayMultiselectOptions'](null)).toEqual([]);
   });
 
-  it('Should add filter params and return value', done => {
+  it('Should add filter params and return value', async () => {
     const filteredObject = { label: 'angular', value: 'angular' };
     const expectResponse = [{ label: 'angular', value: 'angular' }];
     const param = ['angular', 'components'];
     const urlWithParams = 'http://mockurl.com/?value=angular,components';
 
-    spyOn(multiSelectService, <any>'parseToMultiselectOption').and.returnValue(filteredObject);
-    spyOnProperty(multiSelectService, 'url', 'get').and.returnValue('http://mockurl.com/');
+    vi.spyOn(multiSelectService as any, 'parseToMultiselectOption').mockReturnValue(filteredObject);
+    vi.spyOn(multiSelectService, 'url', 'get').mockReturnValue('http://mockurl.com/');
 
     multiSelectService.getObjectsByValues(param).subscribe(response => {
       expect(response).toEqual(expectResponse);
-      done();
     });
 
     httpMock.expectOne((req: HttpRequest<any>) => req.urlWithParams === urlWithParams).flush({ items: [{}] });

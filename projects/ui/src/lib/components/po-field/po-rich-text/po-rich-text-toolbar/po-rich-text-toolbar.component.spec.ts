@@ -36,7 +36,7 @@ describe('PoRichTextToolbarComponent:', () => {
 
   describe('Properties:', () => {
     it('readonly: should call toggleDisableButtons', () => {
-      spyOn(component, <any>'toggleDisableButtons');
+      vi.spyOn(component as any, 'toggleDisableButtons');
 
       component.readonly = true;
 
@@ -44,14 +44,14 @@ describe('PoRichTextToolbarComponent:', () => {
     });
 
     it('isInternetExplorer: should call isIE', () => {
-      const spyIsIE = spyOn(UtilsFunction, 'isIE');
+      const spyIsIE = vi.spyOn(UtilsFunction as any, 'isIE');
 
       expect(component.isInternetExplorer).toBeFalsy();
       expect(spyIsIE).toHaveBeenCalled();
     });
 
     it('mediaButtons: should call richTextImageModal.openModal', () => {
-      spyOn(component.richTextImageModal, <any>'openModal');
+      vi.spyOn(component.richTextImageModal as any, 'openModal');
       component.mediaButtons[0].action();
 
       expect(component.richTextImageModal.openModal).toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe('PoRichTextToolbarComponent:', () => {
     it('linkButtons: should call richTextLinkModal.openModal', () => {
       component['selectedLinkElement'] = undefined;
 
-      spyOn(component.richTextLinkModal, 'openModal');
+      vi.spyOn(component.richTextLinkModal as any, 'openModal');
 
       component.linkButtons[0].action();
 
@@ -108,20 +108,20 @@ describe('PoRichTextToolbarComponent:', () => {
     it('disabled: should set `disabled` property to true', () => {
       component.disabled = true;
 
-      expect(component.disabled).toBeTrue();
+      expect(component.disabled).toBe(true);
     });
 
     it('disabled: should set `disabled` property to false', () => {
       component.disabled = false;
 
-      expect(component.disabled).toBeFalse();
+      expect(component.disabled).toBe(false);
     });
   });
 
   describe('Methods:', () => {
     it('ngAfterViewInit: should call removeButtonFocus and setColorInColorPicker', () => {
-      const spyOnRemoveButtonFocus = spyOn(component, <any>'removeButtonFocus');
-      const spyOnSetColorInColorPicker = spyOn(component, <any>'setColorInColorPicker');
+      const spyOnRemoveButtonFocus = vi.spyOn(component as any, 'removeButtonFocus');
+      const spyOnSetColorInColorPicker = vi.spyOn(component as any, 'setColorInColorPicker');
 
       component.ngAfterViewInit();
 
@@ -183,7 +183,7 @@ describe('PoRichTextToolbarComponent:', () => {
 
       it(`should call 'setColorInColorPicker' if 'readonly' is 'false'.`, () => {
         component.readonly = false;
-        const spyOnSetColorInColorPicker = spyOn(component, <any>'setColorInColorPicker');
+        const spyOnSetColorInColorPicker = vi.spyOn(component as any, 'setColorInColorPicker');
 
         component.setButtonsStates({ commands, hexColor });
 
@@ -194,7 +194,7 @@ describe('PoRichTextToolbarComponent:', () => {
     it('emitLinkEditing: should emit linkEditing', () => {
       const isLinkEdit = false;
 
-      spyOn(component.linkEditing, 'emit');
+      vi.spyOn(component.linkEditing as any, 'emit');
 
       component.emitLinkEditing(isLinkEdit);
 
@@ -208,7 +208,7 @@ describe('PoRichTextToolbarComponent:', () => {
     });
 
     it('emitAlignCommand: should emit command', () => {
-      spyOn(component.command, 'emit');
+      vi.spyOn(component.command as any, 'emit');
 
       component['emitAlignCommand']('justifyleft');
 
@@ -232,7 +232,7 @@ describe('PoRichTextToolbarComponent:', () => {
     });
 
     it('emitCommand: should emit command', () => {
-      spyOn(component.command, 'emit');
+      vi.spyOn(component.command as any, 'emit');
 
       component.emitCommand('justifyleft');
 
@@ -279,7 +279,7 @@ describe('PoRichTextToolbarComponent:', () => {
     });
 
     it(`changeTextColor: should call 'command.emit'.`, () => {
-      const spyOnEmit = spyOn(component.command, 'emit');
+      const spyOnEmit = vi.spyOn(component.command as any, 'emit');
       const command = 'foreColor';
       const value = '#000000';
 
@@ -300,7 +300,7 @@ describe('PoRichTextToolbarComponent:', () => {
     it('shortcutTrigger: should call `richTextLinkModal.openModal`', () => {
       component['selectedLinkElement'] = undefined;
 
-      spyOn(component.richTextLinkModal, <any>'openModal');
+      vi.spyOn(component.richTextLinkModal as any, 'openModal');
 
       component.shortcutTrigger();
 
@@ -311,13 +311,13 @@ describe('PoRichTextToolbarComponent:', () => {
       it('should return true if the action is hidden', () => {
         component.hideToolbarActions = [PoRichTextToolbarActions.Color];
 
-        expect(component.isActionHidden(PoRichTextToolbarActions.Color)).toBeTrue();
+        expect(component.isActionHidden(PoRichTextToolbarActions.Color)).toBe(true);
       });
 
       it('should return false if the action is not hidden', () => {
         component.hideToolbarActions = [PoRichTextToolbarActions.Align];
 
-        expect(component.isActionHidden(PoRichTextToolbarActions.Color)).toBeFalse();
+        expect(component.isActionHidden(PoRichTextToolbarActions.Color)).toBe(false);
       });
     });
   });
@@ -402,7 +402,7 @@ describe('PoRichTextToolbarComponent:', () => {
       fixture.detectChanges();
 
       const toolbar = nativeElement.querySelector('.po-rich-text-toolbar');
-      expect(toolbar.classList.contains('po-rich-text-disabled')).toBeTrue();
+      expect(toolbar.classList.contains('po-rich-text-disabled')).toBe(true);
     });
 
     it('should not add `po-rich-text-disabled` class to toolbar when `disabled` is false', () => {
@@ -410,7 +410,7 @@ describe('PoRichTextToolbarComponent:', () => {
       fixture.detectChanges();
 
       const toolbar = nativeElement.querySelector('.po-rich-text-toolbar');
-      expect(toolbar.classList.contains('po-rich-text-disabled')).toBeFalse();
+      expect(toolbar.classList.contains('po-rich-text-disabled')).toBe(false);
     });
   });
 });

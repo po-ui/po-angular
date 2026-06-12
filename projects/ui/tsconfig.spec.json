@@ -2,12 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": ["jasmine", "node"],
+    "types": ["vitest/globals", "node"],
     "skipLibCheck": true
   },
-  "files": ["src/test.ts"],
+  "files": ["src/test.ts", "src/test-providers.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts", "src/lib/util-test/util-setup.ts"],
-  "exclude": ["schematics/**/*.spec.ts", "**/*.d.ts"],
+  "exclude": ["schematics/**/*.spec.ts"],
   "angularCompilerOptions": {
     "strictTemplates": false,
     "compilationMode": "experimental-local"

@@ -29,7 +29,7 @@ describe('PoMultiselectSearchComponent:', () => {
   });
 
   it('should emit onChange', () => {
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
     component.initUp = true;
     component.initDown = true;
     component.onChange({ key: 'Tab', preventDefault: () => {} });
@@ -55,7 +55,7 @@ describe('PoMultiselectSearchComponent:', () => {
   });
 
   it('should set focus on input', () => {
-    spyOn(component.inputElement.nativeElement, 'focus');
+    vi.spyOn(component.inputElement.nativeElement, 'focus');
 
     component.setFocus();
 

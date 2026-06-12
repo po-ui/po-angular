@@ -29,7 +29,7 @@ describe('PoStepComponent:', () => {
 
   describe('Properties:', () => {
     it('status: should call `setDisplayOnActiveOrError`', () => {
-      spyOn(component, <any>'setDisplayOnActiveOrError');
+      vi.spyOn(component as any, 'setDisplayOnActiveOrError');
 
       component.status = PoStepperStatus.Active;
 
@@ -39,7 +39,7 @@ describe('PoStepComponent:', () => {
 
   describe('Methods:', () => {
     it('ngAfterContentInit: should call `setDisplayOnActiveOrError`', () => {
-      spyOn(component, <any>'setDisplayOnActiveOrError');
+      vi.spyOn(component as any, 'setDisplayOnActiveOrError');
 
       component.ngAfterContentInit();
 

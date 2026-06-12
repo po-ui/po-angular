@@ -88,7 +88,7 @@ describe('PoDisclaimerGroupComponent:', () => {
     const changes: any = {
       disclaimers: ['test']
     };
-    spyOn(component, 'handleKeyboardNavigationTag');
+    vi.spyOn(component as any, 'handleKeyboardNavigationTag');
 
     component.ngOnChanges(changes);
     tick();
@@ -97,8 +97,8 @@ describe('PoDisclaimerGroupComponent:', () => {
   }));
 
   it('onCloseAction: should remove disclaimer and emit current disclaimers', fakeAsync(() => {
-    spyOn(component.change, <any>'emit');
-    spyOn(component, <any>'focusOnNextTag');
+    vi.spyOn(component.change as any, 'emit');
+    vi.spyOn(component as any, 'focusOnNextTag');
 
     const disclaimerToRemove = { value: 'north', label: 'Region', property: 'region', hideClose: false };
     const currentDisclaimers = [component.disclaimers[0], component.disclaimers[1]];
@@ -116,7 +116,7 @@ describe('PoDisclaimerGroupComponent:', () => {
   }));
 
   it('onCloseAction: should emit removedDisclaimer and currentDisclaimers in remove action', () => {
-    spyOn(component.remove, <any>'emit');
+    vi.spyOn(component.remove as any, 'emit');
 
     const removedDisclaimer = { value: 'north', label: 'Region', property: 'region', hideClose: false };
     const currentDisclaimers = [component.disclaimers[0], component.disclaimers[1]];
@@ -130,8 +130,8 @@ describe('PoDisclaimerGroupComponent:', () => {
   it('should handleKeyDown correctly for Space key', () => {
     const event = new KeyboardEvent('keydown', { code: 'Space' });
 
-    spyOn(event, 'preventDefault');
-    spyOn(event, 'stopPropagation');
+    vi.spyOn(event as any, 'preventDefault');
+    vi.spyOn(event as any, 'stopPropagation');
 
     component['handleKeyDown'](event, [], 0);
 
@@ -141,7 +141,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
   it('should handleKeyDown correctly for ArrowLeft key', () => {
     const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-    spyOn(component as any, 'handleArrowLeft');
+    vi.spyOn(component as any, 'handleArrowLeft');
 
     component['handleKeyDown'](event, [], 0);
 
@@ -150,7 +150,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
   it('should handleKeyDown correctly for ArrowRight key', () => {
     const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-    spyOn(component as any, 'handleArrowRight');
+    vi.spyOn(component as any, 'handleArrowRight');
 
     component['handleKeyDown'](event, [], 0);
 
@@ -166,8 +166,8 @@ describe('PoDisclaimerGroupComponent:', () => {
 
     const indexArrow = 1;
 
-    spyOn(component, 'setTabIndex' as any);
-    spyOn(tagRemoveElements[indexArrow + 1], 'focus');
+    vi.spyOn(component, 'setTabIndex' as any);
+    vi.spyOn(tagRemoveElements[indexArrow + 1], 'focus');
 
     component['handleArrowRight'](tagRemoveElements, indexArrow);
 
@@ -185,8 +185,8 @@ describe('PoDisclaimerGroupComponent:', () => {
 
     const indexArrow = 1;
 
-    spyOn(component, 'setTabIndex' as any);
-    spyOn(tagRemoveElements[indexArrow - 1], 'focus');
+    vi.spyOn(component, 'setTabIndex' as any);
+    vi.spyOn(tagRemoveElements[indexArrow - 1], 'focus');
 
     component['handleArrowLeft'](tagRemoveElements, indexArrow);
 
@@ -202,7 +202,7 @@ describe('PoDisclaimerGroupComponent:', () => {
       document.createElement('div')
     ];
     const indexClosed = 3;
-    spyOn(tagRemoveElements[indexClosed - 1], 'focus');
+    vi.spyOn(tagRemoveElements[indexClosed - 1], 'focus');
 
     component['focusOnRemoveTag'](tagRemoveElements, indexClosed);
 
@@ -216,7 +216,7 @@ describe('PoDisclaimerGroupComponent:', () => {
       document.createElement('div')
     ];
     const indexClosed = 1;
-    spyOn(tagRemoveElements[indexClosed], 'focus');
+    vi.spyOn(tagRemoveElements[indexClosed], 'focus');
 
     component['focusOnRemoveTag'](tagRemoveElements, indexClosed);
 
@@ -232,7 +232,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
     const initialIndex = 3;
 
-    spyOn(component, 'setTabIndex' as any);
+    vi.spyOn(component, 'setTabIndex' as any);
 
     component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -244,8 +244,8 @@ describe('PoDisclaimerGroupComponent:', () => {
     const initialIndex = 0;
     const fakeKeyboardEvent = new KeyboardEvent('keydown');
 
-    spyOn(component as any, 'setTabIndex');
-    spyOn(component as any, 'handleKeyDown');
+    vi.spyOn(component as any, 'setTabIndex');
+    vi.spyOn(component as any, 'handleKeyDown');
 
     component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -260,7 +260,7 @@ describe('PoDisclaimerGroupComponent:', () => {
     const tagRemoveElements = [document.createElement('div'), document.createElement('div')];
     const initialIndex = 0;
 
-    spyOn(component as any, 'setTabIndex');
+    vi.spyOn(component as any, 'setTabIndex');
 
     component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -275,7 +275,7 @@ describe('PoDisclaimerGroupComponent:', () => {
     const tagRemoveElements = [document.createElement('div'), document.createElement('div')];
     const initialIndex = 1;
 
-    spyOn(component as any, 'setTabIndex');
+    vi.spyOn(component as any, 'setTabIndex');
 
     component['initializeTagRemoveElements'](tagRemoveElements, initialIndex);
 
@@ -290,7 +290,7 @@ describe('PoDisclaimerGroupComponent:', () => {
       <div class="po-tag-remove"></div>
     `;
 
-    spyOn(component, <any>'focusOnRemoveTag');
+    vi.spyOn(component as any, 'focusOnRemoveTag');
 
     component['focusOnNextTag'](0, 'enter');
 
@@ -305,7 +305,7 @@ describe('PoDisclaimerGroupComponent:', () => {
       <div class="po-tag-remove"></div>
     `;
 
-    spyOn(component, <any>'focusOnRemoveTag');
+    vi.spyOn(component as any, 'focusOnRemoveTag');
 
     component['focusOnNextTag'](null, 'enter');
 
@@ -322,7 +322,7 @@ describe('PoDisclaimerGroupComponent:', () => {
 
     document.body.appendChild(tagsFake);
 
-    spyOn(component as any, 'handleKeyboardNavigationTag');
+    vi.spyOn(component as any, 'handleKeyboardNavigationTag');
 
     component['focusOnNextTag'](null, 'click');
 

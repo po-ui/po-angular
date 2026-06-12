@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { Directive, Injector, SimpleChanges } from '@angular/core';
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { NgControl, UntypedFormControl } from '@angular/forms';
@@ -42,7 +43,7 @@ describe('PoLookupBaseComponent:', () => {
   let injector: Injector;
   let languageService: PoLanguageService;
   let poLookupModalService: PoLookupModalService;
-  let spyService: jasmine.Spy;
+  let spyService: any;
 
   const fakeSubscription = <any>{ unsubscribe: () => {} };
 
@@ -54,7 +55,7 @@ describe('PoLookupBaseComponent:', () => {
 
     defaultService = new PoLookupFilterService(undefined);
     languageService = TestBed.inject(PoLanguageService);
-    spyService = spyOn(languageService, 'getShortLanguage').and.returnValue('pt');
+    spyService = vi.spyOn(languageService as any, 'getShortLanguage').mockReturnValue('pt');
     injector = TestBed.inject(Injector);
     poLookupModalService = TestBed.inject(PoLookupModalService);
     component = TestBed.runInInjectionContext(
@@ -221,8 +222,8 @@ describe('PoLookupBaseComponent:', () => {
     const objectSelected = { value: 123, label: 'test label' };
     component.fieldValue = 'value';
 
-    spyOn(component.selected, 'emit');
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component.selected as any, 'emit');
+    vi.spyOn(component as any, 'callOnChange');
 
     component.selectValue(objectSelected);
 
@@ -235,8 +236,8 @@ describe('PoLookupBaseComponent:', () => {
     component.fieldValue = 'value';
     component.multiple = true;
 
-    spyOn(component.selected, 'emit');
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component.selected as any, 'emit');
+    vi.spyOn(component as any, 'callOnChange');
 
     component.selectValue(objectSelected);
 
@@ -248,7 +249,7 @@ describe('PoLookupBaseComponent:', () => {
     component.fieldValue = 'value';
     component.multiple = false;
 
-    spyOn(component, 'callOnChange');
+    vi.spyOn(component as any, 'callOnChange');
 
     component.selectValue(undefined);
 
@@ -256,7 +257,7 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   it('should be called the onChangePropated event', () => {
-    spyOn(component, <any>'onChangePropagate');
+    vi.spyOn(component as any, 'onChangePropagate');
 
     component.callOnChange('value');
 
@@ -271,7 +272,7 @@ describe('PoLookupBaseComponent:', () => {
       }
     };
 
-    spyOn<any>(component, 'onChangePropagate');
+    vi.spyOn(component as any, 'onChangePropagate');
 
     component.callOnChange.call(fakeThis, '123');
 
@@ -297,14 +298,14 @@ describe('PoLookupBaseComponent:', () => {
     const objectSelected = { value: 1495832652942, label: 'Kakaroto' };
     component.fieldValue = 'value';
 
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
 
     component.selectValue(objectSelected);
     expect(component.change.emit).toHaveBeenCalledWith(1495832652942);
   });
 
   it('callOnChange: should call `updateLookupInputHeight` when `autoHeight` is true', fakeAsync(() => {
-    spyOn(component as any, 'updateLookupInputHeight');
+    vi.spyOn(component as any, 'updateLookupInputHeight');
     (component as any).autoHeight = true;
 
     component.callOnChange('value');
@@ -314,7 +315,7 @@ describe('PoLookupBaseComponent:', () => {
   }));
 
   it('callOnChange: should not call `updateLookupInputHeight` when `autoHeight` is false', fakeAsync(() => {
-    spyOn(component as any, 'updateLookupInputHeight');
+    vi.spyOn(component as any, 'updateLookupInputHeight');
     (component as any).autoHeight = false;
 
     component.callOnChange('value');
@@ -324,7 +325,7 @@ describe('PoLookupBaseComponent:', () => {
   }));
 
   it('call initialize columns in the ngOnInit method', () => {
-    spyOn(component, <any>'initializeColumn');
+    vi.spyOn(component as any, 'initializeColumn');
 
     component.ngOnInit();
 
@@ -333,7 +334,7 @@ describe('PoLookupBaseComponent:', () => {
 
   describe('ngAfterViewInit', () => {
     it('not inject control the ngAfterViewInit method if is not in a Form', () => {
-      spyOn(component['injector'], <any>'get').and.returnValue(undefined);
+      vi.spyOn(component['injector'] as any, 'get').mockReturnValue(undefined);
       component.ngAfterViewInit();
 
       expect(component['control']).toBeUndefined();
@@ -341,7 +342,7 @@ describe('PoLookupBaseComponent:', () => {
 
     it('inject control the ngAfterViewInit method ', () => {
       const returnObj = { control: { markAsPending: () => {} } } as NgControl;
-      spyOn(component['injector'], <any>'get').and.returnValue(returnObj);
+      vi.spyOn(component['injector'] as any, 'get').mockReturnValue(returnObj);
 
       component.ngAfterViewInit();
 
@@ -350,7 +351,7 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   it('ngOnChanges: should call defaultService.setConfig if is multiple and filterService is string', () => {
-    spyOn<any>(component['defaultService'], 'setConfig');
+    vi.spyOn(component['defaultService'] as any, 'setConfig');
     component.multiple = true;
     component.fieldValue = 'value';
     component.filterService = 'http://url.com';
@@ -397,7 +398,7 @@ describe('PoLookupBaseComponent:', () => {
       }
     };
 
-    spyOn(component['defaultService'], 'setConfig');
+    vi.spyOn(component['defaultService'] as any, 'setConfig');
 
     component.ngOnChanges(changes);
 
@@ -419,7 +420,7 @@ describe('PoLookupBaseComponent:', () => {
       columns: undefined
     };
 
-    spyOn(component.poLookupModalService, 'setChangeColumns');
+    vi.spyOn(component.poLookupModalService as any, 'setChangeColumns');
 
     component.ngOnChanges(changes);
 
@@ -448,7 +449,7 @@ describe('PoLookupBaseComponent:', () => {
       }
     };
 
-    spyOn(component['defaultService'], 'setConfig');
+    vi.spyOn(component['defaultService'] as any, 'setConfig');
 
     component.ngOnChanges(changes);
 
@@ -459,7 +460,7 @@ describe('PoLookupBaseComponent:', () => {
     const objectSelected = { value: 123, label: 'test label' };
     component['keysDescription'] = ['label'];
 
-    spyOn(component, 'setViewValue');
+    vi.spyOn(component as any, 'setViewValue');
 
     component['selectModel']([objectSelected]);
 
@@ -467,7 +468,7 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   it('should be request the search for by Id', () => {
-    spyOn(component, <any>'selectModel');
+    vi.spyOn(component as any, 'selectModel');
 
     component['selectModel'](component.getModelValue());
 
@@ -490,7 +491,7 @@ describe('PoLookupBaseComponent:', () => {
 
   describe('Methods:', () => {
     it('cleanViewValue: should call `setDisclaimers` when execute the method `cleanViewValue`.', () => {
-      spyOn(component, <any>'setDisclaimers');
+      vi.spyOn(component as any, 'setDisclaimers');
 
       component['cleanViewValue']();
 
@@ -498,7 +499,7 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('cleanViewValue: should call `setViewValue` when execute the method `cleanViewValue`.', () => {
-      spyOn(component, <any>'setViewValue');
+      vi.spyOn(component as any, 'setViewValue');
 
       component['cleanViewValue']();
 
@@ -512,8 +513,8 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('cleanModel: should call `cleanViewValue` when execute the method `cleanModel`.', () => {
-      spyOn(component, <any>'cleanViewValue');
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'cleanViewValue');
+      vi.spyOn(component as any, 'callOnChange');
 
       component['cleanModel']();
 
@@ -530,10 +531,10 @@ describe('PoLookupBaseComponent:', () => {
         component.filterParams = filterParams;
         component.service = lookupFilterService;
 
-        spyOn(component, 'selectValue');
-        const spyPending = spyOn(component['control'], 'markAsPending');
-        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(of([{ id: 1, name: 'po' }]));
+        vi.spyOn(component as any, 'selectValue');
+        const spyPending = vi.spyOn(component['control'] as any, 'markAsPending');
+        const spyUpdate = vi.spyOn(component['control'] as any, 'updateValueAndValidity');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of([{ id: 1, name: 'po' }]));
 
         component.searchById(searchValue);
 
@@ -555,7 +556,7 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('searchById: should call `cleanModel` when execute the method `searchById` with empty param.', () => {
-      spyOn(component, <any>'cleanModel');
+      vi.spyOn(component as any, 'cleanModel');
 
       component.searchById('');
 
@@ -563,7 +564,7 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('searchById: should call `cleanModel` when execute the method `searchById` with `space` param.', () => {
-      spyOn(component, <any>'cleanModel');
+      vi.spyOn(component as any, 'cleanModel');
 
       component.searchById(' ');
 
@@ -575,9 +576,9 @@ describe('PoLookupBaseComponent:', () => {
       (lookupFilterService: LookupFilterService) => {
         component.service = lookupFilterService;
 
-        spyOn(component, <any>'cleanModel');
-        spyOn(component.onError, 'emit');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ status: 404 }));
+        vi.spyOn(component as any, 'cleanModel');
+        vi.spyOn(component.onError as any, 'emit');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(throwError({ status: 404 }));
 
         component.searchById('aaa');
 
@@ -592,7 +593,7 @@ describe('PoLookupBaseComponent:', () => {
         const expectedValue = ' Item X';
         component.service = lookupFilterService;
 
-        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ id: 1 }));
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(throwError({ id: 1 }));
 
         component.filterParams = undefined;
         component.searchById(expectedValue);
@@ -611,17 +612,17 @@ describe('PoLookupBaseComponent:', () => {
         component.service = lookupFilterService;
         component.multiple = true;
 
-        spyOn(component, 'selectValue');
-        const spyPending = spyOn(component['control'], 'markAsPending');
-        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(
+        vi.spyOn(component as any, 'selectValue');
+        const spyPending = vi.spyOn(component['control'] as any, 'markAsPending');
+        const spyUpdate = vi.spyOn(component['control'] as any, 'updateValueAndValidity');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(
           of([
             { id: 1, name: 'po' },
             { id: 2, name: 'ui' }
           ])
         );
-        spyOn(component, <any>'setDisclaimers');
-        spyOn(component, <any>'updateVisibleItems');
+        vi.spyOn(component as any, 'setDisclaimers');
+        vi.spyOn(component as any, 'updateVisibleItems');
 
         component.searchById(searchValue);
 
@@ -644,10 +645,10 @@ describe('PoLookupBaseComponent:', () => {
         component.service = lookupFilterService;
         component.multiple = true;
 
-        spyOn(component, 'selectValue');
-        const spyPending = spyOn(component['control'], 'markAsPending');
-        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(of([]));
+        vi.spyOn(component as any, 'selectValue');
+        const spyPending = vi.spyOn(component['control'] as any, 'markAsPending');
+        const spyUpdate = vi.spyOn(component['control'] as any, 'updateValueAndValidity');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of([]));
 
         component.searchById(searchValue);
 
@@ -669,11 +670,11 @@ describe('PoLookupBaseComponent:', () => {
         component.service = lookupFilterService;
         component.multiple = true;
 
-        spyOn(component, 'selectValue');
-        const spyPending = spyOn(component['control'], 'markAsPending');
-        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(of([]));
-        spyOn(component, <any>'cleanModel');
+        vi.spyOn(component as any, 'selectValue');
+        const spyPending = vi.spyOn(component['control'] as any, 'markAsPending');
+        const spyUpdate = vi.spyOn(component['control'] as any, 'updateValueAndValidity');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of([]));
+        vi.spyOn(component as any, 'cleanModel');
 
         component.searchById(searchValue);
 
@@ -695,11 +696,11 @@ describe('PoLookupBaseComponent:', () => {
         component.service = lookupFilterService;
         component.multiple = true;
 
-        spyOn(component, 'selectValue');
-        const spyPending = spyOn(component['control'], 'markAsPending');
-        const spyUpdate = spyOn(component['control'], 'updateValueAndValidity');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(of(undefined));
-        spyOn(component, <any>'cleanModel');
+        vi.spyOn(component as any, 'selectValue');
+        const spyPending = vi.spyOn(component['control'] as any, 'markAsPending');
+        const spyUpdate = vi.spyOn(component['control'] as any, 'updateValueAndValidity');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(of(undefined));
+        vi.spyOn(component as any, 'cleanModel');
 
         component.searchById(searchValue);
 
@@ -713,7 +714,7 @@ describe('PoLookupBaseComponent:', () => {
     ));
 
     it('searchById: should be multiple and call `cleanModel` when execute the method `searchById` with empty param.', () => {
-      spyOn(component, <any>'cleanModel');
+      vi.spyOn(component as any, 'cleanModel');
       component.multiple = true;
 
       component.searchById('');
@@ -722,7 +723,7 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('searchById: should call `cleanModel` when execute the method `searchById` with `space` param.', () => {
-      spyOn(component, <any>'cleanModel');
+      vi.spyOn(component as any, 'cleanModel');
 
       component.searchById(' ');
 
@@ -735,9 +736,9 @@ describe('PoLookupBaseComponent:', () => {
         component.service = lookupFilterService;
         component.multiple = true;
 
-        spyOn(component, <any>'cleanModel');
-        spyOn(component.onError, 'emit');
-        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ status: 404 }));
+        vi.spyOn(component as any, 'cleanModel');
+        vi.spyOn(component.onError as any, 'emit');
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(throwError({ status: 404 }));
 
         component.searchById('aaa');
 
@@ -753,7 +754,7 @@ describe('PoLookupBaseComponent:', () => {
         component.service = lookupFilterService;
         component.multiple = true;
 
-        spyOn(component.service, 'getObjectByValue').and.returnValue(throwError({ id: 1 }));
+        vi.spyOn(component.service as any, 'getObjectByValue').mockReturnValue(throwError({ id: 1 }));
 
         component.filterParams = undefined;
         component.searchById(expectedValue);
@@ -763,7 +764,7 @@ describe('PoLookupBaseComponent:', () => {
     ));
 
     it('writeValue: should call `cleanViewValue` when execute the method `writeValue` with undefined param.', () => {
-      spyOn(component, <any>'cleanViewValue');
+      vi.spyOn(component as any, 'cleanViewValue');
 
       component.writeValue(undefined);
 
@@ -773,7 +774,7 @@ describe('PoLookupBaseComponent:', () => {
     it('writeValue: should call searchById with string value param', () => {
       const value = '123';
 
-      spyOn(component, 'searchById');
+      vi.spyOn(component as any, 'searchById');
 
       component.writeValue(value);
 
@@ -783,7 +784,7 @@ describe('PoLookupBaseComponent:', () => {
     it('writeValue: should call searchById with array value param', () => {
       const value = [123];
 
-      spyOn(component, 'searchById');
+      vi.spyOn(component as any, 'searchById');
 
       component.writeValue(value);
 
@@ -793,7 +794,7 @@ describe('PoLookupBaseComponent:', () => {
     it('getSubscription: should `unsubscribe` on destroy.', () => {
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(component['getSubscription'], <any>'unsubscribe');
+      vi.spyOn(component['getSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -803,7 +804,7 @@ describe('PoLookupBaseComponent:', () => {
     it('getSubscription: should not `unsubscribe` if `getSubscription` is falsy.', () => {
       component['getSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['getSubscription'] = undefined;
       component.ngOnDestroy();
@@ -825,14 +826,14 @@ describe('PoLookupBaseComponent:', () => {
         }
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
     });
 
     it('validate: should return undefined when `requiredFailed` is false', () => {
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
 
       expect(component.validate(new UntypedFormControl(null))).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -841,7 +842,7 @@ describe('PoLookupBaseComponent:', () => {
     it('validateModel: should call `validatorChange` when `validateModel` is a function.', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']([]);
 
@@ -868,7 +869,7 @@ describe('PoLookupBaseComponent:', () => {
 
       const newModel = [1, 2, 3, 4];
 
-      spyOn(component, 'selectValue');
+      vi.spyOn(component as any, 'selectValue');
 
       component['selectModel'](options);
 
@@ -880,7 +881,7 @@ describe('PoLookupBaseComponent:', () => {
 
       component.fieldValue = 'value';
 
-      spyOn(component, 'selectValue');
+      vi.spyOn(component as any, 'selectValue');
 
       component['selectModel'](options);
 
@@ -894,7 +895,7 @@ describe('PoLookupBaseComponent:', () => {
 
       const oldValue = 'John';
 
-      spyOn(component, <any>'setViewValue');
+      vi.spyOn(component as any, 'setViewValue');
 
       component['selectModel'](options);
 
@@ -905,8 +906,8 @@ describe('PoLookupBaseComponent:', () => {
     it('selectModel: should call selectValue and cleanViewValue if options.length is equal to 0', () => {
       const options: Array<any> = [];
 
-      spyOn(component, <any>'selectValue');
-      spyOn(component, <any>'cleanViewValue');
+      vi.spyOn(component as any, 'selectValue');
+      vi.spyOn(component as any, 'cleanViewValue');
 
       component['selectModel'](options);
 
@@ -920,7 +921,7 @@ describe('PoLookupBaseComponent:', () => {
       component.service = undefined;
       component.fieldValue = 'teste';
 
-      spyOn(component['defaultService'], <any>'setConfig');
+      vi.spyOn(component['defaultService'] as any, 'setConfig');
 
       component['setService'](serviceUrl);
 
@@ -932,7 +933,7 @@ describe('PoLookupBaseComponent:', () => {
       const serviceUrl = '';
       component.service = undefined;
 
-      spyOn(component['defaultService'], <any>'setConfig');
+      vi.spyOn(component['defaultService'] as any, 'setConfig');
 
       component['setService'](serviceUrl);
 
@@ -944,7 +945,7 @@ describe('PoLookupBaseComponent:', () => {
       const service = new LookupFilterService();
       component.service = undefined;
 
-      spyOn(component['defaultService'], <any>'setConfig');
+      vi.spyOn(component['defaultService'] as any, 'setConfig');
 
       component['setService'](service);
 
@@ -1035,7 +1036,7 @@ describe('PoLookupBaseComponent:', () => {
     });
 
     it('p-filter-service: shoul call `setService` with `filterService`', () => {
-      spyOn(component, <any>'setService');
+      vi.spyOn(component as any, 'setService');
 
       component.filterService = 'http://service.com.br';
 
@@ -1067,38 +1068,38 @@ describe('PoLookupBaseComponent:', () => {
     describe('p-loading:', () => {
       it('should set loading to true', () => {
         component.loading = true;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should set loading to false', () => {
         component.loading = false;
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
 
       it('loading should not affect disabled state', () => {
         component.disabled = false;
 
         component.loading = true;
-        expect(component.disabled).toBeFalse();
+        expect(component.disabled).toBe(false);
 
         component.disabled = true;
         component.loading = false;
-        expect(component.disabled).toBeTrue();
+        expect(component.disabled).toBe(true);
       });
 
       it('should set loading=true when input receives empty string', () => {
         component.loading = '' as any;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should set loading=false when input receives string "false"', () => {
         component.loading = 'false' as any;
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
 
       it('should set loading=true when input receives string "true"', () => {
         component.loading = 'true' as any;
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
       });
 
       it('should not throw when cd is undefined', () => {
@@ -1120,39 +1121,39 @@ describe('PoLookupBaseComponent:', () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
 
       it('should return true when disabled is true and loading is false', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled is false and loading is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when disabled and loading are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should keep disabled true after loading toggles from true to false', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
 
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
     });
 
@@ -1210,7 +1211,7 @@ describe('PoLookupBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -1218,7 +1219,7 @@ describe('PoLookupBaseComponent:', () => {
 
     describe('p-spacing', () => {
       it('should set property with valid value when accessibility is AA', () => {
-        spyOn(functions as any, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AA);
+        vi.spyOn(functions as any, 'getA11yLevel').mockReturnValue(PoThemeA11yEnum.AA);
 
         component.spacing = PoTableColumnSpacing.ExtraSmall;
         expect(component.spacing).toBe(PoTableColumnSpacing.ExtraSmall);
@@ -1228,14 +1229,14 @@ describe('PoLookupBaseComponent:', () => {
       });
 
       it('should set spacing to "medium" if value is "extra-small" and accessibility is AAA', () => {
-        spyOn(functions as any, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AAA);
+        vi.spyOn(functions as any, 'getA11yLevel').mockReturnValue(PoThemeA11yEnum.AAA);
 
         component.spacing = PoTableColumnSpacing.ExtraSmall;
         expect(component.spacing).toBe(PoTableColumnSpacing.Medium);
       });
 
       it('should set spacing with other valid values when accessibility is AAA', () => {
-        spyOn(functions, 'getA11yLevel').and.returnValue(PoThemeA11yEnum.AAA);
+        vi.spyOn(functions as any, 'getA11yLevel').mockReturnValue(PoThemeA11yEnum.AAA);
 
         component.spacing = PoTableColumnSpacing.Small;
         expect(component.spacing).toBe(PoTableColumnSpacing.Small);
@@ -1246,7 +1247,7 @@ describe('PoLookupBaseComponent:', () => {
 
       it('should set spacing with default value when value is invalid', () => {
         const defaultSpacing = PoTableColumnSpacing.Small;
-        spyOn(component as any, 'getDefaultSpacing').and.returnValue(defaultSpacing);
+        vi.spyOn(component as any, 'getDefaultSpacing').mockReturnValue(defaultSpacing);
 
         component.spacing = 'invalid-spacing';
 

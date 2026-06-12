@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { Component, Renderer2 } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -22,7 +23,7 @@ describe('PoTooltipDirective', () => {
   let directive;
 
   let fixture: ComponentFixture<TestComponent>;
-  let controlPositionMock: jasmine.SpyObj<PoControlPositionService>;
+  let controlPositionMock: any;
 
   const event = new Event('scroll', { bubbles: true });
 
@@ -42,11 +43,11 @@ describe('PoTooltipDirective', () => {
     directive.createTooltip();
     fixture.detectChanges();
 
-    controlPositionMock = jasmine.createSpyObj('PoControlPositionService', [
-      'adjustPosition',
-      'setElements',
-      'getArrowDirection'
-    ]);
+    controlPositionMock = {
+      adjustPosition: vi.fn().mockName('PoControlPositionService.adjustPosition'),
+      setElements: vi.fn().mockName('PoControlPositionService.setElements'),
+      getArrowDirection: vi.fn().mockName('PoControlPositionService.getArrowDirection')
+    };
     directive['poControlPosition'] = controlPositionMock;
   });
 
@@ -58,7 +59,7 @@ describe('PoTooltipDirective', () => {
     it('onMouseLeave: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
       directive.displayTooltip = true;
 
-      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+      const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
       directive.onMouseLeave();
 
@@ -68,7 +69,7 @@ describe('PoTooltipDirective', () => {
     it('mouseClick: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
       directive.displayTooltip = true;
 
-      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+      const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
       directive.onMouseClick();
 
@@ -78,7 +79,7 @@ describe('PoTooltipDirective', () => {
     it('mouseClick: should call removeTooltipAction if `displayTooltip` is false', () => {
       directive.displayTooltip = false;
 
-      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+      const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
       directive.onMouseClick();
 
@@ -88,7 +89,7 @@ describe('PoTooltipDirective', () => {
     it('focusout: shouldn`t call removeTooltipAction if `displayTooltip` is true', () => {
       directive.displayTooltip = true;
 
-      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+      const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
       directive.onFocusOut();
 
@@ -98,7 +99,7 @@ describe('PoTooltipDirective', () => {
     it('focusout: should call removeTooltipAction if `displayTooltip` is false', () => {
       directive.displayTooltip = false;
 
-      const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+      const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
       directive.onFocusOut();
 
@@ -108,7 +109,7 @@ describe('PoTooltipDirective', () => {
     it('onFocusIn: should call addTooltipAction if `displayTooltip` is false', () => {
       directive.displayTooltip = false;
 
-      const spyaddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+      const spyaddTooltipAction = vi.spyOn(directive as any, 'addTooltipAction');
 
       directive.onFocusIn();
 
@@ -118,7 +119,7 @@ describe('PoTooltipDirective', () => {
     it('onFocusIn: shouldn`t call addTooltipAction if `displayTooltip` is true', () => {
       directive.displayTooltip = true;
 
-      const spyaddTooltipAction = spyOn(directive, <any>'addTooltipAction');
+      const spyaddTooltipAction = vi.spyOn(directive as any, 'addTooltipAction');
 
       directive.onFocusIn();
 
@@ -129,8 +130,8 @@ describe('PoTooltipDirective', () => {
       it('should call `removeTooltipAction` if `show` is false and `displayTooltip` is false', () => {
         directive.displayTooltip = false;
 
-        const spyAddTooltipAction = spyOn(directive, <any>'addTooltipAction');
-        const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+        const spyAddTooltipAction = vi.spyOn(directive as any, 'addTooltipAction');
+        const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
         directive.toggleTooltipVisibility(false);
 
@@ -141,8 +142,8 @@ describe('PoTooltipDirective', () => {
       it('should call `addTooltipAction` if `show` is true and `displayTooltip` is false', () => {
         directive.displayTooltip = false;
 
-        const spyAddTooltipAction = spyOn(directive, <any>'addTooltipAction');
-        const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+        const spyAddTooltipAction = vi.spyOn(directive as any, 'addTooltipAction');
+        const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
         directive.toggleTooltipVisibility(true);
 
@@ -153,8 +154,8 @@ describe('PoTooltipDirective', () => {
       it('should not call `addTooltipAction` or `removeTooltipAction` if `displayTooltip` is true', () => {
         directive.displayTooltip = true;
 
-        const spyAddTooltipAction = spyOn(directive, <any>'addTooltipAction');
-        const spyRemoveTooltipAction = spyOn(directive, <any>'removeTooltipAction');
+        const spyAddTooltipAction = vi.spyOn(directive as any, 'addTooltipAction');
+        const spyRemoveTooltipAction = vi.spyOn(directive as any, 'removeTooltipAction');
 
         directive.toggleTooltipVisibility(true);
         directive.toggleTooltipVisibility(false);
@@ -166,7 +167,7 @@ describe('PoTooltipDirective', () => {
   });
 
   it('should call hideTooltip in ngOnDestroy', () => {
-    spyOn(directive, 'hideTooltip');
+    vi.spyOn(directive as any, 'hideTooltip');
 
     directive.ngOnDestroy();
 
@@ -174,7 +175,7 @@ describe('PoTooltipDirective', () => {
   });
 
   it('should call initScrollEventListenerFunction in ngOnInit', () => {
-    spyOn(directive, 'initScrollEventListenerFunction');
+    vi.spyOn(directive as any, 'initScrollEventListenerFunction');
 
     directive.ngOnInit();
 
@@ -189,36 +190,36 @@ describe('PoTooltipDirective', () => {
 
   it('should create tooltip with proper configurations', () => {
     const renderer = fixture.debugElement.injector.get(Renderer2);
-    spyOn(renderer, 'setStyle').and.callThrough();
-    spyOn(renderer, 'setProperty').and.callThrough();
+    vi.spyOn(renderer as any, 'setStyle');
+    vi.spyOn(renderer as any, 'setProperty');
 
     directive.hideArrow = true;
     directive.innerHtml = true;
     directive.tooltip = '<b>HTML</b>';
     directive.createTooltip();
 
-    expect(renderer.setStyle).toHaveBeenCalledWith(jasmine.any(Object), 'display', 'none');
+    expect(renderer.setStyle).toHaveBeenCalledWith(expect.any(Object), 'display', 'none');
 
-    expect(renderer.setProperty).toHaveBeenCalledWith(jasmine.any(Object), 'innerHTML', '<b>HTML</b>');
+    expect(renderer.setProperty).toHaveBeenCalledWith(expect.any(Object), 'innerHTML', '<b>HTML</b>');
 
-    (renderer.setStyle as jasmine.Spy).calls.reset();
-    (renderer.setProperty as jasmine.Spy).calls.reset();
+    (renderer.setStyle as Mock).mockClear();
+    (renderer.setProperty as Mock).mockClear();
 
     directive.hideArrow = false;
     directive.innerHtml = false;
     directive.tooltip = 'Plain text';
     directive.createTooltip();
 
-    expect(renderer.setStyle).not.toHaveBeenCalledWith(jasmine.any(Object), 'display', 'none');
+    expect(renderer.setStyle).not.toHaveBeenCalledWith(expect.any(Object), 'display', 'none');
 
-    expect(renderer.setProperty).not.toHaveBeenCalledWith(jasmine.any(Object), 'innerHTML', jasmine.any(String));
+    expect(renderer.setProperty).not.toHaveBeenCalledWith(expect.any(Object), 'innerHTML', expect.any(String));
   });
 
   it('should sanitize tooltip and fallback to empty string when sanitize returns null', () => {
     directive.tooltip = '<b>test</b>';
     directive.innerHtml = true;
 
-    spyOn(directive['sanitizer'], 'sanitize').and.returnValue(null as any);
+    vi.spyOn(directive['sanitizer'] as any, 'sanitize').mockReturnValue(null as any);
 
     directive['createTooltip']();
 
@@ -229,10 +230,10 @@ describe('PoTooltipDirective', () => {
     directive.tooltip = 'TEXT';
     directive.tooltipContent = false;
 
-    spyOn(directive, 'showTooltip');
-    spyOn(directive, 'createTooltip');
-    spyOn(directive, 'removeArrow');
-    spyOn(directive, 'addArrow');
+    vi.spyOn(directive as any, 'showTooltip');
+    vi.spyOn(directive as any, 'createTooltip');
+    vi.spyOn(directive as any, 'removeArrow');
+    vi.spyOn(directive as any, 'addArrow');
 
     directive.onMouseEnter();
 
@@ -252,10 +253,10 @@ describe('PoTooltipDirective', () => {
     directive.tooltip = undefined;
     directive.tooltipContent = false;
 
-    spyOn(directive, 'showTooltip');
-    spyOn(directive, 'createTooltip');
-    spyOn(directive, 'removeArrow');
-    spyOn(directive, 'addArrow');
+    vi.spyOn(directive as any, 'showTooltip');
+    vi.spyOn(directive as any, 'createTooltip');
+    vi.spyOn(directive as any, 'removeArrow');
+    vi.spyOn(directive as any, 'addArrow');
 
     directive.onMouseEnter();
 
@@ -276,10 +277,10 @@ describe('PoTooltipDirective', () => {
     directive.displayTooltip = true;
     directive.tooltipContent = false;
 
-    spyOn(directive, 'showTooltip');
-    spyOn(directive, 'createTooltip');
-    spyOn(directive, 'removeArrow');
-    spyOn(directive, 'addArrow');
+    vi.spyOn(directive as any, 'showTooltip');
+    vi.spyOn(directive as any, 'createTooltip');
+    vi.spyOn(directive as any, 'removeArrow');
+    vi.spyOn(directive as any, 'addArrow');
 
     directive.onMouseEnter();
 
@@ -299,10 +300,10 @@ describe('PoTooltipDirective', () => {
     directive.tooltip = 'TEXT';
     directive.tooltipContent = true;
 
-    spyOn(directive, 'showTooltip');
-    spyOn(directive, 'createTooltip');
-    spyOn(directive, 'removeArrow');
-    spyOn(directive, 'addArrow');
+    vi.spyOn(directive as any, 'showTooltip');
+    vi.spyOn(directive as any, 'createTooltip');
+    vi.spyOn(directive as any, 'removeArrow');
+    vi.spyOn(directive as any, 'addArrow');
 
     directive.onMouseEnter();
 
@@ -323,7 +324,7 @@ describe('PoTooltipDirective', () => {
       code: 'Escape'
     };
 
-    spyOn(directive, 'removeTooltipAction');
+    vi.spyOn(directive as any, 'removeTooltipAction');
 
     directive.onKeyDown(newEvent);
 
@@ -335,7 +336,7 @@ describe('PoTooltipDirective', () => {
       keyCode: 27
     };
 
-    spyOn(directive, 'removeTooltipAction');
+    vi.spyOn(directive as any, 'removeTooltipAction');
 
     directive.onKeyDown(newEvent);
 
@@ -360,7 +361,7 @@ describe('PoTooltipDirective', () => {
   });
 
   it('should call hideTooltip in mouseleave', fakeAsync(() => {
-    spyOn(directive, 'hideTooltip');
+    vi.spyOn(directive as any, 'hideTooltip');
     directive.appendInBody = undefined;
 
     directive.onMouseLeave();
@@ -371,8 +372,8 @@ describe('PoTooltipDirective', () => {
   }));
 
   it('shouldn`t call hideTooltip in mouseleave if `appendInBody` is true', fakeAsync(() => {
-    spyOn(directive, 'hideTooltip');
-    spyOn(directive.renderer, 'removeChild');
+    vi.spyOn(directive as any, 'hideTooltip');
+    vi.spyOn(directive.renderer as any, 'removeChild');
     directive.appendInBody = true;
     directive.tooltip = 'TEXT';
     directive.tooltipContent = false;
@@ -388,7 +389,7 @@ describe('PoTooltipDirective', () => {
   }));
 
   it('should call hideTooltip in mouse click', fakeAsync(() => {
-    spyOn(directive, 'hideTooltip');
+    vi.spyOn(directive as any, 'hideTooltip');
     directive.appendInBody = undefined;
 
     directive.onMouseClick();
@@ -399,8 +400,8 @@ describe('PoTooltipDirective', () => {
   }));
 
   it('shouldn`t call hideTooltip in mouse click if `appendInBody` is true', fakeAsync(() => {
-    spyOn(directive, 'hideTooltip');
-    spyOn(directive.renderer, 'removeChild');
+    vi.spyOn(directive as any, 'hideTooltip');
+    vi.spyOn(directive.renderer as any, 'removeChild');
     directive.appendInBody = true;
     directive.tooltip = 'TEXT';
     directive.tooltipContent = false;
@@ -420,7 +421,7 @@ describe('PoTooltipDirective', () => {
     directive.tooltip = '<b>ghi</b>';
     directive.innerHtml = true;
 
-    spyOn(directive['sanitizer'], 'sanitize').and.returnValue(null);
+    vi.spyOn(directive['sanitizer'] as any, 'sanitize').mockReturnValue(null);
 
     directive.updateTextContent();
 
@@ -446,7 +447,7 @@ describe('PoTooltipDirective', () => {
   });
 
   it('removeScrollEventListener: shoult call window.removeEventListener', () => {
-    spyOn(window, 'removeEventListener');
+    vi.spyOn(window as any, 'removeEventListener');
 
     directive['removeScrollEventListener']();
 
@@ -455,15 +456,15 @@ describe('PoTooltipDirective', () => {
 
   it('should hide tooltip when not have tooltipContent', () => {
     directive.tooltipContent = false;
-    spyOn(directive, 'removeScrollEventListener');
+    vi.spyOn(directive as any, 'removeScrollEventListener');
 
     directive.hideTooltip();
     expect(directive.removeScrollEventListener).not.toHaveBeenCalled();
   });
 
   it('should show tooltip', () => {
-    spyOn(directive, 'addScrollEventListener');
-    spyOn(directive, 'updateTextContent');
+    vi.spyOn(directive as any, 'addScrollEventListener');
+    vi.spyOn(directive as any, 'updateTextContent');
 
     directive.showTooltip();
 

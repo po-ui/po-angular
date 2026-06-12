@@ -95,7 +95,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     });
 
     it('primaryAction: should call `close` when call primaryAction.action', () => {
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'close');
 
       component.primaryAction.action();
 
@@ -105,8 +105,8 @@ describe('PoHttpInterceptorDetailComponent:', () => {
 
   describe('Methods', () => {
     it('close: should call modal.close and closed.emit', () => {
-      spyOn(component.modal, 'close');
-      spyOn(component['closed'], 'emit');
+      vi.spyOn(component.modal as any, 'close');
+      vi.spyOn(component['closed'] as any, 'emit');
 
       component.close();
 
@@ -115,7 +115,7 @@ describe('PoHttpInterceptorDetailComponent:', () => {
     });
 
     it('open: should call modal.open', () => {
-      spyOn(component.modal, 'open');
+      vi.spyOn(component.modal as any, 'open');
 
       component.open();
 

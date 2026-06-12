@@ -121,7 +121,7 @@ describe('PoSwitchComponent', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -129,18 +129,18 @@ describe('PoSwitchComponent', () => {
 
     describe('p-loading:', () => {
       it('should set loading value and call markForCheck', () => {
-        const markForCheckSpy = spyOn(component['changeDetector'], 'markForCheck');
+        const markForCheckSpy = vi.spyOn(component['changeDetector'] as any, 'markForCheck');
 
         component.loading = true;
 
-        expect(component.loading).toBeTrue();
+        expect(component.loading).toBe(true);
         expect(markForCheckSpy).toHaveBeenCalled();
       });
 
       it('should set loading false correctly', () => {
         component.loading = false;
 
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
     });
   });
@@ -153,7 +153,7 @@ describe('PoSwitchComponent', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
 
     it('focus: should call `focus` of switch', () => {
@@ -163,7 +163,7 @@ describe('PoSwitchComponent', () => {
         }
       };
 
-      spyOn(component.switchContainer.nativeElement, 'focus');
+      vi.spyOn(component.switchContainer.nativeElement, 'focus');
 
       component.focus();
 
@@ -178,7 +178,7 @@ describe('PoSwitchComponent', () => {
       };
       component.disabled = true;
 
-      spyOn(component.switchContainer.nativeElement, 'focus');
+      vi.spyOn(component.switchContainer.nativeElement, 'focus');
 
       component.focus();
 
@@ -205,8 +205,8 @@ describe('PoSwitchComponent', () => {
       });
 
       it('should call preventDefault and eventClick when keycode and which equal to 32', () => {
-        spyOn(component, 'eventClick');
-        spyOn(fakeEvent, 'preventDefault');
+        vi.spyOn(component as any, 'eventClick');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
 
         component.onKeyDown(fakeEvent);
 
@@ -216,8 +216,8 @@ describe('PoSwitchComponent', () => {
 
       it('should call preventDefault and eventClick when keycode equal to 32', () => {
         fakeEvent.which = 12;
-        spyOn(component, 'eventClick');
-        spyOn(fakeEvent, 'preventDefault');
+        vi.spyOn(component as any, 'eventClick');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
 
         component.onKeyDown(fakeEvent);
 
@@ -228,8 +228,8 @@ describe('PoSwitchComponent', () => {
       it('should not call preventDefault and eventClick when keycode and which not equal to 32', () => {
         fakeEvent.which = 12;
         fakeEvent.keyCode = 12;
-        spyOn(component, 'eventClick');
-        spyOn(fakeEvent, 'preventDefault');
+        vi.spyOn(component as any, 'eventClick');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
 
         component.onKeyDown(fakeEvent);
 
@@ -245,8 +245,8 @@ describe('PoSwitchComponent', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(component.switchContainer.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(component.switchContainer.nativeElement);
 
         component.onKeyDown(fakeEvent);
 
@@ -261,8 +261,8 @@ describe('PoSwitchComponent', () => {
           }
         };
 
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(document.createElement('div'));
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(document.createElement('div'));
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -281,7 +281,7 @@ describe('PoSwitchComponent', () => {
         const fakeEvent = new KeyboardEvent('keydown', { key: 'Tab' });
         component.switchContainer = undefined;
 
-        spyOn(component.keydown, 'emit');
+        vi.spyOn(component.keydown as any, 'emit');
         component.onKeyDown(fakeEvent);
 
         expect(component.keydown.emit).not.toHaveBeenCalled();
@@ -296,14 +296,14 @@ describe('PoSwitchComponent', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
       });
 
       it('should call `onTouched` on blur', () => {
         component['onTouched'] = value => {};
 
-        spyOn(component, <any>'onTouched');
+        vi.spyOn(component as any, 'onTouched');
 
         component.onBlur();
 
@@ -331,7 +331,7 @@ describe('PoSwitchComponent', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -344,11 +344,11 @@ describe('PoSwitchComponent', () => {
         const helperCmp = {} as any;
 
         (component as any).helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
-        spyOn(component as any, 'getAdditionalHelpTooltip').and.returnValue('getAdditionalHelpTooltip');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperCmp);
+        vi.spyOn(component as any, 'getAdditionalHelpTooltip').mockReturnValue('getAdditionalHelpTooltip');
         component.displayAdditionalHelp = true;
         const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
-        const superSpy = spyOn(superProto, 'showAdditionalHelp').and.returnValue(true);
+        const superSpy = vi.spyOn(superProto as any, 'showAdditionalHelp').mockReturnValue(true);
 
         component.onBlur();
         expect((component as any).poHelperComponent).toHaveBeenCalled();
@@ -360,11 +360,11 @@ describe('PoSwitchComponent', () => {
         const helperCmp = {} as any;
 
         (component as any).helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
-        spyOn(component as any, 'getAdditionalHelpTooltip').and.returnValue('');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperCmp);
+        vi.spyOn(component as any, 'getAdditionalHelpTooltip').mockReturnValue('');
         component.displayAdditionalHelp = true;
         const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
-        const superSpy = spyOn(superProto, 'showAdditionalHelp').and.returnValue(true);
+        const superSpy = vi.spyOn(superProto as any, 'showAdditionalHelp').mockReturnValue(true);
 
         component.onBlur();
         expect(superSpy).not.toHaveBeenCalled();
@@ -374,8 +374,8 @@ describe('PoSwitchComponent', () => {
     it('changeValue: shouldn`t call `change.emit` and `updateModel` if switch value is not changed', () => {
       component.value = true;
 
-      spyOn(component.change, 'emit');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component.change as any, 'emit');
+      vi.spyOn(component as any, 'updateModel');
 
       component.changeValue(true);
       expect(component['updateModel']).not.toHaveBeenCalled();
@@ -385,8 +385,8 @@ describe('PoSwitchComponent', () => {
     it('changeValue: should call `updateModel` and `change.emit` if switch value is changed', () => {
       component.value = true;
 
-      spyOn(component.change, 'emit');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component.change as any, 'emit');
+      vi.spyOn(component as any, 'updateModel');
       component.changeValue(false);
 
       expect(component['updateModel']).toHaveBeenCalledWith(false);
@@ -397,8 +397,8 @@ describe('PoSwitchComponent', () => {
       component.value = true;
       component.formatModel = true;
 
-      spyOn(component.change, 'emit');
-      spyOn(component, <any>'updateModel');
+      vi.spyOn(component.change as any, 'emit');
+      vi.spyOn(component as any, 'updateModel');
 
       component.changeValue(false);
       expect(component['updateModel']).toHaveBeenCalledWith('false');
@@ -414,7 +414,7 @@ describe('PoSwitchComponent', () => {
 
       component.value = true;
 
-      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
+      vi.spyOn(component['changeDetector'] as any, 'markForCheck').mockImplementation(() => {});
 
       component.onWriteValue(expectedValue);
 
@@ -428,7 +428,7 @@ describe('PoSwitchComponent', () => {
       component.value = false;
       component.formatModel = true;
 
-      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
+      vi.spyOn(component['changeDetector'] as any, 'markForCheck').mockImplementation(() => {});
 
       component.onWriteValue(null);
 
@@ -442,7 +442,7 @@ describe('PoSwitchComponent', () => {
       component.value = false;
       component.formatModel = true;
 
-      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
+      vi.spyOn(component['changeDetector'] as any, 'markForCheck').mockImplementation(() => {});
 
       component.onWriteValue('true');
 
@@ -455,7 +455,7 @@ describe('PoSwitchComponent', () => {
 
       component.value = expectedValue;
 
-      spyOn(component['changeDetector'], 'markForCheck').and.callFake(() => {});
+      vi.spyOn(component['changeDetector'] as any, 'markForCheck').mockImplementation(() => {});
 
       component.onWriteValue(expectedValue);
 
@@ -466,7 +466,7 @@ describe('PoSwitchComponent', () => {
     it('eventClick: shouldn`t call changeValue if disabled is true', () => {
       component.disabled = true;
 
-      spyOn(component, 'changeValue');
+      vi.spyOn(component as any, 'changeValue');
 
       component.eventClick();
 
@@ -476,7 +476,7 @@ describe('PoSwitchComponent', () => {
     it('eventClick: should call changeValue', () => {
       component.disabled = false;
 
-      spyOn(component, 'changeValue');
+      vi.spyOn(component as any, 'changeValue');
 
       component.eventClick();
 
@@ -557,7 +557,7 @@ describe('PoSwitchComponent', () => {
       it('should return `fieldErrorMessage` when `fieldErrorMessage` is set and `hasInvalidClass` is true', () => {
         component.fieldErrorMessage = 'Campo obrigatório';
 
-        spyOn(component, 'hasInvalidClass').and.returnValue(true);
+        vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(true);
 
         const result = component.getErrorPattern();
 
@@ -567,7 +567,7 @@ describe('PoSwitchComponent', () => {
       it('should return empty string when `fieldErrorMessage` is set but `hasInvalidClass` is false', () => {
         component.fieldErrorMessage = 'Campo obrigatório';
 
-        spyOn(component, 'hasInvalidClass').and.returnValue(false);
+        vi.spyOn(component as any, 'hasInvalidClass').mockReturnValue(false);
 
         const result = component.getErrorPattern();
 
@@ -597,7 +597,7 @@ describe('PoSwitchComponent', () => {
 
         const result = component.hasInvalidClass();
 
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return false when only `ng-invalid` is present', () => {
@@ -606,7 +606,7 @@ describe('PoSwitchComponent', () => {
 
         const result = component.hasInvalidClass();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when only `ng-dirty` is present', () => {
@@ -615,7 +615,7 @@ describe('PoSwitchComponent', () => {
 
         const result = component.hasInvalidClass();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should return false when neither `ng-invalid` nor `ng-dirty` are present', () => {
@@ -624,7 +624,7 @@ describe('PoSwitchComponent', () => {
 
         const result = component.hasInvalidClass();
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 
@@ -634,25 +634,25 @@ describe('PoSwitchComponent', () => {
         const helperCmp = {} as any;
 
         (component as any).helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperCmp);
         const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
-        const superSpy = spyOn(superProto, 'showAdditionalHelp').and.returnValue(true);
+        const superSpy = vi.spyOn(superProto as any, 'showAdditionalHelp').mockReturnValue(true);
         const result = component.showAdditionalHelp();
 
         expect((component as any).poHelperComponent).toHaveBeenCalled();
         expect(superSpy).toHaveBeenCalledWith(helperEl, helperCmp);
-        expect(result).toBeTrue();
+        expect(result).toBe(true);
       });
 
       it('should return false when super.showAdditionalHelp returns false', () => {
         const helperEl = {} as any;
         const helperCmp = {} as any;
         (component as any).helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperCmp);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperCmp);
         const superProto = Object.getPrototypeOf(Object.getPrototypeOf(component));
-        spyOn(superProto, 'showAdditionalHelp').and.returnValue(false);
+        vi.spyOn(superProto as any, 'showAdditionalHelp').mockReturnValue(false);
         const result = component.showAdditionalHelp();
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
     });
 

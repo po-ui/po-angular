@@ -61,7 +61,7 @@ describe('PoGaugeBaseComponent', () => {
       component.ranges = null;
       expect(component.ranges).toEqual([]);
 
-      component.ranges = <any>'invalid';
+      (component as any).ranges = 'invalid';
       expect(component.ranges).toEqual([]);
     });
 
@@ -76,12 +76,12 @@ describe('PoGaugeBaseComponent', () => {
     });
 
     it('should convert string number to number in value', () => {
-      component.value = <any>'123';
+      (component as any).value = '123';
       expect(component.value).toBe(123);
     });
 
     it('should set value to undefined if invalid', () => {
-      component.value = <any>'   ';
+      (component as any).value = '   ';
       expect(component.value).toBeUndefined();
 
       component.value = null;
@@ -89,12 +89,12 @@ describe('PoGaugeBaseComponent', () => {
     });
 
     it('should have default values for showFromToLegend and showPointer', () => {
-      expect(component.showFromToLegend).toBeFalse();
-      expect(component.showPointer).toBeTrue();
+      expect(component.showFromToLegend).toBe(false);
+      expect(component.showPointer).toBe(true);
     });
 
     it('should set value as undefined when gaugeValue is a non-numeric string', () => {
-      component.value = <any>'abc';
+      (component as any).value = 'abc';
       expect(component.value).toBeUndefined();
     });
   });

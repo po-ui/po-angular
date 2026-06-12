@@ -25,7 +25,7 @@ describe('PoHeaderMenuItemComponent', () => {
 
     fixture.detectChanges();
 
-    component.poPopupElement = { toggle: jasmine.createSpy('toggle') } as any;
+    component.poPopupElement = { toggle: vi.fn() } as any;
   });
 
   it('should create the component', () => {
@@ -33,8 +33,8 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('ngOnInit: should subscribe to resize event and call checkActiveItemByUrl after debounce', fakeAsync(() => {
-    const spyCheckFragments = spyOn<any>(component, 'checkRouterChildrenFragments').and.returnValue('/test');
-    const spyCheckActive = spyOn<any>(component, 'checkActiveItemByUrl');
+    const spyCheckFragments = vi.spyOn(component as any, 'checkRouterChildrenFragments').mockReturnValue('/test');
+    const spyCheckActive = vi.spyOn(component as any, 'checkActiveItemByUrl');
 
     component.ngOnInit();
 
@@ -47,7 +47,7 @@ describe('PoHeaderMenuItemComponent', () => {
   }));
 
   it('should call detectChanges when itemOverFlow is changed', () => {
-    spyOn(component['cd'], 'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
 
     component.ngOnChanges({
       itemOverFlow: {
@@ -62,7 +62,7 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('should call checkActiveItemByUrl when item is changed', () => {
-    spyOn(component, <any>'checkActiveItemByUrl');
+    vi.spyOn(component as any, 'checkActiveItemByUrl');
 
     component.ngOnChanges({
       item: {
@@ -77,7 +77,7 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('should call detectChanges and toggle Popup', () => {
-    spyOn(component['cd'], 'detectChanges');
+    vi.spyOn(component['cd'] as any, 'detectChanges');
 
     component.openListButtonMore();
 
@@ -86,7 +86,7 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('should call openListButtonMore when event is Space', () => {
-    spyOn(component, 'openListButtonMore');
+    vi.spyOn(component as any, 'openListButtonMore');
 
     component.onKeyDownButtonMore({ code: 'Space', preventDefault: () => {} });
 
@@ -94,7 +94,7 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('should call openListButtonMore when event is Enter', () => {
-    spyOn(component, 'openListButtonMore');
+    vi.spyOn(component as any, 'openListButtonMore');
 
     component.onKeyDownButtonMore({ code: 'Enter', preventDefault: () => {} });
 
@@ -104,11 +104,11 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should call action when event is Enter', () => {
     const item = {
       label: 'test',
-      action: jasmine.createSpy('action')
+      action: vi.fn()
     };
 
     component.item = item;
-    spyOn(component.itemClick, 'emit');
+    vi.spyOn(component.itemClick as any, 'emit');
 
     component.onKeyDownButtonList({ code: 'Enter', preventDefault: () => {} }, item);
 
@@ -119,11 +119,11 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should call onAction when event is Enter', () => {
     const item = {
       label: 'test',
-      action: jasmine.createSpy('action')
+      action: vi.fn()
     };
 
     component.item = item;
-    spyOn(component, 'onAction');
+    vi.spyOn(component as any, 'onAction');
 
     component.onKeyDownButtonList({ code: 'Enter', preventDefault: () => {} }, item);
 
@@ -133,8 +133,8 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should open external link in new tab when isExternalLink is true', () => {
     const item: PoHeaderActions = { link: 'http://external.com', label: 'test1' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(true);
-    const windowSpy = spyOn(window, 'open');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(true);
+    const windowSpy = vi.spyOn(window as any, 'open');
 
     component.onAction(item);
 
@@ -145,8 +145,8 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should open external link in new tab when isExternalLink is true and itemDefault is false', () => {
     const item: PoHeaderActions = { link: 'http://external.com', label: 'test1' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(true);
-    const windowSpy = spyOn(window, 'open');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(true);
+    const windowSpy = vi.spyOn(window as any, 'open');
 
     component.onAction(item, false);
 
@@ -157,8 +157,8 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should navigate using router when isExternalLink is false', () => {
     const item: PoHeaderActions = { link: 'http://external.com', label: 'test1' };
 
-    spyOn(util, 'isExternalLink').and.returnValue(false);
-    const routerSpy = spyOn(router, 'navigateByUrl');
+    vi.spyOn(util as any, 'isExternalLink').mockReturnValue(false);
+    const routerSpy = vi.spyOn(router as any, 'navigateByUrl');
 
     component.onAction(item);
 
@@ -169,11 +169,11 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should call onAction when event is Space', () => {
     const item = {
       label: 'test',
-      action: jasmine.createSpy('action')
+      action: vi.fn()
     };
 
     component.item = item;
-    spyOn(component, 'onAction');
+    vi.spyOn(component as any, 'onAction');
 
     component.onKeyDownButtonList({ code: 'Space', preventDefault: () => {} }, item);
 
@@ -183,11 +183,11 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should call action and emit event', () => {
     const item = {
       label: 'test',
-      action: jasmine.createSpy('action')
+      action: vi.fn()
     };
 
     component.item = item;
-    spyOn(component.itemClick, 'emit');
+    vi.spyOn(component.itemClick as any, 'emit');
 
     component.onAction(item);
 
@@ -198,7 +198,7 @@ describe('PoHeaderMenuItemComponent', () => {
   it('should emit item when exist lastItemSelected', () => {
     component.buttonMoreElement = { nativeElement: { focus: () => {} } };
     component.lastItemSelected = { label: 'test' };
-    spyOn(component.itemClick, 'emit');
+    vi.spyOn(component.itemClick as any, 'emit');
 
     component.onClosePopup();
 
@@ -210,7 +210,7 @@ describe('PoHeaderMenuItemComponent', () => {
 
     (component as any).checkActiveItemByUrl('/home/dashboard');
 
-    expect(component['selectedItem']).toBeTrue();
+    expect(component['selectedItem']).toBe(true);
   });
 
   it('should set selectedItem to true when item.link matches a partial urlRouter', () => {
@@ -218,7 +218,7 @@ describe('PoHeaderMenuItemComponent', () => {
 
     (component as any).checkActiveItemByUrl('/home/dashboard/details');
 
-    expect(component['selectedItem']).toBeTrue();
+    expect(component['selectedItem']).toBe(true);
   });
 
   it('should set selectedItem to false when item.link does not match urlRouter', () => {
@@ -226,22 +226,22 @@ describe('PoHeaderMenuItemComponent', () => {
 
     (component as any).checkActiveItemByUrl('/home/dashboard');
 
-    expect(component['selectedItem']).toBeFalse();
+    expect(component['selectedItem']).toBe(false);
   });
 
   it('should stop at the first match and not continue looping', () => {
     component['item'] = { link: '/home/dashboard' } as any;
 
-    const spy = spyOn<any>(component, 'checkActiveItemByUrl').and.callThrough();
+    const spy = vi.spyOn(component as any, 'checkActiveItemByUrl');
 
     (component as any).checkActiveItemByUrl('/home/dashboard/details');
 
-    expect(component['selectedItem']).toBeTrue();
+    expect(component['selectedItem']).toBe(true);
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
   it('should return "/" when there are no children', () => {
-    spyOn(router, 'parseUrl').and.returnValue({
+    vi.spyOn(router as any, 'parseUrl').mockReturnValue({
       root: { children: {} }
     } as any);
 
@@ -251,7 +251,7 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('should return the path from primary children when it exists', () => {
-    spyOn(router, 'parseUrl').and.returnValue({
+    vi.spyOn(router as any, 'parseUrl').mockReturnValue({
       root: {
         children: {
           primary: {
@@ -267,7 +267,7 @@ describe('PoHeaderMenuItemComponent', () => {
   });
 
   it('should return "/" when primary children has no segments', () => {
-    spyOn(router, 'parseUrl').and.returnValue({
+    vi.spyOn(router as any, 'parseUrl').mockReturnValue({
       root: {
         children: {
           primary: {
@@ -285,10 +285,10 @@ describe('PoHeaderMenuItemComponent', () => {
   it(`subscribeToRoute: should call checkActiveItemByUrl with url router if router events return an instance of NavigationEnd`, () => {
     const navigation = new NavigationEnd(1, 'url/', undefined);
 
-    spyOn(component, <any>'checkRouterChildrenFragments').and.returnValue('test');
-    spyOn(component, <any>'checkActiveItemByUrl');
+    vi.spyOn(component as any, 'checkRouterChildrenFragments').mockReturnValue('test');
+    vi.spyOn(component as any, 'checkActiveItemByUrl');
 
-    spyOn(component['router'].events, 'subscribe').and.callFake(callback => {
+    vi.spyOn(component['router'].events, 'subscribe').mockImplementation(callback => {
       callback(navigation);
       return new Subscription();
     });
@@ -301,10 +301,10 @@ describe('PoHeaderMenuItemComponent', () => {
   it(`subscribeToRoute: should call checkActiveItemByUrl with url router if router events return an instance of NavigationCancel`, () => {
     const navigation = new NavigationCancel(1, 'url/', undefined);
 
-    spyOn(component, <any>'checkRouterChildrenFragments').and.returnValue('test');
-    spyOn(component, <any>'checkActiveItemByUrl');
+    vi.spyOn(component as any, 'checkRouterChildrenFragments').mockReturnValue('test');
+    vi.spyOn(component as any, 'checkActiveItemByUrl');
 
-    spyOn(component['router'].events, 'subscribe').and.callFake(callback => {
+    vi.spyOn(component['router'].events, 'subscribe').mockImplementation(callback => {
       callback(navigation);
       return new Subscription();
     });

@@ -29,11 +29,11 @@ describe('PoContextTabButtonComponent:', () => {
     it('afterViewInit: should apply initial properties', () => {
       component.ngAfterViewInit();
 
-      expect(component.afterViewChecked).toBeTrue();
+      expect(component.afterViewChecked).toBe(true);
     });
 
     it('ngOnChanges: should emit `changeState` if hide currentValue is true', () => {
-      spyOn(component.changeState, 'emit');
+      vi.spyOn(component.changeState as any, 'emit');
 
       component.ngOnChanges(<any>{ hide: { currentValue: true } });
 
@@ -41,7 +41,7 @@ describe('PoContextTabButtonComponent:', () => {
     });
 
     it('ngOnChanges: should emit `changeState` if disabled currentValue is true', () => {
-      spyOn(component.changeState, 'emit');
+      vi.spyOn(component.changeState as any, 'emit');
 
       component.ngOnChanges(<any>{ disabled: { currentValue: true } });
 
@@ -49,7 +49,7 @@ describe('PoContextTabButtonComponent:', () => {
     });
 
     it('ngOnChanges: shouldn`t emit `changeState` if hide or disabled currentValue is false', () => {
-      spyOn(component.changeState, 'emit');
+      vi.spyOn(component.changeState as any, 'emit');
 
       component.ngOnChanges(<any>{ disabled: { currentValue: false }, hide: { currentValue: false } });
 
@@ -57,7 +57,7 @@ describe('PoContextTabButtonComponent:', () => {
     });
 
     it('ngOnChanges: should emit `changeVisible` if hide currentValue is true', () => {
-      spyOn(component.changeVisible, 'emit');
+      vi.spyOn(component.changeVisible as any, 'emit');
 
       component.afterViewChecked = true;
       component.ngOnChanges(<any>{ hide: { currentValue: true } });
@@ -67,9 +67,9 @@ describe('PoContextTabButtonComponent:', () => {
 
     it('should emit close when closeTab is called with Enter key and not disabled', () => {
       const event = new KeyboardEvent('keydown', { key: 'Enter' });
-      spyOn(event, 'preventDefault');
-      spyOn(event, 'stopPropagation');
-      spyOn(component.close, 'emit');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(event as any, 'stopPropagation');
+      vi.spyOn(component.close as any, 'emit');
 
       component.disabled = false;
 
@@ -82,9 +82,9 @@ describe('PoContextTabButtonComponent:', () => {
 
     it('should stopPropagation when closeTab is called with ArrowLeft or ArrowRight key', () => {
       const event = new KeyboardEvent('keydown', { code: 'ArrowLeft', key: 'ArrowLeft' });
-      spyOn(event, 'preventDefault');
-      spyOn(event, 'stopPropagation');
-      spyOn(component.close, 'emit');
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(event as any, 'stopPropagation');
+      vi.spyOn(component.close as any, 'emit');
 
       component.closeTab(event as any);
 
@@ -93,8 +93,8 @@ describe('PoContextTabButtonComponent:', () => {
       expect(component.close.emit).not.toHaveBeenCalled();
 
       const event2 = new KeyboardEvent('keydown', { code: 'ArrowRight', key: 'ArrowLeft' });
-      spyOn(event2, 'preventDefault');
-      spyOn(event2, 'stopPropagation');
+      vi.spyOn(event2 as any, 'preventDefault');
+      vi.spyOn(event2 as any, 'stopPropagation');
 
       component.closeTab(event2 as any);
 
@@ -104,7 +104,7 @@ describe('PoContextTabButtonComponent:', () => {
 
     it('should not emit close if component is disabled', () => {
       const event = new KeyboardEvent('keydown', { key: 'Enter' });
-      spyOn(component.close, 'emit');
+      vi.spyOn(component.close as any, 'emit');
 
       component.disabled = true;
 
@@ -117,10 +117,10 @@ describe('PoContextTabButtonComponent:', () => {
       component.disabled = false;
 
       component.onFocusIn();
-      expect(component.activeCloseIcon).toBeTrue();
+      expect(component.activeCloseIcon).toBe(true);
 
       component.onFocusOut();
-      expect(component.activeCloseIcon).toBeFalse();
+      expect(component.activeCloseIcon).toBe(false);
     });
   });
 });

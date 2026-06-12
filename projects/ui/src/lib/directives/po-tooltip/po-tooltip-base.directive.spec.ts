@@ -55,12 +55,12 @@ describe('PoTooltipBaseDirective', () => {
   });
 
   it('should set p-append-in-body', () => {
-    expect(component.appendInBody).toBeFalse();
+    expect(component.appendInBody).toBe(false);
   });
 
   describe('Properties', () => {
     it('p-display-tooltip: should call `addTooltipAction` if true', () => {
-      const spyAddTooltipAction = spyOn(component, <any>'addTooltipAction');
+      const spyAddTooltipAction = vi.spyOn(component as any, 'addTooltipAction');
 
       component.displayTooltip = true;
 
@@ -68,7 +68,7 @@ describe('PoTooltipBaseDirective', () => {
     });
 
     it('p-display-tooltip: should call `removeTooltipAction` if false', () => {
-      const spyRemoveTooltipAction = spyOn(component, <any>'removeTooltipAction');
+      const spyRemoveTooltipAction = vi.spyOn(component as any, 'removeTooltipAction');
 
       component.displayTooltip = false;
 

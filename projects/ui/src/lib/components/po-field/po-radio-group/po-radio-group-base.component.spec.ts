@@ -59,8 +59,8 @@ describe('PoRadioGroupBase: ', () => {
     component.value = '2';
     component['onChangePropagate'] = (v: any) => {};
 
-    spyOn(component.change, 'emit');
-    spyOn(component, <any>'onChangePropagate');
+    vi.spyOn(component.change as any, 'emit');
+    vi.spyOn(component as any, 'onChangePropagate');
     component.changeValue('1');
     expect(component.change.emit).toHaveBeenCalled();
     expect(component['onChangePropagate']).toHaveBeenCalled();
@@ -70,8 +70,8 @@ describe('PoRadioGroupBase: ', () => {
     component.value = '1';
     component['onChangePropagate'] = (v: any) => {};
 
-    spyOn(component.change, 'emit');
-    spyOn(component, <any>'onChangePropagate');
+    vi.spyOn(component.change as any, 'emit');
+    vi.spyOn(component as any, 'onChangePropagate');
     component.changeValue('1');
     expect(component.change.emit).not.toHaveBeenCalled();
     expect(component['onChangePropagate']).toHaveBeenCalled();
@@ -81,8 +81,8 @@ describe('PoRadioGroupBase: ', () => {
     component.value = '1';
     component['onChangePropagate'] = (v: any) => {};
 
-    spyOn(component.change, 'emit');
-    const spy = spyOn(component, <any>'onChangePropagate');
+    vi.spyOn(component.change as any, 'emit');
+    const spy = vi.spyOn(component as any, 'onChangePropagate');
     component['onChangePropagate'] = undefined;
     component.changeValue('1');
     expect(component.change.emit).not.toHaveBeenCalled();
@@ -113,8 +113,8 @@ describe('PoRadioGroupBase: ', () => {
       component.value = '2';
       component[onChangePropagate] = () => {};
 
-      spyOn(component, 'getElementByValue').and.returnValue(false);
-      spyOn(component, onChangePropagate);
+      vi.spyOn(component as any, 'getElementByValue').mockReturnValue(false);
+      vi.spyOn(component, onChangePropagate);
 
       component.writeValue(modelValue);
 
@@ -129,8 +129,8 @@ describe('PoRadioGroupBase: ', () => {
       component.value = undefined;
       component[onChangePropagate] = () => {};
 
-      spyOn(component, 'getElementByValue').and.returnValue(true);
-      spyOn(component, onChangePropagate);
+      vi.spyOn(component as any, 'getElementByValue').mockReturnValue(true);
+      vi.spyOn(component, onChangePropagate);
 
       component.writeValue(modelValue);
 
@@ -142,7 +142,7 @@ describe('PoRadioGroupBase: ', () => {
     it('validateModel: should call `validatorChange` if `validatorChange` is defined', () => {
       component['validatorChange'] = () => {};
 
-      spyOn(component, <any>'validatorChange');
+      vi.spyOn(component as any, 'validatorChange');
 
       component['validateModel']();
 
@@ -165,7 +165,7 @@ describe('PoRadioGroupBase: ', () => {
         }
       };
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
       expect(component.validate(new UntypedFormControl(formControl))).toEqual(validObj);
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -174,7 +174,7 @@ describe('PoRadioGroupBase: ', () => {
     it('validate: should return undefined if `requiredFailed` is false', () => {
       const formControl = new UntypedFormControl('1');
 
-      spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+      vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
 
       expect(component.validate(formControl)).toBeUndefined();
       expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
@@ -221,7 +221,7 @@ describe('PoRadioGroupBase: ', () => {
     const validateModel: any = 'validateModel';
 
     it('p-disabled: should be update with valid and invalid values.', () => {
-      spyOn(component, validateModel);
+      vi.spyOn(component, validateModel);
 
       expectPropertiesValues(component, 'disabled', validValues, true);
       expectPropertiesValues(component, 'disabled', invalidValues, false);
@@ -229,7 +229,7 @@ describe('PoRadioGroupBase: ', () => {
     });
 
     it('p-required: should be update with valid and invalid values.', () => {
-      spyOn(component, validateModel);
+      vi.spyOn(component, validateModel);
 
       expectPropertiesValues(component, 'required', validValues, true);
       expectPropertiesValues(component, 'required', invalidValues, false);
@@ -250,8 +250,8 @@ describe('PoRadioGroupBase: ', () => {
     it('p-columns: should set `mdColumns` and call `convertToInt` and `getGridSystemColumns` when `p-columns` property is setted', () => {
       component.mdColumns = undefined;
 
-      spyOn(UtilsFunction, 'convertToInt');
-      spyOn(component, <any>'getGridSystemColumns').and.returnValue(6);
+      vi.spyOn(UtilsFunction as any, 'convertToInt');
+      vi.spyOn(component as any, 'getGridSystemColumns').mockReturnValue(6);
 
       expectPropertiesValues(component, 'columns', 2, 6);
       expect(component.mdColumns).toBe(6);
@@ -331,7 +331,7 @@ describe('PoRadioGroupBase: ', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });

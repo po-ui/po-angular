@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { Renderer2, RendererFactory2, RendererStyleFlags2, DOCUMENT } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
@@ -113,8 +114,8 @@ describe('PoThemeService:', () => {
     renderer = TestBed.inject(RendererFactory2).createRenderer(null, null);
     service = TestBed.inject(PoThemeService);
 
-    spyOn(renderer, 'createText').and.callFake(css => document.createTextNode(css));
-    spyOn(document.documentElement, 'setAttribute');
+    vi.spyOn(renderer as any, 'createText').mockImplementation((css: any) => document.createTextNode(css));
+    vi.spyOn(document.documentElement as any, 'setAttribute');
 
     return TestBed.inject(PoThemeService);
   });
@@ -272,7 +273,7 @@ describe('PoThemeService:', () => {
     });
 
     it('should not set the custom theme, if it was send with a PoThemeTypeEnum that the theme does not have', () => {
-      spyOn(console, 'error');
+      vi.spyOn(console as any, 'error');
       service.setTheme(poThemeTest, 1);
 
       expect(console.error).not.toHaveBeenCalled();
@@ -303,7 +304,7 @@ describe('PoThemeService:', () => {
         },
         active: PoThemeTypeEnum.light
       };
-      spyOn(service, 'getThemeActive').and.returnValue(_theme);
+      vi.spyOn(service as any, 'getThemeActive').mockReturnValue(_theme);
       service.changeCurrentThemeType(PoThemeTypeEnum.dark);
 
       const activeTypeFromTheme = service['getActiveTypeFromTheme'](_theme.active);
@@ -327,7 +328,7 @@ describe('PoThemeService:', () => {
     });
 
     it('setTheme: should return if the type dont exist', () => {
-      spyOn(service, 'getThemeActive').and.returnValue(undefined);
+      vi.spyOn(service as any, 'getThemeActive').mockReturnValue(undefined);
       const theme = service.setTheme(poThemeInit, 2 as PoThemeTypeEnum, PoThemeA11yEnum.AA);
 
       expect(theme).toEqual(undefined);
@@ -343,73 +344,73 @@ describe('PoThemeService:', () => {
 
     describe('getA11yLevel:', () => {
       beforeEach(() => {
-        spyOn(document.documentElement, 'getAttribute').and.callThrough();
+        vi.spyOn(document.documentElement as any, 'getAttribute');
       });
 
       it('should return AAA if data-a11y is not set or is not AA', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue(null);
+        (document.documentElement.getAttribute as Mock).mockReturnValue(null);
         expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AAA);
 
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AB');
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AB');
         expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AAA);
       });
 
       it('should return AA if data-a11y is set to AA', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AA');
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AA');
         expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AA);
       });
 
       it('should return AAA if data-a11y is set to AAA', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AAA');
         expect(service.getA11yLevel()).toBe(PoThemeA11yEnum.AAA);
       });
     });
 
     describe('setA11yDefaultSizeSmall:', () => {
       beforeEach(() => {
-        spyOn(document.documentElement, 'getAttribute').and.callThrough();
+        vi.spyOn(document.documentElement as any, 'getAttribute');
       });
 
       it('should return false when isValidA11yLevel returns false', () => {
-        spyOn(service as any, 'isValidA11yLevel').and.returnValue(false);
+        vi.spyOn(service as any, 'isValidA11yLevel').mockReturnValue(false);
 
         const result = service.setA11yDefaultSizeSmall(true);
 
-        expect(result).toBeFalse();
+        expect(result).toBe(false);
       });
 
       it('should set enableSmallSizeForComponents to false if data-a11y is not AA or not set', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue(null);
+        (document.documentElement.getAttribute as Mock).mockReturnValue(null);
         const resultNull = service.setA11yDefaultSizeSmall(true);
-        expect(resultNull).toBeFalse();
+        expect(resultNull).toBe(false);
 
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AB');
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AB');
         const resultInvalid = service.setA11yDefaultSizeSmall(true);
-        expect(resultInvalid).toBeFalse();
+        expect(resultInvalid).toBe(false);
       });
 
       it('should set enableSmallSizeForComponents to false if data-a11y is not AA even if enable is true', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
-        expect(service.setA11yDefaultSizeSmall(true)).toBeFalse();
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AAA');
+        expect(service.setA11yDefaultSizeSmall(true)).toBe(false);
       });
 
       it('should enable small size only if data-a11y is AA and enable is true', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AA');
-        expect(service.setA11yDefaultSizeSmall(true)).toBeTrue();
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AA');
+        expect(service.setA11yDefaultSizeSmall(true)).toBe(true);
 
-        expect(service.setA11yDefaultSizeSmall(false)).toBeFalse();
+        expect(service.setA11yDefaultSizeSmall(false)).toBe(false);
       });
 
       it('should not enable small size if data-a11y is AAA, regardless of enable', () => {
-        (document.documentElement.getAttribute as jasmine.Spy).and.returnValue('AAA');
-        expect(service.setA11yDefaultSizeSmall(true)).toBeFalse();
-        expect(service.setA11yDefaultSizeSmall(false)).toBeFalse();
+        (document.documentElement.getAttribute as Mock).mockReturnValue('AAA');
+        expect(service.setA11yDefaultSizeSmall(true)).toBe(false);
+        expect(service.setA11yDefaultSizeSmall(false)).toBe(false);
       });
     });
 
     describe('getDensityMode', () => {
       it('should return the density mode', () => {
-        spyOn(UtilFunctions, 'getDensityMode').and.returnValue(PoDensityMode.Small);
+        vi.spyOn(UtilFunctions as any, 'getDensityMode').mockReturnValue(PoDensityMode.Small);
 
         expect(service.getDensityMode()).toBe(PoDensityMode.Small);
         expect(UtilFunctions.getDensityMode).toHaveBeenCalled();
@@ -420,9 +421,9 @@ describe('PoThemeService:', () => {
       let styleElement: HTMLStyleElement;
 
       beforeEach(() => {
-        spyOn(service as any, 'setPerComponentAndOnRoot');
-        spyOn(service as any, 'setDefaultBaseStyle');
-        spyOn(localStorage, 'setItem');
+        vi.spyOn(service as any, 'setPerComponentAndOnRoot');
+        vi.spyOn(service as any, 'setDefaultBaseStyle');
+        vi.spyOn(localStorage as any, 'setItem');
 
         styleElement = document.createElement('style');
         styleElement.id = 'baseStyle';
@@ -446,7 +447,7 @@ describe('PoThemeService:', () => {
         expect((service as any).setPerComponentAndOnRoot).toHaveBeenCalledWith(
           undefined,
           poThemeDefaultAA.perComponent,
-          jasmine.objectContaining(poThemeDensity.small)
+          expect.objectContaining(poThemeDensity.small)
         );
         expect((service as any).setDefaultBaseStyle).not.toHaveBeenCalled();
       });
@@ -468,20 +469,22 @@ describe('PoThemeService:', () => {
 
     describe('getA11yDefaultSize:', () => {
       it('should return "small" if data-a11y is AA and po-default-size in localStorage is set small', () => {
-        spyOn(document.documentElement, 'getAttribute').and.callFake((attr: string) => {
+        vi.spyOn(document.documentElement as any, 'getAttribute').mockImplementation((attr: string) => {
           if (attr === 'data-a11y') {
             return 'AA';
           }
           return null;
         });
 
-        spyOn(localStorage, 'getItem').and.callFake((key: string) => (key === 'po-default-size' ? 'small' : null));
+        vi.spyOn(localStorage as any, 'getItem').mockImplementation((key: string) =>
+          key === 'po-default-size' ? 'small' : null
+        );
 
         expect(service.getA11yDefaultSize()).toBe('small');
       });
 
       it('should return "medium" if data-a11y is not AA', () => {
-        spyOn(document.documentElement, 'getAttribute').and.callFake((attr: string) => {
+        vi.spyOn(document.documentElement as any, 'getAttribute').mockImplementation((attr: string) => {
           if (attr === 'data-a11y') {
             return 'AAA';
           }
@@ -491,7 +494,7 @@ describe('PoThemeService:', () => {
           return null;
         });
 
-        spyOn(localStorage, 'getItem').and.returnValue('small');
+        vi.spyOn(localStorage as any, 'getItem').mockReturnValue('small');
 
         expect(service.getA11yDefaultSize()).toBe('medium');
       });
@@ -499,8 +502,8 @@ describe('PoThemeService:', () => {
 
     describe('Local Saved Theme Methods:', () => {
       it('applyTheme: should persist and define the active theme', () => {
-        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
-        spyOn(service, 'setTheme');
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue(poThemeTest);
+        vi.spyOn(service as any, 'setTheme');
 
         const result = service.applyTheme();
 
@@ -514,8 +517,8 @@ describe('PoThemeService:', () => {
       });
 
       it('applyTheme: should apply local theme, if theme passed is the same saved', () => {
-        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
-        spyOn(service, 'setTheme');
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue(poThemeTest);
+        vi.spyOn(service as any, 'setTheme');
 
         const result = service.applyTheme(poThemeTest);
 
@@ -529,8 +532,8 @@ describe('PoThemeService:', () => {
       });
 
       it('applyTheme: should apply new theme and persist and define as active theme', () => {
-        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
-        spyOn(service, 'setTheme');
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue(poThemeTest);
+        vi.spyOn(service as any, 'setTheme');
 
         const result = service.applyTheme(poThemeInit);
 
@@ -543,8 +546,8 @@ describe('PoThemeService:', () => {
       });
 
       it('applyTheme: should not apply theme if none is passed and there is none local saved', () => {
-        spyOn(service, 'getThemeActive').and.returnValue(undefined);
-        spyOn(service, 'setTheme');
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue(undefined);
+        vi.spyOn(service as any, 'setTheme');
 
         const result = service.applyTheme();
 
@@ -553,8 +556,8 @@ describe('PoThemeService:', () => {
       });
 
       it('changeCurrentThemeType: should change current theme type', () => {
-        spyOn(service, 'getThemeActive').and.returnValue(poThemeTest);
-        spyOn(service, <any>'changeThemeType');
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue(poThemeTest);
+        vi.spyOn(service as any, 'changeThemeType');
         service.changeCurrentThemeType(PoThemeTypeEnum.dark);
 
         expect(service.getThemeActive).toHaveBeenCalled();
@@ -568,8 +571,8 @@ describe('PoThemeService:', () => {
 
         const htmlElement = document.getElementsByTagName('html')[0];
         htmlElement.classList.add('test-light-AAA');
-        const removeClassSpy = spyOn(htmlElement.classList, 'remove').and.callThrough();
-        const localStorageSpy = spyOn(localStorage, 'removeItem');
+        const removeClassSpy = vi.spyOn(htmlElement.classList as any, 'remove');
+        const localStorageSpy = vi.spyOn(localStorage as any, 'removeItem');
 
         service.cleanThemeActive();
 
@@ -579,7 +582,7 @@ describe('PoThemeService:', () => {
 
       it('setThemeLocal: should set active theme', () => {
         const theme: PoTheme = poThemeTest;
-        const setItemSpy = spyOn(localStorage, 'setItem');
+        const setItemSpy = vi.spyOn(localStorage as any, 'setItem');
 
         service['setThemeLocal'](theme);
 
@@ -588,7 +591,7 @@ describe('PoThemeService:', () => {
       });
 
       it('getThemeActive: should get active theme', () => {
-        const localStorageSpy = spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(poThemeTest));
+        const localStorageSpy = vi.spyOn(localStorage as any, 'getItem').mockReturnValue(JSON.stringify(poThemeTest));
         const result = service.getThemeActive();
 
         // Expectations
@@ -597,17 +600,19 @@ describe('PoThemeService:', () => {
       });
 
       it('getThemeActive: should catch error when localStorage is corrupted', () => {
-        spyOn(localStorage, 'getItem').and.throwError('Corrupted localStorage');
-        const consoleSpy = spyOn(console, 'error');
+        vi.spyOn(localStorage as any, 'getItem').mockImplementation(() => {
+          throw new Error('Corrupted localStorage');
+        });
+        const consoleSpy = vi.spyOn(console as any, 'error');
         service.getThemeActive();
 
-        expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', jasmine.any(Error));
+        expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', expect.any(Error));
       });
     });
 
     describe('setThemeType', () => {
       beforeEach(() => {
-        spyOn(service, 'setTheme');
+        vi.spyOn(service as any, 'setTheme');
       });
 
       it('should set theme type to light by default, if it is not defined', () => {
@@ -640,8 +645,8 @@ describe('PoThemeService:', () => {
 
     describe('setCurrentThemeType', () => {
       beforeEach(() => {
-        spyOn(service, 'getThemeActive').and.returnValue({ ...poThemeInit, active: PoThemeTypeEnum.light });
-        spyOn(service, 'setThemeType');
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue({ ...poThemeInit, active: PoThemeTypeEnum.light });
+        vi.spyOn(service as any, 'setThemeType');
       });
 
       it('should set current theme type to light by default', () => {
@@ -665,7 +670,7 @@ describe('PoThemeService:', () => {
 
     describe('setThemeA11y', () => {
       beforeEach(() => {
-        spyOn(service, 'setTheme');
+        vi.spyOn(service as any, 'setTheme');
       });
 
       it('should set theme accessibility to AAA by default, if it is not defined', () => {
@@ -698,11 +703,11 @@ describe('PoThemeService:', () => {
 
     describe('setCurrentThemeA11y', () => {
       beforeEach(() => {
-        spyOn(service, 'getThemeActive').and.returnValue({
+        vi.spyOn(service as any, 'getThemeActive').mockReturnValue({
           ...poThemeInit,
           active: { type: PoThemeTypeEnum.light }
         });
-        spyOn(service, 'setThemeA11y');
+        vi.spyOn(service as any, 'setThemeA11y');
       });
 
       it('should set current theme accessibility to AAA by default', () => {
@@ -828,7 +833,6 @@ describe('PoThemeService:', () => {
 
         const expectedCss = `
           :root[class*="-light-AAA"] {
-
           }
         `;
         validateStyleContent(expectedCss);
@@ -899,11 +903,11 @@ describe('PoThemeService:', () => {
       document.head.insertBefore(mockFirstChild, document.head.firstChild);
 
       // Configura spies para os seletores
-      spyOn(document, 'querySelector')
-        .withArgs('#theme')
-        .and.returnValue(null)
-        .withArgs('#baseStyle')
-        .and.returnValue(null);
+      vi.spyOn(document as any, 'querySelector').mockImplementation((selector: string) => {
+        if (selector === '#theme') return null;
+        if (selector === '#baseStyle') return null;
+        return document.querySelector.call(document, selector);
+      });
 
       // Chama o método
       service['applyThemeStyles'](testCss);

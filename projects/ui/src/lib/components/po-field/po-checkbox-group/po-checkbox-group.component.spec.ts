@@ -56,7 +56,7 @@ describe('PoCheckboxGroupComponent:', () => {
   });
 
   it('should call setValidators on ngAfterViewChecked', () => {
-    spyOn(fakeInstance.changeDetector, 'detectChanges');
+    vi.spyOn(fakeInstance.changeDetector as any, 'detectChanges');
     component.ngAfterViewChecked.call(fakeInstance);
     expect(fakeInstance.changeDetector.detectChanges).toHaveBeenCalled();
   });
@@ -69,13 +69,13 @@ describe('PoCheckboxGroupComponent:', () => {
 
       component.ngOnChanges(changes);
 
-      expect(component.displayAdditionalHelp).toBeFalse();
+      expect(component.displayAdditionalHelp).toBe(false);
     });
 
     it('ngAfterViewInit: should call `focus` if `autoFocus` is true.', () => {
       component.autoFocus = true;
 
-      const spyFocus = spyOn(component, <any>'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
 
       component.ngAfterViewInit();
 
@@ -85,7 +85,7 @@ describe('PoCheckboxGroupComponent:', () => {
     it('ngAfterViewInit: shouldn´t call `focus` if `autoFocus` is false.', () => {
       component.autoFocus = false;
 
-      const spyFocus = spyOn(component, <any>'focus');
+      const spyFocus = vi.spyOn(component as any, 'focus');
 
       component.ngAfterViewInit();
 
@@ -101,7 +101,7 @@ describe('PoCheckboxGroupComponent:', () => {
           component.additionalHelpTooltip = tooltip;
           component.displayAdditionalHelp = displayHelp;
           component.additionalHelp = additionalHelpEvent;
-          spyOn(component, 'showAdditionalHelp');
+          vi.spyOn(component as any, 'showAdditionalHelp');
         };
 
         checkboxMock = {
@@ -130,8 +130,8 @@ describe('PoCheckboxGroupComponent:', () => {
 
     describe('emitAdditionalHelp:', () => {
       it('should emit additionalHelp when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         component.emitAdditionalHelp();
 
@@ -139,8 +139,8 @@ describe('PoCheckboxGroupComponent:', () => {
       });
 
       it('should not emit additionalHelp when isAdditionalHelpEventTriggered returns false', () => {
-        spyOn(component.additionalHelp, 'emit');
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         component.emitAdditionalHelp();
 
@@ -148,7 +148,7 @@ describe('PoCheckboxGroupComponent:', () => {
       });
 
       it('should include additionalHelp when event is triggered', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
         component.additionalHelp = new EventEmitter<any>();
 
         const result = component.setHelper('label', 'tooltip');
@@ -182,7 +182,7 @@ describe('PoCheckboxGroupComponent:', () => {
         component.checkboxLabels = checkboxLabel;
         changeDetector.detectChanges();
 
-        spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
 
         component.focus();
 
@@ -198,8 +198,8 @@ describe('PoCheckboxGroupComponent:', () => {
         component.checkboxLabels = checkboxLabel;
         changeDetector.detectChanges();
 
-        spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
-        spyOn(component.checkboxLabels[1].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[1].checkboxLabel.nativeElement, 'focus');
 
         component.focus();
 
@@ -217,8 +217,8 @@ describe('PoCheckboxGroupComponent:', () => {
         component.checkboxLabels = checkboxLabel;
         changeDetector.detectChanges();
 
-        spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
-        spyOn(component.checkboxLabels[1].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[1].checkboxLabel.nativeElement, 'focus');
 
         component.focus();
 
@@ -235,8 +235,8 @@ describe('PoCheckboxGroupComponent:', () => {
         component.checkboxLabels = checkboxLabel;
         changeDetector.detectChanges();
 
-        spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
-        spyOn(component.checkboxLabels[1].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[0].checkboxLabel.nativeElement, 'focus');
+        vi.spyOn(component.checkboxLabels[1].checkboxLabel.nativeElement, 'focus');
 
         component.focus();
 
@@ -247,7 +247,7 @@ describe('PoCheckboxGroupComponent:', () => {
 
     describe('getAdditionalHelpTooltip:', () => {
       it('should return null when isAdditionalHelpEventTriggered returns true', () => {
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -257,7 +257,7 @@ describe('PoCheckboxGroupComponent:', () => {
       it('should return additionalHelpTooltip when isAdditionalHelpEventTriggered returns false', () => {
         const tooltip = 'Test Tooltip';
         component.additionalHelpTooltip = tooltip;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -266,7 +266,7 @@ describe('PoCheckboxGroupComponent:', () => {
 
       it('should return undefined when additionalHelpTooltip is undefined and isAdditionalHelpEventTriggered returns false', () => {
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
 
         const result = component.getAdditionalHelpTooltip();
 
@@ -316,13 +316,13 @@ describe('PoCheckboxGroupComponent:', () => {
 
         checkboxMock = {
           checkboxLabel: { nativeElement: document.createElement('input') },
-          focus: jasmine.createSpy('focus')
+          focus: vi.fn()
         } as unknown as PoCheckboxComponent;
       });
 
       it('should call `checkOption` and `preventDefault` when event which from spacebar', () => {
-        spyOn(component, 'checkOption');
-        spyOn(fakeEvent, 'preventDefault');
+        vi.spyOn(component as any, 'checkOption');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
 
         component.onKeyDown(fakeEvent, option, checkboxMock);
 
@@ -334,8 +334,8 @@ describe('PoCheckboxGroupComponent:', () => {
         fakeEvent.which = 9;
         fakeEvent.keyCode = 9;
 
-        spyOn(component, 'checkOption');
-        spyOn(fakeEvent, 'preventDefault');
+        vi.spyOn(component as any, 'checkOption');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
 
         component.onKeyDown(fakeEvent, option, checkboxMock);
 
@@ -346,8 +346,8 @@ describe('PoCheckboxGroupComponent:', () => {
       it('should call `checkOption` and `preventDefault` when event keyCode from spacebar key and event which undefined', () => {
         fakeEvent.which = undefined;
 
-        spyOn(component, 'checkOption');
-        spyOn(fakeEvent, 'preventDefault');
+        vi.spyOn(component as any, 'checkOption');
+        vi.spyOn(fakeEvent as any, 'preventDefault');
 
         component.onKeyDown(fakeEvent, option, checkboxMock);
 
@@ -356,8 +356,8 @@ describe('PoCheckboxGroupComponent:', () => {
       });
 
       it('should emit event when field is focused', () => {
-        spyOn(component.keydown, 'emit');
-        spyOnProperty(document, 'activeElement', 'get').and.returnValue(checkboxMock.checkboxLabel.nativeElement);
+        vi.spyOn(component.keydown as any, 'emit');
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(checkboxMock.checkboxLabel.nativeElement);
 
         component.onKeyDown(fakeEvent, option, checkboxMock);
 
@@ -369,9 +369,9 @@ describe('PoCheckboxGroupComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
 
@@ -379,11 +379,11 @@ describe('PoCheckboxGroupComponent:', () => {
         (component as any).label = '';
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -393,17 +393,17 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -412,18 +412,18 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -434,18 +434,18 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(false);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(false);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -455,18 +455,18 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component as any, 'isAdditionalHelpEventTriggered').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'isAdditionalHelpEventTriggered').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -475,7 +475,7 @@ describe('PoCheckboxGroupComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from false to true', () => {
@@ -483,8 +483,8 @@ describe('PoCheckboxGroupComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -492,8 +492,8 @@ describe('PoCheckboxGroupComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
   });

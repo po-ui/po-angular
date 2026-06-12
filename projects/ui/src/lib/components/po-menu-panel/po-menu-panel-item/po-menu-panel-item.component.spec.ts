@@ -40,7 +40,7 @@ describe('PoMenuPanelItemComponent', () => {
   describe('Methods: ', () => {
     it('ngOnInit: should call `subscribeMenuClickedFromParent`', () => {
       const fnSpy: any = 'subscribeMenuClickedFromParent';
-      spyOn(component, fnSpy);
+      vi.spyOn(component, fnSpy);
 
       component.ngOnInit();
 
@@ -53,8 +53,8 @@ describe('PoMenuPanelItemComponent', () => {
         ctrlKey: false,
         preventDefault: () => {}
       };
-      spyOn(event, 'preventDefault');
-      spyOn(component['menuItemsService'], method);
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(component['menuItemsService'], method);
 
       component.clickMenuItem(event);
 
@@ -68,8 +68,8 @@ describe('PoMenuPanelItemComponent', () => {
         metaKey: false,
         preventDefault: () => {}
       };
-      spyOn(event, 'preventDefault');
-      spyOn(component['menuItemsService'], fnSpy);
+      vi.spyOn(event as any, 'preventDefault');
+      vi.spyOn(component['menuItemsService'], fnSpy);
 
       component.clickMenuItem(event);
 
@@ -81,7 +81,7 @@ describe('PoMenuPanelItemComponent', () => {
       const fnSpy: any = 'activateMenu';
       const menu = { active: false, grouped: false };
 
-      spyOn(component, fnSpy).and.returnValue(null);
+      vi.spyOn(component, fnSpy).mockReturnValue(null);
 
       component.menuItemInternal.type = 'internalLink';
       component['processMenuItem'](menu);
@@ -93,7 +93,7 @@ describe('PoMenuPanelItemComponent', () => {
       const fnSpy: any = 'activateMenu';
       const menu = { active: false, grouped: false };
 
-      spyOn(component, fnSpy).and.returnValue(null);
+      vi.spyOn(component, fnSpy).mockReturnValue(null);
 
       component.menuItemInternal.type = 'externalLink';
       component['processMenuItem'](menu);
@@ -105,7 +105,7 @@ describe('PoMenuPanelItemComponent', () => {
       const fnSpy: any = 'processMenuItem';
       menuItemInternal.type = 'externalLink';
 
-      spyOn(component, fnSpy);
+      vi.spyOn(component, fnSpy);
 
       Object.defineProperty(component, 'menuItemsService', {
         value: <any>fakeMenuService(menuItemInternal),
@@ -127,8 +127,8 @@ describe('PoMenuPanelItemComponent', () => {
     it('shouldn`t call `preventDefault` and `menuItemsService` when dispatch event ctrl + click', () => {
       const method = 'sendToParentMenuClicked';
 
-      spyOn(eventClick, 'preventDefault');
-      spyOn(component['menuItemsService'], method);
+      vi.spyOn(eventClick as any, 'preventDefault');
+      vi.spyOn(component['menuItemsService'], method);
 
       const menuItem = nativeElement.querySelector('.po-menu-panel-item');
       menuItem.dispatchEvent(eventClick);

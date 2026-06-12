@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { EventEmitter, NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -72,10 +73,10 @@ describe('PoRichTextComponent:', () => {
 
   describe('Methods:', () => {
     describe('ngAfterViewInit:', () => {
-      let inputFocus: jasmine.Spy;
+      let inputFocus: any;
 
       beforeEach(() => {
-        inputFocus = spyOn(component, 'focus');
+        inputFocus = vi.spyOn(component as any, 'focus');
       });
 
       it('should include additionalHelp when observed is true', () => {
@@ -99,7 +100,7 @@ describe('PoRichTextComponent:', () => {
       it('should apply eventListeners if onChangeModel is null', fakeAsync(() => {
         component.onChangeModel = null;
 
-        spyOn(nativeElement, 'addEventListener');
+        vi.spyOn(nativeElement as any, 'addEventListener');
 
         component.ngAfterViewInit();
         tick();
@@ -112,7 +113,7 @@ describe('PoRichTextComponent:', () => {
       it('shouldn`t apply eventListeners if onChangeModel is not null', fakeAsync(() => {
         component.onChangeModel = () => {};
 
-        spyOn(nativeElement, 'addEventListener');
+        vi.spyOn(nativeElement as any, 'addEventListener');
 
         component.ngAfterViewInit();
         tick();
@@ -138,7 +139,7 @@ describe('PoRichTextComponent:', () => {
     it('ngOnDestroy: should remove eventListeners if onChangeModel is null', () => {
       component.onChangeModel = null;
 
-      spyOn(nativeElement, 'removeEventListener');
+      vi.spyOn(nativeElement as any, 'removeEventListener');
 
       component.ngOnDestroy();
 
@@ -150,7 +151,7 @@ describe('PoRichTextComponent:', () => {
     it('ngOnDestroy: shouldn`t remove eventListeners if onChangeModel is not null', () => {
       component.onChangeModel = () => {};
 
-      spyOn(nativeElement, 'removeEventListener');
+      vi.spyOn(nativeElement as any, 'removeEventListener');
 
       component.ngOnDestroy();
 
@@ -160,7 +161,9 @@ describe('PoRichTextComponent:', () => {
     });
 
     it('should call focus on bodyElement', () => {
-      component.bodyElement = jasmine.createSpyObj('PoRichTextBodyComponent', ['focus']);
+      (component as any).bodyElement = {
+        focus: vi.fn().mockName('PoRichTextBodyComponent.focus')
+      };
 
       component.focus();
 
@@ -169,7 +172,7 @@ describe('PoRichTextComponent:', () => {
     describe('onBlur', () => {
       it('should be called when `po-rich-text-body` emit blur event', () => {
         component['onTouched'] = () => {};
-        spyOn(component, <any>'onTouched');
+        vi.spyOn(component as any, 'onTouched');
 
         component.onBlur();
 
@@ -189,23 +192,23 @@ describe('PoRichTextComponent:', () => {
       let helperEl: any;
       beforeEach(() => {
         helperEl = {
-          openHelperPopover: jasmine.createSpy('openHelperPopover'),
-          closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-          helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false)
+          openHelperPopover: vi.fn(),
+          closeHelperPopover: vi.fn(),
+          helperIsVisible: vi.fn().mockReturnValue(false)
         };
       });
       it('should emit additionalHelp when isHelpEvt is true (observed)', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
 
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
 
-        spyOnProperty(component.additionalHelp as any, 'observed', 'get').and.returnValue(true);
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component.additionalHelp as any, 'observed', 'get').mockReturnValue(true);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -215,7 +218,7 @@ describe('PoRichTextComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalledTimes(1);
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call closeHelperPopover and return early when helperIsVisible is true', () => {
@@ -223,10 +226,10 @@ describe('PoRichTextComponent:', () => {
         component.additionalHelpTooltip = undefined;
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(true);
+        helperEl.helperIsVisible.mockReturnValue(true);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -236,17 +239,17 @@ describe('PoRichTextComponent:', () => {
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should emit additionalHelp and return early when isAdditionalHelpEventTriggered is true', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue({});
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue({});
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -254,17 +257,17 @@ describe('PoRichTextComponent:', () => {
         expect(component.helperEl.openHelperPopover).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should call helper.eventOnClick and return early when helper has eventOnClick function', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        const helperMock = { eventOnClick: jasmine.createSpy('eventOnClick') };
-        spyOn(component as any, 'poHelperComponent').and.returnValue(helperMock);
-        spyOn(component.additionalHelp, 'emit');
+        const helperMock = { eventOnClick: vi.fn() };
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(helperMock);
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -275,18 +278,18 @@ describe('PoRichTextComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.helperEl.openHelperPopover).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via additionalHelpTooltip when helper is falsy and isHelpEvt is false, then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = 'any text';
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
@@ -296,32 +299,32 @@ describe('PoRichTextComponent:', () => {
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
         expect(component.additionalHelp.emit).not.toHaveBeenCalled();
         expect(result).toBeUndefined();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should enter the block via isHelpEvt when helper and tooltip are falsy, emit and then open popover', () => {
         (component as any).label = '';
         component.displayAdditionalHelp = false;
 
-        helperEl.helperIsVisible.and.returnValue(false);
+        helperEl.helperIsVisible.mockReturnValue(false);
         component.helperEl = helperEl;
-        spyOn(component as any, 'poHelperComponent').and.returnValue(undefined);
+        vi.spyOn(component as any, 'poHelperComponent').mockReturnValue(undefined);
         component.additionalHelpTooltip = undefined;
-        spyOn(component.additionalHelp, 'emit');
+        vi.spyOn(component.additionalHelp as any, 'emit');
 
         const result = component.showAdditionalHelp();
 
         expect((component as any).poHelperComponent).toHaveBeenCalled();
         expect(component.helperEl.closeHelperPopover).not.toHaveBeenCalled();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(component.displayAdditionalHelp).toBe(true);
       });
       it('should toggle `displayAdditionalHelp` from false to true', () => {
         component.displayAdditionalHelp = false;
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeTrue();
-        expect(component.displayAdditionalHelp).toBeTrue();
+        expect(result).toBe(true);
+        expect(component.displayAdditionalHelp).toBe(true);
       });
 
       it('should toggle `displayAdditionalHelp` from true to false', () => {
@@ -329,14 +332,14 @@ describe('PoRichTextComponent:', () => {
 
         const result = component.showAdditionalHelp();
 
-        expect(result).toBeFalse();
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(result).toBe(false);
+        expect(component.displayAdditionalHelp).toBe(false);
       });
     });
 
     it('updateValue: should apply values to value, invalid and call updateModel', () => {
-      spyOn(component, <any>'updateModel');
-      spyOn(component, <any>'controlChangeModelEmitter');
+      vi.spyOn(component as any, 'updateModel');
+      vi.spyOn(component as any, 'controlChangeModelEmitter');
 
       component.updateValue('value');
 
@@ -378,7 +381,7 @@ describe('PoRichTextComponent:', () => {
     }));
 
     it('onChangeValue: should emit change', () => {
-      spyOn(component.change, 'emit');
+      vi.spyOn(component.change as any, 'emit');
 
       component.onChangeValue('value');
 
@@ -387,7 +390,7 @@ describe('PoRichTextComponent:', () => {
 
     it('p-keydown: should emit event', () => {
       const fakeEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-      spyOn(component.keydown, 'emit');
+      vi.spyOn(component.keydown as any, 'emit');
 
       component.onKeyDown(fakeEvent);
 
@@ -398,7 +401,7 @@ describe('PoRichTextComponent:', () => {
       const value = 'value';
       component['modelLastUpdate'] = '1';
 
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
 
       component['controlChangeModelEmitter'](value);
 
@@ -410,7 +413,7 @@ describe('PoRichTextComponent:', () => {
       const value = 'value';
       component['modelLastUpdate'] = 'value';
 
-      spyOn(component.changeModel, 'emit');
+      vi.spyOn(component.changeModel as any, 'emit');
 
       component['controlChangeModelEmitter'](value);
 
@@ -425,7 +428,7 @@ describe('PoRichTextComponent:', () => {
 
         component.ngOnChanges(changes);
 
-        expect(component.displayAdditionalHelp).toBeFalse();
+        expect(component.displayAdditionalHelp).toBe(false);
       });
 
       it('should update `hideToolbarActions` if it changes', () => {
@@ -469,36 +472,36 @@ describe('PoRichTextComponent:', () => {
 
         fixture.detectChanges();
 
-        expect(component.isAllActionsHidden()).toBeTrue();
+        expect(component.isAllActionsHidden()).toBe(true);
       });
 
       it('should return false if not all toolbar actions are hidden', () => {
         component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
 
-        expect(component.isAllActionsHidden()).toBeFalse();
+        expect(component.isAllActionsHidden()).toBe(false);
       });
 
       it('should prioritize `disabledTextAlign` as true and include `Align` action even if not in `hideToolbarActions`', () => {
         component.disabledTextAlign = true;
         component.hideToolbarActions = [PoRichTextToolbarActions.Color];
 
-        expect(component.isAllActionsHidden()).toBeFalse();
-        expect(component.hideToolbarActions.includes(PoRichTextToolbarActions.Align)).toBeFalse();
+        expect(component.isAllActionsHidden()).toBe(false);
+        expect(component.hideToolbarActions.includes(PoRichTextToolbarActions.Align)).toBe(false);
       });
 
       it('should prioritize `disabledTextAlign` as false and exclude `Align` action if present in `hideToolbarActions`', () => {
         component.disabledTextAlign = false;
         component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
 
-        expect(component.isAllActionsHidden()).toBeFalse();
-        expect(component.hideToolbarActions.includes(PoRichTextToolbarActions.Align)).toBeTrue();
+        expect(component.isAllActionsHidden()).toBe(false);
+        expect(component.hideToolbarActions.includes(PoRichTextToolbarActions.Align)).toBe(true);
       });
 
       it('should ignore `disabledTextAlign` if it is undefined', () => {
         component.disabledTextAlign = undefined;
         component.hideToolbarActions = [PoRichTextToolbarActions.Align, PoRichTextToolbarActions.Color];
 
-        expect(component.isAllActionsHidden()).toBeFalse();
+        expect(component.isAllActionsHidden()).toBe(false);
       });
 
       it('should return true if all actions in hideToolbarActions and disabledTextAlign as true includes `Align`', () => {
@@ -509,7 +512,7 @@ describe('PoRichTextComponent:', () => {
 
         fixture.detectChanges();
 
-        expect(component.isAllActionsHidden()).toBeTrue();
+        expect(component.isAllActionsHidden()).toBe(true);
       });
     });
   });
@@ -517,7 +520,7 @@ describe('PoRichTextComponent:', () => {
   describe('Properties:', () => {
     describe('p-size', () => {
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -526,7 +529,7 @@ describe('PoRichTextComponent:', () => {
 
   describe('Template:', () => {
     it('should display `po-rich-text-toolbar` when `isAllActionsHidden` returns false', () => {
-      spyOn(component, 'isAllActionsHidden').and.returnValue(false);
+      vi.spyOn(component as any, 'isAllActionsHidden').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -535,7 +538,7 @@ describe('PoRichTextComponent:', () => {
     });
 
     it('should not display `po-rich-text-toolbar` and display `richTextWithNoToolbar` template when `isAllActionsHidden` returns true', () => {
-      spyOn(component, 'isAllActionsHidden').and.returnValue(true);
+      vi.spyOn(component as any, 'isAllActionsHidden').mockReturnValue(true);
       fixture.detectChanges();
 
       const toolbar = nativeElement.querySelector('po-rich-text-toolbar');
@@ -546,7 +549,7 @@ describe('PoRichTextComponent:', () => {
     });
 
     it('should call `isAllActionsHidden` to determine which template to display', () => {
-      const spyIsAllActionsHidden = spyOn(component, 'isAllActionsHidden').and.callThrough();
+      const spyIsAllActionsHidden = vi.spyOn(component as any, 'isAllActionsHidden');
 
       fixture.detectChanges();
 
@@ -559,7 +562,7 @@ describe('PoRichTextComponent:', () => {
 
       const toolbar = fixture.debugElement.query(debugEl => debugEl.name === 'po-rich-text-toolbar');
 
-      expect(toolbar.componentInstance.disabled).toBeTrue();
+      expect(toolbar.componentInstance.disabled).toBe(true);
     });
 
     it('should pass `isDisabled` as true to toolbar when `loading` is true', () => {
@@ -568,7 +571,7 @@ describe('PoRichTextComponent:', () => {
 
       const toolbar = fixture.debugElement.query(debugEl => debugEl.name === 'po-rich-text-toolbar');
 
-      expect(toolbar.componentInstance.disabled).toBeTrue();
+      expect(toolbar.componentInstance.disabled).toBe(true);
     });
   });
 });

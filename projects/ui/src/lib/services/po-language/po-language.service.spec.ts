@@ -24,8 +24,8 @@ describe('PoLanguageService:', () => {
 
   describe('Properties:', () => {
     it(`languageDefault: shouldn't call 'localStorage.setItem' if invalid value.`, () => {
-      spyOn(utils, 'isLanguage').and.returnValue(false);
-      spyOn(localStorage, 'setItem');
+      vi.spyOn(utils as any, 'isLanguage').mockReturnValue(false);
+      vi.spyOn(localStorage as any, 'setItem');
 
       service.languageDefault = 'po';
 
@@ -33,7 +33,7 @@ describe('PoLanguageService:', () => {
     });
 
     it(`languageDefault: should call 'localStorage.setItem' with 'poDefaultLanguage' and value if valid value.`, () => {
-      spyOn(localStorage, 'setItem');
+      vi.spyOn(localStorage as any, 'setItem');
 
       service.languageDefault = languages.en;
 
@@ -41,7 +41,7 @@ describe('PoLanguageService:', () => {
     });
 
     it(`languageDefault: should call 'localStorage.getItem' with 'poDefaultLanguage'.`, () => {
-      spyOn(localStorage, 'getItem').and.returnValue(languages.en);
+      vi.spyOn(localStorage as any, 'getItem').mockReturnValue(languages.en);
 
       service.languageDefault = languages.en;
 
@@ -52,32 +52,32 @@ describe('PoLanguageService:', () => {
 
   describe('Methods:', () => {
     it('getLanguage: should call `localStorage.getItem` with `poLocaleKey` and return its value.', () => {
-      spyOn(localStorage, 'getItem').and.returnValue(languages.pt);
+      vi.spyOn(localStorage as any, 'getItem').mockReturnValue(languages.pt);
 
       expect(service.getLanguage()).toBe(languages.pt);
       expect(localStorage.getItem).toHaveBeenCalledWith(poLocaleKey);
     });
 
     it('getLanguage: should return `languageDefault` if `localStorage.getItem` is null.', () => {
-      spyOnProperty(service, 'languageDefault').and.returnValue(languages.enUs);
+      vi.spyOn(service as any, 'languageDefault').mockReturnValue(languages.enUs);
 
-      spyOn(localStorage, 'getItem').and.returnValue(null);
+      vi.spyOn(localStorage as any, 'getItem').mockReturnValue(null);
 
       expect(service.getLanguage()).toBe(languages.enUs.toLowerCase());
     });
 
     it('getLanguage: should return browser language if `localStorage.getItem` and `languageDefault` return undefined.', () => {
-      spyOn(utils, 'getBrowserLanguage').and.returnValue('pt');
+      vi.spyOn(utils as any, 'getBrowserLanguage').mockReturnValue('pt');
 
       service.languageDefault = undefined;
 
-      spyOn(localStorage, 'getItem').and.returnValue(undefined);
+      vi.spyOn(localStorage as any, 'getItem').mockReturnValue(undefined);
 
       expect(service.getLanguage()).toBe('pt');
     });
 
     it('getLanguageDefault: should return `languageDefault` value.', () => {
-      const spyLanguageDefault = spyOnProperty(service, 'languageDefault');
+      const spyLanguageDefault = vi.spyOn(service as any, 'languageDefault');
 
       service.getLanguageDefault();
 
@@ -85,40 +85,40 @@ describe('PoLanguageService:', () => {
     });
 
     it('getShortLanguage: should return default language `pt` if `getLanguage` return undefined.', () => {
-      spyOn(service, 'getLanguage').and.returnValue(undefined);
+      vi.spyOn(service as any, 'getLanguage').mockReturnValue(undefined);
 
       expect(service.getShortLanguage()).toBe(languages.pt);
     });
 
     it('getShortLanguage: should return default language `pt` if language is different of `pt`, `en`, `ru` or `es`.', () => {
-      spyOn(service, 'getLanguage').and.returnValue('de');
+      vi.spyOn(service as any, 'getLanguage').mockReturnValue('de');
 
       expect(service.getShortLanguage()).toBe(languages.pt);
     });
 
     it('getShortLanguage: should return the language without country abbreviation if `getLanguage` returns `pt-BR`.', () => {
-      spyOn(service, 'getLanguage').and.returnValue(languages.ptBr);
+      vi.spyOn(service as any, 'getLanguage').mockReturnValue(languages.ptBr);
 
       expect(service.getShortLanguage()).toBe(languages.pt);
     });
 
     it('getShortLanguage: should return the language without country abbreviation if `getLanguage` returns `en`.', () => {
-      spyOn(service, 'getLanguage').and.returnValue(languages.en);
+      vi.spyOn(service as any, 'getLanguage').mockReturnValue(languages.en);
 
       expect(service.getShortLanguage()).toBe(languages.en);
     });
 
     it('setLanguage: should call `localStorage.setItem` with `poLocaleKey` and value param if value is a language.', () => {
-      spyOn(utils, 'isLanguage').and.returnValue(true);
-      spyOn(localStorage, 'setItem');
+      vi.spyOn(utils as any, 'isLanguage').mockReturnValue(true);
+      vi.spyOn(localStorage as any, 'setItem');
 
       service.setLanguage(languages.es);
       expect(localStorage.setItem).toHaveBeenCalledWith(poLocaleKey, languages.es);
     });
 
     it(`setLanguage: shouldn't call 'localStorage.setItem' with 'poLocaleKey' and value param if value isn't a language.`, () => {
-      spyOn(utils, 'isLanguage').and.returnValue(false);
-      spyOn(localStorage, 'setItem');
+      vi.spyOn(utils as any, 'isLanguage').mockReturnValue(false);
+      vi.spyOn(localStorage as any, 'setItem');
 
       service.setLanguage(languages.es);
       expect(localStorage.setItem).not.toHaveBeenCalled();
@@ -140,7 +140,7 @@ describe('PoLanguageService:', () => {
 
     describe('getNumberSeparators:', () => {
       it(`should return language separators if language param is undefined.`, () => {
-        spyOn(service, 'getShortLanguage').and.returnValue('pt');
+        vi.spyOn(service as any, 'getShortLanguage').mockReturnValue('pt');
         const { decimalSeparator, thousandSeparator } = service.getNumberSeparators();
         expect(decimalSeparator).toBe(',');
         expect(thousandSeparator).toBe('.');
@@ -178,17 +178,17 @@ describe('PoLanguageService:', () => {
     });
     describe('getDateSeparator:', () => {
       it(`should return language date separator '/' if language param is 'pt'.`, () => {
-        spyOn(service, 'getShortLanguage').and.returnValue('pt');
+        vi.spyOn(service as any, 'getShortLanguage').mockReturnValue('pt');
         const dateSeparator = service.getDateSeparator();
         expect(dateSeparator).toBe('/');
       });
       it(`should return language date separator '/' if language param is not one of the valids'.`, () => {
-        spyOn(service, 'getShortLanguage').and.returnValue('de');
+        vi.spyOn(service as any, 'getShortLanguage').mockReturnValue('de');
         const dateSeparator = service.getDateSeparator();
         expect(dateSeparator).toBe('/');
       });
       it(`should return language date separator '.' if language param is 'ru'.`, () => {
-        spyOn(service, 'getShortLanguage').and.returnValue('ru');
+        vi.spyOn(service as any, 'getShortLanguage').mockReturnValue('ru');
         const dateSeparator = service.getDateSeparator();
         expect(dateSeparator).toBe('.');
       });

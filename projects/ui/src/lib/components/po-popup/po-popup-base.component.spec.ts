@@ -103,48 +103,52 @@ describe('PoPopupBaseComponent:', () => {
       it('should return false when actions have no subItems', () => {
         component.actions = [{ label: 'Action 1' }, { label: 'Action 2' }];
 
-        expect(component.computedListboxSubitems).toBeFalse();
+        expect(component.computedListboxSubitems).toBe(false);
       });
 
       it('should return true when at least one action has subItems', () => {
         component.actions = [{ label: 'Action 1' }, { label: 'Group', subItems: [{ label: 'Sub 1' }] }];
 
-        expect(component.computedListboxSubitems).toBeTrue();
+        expect(component.computedListboxSubitems).toBe(true);
       });
 
       it('should return false when subItems is an empty array', () => {
         component.actions = [{ label: 'Action 1', subItems: [] }];
 
-        expect(component.computedListboxSubitems).toBeFalse();
+        expect(component.computedListboxSubitems).toBe(false);
       });
 
       it('should return true when at least one action has $subItemTemplate', () => {
         const templateRef = {} as any;
         component.actions = [{ label: 'Action 1', $subItemTemplate: templateRef }];
 
-        expect(component.computedListboxSubitems).toBeTrue();
+        expect(component.computedListboxSubitems).toBe(true);
       });
 
       it('should return false when actions is empty', () => {
         component.actions = [];
 
-        expect(component.computedListboxSubitems).toBeFalse();
+        expect(component.computedListboxSubitems).toBe(false);
       });
 
       it('should recalculate when actions change dynamically', () => {
         component.actions = [{ label: 'Action 1' }];
 
-        expect(component.computedListboxSubitems).toBeFalse();
+        expect(component.computedListboxSubitems).toBe(false);
 
         component.actions = [{ label: 'Group', subItems: [{ label: 'Sub 1' }] }];
 
-        expect(component.computedListboxSubitems).toBeTrue();
+        expect(component.computedListboxSubitems).toBe(true);
       });
 
       it('should return false when actions is set to invalid value', () => {
-        (component as { actions: any }).actions = undefined;
+        (
+          component as {
+            actions: any;
+          }
+        ).actions = undefined;
 
-        expect(component.computedListboxSubitems).toBeFalse();
+        expect(component.computedListboxSubitems).toBe(false);
       });
     });
 

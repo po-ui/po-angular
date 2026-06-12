@@ -165,7 +165,7 @@ describe('PoTableListManagerComponent:', () => {
       { property: 'name', label: 'Name' }
     ];
 
-    spyOn(component['changePosition'], 'emit');
+    vi.spyOn(component['changePosition'] as any, 'emit');
 
     component.emitChangePosition({ property: 'initial', label: 'initial', value: 'initial' }, 'up');
 
@@ -179,7 +179,7 @@ describe('PoTableListManagerComponent:', () => {
       { property: 'name', label: 'Name' }
     ];
 
-    spyOn(component['changePosition'], 'emit');
+    vi.spyOn(component['changePosition'] as any, 'emit');
     component.emitChangePosition({ property: 'id', label: 'Code', value: 'id' }, 'up');
 
     expect(component['changePosition'].emit).not.toHaveBeenCalled();
@@ -192,7 +192,7 @@ describe('PoTableListManagerComponent:', () => {
       { property: 'name', label: 'Name' }
     ];
 
-    spyOn(component['changePosition'], 'emit');
+    vi.spyOn(component['changePosition'] as any, 'emit');
 
     component.emitChangePosition({ property: 'initial', label: 'initial', value: 'initial' }, 'down');
 
@@ -206,7 +206,7 @@ describe('PoTableListManagerComponent:', () => {
       { property: 'name', label: 'Name' }
     ];
 
-    spyOn(component['changePosition'], 'emit');
+    vi.spyOn(component['changePosition'] as any, 'emit');
     component.emitChangePosition({ property: 'name', label: 'name', value: 'name' }, 'down');
 
     expect(component['changePosition'].emit).not.toHaveBeenCalled();
@@ -221,7 +221,7 @@ describe('PoTableListManagerComponent:', () => {
 
     const resultIsfixed = component.isFixed({ property: 'id', value: 'id' });
 
-    expect(resultIsfixed).toBeTrue();
+    expect(resultIsfixed).toBe(true);
   });
 
   it(`isFixed: should return false if option is not fixed`, () => {
@@ -233,7 +233,7 @@ describe('PoTableListManagerComponent:', () => {
 
     const resultIsfixed = component.isFixed({ property: 'id', value: 'id' });
 
-    expect(resultIsfixed).toBeFalse();
+    expect(resultIsfixed).toBe(false);
   });
 
   it(`emitFixed: should emit option with fixed true`, () => {
@@ -242,7 +242,7 @@ describe('PoTableListManagerComponent:', () => {
       { property: 'initial', label: 'initial' },
       { property: 'name', label: 'Name' }
     ];
-    spyOn(component['changeColumnFixed'], 'emit');
+    vi.spyOn(component['changeColumnFixed'] as any, 'emit');
 
     component.emitFixed({ property: 'id', value: 'id', visible: true });
 
@@ -260,7 +260,7 @@ describe('PoTableListManagerComponent:', () => {
       { property: 'initial', label: 'initial' },
       { property: 'name', label: 'Name' }
     ];
-    spyOn(component['changeColumnFixed'], 'emit');
+    vi.spyOn(component['changeColumnFixed'] as any, 'emit');
 
     component.emitFixed({ property: 'id', value: 'id', visible: true });
 
@@ -273,7 +273,7 @@ describe('PoTableListManagerComponent:', () => {
   });
 
   it(`clickSwitch: should call checkOption`, () => {
-    spyOn(component, 'checkOption');
+    vi.spyOn(component as any, 'checkOption');
 
     component.clickSwitch({ property: 'id', label: 'Id', fixed: true });
 
@@ -292,7 +292,7 @@ describe('PoTableListManagerComponent:', () => {
 
     const result = component.checksIfHasFiveFixed({ property: 'test', label: 'Teste', value: 'test', fixed: false });
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it(`checksIfHasFiveFixed: should return true if has less than 5 fixed and item is not fixed`, () => {
@@ -307,6 +307,6 @@ describe('PoTableListManagerComponent:', () => {
 
     const result = component.checksIfHasFiveFixed({ property: 'test', label: 'Teste', value: 'test', fixed: false });
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 });

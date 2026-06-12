@@ -78,10 +78,10 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it('modalCancelAction: should call modal.close and cleanUpFields', () => {
-      spyOn(component.modal, <any>'close');
-      spyOn(component.command, 'emit');
-      spyOn(component, <any>'retrieveCursorPosition');
-      spyOn(component, <any>'cleanUpFields');
+      vi.spyOn(component.modal as any, 'close');
+      vi.spyOn(component.command as any, 'emit');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
+      vi.spyOn(component as any, 'cleanUpFields');
 
       component.modalCancelAction.action();
 
@@ -92,7 +92,7 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it('modalConfirmAction: should call insertElementRef', () => {
-      spyOn(component, <any>'insertElementRef');
+      vi.spyOn(component as any, 'insertElementRef');
 
       component.modalConfirmAction.action();
 
@@ -102,8 +102,8 @@ describe('PoRichTextImageModalComponent', () => {
 
   describe('Methods:', () => {
     it(`openModal: should call 'modal.open' and 'saveCursorPosition'`, () => {
-      spyOn(component.modal, 'open');
-      spyOn(component, <any>'saveCursorPosition');
+      vi.spyOn(component.modal as any, 'open');
+      vi.spyOn(component as any, 'saveCursorPosition');
 
       component.openModal();
 
@@ -112,8 +112,8 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it(`convertToBase64: should call 'convertImageToBase64'.`, async () => {
-      component.uploadModel = <any>[{ rawFile: <any>'new file' }];
-      spyOn(UtilsFunction, 'convertImageToBase64');
+      component.uploadModel = <any>[{ rawFile: 'new file' }];
+      vi.spyOn(UtilsFunction as any, 'convertImageToBase64');
 
       await component['convertToBase64']();
 
@@ -121,7 +121,7 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it(`convertToBase64: shouldn't call 'convertImageToBase64'.`, async () => {
-      spyOn(UtilsFunction, 'convertImageToBase64');
+      vi.spyOn(UtilsFunction as any, 'convertImageToBase64');
 
       await component['convertToBase64']();
 
@@ -132,7 +132,7 @@ describe('PoRichTextImageModalComponent', () => {
       const value = 'fakeUrl';
       const command = 'insertImage';
 
-      spyOn(component.command, 'emit');
+      vi.spyOn(component.command as any, 'emit');
 
       component['emitCommand'](value);
 
@@ -142,7 +142,7 @@ describe('PoRichTextImageModalComponent', () => {
     it(`emitCommand: shouldn't call 'command' and 'emit'.`, () => {
       const value = undefined;
 
-      spyOn(component.command, 'emit');
+      vi.spyOn(component.command as any, 'emit');
 
       component['emitCommand'](value);
 
@@ -150,23 +150,27 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it(`insertElementRef: should call 'retrieveCursorPosition' and 'modal.close' before 'emitCommand'`, async () => {
-      spyOn(component.modal, <any>'close');
-      spyOn(component, <any>'retrieveCursorPosition');
-      const spyEmitCommand = spyOn(component, <any>'emitCommand');
-      spyOnProperty(component, 'isUrlValid').and.returnValue(true);
+      vi.spyOn(component.modal as any, 'close');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
+      const spyEmitCommand = vi.spyOn(component as any, 'emitCommand');
+      vi.spyOn(component as any, 'isUrlValid').mockReturnValue(true);
 
       await component['insertElementRef']();
 
-      expect(component['retrieveCursorPosition']).toHaveBeenCalledBefore(spyEmitCommand);
-      expect(component.modal.close).toHaveBeenCalledBefore(spyEmitCommand);
+      expect(Math.min(...vi.mocked(component['retrieveCursorPosition']).mock.invocationCallOrder)).toBeLessThan(
+        Math.min(...vi.mocked(spyEmitCommand).mock.invocationCallOrder)
+      );
+      expect(Math.min(...vi.mocked(component.modal.close).mock.invocationCallOrder)).toBeLessThan(
+        Math.min(...vi.mocked(spyEmitCommand).mock.invocationCallOrder)
+      );
     });
 
     it(`insertElementRef: should call 'convertToBase64' if 'urlImage' is undefined.`, async () => {
       component.urlImage = undefined;
 
-      spyOn(component, <any>'convertToBase64');
-      spyOn(component.modal, <any>'close');
-      spyOn(component, <any>'retrieveCursorPosition');
+      vi.spyOn(component as any, 'convertToBase64');
+      vi.spyOn(component.modal as any, 'close');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
 
       await component['insertElementRef']();
 
@@ -179,10 +183,10 @@ describe('PoRichTextImageModalComponent', () => {
       const fakeUrlImage = 'test';
       component.urlImage = fakeUrlImage;
 
-      spyOn(component, <any>'convertToBase64');
-      spyOn(component.modal, <any>'close');
-      spyOn(component, <any>'retrieveCursorPosition');
-      spyOn(component, <any>'cleanUpFields');
+      vi.spyOn(component as any, 'convertToBase64');
+      vi.spyOn(component.modal as any, 'close');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
+      vi.spyOn(component as any, 'cleanUpFields');
 
       await component['insertElementRef']();
 
@@ -193,12 +197,12 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it(`insertElementRef: should call 'emitCommand' with 'urlImage' if 'isUrlValid' returns 'true'.`, async () => {
-      spyOn(component, <any>'retrieveCursorPosition');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
       const fakeUrlImage = 'test';
       component.urlImage = fakeUrlImage;
 
-      spyOn(component, <any>'emitCommand');
-      spyOnProperty(component, 'isUrlValid').and.returnValue(true);
+      vi.spyOn(component as any, 'emitCommand');
+      vi.spyOn(component as any, 'isUrlValid').mockReturnValue(true);
 
       await component['insertElementRef']();
 
@@ -208,10 +212,10 @@ describe('PoRichTextImageModalComponent', () => {
     it(`insertElementRef: should call 'emitCommand' with 'base64Image' if 'isUploadValid' returns 'true'.`, async () => {
       const fakeBase64Image = 'imageBase64';
 
-      spyOn(component, <any>'emitCommand');
-      spyOn(component, <any>'retrieveCursorPosition');
-      spyOn(component, <any>'convertToBase64').and.returnValue(Promise.resolve(fakeBase64Image));
-      spyOnProperty(component, 'isUploadValid').and.returnValue(true);
+      vi.spyOn(component as any, 'emitCommand');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
+      vi.spyOn(component as any, 'convertToBase64').mockReturnValue(Promise.resolve(fakeBase64Image));
+      vi.spyOn(component as any, 'isUploadValid').mockReturnValue(true);
 
       await component['insertElementRef']();
 
@@ -219,11 +223,11 @@ describe('PoRichTextImageModalComponent', () => {
     });
 
     it(`insertElementRef: shouldn't call 'emitCommand' if 'isUploadValid' and 'isUrlValid' returns 'false'.`, async () => {
-      spyOn(component, <any>'retrieveCursorPosition');
+      vi.spyOn(component as any, 'retrieveCursorPosition');
 
-      spyOn(component, <any>'emitCommand');
-      spyOnProperty(component, 'isUrlValid').and.returnValue(false);
-      spyOnProperty(component, 'isUploadValid').and.returnValue(false);
+      vi.spyOn(component as any, 'emitCommand');
+      vi.spyOn(component as any, 'isUrlValid').mockReturnValue(false);
+      vi.spyOn(component as any, 'isUploadValid').mockReturnValue(false);
 
       await component['insertElementRef']();
 
@@ -242,7 +246,7 @@ describe('PoRichTextImageModalComponent', () => {
     it(`retrieveCursorPosition: should call 'selection.collapse'.`, () => {
       component.savedCursorPosition = [null, 1];
 
-      spyOn(component.selection, 'collapse');
+      vi.spyOn(component.selection as any, 'collapse');
 
       component['retrieveCursorPosition']();
 

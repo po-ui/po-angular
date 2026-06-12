@@ -56,7 +56,7 @@ describe('PoPageDefaultComponent mobile', () => {
   let mobileFixture: ComponentFixture<MobileComponent>;
 
   const routerStub = {
-    navigate: jasmine.createSpy('navigate')
+    navigate: vi.fn()
   };
 
   beforeEach(async () => {
@@ -102,7 +102,7 @@ describe('PoPageDefaultComponent mobile', () => {
   it('should be call method of parent passing string', () => {
     const poButton = mobileFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[0];
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
 
     poButton.dispatchEvent(new Event('click'));
 
@@ -129,7 +129,7 @@ describe('PoPageDefaultComponent mobile', () => {
       undefinedAction: undefined
     };
 
-    spyOn(fakeThis, 'saveAction');
+    vi.spyOn(fakeThis as any, 'saveAction');
     component.callAction({ label: 'Save', url: null, action: fakeThis.saveAction });
     component.callAction.call(fakeThis, '');
     expect(fakeThis.saveAction).toHaveBeenCalled();
@@ -199,7 +199,7 @@ describe('PoPageDefaultComponent desktop', () => {
   it('should be call function of parent passsing function reference', () => {
     const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[0];
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
 
     poButton.dispatchEvent(eventClick);
 
@@ -209,7 +209,7 @@ describe('PoPageDefaultComponent desktop', () => {
   it('should be call function of parent passing null', () => {
     const poButton = desktopFixture.debugElement.nativeElement.querySelectorAll('po-button > button')[1];
 
-    spyOn(poButton, 'dispatchEvent');
+    vi.spyOn(poButton as any, 'dispatchEvent');
 
     poButton.dispatchEvent(eventClick);
 
@@ -298,13 +298,13 @@ describe('PoPageDefaultComponent desktop', () => {
     });
 
     it('should show page header if `hasPageHeader` return true', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(true);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(true);
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('po-page-header')).toBeTruthy();
     });
 
     it('should hide page header if `hasPageHeader` return false', () => {
-      spyOn(component, 'hasPageHeader').and.returnValue(false);
+      vi.spyOn(component as any, 'hasPageHeader').mockReturnValue(false);
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('po-page-header')).toBeFalsy();
     });
@@ -339,7 +339,7 @@ describe('PoPageDefaultComponent desktop', () => {
     it('callAction: should open an external URL in a new tab in the browser by calling Utils`s openExternalLink method', () => {
       const url = 'http://po-ui.io';
 
-      spyOn(UtilsFunction, 'openExternalLink');
+      vi.spyOn(UtilsFunction as any, 'openExternalLink');
 
       component.callAction({ label: 'PO', url });
 
@@ -351,7 +351,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       const returnValue = component.actionIsVisible(action);
 
-      expect(returnValue).toBeTruthy(true);
+      expect(returnValue).toBeTruthy();
     });
 
     it('actionIsVisible: should return true in function result', () => {
@@ -359,7 +359,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       const returnValue = component.actionIsVisible(action);
 
-      expect(returnValue).toBeTruthy(true);
+      expect(returnValue).toBeTruthy();
     });
 
     it('actionIsDisabled: should return boolean value', () => {
@@ -367,7 +367,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       const returnValue = component.actionIsDisabled(action);
 
-      expect(returnValue).toBeTruthy(true);
+      expect(returnValue).toBeTruthy();
     });
 
     it('actionIsDisabled: should return true in function result', () => {
@@ -375,7 +375,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       const returnValue = component.actionIsDisabled(action);
 
-      expect(returnValue).toBeTruthy(true);
+      expect(returnValue).toBeTruthy();
     });
 
     it('hasPageHeader: should return true if has breadcrumb', () => {
@@ -399,7 +399,7 @@ describe('PoPageDefaultComponent desktop', () => {
       component.breadcrumb = undefined;
       component.title = undefined;
 
-      spyOn(component, 'getVisibleActions').and.returnValue([{ label: 'action' }]);
+      vi.spyOn(component as any, 'getVisibleActions').mockReturnValue([{ label: 'action' }]);
 
       expect(component.hasPageHeader()).toBe(true);
     });
@@ -417,7 +417,7 @@ describe('PoPageDefaultComponent desktop', () => {
       component.title = undefined;
       component.breadcrumb = undefined;
 
-      spyOn(component, 'getVisibleActions').and.returnValue([{ label: 'action' }]);
+      vi.spyOn(component as any, 'getVisibleActions').mockReturnValue([{ label: 'action' }]);
 
       expect(component.hasPageHeader()).toBe(true);
     });
@@ -427,7 +427,7 @@ describe('PoPageDefaultComponent desktop', () => {
       component.title = undefined;
       component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
 
-      spyOn(component, 'getVisibleActions').and.returnValue([]);
+      vi.spyOn(component as any, 'getVisibleActions').mockReturnValue([]);
 
       expect(component.hasPageHeader()).toBe(false);
     });
@@ -496,7 +496,7 @@ describe('PoPageDefaultComponent desktop', () => {
 
       fixture.detectChanges();
 
-      spyOn(component.back, 'emit');
+      vi.spyOn(component.back as any, 'emit');
 
       const backButton = fixture.debugElement.nativeElement.querySelector(
         'po-button[po-page-header-navigation] button'
@@ -584,7 +584,7 @@ describe('PoPageDefaultComponent desktop', () => {
   describe('backNavigationLabel', () => {
     it('should fallback to english label when language is not mapped in backNavigationAriaLabels', () => {
       const languageService = TestBed.inject(PoLanguageService);
-      spyOn(languageService, 'getShortLanguage').and.returnValue('de');
+      vi.spyOn(languageService as any, 'getShortLanguage').mockReturnValue('de');
 
       const newFixture = TestBed.createComponent(PoPageDefaultComponent);
       const newComponent = newFixture.componentInstance;
@@ -664,14 +664,14 @@ describe('PoPageDefaultComponent desktop', () => {
       fixture.componentRef.setInput('p-helper', { content: 'Help content' });
       fixture.detectChanges();
 
-      expect(component.helper()).toEqual(jasmine.objectContaining({ content: 'Help content', type: 'info' }));
+      expect(component.helper()).toEqual(expect.objectContaining({ content: 'Help content', type: 'info' }));
     });
 
     it('should preserve type when PoHelperOptions object already has type defined', () => {
       fixture.componentRef.setInput('p-helper', { content: 'Help content', type: 'help' });
       fixture.detectChanges();
 
-      expect(component.helper()).toEqual(jasmine.objectContaining({ content: 'Help content', type: 'help' }));
+      expect(component.helper()).toEqual(expect.objectContaining({ content: 'Help content', type: 'help' }));
     });
   });
 });

@@ -69,7 +69,7 @@ describe('PoDatetimepickerComponent:', () => {
 
       const timer = component.calendarComponent?.timerComponent;
       if (timer) {
-        spyOn(timer, 'initAllColumnOffsets');
+        vi.spyOn(timer as any, 'initAllColumnOffsets');
         component.togglePicker();
         tick(16);
         expect(timer.initAllColumnOffsets).toHaveBeenCalled();
@@ -88,7 +88,7 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('focus:', () => {
     it('should focus the input element', () => {
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
       component.focus();
 
       expect(component.inputEl.nativeElement.focus).toHaveBeenCalled();
@@ -96,7 +96,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should not focus when disabled', () => {
       component['_disabled'] = true;
-      spyOn(component.inputEl.nativeElement, 'focus');
+      vi.spyOn(component.inputEl.nativeElement, 'focus');
       component.focus();
 
       expect(component.inputEl.nativeElement.focus).not.toHaveBeenCalled();
@@ -106,7 +106,7 @@ describe('PoDatetimepickerComponent:', () => {
   describe('onKeydown:', () => {
     it('should close calendar on Escape when visible', () => {
       component.visible = true;
-      spyOn(component, 'togglePicker');
+      vi.spyOn(component as any, 'togglePicker');
 
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
       component.onKeydown(event);
@@ -116,7 +116,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should not close calendar on Escape when not visible', () => {
       component.visible = false;
-      spyOn(component, 'togglePicker');
+      vi.spyOn(component as any, 'togglePicker');
 
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
       component.onKeydown(event);
@@ -125,7 +125,7 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should emit keydown event when target is input', () => {
-      spyOn(component.keydown, 'emit');
+      vi.spyOn(component.keydown as any, 'emit');
       const event = new KeyboardEvent('keydown', { key: 'a' });
       Object.defineProperty(event, 'target', { value: component.inputEl.nativeElement });
       component.onKeydown(event);
@@ -136,7 +136,7 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('onTimeChange:', () => {
     it('should not process when time is empty', () => {
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'controlModel');
       component.onTimeChange('');
 
       expect(component.controlModel).not.toHaveBeenCalled();
@@ -150,7 +150,7 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should call controlModel when date is valid', () => {
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'controlModel');
       component['date'] = new Date(2026, 4, 12);
       component.onTimeChange('14:30');
 
@@ -158,7 +158,7 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should not call controlModel when date is undefined', () => {
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'controlModel');
       component['date'] = undefined;
       component.onTimeChange('14:30');
 
@@ -216,7 +216,7 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should emit change with empty string', () => {
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'callOnChange');
       component.clear();
 
       expect(component.callOnChange).toHaveBeenCalledWith('');
@@ -225,8 +225,8 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('eventOnBlur:', () => {
     it('should emit blur event', () => {
-      spyOn(component.onblur, 'emit');
-      component['objMask'] = { blur: jasmine.createSpy('blur') };
+      vi.spyOn(component.onblur as any, 'emit');
+      component['objMask'] = { blur: vi.fn() };
       const event = { target: component.inputEl.nativeElement };
       component.eventOnBlur(event);
 
@@ -235,7 +235,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should clear values when input is empty', () => {
       component.inputEl.nativeElement.value = '';
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'callOnChange');
       const event = { target: component.inputEl.nativeElement };
       component.eventOnBlur(event);
 
@@ -245,7 +245,7 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('eventOnClick:', () => {
     it('should call objMask.click when not readonly', () => {
-      component['objMask'] = { click: jasmine.createSpy('click') };
+      component['objMask'] = { click: vi.fn() };
       const event = { target: component.inputEl.nativeElement };
       component.eventOnClick(event);
 
@@ -292,7 +292,7 @@ describe('PoDatetimepickerComponent:', () => {
       component['initializeListeners']();
       fixture.detectChanges();
 
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
 
       const outsideElement = document.createElement('div');
       document.body.appendChild(outsideElement);
@@ -310,11 +310,11 @@ describe('PoDatetimepickerComponent:', () => {
   describe('onTimerBoundaryTab:', () => {
     it('should close calendar on forward direction', () => {
       component.visible = true;
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
 
       const event = {
         direction: 'forward',
-        event: { preventDefault: jasmine.createSpy('preventDefault') } as any,
+        event: { preventDefault: vi.fn() } as any,
         column: 'minutes'
       };
       component.onTimerBoundaryTab(event);
@@ -324,11 +324,11 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should not close calendar on backward direction', () => {
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
 
       const event = {
         direction: 'backward',
-        event: { preventDefault: jasmine.createSpy('preventDefault') } as any,
+        event: { preventDefault: vi.fn() } as any,
         column: 'hours'
       };
       component.onTimerBoundaryTab(event);
@@ -395,7 +395,7 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('ngAfterViewInit:', () => {
     it('should call focus when autoFocus is true', () => {
-      spyOn(component, 'focus');
+      vi.spyOn(component as any, 'focus');
       // Simulate autoFocus input being true
       (component as any)['autoFocus'] = () => true;
       component.ngAfterViewInit();
@@ -411,7 +411,7 @@ describe('PoDatetimepickerComponent:', () => {
       component.inputEl.nativeElement.value = '12/05/2026 14:30';
       component['initializeListeners']();
 
-      spyOn(component.iconDatepicker, 'focus');
+      vi.spyOn(component.iconDatepicker as any, 'focus');
       component.closeCalendar(false);
       tick(10);
 
@@ -426,7 +426,7 @@ describe('PoDatetimepickerComponent:', () => {
 
       const buttonEl = component.iconDatepicker?.buttonElement?.nativeElement;
       if (buttonEl) {
-        spyOn(buttonEl, 'focus');
+        vi.spyOn(buttonEl as any, 'focus');
       }
       component.closeCalendar(false);
       tick(20);
@@ -441,7 +441,7 @@ describe('PoDatetimepickerComponent:', () => {
   describe('wasClickedOnPicker - edge cases:', () => {
     it('should return early when dialogPicker is undefined', () => {
       component['dialogPicker'] = undefined;
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
 
       component.wasClickedOnPicker({ target: document.createElement('div') } as any);
 
@@ -453,7 +453,7 @@ describe('PoDatetimepickerComponent:', () => {
       component['initializeListeners']();
       fixture.detectChanges();
 
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
 
       const overlayEl = document.createElement('div');
       overlayEl.classList.add('po-datetimepicker-calendar-overlay');
@@ -470,7 +470,7 @@ describe('PoDatetimepickerComponent:', () => {
   describe('onKeyup:', () => {
     it('should not process when readonly', () => {
       component['_readonly'] = true;
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'controlModel');
 
       const event = { target: component.inputEl.nativeElement } as any;
       component.onKeyup(event);
@@ -479,7 +479,7 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should not process when target is not the input', () => {
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'controlModel');
 
       const event = { target: document.createElement('div') } as any;
       component.onKeyup(event);
@@ -489,7 +489,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should call objMask.keyup when target is input', () => {
       component['objMask'] = {
-        keyup: jasmine.createSpy('keyup'),
+        keyup: vi.fn(),
         valueToModel: ''
       } as any;
 
@@ -501,14 +501,14 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should clear date and timeValue when valueToModel length is less than expected', () => {
       component['objMask'] = {
-        keyup: jasmine.createSpy('keyup'),
+        keyup: vi.fn(),
         valueToModel: '1234'
       } as any;
       component.inputEl.nativeElement.value = '12/3';
       component['date'] = new Date(2026, 4, 12);
       component['timeValue'] = '14:30';
 
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'controlModel');
       const event = { target: component.inputEl.nativeElement } as any;
       component.onKeyup(event);
 
@@ -519,12 +519,12 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should parse and sync when valueToModel length meets expected length', () => {
       component['objMask'] = {
-        keyup: jasmine.createSpy('keyup'),
+        keyup: vi.fn(),
         valueToModel: '121020261430'
       } as any;
       component.inputEl.nativeElement.value = '12/10/2026 14:30';
 
-      spyOn<any>(component, 'parseInputAndSync');
+      vi.spyOn(component as any, 'parseInputAndSync');
       const event = { target: component.inputEl.nativeElement } as any;
       component.onKeyup(event);
 
@@ -533,7 +533,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should clear date and timeValue when objMask.valueToModel is falsy and not empty string', () => {
       component['objMask'] = {
-        keyup: jasmine.createSpy('keyup'),
+        keyup: vi.fn(),
         valueToModel: undefined
       } as any;
       component['date'] = new Date(2026, 4, 12);
@@ -564,7 +564,7 @@ describe('PoDatetimepickerComponent:', () => {
   describe('onKeydown - readonly branch:', () => {
     it('should return early when readonly', () => {
       component['_readonly'] = true;
-      spyOn(component, 'togglePicker');
+      vi.spyOn(component as any, 'togglePicker');
 
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
       component.visible = true;
@@ -577,12 +577,12 @@ describe('PoDatetimepickerComponent:', () => {
   describe('eventOnBlur - else branch (incomplete input):', () => {
     it('should mark as invalid when input is incomplete', () => {
       component['objMask'] = {
-        blur: jasmine.createSpy('blur'),
+        blur: vi.fn(),
         valueToModel: '1234'
       } as any;
       component.inputEl.nativeElement.value = '12/1';
 
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'callOnChange');
       const event = { target: component.inputEl.nativeElement };
       component.eventOnBlur(event);
 
@@ -595,13 +595,13 @@ describe('PoDatetimepickerComponent:', () => {
   describe('eventOnBlur - complete input with valid date+time:', () => {
     it('should parse input and emit change when valueToModel meets expected length', () => {
       component['objMask'] = {
-        blur: jasmine.createSpy('blur'),
+        blur: vi.fn(),
         valueToModel: '121020261430'
       } as any;
       component.inputEl.nativeElement.value = '12/10/2026 14:30';
       component['valueBeforeChange'] = '';
 
-      spyOn(component.onchange, 'emit');
+      vi.spyOn(component.onchange as any, 'emit');
       const event = { target: component.inputEl.nativeElement };
       component.eventOnBlur(event);
 
@@ -613,9 +613,9 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('eventOnClick:', () => {
     it('should call objMask.click when not mobile and not readonly', () => {
-      spyOn(component, 'verifyMobile').and.returnValue(null);
+      vi.spyOn(component as any, 'verifyMobile').mockReturnValue(null);
       component['_readonly'] = false;
-      component['objMask'] = { click: jasmine.createSpy('click') };
+      component['objMask'] = { click: vi.fn() };
 
       const event = { target: component.inputEl.nativeElement };
       component.eventOnClick(event);
@@ -624,10 +624,10 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should toggle picker on mobile', fakeAsync(() => {
-      spyOn(component, 'verifyMobile').and.returnValue(['mobile'] as any);
-      spyOn(component, 'togglePicker');
+      vi.spyOn(component as any, 'verifyMobile').mockReturnValue(['mobile'] as any);
+      vi.spyOn(component as any, 'togglePicker');
 
-      const event = { target: { blur: jasmine.createSpy('blur') } };
+      const event = { target: { blur: vi.fn() } };
       component.eventOnClick(event);
       tick(10);
 
@@ -644,8 +644,8 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('eventOnCalendarKeydown:', () => {
     it('should close calendar on Shift+Tab when first combo is focused', () => {
-      spyOn(component, 'closeCalendar');
-      spyOn<any>(component, 'isFocusOnFirstCombo').and.returnValue(true);
+      vi.spyOn(component as any, 'closeCalendar');
+      vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
 
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
       component.eventOnCalendarKeydown(event);
@@ -654,8 +654,8 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should not close calendar on Tab without Shift', () => {
-      spyOn(component, 'closeCalendar');
-      spyOn<any>(component, 'isFocusOnFirstCombo').and.returnValue(true);
+      vi.spyOn(component as any, 'closeCalendar');
+      vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(true);
 
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
       component.eventOnCalendarKeydown(event);
@@ -664,8 +664,8 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should not close calendar when first combo is not focused', () => {
-      spyOn(component, 'closeCalendar');
-      spyOn<any>(component, 'isFocusOnFirstCombo').and.returnValue(false);
+      vi.spyOn(component as any, 'closeCalendar');
+      vi.spyOn(component as any, 'isFocusOnFirstCombo').mockReturnValue(false);
 
       const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
       component.eventOnCalendarKeydown(event);
@@ -692,8 +692,8 @@ describe('PoDatetimepickerComponent:', () => {
 
       component['timeValue'] = '14:30';
       component.visible = true;
-      spyOn(component, 'closeCalendar');
-      spyOn(component, 'controlModel');
+      vi.spyOn(component as any, 'closeCalendar');
+      vi.spyOn(component as any, 'controlModel');
 
       component.onDateChange(todayISO);
 
@@ -707,7 +707,7 @@ describe('PoDatetimepickerComponent:', () => {
 
       component['timeValue'] = '';
       component.visible = true;
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
 
       component.onDateChange(todayISO);
 
@@ -725,7 +725,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should call helper eventOnClick when helper has eventOnClick and no label', () => {
       fixture.componentRef.setInput('p-label', undefined);
-      fixture.componentRef.setInput('p-helper', { eventOnClick: jasmine.createSpy('eventOnClick') });
+      fixture.componentRef.setInput('p-helper', { eventOnClick: vi.fn() });
       fixture.detectChanges();
 
       component.showAdditionalHelp();
@@ -759,7 +759,7 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('parseInputAndSync - else branch:', () => {
     it('should set invalid when parse fails', () => {
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'callOnChange');
       component['parseInputAndSync']('invalid/date time');
 
       expect(component['date']).toBeUndefined();
@@ -900,9 +900,9 @@ describe('PoDatetimepickerComponent:', () => {
       fixture.detectChanges();
 
       component['helperEl'] = {
-        helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(true),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-        openHelperPopover: jasmine.createSpy('openHelperPopover')
+        helperIsVisible: vi.fn().mockReturnValue(true),
+        closeHelperPopover: vi.fn(),
+        openHelperPopover: vi.fn()
       } as any;
 
       component.showAdditionalHelp();
@@ -917,9 +917,9 @@ describe('PoDatetimepickerComponent:', () => {
       fixture.detectChanges();
 
       component['helperEl'] = {
-        helperIsVisible: jasmine.createSpy('helperIsVisible').and.returnValue(false),
-        closeHelperPopover: jasmine.createSpy('closeHelperPopover'),
-        openHelperPopover: jasmine.createSpy('openHelperPopover')
+        helperIsVisible: vi.fn().mockReturnValue(false),
+        closeHelperPopover: vi.fn(),
+        openHelperPopover: vi.fn()
       } as any;
 
       component.showAdditionalHelp();
@@ -971,12 +971,12 @@ describe('PoDatetimepickerComponent:', () => {
           querySelector: () => null,
           scrollHeight: 400,
           scrollWidth: 600,
-          style: { height: '', width: '', setProperty: jasmine.createSpy('setProperty') }
+          style: { height: '', width: '', setProperty: vi.fn() }
         }
       } as any;
 
-      spyOn(component['controlPosition'], 'setElements');
-      spyOn(component['controlPosition'], 'adjustPosition');
+      vi.spyOn(component['controlPosition'] as any, 'setElements');
+      vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
       component['adjustCalendarPosition']();
       tick(20);
@@ -988,7 +988,7 @@ describe('PoDatetimepickerComponent:', () => {
 
   describe('initializeListeners:', () => {
     it('should register click listener that calls wasClickedOnPicker', () => {
-      spyOn(component, 'wasClickedOnPicker');
+      vi.spyOn(component as any, 'wasClickedOnPicker');
       component['initializeListeners']();
 
       const event = new MouseEvent('click');
@@ -999,7 +999,7 @@ describe('PoDatetimepickerComponent:', () => {
     });
 
     it('should register resize listener that calls closeCalendar', () => {
-      spyOn(component, 'closeCalendar');
+      vi.spyOn(component as any, 'closeCalendar');
       component['initializeListeners']();
 
       window.dispatchEvent(new Event('resize'));
@@ -1010,7 +1010,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should register scroll listener', () => {
       component.visible = true;
-      spyOn(component['controlPosition'], 'adjustPosition');
+      vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
       component['initializeListeners']();
 
       const scrollableEl = document.createElement('div');
@@ -1028,7 +1028,7 @@ describe('PoDatetimepickerComponent:', () => {
   describe('onScroll:', () => {
     it('should call adjustPosition when visible', () => {
       component.visible = true;
-      spyOn(component['controlPosition'], 'adjustPosition');
+      vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
       component['onScroll']();
 
@@ -1037,7 +1037,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should not call adjustPosition when not visible', () => {
       component.visible = false;
-      spyOn(component['controlPosition'], 'adjustPosition');
+      vi.spyOn(component['controlPosition'] as any, 'adjustPosition');
 
       component['onScroll']();
 

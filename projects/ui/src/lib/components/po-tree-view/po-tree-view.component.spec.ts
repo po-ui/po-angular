@@ -49,8 +49,10 @@ describe('PoTreeViewComponent:', () => {
     it('ngOnInit: should subscribe onExpand and call emitExpanded with treeViewItem', () => {
       const expectedValue: PoTreeViewItem = { label: 'Nivel 01', value: 1 };
 
-      const spyReceiveEvent = spyOn(component['treeViewService'], 'onExpand').and.returnValue(of(expectedValue));
-      const spyEmitEvent = spyOn(component, <any>'emitExpanded');
+      const spyReceiveEvent = vi
+        .spyOn(component['treeViewService'] as any, 'onExpand')
+        .mockReturnValue(of(expectedValue));
+      const spyEmitEvent = vi.spyOn(component as any, 'emitExpanded');
 
       component.ngOnInit();
 
@@ -61,8 +63,8 @@ describe('PoTreeViewComponent:', () => {
     it('ngOnInit: should subscribe onChecked and call emitSelected with treeViewItem', () => {
       const expectedValue: PoTreeViewItem = { label: 'Nivel 01', value: 1 };
 
-      const spyOnChecked = spyOn(component['treeViewService'], 'onSelect').and.returnValue(of(expectedValue));
-      const spyEmitChecked = spyOn(component, <any>'emitSelected');
+      const spyOnChecked = vi.spyOn(component['treeViewService'] as any, 'onSelect').mockReturnValue(of(expectedValue));
+      const spyEmitChecked = vi.spyOn(component as any, 'emitSelected');
 
       component.ngOnInit();
 

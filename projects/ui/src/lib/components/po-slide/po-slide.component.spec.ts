@@ -41,7 +41,7 @@ describe('PoSlideComponent:', () => {
     ];
 
     it('onResize: should trigger onResize method when window is resized ', () => {
-      const spyOnResize = spyOn(component, 'onResize');
+      const spyOnResize = vi.spyOn(component as any, 'onResize');
 
       window.dispatchEvent(new Event('resize'));
 
@@ -49,8 +49,8 @@ describe('PoSlideComponent:', () => {
     });
 
     it('onResize: should call `setSlideItemWidth` and `goToItem` with `currentSlideIndex`', fakeAsync(() => {
-      spyOn(component, <any>'setSlideItemWidth');
-      spyOn(component, 'goToItem');
+      vi.spyOn(component as any, 'setSlideItemWidth');
+      vi.spyOn(component as any, 'goToItem');
 
       component.onResize();
 
@@ -61,7 +61,7 @@ describe('PoSlideComponent:', () => {
     }));
 
     it('ngOnDestroy: should call resizeSubscription.unsubscribe', fakeAsync(() => {
-      const spyResizeSubscription = spyOn(component['resizeSubscription'], 'unsubscribe');
+      const spyResizeSubscription = vi.spyOn(component['resizeSubscription'] as any, 'unsubscribe');
 
       component.onResize();
 
@@ -83,9 +83,9 @@ describe('PoSlideComponent:', () => {
     describe('ngDoCheck:', () => {
       it('should call `setSlideItemWidth` and set `isLoaded` to true if isn`t loaded and has elements', () => {
         component['isLoaded'] = false;
-        spyOnProperty(component, <any>'hasElements').and.returnValue(true);
+        vi.spyOn(component as any, 'hasElements').mockReturnValue(true);
 
-        spyOn(component, <any>'setSlideItemWidth');
+        vi.spyOn(component as any, 'setSlideItemWidth');
 
         component.ngDoCheck();
 
@@ -95,9 +95,9 @@ describe('PoSlideComponent:', () => {
 
       it('shouldn`t call `setSlideItemWidth` isn`t loaded but has elements', () => {
         component['isLoaded'] = false;
-        spyOnProperty(component, <any>'hasElements').and.returnValue(false);
+        vi.spyOn(component as any, 'hasElements').mockReturnValue(false);
 
-        spyOn(component, <any>'setSlideItemWidth');
+        vi.spyOn(component as any, 'setSlideItemWidth');
 
         component.ngDoCheck();
 
@@ -106,9 +106,9 @@ describe('PoSlideComponent:', () => {
 
       it('shouldn`t call `setSlideItemWidth` is loaded and doesn`t have elements', () => {
         component['isLoaded'] = true;
-        spyOnProperty(component, <any>'hasElements').and.returnValue(false);
+        vi.spyOn(component as any, 'hasElements').mockReturnValue(false);
 
-        spyOn(component, <any>'setSlideItemWidth');
+        vi.spyOn(component as any, 'setSlideItemWidth');
 
         component.ngDoCheck();
 
@@ -117,11 +117,11 @@ describe('PoSlideComponent:', () => {
 
       it('should call `startSlide` and  `setSlideItemWidth` if has slides, isn`t loaded and has elements', () => {
         component['isLoaded'] = false;
-        spyOnProperty(component, <any>'hasElements').and.returnValue(true);
-        spyOnProperty(component, 'hasSlides').and.returnValue(true);
+        vi.spyOn(component as any, 'hasElements').mockReturnValue(true);
+        vi.spyOn(component as any, 'hasSlides').mockReturnValue(true);
 
-        spyOn(component, <any>'setSlideItemWidth');
-        spyOn(component, <any>'startSlide');
+        vi.spyOn(component as any, 'setSlideItemWidth');
+        vi.spyOn(component as any, 'startSlide');
 
         component.ngDoCheck();
 
@@ -132,11 +132,11 @@ describe('PoSlideComponent:', () => {
       it('shouldn`t call `startSlide` if doesn`t have slides, isn`t loaded and has elements, but should call `setSlideItemWidth`', () => {
         component['isLoaded'] = false;
 
-        spyOnProperty(component, <any>'hasElements').and.returnValue(true);
-        spyOnProperty(component, 'hasSlides').and.returnValue(false);
+        vi.spyOn(component as any, 'hasElements').mockReturnValue(true);
+        vi.spyOn(component as any, 'hasSlides').mockReturnValue(false);
 
-        spyOn(component, <any>'setSlideItemWidth');
-        spyOn(component, <any>'startSlide');
+        vi.spyOn(component as any, 'setSlideItemWidth');
+        vi.spyOn(component as any, 'startSlide');
 
         component.ngDoCheck();
 
@@ -149,7 +149,7 @@ describe('PoSlideComponent:', () => {
       component.height = 400;
       const height = 400;
 
-      spyOn(component, 'setSlideHeight');
+      vi.spyOn(component as any, 'setSlideHeight');
 
       component.ngOnChanges(<any>{ height });
 
@@ -157,7 +157,7 @@ describe('PoSlideComponent:', () => {
     });
 
     it('ngOnChanges: should`t call `setSlideHeight` if `changes.height` is not defined', () => {
-      spyOn(component, 'setSlideHeight');
+      vi.spyOn(component as any, 'setSlideHeight');
 
       component.ngOnChanges({});
 
@@ -175,8 +175,8 @@ describe('PoSlideComponent:', () => {
     it('goToItem: should set `currentSlideIndex` and call `animate` with `offset`', () => {
       const index = 3;
 
-      spyOn(component, <any>'animate');
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'animate');
+      vi.spyOn(component as any, 'startInterval');
 
       component.goToItem(index);
 
@@ -189,7 +189,7 @@ describe('PoSlideComponent:', () => {
       const index = 3;
       component.interval = 4000;
 
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       component.goToItem(index);
 
@@ -200,7 +200,7 @@ describe('PoSlideComponent:', () => {
       const index = 3;
       component.interval = 0;
 
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       component.goToItem(index);
 
@@ -212,7 +212,7 @@ describe('PoSlideComponent:', () => {
       component.currentSlideIndex = 3;
       const result = 0;
 
-      spyOn(component, <any>'animate');
+      vi.spyOn(component as any, 'animate');
 
       component.next();
 
@@ -226,7 +226,7 @@ describe('PoSlideComponent:', () => {
       component.currentSlideIndex = 2;
       const currentLastIndexAfterNext = 3;
 
-      spyOn(component, <any>'animate');
+      vi.spyOn(component as any, 'animate');
 
       component.next();
 
@@ -235,7 +235,7 @@ describe('PoSlideComponent:', () => {
     });
 
     it(`nextControl: should call 'next'`, () => {
-      spyOn(component, 'next');
+      vi.spyOn(component as any, 'next');
 
       component.nextControl();
 
@@ -244,7 +244,7 @@ describe('PoSlideComponent:', () => {
 
     it(`nextControl: should call 'startInterval' if interval is greater than 1000`, () => {
       component.interval = 4000;
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       component.nextControl();
 
@@ -253,7 +253,7 @@ describe('PoSlideComponent:', () => {
 
     it(`nextControl: shouldn't call 'startInterval' if interval is less than 1000`, () => {
       component.interval = 0;
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       component.nextControl();
 
@@ -266,7 +266,7 @@ describe('PoSlideComponent:', () => {
       component.currentSlideIndex = 0;
       const currentSlideIndexAfterPrevious = 3;
 
-      spyOn(component, <any>'animate');
+      vi.spyOn(component as any, 'animate');
 
       component.previous();
 
@@ -280,7 +280,7 @@ describe('PoSlideComponent:', () => {
       component.currentSlideIndex = 4;
       const currentSlideIndexAfterPrevious = 3;
 
-      spyOn(component, <any>'animate');
+      vi.spyOn(component as any, 'animate');
 
       component.previous();
 
@@ -289,7 +289,7 @@ describe('PoSlideComponent:', () => {
     });
 
     it(`previousControl: should call 'previous'`, () => {
-      spyOn(component, 'previous');
+      vi.spyOn(component as any, 'previous');
 
       component.previousControl();
 
@@ -298,7 +298,7 @@ describe('PoSlideComponent:', () => {
 
     it(`previousControl: should call 'startInterval' if interval is greater than 1000`, () => {
       component.interval = 4000;
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       component.previousControl();
 
@@ -307,7 +307,7 @@ describe('PoSlideComponent:', () => {
 
     it(`previousControl: shouldn't call 'startInterval' if interval is less than 1000`, () => {
       component.interval = 0;
-      spyOn(component, <any>'startInterval');
+      vi.spyOn(component as any, 'startInterval');
 
       component.previousControl();
 
@@ -316,7 +316,7 @@ describe('PoSlideComponent:', () => {
 
     it(`setSlideHeigth: should call 'setHeight' with 'heigth'`, () => {
       const slideHeight = 300;
-      spyOn(component, <any>'setHeight');
+      vi.spyOn(component as any, 'setHeight');
 
       component.setSlideHeight(slideHeight);
 
@@ -326,8 +326,8 @@ describe('PoSlideComponent:', () => {
     it(`animate: should call 'buildTransitionAnimation' with offset if has elements`, () => {
       const offset = 400;
 
-      spyOnProperty(component, <any>'hasElements').and.returnValue(true);
-      spyOn(component, <any>'buildTransitionAnimation').and.callThrough();
+      vi.spyOn(component as any, 'hasElements').mockReturnValue(true);
+      vi.spyOn(component as any, 'buildTransitionAnimation');
 
       component['animate'](offset);
 
@@ -337,8 +337,8 @@ describe('PoSlideComponent:', () => {
     it(`animate: shouldn't call 'buildTransitionAnimation' with offset if doesn't have elements`, () => {
       const offset = 400;
 
-      spyOnProperty(component, <any>'hasElements').and.returnValue(false);
-      spyOn(component, <any>'buildTransitionAnimation');
+      vi.spyOn(component as any, 'hasElements').mockReturnValue(false);
+      vi.spyOn(component as any, 'buildTransitionAnimation');
 
       component['animate'](offset);
 
@@ -348,7 +348,7 @@ describe('PoSlideComponent:', () => {
     it(`buildTransitionAnimation: should call builder`, () => {
       const offset = 400;
 
-      spyOn(component['builder'], 'build').and.callThrough();
+      vi.spyOn(component['builder'] as any, 'build');
 
       component['buildTransitionAnimation'](offset);
 
@@ -400,14 +400,14 @@ describe('PoSlideComponent:', () => {
         const height = undefined;
         const defaultHeight = 336;
 
-        spyOnProperty(component, <any>'isImageSlide').and.returnValue(true);
+        vi.spyOn(component as any, 'isImageSlide').mockReturnValue(true);
         component['setDefaultHeight'](height);
         expect(component.imageHeight).toBe(defaultHeight);
       });
 
       it('should set `imageHeight` to undefined if height is not defined and isn`t image slide', () => {
         const height = undefined;
-        spyOnProperty(component, <any>'isImageSlide').and.returnValue(false);
+        vi.spyOn(component as any, 'isImageSlide').mockReturnValue(false);
         component['setDefaultHeight'](height);
         expect(component.imageHeight).toBeUndefined();
       });
@@ -420,7 +420,7 @@ describe('PoSlideComponent:', () => {
 
       it('should set `imageHeight` to undefined if height is undefined and isn`t image slide', () => {
         const height = undefined;
-        spyOnProperty(component, <any>'isImageSlide').and.returnValue(false);
+        vi.spyOn(component as any, 'isImageSlide').mockReturnValue(false);
         component['setDefaultHeight'](height);
         expect(component.imageHeight).toBeUndefined();
       });
@@ -430,7 +430,7 @@ describe('PoSlideComponent:', () => {
       it('should set slide height and imageHeight, shouldn`t call `setDefaultHeight` if height is greater than 192px', () => {
         const height = 400;
 
-        spyOn(component, <any>'setDefaultHeight');
+        vi.spyOn(component as any, 'setDefaultHeight');
         component['setHeight'](height);
 
         expect(component.imageHeight).toBe(400);
@@ -441,7 +441,7 @@ describe('PoSlideComponent:', () => {
       it('should call `setDefaultHeight` if height is not defined', () => {
         const height = undefined;
 
-        spyOn(component, <any>'setDefaultHeight');
+        vi.spyOn(component as any, 'setDefaultHeight');
         component['setHeight'](height);
         expect(component['setDefaultHeight']).toHaveBeenCalled();
       });
@@ -449,14 +449,14 @@ describe('PoSlideComponent:', () => {
       it('should call `setDefaultHeight` if less than 192px', () => {
         const height = 100;
 
-        spyOn(component, <any>'setDefaultHeight');
+        vi.spyOn(component as any, 'setDefaultHeight');
         component['setHeight'](height);
         expect(component['setDefaultHeight']).toHaveBeenCalled();
       });
     });
 
     it(`setSlideItemWidth: shouldn't set 'slideItemWidth' if doesn't have elements`, () => {
-      spyOnProperty(component, <any>'hasElements').and.returnValue(false);
+      vi.spyOn(component as any, 'hasElements').mockReturnValue(false);
 
       component['setSlideItemWidth']();
 
@@ -484,7 +484,7 @@ describe('PoSlideComponent:', () => {
     it(`cancelInterval: should cancel interval and shouldn't call 'next' function`, fakeAsync(() => {
       component.interval = 1000;
 
-      spyOn(component, 'next');
+      vi.spyOn(component as any, 'next');
 
       component['cancelInterval']();
 
@@ -494,7 +494,7 @@ describe('PoSlideComponent:', () => {
 
     describe('startSlide:', () => {
       it(`should call 'setSlideHeight' and set 'currentSlideIndex' to 0`, () => {
-        spyOn(component, 'setSlideHeight');
+        vi.spyOn(component as any, 'setSlideHeight');
 
         component['startSlide']();
 
@@ -504,7 +504,7 @@ describe('PoSlideComponent:', () => {
 
       it(`should call 'startInterval' if interval is greater than 1000`, () => {
         component.interval = 2000;
-        spyOn(component, <any>'startInterval');
+        vi.spyOn(component as any, 'startInterval');
 
         component['startSlide']();
 
@@ -513,7 +513,7 @@ describe('PoSlideComponent:', () => {
 
       it(`shouldn't call 'startInterval' if interval is less than 1000`, () => {
         component.interval = 0;
-        spyOn(component, <any>'startInterval');
+        vi.spyOn(component as any, 'startInterval');
 
         component['startSlide']();
 
@@ -525,9 +525,9 @@ describe('PoSlideComponent:', () => {
       it(`should call 'createArrayFromSlides' if slides are defined and template is undefined.`, () => {
         const slidesArray = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
 
-        spyOnProperty(component, 'hasSlides').and.returnValue(true);
+        vi.spyOn(component as any, 'hasSlides').mockReturnValue(true);
 
-        spyOn(component, <any>'createArrayFromSlides');
+        vi.spyOn(component as any, 'createArrayFromSlides');
 
         component['setSlideItems'](slidesArray);
 
@@ -538,9 +538,9 @@ describe('PoSlideComponent:', () => {
         const slidesArray = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
         component.slideContentTemplate = <any>{ templateRef: {} };
 
-        spyOnProperty(component, 'hasSlides').and.returnValue(true);
+        vi.spyOn(component as any, 'hasSlides').mockReturnValue(true);
 
-        spyOn(component, <any>'createArrayForTemplate');
+        vi.spyOn(component as any, 'createArrayForTemplate');
 
         component['setSlideItems'](slidesArray);
 
@@ -550,7 +550,7 @@ describe('PoSlideComponent:', () => {
       it(`should call 'cancelInterval' and 'setSlideItems' to [].`, () => {
         const slidesArray = [];
 
-        spyOn(component, <any>'cancelInterval');
+        vi.spyOn(component as any, 'cancelInterval');
         component['setSlideItems'](slidesArray);
 
         expect(component['cancelInterval']).toHaveBeenCalled();
@@ -561,7 +561,7 @@ describe('PoSlideComponent:', () => {
     describe('startInterval:', () => {
       it(`should call 'cancelInterval' if 'setInterval' is defined.`, () => {
         component['setInterval'] = () => {};
-        spyOn(component, <any>'cancelInterval');
+        vi.spyOn(component as any, 'cancelInterval');
 
         component['startInterval']();
 
@@ -582,7 +582,7 @@ describe('PoSlideComponent:', () => {
         fixture.detectChanges();
 
         const interval = 1000;
-        spyOn(component, 'next');
+        vi.spyOn(component as any, 'next');
 
         component.interval = interval;
         tick(2000);
@@ -694,7 +694,7 @@ describe('PoSlideComponent:', () => {
 
     it(`should  call 'previous' if slide arrow previous was clicked`, () => {
       component.slides = ['item1', 'item2', 'item3'];
-      spyOn(component, 'previousControl');
+      vi.spyOn(component as any, 'previousControl');
 
       fixture.detectChanges();
 
@@ -706,7 +706,7 @@ describe('PoSlideComponent:', () => {
 
     it(`should call 'next' if slide arrow next was clicked.`, () => {
       component.slides = ['item1', 'item2', 'item3'];
-      spyOn(component, 'nextControl');
+      vi.spyOn(component as any, 'nextControl');
 
       fixture.detectChanges();
 

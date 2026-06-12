@@ -53,7 +53,7 @@ describe('PoStepperStepComponent:', () => {
     });
 
     it('p-status: should call `activated.emit` if status is `active`.', () => {
-      spyOn(component.activated, 'emit');
+      vi.spyOn(component.activated as any, 'emit');
 
       component.status = PoStepperStatus.Active;
 
@@ -61,7 +61,7 @@ describe('PoStepperStepComponent:', () => {
     });
 
     it('p-status: shouldn´t call `activated.emit` if status is different of `active`.', () => {
-      spyOn(component.activated, 'emit');
+      vi.spyOn(component.activated as any, 'emit');
 
       component.status = PoStepperStatus.Default;
       expect(component.activated.emit).not.toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe('PoStepperStepComponent:', () => {
     it('onClick: should call `click.emit` if `status` is different of `disabled`.', () => {
       component.status = PoStepperStatus.Active;
 
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
       component.onClick();
 
       expect(component.click.emit).toHaveBeenCalled();
@@ -188,7 +188,7 @@ describe('PoStepperStepComponent:', () => {
     it('onClick: shouldn´t call `click.emit` if `status` is `disabled`.', () => {
       component.status = PoStepperStatus.Disabled;
 
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
       component.onClick();
 
       expect(component.click.emit).not.toHaveBeenCalled();
@@ -197,7 +197,7 @@ describe('PoStepperStepComponent:', () => {
     it('onClick: shouldn´t call `click.emit` if `disabledClick` is `true`.', () => {
       component.status = PoStepperStatus.Active;
       component.disabledClick = true;
-      spyOn(component.click, 'emit');
+      vi.spyOn(component.click as any, 'emit');
       component.onClick();
 
       expect(component.click.emit).not.toHaveBeenCalled();
@@ -206,7 +206,7 @@ describe('PoStepperStepComponent:', () => {
     it('onEnter: should call `click.emit` if `status` is different of `disabled`.', () => {
       component.status = PoStepperStatus.Active;
 
-      spyOn(component.enter, 'emit');
+      vi.spyOn(component.enter as any, 'emit');
       component.onEnter();
 
       expect(component.enter.emit).toHaveBeenCalled();
@@ -215,7 +215,7 @@ describe('PoStepperStepComponent:', () => {
     it('onEnter: shouldn´t call `click.emit` if `status` is `disabled`.', () => {
       component.status = PoStepperStatus.Disabled;
 
-      spyOn(component.enter, 'emit');
+      vi.spyOn(component.enter as any, 'emit');
       component.onEnter();
 
       expect(component.enter.emit).not.toHaveBeenCalled();
@@ -224,7 +224,7 @@ describe('PoStepperStepComponent:', () => {
     it('onEnter: shouldn´t call `click.emit` if `disabledClick` is `true`.', () => {
       component.status = PoStepperStatus.Active;
       component.disabledClick = true;
-      spyOn(component.enter, 'emit');
+      vi.spyOn(component.enter as any, 'emit');
       component.onEnter();
 
       expect(component.enter.emit).not.toHaveBeenCalled();
@@ -260,7 +260,7 @@ describe('PoStepperStepComponent:', () => {
       (component as any)._stepSize = 40;
       component.stepSizeOriginal = undefined;
 
-      spyOn(component, 'setDefaultStepSize');
+      vi.spyOn(component as any, 'setDefaultStepSize');
 
       const changes = {
         stepSize: { currentValue: 40, previousValue: 30, firstChange: false, isFirstChange: () => false }
@@ -275,7 +275,7 @@ describe('PoStepperStepComponent:', () => {
     it('should call setDefaultStepSize if status changes', () => {
       component.stepSizeOriginal = 30;
 
-      spyOn(component, 'setDefaultStepSize');
+      vi.spyOn(component as any, 'setDefaultStepSize');
 
       const changes = {
         status: {
@@ -294,7 +294,7 @@ describe('PoStepperStepComponent:', () => {
     it('should call setDefaultStepSize if both stepSize and status change', () => {
       component.stepSizeOriginal = 30;
 
-      spyOn(component, 'setDefaultStepSize');
+      vi.spyOn(component as any, 'setDefaultStepSize');
 
       const changes = {
         stepSize: { currentValue: 40, previousValue: 30, firstChange: false, isFirstChange: () => false },

@@ -39,39 +39,39 @@ describe('PoTimepickerBaseComponent:', () => {
 
   it('should be update property p-disabled', () => {
     component.setDisabled = 'true';
-    expect(component.disabled).toBeTrue();
+    expect(component.disabled).toBe(true);
 
     component.setDisabled = 'false';
-    expect(component.disabled).toBeFalse();
+    expect(component.disabled).toBe(false);
   });
 
   it('should update property p-required', () => {
     component.setRequired = 'true';
-    expect(component.required).toBeTrue();
+    expect(component.required).toBe(true);
 
     component.setRequired = 'false';
-    expect(component.required).toBeFalse();
+    expect(component.required).toBe(false);
   });
 
   it('should update property p-readonly', () => {
     component.setReadonly = 'true';
-    expect(component.readonly).toBeTrue();
+    expect(component.readonly).toBe(true);
 
     component.setReadonly = 'false';
-    expect(component.readonly).toBeFalse();
+    expect(component.readonly).toBe(false);
   });
 
   it('should update property p-clean', () => {
     component.setClean = 'true';
-    expect(component.clean).toBeTrue();
+    expect(component.clean).toBe(true);
 
     component.setClean = 'false';
-    expect(component.clean).toBeFalse();
+    expect(component.clean).toBe(false);
   });
 
   it('setDisabledState: should set `component.disabled` with boolean parameter', () => {
     const expectedValue = true;
-    const markForCheck = spyOn(component['cd'], 'markForCheck');
+    const markForCheck = vi.spyOn(component['cd'] as any, 'markForCheck');
 
     component.setDisabledState(expectedValue);
 
@@ -110,25 +110,25 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('p-loading:', () => {
       it('should convert value to boolean and call markForCheck', () => {
-        const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
+        const markForCheckSpy = vi.spyOn(component['cd'] as any, 'markForCheck');
 
         component.loading = 'true' as any;
 
-        expect(component['_loading']).toBeTrue();
+        expect(component['_loading']).toBe(true);
         expect(markForCheckSpy).toHaveBeenCalled();
       });
 
       it('should set loading to false when value is falsy', () => {
-        const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
+        const markForCheckSpy = vi.spyOn(component['cd'] as any, 'markForCheck');
 
         component.loading = null;
 
-        expect(component['_loading']).toBeFalse();
+        expect(component['_loading']).toBe(false);
         expect(markForCheckSpy).toHaveBeenCalled();
       });
 
       it('should default loading to false', () => {
-        expect(component.loading).toBeFalse();
+        expect(component.loading).toBe(false);
       });
     });
 
@@ -137,28 +137,28 @@ describe('PoTimepickerBaseComponent:', () => {
         component.disabled = true;
         component.loading = false;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when loading is true', () => {
         component.disabled = false;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return true when both disabled and loading are true', () => {
         component.disabled = true;
         component.loading = true;
 
-        expect(component.isDisabled).toBeTrue();
+        expect(component.isDisabled).toBe(true);
       });
 
       it('should return false when both disabled and loading are false', () => {
         component.disabled = false;
         component.loading = false;
 
-        expect(component.isDisabled).toBeFalse();
+        expect(component.isDisabled).toBe(false);
       });
     });
 
@@ -192,7 +192,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should call refreshValue with current timeValue when format changes', () => {
-        spyOn(component, 'refreshValue');
+        vi.spyOn(component as any, 'refreshValue');
         component['_timeValue'] = '14:00';
 
         component.format = PoTimerFormat.Format12;
@@ -201,7 +201,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should call refreshValue with empty string when format changes and no value is set', () => {
-        spyOn(component, 'refreshValue');
+        vi.spyOn(component as any, 'refreshValue');
 
         component.format = PoTimerFormat.Format12;
 
@@ -248,16 +248,16 @@ describe('PoTimepickerBaseComponent:', () => {
     describe('p-show-seconds:', () => {
       it('should set showSeconds to true', () => {
         component.showSeconds = true;
-        expect(component.showSeconds).toBeTrue();
+        expect(component.showSeconds).toBe(true);
       });
 
       it('should set showSeconds to false', () => {
         component.showSeconds = false;
-        expect(component.showSeconds).toBeFalse();
+        expect(component.showSeconds).toBe(false);
       });
 
       it('should call refreshValue with current timeValue when showSeconds changes', () => {
-        spyOn(component, 'refreshValue');
+        vi.spyOn(component as any, 'refreshValue');
         component['_timeValue'] = '14:00';
 
         component.showSeconds = true;
@@ -266,7 +266,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should call refreshValue with empty string when showSeconds changes and no value is set', () => {
-        spyOn(component, 'refreshValue');
+        vi.spyOn(component as any, 'refreshValue');
 
         component.showSeconds = true;
 
@@ -321,7 +321,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
@@ -331,7 +331,7 @@ describe('PoTimepickerBaseComponent:', () => {
   describe('Methods:', () => {
     describe('callOnChange:', () => {
       it('should call onChangeModel when value differs from previousValue', () => {
-        const fnChange = jasmine.createSpy('onChangeModel');
+        const fnChange = vi.fn();
         component.registerOnChange(fnChange);
         component['previousValue'] = '';
 
@@ -341,7 +341,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should not call onChangeModel when value is same as previousValue', () => {
-        const fnChange = jasmine.createSpy('onChangeModel');
+        const fnChange = vi.fn();
         component.registerOnChange(fnChange);
         component['previousValue'] = '10:00';
 
@@ -351,7 +351,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should keep original value when formatOutput returns empty string', () => {
-        const fnChange = jasmine.createSpy('onChangeModel');
+        const fnChange = vi.fn();
         component.registerOnChange(fnChange);
         component['previousValue'] = '';
 
@@ -392,47 +392,47 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('isValidTimeString:', () => {
       it('should return true for valid HH:mm', () => {
-        expect(component['isValidTimeString']('10:30')).toBeTrue();
+        expect(component['isValidTimeString']('10:30')).toBe(true);
       });
 
       it('should return true for valid HH:mm:ss', () => {
-        expect(component['isValidTimeString']('10:30:45')).toBeTrue();
+        expect(component['isValidTimeString']('10:30:45')).toBe(true);
       });
 
       it('should return false for invalid values', () => {
-        expect(component['isValidTimeString']('')).toBeFalse();
-        expect(component['isValidTimeString'](null)).toBeFalse();
-        expect(component['isValidTimeString']('abc')).toBeFalse();
-        expect(component['isValidTimeString']('24:60:60')).toBeFalse();
-        expect(component['isValidTimeString']('13:60')).toBeFalse();
-        expect(component['isValidTimeString']('25:00')).toBeFalse();
+        expect(component['isValidTimeString']('')).toBe(false);
+        expect(component['isValidTimeString'](null)).toBe(false);
+        expect(component['isValidTimeString']('abc')).toBe(false);
+        expect(component['isValidTimeString']('24:60:60')).toBe(false);
+        expect(component['isValidTimeString']('13:60')).toBe(false);
+        expect(component['isValidTimeString']('25:00')).toBe(false);
       });
 
       it('should support custom hour range for 12h validation', () => {
-        expect(component['isValidTimeString']('12:59', 1, 12)).toBeTrue();
-        expect(component['isValidTimeString']('13:59', 1, 12)).toBeFalse();
+        expect(component['isValidTimeString']('12:59', 1, 12)).toBe(true);
+        expect(component['isValidTimeString']('13:59', 1, 12)).toBe(false);
       });
     });
 
     describe('isTimeInRange:', () => {
       it('should return true when no min/max is set', () => {
-        expect(component['isTimeInRange']('10:00')).toBeTrue();
+        expect(component['isTimeInRange']('10:00')).toBe(true);
       });
 
       it('should return false when time is before minTime', () => {
         component.minTime = '08:00';
-        expect(component['isTimeInRange']('07:00')).toBeFalse();
+        expect(component['isTimeInRange']('07:00')).toBe(false);
       });
 
       it('should return false when time is after maxTime', () => {
         component.maxTime = '18:00';
-        expect(component['isTimeInRange']('19:00')).toBeFalse();
+        expect(component['isTimeInRange']('19:00')).toBe(false);
       });
 
       it('should return true when time is within range', () => {
         component.minTime = '08:00';
         component.maxTime = '18:00';
-        expect(component['isTimeInRange']('12:00')).toBeTrue();
+        expect(component['isTimeInRange']('12:00')).toBe(true);
       });
     });
 
@@ -460,9 +460,9 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('validate:', () => {
       it('should return required error when required and empty', () => {
-        spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+        vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         const result = component.validate(new UntypedFormControl(undefined));
 
@@ -471,7 +471,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
       it('should return time error for invalid time string', () => {
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         const result = component.validate(new UntypedFormControl('invalid'));
 
@@ -481,7 +481,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
       it('should return time error for semantic invalid time values', () => {
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         const result = component.validate(new UntypedFormControl('24:60:60'));
 
@@ -492,7 +492,7 @@ describe('PoTimepickerBaseComponent:', () => {
       it('should return time error for time out of range', () => {
         component.minTime = '08:00';
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         const result = component.validate(new UntypedFormControl('07:00'));
 
@@ -507,7 +507,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
         component.validate(new UntypedFormControl('', Validators.required));
 
-        expect(component['hasValidatorRequired']).toBeTrue();
+        expect(component['hasValidatorRequired']).toBe(true);
       });
 
       it('should return null for valid time', () => {
@@ -536,7 +536,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
       it('should use validationValue when set', () => {
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
         component['setValidationValue']('invalid-time');
 
         const result = component.validate(new UntypedFormControl(''));
@@ -546,7 +546,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
       it('should use validationHourRange when set', () => {
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
         component['setValidationValue']('13:00', 1, 12);
 
         const result = component.validate(new UntypedFormControl(''));
@@ -557,7 +557,7 @@ describe('PoTimepickerBaseComponent:', () => {
       it('should return time error for out-of-range with maxTime', () => {
         component.maxTime = '18:00';
         component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
+        vi.spyOn(component['cd'] as any, 'markForCheck');
 
         const result = component.validate(new UntypedFormControl('19:00'));
 
@@ -605,69 +605,69 @@ describe('PoTimepickerBaseComponent:', () => {
     describe('isTimeInRange (extended):', () => {
       it('should return true when time is exactly at minTime', () => {
         component.minTime = '08:00';
-        expect(component['isTimeInRange']('08:00')).toBeTrue();
+        expect(component['isTimeInRange']('08:00')).toBe(true);
       });
 
       it('should return true when time is exactly at maxTime', () => {
         component.maxTime = '18:00';
-        expect(component['isTimeInRange']('18:00')).toBeTrue();
+        expect(component['isTimeInRange']('18:00')).toBe(true);
       });
 
       it('should handle seconds in range comparison', () => {
         component.minTime = '08:00:00';
         component.maxTime = '18:00:00';
-        expect(component['isTimeInRange']('08:00:01')).toBeTrue();
-        expect(component['isTimeInRange']('17:59:59')).toBeTrue();
+        expect(component['isTimeInRange']('08:00:01')).toBe(true);
+        expect(component['isTimeInRange']('17:59:59')).toBe(true);
       });
 
       it('should return true when only minTime is set and time is after', () => {
         component.minTime = '08:00';
         component.maxTime = undefined;
-        expect(component['isTimeInRange']('09:00')).toBeTrue();
+        expect(component['isTimeInRange']('09:00')).toBe(true);
       });
 
       it('should return true when only maxTime is set and time is before', () => {
         component.minTime = undefined;
         component.maxTime = '18:00';
-        expect(component['isTimeInRange']('17:00')).toBeTrue();
+        expect(component['isTimeInRange']('17:00')).toBe(true);
       });
     });
 
     describe('isValidTimeString (extended):', () => {
       it('should return false for time with invalid seconds', () => {
-        expect(component['isValidTimeString']('10:30:60')).toBeFalse();
+        expect(component['isValidTimeString']('10:30:60')).toBe(false);
       });
 
       it('should return true for boundary hour 23', () => {
-        expect(component['isValidTimeString']('23:59')).toBeTrue();
+        expect(component['isValidTimeString']('23:59')).toBe(true);
       });
 
       it('should return true for boundary hour 00', () => {
-        expect(component['isValidTimeString']('00:00')).toBeTrue();
+        expect(component['isValidTimeString']('00:00')).toBe(true);
       });
 
       it('should return false for null input', () => {
-        expect(component['isValidTimeString'](null)).toBeFalse();
+        expect(component['isValidTimeString'](null)).toBe(false);
       });
 
       it('should return false for undefined input', () => {
-        expect(component['isValidTimeString'](undefined)).toBeFalse();
+        expect(component['isValidTimeString'](undefined)).toBe(false);
       });
 
       it('should return false for non-string input', () => {
-        expect(component['isValidTimeString'](123 as any)).toBeFalse();
+        expect(component['isValidTimeString'](123 as any)).toBe(false);
       });
 
       it('should return true for valid time with custom hour range 0-23', () => {
-        expect(component['isValidTimeString']('23:00', 0, 23)).toBeTrue();
+        expect(component['isValidTimeString']('23:00', 0, 23)).toBe(true);
       });
 
       it('should return false when hour exceeds custom max', () => {
-        expect(component['isValidTimeString']('13:00', 0, 12)).toBeFalse();
+        expect(component['isValidTimeString']('13:00', 0, 12)).toBe(false);
       });
 
       it('should return false when hour is below custom min', () => {
-        expect(component['isValidTimeString']('00:00', 1, 12)).toBeFalse();
+        expect(component['isValidTimeString']('00:00', 1, 12)).toBe(false);
       });
     });
 
@@ -690,10 +690,10 @@ describe('PoTimepickerBaseComponent:', () => {
     describe('setValidationValue / clearValidationValue / hasValidationValue:', () => {
       it('should set and clear validation value', () => {
         component['setValidationValue']('10:00');
-        expect(component['hasValidationValue']()).toBeTrue();
+        expect(component['hasValidationValue']()).toBe(true);
 
         component['clearValidationValue']();
-        expect(component['hasValidationValue']()).toBeFalse();
+        expect(component['hasValidationValue']()).toBe(false);
       });
 
       it('should set validation value with hour range', () => {
@@ -740,23 +740,23 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('isGeneratedErrorPattern:', () => {
       it('should return true for invalidTime message', () => {
-        expect(component['isGeneratedErrorPattern']('Hora inválida')).toBeTrue();
+        expect(component['isGeneratedErrorPattern']('Hora inválida')).toBe(true);
       });
 
       it('should return true for outOfRangeTime message', () => {
-        expect(component['isGeneratedErrorPattern']('Hora fora do período')).toBeTrue();
+        expect(component['isGeneratedErrorPattern']('Hora fora do período')).toBe(true);
       });
 
       it('should return false for custom error', () => {
-        expect(component['isGeneratedErrorPattern']('Custom error')).toBeFalse();
+        expect(component['isGeneratedErrorPattern']('Custom error')).toBe(false);
       });
 
       it('should return false for empty string', () => {
-        expect(component['isGeneratedErrorPattern']('')).toBeFalse();
+        expect(component['isGeneratedErrorPattern']('')).toBe(false);
       });
 
       it('should return false for null', () => {
-        expect(component['isGeneratedErrorPattern'](null)).toBeFalse();
+        expect(component['isGeneratedErrorPattern'](null)).toBe(false);
       });
     });
 
@@ -782,7 +782,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should clear pendingChangeValue after onChangeModel is called', () => {
-        const fnChange = jasmine.createSpy('onChangeModel');
+        const fnChange = vi.fn();
         component.registerOnChange(fnChange);
         component['previousValue'] = '';
         component['pendingChangeValue'] = { value: '10:00' };
@@ -798,7 +798,7 @@ describe('PoTimepickerBaseComponent:', () => {
         component['pendingChangeValue'] = { value: '10:00' };
         component['previousValue'] = '';
 
-        const fnChange = jasmine.createSpy('onChangeModel');
+        const fnChange = vi.fn();
         component.registerOnChange(fnChange);
 
         expect(fnChange).toHaveBeenCalledWith('10:00');
@@ -808,7 +808,7 @@ describe('PoTimepickerBaseComponent:', () => {
       it('should not flush when no pending value', () => {
         component['pendingChangeValue'] = null;
 
-        const fnChange = jasmine.createSpy('onChangeModel');
+        const fnChange = vi.fn();
         component.registerOnChange(fnChange);
 
         expect(fnChange).not.toHaveBeenCalled();
@@ -817,7 +817,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('registerOnValidatorChange:', () => {
       it('should store the validator change function', () => {
-        const fn = jasmine.createSpy('validatorChange');
+        const fn = vi.fn();
         component.registerOnValidatorChange(fn);
 
         expect(component['validatorChange']).toBe(fn);
@@ -826,7 +826,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('validateModel:', () => {
       it('should call validatorChange when registered', () => {
-        const fn = jasmine.createSpy('validatorChange');
+        const fn = vi.fn();
         component.registerOnValidatorChange(fn);
 
         component['validateModel']('10:00');
@@ -844,12 +844,12 @@ describe('PoTimepickerBaseComponent:', () => {
     describe('is12HourFormat:', () => {
       it('should return true when format is 12', () => {
         component.format = PoTimerFormat.Format12;
-        expect(component.is12HourFormat).toBeTrue();
+        expect(component.is12HourFormat).toBe(true);
       });
 
       it('should return false when format is 24', () => {
         component.format = PoTimerFormat.Format24;
-        expect(component.is12HourFormat).toBeFalse();
+        expect(component.is12HourFormat).toBe(false);
       });
     });
 
@@ -874,7 +874,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('p-locale:', () => {
       it('should set locale and update mask', () => {
-        spyOn(component as any, 'updateMask');
+        vi.spyOn(component as any, 'updateMask');
         component.locale = 'en';
 
         expect(component['_locale']).toBe('en');
@@ -883,7 +883,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('ngOnInit:', () => {
       it('should call updateMask', () => {
-        spyOn(component as any, 'updateMask');
+        vi.spyOn(component as any, 'updateMask');
         component.ngOnInit();
 
         expect(component['updateMask']).toHaveBeenCalled();
@@ -909,35 +909,35 @@ describe('PoTimepickerBaseComponent:', () => {
 
       it('should set noAutocomplete to true', () => {
         component.noAutocomplete = true;
-        expect(component.noAutocomplete).toBeTrue();
+        expect(component.noAutocomplete).toBe(true);
       });
     });
 
     describe('p-disabled - empty string branch:', () => {
       it('should set disabled to true when empty string is passed', () => {
         component.setDisabled = '';
-        expect(component.disabled).toBeTrue();
+        expect(component.disabled).toBe(true);
       });
     });
 
     describe('p-readonly - empty string branch:', () => {
       it('should set readonly to true when empty string is passed', () => {
         component.setReadonly = '';
-        expect(component.readonly).toBeTrue();
+        expect(component.readonly).toBe(true);
       });
     });
 
     describe('p-required - empty string branch:', () => {
       it('should set required to true when empty string is passed', () => {
         component.setRequired = '';
-        expect(component.required).toBeTrue();
+        expect(component.required).toBe(true);
       });
     });
 
     describe('p-clean - empty string branch:', () => {
       it('should set clean to true when empty string is passed', () => {
         component.setClean = '';
-        expect(component.clean).toBeTrue();
+        expect(component.clean).toBe(true);
       });
     });
 
@@ -945,61 +945,61 @@ describe('PoTimepickerBaseComponent:', () => {
       it('should return false when parsed numbers result in NaN', () => {
         // The regex requires \d{2} so we can't easily make parseInt return NaN
         // Test with a string that doesn't match the regex
-        expect(component['isValidTimeString']('ab:cd')).toBeFalse();
+        expect(component['isValidTimeString']('ab:cd')).toBe(false);
       });
 
       it('should return false when hours exceed max', () => {
-        expect(component['isValidTimeString']('24:00')).toBeFalse();
+        expect(component['isValidTimeString']('24:00')).toBe(false);
       });
 
       it('should return false when minutes exceed 59', () => {
-        expect(component['isValidTimeString']('10:60')).toBeFalse();
+        expect(component['isValidTimeString']('10:60')).toBe(false);
       });
 
       it('should return false when seconds exceed 59', () => {
-        expect(component['isValidTimeString']('10:30:60')).toBeFalse();
+        expect(component['isValidTimeString']('10:30:60')).toBe(false);
       });
 
       it('should return true for valid time with seconds', () => {
-        expect(component['isValidTimeString']('10:30:45')).toBeTrue();
+        expect(component['isValidTimeString']('10:30:45')).toBe(true);
       });
 
       it('should return false for null value', () => {
-        expect(component['isValidTimeString'](null)).toBeFalse();
+        expect(component['isValidTimeString'](null)).toBe(false);
       });
 
       it('should return false for non-string value', () => {
-        expect(component['isValidTimeString'](123 as any)).toBeFalse();
+        expect(component['isValidTimeString'](123 as any)).toBe(false);
       });
     });
 
     describe('isTimeInRange - edge cases:', () => {
       it('should return true when time is null', () => {
-        expect(component['isTimeInRange'](null)).toBeTrue();
+        expect(component['isTimeInRange'](null)).toBe(true);
       });
 
       it('should return true when time is empty', () => {
-        expect(component['isTimeInRange']('')).toBeTrue();
+        expect(component['isTimeInRange']('')).toBe(true);
       });
 
       it('should return true when time is invalid format', () => {
-        expect(component['isTimeInRange']('abc')).toBeTrue();
+        expect(component['isTimeInRange']('abc')).toBe(true);
       });
 
       it('should return false when time is below minTime', () => {
         component['_minTime'] = '10:00';
-        expect(component['isTimeInRange']('09:00')).toBeFalse();
+        expect(component['isTimeInRange']('09:00')).toBe(false);
       });
 
       it('should return false when time is above maxTime', () => {
         component['_maxTime'] = '18:00';
-        expect(component['isTimeInRange']('19:00')).toBeFalse();
+        expect(component['isTimeInRange']('19:00')).toBe(false);
       });
 
       it('should return true when no minTime or maxTime is set', () => {
         component['_minTime'] = undefined;
         component['_maxTime'] = undefined;
-        expect(component['isTimeInRange']('10:00')).toBeTrue();
+        expect(component['isTimeInRange']('10:00')).toBe(true);
       });
     });
 
@@ -1033,25 +1033,25 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('isGeneratedErrorPattern - edge cases:', () => {
       it('should return false for empty string', () => {
-        expect(component['isGeneratedErrorPattern']('')).toBeFalse();
+        expect(component['isGeneratedErrorPattern']('')).toBe(false);
       });
 
       it('should return false for null', () => {
-        expect(component['isGeneratedErrorPattern'](null)).toBeFalse();
+        expect(component['isGeneratedErrorPattern'](null)).toBe(false);
       });
 
       it('should return true for invalidTime message', () => {
         const message = component['getDefaultInvalidTimeMessage']();
-        expect(component['isGeneratedErrorPattern'](message)).toBeTrue();
+        expect(component['isGeneratedErrorPattern'](message)).toBe(true);
       });
 
       it('should return true for outOfRangeTime message', () => {
         const message = component['getDefaultOutOfRangeTimeMessage']();
-        expect(component['isGeneratedErrorPattern'](message)).toBeTrue();
+        expect(component['isGeneratedErrorPattern'](message)).toBe(true);
       });
 
       it('should return false for custom error message', () => {
-        expect(component['isGeneratedErrorPattern']('Custom error')).toBeFalse();
+        expect(component['isGeneratedErrorPattern']('Custom error')).toBe(false);
       });
     });
 
@@ -1090,7 +1090,7 @@ describe('PoTimepickerBaseComponent:', () => {
       });
 
       it('should not call onChangeModel when value equals previousValue', () => {
-        const spy = jasmine.createSpy('onChangeModel');
+        const spy = vi.fn();
         component['onChangeModel'] = spy;
         component['previousValue'] = '10:00';
 
@@ -1103,7 +1103,7 @@ describe('PoTimepickerBaseComponent:', () => {
     describe('registerOnChange - pending change flush:', () => {
       it('should flush pending change when registering onChange', () => {
         component['pendingChangeValue'] = { value: '10:00' };
-        const spy = jasmine.createSpy('onChangeModel');
+        const spy = vi.fn();
 
         component.registerOnChange(spy);
 
@@ -1190,7 +1190,7 @@ describe('PoTimepickerBaseComponent:', () => {
     describe('isValidTimeString - NaN guard path:', () => {
       it('should return false when parsed hours is NaN', () => {
         const originalParseInt = window.parseInt;
-        spyOn(window, 'parseInt').and.callFake((value: string, radix?: number) => {
+        vi.spyOn(window as any, 'parseInt').mockImplementation((value: string, radix?: number) => {
           if (value === '12') {
             return Number.NaN;
           }
@@ -1198,12 +1198,12 @@ describe('PoTimepickerBaseComponent:', () => {
           return originalParseInt(value, radix);
         });
 
-        expect(component['isValidTimeString']('12:34:56')).toBeFalse();
+        expect(component['isValidTimeString']('12:34:56')).toBe(false);
       });
 
       it('should return false when parsed minutes is NaN', () => {
         const originalParseInt = window.parseInt;
-        spyOn(window, 'parseInt').and.callFake((value: string, radix?: number) => {
+        vi.spyOn(window as any, 'parseInt').mockImplementation((value: string, radix?: number) => {
           if (value === '34') {
             return Number.NaN;
           }
@@ -1211,12 +1211,12 @@ describe('PoTimepickerBaseComponent:', () => {
           return originalParseInt(value, radix);
         });
 
-        expect(component['isValidTimeString']('12:34:56')).toBeFalse();
+        expect(component['isValidTimeString']('12:34:56')).toBe(false);
       });
 
       it('should return false when parsed seconds is NaN', () => {
         const originalParseInt = window.parseInt;
-        spyOn(window, 'parseInt').and.callFake((value: string, radix?: number) => {
+        vi.spyOn(window as any, 'parseInt').mockImplementation((value: string, radix?: number) => {
           if (value === '56') {
             return Number.NaN;
           }
@@ -1224,35 +1224,35 @@ describe('PoTimepickerBaseComponent:', () => {
           return originalParseInt(value, radix);
         });
 
-        expect(component['isValidTimeString']('12:34:56')).toBeFalse();
+        expect(component['isValidTimeString']('12:34:56')).toBe(false);
       });
 
       it('should return false for time string with hours above 23', () => {
-        expect(component['isValidTimeString']('99:99')).toBeFalse();
+        expect(component['isValidTimeString']('99:99')).toBe(false);
       });
 
       it('should return false for time with seconds above 59', () => {
-        expect(component['isValidTimeString']('10:30:99')).toBeFalse();
+        expect(component['isValidTimeString']('10:30:99')).toBe(false);
       });
 
       it('should return true for valid time with seconds', () => {
-        expect(component['isValidTimeString']('10:30:45')).toBeTrue();
+        expect(component['isValidTimeString']('10:30:45')).toBe(true);
       });
 
       it('should return false for non-matching format', () => {
-        expect(component['isValidTimeString']('1:2')).toBeFalse();
+        expect(component['isValidTimeString']('1:2')).toBe(false);
       });
 
       it('should accept custom minHour and maxHour', () => {
-        expect(component['isValidTimeString']('05:00', 1, 12)).toBeTrue();
-        expect(component['isValidTimeString']('13:00', 1, 12)).toBeFalse();
-        expect(component['isValidTimeString']('00:00', 1, 12)).toBeFalse();
+        expect(component['isValidTimeString']('05:00', 1, 12)).toBe(true);
+        expect(component['isValidTimeString']('13:00', 1, 12)).toBe(false);
+        expect(component['isValidTimeString']('00:00', 1, 12)).toBe(false);
       });
     });
 
     describe('getDefaultInvalidTimeMessage - locale fallback to poLocaleDefault:', () => {
       it('should use poLocaleDefault when locale getter returns empty string', () => {
-        spyOnProperty(component, 'locale', 'get').and.returnValue('');
+        vi.spyOn(component, 'locale', 'get').mockReturnValue('');
 
         const msg = component['getDefaultInvalidTimeMessage']();
 
@@ -1274,7 +1274,7 @@ describe('PoTimepickerBaseComponent:', () => {
 
     describe('getDefaultOutOfRangeTimeMessage - locale fallback to poLocaleDefault:', () => {
       it('should use poLocaleDefault when locale getter returns empty string', () => {
-        spyOnProperty(component, 'locale', 'get').and.returnValue('');
+        vi.spyOn(component, 'locale', 'get').mockReturnValue('');
 
         const msg = component['getDefaultOutOfRangeTimeMessage']();
 

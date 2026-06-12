@@ -18,8 +18,8 @@ describe('PoHeaderCustomerComponent', () => {
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    component.poPopupAction = { toggle: jasmine.createSpy('toggle') } as any;
-    component.poPopoverAction = { close: jasmine.createSpy('close') } as any;
+    component.poPopupAction = { toggle: vi.fn() } as any;
+    component.poPopoverAction = { close: vi.fn() } as any;
   });
 
   it('should create the component', () => {
@@ -46,7 +46,7 @@ describe('PoHeaderCustomerComponent', () => {
       items: [{ label: 'label', action: () => {} }]
     };
 
-    spyOn(component.headerUser, 'action');
+    vi.spyOn(component.headerUser as any, 'action');
 
     component.onClickUserSection();
 
@@ -76,7 +76,7 @@ describe('PoHeaderCustomerComponent', () => {
       popover: { content: null }
     };
 
-    component.poPopoverAction.open = jasmine.createSpy('open');
+    component.poPopoverAction.open = vi.fn();
 
     Object.defineProperty(component.poPopoverAction, 'isHidden', { get: () => true });
 

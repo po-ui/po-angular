@@ -33,7 +33,7 @@ describe('PoProgressComponent:', () => {
     it(`emitCancellation: should call 'emit' with 'status'`, () => {
       component.status = PoProgressStatus.Success;
 
-      spyOn(component.cancel, 'emit');
+      vi.spyOn(component.cancel as any, 'emit');
 
       component.emitCancellation();
 
@@ -43,7 +43,7 @@ describe('PoProgressComponent:', () => {
     it(`emitRetry: should call 'emit'`, () => {
       component.status = PoProgressStatus.Success;
 
-      spyOn(component.retry, 'emit');
+      vi.spyOn(component.retry as any, 'emit');
 
       component.emitRetry();
 
@@ -51,7 +51,7 @@ describe('PoProgressComponent:', () => {
     });
 
     it('callAction: should emit customActionClick event', () => {
-      spyOn(component.customActionClick, 'emit');
+      vi.spyOn(component.customActionClick as any, 'emit');
 
       component.callAction();
 
@@ -60,54 +60,54 @@ describe('PoProgressComponent:', () => {
 
     it('isActionVisible: should return true if visible is true or a function that returns true', () => {
       component.customAction = { label: 'Action', visible: true };
-      expect(component.isActionVisible(component.customAction)).toBeTrue();
+      expect(component.isActionVisible(component.customAction)).toBe(true);
 
       component.customAction = { label: 'Action', visible: () => true };
-      expect(component.isActionVisible(component.customAction)).toBeTrue();
+      expect(component.isActionVisible(component.customAction)).toBe(true);
     });
 
     it('isActionVisible: should return false if visible is false or a function that returns false', () => {
       component.customAction = { label: 'Action', visible: false };
-      expect(component.isActionVisible(component.customAction)).toBeFalse();
+      expect(component.isActionVisible(component.customAction)).toBe(false);
 
       component.customAction = { label: 'Action', visible: () => false };
-      expect(component.isActionVisible(component.customAction)).toBeFalse();
+      expect(component.isActionVisible(component.customAction)).toBe(false);
     });
 
     it('isActionVisible: should return true if action.icon is defined and action.visible is true', () => {
       component.customAction = { icon: 'an an-icon', visible: true };
-      expect(component.isActionVisible(component.customAction)).toBeTrue();
+      expect(component.isActionVisible(component.customAction)).toBe(true);
     });
 
     it('isActionVisible: should return false if action.icon is defined but action.visible is false', () => {
       component.customAction = { icon: 'an an-icon', visible: false };
-      expect(component.isActionVisible(component.customAction)).toBeFalse();
+      expect(component.isActionVisible(component.customAction)).toBe(false);
     });
 
     it('isActionVisible: should return true if action.icon is defined and action.visible is a function that returns true', () => {
       component.customAction = { icon: 'an an-icon', visible: () => true };
-      expect(component.isActionVisible(component.customAction)).toBeTrue();
+      expect(component.isActionVisible(component.customAction)).toBe(true);
     });
 
     it('isActionVisible: should return false if action.icon is defined and action.visible is a function that returns false', () => {
       component.customAction = { icon: 'an an-icon', visible: () => false };
-      expect(component.isActionVisible(component.customAction)).toBeFalse();
+      expect(component.isActionVisible(component.customAction)).toBe(false);
     });
 
     it('actionIsDisabled: should return true if disabled is true or a function that returns true', () => {
       component.customAction = { label: 'Action', disabled: true };
-      expect(component.actionIsDisabled(component.customAction)).toBeTrue();
+      expect(component.actionIsDisabled(component.customAction)).toBe(true);
 
       component.customAction = { label: 'Action', disabled: () => true };
-      expect(component.actionIsDisabled(component.customAction)).toBeTrue();
+      expect(component.actionIsDisabled(component.customAction)).toBe(true);
     });
 
     it('actionIsDisabled: should return false if disabled is false or a function that returns false', () => {
       component.customAction = { label: 'Action', disabled: false };
-      expect(component.actionIsDisabled(component.customAction)).toBeFalse();
+      expect(component.actionIsDisabled(component.customAction)).toBe(false);
 
       component.customAction = { label: 'Action', disabled: () => false };
-      expect(component.actionIsDisabled(component.customAction)).toBeFalse();
+      expect(component.actionIsDisabled(component.customAction)).toBe(false);
     });
   });
 
@@ -137,7 +137,7 @@ describe('PoProgressComponent:', () => {
     });
 
     it('statusClass: should return `po-progress-default` if `status` is invalid', () => {
-      component.status = <any>'test';
+      (component as any).status = 'test';
 
       expect(component.statusClass).toBe('po-progress-default');
     });
@@ -288,7 +288,7 @@ describe('PoProgressComponent:', () => {
     });
 
     it('should contain `po-progress-default` if `status` does not exist', () => {
-      component.status = <any>'test';
+      (component as any).status = 'test';
 
       fixture.detectChanges();
 
@@ -338,7 +338,7 @@ describe('PoProgressComponent:', () => {
       expect(progressbar).toBeTruthy();
       expect(progressbar.getAttribute('aria-valuemin')).toBe('0');
       expect(progressbar.getAttribute('aria-valuemax')).toBe('100');
-      expect(progressbar.hasAttribute('aria-valuenow')).toBeFalse();
+      expect(progressbar.hasAttribute('aria-valuenow')).toBe(false);
     });
 
     it('should set aria-label in bar progress when p-aria-label is informed', () => {
@@ -375,7 +375,7 @@ describe('PoProgressComponent:', () => {
       expect(progressbar.getAttribute('aria-label')).toBe('Upload in progress');
       expect(progressbar.getAttribute('aria-valuemin')).toBe('0');
       expect(progressbar.getAttribute('aria-valuemax')).toBe('100');
-      expect(progressbar.hasAttribute('aria-valuenow')).toBeFalse();
+      expect(progressbar.hasAttribute('aria-valuenow')).toBe(false);
     });
 
     it('should set aria-label in circle progress when p-aria-label is informed', () => {
@@ -508,7 +508,7 @@ describe('PoProgressComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component.cancel, 'emit');
+      vi.spyOn(component.cancel as any, 'emit');
 
       nativeElement.querySelector('.an-x').click();
 
@@ -523,7 +523,7 @@ describe('PoProgressComponent:', () => {
 
       fixture.detectChanges();
 
-      spyOn(component.retry, 'emit');
+      vi.spyOn(component.retry as any, 'emit');
 
       nativeElement.querySelector('.an-arrow-clockwise').click();
 
@@ -605,7 +605,7 @@ describe('PoProgressComponent:', () => {
 
     it('should emit customActionClick event when customAction button is clicked', () => {
       component.customAction = { label: 'Download', icon: 'download', type: 'default', visible: true };
-      spyOn(component.customActionClick, 'emit');
+      vi.spyOn(component.customActionClick as any, 'emit');
 
       fixture.detectChanges();
 
@@ -629,7 +629,7 @@ describe('PoProgressComponent:', () => {
       const customActionButton = nativeElement.querySelector('.po-progress-custom-button button');
       expect(customActionButton).toBeTruthy();
 
-      expect(customActionButton.disabled).toBeTrue();
+      expect(customActionButton.disabled).toBe(true);
     });
 
     it('should not disable customAction button when disabled is false', () => {
@@ -642,7 +642,7 @@ describe('PoProgressComponent:', () => {
       fixture.detectChanges();
 
       const customActionButton = nativeElement.querySelector('.po-progress-custom-button button');
-      expect(customActionButton.hasAttribute('disabled')).toBeFalse();
+      expect(customActionButton.hasAttribute('disabled')).toBe(false);
     });
   });
 
@@ -651,12 +651,12 @@ describe('PoProgressComponent:', () => {
       it('should return true for element with inline height in px', () => {
         const el = document.createElement('div');
         el.style.height = '200px';
-        expect((component as any).hasExplicitHeight(el)).toBeTrue();
+        expect((component as any).hasExplicitHeight(el)).toBe(true);
       });
 
       it('should return false for element with no height set', () => {
         const el = document.createElement('div');
-        expect((component as any).hasExplicitHeight(el)).toBeFalse();
+        expect((component as any).hasExplicitHeight(el)).toBe(false);
       });
     });
 
@@ -670,14 +670,14 @@ describe('PoProgressComponent:', () => {
         grandparent.appendChild(parent);
         document.body.appendChild(grandparent);
 
-        expect((component as any).hasAllocatedHeight(parent)).toBeTrue();
+        expect((component as any).hasAllocatedHeight(parent)).toBe(true);
 
         document.body.removeChild(grandparent);
       });
 
       it('should return false when parent element does not exist', () => {
         const orphan = document.createElement('div');
-        expect((component as any).hasAllocatedHeight(orphan)).toBeFalse();
+        expect((component as any).hasAllocatedHeight(orphan)).toBe(false);
       });
 
       it('should return false when parent  without explicit height', () => {
@@ -688,7 +688,7 @@ describe('PoProgressComponent:', () => {
         grandparent.appendChild(parent);
         document.body.appendChild(grandparent);
 
-        expect((component as any).hasAllocatedHeight(parent)).toBeFalse();
+        expect((component as any).hasAllocatedHeight(parent)).toBe(false);
 
         document.body.removeChild(grandparent);
       });
@@ -696,7 +696,7 @@ describe('PoProgressComponent:', () => {
 
     describe('measureAndSetParentSize:', () => {
       it('should set parentSize based on element dimensions', () => {
-        spyOn(window, 'getComputedStyle').and.returnValue({
+        vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
           height: '150px',
           width: '200px',
           paddingTop: '0px',
@@ -718,7 +718,7 @@ describe('PoProgressComponent:', () => {
       });
 
       it('should subtract padding from dimensions', () => {
-        spyOn(window, 'getComputedStyle').and.returnValue({
+        vi.spyOn(window as any, 'getComputedStyle').mockReturnValue({
           height: '200px',
           width: '200px',
           paddingTop: '10px',
@@ -862,9 +862,9 @@ describe('PoProgressComponent:', () => {
 
     describe('ngAfterViewInit:', () => {
       beforeEach(() => {
-        (window as any).ResizeObserver = jasmine.createSpy('ResizeObserver').and.returnValue({
-          observe: jasmine.createSpy('observe'),
-          disconnect: jasmine.createSpy('disconnect')
+        (window as any).ResizeObserver = vi.fn().mockReturnValue({
+          observe: vi.fn(),
+          disconnect: vi.fn()
         });
       });
 
@@ -906,7 +906,7 @@ describe('PoProgressComponent:', () => {
         document.body.removeChild(ancestor);
       });
 
-      it('should update parentSize when ResizeObserver callback fires with valid dimensions', (done: DoneFn) => {
+      it('should update parentSize when ResizeObserver callback fires with valid dimensions', async () => {
         let resizeCallback: ResizeObserverCallback;
         const OriginalResizeObserver = window.ResizeObserver;
 
@@ -931,8 +931,6 @@ describe('PoProgressComponent:', () => {
 
         resizeCallback([{ contentRect: { width: 200, height: 200 } } as any], {} as any);
         expect(component.parentSize()).toBe(200);
-        done();
-
         document.body.removeChild(ancestor);
         window.ResizeObserver = OriginalResizeObserver;
       });

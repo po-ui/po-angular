@@ -57,7 +57,7 @@ describe('PoNotificationService ', () => {
   });
 
   it('should be success toaster in stack', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.success({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
@@ -66,7 +66,7 @@ describe('PoNotificationService ', () => {
   });
 
   it('should be warning toaster in stack', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.warning({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
@@ -75,7 +75,7 @@ describe('PoNotificationService ', () => {
   });
 
   it('should be error toaster in stack', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.error({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
@@ -84,7 +84,7 @@ describe('PoNotificationService ', () => {
   });
 
   it('should be information toaster in stack', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.information({ message: 'teste', orientation: PoToasterOrientation.Top });
 
     expect(service.createToaster).toHaveBeenCalledWith(
@@ -93,35 +93,35 @@ describe('PoNotificationService ', () => {
   });
 
   it('call be method information with string', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.information('teste');
 
     expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Information }));
   });
 
   it('call be method error with string', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.error('teste');
 
     expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Error }));
   });
 
   it('call be method warning with string', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.warning('teste');
 
     expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Warning }));
   });
 
   it('call be method success with string', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.success('teste');
 
     expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success }));
   });
 
   it('should be orientation bottom', () => {
-    spyOn(service, 'createToaster');
+    vi.spyOn(service as any, 'createToaster');
     service.success({ message: 'teste', orientation: PoToasterOrientation.Bottom });
 
     expect(service.createToaster).toHaveBeenCalledWith(
@@ -137,7 +137,7 @@ describe('PoNotificationService ', () => {
     };
     service.success(notification);
 
-    spyOn(notification, 'action');
+    vi.spyOn(notification as any, 'action');
     service.stackBottom[0].instance.poToasterAction();
     expect(notification.action).toHaveBeenCalledWith();
   });
@@ -150,28 +150,28 @@ describe('PoNotificationService ', () => {
     };
     service.success(notification);
 
-    spyOn(notification, 'action');
+    vi.spyOn(notification as any, 'action');
     service.stackTop[0].instance.poToasterAction();
     expect(notification.action).toHaveBeenCalledWith();
   });
 
   describe('Methods: ', () => {
     it('should be duration 9000 when not informed', () => {
-      spyOn(service, 'createToaster');
+      vi.spyOn(service as any, 'createToaster');
       service.success({ message: 'teste' });
 
       expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 9000 }));
     });
 
     it('should be duration equals 5 seconds', () => {
-      spyOn(service, 'createToaster');
+      vi.spyOn(service as any, 'createToaster');
       service.success({ message: 'teste', duration: 5000 });
 
       expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 5000 }));
     });
 
     it('should change default duration to 3 seconds', () => {
-      spyOn(service, 'setDefaultDuration').and.callThrough();
+      vi.spyOn(service as any, 'setDefaultDuration');
       service.setDefaultDuration(3000);
 
       expect(service.setDefaultDuration).toHaveBeenCalledWith(3000);

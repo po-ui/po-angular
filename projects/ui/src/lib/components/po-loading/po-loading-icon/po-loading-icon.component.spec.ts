@@ -58,7 +58,7 @@ describe('PoLoadingIconComponent', () => {
       component.inOverlay = true;
       component['createdRef'] = {
         instance: { size: '' },
-        destroy: jasmine.createSpy('destroy')
+        destroy: vi.fn()
       } as any;
 
       component.size = 'lg';
@@ -108,7 +108,7 @@ describe('PoLoadingIconComponent', () => {
       it('should destroy createdRef if it exists', () => {
         component['createdRef'] = {
           instance: { size: 'md' },
-          destroy: jasmine.createSpy('destroy')
+          destroy: vi.fn()
         } as any;
 
         component.ngOnDestroy();
@@ -230,10 +230,10 @@ describe('PoLoadingIconComponent with custom component', () => {
         }
 
         // Cria spies após o ViewChild estar disponível
-        const clearSpy = spyOn(component['loadingContainer'], 'clear');
-        const createComponentSpy = spyOn(component['loadingContainer'], 'createComponent').and.returnValue({
+        const clearSpy = vi.spyOn(component['loadingContainer'] as any, 'clear');
+        const createComponentSpy = vi.spyOn(component['loadingContainer'] as any, 'createComponent').mockReturnValue({
           instance: { size: 'md' },
-          destroy: jasmine.createSpy('destroy')
+          destroy: vi.fn()
         } as any);
 
         // Chama ngAfterViewInit novamente

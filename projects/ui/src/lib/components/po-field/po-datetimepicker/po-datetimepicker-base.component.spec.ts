@@ -27,7 +27,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('writeValue:', () => {
     it('should clear date and timeValue when value is null', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue(null);
 
       expect(component['date']).toBeUndefined();
@@ -36,7 +36,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should clear date and timeValue when value is empty string', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue('');
 
       expect(component['date']).toBeUndefined();
@@ -44,7 +44,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should set date and timeValue from Date object', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       const date = new Date(2026, 4, 12, 14, 30, 0);
       component.writeValue(date);
 
@@ -55,7 +55,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should set date and timeValue from ISO string with timezone', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue('2026-05-12T14:30:00-03:00');
 
       expect(component['date']).toBeDefined();
@@ -63,7 +63,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should set date and timeValue from ISO string without timezone', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue('2026-05-12T14:30:00');
 
       expect(component['date']).toBeDefined();
@@ -71,7 +71,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should set date with 00:00 time from date-only ISO string', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue('2026-05-12');
 
       expect(component['date']).toBeDefined();
@@ -80,32 +80,32 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should call onChangeModel with ISO model when date and time are valid', () => {
-      const onChangeSpy = jasmine.createSpy('onChangeModel');
+      const onChangeSpy = vi.fn();
       component.registerOnChange(onChangeSpy);
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue(new Date(2026, 4, 12, 14, 30));
 
       expect(onChangeSpy).toHaveBeenCalled();
-      const calledValue = onChangeSpy.calls.mostRecent().args[0];
+      const calledValue = vi.mocked(onChangeSpy).mock.lastCall[0];
       expect(calledValue).toContain('2026-05-12T14:30');
     });
 
     it('should always propagate normalized ISO value even when called twice with same Date', () => {
-      const onChangeSpy = jasmine.createSpy('onChangeModel');
+      const onChangeSpy = vi.fn();
       component.registerOnChange(onChangeSpy);
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
 
       component.writeValue(new Date(2026, 4, 12, 14, 30));
       component.writeValue(new Date(2026, 4, 12, 14, 30));
 
       expect(onChangeSpy).toHaveBeenCalledTimes(2);
-      expect(onChangeSpy.calls.mostRecent().args[0]).toContain('2026-05-12T14:30');
+      expect(vi.mocked(onChangeSpy).mock.lastCall[0]).toContain('2026-05-12T14:30');
     });
   });
 
   describe('registerOnChange:', () => {
     it('should store the onChange function', () => {
-      const fn = jasmine.createSpy('onChange');
+      const fn = vi.fn();
       component.registerOnChange(fn);
       expect(component['onChangeModel']).toBe(fn);
     });
@@ -113,7 +113,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('registerOnTouched:', () => {
     it('should store the onTouched function', () => {
-      const fn = jasmine.createSpy('onTouched');
+      const fn = vi.fn();
       component.registerOnTouched(fn);
       expect(component['onTouchedModel']).toBe(fn);
     });
@@ -213,21 +213,21 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
     it('should return + sign when offset is negative (east of UTC)', () => {
       const date = new Date();
-      spyOn(date, 'getTimezoneOffset').and.returnValue(-180); // UTC+3
+      vi.spyOn(date as any, 'getTimezoneOffset').mockReturnValue(-180); // UTC+3
       const result = component.getTimezoneOffset(date);
       expect(result).toBe('+03:00');
     });
 
     it('should return - sign when offset is positive (west of UTC)', () => {
       const date = new Date();
-      spyOn(date, 'getTimezoneOffset').and.returnValue(180); // UTC-3
+      vi.spyOn(date as any, 'getTimezoneOffset').mockReturnValue(180); // UTC-3
       const result = component.getTimezoneOffset(date);
       expect(result).toBe('-03:00');
     });
 
     it('should return +00:00 when offset is 0 (UTC)', () => {
       const date = new Date();
-      spyOn(date, 'getTimezoneOffset').and.returnValue(0);
+      vi.spyOn(date as any, 'getTimezoneOffset').mockReturnValue(0);
       const result = component.getTimezoneOffset(date);
       expect(result).toBe('+00:00');
     });
@@ -235,7 +235,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('callOnChange:', () => {
     it('should call onChangeModel and update previousValue', () => {
-      const fn = jasmine.createSpy('onChange');
+      const fn = vi.fn();
       component.registerOnChange(fn);
       component.callOnChange('new-value');
 
@@ -244,10 +244,10 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should call onChangeModel even when value is same as previous', () => {
-      const fn = jasmine.createSpy('onChange');
+      const fn = vi.fn();
       component.registerOnChange(fn);
       component.callOnChange('same-value');
-      fn.calls.reset();
+      fn.mockClear();
       component.callOnChange('same-value');
 
       expect(fn).toHaveBeenCalledWith('same-value');
@@ -256,7 +256,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('controlModel:', () => {
     it('should call callOnChange with model value', () => {
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'callOnChange');
       component['date'] = new Date(2026, 4, 12);
       component['timeValue'] = '14:30';
       component.controlModel();
@@ -265,7 +265,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
     });
 
     it('should call callOnChange with empty string when no date', () => {
-      spyOn(component, 'callOnChange');
+      vi.spyOn(component as any, 'callOnChange');
       component['date'] = undefined;
       component.controlModel();
 
@@ -384,7 +384,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('registerOnValidatorChange:', () => {
     it('should store the validator change function', () => {
-      const fn = jasmine.createSpy('validatorChange');
+      const fn = vi.fn();
       component.registerOnValidatorChange(fn);
       expect(component['validatorChange']).toBe(fn);
     });
@@ -440,7 +440,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('onThemeChange:', () => {
     it('should call applySizeBasedOnA11y', () => {
-      spyOn<any>(component, 'applySizeBasedOnA11y');
+      vi.spyOn(component as any, 'applySizeBasedOnA11y');
       component['onThemeChange']();
       expect(component['applySizeBasedOnA11y']).toHaveBeenCalled();
     });
@@ -545,7 +545,7 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('validateModel:', () => {
     it('should call validatorChange when defined', () => {
-      const fn = jasmine.createSpy('validatorChange');
+      const fn = vi.fn();
       component['validatorChange'] = fn;
       component['validateModel']('value');
       expect(fn).toHaveBeenCalled();
@@ -559,14 +559,14 @@ describe('PoDatetimepickerBaseComponent:', () => {
 
   describe('processStringValue:', () => {
     it('should use fallback parse when Date constructor returns Invalid Date', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component.writeValue('2026-05-12Tinvalid');
 
       expect(component['date']).toBeDefined();
     });
 
     it('should parse date-only string and set timeValue to 00:00', () => {
-      spyOn(component, 'refreshValue');
+      vi.spyOn(component as any, 'refreshValue');
       component['processStringValue']('2026-05-12');
 
       expect(component['date']).toBeDefined();

@@ -110,7 +110,7 @@ describe('PoProgressBaseComponent:', () => {
       });
 
       it('onThemeChange: should call applySizeActionsBasedOnA11y', () => {
-        spyOn<any>(component, 'applySizeActionsBasedOnA11y');
+        vi.spyOn(component as any, 'applySizeActionsBasedOnA11y');
         component['onThemeChange']();
         expect((component as any).applySizeActionsBasedOnA11y).toHaveBeenCalled();
       });
@@ -245,7 +245,7 @@ describe('PoProgressBaseComponent:', () => {
       it('should respect the visible property when it is a boolean', () => {
         component.customAction = { label: 'Download', visible: true };
 
-        expect(component.customAction.visible).toBeTrue();
+        expect(component.customAction.visible).toBe(true);
       });
 
       it('should respect the visible property when it is a function', () => {
@@ -253,13 +253,13 @@ describe('PoProgressBaseComponent:', () => {
 
         const isVisible = (component.customAction.visible as Function)();
 
-        expect(isVisible).toBeFalse();
+        expect(isVisible).toBe(false);
       });
 
       it('should respect the disabled property when it is a boolean', () => {
         component.customAction = { label: 'Download', disabled: true };
 
-        expect(component.customAction.disabled).toBeTrue();
+        expect(component.customAction.disabled).toBe(true);
       });
 
       it('should respect the disabled property when it is a function', () => {
@@ -267,12 +267,12 @@ describe('PoProgressBaseComponent:', () => {
 
         const isDisabled = (component.customAction.disabled as Function)();
 
-        expect(isDisabled).toBeTrue();
+        expect(isDisabled).toBe(true);
       });
     });
     describe('p-custom-action-click:', () => {
       it('should emit when the event is triggered', () => {
-        spyOn(component.customActionClick, 'emit');
+        vi.spyOn(component.customActionClick as any, 'emit');
 
         const mockFile = { name: 'example.txt' };
         component.customActionClick.emit(mockFile);

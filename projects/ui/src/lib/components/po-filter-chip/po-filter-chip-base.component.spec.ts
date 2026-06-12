@@ -24,56 +24,56 @@ describe('PoFilterChipBaseComponent:', () => {
   describe('Properties:', () => {
     describe('p-disabled:', () => {
       it('should have default value as false', () => {
-        expect(component.disabled()).toBeFalse();
+        expect(component.disabled()).toBe(false);
       });
 
       it('should convert string "true" to boolean true', () => {
         fixture.componentRef.setInput('p-disabled', 'true');
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeTrue();
+        expect(component.disabled()).toBe(true);
       });
 
       it('should convert string "false" to boolean false', () => {
         fixture.componentRef.setInput('p-disabled', 'false');
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeFalse();
+        expect(component.disabled()).toBe(false);
       });
 
       it('should convert boolean true to true', () => {
         fixture.componentRef.setInput('p-disabled', true);
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeTrue();
+        expect(component.disabled()).toBe(true);
       });
 
       it('should convert boolean false to false', () => {
         fixture.componentRef.setInput('p-disabled', false);
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeFalse();
+        expect(component.disabled()).toBe(false);
       });
 
       it('should convert empty string to true', () => {
         fixture.componentRef.setInput('p-disabled', '');
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeTrue();
+        expect(component.disabled()).toBe(true);
       });
 
       it('should convert null to false', () => {
         fixture.componentRef.setInput('p-disabled', null);
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeFalse();
+        expect(component.disabled()).toBe(false);
       });
 
       it('should convert undefined to false', () => {
         fixture.componentRef.setInput('p-disabled', undefined);
         fixture.detectChanges();
 
-        expect(component.disabled()).toBeFalse();
+        expect(component.disabled()).toBe(false);
       });
     });
 
@@ -99,56 +99,56 @@ describe('PoFilterChipBaseComponent:', () => {
 
     describe('p-selected:', () => {
       it('should have default value as false', () => {
-        expect(component.selected()).toBeFalse();
+        expect(component.selected()).toBe(false);
       });
 
       it('should convert string "true" to boolean true', () => {
         fixture.componentRef.setInput('p-selected', 'true');
         fixture.detectChanges();
 
-        expect(component.selected()).toBeTrue();
+        expect(component.selected()).toBe(true);
       });
 
       it('should convert string "false" to boolean false', () => {
         fixture.componentRef.setInput('p-selected', 'false');
         fixture.detectChanges();
 
-        expect(component.selected()).toBeFalse();
+        expect(component.selected()).toBe(false);
       });
 
       it('should convert boolean true to true', () => {
         fixture.componentRef.setInput('p-selected', true);
         fixture.detectChanges();
 
-        expect(component.selected()).toBeTrue();
+        expect(component.selected()).toBe(true);
       });
 
       it('should convert boolean false to false', () => {
         fixture.componentRef.setInput('p-selected', false);
         fixture.detectChanges();
 
-        expect(component.selected()).toBeFalse();
+        expect(component.selected()).toBe(false);
       });
 
       it('should convert empty string to true', () => {
         fixture.componentRef.setInput('p-selected', '');
         fixture.detectChanges();
 
-        expect(component.selected()).toBeTrue();
+        expect(component.selected()).toBe(true);
       });
 
       it('should convert null to false', () => {
         fixture.componentRef.setInput('p-selected', null);
         fixture.detectChanges();
 
-        expect(component.selected()).toBeFalse();
+        expect(component.selected()).toBe(false);
       });
 
       it('should convert undefined to false', () => {
         fixture.componentRef.setInput('p-selected', undefined);
         fixture.detectChanges();
 
-        expect(component.selected()).toBeFalse();
+        expect(component.selected()).toBe(false);
       });
     });
 

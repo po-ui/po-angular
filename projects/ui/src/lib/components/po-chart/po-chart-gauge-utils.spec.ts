@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ElementRef } from '@angular/core';
 
 import { PoChartGaugeUtils } from './po-chart-gauge-utils';
@@ -5,13 +6,15 @@ import { PoChartComponent } from './po-chart.component';
 
 describe('PoChartGaugeUtils', () => {
   let gaugeUtils: PoChartGaugeUtils;
-  let componentMock: jasmine.SpyObj<PoChartComponent>;
+  let componentMock: any;
 
   beforeEach(() => {
-    componentMock = jasmine.createSpyObj<PoChartComponent>('PoChartComponent', ['getCSSVariable']);
+    componentMock = {
+      getCSSVariable: vi.fn().mockName('PoChartComponent.getCSSVariable')
+    };
 
     const mockNativeElement = {
-      querySelector: jasmine.createSpy().and.returnValue({ clientWidth: 600 })
+      querySelector: vi.fn().mockReturnValue({ clientWidth: 600 })
     };
 
     componentMock.el = new ElementRef(mockNativeElement);
@@ -32,21 +35,23 @@ describe('PoChartGaugeUtils', () => {
 
   describe('setGaugeOptions', () => {
     let utils: PoChartGaugeUtils;
-    let componentMock: jasmine.SpyObj<PoChartComponent>;
+    let componentMock: any;
     let nativeElementMock: any;
 
     beforeEach(() => {
       nativeElementMock = {
-        querySelector: jasmine.createSpy().and.returnValue({ clientWidth: 300 })
+        querySelector: vi.fn().mockReturnValue({ clientWidth: 300 })
       };
 
-      componentMock = jasmine.createSpyObj<PoChartComponent>('PoChartComponent', ['getCSSVariable'], ['el']);
+      componentMock = {
+        getCSSVariable: vi.fn().mockName('PoChartComponent.getCSSVariable')
+      };
 
       Object.defineProperty(componentMock, 'el', {
         get: () => ({ nativeElement: nativeElementMock })
       });
 
-      componentMock.getCSSVariable.and.returnValue('mock-css-var');
+      componentMock.getCSSVariable.mockReturnValue('mock-css-var');
 
       componentMock.itemsTypeGauge = [];
       componentMock.itemsColorTypeGauge = [];
@@ -94,11 +99,13 @@ describe('PoChartGaugeUtils', () => {
       componentMock.series = [{ label: 'A' }];
       componentMock.itemsTypeGauge = [{ label: 'A', from: 0, to: 10 }];
       componentMock.itemsColorTypeGauge = ['#ff0000'];
-      const options = {} as { graphic?: any };
+      const options = {} as {
+        graphic?: any;
+      };
       utils.setGaugeOptions(options, 12);
 
       expect(options.graphic).toBeDefined();
-      expect(Array.isArray(options.graphic)).toBeTrue();
+      expect(Array.isArray(options.graphic)).toBe(true);
       expect(options.graphic[0].type).toBe('group');
       expect(options.graphic[0].children.length).toBe(2);
     });
@@ -110,13 +117,15 @@ describe('PoChartGaugeUtils', () => {
         showFromToLegend: false
       };
 
-      nativeElementMock.querySelector.and.returnValue({ clientWidth: 100 });
+      nativeElementMock.querySelector.mockReturnValue({ clientWidth: 100 });
 
       componentMock.series = [{ label: 'A' }];
       componentMock.itemsTypeGauge = [{ label: 'A', from: 0, to: 10 }];
       componentMock.itemsColorTypeGauge = ['#00ff00'];
 
-      const options = {} as { graphic?: any };
+      const options = {} as {
+        graphic?: any;
+      };
       utils.setGaugeOptions(options, 20);
 
       expect(options.graphic[0].children[0].top).toBe(0);
@@ -145,8 +154,8 @@ describe('PoChartGaugeUtils', () => {
       expect(options.graphic[0].type).toBe('group');
 
       const textItems = options.graphic[0].children.filter(child => child.type === 'text');
-      expect(textItems.some(t => t.style.text === '')).toBeTrue();
-      expect(options.graphic[0].children.some(c => c.top > 0)).toBeTrue();
+      expect(textItems.some(t => t.style.text === '')).toBe(true);
+      expect(options.graphic[0].children.some(c => c.top > 0)).toBe(true);
     });
   });
 
@@ -164,7 +173,7 @@ describe('PoChartGaugeUtils', () => {
         itemsColorTypeGauge: ['#111', '#222'],
         el: {
           nativeElement: {
-            querySelector: jasmine.createSpy('querySelector').and.returnValue({ clientWidth: 500 })
+            querySelector: vi.fn().mockReturnValue({ clientWidth: 500 })
           }
         },
         height: 500,
@@ -174,7 +183,7 @@ describe('PoChartGaugeUtils', () => {
           subtitleGauge: 'subtitleGauge'
         },
         valueGaugeMultiple: 42,
-        getCSSVariable: jasmine.createSpy('getCSSVariable').and.callFake(name => {
+        getCSSVariable: vi.fn().mockImplementation(name => {
           const map = {
             '--color-gauge-pointer-color': '#000',
             '--font-weight-hightlight-value': '700',
@@ -198,7 +207,7 @@ describe('PoChartGaugeUtils', () => {
 
       const result = utils.setListTypeGauge(serie, fontSizes);
 
-      expect(componentMock.isGaugeSingle).toBeTrue();
+      expect(componentMock.isGaugeSingle).toBe(true);
       expect(componentMock.itemsTypeGauge.length).toBe(1);
       expect(componentMock.itemsTypeGauge[0].label).toBe('label1');
       expect(componentMock.itemsTypeGauge[0].from).toBe(0);
@@ -208,9 +217,9 @@ describe('PoChartGaugeUtils', () => {
       expect(result.endAngle).toBe(0);
       expect(result.center).toBeDefined();
       expect(result.radius).toBeDefined();
-      expect(result.axisTick.show).toBeFalse();
-      expect(result.pointer.show).toBeFalse();
-      expect(result.detail.show).toBeTrue();
+      expect(result.axisTick.show).toBe(false);
+      expect(result.pointer.show).toBe(false);
+      expect(result.detail.show).toBe(true);
       expect(result.detail.formatter({})).toBe('80%');
       expect(result.title.fontSize).toBe(fontSizes.fontSizeSubtitle);
       expect(result.data[0].value).toBe(80);
@@ -226,16 +235,16 @@ describe('PoChartGaugeUtils', () => {
       componentMock.valueGaugeMultiple = 55;
       utils = new PoChartGaugeUtils(componentMock as PoChartComponent);
 
-      spyOn(utils as any, 'normalizeToRelativePercentage').and.callThrough();
-      spyOn(utils as any, 'setPropertiesGauge').and.callThrough();
+      vi.spyOn(utils as any, 'normalizeToRelativePercentage');
+      vi.spyOn(utils as any, 'setPropertiesGauge');
 
       const result = utils.setListTypeGauge(serie, fontSizes);
 
-      expect(componentMock.isGaugeSingle).toBeFalse();
+      expect(componentMock.isGaugeSingle).toBe(false);
       expect(utils['normalizeToRelativePercentage']).toHaveBeenCalledWith(componentMock.series);
       expect(componentMock.itemsTypeGauge.length).toBeGreaterThan(0);
       expect(result.type).toBe('gauge');
-      expect(result.pointer.show).toBeTrue();
+      expect(result.pointer.show).toBe(true);
       expect(result.detail.formatter({})).toBe('55%');
       expect(result.data[0].value).toBe(55);
       expect(result.data[0].name).toBe('subtitleGauge');
@@ -243,7 +252,7 @@ describe('PoChartGaugeUtils', () => {
 
     it('should use fontSizeMd for small width or height', () => {
       componentMock.series = [{ label: 'label1', data: 100 }];
-      componentMock.el.nativeElement.querySelector = jasmine.createSpy().and.returnValue({ clientWidth: 400 });
+      componentMock.el.nativeElement.querySelector = vi.fn().mockReturnValue({ clientWidth: 400 });
       componentMock.height = 300;
       utils = new PoChartGaugeUtils(componentMock as PoChartComponent);
 
@@ -254,7 +263,7 @@ describe('PoChartGaugeUtils', () => {
 
     it('should use fontSizeLg for large width and height', () => {
       componentMock.series = [{ label: 'label1', data: 100 }];
-      componentMock.el.nativeElement.querySelector = jasmine.createSpy().and.returnValue({ clientWidth: 500 });
+      componentMock.el.nativeElement.querySelector = vi.fn().mockReturnValue({ clientWidth: 500 });
       componentMock.height = 600;
       utils = new PoChartGaugeUtils(componentMock as PoChartComponent);
 
@@ -265,13 +274,13 @@ describe('PoChartGaugeUtils', () => {
 
     it('should set divWidth to 0 when querySelector returns null', () => {
       componentMock.series = [{ label: 'label1', data: 80 }];
-      componentMock.el.nativeElement.querySelector = jasmine.createSpy().and.returnValue(null);
+      componentMock.el.nativeElement.querySelector = vi.fn().mockReturnValue(null);
       utils = new PoChartGaugeUtils(componentMock as PoChartComponent);
 
       const result = utils.setListTypeGauge(serie, fontSizes);
 
       expect(result).toBeDefined();
-      expect(componentMock.isGaugeSingle).toBeTrue();
+      expect(componentMock.isGaugeSingle).toBe(true);
     });
 
     it('should formatter return empty string when not single gauge and valueGaugeMultiple is falsy', () => {
@@ -444,7 +453,7 @@ describe('PoChartGaugeUtils', () => {
 
   describe('finalizeSerieTypeGauge', () => {
     beforeEach(() => {
-      componentMock.getCSSVariable.and.returnValue('#cccccc');
+      componentMock.getCSSVariable.mockReturnValue('#cccccc');
     });
 
     it('should handle single gauge with correct colors', () => {
@@ -480,7 +489,7 @@ describe('PoChartGaugeUtils', () => {
       ];
       componentMock.itemsColorTypeGauge = ['#ff0000', '#00ff00', '#0000ff'];
 
-      spyOn<any>(gaugeUtils, 'buildGaugeAxisLineColorsWithGaps').and.returnValue([
+      vi.spyOn(gaugeUtils as any, 'buildGaugeAxisLineColorsWithGaps').mockReturnValue([
         [0.25, '#ff0000'],
         [0.5, '#00ff00'],
         [1, '#0000ff']
@@ -607,7 +616,7 @@ describe('PoChartGaugeUtils', () => {
       const colors = ['#ff0000', '#00ff00'];
       const gapColor = '#eeeeee';
 
-      spyOn(Math, 'max').and.returnValue(100);
+      vi.spyOn(Math as any, 'max').mockReturnValue(100);
 
       const result = callPrivateMethod(series, colors, gapColor);
 
@@ -618,7 +627,7 @@ describe('PoChartGaugeUtils', () => {
         [1, '#eeeeee']
       ]);
 
-      (Math.max as jasmine.Spy).and.callThrough();
+      Math.max as Mock;
     });
 
     it('should handle color palette cycling', () => {

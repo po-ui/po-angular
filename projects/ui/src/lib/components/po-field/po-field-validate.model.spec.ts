@@ -4,7 +4,9 @@ import { PoFieldValidateModel } from './po-field-validate.model';
 import { PoValidators as ValidatorsFunctions } from './validators';
 
 class FieldValidate extends PoFieldValidateModel<any> {
-  extraValidation(c: AbstractControl): { [key: string]: any } {
+  extraValidation(c: AbstractControl): {
+    [key: string]: any;
+  } {
     return null;
   }
 
@@ -44,13 +46,13 @@ describe('PoFieldValidateModel', () => {
 
     component.validate(controlMock);
 
-    expect(component['hasValidatorRequired']).toBeTrue();
+    expect(component['hasValidatorRequired']).toBe(true);
   });
 
   it('validateModel: should call `onValidatorChange` when it is true.', () => {
     component['onValidatorChange'] = () => {};
 
-    spyOn(component, <any>'onValidatorChange');
+    vi.spyOn(component as any, 'onValidatorChange');
 
     component['validateModel']();
 
@@ -71,14 +73,14 @@ describe('PoFieldValidateModel', () => {
       }
     };
 
-    spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(true);
+    vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(true);
 
     expect(component.validate(new UntypedFormControl([]))).toEqual(validObj);
     expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();
   });
 
   it('validate: should return undefined when `requiredFailed` is false', () => {
-    spyOn(ValidatorsFunctions, 'requiredFailed').and.returnValue(false);
+    vi.spyOn(ValidatorsFunctions as any, 'requiredFailed').mockReturnValue(false);
 
     expect(component.validate(new UntypedFormControl(null))).toBeNull();
     expect(ValidatorsFunctions.requiredFailed).toHaveBeenCalled();

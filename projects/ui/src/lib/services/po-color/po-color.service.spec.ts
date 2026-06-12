@@ -107,7 +107,7 @@ describe('PoColorService', () => {
       });
 
       it('should return a list of data with defaultColors, overlayColors, po-color and the passed color', () => {
-        spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+        vi.spyOn(service as any, 'getCSSVariable').mockImplementation((variable: string) => variable);
         const data = [
           { from: 0, to: 30 },
           { from: 30, to: 60, color: 'red' },
@@ -144,7 +144,7 @@ describe('PoColorService', () => {
       });
 
       it('should return an array with up to 8 predefined CSS variables when length is 8 or less', () => {
-        spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+        vi.spyOn(service as any, 'getCSSVariable').mockImplementation((variable: string) => variable);
 
         const colors = (service as any).getDefaultCategoricalColors(5);
 
@@ -165,8 +165,8 @@ describe('PoColorService', () => {
         { from: 50, to: 100 }
       ];
 
-      spyOn(service as any, 'getDefaultColors').and.callThrough();
-      spyOn(service as any, 'getDefaultCategoricalColors').and.callThrough();
+      vi.spyOn(service as any, 'getDefaultColors');
+      vi.spyOn(service as any, 'getDefaultCategoricalColors');
 
       (service as any).verifyIfHasColorProperty(data);
 
@@ -175,7 +175,7 @@ describe('PoColorService', () => {
       expect(service['getDefaultCategoricalColors']).not.toHaveBeenCalled();
     });
     it('should return an array with exactly 8 predefined CSS variables when length is 8', () => {
-      spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+      vi.spyOn(service as any, 'getCSSVariable').mockImplementation((variable: string) => variable);
 
       const colors = (service as any).getDefaultCategoricalColors(8);
 
@@ -193,7 +193,7 @@ describe('PoColorService', () => {
     });
 
     it('should fill remaining colors with random colors when length is greater than 8 and isOverlay is true', () => {
-      spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
+      vi.spyOn(service as any, 'getCSSVariable').mockImplementation((variable: string) => variable);
       service.defaultColors = [];
       service.defaultColors[8] = '#123456';
       service.defaultColors[9] = '#123456';
@@ -215,8 +215,8 @@ describe('PoColorService', () => {
     });
 
     it('should fill remaining colors with random colors when length is greater than 8', () => {
-      spyOn(service as any, 'getCSSVariable').and.callFake((variable: string) => variable);
-      spyOn(service as any, 'getRandomColor').and.returnValue('#123456');
+      vi.spyOn(service as any, 'getCSSVariable').mockImplementation((variable: string) => variable);
+      vi.spyOn(service as any, 'getRandomColor').mockReturnValue('#123456');
 
       const colors = (service as any).getDefaultCategoricalColors(10);
 

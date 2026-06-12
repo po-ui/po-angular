@@ -620,21 +620,21 @@ describe('PoProgressCircleComponent:', () => {
       fixture.componentRef.setInput('p-indeterminate', false);
       fixture.componentRef.setInput('p-show-percentage', true);
 
-      expect(component.hasCenterContent()).toBeTrue();
+      expect(component.hasCenterContent()).toBe(true);
     });
 
     it('should return true when status is error and not indeterminate', () => {
       fixture.componentRef.setInput('p-indeterminate', false);
       fixture.componentRef.setInput('p-status', 'error');
 
-      expect(component.hasCenterContent()).toBeTrue();
+      expect(component.hasCenterContent()).toBe(true);
     });
 
     it('should return false when indeterminate is true', () => {
       fixture.componentRef.setInput('p-indeterminate', true);
       fixture.componentRef.setInput('p-show-percentage', true);
 
-      expect(component.hasCenterContent()).toBeFalse();
+      expect(component.hasCenterContent()).toBe(false);
     });
 
     it('should return false when status is default and showPercentage is false', () => {
@@ -642,7 +642,7 @@ describe('PoProgressCircleComponent:', () => {
       fixture.componentRef.setInput('p-show-percentage', false);
       fixture.componentRef.setInput('p-status', 'default');
 
-      expect(component.hasCenterContent()).toBeFalse();
+      expect(component.hasCenterContent()).toBe(false);
     });
   });
 

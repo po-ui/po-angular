@@ -73,7 +73,7 @@ describe('PoDisclaimerComponent:', () => {
     const eventDeleteKey = { keyCode: 46, which: 46 };
 
     it(`onKeyPress: should call 'close' if enter is typed.`, () => {
-      spyOn(component, 'close');
+      vi.spyOn(component as any, 'close');
 
       component.onKeyPress(eventEnterKey);
 
@@ -81,7 +81,7 @@ describe('PoDisclaimerComponent:', () => {
     });
 
     it(`onKeyPress: should call 'isKeyCodeEnter' and check if typed key is enter.`, () => {
-      spyOn(UtilsFunction, <any>'isKeyCodeEnter');
+      vi.spyOn(UtilsFunction as any, 'isKeyCodeEnter');
 
       component.onKeyPress(eventEnterKey);
 
@@ -89,8 +89,8 @@ describe('PoDisclaimerComponent:', () => {
     });
 
     it(`onKeyPress: shouldn't call 'close' if the typed key is not enter.`, () => {
-      spyOn(UtilsFunction, <any>'isKeyCodeEnter');
-      spyOn(component, <any>'close');
+      vi.spyOn(UtilsFunction as any, 'isKeyCodeEnter');
+      vi.spyOn(component as any, 'close');
       component.onKeyPress(eventDeleteKey);
 
       expect(component['close']).not.toHaveBeenCalled();
@@ -98,19 +98,19 @@ describe('PoDisclaimerComponent:', () => {
     });
 
     it('getWidthDisclaimer: should return `true` when disclaimer-label offsetWidth > 201', () => {
-      spyOnProperty(component.disclaimerContainer.nativeElement, 'offsetWidth').and.returnValue(250);
+      vi.spyOn(component.disclaimerContainer.nativeElement, 'offsetWidth').mockReturnValue(250);
       const expectedValue = component.getWidthDisclaimer();
       expect(expectedValue).toBeTruthy();
     });
 
     it('getWidthDisclaimer: should return `false` when disclaimer-label offsetWidth < 201', () => {
-      spyOnProperty(component.disclaimerContainer.nativeElement, 'offsetWidth').and.returnValue(50);
+      vi.spyOn(component.disclaimerContainer.nativeElement, 'offsetWidth').mockReturnValue(50);
       const expectedValue = component.getWidthDisclaimer();
       expect(expectedValue).toBeFalsy();
     });
 
     it('emitLastDisclaimer: should emit last disclaimer', () => {
-      spyOn(component.clickNumber, 'emit');
+      vi.spyOn(component.clickNumber as any, 'emit');
 
       component.emitLastDisclaimer(true);
 

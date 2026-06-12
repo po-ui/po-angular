@@ -17,7 +17,7 @@ describe('PoHttpRequesControltService: ', () => {
     });
 
     it('send: should call `next` when receive a request.', () => {
-      spyOn(httpRequestControlService.controlHttpRequest, 'next');
+      vi.spyOn(httpRequestControlService.controlHttpRequest as any, 'next');
 
       httpRequestControlService.send(2);
 
@@ -25,7 +25,7 @@ describe('PoHttpRequesControltService: ', () => {
     });
 
     it('send: should call `next` when receive a request without value in `send` method.', () => {
-      spyOn(httpRequestControlService.controlHttpRequest, 'next');
+      vi.spyOn(httpRequestControlService.controlHttpRequest as any, 'next');
 
       httpRequestControlService.send();
 

@@ -139,7 +139,7 @@ describe('PoMenuComponent:', () => {
       }
     ];
 
-    fixture.ngZone.run(() => {
+    fixture.ngZone.run(async () => {
       router.initialNavigation();
     });
 
@@ -151,7 +151,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call sendChanges of global service if menus has chages and afterViewInitWasCalled is true', () => {
-    spyOn(component['menuGlobalService'], <any>'sendChanges');
+    vi.spyOn(component['menuGlobalService'] as any, 'sendChanges');
     component.afterViewInitWasCalled = true;
     component.menuid = 'my-id';
 
@@ -173,12 +173,12 @@ describe('PoMenuComponent:', () => {
 
   it('should toggle overlay of menu mobile', () => {
     component.toggleMenuMobile();
-    expect(component.mobileOpened).toBeTruthy(true);
+    expect(component.mobileOpened).toBeTruthy();
     fixture.detectChanges();
     expect(nativeElement.querySelector('.po-menu-overlay')).toBeTruthy();
 
     component.toggleMenuMobile();
-    expect(component.mobileOpened).toBeFalsy(false);
+    expect(component.mobileOpened).toBeFalsy();
     fixture.detectChanges();
     expect(nativeElement.querySelector('.po-menu-overlay')).toBeFalsy();
   });
@@ -205,7 +205,7 @@ describe('PoMenuComponent:', () => {
     component['clickMenuItem'](component.menus[0]);
     fixture.detectChanges();
 
-    spyOn(component, <any>'activateMenuItem');
+    vi.spyOn(component as any, 'activateMenuItem');
     const menuItem = {
       link: '/',
       id: '123',
@@ -221,7 +221,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call openExternalLink if link is external', () => {
-    spyOn(utilsFunctions, <any>'openExternalLink');
+    vi.spyOn(utilsFunctions as any, 'openExternalLink');
 
     const menuItem = {
       link: 'https://www.google.com',
@@ -235,11 +235,11 @@ describe('PoMenuComponent:', () => {
 
     component['clickMenuItem'](menuItem);
     expect(utilsFunctions.openExternalLink).toHaveBeenCalledWith('https://www.google.com');
-    expect(component['mobileOpened']).toBeFalse();
+    expect(component['mobileOpened']).toBe(false);
   });
 
   it('should call groupMenuItem if link contain subItems', () => {
-    spyOn(component, <any>'groupMenuItem');
+    vi.spyOn(component as any, 'groupMenuItem');
 
     const menuItem = {
       link: '/test',
@@ -256,7 +256,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call groupMenuItem if link contain subItems and set filteringItems to false is filteringItems is true', () => {
-    spyOn(component, <any>'groupMenuItem');
+    vi.spyOn(component as any, 'groupMenuItem');
     component['filteringItems'] = true;
 
     const menuItem = {
@@ -271,7 +271,7 @@ describe('PoMenuComponent:', () => {
 
     component['clickMenuItem'](menuItem);
     expect(component['groupMenuItem']).toHaveBeenCalled();
-    expect(component['filteringItems']).toBeFalse();
+    expect(component['filteringItems']).toBe(false);
   });
 
   it('should activate sub menu', () => {
@@ -286,7 +286,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should open external link', () => {
-    spyOn(window, 'open');
+    vi.spyOn(window as any, 'open');
 
     component['clickMenuItem'](component.menus[2]);
     expect(component.mobileOpened).toBeFalsy();
@@ -296,7 +296,7 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call action', () => {
-    spyOn(component.menus[3], <any>'action');
+    vi.spyOn(component.menus[3] as any, 'action');
 
     component['clickMenuItem'](component.menus[3]);
     expect(component.mobileOpened).toBeFalsy();
@@ -308,7 +308,7 @@ describe('PoMenuComponent:', () => {
     component['clickMenuItem'](component.menus[1]);
 
     expect(component.groupedMenuItem).toBe(component.menus[1]);
-    expect(component.groupedMenuItem['isOpened']).toBeTruthy(true);
+    expect(component.groupedMenuItem['isOpened']).toBeTruthy();
     expect(component.groupedMenuItem.subItems.length).toEqual(3);
 
     fixture.detectChanges();
@@ -443,60 +443,52 @@ describe('PoMenuComponent:', () => {
     expect(component.groupedMenuItem).toEqual(menuItem);
   });
 
-  it('should navigate to home and activate menu item', done => {
-    fixture.ngZone.run(() => {
-      router.navigate(['home']).then(() => {
+  it('should navigate to home and activate menu item', async () => {
+    fixture.ngZone.run(async () => {
+      await router.navigate(['home']).then(() => {
         expect(location.path()).toBe('/home');
         expect(component.activeMenuItem).toBe(component.menus[0]);
-
-        done();
       });
     });
   });
 
-  it('should navigate to search and activate sub menu item and group parent', done => {
-    fixture.ngZone.run(() => {
-      router.navigate(['search']).then(() => {
+  it('should navigate to search and activate sub menu item and group parent', async () => {
+    fixture.ngZone.run(async () => {
+      await router.navigate(['search']).then(() => {
         expect(location.path()).toBe('/search');
         expect(component.activeMenuItem).toBe(component.menus[1].subItems[0]);
         expect(component.groupedMenuItem).toBe(component.menus[1]);
-
-        done();
       });
     });
   });
 
-  it('should not navigate if has same link', done => {
-    spyOn(component, 'activateMenuByUrl');
-    spyOn(component, <any>'checkingRouterChildrenFragments').and.returnValue('/search');
+  it('should not navigate if has same link', async () => {
+    vi.spyOn(component as any, 'activateMenuByUrl');
+    vi.spyOn(component as any, 'checkingRouterChildrenFragments').mockReturnValue('/search');
 
     component.linkActive = '/search';
 
-    fixture.ngZone.run(() => {
-      router.navigate(['search']).then(() => {
+    fixture.ngZone.run(async () => {
+      await router.navigate(['search']).then(() => {
         expect(component['checkingRouterChildrenFragments']).toHaveBeenCalled();
         expect(component.activateMenuByUrl).not.toHaveBeenCalled();
-
-        done();
       });
     });
   });
 
-  it('should navigate to /test and not activate menu item and group parent', done => {
+  it('should navigate to /test and not activate menu item and group parent', async () => {
     component.activeMenuItem = undefined;
     component.groupedMenuItem = undefined;
-    fixture.ngZone.run(() => {
-      router.navigate(['/test']).then(() => {
+    fixture.ngZone.run(async () => {
+      await router.navigate(['/test']).then(() => {
         expect(location.path()).toBe('/test');
         expect(component.activeMenuItem).toBe(undefined);
         expect(component.groupedMenuItem).toBe(undefined);
-
-        done();
       });
     });
   });
 
-  it('should navigate to redirectroute and set activeMenuItem', done => {
+  it('should navigate to redirectroute and set activeMenuItem', async () => {
     component.activeMenuItem = undefined;
     const result = {
       label: 'Home',
@@ -506,12 +498,11 @@ describe('PoMenuComponent:', () => {
       level: 1,
       type: 'internalLink'
     };
-    fixture.ngZone.run(() => {
-      router.navigate(['/']).then(() => {
+    fixture.ngZone.run(async () => {
+      await router.navigate(['/']).then(() => {
         expect(location.path()).toBe('/home');
         expect(component.activeMenuItem.link).toEqual(result.link);
         expect(component.groupedMenuItem).toBeFalsy();
-        done();
       });
     });
   });
@@ -534,8 +525,8 @@ describe('PoMenuComponent:', () => {
 
   it('should call updateMenu and `validateCollapseClass` if it has not been initialized', () => {
     component['menuInitialized'] = false;
-    spyOn(component, <any>'updateMenu');
-    spyOn(component, <any>'validateCollapseClass');
+    vi.spyOn(component as any, 'updateMenu');
+    vi.spyOn(component as any, 'validateCollapseClass');
 
     component.ngDoCheck();
 
@@ -545,7 +536,7 @@ describe('PoMenuComponent:', () => {
 
   it('should call updateMenu when the menu items changes', () => {
     component['menuInitialized'] = true;
-    spyOn(component, <any>'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.menus.push({ label: 'Com ícone', icon: 'star' });
 
     component.ngDoCheck();
@@ -557,7 +548,7 @@ describe('PoMenuComponent:', () => {
     component['filteringItems'] = true;
     component['filter'] = true;
     component['menuInitialized'] = true;
-    spyOn(component, <any>'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.menus.push({ label: 'Com ícone', icon: 'star' });
 
     component.ngDoCheck();
@@ -569,7 +560,7 @@ describe('PoMenuComponent:', () => {
     component['filteringItems'] = true;
     component['filter'] = false;
     component['menuInitialized'] = true;
-    spyOn(component, <any>'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.menus.push({ label: 'Com ícone', icon: 'star' });
 
     component.ngDoCheck();
@@ -581,7 +572,7 @@ describe('PoMenuComponent:', () => {
     component['filteringItems'] = false;
     component['filter'] = true;
     component['menuInitialized'] = true;
-    spyOn(component, <any>'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.menus.push({ label: 'Com ícone', icon: 'star' });
 
     component.ngDoCheck();
@@ -593,7 +584,7 @@ describe('PoMenuComponent:', () => {
     component['filteringItems'] = false;
     component['filter'] = false;
     component['menuInitialized'] = true;
-    spyOn(component, <any>'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
     component.menus.push({ label: 'Com ícone', icon: 'star' });
 
     component.ngDoCheck();
@@ -604,7 +595,7 @@ describe('PoMenuComponent:', () => {
   it('should not call updateMenu if it has been initialized and not changed', () => {
     component['menuInitialized'] = true;
     component['menuPrevious'] = component['stringify'](component.menus);
-    spyOn(component, <any>'updateMenu');
+    vi.spyOn(component as any, 'updateMenu');
 
     component.ngDoCheck();
 
@@ -612,8 +603,8 @@ describe('PoMenuComponent:', () => {
   });
 
   it('should call methods to update menu when the menu items changes', () => {
-    spyOn(component, <any>'setMenuExtraProperties');
-    spyOn(component, <any>'validateMenus');
+    vi.spyOn(component as any, 'setMenuExtraProperties');
+    vi.spyOn(component as any, 'validateMenus');
     component['menuInitialized'] = false;
     component.menus.push({ label: 'Com ícone', icon: 'star' });
 
@@ -638,7 +629,7 @@ describe('PoMenuComponent:', () => {
   it('itemSubscription: should `unsubscribe` `itemSubscription` on destroy.', () => {
     component['itemSubscription'] = <any>{ unsubscribe: () => {} };
 
-    spyOn(component['itemSubscription'], <any>'unsubscribe');
+    vi.spyOn(component['itemSubscription'] as any, 'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -648,7 +639,7 @@ describe('PoMenuComponent:', () => {
   it('routeSubscription: should `unsubscribe` `routeSubscription` on destroy.', () => {
     component['routeSubscription'] = <any>{ unsubscribe: () => {} };
 
-    spyOn(component['routeSubscription'], <any>'unsubscribe');
+    vi.spyOn(component['routeSubscription'] as any, 'unsubscribe');
 
     component.ngOnDestroy();
 
@@ -762,7 +753,7 @@ describe('PoMenuComponent:', () => {
 
     it('should show menu filter if `enableCollapse` is `false`', () => {
       component.filter = true;
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -795,7 +786,7 @@ describe('PoMenuComponent:', () => {
 
       fixture.detectChanges();
       const collapseButton = nativeElement.querySelector('.po-menu-collapse-button-icon');
-      spyOn(component, 'toggle');
+      vi.spyOn(component as any, 'toggle');
 
       collapseButton.dispatchEvent(eventClick);
 
@@ -809,7 +800,7 @@ describe('PoMenuComponent:', () => {
 
       fixture.detectChanges();
       const collapseButton = nativeElement.querySelector('.po-menu-collapse-button-icon');
-      spyOn(component, 'toggle');
+      vi.spyOn(component as any, 'toggle');
 
       collapseButton.dispatchEvent(eventClick);
 
@@ -849,7 +840,7 @@ describe('PoMenuComponent:', () => {
 
     it('should display `po-logo` component if have `shortLogo` and `enableCollapse` is true.', () => {
       component.shortLogo = 'https://po-ui.io/assets/graphics/po.png';
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -863,7 +854,7 @@ describe('PoMenuComponent:', () => {
     it('should contain `po-menu-header-template` if `enableCollapse` is false and `menuHeaderTemplate` is defined', () => {
       component.menuHeaderTemplate = { templateRef: null };
 
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -873,7 +864,7 @@ describe('PoMenuComponent:', () => {
     it('shouldn`t contain `po-menu-header-template` if `enableCollapse` is true and `menuHeaderTemplate` is defined', () => {
       component.menuHeaderTemplate = { templateRef: null };
 
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(true);
 
       fixture.detectChanges();
 
@@ -883,7 +874,7 @@ describe('PoMenuComponent:', () => {
     it('shouldn`t contain `po-menu-header-template` if `enableCollapse` is false and `menuHeaderTemplate` is undefined', () => {
       component.menuHeaderTemplate = undefined;
 
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(false);
 
       fixture.detectChanges();
 
@@ -893,8 +884,8 @@ describe('PoMenuComponent:', () => {
 
   describe('Methods:', () => {
     it(`ngOnInit: should call 'subscribeToMenuItem' and 'subscribeToRoute'`, () => {
-      spyOn(component, 'subscribeToMenuItem');
-      spyOn(component, 'subscribeToRoute');
+      vi.spyOn(component as any, 'subscribeToMenuItem');
+      vi.spyOn(component as any, 'subscribeToRoute');
 
       component.ngOnInit();
 
@@ -903,7 +894,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`ngAfterViewInit: should call 'menuGlobalService.sendApplicationMenu' with component instance`, () => {
-      spyOn(component['menuGlobalService'], <any>'sendApplicationMenu');
+      vi.spyOn(component['menuGlobalService'] as any, 'sendApplicationMenu');
 
       component.ngAfterViewInit();
 
@@ -913,8 +904,8 @@ describe('PoMenuComponent:', () => {
     it(`ngOnDestroy: should call 'resizeListener' if has 'resizeListener`, () => {
       component['createResizeListener']();
 
-      spyOn(component, <any>'resizeListener');
-      spyOn(component['menuGlobalService'], <any>'sendRemovedApplicationMenu');
+      vi.spyOn(component as any, 'resizeListener');
+      vi.spyOn(component['menuGlobalService'] as any, 'sendRemovedApplicationMenu');
 
       component.ngOnDestroy();
 
@@ -923,7 +914,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`collapse: should call 'validateToggleMenu' with 'true'`, () => {
-      spyOn(component, <any>'validateToggleMenu');
+      vi.spyOn(component as any, 'validateToggleMenu');
 
       component.collapse();
 
@@ -931,7 +922,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`expand: should call 'validateToggleMenu' with 'false'`, () => {
-      spyOn(component, <any>'validateToggleMenu');
+      vi.spyOn(component as any, 'validateToggleMenu');
 
       component.expand();
 
@@ -940,7 +931,7 @@ describe('PoMenuComponent:', () => {
 
     it(`toggle: should call 'validateToggleMenu' with '!collapsed'`, () => {
       component.collapsed = true;
-      spyOn(component, <any>'validateToggleMenu');
+      vi.spyOn(component as any, 'validateToggleMenu');
 
       component.toggle();
 
@@ -952,7 +943,7 @@ describe('PoMenuComponent:', () => {
         const collapsed = true;
         component.allowCollapseMenu = false;
 
-        spyOn(component, <any>'toggleMenuCollapse');
+        vi.spyOn(component as any, 'toggleMenuCollapse');
 
         component['validateToggleMenu'](collapsed);
 
@@ -963,7 +954,7 @@ describe('PoMenuComponent:', () => {
         const collapsed = false;
         component.allowCollapseMenu = true;
 
-        spyOn(component, <any>'toggleMenuCollapse');
+        vi.spyOn(component as any, 'toggleMenuCollapse');
 
         component['validateToggleMenu'](collapsed);
 
@@ -1061,7 +1052,7 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'updateMenu');
+      vi.spyOn(fakeThis as any, 'updateMenu');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1085,8 +1076,8 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'toggleGroupedMenuItem');
-      spyOn(fakeThis, 'getActiveMenuParent');
+      vi.spyOn(fakeThis as any, 'toggleGroupedMenuItem');
+      vi.spyOn(fakeThis as any, 'getActiveMenuParent');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1111,8 +1102,8 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'toggleGroupedMenuItem');
-      spyOn(fakeThis, 'getActiveMenuParent');
+      vi.spyOn(fakeThis as any, 'toggleGroupedMenuItem');
+      vi.spyOn(fakeThis as any, 'getActiveMenuParent');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1133,8 +1124,8 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'toggleGroupedMenuItem');
-      spyOn(fakeThis, 'getActiveMenuParent');
+      vi.spyOn(fakeThis as any, 'toggleGroupedMenuItem');
+      vi.spyOn(fakeThis as any, 'getActiveMenuParent');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1155,8 +1146,8 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'toggleGroupedMenuItem');
-      spyOn(fakeThis, 'getActiveMenuParent');
+      vi.spyOn(fakeThis as any, 'toggleGroupedMenuItem');
+      vi.spyOn(fakeThis as any, 'getActiveMenuParent');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1178,8 +1169,8 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'activateCollapseSubMenuItem');
-      spyOn(fakeThis.menuItemsService, 'sendToChildMenuClicked');
+      vi.spyOn(fakeThis as any, 'activateCollapseSubMenuItem');
+      vi.spyOn(fakeThis.menuItemsService as any, 'sendToChildMenuClicked');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1206,8 +1197,8 @@ describe('PoMenuComponent:', () => {
         setCollapsed: () => {}
       };
 
-      spyOn(fakeThis, 'activateCollapseSubMenuItem');
-      spyOn(fakeThis.menuItemsService, 'sendToChildMenuClicked');
+      vi.spyOn(fakeThis as any, 'activateCollapseSubMenuItem');
+      vi.spyOn(fakeThis.menuItemsService as any, 'sendToChildMenuClicked');
 
       component['toggleMenuCollapse'].call(fakeThis);
 
@@ -1219,7 +1210,7 @@ describe('PoMenuComponent:', () => {
       component.collapsed = true;
       component.collapsedMobile = true;
 
-      spyOn(component, <any>'validateCollapseClass');
+      vi.spyOn(component as any, 'validateCollapseClass');
 
       component.toggleMenuMobile();
 
@@ -1254,8 +1245,8 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`toggleMenuMobile: should set 'menuMobileOpened' to true and call 'createResizeListener' if 'isMobile' is 'false'`, () => {
-      spyOn(component, <any>'createResizeListener');
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
+      vi.spyOn(component as any, 'createResizeListener');
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
 
       component.toggleMenuMobile();
 
@@ -1264,8 +1255,8 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`toggleMenuMobile: should set 'menuMobileOpened' to true and doesn't call 'createResizeListener' if 'isMobile' is 'true'`, () => {
-      spyOn(component, <any>'createResizeListener');
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(true);
+      vi.spyOn(component as any, 'createResizeListener');
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(true);
 
       component.toggleMenuMobile();
 
@@ -1276,8 +1267,8 @@ describe('PoMenuComponent:', () => {
     it(`toggleMenuMobile: should set 'menuMobileOpened' to false and doesn't call 'createResizeListener'`, () => {
       component.mobileOpened = true;
 
-      spyOn(utilsFunctions, <any>'isMobile').and.returnValue(false);
-      spyOn(component, <any>'createResizeListener');
+      vi.spyOn(utilsFunctions as any, 'isMobile').mockReturnValue(false);
+      vi.spyOn(component as any, 'createResizeListener');
 
       component.toggleMenuMobile();
 
@@ -1317,7 +1308,7 @@ describe('PoMenuComponent:', () => {
         if 'mobileOpened' is 'true'`, () => {
       component.mobileOpened = true;
 
-      spyOn(component, <any>'validateCollapseClass');
+      vi.spyOn(component as any, 'validateCollapseClass');
 
       component['toggleResize']();
 
@@ -1329,7 +1320,7 @@ describe('PoMenuComponent:', () => {
     it(`toggleResize: shouldn't call 'validateCollapseClass' if 'mobileOpened' is 'false'`, () => {
       component.mobileOpened = false;
 
-      spyOn(component, <any>'validateCollapseClass');
+      vi.spyOn(component as any, 'validateCollapseClass');
 
       component['toggleResize']();
 
@@ -1337,7 +1328,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('validateCollapseClass: should add class `po-collapsed-menu` if `isCollapsed` is `true`', () => {
-      spyOnProperty(component, 'isCollapsed').and.returnValue(true);
+      vi.spyOn(component as any, 'isCollapsed').mockReturnValue(true);
 
       component['validateCollapseClass']();
 
@@ -1345,7 +1336,7 @@ describe('PoMenuComponent:', () => {
     });
 
     it('validateCollapseClass: shouldn`t have class `po-collapsed-menu` if `isCollapsed` is `false`', () => {
-      spyOnProperty(component, 'isCollapsed').and.returnValue(false);
+      vi.spyOn(component as any, 'isCollapsed').mockReturnValue(false);
 
       component['validateCollapseClass']();
 
@@ -1362,7 +1353,7 @@ describe('PoMenuComponent:', () => {
 
     it('validateCollapseClass: should add class `po-collapsed-menu` if `isCollapsed` is `true` and `collapsedMobile` is `false` ', () => {
       const collapsedMobile = false;
-      spyOnProperty(component, 'isCollapsed').and.returnValue(true);
+      vi.spyOn(component as any, 'isCollapsed').mockReturnValue(true);
 
       component['validateCollapseClass'](collapsedMobile);
 
@@ -1371,7 +1362,7 @@ describe('PoMenuComponent:', () => {
 
     it('groupMenuItem: should call method `toggleMenuCollapse` if menu is collapsed', () => {
       component.collapsed = true;
-      spyOn(component, <any>'toggleMenuCollapse');
+      vi.spyOn(component as any, 'toggleMenuCollapse');
 
       component['groupMenuItem'](component.menus[1]);
 
@@ -1380,7 +1371,7 @@ describe('PoMenuComponent:', () => {
 
     it('groupMenuItem: shouldn`t call method `toggleMenuCollapse` if menu is open', () => {
       component.collapsed = false;
-      spyOn(component, <any>'toggleMenuCollapse');
+      vi.spyOn(component as any, 'toggleMenuCollapse');
 
       component['groupMenuItem'](component.menus[1]);
 
@@ -1408,7 +1399,7 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = activeMenuItem;
       fixture.detectChanges();
 
-      spyOn(component, <any>'clearGroupMenuIfFirstLevel');
+      vi.spyOn(component as any, 'clearGroupMenuIfFirstLevel');
 
       component['activateCollapseSubMenuItem']();
 
@@ -1420,7 +1411,7 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = { label: 'test', level: 2 };
       component.groupedMenuItem = { label: 'test', level: 1 };
 
-      spyOn(component, <any>'openParentMenu');
+      vi.spyOn(component as any, 'openParentMenu');
 
       component['activateCollapseSubMenuItem']();
 
@@ -1474,8 +1465,8 @@ describe('PoMenuComponent:', () => {
     it(`createResizeListener: should call 'toggleResize' and 'resizeListener' if window is resized`, () => {
       component['createResizeListener']();
 
-      spyOn(component, <any>'toggleResize');
-      spyOn(component, <any>'resizeListener');
+      vi.spyOn(component as any, 'toggleResize');
+      vi.spyOn(component as any, 'resizeListener');
 
       window.dispatchEvent(new Event('resize'));
 
@@ -1490,8 +1481,8 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = activeMenu;
       component.groupedMenuItem = groupedMenu;
 
-      spyOn(component, <any>'activateMenuItem');
-      spyOn(component, <any>'isRootMenuEqualGroupedMenu').and.returnValue(true);
+      vi.spyOn(component as any, 'activateMenuItem');
+      vi.spyOn(component as any, 'isRootMenuEqualGroupedMenu').mockReturnValue(true);
 
       component['groupMenuItem'](groupedMenu);
 
@@ -1505,8 +1496,8 @@ describe('PoMenuComponent:', () => {
       component.activeMenuItem = activeMenu;
       component.groupedMenuItem = groupedMenu;
 
-      spyOn(component, <any>'activateMenuItem');
-      spyOn(component, <any>'isRootMenuEqualGroupedMenu').and.returnValue(false);
+      vi.spyOn(component as any, 'activateMenuItem');
+      vi.spyOn(component as any, 'isRootMenuEqualGroupedMenu').mockReturnValue(false);
 
       component['groupMenuItem'](groupedMenu);
 
@@ -1545,12 +1536,11 @@ describe('PoMenuComponent:', () => {
       expect(rootParent).toBeUndefined();
     });
 
-    it('checkingRouterChildrenFragments: should return the router url value if router contains a `.children[`primary`]` value', done => {
-      fixture.ngZone.run(() => {
-        router.navigate(['/search']).then(() => {
+    it('checkingRouterChildrenFragments: should return the router url value if router contains a `.children[`primary`]` value', async () => {
+      fixture.ngZone.run(async () => {
+        await router.navigate(['/search']).then(() => {
           const routerFragment = component['checkingRouterChildrenFragments']();
           expect(routerFragment).toEqual('/search');
-          done();
         });
       });
     });
@@ -1565,7 +1555,7 @@ describe('PoMenuComponent:', () => {
       );
       mockUrlTree.root.children = {};
 
-      spyOn(component['router'], 'parseUrl').and.returnValue(mockUrlTree);
+      vi.spyOn(component['router'] as any, 'parseUrl').mockReturnValue(mockUrlTree);
 
       const result = component['checkingRouterChildrenFragments']();
       expect(result).toEqual('');
@@ -1578,39 +1568,36 @@ describe('PoMenuComponent:', () => {
       expect(result).toEqual('/home');
     });
 
-    it('activateMenuByUrl: should call `activateMenuItem` and `getFormattedLink` if urlPath and menu.link have same value', done => {
+    it('activateMenuByUrl: should call `activateMenuItem` and `getFormattedLink` if urlPath and menu.link have same value', async () => {
       const urlPath = '/search';
-      spyOn(component, <any>'activateMenuItem');
+      vi.spyOn(component as any, 'activateMenuItem');
 
-      fixture.ngZone.run(() => {
-        router.navigate(['/search']).then(() => {
+      fixture.ngZone.run(async () => {
+        await router.navigate(['/search']).then(() => {
           component.activateMenuByUrl(urlPath, component.menus);
           expect(component['activateMenuItem']).toHaveBeenCalled();
           expect(component.linkActive).toBe(urlPath);
-          done();
         });
       });
     });
 
-    it(`activateMenuByUrl: 'linkActive' should be equal to 'urlPath'`, done => {
+    it(`activateMenuByUrl: 'linkActive' should be equal to 'urlPath'`, async () => {
       const urlPath = '/test2/list';
-      spyOn(component, <any>'activateMenuItem');
+      vi.spyOn(component as any, 'activateMenuItem');
 
-      fixture.ngZone.run(() => {
-        router.navigate(['/test2/list']).then(() => {
+      fixture.ngZone.run(async () => {
+        await router.navigate(['/test2/list']).then(() => {
           component.activateMenuByUrl(urlPath, component.menus);
           expect(component.linkActive).toBe('/test2/list');
-
-          done();
         });
       });
     });
 
     it('convertToMenuItemFiltered: should return only { link, label, action } if `menuItem` is an object with others properties', () => {
-      const expectedValue = { label: 'Menu 1', link: 'menu1', action: jasmine.any(Function) };
+      const expectedValue = { label: 'Menu 1', link: 'menu1', action: expect.any(Function) };
       const menuItem = { icon: 'copy', label: 'Menu 1', link: 'menu1', action: () => {} };
 
-      const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
+      const spySetMenuItemProperties = vi.spyOn(component as any, 'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
@@ -1621,14 +1608,14 @@ describe('PoMenuComponent:', () => {
     it('convertToMenuItemFiltered: should return { link: ``, label: ``, action } if `menuItem` is undefined', () => {
       const menuItem = undefined;
 
-      const spySetMenuItemProperties = spyOn(component, <any>'setMenuItemProperties');
+      const spySetMenuItemProperties = vi.spyOn(component as any, 'setMenuItemProperties');
 
       const menuItemFiltered = component['convertToMenuItemFiltered'](menuItem);
 
-      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '', action: jasmine.any(Function) });
+      expect(menuItemFiltered).toEqual(<any>{ label: '', link: '', action: expect.any(Function) });
       expect(spySetMenuItemProperties).toHaveBeenCalled();
 
-      expect(menuItemFiltered.action).toEqual(jasmine.any(Function));
+      expect(menuItemFiltered.action).toEqual(expect.any(Function));
       expect(menuItemFiltered.action()).toBeUndefined();
     });
 
@@ -1645,7 +1632,7 @@ describe('PoMenuComponent:', () => {
 
       component.menus = menus;
 
-      spyOn(component, <any>'findItems').and.callThrough();
+      vi.spyOn(component as any, 'findItems');
 
       const filteredItems = component['filterLocalItems'](filter);
 
@@ -1668,7 +1655,7 @@ describe('PoMenuComponent:', () => {
       component.searchTreeItems = true;
       component.menus = menus;
 
-      spyOn(component, <any>'findItems').and.callThrough();
+      vi.spyOn(component as any, 'findItems');
 
       const filteredItems = component['filterLocalItems'](filter);
 
@@ -1682,7 +1669,9 @@ describe('PoMenuComponent:', () => {
 
       component.service = 'http://po.com.br/api';
 
-      const spyGetFilteredData = spyOn(component.filterService, 'getFilteredData').and.returnValue(of(menuItems));
+      const spyGetFilteredData = vi
+        .spyOn(component.filterService as any, 'getFilteredData')
+        .mockReturnValue(of(menuItems));
 
       const filteredMenuItens = await component['filterOnService'](search);
 
@@ -1698,7 +1687,7 @@ describe('PoMenuComponent:', () => {
 
       component.service = 'http://po.com.br/api';
 
-      const spyGetFilteredData = spyOn(component.filterService, 'getFilteredData');
+      const spyGetFilteredData = vi.spyOn(component.filterService as any, 'getFilteredData');
 
       const filteredMenuItens = await component['filterOnService'](search);
 
@@ -1712,8 +1701,8 @@ describe('PoMenuComponent:', () => {
 
       component.menus = menus;
 
-      spyOn(component, <any>'filterOnService');
-      spyOn(component, <any>'filterLocalItems');
+      vi.spyOn(component as any, 'filterOnService');
+      vi.spyOn(component as any, 'filterLocalItems');
 
       component['filterItems'](filter);
 
@@ -1733,8 +1722,8 @@ describe('PoMenuComponent:', () => {
       component.menus = menus;
       component.filterService = undefined;
 
-      const spyFilterLocalItems = spyOn(component, <any>'filterLocalItems').and.returnValue(foundMenus);
-      const spyFilterOnService = spyOn(component, <any>'filterOnService');
+      const spyFilterLocalItems = vi.spyOn(component as any, 'filterLocalItems').mockReturnValue(foundMenus);
+      const spyFilterOnService = vi.spyOn(component as any, 'filterOnService');
 
       component['filterItems'](filter);
 
@@ -1754,8 +1743,10 @@ describe('PoMenuComponent:', () => {
       component.menus = menus;
       component.service = 'http://po.com.br';
 
-      const spyFilterOnService = spyOn(component, <any>'filterOnService').and.returnValue(Promise.resolve(foundMenus));
-      const spyFilterLocalItems = spyOn(component, <any>'filterLocalItems');
+      const spyFilterOnService = vi
+        .spyOn(component as any, 'filterOnService')
+        .mockReturnValue(Promise.resolve(foundMenus));
+      const spyFilterLocalItems = vi.spyOn(component as any, 'filterLocalItems');
 
       await component['filterItems'](filter);
 
@@ -1768,10 +1759,10 @@ describe('PoMenuComponent:', () => {
 
     it(`filterProcess: should set 'filterLoading' to false call 'showNoData', 'changeDetector.detectChanges' and
       'sendToChildMenuClicked' when the return of 'filterItems' promise is resolved`, fakeAsync(() => {
-      spyOn(component, <any>'showNoData');
-      spyOn(component['changeDetector'], 'detectChanges');
-      spyOn(component['menuItemsService'], 'sendToChildMenuClicked');
-      spyOn(component, <any>'filterItems').and.returnValue(Promise.resolve());
+      vi.spyOn(component as any, 'showNoData');
+      vi.spyOn(component['changeDetector'] as any, 'detectChanges');
+      vi.spyOn(component['menuItemsService'] as any, 'sendToChildMenuClicked');
+      vi.spyOn(component as any, 'filterItems').mockReturnValue(Promise.resolve());
 
       component['filterProcess']('filter');
 
@@ -1790,7 +1781,7 @@ describe('PoMenuComponent:', () => {
         filterItems: () => ({ then: () => ({ catch: callback => callback(error) }) })
       };
 
-      spyOn(Promise, 'reject');
+      vi.spyOn(Promise as any, 'reject');
 
       component['filterProcess'].call(fakeThis);
 
@@ -1801,7 +1792,7 @@ describe('PoMenuComponent:', () => {
     it(`filterProcess: should set 'filterLoading' to true when 'filterProcess' is called`, () => {
       component.filterLoading = false;
 
-      spyOn(component, <any>'filterItems').and.callFake(() => ({ then: () => ({ catch: () => {} }) }));
+      vi.spyOn(component as any, 'filterItems').mockImplementation(() => ({ then: () => ({ catch: () => {} }) }));
 
       component['filterProcess']('filter');
 
@@ -1843,29 +1834,29 @@ describe('PoMenuComponent:', () => {
     });
 
     it(`hasFooter: should return 'true' if 'enableCollapseButton' and 'enableCollapse' are 'true'`, () => {
-      spyOnProperty(component, 'enableCollapseButton').and.returnValue(true);
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
+      vi.spyOn(component as any, 'enableCollapseButton').mockReturnValue(true);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(true);
 
       expect(component.hasFooter).toBe(true);
     });
 
     it(`hasFooter: should return 'true' if 'enableCollapseButton' is 'true' and 'enableCollapse' is 'false'`, () => {
-      spyOnProperty(component, 'enableCollapseButton').and.returnValue(true);
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
+      vi.spyOn(component as any, 'enableCollapseButton').mockReturnValue(true);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(false);
 
       expect(component.hasFooter).toBe(true);
     });
 
     it(`hasFooter: should return 'true' if 'enableCollapseButton' is 'false' and 'enableCollapse' is 'true'`, () => {
-      spyOnProperty(component, 'enableCollapseButton').and.returnValue(false);
-      spyOnProperty(component, 'enableCollapse').and.returnValue(true);
+      vi.spyOn(component as any, 'enableCollapseButton').mockReturnValue(false);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(true);
 
       expect(component.hasFooter).toBe(true);
     });
 
     it(`hasFooter: should return 'false' if 'enableCollapseButton' and 'enableCollapse' are 'false'`, () => {
-      spyOnProperty(component, 'enableCollapseButton').and.returnValue(false);
-      spyOnProperty(component, 'enableCollapse').and.returnValue(false);
+      vi.spyOn(component as any, 'enableCollapseButton').mockReturnValue(false);
+      vi.spyOn(component as any, 'enableCollapse').mockReturnValue(false);
 
       expect(component.hasFooter).toBe(false);
     });

@@ -62,21 +62,21 @@ describe('PoMultiselectDropdownComponent:', () => {
   it('should call updateSelectedValues', () => {
     fixture.detectChanges();
     component.hideSearch = false;
-    spyOn(component, 'updateSelectedValues');
-    spyOn(component.listbox.searchElement, 'setFocus');
+    vi.spyOn(component as any, 'updateSelectedValues');
+    vi.spyOn(component.listbox.searchElement, 'setFocus');
     component.clickItem({ option: { label: 'label1', value: 1 }, selected: true });
     expect(component.updateSelectedValues).toHaveBeenCalled();
   });
 
   it('clickItem: should call `updateSelectedValues` with `option` and `check`', () => {
-    const spyUpdateSelectedValues = spyOn(component, 'updateSelectedValues');
+    const spyUpdateSelectedValues = vi.spyOn(component as any, 'updateSelectedValues');
     component.clickItem(true, { label: 'label1', value: 1 });
     expect(spyUpdateSelectedValues).toHaveBeenCalled();
   });
 
   it('clickItem: should call `updateSelectedValues` with `option`', () => {
     const properties = { option: { label: 'label1', value: 1 }, selected: true };
-    const spyUpdateSelectedValues = spyOn(component, 'updateSelectedValues');
+    const spyUpdateSelectedValues = vi.spyOn(component as any, 'updateSelectedValues');
     component.clickItem(properties);
     expect(spyUpdateSelectedValues).toHaveBeenCalledWith(true, { label: 'label1', value: 1 });
   });
@@ -84,7 +84,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   it('should add value to selectedOptions and emit change', () => {
     component['selectedOptions'] = [];
 
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
     component.updateSelectedValues(true, { label: 'label1', value: 1 });
     expect(component['selectedOptions'].length).toBe(1);
     expect(component.change.emit).toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   it('should remove value to selectedOptions and emit change', () => {
     component['selectedOptions'] = [{ value: 1 }];
 
-    spyOn(component.change, 'emit');
+    vi.spyOn(component.change as any, 'emit');
     component.updateSelectedValues(false, { label: 'label1', value: 1 });
     expect(component['selectedOptions'].length).toBe(0);
     expect(component.change.emit).toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe('PoMultiselectDropdownComponent:', () => {
     component.visibleOptions = [...component.options];
     component.selectedOptions = [];
 
-    const spyChange = spyOn(component.change, 'emit');
+    const spyChange = vi.spyOn(component.change as any, 'emit');
 
     component.onClickSelectAll();
 
@@ -172,7 +172,7 @@ describe('PoMultiselectDropdownComponent:', () => {
   });
 
   it('should emit changeSearch', () => {
-    spyOn(component.changeSearch, 'emit');
+    vi.spyOn(component.changeSearch as any, 'emit');
     component.callChangeSearch({});
     expect(component.changeSearch.emit).toHaveBeenCalled();
   });
@@ -181,8 +181,8 @@ describe('PoMultiselectDropdownComponent:', () => {
     component.hideSearch = false;
     component.show = false;
     fixture.detectChanges();
-    spyOn(component.listbox.searchElement, 'setFocus');
-    spyOn(component.listbox.searchElement, 'clean');
+    vi.spyOn(component.listbox.searchElement, 'setFocus');
+    vi.spyOn(component.listbox.searchElement, 'clean');
 
     component.controlVisibility(true);
 
@@ -211,8 +211,8 @@ describe('PoMultiselectDropdownComponent:', () => {
     component.hideSearch = true;
     component.show = false;
 
-    spyOn(component.listbox.searchElement, 'setFocus');
-    spyOn(component.listbox.searchElement, 'clean');
+    vi.spyOn(component.listbox.searchElement, 'setFocus');
+    vi.spyOn(component.listbox.searchElement, 'clean');
     component.controlVisibility(true);
 
     tick(200);
@@ -228,8 +228,8 @@ describe('PoMultiselectDropdownComponent:', () => {
 
     fixture.detectChanges();
 
-    spyOn(component.listbox.searchElement, 'setFocus');
-    spyOn(component.listbox.searchElement, 'clean');
+    vi.spyOn(component.listbox.searchElement, 'setFocus');
+    vi.spyOn(component.listbox.searchElement, 'clean');
     component.controlVisibility(false);
 
     tick(200);

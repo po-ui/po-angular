@@ -29,7 +29,7 @@ describe('PoPageContentComponent:', () => {
 
   it('constructor: should call recalculateHeaderSize on resize', () => {
     component['initializeListeners']();
-    spyOn(component, 'recalculateHeaderSize');
+    vi.spyOn(component as any, 'recalculateHeaderSize');
 
     changeBrowserInnerWidth(450);
     window.dispatchEvent(eventResize);
@@ -47,7 +47,7 @@ describe('PoPageContentComponent:', () => {
     }));
 
     it('ngAfterViewInit: should call recalculateHeaderSize', () => {
-      spyOn(component, 'recalculateHeaderSize');
+      vi.spyOn(component as any, 'recalculateHeaderSize');
 
       component.ngAfterViewInit();
 
@@ -79,7 +79,7 @@ describe('PoPageContentComponent:', () => {
     }));
 
     it('should fallback to 90% when calculated height is zero or negative without .po-page', fakeAsync(() => {
-      spyOn(fixture.nativeElement, 'getBoundingClientRect').and.returnValue({
+      vi.spyOn(fixture.nativeElement as any, 'getBoundingClientRect').mockReturnValue({
         top: window.innerHeight + 100,
         bottom: window.innerHeight + 200,
         left: 0,

@@ -47,7 +47,9 @@ describe('PoLookupModalBaseComponent:', () => {
   });
 
   it('should init modal with items', () => {
-    spyOn(component.filterService, 'getFilteredItems').and.returnValue(of({ items: [].concat(items), hasNext: true }));
+    vi.spyOn(component.filterService as any, 'getFilteredItems').mockReturnValue(
+      of({ items: [].concat(items), hasNext: true })
+    );
 
     component.ngOnInit();
 
@@ -111,7 +113,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('literals: should accept custom literals and call `setTableLiterals`', () => {
       Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
 
-      spyOn(component, <any>'setTableLiterals');
+      vi.spyOn(component as any, 'setTableLiterals');
 
       const customLiterals = Object.assign({}, poLookupLiteralsDefault[poLocaleDefault]);
 
@@ -163,7 +165,7 @@ describe('PoLookupModalBaseComponent:', () => {
   describe('Methods:', () => {
     it('filterSubscription: should unsubscribe filterSubscription on destroy', () => {
       component['filterSubscription'] = fakeSubscription;
-      spyOn(component['filterSubscription'], <any>'unsubscribe');
+      vi.spyOn(component['filterSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -173,7 +175,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('filterSubscription: should not unsubscribe if filterSubscription is falsy', () => {
       component['filterSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['filterSubscription'] = undefined;
       component.ngOnDestroy();
@@ -183,7 +185,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('searchSubscription: should unsubscribe searchSubscription on destroy', () => {
       component['searchSubscription'] = fakeSubscription;
-      spyOn(component['searchSubscription'], <any>'unsubscribe');
+      vi.spyOn(component['searchSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -193,7 +195,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('searchSubscription: should not unsubscribe if searchSubscription is falsy', () => {
       component['searchSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['searchSubscription'] = undefined;
       component.ngOnDestroy();
@@ -203,7 +205,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('showMoreSubscription: should unsubscribe showMoreSubscription on destroy', () => {
       component['showMoreSubscription'] = fakeSubscription;
-      spyOn(component['showMoreSubscription'], <any>'unsubscribe');
+      vi.spyOn(component['showMoreSubscription'] as any, 'unsubscribe');
 
       component.ngOnDestroy();
 
@@ -213,7 +215,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('showMoreSubscription: should not unsubscribe if showMoreSubscription is falsy', () => {
       component['showMoreSubscription'] = fakeSubscription;
 
-      spyOn(fakeSubscription, <any>'unsubscribe');
+      vi.spyOn(fakeSubscription as any, 'unsubscribe');
 
       component['showMoreSubscription'] = undefined;
       component.ngOnDestroy();
@@ -231,8 +233,8 @@ describe('PoLookupModalBaseComponent:', () => {
       component.pageSize = pageSize;
       component.filterParams = filterParams;
 
-      spyOn(component.filterService, 'getFilteredItems').and.returnValue(of(<any>{ items }));
-      spyOn(component, <any>'getFilteredParams').and.callThrough();
+      vi.spyOn(component.filterService as any, 'getFilteredItems').mockReturnValue(of(<any>{ items }));
+      vi.spyOn(component as any, 'getFilteredParams');
 
       const filteredDataObservable = component['getFilteredItems'](filter);
 
@@ -277,7 +279,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
       const filteredItems = items.filter(f => f.label.includes(component.searchValue));
 
-      spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: filteredItems, hasNext: true }));
+      vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of({ items: filteredItems, hasNext: true }));
 
       component.search();
 
@@ -294,8 +296,8 @@ describe('PoLookupModalBaseComponent:', () => {
       };
       component.appliedSearchValue = 'Suco';
 
-      spyOn(component, <any>'getFilteredItems').and.returnValue(of(data));
-      const spySetLookupResponseProperties = spyOn(component, <any>'setLookupResponseProperties');
+      vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of(data));
+      const spySetLookupResponseProperties = vi.spyOn(component as any, 'setLookupResponseProperties');
 
       component.search();
 
@@ -305,9 +307,9 @@ describe('PoLookupModalBaseComponent:', () => {
     it('search: should call `setLookupResponseProperties` without param if the service returns with an error', () => {
       component.searchValue = 'Suco';
 
-      spyOn(component, <any>'getFilteredItems').and.returnValue(throwError(() => new Error('')));
-      const spySearchFilteredItems = spyOn(component, <any>'searchFilteredItems').and.callThrough();
-      const spySetLookupResponseProperties = spyOn(component, <any>'setLookupResponseProperties');
+      vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(throwError(() => new Error('')));
+      const spySearchFilteredItems = vi.spyOn(component as any, 'searchFilteredItems');
+      const spySetLookupResponseProperties = vi.spyOn(component as any, 'setLookupResponseProperties');
 
       component.search();
 
@@ -319,7 +321,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('search: should call `initializeData` if `searchValue` is falsy.', () => {
       component.appliedSearchValue = undefined;
 
-      spyOn(component, <any>'initializeData');
+      vi.spyOn(component as any, 'initializeData');
 
       component.search();
 
@@ -331,7 +333,7 @@ describe('PoLookupModalBaseComponent:', () => {
       component.hasNext = true;
       component.isLoading = true;
 
-      spyOn(component, <any>'getFilteredItems').and.returnValue(throwError(''));
+      vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(throwError(''));
 
       component.showMoreEvent();
 
@@ -346,7 +348,7 @@ describe('PoLookupModalBaseComponent:', () => {
       component.items = [].concat(items);
       component.appliedSearchValue = searchValue;
 
-      spyOn(component, <any>'getFilteredItems').and.returnValue(of({ items: returnedItems }));
+      vi.spyOn(component as any, 'getFilteredItems').mockReturnValue(of({ items: returnedItems }));
 
       component.showMoreEvent();
 
@@ -359,7 +361,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('setSelectedItems: should call `selectRowItem`', () => {
       component.selecteds = [{ value: 1495832652942 }, { value: 1495832596999 }];
 
-      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
+      const spySelectRowItem = vi.spyOn(component.poTable as any, 'selectRowItem');
 
       component.setSelectedItems();
 
@@ -369,7 +371,7 @@ describe('PoLookupModalBaseComponent:', () => {
     it('setSelectedItems: should call `selectRowItem` if is multiple', () => {
       component.selecteds = [{ value: 1495832652942 }, { value: 1495832596999 }];
       component.multiple = true;
-      const spySelectRowItem = spyOn(component.poTable, 'selectRowItem').and.callThrough();
+      const spySelectRowItem = vi.spyOn(component.poTable as any, 'selectRowItem');
 
       component.setSelectedItems();
 
@@ -486,7 +488,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('onChangeDisclaimerGroup: should call searchFilteredItems if searchValue is empty', () => {
       component.appliedSearchValue = undefined;
-      const spySearch = spyOn(component, <any>'searchFilteredItems');
+      const spySearch = vi.spyOn(component as any, 'searchFilteredItems');
 
       component.onChangeDisclaimerGroup();
 
@@ -495,7 +497,7 @@ describe('PoLookupModalBaseComponent:', () => {
 
     it('onChangeDisclaimerGroup: should not call searchFilteredItems if searchValue is not empty', () => {
       component.appliedSearchValue = 'hasValue';
-      const spySearch = spyOn(component, <any>'searchFilteredItems');
+      const spySearch = vi.spyOn(component as any, 'searchFilteredItems');
 
       component.onChangeDisclaimerGroup();
 
@@ -503,7 +505,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('createDisclaimer: should call initializeData if dynamicFormValue is empty', () => {
-      const spyInitializeData = spyOn(component, <any>'initializeData');
+      const spyInitializeData = vi.spyOn(component as any, 'initializeData');
       component.dynamicFormValue = {};
       component.createDisclaimer();
 
@@ -511,7 +513,7 @@ describe('PoLookupModalBaseComponent:', () => {
     });
 
     it('createDisclaimer: should call addDisclaimer if dynamicFormValue is not empty', () => {
-      const spyAddDisclaimer = spyOn(component, <any>'addDisclaimer');
+      const spyAddDisclaimer = vi.spyOn(component as any, 'addDisclaimer');
       component.dynamicFormValue = { name: 'nameTest' };
       component.createDisclaimer();
 
@@ -752,7 +754,7 @@ describe('PoLookupModalBaseComponent:', () => {
       component.multiple = true;
       component.poModal = <any>{ close: () => {} };
 
-      spyOn(component.model, 'emit');
+      vi.spyOn(component.model as any, 'emit');
 
       component.primaryAction.action();
 

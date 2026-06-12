@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { PoAccordionModule } from '../po-accordion.module';
 import { PoAccordionManagerComponent } from './po-accordion-manager.component';
 
 describe('PoAccordionManagerComponent:', () => {
@@ -11,8 +11,7 @@ describe('PoAccordionManagerComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PoAccordionManagerComponent],
-      imports: [BrowserAnimationsModule]
+      imports: [PoAccordionModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoAccordionManagerComponent);
@@ -29,7 +28,7 @@ describe('PoAccordionManagerComponent:', () => {
     it('onClick: should call `clickManager.emit`', () => {
       const expectedValue = true;
       component.expandedAllItems = expectedValue;
-      spyOn(component.clickManager, 'emit');
+      vi.spyOn(component.clickManager as any, 'emit');
 
       component.onClick();
 
@@ -74,9 +73,14 @@ describe('PoAccordionManagerComponent:', () => {
     it('getTooltip: should return label', () => {
       component.labelValue = 'Test Label';
       component.expandedAllItems = true;
-      spyOnProperty(component.accordionElement.nativeElement, 'offsetWidth').and.returnValue(160);
-
-      spyOnProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth').and.returnValue(100);
+      Object.defineProperty(component.accordionElement.nativeElement, 'offsetWidth', {
+        value: 160,
+        configurable: true
+      });
+      Object.defineProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth', {
+        value: 100,
+        configurable: true
+      });
 
       const tooltip = component.getTooltip();
       expect(tooltip).toBe(component.labelValue);
@@ -85,9 +89,14 @@ describe('PoAccordionManagerComponent:', () => {
     it('getTooltip: should not return label', () => {
       component.labelValue = 'Test Label';
       component.expandedAllItems = true;
-      spyOnProperty(component.accordionElement.nativeElement, 'offsetWidth').and.returnValue(200);
-
-      spyOnProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth').and.returnValue(100);
+      Object.defineProperty(component.accordionElement.nativeElement, 'offsetWidth', {
+        value: 200,
+        configurable: true
+      });
+      Object.defineProperty(component.accordionHeaderElement.nativeElement, 'offsetWidth', {
+        value: 100,
+        configurable: true
+      });
 
       const tooltip = component.getTooltip();
       expect(tooltip).toBe(null);

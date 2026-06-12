@@ -119,7 +119,7 @@ describe('PoNavbarBaseComponent:', () => {
     });
 
     it('logo: should call `validateMenuLogo` if has `applicationMenu`', () => {
-      spyOn(component, 'validateMenuLogo');
+      vi.spyOn(component as any, 'validateMenuLogo');
 
       component.applicationMenu = <any>{ logo: 'logo' };
       component.logo = 'logo';
@@ -128,7 +128,7 @@ describe('PoNavbarBaseComponent:', () => {
     });
 
     it('logo: shouldn`t call `validateMenuLogo` if doesn`t have `applicationMenu`', () => {
-      spyOn(component, 'validateMenuLogo');
+      vi.spyOn(component as any, 'validateMenuLogo');
 
       component.applicationMenu = undefined;
       component.logo = 'logo';

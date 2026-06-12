@@ -25,7 +25,8 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/ui/tsconfig.spec.json"
+            "tsConfig": "projects/ui/tsconfig.spec.json",
+            "providersFile": "projects/ui/src/test-providers.ts"
           }
         },
         "lint": {
