@@ -1,0 +1,27 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: '<%= selector %>',
+  templateUrl: './<%= componentFileName %>.html',
+  styleUrls: ['./<%= componentFileName %>.<%= style %>'],
+  standalone: false
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() { }
+
+  back() {
+    // back action here
+  }
+
+  edit() {
+    // edit action here
+  }
+
+  remove() {
+    // remove action here
+  }
+
+}

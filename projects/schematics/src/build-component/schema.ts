@@ -40,4 +40,14 @@ export interface Schema {
 
   /** When true, create a component module. */
   createModule?: boolean;
+
+  /**
+   * The file naming convention to use for generated files.
+   *
+   * - `2016`: classic Angular Style Guide suffixes (e.g. `name.component.ts`, `name.module.ts`).
+   * - `2025`: current Angular convention without type suffixes (e.g. `name.ts`, `name-module.ts`).
+   *
+   * When omitted, the convention already used by the project is auto-detected.
+   */
+  fileNameStyleGuide?: '2016' | '2025';
 }

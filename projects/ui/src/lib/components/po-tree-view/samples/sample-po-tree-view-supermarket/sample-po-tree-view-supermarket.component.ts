@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoStepperComponent, PoTableColumn, PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tree-view-supermarket',
   templateUrl: 'sample-po-tree-view-supermarket.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTreeViewSupermarketComponent {

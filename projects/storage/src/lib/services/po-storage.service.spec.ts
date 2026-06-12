@@ -666,11 +666,10 @@ describe('PoStorageService:', () => {
     it('getStorageInstance: should return localForage instance', async () => {
       const localForageMock: LocalForage = createLocalForageInstance();
 
-      spyOn(LocalForage, 'createInstance').and.returnValue(localForageMock);
       spyOn(PoStorageService, 'getDefaultConfig').and.returnValue({});
-      spyOn(poStorageService, <any>'setDriver').and.returnValue(Promise.resolve());
+      spyOn(poStorageService, <any>'defineLocalForageDriver').and.returnValue(Promise.resolve(localForageMock));
 
-      expect(await poStorageService['getStorageInstance'](getConfigMock())).toEqual(localForageMock);
+      expect(await poStorageService['getStorageInstance'](getConfigMock())).toBe(localForageMock);
     });
   });
 });

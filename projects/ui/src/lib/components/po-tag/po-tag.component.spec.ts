@@ -1,4 +1,4 @@
-import { Component, provideNgReflectAttributes } from '@angular/core';
+import { Component, provideNgReflectAttributes, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -16,6 +16,7 @@ import { PoTagLiterals } from './po-tag.literals';
 
 @Component({
   template: ` <po-tag p-label="Mock" (p-click)="onClick()"></po-tag> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoTagClickableComponent {

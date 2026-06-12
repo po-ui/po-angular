@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoPageChangePasswordComponent } from '@po-ui/ng-templates';
 
@@ -7,6 +7,7 @@ import { PoBreadcrumb, PoSelectOption } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-page-change-password-modify',
   templateUrl: './sample-po-page-change-password-modify.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageChangePasswordModifyComponent implements OnInit {

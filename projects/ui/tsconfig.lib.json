@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "./dist/",
     "declarationMap": true,
     "declaration": true,
@@ -11,9 +10,9 @@
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "enableResourceInlining": true
+    "enableResourceInlining": true,
+    "strictTemplates": false
   },
   "exclude": ["test.ts", "**/*.spec.ts", "**/*.e2e-spec.ts", "**/*.po.ts", "./node_modules/"]
 }

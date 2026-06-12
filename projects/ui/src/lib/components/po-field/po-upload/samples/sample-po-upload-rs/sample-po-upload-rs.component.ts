@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoModalAction, PoModalComponent, PoStepperComponent, PoUploadComponent 
 @Component({
   selector: 'sample-po-upload-rs',
   templateUrl: 'sample-po-upload-rs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUploadRsComponent implements OnInit {

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'sample-po-progress-circle',
   templateUrl: './sample-po-progress-circle.component.html',
   styleUrls: ['./sample-po-progress-circle.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoProgressCircleComponent {

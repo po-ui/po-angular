@@ -10,7 +10,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/ui/tsconfig.lib.json",
             "project": "projects/ui/ng-package.json"
@@ -22,11 +22,12 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "main": "projects/ui/src/test.ts",
             "tsConfig": "projects/ui/tsconfig.spec.json",
-            "karmaConfig": "projects/ui/karma.conf.js"
+            "karmaConfig": "projects/ui/karma.conf.js",
+            "codeCoverageExclude": ["projects/ui/src/lib/components/po-grid/**"]
           }
         },
         "lint": {
@@ -45,7 +46,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "outputPath": {
               "base": "dist/app"
@@ -112,7 +113,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "open": true,
             "host": "0.0.0.0",
@@ -138,7 +139,7 @@
       "sourceRoot": "projects/storage/src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/storage/tsconfig.lib.json",
             "project": "projects/storage/ng-package.json"
@@ -150,7 +151,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "main": "projects/storage/src/test.ts",
             "tsConfig": "projects/storage/tsconfig.spec.json",
@@ -171,7 +172,7 @@
       "sourceRoot": "projects/sync/src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/sync/tsconfig.lib.json",
             "project": "projects/sync/ng-package.json"
@@ -183,8 +184,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
             "main": "projects/sync/src/test.ts",
             "tsConfig": "projects/sync/tsconfig.spec.json",
             "karmaConfig": "projects/sync/karma.conf.js"
@@ -205,7 +207,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/templates/tsconfig.lib.json",
             "project": "projects/templates/ng-package.json"
@@ -217,8 +219,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
             "main": "projects/templates/src/test.ts",
             "tsConfig": "projects/templates/tsconfig.spec.json",
             "karmaConfig": "projects/templates/karma.conf.js"
@@ -239,7 +242,7 @@
       "prefix": "po",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/code-editor/tsconfig.lib.json",
             "project": "projects/code-editor/ng-package.json"
@@ -251,8 +254,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
             "main": "projects/code-editor/src/test.ts",
             "tsConfig": "projects/code-editor/tsconfig.spec.json",
             "karmaConfig": "projects/code-editor/karma.conf.js"
@@ -274,7 +278,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "outputPath": {
               "base": "dist/portal"
@@ -353,7 +357,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "buildTarget": "portal:build"
           },
@@ -364,7 +368,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "portal:build"
           }

@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
 import { PoDynamicFormValidationService } from './po-dynamic-form-validation.service';
 
@@ -20,7 +20,7 @@ describe('PoDynamicFormValidationService:', () => {
       imports: [],
       providers: [
         PoDynamicFormValidationService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

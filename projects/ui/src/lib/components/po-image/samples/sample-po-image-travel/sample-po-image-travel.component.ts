@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-image-travel',
   templateUrl: './sample-po-image-travel.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoImageTravelComponent {

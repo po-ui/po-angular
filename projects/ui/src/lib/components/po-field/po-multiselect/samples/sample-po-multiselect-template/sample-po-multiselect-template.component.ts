@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-multiselect-template',
   templateUrl: './sample-po-multiselect-template.component.html',
   styleUrls: ['./sample-po-multiselect-template.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMultiselectTemplateComponent {

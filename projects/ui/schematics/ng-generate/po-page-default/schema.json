@@ -61,6 +61,11 @@
           "format": "html-selector"
         }
       ]
+    },
+    "fileNameStyleGuide": {
+      "type": "string",
+      "description": "The file naming convention to use for generated files. `2016` uses classic suffixes such as `.component.ts` and `.module.ts`. `2025` omits type suffixes. When omitted, the convention already used by the project is auto-detected.",
+      "enum": ["2016", "2025"]
     }
   },
   "required": ["name"]

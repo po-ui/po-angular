@@ -1131,13 +1131,19 @@ describe('PoSearchComponent', () => {
 
   describe('locateCounter ViewChild setter', () => {
     let observeSpy: jasmine.Spy;
+    let originalResizeObserver: typeof ResizeObserver;
 
     beforeEach(() => {
+      originalResizeObserver = window.ResizeObserver;
       observeSpy = jasmine.createSpy('observe');
       (window as any).ResizeObserver = function (callback) {
         callback();
         return { observe: observeSpy };
       };
+    });
+
+    afterEach(() => {
+      (window as any).ResizeObserver = originalResizeObserver;
     });
 
     it('should set _locateCounter, create ResizeObserver and observe the element', () => {

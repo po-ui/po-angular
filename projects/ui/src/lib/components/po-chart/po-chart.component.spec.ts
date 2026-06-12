@@ -1,9 +1,7 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ElementRef, NO_ERRORS_SCHEMA, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import type { EChartsType } from 'echarts/core';
 import { PoTooltipModule } from '../../directives';
@@ -64,7 +62,7 @@ describe('PoChartComponent', () => {
     mockVcr = jasmine.createSpyObj('ViewContainerRef', ['clear', 'createComponent']);
 
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, PoTooltipModule],
+      imports: [PoTooltipModule],
       declarations: [PoChartComponent],
       providers: [
         CurrencyPipe,
@@ -74,7 +72,7 @@ describe('PoChartComponent', () => {
         { provide: PoChartBaseComponent, useValue: {} },
         { provide: ElementRef, useValue: createMockElementRef },
         { provide: ViewContainerRef, useValue: mockVcr },
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting()
       ],
       schemas: [NO_ERRORS_SCHEMA]

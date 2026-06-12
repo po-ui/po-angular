@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoBadgeBaseComponent } from './po-badge-base.component';
 import { PoBadgeLiterals } from './interfaces/po-badge-literals.interface';
@@ -32,6 +32,7 @@ const PO_BADGE_MAX_NOTIFICATIONS = 9;
   selector: 'po-badge',
   templateUrl: './po-badge.component.html',
   styles: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoBadgeComponent extends PoBadgeBaseComponent implements OnInit, OnChanges {

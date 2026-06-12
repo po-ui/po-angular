@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -25,10 +26,11 @@ describe('PoToolbarProfileComponent:', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterModule.forRoot([])],
       declarations: [PoToolbarProfileComponent, PoPopupComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideLocationMocks(),
         { provide: ElementRef, useValue: elementRef },
         { provide: Renderer2, useValue: renderer2 },
         { provide: PoControlPositionService, useValue: poControlPositionService }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { PoComboOption, PoDynamicFormComponent, PoLanguageService } from '@po-ui/ng-components';
@@ -21,6 +21,7 @@ import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.compone
 @Component({
   selector: 'po-advanced-filter',
   templateUrl: './po-advanced-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoAdvancedFilterComponent extends PoAdvancedFilterBaseComponent implements OnDestroy, OnInit {

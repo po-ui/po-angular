@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
@@ -17,6 +17,7 @@ import { SamplePoPageListHiringProcessesService } from './sample-po-page-list-hi
   selector: 'sample-po-page-list-hiring-processes',
   templateUrl: './sample-po-page-list-hiring-processes.component.html',
   providers: [SamplePoPageListHiringProcessesService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageListHiringProcessesComponent implements OnInit {

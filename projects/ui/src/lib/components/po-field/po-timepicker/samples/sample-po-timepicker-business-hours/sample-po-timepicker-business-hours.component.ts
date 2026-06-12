@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-timepicker-business-hours',
   templateUrl: './sample-po-timepicker-business-hours.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTimepickerBusinessHoursComponent {

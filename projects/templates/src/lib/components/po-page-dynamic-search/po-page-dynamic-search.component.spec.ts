@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
 import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA, SimpleChanges } from '@angular/core';
 
@@ -12,7 +12,7 @@ import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filt
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 import { expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 export const routes: Routes = [];
 
@@ -24,8 +24,13 @@ describe('PoPageDynamicSearchComponent:', () => {
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule, PoDynamicModule],
-      providers: [TitleCasePipe, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      imports: [FormsModule, RouterModule.forRoot(routes), PoPageCustomizationModule, PoDynamicModule],
+      providers: [
+        provideLocationMocks(),
+        TitleCasePipe,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 

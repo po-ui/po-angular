@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { isIEOrEdge } from '../../../utils/util';
 
@@ -14,6 +14,7 @@ import { PoSlideContentTemplateDirective } from '../directives/po-slide-content-
 @Component({
   selector: 'po-slide-item',
   templateUrl: './po-slide-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoSlideItemComponent {

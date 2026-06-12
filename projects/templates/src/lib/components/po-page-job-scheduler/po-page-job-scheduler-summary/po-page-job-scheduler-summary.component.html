@@ -61,6 +61,6 @@
 }
 @if (jobSchedulerSummaryTemplate) {
   <div class="po-pt-1 po-pb-1 po-md-12">
-    <ng-template [ngTemplateOutlet]="jobSchedulerSummaryTemplate?.templateRef"></ng-template>
+    <ng-template [ngTemplateOutlet]="$safeNavigationMigration(jobSchedulerSummaryTemplate?.templateRef)"></ng-template>
   </div>
 }

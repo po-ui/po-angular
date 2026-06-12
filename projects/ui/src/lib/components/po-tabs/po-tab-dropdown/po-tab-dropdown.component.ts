@@ -7,7 +7,8 @@ import {
   Input,
   Output,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoButtonComponent } from '../../po-button/po-button.component';
@@ -25,6 +26,7 @@ import { PoTabComponent } from '../po-tab/po-tab.component';
 @Component({
   selector: 'po-tab-dropdown',
   templateUrl: './po-tab-dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTabDropdownComponent implements AfterViewInit {

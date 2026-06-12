@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
 import { PoFieldModule } from '../../po-field/po-field.module';
@@ -14,7 +13,7 @@ describe('PoTreeviewItemComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
+      imports: [FormsModule, PoFieldModule],
       declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
       providers: [PoTreeViewService]
     }).compileComponents();
@@ -113,6 +112,50 @@ describe('PoTreeviewItemComponent:', () => {
 
     it('trackByFunction: should return index param', () => {
       expect(component.trackByFunction(1)).toBe(1);
+    });
+
+    it('animateEnter: should animate height/opacity and call animationComplete on finish', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 150 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component.animateEnter(<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith(
+        [
+          { height: '0px', opacity: 0, offset: 0 },
+          { height: '150px', opacity: 0, offset: 0.6667 },
+          { height: '150px', opacity: 1, offset: 1 }
+        ],
+        { duration: 300, easing: 'linear' }
+      );
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateLeave: should animate height/opacity and call animationComplete on finish', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 90 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component.animateLeave(<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith(
+        [
+          { height: '90px', opacity: 1, offset: 0 },
+          { height: '0px', opacity: 1, offset: 0.6667 },
+          { height: '0px', opacity: 0, offset: 1 }
+        ],
+        { duration: 300, easing: 'linear' }
+      );
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
     });
   });
 });

@@ -6,12 +6,14 @@ import {
   ChangeDetectorRef,
   Output,
   EventEmitter,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 @Component({
   selector: 'po-grid-cell',
   templateUrl: './po-grid-cell.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoGridCellComponent {

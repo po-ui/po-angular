@@ -1,11 +1,12 @@
 import { By } from '@angular/platform-browser';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { PoUploadDragDropDirective } from './po-upload-drag-drop.directive';
 
 @Component({
   template: ` <div p-upload-drag-drop></div> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class TestComponent {}
