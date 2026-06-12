@@ -1,5 +1,5 @@
 import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
-import { Component, ContentChild, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ContentChild, ElementRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
 
@@ -66,6 +66,7 @@ export const poPageSlideLiteralsDefault = {
       transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
     ])
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {

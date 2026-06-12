@@ -11,7 +11,7 @@ import { PoFieldModule } from '../../../../components/po-field/po-field.module';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
 import { PoLookupModalService } from '../../../../components/po-field/po-lookup/services/po-lookup-modal.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
@@ -64,7 +64,7 @@ describe('PoLookupModalService:', () => {
         PoComponentInjectorService,
         PoControlPositionService,
         PoLookupModalService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

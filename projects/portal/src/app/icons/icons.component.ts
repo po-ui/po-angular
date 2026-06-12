@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { PoComboOption, PoNotificationService, PoSearchComponent, PoSearchFilterMode } from '../../../../ui/src/lib';
 
 @Component({
   selector: 'app-icons',
   templateUrl: './icons.component.html',
   styleUrls: ['icons.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class IconsComponent {

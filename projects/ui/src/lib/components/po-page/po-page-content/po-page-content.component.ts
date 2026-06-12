@@ -6,7 +6,8 @@ import {
   OnDestroy,
   Renderer2,
   inject,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoPageContentBaseComponent } from './po-page-content-base.component';
@@ -19,6 +20,7 @@ import { PoPageContentBaseComponent } from './po-page-content-base.component';
 @Component({
   selector: 'po-page-content',
   templateUrl: './po-page-content.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageContentComponent extends PoPageContentBaseComponent implements AfterViewInit, OnDestroy {

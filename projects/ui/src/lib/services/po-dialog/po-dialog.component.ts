@@ -1,4 +1,4 @@
-import { Component, ComponentRef, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentRef, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -39,6 +39,7 @@ export const poDialogConfirmLiteralsDefault = {
 
 @Component({
   templateUrl: './po-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDialogComponent implements OnDestroy, OnInit {

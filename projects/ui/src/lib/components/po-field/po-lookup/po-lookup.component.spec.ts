@@ -9,7 +9,7 @@ import { PoFieldModule } from '../../../components/po-field';
 import { PoComponentInjectorService } from '../../../services/po-component-injector/po-component-injector.service';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NgControl } from '@angular/forms';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -51,7 +51,7 @@ describe('PoLookupComponent:', () => {
         PoControlPositionService,
         Injector,
         NgControl,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

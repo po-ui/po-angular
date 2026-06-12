@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoContainerBaseComponent } from './po-container-base.component';
 
@@ -27,6 +27,7 @@ import { PoContainerBaseComponent } from './po-container-base.component';
 @Component({
   selector: 'po-container',
   templateUrl: './po-container.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoContainerComponent extends PoContainerBaseComponent {}

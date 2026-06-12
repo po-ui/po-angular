@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, Input, OnDestroy, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, ElementRef, Input, OnDestroy, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
 
@@ -12,6 +12,7 @@ import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
 @Component({
   selector: 'po-table-subtitle-footer',
   templateUrl: './po-table-subtitle-footer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableSubtitleFooterComponent implements AfterViewInit, DoCheck, OnDestroy {

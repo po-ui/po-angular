@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dropdown-social-network',
   templateUrl: './sample-po-dropdown-social-network.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDropdownSocialNetworkComponent implements OnInit {

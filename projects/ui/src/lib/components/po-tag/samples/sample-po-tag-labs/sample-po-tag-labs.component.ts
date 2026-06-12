@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoRadioGroupOption,
@@ -12,6 +12,7 @@ import {
   selector: 'sample-po-tag-labs',
   templateUrl: './sample-po-tag-labs.component.html',
   styleUrls: ['./sample-po-tag-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTagLabsComponent implements OnInit {

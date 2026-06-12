@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoDialogService,
@@ -15,6 +15,7 @@ import { SamplePoTableAirfareService } from './sample-po-table-airfare.service';
   selector: 'sample-po-table-airfare',
   templateUrl: './sample-po-table-airfare.component.html',
   providers: [SamplePoTableAirfareService, PoDialogService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTableAirfareComponent implements AfterViewInit, OnInit {

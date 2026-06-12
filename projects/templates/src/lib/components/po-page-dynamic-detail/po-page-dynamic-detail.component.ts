@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, concat, of, throwError } from 'rxjs';
@@ -161,6 +161,7 @@ export const poPageDynamicDetailLiteralsDefault = {
   selector: 'po-page-dynamic-detail',
   templateUrl: './po-page-dynamic-detail.component.html',
   providers: [PoPageDynamicService, PoPageDynamicDetailActionsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDynamicDetailComponent implements OnInit, OnDestroy {
