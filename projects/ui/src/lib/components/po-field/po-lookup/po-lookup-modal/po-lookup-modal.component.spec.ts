@@ -12,8 +12,8 @@ import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-s
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoTableColumnSpacing } from '../../../po-table';
-import { PoFieldSize } from 'projects/ui/src/lib/enums/po-field-size.enum';
-import { PoThemeA11yEnum } from 'projects/ui/src/public-api';
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
+import { PoThemeA11yEnum } from '../../../../../public-api';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
