@@ -11,7 +11,7 @@ import {
   PoTableColumn,
   PoToasterOrientation
 } from '@po-ui/ng-components';
-import { PoButtonType } from 'projects/ui/src/lib';
+import { PoButtonType } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-tools-dynamic-form',
