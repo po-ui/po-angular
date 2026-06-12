@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, inject } from '@angular/core';
+import { Component, ViewChild, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import {
@@ -18,6 +18,7 @@ import { SampleDashboardService } from './sample-po-page-default-dashboard.servi
   templateUrl: './sample-po-page-default-dashboard.component.html',
   styleUrls: ['./sample-po-page-default-dashboard.component.css'],
   providers: [SampleDashboardService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDefaultDashboardComponent implements OnInit {

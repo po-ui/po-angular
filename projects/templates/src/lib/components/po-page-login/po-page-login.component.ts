@@ -7,7 +7,8 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -57,6 +58,7 @@ import { PoPageLoginService } from './po-page-login.service';
 @Component({
   selector: 'po-page-login',
   templateUrl: './po-page-login.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageLoginComponent extends PoPageLoginBaseComponent implements AfterViewChecked, OnInit {

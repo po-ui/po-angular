@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoDynamicFormField } from '@po-ui/ng-components';
 @Component({
   selector: 'po-page-job-scheduler-parameters',
   templateUrl: 'po-page-job-scheduler-parameters.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageJobSchedulerParametersComponent implements AfterViewInit {

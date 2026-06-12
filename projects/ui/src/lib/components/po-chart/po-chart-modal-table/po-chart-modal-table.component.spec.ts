@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PoChartModalTableComponent } from './po-chart-modal-table.component';
 import { PoModalModule } from '../../po-modal';
 import { PoTableModule } from '../../po-table';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 
 describe('PoChartModalTableComponent', () => {
   let component: PoChartModalTableComponent;
@@ -12,7 +12,7 @@ describe('PoChartModalTableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, PoChartModalTableComponent, PoModalModule, PoTableModule],
-      providers: [provideHttpClient()]
+      providers: [provideHttpClient(withXhr())]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoChartModalTableComponent);

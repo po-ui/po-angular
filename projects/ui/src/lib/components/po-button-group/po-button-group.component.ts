@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, inject } from '@angular/core';
+import { Component, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 
@@ -31,6 +31,7 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 @Component({
   selector: 'po-button-group',
   templateUrl: './po-button-group.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoButtonGroupComponent extends PoButtonGroupBaseComponent {}

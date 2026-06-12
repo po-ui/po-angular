@@ -10,7 +10,8 @@ import {
   QueryList,
   SimpleChanges,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { debounceTime, delay, fromEvent, map, startWith, Subscription } from 'rxjs';
 import { PoLanguageService } from '../../services';
@@ -45,6 +46,7 @@ import { PoHeaderMenuItemComponent } from './po-header-menu-item/po-header-menu-
 @Component({
   selector: 'po-header',
   templateUrl: './po-header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHeaderComponent extends PoHeaderBaseComponent implements AfterViewInit, OnChanges, OnInit, OnDestroy {

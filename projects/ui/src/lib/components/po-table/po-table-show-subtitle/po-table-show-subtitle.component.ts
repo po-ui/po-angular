@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subtitle-column.interface';
 
@@ -12,6 +12,7 @@ import { PoTableSubtitleColumn } from '../po-table-subtitle-footer/po-table-subt
 @Component({
   selector: 'po-table-show-subtitle',
   templateUrl: './po-table-show-subtitle.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableShowSubtitleComponent {

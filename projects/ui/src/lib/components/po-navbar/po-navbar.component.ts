@@ -7,7 +7,8 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
@@ -37,6 +38,7 @@ const poNavbarTiming = '250ms ease';
 @Component({
   selector: 'po-navbar',
   templateUrl: './po-navbar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy, OnInit {

@@ -7,7 +7,7 @@ import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 import { poPageJobSchedulerLiteralsDefault } from '../po-page-job-scheduler-literals';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
 import { PoPageJobSchedulerSummaryComponent } from './po-page-job-scheduler-summary.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerSummaryComponent:', () => {
   const languageService: PoLanguageService = new PoLanguageService();
@@ -20,7 +20,7 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

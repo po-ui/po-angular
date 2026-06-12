@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
@@ -28,6 +28,7 @@ eventResize.initEvent('resize', false, true);
 
 @Component({
   template: ` <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class MobileComponent {
@@ -140,6 +141,7 @@ describe('PoPageDefaultComponent mobile', () => {
 
 @Component({
   template: ` <po-page-default p-title="Unit Test" [p-actions]="actions"> </po-page-default> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class DesktopComponent {

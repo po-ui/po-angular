@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoListViewAction } from '@po-ui/ng-components';
@@ -8,6 +8,7 @@ import { DocumentationService } from '../documentation/documentation.service';
 
 @Component({
   templateUrl: './documentation-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class DocumentationListComponent implements OnInit {

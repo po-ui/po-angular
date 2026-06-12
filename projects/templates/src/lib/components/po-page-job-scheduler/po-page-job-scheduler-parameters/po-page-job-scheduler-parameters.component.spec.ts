@@ -6,7 +6,7 @@ import { getObservable } from '../../../util-test/util-expect.spec';
 
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
 import { PoPageJobSchedulerParametersComponent } from './po-page-job-scheduler-parameters.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerParametersComponent:', () => {
   let component: PoPageJobSchedulerParametersComponent;
@@ -17,7 +17,7 @@ describe('PoPageJobSchedulerParametersComponent:', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

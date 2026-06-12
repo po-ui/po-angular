@@ -62,7 +62,7 @@
 
       @for (template of parametersTemplate; track template; let index = $index) {
         <div [hidden]="step !== index + (_stepExecutionLast ? 1 : 2)">
-          <ng-template [ngTemplateOutlet]="template?.templateRef"></ng-template>
+          <ng-template [ngTemplateOutlet]="$safeNavigationMigration(template?.templateRef)"></ng-template>
         </div>
       }
     </po-container>

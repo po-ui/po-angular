@@ -14,7 +14,7 @@ import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-schedul
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
 import { PoStepperOrientation } from '@po-ui/ng-components';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerComponent:', () => {
   let component: PoPageJobSchedulerComponent;
@@ -23,7 +23,7 @@ describe('PoPageJobSchedulerComponent:', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Component, QueryList } from '@angular/core';
+import { Component, QueryList, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoAccordionComponent } from './po-accordion.component';
@@ -13,6 +13,7 @@ import { PoAccordionService } from './services/po-accordion.service';
       <po-accordion-item p-label="PO Accordion 2"> Item 2 </po-accordion-item>
     </po-accordion>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoAccordionMockComponent {}

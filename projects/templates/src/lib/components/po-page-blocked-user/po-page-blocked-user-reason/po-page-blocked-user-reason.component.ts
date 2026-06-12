@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
@@ -9,6 +9,7 @@ import { PoPageBlockedUserReasonParams } from '../interfaces/po-page-blocked-use
 @Component({
   selector: 'po-page-blocked-user-reason',
   templateUrl: './po-page-blocked-user-reason.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageBlockedUserReasonComponent implements OnChanges, OnInit {

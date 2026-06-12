@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, inject, OnChanges, OnDestroy, Renderer2, SimpleChange } from '@angular/core';
+import { AfterContentInit, Component, inject, OnChanges, OnDestroy, Renderer2, SimpleChange, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
@@ -34,6 +34,7 @@ import { backNavigationAriaLabels, PoPageDefaultBaseComponent } from './po-page-
 @Component({
   selector: 'po-page-default',
   templateUrl: './po-page-default.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDefaultComponent

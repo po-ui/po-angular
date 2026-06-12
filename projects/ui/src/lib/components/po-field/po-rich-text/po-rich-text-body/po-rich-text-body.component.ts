@@ -12,7 +12,8 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Subscription } from 'rxjs';
@@ -36,6 +37,7 @@ const poRichTextBodyCommands = [
 @Component({
   selector: 'po-rich-text-body',
   templateUrl: './po-rich-text-body.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoRichTextBodyComponent implements OnInit, OnDestroy, OnChanges {
