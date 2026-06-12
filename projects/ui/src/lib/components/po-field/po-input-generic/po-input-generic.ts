@@ -232,7 +232,9 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
   }
 
   clear(value) {
+    this.onTouched?.();
     this.callOnChange(value);
+    this.valueBeforeChange = undefined;
     this.controlChangeEmitter();
     if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
       this.verifyErrorAsync();

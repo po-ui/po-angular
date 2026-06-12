@@ -407,6 +407,28 @@ describe('PoInputGeneric:', () => {
     expect(component.controlChangeEmitter).toHaveBeenCalled();
   });
 
+  it('should call onTouched when input is cleaned', () => {
+    component['onTouched'] = jasmine.createSpy('onTouched');
+
+    component.clear('');
+
+    expect(component['onTouched']).toHaveBeenCalled();
+  });
+
+  it('should set valueBeforeChange to undefined when input is cleaned', () => {
+    component.valueBeforeChange = 'previous value';
+
+    component.clear('');
+
+    expect(component.valueBeforeChange).toBeUndefined();
+  });
+
+  it('should not throw error when onTouched is null and input is cleaned', () => {
+    component['onTouched'] = null;
+
+    expect(() => component.clear('')).not.toThrow();
+  });
+
   it('should clean input when "value" to be null', () => {
     const fakeThis = {
       inputEl: component.inputEl,
