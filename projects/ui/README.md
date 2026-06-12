@@ -19,7 +19,7 @@ Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos a
 Execute o comando abaixo na pasta raiz do seu projeto:
 
 ```
-ng add @po-ui/ng-components
+ng add @po-ui/ng-components@next
 ```
 
 

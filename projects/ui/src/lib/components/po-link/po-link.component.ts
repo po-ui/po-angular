@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoLinkBaseComponent } from './po-link-base.component';
 
@@ -25,6 +25,7 @@ import { PoLinkBaseComponent } from './po-link-base.component';
 @Component({
   selector: 'po-link',
   templateUrl: './po-link.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoLinkComponent extends PoLinkBaseComponent {

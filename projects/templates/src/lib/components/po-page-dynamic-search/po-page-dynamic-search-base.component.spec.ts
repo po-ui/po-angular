@@ -2,7 +2,7 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../../../ui/src/lib/services/po-language/po-language.constant';
 import { PoLanguageService } from './../../../../../ui/src/lib/services/po-language/po-language.service';
 
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoThemeA11yEnum } from '@po-ui/ng-components';
 import { convertToBoolean } from '../../utils/util';
 import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
@@ -16,6 +16,7 @@ import {
 @Component({
   selector: 'mock-component',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class MockComponent extends PoPageDynamicSearchBaseComponent {

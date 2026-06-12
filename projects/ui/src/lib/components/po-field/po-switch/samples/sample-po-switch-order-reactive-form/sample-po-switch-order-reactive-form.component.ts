@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoNotificationService, PoSwitchLabelPosition, PoTableColumn } from '@po
 @Component({
   selector: 'sample-po-switch-order-reactive-form',
   templateUrl: './sample-po-switch-order-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSwitchOrderReactiveFormComponent implements OnInit {

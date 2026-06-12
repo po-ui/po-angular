@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNavbarItem } from '../../interfaces/po-navbar-item.interface';
 
@@ -7,6 +7,7 @@ import { isExternalLink } from '../../../../utils/util';
 @Component({
   selector: 'po-navbar-item',
   templateUrl: './po-navbar-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoNavbarItemComponent {

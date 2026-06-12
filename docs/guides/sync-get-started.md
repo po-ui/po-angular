@@ -9,21 +9,19 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~21.2.17):
+- [Angular CLI](https://cli.angular.io/) (~22.0.1):
   - ```shell
-    npm install -g @angular/cli@21
+    npm install -g @angular/cli@22
     ```
-- [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
+- [Ionic](https://ionicframework.com/docs/cli/):
   - ```shell
-    npm install -g @ionic/cli@7
+    npm install -g @ionic/cli
     ```
 
 
 > É importante ter conhecimento prévio em Angular e Ionic para seguir esta documentação e obter melhor entendimento do PO Sync.
 
 ### Passo 1 - Criando o aplicativo
-
-> Atualmente, a Ionic CLI cria novos projetos utilizando Angular 20 como versão base, independentemente da versão final desejada do Angular.
 
 Para a aplicação de exemplo usaremos o template *blank* do Ionic. Para isso, execute o seguinte comando:
 
@@ -35,34 +33,24 @@ Caso surja a questão relacionada ao framework desejado, opte por `Angular`.
 
 ### Passo 2 - Instalando as dependências
 
-É necessário realizar alguns ajustes de compatibilidade do PO para o projeto criado.
+É necessário realizar alguns ajustes de compatibilidade do PO UI para o projeto criado.
 
 Navegue até a pasta do aplicativo:
 ```shell
 cd po-sync-getting-started
 ```
 
-Antes de instalar o po-sync, é necessário atualizar o projeto para o Angular 21, garantindo compatibilidade com o PO UI.
-
-```shell
-ng update @angular/core@21 @angular/cli@21
-```
-
-> Esse passo é necessário porque o projeto foi inicialmente criado com Angular 20, e o upgrade garante compatibilidade com as versões utilizadas pelo PO UI.
-
 Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser conferidas e se necessário, ajustadas no seu projeto.
 
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~21.2.17",
-    "@angular/common": "~21.2.17",
-    "@angular/compiler": "~21.2.17",
-    "@angular/core": "~21.2.17",
-    "@angular/forms": "~21.2.17",
-    "@angular/platform-browser": "~21.2.17",
-    "@angular/platform-browser-dynamic": "~21.2.17",
-    "@angular/router": "~21.2.17",
+    "@angular/common": "~22.0.1",
+    "@angular/compiler": "~22.0.1",
+    "@angular/core": "~22.0.1",
+    "@angular/forms": "~22.0.1",
+    "@angular/platform-browser": "~22.0.1",
+    "@angular/router": "~22.0.1",
     "@capacitor/app": "8.0.0",
     "@capacitor/core": "8.0.1",
     "@capacitor/haptics": "8.0.0",
@@ -76,22 +64,31 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "~21.2.17",
-    ...
-    "@angular/cli": "~21.2.17",
-    "@angular/compiler-cli": "~21.2.17",
-    "@angular/language-service": "~21.2.17",
+    "@angular-devkit/schematics": "~22.0.1",
+    "@angular/build": "~22.2.1",
+    "@angular/cli": "~22.0.1",
+    "@angular/compiler-cli": "~22.0.1",
+    "@angular/language-service": "~22.0.1",
     "@capacitor/cli": "8.0.1",
     "@ionic/angular-toolkit": "^12.0.0",
     ...
-    "typescript": "~5.9.3"
+    "typescript": "~6.0.3"
   },
   ...
 ```
 
+> **Nota para projetos com módulos (NgModule)**: A CLI do Ionic pode gerar projetos com o arquivo `src/main.ts` utilizando o `platformBrowserDynamic`. Caso isso aconteça, será necessário adicionar o pacote `@angular/platform-browser-dynamic` no arquivo `package.json` (dentro de `dependencies`), juntamente com as outras dependências listadas acima:
+> ```json
+> "dependencies": {
+>   ...
+>   "@angular/platform-browser-dynamic": "~22.0.1",
+>   ...
+> }
+> ```
+
 > Após configurar seu arquivo, certifique-se de salvar as alterações realizadas.
 
-Execute o seguinte comando para instalar as dependências:
+Realize a limpeza do arquivo `package-lock.json` e da pasta `node_modules/`, para então executar o seguinte comando para instalar as dependências:
 
 ```shell
 npm install
@@ -102,14 +99,14 @@ npm install
 Para instalar o `po-sync` no aplicativo execute o seguinte comando:
 
 ```shell
-ng add @po-ui/ng-sync
+ng add @po-ui/ng-sync@next
 ```
 
 ### Passo 4 - Utilizando o po-sync
 
 #### Passo 4.1 (NgModule) - Importando o `po-sync` e o `po-storage`
 
-No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
+No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`:
 
 ```typescript
 import { NgModule } from '@angular/core';
@@ -145,7 +142,7 @@ export class AppModule {}
 
 #### Passo 4.1 (Standalone) - Importando o `po-sync` e o `po-storage`
 
-No arquivo `src/main.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
+No arquivo `src/main.ts`, avalie se foi feita a importação dos módulos do `po-storage` e do `po-sync`: 
 
 ```typescript
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -201,7 +198,7 @@ Após ter o seu primeiro *schema* criado, configure o seu aplicativo utilizando 
 Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -215,8 +212,11 @@ import { conferenceSchema } from './home/conference-schema.constants';
   styleUrls: ['app.component.scss'],
   standalone: false
 })
-export class AppComponent {
-  constructor(private platform: Platform, private poSync: PoSyncService) {
+export class AppComponent implements OnInit {
+  private readonly platform = inject(Platform);
+  private readonly poSync = inject(PoSyncService);
+
+  ngOnInit() {
     this.initializeApp();
   }
 
@@ -249,7 +249,7 @@ Após utilizar o método `PoSyncService.prepare()`, a aplicação estará pronta
 Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
@@ -264,10 +264,11 @@ import { conferenceSchema } from './home/conference-schema.constants';
   templateUrl: 'app.component.html',
   imports: [IonApp, IonRouterOutlet],
 })
-export class AppComponent {
-  constructor(
-    private platform: Platform, private poSync: PoSyncService
-  ) {
+export class AppComponent implements OnInit {
+  private readonly platform = inject(Platform);
+  private readonly poSync = inject(PoSyncService);
+
+  ngOnInit() {
     this.initializeApp();
   }
 
@@ -297,10 +298,35 @@ export class AppComponent {
 
 ### Passo 6 (NgModule) - Acessando os dados
 
+Caso o projeto tenha sido gerado em uma versão anterior a 9.x do `@ionic/angular`, no arquivo `po-sync-getting-started/src/app/home/home.module.ts`, atualize a importação do `IonicModule` para utilizar o caminho `import { IonicModule } from '@ionic/angular';`:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { HomePage } from './home.page';
+
+import { HomePageRoutingModule } from './home-routing.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    HomePageRoutingModule
+  ],
+  declarations: [HomePage]
+})
+export class HomePageModule {}
+```
+
+> **Nota sobre importação do `IonicModule`**: As versões anteriores à 9.x do `@ionic/angular` não possuem o export `lazy`, devendo ser feito o import de `@ionic/angular`. A partir da versão 9.x, o import de `@ionic/angular/lazy` funciona normalmente (sendo o padrão da CLI do ionic para projetos standalone).
+
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { PoSyncService } from '@po-ui/ng-sync';
 
@@ -311,21 +337,21 @@ import { PoSyncService } from '@po-ui/ng-sync';
   standalone: false
 })
 export class HomePage {
+  private readonly poSync = inject(PoSyncService);
 
-  conference: any;
+  readonly conference = signal<any>(null);
 
-  constructor(private poSync: PoSyncService) {
+  constructor() {
     this.poSync.onSync().subscribe(() => this.loadHomePage());
   }
 
   async loadHomePage() {
-    this.conference = await this.poSync.getModel('conference').findOne().exec();
+    this.conference.set(await this.poSync.getModel('conference').findOne().exec());
   }
 
   clear() {
-    this.conference = null;
+    this.conference.set(null);
   }
-
 }
 ```
 
@@ -336,31 +362,38 @@ No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
-import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 
-import { IonicModule } from '@ionic/angular';
+import {
+  IonContent,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardTitle
+} from '@ionic/angular/standalone';
 import { PoSyncService } from '@po-ui/ng-sync';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonicModule, NgIf],
+  imports: [IonContent, IonButton, IonCard, IonCardContent, IonCardTitle],
 })
 export class HomePage {
-  conference: any;
+  private readonly poSync = inject(PoSyncService);
 
-  constructor(private poSync: PoSyncService) {
+  readonly conference = signal<any>(null);
+
+  constructor() {
     this.poSync.onSync().subscribe(() => this.loadHomePage());
   }
 
   async loadHomePage() {
-    this.conference = await this.poSync.getModel('conference').findOne().exec();
+    this.conference.set(await this.poSync.getModel('conference').findOne().exec());
   }
 
   clear() {
-    this.conference = null;
+    this.conference.set(null);
   }
 }
 
@@ -371,18 +404,20 @@ export class HomePage {
 No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ```html
 <ion-content class="ion-padding">
-  <ion-button expand="full" (click)="loadHomePage()">Buscar informações</ion-button>
-  <ion-button expand="full" color="danger" (click)="clear()">Apagar informações</ion-button>
+  <ion-button expand="full" (click)="loadHomePage()" (keyup.enter)="loadHomePage()">Buscar informações</ion-button>  
+  <ion-button expand="full" color="danger" (click)="clear()" (keyup.enter)="clear()">Apagar informações</ion-button>
 
-  <ion-card *ngIf="conference">
-    <ion-card-content>
-      <ion-card-title>
-        {{ conference.title }}
-      </ion-card-title>
-      <p>{{ conference.description }}</p>
-      <p>{{ conference.location }}</p>
-    </ion-card-content>
-  </ion-card>
+  @if (conference(); as conference) {
+    <ion-card>
+      <ion-card-content>
+        <ion-card-title>
+          {{ conference.title }}
+        </ion-card-title>
+        <p>{{ conference.description }}</p>
+        <p>{{ conference.location }}</p>
+      </ion-card-content>
+    </ion-card>
+  }
 </ion-content>
 ```
 
@@ -390,7 +425,38 @@ No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 
 Execute o comando `ionic serve` e verifique o funcionamento do aplicativo Ionic com `po-sync`.
 
-> Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript (5.2.x) conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
+> Pode ocorrer o seguinte erro `TypeError: Failed to fetch dynamically imported module...`, sendo necessário adicionar ao arquivo `angular.json` as seguintes configurações:
+> ```json
+> {
+>   "projects": {
+>     "app": {
+>       ...
+>       "architect": {
+>         ...
+>         "build": {
+>           ...
+>           "options": {
+>             ...
+>             "polyfills": ["zone.js"],
+>           },
+>         },
+>         "serve": {
+>           ...
+>           "builder": "@angular/build:dev-server",
+>           "options": {
+>             ...
+>             "prebundle": {
+>               "exclude": ["@ionic/angular", "@ionic/core", "ionicons"]
+>             }
+>           }
+>         },
+>       }
+>     }
+>   },
+> }
+> ```
+
+> Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
 
 > Ao executar um projeto standalone, pode ocorrer o seguinte erro: `[ERROR] Invalid project type: angular-standalone (project config: ./ionic.config.json).`. Para corrigir, edite o arquivo `ionic.config.json` e ajuste a propriedade `type` para o valor `angular`.
 

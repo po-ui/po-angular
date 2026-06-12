@@ -1,15 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule, Routes } from '@angular/router';
+import { provideLocationMocks } from '@angular/common/testing';
 
 import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
 import { PoHelperModule } from '../../po-helper/po-helper.module';
 import { PoPageHeaderComponent } from './po-page-header.component';
 
 @Component({
+  selector: 'app-guides-header-test',
   template: 'Guides',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GuidesComponent {}
@@ -23,9 +25,9 @@ describe('PoPageHeaderComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PoBreadcrumbModule, PoHelperModule, RouterTestingModule.withRoutes(routes)],
+      imports: [PoBreadcrumbModule, PoHelperModule, RouterModule.forRoot(routes)],
       declarations: [PoPageHeaderComponent, GuidesComponent],
-      providers: [HttpClient, HttpHandler]
+      providers: [HttpClient, HttpHandler, provideLocationMocks()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoPageHeaderComponent);
