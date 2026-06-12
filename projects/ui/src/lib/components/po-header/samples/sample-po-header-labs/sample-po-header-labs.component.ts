@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoHeaderActions,
@@ -12,6 +12,7 @@ import {
   selector: 'sample-po-header-labs',
   templateUrl: './sample-po-header-labs.component.html',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     /* alterado apenas para demonstração no portal*/
     po-header {

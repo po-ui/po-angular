@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
 
 import { PoItemListComponent } from './po-item-list.component';
 import { PoItemListFilterMode } from '../enums/po-item-list-filter-mode.enum';
@@ -15,8 +15,8 @@ describe('PoItemListComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [PoItemListComponent],
-      imports: [RouterTestingModule],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [provideLocationMocks()]
     }).compileComponents();
   });
 

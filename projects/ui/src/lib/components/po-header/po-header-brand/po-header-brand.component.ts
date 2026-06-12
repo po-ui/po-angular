@@ -10,7 +10,8 @@ import {
   OnDestroy,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { debounceTime, fromEvent, map, startWith, Subscription } from 'rxjs';
@@ -21,6 +22,7 @@ import { PoHeaderBrand } from '../interfaces/po-header-brand.interface';
 @Component({
   selector: 'po-header-brand',
   templateUrl: './po-header-brand.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHeaderbrandComponent implements AfterViewInit, OnChanges, OnDestroy {

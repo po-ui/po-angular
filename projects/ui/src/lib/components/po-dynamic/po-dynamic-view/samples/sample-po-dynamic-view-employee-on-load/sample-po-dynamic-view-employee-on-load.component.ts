@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDynamicViewField } from '@po-ui/ng-components';
 import { SamplePoDynamicViewEmployeeOnLoadService } from './sample-po-dynamic-view-employee-on-load.service';
@@ -7,6 +7,7 @@ import { SamplePoDynamicViewEmployeeOnLoadService } from './sample-po-dynamic-vi
   selector: 'sample-po-dynamic-view-employee-on-load',
   templateUrl: './sample-po-dynamic-view-employee-on-load.component.html',
   providers: [SamplePoDynamicViewEmployeeOnLoadService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDynamicViewEmployeeOnLoadComponent implements OnInit {

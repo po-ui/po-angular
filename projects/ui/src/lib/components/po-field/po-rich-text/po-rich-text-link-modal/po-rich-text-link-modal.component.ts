@@ -7,7 +7,8 @@ import {
   OnInit,
   Output,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 
@@ -20,6 +21,7 @@ import { poRichTextLiteralsDefault } from '../po-rich-text-literals';
 @Component({
   selector: 'po-rich-text-link-modal',
   templateUrl: './po-rich-text-link-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoRichTextLinkModalComponent implements OnInit {

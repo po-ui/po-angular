@@ -59,7 +59,7 @@
         p-menu-id="po-header-nav-bar"
       >
         <div *p-menu-header-template>
-          <ng-template *ngTemplateOutlet="menuHeaderTemplate?.templateRef"></ng-template>
+          <ng-template *ngTemplateOutlet="$safeNavigationMigration(menuHeaderTemplate?.templateRef)"></ng-template>
         </div>
       </po-menu>
     </div>

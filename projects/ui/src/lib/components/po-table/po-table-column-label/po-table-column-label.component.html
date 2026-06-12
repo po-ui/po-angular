@@ -1,10 +1,10 @@
 @if (checkValueHasLabel()) {
   <po-tag
-    [p-color]="value?.color"
-    [p-value]="value?.label"
-    [p-text-color]="value?.textColor"
-    [p-icon]="value?.icon"
-    [p-type]="value?.type"
+    [p-color]="$safeNavigationMigration(value?.color)"
+    [p-value]="$safeNavigationMigration(value?.label)"
+    [p-text-color]="$safeNavigationMigration(value?.textColor)"
+    [p-icon]="$safeNavigationMigration(value?.icon)"
+    [p-type]="$safeNavigationMigration(value?.type)"
   >
   </po-tag>
 }

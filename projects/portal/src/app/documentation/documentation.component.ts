@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { MenuComponentsService } from './menu-components.service';
@@ -6,6 +6,7 @@ import { MenuComponentsService } from './menu-components.service';
 @Component({
   templateUrl: './documentation.component.html',
   providers: [MenuComponentsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class DocumentationComponent implements OnInit {

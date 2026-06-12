@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
   PoEmailComponent,
@@ -14,6 +14,7 @@ import {
 @Component({
   selector: 'sample-po-search-fields-locate',
   templateUrl: './sample-po-search-fields-locate.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSearchFieldsLocateComponent implements AfterViewInit {
