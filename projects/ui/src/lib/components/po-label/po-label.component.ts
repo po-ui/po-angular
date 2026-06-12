@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input, Input, ChangeDetectionStrategy } from '@angular/core';
 import { convertToBoolean } from '../../utils/util';
 import { poFieldContainerLiterals } from '../po-field/po-field-container/po-field-container-literals';
 
@@ -11,6 +11,7 @@ import { poFieldContainerLiterals } from '../po-field/po-field-container/po-fiel
 @Component({
   selector: 'po-label',
   templateUrl: './po-label.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoLabelComponent {

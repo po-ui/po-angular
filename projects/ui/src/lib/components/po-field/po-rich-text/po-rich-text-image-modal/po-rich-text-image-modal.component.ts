@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoUtils } from '../../../../utils/util';
@@ -14,6 +14,7 @@ const uploadRestrictions = ['.apng', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.
 @Component({
   selector: 'po-rich-text-image-modal',
   templateUrl: './po-rich-text-image-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoRichTextImageModalComponent {

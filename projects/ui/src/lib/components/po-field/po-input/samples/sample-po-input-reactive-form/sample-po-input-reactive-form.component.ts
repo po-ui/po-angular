@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-input-reactive-form',
   templateUrl: './sample-po-input-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoInputReactiveFormComponent {

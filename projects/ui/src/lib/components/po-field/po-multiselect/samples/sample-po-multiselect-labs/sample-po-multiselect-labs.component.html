@@ -28,9 +28,9 @@
     [p-listbox-control-position]="listboxPosition"
     (p-change)="changeEvent('p-change')"
     (p-keydown)="changeEvent('p-keydown')"
-    [p-error-limit]="properties?.includes('errorLimit')"
-    [p-label-text-wrap]="properties?.includes('labelTextWrap')"
-    [p-compact-label]="properties?.includes('compactLabel')"
+    [p-error-limit]="$safeNavigationMigration(properties?.includes('errorLimit'))"
+    [p-label-text-wrap]="$safeNavigationMigration(properties?.includes('labelTextWrap'))"
+    [p-compact-label]="$safeNavigationMigration(properties?.includes('compactLabel'))"
   >
   </po-multiselect>
 </div>

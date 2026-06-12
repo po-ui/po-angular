@@ -63,7 +63,7 @@
         }
 
         <ng-template
-          [ngTemplateOutlet]="template?.templateRef"
+          [ngTemplateOutlet]="$safeNavigationMigration(template?.templateRef)"
           [ngTemplateOutletContext]="{ $implicit: templateContext }"
         >
         </ng-template>
@@ -91,7 +91,7 @@
           <span class="po-item-list__label">{{ label }}</span>
         }
         <ng-template
-          [ngTemplateOutlet]="template?.templateRef"
+          [ngTemplateOutlet]="$safeNavigationMigration(template?.templateRef)"
           [ngTemplateOutletContext]="{ $implicit: templateContext }"
         >
         </ng-template>

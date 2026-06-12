@@ -22,7 +22,7 @@
           [p-status]="step.status"
           [p-step-icons]="stepIcons"
           [p-step-size]="stepSize"
-          [p-next-status]="poSteps.get(index + 1)?.status"
+          [p-next-status]="$safeNavigationMigration(poSteps.get(index + 1)?.status)"
           [p-icon-default]="step.iconDefault"
           [p-step-icon-active]="iconActive"
           [p-step-icon-done]="iconDone"

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -7,6 +7,7 @@ import { PoPageAction } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-textarea-email',
   templateUrl: './sample-po-textarea-email.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTextareaEmailComponent {

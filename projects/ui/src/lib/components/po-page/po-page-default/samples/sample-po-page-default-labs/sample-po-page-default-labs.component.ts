@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoBreadcrumb,
@@ -20,6 +20,7 @@ interface EditableAction extends PoPageAction {
 @Component({
   selector: 'sample-po-page-default-labs',
   templateUrl: './sample-po-page-default-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDefaultLabsComponent implements OnInit {

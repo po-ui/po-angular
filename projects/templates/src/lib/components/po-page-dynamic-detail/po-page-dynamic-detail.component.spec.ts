@@ -11,7 +11,7 @@ import { PoDialogService, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoUtils as util } from '../../utils/util';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
 import { PoPageDynamicDetailComponent } from './po-page-dynamic-detail.component';
@@ -25,7 +25,7 @@ describe('PoPageDynamicDetailComponent:', () => {
       declarations: [PoPageDynamicDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [FormsModule, RouterTestingModule.withRoutes([])],
-      providers: [PoDialogService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [PoDialogService, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

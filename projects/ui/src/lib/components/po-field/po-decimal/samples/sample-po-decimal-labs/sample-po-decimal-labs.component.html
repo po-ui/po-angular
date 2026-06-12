@@ -14,7 +14,7 @@
   [p-error-pattern]="errorPattern"
   [p-max]="max"
   [p-min]="min"
-  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
+  [p-no-autocomplete]="$safeNavigationMigration(properties?.includes('noAutocomplete'))"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
@@ -23,13 +23,13 @@
   [p-show-required]="properties.includes('showRequired')"
   [p-size]="size"
   [p-thousand-maxlength]="thousandMaxlength"
-  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
-  [p-compact-label]="properties?.includes('compactLabel')"
+  [p-label-text-wrap]="$safeNavigationMigration(properties?.includes('labelTextWrap'))"
+  [p-compact-label]="$safeNavigationMigration(properties?.includes('compactLabel'))"
   (p-blur)="changeEvent('p-blur')"
   (p-change)="changeEvent('p-change')"
   (p-change-model)="changeEvent('p-change-model')"
   (p-keydown)="changeEvent('p-keydown')"
-  [p-error-limit]="properties?.includes('errorLimit')"
+  [p-error-limit]="$safeNavigationMigration(properties?.includes('errorLimit'))"
 >
 </po-decimal>
 

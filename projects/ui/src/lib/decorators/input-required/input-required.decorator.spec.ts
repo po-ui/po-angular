@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from '../../util-test/util-expect.spec';
@@ -7,6 +7,7 @@ import { InputRequired } from './input-required.decorator';
 @Component({
   selector: 'mock-component',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoMockComponent implements OnInit {

@@ -6,7 +6,7 @@
     <li [class.po-header-nav-item-small]="i !== actionTools.length - 1">
       <po-button
         #buttonActionElement
-        [p-tooltip]="action?.tooltip"
+        [p-tooltip]="$safeNavigationMigration(action?.tooltip)"
         [p-icon]="action?.badge ? badge : action?.icon || 'an an-dots-nine'"
         p-kind="tertiary"
         (p-click)="onClickAction(i)"
@@ -19,14 +19,14 @@
 
       <ng-template #badge>
         <i class="po-header-badge" [class]="action?.icon || 'an an-bell'">
-          <po-badge class="po-header-status" [p-value]="action?.badge"></po-badge>
+          <po-badge class="po-header-status" [p-value]="$safeNavigationMigration(action?.badge)"></po-badge>
         </i>
       </ng-template>
 
       <po-popup
         #poPopupAction
-        [p-actions]="action?.items"
-        [p-target]="buttonActionElements?.get(i)"
+        [p-actions]="$safeNavigationMigration(action?.items)"
+        [p-target]="$safeNavigationMigration(buttonActionElements?.get(i))"
         [p-hide-arrow]="true"
         (p-close)="onClosePopup(i)"
         [p-size]="size()"
@@ -38,11 +38,11 @@
           #poPopoverAction
           p-position="bottom-right"
           [p-width]="action.popover.width"
-          [p-target]="buttonActionElements?.get(i)"
+          [p-target]="$safeNavigationMigration(buttonActionElements?.get(i))"
           [p-hide-arrow]="true"
           [p-corner-aligned]="true"
         >
-          <ng-container *ngTemplateOutlet="action.popover?.content"></ng-container>
+          <ng-container *ngTemplateOutlet="$safeNavigationMigration(action.popover?.content)"></ng-container>
         </po-popover>
       }
     </li>

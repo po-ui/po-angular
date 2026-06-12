@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   PoCheckboxGroupOption,
   PoRadioGroupOption,
@@ -13,6 +13,7 @@ import { PoSearchLocateSummary } from '@po-ui/ng-components/lib/components/po-se
   selector: 'sample-po-search-labs',
   templateUrl: './sample-po-search-labs.component.html',
   styleUrls: ['./sample-po-search-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSearchLabsComponent implements OnInit, OnChanges {

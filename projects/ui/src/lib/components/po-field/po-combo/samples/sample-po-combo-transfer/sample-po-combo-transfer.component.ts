@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoSelectOption 
 @Component({
   selector: 'sample-po-combo-transfer',
   templateUrl: './sample-po-combo-transfer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoComboTransferComponent {

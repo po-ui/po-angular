@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import {
@@ -20,6 +20,7 @@ import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
   selector: 'sample-po-theme-labs',
   templateUrl: './sample-po-theme-labs.component.html',
   providers: [PoThemeService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoThemeLabsComponent implements OnInit, OnDestroy {

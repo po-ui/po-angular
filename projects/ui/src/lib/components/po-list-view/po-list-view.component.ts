@@ -7,7 +7,8 @@ import {
   DoCheck,
   IterableDiffers,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -51,6 +52,7 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
       transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
     ])
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {

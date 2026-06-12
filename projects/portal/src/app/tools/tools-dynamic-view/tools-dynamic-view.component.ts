@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -18,6 +18,7 @@ import {
   selector: 'app-tools-dynamic-view',
   templateUrl: 'tools-dynamic-view.component.html',
   styleUrls: ['tools-dynamic-view.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ToolsDynamicViewComponent {

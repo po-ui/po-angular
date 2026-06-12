@@ -12,7 +12,7 @@ import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filt
 import { PoPageCustomizationModule } from '../../services/po-page-customization/po-page-customization.module';
 import { expectBrowserLanguageMethod } from './../../util-test/util-expect.spec';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 export const routes: Routes = [];
 
@@ -25,7 +25,7 @@ describe('PoPageDynamicSearchComponent:', () => {
       declarations: [PoPageDynamicSearchComponent, PoAdvancedFilterComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [FormsModule, RouterTestingModule.withRoutes(routes), PoPageCustomizationModule, PoDynamicModule],
-      providers: [TitleCasePipe, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [TitleCasePipe, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

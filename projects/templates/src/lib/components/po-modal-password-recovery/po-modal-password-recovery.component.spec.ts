@@ -16,7 +16,7 @@ import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-r
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoModalPasswordRecoveryComponent:', () => {
   let component: PoModalPasswordRecoveryComponent;
@@ -31,7 +31,7 @@ describe('PoModalPasswordRecoveryComponent:', () => {
       providers: [
         PoI18nPipe,
         PoModalPasswordRecoveryService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

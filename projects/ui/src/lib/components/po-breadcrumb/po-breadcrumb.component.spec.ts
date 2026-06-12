@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -10,12 +10,14 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
 @Component({
   template: 'Documentation',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class DocumentationComponent {}
 
 @Component({
   template: 'Guides',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GuidesComponent {}

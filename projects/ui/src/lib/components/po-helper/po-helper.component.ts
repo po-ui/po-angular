@@ -7,7 +7,8 @@ import {
   OnChanges,
   SimpleChanges,
   ChangeDetectorRef,
-  computed
+  computed,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
@@ -42,6 +43,7 @@ const PO_HELPER_ALLOWED_TAGS: Array<PoFormattingTag> = ['b', 'i', 'u', 'strong',
 @Component({
   selector: 'po-helper',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './po-helper.component.html'
 })
 export class PoHelperComponent extends PoHelperBaseComponent implements AfterViewInit, OnDestroy, OnChanges {

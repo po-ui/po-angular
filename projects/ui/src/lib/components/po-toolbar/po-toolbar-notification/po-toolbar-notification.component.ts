@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
@@ -21,6 +21,7 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
   selector: 'po-toolbar-notification',
   templateUrl: './po-toolbar-notification.component.html',
   providers: [PoControlPositionService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoToolbarNotificationComponent implements AfterViewInit {

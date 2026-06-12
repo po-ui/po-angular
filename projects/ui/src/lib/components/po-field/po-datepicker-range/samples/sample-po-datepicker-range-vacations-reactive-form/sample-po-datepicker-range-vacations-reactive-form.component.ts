@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
 @Component({
   selector: 'sample-po-datepicker-range-vacations-reactive-form',
   templateUrl: './sample-po-datepicker-range-vacations-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDatepickerRangeVacationsReactiveFormComponent implements OnInit {

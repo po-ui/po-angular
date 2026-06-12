@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -14,6 +14,7 @@ import { convertToBoolean } from '../../../utils/util';
 @Component({
   selector: 'po-rich-texts-base-host',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoRichTextHostComponent extends PoRichTextBaseComponent {}

@@ -9,12 +9,12 @@
   [p-help]="help"
   [p-icon]="icon"
   [p-label]="label"
-  [p-loading]="properties?.includes('loading')"
+  [p-loading]="$safeNavigationMigration(properties?.includes('loading'))"
   [p-max]="max"
   [p-maxlength]="maxlength"
   [p-min]="min"
   [p-minlength]="minlength"
-  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
+  [p-no-autocomplete]="$safeNavigationMigration(properties?.includes('noAutocomplete'))"
   [p-optional]="properties.includes('optional')"
   [p-placeholder]="placeholder"
   [p-readonly]="properties.includes('readonly')"
@@ -27,9 +27,9 @@
   (p-change)="changeEvent('p-change')"
   (p-change-model)="changeEvent('p-change-model')"
   (p-keydown)="changeEvent('p-keydown')"
-  [p-error-limit]="properties?.includes('errorLimit')"
-  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
-  [p-compact-label]="properties?.includes('compactLabel')"
+  [p-error-limit]="$safeNavigationMigration(properties?.includes('errorLimit'))"
+  [p-label-text-wrap]="$safeNavigationMigration(properties?.includes('labelTextWrap'))"
+  [p-compact-label]="$safeNavigationMigration(properties?.includes('compactLabel'))"
 >
 </po-number>
 

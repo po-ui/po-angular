@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { concat, EMPTY, Observable, of, Subscription, throwError } from 'rxjs';
@@ -204,6 +204,7 @@ export const poPageDynamicEditLiteralsDefault = {
   selector: 'po-page-dynamic-edit',
   templateUrl: './po-page-dynamic-edit.component.html',
   providers: [PoPageDynamicService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDynamicEditComponent implements OnInit, OnDestroy {

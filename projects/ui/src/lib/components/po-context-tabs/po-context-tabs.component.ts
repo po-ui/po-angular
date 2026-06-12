@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoTabComponent, PoTabsComponent } from '../po-tabs';
 
 /**
@@ -48,6 +48,7 @@ import { PoTabComponent, PoTabsComponent } from '../po-tabs';
 @Component({
   selector: 'po-context-tabs',
   templateUrl: './po-context-tabs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoContextTabsComponent extends PoTabsComponent {

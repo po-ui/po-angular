@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -43,6 +43,7 @@ import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.ser
 @Component({
   selector: 'po-modal-password-recovery',
   templateUrl: './po-modal-password-recovery.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoModalPasswordRecoveryComponent extends PoModalPasswordRecoveryBaseComponent implements OnDestroy {

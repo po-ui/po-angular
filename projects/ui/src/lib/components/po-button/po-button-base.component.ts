@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, input } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
@@ -73,6 +73,7 @@ import { PoButtonType } from './enums/po-button-type.enum';
 @Component({
   selector: 'po-button-base',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoButtonBaseComponent {

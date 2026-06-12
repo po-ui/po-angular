@@ -1,6 +1,12 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpParams, HttpErrorResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HttpParams,
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr
+} from '@angular/common/http';
 
 import { PoPageDynamicService, poPageDynamicLiterals } from './po-page-dynamic.service';
 import { PoPageDynamicTableMetaData } from '../../components';
@@ -12,7 +18,11 @@ describe('PoPageDynamicService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoPageDynamicService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoPageDynamicService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     poPageDynamicService = TestBed.inject(PoPageDynamicService);

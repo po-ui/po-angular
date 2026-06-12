@@ -8,7 +8,8 @@ import {
   forwardRef,
   HostListener,
   AfterViewInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -71,6 +72,7 @@ const providers = [
   selector: 'po-datetimepicker',
   templateUrl: './po-datetimepicker.component.html',
   providers,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent implements AfterViewInit, OnDestroy {

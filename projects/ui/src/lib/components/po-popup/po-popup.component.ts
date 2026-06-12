@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
@@ -36,6 +36,7 @@ import { PoPopupBaseComponent } from './po-popup-base.component';
   selector: 'po-popup',
   templateUrl: './po-popup.component.html',
   providers: [PoControlPositionService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewInit {

@@ -8,7 +8,8 @@ import {
   Optional,
   Type,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { convertToBoolean, uuid } from '../../../utils/util';
@@ -27,6 +28,7 @@ import { LoadingIconComponent } from '../interfaces/po-loading-icon-component';
 @Component({
   selector: 'po-loading-icon',
   templateUrl: 'po-loading-icon.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoLoadingIconComponent implements AfterViewInit, OnDestroy {

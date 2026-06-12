@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoChartSerie } from '../po-chart';
 import { PoGaugeBaseComponent } from './po-gauge-base.component';
@@ -27,6 +27,7 @@ import { PoGaugeBaseComponent } from './po-gauge-base.component';
 @Component({
   selector: 'po-gauge',
   templateUrl: './po-gauge.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoGaugeComponent extends PoGaugeBaseComponent implements OnChanges, OnInit {

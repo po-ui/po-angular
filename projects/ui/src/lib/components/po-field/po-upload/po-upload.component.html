@@ -44,10 +44,10 @@
           class="po-upload-file-restrictions"
           [ngClass]="{ 'po-upload-file-restrictions-drag-drop': displayDragDrop }"
           [class.po-pb-1]="!displayDragDrop"
-          [p-allowed-extensions]="fileRestrictions?.allowedExtensions"
+          [p-allowed-extensions]="$safeNavigationMigration(fileRestrictions?.allowedExtensions)"
           [p-max-files]="maxFiles"
-          [p-max-file-size]="fileRestrictions?.maxFileSize"
-          [p-min-file-size]="fileRestrictions?.minFileSize"
+          [p-max-file-size]="$safeNavigationMigration(fileRestrictions?.maxFileSize)"
+          [p-min-file-size]="$safeNavigationMigration(fileRestrictions?.minFileSize)"
         >
         </po-upload-file-restrictions>
       }
@@ -107,8 +107,8 @@
                         [p-tooltip]="tooltipTitle"
                         (keydown)="openModal(file, $event)"
                         (click)="openModal(file)"
-                        (mouseover)="showTooltipText($event, file?.displayName)"
-                        (focus)="showTooltipText($event, file?.displayName)"
+                        (mouseover)="showTooltipText($event, $safeNavigationMigration(file?.displayName))"
+                        (focus)="showTooltipText($event, $safeNavigationMigration(file?.displayName))"
                         >{{ file.displayName }}</span
                       >
                     </div>

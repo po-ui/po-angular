@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -14,6 +14,7 @@ import {
 @Component({
   selector: 'sample-po-page-login-human-resources',
   templateUrl: './sample-po-page-login-human-resources.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageLoginHumanResourcesComponent implements OnDestroy, OnInit {

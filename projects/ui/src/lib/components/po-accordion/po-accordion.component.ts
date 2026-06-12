@@ -1,4 +1,4 @@
-import { Component, ContentChildren, OnDestroy, QueryList, ViewChildren, inject } from '@angular/core';
+import { Component, ContentChildren, OnDestroy, QueryList, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -32,6 +32,7 @@ import { PoAccordionService } from './services/po-accordion.service';
   selector: 'po-accordion',
   templateUrl: 'po-accordion.component.html',
   providers: [PoAccordionService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoAccordionComponent extends PoAccordionBaseComponent implements OnDestroy {

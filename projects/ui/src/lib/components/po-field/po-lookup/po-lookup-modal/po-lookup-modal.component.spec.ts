@@ -10,7 +10,7 @@ import { PoComponentInjectorService } from '../../../../services/po-component-in
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoTableColumnSpacing } from '../../../po-table';
 import { PoFieldSize } from 'projects/ui/src/lib/enums/po-field-size.enum';
 import { PoThemeA11yEnum } from 'projects/ui/src/public-api';
@@ -38,7 +38,7 @@ describe('PoLookupModalComponent', () => {
       providers: [
         LookupFilterService,
         PoComponentInjectorService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
         provideRouter([])
       ]

@@ -11,7 +11,8 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
@@ -61,6 +62,7 @@ const poSlideTiming = '250ms ease';
 @Component({
   selector: 'po-slide',
   templateUrl: './po-slide.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {

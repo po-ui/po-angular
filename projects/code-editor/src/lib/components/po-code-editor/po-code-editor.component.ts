@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, NgZone, ViewChild, Provider } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, NgZone, ViewChild, Provider, ChangeDetectionStrategy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
@@ -60,6 +60,7 @@ const providers: Array<Provider> = [
   selector: 'po-code-editor',
   templateUrl: './po-code-editor.component.html',
   providers,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {

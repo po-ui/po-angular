@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -10,6 +10,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
       transition('void => *', [style({ height: '0' }), animate(200, style({ height: '*' }))])
     ])
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoAccordionItemBodyComponent {

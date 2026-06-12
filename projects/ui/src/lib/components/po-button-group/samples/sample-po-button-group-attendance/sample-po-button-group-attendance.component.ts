@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoButtonGroupItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-button-group-attendance',
   templateUrl: './sample-po-button-group-attendance.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoButtonGroupAttendanceComponent {

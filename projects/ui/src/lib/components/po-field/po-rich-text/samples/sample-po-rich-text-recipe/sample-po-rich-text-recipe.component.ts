@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import image from './sample-po-rich-text-recipe-image-base-64';
 
 @Component({
   selector: 'sample-po-rich-text-recipe',
   templateUrl: './sample-po-rich-text-recipe.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoRichTextRecipeComponent {

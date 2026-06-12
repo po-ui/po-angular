@@ -11,7 +11,8 @@ import {
   SimpleChanges,
   ViewChild,
   ViewChildren,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -28,6 +29,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 @Component({
   selector: 'po-listbox',
   templateUrl: './po-listbox.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {

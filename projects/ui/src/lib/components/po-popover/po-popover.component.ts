@@ -8,7 +8,8 @@ import {
   OnDestroy,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoControlPositionService } from './../../services/po-control-position/po-control-position.service';
@@ -39,6 +40,7 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
   selector: 'po-popover',
   templateUrl: './po-popover.component.html',
   providers: [PoControlPositionService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterViewInit, OnDestroy, OnChanges {

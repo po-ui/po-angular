@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, Input, TemplateRef, inject } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, TemplateRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { uuid } from '../../../utils/util';
@@ -45,6 +45,7 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 @Component({
   selector: 'po-step',
   templateUrl: 'po-step.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoStepComponent implements AfterContentInit {

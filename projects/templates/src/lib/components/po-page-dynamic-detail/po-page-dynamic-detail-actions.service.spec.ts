@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoPageDynamicDetailActionsService } from './po-page-dynamic-detail-actions.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageDynamicDetailActionsService', () => {
   let service: PoPageDynamicDetailActionsService;
@@ -13,7 +13,7 @@ describe('PoPageDynamicDetailActionsService', () => {
       imports: [],
       providers: [
         PoPageDynamicDetailActionsService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

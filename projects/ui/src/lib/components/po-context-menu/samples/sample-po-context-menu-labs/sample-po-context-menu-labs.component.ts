@@ -1,10 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoContextMenuItem, PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-context-menu-labs',
   templateUrl: './sample-po-context-menu-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoContextMenuLabsComponent {

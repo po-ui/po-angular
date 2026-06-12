@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalAction } from '../../../components/po-modal/po-modal-action.interface';
 import { PoModalComponent } from '../../../components/po-modal/po-modal.component';
@@ -19,6 +19,7 @@ export const colors = { success: 'color-11', error: 'color-07', warning: 'color-
 @Component({
   selector: 'po-http-interceptor-detail',
   templateUrl: './po-http-interceptor-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHttpInterceptorDetailComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
 
@@ -13,6 +13,7 @@ import { PoNumberBaseComponent } from './po-number-base.component';
     <input type="number" #inp />
     <span #clean></span>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class ContentProjectionComponent extends PoNumberBaseComponent {

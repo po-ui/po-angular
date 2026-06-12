@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDialogService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-email-newsletter',
   templateUrl: './sample-po-email-newsletter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoEmailNewsletterComponent {

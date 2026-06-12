@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfile } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoDialogService, PoNotificationService, PoToolbarAction, PoToolbarProfi
   selector: 'sample-po-toolbar-logged',
   templateUrl: './sample-po-toolbar-logged.component.html',
   providers: [PoNotificationService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoToolbarLoggedComponent {

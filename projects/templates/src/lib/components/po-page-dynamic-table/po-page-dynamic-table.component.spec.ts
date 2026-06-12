@@ -19,7 +19,7 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
@@ -33,7 +33,7 @@ describe('PoPageDynamicTableComponent:', () => {
       declarations: [PoPageDynamicTableComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [FormsModule, RouterTestingModule.withRoutes([]), PoNotificationModule, PoDialogModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

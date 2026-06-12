@@ -7,7 +7,8 @@ import {
   QueryList,
   ViewChild,
   ViewEncapsulation,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -55,6 +56,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
   templateUrl: './po-page-job-scheduler.component.html',
   encapsulation: ViewEncapsulation.None,
   styles: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent implements OnInit, AfterContentInit {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { getShortBrowserLanguage, convertToBoolean, isTypeof } from './../../../utils/util';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
@@ -23,6 +23,7 @@ const poStepLiteralsDefault = {
 @Component({
   selector: 'po-stepper-step',
   templateUrl: 'po-stepper-step.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoStepperStepComponent implements OnChanges {

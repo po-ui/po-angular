@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PoPageJobSchedulerLookupService } from './po-page-job-scheduler-lookup.service';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerLookupService:', () => {
   let poPageJobSchedulerLookupService: PoPageJobSchedulerLookupService;
@@ -14,7 +14,7 @@ describe('PoPageJobSchedulerLookupService:', () => {
       providers: [
         PoPageJobSchedulerLookupService,
         PoPageJobSchedulerService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

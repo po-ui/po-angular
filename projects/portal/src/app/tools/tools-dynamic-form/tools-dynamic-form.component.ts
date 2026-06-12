@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import {
@@ -17,6 +17,7 @@ import { PoButtonType } from 'projects/ui/src/lib';
   selector: 'app-tools-dynamic-form',
   templateUrl: 'tools-dynamic-form.component.html',
   styleUrls: ['tools-dynamic-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ToolsDynamicFormComponent {

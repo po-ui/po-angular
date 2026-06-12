@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-components';
@@ -7,6 +7,7 @@ import { PoModalAction, PoModalComponent, PoPopupAction } from '@po-ui/ng-compon
   selector: 'sample-po-popup-email',
   templateUrl: './sample-po-popup-email.component.html',
   styleUrls: ['./sample-po-popup-email.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPopupEmailComponent implements OnInit {

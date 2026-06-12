@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -10,6 +10,7 @@ import { PoPageHeaderComponent } from './po-page-header.component';
 
 @Component({
   template: 'Guides',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GuidesComponent {}

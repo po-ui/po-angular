@@ -1,4 +1,4 @@
-import { Component, DebugElement, ElementRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -17,6 +17,7 @@ import { PoPageSlideComponent } from './po-page-slide.component';
       </form>
     </po-page-slide>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestComponent {

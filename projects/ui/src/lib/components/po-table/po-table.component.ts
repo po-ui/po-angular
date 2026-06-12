@@ -18,7 +18,8 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
@@ -98,6 +99,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
   selector: 'po-table',
   templateUrl: './po-table.component.html',
   providers: [PoDateService, PoTableService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
