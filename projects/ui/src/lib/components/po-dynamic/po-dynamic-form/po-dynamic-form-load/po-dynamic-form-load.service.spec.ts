@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { PoDynamicFormLoadService } from './po-dynamic-form-load.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoDynamicFormLoadService:', () => {
   let service: PoDynamicFormLoadService;
@@ -15,7 +15,11 @@ describe('PoDynamicFormLoadService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoDynamicFormLoadService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoDynamicFormLoadService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     service = TestBed.inject(PoDynamicFormLoadService);

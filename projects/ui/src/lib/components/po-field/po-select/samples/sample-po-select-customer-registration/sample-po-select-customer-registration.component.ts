@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -11,6 +11,7 @@ import { SamplePoSelectCustomerRegistrationService } from './sample-po-select-cu
   templateUrl: './sample-po-select-customer-registration.component.html',
   providers: [SamplePoSelectCustomerRegistrationService],
   styleUrls: ['./sample-po-select-customer-registration.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSelectCustomerRegistrationComponent implements OnDestroy, OnInit {

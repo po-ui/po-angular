@@ -1,5 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { throwError } from 'rxjs';
 
@@ -9,7 +10,7 @@ import { getObservable } from '../../../util-test/util-expect.spec';
 import { PoPageJobSchedulerExecutionComponent } from './po-page-job-scheduler-execution.component';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerExecutionComponent:', () => {
   let component: PoPageJobSchedulerExecutionComponent;
@@ -19,8 +20,12 @@ describe('PoPageJobSchedulerExecutionComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      imports: [RouterModule.forRoot([]), PoPageJobSchedulerModule],
+      providers: [
+        provideLocationMocks(),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 

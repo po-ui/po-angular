@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components'
   selector: 'sample-po-loading-overlay-labs',
   templateUrl: './sample-po-loading-overlay-labs.component.html',
   styleUrls: ['./sample-po-loading-overlay-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLoadingOverlayLabsComponent implements OnInit {

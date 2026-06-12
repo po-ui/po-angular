@@ -10,7 +10,8 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -89,6 +90,7 @@ const poTabsMaxNumberOfTabs = 5;
 @Component({
   selector: 'po-tabs',
   templateUrl: './po-tabs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTabsComponent extends PoTabsBaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {

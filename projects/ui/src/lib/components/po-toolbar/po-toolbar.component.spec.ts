@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -13,7 +14,8 @@ describe('PoToolbarComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoToolbarModule]
+      imports: [RouterModule.forRoot([]), PoToolbarModule],
+      providers: [provideLocationMocks()]
     });
   });
 

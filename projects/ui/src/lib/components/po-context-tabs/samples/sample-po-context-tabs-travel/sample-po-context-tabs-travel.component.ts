@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-context-tabs-travel',
   templateUrl: './sample-po-context-tabs-travel.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoContextTabsTravelComponent {

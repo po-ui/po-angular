@@ -1,4 +1,4 @@
-import { Component, HostBinding, input } from '@angular/core';
+import { Component, HostBinding, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { validateSizeFn } from '../../utils/util';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
@@ -59,6 +59,7 @@ import { PoHelperCustomAction } from './interfaces/po-helper-custom-action.inter
 @Component({
   selector: 'po-helper-base',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHelperBaseComponent {

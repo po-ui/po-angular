@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -37,6 +37,7 @@ export const PoBreadcrumbLiterals: object = {
   selector: 'po-breadcrumb-favorite',
   templateUrl: './po-breadcrumb-favorite.component.html',
   providers: [PoBreadcrumbFavoriteService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoBreadcrumbFavoriteComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite, expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -11,6 +11,7 @@ import { LoadingIconComponent } from '../interfaces/po-loading-icon-component';
 @Component({
   selector: 'po-custom-loading-icon',
   template: '<div class="custom-loading-icon custom-loading-{{ size }}">Custom Loading</div>',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 class CustomLoadingIconComponent implements LoadingIconComponent {

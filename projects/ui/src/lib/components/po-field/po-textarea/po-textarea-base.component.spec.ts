@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, UntypedFormControl, Validators } from '@angular/forms';
 
 import { expectPropertiesValues, expectSettersMethod } from '../../../util-test/util-expect.spec';
@@ -12,6 +12,7 @@ import { mapInputSizeToLoadingIcon } from '../../../utils/util';
 @Component({
   selector: 'po-textarea-base-host',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoTextareaHostComponent extends PoTextareaBaseComponent {

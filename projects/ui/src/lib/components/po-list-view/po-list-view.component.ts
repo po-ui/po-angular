@@ -1,13 +1,14 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   AfterContentInit,
+  AnimationCallbackEvent,
   ChangeDetectorRef,
   Component,
   ContentChild,
   DoCheck,
   IterableDiffers,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -43,14 +44,7 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
 @Component({
   selector: 'po-list-view',
   templateUrl: './po-list-view.component.html',
-  animations: [
-    trigger('showHideDetail', [
-      state('*', style({ 'overflow-y': 'visible' })),
-      state('void', style({ 'overflow-y': 'hidden' })),
-      transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
-      transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
-    ])
-  ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
@@ -135,13 +129,42 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     this.poPopupComponent.toggle(item);
   }
 
-  onAnimationEvent(event: AnimationEvent, detail) {
-    this.showDetail.emit(detail);
-  }
-
   // Avalia a visibilidade das ações por item, passando o item corrente.
   protected getVisibleActions(item): Array<PoListViewAction> {
     return this.actions?.filter(action => this.returnBooleanValue(action, item, 'visible') !== false) ?? [];
+  }
+
+  animateDetailEnter(event: AnimationCallbackEvent, item: any): void {
+    this.showDetail.emit(item);
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    const previousOverflow = element.style.overflowY;
+    element.style.overflowY = 'hidden';
+
+    const animation = element.animate([{ height: '0px' }, { height: `${height}px` }], {
+      duration: 100,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      element.style.overflowY = previousOverflow;
+      event.animationComplete();
+    };
+  }
+
+  animateDetailLeave(event: AnimationCallbackEvent): void {
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    element.style.overflowY = 'hidden';
+
+    const animation = element.animate([{ height: `${height}px` }, { height: '0px' }], {
+      duration: 100,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      event.animationComplete();
+    };
   }
 
   private checkItemsChange() {

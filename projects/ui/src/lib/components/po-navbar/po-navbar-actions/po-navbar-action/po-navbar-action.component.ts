@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
+import { Component, Input, TemplateRef, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { isExternalLink, PoUtils } from '../../../../utils/util';
@@ -6,6 +6,7 @@ import { isExternalLink, PoUtils } from '../../../../utils/util';
 @Component({
   selector: 'po-navbar-action',
   templateUrl: './po-navbar-action.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoNavbarActionComponent {

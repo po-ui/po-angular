@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -17,6 +17,7 @@ import { SamplePoTableLabsService } from './sample-po-table-labs.service';
   selector: 'sample-po-table-labs',
   templateUrl: './sample-po-table-labs.component.html',
   providers: [SamplePoTableLabsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTableLabsComponent implements OnInit {

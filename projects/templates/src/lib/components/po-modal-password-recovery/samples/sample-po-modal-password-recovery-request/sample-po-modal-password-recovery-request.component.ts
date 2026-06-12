@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalPasswordRecoveryComponent, PoModalPasswordRecoveryType } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-modal-password-recovery-request',
   templateUrl: './sample-po-modal-password-recovery-request.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoModalPasswordRecoveryRequestComponent {

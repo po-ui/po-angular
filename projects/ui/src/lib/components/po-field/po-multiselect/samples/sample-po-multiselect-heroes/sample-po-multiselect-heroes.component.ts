@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PoTableColumn, PoMultiselectFilter } from '@po-ui/ng-components';
 
 import { SamplePoMultiselectHeroesService } from './sample-po-multiselect-heroes.service';
@@ -7,6 +7,7 @@ import { SamplePoMultiselectHeroesService } from './sample-po-multiselect-heroes
   selector: 'sample-po-multiselect-heroes',
   templateUrl: './sample-po-multiselect-heroes.component.html',
   providers: [SamplePoMultiselectHeroesService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMultiselectHeroesComponent {

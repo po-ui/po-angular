@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -12,7 +12,11 @@ describe('PoUploadBaseService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoUploadBaseService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoUploadBaseService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
   });
 

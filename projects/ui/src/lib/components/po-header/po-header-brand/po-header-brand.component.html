@@ -24,7 +24,10 @@
       <img [src]="brand?.smallLogo || brand?.logo" alt="Logo" />
     </div>
   }
-  <span #titleBrand [p-tooltip]="showTooltip ? brand?.title : ''" class="po-header-nav-brand-text">{{
-    brand?.title
-  }}</span>
+  <span
+    #titleBrand
+    [p-tooltip]="showTooltip ? $safeNavigationMigration(brand?.title) : ''"
+    class="po-header-nav-brand-text"
+    >{{ brand?.title }}</span
+  >
 </div>

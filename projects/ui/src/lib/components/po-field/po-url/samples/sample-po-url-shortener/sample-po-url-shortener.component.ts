@@ -1,10 +1,11 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-url-shortener',
   templateUrl: './sample-po-url-shortener.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUrlShortenerComponent {

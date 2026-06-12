@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
@@ -18,6 +18,7 @@ import { PoToolbarAction } from '../po-toolbar-action.interface';
   selector: 'po-toolbar-profile',
   templateUrl: './po-toolbar-profile.component.html',
   providers: [PoControlPositionService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoToolbarProfileComponent {

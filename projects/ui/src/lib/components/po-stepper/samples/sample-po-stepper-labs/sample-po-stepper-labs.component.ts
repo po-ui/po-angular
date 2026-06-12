@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDynamicFormField, PoStepperItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-stepper-labs',
   templateUrl: './sample-po-stepper-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoStepperLabsComponent implements OnInit {

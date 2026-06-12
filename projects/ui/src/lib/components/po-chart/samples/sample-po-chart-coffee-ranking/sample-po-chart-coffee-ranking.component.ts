@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService, PoChartLabelFormat } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoChartType, PoChartOptions, PoChartSerie, PoDialogService, PoChartLabe
   selector: 'sample-po-chart-coffee-ranking',
   templateUrl: './sample-po-chart-coffee-ranking.component.html',
   providers: [PoDialogService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoChartCoffeeRankingComponent {

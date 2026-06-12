@@ -1,7 +1,7 @@
 import { ComponentRef, EventEmitter, Injector } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, inject, TestBed, tick } from '@angular/core/testing';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Routes, RouterModule } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { PoFieldModule } from '../../../components/po-field';
 import { PoComponentInjectorService } from '../../../services/po-component-injector/po-component-injector.service';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NgControl } from '@angular/forms';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -44,14 +44,15 @@ describe('PoLookupComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      imports: [RouterModule.forRoot(routes), PoFieldModule],
       providers: [
+        provideLocationMocks(),
         LookupFilterService,
         PoComponentInjectorService,
         PoControlPositionService,
         Injector,
-        NgControl,
-        provideHttpClient(withInterceptorsFromDi()),
+        { provide: NgControl, useValue: { control: null } },
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

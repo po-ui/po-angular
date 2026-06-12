@@ -1,5 +1,5 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { PoMenuService } from './po-menu.service';
@@ -13,7 +13,7 @@ describe('PoMenuService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoMenuService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [PoMenuService, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     });
 
     menuService = TestBed.inject(PoMenuService);

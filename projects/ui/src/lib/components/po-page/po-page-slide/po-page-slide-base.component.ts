@@ -14,45 +14,6 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../uti
  * através do botão que encontra-se no cabeçalho do mesmo ou através do método
  * `#close()`.
  *
- * > Para o correto funcionamento do componente `po-page-slide`, deve ser
- * > importado o módulo `BrowserAnimationsModule` no módulo principal da sua
- * > aplicação.
- *
- * Módulo da aplicação:
- * ```
- * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
- * import { PoModule } from '@po-ui/ng-components';
- * ...
- *
- * @NgModule({
- *   imports: [
- *     BrowserModule,
- *     BrowserAnimationsModule,
- *     ...
- *     PoModule
- *   ],
- *   declarations: [
- *     AppComponent,
- *     ...
- *   ],
- *   providers: [],
- *   bootstrap: [AppComponent]
- * })
- * export class AppModule { }
- * ```
- *
- * Em aplicações Standalone, utilize a seguinte configuração para o bootstrap:
- *
- * ```
- * import { bootstrapApplication } from '@angular/platform-browser';
- * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
- * import { AppComponent } from './app.component';
- *
- * bootstrapApplication(AppComponent, {
- *   providers: [importProvidersFrom(BrowserAnimationsModule)]
- * }).catch(err => console.error(err));
- * ```
- *
  *  Caso utilize componentes de field dentro do page-slide, recomenda-se o uso do [Grid System](https://po-ui.io/guides/grid-system).
  *
  * No rodapé é possível utilizar o componente [`PoPageSlideFooter`](/documentation/po-page-slide-footer) para customização do template.

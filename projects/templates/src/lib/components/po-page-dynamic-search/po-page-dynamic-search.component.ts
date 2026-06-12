@@ -7,7 +7,8 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -56,6 +57,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 @Component({
   selector: 'po-page-dynamic-search',
   templateUrl: './po-page-dynamic-search.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDynamicSearchComponent

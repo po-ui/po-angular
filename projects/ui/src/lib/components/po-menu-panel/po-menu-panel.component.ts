@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewContainerRef, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -82,6 +82,7 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
 @Component({
   selector: 'po-menu-panel',
   templateUrl: './po-menu-panel.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoMenuPanelComponent extends PoMenuPanelBaseComponent implements OnDestroy, OnInit {

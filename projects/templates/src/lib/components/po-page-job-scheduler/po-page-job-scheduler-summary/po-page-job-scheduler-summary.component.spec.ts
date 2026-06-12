@@ -1,13 +1,14 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoLanguageService, poLocaleDefault } from '@po-ui/ng-components';
 
 import { poPageJobSchedulerLiteralsDefault } from '../po-page-job-scheduler-literals';
 import { PoPageJobSchedulerModule } from '../po-page-job-scheduler.module';
 import { PoPageJobSchedulerSummaryComponent } from './po-page-job-scheduler-summary.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerSummaryComponent:', () => {
   const languageService: PoLanguageService = new PoLanguageService();
@@ -19,8 +20,12 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoPageJobSchedulerModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      imports: [RouterModule.forRoot([]), PoPageJobSchedulerModule],
+      providers: [
+        provideLocationMocks(),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 
