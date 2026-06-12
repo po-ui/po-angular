@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ViewChild, OnInit, inject } from '@angular/core';
+import { AfterContentChecked, Component, ViewChild, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { SampleDashboardService } from './sample-po-container-dashboard.service';
@@ -17,6 +17,7 @@ import {
   templateUrl: './sample-po-container-dashboard.component.html',
   styleUrls: ['./sample-po-container-dashboard.component.css'],
   providers: [SampleDashboardService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoContainerDashboardComponent implements AfterContentChecked, OnInit {

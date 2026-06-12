@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import {
   PoCheckboxGroupOption,
   PoModalComponent,
@@ -11,6 +11,7 @@ import {
 @Component({
   selector: 'sample-po-toaster-labs',
   templateUrl: './sample-po-toaster-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoToasterLabsComponent {

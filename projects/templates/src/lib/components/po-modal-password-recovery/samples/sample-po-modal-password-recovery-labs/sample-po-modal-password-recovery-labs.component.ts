@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDialogService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 import {
@@ -10,6 +10,7 @@ import {
 @Component({
   selector: 'sample-po-modal-password-recovery-labs',
   templateUrl: './sample-po-modal-password-recovery-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoModalPasswordRecoveryLabsComponent implements OnInit {

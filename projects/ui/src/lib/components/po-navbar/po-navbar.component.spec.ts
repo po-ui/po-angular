@@ -9,10 +9,9 @@ import { PoNavbarItemNavigationModule } from './po-navbar-item-navigation/po-nav
 import { PoMenuModule } from '../po-menu/po-menu.module';
 import { PoNavbarLogoComponent } from './po-navbar-logo/po-navbar-logo.component';
 import { PoNavbarComponent } from './po-navbar.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { changeBrowserInnerWidth } from 'projects/templates/src/lib/util-test/util-expect.spec';
+import { changeBrowserInnerWidth } from '../../../../../templates/src/lib/util-test/util-expect.spec';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoNavbarComponent:', () => {
   let component: PoNavbarComponent;
@@ -22,14 +21,13 @@ describe('PoNavbarComponent:', () => {
     await TestBed.configureTestingModule({
       declarations: [PoNavbarComponent, PoNavbarLogoComponent],
       imports: [
-        BrowserAnimationsModule,
         PoNavbarActionsModule,
         PoNavbarItemsModule,
         PoNavbarItemNavigationModule,
         PoMenuModule,
         RouterModule.forRoot([], {})
       ],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoNavbarComponent);
@@ -294,24 +292,39 @@ describe('PoNavbarComponent:', () => {
       expect(component['allNavbarItemsWidth'].call(fakeThis)).toBe(35);
     });
 
-    it(`animate: should call 'buildTransitionAnimation' with offset if has elements`, () => {
+    it(`animate: should call element.animate with negative offset`, () => {
       const offset = 400;
 
-      spyOn(component, <any>'buildTransitionAnimation').and.callThrough();
+      spyOn(component.navbarItems.navbarItemsContainer.nativeElement, 'animate').and.returnValue({ cancel: () => {} });
 
       component['animate'](offset);
 
-      expect(component['buildTransitionAnimation']).toHaveBeenCalledWith(offset);
+      expect(component.navbarItems.navbarItemsContainer.nativeElement.animate).toHaveBeenCalledWith(
+        [{ transform: 'translateX(0px)' }, { transform: 'translateX(-400px)' }],
+        { duration: 250, easing: 'ease', fill: 'forwards' }
+      );
     });
 
-    it(`buildTransitionAnimation: should call builder`, () => {
-      const offset = 400;
+    it(`animate: should cancel previous animation before starting new one`, () => {
+      const cancelSpy = jasmine.createSpy('cancel');
+      component['currentAnimation'] = { cancel: cancelSpy } as any;
+      spyOn(component.navbarItems.navbarItemsContainer.nativeElement, 'animate').and.returnValue({ cancel: () => {} });
 
-      spyOn(component['builder'], 'build').and.callThrough();
+      component['animate'](200);
 
-      component['buildTransitionAnimation'](offset);
+      expect(cancelSpy).toHaveBeenCalled();
+    });
 
-      expect(component['builder'].build).toHaveBeenCalled();
+    it(`animate: should track previousAnimatedOffset for smooth transitions`, () => {
+      spyOn(component.navbarItems.navbarItemsContainer.nativeElement, 'animate').and.returnValue({ cancel: () => {} });
+
+      component['animate'](400);
+      component['animate'](0);
+
+      expect(component.navbarItems.navbarItemsContainer.nativeElement.animate).toHaveBeenCalledWith(
+        [{ transform: 'translateX(-400px)' }, { transform: 'translateX(0px)' }],
+        { duration: 250, easing: 'ease', fill: 'forwards' }
+      );
     });
 
     describe('changeNavbarMenuItems', () => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoUserGuideOptions, PoUserGuidePosition, PoUserGuideService, PoUserGuideStep } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoUserGuideOptions, PoUserGuidePosition, PoUserGuideService, PoUserGuid
   selector: 'sample-po-user-guide-labs',
   templateUrl: './sample-po-user-guide-labs.component.html',
   providers: [PoUserGuideService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUserGuideLabsComponent implements OnInit {

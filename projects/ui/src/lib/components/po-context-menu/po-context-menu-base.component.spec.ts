@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { PoContextMenuBaseComponent } from './po-context-menu-base.component';
@@ -6,6 +6,7 @@ import { PoContextMenuItem } from './po-context-menu-item.interface';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 class PoContextMenuTestComponent extends PoContextMenuBaseComponent {}

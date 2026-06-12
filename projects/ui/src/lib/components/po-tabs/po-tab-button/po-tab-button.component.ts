@@ -9,7 +9,8 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -24,6 +25,7 @@ import { convertToBoolean } from '../../../utils/util';
 @Component({
   selector: 'po-tab-button',
   templateUrl: './po-tab-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTabButtonComponent implements OnChanges, AfterViewInit {

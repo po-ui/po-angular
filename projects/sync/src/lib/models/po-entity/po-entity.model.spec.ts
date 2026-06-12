@@ -133,7 +133,7 @@ describe('PoEntity:', () => {
       const limitedCallWrapReturn = 'limitedCallWrap return';
 
       spyOn(poEntity['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
-      spyOn(poEntity['selectSaveType'], <never>'bind');
+      spyOn(poEntity['selectSaveType'] as any, 'bind');
 
       const result = await poEntity.save(modelMock, customRequestId);
 
