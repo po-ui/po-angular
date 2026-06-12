@@ -1,4 +1,13 @@
-import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, of } from 'rxjs';
@@ -160,6 +169,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
   selector: 'po-page-dynamic-table',
   templateUrl: './po-page-dynamic-table.component.html',
   providers: [PoPageDynamicService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {

@@ -79,11 +79,12 @@ module.exports = {
 
   generateApiComponentFile: function (docName, component) {
     const componentSource = `
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{docName}}-doc',
   templateUrl: './sample-{{docName}}-doc.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class Sample{{component}}DocComponent { }
@@ -109,11 +110,12 @@ export class Sample{{component}}DocComponent { }
   },
   generateSampleViewComponentFile: function (docName, name, component) {
     const componentSource = `
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{name}}-view',
   templateUrl: './sample-{{name}}-view.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class Sample{{component}}ViewComponent {
@@ -191,10 +193,11 @@ export class Doc{{component}}RoutingModule { }
 
     const componentSource = `
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   templateUrl: './doc-{{docName}}.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class Doc{{component}}Component implements OnInit, OnDestroy {

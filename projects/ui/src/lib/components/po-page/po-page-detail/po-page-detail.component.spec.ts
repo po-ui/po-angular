@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
@@ -17,6 +17,7 @@ import { PoPageHeaderComponent } from '../po-page-header/po-page-header.componen
   template: `
     <po-page-detail p-title="Unit Test" (p-back)="back()" (p-edit)="edit()" (p-remove)="remove()"> </po-page-detail>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class ContainerComponent {

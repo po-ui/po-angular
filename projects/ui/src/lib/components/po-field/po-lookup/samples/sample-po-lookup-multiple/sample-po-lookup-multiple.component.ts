@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PoTableColumn } from '@po-ui/ng-components';
 
 import { SamplePoLookupMultipleService } from './sample-po-lookup-multiple.service';
@@ -7,6 +7,7 @@ import { SamplePoLookupMultipleService } from './sample-po-lookup-multiple.servi
   selector: 'sample-po-lookup-multiple',
   templateUrl: './sample-po-lookup-multiple.component.html',
   styles: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLookupMultipleComponent {

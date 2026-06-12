@@ -8,14 +8,14 @@
     [attr.aria-label]="literals.labelUser"
   >
     <div class="po-header-nav-customer-brand">
-      <img [src]="headerUser?.customerBrand" alt="User" />
+      <img [src]="$safeNavigationMigration(headerUser?.customerBrand)" alt="User" />
     </div>
 
     <div class="po-header-nav-customer-divider"></div>
 
     <div class="po-header-nav-customer-avatar-wrapper">
       <div class="po-header-nav-customer-avatar">
-        <img [src]="headerUser?.avatar" alt="Avatar" />
+        <img [src]="$safeNavigationMigration(headerUser?.avatar)" alt="Avatar" />
       </div>
       @if (headerUser?.status) {
         <po-badge class="po-header-nav-avatar-status" p-size="small" [p-status]="headerUser.status"></po-badge>
@@ -25,7 +25,7 @@
 
   <li class="po-header-nav-customer-avatar-wrapper po-header-icon-small">
     <div class="po-header-nav-customer-avatar">
-      <img [src]="headerUser?.avatar" alt="Avatar" />
+      <img [src]="$safeNavigationMigration(headerUser?.avatar)" alt="Avatar" />
     </div>
     @if (headerUser?.status) {
       <po-badge class="po-header-nav-avatar-status" p-size="small" [p-status]="headerUser.status"></po-badge>

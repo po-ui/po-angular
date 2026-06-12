@@ -16,7 +16,7 @@
           <po-button
             class="po-lg-12 po-sm-12 po-page-blocked-user-button"
             p-kind="primary"
-            [p-label]="literals?.primaryButton"
+            [p-label]="$safeNavigationMigration(literals?.primaryButton)"
             [p-size]="componentsSize"
             (p-click)="navigateTo(urlBack)"
           >

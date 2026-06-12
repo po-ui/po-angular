@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dynamic-view-employee',
   templateUrl: './sample-po-dynamic-view-employee.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDynamicViewEmployeeComponent {

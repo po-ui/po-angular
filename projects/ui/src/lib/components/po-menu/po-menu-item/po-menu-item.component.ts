@@ -1,4 +1,14 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -20,6 +30,7 @@ const poMenuItemSubItemSize = 98;
 @Component({
   selector: 'po-menu-item',
   templateUrl: './po-menu-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoMenuItemComponent implements OnDestroy, OnInit {

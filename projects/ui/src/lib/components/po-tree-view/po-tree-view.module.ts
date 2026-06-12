@@ -17,6 +17,7 @@ import { PoTreeViewItemContentComponent } from './po-tree-view-item-content/po-t
  * @description
  *
  * Módulo do componente `po-tree-view`.
+ *
  */
 @NgModule({
   declarations: [PoTreeViewComponent, PoTreeViewItemComponent, PoTreeViewItemContentComponent],

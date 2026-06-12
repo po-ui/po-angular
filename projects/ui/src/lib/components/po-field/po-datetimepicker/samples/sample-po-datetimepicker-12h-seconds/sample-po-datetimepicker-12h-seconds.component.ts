@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'sample-po-datetimepicker-12h-seconds',
   templateUrl: './sample-po-datetimepicker-12h-seconds.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDatetimepicker12hSecondsComponent {

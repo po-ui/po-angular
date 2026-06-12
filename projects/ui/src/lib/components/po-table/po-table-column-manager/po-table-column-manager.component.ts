@@ -10,7 +10,8 @@ import {
   SimpleChange,
   SimpleChanges,
   ViewChild,
-  output
+  output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -48,6 +49,7 @@ type Direction = 'up' | 'down';
 @Component({
   selector: 'po-table-column-manager',
   templateUrl: './po-table-column-manager.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableColumnManagerComponent implements OnChanges, OnDestroy {

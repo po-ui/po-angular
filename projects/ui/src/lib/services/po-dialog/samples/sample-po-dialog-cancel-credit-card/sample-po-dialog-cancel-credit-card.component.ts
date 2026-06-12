@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { PoDialogService, PoNotificationService, PoPageAction, PoRadioGroupOptio
 @Component({
   selector: 'sample-po-dialog-cancel-credit-card',
   templateUrl: './sample-po-dialog-cancel-credit-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDialogCancelCreditCardComponent implements OnDestroy, OnInit {

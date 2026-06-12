@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoModalPasswordRecoveryService:', () => {
   let poModalPasswordRecoveryService: PoModalPasswordRecoveryService;
@@ -13,7 +13,7 @@ describe('PoModalPasswordRecoveryService:', () => {
       imports: [],
       providers: [
         PoModalPasswordRecoveryService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

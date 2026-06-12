@@ -8,7 +8,8 @@ import {
   SimpleChanges,
   ViewChild,
   computed,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoLanguageService, poLocaleDefault, PoThemeA11yEnum, PoThemeService } from '../../services';
@@ -57,6 +58,7 @@ import {
 @Component({
   selector: 'po-widget',
   templateUrl: './po-widget.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, OnChanges, AfterViewInit {

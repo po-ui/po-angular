@@ -6,7 +6,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 import { expectPropertiesValues, expectSettersMethod } from '../../util-test/util-expect.spec';
 import { PoUtils as utilsFunctions } from '../../utils/util';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
@@ -40,7 +40,7 @@ describe('PoTableBaseComponent:', () => {
         PoTableService,
         PoLanguageService,
         PoDateService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

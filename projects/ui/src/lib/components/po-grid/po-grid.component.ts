@@ -6,7 +6,8 @@ import {
   OnDestroy,
   Renderer2,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoGridRowActions } from './po-grid-row-actions.interface';
@@ -43,6 +44,7 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
 @Component({
   selector: 'po-grid',
   templateUrl: './po-grid.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoGridComponent implements OnDestroy {

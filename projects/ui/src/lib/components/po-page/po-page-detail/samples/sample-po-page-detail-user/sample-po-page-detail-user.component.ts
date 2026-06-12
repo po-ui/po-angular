@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoBreadcrumb } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-page-detail-user',
   templateUrl: './sample-po-page-detail-user.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDetailUserComponent {

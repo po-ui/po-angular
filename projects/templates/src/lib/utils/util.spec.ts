@@ -36,7 +36,7 @@ import {
 } from './util';
 import { changeChromeProperties } from '../util-test/util-expect.spec';
 import { PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
-import { PoFieldSize } from 'projects/ui/src/lib/enums/po-field-size.enum';
+import { PoFieldSize } from '../../../../ui/src/lib/enums/po-field-size.enum';
 
 describe('Language:', () => {
   let navigatorLanguageSpy;

@@ -1,5 +1,5 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { PoBreadcrumbFavoriteService } from './po-breadcrumb-favorite.service';
@@ -21,7 +21,11 @@ describe('PoBreadcrumbFavoriteService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoBreadcrumbFavoriteService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoBreadcrumbFavoriteService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     breadcrumbFavoriteService = TestBed.inject(PoBreadcrumbFavoriteService);

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicFormField } from '@po-ui/ng-components';
 
@@ -7,6 +7,7 @@ import { PoPageDynamicEditActions, PoPageDynamicEditComponent, PoPageDynamicEdit
 @Component({
   selector: 'sample-po-page-dynamic-edit-user',
   templateUrl: './sample-po-page-dynamic-edit-user.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDynamicEditUserComponent {

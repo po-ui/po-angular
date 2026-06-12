@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { PoLanguageService, PoThemeA11yEnum } from '../../services';
 import { PoHeaderLiterals } from './interfaces/po-header-literals.interface';
@@ -6,6 +6,7 @@ import { PoHeaderBaseComponent, poNavbarLiteralsDefault } from './po-header-base
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestHostComponent extends PoHeaderBaseComponent {

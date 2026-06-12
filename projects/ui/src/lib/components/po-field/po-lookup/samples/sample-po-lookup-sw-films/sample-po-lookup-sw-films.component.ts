@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PoRadioGroupOption } from '@po-ui/ng-components';
 import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.service';
 
@@ -6,6 +6,7 @@ import { SamplePoLookupSwFilmsService } from './sample-po-lookup-sw-films.servic
   selector: 'sample-po-lookup-sw-films',
   templateUrl: './sample-po-lookup-sw-films.component.html',
   providers: [SamplePoLookupSwFilmsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLookupSwFilmsComponent implements OnInit {

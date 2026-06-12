@@ -4,7 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 
 import { PoPageCustomizationService } from './po-page-customization.service';
 import { PoPageDynamicSearchOptions } from '../../components/po-page-dynamic-search/interfaces/po-page-dynamic-search-options.interface';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 const originalPageOptions: PoPageDynamicSearchOptions = {
   title: 'Original Title',
@@ -93,7 +93,11 @@ describe('PoPageCustomizationService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoPageCustomizationService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoPageCustomizationService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     poPageCustomizationService = TestBed.inject(PoPageCustomizationService);

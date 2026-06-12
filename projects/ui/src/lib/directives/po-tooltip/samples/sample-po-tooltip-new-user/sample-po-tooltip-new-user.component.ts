@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoNotificationService } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-tooltip-new-user',
   templateUrl: './sample-po-tooltip-new-user.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTooltipNewUserComponent implements OnInit {

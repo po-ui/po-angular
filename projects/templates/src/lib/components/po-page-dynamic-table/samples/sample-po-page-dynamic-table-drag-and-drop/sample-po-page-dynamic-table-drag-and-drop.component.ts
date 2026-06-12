@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'sample-po-page-dynamic-table-drag-and-drop',
   templateUrl: './sample-po-page-dynamic-table-drag-and-drop.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDynamicTableDragAndDropComponent {

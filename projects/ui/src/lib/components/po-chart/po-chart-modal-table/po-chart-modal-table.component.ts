@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalComponent, PoModalModule } from '../../po-modal';
 import { PoTableModule } from '../../po-table';
@@ -7,6 +7,7 @@ import { PoTableModule } from '../../po-table';
   standalone: true,
   imports: [PoModalModule, PoTableModule],
   selector: 'po-chart-modal-table',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <po-modal #modalComponent [p-click-out]="true" [p-title]="title" [p-primary-action]="actionModal">
       <po-table [p-hide-columns-manager]="true" [p-items]="itemsTable" [p-columns]="columnsTable"></po-table>

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoUtils as UtilsFunction } from '../../utils/util';
 
@@ -20,8 +21,9 @@ describe('PoDropdownComponent: ', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [PoDropdownComponent, PoPopupComponent]
+      imports: [RouterModule.forRoot([])],
+      declarations: [PoDropdownComponent, PoPopupComponent],
+      providers: [provideLocationMocks()]
     })
       .overrideComponent(PoDropdownComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default }

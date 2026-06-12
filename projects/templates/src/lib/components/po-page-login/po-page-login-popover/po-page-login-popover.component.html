@@ -11,7 +11,8 @@
       <p class="po-font-text">
         {{ literals?.ifYouTryHarder }}
         <span class="po-font-text-bold po-page-login-popover-attempts">
-          {{ literals?.attempts | poI18n: remainingAttempts }} </span>{{ literals?.yourUserWillBeBlocked }}
+          {{ $safeNavigationMigration(literals?.attempts) | poI18n: remainingAttempts }} </span
+        >{{ literals?.yourUserWillBeBlocked }}
       </p>
       <br />
       <p class="po-font-text">
