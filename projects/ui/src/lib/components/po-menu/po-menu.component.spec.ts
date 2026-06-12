@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree, RouterModule } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { PoCleanComponent } from './../po-field/po-clean/po-clean.component';
 import { PoIconModule } from '../po-icon/po-icon.module';
 import { PoLoadingModule } from '../po-loading/po-loading.module';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoBadgeComponent } from '../po-badge';
 import { PoMenuFilterComponent } from './po-menu-filter/po-menu-filter.component';
 import { PoMenuItemComponent } from './po-menu-item/po-menu-item.component';
@@ -24,6 +24,7 @@ import { PoMenuService } from './services/po-menu.service';
 @Component({
   selector: 'app-menu-search',
   template: 'Search',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SearchComponent {}
@@ -31,6 +32,7 @@ export class SearchComponent {}
 @Component({
   selector: 'app-menu-home',
   template: 'Home',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class HomeComponent {}
@@ -63,11 +65,12 @@ describe('PoMenuComponent:', () => {
         SearchComponent,
         PoBadgeComponent
       ],
-      imports: [RouterTestingModule.withRoutes(routes), PoLoadingModule, PoIconModule],
+      imports: [RouterModule.forRoot(routes), PoLoadingModule, PoIconModule],
       providers: [
+        provideLocationMocks(),
         PoMenuItemsService,
         PoMenuService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

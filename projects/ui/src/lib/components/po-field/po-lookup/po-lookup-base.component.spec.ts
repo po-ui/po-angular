@@ -49,7 +49,12 @@ describe('PoLookupBaseComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      providers: [LookupFilterService, Injector, NgControl, PoLookupModalService]
+      providers: [
+        LookupFilterService,
+        Injector,
+        { provide: NgControl, useValue: { control: new UntypedFormControl() } },
+        PoLookupModalService
+      ]
     }).compileComponents();
 
     defaultService = new PoLookupFilterService(undefined);

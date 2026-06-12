@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
@@ -9,6 +9,7 @@ import { SamplePoMenuHumanResourcesService } from './sample-po-menu-human-resour
   templateUrl: './sample-po-menu-human-resources.component.html',
   providers: [SamplePoMenuHumanResourcesService],
   styleUrls: ['./sample-po-menu-human-resources.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMenuHumanResourcesComponent {

@@ -7,7 +7,8 @@ import {
   OnDestroy,
   Renderer2,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoBreadcrumbBaseComponent } from './po-breadcrumb-base.component';
@@ -48,6 +49,7 @@ export const poBreadcrumbLiterals: object = {
 @Component({
   selector: 'po-breadcrumb',
   templateUrl: './po-breadcrumb.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoBreadcrumbComponent extends PoBreadcrumbBaseComponent implements AfterViewInit, DoCheck, OnDestroy {

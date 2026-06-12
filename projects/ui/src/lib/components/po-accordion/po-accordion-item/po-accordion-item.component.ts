@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription, filter } from 'rxjs';
 
 import { convertToBoolean } from '../../../utils/util';
@@ -39,6 +39,7 @@ import { PoAccordionService } from '../services/po-accordion.service';
 @Component({
   selector: 'po-accordion-item',
   templateUrl: 'po-accordion-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoAccordionItemComponent implements OnDestroy {

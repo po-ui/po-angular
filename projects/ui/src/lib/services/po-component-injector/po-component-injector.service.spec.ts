@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule, Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed, inject } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 
@@ -8,6 +8,7 @@ import { PoComponentInjectorService } from './po-component-injector.service';
 
 @Component({
   template: ` <div class="test-component-class">test component</div> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestComponent {

@@ -1,10 +1,11 @@
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { PoContextMenuItem, PoContextTabsComponent, PoDynamicFormField, PoTabComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-context-menu-user',
   templateUrl: './sample-po-context-menu-user.component.html',
   styleUrls: ['./sample-po-context-menu-user.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoContextMenuUserComponent {

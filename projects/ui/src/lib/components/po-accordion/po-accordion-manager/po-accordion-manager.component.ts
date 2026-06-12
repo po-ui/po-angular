@@ -8,13 +8,15 @@ import {
   OnChanges,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { PoAccordionLiterals } from '../interfaces/po-accordion-literals.interface';
 
 @Component({
   selector: 'po-accordion-manager',
   templateUrl: 'po-accordion-manager.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoAccordionManagerComponent implements OnChanges {

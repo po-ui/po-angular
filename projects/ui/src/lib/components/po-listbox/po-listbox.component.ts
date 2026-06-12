@@ -12,7 +12,8 @@ import {
   ViewChild,
   ViewChildren,
   effect,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
@@ -30,6 +31,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 @Component({
   selector: 'po-listbox',
   templateUrl: './po-listbox.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
