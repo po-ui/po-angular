@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ContentChild, ElementRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { uuid } from '../../utils/util';
 import { PoModalBaseComponent } from './po-modal-base.component';
@@ -31,6 +31,7 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
 @Component({
   selector: 'po-modal',
   templateUrl: './po-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoModalComponent extends PoModalBaseComponent {

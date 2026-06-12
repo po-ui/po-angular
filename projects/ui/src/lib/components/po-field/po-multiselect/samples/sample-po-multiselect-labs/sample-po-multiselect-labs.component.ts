@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -10,6 +10,7 @@ import {
 @Component({
   selector: 'sample-po-multiselect-labs',
   templateUrl: './sample-po-multiselect-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMultiselectLabsComponent implements OnInit {

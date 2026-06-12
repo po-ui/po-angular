@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-number-calculate',
   templateUrl: './sample-po-number-calculate.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoNumberCalculateComponent {

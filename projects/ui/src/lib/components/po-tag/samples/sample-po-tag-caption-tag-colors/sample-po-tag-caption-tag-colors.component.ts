@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'sample-po-tag-caption-tag-colors',
   templateUrl: './sample-po-tag-caption-tag-colors.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTagCaptionTagColorsComponent {

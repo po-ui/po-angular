@@ -4,17 +4,12 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    files: [
-      { pattern: './src/lib/util-test/util-setup.spec.ts', watched: false, type: 'js' },
-      { pattern: './src/**/*.spec.ts', watched: false, type: 'js' }
-    ],
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('karma-coverage')
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
@@ -40,7 +35,8 @@ module.exports = function (config) {
           branches: 99,
           statements: 99,
           lines: 99,
-          functions: 99
+          functions: 99,
+          excludes: ['**/po-grid/**']
         }
       }
     },

@@ -1,12 +1,12 @@
 @if (maxFiles > 1) {
   <p>
-    {{ literals?.numberOfFilesAllowed | poI18n: maxFiles }}
+    {{ $safeNavigationMigration(literals?.numberOfFilesAllowed) | poI18n: maxFiles }}
   </p>
 }
 
 @if (allowedExtensions) {
   <p>
-    {{ literals?.allowedFormats | poI18n: allowedExtensions }}
+    {{ $safeNavigationMigration(literals?.allowedFormats) | poI18n: allowedExtensions }}
   </p>
 }
 
@@ -15,17 +15,17 @@
     <span>{{ literals?.allowedSizes }}</span>
     @if (minFileSize && maxFileSize) {
       <span>
-        {{ literals?.allowedFileSizeRange | poI18n: [minFileSize, maxFileSize] }}
+        {{ $safeNavigationMigration(literals?.allowedFileSizeRange) | poI18n: [minFileSize, maxFileSize] }}
       </span>
     }
     @if (minFileSize && !maxFileSize) {
       <span>
-        {{ literals?.minFileSizeAllowed | poI18n: minFileSize }}
+        {{ $safeNavigationMigration(literals?.minFileSizeAllowed) | poI18n: minFileSize }}
       </span>
     }
     @if (maxFileSize && !minFileSize) {
       <span>
-        {{ literals?.maxFileSizeAllowed | poI18n: maxFileSize }}
+        {{ $safeNavigationMigration(literals?.maxFileSizeAllowed) | poI18n: maxFileSize }}
       </span>
     }
   </p>

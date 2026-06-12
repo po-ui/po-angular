@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -12,6 +12,7 @@ import {
 @Component({
   selector: 'sample-po-datepicker-range-labs',
   templateUrl: './sample-po-datepicker-range-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDatepickerRangeLabsComponent implements OnInit {

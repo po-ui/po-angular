@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
 @Component({
   selector: 'sample-po-datepicker-airfare-reactive-form',
   templateUrl: './sample-po-datepicker-airfare-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDatepickerAirfareReactiveFormComponent implements OnInit {

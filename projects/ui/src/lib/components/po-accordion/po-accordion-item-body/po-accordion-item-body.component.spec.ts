@@ -1,5 +1,3 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoAccordionItemBodyComponent } from './po-accordion-item-body.component';
@@ -12,8 +10,7 @@ describe('PoAccordionItemBodyComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PoAccordionItemBodyComponent],
-      imports: [BrowserAnimationsModule]
+      declarations: [PoAccordionItemBodyComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoAccordionItemBodyComponent);
@@ -50,6 +47,44 @@ describe('PoAccordionItemBodyComponent:', () => {
 
       const body = nativeElement.querySelector('.po-accordion-item-body');
       expect(body).toBeFalsy();
+    });
+  });
+
+  describe('Methods:', () => {
+    it('animateEnter: should animate height from 0 to scrollHeight and call animationComplete', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 120 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component.animateEnter(<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '120px' }], {
+        duration: 200,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateLeave: should animate height from scrollHeight to 0 and call animationComplete', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 80 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component.animateLeave(<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith([{ height: '80px' }, { height: '0px' }], {
+        duration: 200,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
     });
   });
 });

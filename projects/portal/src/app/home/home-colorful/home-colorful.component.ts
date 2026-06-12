@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { pluck } from 'rxjs/operators';
 import { HomeColorfulService } from './home-colorful.service';
 
@@ -6,6 +6,7 @@ import { HomeColorfulService } from './home-colorful.service';
   selector: 'app-home-colorful',
   templateUrl: './home-colorful.component.html',
   styleUrls: ['./home-colorful.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class HomeColorfulComponent implements OnInit {

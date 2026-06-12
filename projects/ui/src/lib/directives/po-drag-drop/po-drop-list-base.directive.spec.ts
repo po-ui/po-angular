@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -27,15 +27,17 @@ interface TestItem {
   standalone: false
 })
 class TestHostComponent {
-  items: Array<TestItem> = [
+  // Inputs do host para permitir atualização via fixture.componentRef.setInput,
+  // que é o mecanismo suportado para refletir mudanças de binding no ambiente de teste (Angular 22).
+  @Input() items: Array<TestItem> = [
     { id: '1', value: 10 },
     { id: '2', value: 20 }
   ];
-  listId = 'test-list';
-  disabled = false;
-  orientation: 'horizontal' | 'vertical' | 'mixed' = 'vertical';
-  connectedTo: Array<string> = [];
-  sortingDisabled = false;
+  @Input() listId = 'test-list';
+  @Input() disabled = false;
+  @Input() orientation: 'horizontal' | 'vertical' | 'mixed' = 'vertical';
+  @Input() connectedTo: Array<string> = [];
+  @Input() sortingDisabled = false;
   droppedEvent: PoDropEvent | null = null;
   enteredEvent: PoDragEnterEvent<TestItem> | null = null;
 
@@ -89,14 +91,14 @@ describe('PoDropListBaseDirective (via PoDropListDirective)', () => {
     });
 
     it('should update items when bound array changes', () => {
-      component.items = [{ id: '3', value: 30 }];
+      fixture.componentRef.setInput('items', [{ id: '3', value: 30 }]);
       fixture.detectChanges();
       expect(directive.items()).toHaveSize(1);
       expect(directive.items()[0]).toEqual(jasmine.objectContaining({ id: '3', value: 30 }));
     });
 
     it('should accept empty array', () => {
-      component.items = [];
+      fixture.componentRef.setInput('items', []);
       fixture.detectChanges();
       expect(directive.items()).toEqual([]);
     });
@@ -123,15 +125,15 @@ describe('PoDropListBaseDirective (via PoDropListDirective)', () => {
     });
 
     it('should read `dropListDisabled` signal as true when bound to true', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       expect(directive.dropListDisabled()).toBeTrue();
     });
 
     it('should toggle back to false', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
-      component.disabled = false;
+      fixture.componentRef.setInput('disabled', false);
       fixture.detectChanges();
       expect(directive.dropListDisabled()).toBeFalse();
     });
@@ -152,13 +154,13 @@ describe('PoDropListBaseDirective (via PoDropListDirective)', () => {
     });
 
     it('should update to "horizontal" when input changes', () => {
-      component.orientation = 'horizontal';
+      fixture.componentRef.setInput('orientation', 'horizontal');
       fixture.detectChanges();
       expect(directive.dropListOrientation()).toBe('horizontal');
     });
 
     it('should accept "mixed" value', () => {
-      component.orientation = 'mixed';
+      fixture.componentRef.setInput('orientation', 'mixed');
       fixture.detectChanges();
       expect(directive.dropListOrientation()).toBe('mixed');
     });
@@ -170,15 +172,15 @@ describe('PoDropListBaseDirective (via PoDropListDirective)', () => {
     });
 
     it('should update when string ids are provided', () => {
-      component.connectedTo = ['list-x', 'list-y'];
+      fixture.componentRef.setInput('connectedTo', ['list-x', 'list-y']);
       fixture.detectChanges();
       expect(directive.dropListConnectedTo()).toEqual(['list-x', 'list-y']);
     });
 
     it('should update back to empty array', () => {
-      component.connectedTo = ['list-x'];
+      fixture.componentRef.setInput('connectedTo', ['list-x']);
       fixture.detectChanges();
-      component.connectedTo = [];
+      fixture.componentRef.setInput('connectedTo', []);
       fixture.detectChanges();
       expect(directive.dropListConnectedTo()).toEqual([]);
     });
@@ -190,7 +192,7 @@ describe('PoDropListBaseDirective (via PoDropListDirective)', () => {
     });
 
     it('should read `dropSortingDisabled` as true when bound to true', () => {
-      component.sortingDisabled = true;
+      fixture.componentRef.setInput('sortingDisabled', true);
       fixture.detectChanges();
       expect(directive.dropSortingDisabled()).toBeTrue();
     });

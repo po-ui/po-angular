@@ -1,6 +1,6 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 import { of } from 'rxjs';
 
@@ -44,7 +44,7 @@ describe('PoI18nService:', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [PoLanguageModule, PoI18nModule.config(config)],
-        providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+        providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
       }).compileComponents();
 
       service = TestBed.inject(PoI18nService);
@@ -334,7 +334,7 @@ describe('PoI18nService:', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [PoLanguageModule, PoI18nModule.config(config)],
-        providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+        providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
       });
 
       service = TestBed.inject(PoI18nService);

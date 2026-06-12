@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -15,6 +15,7 @@ import { PoMenuPanelItemsService } from '../services/po-menu-panel-items.service
 @Component({
   selector: 'po-menu-panel-item',
   templateUrl: './po-menu-panel-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoMenuPanelItemComponent implements OnDestroy, OnInit {

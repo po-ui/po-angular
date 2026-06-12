@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Input, input } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
@@ -63,6 +63,7 @@ const PO_TOGGLE_TYPE_DEFAULT = 'none';
 @Component({
   selector: 'po-button-group-base',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoButtonGroupBaseComponent {

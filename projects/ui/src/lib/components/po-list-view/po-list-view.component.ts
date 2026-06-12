@@ -11,7 +11,8 @@ import {
   IterableDiffers,
   Renderer2,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -55,6 +56,7 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
 @Component({
   selector: 'po-list-view',
   templateUrl: './po-list-view.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoListViewComponent

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CdkDrag } from '@angular/cdk/drag-drop';
@@ -25,8 +25,10 @@ interface TestItem {
   standalone: false
 })
 class TestHostComponent {
-  item: TestItem = { id: '1', name: 'test' };
-  disabled = false;
+  // Inputs do host para permitir atualização via fixture.componentRef.setInput,
+  // que é o mecanismo suportado para refletir mudanças de binding no ambiente de teste (Angular 22).
+  @Input() item: TestItem = { id: '1', name: 'test' };
+  @Input() disabled = false;
   startedItem: TestItem | null = null;
   endedItem: TestItem | null = null;
   movedEvent: any = null;
@@ -63,7 +65,7 @@ class TestDisabledHostComponent {
 class TestDropListHostComponent {
   item: TestItem = { id: '1', name: 'test' };
   items: Array<TestItem> = [{ id: '1', name: 'test' }];
-  dropListDisabled = false;
+  @Input() dropListDisabled = false;
 }
 
 describe('PoDragDirective', () => {
@@ -95,7 +97,7 @@ describe('PoDragDirective', () => {
 
     it('should update `data` signal when input changes', () => {
       const newItem: TestItem = { id: '2', name: 'updated' };
-      component.item = newItem;
+      fixture.componentRef.setInput('item', newItem);
       fixture.detectChanges();
       expect(directive.data()).toEqual(newItem);
     });
@@ -105,7 +107,7 @@ describe('PoDragDirective', () => {
     });
 
     it('should read `dragDisabled` signal as true when disabled is set', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       expect(directive.dragDisabled()).toBeTrue();
     });
@@ -141,16 +143,16 @@ describe('PoDragDirective', () => {
     });
 
     it('should remove po-drag-drop-item class when disabled', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       const hostEl = fixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
       expect(hostEl.classList.contains('po-drag-drop-item')).toBeFalse();
     });
 
     it('should add po-drag-drop-item class back when re-enabled', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
-      component.disabled = false;
+      fixture.componentRef.setInput('disabled', false);
       fixture.detectChanges();
       const hostEl = fixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
       expect(hostEl.classList.contains('po-drag-drop-item')).toBeTrue();
@@ -175,7 +177,7 @@ describe('PoDragDirective', () => {
     });
 
     it('should remove handle when drag is disabled', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       const hostEl = fixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
       const handle = hostEl.querySelector('po-drag-handle-button');
@@ -183,9 +185,9 @@ describe('PoDragDirective', () => {
     });
 
     it('should re-append handle when drag is re-enabled', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
-      component.disabled = false;
+      fixture.componentRef.setInput('disabled', false);
       fixture.detectChanges();
       const hostEl = fixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
       const handle = hostEl.querySelector('po-drag-handle-button');
@@ -201,7 +203,7 @@ describe('PoDragDirective', () => {
 
     it('should update cdkDrag.data when input changes', () => {
       const newItem: TestItem = { id: '3', name: 'new' };
-      component.item = newItem;
+      fixture.componentRef.setInput('item', newItem);
       fixture.detectChanges();
       const cdkDrag = fixture.debugElement.query(By.directive(CdkDrag)).injector.get(CdkDrag);
       expect(cdkDrag.data).toEqual(newItem);
@@ -317,7 +319,7 @@ describe('PoDragDirective', () => {
   describe('parent drop list disabled', () => {
     it('should not append handle when parent drop list is disabled', () => {
       const dropListFixture = TestBed.createComponent(TestDropListHostComponent);
-      dropListFixture.componentInstance.dropListDisabled = true;
+      dropListFixture.componentRef.setInput('dropListDisabled', true);
       dropListFixture.detectChanges();
 
       const hostEl = dropListFixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
@@ -334,7 +336,7 @@ describe('PoDragDirective', () => {
 
     it('should remove po-drag-drop-item class when parent drop list is disabled', () => {
       const dropListFixture = TestBed.createComponent(TestDropListHostComponent);
-      dropListFixture.componentInstance.dropListDisabled = true;
+      dropListFixture.componentRef.setInput('dropListDisabled', true);
       dropListFixture.detectChanges();
 
       const hostEl = dropListFixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
@@ -355,11 +357,11 @@ describe('PoDragDirective', () => {
       const hostEl = dropListFixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;
       expect(hostEl.querySelector('po-drag-handle-button')).toBeTruthy();
 
-      dropListFixture.componentInstance.dropListDisabled = true;
+      dropListFixture.componentRef.setInput('dropListDisabled', true);
       dropListFixture.detectChanges();
       expect(hostEl.querySelector('po-drag-handle-button')).toBeNull();
 
-      dropListFixture.componentInstance.dropListDisabled = false;
+      dropListFixture.componentRef.setInput('dropListDisabled', false);
       dropListFixture.detectChanges();
       expect(hostEl.querySelector('po-drag-handle-button')).toBeTruthy();
     });
@@ -371,18 +373,18 @@ describe('PoDragDirective', () => {
       expect(hostEl.querySelector('po-drag-handle-button')).toBeTruthy();
 
       // Disabling destroys the handle
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       expect(hostEl.querySelector('po-drag-handle-button')).toBeNull();
 
       // Re-enabling appends the handle again
-      component.disabled = false;
+      fixture.componentRef.setInput('disabled', false);
       fixture.detectChanges();
       expect(hostEl.querySelector('po-drag-handle-button')).toBeTruthy();
     });
 
     it('should not append handle while dragDisabled is true', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
 
       const hostEl = fixture.debugElement.query(By.directive(PoDragDirective)).nativeElement;

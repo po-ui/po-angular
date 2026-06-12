@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoSelectOption } from '@po-ui/ng-components';
 
@@ -10,6 +10,7 @@ import { SamplePoTableTransportService } from './sample-po-table-transport.servi
   selector: 'sample-po-table-transport',
   templateUrl: 'sample-po-table-transport.component.html',
   providers: [SamplePoTableTransportService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTableTransportComponent implements OnInit {

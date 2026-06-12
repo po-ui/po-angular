@@ -51,9 +51,9 @@
 </div>
 
 <po-modal p-click-out="true" p-size="sm" p-title="{{ detail?.destination }} - {{ detail?.country }}">
-  <po-info class="po-sm-6" p-label="Airline" [p-value]="detail?.airline"> </po-info>
+  <po-info class="po-sm-6" p-label="Airline" [p-value]="$safeNavigationMigration(detail?.airline)"> </po-info>
 
-  <po-info class="po-sm-2" p-label="Initials" [p-value]="detail?.initials"> </po-info>
+  <po-info class="po-sm-2" p-label="Initials" [p-value]="$safeNavigationMigration(detail?.initials)"> </po-info>
 
-  <po-info class="po-sm-4" p-label="Class" [p-value]="detail?.class"> </po-info>
+  <po-info class="po-sm-4" p-label="Class" [p-value]="$safeNavigationMigration(detail?.class)"> </po-info>
 </po-modal>

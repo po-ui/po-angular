@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import {
   PoHeaderActions,
@@ -16,6 +24,7 @@ import {
   templateUrl: './sample-po-header-apps.component.html',
   standalone: false,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     sample-po-header-apps {
       display: block;

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { PoUtils as UtilsFunction } from '../../../../utils/util';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoButtonGroupModule } from '../../../po-button-group';
 import { PoModalModule } from '../../../po-modal/po-modal.module';
@@ -21,7 +21,7 @@ describe('PoRichTextToolbarComponent:', () => {
     await TestBed.configureTestingModule({
       declarations: [],
       imports: [FormsModule, PoButtonGroupModule, PoModalModule, PoTooltipModule, PoFieldModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoRichTextToolbarComponent);

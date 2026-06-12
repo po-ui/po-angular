@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoLookupColumn, PoSelectOption } from '@po-ui/ng-components';
 
@@ -10,6 +10,7 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
   selector: 'sample-po-lookup-hero',
   templateUrl: './sample-po-lookup-hero.component.html',
   providers: [SamplePoLookupService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLookupHeroComponent {

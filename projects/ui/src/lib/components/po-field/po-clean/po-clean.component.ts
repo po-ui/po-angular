@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCleanBaseComponent } from './po-clean-base.component';
 
@@ -17,6 +17,7 @@ import { PoCleanBaseComponent } from './po-clean-base.component';
 @Component({
   selector: 'po-clean',
   templateUrl: './po-clean.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoCleanComponent extends PoCleanBaseComponent {

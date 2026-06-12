@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
@@ -30,6 +30,7 @@ import { PoLoadingOverlayBaseComponent } from './po-loading-overlay-base.compone
 @Component({
   selector: 'po-loading-overlay',
   templateUrl: 'po-loading-overlay.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoLoadingOverlayComponent extends PoLoadingOverlayBaseComponent {

@@ -1,0 +1,33 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
+
+import { PoPageModule } from '@po-ui/ng-components';
+
+import { <%= classify(name) %>Component } from './<%= componentFileName %>';
+
+describe('<%= classify(name) %>Component', () => {
+  let component: <%= classify(name) %>Component;
+  let fixture: ComponentFixture<<%= classify(name) %>Component>;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        RouterModule.forRoot([]),
+        PoPageModule
+      ],
+      providers: [provideLocationMocks()]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(<%= classify(name) %>Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

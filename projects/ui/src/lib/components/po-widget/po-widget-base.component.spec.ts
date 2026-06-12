@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoWidgetBaseComponent } from './po-widget-base.component';
@@ -8,6 +8,7 @@ import { PoThemeA11yEnum } from '../../services';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 class TestComponent extends PoWidgetBaseComponent {}

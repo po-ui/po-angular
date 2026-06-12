@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoDialogService, PoNotificationService, PoSelectOption } from '@po-ui/n
 @Component({
   selector: 'sample-po-datepicker-airfare',
   templateUrl: './sample-po-datepicker-airfare.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDatepickerAirfareComponent {

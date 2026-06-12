@@ -1,9 +1,10 @@
-import { AfterViewInit, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PoStepperItem, PoStepperStatus } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-stepper-steps',
   templateUrl: './sample-po-stepper-steps.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoStepperStepsComponent implements AfterViewInit {
