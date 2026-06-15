@@ -2,8 +2,8 @@
   "compilerOptions": {
     "lib": ["es2022"],
     "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
