@@ -220,7 +220,14 @@ describe('PoTableComponent:', () => {
       checkChangesItems: () => {},
       debounceResize: () => true,
       checkInfiniteScroll: () => {},
-      applyFixedColumns: () => {}
+      applyFixedColumns: () => {},
+      initializeVisibleElement() {
+        if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement) {
+          this.debounceResize();
+          this.checkInfiniteScroll();
+          this.visibleElement = true;
+        }
+      }
     };
   }
 
