@@ -319,6 +319,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeHeaderWidth();
     this.changeSizeLoading();
     this.applyFixedColumns();
+    this.initializeVisibleElement();
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -335,10 +336,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     // Permite que os cabeçalhos sejam calculados na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
-    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
-      this.debounceResize();
-      this.checkInfiniteScroll();
-      this.visibleElement = true;
+    if (this.initialized) {
+      this.initializeVisibleElement();
     }
   }
 
@@ -1020,6 +1019,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.timeoutResize = setTimeout(() => {
       // show the table
       this.setTableOpacity(1);
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -1121,6 +1121,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     });
 
     return mergedIcons;
+  }
+
+  private initializeVisibleElement(): void {
+    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement) {
+      this.debounceResize();
+      this.checkInfiniteScroll();
+      this.visibleElement = true;
+    }
   }
 
   private removeListeners() {
