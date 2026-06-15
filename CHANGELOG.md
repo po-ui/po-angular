@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.15](https://github.com/po-ui/po-angular/compare/v19.39.14...v19.39.15) (2026-06-15)
+
+
+### Bug Fixes
+
+* **input:** adiciona onTouched ao método clear para disparar validação ([71b51d0](https://github.com/po-ui/po-angular/commit/71b51d0a1b11859e58d0946c3de65ae101b7cdfa)), closes [#1837](https://github.com/po-ui/po-angular/issues/1837)
+* **multiselect:** corrige validação ao remover tags compactadas ([7721532](https://github.com/po-ui/po-angular/commit/77215323165b7b57af03d56b8fe70fe66063559c)), closes [#2845](https://github.com/po-ui/po-angular/issues/2845)
+
 ### [19.39.14](https://github.com/po-ui/po-angular/compare/v19.39.13...v19.39.14) (2026-06-05)
 
 
