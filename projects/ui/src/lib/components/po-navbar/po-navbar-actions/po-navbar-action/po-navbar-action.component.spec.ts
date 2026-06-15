@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { PoUtils as utils } from '../../../../utils/util';
 
 import { PoNavbarActionComponent } from './po-navbar-action.component';
-import { PoTooltipModule } from '../../../../../../directives';
+import { PoTooltipModule } from '../../../../directives';
 
 describe('PoNavbarActionComponent:', () => {
   let component: PoNavbarActionComponent;

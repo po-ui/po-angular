@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from '../../../../../util-test/util-expect.spec';
+import { configureTestSuite } from '../../../util-test/util-expect.spec';
 
 import { PoNavbarItemNavigationComponent } from './po-navbar-item-navigation.component';
 import { PoNavbarItemNavigationIconComponent } from './po-navbar-item-navigation-icon/po-navbar-item-navigation-icon.component';
