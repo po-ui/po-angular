@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, Renderer2, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy,
+  Renderer2,
+  inject,
+  ChangeDetectorRef
+} from '@angular/core';
 
 import { PoPageContentBaseComponent } from './po-page-content-base.component';
 
@@ -16,6 +25,7 @@ export class PoPageContentComponent extends PoPageContentBaseComponent implement
   private readonly renderer = inject(Renderer2);
   private readonly elementRef = inject(ElementRef);
   private readonly ngZone = inject(NgZone);
+  private readonly cd = inject(ChangeDetectorRef);
 
   contentOpacity: number = 0;
 
@@ -43,6 +53,7 @@ export class PoPageContentComponent extends PoPageContentBaseComponent implement
     setTimeout(() => {
       this.setHeightContent();
       this.contentOpacity = 1;
+      this.cd.markForCheck();
     });
   }
 
