@@ -1,13 +1,13 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   NgZone,
   OnDestroy,
   Renderer2,
-  inject,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy
+  inject
 } from '@angular/core';
 
 import { PoPageContentBaseComponent } from './po-page-content-base.component';
