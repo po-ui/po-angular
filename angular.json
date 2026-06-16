@@ -26,7 +26,8 @@
           "options": {
             "main": "projects/ui/src/test.ts",
             "tsConfig": "projects/ui/tsconfig.spec.json",
-            "karmaConfig": "projects/ui/karma.conf.js"
+            "karmaConfig": "projects/ui/karma.conf.js",
+            "codeCoverageExclude": ["projects/ui/src/lib/components/po-grid/**"]
           }
         },
         "lint": {
