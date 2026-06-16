@@ -243,10 +243,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
     });
   }
 
-  trackByFn(step: PoStepComponent) {
-    return step.id;
-  }
-
   private activeFirstStep() {
     const hasStepActive = this.poSteps.some(poStep => poStep.status === PoStepperStatus.Active);
 
