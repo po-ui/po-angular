@@ -33,7 +33,7 @@
       <po-container [p-no-padding]="true">
         <div class="po-list-view-container">
           <div class="po-list-view-header">
-            <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
+            <div class="po-list-view-title">
               @if (select) {
                 <div class="po-list-view-select">
                   <po-checkbox
@@ -46,31 +46,32 @@
                 </div>
               }
 
-              <a
-                *ngSwitchCase="'externalLink'"
-                class="po-list-view-title-link"
-                target="_blank"
-                [href]="item[propertyLink]"
-                (click)="runTitleAction(item)"
-              >
-                {{ getItemTitle(item) }}
-              </a>
-              <a
-                *ngSwitchCase="'internalLink'"
-                class="po-list-view-title-link"
-                [routerLink]="item[propertyLink]"
-                (click)="runTitleAction(item)"
-              >
-                {{ getItemTitle(item) }}
-              </a>
-              <span
-                *ngSwitchCase="'noLink'"
-                class="po-list-view-title-no-link"
-                [class.po-list-view-title-link]="titleHasAction"
-                (click)="titleHasAction && runTitleAction(item)"
-              >
-                {{ getItemTitle(item) }}
-              </span>
+              @switch (checkTitleType(item)) {
+                @case ('externalLink') {
+                  <a
+                    class="po-list-view-title-link"
+                    target="_blank"
+                    [href]="item[propertyLink]"
+                    (click)="runTitleAction(item)"
+                  >
+                    {{ getItemTitle(item) }}
+                  </a>
+                }
+                @case ('internalLink') {
+                  <a class="po-list-view-title-link" [routerLink]="item[propertyLink]" (click)="runTitleAction(item)">
+                    {{ getItemTitle(item) }}
+                  </a>
+                }
+                @case ('noLink') {
+                  <span
+                    class="po-list-view-title-no-link"
+                    [class.po-list-view-title-link]="titleHasAction"
+                    (click)="titleHasAction && runTitleAction(item)"
+                  >
+                    {{ getItemTitle(item) }}
+                  </span>
+                }
+              }
             </div>
 
             @if (showButtonsActions) {
