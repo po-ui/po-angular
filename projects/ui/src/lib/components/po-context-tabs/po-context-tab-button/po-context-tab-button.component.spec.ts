@@ -17,6 +17,7 @@ describe('PoContextTabButtonComponent:', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoContextTabButtonComponent);
     component = fixture.componentInstance;
+    component.literals = { close: 'Close Tab' };
 
     nativeElement = fixture.debugElement.nativeElement;
   });

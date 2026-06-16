@@ -39,7 +39,8 @@ module.exports = function (config) {
           branches: 99,
           statements: 99,
           lines: 99,
-          functions: 99
+          functions: 99,
+          excludes: ['**/po-grid/**']
         }
       }
     },

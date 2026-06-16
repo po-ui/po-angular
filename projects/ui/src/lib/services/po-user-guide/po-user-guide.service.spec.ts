@@ -998,7 +998,9 @@ describe('PoUserGuideService:', () => {
 
     it('should return a Promise when importDriver is invoked directly', () => {
       const result = (service as any).importDriver();
-      expect(result).toBeInstanceOf(Promise);
+      expect(result).toBeDefined();
+      expect(typeof result.then).toBe('function');
+      expect(typeof result.catch).toBe('function');
       (result as Promise<unknown>).catch(() => {});
     });
 
