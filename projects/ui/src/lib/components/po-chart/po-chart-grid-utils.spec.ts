@@ -48,7 +48,7 @@ describe('PoChartGridUtils', () => {
   });
 
   describe('setSerieTypeArea', () => {
-    it('should set areaStyle and opacity', () => {
+    it('should set areaStyle and opacity when index > 7', () => {
       const serie: any = {
         isTypeArea: true,
         color: 'color-01',
@@ -58,6 +58,30 @@ describe('PoChartGridUtils', () => {
       utils.setSerieTypeArea(serie, 8);
 
       expect(serie.areaStyle.opacity).toBe(0.5);
+    });
+
+    it('should use overlayColor for areaStyle.color when both color and overlayColor are present', () => {
+      const serie: any = {
+        isTypeArea: true,
+        color: '#9F0712',
+        overlayColor: '#FB9DA3'
+      };
+
+      utils.setSerieTypeArea(serie, 0);
+
+      expect(serie.areaStyle.color).toBe('#FB9DA3');
+    });
+
+    it('should fallback to serie.color when overlayColor is undefined', () => {
+      const serie: any = {
+        isTypeArea: true,
+        color: '#9F0712',
+        overlayColor: undefined
+      };
+
+      utils.setSerieTypeArea(serie, 0);
+
+      expect(serie.areaStyle.color).toBe('#9F0712');
     });
 
     it('should set areaStyle.color using computedStyle when serie.color is var(...)', () => {

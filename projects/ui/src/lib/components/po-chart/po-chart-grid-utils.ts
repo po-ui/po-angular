@@ -154,7 +154,7 @@ export class PoChartGridUtils {
       } else if (serie.color?.includes('color')) {
         colorVariable = this.component.getCSSVariable(`--${serie.color.replace('po-', '')}`);
       } else {
-        colorVariable = serie.color ?? serie.overlayColor;
+        colorVariable = serie.overlayColor ?? serie.color;
       }
 
       serie.areaStyle = {
