@@ -324,6 +324,16 @@ describe('PoTextareaComponent:', () => {
     });
 
     describe('initResizeObserver:', () => {
+      let originalResizeObserver: typeof ResizeObserver;
+
+      beforeEach(() => {
+        originalResizeObserver = window.ResizeObserver;
+      });
+
+      afterEach(() => {
+        (window as any).ResizeObserver = originalResizeObserver;
+      });
+
       it('should observe the input element', () => {
         const observeSpy = jasmine.createSpy('observe');
         const disconnectSpy = jasmine.createSpy('disconnect');
@@ -875,13 +885,19 @@ describe('PoTextareaComponent:', () => {
     describe('initResizeObserver:', () => {
       let observeSpy: jasmine.Spy;
       let observerCallback: Function;
+      let originalResizeObserver: typeof ResizeObserver;
 
       beforeEach(() => {
+        originalResizeObserver = window.ResizeObserver;
         observeSpy = jasmine.createSpy('observe');
         (window as any).ResizeObserver = function (callback: Function) {
           observerCallback = callback;
           return { observe: observeSpy, disconnect: jasmine.createSpy('disconnect') };
         };
+      });
+
+      afterEach(() => {
+        (window as any).ResizeObserver = originalResizeObserver;
       });
 
       it('should create ResizeObserver and observe the textarea element', () => {

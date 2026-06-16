@@ -1,6 +1,6 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
@@ -333,17 +333,15 @@ describe('PoLookupModalComponent', () => {
   });
 
   describe('AdvancedSearch: ', () => {
-    beforeEach(fakeAsync(() => {
+    beforeEach(async () => {
       component.advancedFilters = advancedFilters;
       fixture.detectChanges();
-      component.onAdvancedFilter();
+      await component.onAdvancedFilter();
 
-      tick(10);
       fixture.detectChanges();
-
-      flush();
-      discardPeriodicTasks();
-    }));
+      await fixture.whenStable();
+      fixture.detectChanges();
+    });
 
     afterEach(() => {
       component.advancedFilters = [];

@@ -50,7 +50,7 @@ describe('PoLookupComponent:', () => {
         PoComponentInjectorService,
         PoControlPositionService,
         Injector,
-        NgControl,
+        { provide: NgControl, useValue: { control: null } },
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]

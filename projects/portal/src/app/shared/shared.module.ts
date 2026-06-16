@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { PoModule, PoI18nModule } from '@po-ui/ng-components';
+// import { PoModule, PoI18nModule } from '@po-ui/ng-components';
 import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
 
 import { customLanguage } from './po-language-terraform.constant';
 import { HighlightCodeDirective } from './../documentation/documentation-code.directive';
+import { PoI18nModule, PoModule } from '../../../../ui/src/lib';
 
 @NgModule({
   imports: [

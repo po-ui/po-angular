@@ -34,7 +34,7 @@ describe('InputRequired:', () => {
 
   it('should call console.warn if `myProperty` is null', () => {
     spyOn(console, 'warn');
-    const consoleMessage = 'PoMockComponent: myProperty is required, but was not provided';
+    const consoleMessage = `${component.constructor.name}: myProperty is required, but was not provided`;
 
     component.ngOnInit();
 
