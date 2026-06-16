@@ -2,25 +2,25 @@ import { PoThemeColorCategorical } from '../../interfaces/po-theme-color.interfa
 import { poThemeDefaultLightValues } from './po-theme-light-defaults.constant';
 
 const poThemeDefaultCategoricalsAA: PoThemeColorCategorical = {
-  '01': '#3773FF',
-  '02': '#F86544',
-  '03': '#B46AFF',
-  '04': '#06A883',
-  '05': '#FF45B8',
-  '06': '#FF6021',
-  '07': '#2393FB',
-  '08': '#C5863A'
+  '01': '#003DCC',
+  '02': '#669900',
+  '03': '#6626A6',
+  '04': '#D44E2A',
+  '05': '#008599',
+  '06': '#B17F00',
+  '07': '#AC2076',
+  '08': '#9F0712'
 };
 
 const poThemeDefaultOverlayCategoricalsAA: PoThemeColorCategorical = {
-  '01': '#9BB9FF',
-  '02': '#FBB2A1',
-  '03': '#D9B5FF',
-  '04': '#83D3C1',
-  '05': '#FFA2DB',
-  '06': '#FFAF90',
-  '07': '#91C9FD',
-  '08': '#E2C39C'
+  '01': '#99B8FF',
+  '02': '#DDFF99',
+  '03': '#CCACEC',
+  '04': '#EEB9AA',
+  '05': '#99F1FF',
+  '06': '#FFE299',
+  '07': '#EFA9D4',
+  '08': '#FB9DA3'
 };
 
 /**
@@ -31,23 +31,23 @@ const poThemeDefaultLightValuesAA = {
   onRoot: {
     ...poThemeDefaultLightValues.onRoot,
     /* CATEGORICAL COLORS */
-    '--color-caption-categorical-01': '#3773FF',
-    '--color-caption-categorical-02': '#F86544',
-    '--color-caption-categorical-03': '#B46AFF',
-    '--color-caption-categorical-04': '#06A883',
-    '--color-caption-categorical-05': '#FF45B8',
-    '--color-caption-categorical-06': '#FF6021',
-    '--color-caption-categorical-07': '#2393FB',
-    '--color-caption-categorical-08': '#C5863A',
+    '--color-caption-categorical-01': '#003DCC',
+    '--color-caption-categorical-02': '#669900',
+    '--color-caption-categorical-03': '#6626A6',
+    '--color-caption-categorical-04': '#D44E2A',
+    '--color-caption-categorical-05': '#008599',
+    '--color-caption-categorical-06': '#B17F00',
+    '--color-caption-categorical-07': '#AC2076',
+    '--color-caption-categorical-08': '#9F0712',
     /* CATEGORICAL OVERLAY COLORS */
-    '--color-caption-categorical-overlay-01': '#9BB9FF',
-    '--color-caption-categorical-overlay-02': '#FBB2A1',
-    '--color-caption-categorical-overlay-03': '#D9B5FF',
-    '--color-caption-categorical-overlay-04': '#83D3C1',
-    '--color-caption-categorical-overlay-05': '#FFA2DB',
-    '--color-caption-categorical-overlay-06': '#FFAF90',
-    '--color-caption-categorical-overlay-07': '#91C9FD',
-    '--color-caption-categorical-overlay-08': '#E2C39C'
+    '--color-caption-categorical-overlay-01': '#99B8FF',
+    '--color-caption-categorical-overlay-02': '#DDFF99',
+    '--color-caption-categorical-overlay-03': '#CCACEC',
+    '--color-caption-categorical-overlay-04': '#EEB9AA',
+    '--color-caption-categorical-overlay-05': '#99F1FF',
+    '--color-caption-categorical-overlay-06': '#FFE299',
+    '--color-caption-categorical-overlay-07': '#EFA9D4',
+    '--color-caption-categorical-overlay-08': '#FB9DA3'
   }
 };
 

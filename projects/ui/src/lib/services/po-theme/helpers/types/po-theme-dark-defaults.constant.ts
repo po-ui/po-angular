@@ -113,25 +113,25 @@ const poThemeDefaultBrandsDark: poThemeColorBrand = {
 };
 
 const poThemeDefaultCategoricalsDark: PoThemeColorCategorical = {
-  '01': '#2E67FF',
-  '02': '#F76D43',
-  '03': '#9654FF',
-  '04': '#00BF9C',
-  '05': '#F22CA6',
-  '06': '#FC501C',
-  '07': '#63A9EB',
-  '08': '#FA8E0A'
+  '01': '#003DCC',
+  '02': '#669900',
+  '03': '#6626A6',
+  '04': '#D44E2A',
+  '05': '#008599',
+  '06': '#B17F00',
+  '07': '#AC2076',
+  '08': '#9F0712'
 };
 
 const poThemeDefaultCategoricalsOverlayDark: PoThemeColorCategorical = {
-  '01': '#1F3FAD',
-  '02': '#B8523E',
-  '03': '#4D2C97',
-  '04': '#018E7F',
-  '05': '#95277B',
-  '06': '#BA3B15',
-  '07': '#4B80B3',
-  '08': '#B96907'
+  '01': '#99B8FF',
+  '02': '#DDFF99',
+  '03': '#CCACEC',
+  '04': '#EEB9AA',
+  '05': '#99F1FF',
+  '06': '#FFE299',
+  '07': '#EFA9D4',
+  '08': '#FB9DA3'
 };
 
 /**
@@ -241,23 +241,23 @@ const poThemeDefaultDarkValues = {
     '--color-stepper-circle-disabled': 'var(--color-neutral-mid-40)',
     '--color-stepper-bar-disabled': 'var(--color-neutral-mid-40)',
     /* CATEGORICAL COLORS */
-    '--color-caption-categorical-01': '#2E67FF',
-    '--color-caption-categorical-02': '#F76D43',
-    '--color-caption-categorical-03': '#9654FF',
-    '--color-caption-categorical-04': '#00BF9C',
-    '--color-caption-categorical-05': '#F22CA6',
-    '--color-caption-categorical-06': '#FC501C',
-    '--color-caption-categorical-07': '#63A9EB',
-    '--color-caption-categorical-08': '#FA8E0A',
+    '--color-caption-categorical-01': '#003DCC',
+    '--color-caption-categorical-02': '#669900',
+    '--color-caption-categorical-03': '#6626A6',
+    '--color-caption-categorical-04': '#D44E2A',
+    '--color-caption-categorical-05': '#008599',
+    '--color-caption-categorical-06': '#B17F00',
+    '--color-caption-categorical-07': '#AC2076',
+    '--color-caption-categorical-08': '#9F0712',
     /* CATEGORICAL OVERLAY COLORS */
-    '--color-caption-categorical-overlay-01': '#1F3FAD',
-    '--color-caption-categorical-overlay-02': '#B8523E',
-    '--color-caption-categorical-overlay-03': '#4D2C97',
-    '--color-caption-categorical-overlay-04': '#018E7F',
-    '--color-caption-categorical-overlay-05': '#95277B',
-    '--color-caption-categorical-overlay-06': '#BA3B15',
-    '--color-caption-categorical-overlay-07': '#4B80B3',
-    '--color-caption-categorical-overlay-08': '#B96907'
+    '--color-caption-categorical-overlay-01': '#99B8FF',
+    '--color-caption-categorical-overlay-02': '#DDFF99',
+    '--color-caption-categorical-overlay-03': '#CCACEC',
+    '--color-caption-categorical-overlay-04': '#EEB9AA',
+    '--color-caption-categorical-overlay-05': '#99F1FF',
+    '--color-caption-categorical-overlay-06': '#FFE299',
+    '--color-caption-categorical-overlay-07': '#EFA9D4',
+    '--color-caption-categorical-overlay-08': '#FB9DA3'
   }
 };
 
