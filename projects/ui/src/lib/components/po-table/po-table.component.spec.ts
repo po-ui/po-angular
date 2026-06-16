@@ -225,7 +225,7 @@ describe('PoTableComponent:', () => {
       debounceResize: () => true,
       checkInfiniteScroll: () => {},
       applyFixedColumns: () => {},
-      initializeVisibleElement() {
+      initializeVisibleElement: function () {
         if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement) {
           this.debounceResize();
           this.checkInfiniteScroll();
