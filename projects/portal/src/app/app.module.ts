@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from './shared/shared.module';
@@ -13,7 +12,7 @@ import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/com
   declarations: [AppComponent],
   exports: [],
   bootstrap: [AppComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, SharedModule, AppRoutingModule],
+  imports: [BrowserModule, SharedModule, AppRoutingModule],
   providers: [MenuService, provideHttpClient(withXhr(), withInterceptorsFromDi())]
 })
 export class AppModule {}

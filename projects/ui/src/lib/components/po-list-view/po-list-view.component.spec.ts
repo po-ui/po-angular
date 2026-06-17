@@ -1,6 +1,5 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
@@ -24,7 +23,7 @@ describe('PoListViewComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
-      imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule],
+      imports: [RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule],
       providers: [provideNgReflectAttributes()]
     }).compileComponents();
 
@@ -194,6 +193,45 @@ describe('PoListViewComponent:', () => {
       component.onAnimationEvent(event, detail);
 
       expect(component.showDetail.emit).toHaveBeenCalledWith(detail);
+    });
+
+    it('animateDetailEnter: should emit showDetail and animate height from 0 to scrollHeight', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 60 });
+      spyOn(element, 'animate').and.returnValue(animation);
+      spyOn(component.showDetail, 'emit');
+
+      const item = { name: 'test' };
+      component.animateDetailEnter(<any>{ target: element, animationComplete }, item);
+
+      expect(component.showDetail.emit).toHaveBeenCalledWith(item);
+      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '60px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateDetailLeave: should animate height from scrollHeight to 0 and call animationComplete', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 40 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component.animateDetailLeave(<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith([{ height: '40px' }, { height: '0px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
     });
 
     it('trackBy: should return `index`', () => {

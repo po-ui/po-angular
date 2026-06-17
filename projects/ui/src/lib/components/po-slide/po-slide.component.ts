@@ -15,8 +15,6 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
-
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -28,7 +26,6 @@ import { PoSlideItemComponent } from './po-slide-item/po-slide-item.component';
 const poSlideDefaultHeight = 336;
 const poSlideIntervalMin = 1000;
 const poSlideMinHeight = 192;
-const poSlideTiming = '250ms ease';
 
 /**
  * @docsExtends PoSlideBaseComponent
@@ -66,8 +63,6 @@ const poSlideTiming = '250ms ease';
   standalone: false
 })
 export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
-  private readonly builder = inject(AnimationBuilder);
-
   @ContentChild(PoSlideContentTemplateDirective, { static: true })
   slideContentTemplate: PoSlideContentTemplateDirective;
 
@@ -81,7 +76,8 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
   slideItemWidth: number;
 
   private isLoaded: boolean = false;
-  private player: AnimationPlayer;
+  private currentAnimation: Animation;
+  private previousOffset: number = 0;
   private setInterval: any;
   private readonly resize$ = new Subject<any>();
   private resizeSubscription: Subscription;
@@ -257,15 +253,19 @@ export class PoSlideComponent extends PoSlideBaseComponent implements OnInit, Do
 
   private animate(offset: number) {
     if (this.hasElements) {
-      const animation: AnimationFactory = this.buildTransitionAnimation(offset);
+      const element = this.slide.nativeElement;
 
-      this.player = animation.create(this.slide.nativeElement);
-      this.player.play();
+      if (this.currentAnimation) {
+        this.currentAnimation.cancel();
+      }
+
+      this.currentAnimation = element.animate(
+        [{ transform: `translateX(-${this.previousOffset}px)` }, { transform: `translateX(-${offset}px)` }],
+        { duration: 250, easing: 'ease', fill: 'forwards' }
+      );
+
+      this.previousOffset = offset;
     }
-  }
-
-  private buildTransitionAnimation(offset: number) {
-    return this.builder.build([animate(poSlideTiming, keyframes([style({ transform: `translateX(-${offset}px)` })]))]);
   }
 
   private createArrayForTemplate(slides: Array<any>) {

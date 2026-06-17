@@ -15,43 +15,6 @@ import { PoTreeViewItemHeaderComponent } from './po-tree-view-item-header/po-tre
  *
  * Módulo do componente `po-tree-view`.
  *
- * > Para o correto funcionamento do componente `po-tree-view`, deve ser importado o módulo `BrowserAnimationsModule` no
- * > módulo principal da sua aplicação.
- *
- * Módulo da aplicação:
- * ```
- * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
- * import { PoModule } from '@po-ui/ng-components';
- * ...
- *
- * @NgModule({
- *   imports: [
- *     BrowserModule,
- *     BrowserAnimationsModule,
- *     ...
- *     PoModule
- *   ],
- *   declarations: [
- *     AppComponent,
- *     ...
- *   ],
- *   providers: [],
- *   bootstrap: [AppComponent]
- * })
- * export class AppModule { }
- * ```
- *
- * Em aplicações Standalone, utilize a seguinte configuração para o bootstrap:
- *
- * ```
- * import { bootstrapApplication } from '@angular/platform-browser';
- * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
- * import { AppComponent } from './app.component';
- *
- * bootstrapApplication(AppComponent, {
- *   providers: [importProvidersFrom(BrowserAnimationsModule)]
- * }).catch(err => console.error(err));
- * ```
  */
 @NgModule({
   declarations: [PoTreeViewComponent, PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],

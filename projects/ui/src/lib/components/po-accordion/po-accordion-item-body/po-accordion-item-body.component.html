@@ -1,5 +1,5 @@
 @if (expanded) {
-  <div class="po-accordion-item-body" @toggleBody>
+  <div class="po-accordion-item-body" (animate.enter)="animateEnter($event)" (animate.leave)="animateLeave($event)">
     <div class="po-accordion-item-body-content">
       <ng-content></ng-content>
     </div>

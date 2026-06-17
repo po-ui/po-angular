@@ -14,7 +14,6 @@ import { PoColorPaletteService } from './../../services/po-color-palette/po-colo
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
@@ -241,7 +240,7 @@ describe('PoTableComponent:', () => {
 
     await TestBed.configureTestingModule({
       declarations: [TestMenuComponent, SearchComponent],
-      imports: [RouterTestingModule.withRoutes(routes), PoTableModule, NoopAnimationsModule],
+      imports: [RouterTestingModule.withRoutes(routes), PoTableModule],
       providers: [
         PoControlPositionService,
         PoDateService,

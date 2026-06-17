@@ -1,4 +1,3 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component, QueryList, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -30,7 +29,7 @@ describe('PoAccordionComponent:', () => {
     await TestBed.configureTestingModule({
       declarations: [PoAccordionMockComponent],
       providers: [PoAccordionService],
-      imports: [PoAccordionModule, BrowserAnimationsModule]
+      imports: [PoAccordionModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoAccordionComponent);

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoAccordionManagerComponent } from './po-accordion-manager.component';
 
@@ -12,7 +11,7 @@ describe('PoAccordionManagerComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoAccordionManagerComponent],
-      imports: [BrowserAnimationsModule]
+      imports: []
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoAccordionManagerComponent);
