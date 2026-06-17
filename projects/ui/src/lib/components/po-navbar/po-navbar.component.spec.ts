@@ -300,7 +300,7 @@ describe('PoNavbarComponent:', () => {
       component['animate'](offset);
 
       expect(component.navbarItems.navbarItemsContainer.nativeElement.animate).toHaveBeenCalledWith(
-        [{ transform: 'translateX(-0px)' }, { transform: 'translateX(-400px)' }],
+        [{ transform: 'translateX(0px)' }, { transform: 'translateX(-400px)' }],
         { duration: 250, easing: 'ease', fill: 'forwards' }
       );
     });
@@ -322,7 +322,7 @@ describe('PoNavbarComponent:', () => {
       component['animate'](0);
 
       expect(component.navbarItems.navbarItemsContainer.nativeElement.animate).toHaveBeenCalledWith(
-        [{ transform: 'translateX(-400px)' }, { transform: 'translateX(-0px)' }],
+        [{ transform: 'translateX(-400px)' }, { transform: 'translateX(0px)' }],
         { duration: 250, easing: 'ease', fill: 'forwards' }
       );
     });

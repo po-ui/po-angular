@@ -597,10 +597,12 @@ describe('PoSlideComponent:', () => {
         component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
         fixture.detectChanges();
 
-        const interval = 1000;
         spyOn(component, 'next');
+        spyOnProperty(component, <any>'hasElements').and.returnValue(true);
+        spyOnProperty(component, 'hasSlides').and.returnValue(true);
 
-        component.interval = interval;
+        component.interval = 1000;
+        component['startInterval']();
         tick(2000);
         component['cancelInterval']();
 
@@ -613,6 +615,9 @@ describe('PoSlideComponent:', () => {
     it(`hasElements: should return true if has 'slides' to create 'itemsElements'`, () => {
       component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
       fixture.detectChanges();
+
+      // Simular que o elemento tem dimensões visíveis no DOM
+      Object.defineProperty(component['slide'].nativeElement, 'offsetWidth', { value: 800, configurable: true });
 
       expect(component['hasElements']).toBe(true);
     });
