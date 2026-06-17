@@ -8,7 +8,7 @@ import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
 
 import { customLanguage } from './po-language-terraform.constant';
 import { HighlightCodeDirective } from './../documentation/documentation-code.directive';
-import { PoI18nModule, PoModule } from '../../../../ui/src/lib';
+import { PoI18nModule, PoModule } from '@po-ui/ng-components';
 
 @NgModule({
   imports: [
