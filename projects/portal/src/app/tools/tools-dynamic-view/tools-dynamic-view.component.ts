@@ -1,6 +1,5 @@
 import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import {
   PoDynamicFormField,
