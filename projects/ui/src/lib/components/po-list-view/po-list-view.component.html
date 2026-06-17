@@ -111,9 +111,9 @@
 
           @if (hasDetailTemplate && item.$showDetail) {
             <div
-              @showHideDetail
-              (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
               class="po-list-view-detail"
+              (animate.enter)="animateDetailEnter($event, item)"
+              (animate.leave)="animateDetailLeave($event)"
             >
               <ng-template
                 [ngTemplateOutlet]="listViewDetailTemplate.templateRef"

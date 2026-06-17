@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PoChartModalTableComponent } from './po-chart-modal-table.component';
 import { PoModalModule } from '../../po-modal';
 import { PoTableModule } from '../../po-table';
@@ -11,7 +10,7 @@ describe('PoChartModalTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, PoChartModalTableComponent, PoModalModule, PoTableModule],
+      imports: [PoChartModalTableComponent, PoModalModule, PoTableModule],
       providers: [provideHttpClient(withXhr())]
     }).compileComponents();
 
