@@ -316,6 +316,27 @@ describe('PoPageSlideComponent', () => {
       expect(animationComplete).toHaveBeenCalled();
     });
 
+    it('animateEnter: should use fallback duration 70 when parseDuration returns 0', () => {
+      const rootElement = document.createElement('div');
+      const container = document.createElement('div');
+      container.classList.add('po-page-slide-container');
+      rootElement.appendChild(container);
+
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const containerAnimation: any = {};
+      const rootAnimateSpy = spyOn(rootElement, 'animate').and.returnValue({} as any);
+      spyOn(container, 'animate').and.returnValue(containerAnimation);
+
+      // parseDuration retorna 0 para string '0ms', ativando o fallback || 70
+      component.duration = '0ms';
+      component.animateEnter(<any>{ target: rootElement, animationComplete });
+
+      expect(rootAnimateSpy).toHaveBeenCalledWith(
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration: 70, easing: 'linear', fill: 'forwards' }
+      );
+    });
+
     it('parseDuration: should parse ms value', () => {
       expect(component['parseDuration']('200ms')).toBe(200);
     });
@@ -340,5 +361,41 @@ describe('PoPageSlideComponent', () => {
       expect(result.duration).toBe(700);
       expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
     });
+
+    it('parseTiming: should parse seconds value', () => {
+      const result = component['parseTiming']('1.5s ease-out');
+      expect(result.duration).toBe(1500);
+      expect(result.easing).toBe('ease-out');
+    });
+
+    it('parseTiming: should return default for invalid value', () => {
+      const result = component['parseTiming']('invalid');
+      expect(result.duration).toBe(700);
+      expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
+    });
+
+    it('parseDuration: should return default for null value', () => {
+      expect(component['parseDuration'](null)).toBe(70);
+    });
+
+    it('parseTiming: should return default for null value', () => {
+      const result = component['parseTiming'](null);
+      expect(result.duration).toBe(700);
+      expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
+    });
+
+    it('animateLeave: should use setTimeout when container is not found', fakeAsync(() => {
+      const rootElement = document.createElement('div');
+      const animationComplete = jasmine.createSpy('animationComplete');
+      spyOn(rootElement, 'animate').and.returnValue({} as any);
+
+      component.animateLeave(<any>{ target: rootElement, animationComplete });
+
+      expect(animationComplete).not.toHaveBeenCalled();
+
+      tick(150);
+
+      expect(animationComplete).toHaveBeenCalled();
+    }));
   });
 });
