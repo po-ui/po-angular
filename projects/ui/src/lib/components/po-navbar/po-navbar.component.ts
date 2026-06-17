@@ -10,7 +10,6 @@ import {
   inject,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, keyframes, style } from '@angular/animations';
 
 import { delay, filter, finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -28,7 +27,6 @@ import { PoNavbarItemsComponent } from './po-navbar-items/po-navbar-items.compon
 const poNavbarNavigationWidth = 88;
 const poNavbarMenuMedia = 768;
 const poNavbarMatchMedia = `(max-width: ${poNavbarMenuMedia}px)`;
-const poNavbarTiming = '250ms ease';
 
 /**
  * @deprecated v23.x.x use `po-header`
@@ -43,7 +41,6 @@ const poNavbarTiming = '250ms ease';
 })
 export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterViewInit, OnDestroy, OnInit {
   private readonly renderer = inject(Renderer2);
-  private readonly builder = inject(AnimationBuilder);
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly menuGlobalService = inject(PoMenuGlobalService);
 
@@ -62,7 +59,8 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   private readonly id = uuid();
   private mediaQuery: any;
   private offset: number = 0;
-  private player: AnimationPlayer;
+  private currentAnimation: Animation;
+  private previousAnimatedOffset: number = 0;
   private readonly menuItems: Array<PoMenuItem>;
   private previousMenuComponentId;
   private previousMenusItems = [];
@@ -180,14 +178,18 @@ export class PoNavbarComponent extends PoNavbarBaseComponent implements AfterVie
   }
 
   private animate(offset: number) {
-    const animation: AnimationFactory = this.buildTransitionAnimation(offset);
+    const element = this.navbarItems.navbarItemsContainer.nativeElement;
 
-    this.player = animation.create(this.navbarItems.navbarItemsContainer.nativeElement);
-    this.player.play();
-  }
+    if (this.currentAnimation) {
+      this.currentAnimation.cancel();
+    }
 
-  private buildTransitionAnimation(offset: number) {
-    return this.builder.build([animate(poNavbarTiming, keyframes([style({ transform: `translateX(${-offset}px)` })]))]);
+    this.currentAnimation = element.animate(
+      [{ transform: `translateX(${-this.previousAnimatedOffset}px)` }, { transform: `translateX(${-offset}px)` }],
+      { duration: 250, easing: 'ease', fill: 'forwards' }
+    );
+
+    this.previousAnimatedOffset = offset;
   }
 
   private changeNavbarMenuItems(isCollapsedMedia: any, navbarItems: Array<PoNavbarItem>, label: string) {
