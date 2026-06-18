@@ -336,7 +336,8 @@ describe('PoLookupModalComponent', () => {
     beforeEach(async () => {
       component.advancedFilters = advancedFilters;
       fixture.detectChanges();
-      await component.onAdvancedFilter();
+      component.onAdvancedFilter();
+      await (component as any).dynamicFormReady;
 
       fixture.detectChanges();
       await fixture.whenStable();
