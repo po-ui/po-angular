@@ -41,6 +41,8 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   componentRef: ComponentRef<any>;
   dynamicForm: NgForm;
 
+  private dynamicFormReady: Promise<void>;
+
   constructor() {
     const poLanguage = inject(PoLanguageService);
     const changeDetector = inject(ChangeDetectorRef);
@@ -140,9 +142,9 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     }
   }
 
-  onAdvancedFilter() {
+  onAdvancedFilter(): void {
     this.setupModalAdvancedFilter();
-    return this.createDynamicForm();
+    this.dynamicFormReady = this.createDynamicForm();
   }
 
   private setTableHeight(): void {
