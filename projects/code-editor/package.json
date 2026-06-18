@@ -23,7 +23,6 @@
     "@angular/core": "^22",
     "@angular/forms": "^22",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
-    "monaco-editor": "0.44.0",
-    "zone.js": "~0.15.0"
+    "monaco-editor": "0.44.0"
   }
 }

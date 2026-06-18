@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, NgZone, ViewChild, Provider, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  ElementRef,
+  forwardRef,
+  ViewChild,
+  Provider,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  inject
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
@@ -60,7 +71,7 @@ const providers: Array<Provider> = [
   selector: 'po-code-editor',
   templateUrl: './po-code-editor.component.html',
   providers,
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements AfterViewInit, DoCheck {
@@ -68,12 +79,12 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
 
   canLoad = false;
 
-  constructor(
-    private readonly zone: NgZone,
-    private readonly el: ElementRef,
-    private readonly poCodeEditorSuggestionService: PoCodeEditorSuggestionService,
-    private readonly codeEditorRegister?: PoCodeEditorRegister
-  ) {
+  private readonly cd = inject(ChangeDetectorRef);
+  private readonly el = inject(ElementRef);
+  private readonly poCodeEditorSuggestionService = inject(PoCodeEditorSuggestionService);
+  private readonly codeEditorRegister = inject(PoCodeEditorRegister, { optional: true });
+
+  constructor() {
     super();
   }
 
@@ -211,7 +222,8 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
       this.editor.onDidChangeModelContent((e: any) => {
         const value = this.editor.getValue();
         this.onChangePropagate(value);
-        this.zone.run(() => (this.value = value));
+        this.value = value;
+        this.cd.markForCheck();
       });
     }
     setTimeout(() => {
