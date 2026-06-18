@@ -1,6 +1,5 @@
 import {
   inject,
-  NgZone,
   OnInit,
   Output,
   Component,
@@ -99,7 +98,6 @@ export class PoTimerComponent
   }>();
 
   private readonly changeDetector = inject(ChangeDetectorRef);
-  private readonly ngZone = inject(NgZone);
   private readonly domDocument = inject(DOCUMENT, { optional: true });
   private hasViewInitialized = false;
   private currentRenderedSize: string;
@@ -182,11 +180,10 @@ export class PoTimerComponent
 
     // requestAnimationFrame garante que o layout ja foi calculado
     // e scrollHeight dos containers esta disponivel.
-    this.ngZone.runOutsideAngular(() => {
-      requestAnimationFrame(() => {
-        this.initAllColumnOffsets();
-        this.syncAriaToNativeButtons();
-      });
+    requestAnimationFrame(() => {
+      this.initAllColumnOffsets();
+      this.syncAriaToNativeButtons();
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -205,10 +202,9 @@ export class PoTimerComponent
     if (nextSize !== this.currentRenderedSize) {
       this.currentRenderedSize = nextSize;
 
-      this.ngZone.runOutsideAngular(() => {
-        setTimeout(() => {
-          this.initAllColumnOffsets();
-        });
+      requestAnimationFrame(() => {
+        this.initAllColumnOffsets();
+        this.changeDetector.markForCheck();
       });
     }
   }
@@ -377,11 +373,9 @@ export class PoTimerComponent
 
     const direction: 1 | -1 = event.deltaY > 0 ? 1 : -1;
 
-    this.ngZone.runOutsideAngular(() => {
-      this.wheelRafId = requestAnimationFrame(() => {
-        this.wheelRafId = null;
-        this.scrollColumnByStep(type, direction);
-      });
+    this.wheelRafId = requestAnimationFrame(() => {
+      this.wheelRafId = null;
+      this.scrollColumnByStep(type, direction);
     });
   }
 
@@ -398,9 +392,8 @@ export class PoTimerComponent
     // Reposicionar as colunas para o valor selecionado apos a proxima renderizacao.
     if (this.hasViewInitialized) {
       requestAnimationFrame(() => {
-        this.ngZone.runOutsideAngular(() => {
-          this.initAllColumnOffsets();
-        });
+        this.initAllColumnOffsets();
+        this.changeDetector.markForCheck();
       });
     }
   }
@@ -1182,11 +1175,10 @@ export class PoTimerComponent
   }
 
   private realignColumnsToSelection(): void {
-    this.ngZone.runOutsideAngular(() => {
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.initAllColumnOffsets();
-        });
+        this.initAllColumnOffsets();
+        this.changeDetector.markForCheck();
       });
     });
   }

@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, Renderer2, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  Renderer2,
+  inject,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 
 import { PoPageContentBaseComponent } from './po-page-content-base.component';
 
@@ -16,7 +25,6 @@ import { PoPageContentBaseComponent } from './po-page-content-base.component';
 export class PoPageContentComponent extends PoPageContentBaseComponent implements AfterViewInit, OnDestroy {
   private readonly renderer = inject(Renderer2);
   private readonly elementRef = inject(ElementRef);
-  private readonly ngZone = inject(NgZone);
   private readonly cd = inject(ChangeDetectorRef);
 
   contentOpacity: number = 0;
@@ -82,10 +90,8 @@ export class PoPageContentComponent extends PoPageContentBaseComponent implement
   }
 
   private initializeListeners(): void {
-    this.ngZone.runOutsideAngular(() => {
-      this.resizeListener = this.renderer.listen('window', 'resize', () => {
-        this.ngZone.run(() => this.recalculateHeaderSize());
-      });
+    this.resizeListener = this.renderer.listen('window', 'resize', () => {
+      this.recalculateHeaderSize();
     });
   }
 

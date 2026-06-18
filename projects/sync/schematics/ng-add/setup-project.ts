@@ -203,7 +203,7 @@ import { PoStorageModule } from '@po-ui/ng-storage';
   providers: [
     provideRouter(routes),
     provideHttpClient(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(PoSyncModule),
     importProvidersFrom(PoStorageModule.forRoot())
@@ -218,7 +218,7 @@ import { PoStorageModule } from '@po-ui/ng-storage';
   // Adiciona os novos imports e providers
   modifiedContent = modifiedContent.replace(
     /export const appConfig: ApplicationConfig = {/,
-    `import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';${importBlock}
+    `import { ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';${importBlock}
 export const appConfig: ApplicationConfig = {${providersBlock}`
   );
 
