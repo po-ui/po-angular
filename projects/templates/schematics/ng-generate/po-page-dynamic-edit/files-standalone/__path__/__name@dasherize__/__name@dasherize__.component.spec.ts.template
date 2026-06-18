@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
 import { PoPageDynamicEditModule } from '@po-ui/ng-templates';
@@ -13,10 +14,10 @@ describe('<%= classify(name) %>Component', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        RouterModule.forRoot([]),
         PoPageDynamicEditModule
       ],
-      providers: [provideHttpClient()]
+      providers: [provideLocationMocks(), provideHttpClient()]
     })
     .compileComponents();
   }));

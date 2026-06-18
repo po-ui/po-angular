@@ -1,6 +1,7 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoSlideCirclesComponent } from './po-slide-circles/po-slide-circles.component';
 import { PoSlideComponent } from './po-slide.component';
@@ -15,8 +16,9 @@ describe('PoSlideComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [PoSlideCirclesComponent, PoSlideComponent, PoSlideControlComponent, PoSlideItemComponent]
+      imports: [RouterModule.forRoot([])],
+      declarations: [PoSlideCirclesComponent, PoSlideComponent, PoSlideControlComponent, PoSlideItemComponent],
+      providers: [provideLocationMocks()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoSlideComponent);

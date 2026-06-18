@@ -1,7 +1,7 @@
 import { ComponentRef, EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
 
 import { Observable, of } from 'rxjs';
 
@@ -58,8 +58,9 @@ describe('PoLookupModalService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      imports: [RouterModule.forRoot(routes), PoFieldModule],
       providers: [
+        provideLocationMocks(),
         LookupFilterService,
         PoComponentInjectorService,
         PoControlPositionService,
