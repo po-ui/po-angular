@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoPageModule } from '@po-ui/ng-components';
 
@@ -12,9 +13,10 @@ describe('<%= classify(name) %>Component', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        RouterModule.forRoot([]),
         PoPageModule
       ],
+      providers: [provideLocationMocks()],
       declarations: [ <%= classify(name) %>Component ]
     })
     .compileComponents();

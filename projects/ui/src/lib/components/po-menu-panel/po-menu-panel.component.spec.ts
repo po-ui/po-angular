@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Router, Routes, RouterModule } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -40,9 +40,9 @@ describe('PoMenuPanelComponent: ', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoTooltipModule],
+      imports: [RouterModule.forRoot(routes), PoTooltipModule],
       declarations: [PoMenuPanelComponent, PoMenuPanelItemComponent, HomeComponent, SearchComponent],
-      providers: [PoMenuPanelItemsService]
+      providers: [provideLocationMocks(), PoMenuPanelItemsService]
     }).compileComponents();
 
     router = TestBed.inject(Router);

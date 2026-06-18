@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Router, RouterModule } from '@angular/router';
 
 import { changeBrowserInnerWidth } from '../../../util-test/util-expect.spec';
 
@@ -62,7 +62,7 @@ describe('PoPageDefaultComponent mobile', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
+      imports: [CommonModule, RouterModule.forRoot([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [
         MobileComponent,
         PoPageDefaultComponent,
@@ -70,7 +70,7 @@ describe('PoPageDefaultComponent mobile', () => {
         PoPageContentComponent,
         PoPageHeaderComponent
       ],
-      providers: [{ provide: Router, useValue: routerStub }]
+      providers: [provideLocationMocks(), { provide: Router, useValue: routerStub }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoPageDefaultComponent);
@@ -163,7 +163,7 @@ describe('PoPageDefaultComponent desktop', () => {
     await TestBed.configureTestingModule({
       imports: [
         CommonModule,
-        RouterTestingModule.withRoutes([]),
+        RouterModule.forRoot([]),
         PoBreadcrumbModule,
         PoButtonModule,
         PoDropdownModule,
@@ -175,7 +175,8 @@ describe('PoPageDefaultComponent desktop', () => {
         PoPageComponent,
         PoPageContentComponent,
         PoPageHeaderComponent
-      ]
+      ],
+      providers: [provideLocationMocks()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoPageDefaultComponent);
@@ -684,9 +685,9 @@ describe('PoPageDefaultComponent i18n fallback', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, RouterTestingModule.withRoutes([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
+      imports: [CommonModule, RouterModule.forRoot([]), PoBreadcrumbModule, PoButtonModule, PoDropdownModule],
       declarations: [PoPageDefaultComponent, PoPageComponent, PoPageContentComponent, PoPageHeaderComponent],
-      providers: [{ provide: PoLanguageService, useValue: { getShortLanguage: () => 'fr' } }]
+      providers: [provideLocationMocks(), { provide: PoLanguageService, useValue: { getShortLanguage: () => 'fr' } }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoPageDefaultComponent);

@@ -1,14 +1,15 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Routes, RouterModule } from '@angular/router';
 
 import { PoBreadcrumbComponent } from './po-breadcrumb.component';
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite/po-breadcrumb-favorite.component';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
 @Component({
+  selector: 'app-documentation-test',
   template: 'Documentation',
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
@@ -16,6 +17,7 @@ import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 export class DocumentationComponent {}
 
 @Component({
+  selector: 'app-guides-test',
   template: 'Guides',
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
@@ -51,9 +53,9 @@ describe('PoBreadcrumbComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
+      imports: [RouterModule.forRoot(routes)],
       declarations: [PoBreadcrumbComponent, PoBreadcrumbFavoriteComponent, DocumentationComponent, GuidesComponent],
-      providers: [HttpClient, HttpHandler]
+      providers: [provideLocationMocks(), HttpClient, HttpHandler]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoBreadcrumbComponent);
@@ -440,6 +442,7 @@ describe('PoBreadcrumbComponent:', () => {
         { label: 'Teste nível 4', link: '/test/nivel/4' }
       ];
 
+      component['_breadcrumbItemsLenght'] = 500;
       spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
 
       component['calcBreadcrumb']();

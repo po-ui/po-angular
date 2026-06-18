@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { configureTestSuite, expectPropertiesValues } from './../../util-test/util-expect.spec';
 
@@ -31,9 +32,9 @@ describe('PoPopupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterModule.forRoot([])],
       declarations: [PoPopupComponent],
-      providers: [PoControlPositionService]
+      providers: [provideLocationMocks(), PoControlPositionService]
     });
   });
 

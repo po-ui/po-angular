@@ -2,9 +2,9 @@ import { DecimalPipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, ElementRef, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
 import { By } from '@angular/platform-browser';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Routes, RouterModule } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
 import { PoControlPositionService } from '../../services/po-control-position/po-control-position.service';
@@ -240,8 +240,9 @@ describe('PoTableComponent:', () => {
 
     await TestBed.configureTestingModule({
       declarations: [TestMenuComponent, SearchComponent],
-      imports: [RouterTestingModule.withRoutes(routes), PoTableModule],
+      imports: [RouterModule.forRoot(routes), PoTableModule],
       providers: [
+        provideLocationMocks(),
         PoControlPositionService,
         PoDateService,
         DecimalPipe,

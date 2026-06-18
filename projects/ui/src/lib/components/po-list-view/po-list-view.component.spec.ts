@@ -1,6 +1,7 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -23,8 +24,8 @@ describe('PoListViewComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
-      imports: [RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule],
-      providers: [provideNgReflectAttributes()]
+      imports: [RouterModule.forRoot([]), PoButtonModule, PoPopupModule],
+      providers: [provideLocationMocks(), provideNgReflectAttributes()]
     }).compileComponents();
 
     detail = { test: 'test' };

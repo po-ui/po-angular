@@ -1,8 +1,9 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, provideNgReflectAttributes } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   PoButtonComponent,
@@ -37,7 +38,7 @@ describe('PoPageLoginComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, OverlayModule, RouterTestingModule.withRoutes([])],
+      imports: [FormsModule, OverlayModule, RouterModule.forRoot([])],
       declarations: [
         PoButtonComponent,
         PoComboComponent,
@@ -48,7 +49,7 @@ describe('PoPageLoginComponent: ', () => {
         PoSelectComponent,
         PoSwitchComponent
       ],
-      providers: [HttpClient, HttpHandler, PoPageLoginService, provideNgReflectAttributes()],
+      providers: [provideLocationMocks(), HttpClient, HttpHandler, PoPageLoginService, provideNgReflectAttributes()],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
