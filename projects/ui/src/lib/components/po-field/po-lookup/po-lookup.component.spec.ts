@@ -1,7 +1,7 @@
 import { ComponentRef, EventEmitter, Injector } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, inject, TestBed, tick } from '@angular/core/testing';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Routes, RouterModule } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -44,8 +44,9 @@ describe('PoLookupComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoFieldModule],
+      imports: [RouterModule.forRoot(routes), PoFieldModule],
       providers: [
+        provideLocationMocks(),
         LookupFilterService,
         PoComponentInjectorService,
         PoControlPositionService,

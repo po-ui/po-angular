@@ -93,5 +93,23 @@ describe('PoPageContentComponent:', () => {
 
       expect(component.height).toBe('90%');
     }));
+
+    it('should set height in pixels when calculated height is positive without .po-page', fakeAsync(() => {
+      spyOn(fixture.nativeElement, 'getBoundingClientRect').and.returnValue({
+        top: 100,
+        bottom: 200,
+        left: 0,
+        right: 0,
+        width: 0,
+        height: 0
+      });
+
+      component.recalculateHeaderSize();
+      tick(100);
+
+      const expectedHeight = window.innerHeight - 100;
+      expect(expectedHeight).toBeGreaterThan(0);
+      expect(component.height).toBe(`${expectedHeight}px`);
+    }));
   });
 });

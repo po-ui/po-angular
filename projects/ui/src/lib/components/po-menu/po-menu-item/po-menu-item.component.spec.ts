@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Routes, RouterModule } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -39,9 +39,9 @@ describe('PoMenuItemComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes), PoIconModule],
+      imports: [RouterModule.forRoot(routes), PoIconModule],
       declarations: [SearchComponent, HomeComponent, PoMenuItemComponent, PoBadgeComponent],
-      providers: [PoMenuItemsService]
+      providers: [provideLocationMocks(), PoMenuItemsService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoMenuItemComponent);

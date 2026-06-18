@@ -1,8 +1,8 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Router, RouterModule } from '@angular/router';
 
 import { changeBrowserInnerWidth } from '../../../util-test/util-expect.spec';
 
@@ -68,7 +68,7 @@ describe('PoPageListComponent - Mobile:', () => {
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        RouterTestingModule.withRoutes([]),
+        RouterModule.forRoot([]),
         PoBreadcrumbModule,
         PoButtonModule,
         PoDisclaimerGroupModule,
@@ -81,7 +81,7 @@ describe('PoPageListComponent - Mobile:', () => {
         PoPageHeaderComponent,
         PoPageContentComponent
       ],
-      providers: [{ provide: Router, useValue: routerStub }]
+      providers: [provideLocationMocks(), { provide: Router, useValue: routerStub }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoPageListComponent);
@@ -158,7 +158,7 @@ describe('PoPageListComponent - Desktop:', () => {
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([]),
+        RouterModule.forRoot([]),
         PoBreadcrumbModule,
         PoButtonModule,
         PoDisclaimerGroupModule,
@@ -171,7 +171,7 @@ describe('PoPageListComponent - Desktop:', () => {
         PoPageHeaderComponent,
         PoPageContentComponent
       ],
-      providers: [{ provide: Router, useValue: routerStub }]
+      providers: [provideLocationMocks(), { provide: Router, useValue: routerStub }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoPageListComponent);
