@@ -1,8 +1,9 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, throwError } from 'rxjs';
 
@@ -24,8 +25,13 @@ describe('PoPageDynamicDetailComponent:', () => {
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [FormsModule, RouterTestingModule.withRoutes([])],
-      providers: [PoDialogService, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+      imports: [FormsModule, RouterModule.forRoot([])],
+      providers: [
+        provideLocationMocks(),
+        PoDialogService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 

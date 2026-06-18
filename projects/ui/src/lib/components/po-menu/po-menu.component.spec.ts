@@ -2,8 +2,8 @@ import { Location } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Router, Routes, UrlSegment, UrlSegmentGroup, UrlTree, RouterModule } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -63,8 +63,9 @@ describe('PoMenuComponent:', () => {
         SearchComponent,
         PoBadgeComponent
       ],
-      imports: [RouterTestingModule.withRoutes(routes), PoLoadingModule, PoIconModule],
+      imports: [RouterModule.forRoot(routes), PoLoadingModule, PoIconModule],
       providers: [
+        provideLocationMocks(),
         PoMenuItemsService,
         PoMenuService,
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
