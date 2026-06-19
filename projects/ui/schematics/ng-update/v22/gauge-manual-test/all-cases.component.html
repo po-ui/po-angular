@@ -1,0 +1,723 @@
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     CASO 1: Uso mínimo — apenas p-value (sem ranges)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 1: Apenas p-value</h3>
+<po-gauge [p-value]="percentual"></po-gauge>
+
+<!-- CASO 1b: p-value literal numérico -->
+<h3>Caso 1b: p-value literal</h3>
+<po-gauge [p-value]="50"></po-gauge>
+
+<!-- CASO 1c: p-value como string estática (sem binding) — migração deve converter para [p-value] -->
+<h3>Caso 1c: p-value string numérica com binding</h3>
+<po-gauge [p-value]="75"></po-gauge>
+
+<!-- CASO 1d: p-value zero -->
+<h3>Caso 1d: p-value zero</h3>
+<po-gauge [p-value]="0"></po-gauge>
+
+<!-- CASO 1e: p-value acima de 100 (overflow) -->
+<h3>Caso 1e: p-value overflow (>100)</h3>
+<po-gauge [p-value]="150"></po-gauge>
+
+<!-- CASO 1f: p-value negativo -->
+<h3>Caso 1f: p-value negativo</h3>
+<po-gauge [p-value]="negativeValue"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 2: Todas as propriedades mapeáveis
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 2: Todas as propriedades</h3>
+<po-gauge
+  [p-value]="currentValue"
+  [p-ranges]="gaugeRanges"
+  [p-description]="descricao"
+  p-title="Velocidade"
+  [p-height]="300"
+  [p-show-from-to-legend]="true"
+  [p-show-pointer]="true"
+>
+</po-gauge>
+
+<!-- CASO 2b: Todas propriedades com valores false explícitos -->
+<h3>Caso 2b: Booleans explicitamente false</h3>
+<po-gauge
+  [p-value]="currentValue"
+  [p-ranges]="gaugeRanges"
+  [p-description]="descricao"
+  p-title="Sem Ponteiro"
+  [p-height]="350"
+  [p-show-from-to-legend]="false"
+  [p-show-pointer]="false"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 3: p-value + p-ranges + p-description
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 3: Com ranges e description</h3>
+<po-gauge [p-value]="score" [p-ranges]="scoreRanges" p-description="Pontuação geral" [p-height]="250"> </po-gauge>
+
+<!-- CASO 3b: ranges sem label (legenda oculta) -->
+<h3>Caso 3b: Ranges sem label</h3>
+<po-gauge [p-value]="70" [p-ranges]="rangesWithoutLabel" p-description="Sem legenda de ranges"> </po-gauge>
+
+<!-- CASO 3c: ranges com cores hexadecimais -->
+<h3>Caso 3c: Ranges com cores hex</h3>
+<po-gauge [p-value]="45" [p-ranges]="rangesHexColor" p-title="Hex Colors"> </po-gauge>
+
+<!-- CASO 3d: ranges com cores RGB -->
+<h3>Caso 3d: Ranges com cores RGB</h3>
+<po-gauge [p-value]="60" [p-ranges]="rangesRgbColor" p-title="RGB Colors"> </po-gauge>
+
+<!-- CASO 3e: ranges com cores do tema PO (color-01, color-02...) -->
+<h3>Caso 3e: Ranges com cores do tema</h3>
+<po-gauge [p-value]="80" [p-ranges]="rangesThemeColor" p-title="Theme Colors"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 4: p-options (variável) junto de propriedades individuais
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 4: Com p-options variável</h3>
+<po-gauge [p-value]="valor" p-title="Medidor" [p-options]="gaugeOptions"> </po-gauge>
+
+<!-- CASO 4b: p-options como objeto literal inline -->
+<h3>Caso 4b: p-options inline</h3>
+<po-gauge [p-value]="temperatura" [p-height]="200" [p-options]="{ showContainerGauge: false, showFromToLegend: true }">
+</po-gauge>
+
+<!-- CASO 4c: p-options com todas as propriedades -->
+<h3>Caso 4c: p-options completo</h3>
+<po-gauge [p-value]="85" [p-ranges]="gaugeRanges" p-title="Full Options" [p-options]="fullOptions"> </po-gauge>
+
+<!-- CASO 4d: p-options com header options -->
+<h3>Caso 4d: p-options com header</h3>
+<po-gauge [p-value]="55" [p-ranges]="gaugeRanges" p-title="Header Options" [p-options]="optionsWithHeader"> </po-gauge>
+
+<!-- CASO 4e: p-options com subtitleGauge -->
+<h3>Caso 4e: p-options com subtitleGauge</h3>
+<po-gauge [p-value]="72" [p-ranges]="scoreRanges" p-title="Com Subtitle" [p-options]="optionsWithSubtitle"> </po-gauge>
+
+<!-- CASO 4f: p-options com descriptionChart -->
+<h3>Caso 4f: p-options com descriptionChart</h3>
+<po-gauge
+  [p-value]="63"
+  [p-ranges]="gaugeRanges"
+  p-title="Com DescriptionChart"
+  [p-options]="optionsWithDescriptionChart"
+>
+</po-gauge>
+
+<!-- CASO 4g: p-options com showContainerGauge false -->
+<h3>Caso 4g: p-options sem container</h3>
+<po-gauge [p-value]="40" p-title="Sem Container" [p-options]="{ showContainerGauge: false }"> </po-gauge>
+
+<!-- CASO 4h: p-options com pointer false -->
+<h3>Caso 4h: p-options pointer false</h3>
+<po-gauge [p-value]="66" [p-ranges]="gaugeRanges" p-title="Pointer Off" [p-options]="{ pointer: false }"> </po-gauge>
+
+<!-- CASO 4i: p-options inline completo -->
+<h3>Caso 4i: p-options inline completo</h3>
+<po-gauge
+  [p-value]="77"
+  [p-ranges]="gaugeRanges"
+  p-title="Inline Completo"
+  [p-options]="{
+    showFromToLegend: true,
+    pointer: true,
+    showContainerGauge: true,
+    subtitleGauge: 'Sub inline',
+    descriptionChart: 'Desc inline'
+  }"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 5: Atributos estáticos (sem binding)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 5: Estático</h3>
+<po-gauge p-title="Metade" p-description="Está em 50%"></po-gauge>
+
+<!-- CASO 5b: mix de binding e estático -->
+<h3>Caso 5b: Mix binding + estático</h3>
+<po-gauge [p-value]="dynamicValue" p-title="Título Fixo" p-description="Descrição fixa" [p-ranges]="myRanges">
+</po-gauge>
+
+<!-- CASO 5c: apenas p-title estático -->
+<h3>Caso 5c: Apenas título estático</h3>
+<po-gauge p-title="Título Sozinho"></po-gauge>
+
+<!-- CASO 5d: p-value estático + p-title estático -->
+<h3>Caso 5d: Value e title estáticos</h3>
+<po-gauge [p-value]="82" p-title="Performance" p-description="82% do alvo"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 6: Múltiplos po-gauge no mesmo template
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 6: Múltiplos gauges</h3>
+<div class="row">
+  <div class="col">
+    <po-gauge [p-value]="cpu" p-title="CPU" [p-ranges]="cpuRanges"></po-gauge>
+  </div>
+  <div class="col">
+    <po-gauge [p-value]="memory" p-title="Memória" [p-ranges]="memRanges"></po-gauge>
+  </div>
+  <div class="col">
+    <po-gauge [p-value]="disk" p-title="Disco" [p-show-pointer]="true"></po-gauge>
+  </div>
+</div>
+
+<!-- CASO 6b: Múltiplos gauges com diferentes configurações -->
+<h3>Caso 6b: Gauges variados lado a lado</h3>
+<div class="po-row">
+  <div class="po-md-4">
+    <po-gauge [p-value]="25" p-title="Simples" p-description="Sem ranges"></po-gauge>
+  </div>
+  <div class="po-md-4">
+    <po-gauge [p-value]="50" p-title="Com Ranges" [p-ranges]="gaugeRanges" [p-show-from-to-legend]="true"> </po-gauge>
+  </div>
+  <div class="po-md-4">
+    <po-gauge [p-value]="90" p-title="Com Options" [p-ranges]="gaugeRanges" [p-options]="gaugeOptions"> </po-gauge>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 7: Conteúdo projetado (content projection)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 7: Conteúdo projetado</h3>
+<po-gauge [p-value]="progress" p-title="Upload"> </po-gauge>
+
+<!-- CASO 7b: com ranges + descrição -->
+<h3>Caso 7b: Ranges + descrição</h3>
+<po-gauge [p-value]="score" [p-ranges]="ranges" p-description="Avaliação"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 8: Atributos genéricos preservados (class, id, ngClass, ngIf, etc.)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 8: Atributos genéricos</h3>
+<po-gauge
+  [p-value]="val"
+  p-title="Com Extras"
+  class="my-gauge"
+  id="gauge-main"
+  [ngClass]="{ active: isActive }"
+  *ngIf="showGauge"
+  (click)="onGaugeClick()"
+>
+</po-gauge>
+
+<!-- CASO 8b: com style inline -->
+<h3>Caso 8b: Com style inline</h3>
+<po-gauge [p-value]="val" p-title="Styled" style="margin-top: 16px" [style.opacity]="isActive ? 1 : 0.5"> </po-gauge>
+
+<!-- CASO 8c: com data attributes -->
+<h3>Caso 8c: Com data attributes</h3>
+<po-gauge
+  [p-value]="val"
+  p-title="Data Attrs"
+  data-testid="gauge-test"
+  data-cy="cypress-gauge"
+  [attr.aria-label]="'Gauge value: ' + val"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 9: Dentro de estruturas condicionais Angular
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 9: Dentro de *ngIf</h3>
+<div *ngIf="showGauge">
+  <po-gauge [p-value]="val" p-title="Condicional"></po-gauge>
+</div>
+
+<!-- CASO 9b: Dentro de *ngFor -->
+<h3>Caso 9b: Dentro de *ngFor</h3>
+<div *ngFor="let item of gaugeItems; let i = index">
+  <po-gauge [p-value]="item.value" [p-title]="item.title" [p-ranges]="item.ranges" [p-description]="item.description">
+  </po-gauge>
+</div>
+
+<!-- CASO 9c: Dentro de ng-container com ngSwitch -->
+<h3>Caso 9c: Com ngSwitch</h3>
+<ng-container [ngSwitch]="gaugeType">
+  <po-gauge *ngSwitchCase="'simple'" [p-value]="val" p-title="Simple"></po-gauge>
+  <po-gauge *ngSwitchCase="'ranged'" [p-value]="val" [p-ranges]="gaugeRanges" p-title="Ranged"></po-gauge>
+  <po-gauge *ngSwitchDefault [p-value]="val" p-title="Default"></po-gauge>
+</ng-container>
+
+<!-- CASO 9d: Com ng-template e ngTemplateOutlet -->
+<h3>Caso 9d: Com ng-template</h3>
+<ng-template #gaugeTemplate>
+  <po-gauge [p-value]="val" p-title="Template" [p-ranges]="gaugeRanges"></po-gauge>
+</ng-template>
+<ng-container *ngTemplateOutlet="gaugeTemplate"></ng-container>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 10: p-show-from-to-legend e p-show-pointer isolados
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 10: showFromToLegend isolado</h3>
+<po-gauge [p-value]="72" [p-ranges]="gaugeRanges" p-title="From-To Legend" [p-show-from-to-legend]="true"> </po-gauge>
+
+<!-- CASO 10b: showPointer isolado false -->
+<h3>Caso 10b: showPointer false</h3>
+<po-gauge [p-value]="45" [p-ranges]="gaugeRanges" p-title="Sem Ponteiro" [p-show-pointer]="false"> </po-gauge>
+
+<!-- CASO 10c: showPointer com variável -->
+<h3>Caso 10c: showPointer dinâmico</h3>
+<po-gauge [p-value]="60" [p-ranges]="gaugeRanges" p-title="Pointer Dinâmico" [p-show-pointer]="showPointerFlag">
+</po-gauge>
+
+<!-- CASO 10d: showFromToLegend com variável -->
+<h3>Caso 10d: showFromToLegend dinâmico</h3>
+<po-gauge [p-value]="55" [p-ranges]="gaugeRanges" p-title="Legend Dinâmico" [p-show-from-to-legend]="showLegendFlag">
+</po-gauge>
+
+<!-- CASO 10e: Ambos show flags com expressão -->
+<h3>Caso 10e: Flags com expressão</h3>
+<po-gauge
+  [p-value]="88"
+  [p-ranges]="gaugeRanges"
+  p-title="Expressões"
+  [p-show-from-to-legend]="properties.includes('showFromToLegend')"
+  [p-show-pointer]="properties.includes('showPointer')"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 11: Convivência com po-chart existente
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 11: Gauge ao lado de po-chart</h3>
+<div class="po-row">
+  <div class="po-md-6">
+    <po-gauge [p-value]="cpu" p-title="CPU Usage" [p-ranges]="cpuRanges"></po-gauge>
+  </div>
+  <div class="po-md-6">
+    <po-chart p-title="Existente" [p-series]="chartSeries"></po-chart>
+  </div>
+</div>
+
+<!-- CASO 11b: Gauge pendente ao lado de po-chart já existente -->
+<h3>Caso 11b: Pendente de migração</h3>
+<po-gauge [p-value]="b" p-title="Ainda pendente"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 12: Atributos em múltiplas linhas (indentação)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 12: Multiline</h3>
+<po-gauge
+  [p-value]="longVariableName"
+  [p-ranges]="rangesArray"
+  p-title="Multiline"
+  [p-height]="400"
+  [p-show-pointer]="true"
+  p-description="Teste de indentação preservada"
+>
+</po-gauge>
+
+<!-- CASO 12b: tudo em uma linha só -->
+<h3>Caso 12b: Inline</h3>
+<po-gauge [p-value]="x" [p-ranges]="r" p-title="Inline" [p-height]="100" [p-show-from-to-legend]="true"></po-gauge>
+
+<!-- CASO 12c: self-closing style (sem conteúdo, mas com /> implícito) -->
+<h3>Caso 12c: Tag fechada imediata</h3>
+<po-gauge [p-value]="x" p-title="Fechada"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 13: p-height variações
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 13: Height mínimo (300)</h3>
+<po-gauge [p-value]="50" p-title="Min Height" [p-height]="300"></po-gauge>
+
+<!-- CASO 13b: Height abaixo do mínimo (deve usar 300) -->
+<h3>Caso 13b: Height abaixo do mínimo</h3>
+<po-gauge [p-value]="50" p-title="Below Min" [p-height]="100"></po-gauge>
+
+<!-- CASO 13c: Height grande -->
+<h3>Caso 13c: Height grande</h3>
+<po-gauge [p-value]="50" p-title="Big Height" [p-height]="600"></po-gauge>
+
+<!-- CASO 13d: Height com variável -->
+<h3>Caso 13d: Height dinâmico</h3>
+<po-gauge [p-value]="50" p-title="Dynamic Height" [p-height]="dynamicHeight"></po-gauge>
+
+<!-- CASO 13e: Height com valor literal -->
+<h3>Caso 13e: Height literal</h3>
+<po-gauge [p-value]="50" p-title="Static Height" [p-height]="400"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 14: p-description variações
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 14: Description com ranges (acima do gauge)</h3>
+<po-gauge [p-value]="75" [p-ranges]="gaugeRanges" p-description="Descrição acima do gauge" p-title="Com Ranges">
+</po-gauge>
+
+<!-- CASO 14b: Description sem ranges (dentro do arco) -->
+<h3>Caso 14b: Description sem ranges (dentro do arco)</h3>
+<po-gauge [p-value]="75" p-description="Dentro do arco"> </po-gauge>
+
+<!-- CASO 14c: Description com binding de variável -->
+<h3>Caso 14c: Description dinâmico</h3>
+<po-gauge [p-value]="75" [p-description]="dynamicDescription"> </po-gauge>
+
+<!-- CASO 14d: Description longo -->
+<h3>Caso 14d: Description longo</h3>
+<po-gauge
+  [p-value]="75"
+  p-description="Esta é uma descrição muito longa para testar o comportamento do componente com textos extensos"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 15: p-title variações
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 15: Title com binding</h3>
+<po-gauge [p-value]="50" [p-title]="dynamicTitle"></po-gauge>
+
+<!-- CASO 15b: Title com interpolação via variável -->
+<h3>Caso 15b: Title com expressão ternária</h3>
+<po-gauge [p-value]="50" [p-title]="isActive ? 'Ativo' : 'Inativo'"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 16: Conflito p-options vs propriedades individuais (prioridade)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 16: p-options + p-show-from-to-legend (conflito)</h3>
+<po-gauge
+  [p-value]="60"
+  [p-ranges]="gaugeRanges"
+  p-title="Conflito"
+  [p-show-from-to-legend]="true"
+  [p-show-pointer]="false"
+  [p-options]="{ showFromToLegend: false, pointer: true }"
+>
+</po-gauge>
+
+<!-- CASO 16b: p-options com description + p-description separado -->
+<h3>Caso 16b: Conflito description</h3>
+<po-gauge
+  [p-value]="70"
+  [p-ranges]="gaugeRanges"
+  p-title="Conflito Desc"
+  p-description="Desc pela propriedade"
+  [p-options]="{ descriptionChart: 'Desc pelo options' }"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 17: Ranges com valores extremos
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 17: Ranges com valor abaixo do from mínimo</h3>
+<po-gauge [p-value]="5" [p-ranges]="rangesStartAt20" p-title="Value < min from"> </po-gauge>
+
+<!-- CASO 17b: Ranges com valor acima do to máximo -->
+<h3>Caso 17b: Value acima do max to</h3>
+<po-gauge [p-value]="120" [p-ranges]="rangesEndAt80" p-title="Value > max to"> </po-gauge>
+
+<!-- CASO 17c: Ranges com from/to negativos -->
+<h3>Caso 17c: Ranges negativos</h3>
+<po-gauge [p-value]="-15" [p-ranges]="negativeRanges" p-title="Negative Ranges"> </po-gauge>
+
+<!-- CASO 17d: Single range -->
+<h3>Caso 17d: Um único range</h3>
+<po-gauge [p-value]="50" [p-ranges]="singleRange" p-title="Single Range"> </po-gauge>
+
+<!-- CASO 17e: Muitos ranges -->
+<h3>Caso 17e: Muitos ranges (12)</h3>
+<po-gauge [p-value]="50" [p-ranges]="manyRanges" p-title="Many Ranges" [p-show-from-to-legend]="true"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 18: Uso dentro de po-container (exemplo do sample-summary)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 18: Dentro de po-container</h3>
+<po-container>
+  <div class="po-font-title po-mb-3">Sales Performance</div>
+  <div class="po-row">
+    <div class="po-md-6">
+      <po-gauge
+        p-title="Employee turnover rate"
+        [p-value]="25"
+        p-description="25% of turnover"
+        [p-show-from-to-legend]="true"
+        [p-ranges]="turnoverRanges"
+      >
+      </po-gauge>
+    </div>
+    <div class="po-md-6">
+      <po-gauge
+        p-title="Sales performance"
+        [p-value]="82"
+        p-description="The sales increased in 82%"
+        [p-show-from-to-legend]="true"
+        [p-ranges]="salesRanges"
+      >
+      </po-gauge>
+    </div>
+  </div>
+</po-container>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 19: Uso com pipe
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 19: Value com expressão concatenada</h3>
+<po-gauge [p-value]="rawValue" [p-title]="'Score: ' + score"> </po-gauge>
+
+<!-- CASO 19b: Description com pipe -->
+<h3>Caso 19b: Description com pipe</h3>
+<po-gauge [p-value]="score" [p-description]="descricao | uppercase"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 20: Uso com async pipe (Observable)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 20: Value com async pipe</h3>
+<po-gauge
+  [p-value]="$any(gaugeValue$ | async)"
+  [p-title]="$any(gaugeTitle$ | async)"
+  [p-ranges]="$any(gaugeRanges$ | async)"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 21: Gauge sem nenhuma propriedade (empty)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 21: Gauge vazio (sem props)</h3>
+<po-gauge></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 22: p-options com header completo
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 22: Header options completo</h3>
+<po-gauge [p-value]="85" [p-ranges]="gaugeRanges" p-title="Full Header" [p-options]="fullHeaderOptions"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 23: Uso com ViewChild / template reference
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 23: Com template reference</h3>
+<po-gauge #myGauge [p-value]="val" p-title="Com Ref" [p-ranges]="gaugeRanges"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 24: Combinação com outros componentes PO
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 24: Dentro de po-widget</h3>
+<po-widget p-title="Dashboard">
+  <po-gauge [p-value]="cpu" p-title="CPU" [p-ranges]="cpuRanges"></po-gauge>
+</po-widget>
+
+<!-- CASO 24b: Dentro de po-accordion -->
+<h3>Caso 24b: Dentro de po-accordion</h3>
+<po-accordion>
+  <po-accordion-item p-label="Gauge 1">
+    <po-gauge [p-value]="25" p-title="Accordion Gauge" [p-ranges]="gaugeRanges"></po-gauge>
+  </po-accordion-item>
+</po-accordion>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 25: p-value com expressões complexas
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 25: Value com expressão aritmética</h3>
+<po-gauge [p-value]="cpu + memory" p-title="Soma"></po-gauge>
+
+<!-- CASO 25b: Value com ternário -->
+<h3>Caso 25b: Value com ternário</h3>
+<po-gauge [p-value]="isActive ? 100 : 0" p-title="Ternário"></po-gauge>
+
+<!-- CASO 25c: Value com método -->
+<h3>Caso 25c: Value com método</h3>
+<po-gauge [p-value]="getGaugeValue()" p-title="Método"></po-gauge>
+
+<!-- CASO 25d: Value com acesso a propriedade de objeto -->
+<h3>Caso 25d: Value de objeto</h3>
+<po-gauge [p-value]="gaugeData.value" [p-title]="gaugeData.title" [p-ranges]="gaugeData.ranges"></po-gauge>
+
+<!-- CASO 25e: Value com non-null assertion -->
+<h3>Caso 25e: Value com non-null assertion</h3>
+<po-gauge [p-value]="gaugeData!.value" [p-title]="gaugeData!.title"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 26: Indentação com tabs vs espaços
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 26: Indentação com 2 espaços</h3>
+<div>
+  <po-gauge [p-value]="50" p-title="2 Spaces" [p-ranges]="gaugeRanges"> </po-gauge>
+</div>
+
+<!-- CASO 26b: Indentação com 4 espaços -->
+<h3>Caso 26b: Indentação com 4 espaços</h3>
+<div>
+  <po-gauge [p-value]="50" p-title="4 Spaces" [p-ranges]="gaugeRanges" [p-height]="350"> </po-gauge>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 27: Uso com @if / @for (nova sintaxe de controle Angular 17+)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 27: Com &#64;if (Angular 17+)</h3>
+@if (showGauge) {
+  <po-gauge [p-value]="val" p-title="New Control Flow"></po-gauge>
+}
+
+<!-- CASO 27b: Com @for -->
+<h3>Caso 27b: Com &#64;for</h3>
+@for (item of gaugeItems; track item.title) {
+  <po-gauge [p-value]="item.value" [p-title]="item.title" [p-ranges]="item.ranges"> </po-gauge>
+}
+
+<!-- CASO 27c: Com @switch -->
+<h3>Caso 27c: Com &#64;switch</h3>
+@switch (gaugeType) {
+  @case ('simple') {
+    <po-gauge [p-value]="val" p-title="Simple Switch"></po-gauge>
+  }
+  @case ('ranged') {
+    <po-gauge [p-value]="val" [p-ranges]="gaugeRanges" p-title="Ranged Switch"></po-gauge>
+  }
+  @default {
+    <po-gauge [p-value]="val" p-title="Default Switch"></po-gauge>
+  }
+}
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 28: Gauge com p-ranges vazio (array vazio)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 28: Ranges vazio</h3>
+<po-gauge [p-value]="50" [p-ranges]="emptyRanges" p-title="Empty Ranges"></po-gauge>
+
+<!-- CASO 28b: Ranges undefined/null -->
+<h3>Caso 28b: Ranges null</h3>
+<po-gauge [p-value]="50" [p-ranges]="nullRanges" p-title="Null Ranges"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 29: p-options com apenas showContainerGauge
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 29: Options apenas showContainerGauge true</h3>
+<po-gauge [p-value]="80" p-title="Container True" [p-options]="{ showContainerGauge: true }"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 30: Gauge com atributos extras (simulação de cenário com atributos custom)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 30: Atributos extras preservados</h3>
+<po-gauge [p-value]="50" p-title="Título Extra" p-description="Descrição Extra" [attr.data-i18n]="'gauge-30'">
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 31: Gauge com comentários HTML internos
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 31: Gauge entre comentários HTML</h3>
+<!-- comentário antes -->
+<po-gauge [p-value]="val" p-title="Com Comentário" [p-ranges]="gaugeRanges"> </po-gauge>
+<!-- comentário depois -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 32: Uso do po-gauge labs (todas as propriedades dinâmicas)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 32: Labs-style (tudo dinâmico)</h3>
+<po-gauge
+  [p-description]="labsDescription"
+  [p-height]="labsHeight"
+  [p-ranges]="labsRanges"
+  [p-title]="labsTitle"
+  [p-value]="labsValue"
+  [p-options]="labsOptions"
+  [p-show-from-to-legend]="labsShowFromToLegend"
+  [p-show-pointer]="labsShowPointer"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 33: Apenas p-value sem nenhum outro atributo de gauge
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 33: Minimal — só valor decimal</h3>
+<po-gauge [p-value]="33.33"></po-gauge>
+
+<!-- CASO 33b: Valor com muitas decimais -->
+<h3>Caso 33b: Valor decimal longo</h3>
+<po-gauge [p-value]="66.6666667"></po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 34: Gauge com output events (click, etc) - atributos não-gauge
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 34: Com múltiplos event handlers</h3>
+<po-gauge
+  [p-value]="val"
+  p-title="Events"
+  (click)="onGaugeClick()"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 35: Gauge dentro de formulário
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 35: Dentro de form</h3>
+<form>
+  <po-gauge [p-value]="formValue" p-title="Form Gauge" [p-ranges]="gaugeRanges" [p-show-from-to-legend]="true">
+  </po-gauge>
+</form>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 36: p-ranges com ranges inline (literal array no template)
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 36: Ranges inline literal</h3>
+<po-gauge
+  [p-value]="60"
+  p-title="Inline Ranges"
+  [p-ranges]="[
+    { from: 0, to: 50, label: 'Low', color: 'red' },
+    { from: 50, to: 100, label: 'High', color: 'green' }
+  ]"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 37: Gauge com binding de duas vias (banana-in-a-box) - edge case
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 37: Atributos não-standard</h3>
+<po-gauge [p-value]="val" p-title="Non-Standard" [hidden]="!showGauge" tabindex="0" role="img"> </po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 38: Gauge com múltiplas classes e bindings de estilo
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 38: Múltiplas classes</h3>
+<po-gauge
+  [p-value]="val"
+  p-title="Multi Class"
+  class="gauge-wrapper po-mb-3 po-mt-2"
+  [class.highlighted]="isActive"
+  [class.dimmed]="!isActive"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 39: Gauge com @Input de componente pai passado como parâmetro
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 39: Propriedades de @Input do pai</h3>
+<po-gauge
+  [p-value]="inputValue"
+  [p-title]="inputTitle"
+  [p-description]="inputDescription"
+  [p-ranges]="inputRanges"
+  [p-height]="inputHeight"
+  [p-show-from-to-legend]="inputShowLegend"
+  [p-show-pointer]="inputShowPointer"
+  [p-options]="inputOptions"
+>
+</po-gauge>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+          CASO 40: Combinação de p-options e TODAS as propriedades individuais
+          ═══════════════════════════════════════════════════════════════════════════ -->
+<h3>Caso 40: Tudo junto — máximo de propriedades</h3>
+<po-gauge
+  [p-value]="currentValue"
+  [p-ranges]="gaugeRanges"
+  [p-description]="descricao"
+  [p-title]="dynamicTitle"
+  [p-height]="dynamicHeight"
+  [p-show-from-to-legend]="showLegendFlag"
+  [p-show-pointer]="showPointerFlag"
+  [p-options]="fullOptions"
+  class="full-gauge"
+  id="gauge-full"
+  [ngClass]="{ active: isActive }"
+  *ngIf="showGauge"
+  data-testid="full-gauge"
+  #fullGauge
+  (click)="onGaugeClick()"
+>
+</po-gauge>
