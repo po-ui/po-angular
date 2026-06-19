@@ -497,6 +497,8 @@ export class PoMultiselectComponent
         }
       }
     } else {
+      this.visibleTags = [];
+      this.changeDetector.detectChanges();
       index = this.selectedOptions.findIndex(option => option[this.fieldValue] === value);
       this.selectedOptions.splice(index, 1);
       this.updateVisibleItems();
