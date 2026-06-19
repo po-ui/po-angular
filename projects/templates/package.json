@@ -16,7 +16,6 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/animations": "^22",
     "@angular/common": "^22",
     "@angular/compiler": "^22",
     "@angular/core": "^22",
