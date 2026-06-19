@@ -59,7 +59,7 @@ ng update @po-ui/ng-components@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components --allow-dirty --force
+ng update @po-ui/ng-components@next --allow-dirty --force
 ```
 
 > Caso ocorra um erro ao concluir o comando acima pode ser necessário fazer uma instalação limpa no projeto apagando a pasta `node_modules` e o arquivo `package-lock.json` e executando o comando `npm i --legacy-peer-deps` antes de realizar o `ng update`.
@@ -92,12 +92,43 @@ ng update @po-ui/ng-sync@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync --allow-dirty --force
+ng update @po-ui/ng-sync@next --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
   - `@po-ui/ng-sync`;
   - `@po-ui/ng-storage`;
+
+> Pode ocorrer o seguinte erro `TypeError: Failed to fetch dynamically imported module...`, sendo necessário adicionar ao arquivo `angular.json` as seguintes configurações:
+> ```json
+> {
+>   "projects": {
+>     "app": {
+>       ...
+>       "architect": {
+>         ...
+>         "build": {
+>           ...
+>           "options": {
+>             ...
+>             "polyfills": ["zone.js"],
+>           },
+>         },
+>         "serve": {
+>           ...
+>           "builder": "@angular/build:dev-server",
+>           "options": {
+>             ...
+>             "prebundle": {
+>               "exclude": ["@ionic/angular", "@ionic/core", "ionicons"]
+>             }
+>           }
+>         },
+>       }
+>     }
+>   },
+> }
+> ```
 
 ## Depreciações e Breaking Changes
 
