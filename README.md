@@ -65,13 +65,13 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~22.0.1",
     "@angular-devkit/schematics": "~22.0.1",
     "@angular/build": "~22.2.1",
     "@angular/cli": "~22.0.1",
     "@angular/compiler-cli": "~22.0.1",
     ...
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "^4.0.0"
   }
 ```
 
@@ -89,7 +89,7 @@ Caso prefira instalar com o yarn:
 yarn install
 ```
 
-### Passo 2 - Adiconando o pacote @po-ui/ng-components
+### Passo 2 - Adicionando o pacote @po-ui/ng-components
 
 Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos adicionar o **Po** em seu projeto e o mesmo se encarregará de configurar o tema, instalar o  guia de primeiros passos **Po**. Além de importar também o modulo **HttpClientModule**.
 
