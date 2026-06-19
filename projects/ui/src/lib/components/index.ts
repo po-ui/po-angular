@@ -17,7 +17,6 @@ export * from './po-dropdown/index';
 export * from './po-dynamic/index';
 export * from './po-field/index';
 export * from './po-filter-chip/index';
-export * from './po-gauge/index';
 export * from './po-grid/index';
 export * from './po-helper/index';
 export * from './po-icon/index';
