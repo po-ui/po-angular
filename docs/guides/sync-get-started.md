@@ -9,9 +9,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~21.2.4):
+- [Angular CLI](https://cli.angular.io/) (~22.0.1):
   - ```shell
-    npm install -g @angular/cli@21
+    npm install -g @angular/cli@22
     ```
 - [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
   - ```shell
@@ -42,10 +42,10 @@ Navegue até a pasta do aplicativo:
 cd po-sync-getting-started
 ```
 
-Antes de instalar o po-sync, é necessário atualizar o projeto para o Angular 21, garantindo compatibilidade com o PO UI.
+Antes de instalar o po-sync, é necessário atualizar o projeto para o Angular 22, garantindo compatibilidade com o PO UI.
 
 ```shell
-ng update @angular/core@21 @angular/cli@21
+ng update @angular/core@22 @angular/cli@22
 ```
 
 > Esse passo é necessário porque o projeto foi inicialmente criado com Angular 20, e o upgrade garante compatibilidade com as versões utilizadas pelo PO UI.
@@ -55,14 +55,14 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 ```json
   ...
   "dependencies": {
-    "@angular/animations": "~21.2.4",
-    "@angular/common": "~21.2.4",
-    "@angular/compiler": "~21.2.4",
-    "@angular/core": "~21.2.4",
-    "@angular/forms": "~21.2.4",
-    "@angular/platform-browser": "~21.2.4",
-    "@angular/platform-browser-dynamic": "~21.2.4",
-    "@angular/router": "~21.2.4",
+    "@angular/animations": "~22.0.1",
+    "@angular/common": "~22.0.1",
+    "@angular/compiler": "~22.0.1",
+    "@angular/core": "~22.0.1",
+    "@angular/forms": "~22.0.1",
+    "@angular/platform-browser": "~22.0.1",
+    "@angular/platform-browser-dynamic": "~22.0.1",
+    "@angular/router": "~22.0.1",
     "@capacitor/app": "8.0.0",
     "@capacitor/core": "8.0.1",
     "@capacitor/haptics": "8.0.0",
@@ -76,15 +76,15 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "~21.2.4",
+    "@angular-devkit/schematics": "~22.0.1",
     ...
-    "@angular/cli": "~21.2.4",
-    "@angular/compiler-cli": "~21.2.4",
-    "@angular/language-service": "~21.2.4",
+    "@angular/cli": "~22.0.1",
+    "@angular/compiler-cli": "~22.0.1",
+    "@angular/language-service": "~22.0.1",
     "@capacitor/cli": "8.0.1",
     "@ionic/angular-toolkit": "^12.0.0",
     ...
-    "typescript": "~5.9.3"
+    "typescript": "~6.0.3"
   },
   ...
 ```

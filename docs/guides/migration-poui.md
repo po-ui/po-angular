@@ -13,7 +13,7 @@ Antes de atualizar a versão do PO UI, é importante que você tenha atualizado 
 o Angular que o PO UI está homologado, veja nossa
 [tabela de compatibilidade](https://github.com/po-ui/po-angular/wiki#vers%C3%B5es-angular-x-po-ui) em nosso Github Wiki.
 
-> Caso o seu projeto esteja na versão Angular@20:
+> Caso o seu projeto esteja na versão Angular@21:
 Realize a instalação do pacote Schematics do Angular para o nosso script de atualização funcionar corretamente: 
 
 ```
@@ -29,7 +29,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@21 @angular/core@21 --force
+ng update @angular/cli@22 @angular/core@22 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -70,7 +70,7 @@ ng update @po-ui/ng-components --allow-dirty --force
 ```json
   "devDependencies": {
     ...,
-    "@angular-devkit/schematics": "~21.2.4",
+    "@angular-devkit/schematics": "~22.0.1",
     ...
   }
 ```
