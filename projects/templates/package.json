@@ -21,7 +21,6 @@
     "@angular/core": "^22",
     "@angular/forms": "^22",
     "@angular/platform-browser": "^22",
-    "@angular/platform-browser-dynamic": "^22",
     "@angular/router": "^22",
     "@po-ui/ng-components": "0.0.0-PLACEHOLDER",
     "rxjs": "~7.8.1",

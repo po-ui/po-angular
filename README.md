@@ -58,7 +58,6 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     "@angular/core": "~22.0.1",
     "@angular/forms": "~22.0.1",
     "@angular/platform-browser": "~22.0.1",
-    "@angular/platform-browser-dynamic": "~22.0.1",
     "@angular/router": "~22.0.1",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",

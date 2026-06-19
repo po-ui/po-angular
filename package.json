@@ -74,7 +74,6 @@
     "@angular/core": "~22.0.1",
     "@angular/forms": "~22.0.1",
     "@angular/platform-browser": "~22.0.1",
-    "@angular/platform-browser-dynamic": "~22.0.1",
     "@angular/router": "~22.0.1",
     "@capacitor/core": "5.7.2",
     "@capacitor/network": "^5.0.7",
