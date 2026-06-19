@@ -468,6 +468,38 @@ describe('PoMultiselectComponent:', () => {
     expect(component.selectedOptions[1].value).toBe(2);
   });
 
+  it(`closeTag: should reset visibleTags to [] and call detectChanges before updating state
+      to prevent "insertBefore on Node" when removing the tag immediately before the "+N" grouped tag`, () => {
+    const option1 = { label: 'label1', value: 1 };
+    const option2 = { label: 'label2', value: 2 };
+    const groupedTag = { label: '+2', value: '' };
+
+    component.visibleTags = [option1, option2, groupedTag];
+    component.selectedOptions = [option1, option2, { label: 'label3', value: 3 }, { label: 'label4', value: 4 }];
+
+    const detectChangesSpy = spyOn(component['changeDetector'], 'detectChanges');
+    spyOn(component, 'updateVisibleItems');
+    spyOn(component, 'callOnChange');
+
+    // Captura o estado de visibleTags no momento em que detectChanges é chamado
+    let visibleTagsAtDetectChanges: Array<any>;
+    detectChangesSpy.and.callFake(() => {
+      visibleTagsAtDetectChanges = [...component.visibleTags];
+    });
+
+    // Remove option2 — tag imediatamente antes do "+N"
+    component['closeTag'](2, 'click');
+
+    // visibleTags deve ter sido zerado antes de detectChanges ser chamado
+    expect(visibleTagsAtDetectChanges).toEqual([]);
+    expect(detectChangesSpy).toHaveBeenCalledBefore(component.updateVisibleItems as jasmine.Spy);
+
+    // O fluxo normal de remoção deve prosseguir normalmente após o reset
+    expect(component.selectedOptions.some(opt => opt.value === 2)).toBeFalse();
+    expect(component.updateVisibleItems).toHaveBeenCalled();
+    expect(component.callOnChange).toHaveBeenCalled();
+  });
+
   describe('showAdditionalHelp:', () => {
     let helperEl: any;
     beforeEach(() => {
