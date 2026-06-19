@@ -53,7 +53,6 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```json
   "dependencies": {
-    "@angular/animations": "~22.0.1",
     "@angular/common": "~22.0.1",
     "@angular/compiler": "~22.0.1",
     "@angular/core": "~22.0.1",
