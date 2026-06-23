@@ -79,7 +79,8 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     { property: 'hireStatus', label: 'Hire Status', options: this.statusOptions, gridColumns: 6 },
     { property: 'name', gridColumns: 6 },
     { property: 'city', gridColumns: 6 },
-    { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 }
+    { property: 'job', label: 'Job Description', options: this.jobDescriptionOptions, gridColumns: 6 },
+    { property: 'active', label: 'Active', type: 'boolean', booleanTrue: 'Yes', booleanFalse: 'No', gridColumns: 6 }
   ];
 
   ngOnInit() {
