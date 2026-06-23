@@ -18,7 +18,8 @@ import {
   PoDynamicFormField,
   PoLanguageService,
   PoPageFilter,
-  PoPageListComponent
+  PoPageListComponent,
+  poLocaleDefault
 } from '@po-ui/ng-components';
 import { Observable, Subscription } from 'rxjs';
 
@@ -29,7 +30,10 @@ import { PoPageDynamicOptionsSchema } from '../../services';
 import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
 import { PoPageDynamicSearchOptions } from './interfaces/po-page-dynamic-search-options.interface';
 import { PoAdvancedFilterComponent } from './po-advanced-filter/po-advanced-filter.component';
-import { PoPageDynamicSearchBaseComponent } from './po-page-dynamic-search-base.component';
+import {
+  PoPageDynamicSearchBaseComponent,
+  poPageDynamicSearchLiteralsDefault
+} from './po-page-dynamic-search-base.component';
 
 type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
 
@@ -302,11 +306,35 @@ export class PoPageDynamicSearchComponent
       return field.range ? this.formatDate(value.start) + ' - ' + this.formatDate(value.end) : this.formatDate(value);
     }
 
+    if (field.type === PoDynamicFieldType.Boolean && typeof value === 'boolean') {
+      return this.formatValueToBoolean(field, value);
+    }
+
     if (field.options && value) {
       return this.applyDisclaimerLabelValue(field, value);
     }
 
     return value;
+  }
+
+  private formatValueToBoolean(field: PoDynamicFormField, value: boolean): string {
+    if (value && field.booleanTrue) {
+      return field.booleanTrue;
+    }
+
+    if (!value && field.booleanFalse) {
+      return field.booleanFalse;
+    }
+
+    const language = this.languageService.getShortLanguage();
+    const fallbackLiterals =
+      poPageDynamicSearchLiteralsDefault[language] ?? poPageDynamicSearchLiteralsDefault[poLocaleDefault];
+
+    const customLiterals = this['_literals'];
+    const trueLabel = customLiterals?.disclaimerBooleanTrue ?? fallbackLiterals.disclaimerBooleanTrue;
+    const falseLabel = customLiterals?.disclaimerBooleanFalse ?? fallbackLiterals.disclaimerBooleanFalse;
+
+    return value ? trueLabel : falseLabel;
   }
 
   private emitChangesDisclaimers(currentDisclaimers: any) {
