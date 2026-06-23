@@ -1,22 +1,26 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "SchematicsNgAdd",
-  "title": "Ng Add Options Schema",
+  "$id": "SchematicsPONgAdd",
+  "title": "PO UI ng-add Options Schema",
   "type": "object",
   "properties": {
     "project": {
       "type": "string",
-      "description": "Name of the project.",
+      "description": "The name of the project.",
       "$default": {
         "$source": "projectName"
       }
     },
     "configSideMenu": {
       "type": "boolean",
-      "description": "When true create a app.component with po-toolbar and po-menu configured.",
-      "default": true,
-      "x-prompt": "Would you like to configure Sidemenu?",
-      "x-user-analytics": 17
+      "description": "Configure side menu layout",
+      "default": false
+    },
+    "enableTelemetry": {
+      "type": "boolean",
+      "description": "Enable anonymous telemetry to help the PO UI team improve components",
+      "default": false,
+      "x-prompt": "Deseja habilitar telemetria anônima para ajudar a equipe do PO UI a melhorar os componentes?"
     }
   },
   "required": []
