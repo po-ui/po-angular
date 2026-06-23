@@ -5,28 +5,28 @@ import { of, throwError } from 'rxjs';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
-import { PoAiSearchResponse, PoAiSearchResult } from './interfaces/po-ai-search.interface';
-import { PoAiSearchComponent } from './po-ai-search.component';
-import { PoAiSearchService } from './po-ai-search.service';
+import { PoSearchAiResponse, PoSearchAiResult } from './interfaces/po-search-ai.interface';
+import { PoSearchAiComponent } from './po-search-ai.component';
+import { PoSearchAiService } from './po-search-ai.service';
 
-describe('PoAiSearchComponent: ', () => {
-  let component: PoAiSearchComponent;
-  let fixture: ComponentFixture<PoAiSearchComponent>;
-  let serviceSpy: jasmine.SpyObj<PoAiSearchService>;
+describe('PoSearchAiComponent: ', () => {
+  let component: PoSearchAiComponent;
+  let fixture: ComponentFixture<PoSearchAiComponent>;
+  let serviceSpy: jasmine.SpyObj<PoSearchAiService>;
 
   configureTestSuite(() => {
-    serviceSpy = jasmine.createSpyObj('PoAiSearchService', ['sendQuery', 'extractColumnsMetadata']);
+    serviceSpy = jasmine.createSpyObj('PoSearchAiService', ['sendQuery', 'extractColumnsMetadata']);
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [PoAiSearchComponent],
-      providers: [{ provide: PoAiSearchService, useValue: serviceSpy }],
+      declarations: [PoSearchAiComponent],
+      providers: [{ provide: PoSearchAiService, useValue: serviceSpy }],
       schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PoAiSearchComponent);
+    fixture = TestBed.createComponent(PoSearchAiComponent);
     component = fixture.componentInstance;
     component.url = '/api/ai-search';
     serviceSpy.extractColumnsMetadata.and.returnValue([]);
@@ -128,7 +128,7 @@ describe('PoAiSearchComponent: ', () => {
       });
 
       it('should emit p-result and apply feedback on a confident response', () => {
-        const response: PoAiSearchResponse = { filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 };
+        const response: PoSearchAiResponse = { filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 };
         serviceSpy.sendQuery.and.returnValue(of(response));
         const resultSpy = spyOn(component.result, 'emit');
 
@@ -144,7 +144,7 @@ describe('PoAiSearchComponent: ', () => {
       });
 
       it('should not set appliedDescription when showAppliedFeedback is false', () => {
-        const response: PoAiSearchResponse = { filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 };
+        const response: PoSearchAiResponse = { filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 };
         serviceSpy.sendQuery.and.returnValue(of(response));
         component.showAppliedFeedback = false;
 
@@ -154,7 +154,7 @@ describe('PoAiSearchComponent: ', () => {
       });
 
       it('should treat missing confidence as fully confident (1)', () => {
-        const response: PoAiSearchResponse = { filter: `city eq 'SP'`, description: 'cidade SP' };
+        const response: PoSearchAiResponse = { filter: `city eq 'SP'`, description: 'cidade SP' };
         serviceSpy.sendQuery.and.returnValue(of(response));
         const resultSpy = spyOn(component.result, 'emit');
 
@@ -164,7 +164,7 @@ describe('PoAiSearchComponent: ', () => {
       });
 
       it('should emit p-low-confidence when confidence is below min-confidence', () => {
-        const response: PoAiSearchResponse = { filter: '', description: 'incerto', confidence: 0.2 };
+        const response: PoSearchAiResponse = { filter: '', description: 'incerto', confidence: 0.2 };
         serviceSpy.sendQuery.and.returnValue(of(response));
         const lowSpy = spyOn(component.lowConfidence, 'emit');
         const resultSpy = spyOn(component.result, 'emit');
@@ -246,7 +246,7 @@ describe('PoAiSearchComponent: ', () => {
 
     describe('ngOnDestroy:', () => {
       it('should unsubscribe the ai subscription', () => {
-        const response: PoAiSearchResponse = { filter: 'x', description: 'd', confidence: 1 };
+        const response: PoSearchAiResponse = { filter: 'x', description: 'd', confidence: 1 };
         serviceSpy.sendQuery.and.returnValue(of(response));
         spyOn(component, 'getScreenValue').and.returnValue('algo');
         component.search();

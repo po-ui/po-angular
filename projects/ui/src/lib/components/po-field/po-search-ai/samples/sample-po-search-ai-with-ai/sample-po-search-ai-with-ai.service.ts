@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { PoAiSearchResponse } from '@po-ui/ng-components';
+import { PoSearchAiResponse } from '@po-ui/ng-components';
 
 /**
  * Serviço de mock que simula o backend (proxy) de IA para fins de demonstração.
  *
- * Em um cenário real, o `po-ai-search` faz um `POST` para `p-url` e o backend encaminha
+ * Em um cenário real, o `po-search-ai` faz um `POST` para `p-url` e o backend encaminha
  * a consulta para a LLM. Aqui, interpretamos algumas palavras-chave localmente para
  * gerar um filtro OData e uma descrição, sem nenhuma chamada externa.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class SamplePoAiSearchWithAiService {
-  interpret(query: string): Observable<PoAiSearchResponse> {
+export class SamplePoSearchAiWithAiService {
+  interpret(query: string): Observable<PoSearchAiResponse> {
     const normalized = (query || '').toLowerCase();
     const filters: Array<string> = [];
     const descriptions: Array<string> = [];
@@ -39,7 +39,7 @@ export class SamplePoAiSearchWithAiService {
 
     const confidence = filters.length ? 0.9 : 0.2;
 
-    const response: PoAiSearchResponse = {
+    const response: PoSearchAiResponse = {
       filter: filters.join(' and '),
       description: descriptions.length ? descriptions.join(', ') : 'Não foi possível interpretar a busca',
       confidence

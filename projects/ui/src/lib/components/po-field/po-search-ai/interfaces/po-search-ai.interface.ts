@@ -1,31 +1,31 @@
-import { PoAiSearchColumn } from './po-ai-search-column.interface';
+import { PoSearchAiColumn } from './po-search-ai-column.interface';
 
 /**
- * @usedBy PoAiSearchComponent
+ * @usedBy PoSearchAiComponent
  *
  * @description
  *
  * Interface que define o payload enviado ao endpoint de IA configurado via `p-url`.
  *
  * O componente é **agnóstico ao provedor de IA**: o backend (proxy) recebe este payload,
- * encaminha para a LLM e retorna um `PoAiSearchResponse`.
+ * encaminha para a LLM e retorna um `PoSearchAiResponse`.
  */
-export interface PoAiSearchRequest {
+export interface PoSearchAiRequest {
   /** Texto em linguagem natural digitado pelo usuário. */
   query: string;
 
-  /** Metadados dos campos disponíveis para a busca (ver `PoAiSearchColumn`). */
-  columns: Array<PoAiSearchColumn>;
+  /** Metadados dos campos disponíveis para a busca (ver `PoSearchAiColumn`). */
+  columns: Array<PoSearchAiColumn>;
 }
 
 /**
- * @usedBy PoAiSearchComponent
+ * @usedBy PoSearchAiComponent
  *
  * @description
  *
  * Interface que define a resposta esperada do endpoint de IA configurado via `p-url`.
  */
-export interface PoAiSearchResponse {
+export interface PoSearchAiResponse {
   /**
    * Filtro gerado pela IA, normalmente no padrão OData
    * (ex: `age gt 30 and city eq 'São Paulo'`).
@@ -44,13 +44,13 @@ export interface PoAiSearchResponse {
 }
 
 /**
- * @usedBy PoAiSearchComponent
+ * @usedBy PoSearchAiComponent
  *
  * @description
  *
  * Interface que define o objeto emitido pelos eventos `p-result` e `p-low-confidence`.
  */
-export interface PoAiSearchResult {
+export interface PoSearchAiResult {
   /** Texto original digitado pelo usuário. */
   query: string;
 
@@ -65,14 +65,14 @@ export interface PoAiSearchResult {
 }
 
 /**
- * @usedBy PoAiSearchComponent
+ * @usedBy PoSearchAiComponent
  *
  * @description
  *
  * Interface que define o objeto emitido pelo evento `p-error` quando a chamada à
  * API de IA falha (erro HTTP, timeout, resposta inválida, etc.).
  */
-export interface PoAiSearchError {
+export interface PoSearchAiError {
   /** Texto original digitado pelo usuário. */
   query: string;
 

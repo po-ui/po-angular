@@ -12,62 +12,62 @@ import {
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { uuid } from '../../../utils/util';
-import { PoAiSearchResult } from './interfaces/po-ai-search.interface';
-import { PoAiSearchBaseComponent } from './po-ai-search-base.component';
-import { PoAiSearchService } from './po-ai-search.service';
+import { PoSearchAiResult } from './interfaces/po-search-ai.interface';
+import { PoSearchAiBaseComponent } from './po-search-ai-base.component';
+import { PoSearchAiService } from './po-search-ai.service';
 
 /**
- * @docsExtends PoAiSearchBaseComponent
+ * @docsExtends PoSearchAiBaseComponent
  *
  * @example
  *
- * <example name="po-ai-search-basic" title="PO AI Search Basic">
- *  <file name="sample-po-ai-search-basic/sample-po-ai-search-basic.component.html"> </file>
- *  <file name="sample-po-ai-search-basic/sample-po-ai-search-basic.component.ts"> </file>
+ * <example name="po-search-ai-basic" title="PO AI Search Basic">
+ *  <file name="sample-po-search-ai-basic/sample-po-search-ai-basic.component.html"> </file>
+ *  <file name="sample-po-search-ai-basic/sample-po-search-ai-basic.component.ts"> </file>
  * </example>
  *
- * <example name="po-ai-search-labs" title="PO AI Search Labs">
- *  <file name="sample-po-ai-search-labs/sample-po-ai-search-labs.component.html"> </file>
- *  <file name="sample-po-ai-search-labs/sample-po-ai-search-labs.component.ts"> </file>
+ * <example name="po-search-ai-labs" title="PO AI Search Labs">
+ *  <file name="sample-po-search-ai-labs/sample-po-search-ai-labs.component.html"> </file>
+ *  <file name="sample-po-search-ai-labs/sample-po-search-ai-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-ai-search-with-ai" title="PO AI Search - Search with AI">
- *  <file name="sample-po-ai-search-with-ai/sample-po-ai-search-with-ai.component.html"> </file>
- *  <file name="sample-po-ai-search-with-ai/sample-po-ai-search-with-ai.component.ts"> </file>
- *  <file name="sample-po-ai-search-with-ai/sample-po-ai-search-with-ai.service.ts"> </file>
+ * <example name="po-search-ai-with-ai" title="PO AI Search - Search with AI">
+ *  <file name="sample-po-search-ai-with-ai/sample-po-search-ai-with-ai.component.html"> </file>
+ *  <file name="sample-po-search-ai-with-ai/sample-po-search-ai-with-ai.component.ts"> </file>
+ *  <file name="sample-po-search-ai-with-ai/sample-po-search-ai-with-ai.service.ts"> </file>
  * </example>
  */
 @Component({
-  selector: 'po-ai-search',
-  templateUrl: './po-ai-search.component.html',
+  selector: 'po-search-ai',
+  templateUrl: './po-search-ai.component.html',
   providers: [
-    PoAiSearchService,
+    PoSearchAiService,
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PoAiSearchComponent),
+      useExisting: forwardRef(() => PoSearchAiComponent),
       multi: true
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PoAiSearchComponent),
+      useExisting: forwardRef(() => PoSearchAiComponent),
       multi: true
     }
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PoAiSearchComponent extends PoAiSearchBaseComponent implements OnChanges {
+export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnChanges {
   @ViewChild('inp', { static: true }) inp: ElementRef;
 
-  id = `po-ai-search[${uuid()}]`;
+  id = `po-search-ai[${uuid()}]`;
 
   /* istanbul ignore next */
   constructor() {
     const el = inject(ElementRef);
-    const aiSearchService = inject(PoAiSearchService);
+    const searchAiService = inject(PoSearchAiService);
     const cd = inject(ChangeDetectorRef);
 
-    super(el, aiSearchService, cd);
+    super(el, searchAiService, cd);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -92,16 +92,16 @@ export class PoAiSearchComponent extends PoAiSearchBaseComponent implements OnCh
 
     this.aiSubscription?.unsubscribe();
 
-    const columnsMetadata = this.aiSearchService.extractColumnsMetadata(this.columns || []);
+    const columnsMetadata = this.searchAiService.extractColumnsMetadata(this.columns || []);
 
     this.aiLoading = true;
     this.loading = true;
     this.appliedDescription = '';
     this.cd?.detectChanges();
 
-    this.aiSubscription = this.aiSearchService.sendQuery(this.url, query, columnsMetadata, this.timeout).subscribe({
+    this.aiSubscription = this.searchAiService.sendQuery(this.url, query, columnsMetadata, this.timeout).subscribe({
       next: response => {
-        const result: PoAiSearchResult = {
+        const result: PoSearchAiResult = {
           query,
           filter: response?.filter,
           description: response?.description,
@@ -151,7 +151,7 @@ export class PoAiSearchComponent extends PoAiSearchBaseComponent implements OnCh
     return null;
   }
 
-  private handleResponse(result: PoAiSearchResult): void {
+  private handleResponse(result: PoSearchAiResult): void {
     this.aiLoading = false;
     this.loading = false;
 

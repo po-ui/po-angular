@@ -5,18 +5,18 @@ import { Subscription } from 'rxjs';
 
 import { convertToBoolean } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
-import { PoAiSearchColumn } from './interfaces/po-ai-search-column.interface';
-import { PoAiSearchError, PoAiSearchResult } from './interfaces/po-ai-search.interface';
-import { PoAiSearchService } from './po-ai-search.service';
+import { PoSearchAiColumn } from './interfaces/po-search-ai-column.interface';
+import { PoSearchAiError, PoSearchAiResult } from './interfaces/po-search-ai.interface';
+import { PoSearchAiService } from './po-search-ai.service';
 
-const PO_AI_SEARCH_DEFAULT_TIMEOUT = 10000;
-const PO_AI_SEARCH_DEFAULT_MIN_CONFIDENCE = 0.5;
+const PO_SEARCH_AI_DEFAULT_TIMEOUT = 10000;
+const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
 
 /* eslint-disable @angular-eslint/directive-class-suffix */
 /**
  * @description
  *
- * O `po-ai-search` é um componente de **busca em linguagem natural** baseado em input.
+ * O `po-search-ai` é um componente de **busca em linguagem natural** baseado em input.
  * Ele permite que o usuário digite uma consulta em texto livre (por exemplo,
  * *"clientes de SP com saldo acima de R$ 500"*) e a converte, através de um provedor de IA,
  * em um filtro estruturado (normalmente OData) que pode ser aplicado por outro componente,
@@ -53,7 +53,7 @@ const PO_AI_SEARCH_DEFAULT_MIN_CONFIDENCE = 0.5;
  * seguem os Design Tokens do Animalia DS.
  */
 @Directive()
-export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements OnDestroy {
+export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements OnDestroy {
   /**
    * @optional
    *
@@ -65,7 +65,7 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
    *
    * @default `[]`
    */
-  @Input('p-columns') columns: Array<PoAiSearchColumn> = [];
+  @Input('p-columns') columns: Array<PoSearchAiColumn> = [];
 
   /**
    * @optional
@@ -73,9 +73,9 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
    * @description
    *
    * Evento disparado quando a IA retorna um resultado com confiança maior ou igual a
-   * `p-min-confidence`. Emite um objeto `PoAiSearchResult`.
+   * `p-min-confidence`. Emite um objeto `PoSearchAiResult`.
    */
-  @Output('p-result') result = new EventEmitter<PoAiSearchResult>();
+  @Output('p-result') result = new EventEmitter<PoSearchAiResult>();
 
   /**
    * @optional
@@ -83,10 +83,10 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
    * @description
    *
    * Evento disparado quando a confiança da resposta da IA é menor que `p-min-confidence`.
-   * Emite um objeto `PoAiSearchResult`, permitindo ao desenvolvedor decidir o que fazer
+   * Emite um objeto `PoSearchAiResult`, permitindo ao desenvolvedor decidir o que fazer
    * (ex: confirmar com o usuário antes de aplicar o filtro).
    */
-  @Output('p-low-confidence') lowConfidence = new EventEmitter<PoAiSearchResult>();
+  @Output('p-low-confidence') lowConfidence = new EventEmitter<PoSearchAiResult>();
 
   /**
    * @optional
@@ -94,9 +94,9 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
    * @description
    *
    * Evento disparado quando a chamada à API de IA falha (erro HTTP, timeout, etc.).
-   * Emite um objeto `PoAiSearchError`.
+   * Emite um objeto `PoSearchAiError`.
    */
-  @Output('p-error') error = new EventEmitter<PoAiSearchError>();
+  @Output('p-error') error = new EventEmitter<PoSearchAiError>();
 
   /**
    * @optional
@@ -120,12 +120,12 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
   protected aiSubscription: Subscription;
 
   private _url: string;
-  private _timeout: number = PO_AI_SEARCH_DEFAULT_TIMEOUT;
-  private _minConfidence: number = PO_AI_SEARCH_DEFAULT_MIN_CONFIDENCE;
+  private _timeout: number = PO_SEARCH_AI_DEFAULT_TIMEOUT;
+  private _minConfidence: number = PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE;
 
   constructor(
     el: ElementRef,
-    protected aiSearchService: PoAiSearchService,
+    protected searchAiService: PoSearchAiService,
     cd?: ChangeDetectorRef
   ) {
     super(el, cd);
@@ -160,7 +160,7 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
    */
   @Input('p-timeout') set timeout(value: number) {
     const parsed = Number(value);
-    this._timeout = parsed > 0 ? parsed : PO_AI_SEARCH_DEFAULT_TIMEOUT;
+    this._timeout = parsed > 0 ? parsed : PO_SEARCH_AI_DEFAULT_TIMEOUT;
   }
   get timeout(): number {
     return this._timeout;
@@ -179,7 +179,7 @@ export abstract class PoAiSearchBaseComponent extends PoInputGeneric implements 
    */
   @Input('p-min-confidence') set minConfidence(value: number) {
     const parsed = Number(value);
-    this._minConfidence = parsed >= 0 && parsed <= 1 ? parsed : PO_AI_SEARCH_DEFAULT_MIN_CONFIDENCE;
+    this._minConfidence = parsed >= 0 && parsed <= 1 ? parsed : PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE;
   }
   get minConfidence(): number {
     return this._minConfidence;

@@ -1,24 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { PoAiSearchColumn } from './interfaces/po-ai-search-column.interface';
-import { PoAiSearchResponse } from './interfaces/po-ai-search.interface';
-import { PoAiSearchService } from './po-ai-search.service';
+import { PoSearchAiColumn } from './interfaces/po-search-ai-column.interface';
+import { PoSearchAiResponse } from './interfaces/po-search-ai.interface';
+import { PoSearchAiService } from './po-search-ai.service';
 
-describe('PoAiSearchService:', () => {
-  let service: PoAiSearchService;
+describe('PoSearchAiService:', () => {
+  let service: PoSearchAiService;
   let httpMock: HttpTestingController;
 
   const url = '/api/ai-search';
-  const columns: Array<PoAiSearchColumn> = [{ property: 'name', label: 'Nome', type: 'string' }];
+  const columns: Array<PoSearchAiColumn> = [{ property: 'name', label: 'Nome', type: 'string' }];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [PoAiSearchService]
+      providers: [PoSearchAiService]
     });
 
-    service = TestBed.inject(PoAiSearchService);
+    service = TestBed.inject(PoSearchAiService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -33,7 +33,7 @@ describe('PoAiSearchService:', () => {
   describe('Methods:', () => {
     describe('sendQuery:', () => {
       it('should POST the sanitized query and columns and return the response', () => {
-        const expected: PoAiSearchResponse = { filter: `name eq 'Ana'`, description: 'nome Ana', confidence: 0.9 };
+        const expected: PoSearchAiResponse = { filter: `name eq 'Ana'`, description: 'nome Ana', confidence: 0.9 };
 
         service.sendQuery(url, '  <Ana>  ', columns).subscribe(response => {
           expect(response).toEqual(expected);
@@ -95,11 +95,11 @@ describe('PoAiSearchService:', () => {
         expect(service.extractColumnsMetadata(undefined)).toEqual([]);
       });
 
-      it('should filter out columns without property, hidden or marked as aiSearchIgnore', () => {
+      it('should filter out columns without property, hidden or marked as searchAiIgnore', () => {
         const result = service.extractColumnsMetadata([
           { property: 'name', label: 'Nome', type: 'string' },
           { property: 'age', label: 'Idade' },
-          { property: 'secret', label: 'Secret', aiSearchIgnore: true },
+          { property: 'secret', label: 'Secret', searchAiIgnore: true },
           { property: 'hidden', label: 'Hidden', visible: false },
           { label: 'No property' }
         ]);

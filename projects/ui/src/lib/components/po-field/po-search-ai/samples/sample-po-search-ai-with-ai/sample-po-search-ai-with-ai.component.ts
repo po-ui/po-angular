@@ -1,24 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
-  PoAiSearchColumn,
-  PoAiSearchComponent,
-  PoAiSearchError,
-  PoAiSearchResult,
+  PoSearchAiColumn,
+  PoSearchAiComponent,
+  PoSearchAiError,
+  PoSearchAiResult,
   PoNotificationService,
   PoTableColumn
 } from '@po-ui/ng-components';
 
-import { SamplePoAiSearchWithAiService } from './sample-po-ai-search-with-ai.service';
+import { SamplePoSearchAiWithAiService } from './sample-po-search-ai-with-ai.service';
 
 @Component({
-  selector: 'sample-po-ai-search-with-ai',
-  templateUrl: './sample-po-ai-search-with-ai.component.html',
-  providers: [SamplePoAiSearchWithAiService],
+  selector: 'sample-po-search-ai-with-ai',
+  templateUrl: './sample-po-search-ai-with-ai.component.html',
+  providers: [SamplePoSearchAiWithAiService],
   standalone: false
 })
-export class SamplePoAiSearchWithAiComponent implements OnInit {
-  @ViewChild('aiSearch', { static: true }) aiSearch: PoAiSearchComponent;
+export class SamplePoSearchAiWithAiComponent implements OnInit {
+  @ViewChild('searchAi', { static: true }) searchAi: PoSearchAiComponent;
 
   filteredItems: Array<any> = [];
   loading = false;
@@ -30,7 +30,7 @@ export class SamplePoAiSearchWithAiComponent implements OnInit {
     { property: 'statusDescription', label: 'Status' }
   ];
 
-  readonly aiColumns: Array<PoAiSearchColumn> = [
+  readonly aiColumns: Array<PoSearchAiColumn> = [
     { property: 'name', label: 'Nome', type: 'string' },
     { property: 'age', label: 'Idade', type: 'number' },
     { property: 'city', label: 'Cidade', type: 'string' },
@@ -45,7 +45,7 @@ export class SamplePoAiSearchWithAiComponent implements OnInit {
   ];
 
   constructor(
-    private readonly aiService: SamplePoAiSearchWithAiService,
+    private readonly aiService: SamplePoSearchAiWithAiService,
     private readonly poNotification: PoNotificationService
   ) {}
 
@@ -55,16 +55,16 @@ export class SamplePoAiSearchWithAiComponent implements OnInit {
 
   // Demonstra a integração com a IA interceptando a chamada do componente.
   // Em produção, basta configurar `p-url` apontando para o proxy de IA.
-  onResult(result: PoAiSearchResult) {
+  onResult(result: PoSearchAiResult) {
     this.applyFilter(result.filter);
     this.poNotification.success(`Filtro aplicado via IA: ${result.description}`);
   }
 
-  onLowConfidence(result: PoAiSearchResult) {
+  onLowConfidence(result: PoSearchAiResult) {
     this.poNotification.warning(`Não tenho certeza do que você quis dizer: "${result.query}". Tente reformular.`);
   }
 
-  onError(error: PoAiSearchError) {
+  onError(error: PoSearchAiError) {
     this.poNotification.error(`Erro ao consultar a IA: ${error.message}`);
   }
 

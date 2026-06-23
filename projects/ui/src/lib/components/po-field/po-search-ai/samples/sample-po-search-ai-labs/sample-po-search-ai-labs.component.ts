@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoAiSearchColumn, PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
+import { PoSearchAiColumn, PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'sample-po-ai-search-labs',
-  templateUrl: './sample-po-ai-search-labs.component.html',
+  selector: 'sample-po-search-ai-labs',
+  templateUrl: './sample-po-search-ai-labs.component.html',
   standalone: false
 })
-export class SamplePoAiSearchLabsComponent implements OnInit {
+export class SamplePoSearchAiLabsComponent implements OnInit {
   event: string;
   help: string;
   helperText: string;
@@ -19,7 +19,7 @@ export class SamplePoAiSearchLabsComponent implements OnInit {
   timeout: number;
   url: string;
 
-  readonly columns: Array<PoAiSearchColumn> = [
+  readonly columns: Array<PoSearchAiColumn> = [
     { property: 'name', label: 'Nome', type: 'string' },
     { property: 'age', label: 'Idade', type: 'number' },
     { property: 'city', label: 'Cidade', type: 'string' }

@@ -1,5 +1,5 @@
 /**
- * @usedBy PoAiSearchComponent
+ * @usedBy PoSearchAiComponent
  *
  * @description
  *
@@ -9,7 +9,7 @@
  * Esses metadados ajudam o provedor de IA a mapear os termos digitados pelo usuário
  * para as propriedades reais dos dados e a gerar um filtro (por exemplo, OData) coerente.
  */
-export interface PoAiSearchColumn {
+export interface PoSearchAiColumn {
   /** Nome da propriedade do campo (ex: `name`, `age`, `city`). */
   property: string;
 

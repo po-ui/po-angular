@@ -1,5 +1,5 @@
-<po-ai-search
-  name="aiSearch"
+<po-search-ai
+  name="searchAi"
   p-label="Busca inteligente"
   p-help="Descreva o que procura em linguagem natural e pressione Enter"
   p-placeholder="Ex: clientes de SP com idade acima de 30"
@@ -8,7 +8,7 @@
   (p-result)="onResult($event)"
   (p-clear)="onClear()"
 >
-</po-ai-search>
+</po-search-ai>
 
 @if (lastFilter) {
   <p class="po-mt-1">
