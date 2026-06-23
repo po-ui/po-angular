@@ -880,6 +880,204 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(result).toBe(123);
     });
 
+    it('getFilterValueToDisclaimer: should return `booleanTrue` value when field type is `boolean` and value is `true`', () => {
+      const field = {
+        property: 'active',
+        type: PoDynamicFieldType.Boolean,
+        booleanTrue: 'Ativo',
+        booleanFalse: 'Inativo'
+      };
+
+      const result = component['getFilterValueToDisclaimer'](field, true);
+
+      expect(result).toBe('Ativo');
+    });
+
+    it('getFilterValueToDisclaimer: should return `booleanFalse` value when field type is `boolean` and value is `false`', () => {
+      const field = {
+        property: 'active',
+        type: PoDynamicFieldType.Boolean,
+        booleanTrue: 'Ativo',
+        booleanFalse: 'Inativo'
+      };
+
+      const result = component['getFilterValueToDisclaimer'](field, false);
+
+      expect(result).toBe('Inativo');
+    });
+
+    it('getFilterValueToDisclaimer: should return literal `disclaimerBooleanTrue` when value is `true` and `booleanTrue` is undefined', () => {
+      component['languageService'].setLanguage('pt');
+      const field = { property: 'active', type: PoDynamicFieldType.Boolean };
+
+      const result = component['getFilterValueToDisclaimer'](field, true);
+
+      expect(result).toBe('Sim');
+    });
+
+    it('getFilterValueToDisclaimer: should return literal `disclaimerBooleanFalse` when value is `false` and `booleanFalse` is undefined', () => {
+      component['languageService'].setLanguage('pt');
+      const field = { property: 'active', type: PoDynamicFieldType.Boolean };
+
+      const result = component['getFilterValueToDisclaimer'](field, false);
+
+      expect(result).toBe('Não');
+    });
+
+    it('getFilterValueToDisclaimer: should fall back to literals in english when language is `en`', () => {
+      component['languageService'].setLanguage('en');
+      const field = { property: 'active', type: PoDynamicFieldType.Boolean };
+
+      expect(component['getFilterValueToDisclaimer'](field, true)).toBe('Yes');
+      expect(component['getFilterValueToDisclaimer'](field, false)).toBe('No');
+    });
+
+    it('getFilterValueToDisclaimer: should fall back to literals in spanish when language is `es`', () => {
+      component['languageService'].setLanguage('es');
+      const field = { property: 'active', type: PoDynamicFieldType.Boolean };
+
+      expect(component['getFilterValueToDisclaimer'](field, true)).toBe('Sí');
+      expect(component['getFilterValueToDisclaimer'](field, false)).toBe('No');
+    });
+
+    it('getFilterValueToDisclaimer: should fall back to literals in russian when language is `ru`', () => {
+      component['languageService'].setLanguage('ru');
+      const field = { property: 'active', type: PoDynamicFieldType.Boolean };
+
+      expect(component['getFilterValueToDisclaimer'](field, true)).toBe('Да');
+      expect(component['getFilterValueToDisclaimer'](field, false)).toBe('Нет');
+    });
+
+    it('getFilterValueToDisclaimer: should fall back to default locale when current language is unsupported', () => {
+      spyOn(component['languageService'], 'getShortLanguage').and.returnValue('xx');
+      const field = { property: 'active', type: PoDynamicFieldType.Boolean };
+
+      expect(component['getFilterValueToDisclaimer'](field, true)).toBe('Sim');
+      expect(component['getFilterValueToDisclaimer'](field, false)).toBe('Não');
+    });
+
+    it('getFilterValueToDisclaimer: should ignore boolean handling when value is not a boolean primitive', () => {
+      const field = {
+        property: 'active',
+        type: PoDynamicFieldType.Boolean,
+        booleanTrue: 'Ativo',
+        booleanFalse: 'Inativo'
+      };
+
+      expect(component['getFilterValueToDisclaimer'](field, 'true')).toBe('true');
+      expect(component['getFilterValueToDisclaimer'](field, null)).toBeNull();
+      expect(component['getFilterValueToDisclaimer'](field, undefined)).toBeUndefined();
+    });
+
+    it('getFilterValueToDisclaimer: should prefer custom `booleanTrue/booleanFalse` over literals when both exist', () => {
+      component['languageService'].setLanguage('pt');
+      const field = {
+        property: 'active',
+        type: PoDynamicFieldType.Boolean,
+        booleanTrue: 'Ativo',
+        booleanFalse: 'Inativo'
+      };
+
+      expect(component['getFilterValueToDisclaimer'](field, true)).toBe('Ativo');
+      expect(component['getFilterValueToDisclaimer'](field, false)).toBe('Inativo');
+    });
+
+    it('formatValueToBoolean: should return `booleanTrue` value when value is `true` and `booleanTrue` is defined', () => {
+      const field = { property: 'active', booleanTrue: 'Ativo', booleanFalse: 'Inativo' };
+
+      expect(component['formatValueToBoolean'](field, true)).toBe('Ativo');
+    });
+
+    it('formatValueToBoolean: should return `booleanFalse` value when value is `false` and `booleanFalse` is defined', () => {
+      const field = { property: 'active', booleanTrue: 'Ativo', booleanFalse: 'Inativo' };
+
+      expect(component['formatValueToBoolean'](field, false)).toBe('Inativo');
+    });
+
+    it('formatValueToBoolean: should return literal `disclaimerBooleanTrue` when `booleanTrue` is undefined', () => {
+      component['languageService'].setLanguage('pt');
+      const field = { property: 'active' };
+
+      expect(component['formatValueToBoolean'](field, true)).toBe('Sim');
+    });
+
+    it('formatValueToBoolean: should return literal `disclaimerBooleanFalse` when `booleanFalse` is undefined', () => {
+      component['languageService'].setLanguage('pt');
+      const field = { property: 'active' };
+
+      expect(component['formatValueToBoolean'](field, false)).toBe('Não');
+    });
+
+    it('formatValueToBoolean: should never return raw boolean values as fallback', () => {
+      component['languageService'].setLanguage('en');
+      const field = { property: 'active' };
+
+      const trueResult = component['formatValueToBoolean'](field, true);
+      const falseResult = component['formatValueToBoolean'](field, false);
+
+      expect(typeof trueResult).toBe('string');
+      expect(typeof falseResult).toBe('string');
+      expect(trueResult).not.toBe('true');
+      expect(falseResult).not.toBe('false');
+    });
+
+    it('formatValueToBoolean: should respect `disclaimerBooleanTrue/False` from `p-literals` when defined', () => {
+      component.literals = {
+        disclaimerBooleanTrue: 'Habilitado',
+        disclaimerBooleanFalse: 'Desabilitado'
+      };
+      const field = { property: 'active' };
+
+      expect(component['formatValueToBoolean'](field, true)).toBe('Habilitado');
+      expect(component['formatValueToBoolean'](field, false)).toBe('Desabilitado');
+    });
+
+    it('formatValueToBoolean: should prefer field-level `booleanTrue/False` over `p-literals`', () => {
+      component.literals = {
+        disclaimerBooleanTrue: 'Habilitado',
+        disclaimerBooleanFalse: 'Desabilitado'
+      };
+      const field = { property: 'active', booleanTrue: 'Ativo', booleanFalse: 'Inativo' };
+
+      expect(component['formatValueToBoolean'](field, true)).toBe('Ativo');
+      expect(component['formatValueToBoolean'](field, false)).toBe('Inativo');
+    });
+
+    it('setDisclaimers: should generate disclaimer with custom `booleanTrue/booleanFalse` for boolean filters', () => {
+      component.filters = [
+        {
+          property: 'active',
+          label: 'Situação',
+          type: PoDynamicFieldType.Boolean,
+          booleanTrue: 'Ativo',
+          booleanFalse: 'Inativo'
+        }
+      ];
+
+      const trueDisclaimers = component['setDisclaimers']({ active: true }, undefined, component.filters);
+      const falseDisclaimers = component['setDisclaimers']({ active: false }, undefined, component.filters);
+
+      expect(trueDisclaimers).toEqual([
+        { label: 'Situação: Ativo', property: 'active', value: true, hideClose: false }
+      ]);
+      expect(falseDisclaimers).toEqual([
+        { label: 'Situação: Inativo', property: 'active', value: false, hideClose: false }
+      ]);
+    });
+
+    it('setDisclaimers: should generate disclaimer with i18n fallback when boolean field has no custom labels', () => {
+      component['languageService'].setLanguage('pt');
+      component.filters = [{ property: 'active', label: 'Situação', type: PoDynamicFieldType.Boolean }];
+
+      const trueDisclaimers = component['setDisclaimers']({ active: true }, undefined, component.filters);
+      const falseDisclaimers = component['setDisclaimers']({ active: false }, undefined, component.filters);
+
+      expect(trueDisclaimers).toEqual([{ label: 'Situação: Sim', property: 'active', value: true, hideClose: false }]);
+      expect(falseDisclaimers).toEqual([
+        { label: 'Situação: Não', property: 'active', value: false, hideClose: false }
+      ]);
+    });
+
     it('should return an array of disclaimers for filters with fixed property, initValue defined, and no duplicates', () => {
       component.filters = [
         { property: 'status', fixed: true, initValue: 'Active', label: 'Status' },

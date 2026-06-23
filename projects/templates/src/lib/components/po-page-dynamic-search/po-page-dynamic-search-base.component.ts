@@ -18,6 +18,8 @@ import { PoAdvancedFilterLiterals } from './po-advanced-filter/po-advanced-filte
 
 export const poPageDynamicSearchLiteralsDefault = {
   en: <PoPageDynamicSearchLiterals>{
+    disclaimerBooleanFalse: 'No',
+    disclaimerBooleanTrue: 'Yes',
     disclaimerGroupTitle: 'Displaying results filtered by:',
     filterTitle: poAdvancedFiltersLiteralsDefault.en.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.en.cancelLabel,
@@ -26,6 +28,8 @@ export const poPageDynamicSearchLiteralsDefault = {
     searchPlaceholder: 'Search'
   },
   es: <PoPageDynamicSearchLiterals>{
+    disclaimerBooleanFalse: 'No',
+    disclaimerBooleanTrue: 'Sí',
     disclaimerGroupTitle: 'Presentando resultados filtrados por:',
     filterTitle: poAdvancedFiltersLiteralsDefault.es.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.es.cancelLabel,
@@ -34,6 +38,8 @@ export const poPageDynamicSearchLiteralsDefault = {
     searchPlaceholder: 'Buscar'
   },
   pt: <PoPageDynamicSearchLiterals>{
+    disclaimerBooleanFalse: 'Não',
+    disclaimerBooleanTrue: 'Sim',
     disclaimerGroupTitle: 'Apresentando resultados filtrados por:',
     filterTitle: poAdvancedFiltersLiteralsDefault.pt.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.pt.cancelLabel,
@@ -42,6 +48,8 @@ export const poPageDynamicSearchLiteralsDefault = {
     searchPlaceholder: 'Pesquisar'
   },
   ru: <PoPageDynamicSearchLiterals>{
+    disclaimerBooleanFalse: 'Нет',
+    disclaimerBooleanTrue: 'Да',
     disclaimerGroupTitle: 'Отображение результатов, отфильтрованных по:',
     filterTitle: poAdvancedFiltersLiteralsDefault.ru.title,
     filterCancelLabel: poAdvancedFiltersLiteralsDefault.ru.cancelLabel,
@@ -273,6 +281,8 @@ export abstract class PoPageDynamicSearchBaseComponent {
    *
    * ```
    *  const customLiterals: PoPageDynamicSearchLiterals = {
+   *    disclaimerBooleanFalse: 'Inativo',
+   *    disclaimerBooleanTrue: 'Ativo',
    *    disclaimerGroupTitle: 'Filtros aplicados:',
    *    filterTitle: 'Filtro avançado',
    *    filterCancelLabel: 'Fechar',

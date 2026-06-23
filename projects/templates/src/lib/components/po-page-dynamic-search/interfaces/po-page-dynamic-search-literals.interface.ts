@@ -6,6 +6,18 @@
  * Interface para definição das literais usadas no `po-page-dynamic-search` e no `po-page-dynamic-table`.
  */
 export interface PoPageDynamicSearchLiterals {
+  /**
+   * Texto exibido no *disclaimer* de filtros do tipo `boolean` quando o valor for `false` e
+   * a propriedade `booleanFalse` do campo não estiver definida.
+   */
+  disclaimerBooleanFalse?: string;
+
+  /**
+   * Texto exibido no *disclaimer* de filtros do tipo `boolean` quando o valor for `true` e
+   * a propriedade `booleanTrue` do campo não estiver definida.
+   */
+  disclaimerBooleanTrue?: string;
+
   /** Título do grupo de *disclaimers* que será exibido após realizar alguma busca. */
   disclaimerGroupTitle?: string;
 
