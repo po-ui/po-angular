@@ -41,6 +41,7 @@ export const AnimaliaIconDictionary: { [key: string]: string } = {
   ICON_LIST: 'an an-list-dashes',
   ICON_LIST_BULLETS: 'an an-list-bullets',
   ICON_LOCK: 'an an-lock',
+  ICON_MAGIC_WAND: 'an an-magic-wand',
   ICON_MAIL: 'an an-envelope-simple',
   ICON_MENU: 'an an-list',
   ICON_MENU_CLOSE: 'an an-caret-circle-left',

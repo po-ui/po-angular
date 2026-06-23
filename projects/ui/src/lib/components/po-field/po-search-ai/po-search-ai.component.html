@@ -1,0 +1,115 @@
+@let poHelper = setHelper(label, additionalHelpTooltip);
+<po-field-container
+  #fieldContainer
+  [p-disabled]="isDisabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="!!required"
+  [p-show-required]="showRequired"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : false"
+  [p-size]="size"
+  [p-text-wrap]="labelTextWrap()"
+  [p-compact-label]="compactLabel()"
+>
+  <div class="po-field-container-content">
+    <div class="po-field-container-content-helper-wrapper">
+      <div
+        class="po-field-container-input"
+        [class.po-search-ai-processing]="aiLoading"
+        [class.po-search-ai-error]="aiErrorMessage && !aiLoading"
+      >
+        @if (aiErrorMessage && !aiLoading) {
+          <div class="po-search-ai-error-overlay" aria-hidden="true"></div>
+        }
+        <div class="po-search-ai-icon" aria-hidden="true">
+          <po-icon p-icon="ICON_SEARCH"></po-icon>
+        </div>
+        <input
+          #inp
+          [attr.aria-label]="label || placeholder"
+          [attr.name]="name"
+          [attr.data-focused-element]="!isDisabled"
+          [attr.data-inactive-component]="isDisabled || readonly"
+          [attr.p-size]="size"
+          [autocomplete]="autocomplete"
+          class="po-input"
+          [disabled]="isDisabled"
+          [id]="id"
+          [placeholder]="isDisabled ? '' : placeholder"
+          [readonly]="readonly || aiLoading"
+          [required]="required"
+          [type]="type"
+          (blur)="eventOnBlur($event)"
+          (focus)="eventOnFocus($event)"
+          (input)="eventOnInput($event)"
+          (keydown)="onSearchKeydown($event)"
+        />
+
+        @if (loading) {
+          <div class="po-field-icon-container-right">
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          </div>
+        } @else if (aiLoading) {
+          <div class="po-field-icon-container-right">
+            <po-loading-icon class="po-search-ai-processing-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          </div>
+        } @else {
+          <div class="po-field-icon-container-right">
+            @if (clean && hasValue() && !isDisabled && !readonly) {
+              <po-clean
+                #iconClean
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="effectiveLiterals().clean"
+                class="po-icon-input"
+                p-icon="ICON_FILL_CLEAR_CONTENT"
+                [p-element-ref]="inputEl"
+                [p-size]="size"
+                (p-change-event)="clearSearch()"
+                (keydown)="handleCleanKeydown($event)"
+                (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+                (keydown.space)="clearAndFocus(); $event.preventDefault()"
+              >
+              </po-clean>
+              <div class="po-button-vertical-divider"></div>
+            }
+            <po-button
+              #iconSearchAi
+              class="po-search-ai-button"
+              p-icon="ICON_MAGIC_WAND"
+              p-kind="tertiary"
+              [p-disabled]="isDisabled || !!readonly"
+              [p-size]="size"
+              (p-click)="search()"
+            >
+            </po-button>
+          </div>
+        }
+      </div>
+      @if (!this.label && (poHelperComponent() || poHelper.hideAdditionalHelp)) {
+        <po-helper
+          #helperEl
+          class="po-field-helper-button"
+          [p-size]="size"
+          [p-helper]="poHelper.helperSettings"
+          [p-disabled]="isDisabled"
+          [p-append-in-body]="appendBox"
+        >
+        </po-helper>
+      }
+    </div>
+  </div>
+
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="isDisabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-size]="size"
+    ></po-field-container-bottom>
+  }
+</po-field-container>
