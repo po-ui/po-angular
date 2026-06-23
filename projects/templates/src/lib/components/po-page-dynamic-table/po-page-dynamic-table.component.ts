@@ -537,6 +537,8 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
    *
    * ```
    *  const customLiterals: PoPageDynamicSearchLiterals = {
+   *    disclaimerBooleanFalse: 'Inativo',
+   *    disclaimerBooleanTrue: 'Ativo',
    *    disclaimerGroupTitle: 'Filtros aplicados:',
    *    filterTitle: 'Filtro avançado',
    *    filterCancelLabel: 'Fechar',
