@@ -139,6 +139,12 @@ const providers = [
  *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.component.ts"> </file>
  *  <file name="sample-po-lookup-multiple/sample-po-lookup-multiple.service.ts"> </file>
  * </example>
+ *
+ * <example name="po-lookup-mask" title="PO Lookup - Mask">
+ *  <file name="sample-po-lookup-mask/sample-po-lookup-mask.component.html"> </file>
+ *  <file name="sample-po-lookup-mask/sample-po-lookup-mask.component.ts"> </file>
+ *  <file name="sample-po-lookup-mask/sample-po-lookup-mask.service.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-lookup',

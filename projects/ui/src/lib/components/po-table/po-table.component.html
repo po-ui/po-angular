@@ -475,7 +475,9 @@
                       </span>
                     }
                     @default {
-                      <span>{{ getCellData(row, column) }}</span>
+                      <span>{{
+                        column.mask ? formatWithMask(getCellData(row, column), column.mask) : getCellData(row, column)
+                      }}</span>
                     }
                   }
                 </div>
@@ -836,7 +838,9 @@
                       </span>
                     }
                     @default {
-                      <span>{{ getCellData(row, column) }}</span>
+                      <span>{{
+                        column.mask ? formatWithMask(getCellData(row, column), column.mask) : getCellData(row, column)
+                      }}</span>
                     }
                   }
                 </div>
