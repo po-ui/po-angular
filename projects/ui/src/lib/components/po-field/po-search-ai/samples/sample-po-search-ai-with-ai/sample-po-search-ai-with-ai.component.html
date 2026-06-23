@@ -1,0 +1,19 @@
+<po-search-ai
+  name="searchAi"
+  p-label="Pesquise com IA"
+  p-help="Ex: funcionários ativos de São Paulo com salário acima de 10000"
+  p-placeholder="Descreva o que procura..."
+  p-url="https://po-sample-api.onrender.com/v1/ai/filter"
+  p-clean
+  [p-columns]="aiColumns"
+  [p-loading]="loading"
+  (p-result)="onResult($event)"
+  (p-low-confidence)="onLowConfidence($event)"
+  (p-error)="onError($event)"
+  (p-clear)="onClear()"
+>
+</po-search-ai>
+
+<po-divider />
+
+<po-table [p-columns]="columns" [p-items]="filteredItems" [p-loading]="loading"> </po-table>
