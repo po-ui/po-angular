@@ -1,0 +1,99 @@
+@let poHelper = setHelper(label, additionalHelpTooltip);
+<po-field-container
+  #fieldContainer
+  [p-disabled]="isDisabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+  [p-helper]="label ? poHelper.helperSettings : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-size]="size"
+  [p-text-wrap]="labelTextWrap()"
+  [p-compact-label]="compactLabel()"
+>
+  <div class="po-field-container-content">
+    <div class="po-field-container-content-helper-wrapper">
+      <div class="po-field-container-input">
+        <div class="po-field-icon-container-left">
+          <po-icon
+            class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+            [class.po-field-icon-disabled]="isDisabled"
+            [class.po-field-icon-aa]="size === 'small'"
+            [p-icon]="icon || 'ICON_SEARCH'"
+          ></po-icon>
+        </div>
+
+        <input
+          #inp
+          class="po-input po-input-icon-left"
+          [attr.aria-label]="label || placeholder"
+          [attr.name]="name"
+          [attr.data-focused-element]="!isDisabled"
+          [attr.data-inactive-component]="isDisabled || readonly"
+          [attr.p-size]="size"
+          [autocomplete]="autocomplete"
+          [class.po-input-icon-left-aa]="size === 'small'"
+          [class.po-input-icon-right]="hasAppliedFilter || loading"
+          [class.po-input-icon-right-aa]="(hasAppliedFilter || loading) && size === 'small'"
+          [disabled]="isDisabled"
+          [id]="id"
+          [placeholder]="isDisabled ? '' : placeholder"
+          [readonly]="readonly"
+          [required]="required"
+          [type]="type"
+          (blur)="eventOnBlur($event)"
+          (focus)="eventOnFocus($event)"
+          (input)="eventOnInput($event)"
+          (keydown)="onSearchKeydown($event)"
+        />
+        <div class="po-field-icon-container-right">
+          @if (loading) {
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          }
+
+          @if (!loading && hasAppliedFilter && !isDisabled && !readonly) {
+            <po-clean
+              class="{{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
+              [p-element-ref]="inputEl"
+              [p-size]="size"
+              (p-change-event)="clearSearch()"
+            >
+            </po-clean>
+          }
+        </div>
+      </div>
+      @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+        <po-helper
+          #helperEl
+          class="po-field-helper-button"
+          [p-size]="size"
+          [p-helper]="poHelper.helperSettings"
+          [p-disabled]="isDisabled"
+          [p-append-in-body]="appendBox"
+        >
+        </po-helper>
+      }
+    </div>
+
+    @if (showAppliedFeedback && hasAppliedFilter) {
+      <div class="po-ai-search-applied" [attr.data-applied]="true">
+        <po-tag p-type="info" p-icon="ICON_SEARCH" [p-value]="appliedDescription"></po-tag>
+      </div>
+    }
+  </div>
+
+  @if (!readonly) {
+    <po-field-container-bottom
+      [p-append-in-body]="appendBox"
+      [p-help]="help"
+      [p-disabled]="isDisabled"
+      [p-error-pattern]="getErrorPattern()"
+      [p-error-limit]="errorLimit"
+      [p-size]="size"
+    ></po-field-container-bottom>
+  }
+</po-field-container>
+
+<span class="po-sr-only" aria-live="polite" role="status">{{ liveAnnouncement }}</span>

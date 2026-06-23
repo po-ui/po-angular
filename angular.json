@@ -116,7 +116,8 @@
           "options": {
             "open": true,
             "host": "0.0.0.0",
-            "buildTarget": "app:build:es5"
+            "buildTarget": "app:build:es5",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

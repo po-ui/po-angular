@@ -1,0 +1,84 @@
+<po-ai-search
+  name="aiSearch"
+  [p-columns]="columns"
+  [p-disabled]="properties?.includes('disabled')"
+  [p-help]="help"
+  [p-helper]="helperText"
+  [p-label]="label"
+  [p-min-confidence]="minConfidence"
+  [p-optional]="properties?.includes('optional')"
+  [p-placeholder]="placeholder"
+  [p-readonly]="properties?.includes('readonly')"
+  [p-required]="properties?.includes('required')"
+  [p-show-applied-feedback]="properties?.includes('showAppliedFeedback')"
+  [p-show-required]="properties?.includes('showRequired')"
+  [p-size]="size"
+  [p-timeout]="timeout"
+  [p-url]="url"
+  (p-blur)="changeEvent('p-blur')"
+  (p-clear)="changeEvent('p-clear')"
+  (p-enter)="changeEvent('p-enter')"
+  (p-error)="changeEvent('p-error')"
+  (p-keydown)="changeEvent('p-keydown')"
+  (p-low-confidence)="changeEvent('p-low-confidence')"
+  (p-result)="changeEvent('p-result')"
+>
+</po-ai-search>
+
+<po-divider />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
+</div>
+
+<po-divider />
+
+<form #f="ngForm">
+  <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
+
+  <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
+
+  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
+
+  <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
+
+  <po-input class="po-md-6" name="url" [(ngModel)]="url" p-clean p-label="URL"> </po-input>
+
+  <po-number class="po-md-6 po-lg-3" name="timeout" [(ngModel)]="timeout" p-clean p-label="Timeout (ms)"> </po-number>
+
+  <po-decimal
+    class="po-md-6 po-lg-3"
+    name="minConfidence"
+    [(ngModel)]="minConfidence"
+    p-clean
+    p-label="Min Confidence"
+    [p-decimals-length]="2"
+    p-help="Valor entre 0 e 1"
+  >
+  </po-decimal>
+
+  <po-checkbox-group
+    class="po-md-12"
+    name="properties"
+    [(ngModel)]="properties"
+    p-columns="4"
+    p-label="Properties"
+    [p-options]="propertiesOptions"
+  >
+  </po-checkbox-group>
+
+  <po-radio-group
+    class="po-md-12"
+    name="size"
+    [(ngModel)]="size"
+    p-columns="4"
+    p-label="Size"
+    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA (https://po-ui.io/documentation/po-theme)."
+    [p-options]="sizeOptions"
+  >
+  </po-radio-group>
+
+  <div class="po-row">
+    <po-button class="po-lg-3 po-md-6" p-label="Sample Restore" (p-click)="f.reset(); this.restore()"> </po-button>
+  </div>
+</form>

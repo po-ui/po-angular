@@ -1,0 +1,19 @@
+<po-ai-search
+  #aiSearch
+  name="aiSearch"
+  p-label="Pesquise com IA"
+  p-help="Ex: clientes ativos de São Paulo com 30 anos"
+  p-placeholder="Descreva o que procura..."
+  p-url="http://localhost:3333/api/ai/filter"
+  [p-columns]="aiColumns"
+  [p-loading]="loading"
+  (p-result)="onResult($event)"
+  (p-low-confidence)="onLowConfidence($event)"
+  (p-error)="onError($event)"
+  (p-clear)="onClear()"
+>
+</po-ai-search>
+
+<po-divider />
+
+<po-table [p-columns]="columns" [p-items]="filteredItems" [p-loading]="loading"> </po-table>
