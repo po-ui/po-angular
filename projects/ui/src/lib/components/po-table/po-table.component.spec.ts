@@ -1104,6 +1104,80 @@ describe('PoTableComponent:', () => {
       });
     });
 
+    describe('formatWithMask:', () => {
+      it('should return empty string when value is null', () => {
+        expect(component['formatWithMask'](null, '999.999')).toEqual('');
+      });
+
+      it('should return empty string when value is undefined', () => {
+        expect(component['formatWithMask'](undefined, '999.999')).toEqual('');
+      });
+
+      it('should return empty string when value is empty string', () => {
+        expect(component['formatWithMask']('', '999.999')).toEqual('');
+      });
+
+      it('should return original value when mask is undefined', () => {
+        expect(component['formatWithMask']('12345', undefined)).toEqual('12345');
+      });
+
+      it('should return original value when mask is empty string', () => {
+        expect(component['formatWithMask']('12345', '')).toEqual('12345');
+      });
+
+      it('should format CPF with mask 999.999.999-99', () => {
+        expect(component['formatWithMask']('12345678901', '999.999.999-99')).toEqual('123.456.789-01');
+      });
+
+      it('should format CNPJ with mask 99.999.999/9999-99', () => {
+        expect(component['formatWithMask']('53113791000122', '99.999.999/9999-99')).toEqual('53.113.791/0001-22');
+      });
+
+      it('should format phone with mask (99) 99999-9999', () => {
+        expect(component['formatWithMask']('11999887766', '(99) 99999-9999')).toEqual('(11) 99988-7766');
+      });
+
+      it('should format CEP with mask 99999-999', () => {
+        expect(component['formatWithMask']('89201000', '99999-999')).toEqual('89201-000');
+      });
+
+      it('should format alphabetic value with mask @@-@@@@', () => {
+        expect(component['formatWithMask']('NBPROM', '@@-@@@@')).toEqual('NB-PROM');
+      });
+
+      it('should format alphanumeric value with mask @@@ 9w99', () => {
+        expect(component['formatWithMask']('ABC1D23', '@@@ 9w99')).toEqual('ABC 1D23');
+      });
+
+      it('should stop formatting when numeric mask 9 receives a letter', () => {
+        expect(component['formatWithMask']('12A45', '99999')).toEqual('12');
+      });
+
+      it('should stop formatting when alpha mask @ receives a digit', () => {
+        expect(component['formatWithMask']('AB3CD', '@@@@@')).toEqual('AB');
+      });
+
+      it('should format alphanumeric mask w accepting both letters and digits', () => {
+        expect(component['formatWithMask']('A1B2C3', 'wwwwww')).toEqual('A1B2C3');
+      });
+
+      it('should handle value shorter than mask', () => {
+        expect(component['formatWithMask']('123', '999.999.999-99')).toEqual('123');
+      });
+
+      it('should strip existing formatting from value before applying mask', () => {
+        expect(component['formatWithMask']('123.456.789-01', '999.999.999-99')).toEqual('123.456.789-01');
+      });
+
+      it('should handle numeric value as number type', () => {
+        expect(component['formatWithMask'](12345678901, '999.999.999-99')).toEqual('123.456.789-01');
+      });
+
+      it('should return value 0 formatted correctly', () => {
+        expect(component['formatWithMask'](0, '999')).toEqual('0');
+      });
+    });
+
     it('constructor: should call debounceResize when resize window.', () => {
       const eventResize = document.createEvent('Event');
       eventResize.initEvent('resize', false, true);
@@ -2127,6 +2201,24 @@ describe('PoTableComponent:', () => {
   });
 
   describe('Templates:', () => {
+    it('should display formatted value when column has mask property', () => {
+      component.columns = [{ property: 'cpf', label: 'CPF', mask: '999.999.999-99' }];
+      component.items = [{ cpf: '12345678901' }];
+      fixture.detectChanges();
+
+      const cellContent = tableElement.querySelector('.po-table-body-ellipsis span');
+      expect(cellContent.textContent.trim()).toEqual('123.456.789-01');
+    });
+
+    it('should display raw value when column has no mask property', () => {
+      component.columns = [{ property: 'name', label: 'Nome' }];
+      component.items = [{ name: 'Test Value' }];
+      fixture.detectChanges();
+
+      const cellContent = tableElement.querySelector('.po-table-body-ellipsis span');
+      expect(cellContent.textContent.trim()).toEqual('Test Value');
+    });
+
     it('shouldn`t contain `po-tooltip` class if link is disabled', fakeAsync(() => {
       const mouseEnterEvent = new Event('mouseenter', { bubbles: true });
       component.columns = [

@@ -281,4 +281,41 @@ export interface PoTableColumn {
   width?: string;
 
   fixed?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma máscara para formatação do valor exibido na coluna.
+   *
+   * A máscara é aplicada somente para **exibição** na tabela, formatando o valor bruto
+   * armazenado no model antes de apresentá-lo ao usuário.
+   *
+   * Caracteres válidos para a máscara:
+   * - `9` : aceita um dígito numérico (0-9).
+   * - `@` : aceita um caractere alfabético (a-z, A-Z).
+   * - `w` : aceita um caractere alfanumérico (a-z, A-Z, 0-9).
+   * - Demais caracteres são considerados fixos e inseridos automaticamente na formatação
+   * (por exemplo: `.`, `-`, `/`, `(`, `)`, `+`, ` `).
+   *
+   * Exemplos de uso:
+   * ```
+   * // CPF
+   * { property: 'cpf', label: 'CPF', mask: '999.999.999-99' }
+   *
+   * // CNPJ
+   * { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99' }
+   *
+   * // Telefone
+   * { property: 'phone', label: 'Telefone', mask: '(99) 99999-9999' }
+   *
+   * // CEP
+   * { property: 'zipCode', label: 'CEP', mask: '99999-999' }
+   * ```
+   *
+   * > Esta propriedade é utilizada apenas para colunas do tipo `string` (padrão).
+   * Caso a coluna possua um `type` diferente de `string`, a máscara será ignorada.
+   */
+  mask?: string;
 }

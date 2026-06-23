@@ -495,6 +495,46 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.decimalPipe.transform(value, format);
   }
 
+  protected formatWithMask(value: any, mask: string): string {
+    if (!mask || value == null || value === '') {
+      return value ?? '';
+    }
+
+    const rawValue = String(value).replace(/[^a-zA-Z\d]/g, '');
+    let formatted = '';
+    let rawIndex = 0;
+
+    for (let maskIndex = 0; maskIndex < mask.length && rawIndex < rawValue.length; maskIndex++) {
+      const maskChar = mask[maskIndex];
+      const rawChar = rawValue[rawIndex];
+      const isValid = this.isValidMaskChar(maskChar, rawChar);
+
+      if (isValid === true) {
+        formatted += rawChar;
+        rawIndex++;
+      } else if (isValid === false) {
+        break;
+      } else {
+        formatted += maskChar;
+      }
+    }
+
+    return formatted;
+  }
+
+  private isValidMaskChar(maskChar: string, rawChar: string): boolean | null {
+    switch (maskChar) {
+      case '9':
+        return /\d/.test(rawChar);
+      case '@':
+        return /[a-zA-Z]/.test(rawChar);
+      case 'w':
+        return /[a-zA-Z\d]/.test(rawChar);
+      default:
+        return null;
+    }
+  }
+
   getCellData(row: any, column: PoTableColumn): any {
     const arrayProperty = column.property.split('.');
     if (arrayProperty.length > 1) {

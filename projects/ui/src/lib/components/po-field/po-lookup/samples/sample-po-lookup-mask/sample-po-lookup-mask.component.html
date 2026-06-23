@@ -1,0 +1,15 @@
+<div class="po-row">
+  <po-lookup
+    name="person"
+    class="po-md-12"
+    [(ngModel)]="person"
+    p-field-label="name"
+    p-field-value="value"
+    p-label="Pessoa"
+    p-help="Selecione uma pessoa para ver as máscaras aplicadas nas colunas"
+    [p-columns]="columns"
+    [p-filter-service]="service"
+    [p-hide-columns-manager]="true"
+  >
+  </po-lookup>
+</div>
