@@ -28,7 +28,7 @@ describe('PoSearchAiComponent: ', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoSearchAiComponent);
     component = fixture.componentInstance;
-    component.url = '/api/ai-search';
+    fixture.componentRef.setInput('p-url', '/api/ai-search');
     serviceSpy.extractColumnsMetadata.and.returnValue([]);
     serviceSpy.sendQuery.calls.reset();
   });
@@ -43,27 +43,27 @@ describe('PoSearchAiComponent: ', () => {
 
   describe('Properties:', () => {
     it('p-timeout: should set default when value is not greater than zero', () => {
-      component.timeout = 0;
-      expect(component.timeout).toBe(10000);
+      fixture.componentRef.setInput('p-timeout', 0);
+      expect(component.timeout()).toBe(10000);
 
-      component.timeout = 5000;
-      expect(component.timeout).toBe(5000);
+      fixture.componentRef.setInput('p-timeout', 5000);
+      expect(component.timeout()).toBe(5000);
     });
 
     it('p-min-confidence: should accept values between 0 and 1 and fallback otherwise', () => {
-      component.minConfidence = 0.8;
-      expect(component.minConfidence).toBe(0.8);
+      fixture.componentRef.setInput('p-min-confidence', 0.8);
+      expect(component.minConfidence()).toBe(0.8);
 
-      component.minConfidence = 2 as any;
-      expect(component.minConfidence).toBe(0.5);
+      fixture.componentRef.setInput('p-min-confidence', 2);
+      expect(component.minConfidence()).toBe(0.5);
 
-      component.minConfidence = -1 as any;
-      expect(component.minConfidence).toBe(0.5);
+      fixture.componentRef.setInput('p-min-confidence', -1);
+      expect(component.minConfidence()).toBe(0.5);
     });
 
     it('p-url: should get and set the url', () => {
-      component.url = '/custom';
-      expect(component.url).toBe('/custom');
+      fixture.componentRef.setInput('p-url', '/custom');
+      expect(component.url()).toBe('/custom');
     });
   });
 
@@ -94,7 +94,7 @@ describe('PoSearchAiComponent: ', () => {
       });
 
       it('should not call the service when url is not defined', () => {
-        component.url = undefined;
+        fixture.componentRef.setInput('p-url', undefined);
         component.search();
         expect(serviceSpy.sendQuery).not.toHaveBeenCalled();
       });
@@ -119,7 +119,7 @@ describe('PoSearchAiComponent: ', () => {
         component.search();
 
         expect(serviceSpy.sendQuery).toHaveBeenCalled();
-        expect(component.aiLoading).toBeFalse();
+        expect((component as any).aiLoading).toBeFalse();
         expect(component.loading).toBeFalse();
         expect(resultSpy).toHaveBeenCalledWith(
           jasmine.objectContaining({ filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 })
@@ -154,10 +154,8 @@ describe('PoSearchAiComponent: ', () => {
 
         component.search();
 
-        expect(errorSpy).toHaveBeenCalledWith(
-          jasmine.objectContaining({ statusCode: 408, message: 'timeout' })
-        );
-        expect(component.aiLoading).toBeFalse();
+        expect(errorSpy).toHaveBeenCalledWith(jasmine.objectContaining({ statusCode: 408, message: 'timeout' }));
+        expect((component as any).aiLoading).toBeFalse();
         expect(component.loading).toBeFalse();
       });
 
@@ -177,13 +175,13 @@ describe('PoSearchAiComponent: ', () => {
       it('should reset state, clear the input value and emit p-clear', () => {
         const clearSpy = spyOn(component.clearEvent, 'emit');
         const onChangeSpy = spyOn(component, 'callOnChange');
-        component.aiLoading = true;
+        (component as any).aiLoading = true;
         component.loading = true;
         component.inputEl.nativeElement.value = 'algum texto';
 
         component.clearSearch();
 
-        expect(component.aiLoading).toBeFalse();
+        expect((component as any).aiLoading).toBeFalse();
         expect(component.loading).toBeFalse();
         expect(component.inputEl.nativeElement.value).toBe('');
         expect(onChangeSpy).toHaveBeenCalledWith('');

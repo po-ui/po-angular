@@ -5,31 +5,30 @@
   [p-id]="id"
   [p-label]="label"
   [p-optional]="optional"
-  [p-required]="required"
+  [p-required]="!!required"
   [p-show-required]="showRequired"
   [p-helper]="label ? poHelper.helperSettings : undefined"
-  [p-show-helper]="label ? displayAdditionalHelp : undefined"
+  [p-show-helper]="label ? displayAdditionalHelp : false"
   [p-size]="size"
   [p-text-wrap]="labelTextWrap()"
   [p-compact-label]="compactLabel()"
 >
   <div class="po-field-container-content">
     <div class="po-field-container-content-helper-wrapper">
-      <div class="po-field-container-input">
+      <div class="po-field-container-input" [class.po-search-ai-processing]="aiLoading">
         <input
           #inp
-          class="po-input"
           [attr.aria-label]="label || placeholder"
           [attr.name]="name"
           [attr.data-focused-element]="!isDisabled"
           [attr.data-inactive-component]="isDisabled || readonly"
           [attr.p-size]="size"
           [autocomplete]="autocomplete"
-          [class.po-input-icon-right]="true"
+          class="po-input po-input-icon-right"
           [disabled]="isDisabled"
           [id]="id"
           [placeholder]="isDisabled ? '' : placeholder"
-          [readonly]="readonly"
+          [readonly]="readonly || aiLoading"
           [required]="required"
           [type]="type"
           (blur)="eventOnBlur($event)"
@@ -40,14 +39,26 @@
 
         @if (loading) {
           <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+        } @else if (aiLoading) {
+          <div class="po-field-icon-container-right">
+            <i class="an an-magic-wand po-search-ai-processing-icon"></i>
+          </div>
         } @else {
           <div class="po-field-icon-container-right">
-            @if (clean && !isDisabled && !readonly) {
+            @if (clean && hasValue() && !isDisabled && !readonly) {
               <po-clean
+                #iconClean
+                tabindex="0"
+                role="button"
+                aria-label="Limpar"
                 class="po-icon-input"
+                p-icon="ICON_FILL_CLEAR_CONTENT"
                 [p-element-ref]="inputEl"
                 [p-size]="size"
                 (p-change-event)="clearSearch()"
+                (keydown)="handleCleanKeydown($event)"
+                (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+                (keydown.space)="clearAndFocus(); $event.preventDefault()"
               >
               </po-clean>
               <div class="po-button-vertical-divider"></div>
@@ -57,7 +68,7 @@
               class="po-search-ai-button"
               p-icon="an an-magic-wand"
               p-kind="tertiary"
-              [p-disabled]="isDisabled || readonly"
+              [p-disabled]="isDisabled || !!readonly"
               [p-size]="size"
               (p-click)="search()"
             >
@@ -65,7 +76,7 @@
           </div>
         }
       </div>
-      @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
+      @if (!this.label && (poHelperComponent() || poHelper.hideAdditionalHelp)) {
         <po-helper
           #helperEl
           class="po-field-helper-button"

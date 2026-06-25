@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 
-import { PoSearchAiColumn } from './interfaces/po-search-ai-column.interface';
+import { PoSearchAiColumn, PoSearchAiColumnInput } from './interfaces/po-search-ai-column.interface';
 import { PoSearchAiRequest, PoSearchAiResponse } from './interfaces/po-search-ai.interface';
 
 /**
@@ -66,9 +66,7 @@ export class PoSearchAiService {
    *
    * @param columns Lista de colunas no formato bruto do componente consumidor.
    */
-  extractColumnsMetadata(
-    columns: Array<{ property?: string; label?: string; type?: string; searchAiIgnore?: boolean; visible?: boolean }>
-  ): Array<PoSearchAiColumn> {
+  extractColumnsMetadata(columns: Array<PoSearchAiColumnInput>): Array<PoSearchAiColumn> {
     if (!columns) {
       return [];
     }

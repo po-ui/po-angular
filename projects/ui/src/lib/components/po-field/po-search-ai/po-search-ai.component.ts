@@ -1,20 +1,21 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
-  inject,
   OnChanges,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { PoButtonComponent } from '../../po-button/po-button.component';
 import { uuid } from '../../../utils/util';
 import { PoSearchAiResult } from './interfaces/po-search-ai.interface';
 import { PoSearchAiBaseComponent } from './po-search-ai-base.component';
 import { PoSearchAiService } from './po-search-ai.service';
+
+const FOCUS_DELAY_MS = 200;
 
 /**
  * @docsExtends PoSearchAiBaseComponent
@@ -58,16 +59,13 @@ import { PoSearchAiService } from './po-search-ai.service';
 })
 export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnChanges {
   @ViewChild('inp', { static: true }) inp: ElementRef;
+  @ViewChild('iconSearchAi') iconSearchAiEl: PoButtonComponent;
 
   id = `po-search-ai[${uuid()}]`;
 
   /* istanbul ignore next */
   constructor() {
-    const el = inject(ElementRef);
-    const searchAiService = inject(PoSearchAiService);
-    const cd = inject(ChangeDetectorRef);
-
-    super(el, searchAiService, cd);
+    super();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -86,31 +84,49 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
   search(): void {
     const query = (this.getScreenValue() || '').toString().trim();
 
-    if (!query || !this.url || this.isDisabled || this.readonly) {
+    if (!query || !this.url() || this.isDisabled || this.readonly) {
       return;
     }
 
     this.aiSubscription?.unsubscribe();
 
-    const columnsMetadata = this.searchAiService.extractColumnsMetadata(this.columns || []);
+    const columnsMetadata = this.searchAiService.extractColumnsMetadata(this.columns());
 
     this.aiLoading = true;
-    this.loading = true;
     this.cd?.detectChanges();
 
-    this.aiSubscription = this.searchAiService.sendQuery(this.url, query, columnsMetadata, this.timeout).subscribe({
-      next: response => {
-        const result: PoSearchAiResult = {
-          query,
-          filter: response?.filter,
-          description: response?.description,
-          confidence: response?.confidence
-        };
+    this.aiSubscription = this.searchAiService
+      .sendQuery(this.url()!, query, columnsMetadata, this.timeout())
+      .subscribe({
+        next: response => {
+          const result: PoSearchAiResult = {
+            query,
+            filter: response?.filter,
+            description: response?.description,
+            confidence: response?.confidence
+          };
 
-        this.handleResponse(result);
-      },
-      error: err => this.handleError(query, err)
-    });
+          this.handleResponse(result);
+        },
+        error: err => this.handleError(query, err)
+      });
+  }
+
+  clearAndFocus(): void {
+    this.clearSearch();
+    setTimeout(() => this.inputEl?.nativeElement?.focus(), FOCUS_DELAY_MS);
+  }
+
+  handleCleanKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Tab' && !event.shiftKey) {
+      this.iconSearchAiEl?.focus();
+      event.preventDefault();
+    }
+    if (event.key === 'Tab' && event.shiftKey) {
+      this.inputEl?.nativeElement?.focus();
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 
   /**
@@ -119,7 +135,6 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
   clearSearch(): void {
     this.aiSubscription?.unsubscribe();
     this.aiLoading = false;
-    this.loading = false;
 
     if (this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.value = '';
@@ -144,38 +159,35 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
     }
   }
 
-  extraValidation(_c: AbstractControl): { [key: string]: any } {
-    return null;
+  private finishProcessing(): void {
+    this.cd?.detectChanges();
+    this.inputEl?.nativeElement?.focus();
   }
 
   private handleResponse(result: PoSearchAiResult): void {
     this.aiLoading = false;
-    this.loading = false;
 
     const confidence = result.confidence ?? 1;
 
-    if (confidence < this.minConfidence) {
+    if (confidence < this.minConfidence()) {
       this.lowConfidence.emit(result);
-      this.cd?.detectChanges();
+      this.finishProcessing();
       return;
     }
 
     this.result.emit(result);
-    this.cd?.detectChanges();
+    this.finishProcessing();
   }
 
   private handleError(query: string, err: { statusCode?: number; message?: string }): void {
     this.aiLoading = false;
-    this.loading = false;
 
     this.error.emit({
       query,
       statusCode: err?.statusCode || 500,
-      message: err?.message || 'Erro na busca com IA'
+      message: err?.message || this.effectiveLiterals().errorMessage
     });
 
-    this.cd?.detectChanges();
+    this.finishProcessing();
   }
-
-
 }

@@ -25,3 +25,17 @@ export interface PoSearchAiColumn {
    */
   type?: string;
 }
+
+/**
+ * @docsPrivate
+ *
+ * Formato de entrada aceito por `extractColumnsMetadata`: superconjunto de `PoSearchAiColumn`
+ * que inclui campos de controle de visibilidade usados por consumidores como o `po-table`.
+ */
+export interface PoSearchAiColumnInput {
+  property?: string;
+  label?: string;
+  type?: string;
+  searchAiIgnore?: boolean;
+  visible?: boolean;
+}

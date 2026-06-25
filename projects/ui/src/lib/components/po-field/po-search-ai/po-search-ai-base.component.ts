@@ -1,10 +1,13 @@
-import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { ChangeDetectorRef, computed, Directive, ElementRef, inject, input, OnDestroy, output } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
+import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 import { PoSearchAiColumn } from './interfaces/po-search-ai-column.interface';
+import { poSearchAiLiteralsDefault } from './interfaces/po-search-ai-literals-default.interface';
+import { PoSearchAiLiterals } from './interfaces/po-search-ai-literals.interface';
 import { PoSearchAiError, PoSearchAiResult } from './interfaces/po-search-ai.interface';
 import { PoSearchAiService } from './po-search-ai.service';
 
@@ -51,6 +54,20 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  */
 @Directive()
 export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements OnDestroy {
+  protected aiLoading = false;
+
+  protected aiSubscription: Subscription;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado quando o filtro aplicado via IA é limpo, seja pela ação do usuário
+   * ou programaticamente. Não emite valor.
+   */
+  clearEvent = output<void>({ alias: 'p-clear' });
+
   /**
    * @optional
    *
@@ -62,17 +79,36 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    *
    * @default `[]`
    */
-  @Input('p-columns') columns: Array<PoSearchAiColumn> = [];
+  columns = input<Array<PoSearchAiColumn>>([], { alias: 'p-columns' });
+
+  protected readonly effectiveLiterals = computed(() => {
+    const val = this.literals();
+    return val && typeof val === 'object'
+      ? { ...poSearchAiLiteralsDefault[this.language], ...val }
+      : poSearchAiLiteralsDefault[this.language];
+  });
 
   /**
    * @optional
    *
    * @description
    *
-   * Evento disparado quando a IA retorna um resultado com confiança maior ou igual a
-   * `p-min-confidence`. Emite um objeto `PoSearchAiResult`.
+   * Evento disparado quando a chamada à API de IA falha (erro HTTP, timeout, etc.).
+   * Emite um objeto `PoSearchAiError`.
    */
-  @Output('p-result') result = new EventEmitter<PoSearchAiResult>();
+  error = output<PoSearchAiError>({ alias: 'p-error' });
+
+  private readonly language: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Objeto com os literais usados no componente. Permite sobrescrever as mensagens padrão
+   * para internacionalização ou customização.
+   */
+  literals = input<PoSearchAiLiterals>(undefined, { alias: 'p-literals' });
 
   /**
    * @optional
@@ -83,79 +119,7 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    * Emite um objeto `PoSearchAiResult`, permitindo ao desenvolvedor decidir o que fazer
    * (ex: confirmar com o usuário antes de aplicar o filtro).
    */
-  @Output('p-low-confidence') lowConfidence = new EventEmitter<PoSearchAiResult>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado quando a chamada à API de IA falha (erro HTTP, timeout, etc.).
-   * Emite um objeto `PoSearchAiError`.
-   */
-  @Output('p-error') error = new EventEmitter<PoSearchAiError>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Evento disparado quando o filtro aplicado via IA é limpo, seja pela ação do usuário
-   * ou programaticamente. Não emite valor.
-   */
-  @Output('p-clear') clearEvent = new EventEmitter<void>();
-
-  /** Indica que uma consulta de IA está em andamento. */
-  aiLoading = false;
-
-  protected aiSubscription: Subscription;
-
-  private _url: string;
-  private _timeout: number = PO_SEARCH_AI_DEFAULT_TIMEOUT;
-  private _minConfidence: number = PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE;
-
-  constructor(
-    el: ElementRef,
-    protected searchAiService: PoSearchAiService,
-    cd?: ChangeDetectorRef
-  ) {
-    super(el, cd);
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Endpoint (proxy) responsável por encaminhar a consulta para o provedor de IA.
-   * Recebe `{ query, columns }` via `POST` e deve retornar `{ filter, description, confidence }`.
-   *
-   * > A integração com a LLM e a guarda de chaves devem ocorrer **no backend**, nunca no client-side.
-   */
-  @Input('p-url') set url(value: string) {
-    this._url = value;
-  }
-  get url(): string {
-    return this._url;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Tempo máximo de espera (em milissegundos) pela resposta da IA antes de abortar a
-   * requisição e emitir `p-error` com `statusCode 408`.
-   *
-   * @default `10000`
-   */
-  @Input('p-timeout') set timeout(value: number) {
-    const parsed = Number(value);
-    this._timeout = parsed > 0 ? parsed : PO_SEARCH_AI_DEFAULT_TIMEOUT;
-  }
-  get timeout(): number {
-    return this._timeout;
-  }
+  lowConfidence = output<PoSearchAiResult>({ alias: 'p-low-confidence' });
 
   /**
    * @optional
@@ -168,26 +132,76 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    *
    * @default `0.5`
    */
-  @Input('p-min-confidence') set minConfidence(value: number) {
-    const parsed = Number(value);
-    this._minConfidence = parsed >= 0 && parsed <= 1 ? parsed : PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE;
+  minConfidence = input<number>(PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE, {
+    alias: 'p-min-confidence',
+    transform: (value: number) => {
+      const parsed = Number(value);
+      return parsed >= 0 && parsed <= 1 ? parsed : PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE;
+    }
+  });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado quando a IA retorna um resultado com confiança maior ou igual a
+   * `p-min-confidence`. Emite um objeto `PoSearchAiResult`.
+   */
+  result = output<PoSearchAiResult>({ alias: 'p-result' });
+
+  protected searchAiService: PoSearchAiService;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Tempo máximo de espera (em milissegundos) pela resposta da IA antes de abortar a
+   * requisição e emitir `p-error` com `statusCode 408`.
+   *
+   * @default `10000`
+   */
+  timeout = input<number>(PO_SEARCH_AI_DEFAULT_TIMEOUT, {
+    alias: 'p-timeout',
+    transform: (value: number) => {
+      const parsed = Number(value);
+      return parsed > 0 ? parsed : PO_SEARCH_AI_DEFAULT_TIMEOUT;
+    }
+  });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Endpoint (proxy) responsável por encaminhar a consulta para o provedor de IA.
+   * Recebe `{ query, columns }` via `POST` e deve retornar `{ filter, description, confidence }`.
+   *
+   * > A integração com a LLM e a guarda de chaves devem ocorrer **no backend**, nunca no client-side.
+   */
+  url = input<string | undefined>(undefined, { alias: 'p-url' });
+
+  constructor() {
+    super(inject(ElementRef), inject(ChangeDetectorRef));
+    this.searchAiService = inject(PoSearchAiService);
+    this.language = inject(PoLanguageService).getShortLanguage();
   }
-  get minConfidence(): number {
-    return this._minConfidence;
+
+  abstract clearSearch(): void;
+
+  abstract search(): void;
+
+  extraValidation(_c: AbstractControl): { [key: string]: any } {
+    return null;
+  }
+
+  hasValue(): boolean {
+    return !!this.getScreenValue();
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy?.();
     this.aiSubscription?.unsubscribe();
   }
-
-  extraValidation(_c: AbstractControl): { [key: string]: any } {
-    return null;
-  }
-
-  // Deve enviar a consulta atual para a IA.
-  abstract search(): void;
-
-  // Deve limpar o filtro aplicado via IA.
-  abstract clearSearch(): void;
 }
