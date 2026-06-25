@@ -135,6 +135,7 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
   clearSearch(): void {
     this.aiSubscription?.unsubscribe();
     this.aiLoading = false;
+    this.loading = false;
 
     if (this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.value = '';

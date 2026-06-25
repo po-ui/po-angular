@@ -1,0 +1,32 @@
+<po-page-default>
+  <po-switch
+    name="theme"
+    p-label="Dark mode"
+    [(ngModel)]="isDark"
+    (p-change)="onThemeChange($event)"
+    class="po-mb-2"
+  ></po-switch>
+  <po-timepicker name="timepicker" p-label="PO Timepicker" p-clean ngModel="11:22"> </po-timepicker>
+  <po-search-ai
+    class="po-md-4"
+    name="searchAi"
+    p-label="Busca inteligente"
+    p-help="Descreva o que procura em linguagem natural e pressione Enter"
+    p-placeholder="Ex: clientes de SP com idade acima de 30"
+    p-url="http://localhost:3333/api/ai/filter"
+    p-clean
+    [p-columns]="columns"
+    (p-result)="onResult($event)"
+    (p-clear)="onClear()"
+  >
+  </po-search-ai>
+
+  @if (result) {
+    <po-container class="po-mt-2" p-no-padding>
+      <p><strong>Query:</strong> {{ result.query }}</p>
+      <p><strong>Filtro:</strong> {{ result.filter }}</p>
+      <p><strong>Descrição:</strong> {{ result.description }}</p>
+      <p><strong>Confiança:</strong> {{ result.confidence }}</p>
+    </po-container>
+  }
+</po-page-default>

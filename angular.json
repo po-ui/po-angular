@@ -67,7 +67,7 @@
                 "output": "/assets/monaco"
               }
             ],
-            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
+            "styles": ["P:/code/po-style/dist/style/css/po-theme-default.min.css", "projects/app/src/styles.css"],
             "scripts": [],
             "extractLicenses": false,
             "sourceMap": true,
@@ -116,8 +116,7 @@
           "options": {
             "open": true,
             "host": "0.0.0.0",
-            "buildTarget": "app:build:es5",
-            "proxyConfig": "proxy.conf.json"
+            "buildTarget": "app:build:es5"
           },
           "configurations": {
             "production": {
@@ -314,7 +313,7 @@
               }
             ],
             "styles": [
-              "node_modules/@po-ui/style/css/po-theme-default.min.css",
+              "P:/code/po-style/dist/style/css/po-theme-default.min.css",
               "projects/portal/src/assets/css/code-highlight.css",
               "projects/portal/src/styles.css"
             ],

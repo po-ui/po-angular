@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormsModule, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -15,12 +15,9 @@ describe('PoSearchAiComponent: ', () => {
   let serviceSpy: jasmine.SpyObj<PoSearchAiService>;
 
   configureTestSuite(() => {
-    serviceSpy = jasmine.createSpyObj('PoSearchAiService', ['sendQuery', 'extractColumnsMetadata']);
-
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [PoSearchAiComponent],
-      providers: [{ provide: PoSearchAiService, useValue: serviceSpy }],
       schemas: [NO_ERRORS_SCHEMA]
     });
   });
@@ -28,13 +25,26 @@ describe('PoSearchAiComponent: ', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PoSearchAiComponent);
     component = fixture.componentInstance;
+
+    // O `PoSearchAiService` é provido no nível do componente, então espionamos a instância
+    // efetivamente injetada nele (em vez de um provider de módulo, que seria sombreado).
+    serviceSpy = (component as any).searchAiService;
+    spyOn(serviceSpy, 'sendQuery').and.returnValue(of({} as PoSearchAiResponse));
+    spyOn(serviceSpy, 'extractColumnsMetadata').and.returnValue([]);
+
     fixture.componentRef.setInput('p-url', '/api/ai-search');
-    serviceSpy.extractColumnsMetadata.and.returnValue([]);
-    serviceSpy.sendQuery.calls.reset();
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should register itself as NG_VALUE_ACCESSOR and NG_VALIDATORS', () => {
+    const valueAccessors = fixture.debugElement.injector.get(NG_VALUE_ACCESSOR);
+    const validators = fixture.debugElement.injector.get(NG_VALIDATORS);
+
+    expect(valueAccessors).toContain(component);
+    expect(validators).toContain(component);
   });
 
   it('should return null in extraValidation', () => {
@@ -65,6 +75,30 @@ describe('PoSearchAiComponent: ', () => {
       fixture.componentRef.setInput('p-url', '/custom');
       expect(component.url()).toBe('/custom');
     });
+
+    it('p-columns: should pass the signal value to extractColumnsMetadata on search', () => {
+      const columns = [{ property: 'name', label: 'Name', type: 'string' }];
+      fixture.componentRef.setInput('p-columns', columns);
+      spyOn(component, 'getScreenValue').and.returnValue('query');
+      serviceSpy.extractColumnsMetadata.and.returnValue([{ property: 'name', label: 'Name', type: 'string' }]);
+      serviceSpy.sendQuery.and.returnValue(of({ filter: '', confidence: 1 }));
+
+      component.search();
+
+      expect(serviceSpy.extractColumnsMetadata).toHaveBeenCalledWith(columns);
+    });
+
+    it('p-literals: should use the custom error message when p-literals is set and error has no message', () => {
+      fixture.componentRef.setInput('p-literals', { errorMessage: 'Custom AI error' });
+      spyOn(component, 'getScreenValue').and.returnValue('query');
+      serviceSpy.extractColumnsMetadata.and.returnValue([]);
+      serviceSpy.sendQuery.and.returnValue(throwError(() => ({})));
+      const errorSpy = spyOn(component.error, 'emit');
+
+      component.search();
+
+      expect(errorSpy).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Custom AI error' }));
+    });
   });
 
   describe('Methods:', () => {
@@ -89,6 +123,12 @@ describe('PoSearchAiComponent: ', () => {
 
       it('should not call the service when query is empty', () => {
         (component.getScreenValue as jasmine.Spy).and.returnValue('   ');
+        component.search();
+        expect(serviceSpy.sendQuery).not.toHaveBeenCalled();
+      });
+
+      it('should not call the service when getScreenValue returns a falsy value', () => {
+        (component.getScreenValue as jasmine.Spy).and.returnValue(undefined);
         component.search();
         expect(serviceSpy.sendQuery).not.toHaveBeenCalled();
       });
@@ -171,6 +211,70 @@ describe('PoSearchAiComponent: ', () => {
       });
     });
 
+    describe('clearAndFocus:', () => {
+      it('should call clearSearch and focus the input after the delay', fakeAsync(() => {
+        const clearSearchSpy = spyOn(component, 'clearSearch');
+        const focusSpy = spyOn(component.inputEl.nativeElement, 'focus');
+
+        component.clearAndFocus();
+
+        expect(clearSearchSpy).toHaveBeenCalled();
+        expect(focusSpy).not.toHaveBeenCalled();
+
+        tick(200);
+
+        expect(focusSpy).toHaveBeenCalled();
+      }));
+    });
+
+    describe('handleCleanKeydown:', () => {
+      it('should focus the search button and prevent default on Tab without Shift', () => {
+        const buttonSpy = jasmine.createSpyObj('PoButtonComponent', ['focus']);
+        component.iconSearchAiEl = buttonSpy;
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false });
+        spyOn(event, 'preventDefault');
+
+        component.handleCleanKeydown(event);
+
+        expect(buttonSpy.focus).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+
+      it('should focus the input, prevent default and stop propagation on Tab + Shift', () => {
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
+        const focusSpy = spyOn(component.inputEl.nativeElement, 'focus');
+        spyOn(event, 'preventDefault');
+        spyOn(event, 'stopPropagation');
+
+        component.handleCleanKeydown(event);
+
+        expect(focusSpy).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should do nothing for non-Tab keys', () => {
+        const event = new KeyboardEvent('keydown', { key: 'Enter' });
+        spyOn(event, 'preventDefault');
+
+        component.handleCleanKeydown(event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('hasValue:', () => {
+      it('should return true when the screen value is not empty', () => {
+        spyOn(component, 'getScreenValue').and.returnValue('some text');
+        expect(component.hasValue()).toBeTrue();
+      });
+
+      it('should return false when the screen value is empty or undefined', () => {
+        spyOn(component, 'getScreenValue').and.returnValue(undefined);
+        expect(component.hasValue()).toBeFalse();
+      });
+    });
+
     describe('clearSearch:', () => {
       it('should reset state, clear the input value and emit p-clear', () => {
         const clearSpy = spyOn(component.clearEvent, 'emit');
@@ -185,6 +289,14 @@ describe('PoSearchAiComponent: ', () => {
         expect(component.loading).toBeFalse();
         expect(component.inputEl.nativeElement.value).toBe('');
         expect(onChangeSpy).toHaveBeenCalledWith('');
+        expect(clearSpy).toHaveBeenCalled();
+      });
+
+      it('should skip clearing the input value when inputEl is not defined', () => {
+        const clearSpy = spyOn(component.clearEvent, 'emit');
+        (component as any).inputEl = undefined;
+
+        expect(() => component.clearSearch()).not.toThrow();
         expect(clearSpy).toHaveBeenCalled();
       });
     });

@@ -54,7 +54,7 @@ export class PoSearchAiService {
 
         return throwError(() => ({
           statusCode: error?.status || 500,
-          message: error?.message || 'AI search request failed'
+          message: error?.status ? error?.message : 'AI search request failed'
         }));
       })
     );
