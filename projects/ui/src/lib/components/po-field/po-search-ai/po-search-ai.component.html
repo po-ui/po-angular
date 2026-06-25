@@ -16,27 +16,16 @@
   <div class="po-field-container-content">
     <div class="po-field-container-content-helper-wrapper">
       <div class="po-field-container-input">
-        <div class="po-field-icon-container-left">
-          <po-icon
-            class="po-field-icon {{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-            [class.po-field-icon-disabled]="isDisabled"
-            [class.po-field-icon-aa]="size === 'small'"
-            [p-icon]="icon || 'ICON_SEARCH'"
-          ></po-icon>
-        </div>
-
         <input
           #inp
-          class="po-input po-input-icon-left"
+          class="po-input"
           [attr.aria-label]="label || placeholder"
           [attr.name]="name"
           [attr.data-focused-element]="!isDisabled"
           [attr.data-inactive-component]="isDisabled || readonly"
           [attr.p-size]="size"
           [autocomplete]="autocomplete"
-          [class.po-input-icon-left-aa]="size === 'small'"
-          [class.po-input-icon-right]="hasAppliedFilter || loading"
-          [class.po-input-icon-right-aa]="(hasAppliedFilter || loading) && size === 'small'"
+          [class.po-input-icon-right]="true"
           [disabled]="isDisabled"
           [id]="id"
           [placeholder]="isDisabled ? '' : placeholder"
@@ -48,21 +37,33 @@
           (input)="eventOnInput($event)"
           (keydown)="onSearchKeydown($event)"
         />
-        <div class="po-field-icon-container-right">
-          @if (loading) {
-            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
-          }
 
-          @if (!loading && hasAppliedFilter && !isDisabled && !readonly) {
-            <po-clean
-              class="{{ disabled ? 'po-icon-input-disabled' : 'po-icon-input' }}"
-              [p-element-ref]="inputEl"
+        @if (loading) {
+          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+        } @else {
+          <div class="po-field-icon-container-right">
+            @if (clean && !isDisabled && !readonly) {
+              <po-clean
+                class="po-icon-input"
+                [p-element-ref]="inputEl"
+                [p-size]="size"
+                (p-change-event)="clearSearch()"
+              >
+              </po-clean>
+              <div class="po-button-vertical-divider"></div>
+            }
+            <po-button
+              #iconSearchAi
+              class="po-search-ai-button"
+              p-icon="an an-magic-wand"
+              p-kind="tertiary"
+              [p-disabled]="isDisabled || readonly"
               [p-size]="size"
-              (p-change-event)="clearSearch()"
+              (p-click)="search()"
             >
-            </po-clean>
-          }
-        </div>
+            </po-button>
+          </div>
+        }
       </div>
       @if ((!this.label && poHelperComponent()) || (!this.label && poHelper.hideAdditionalHelp)) {
         <po-helper
@@ -76,12 +77,6 @@
         </po-helper>
       }
     </div>
-
-    @if (showAppliedFeedback && hasAppliedFilter) {
-      <div class="po-search-ai-applied" [attr.data-applied]="true">
-        <po-tag p-type="info" p-icon="ICON_SEARCH" [p-value]="appliedDescription"></po-tag>
-      </div>
-    }
   </div>
 
   @if (!readonly) {
@@ -95,5 +90,3 @@
     ></po-field-container-bottom>
   }
 </po-field-container>
-
-<span class="po-sr-only" aria-live="polite" role="status">{{ liveAnnouncement }}</span>

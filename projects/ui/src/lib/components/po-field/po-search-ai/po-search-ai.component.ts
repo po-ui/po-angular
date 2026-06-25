@@ -96,7 +96,6 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
 
     this.aiLoading = true;
     this.loading = true;
-    this.appliedDescription = '';
     this.cd?.detectChanges();
 
     this.aiSubscription = this.searchAiService.sendQuery(this.url, query, columnsMetadata, this.timeout).subscribe({
@@ -121,14 +120,12 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
     this.aiSubscription?.unsubscribe();
     this.aiLoading = false;
     this.loading = false;
-    this.appliedDescription = '';
 
     if (this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.value = '';
     }
     this.callOnChange('');
 
-    this.announce('Filtro de busca por IA removido.');
     this.clearEvent.emit();
     this.cd?.detectChanges();
   }
@@ -158,27 +155,18 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
     const confidence = result.confidence ?? 1;
 
     if (confidence < this.minConfidence) {
-      this.appliedDescription = '';
       this.lowConfidence.emit(result);
-      this.announce('A busca por IA retornou baixa confiança e não foi aplicada automaticamente.');
       this.cd?.detectChanges();
       return;
     }
 
-    this.appliedDescription = this.showAppliedFeedback ? result.description || '' : '';
     this.result.emit(result);
-    this.announce(
-      this.appliedDescription
-        ? `Filtro de busca por IA aplicado: ${this.appliedDescription}`
-        : 'Filtro de busca por IA aplicado.'
-    );
     this.cd?.detectChanges();
   }
 
   private handleError(query: string, err: { statusCode?: number; message?: string }): void {
     this.aiLoading = false;
     this.loading = false;
-    this.appliedDescription = '';
 
     this.error.emit({
       query,
@@ -186,11 +174,8 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
       message: err?.message || 'Erro na busca com IA'
     });
 
-    this.announce('Ocorreu um erro na busca por IA.');
     this.cd?.detectChanges();
   }
 
-  private announce(message: string): void {
-    this.liveAnnouncement = message;
-  }
+
 }

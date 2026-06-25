@@ -1,11 +1,11 @@
-import { NO_ERRORS_SCHEMA, SimpleChanges } from '@angular/core';
+import { NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
-import { PoSearchAiResponse, PoSearchAiResult } from './interfaces/po-search-ai.interface';
+import { PoSearchAiResponse } from './interfaces/po-search-ai.interface';
 import { PoSearchAiComponent } from './po-search-ai.component';
 import { PoSearchAiService } from './po-search-ai.service';
 
@@ -61,25 +61,9 @@ describe('PoSearchAiComponent: ', () => {
       expect(component.minConfidence).toBe(0.5);
     });
 
-    it('p-show-applied-feedback: should convert to boolean and default to true when undefined', () => {
-      component.setShowAppliedFeedback = false;
-      expect(component.showAppliedFeedback).toBeFalse();
-
-      component.setShowAppliedFeedback = undefined as any;
-      expect(component.showAppliedFeedback).toBeTrue();
-    });
-
     it('p-url: should get and set the url', () => {
       component.url = '/custom';
       expect(component.url).toBe('/custom');
-    });
-
-    it('hasAppliedFilter: should reflect the appliedDescription state', () => {
-      component.appliedDescription = '';
-      expect(component.hasAppliedFilter).toBeFalse();
-
-      component.appliedDescription = 'idade > 30';
-      expect(component.hasAppliedFilter).toBeTrue();
     });
   });
 
@@ -87,7 +71,7 @@ describe('PoSearchAiComponent: ', () => {
     describe('ngOnChanges:', () => {
       it('should reset displayAdditionalHelp when label changes', () => {
         component.displayAdditionalHelp = true;
-        component.ngOnChanges({ label: {} } as SimpleChanges);
+        component.ngOnChanges({ label: new SimpleChange(undefined, 'test', true) } as SimpleChanges);
         expect(component.displayAdditionalHelp).toBeFalse();
       });
 
@@ -127,7 +111,7 @@ describe('PoSearchAiComponent: ', () => {
         expect(serviceSpy.sendQuery).not.toHaveBeenCalled();
       });
 
-      it('should emit p-result and apply feedback on a confident response', () => {
+      it('should emit p-result on a confident response', () => {
         const response: PoSearchAiResponse = { filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 };
         serviceSpy.sendQuery.and.returnValue(of(response));
         const resultSpy = spyOn(component.result, 'emit');
@@ -137,20 +121,9 @@ describe('PoSearchAiComponent: ', () => {
         expect(serviceSpy.sendQuery).toHaveBeenCalled();
         expect(component.aiLoading).toBeFalse();
         expect(component.loading).toBeFalse();
-        expect(component.appliedDescription).toBe('cidade SP');
         expect(resultSpy).toHaveBeenCalledWith(
           jasmine.objectContaining({ filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 })
         );
-      });
-
-      it('should not set appliedDescription when showAppliedFeedback is false', () => {
-        const response: PoSearchAiResponse = { filter: `city eq 'SP'`, description: 'cidade SP', confidence: 0.9 };
-        serviceSpy.sendQuery.and.returnValue(of(response));
-        component.showAppliedFeedback = false;
-
-        component.search();
-
-        expect(component.appliedDescription).toBe('');
       });
 
       it('should treat missing confidence as fully confident (1)', () => {
@@ -173,7 +146,6 @@ describe('PoSearchAiComponent: ', () => {
 
         expect(lowSpy).toHaveBeenCalled();
         expect(resultSpy).not.toHaveBeenCalled();
-        expect(component.appliedDescription).toBe('');
       });
 
       it('should emit p-error when the service fails', () => {
@@ -205,20 +177,17 @@ describe('PoSearchAiComponent: ', () => {
       it('should reset state, clear the input value and emit p-clear', () => {
         const clearSpy = spyOn(component.clearEvent, 'emit');
         const onChangeSpy = spyOn(component, 'callOnChange');
-        component.appliedDescription = 'idade > 30';
         component.aiLoading = true;
         component.loading = true;
         component.inputEl.nativeElement.value = 'algum texto';
 
         component.clearSearch();
 
-        expect(component.appliedDescription).toBe('');
         expect(component.aiLoading).toBeFalse();
         expect(component.loading).toBeFalse();
         expect(component.inputEl.nativeElement.value).toBe('');
         expect(onChangeSpy).toHaveBeenCalledWith('');
         expect(clearSpy).toHaveBeenCalled();
-        expect(component.liveAnnouncement).toContain('removido');
       });
     });
 

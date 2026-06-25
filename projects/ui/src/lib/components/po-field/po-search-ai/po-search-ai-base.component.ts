@@ -3,7 +3,6 @@ import { AbstractControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
-import { convertToBoolean } from '../../../utils/util';
 import { PoInputGeneric } from '../po-input-generic/po-input-generic';
 import { PoSearchAiColumn } from './interfaces/po-search-ai-column.interface';
 import { PoSearchAiError, PoSearchAiResult } from './interfaces/po-search-ai.interface';
@@ -43,8 +42,6 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  *
  * #### Acessibilidade
  *
- * - Utiliza `aria-live="polite"` para anunciar quando o filtro de IA é aplicado ou limpo,
- *   garantindo feedback para leitores de tela.
  * - Mantém foco sequencial via `Tab` entre o campo de busca, o feedback e o conteúdo associado.
  *
  * #### Tokens customizáveis
@@ -110,12 +107,6 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
 
   /** Indica que uma consulta de IA está em andamento. */
   aiLoading = false;
-
-  /** Descrição legível do último filtro aplicado (feedback persistente). */
-  appliedDescription = '';
-
-  /** Texto que será anunciado via região `aria-live`. */
-  liveAnnouncement = '';
 
   protected aiSubscription: Subscription;
 
@@ -185,30 +176,9 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
     return this._minConfidence;
   }
 
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Define se o feedback visual de "filtro aplicado via IA" será exibido após uma
-   * busca bem-sucedida.
-   *
-   * @default `true`
-   */
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  showAppliedFeedback = true;
-  @Input('p-show-applied-feedback') set setShowAppliedFeedback(value: boolean) {
-    this.showAppliedFeedback = value === undefined ? true : convertToBoolean(value);
-  }
-
   ngOnDestroy(): void {
     super.ngOnDestroy?.();
     this.aiSubscription?.unsubscribe();
-  }
-
-  /** Indica se há um filtro de IA atualmente aplicado. */
-  get hasAppliedFilter(): boolean {
-    return !!this.appliedDescription;
   }
 
   extraValidation(_c: AbstractControl): { [key: string]: any } {

@@ -1,6 +1,7 @@
 <po-search-ai
   name="searchAi"
   [p-columns]="columns"
+  [p-clean]="properties?.includes('clean')"
   [p-disabled]="properties?.includes('disabled')"
   [p-help]="help"
   [p-helper]="helperText"
@@ -10,7 +11,6 @@
   [p-placeholder]="placeholder"
   [p-readonly]="properties?.includes('readonly')"
   [p-required]="properties?.includes('required')"
-  [p-show-applied-feedback]="properties?.includes('showAppliedFeedback')"
   [p-show-required]="properties?.includes('showRequired')"
   [p-size]="size"
   [p-timeout]="timeout"

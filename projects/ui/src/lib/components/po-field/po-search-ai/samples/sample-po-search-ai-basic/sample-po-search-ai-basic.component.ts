@@ -8,7 +8,7 @@ import { PoSearchAiColumn, PoSearchAiResult } from '@po-ui/ng-components';
   standalone: false
 })
 export class SamplePoSearchAiBasicComponent {
-  lastFilter: string;
+  result: PoSearchAiResult;
 
   readonly columns: Array<PoSearchAiColumn> = [
     { property: 'name', label: 'Nome', type: 'string' },
@@ -17,10 +17,10 @@ export class SamplePoSearchAiBasicComponent {
   ];
 
   onResult(result: PoSearchAiResult) {
-    this.lastFilter = result.filter;
+    this.result = result;
   }
 
   onClear() {
-    this.lastFilter = undefined;
+    this.result = undefined;
   }
 }

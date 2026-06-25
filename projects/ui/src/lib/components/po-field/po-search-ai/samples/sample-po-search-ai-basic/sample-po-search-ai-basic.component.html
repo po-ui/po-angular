@@ -4,14 +4,18 @@
   p-help="Descreva o que procura em linguagem natural e pressione Enter"
   p-placeholder="Ex: clientes de SP com idade acima de 30"
   p-url="http://localhost:3333/api/ai/filter"
+  p-clean
   [p-columns]="columns"
   (p-result)="onResult($event)"
   (p-clear)="onClear()"
 >
 </po-search-ai>
 
-@if (lastFilter) {
-  <p class="po-mt-1">
-    <strong>Filtro gerado:</strong> {{ lastFilter }}
-  </p>
+@if (result) {
+  <po-container class="po-mt-2" p-no-padding>
+    <p><strong>Query:</strong> {{ result.query }}</p>
+    <p><strong>Filtro:</strong> {{ result.filter }}</p>
+    <p><strong>Descrição:</strong> {{ result.description }}</p>
+    <p><strong>Confiança:</strong> {{ result.confidence }}</p>
+  </po-container>
 }

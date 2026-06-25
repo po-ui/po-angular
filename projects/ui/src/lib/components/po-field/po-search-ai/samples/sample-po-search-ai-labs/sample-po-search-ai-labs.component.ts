@@ -26,11 +26,11 @@ export class SamplePoSearchAiLabsComponent implements OnInit {
   ];
 
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
+    { value: 'clean', label: 'Clean' },
     { value: 'disabled', label: 'Disabled' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
-    { value: 'showAppliedFeedback', label: 'Show Applied Feedback' },
     { value: 'showRequired', label: 'Show Required' }
   ];
 
@@ -54,7 +54,7 @@ export class SamplePoSearchAiLabsComponent implements OnInit {
     this.label = 'Busca inteligente';
     this.minConfidence = 0.5;
     this.placeholder = 'Descreva o que procura em linguagem natural';
-    this.properties = ['showAppliedFeedback'];
+    this.properties = ['clean'];
     this.size = 'medium';
     this.timeout = 10000;
     this.url = '/api/ai-search';
