@@ -6,8 +6,16 @@
     (p-change)="onThemeChange($event)"
     class="po-mb-2"
   ></po-switch>
+  <po-switch
+    name="a11y"
+    p-label="AAA"
+    [(ngModel)]="isAAA"
+    (p-change)="onA11yChange($event)"
+    class="po-mb-2"
+  ></po-switch>
   <po-timepicker name="timepicker" p-label="PO Timepicker" p-clean ngModel="11:22"> </po-timepicker>
-  <po-search-ai
+ <div class="po-row">
+   <po-search-ai
     class="po-md-4"
     name="searchAi"
     p-label="Busca inteligente"
@@ -20,6 +28,10 @@
     (p-clear)="onClear()"
   >
   </po-search-ai>
+ </div>
+  <div class="po-row">
+    <po-search name="search" p-label="Search Padrão" class="po-md-4"> </po-search>
+  </div>
 
   @if (result) {
     <po-container class="po-mt-2" p-no-padding>

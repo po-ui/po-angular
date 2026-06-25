@@ -43,10 +43,6 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  *   `p-low-confidence` e não aplica o filtro automaticamente.
  * - **Erro:** quando a chamada falha, emite `p-error`.
  *
- * #### Acessibilidade
- *
- * - Mantém foco sequencial via `Tab` entre o campo de busca, o feedback e o conteúdo associado.
- *
  * #### Tokens customizáveis
  *
  * Por herdar de `po-input`, reaproveita os mesmos tokens CSS. As cores de destaque da IA

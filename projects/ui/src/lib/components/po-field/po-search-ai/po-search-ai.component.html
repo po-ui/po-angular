@@ -16,6 +16,9 @@
   <div class="po-field-container-content">
     <div class="po-field-container-content-helper-wrapper">
       <div class="po-field-container-input" [class.po-search-ai-processing]="aiLoading">
+        <div class="po-search-ai-icon" aria-hidden="true">
+          <po-icon p-icon="ICON_SEARCH"></po-icon>
+        </div>
         <input
           #inp
           [attr.aria-label]="label || placeholder"
@@ -24,7 +27,7 @@
           [attr.data-inactive-component]="isDisabled || readonly"
           [attr.p-size]="size"
           [autocomplete]="autocomplete"
-          class="po-input po-input-icon-right"
+          class="po-input"
           [disabled]="isDisabled"
           [id]="id"
           [placeholder]="isDisabled ? '' : placeholder"

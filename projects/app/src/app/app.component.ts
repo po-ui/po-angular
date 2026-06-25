@@ -15,6 +15,7 @@ import {
 export class AppComponent {
   result: PoSearchAiResult;
   isDark = false;
+  isAAA = true;
 
   readonly columns: Array<PoSearchAiColumn> = [
     { property: 'name', label: 'Nome', type: 'string' },
@@ -23,12 +24,17 @@ export class AppComponent {
   ];
 
   constructor(private themeService: PoThemeService) {
-    this.themeService.setTheme(poThemeDefault, 0, PoThemeA11yEnum.AA);
+    this.themeService.setTheme(poThemeDefault, 0, PoThemeA11yEnum.AAA);
     this.themeService.setA11yDefaultSizeSmall(true);
   }
 
   onThemeChange(dark: boolean) {
-    this.themeService.setTheme(poThemeDefault, dark ? 1 : 0, PoThemeA11yEnum.AA);
+    this.themeService.setTheme(poThemeDefault, dark ? 1 : 0, this.isAAA ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA);
+  }
+
+  onA11yChange(aaa: boolean) {
+    this.isAAA = aaa;
+    this.themeService.setTheme(poThemeDefault, this.isDark ? 1 : 0, aaa ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA);
   }
 
   onResult(result: PoSearchAiResult) {
