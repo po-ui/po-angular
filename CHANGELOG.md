@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.16](https://github.com/po-ui/po-angular/compare/v19.39.15...v19.39.16) (2026-06-25)
+
+
+### Bug Fixes
+
+* **multiselect:** corrige remoção de tags ([ba7e460](https://github.com/po-ui/po-angular/commit/ba7e460bb5b6ac28a70a474e2c57270f70d3762d))
+
 ### [19.39.15](https://github.com/po-ui/po-angular/compare/v19.39.14...v19.39.15) (2026-06-15)
 
 
