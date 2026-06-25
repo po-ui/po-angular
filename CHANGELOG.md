@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.22.0](https://github.com/po-ui/po-angular/compare/v21.21.0...v21.22.0) (2026-06-25)
+
+
+### Features
+
+* **datetimepicker:** implementa input apartado para período ([ecfc96a](https://github.com/po-ui/po-angular/commit/ecfc96a165fc68999a898304a19948f402c19732))
+* **icons:** atualiza AnimaliaIcons para v1.1.0 ([868bdb2](https://github.com/po-ui/po-angular/commit/868bdb2db4935967e7855356debb4863e9a51842))
+* **table:** adiciona suporte a máscara nas colunas ([15b17d1](https://github.com/po-ui/po-angular/commit/15b17d12d5c5cf744112dd3d1d1c791fe81271cb))
+
+
+### Bug Fixes
+
+* **multiselect:** corrige remoção de tags ([11f15f6](https://github.com/po-ui/po-angular/commit/11f15f68eb14a34f09f6f5718c9755daa448e364))
+
 ## [21.21.0](https://github.com/po-ui/po-angular/compare/v21.20.0...v21.21.0) (2026-06-18)
 
 
