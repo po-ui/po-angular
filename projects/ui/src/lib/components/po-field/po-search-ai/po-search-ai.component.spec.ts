@@ -5,7 +5,7 @@ import { of, throwError } from 'rxjs';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
-import { PoSearchAiResponse } from './interfaces/po-search-ai.interface';
+import { PoSearchAiResponse, PoSearchAiResponseType } from './interfaces/po-search-ai.interface';
 import { PoSearchAiComponent } from './po-search-ai.component';
 import { PoSearchAiService } from './po-search-ai.service';
 
@@ -208,6 +208,67 @@ describe('PoSearchAiComponent: ', () => {
         expect(errorSpy).toHaveBeenCalledWith(
           jasmine.objectContaining({ statusCode: 500, message: 'Erro na busca com IA' })
         );
+      });
+
+      it('should infer type as "filter" when response has filter property', () => {
+        const response: PoSearchAiResponse = { filter: `age gt 30`, confidence: 0.9 };
+        serviceSpy.sendQuery.and.returnValue(of(response));
+        const resultSpy = spyOn(component.result, 'emit');
+
+        component.search();
+
+        expect(resultSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({ type: PoSearchAiResponseType.filter, filter: 'age gt 30' })
+        );
+      });
+
+      it('should infer type as "custom" when response has no filter and no type', () => {
+        const response: PoSearchAiResponse = { description: 'something', confidence: 0.9, data: { action: 'navigate' } };
+        serviceSpy.sendQuery.and.returnValue(of(response));
+        const resultSpy = spyOn(component.result, 'emit');
+
+        component.search();
+
+        expect(resultSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({ type: PoSearchAiResponseType.custom, data: { action: 'navigate' } })
+        );
+      });
+
+      it('should use explicit type from response when provided', () => {
+        const response: PoSearchAiResponse = {
+          type: PoSearchAiResponseType.chat,
+          description: 'Here is your answer',
+          confidence: 0.95,
+          data: { message: 'Hello' }
+        };
+        serviceSpy.sendQuery.and.returnValue(of(response));
+        const resultSpy = spyOn(component.result, 'emit');
+
+        component.search();
+
+        expect(resultSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({ type: PoSearchAiResponseType.chat, data: { message: 'Hello' } })
+        );
+      });
+
+      it('should propagate data field to the emitted result', () => {
+        const response: PoSearchAiResponse = { filter: 'x eq 1', confidence: 0.9, data: { extra: true } };
+        serviceSpy.sendQuery.and.returnValue(of(response));
+        const resultSpy = spyOn(component.result, 'emit');
+
+        component.search();
+
+        expect(resultSpy).toHaveBeenCalledWith(jasmine.objectContaining({ data: { extra: true } }));
+      });
+
+      it('should emit result with undefined data when response has no data', () => {
+        const response: PoSearchAiResponse = { filter: 'x eq 1', confidence: 0.9 };
+        serviceSpy.sendQuery.and.returnValue(of(response));
+        const resultSpy = spyOn(component.result, 'emit');
+
+        component.search();
+
+        expect(resultSpy).toHaveBeenCalledWith(jasmine.objectContaining({ data: undefined }));
       });
     });
 

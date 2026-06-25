@@ -11,7 +11,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoButtonComponent } from '../../po-button/po-button.component';
 import { uuid } from '../../../utils/util';
-import { PoSearchAiResult } from './interfaces/po-search-ai.interface';
+import { PoSearchAiResponseType, PoSearchAiResult } from './interfaces/po-search-ai.interface';
 import { PoSearchAiBaseComponent } from './po-search-ai-base.component';
 import { PoSearchAiService } from './po-search-ai.service';
 
@@ -99,11 +99,15 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
       .sendQuery(this.url()!, query, columnsMetadata, this.timeout())
       .subscribe({
         next: response => {
+          const type = response?.type || (response?.filter ? PoSearchAiResponseType.filter : PoSearchAiResponseType.custom);
+
           const result: PoSearchAiResult = {
             query,
+            type,
             filter: response?.filter,
             description: response?.description,
-            confidence: response?.confidence
+            confidence: response?.confidence,
+            data: response?.data
           };
 
           this.handleResponse(result);

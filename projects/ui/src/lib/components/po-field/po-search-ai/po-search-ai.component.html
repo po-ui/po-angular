@@ -41,7 +41,7 @@
           <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
         } @else if (aiLoading) {
           <div class="po-field-icon-container-right">
-            <i class="an an-magic-wand po-search-ai-processing-icon"></i>
+            <po-loading-icon class="po-search-ai-processing-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
           </div>
         } @else {
           <div class="po-field-icon-container-right">
