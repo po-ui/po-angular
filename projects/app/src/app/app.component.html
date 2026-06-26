@@ -1,45 +1,142 @@
-<po-page-default>
-  <po-switch
-    name="theme"
-    p-label="Dark mode"
-    [(ngModel)]="isDark"
-    (p-change)="onThemeChange($event)"
-    class="po-mb-2"
-  ></po-switch>
-  <po-switch
-    name="a11y"
-    p-label="AAA"
-    [(ngModel)]="isAAA"
-    (p-change)="onA11yChange($event)"
-    class="po-mb-2"
-  ></po-switch>
+<po-page-default p-title="po-search-ai Playground">
   <po-timepicker name="timepicker" p-label="PO Timepicker" p-clean ngModel="11:22"> </po-timepicker>
- <div class="po-row">
-   <po-search-ai
-    class="po-md-4"
-    name="searchAi"
-    p-label="Busca inteligente"
-    p-help="Descreva o que procura em linguagem natural e pressione Enter"
-    p-placeholder="Ex: clientes de SP com idade acima de 30"
-    p-url="http://localhost:3333/api/ai/filter"
-    p-clean
-    [p-columns]="columns"
-    (p-result)="onResult($event)"
-    (p-clear)="onClear()"
-  >
-  </po-search-ai>
- </div>
-  <div class="po-row">
-    <po-search name="search" p-label="Search Padrão" class="po-md-4"> </po-search>
+  <!-- ── Tema & A11y ─────────────────────────────────────────────────────── -->
+  <div class="po-row po-mb-1">
+    <po-switch
+      name="theme"
+      p-label="Dark mode"
+      [(ngModel)]="isDark"
+      (p-change)="onThemeChange($event)"
+      class="po-md-2"
+    ></po-switch>
+    <po-switch
+      name="a11y"
+      p-label="AAA"
+      [(ngModel)]="isAAA"
+      (p-change)="onA11yChange($event)"
+      class="po-md-2"
+    ></po-switch>
   </div>
 
+  <po-divider p-label="Playground"></po-divider>
+
+  <!-- ── Switches de estado ──────────────────────────────────────────────── -->
+  <div class="po-row po-mb-2">
+    <po-switch name="swDisabled" p-label="Disabled" [(ngModel)]="isDisabled" class="po-md-2"></po-switch>
+    <po-switch name="swReadonly" p-label="Readonly" [(ngModel)]="isReadonly" class="po-md-2"></po-switch>
+    <po-switch name="swRequired" p-label="Required" [(ngModel)]="isRequired" class="po-md-2"></po-switch>
+    <po-switch name="swClean" p-label="Clean" [(ngModel)]="hasClean" class="po-md-2"></po-switch>
+    <po-switch name="swLoading" p-label="Loading" [(ngModel)]="isLoading" class="po-md-2"></po-switch>
+    <po-switch
+      name="swBrokenUrl"
+      p-label="URL quebrada (erro HTTP)"
+      [(ngModel)]="useBrokenUrl"
+      class="po-md-2"
+    ></po-switch>
+  </div>
+
+  <!-- ── Campo interativo ────────────────────────────────────────────────── -->
+  <div class="po-row">
+    <po-search-ai
+      class="po-md-6"
+      name="playground"
+      p-label="Busca inteligente"
+      p-help="Descreva o que procura em linguagem natural e pressione Enter"
+      p-placeholder="Ex: clientes de SP com saldo acima de R$ 500"
+      p-error-pattern="Campo obrigatório"
+      [p-url]="playgroundUrl"
+      [p-columns]="columns"
+      [p-disabled]="isDisabled"
+      [p-readonly]="isReadonly"
+      [p-required]="isRequired"
+      [p-required-field-error-message]="isRequired"
+      [p-clean]="hasClean"
+      [p-loading]="isLoading"
+      [(ngModel)]="playgroundValue"
+      (p-result)="onResult($event)"
+      (p-error)="onError($event)"
+      (p-clear)="onClear()"
+    ></po-search-ai>
+  </div>
+
+  <!-- ── Output ─────────────────────────────────────────────────────────── -->
   @if (result) {
     <po-container class="po-mt-2" p-no-padding>
+      <p class="po-text-color-feedback-positive-dark"><strong>Resultado recebido</strong></p>
       <p><strong>Query:</strong> {{ result.query }}</p>
-      <p><strong>Filtro:</strong> {{ result.filter }}</p>
+      <p><strong>Filtro:</strong> {{ result.filter | json }}</p>
       <p><strong>Descrição:</strong> {{ result.description }}</p>
       <p><strong>Confiança:</strong> {{ result.confidence }}</p>
     </po-container>
   }
-    <!-- <app-po-search-ai-with-ai></app-po-search-ai-with-ai> -->
+  @if (lastError) {
+    <po-container class="po-mt-2" p-no-padding>
+      <p class="po-text-color-feedback-negative-base"><strong>Erro HTTP recebido (p-error)</strong></p>
+      <p><strong>Status:</strong> {{ lastError.statusCode }}</p>
+      <p><strong>Mensagem:</strong> {{ lastError.message }}</p>
+      <p><strong>Query:</strong> {{ lastError.query }}</p>
+    </po-container>
+  }
+
+  <po-divider p-label="Variações"></po-divider>
+
+  <!-- ── Row 1: Normal · Disabled · Readonly ────────────────────────────── -->
+  <div class="po-row">
+    <po-search-ai class="po-md-4" name="v1" p-label="Normal" p-placeholder="Busca inteligente" ngModel></po-search-ai>
+
+    <po-search-ai class="po-md-4" name="v2" p-label="Disabled" p-disabled ngModel="consulta exemplo"></po-search-ai>
+
+    <po-search-ai
+      class="po-md-4"
+      name="v3"
+      p-label="Readonly"
+      p-readonly
+      ngModel="filtro aplicado via IA"
+    ></po-search-ai>
+  </div>
+
+  <!-- ── Row 2: Clean · Loading · Required ──────────────────────────────── -->
+  <div class="po-row">
+    <po-search-ai class="po-md-4" name="v4" p-label="Com clean e valor" p-clean ngModel="clientes de SP"></po-search-ai>
+
+    <po-search-ai class="po-md-4" name="v5" p-label="Loading" p-loading ngModel></po-search-ai>
+
+    <div class="po-md-4">
+      <po-search-ai
+        name="v6"
+        #v6="ngModel"
+        p-label="Required"
+        p-required
+        p-error-pattern="Campo obrigatório"
+        [p-required-field-error-message]="true"
+        ngModel
+      ></po-search-ai>
+      <po-button p-label="Mostrar erro" p-kind="tertiary" p-size="small" (p-click)="markDirty(v6)"></po-button>
+    </div>
+  </div>
+
+  <!-- ── Row 3: Erro HTTP · Sem label · Com help ────────────────────────── -->
+  <div class="po-row">
+    <po-search-ai
+      class="po-md-4"
+      name="v7"
+      p-label="Erro HTTP (clique no botão ✦)"
+      p-url="http://localhost:9999/broken"
+      p-placeholder="Digite algo e pressione o botão"
+      [p-columns]="columns"
+      ngModel
+    ></po-search-ai>
+
+    <po-search-ai class="po-md-4" name="v8" p-placeholder="Sem label, só placeholder" ngModel></po-search-ai>
+
+    <po-search-ai
+      class="po-md-4"
+      name="v9"
+      p-label="Com help e clean"
+      p-help="Descreva o filtro em texto livre"
+      p-clean
+      p-placeholder="Ex: pedidos de ontem"
+      ngModel
+    ></po-search-ai>
+  </div>
 </po-page-default>

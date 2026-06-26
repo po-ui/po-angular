@@ -50,6 +50,8 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  */
 @Directive()
 export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements OnDestroy {
+  protected aiErrorMessage = '';
+
   protected aiLoading = false;
 
   protected aiSubscription: Subscription;
@@ -187,6 +189,10 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
   abstract clearSearch(): void;
 
   abstract search(): void;
+
+  override getErrorPattern() {
+    return this.aiErrorMessage || super.getErrorPattern();
+  }
 
   extraValidation(_c: AbstractControl): { [key: string]: any } {
     return null;

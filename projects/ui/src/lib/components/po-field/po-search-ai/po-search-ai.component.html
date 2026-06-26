@@ -15,7 +15,14 @@
 >
   <div class="po-field-container-content">
     <div class="po-field-container-content-helper-wrapper">
-      <div class="po-field-container-input" [class.po-search-ai-processing]="aiLoading">
+      <div
+        class="po-field-container-input"
+        [class.po-search-ai-processing]="aiLoading"
+        [class.po-search-ai-error]="aiErrorMessage && !aiLoading"
+      >
+        @if (aiErrorMessage && !aiLoading) {
+          <div class="po-search-ai-error-overlay" aria-hidden="true"></div>
+        }
         <div class="po-search-ai-icon" aria-hidden="true">
           <po-icon p-icon="ICON_SEARCH"></po-icon>
         </div>
@@ -41,7 +48,9 @@
         />
 
         @if (loading) {
-          <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          <div class="po-field-icon-container-right">
+            <po-loading-icon [p-size]="mapSizeToIcon(size)"></po-loading-icon>
+          </div>
         } @else if (aiLoading) {
           <div class="po-field-icon-container-right">
             <po-loading-icon class="po-search-ai-processing-icon" [p-size]="mapSizeToIcon(size)"></po-loading-icon>
@@ -53,7 +62,7 @@
                 #iconClean
                 tabindex="0"
                 role="button"
-                aria-label="Limpar"
+                [attr.aria-label]="effectiveLiterals().clean"
                 class="po-icon-input"
                 p-icon="ICON_FILL_CLEAR_CONTENT"
                 [p-element-ref]="inputEl"

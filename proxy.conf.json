@@ -1,9 +1,7 @@
 {
-  "/api/ai-search": {
-    "target": "http://localhost:3333",
+  "/v1": {
+    "target": "http://localhost:3000",
     "secure": false,
-    "pathRewrite": {
-      "^/api/ai-search": "/api/ai/filter"
-    }
+    "changeOrigin": true
   }
 }

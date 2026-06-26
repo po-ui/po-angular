@@ -89,6 +89,8 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
     }
 
     this.aiSubscription?.unsubscribe();
+    this.aiErrorMessage = '';
+    this.el.nativeElement.classList.remove('ng-invalid');
 
     const columnsMetadata = this.searchAiService.extractColumnsMetadata(this.columns());
 
@@ -99,7 +101,8 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
       .sendQuery(this.url()!, query, columnsMetadata, this.timeout())
       .subscribe({
         next: response => {
-          const type = response?.type || (response?.filter ? PoSearchAiResponseType.filter : PoSearchAiResponseType.custom);
+          const type =
+            response?.type || (response?.filter ? PoSearchAiResponseType.filter : PoSearchAiResponseType.custom);
 
           const result: PoSearchAiResult = {
             query,
@@ -138,6 +141,8 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
    */
   clearSearch(): void {
     this.aiSubscription?.unsubscribe();
+    this.aiErrorMessage = '';
+    this.el.nativeElement.classList.remove('ng-invalid');
     this.aiLoading = false;
     this.loading = false;
 
@@ -186,6 +191,8 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
 
   private handleError(query: string, err: { statusCode?: number; message?: string }): void {
     this.aiLoading = false;
+    this.aiErrorMessage = err?.message || this.effectiveLiterals().errorMessage;
+    this.el.nativeElement.classList.add('ng-invalid', 'ng-dirty');
 
     this.error.emit({
       query,

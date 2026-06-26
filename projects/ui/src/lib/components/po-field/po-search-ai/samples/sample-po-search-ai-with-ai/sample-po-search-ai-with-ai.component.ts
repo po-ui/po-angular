@@ -1,25 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 
 import {
+  PoNotificationService,
   PoSearchAiColumn,
-  PoSearchAiComponent,
   PoSearchAiError,
   PoSearchAiResult,
-  PoNotificationService,
   PoTableColumn
 } from '@po-ui/ng-components';
 
-import { SamplePoSearchAiWithAiService } from './sample-po-search-ai-with-ai.service';
+const API_BASE = 'https://po-sample-api.onrender.com/v1';
 
 @Component({
   selector: 'sample-po-search-ai-with-ai',
   templateUrl: './sample-po-search-ai-with-ai.component.html',
-  providers: [SamplePoSearchAiWithAiService],
   standalone: false
 })
 export class SamplePoSearchAiWithAiComponent implements OnInit {
-  @ViewChild('searchAi', { static: true }) searchAi: PoSearchAiComponent;
-
   filteredItems: Array<any> = [];
   loading = false;
 
@@ -27,37 +24,44 @@ export class SamplePoSearchAiWithAiComponent implements OnInit {
     { property: 'name', label: 'Nome' },
     { property: 'age', label: 'Idade', type: 'number' },
     { property: 'city', label: 'Cidade' },
-    { property: 'statusDescription', label: 'Status' }
+    { property: 'department', label: 'Departamento' },
+    { property: 'salary', label: 'Salário', type: 'currency', format: 'BRL' },
+    { property: 'status', label: 'Status' },
+    { property: 'hireDate', label: 'Admissão', type: 'date' }
   ];
 
   readonly aiColumns: Array<PoSearchAiColumn> = [
     { property: 'name', label: 'Nome', type: 'string' },
     { property: 'age', label: 'Idade', type: 'number' },
     { property: 'city', label: 'Cidade', type: 'string' },
-    { property: 'status', label: 'Status', type: 'string' }
-  ];
-
-  private readonly items = [
-    { name: 'Ana Souza', age: 35, city: 'São Paulo', status: 'active', statusDescription: 'Ativo' },
-    { name: 'Bruno Lima', age: 28, city: 'Curitiba', status: 'inactive', statusDescription: 'Inativo' },
-    { name: 'Carla Dias', age: 42, city: 'São Paulo', status: 'active', statusDescription: 'Ativo' },
-    { name: 'Diego Reis', age: 31, city: 'Joinville', status: 'active', statusDescription: 'Ativo' }
+    { property: 'department', label: 'Departamento', type: 'string' },
+    { property: 'salary', label: 'Salário', type: 'number' },
+    { property: 'status', label: 'Status', type: 'string' },
+    { property: 'hireDate', label: 'Data de admissão', type: 'date' }
   ];
 
   constructor(
-    private readonly aiService: SamplePoSearchAiWithAiService,
+    private readonly http: HttpClient,
     private readonly poNotification: PoNotificationService
   ) {}
 
   ngOnInit() {
-    this.filteredItems = [...this.items];
+    this.loadEmployees();
   }
 
-  // Demonstra a integração com a IA interceptando a chamada do componente.
-  // Em produção, basta configurar `p-url` apontando para o proxy de IA.
   onResult(result: PoSearchAiResult) {
-    this.applyFilter(result.filter);
-    this.poNotification.success(`Filtro aplicado via IA: ${result.description}`);
+    this.loading = true;
+    this.http.get<{ items: any[] }>(`${API_BASE}/employees?$filter=${encodeURIComponent(result.filter)}`).subscribe({
+      next: ({ items }) => {
+        this.filteredItems = items;
+        this.loading = false;
+        this.poNotification.success(`Filtro aplicado: ${result.description}`);
+      },
+      error: () => {
+        this.loading = false;
+        this.poNotification.error('Erro ao buscar funcionários.');
+      }
+    });
   }
 
   onLowConfidence(result: PoSearchAiResult) {
@@ -69,42 +73,19 @@ export class SamplePoSearchAiWithAiComponent implements OnInit {
   }
 
   onClear() {
-    this.filteredItems = [...this.items];
+    this.loadEmployees();
   }
 
-  private applyFilter(filter: string) {
-    if (!filter) {
-      this.filteredItems = [...this.items];
-      return;
-    }
-
-    this.filteredItems = this.items.filter(item => this.matchesFilter(item, filter));
-  }
-
-  private matchesFilter(item: any, filter: string): boolean {
-    return filter.split(' and ').every(clause => this.matchesClause(item, clause.trim()));
-  }
-
-  private matchesClause(item: any, clause: string): boolean {
-    const match = clause.match(/^(\w+)\s+(eq|gt|lt)\s+'?([^']+)'?$/);
-
-    if (!match) {
-      return true;
-    }
-
-    const [, property, operator, rawValue] = match;
-    const itemValue = item[property];
-    const value = isNaN(Number(rawValue)) ? rawValue : Number(rawValue);
-
-    switch (operator) {
-      case 'eq':
-        return String(itemValue).toLowerCase() === String(value).toLowerCase();
-      case 'gt':
-        return Number(itemValue) > Number(value);
-      case 'lt':
-        return Number(itemValue) < Number(value);
-      default:
-        return true;
-    }
+  private loadEmployees() {
+    this.loading = true;
+    this.http.get<{ items: any[] }>(`${API_BASE}/employees`).subscribe({
+      next: ({ items }) => {
+        this.filteredItems = items;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
   }
 }

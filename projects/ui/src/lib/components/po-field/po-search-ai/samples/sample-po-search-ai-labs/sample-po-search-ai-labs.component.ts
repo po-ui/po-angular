@@ -57,6 +57,6 @@ export class SamplePoSearchAiLabsComponent implements OnInit {
     this.properties = ['clean'];
     this.size = 'medium';
     this.timeout = 10000;
-    this.url = '/api/ai-search';
+    this.url = 'https://po-sample-api.onrender.com/v1/ai/filter';
   }
 }
