@@ -1373,6 +1373,36 @@ describe('PoTableComponent:', () => {
       expect(component.tooltipText).toBeUndefined();
     });
 
+    it(`tooltipMouseEnter: should not set tooltipText for type 'label' even with overflow`, () => {
+      const fakeEvent = {
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'truncated label'
+        }
+      };
+      const column = { type: 'label', property: 'status', labels: [] };
+
+      component.tooltipMouseEnter(fakeEvent, column);
+
+      expect(component.tooltipText).toBeUndefined();
+    });
+
+    it(`tooltipMouseEnter: should set tooltipText for non-label types with overflow`, () => {
+      const fakeEvent = {
+        target: {
+          offsetWidth: 30,
+          scrollWidth: 43,
+          innerText: 'truncated text'
+        }
+      };
+      const column = { type: 'text', property: 'description' };
+
+      component.tooltipMouseEnter(fakeEvent, column);
+
+      expect(component.tooltipText).toBe('truncated text');
+    });
+
     it(`onOpenColumnManager: should update 'lastVisibleColumnsSelected' 'this.columns`, () => {
       component.columns = columns;
 
@@ -2217,6 +2247,59 @@ describe('PoTableComponent:', () => {
 
       const cellContent = tableElement.querySelector('.po-table-body-ellipsis span');
       expect(cellContent.textContent.trim()).toEqual('Test Value');
+    });
+
+    it('should not apply max-width on label column td when column has width', () => {
+      component.columns = [
+        { property: 'id', label: 'ID', width: '100px' },
+        {
+          property: 'status',
+          type: 'label',
+          label: 'Status',
+          width: '200px',
+          labels: [{ value: 'active', color: 'color-10', label: 'Ativo' }]
+        }
+      ];
+      component.items = [{ id: '1', status: 'active' }];
+      fixture.detectChanges();
+
+      const tds = nativeElement.querySelectorAll('td.po-table-column');
+      const labelTd = tds[1];
+
+      expect(labelTd.style.maxWidth).toBeFalsy();
+    });
+
+    it('should apply min-width max-content on label column td when column has no width', () => {
+      component.columns = [
+        { property: 'id', label: 'ID', width: '100px' },
+        {
+          property: 'status',
+          type: 'label',
+          label: 'Status',
+          labels: [{ value: 'active', color: 'color-10', label: 'Ativo' }]
+        }
+      ];
+      component.items = [{ id: '1', status: 'active' }];
+      fixture.detectChanges();
+
+      const tds = nativeElement.querySelectorAll('td.po-table-column');
+      const labelTd = tds[1];
+
+      expect(labelTd.style.minWidth).toBe('max-content');
+    });
+
+    it('should apply max-width equal to column.width on non-label column', () => {
+      component.columns = [
+        { property: 'id', label: 'ID', width: '100px' },
+        { property: 'name', label: 'Nome', width: '250px' }
+      ];
+      component.items = [{ id: '1', name: 'Test' }];
+      fixture.detectChanges();
+
+      const tds = nativeElement.querySelectorAll('td.po-table-column');
+      const nameTd = tds[1];
+
+      expect(nameTd.style.maxWidth).toBe('250px');
     });
 
     it('shouldn`t contain `po-tooltip` class if link is disabled', fakeAsync(() => {
