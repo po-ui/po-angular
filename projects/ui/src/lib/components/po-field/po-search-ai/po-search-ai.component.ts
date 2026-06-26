@@ -144,7 +144,6 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
     this.aiErrorMessage = '';
     this.el.nativeElement.classList.remove('ng-invalid');
     this.aiLoading = false;
-    this.loading = false;
 
     if (this.inputEl?.nativeElement) {
       this.inputEl.nativeElement.value = '';

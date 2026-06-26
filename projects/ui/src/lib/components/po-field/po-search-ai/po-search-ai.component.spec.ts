@@ -26,8 +26,6 @@ describe('PoSearchAiComponent: ', () => {
     fixture = TestBed.createComponent(PoSearchAiComponent);
     component = fixture.componentInstance;
 
-    // O `PoSearchAiService` é provido no nível do componente, então espionamos a instância
-    // efetivamente injetada nele (em vez de um provider de módulo, que seria sombreado).
     serviceSpy = (component as any).searchAiService;
     spyOn(serviceSpy, 'sendQuery').and.returnValue(of({} as PoSearchAiResponse));
     spyOn(serviceSpy, 'extractColumnsMetadata').and.returnValue([]);
@@ -223,7 +221,11 @@ describe('PoSearchAiComponent: ', () => {
       });
 
       it('should infer type as "custom" when response has no filter and no type', () => {
-        const response: PoSearchAiResponse = { description: 'something', confidence: 0.9, data: { action: 'navigate' } };
+        const response: PoSearchAiResponse = {
+          description: 'something',
+          confidence: 0.9,
+          data: { action: 'navigate' }
+        };
         serviceSpy.sendQuery.and.returnValue(of(response));
         const resultSpy = spyOn(component.result, 'emit');
 
@@ -341,16 +343,20 @@ describe('PoSearchAiComponent: ', () => {
         const clearSpy = spyOn(component.clearEvent, 'emit');
         const onChangeSpy = spyOn(component, 'callOnChange');
         (component as any).aiLoading = true;
-        component.loading = true;
         component.inputEl.nativeElement.value = 'algum texto';
 
         component.clearSearch();
 
         expect((component as any).aiLoading).toBeFalse();
-        expect(component.loading).toBeFalse();
         expect(component.inputEl.nativeElement.value).toBe('');
         expect(onChangeSpy).toHaveBeenCalledWith('');
         expect(clearSpy).toHaveBeenCalled();
+      });
+
+      it('should not reset consumer-controlled loading state on clear', () => {
+        component.loading = true;
+        component.clearSearch();
+        expect(component.loading).toBeTrue();
       });
 
       it('should skip clearing the input value when inputEl is not defined', () => {

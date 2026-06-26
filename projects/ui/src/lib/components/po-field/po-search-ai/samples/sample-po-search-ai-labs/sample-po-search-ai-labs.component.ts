@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoSearchAiColumn, PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
+import { PoSearchAiColumn, PoSearchAiResult, PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-search-ai-labs',
@@ -8,11 +8,17 @@ import { PoSearchAiColumn, PoCheckboxGroupOption, PoRadioGroupOption } from '@po
   standalone: false
 })
 export class SamplePoSearchAiLabsComponent implements OnInit {
+  compactLabel: boolean;
+  errorPattern: string;
   event: string;
+  result: PoSearchAiResult;
   help: string;
   helperText: string;
   label: string;
+  labelTextWrap: boolean;
+  loading: boolean;
   minConfidence: number;
+  noAutocomplete: boolean;
   placeholder: string;
   properties: Array<string>;
   size: string;
@@ -27,7 +33,11 @@ export class SamplePoSearchAiLabsComponent implements OnInit {
 
   readonly propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'clean', label: 'Clean' },
+    { value: 'compactLabel', label: 'Compact Label' },
     { value: 'disabled', label: 'Disabled' },
+    { value: 'labelTextWrap', label: 'Label Text Wrap' },
+    { value: 'loading', label: 'Loading' },
+    { value: 'noAutocomplete', label: 'No Autocomplete' },
     { value: 'optional', label: 'Optional' },
     { value: 'readonly', label: 'Read Only' },
     { value: 'required', label: 'Required' },
@@ -47,8 +57,20 @@ export class SamplePoSearchAiLabsComponent implements OnInit {
     this.event = event;
   }
 
+  onResult(result: PoSearchAiResult) {
+    this.result = result;
+    this.event = 'p-result';
+  }
+
+  onClear() {
+    this.result = undefined;
+    this.event = 'p-clear';
+  }
+
   restore() {
+    this.errorPattern = undefined;
     this.event = undefined;
+    this.result = undefined;
     this.help = undefined;
     this.helperText = undefined;
     this.label = 'Busca inteligente';

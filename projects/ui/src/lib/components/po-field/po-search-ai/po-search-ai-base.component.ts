@@ -33,6 +33,45 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  * (label, help, helper, required, disabled, readonly, size, clean, loading, etc.) e
  * integra-se a formulários `template-driven` e `reactive`.
  *
+ * #### Endpoint de IA (backend)
+ *
+ * O componente **não conversa diretamente com a LLM**. Você deve disponibilizar um endpoint
+ * próprio (proxy) e informá-lo em `p-url`.
+ * É nesse backend que devem ficar a chave de acesso da IA e as regras usadas para montar
+ * o prompt. Essas informações nunca devem ficar expostas no client-side
+ *
+ * O contrato é simples. O componente faz um `POST` enviando:
+ *
+ * ```json
+ * {
+ *   "query": "funcionários de São Paulo com salário acima de 5000",
+ *   "columns": [
+ *     { "property": "name", "label": "Nome", "type": "string" },
+ *     { "property": "city", "label": "Cidade", "type": "string" },
+ *     { "property": "salary", "label": "Salário", "type": "number" }
+ *   ]
+ * }
+ * ```
+ *
+ * E o endpoint deve responder com:
+ *
+ * ```json
+ * {
+ *   "filter": "city eq 'São Paulo' and salary gt 5000",
+ *   "description": "Funcionários de São Paulo com salário acima de 5000",
+ *   "confidence": 0.92
+ * }
+ * ```
+ *
+ * Onde `filter` é o filtro estruturado gerado pela IA (normalmente OData), `description` é um
+ * resumo legível e `confidence` (`0.0` a `1.0`) indica o quão confiável foi a interpretação —
+ * comparado com `p-min-confidence` para decidir entre os eventos `p-result` e `p-low-confidence`.
+ *
+ * > **Exemplo de implementação:** o PO UI mantém um backend de referência, open source, que recebe
+ * > esse contrato e o encaminha para um provedor de IA (Groq/Gemini).
+ * > - Endpoint público: [`/v1/ai/filter`](https://po-sample-api.onrender.com/api#/ai)
+ * > - Código-fonte: [po-sample-api/src/ai/ai.service.ts](https://github.com/po-ui/po-sample-api/blob/main/src/ai/ai.service.ts)
+ *
  * #### Estados de comportamento
  *
  * - **Idle:** aguardando a digitação da consulta.
@@ -45,8 +84,33 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  *
  * #### Tokens customizáveis
  *
- * Por herdar de `po-input`, reaproveita os mesmos tokens CSS. As cores de destaque da IA
- * seguem os Design Tokens do Animalia DS.
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                   | Descrição                                                       | Valor Padrão                       |
+ * |-------------------------------|-----------------------------------------------------------------|------------------------------------|
+ * | **Default**                   |                                                                 |                                    |
+ * | `--font-family`               | Família tipográfica do campo                                    | `var(--font-family-theme)`         |
+ * | `--font-size`                 | Tamanho da fonte do campo                                       | `var(--font-size)`                 |
+ * | `--text-color`                | Cor do texto digitado                                           | `var(--color-neutral-dark-90)`     |
+ * | `--text-color-placeholder`    | Cor do texto do placeholder                                     | `var(--color-neutral-light-30)`    |
+ * | `--color`                     | Cor da borda do campo                                           | `var(--color-neutral-dark-70)`     |
+ * | `--background`                | Cor de fundo do campo                                           | `var(--color-neutral-light-05)`    |
+ * | `--border-radius`             | Raio da borda do campo                                          | `var(--border-radius-md)`          |
+ * | **Ícones e divisória**        |                                                                 |                                    |
+ * | `--color-icon-read`           | Cor do ícone de busca por IA                                    | `var(--color-neutral-dark-70)`     |
+ * | `--color-divider`             | Cor da divisória vertical entre o campo e o botão de busca      | `var(--color-neutral-mid-40)`      |
+ * | `--color-icon-processing`     | Cor do ícone exibido enquanto a consulta está sendo processada  | `var(--color-action-default)`      |
+ * | **Hover**                     |                                                                 |                                    |
+ * | `--color-hover`               | Cor da borda no estado hover                                    | `var(--color-brand-01-dark)`       |
+ * | `--background-hover`          | Cor de fundo no estado hover                                    | `var(--color-brand-01-lightest)`   |
+ * | **Focused**                   |                                                                 |                                    |
+ * | `--color-focused`             | Cor da borda no estado de foco                                  | `var(--color-action-default)`      |
+ * | `--outline-color-focused`     | Cor do outline no estado de foco                                | `var(--color-action-focus)`        |
+ * | **Disabled**                  |                                                                 |                                    |
+ * | `--color-disabled`            | Cor da borda no estado desabilitado                             | `var(--color-neutral-light-30)`    |
+ * | `--background-disabled`       | Cor de fundo no estado desabilitado                             | `var(--color-neutral-light-20)`    |
  */
 @Directive()
 export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements OnDestroy {
@@ -145,6 +209,17 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    *
    * Evento disparado quando a IA retorna um resultado com confiança maior ou igual a
    * `p-min-confidence`. Emite um objeto `PoSearchAiResult`.
+   *
+   * O campo `type` do resultado indica como o consumidor deve interpretar a resposta:
+   *
+   * - **`filter`** _(padrão)_: a IA retornou um filtro estruturado (ex: OData). Use `result.filter`
+   *   para aplicar a consulta à fonte de dados — por exemplo, passando para um `po-table` via `p-filter`.
+   *
+   * - **`chat`**: a IA retornou uma resposta conversacional. Use `result.data` para exibir a mensagem
+   *   ao usuário, por exemplo em um painel lateral ou tooltip.
+   *
+   * - **`custom`**: a IA retornou um payload genérico definido pelo backend. Use `result.data` para
+   *   executar qualquer ação específica da aplicação (ex: navegação, abertura de modal, acionamento de comando).
    */
   result = output<PoSearchAiResult>({ alias: 'p-result' });
 
@@ -178,7 +253,7 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    *
    * > A integração com a LLM e a guarda de chaves devem ocorrer **no backend**, nunca no client-side.
    */
-  url = input<string | undefined>(undefined, { alias: 'p-url' });
+  url = input<string>(undefined, { alias: 'p-url' });
 
   constructor() {
     super(inject(ElementRef), inject(ChangeDetectorRef));

@@ -38,7 +38,7 @@ export class PoSearchAiService {
     timeoutMs: number = 10000
   ): Observable<PoSearchAiResponse> {
     const body: PoSearchAiRequest = {
-      query: this.sanitizeInput(query),
+      query,
       columns
     };
 
@@ -78,14 +78,5 @@ export class PoSearchAiService {
         label: col.label || col.property,
         type: col.type || 'string'
       }));
-  }
-
-  private sanitizeInput(input: string): string {
-    return (input || '')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-      .trim();
   }
 }

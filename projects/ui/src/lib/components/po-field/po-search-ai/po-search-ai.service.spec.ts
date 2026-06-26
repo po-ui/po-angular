@@ -23,8 +23,6 @@ describe('PoSearchAiService:', () => {
   });
 
   afterEach(() => {
-    // `ignoreCancelled` porque o teste de timeout cancela a requisição HTTP (via rxjs timeout),
-    // deixando-a registrada como cancelada — não como pendente.
     httpMock.verify({ ignoreCancelled: true });
   });
 
@@ -34,34 +32,34 @@ describe('PoSearchAiService:', () => {
 
   describe('Methods:', () => {
     describe('sendQuery:', () => {
-      it('should POST the sanitized query and columns and return the response', () => {
+      it('should POST the query and columns and return the response', () => {
         const expected: PoSearchAiResponse = { filter: `name eq 'Ana'`, description: 'nome Ana', confidence: 0.9 };
 
-        service.sendQuery(url, '  <Ana>  ', columns).subscribe(response => {
+        service.sendQuery(url, '<Ana>', columns).subscribe(response => {
           expect(response).toEqual(expected);
         });
 
         const req = httpMock.expectOne(url);
         expect(req.request.method).toBe('POST');
-        expect(req.request.body.query).toBe('&lt;Ana&gt;');
+        expect(req.request.body.query).toBe('<Ana>');
         expect(req.request.body.columns).toEqual(columns);
         expect(req.request.headers.get('X-PO-No-Message')).toBe('true');
         req.flush(expected);
       });
 
-      it('should send an empty query string when the query is falsy', () => {
-        service.sendQuery(url, '' as any, columns).subscribe();
+      it('should send the query as-is when it is an empty string', () => {
+        service.sendQuery(url, '', columns).subscribe();
 
         const req = httpMock.expectOne(url);
         expect(req.request.body.query).toBe('');
         req.flush({});
       });
 
-      it('should sanitize double quotes and single quotes in the query', () => {
+      it('should send the query as-is including quotes and special characters', () => {
         service.sendQuery(url, '"hello" and \'world\'', columns).subscribe();
 
         const req = httpMock.expectOne(url);
-        expect(req.request.body.query).toBe('&quot;hello&quot; and &#x27;world&#x27;');
+        expect(req.request.body.query).toBe('"hello" and \'world\'');
         req.flush({});
       });
 

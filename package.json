@@ -46,7 +46,7 @@
     "build:sync": "ng build sync --configuration production && gulp build:schematics --lib sync && gulp replaceVersion && cd dist/ng-sync && npm pack",
     "build": "npm run build:schematics && npm run build:ui && npm run build:templates && npm run build:storage && npm run build:sync && npm run build:code-editor",
     "build:portal:prod": "ng build portal --configuration production",
-    "build:portal": "npm run build:ui && npm run build:portal:docs",
+    "build:portal": "npm run build:ui && npm run build:templates && npm run build:code-editor && npm run build:portal:docs",
     "build:portal:docs": "cd projects/portal && gulp build && npm run script:copy-icons",
     "build:portal:llms": "cd projects/portal && gulp build:api && gulp build:llms",
     "build:mcp": "cd projects/mcp && npm install --prefer-offline && npm run build",
