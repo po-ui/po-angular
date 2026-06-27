@@ -31,9 +31,11 @@ import { PoTableColumnSpacing } from './enums/po-table-spacing.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumnSort } from './interfaces/po-table-column-sort.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
+import { PoSearchAiError, PoSearchAiResult } from '../po-field/po-search-ai/interfaces/po-search-ai.interface';
 import { PoTableFilteredItemsParams } from './interfaces/po-table-filtered-items-params.interface';
 import { PoTableLiterals } from './interfaces/po-table-literals.interface';
 import { PoTableResponseApi } from './interfaces/po-table-response-api.interface';
+import { PoTableSearchAiField } from './interfaces/po-table-search-ai-field.interface';
 import { PoTableService } from './services/po-table.service';
 
 export type QueryParamsType = string | number | boolean;
@@ -59,7 +61,8 @@ export const poTableLiteralsDefault = {
     cancel: 'Cancel',
     delete: 'Delete',
     deleteSuccessful: 'Items removed successfully',
-    deleteApiError: 'An unexpected error occurred, please try again later'
+    deleteApiError: 'An unexpected error occurred, please try again later',
+    searchAiPlaceholder: 'Describe what you are looking for and press Enter'
   },
   es: <PoTableLiterals>{
     noColumns: 'Columnas no definidas',
@@ -77,7 +80,8 @@ export const poTableLiteralsDefault = {
     cancel: 'Cancelar',
     delete: 'Borrar',
     deleteSuccessful: 'Elementos eliminados con éxito',
-    deleteApiError: 'Ocurrió un error inesperado, inténtalo de nuevo más tarde'
+    deleteApiError: 'Ocurrió un error inesperado, inténtalo de nuevo más tarde',
+    searchAiPlaceholder: 'Describe lo que buscas y presiona Enter'
   },
   pt: <PoTableLiterals>{
     noColumns: 'Nenhuma definição de colunas',
@@ -95,7 +99,8 @@ export const poTableLiteralsDefault = {
     cancel: 'Cancelar',
     delete: 'Excluir',
     deleteSuccessful: 'Itens removidos com sucesso',
-    deleteApiError: 'Ocorreu um erro inesperado, tente novamente mais tarde!'
+    deleteApiError: 'Ocorreu um erro inesperado, tente novamente mais tarde!',
+    searchAiPlaceholder: 'Descreva o que procura e pressione Enter'
   },
   ru: <PoTableLiterals>{
     noColumns: 'Нет определения столбца',
@@ -113,7 +118,8 @@ export const poTableLiteralsDefault = {
     cancel: 'Отмена',
     delete: 'Удалить',
     deleteSuccessful: 'Элементы успешно удалены',
-    deleteApiError: 'Произошла непредвиденная ошибка, повторите попытку позже'
+    deleteApiError: 'Произошла непредвиденная ошибка, повторите попытку позже',
+    searchAiPlaceholder: 'Опишите, что вы ищете, и нажмите Enter'
   }
 };
 
@@ -362,6 +368,31 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * @optional
    *
    * @description
+   *
+   * Configura a busca por linguagem natural integrada à tabela, substituindo o campo de busca padrão
+   * (`po-search`) pelo componente `po-search-ai` na barra de ações.
+   *
+   * Recebe um objeto do tipo `PoTableSearchAiField` com as configurações necessárias:
+   * - `url` _(obrigatório)_: endpoint (proxy) de IA que traduz a consulta em linguagem natural para um filtro
+   *   estruturado (OData v4). O backend deve seguir o contrato do
+   *   [`po-sample-api`](https://github.com/po-ui/po-sample-api).
+   * - `columns`: lista de colunas enviadas à IA; quando omitida, são derivadas de `p-columns`.
+   * - `minConfidence`: confiança mínima para aplicação automática do filtro (padrão `0.5`).
+   * - `timeout`: tempo máximo de espera pela resposta da IA em ms (padrão `10000`).
+   * - `placeholder`: texto exibido como placeholder no campo.
+   * - `literals`: literais customizadas do `po-search-ai`.
+   * - `apply`: estratégia de aplicação do filtro — `'auto'` (padrão), `'parser'`, `'server'`, `'none'`
+   *   ou uma função `(result: PoSearchAiResult) => void`.
+   *
+   * Quando esta propriedade está definida, os eventos `p-search-ai-result`, `p-search-ai-low-confidence`
+   * e `p-search-ai-error` ficam disponíveis para tratamento customizado.
+   */
+  @Input('p-search-ai-field') searchAiField?: PoTableSearchAiField;
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento executado quando todas as linhas são selecionadas por meio do *checkbox* que seleciona todas as linhas.
    */
   @Output('p-all-selected') allSelected: EventEmitter<any> = new EventEmitter<any>();
@@ -505,6 +536,52 @@ export abstract class PoTableBaseComponent implements OnChanges, OnDestroy {
    * Por exemplo: ["idCard", "name", "hireStatus", "age"].
    */
   @Output('p-restore-column-manager') columnRestoreManager = new EventEmitter<Array<string>>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando o `po-search-ai` retorna um resultado com confiança igual ou superior
+   * ao `minConfidence` configurado em `p-search-ai-field`.
+   *
+   * O parâmetro enviado é um objeto `PoSearchAiResult` contendo:
+   * - `filter`: string de filtro OData v4 gerada pela IA (ex: `"city eq 'SP' and salary gt 5000"`).
+   * - `description`: descrição em linguagem natural do filtro aplicado.
+   * - `confidence`: nível de confiança da resposta (0.0 a 1.0).
+   *
+   * > Quando `apply` for diferente de `'none'`, o filtro já é aplicado automaticamente pela tabela
+   * > antes deste evento ser emitido.
+   */
+  @Output('p-search-ai-result') searchAiResult = new EventEmitter<PoSearchAiResult>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando o `po-search-ai` retorna um resultado cuja confiança é inferior ao
+   * `minConfidence` configurado em `p-search-ai-field`. Nesse caso, o filtro **não** é aplicado
+   * automaticamente.
+   *
+   * O parâmetro enviado é um objeto `PoSearchAiResult` com os mesmos campos de `p-search-ai-result`,
+   * permitindo que o desenvolvedor decida como tratar o resultado de baixa confiança.
+   */
+  @Output('p-search-ai-low-confidence') searchAiLowConfidence = new EventEmitter<PoSearchAiResult>();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento emitido quando ocorre um erro na requisição ao endpoint de IA configurado em
+   * `p-search-ai-field`.
+   *
+   * O parâmetro enviado é um objeto `PoSearchAiError` contendo:
+   * - `statusCode`: código HTTP do erro (ex: `408` para timeout, `500` para erro interno).
+   * - `message`: mensagem descritiva do erro.
+   */
+  @Output('p-search-ai-error') searchAiError = new EventEmitter<PoSearchAiError>();
 
   allColumnsWidthPixels: boolean;
   columnMasterDetail: PoTableColumn;

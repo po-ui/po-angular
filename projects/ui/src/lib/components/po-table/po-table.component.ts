@@ -30,6 +30,10 @@ import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
+import { PoSearchAiColumn } from '../po-field/po-search-ai/interfaces/po-search-ai-column.interface';
+import { PoSearchAiError, PoSearchAiResult } from '../po-field/po-search-ai/interfaces/po-search-ai.interface';
+import { PoSearchAiComponent } from '../po-field/po-search-ai/po-search-ai.component';
+import { poSearchAiFilterItems } from '../po-field/po-search-ai/po-search-ai-odata-filter';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -93,6 +97,11 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
  *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.html"> </file>
  *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-table-search-ai" title="PO Table - Search A.I. (EXPERIMENTAL)">
+ *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.html"> </file>
+ *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-table',
@@ -124,6 +133,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChildren('actionsElement', { read: ElementRef }) actionsElement: QueryList<any>;
   @ViewChild('filterInput') filterInput: ElementRef;
   @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
+  @ViewChild(PoSearchAiComponent) searchAiComponent: PoSearchAiComponent;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
 
   poNotification = inject(PoNotificationService);
@@ -167,6 +177,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
   private readonly subscriptionService: Subscription = new Subscription();
+  private aiParserSubscription?: Subscription;
 
   private readonly clickListener: () => void;
   private readonly resizeListener: () => void;
@@ -672,6 +683,121 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.sortArray(this.sortedColumn.property, this.sortedColumn.ascending, items);
     } else {
       this.filteredItems = items;
+    }
+  }
+
+  get searchAiColumns(): Array<PoSearchAiColumn> {
+    if (this.searchAiField?.columns) {
+      return this.searchAiField.columns;
+    }
+    return this.columns
+      .filter(col => col.property && col.visible !== false && !col.searchAiIgnore)
+      .map(col => ({
+        property: col.property,
+        label: col.label || col.property,
+        type: col.type || 'string'
+      }));
+  }
+
+  get searchAiPlaceholder(): string {
+    return this.searchAiField?.placeholder ?? this.literals.searchAiPlaceholder;
+  }
+
+  onAiResult(result: PoSearchAiResult): void {
+    this.searchAiResult.emit(result);
+
+    const apply = this.searchAiField?.apply ?? 'auto';
+
+    if (typeof apply === 'function') {
+      apply(result);
+      return;
+    }
+
+    if (apply === 'none') {
+      return;
+    }
+
+    if (apply === 'server' || (apply === 'auto' && this.hasService)) {
+      this.page = 1;
+      this.initializeData({ $filter: result.filter });
+      return;
+    }
+
+    if (apply === 'parser' && this.hasService) {
+      this.loading = true;
+      this.aiParserSubscription?.unsubscribe();
+      this.aiParserSubscription = this.getFilteredItems({ pageSize: 9999, page: 1 }).subscribe({
+        next: data => {
+          this.loading = false;
+          this.filteredItems = poSearchAiFilterItems(data.items as Array<Record<string, unknown>>, result.filter);
+        },
+        error: () => {
+          this.loading = false;
+        }
+      });
+      this.subscriptionService.add(this.aiParserSubscription);
+      return;
+    }
+
+    this.filteredItems = poSearchAiFilterItems(this.items as Array<Record<string, unknown>>, result.filter);
+  }
+
+  onAiLowConfidence(result: PoSearchAiResult): void {
+    this.searchAiLowConfidence.emit(result);
+  }
+
+  onAiError(error: PoSearchAiError): void {
+    this.searchAiError.emit(error);
+  }
+
+  onAiClear(): void {
+    if (this.hasService) {
+      this.page = 1;
+      this.initializeData();
+    } else {
+      this.filteredItems = this.height ? [...this.items] : this.items;
+    }
+  }
+
+  /**
+   * Atualiza programaticamente o valor do campo de busca por IA (`po-search-ai`) integrado à tabela
+   * via `p-search-ai-field`.
+   *
+   * Útil quando a aplicação precisa preencher a busca a partir de uma ação externa (por exemplo, o
+   * clique em um botão que sugere uma consulta pronta), opcionalmente disparando a busca em seguida.
+   *
+   * > Só tem efeito quando a propriedade `p-search-ai-field` está configurada. Caso contrário, o método
+   * > não executa nenhuma ação.
+   *
+   * @param { string } value Texto da consulta a ser inserido no campo de busca por IA.
+   * @param { boolean } triggerSearch Quando `true`, dispara automaticamente a busca após preencher o
+   * valor. Quando `false` _(padrão)_, apenas preenche o campo.
+   *
+   * @default `triggerSearch = false`
+   *
+   * @example
+   *
+   * ```typescript
+   * @ViewChild(PoTableComponent) table: PoTableComponent;
+   *
+   * onSuggestionClick() {
+   *   // apenas preenche o campo
+   *   this.table.updateSearchAIQuery('clientes de SP com saldo acima de 500');
+   *
+   *   // preenche e já dispara a busca
+   *   this.table.updateSearchAIQuery('clientes de SP com saldo acima de 500', true);
+   * }
+   * ```
+   */
+  updateSearchAIQuery(value: string, triggerSearch: boolean = false): void {
+    if (!this.searchAiField || !this.searchAiComponent) {
+      return;
+    }
+
+    this.searchAiComponent.writeValueModel(value);
+
+    if (triggerSearch) {
+      this.searchAiComponent.search();
     }
   }
 

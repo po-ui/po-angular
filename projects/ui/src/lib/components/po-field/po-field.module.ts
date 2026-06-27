@@ -41,7 +41,7 @@ import { PoRichTextImageModalComponent } from './po-rich-text/po-rich-text-image
 import { PoRichTextLinkModalComponent } from './po-rich-text/po-rich-text-link-modal/po-rich-text-link-modal.component';
 import { PoRichTextToolbarComponent } from './po-rich-text/po-rich-text-toolbar/po-rich-text-toolbar.component';
 import { PoInputComponent } from './po-input/po-input.component';
-import { PoSearchAiComponent } from './po-search-ai/po-search-ai.component';
+import { PoSearchAiModule } from './po-search-ai/po-search-ai.module';
 import { PoNumberComponent } from './po-number/po-number.component';
 import { PoPasswordComponent } from './po-password/po-password.component';
 import { PoSelectComponent } from './po-select/po-select.component';
@@ -102,6 +102,7 @@ import { PoLinkModule } from '../po-link';
     PoRadioGroupModule,
     PoRadioModule,
     PoServicesModule,
+    PoSearchAiModule,
     PoSwitchModule,
     PoTableModule,
     PoTagModule,
@@ -120,7 +121,7 @@ import { PoLinkModule } from '../po-link';
     PoEmailComponent,
     PoFieldContainerModule,
     PoInputComponent,
-    PoSearchAiComponent,
+    PoSearchAiModule,
     PoLabelModule,
     PoLinkModule,
     PoLoginComponent,
@@ -146,7 +147,6 @@ import { PoLinkModule } from '../po-link';
     PoDecimalComponent,
     PoEmailComponent,
     PoInputComponent,
-    PoSearchAiComponent,
     PoLoginComponent,
     PoLookupComponent,
     PoLookupModalComponent,

@@ -32,10 +32,14 @@ const FOCUS_DELAY_MS = 200;
  *  <file name="sample-po-search-ai-labs/sample-po-search-ai-labs.component.ts"> </file>
  * </example>
  *
- * <example name="po-search-ai-with-ai" title="PO AI Search - Search with AI">
- *  <file name="sample-po-search-ai-with-ai/sample-po-search-ai-with-ai.component.html"> </file>
- *  <file name="sample-po-search-ai-with-ai/sample-po-search-ai-with-ai.component.ts"> </file>
- *  <file name="sample-po-search-ai-with-ai/sample-po-search-ai-with-ai.service.ts"> </file>
+ * <example name="po-search-ai-result" title="PO AI Search - Result">
+ *  <file name="sample-po-search-ai-result/sample-po-search-ai-result.component.html"> </file>
+ *  <file name="sample-po-search-ai-result/sample-po-search-ai-result.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-search-ai-filter" title="PO AI Search - Filter">
+ *  <file name="sample-po-search-ai-filter/sample-po-search-ai-filter.component.html"> </file>
+ *  <file name="sample-po-search-ai-filter/sample-po-search-ai-filter.component.ts"> </file>
  * </example>
  */
 @Component({
@@ -97,26 +101,24 @@ export class PoSearchAiComponent extends PoSearchAiBaseComponent implements OnCh
     this.aiLoading = true;
     this.cd?.detectChanges();
 
-    this.aiSubscription = this.searchAiService
-      .sendQuery(this.url()!, query, columnsMetadata, this.timeout())
-      .subscribe({
-        next: response => {
-          const type =
-            response?.type || (response?.filter ? PoSearchAiResponseType.filter : PoSearchAiResponseType.custom);
+    this.aiSubscription = this.searchAiService.sendQuery(this.url(), query, columnsMetadata, this.timeout()).subscribe({
+      next: response => {
+        const type =
+          response?.type || (response?.filter ? PoSearchAiResponseType.filter : PoSearchAiResponseType.custom);
 
-          const result: PoSearchAiResult = {
-            query,
-            type,
-            filter: response?.filter,
-            description: response?.description,
-            confidence: response?.confidence,
-            data: response?.data
-          };
+        const result: PoSearchAiResult = {
+          query,
+          type,
+          filter: response?.filter,
+          description: response?.description,
+          confidence: response?.confidence,
+          data: response?.data
+        };
 
-          this.handleResponse(result);
-        },
-        error: err => this.handleError(query, err)
-      });
+        this.handleResponse(result);
+      },
+      error: err => this.handleError(query, err)
+    });
   }
 
   clearAndFocus(): void {

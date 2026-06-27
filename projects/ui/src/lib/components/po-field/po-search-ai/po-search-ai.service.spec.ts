@@ -110,7 +110,7 @@ describe('PoSearchAiService:', () => {
         expect(service.extractColumnsMetadata(undefined)).toEqual([]);
       });
 
-      it('should filter out columns without property, hidden or marked as searchAiIgnore', () => {
+      it('should filter out columns without property, hidden or with searchAiIgnore set to true', () => {
         const result = service.extractColumnsMetadata([
           { property: 'name', label: 'Nome', type: 'string' },
           { property: 'age', label: 'Idade' },
