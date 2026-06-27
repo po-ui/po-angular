@@ -36,6 +36,7 @@ export interface PoSearchAiColumnInput {
   property?: string;
   label?: string;
   type?: string;
+  /** Quando `true`, a coluna é excluída dos metadados enviados à IA. Padrão: `false`. */
   searchAiIgnore?: boolean;
   visible?: boolean;
 }

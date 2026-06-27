@@ -118,11 +118,7 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-select`, `po-radio-group`, `po-checkbox-group`, `po-multiselect`.
    * */
   options?:
-    | Array<string>
-    | Array<PoSelectOption>
-    | Array<PoMultiselectOption>
-    | Array<PoCheckboxGroupOption>
-    | Array<any>;
+    Array<string> | Array<PoSelectOption> | Array<PoMultiselectOption> | Array<PoCheckboxGroupOption> | Array<any>;
 
   /**
    * Permite que o usuário faça múltipla seleção dentro da lista de opções.

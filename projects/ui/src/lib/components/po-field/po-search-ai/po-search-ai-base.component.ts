@@ -24,6 +24,10 @@ const PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE = 0.5;
  * em um filtro estruturado (normalmente OData) que pode ser aplicado por outro componente,
  * como o [`po-table`](/documentation/po-table).
  *
+ * > **Componente experimental:** o `po-search-ai` está em fase experimental. Sua API
+ * > (propriedades, eventos e contrato com o backend) pode sofrer alterações
+ * > entre versões. Utilize com cautela em ambientes de produção.
+ *
  * O componente é **agnóstico ao provedor de IA**. Toda a comunicação ocorre através do
  * endpoint informado em `p-url`, que recebe `{ query, columns }` e deve retornar
  * `{ filter, description, confidence }`. Isso garante que nenhuma chave de IA seja

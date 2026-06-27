@@ -53,4 +53,7 @@ export interface PoTableLiterals {
 
   /** Texto de notificação de erro na requisição Delete */
   deleteApiError?: string;
+
+  /** Texto exibido como placeholder padrão no campo de busca por IA (`p-search-ai-field`) quando nenhum `placeholder` é informado. */
+  searchAiPlaceholder?: string;
 }

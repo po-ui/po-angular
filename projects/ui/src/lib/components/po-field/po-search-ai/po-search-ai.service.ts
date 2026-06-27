@@ -5,6 +5,7 @@ import { catchError, timeout } from 'rxjs/operators';
 
 import { PoSearchAiColumn, PoSearchAiColumnInput } from './interfaces/po-search-ai-column.interface';
 import { PoSearchAiRequest, PoSearchAiResponse } from './interfaces/po-search-ai.interface';
+import { extractSearchAiColumns } from './po-search-ai-utils';
 
 /**
  * @docsPrivate
@@ -21,7 +22,7 @@ export class PoSearchAiService {
     'X-PO-No-Message': 'true'
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   /**
    * Envia a consulta para o endpoint de IA.
@@ -54,7 +55,7 @@ export class PoSearchAiService {
 
         return throwError(() => ({
           statusCode: error?.status || 500,
-          message: error?.status ? error?.message : 'AI search request failed'
+          message: error?.status ? (error?.error?.message ?? error?.message) : 'AI search request failed'
         }));
       })
     );
@@ -67,16 +68,6 @@ export class PoSearchAiService {
    * @param columns Lista de colunas no formato bruto do componente consumidor.
    */
   extractColumnsMetadata(columns: Array<PoSearchAiColumnInput>): Array<PoSearchAiColumn> {
-    if (!columns) {
-      return [];
-    }
-
-    return columns
-      .filter(col => col.property && col.visible !== false && !col.searchAiIgnore)
-      .map(col => ({
-        property: col.property,
-        label: col.label || col.property,
-        type: col.type || 'string'
-      }));
+    return extractSearchAiColumns(columns);
   }
 }
