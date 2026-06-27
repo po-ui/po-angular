@@ -7,13 +7,15 @@ import { PoSearchAiColumn } from './po-search-ai-column.interface';
  *
  * Enum que define os tipos de resposta suportados pelo endpoint de IA.
  *
- * - `filter` — resposta contendo um filtro estruturado (ex: OData).
- * - `chat` — resposta conversacional em linguagem natural.
- * - `custom` — payload genérico definido pelo consumidor.
  */
 export enum PoSearchAiResponseType {
+  /** Resposta contendo um filtro estruturado (ex: OData). */
   filter = 'filter',
+
+  /** Resposta conversacional em linguagem natural. */
   chat = 'chat',
+
+  /** Payload genérico definido pelo consumidor. */
   custom = 'custom'
 }
 

@@ -1,9 +1,10 @@
-import { NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
+import { NO_ERRORS_SCHEMA, SimpleChange } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
 
 import { PoSearchAiResponse, PoSearchAiResponseType } from './interfaces/po-search-ai.interface';
 import { PoSearchAiComponent } from './po-search-ai.component';
@@ -18,6 +19,7 @@ describe('PoSearchAiComponent: ', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [PoSearchAiComponent],
+      providers: [{ provide: PoLanguageService, useValue: { getShortLanguage: () => 'en' } }],
       schemas: [NO_ERRORS_SCHEMA]
     });
   });
@@ -103,13 +105,13 @@ describe('PoSearchAiComponent: ', () => {
     describe('ngOnChanges:', () => {
       it('should reset displayAdditionalHelp when label changes', () => {
         component.displayAdditionalHelp = true;
-        component.ngOnChanges({ label: new SimpleChange(undefined, 'test', true) } as SimpleChanges);
+        component.ngOnChanges({ label: new SimpleChange(undefined, 'test', true) });
         expect(component.displayAdditionalHelp).toBeFalse();
       });
 
       it('should not change displayAdditionalHelp when label does not change', () => {
         component.displayAdditionalHelp = true;
-        component.ngOnChanges({} as SimpleChanges);
+        component.ngOnChanges({});
         expect(component.displayAdditionalHelp).toBeTrue();
       });
     });
@@ -204,7 +206,7 @@ describe('PoSearchAiComponent: ', () => {
         component.search();
 
         expect(errorSpy).toHaveBeenCalledWith(
-          jasmine.objectContaining({ statusCode: 500, message: 'Erro na busca com IA' })
+          jasmine.objectContaining({ statusCode: 500, message: 'AI search error' })
         );
       });
 

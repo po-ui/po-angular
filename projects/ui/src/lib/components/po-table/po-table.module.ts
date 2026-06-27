@@ -37,6 +37,7 @@ import { PoTableColumnTemplateDirective } from './po-table-column-template/po-ta
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
 import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
 import { PoTableColumnFrozenDirective } from './po-table-column-frozen/po-table-column-frozen.directive';
+import { PoSearchAiModule } from '../po-field/po-search-ai/po-search-ai.module';
 import { PoSearchModule } from '../po-search/po-search.module';
 
 /**
@@ -65,6 +66,7 @@ import { PoSearchModule } from '../po-search/po-search.module';
     PoRadioModule,
     PoLinkModule,
     PoPageSlideModule,
+    PoSearchAiModule,
     PoSwitchModule,
     PoSearchModule
   ],

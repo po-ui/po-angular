@@ -6,6 +6,7 @@ export * from './interfaces/po-table-boolean.interface';
 export * from './interfaces/po-table-column.interface';
 export * from './interfaces/po-table-column-sort.interface';
 export * from './interfaces/po-table-literals.interface';
+export * from './interfaces/po-table-search-ai-field.interface';
 export * from './po-table-column-icon/po-table-column-icon.interface';
 export * from './po-table-column-label/po-table-column-label.interface';
 export * from './po-table-detail/po-table-detail-column.interface';

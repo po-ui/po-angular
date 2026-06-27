@@ -318,4 +318,19 @@ export interface PoTableColumn {
    * Caso a coluna possua um `type` diferente de `string`, a máscara será ignorada.
    */
   mask?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Quando `true`, exclui a coluna dos metadados enviados ao endpoint de IA configurado
+   * em `p-search-ai-field`, independentemente de estar visível na tabela.
+   *
+   * Útil para ocultar colunas de controle interno (IDs, flags técnicos, etc.) da
+   * interpretação da linguagem natural.
+   *
+   * @default `false`
+   */
+  searchAiIgnore?: boolean;
 }

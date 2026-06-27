@@ -143,7 +143,7 @@
     "mkdirp": "3.0.1",
     "ng-packagr": "~21.0.0",
     "ngx-markdown": "^21.0.1",
-    "prettier": "^3.1.0",
+    "prettier": "^3.9.4",
     "rollup": "4.60.1",
     "run-sequence": "^2.2.1",
     "rxjs-compat": "~6.6.7",
