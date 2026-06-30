@@ -74,8 +74,7 @@ export class PoStepComponent implements AfterContentInit {
    * ```
    */
   @Input('p-can-active-next-step') canActiveNextStep:
-    | ((currentStep) => boolean)
-    | ((currentStep) => Observable<boolean>);
+    ((currentStep) => boolean) | ((currentStep) => Observable<boolean>);
 
   /** Título que será exibido descrevendo o passo (*step*). */
   @Input('p-label') label: string = '';
