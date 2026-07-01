@@ -1,0 +1,54 @@
+<po-container class="po-mb-2" p-no-border>
+  <p class="po-font-text-large-bold po-mb-1">Gere um filtro com IA</p>
+  <p class="po-font-text" style="color: var(--color-neutral-dark-70)">
+    Este exemplo usa o <code>po-search-ai</code> de forma isolada para transformar uma frase em linguagem natural em um
+    filtro OData reutilizável, que você pode aplicar em qualquer fonte de dados.
+  </p>
+  <p class="po-font-text po-mt-1" style="color: var(--color-neutral-dark-70)">
+    Quer aplicar o filtro automaticamente em uma tabela? O
+    <a href="https://po-ui.io/documentation/po-table" target="_blank">po-table</a>
+    já integra o <code>po-search-ai</code> de forma inteligente através da propriedade <code>p-search-ai-field</code>,
+    experimente também!
+  </p>
+</po-container>
+
+<po-search-ai
+  name="searchAi"
+  p-label="Gerar filtro com IA"
+  p-help="Descreva o que procura e pressione Enter para gerar um filtro OData"
+  p-placeholder="Ex: funcionários de São Paulo com salário acima de 10000"
+  p-url="https://po-sample-api.onrender.com/v1/ai/filter"
+  p-clean
+  [p-columns]="columns"
+  (p-result)="onResult($event)"
+  (p-low-confidence)="onLowConfidence($event)"
+  (p-error)="onError($event)"
+  (p-clear)="onClear()"
+>
+</po-search-ai>
+
+<p class="po-font-text-small po-mt-2 po-mb-1" style="color: var(--color-neutral-mid-tone)">
+  Sugestões — clique para preencher e buscar automaticamente
+</p>
+<div class="po-mb-1" style="display: flex; flex-wrap: wrap; gap: 0.5rem">
+  @for (ex of examples; track ex) {
+    <po-filter-chip
+      [p-label]="ex"
+      [p-selected]="selectedSuggestion === ex"
+      [p-disabled]="suggestionsLocked && selectedSuggestion !== ex"
+      (p-selected-change)="onSuggestionChange(ex, $event)"
+    ></po-filter-chip>
+  }
+</div>
+
+@if (filter) {
+  <po-container class="po-mt-2" p-no-padding>
+    <p class="po-font-text-large-bold">Filtro OData gerado</p>
+    <p><strong>Consulta:</strong> {{ query }}</p>
+    <p><strong>Descrição:</strong> {{ description }}</p>
+    <p><strong>Confiança:</strong> {{ confidence }}</p>
+    <pre class="po-font-text" style="background: var(--color-neutral-light-10); padding: 8px; border-radius: 4px">{{
+      filter
+    }}</pre>
+  </po-container>
+}

@@ -1,0 +1,29 @@
+<p class="po-font-text-large-bold po-mt-2 po-mb-1">PO Search A.I.</p>
+<p class="po-font-text-small po-mb-2" style="color: var(--color-neutral-mid-tone)">
+  O <strong>PO Search A.I.</strong> é um recurso de busca inteligente integrado ao <code>po-table</code> que utiliza
+  inteligência artificial para interpretar consultas em linguagem natural. Em vez de filtros exatos, o usuário descreve
+  o que procura de forma livre (ex.: "departamento Engenharia com salário acima de 10000") e o componente traduz essa
+  intenção em filtros aplicados automaticamente à tabela, tornando a experiência de busca mais rápida e intuitiva.
+</p>
+<p class="po-font-text-small po-mt-2 po-mb-1" style="color: var(--color-neutral-mid-tone)">
+  Sugestões — clique para preencher e buscar automaticamente
+</p>
+<div class="po-mb-1" style="display: flex; flex-wrap: wrap; gap: 0.5rem">
+  @for (ex of examples; track ex) {
+    <po-filter-chip
+      [p-label]="ex"
+      [p-selected]="selectedSuggestion === ex"
+      [p-disabled]="suggestionsLocked && selectedSuggestion !== ex"
+      (p-selected-change)="onSuggestionChange(ex, $event)"
+    ></po-filter-chip>
+  }
+</div>
+<po-table
+  [p-columns]="columns"
+  [p-items]="items"
+  [p-search-ai-field]="searchAiField"
+  (p-search-ai-result)="onAiResult($event)"
+  (p-search-ai-low-confidence)="onAiLowConfidence($event)"
+  (p-search-ai-error)="onAiError($event)"
+>
+</po-table>

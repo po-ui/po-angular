@@ -26,6 +26,7 @@ import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 import { PoTableService } from './services/po-table.service';
 import { PoThemeA11yEnum } from '../../services';
+import { PoSearchAiResponseType } from '../po-field/po-search-ai/interfaces/po-search-ai.interface';
 
 @Component({
   template: 'Search',
@@ -2030,6 +2031,8 @@ describe('PoTableComponent:', () => {
           { id: 2, name: 'teste2' }
         ];
         spyOn(component['eventDelete'], 'emit');
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['modalDelete'], 'close');
 
         component.deleteItems();
 
@@ -2046,6 +2049,8 @@ describe('PoTableComponent:', () => {
           { id: 2, name: 'teste2' }
         ];
         spyOn(component, 'removeItem');
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['modalDelete'], 'close');
 
         component.deleteItems();
 
@@ -2068,6 +2073,8 @@ describe('PoTableComponent:', () => {
         spyOn(component['defaultService'], <any>'getFilteredItems').and.returnValue(
           of({ items: [component.items[1]], hasNext: false })
         );
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['modalDelete'], 'close');
         component.deleteItems();
 
         expect(component.selectAll).toBeFalsy();
@@ -2084,6 +2091,8 @@ describe('PoTableComponent:', () => {
         ];
         component.itemsSelected = [{ id: 1, name: 'teste', $selected: true }];
         spyOn(component['defaultService'], <any>'deleteItem').and.returnValue(of({}));
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['modalDelete'], 'close');
 
         spyOn(component['eventDelete'], 'emit');
         component.deleteItems();
@@ -2118,6 +2127,8 @@ describe('PoTableComponent:', () => {
           { id: 1, name: 'teste', $selected: true },
           { id: 2, name: 'teste2' }
         ];
+        spyOn(component['poNotification'], 'success');
+        spyOn(component['modalDelete'], 'close');
         component['changesAfterDelete'](newItems);
         expect(component.selectAll).toBeFalsy();
       });
@@ -2196,6 +2207,282 @@ describe('PoTableComponent:', () => {
         component.onFilteredItemsChange(items);
 
         expect(component.sortArray).toHaveBeenCalled();
+      });
+    });
+
+    describe('searchAiColumns:', () => {
+      it('should return searchAiField.columns when explicitly provided', () => {
+        const aiCols = [{ property: 'name', label: 'Nome', type: 'string' }];
+        component.searchAiField = { url: '/ai', columns: aiCols };
+
+        expect(component.searchAiColumns).toBe(aiCols);
+      });
+
+      it('should derive columns from p-columns when searchAiField.columns is not set', () => {
+        component.columns = [
+          { property: 'name', label: 'Nome' },
+          { property: 'age', label: 'Idade', type: 'number' }
+        ];
+        component.searchAiField = { url: '/ai' };
+
+        const result = component.searchAiColumns;
+
+        expect(result.length).toBe(2);
+        expect(result[0]).toEqual({ property: 'name', label: 'Nome', type: 'string' });
+        expect(result[1]).toEqual({ property: 'age', label: 'Idade', type: 'number' });
+      });
+
+      it('should exclude columns with visible set to false', () => {
+        component.columns = [
+          { property: 'name', label: 'Nome' },
+          { property: 'secret', label: 'Secret', visible: false }
+        ];
+        component.searchAiField = { url: '/ai' };
+
+        const result = component.searchAiColumns;
+
+        expect(result.length).toBe(1);
+        expect(result[0].property).toBe('name');
+      });
+
+      it('should exclude columns with searchAiIgnore set to true', () => {
+        component.columns = [
+          { property: 'name', label: 'Nome' },
+          { property: 'id', label: 'ID', searchAiIgnore: true }
+        ];
+        component.searchAiField = { url: '/ai' };
+
+        const result = component.searchAiColumns;
+
+        expect(result.length).toBe(1);
+        expect(result[0].property).toBe('name');
+      });
+
+      it('should use column property as label when label is not set', () => {
+        component.columns = [{ property: 'code' }];
+        component.searchAiField = { url: '/ai' };
+
+        expect(component.searchAiColumns[0].label).toBe('code');
+      });
+    });
+
+    describe('searchAiPlaceholder:', () => {
+      it('should return searchAiField.placeholder when explicitly provided', () => {
+        component.searchAiField = { url: '/ai', placeholder: 'Busque algo' };
+
+        expect(component.searchAiPlaceholder).toBe('Busque algo');
+      });
+
+      it('should return the default literal when placeholder is not provided', () => {
+        component.searchAiField = { url: '/ai' };
+
+        expect(component.searchAiPlaceholder).toBe(component.literals.searchAiPlaceholder);
+      });
+
+      it('should return the default literal when searchAiField is undefined', () => {
+        component.searchAiField = undefined;
+
+        expect(component.searchAiPlaceholder).toBe(component.literals.searchAiPlaceholder);
+      });
+    });
+
+    describe('onAiResult:', () => {
+      const mockResult = {
+        query: 'test',
+        filter: "name eq 'Brasil'",
+        description: 'nome Brasil',
+        confidence: 0.9,
+        type: PoSearchAiResponseType.filter
+      };
+
+      beforeEach(() => {
+        component.searchAiField = { url: '/ai' };
+      });
+
+      it('should emit searchAiResult for any apply strategy', () => {
+        spyOn(component.searchAiResult, 'emit');
+        spyOn(component, 'initializeData');
+
+        component.onAiResult(mockResult);
+
+        expect(component.searchAiResult.emit).toHaveBeenCalledWith(mockResult);
+      });
+
+      it('should call apply function and return when apply is a callback', () => {
+        const applyFn = jasmine.createSpy('applyFn');
+        component.searchAiField = { url: '/ai', apply: applyFn };
+
+        component.onAiResult(mockResult);
+
+        expect(applyFn).toHaveBeenCalledWith(mockResult);
+      });
+
+      it('should not modify filteredItems when apply is "none"', () => {
+        component.searchAiField = { url: '/ai', apply: 'none' };
+        component.items = [{ id: 1 }];
+        component.filteredItems = [{ id: 1 }];
+        spyOn(component, 'initializeData');
+
+        component.onAiResult(mockResult);
+
+        expect(component.initializeData).not.toHaveBeenCalled();
+      });
+
+      it('should call initializeData with $filter when apply is "server"', () => {
+        component.searchAiField = { url: '/ai', apply: 'server' };
+        spyOn(component, 'initializeData');
+
+        component.onAiResult(mockResult);
+
+        expect(component.page).toBe(1);
+        expect(component.initializeData).toHaveBeenCalledWith({ $filter: mockResult.filter });
+      });
+
+      it('should call initializeData with $filter when apply is "auto" and hasService is true', () => {
+        component.searchAiField = { url: '/ai', apply: 'auto' };
+        component.hasService = true;
+        spyOn(component, 'initializeData');
+
+        component.onAiResult(mockResult);
+
+        expect(component.initializeData).toHaveBeenCalledWith({ $filter: mockResult.filter });
+      });
+
+      it('should fetch items and filter locally when apply is "parser" and hasService is true', () => {
+        const serviceItems = [
+          { id: 1, name: 'Brasil' },
+          { id: 2, name: 'França' }
+        ];
+        component.searchAiField = { url: '/ai', apply: 'parser' };
+        component.hasService = true;
+        spyOn(component, 'getFilteredItems').and.returnValue(of({ items: serviceItems, hasNext: false }));
+
+        component.onAiResult({ ...mockResult, filter: "name eq 'Brasil'" });
+
+        expect(component.getFilteredItems).toHaveBeenCalledWith({ pageSize: 9999, page: 1 });
+        expect(component.filteredItems).toEqual([{ id: 1, name: 'Brasil' }]);
+        expect(component.loading).toBeFalse();
+      });
+
+      it('should set loading to false when apply is "parser", hasService is true and request fails', () => {
+        component.searchAiField = { url: '/ai', apply: 'parser' };
+        component.hasService = true;
+        component.loading = false;
+        spyOn(component, 'getFilteredItems').and.returnValue(throwError(() => 'Internal Server Error'));
+
+        component.onAiResult({ ...mockResult, filter: "name eq 'Brasil'" });
+
+        expect(component.getFilteredItems).toHaveBeenCalledWith({ pageSize: 9999, page: 1 });
+        expect(component.loading).toBeFalse();
+      });
+
+      it('should filter local items when apply is "auto" and hasService is false', () => {
+        component.searchAiField = { url: '/ai', apply: 'auto' };
+        component.hasService = false;
+        component.items = [
+          { id: 1, name: 'Brasil' },
+          { id: 2, name: 'França' }
+        ];
+        component.filteredItems = [...component.items];
+
+        component.onAiResult({ ...mockResult, filter: "name eq 'Brasil'" });
+
+        expect(component.filteredItems).toEqual([{ id: 1, name: 'Brasil' }]);
+      });
+
+      it('should filter local items when apply is "parser" and hasService is false', () => {
+        component.searchAiField = { url: '/ai', apply: 'parser' };
+        component.hasService = false;
+        component.items = [
+          { id: 1, name: 'Brasil' },
+          { id: 2, name: 'França' }
+        ];
+        component.filteredItems = [...component.items];
+
+        component.onAiResult({ ...mockResult, filter: "name eq 'Brasil'" });
+
+        expect(component.filteredItems).toEqual([{ id: 1, name: 'Brasil' }]);
+      });
+
+      it('should filter local items when apply defaults to "auto" and hasService is false', () => {
+        component.searchAiField = { url: '/ai' };
+        component.hasService = false;
+        component.items = [
+          { id: 1, name: 'Brasil' },
+          { id: 2, name: 'França' }
+        ];
+        component.filteredItems = [...component.items];
+
+        component.onAiResult({ ...mockResult, filter: "name eq 'Brasil'" });
+
+        expect(component.filteredItems.length).toBe(1);
+        expect(component.filteredItems[0]).toEqual({ id: 1, name: 'Brasil' });
+      });
+    });
+
+    describe('onAiLowConfidence:', () => {
+      it('should emit searchAiLowConfidence', () => {
+        const result = {
+          query: 'test',
+          filter: '',
+          description: '',
+          confidence: 0.3,
+          type: PoSearchAiResponseType.filter
+        };
+        spyOn(component.searchAiLowConfidence, 'emit');
+
+        component.onAiLowConfidence(result);
+
+        expect(component.searchAiLowConfidence.emit).toHaveBeenCalledWith(result);
+      });
+    });
+
+    describe('onAiError:', () => {
+      it('should emit searchAiError', () => {
+        const error = { query: 'test', statusCode: 500, message: 'Server error' };
+        spyOn(component.searchAiError, 'emit');
+
+        component.onAiError(error);
+
+        expect(component.searchAiError.emit).toHaveBeenCalledWith(error);
+      });
+    });
+
+    describe('onAiClear:', () => {
+      it('should reload from service and reset page when hasService is true', () => {
+        component.hasService = true;
+        component.page = 5;
+        spyOn(component, 'initializeData');
+
+        component.onAiClear();
+
+        expect(component.page).toBe(1);
+        expect(component.initializeData).toHaveBeenCalled();
+      });
+
+      it('should restore filteredItems from items reference when hasService is false and no height', () => {
+        component.hasService = false;
+        component['_height'] = undefined;
+        const localItems = [{ id: 1 }, { id: 2 }];
+        component.items = localItems;
+        component.filteredItems = [{ id: 1 }];
+
+        component.onAiClear();
+
+        expect(component.filteredItems).toBe(localItems);
+      });
+
+      it('should restore filteredItems as a shallow copy when hasService is false and height is set', () => {
+        component.hasService = false;
+        component['_height'] = 300;
+        const localItems = [{ id: 1 }, { id: 2 }];
+        component.items = localItems;
+        component.filteredItems = [{ id: 1 }];
+
+        component.onAiClear();
+
+        expect(component.filteredItems).toEqual(localItems);
+        expect(component.filteredItems).not.toBe(localItems);
       });
     });
   });
@@ -3633,6 +3920,52 @@ describe('PoTableComponent:', () => {
       component['reapplySort']();
 
       expect(component.sortArray).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updateSearchAIQuery:', () => {
+    it('should do nothing when searchAiField is not configured', () => {
+      component.searchAiField = undefined;
+      component.searchAiComponent = { writeValueModel: jasmine.createSpy(), search: jasmine.createSpy() } as any;
+
+      component.updateSearchAIQuery('test query');
+
+      expect(component.searchAiComponent.writeValueModel).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing when searchAiComponent is not available', () => {
+      component.searchAiField = { url: '/ai' };
+      component.searchAiComponent = undefined;
+
+      expect(() => component.updateSearchAIQuery('test query')).not.toThrow();
+    });
+
+    it('should call writeValueModel with the provided value', () => {
+      component.searchAiField = { url: '/ai' };
+      component.searchAiComponent = { writeValueModel: jasmine.createSpy(), search: jasmine.createSpy() } as any;
+
+      component.updateSearchAIQuery('clientes de SP');
+
+      expect(component.searchAiComponent.writeValueModel).toHaveBeenCalledWith('clientes de SP');
+    });
+
+    it('should not call search when triggerSearch is false (default)', () => {
+      component.searchAiField = { url: '/ai' };
+      component.searchAiComponent = { writeValueModel: jasmine.createSpy(), search: jasmine.createSpy() } as any;
+
+      component.updateSearchAIQuery('clientes de SP');
+
+      expect(component.searchAiComponent.search).not.toHaveBeenCalled();
+    });
+
+    it('should call search when triggerSearch is true', () => {
+      component.searchAiField = { url: '/ai' };
+      component.searchAiComponent = { writeValueModel: jasmine.createSpy(), search: jasmine.createSpy() } as any;
+
+      component.updateSearchAIQuery('clientes de SP com saldo acima de 500', true);
+
+      expect(component.searchAiComponent.writeValueModel).toHaveBeenCalledWith('clientes de SP com saldo acima de 500');
+      expect(component.searchAiComponent.search).toHaveBeenCalled();
     });
   });
 });

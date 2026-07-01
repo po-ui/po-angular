@@ -36,7 +36,25 @@
     </div>
   }
 
-  @if (!hideTableSearch && hasValidColumns) {
+  @if (searchAiField) {
+    <div class="po-table-search">
+      <po-search-ai
+        [p-url]="searchAiField.url"
+        [p-clean]="true"
+        [p-columns]="searchAiColumns"
+        [p-min-confidence]="searchAiField.minConfidence"
+        [p-timeout]="searchAiField.timeout"
+        [p-placeholder]="searchAiPlaceholder"
+        [p-literals]="searchAiField.literals"
+        [p-size]="componentsSize"
+        (p-result)="onAiResult($event)"
+        (p-low-confidence)="onAiLowConfidence($event)"
+        (p-error)="onAiError($event)"
+        (p-clear)="onAiClear()"
+      >
+      </po-search-ai>
+    </div>
+  } @else if (!hideTableSearch && hasValidColumns) {
     <div class="po-table-search">
       <po-search
         [p-items]="items"
