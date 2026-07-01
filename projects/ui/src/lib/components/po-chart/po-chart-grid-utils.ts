@@ -31,7 +31,7 @@ export class PoChartGridUtils {
       left: this.component.options?.axis?.paddingLeft || 16,
       right: this.component.options?.axis?.paddingRight || 32,
       bottom: this.component.options?.axis?.paddingBottom || paddingBottom,
-      containLabel: true,
+      outerBoundsMode: 'same',
       borderWidth: tokenBorderWidthSm
     };
   }
@@ -103,7 +103,6 @@ export class PoChartGridUtils {
         realtime: true,
         bottom: this.component.options?.bottomDataZoom || 'calc(100%)',
         height: 25,
-        right: this.component.options?.axis?.paddingRight || 32,
         xAxisIndex: [0]
       },
       {

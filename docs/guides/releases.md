@@ -14,14 +14,17 @@ Os números de versão do PO UI indicam o nível de mudanças introduzidas pelo 
 Números de versão PO UI tem três partes: `major.minor.patch`. Por exemplo, a versão 4.16.1 indica a versão principal 4, a versão secundária 2 e o nível de patch 1.
 
 O número da versão principal é incrementado com base na versão do Angular que ele atende.
+
 - **As versões principais** contêm os novos recursos disponibilizados pelo Angular, mas espera-se uma assistência mínima do desenvolvedor durante a atualização. Ao atualizar para uma nova versão principal, pode ser necessário executar scripts de atualização, refatorar códigos, executar testes adicionais e aprender novas APIs.
 - **Versões secundárias** contém novos recursos menores. Versões menores são totalmente compatíveis com versões anteriores; nenhuma assistência do desenvolvedor é esperada durante a atualização, mas você pode opcionalmente modificar seus aplicativos e bibliotecas para começar a usar novas APIs, recursos e capacidades que foram adicionados na versão. São incrementadas regularmente ao final de nossas sprints.
 - **Lançamentos de patch** são lançamentos de correção de bugs. Nenhuma ajuda do desenvolvedor é esperada durante a atualização.
 
 ## Caminhos de atualização suportados
+
 Em alinhamento com o esquema de controle de versão descrito acima, nos comprometemos a oferecer suporte aos seguintes caminhos de atualização:
+
 - Se você estiver atualizando na **versão principal**, poderá pular todas as versões intermediárias e atualizar diretamente para a versão de destino. Por exemplo, você pode atualizar diretamente da versão 4.0.0 para a 4.17.0.
-- Se você estiver  atualizando de **uma versão principal para outra**, recomendamos que **não ignore as versões principais**. Siga as instruções para atualizar de forma incremental para a próxima versão principal, testando e validando em cada erapa. Por exemplo, se você deseja atualizar da versão 2.xx para a versão 4.xx, recomendamos que você atualize para a versão 3.xx mais recente primeiro. Depois de atualizar com sucesso para a versão 3.xx, você pode atualizar para a 4.xx.
+- Se você estiver atualizando de **uma versão principal para outra**, recomendamos que **não ignore as versões principais**. Siga as instruções para atualizar de forma incremental para a próxima versão principal, testando e validando em cada erapa. Por exemplo, se você deseja atualizar da versão 2.xx para a versão 4.xx, recomendamos que você atualize para a versão 3.xx mais recente primeiro. Depois de atualizar com sucesso para a versão 3.xx, você pode atualizar para a 4.xx.
 
 Consulte abaixo nossos guias de migração de versão para obter mais informações sobre como atualizar o PO UI para a versão mais recente nos seus projetos Angular.
 
@@ -118,7 +121,12 @@ Consulte abaixo nossos guias de migração de versão para obter mais informaç�
 ## Versões prévias
 
 Permitimos que você visualize o que está por vir, fornecendo pré-lançamentos `next` ou Release Candidates (`rc`) para cada versão principal:
+
 - **Next**: a versão que está em desenvolvimento, com testes ativos e com breaking changes a resolver. O próximo lançamento é indicado por uma tag de lançamento anexada ao identificador `-next`, como `17.0.0-next`.
 - **Release Candidate**: um lançamento com recurso concluído, teste finalizado e sem breaking changes a resolver. Um candidato a lançamento é indicado por uma tag de lançamento anexada ao identificador `-rc`, como versão `17.0.0-rc`.
 
 A versão mais recente `next` ou de pré-lançamento `rc` fica disponível no [npm do projeto](https://www.npmjs.com/package/@po-ui/ng-components?activeTab=versions).
+
+## Lançamentos e suporte
+
+Para informações sobre o cronograma de lançamentos, janela de suporte (Active/LTS) e política de segurança em versões LTS, consulte o guia [Lançamentos e suporte](guides/release-schedule).

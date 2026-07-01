@@ -8,7 +8,7 @@
         "project": ["projects/app/tsconfig.app.json", "projects/app/tsconfig.spec.json"],
         "createDefaultProgram": true
       },
-      "plugins": ["sonarjs", "eslint-plugin-react"],
+      "plugins": ["sonarjs"],
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
@@ -110,7 +110,6 @@
         "eol-last": "off",
         "id-blacklist": "off",
         "id-match": "off",
-        "import/order": "off",
         "indent": "off",
         "linebreak-style": "off",
         "max-len": "off",
@@ -152,16 +151,6 @@
         ],
         "prefer-arrow/prefer-arrow-functions": "off",
         "quote-props": "off",
-        "react/jsx-curly-spacing": "off",
-        "react/jsx-equals-spacing": "off",
-        "react/jsx-tag-spacing": [
-          "off",
-          {
-            "afterOpening": "allow",
-            "closingSlash": "allow"
-          }
-        ],
-        "react/jsx-wrap-multilines": "off",
         "semi": "off",
         "sonarjs/cognitive-complexity": "off",
         "sonarjs/max-switch-cases": "error",

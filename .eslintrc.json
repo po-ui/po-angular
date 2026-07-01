@@ -13,7 +13,7 @@
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
-      "plugins": ["sonarjs", "eslint-plugin-react"],
+      "plugins": ["sonarjs"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-this-alias": "off",
@@ -189,7 +189,6 @@
         "eol-last": "off",
         "id-blacklist": "off",
         "id-match": "off",
-        "import/order": "off",
         "indent": "off",
         "linebreak-style": "off",
         "max-len": "off",
@@ -237,17 +236,7 @@
         "prefer-arrow/prefer-arrow-functions": "off",
         "quote-props": "off",
         "jsdoc/no-types": "off",
-        "react/jsx-curly-spacing": "off",
         "jsdoc/newline-after-description": "off",
-        "react/jsx-equals-spacing": "off",
-        "react/jsx-tag-spacing": [
-          "off",
-          {
-            "afterOpening": "allow",
-            "closingSlash": "allow"
-          }
-        ],
-        "react/jsx-wrap-multilines": "off",
         "semi": "off",
         "sonarjs/cognitive-complexity": "off",
         "sonarjs/max-switch-cases": "error",
