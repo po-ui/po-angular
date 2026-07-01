@@ -282,8 +282,8 @@ function parsePrimary(tokens: Array<Token>, cur: Cursor): Predicate {
     const valFn = parseValueExpr(tokens, cur);
     expect(tokens, cur, 'RPAREN');
     return item => {
-      const fieldVal = `${fieldFn(item) ?? ''}`.toLowerCase();
-      const searchVal = `${valFn(item) ?? ''}`.toLowerCase();
+      const fieldVal = String(fieldFn(item) ?? '').toLowerCase();
+      const searchVal = String(valFn(item) ?? '').toLowerCase();
       if (fn === 'contains') {
         return fieldVal.includes(searchVal);
       }
@@ -331,7 +331,7 @@ function parseValueExpr(tokens: Array<Token>, cur: Cursor): ValueFn {
     expect(tokens, cur, 'RPAREN');
     const name = fieldToken.value;
     return item => {
-      const v = `${resolveField(item, name) ?? ''}`;
+      const v = String(resolveField(item, name) ?? '');
       return fn === 'tolower' ? v.toLowerCase() : v.toUpperCase();
     };
   }
