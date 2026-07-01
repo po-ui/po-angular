@@ -21,7 +21,7 @@ export class PoSearchAiService {
     'X-PO-No-Message': 'true'
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   /**
    * Envia a consulta para o endpoint de IA.

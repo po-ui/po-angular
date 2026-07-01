@@ -141,8 +141,8 @@ function tokenize(input: string): Array<Token> {
     }
 
     if (input[i] === '-') {
-      const prevType: TokenType | 'START' = tokens.length > 0 ? tokens[tokens.length - 1].type : 'START';
-      if (OPERAND_POSITION_TYPES.has(prevType) && /[0-9]/.test(input[i + 1] ?? '')) {
+      const prevType: TokenType | 'START' = tokens.length > 0 ? tokens.at(-1).type : 'START';
+      if (OPERAND_POSITION_TYPES.has(prevType) && /\d/.test(input[i + 1] ?? '')) {
         let j = i + 1;
         while (j < input.length && /[0-9.]/.test(input[j])) {
           j++;
@@ -153,18 +153,18 @@ function tokenize(input: string): Array<Token> {
       }
     }
 
-    if (/[0-9]/.test(input[i])) {
+    if (/\d/.test(input[i])) {
       let j = i;
-      while (j < input.length && /[0-9]/.test(input[j])) {
+      while (j < input.length && /\d/.test(input[j])) {
         j++;
       }
 
       const isDate =
         j - i === 4 &&
         input[j] === '-' &&
-        /[0-9]{2}/.test(input.slice(j + 1, j + 3)) &&
+        /\d{2}/.test(input.slice(j + 1, j + 3)) &&
         input[j + 3] === '-' &&
-        /[0-9]{2}/.test(input.slice(j + 4, j + 6));
+        /\d{2}/.test(input.slice(j + 4, j + 6));
 
       if (isDate) {
         j += 6;
@@ -172,7 +172,7 @@ function tokenize(input: string): Array<Token> {
       } else {
         if (input[j] === '.') {
           j++;
-          while (j < input.length && /[0-9]/.test(input[j])) {
+          while (j < input.length && /\d/.test(input[j])) {
             j++;
           }
         }
@@ -184,7 +184,7 @@ function tokenize(input: string): Array<Token> {
 
     if (/[a-zA-Z_]/.test(input[i])) {
       let j = i;
-      while (j < input.length && /[a-zA-Z0-9_]/.test(input[j])) {
+      while (j < input.length && /\w/.test(input[j])) {
         j++;
       }
       const word = input.slice(i, j);
@@ -195,10 +195,10 @@ function tokenize(input: string): Array<Token> {
     }
 
     if (input[i] === '/') {
-      const prev = tokens[tokens.length - 1];
+      const prev = tokens.at(-1);
       if (prev?.type === 'IDENT') {
         let j = i + 1;
-        while (j < input.length && /[a-zA-Z0-9_]/.test(input[j])) {
+        while (j < input.length && /\w/.test(input[j])) {
           j++;
         }
         prev.value += '/' + input.slice(i + 1, j);
@@ -282,8 +282,8 @@ function parsePrimary(tokens: Array<Token>, cur: Cursor): Predicate {
     const valFn = parseValueExpr(tokens, cur);
     expect(tokens, cur, 'RPAREN');
     return item => {
-      const fieldVal = String(fieldFn(item) ?? '').toLowerCase();
-      const searchVal = String(valFn(item) ?? '').toLowerCase();
+      const fieldVal = `${fieldFn(item) ?? ''}`.toLowerCase();
+      const searchVal = `${valFn(item) ?? ''}`.toLowerCase();
       if (fn === 'contains') {
         return fieldVal.includes(searchVal);
       }
@@ -331,7 +331,7 @@ function parseValueExpr(tokens: Array<Token>, cur: Cursor): ValueFn {
     expect(tokens, cur, 'RPAREN');
     const name = fieldToken.value;
     return item => {
-      const v = String(resolveField(item, name) ?? '');
+      const v = `${resolveField(item, name) ?? ''}`;
       return fn === 'tolower' ? v.toLowerCase() : v.toUpperCase();
     };
   }
@@ -433,14 +433,14 @@ function compareValues(a: unknown, b: unknown): number | null {
   if (a instanceof Date || b instanceof Date) {
     const da = a instanceof Date ? a : new Date(String(a));
     const db = b instanceof Date ? b : new Date(String(b));
-    if (isNaN(da.getTime()) || isNaN(db.getTime())) {
+    if (Number.isNaN(da.getTime()) || Number.isNaN(db.getTime())) {
       return null;
     }
     return da.getTime() - db.getTime();
   }
   const na = Number(a);
   const nb = Number(b);
-  if (!isNaN(na) && !isNaN(nb)) {
+  if (!Number.isNaN(na) && !Number.isNaN(nb)) {
     return na - nb;
   }
   return String(a).localeCompare(String(b));
