@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MenuGuidesService {
   constructor() {}
 
@@ -18,10 +20,12 @@ export class MenuGuidesService {
       { label: 'Migração do PO UI', link: 'guides/migration-poui' },
       { label: 'Migração do THF para o PO UI v1.x', link: 'guides/migration-thf-to-po-ui' },
       { label: 'Press Kit', link: 'guides/press-kit' },
+      { label: 'Lançamentos e suporte', link: 'guides/release-schedule' },
       { label: 'Releases', link: 'guides/releases' },
       { label: 'Schematics', link: 'guides/schematics' },
       { label: 'Fundamentos do PO Sync', link: 'guides/sync-fundamentals' },
-      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' }
+      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' },
+      { label: 'Customização de Temas usando o serviço PO-UI', link: 'guides/theme-service' }
     );
   }
 }
