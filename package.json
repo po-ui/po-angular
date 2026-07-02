@@ -87,13 +87,13 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.2.24",
+    "@angular-devkit/build-angular": "~19.2.27",
     "@angular-eslint/builder": "^19.0.2",
     "@angular-eslint/eslint-plugin": "^19.0.2",
     "@angular-eslint/eslint-plugin-template": "^19.0.2",
     "@angular-eslint/schematics": "^19.0.2",
     "@angular-eslint/template-parser": "^19.0.2",
-    "@angular/cli": "~19.2.24",
+    "@angular/cli": "~19.2.27",
     "@angular/compiler-cli": "~19.2.20",
     "@angular/language-service": "~19.2.20",
     "@animaliads/animalia-icon": "1.0.5",
@@ -148,10 +148,13 @@
   },
   "overrides": {
     "axios": "1.12.2",
-    "vite": "6.4.2",
+    "vite": "6.4.3",
     "serialize-javascript": "7.0.5",
-    "tar": "7.5.13",
-    "picomatch": "4.0.4"
+    "tar": "7.5.16",
+    "picomatch": "4.0.4",
+    "piscina": "4.9.3",
+    "http-proxy-middleware": "3.0.7",
+    "esbuild": "0.28.1"
   },
   "standard-version": {
     "skip": {

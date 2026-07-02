@@ -68,9 +68,9 @@ Antes de executar a instalação, é necessário que todas as dependências do p
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~19.2.24",
-    "@angular-devkit/schematics": "~19.2.24",
-    "@angular/cli": "~19.2.24",
+    "@angular-devkit/build-angular": "~19.2.27",
+    "@angular-devkit/schematics": "~19.2.27",
+    "@angular/cli": "~19.2.27",
     "@angular/compiler-cli": "~19.2.20",
     "@angular/language-service": "~19.2.20",
     "@ionic/angular-toolkit": "^11.0.1",
