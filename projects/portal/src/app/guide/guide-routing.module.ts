@@ -12,10 +12,12 @@ import { GuideMigrationPouiV2Component } from './guides/guide-migration-poui-v2/
 import { GuideMigrationPouiComponent } from './guides/guide-migration-poui/guide-migration-poui.component';
 import { GuideMigrationThfToPoUiComponent } from './guides/guide-migration-thf-to-po-ui/guide-migration-thf-to-po-ui.component';
 import { GuidePressKitComponent } from './guides/guide-press-kit/guide-press-kit.component';
+import { GuideReleaseScheduleComponent } from './guides/guide-release-schedule/guide-release-schedule.component';
 import { GuideReleasesComponent } from './guides/guide-releases/guide-releases.component';
 import { GuideSchematicsComponent } from './guides/guide-schematics/guide-schematics.component';
 import { GuideSyncFundamentalsComponent } from './guides/guide-sync-fundamentals/guide-sync-fundamentals.component';
 import { GuideSyncGetStartedComponent } from './guides/guide-sync-get-started/guide-sync-get-started.component';
+import { GuideThemeServiceComponent } from './guides/guide-theme-service/guide-theme-service.component';
 
 // Route Configuration
 export const guidesRoutes: Routes = [
@@ -33,10 +35,12 @@ export const guidesRoutes: Routes = [
       { path: 'migration-poui', component: GuideMigrationPouiComponent },
       { path: 'migration-thf-to-po-ui', component: GuideMigrationThfToPoUiComponent },
       { path: 'press-kit', component: GuidePressKitComponent },
+      { path: 'release-schedule', component: GuideReleaseScheduleComponent },
       { path: 'releases', component: GuideReleasesComponent },
       { path: 'schematics', component: GuideSchematicsComponent },
       { path: 'sync-fundamentals', component: GuideSyncFundamentalsComponent },
       { path: 'sync-get-started', component: GuideSyncGetStartedComponent },
+      { path: 'theme-service', component: GuideThemeServiceComponent },
       { path: '', pathMatch: 'full', redirectTo: 'getting-started' }
     ]
   }

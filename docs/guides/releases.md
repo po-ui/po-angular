@@ -112,3 +112,7 @@ Permitimos que você visualize o que está por vir, fornecendo pré-lançamentos
 - **Release Candidate**: um lançamento com recurso concluído, teste finalizado e sem breaking changes a resolver. Um candidato a lançamento é indicado por uma tag de lançamento anexada ao identificador `-rc`, como versão `17.0.0-rc`.
 
 A versão mais recente `next` ou de pré-lançamento `rc` fica disponível no [npm do projeto](https://www.npmjs.com/package/@po-ui/ng-components?activeTab=versions).
+
+## Lançamentos e suporte
+
+Para informações sobre o cronograma de lançamentos, janela de suporte (Active/LTS) e política de segurança em versões LTS, consulte o guia [Lançamentos e suporte](guides/release-schedule).
