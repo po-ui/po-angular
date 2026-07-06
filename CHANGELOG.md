@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.23.0](https://github.com/po-ui/po-angular/compare/v21.22.0...v21.23.0) (2026-07-06)
+
+
+### Features
+
+* **search-ai:** novo componente ([6be47f6](https://github.com/po-ui/po-angular/commit/6be47f6b99d1f5eb528ae377d1dd839e6c049a46))
+* **table:** filtra dados com linguagem natural ([1a78bd3](https://github.com/po-ui/po-angular/commit/1a78bd3dbe55e513681b394957b597ad3602cf21))
+* **widget:** centraliza botão de ações com tag-position top ([1767af9](https://github.com/po-ui/po-angular/commit/1767af949292817ba5b8141138fcb3db09e6a06e))
+
 ## [21.22.0](https://github.com/po-ui/po-angular/compare/v21.21.0...v21.22.0) (2026-06-25)
 
 
