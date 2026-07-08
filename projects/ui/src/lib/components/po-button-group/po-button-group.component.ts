@@ -23,6 +23,11 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
  *  <file name="sample-po-button-group-attendance/sample-po-button-group-attendance.component.ts"> </file>
  * </example>
  *
+ * <example name="po-button-group-opening-service-ticket" title="PO Button Group - Opening Service Ticket">
+ *  <file name="sample-po-button-group-opening-service-ticket/sample-po-button-group-opening-service-ticket.component.html"> </file>
+ *  <file name="sample-po-button-group-opening-service-ticket/sample-po-button-group-opening-service-ticket.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-button-group-post" title="PO Button Group - Post">
  *  <file name="sample-po-button-group-post/sample-po-button-group-post.component.html"> </file>
  *  <file name="sample-po-button-group-post/sample-po-button-group-post.component.ts"> </file>

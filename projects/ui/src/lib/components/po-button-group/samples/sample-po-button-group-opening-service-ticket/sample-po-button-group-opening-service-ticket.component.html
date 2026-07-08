@@ -1,0 +1,19 @@
+<div class="po-font-title po-mb-2">Opening Service Ticket</div>
+
+<po-widget>
+  <div class="po-row">
+    <div class="po-md-12 po-mb-1 po-font-text-bold">Day of the week</div>
+    <div class="po-md-12 po-mb-3">
+      <po-button-group p-toggle="single" [p-buttons]="weekDays"> </po-button-group>
+    </div>
+
+    <div class="po-md-12 po-mb-3">
+      <po-button-group p-toggle="single" [p-buttons]="periods"> </po-button-group>
+    </div>
+
+    <po-divider></po-divider>
+
+    <div class="po-md-12 po-font-text"><strong>Selected day:</strong> {{ selectedWeekDay || 'None' }}</div>
+    <div class="po-md-12 po-font-text"><strong>Selected period:</strong> {{ selectedPeriod || 'None' }}</div>
+  </div>
+</po-widget>
