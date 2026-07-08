@@ -3,12 +3,10 @@ import { By } from '@angular/platform-browser';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
-import { PoButtonModule } from '../po-button/po-button.module';
-
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 import { PoButtonGroupComponent } from './po-button-group.component';
 import { PoButtonGroupItem } from './po-button-group-item.interface';
-import { PoTooltipModule } from './../../directives/po-tooltip/po-tooltip.module';
+import { PoButtonGroupModule } from './po-button-group.module';
 
 describe('PoButtonGroupComponent:', () => {
   let component: PoButtonGroupComponent;
@@ -38,8 +36,7 @@ describe('PoButtonGroupComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoButtonModule, PoTooltipModule],
-      declarations: [PoButtonGroupComponent]
+      imports: [PoButtonGroupModule]
     });
   });
 
@@ -124,7 +121,7 @@ describe('PoButtonGroupComponent:', () => {
       expect(buttonEnabled.outerHTML).toContain('p-tooltip');
     });
 
-    it(`should contain 'tooltip' in button if button is 'enabled' and contains 'tooltip' property.`, fakeAsync(() => {
+    it(`should contain 'tooltip' in body if button is 'enabled' and contains 'tooltip' property.`, fakeAsync(() => {
       const button = fixture.debugElement.query(By.css('.po-button-group'));
 
       button.triggerEventHandler('mouseenter', null);
@@ -133,12 +130,14 @@ describe('PoButtonGroupComponent:', () => {
 
       tick(100);
 
-      const poTooltip = containerButtons.querySelector('.po-tooltip');
+      const poTooltip = document.body.querySelector('.po-tooltip');
 
       expect(poTooltip).toBeTruthy();
     }));
 
-    it(`shouldn't contain 'tooltip' in button if button is 'disabled' and contains 'tooltip' property.`, waitForAsync(() => {
+    it(`shouldn't contain 'tooltip' in body if button is 'disabled' and contains 'tooltip' property.`, waitForAsync(() => {
+      document.body.querySelectorAll('.po-tooltip').forEach(el => el.remove());
+
       const buttons = containerButtons.querySelectorAll('.po-button-group');
       const buttonDisabled = buttons[1];
 
@@ -146,7 +145,7 @@ describe('PoButtonGroupComponent:', () => {
 
       fixture.detectChanges();
       fixture.whenStable().then(() => {
-        const poTooltip = containerButtons.querySelector('.po-tooltip');
+        const poTooltip = document.body.querySelector('.po-tooltip');
 
         expect(poTooltip).toBeNull();
       });
