@@ -28,6 +28,8 @@ describe('PoSearchAiComponent: ', () => {
     fixture = TestBed.createComponent(PoSearchAiComponent);
     component = fixture.componentInstance;
 
+    (component as any).language = 'en';
+
     serviceSpy = (component as any).searchAiService;
     spyOn(serviceSpy, 'sendQuery').and.returnValue(of({} as PoSearchAiResponse));
     spyOn(serviceSpy, 'extractColumnsMetadata').and.returnValue([]);

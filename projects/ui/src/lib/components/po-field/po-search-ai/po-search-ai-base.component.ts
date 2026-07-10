@@ -198,7 +198,7 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    *
    * @default `0.5`
    */
-  minConfidence = input<number>(PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE, {
+  minConfidence = input<number, number>(PO_SEARCH_AI_DEFAULT_MIN_CONFIDENCE, {
     alias: 'p-min-confidence',
     transform: (value: number) => {
       const parsed = Number(value);
@@ -239,7 +239,7 @@ export abstract class PoSearchAiBaseComponent extends PoInputGeneric implements 
    *
    * @default `10000`
    */
-  timeout = input<number>(PO_SEARCH_AI_DEFAULT_TIMEOUT, {
+  timeout = input<number, number>(PO_SEARCH_AI_DEFAULT_TIMEOUT, {
     alias: 'p-timeout',
     transform: (value: number) => {
       const parsed = Number(value);
