@@ -36,7 +36,7 @@ export class PoDialogService extends PoDialogBaseService {
 
   openDialog(dialogType: PoDialogType, dialogOptions: PoDialogAlertOptions | PoDialogConfirmOptions): void {
     const componentRef: ComponentRef<any> = this.poComponentInjector.createComponentInApplication(PoDialogComponent);
-    componentRef.changeDetectorRef.detectChanges();
     componentRef.instance.open(dialogOptions, dialogType, componentRef);
+    componentRef.changeDetectorRef.detectChanges();
   }
 }
