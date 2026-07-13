@@ -1,4 +1,4 @@
-<div
+﻿<div
   [class.po-list-view-main-container-header]="showHeader"
   [class.po-list-view-main-container]="!showHeader"
   [style.height.px]="height"
@@ -29,7 +29,9 @@
       </po-container>
     }
 
-    @for (item of items; track trackBy; let index = $index) {
+    @for (item of items; track trackBy($index); let index = $index) {
+      @let visibleActionsForItem = getVisibleActions(item);
+
       <po-container [p-no-padding]="true">
         <div class="po-list-view-container">
           <div class="po-list-view-header">
@@ -73,9 +75,9 @@
               </span>
             </div>
 
-            @if (showButtonsActions) {
+            @if (visibleActionsForItem.length > 0 && visibleActionsForItem.length <= 2) {
               <div class="po-list-view-actions">
-                @for (action of visibleActions; track action) {
+                @for (action of visibleActionsForItem; track action) {
                   <po-button
                     [p-disabled]="returnBooleanValue(action, item, 'disabled')"
                     [p-icon]="action.icon"
@@ -89,7 +91,7 @@
               </div>
             }
 
-            @if (showPopupActions) {
+            @if (visibleActionsForItem.length > 2) {
               <div class="po-list-view-more-actions">
                 <div #popupTarget class="po-list-view-more-icon po-clickable" (click)="togglePopup(item, popupTarget)">
                   <po-icon p-icon="ICON_MORE"></po-icon>
@@ -151,4 +153,4 @@
   </div>
 }
 
-<po-popup #popup [p-actions]="actions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>
+<po-popup #popup [p-actions]="popupActions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>

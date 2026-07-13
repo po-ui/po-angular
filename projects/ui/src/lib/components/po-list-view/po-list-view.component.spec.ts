@@ -79,46 +79,16 @@ describe('PoListViewComponent:', () => {
       expect(component.displayShowMoreButton).toBe(true);
     });
 
-    it('showButtonsActions: should return `false` if not contains `actions`', () => {
+    it('getVisibleActions: should return `[]` if `actions` is empty', () => {
       component.actions = [];
 
-      expect(component.showButtonsActions).toBe(false);
+      expect(component['getVisibleActions'](item)).toEqual([]);
     });
 
-    it('showButtonsActions: should return `true` if `actions.length` is greater than 0 and lower than 2', () => {
-      component.actions = [{ label: 'Label 01' }, { label: 'Label 02' }];
-
-      expect(component.showButtonsActions).toBe(true);
-    });
-
-    it('showButtonsActions: should return `false` if `actions.length` is greater than 2', () => {
+    it('getVisibleActions: should return all actions if none of them has `visible` literal `false`', () => {
       component.actions = [{ label: 'Label 01' }, { label: 'Label 02' }, { label: 'Label 03' }];
 
-      expect(component.showButtonsActions).toBe(false);
-    });
-
-    it('showButtonsActions: should return `true` if `actions.length` is greater than 2 but one action isn`t visible', () => {
-      component.actions = [{ label: 'Label 01', visible: false }, { label: 'Label 02' }, { label: 'Label 03' }];
-
-      expect(component.showButtonsActions).toBe(true);
-    });
-
-    it('showPopupActions: should return `true` if `actions.length` is greater than 2', () => {
-      component.actions = [{ label: 'Label 01' }, { label: 'Label 02' }, { label: 'Label 03' }];
-
-      expect(component.showPopupActions).toBe(true);
-    });
-
-    it('showPopupActions: should return `false` if `actions.length` is greater than 2 but one action isn`t visible', () => {
-      component.actions = [{ label: 'Label 01', visible: false }, { label: 'Label 02' }, { label: 'Label 03' }];
-
-      expect(component.showPopupActions).toBe(false);
-    });
-
-    it('showPopupActions: should return `false` if `actions.length` is lower than 2', () => {
-      component.actions = [];
-
-      expect(component.showPopupActions).toBe(false);
+      expect(component['getVisibleActions'](item)).toEqual(component.actions);
     });
 
     it('titleHasAction: should return `false` if `titleAction.observers.length` is lower than 1', () => {
@@ -200,19 +170,19 @@ describe('PoListViewComponent:', () => {
       expect(component.trackBy(index)).toBe(index);
     });
 
-    it('visibleActions: should be `false` if doesn`t have action.', () => {
+    it('getVisibleActions: should return `[]` if doesn`t have action.', () => {
       component.actions = undefined;
 
-      expect(component.visibleActions).toEqual([]);
+      expect(component['getVisibleActions'](item)).toEqual([]);
     });
 
-    it('visibleActions: shouldn`t return action if visible is `false`.', () => {
+    it('getVisibleActions: shouldn`t return action if visible is `false`.', () => {
       component.actions = [
         { label: 'PO1', visible: false },
         { label: 'PO2', visible: true }
       ];
 
-      expect(component.visibleActions).toEqual([{ label: 'PO2', visible: true }]);
+      expect(component['getVisibleActions'](item)).toEqual([{ label: 'PO2', visible: true }]);
     });
 
     describe('checkItemsChange:', () => {
@@ -716,5 +686,222 @@ describe('PoListViewComponent:', () => {
 
       expect(noDatacontainer).toBeFalsy();
     }));
+  });
+
+  describe('Visible as function:', () => {
+    function getItemContainers(): Array<HTMLElement> {
+      return Array.from(debugElement.querySelectorAll('.po-list-view-container'));
+    }
+
+    it(`should show the action in the item where 'visible' function returns 'true' and hide it in the item
+      where it returns 'false'`, () => {
+      component.items = [
+        { id: 1, name: 'Active', ativo: true },
+        { id: 2, name: 'Inactive', ativo: false }
+      ];
+      component.actions = [{ label: 'Editar', visible: (item: any) => item.ativo }];
+
+      fixture.detectChanges();
+
+      const containers = getItemContainers();
+      const activeButtons = containers[0].querySelectorAll('.po-list-view-actions po-button');
+      const inactiveButtons = containers[1].querySelectorAll('.po-list-view-actions po-button');
+
+      expect(activeButtons).toHaveSize(1);
+      expect(inactiveButtons).toHaveSize(0);
+    });
+
+    it(`should call the 'visible' function with the list item instead of the function itself`, () => {
+      const visibleSpy = jasmine.createSpy('visible').and.callFake((item: any) => item.ativo);
+      component.items = [
+        { id: 1, ativo: true },
+        { id: 2, ativo: false }
+      ];
+      component.actions = [{ label: 'Editar', visible: visibleSpy }];
+
+      fixture.detectChanges();
+
+      const calledWith = visibleSpy.calls.allArgs().map(args => args[0]);
+
+      expect(calledWith).toContain(component.items[0]);
+      expect(calledWith).toContain(component.items[1]);
+      expect(calledWith).not.toContain(visibleSpy);
+    });
+
+    it(`should show the popup icon if the item has more than 2 visible actions and the inline buttons
+      if it has 1 or 2`, () => {
+      component.items = [
+        { id: 1, perm: true },
+        { id: 2, perm: false }
+      ];
+      component.actions = [{ label: 'A' }, { label: 'B' }, { label: 'C', visible: (item: any) => item.perm }];
+
+      fixture.detectChanges();
+
+      const containers = getItemContainers();
+
+      expect(containers[0].querySelector('.po-list-view-more-actions')).toBeTruthy();
+
+      expect(containers[1].querySelector('.po-list-view-actions')).toBeTruthy();
+      expect(containers[1].querySelectorAll('.po-list-view-actions po-button')).toHaveSize(2);
+      expect(containers[1].querySelector('.po-list-view-more-actions')).toBeNull();
+    });
+
+    it(`should feed 'po-popup' only with the visible actions of the toggled item`, () => {
+      component.items = [{ id: 1, perm: false }];
+      component.actions = [{ label: 'A' }, { label: 'B' }, { label: 'C', visible: (item: any) => item.perm }];
+
+      fixture.detectChanges();
+
+      const target = debugElement.querySelector('.po-list-view-container');
+      component.togglePopup(component.items[0], <HTMLElement>target);
+      fixture.detectChanges();
+
+      const popupActions = component.poPopupComponent.actions || [];
+      const labels = popupActions.map((action: any) => action.label);
+
+      expect(popupActions).toHaveSize(2);
+      expect(labels).not.toContain('C');
+    });
+
+    it(`shouldn't show the popup icon nor the inline buttons if all actions are hidden for the item`, () => {
+      component.items = [{ id: 1, perm: false }];
+      component.actions = [
+        { label: 'A', visible: (item: any) => item.perm },
+        { label: 'B', visible: (item: any) => item.perm },
+        { label: 'C', visible: (item: any) => item.perm }
+      ];
+
+      fixture.detectChanges();
+
+      const container = debugElement.querySelector('.po-list-view-container');
+
+      expect(container.querySelector('.po-list-view-more-actions')).toBeNull();
+      expect(container.querySelector('.po-list-view-actions')).toBeNull();
+    });
+  });
+
+  describe('Visible/disabled preservation:', () => {
+    function buildActionsFromVisibles(visibles: Array<boolean | undefined>): Array<any> {
+      return visibles.map((visible, index) =>
+        visible === undefined ? { label: `Action ${index}` } : { label: `Action ${index}`, visible }
+      );
+    }
+
+    function getFirstContainer(): HTMLElement {
+      return debugElement.querySelector('.po-list-view-container');
+    }
+
+    function assertVisibleDecision(visibles: Array<boolean | undefined>): void {
+      const actions = buildActionsFromVisibles(visibles);
+      const expectedVisibleCount = actions.filter(action => action.visible !== false).length;
+
+      component.items = [{ id: 1, name: 'register' }];
+      component.actions = actions;
+      fixture.detectChanges();
+
+      const container = getFirstContainer();
+      const inlineGroup = container.querySelector('.po-list-view-actions');
+      const popupIcon = container.querySelector('.po-list-view-more-actions');
+      const inlineButtons = container.querySelectorAll('.po-list-view-actions po-button');
+
+      if (expectedVisibleCount === 0) {
+        expect(inlineGroup).toBeNull();
+        expect(popupIcon).toBeNull();
+      } else if (expectedVisibleCount <= 2) {
+        expect(inlineGroup).toBeTruthy();
+        expect(inlineButtons).toHaveSize(expectedVisibleCount);
+        expect(popupIcon).toBeNull();
+      } else {
+        expect(popupIcon).toBeTruthy();
+        expect(inlineGroup).toBeNull();
+      }
+    }
+
+    it(`should keep hiding actions when 'visible' is literal 'false' for all of them`, () => {
+      assertVisibleDecision([false, false]);
+    });
+
+    it(`should keep showing inline buttons when only 1 action is visible (undefined)`, () => {
+      assertVisibleDecision([undefined]);
+    });
+
+    it(`should keep showing inline buttons when 2 actions are visible (true/undefined mix)`, () => {
+      assertVisibleDecision([true, undefined]);
+    });
+
+    it(`should keep showing the popup icon when 3 or more actions are visible`, () => {
+      assertVisibleDecision([true, undefined, true]);
+    });
+
+    it(`should keep showing inline buttons when 3 actions exist but one is hidden ('visible: false')`, () => {
+      assertVisibleDecision([true, false, undefined]);
+    });
+
+    it(`should keep hiding actions when the actions array is empty`, () => {
+      assertVisibleDecision([]);
+    });
+
+    it(`should keep showing the popup icon when 4 actions are visible`, () => {
+      assertVisibleDecision([undefined, true, undefined, true]);
+    });
+
+    it(`should keep showing the popup icon when 5 actions are visible (all undefined)`, () => {
+      assertVisibleDecision([undefined, undefined, undefined, undefined, undefined]);
+    });
+
+    it(`should keep showing inline buttons when 5 actions exist but 3 are hidden`, () => {
+      assertVisibleDecision([false, false, false, true, undefined]);
+    });
+
+    it(`should keep resolving 'disabled' per item through 'returnBooleanValue' when 'disabled' is boolean 'false'`, () => {
+      const listItem = { id: 1, blocked: false };
+      const action = { label: 'PO', disabled: false };
+
+      expect(component.returnBooleanValue(action, listItem, 'disabled')).toBe(false);
+    });
+
+    it(`should keep resolving 'disabled' per item through 'returnBooleanValue' when 'disabled' is boolean 'true'`, () => {
+      const listItem = { id: 1, blocked: true };
+      const action = { label: 'PO', disabled: true };
+
+      expect(component.returnBooleanValue(action, listItem, 'disabled')).toBe(true);
+    });
+
+    it(`should keep resolving 'disabled' per item through 'returnBooleanValue' when 'disabled' is a function
+      returning 'true'`, () => {
+      const listItem = { id: 1, blocked: true };
+      const action = { label: 'PO', disabled: (currentItem: any) => currentItem.blocked };
+
+      expect(component.returnBooleanValue(action, listItem, 'disabled')).toBe(true);
+    });
+
+    it(`should keep resolving 'disabled' per item through 'returnBooleanValue' when 'disabled' is a function
+      returning 'false'`, () => {
+      const listItem = { id: 1, blocked: false };
+      const action = { label: 'PO', disabled: (currentItem: any) => currentItem.blocked };
+
+      expect(component.returnBooleanValue(action, listItem, 'disabled')).toBe(false);
+    });
+
+    it(`should keep evaluating 'checkAllActionIsInvisible' of 'po-popup' only by literal 'visible === false',
+      without treating a 'visible' function as invisible`, () => {
+      const popup = component.poPopupComponent;
+
+      popup.actions = [
+        { label: 'A', visible: false },
+        { label: 'B', visible: false }
+      ];
+      expect(popup['checkAllActionIsInvisible']()).toBeTruthy();
+
+      popup.actions = [
+        { label: 'A', visible: false },
+        { label: 'B', visible: true }
+      ];
+      expect(popup['checkAllActionIsInvisible']()).toBeFalsy();
+
+      popup.actions = [{ label: 'A', visible: () => false }];
+      expect(popup['checkAllActionIsInvisible']()).toBeFalsy();
+    });
   });
 });
