@@ -63,7 +63,9 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
 
-  private differ;
+  popupActions: Array<PoListViewAction> = [];
+
+  private readonly differ;
 
   constructor() {
     const differs = inject(IterableDiffers);
@@ -85,23 +87,8 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return this.items && this.items.length > 0 && this.showMore.observers.length > 0;
   }
 
-  get showButtonsActions(): boolean {
-    return this.visibleActions && this.visibleActions.length > 0 && this.visibleActions.length <= 2;
-  }
-
-  get showPopupActions(): boolean {
-    return this.visibleActions && this.visibleActions.length > 2;
-  }
-
   get titleHasAction() {
     return this.titleAction.observers.length > 0;
-  }
-
-  get visibleActions() {
-    return (
-      this.actions &&
-      this.actions.filter(action => this.returnBooleanValue(action, action.visible, 'visible') !== false)
-    );
   }
 
   ngAfterContentInit(): void {
@@ -142,6 +129,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   togglePopup(item, targetRef: HTMLElement) {
     this.popupTarget = targetRef;
+    this.popupActions = this.getVisibleActions(item);
     this.changeDetector.detectChanges();
 
     this.poPopupComponent.toggle(item);
@@ -149,6 +137,11 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   onAnimationEvent(event: AnimationEvent, detail) {
     this.showDetail.emit(detail);
+  }
+
+  // Avalia a visibilidade das ações por item, passando o item corrente.
+  protected getVisibleActions(item): Array<PoListViewAction> {
+    return this.actions?.filter(action => this.returnBooleanValue(action, item, 'visible') !== false) ?? [];
   }
 
   private checkItemsChange() {
