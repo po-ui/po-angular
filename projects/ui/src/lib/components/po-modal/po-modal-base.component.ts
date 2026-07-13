@@ -1,4 +1,14 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  inject,
+  Input,
+  Output,
+  TemplateRef
+} from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 import { PoModalAction } from './po-modal-action.interface';
@@ -74,6 +84,7 @@ export class PoModalBaseComponent {
   private _initialComponentsSize?: string = undefined;
   private _hideClose?: boolean = false;
   private _size?: string = 'md';
+  private cd = inject(ChangeDetectorRef);
 
   /**
    * Define o tamanho da modal.
@@ -200,6 +211,7 @@ export class PoModalBaseComponent {
     this.validPrimaryAction();
 
     this.isHidden = false;
+    this.cd.markForCheck();
   }
 
   validPrimaryAction() {
