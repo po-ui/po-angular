@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.23.1](https://github.com/po-ui/po-angular/compare/v21.23.0...v21.23.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** exibe label customizado em disclaimer boolean ([0509766](https://github.com/po-ui/po-angular/commit/050976622c81eeb12c20859f6512c5d513d28eb1))
+
 ## [21.23.0](https://github.com/po-ui/po-angular/compare/v21.22.0...v21.23.0) (2026-07-06)
 
 
