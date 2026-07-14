@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.18](https://github.com/po-ui/po-angular/compare/v19.39.17...v19.39.18) (2026-07-14)
+
+
+### Bug Fixes
+
+* **page-dynamic-search:** exibe label customizado em disclaimer boolean ([8bb876e](https://github.com/po-ui/po-angular/commit/8bb876ebda6a514cf730b1bf09b545a3c2a73022))
+
 ### [19.39.17](https://github.com/po-ui/po-angular/compare/v19.39.16...v19.39.17) (2026-07-06)
 
 Compatibilidade com @po-ui/style@19.39.17
