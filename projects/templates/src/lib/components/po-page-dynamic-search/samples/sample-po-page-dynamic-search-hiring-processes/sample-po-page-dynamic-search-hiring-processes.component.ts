@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoPageDynamicSearchLiterals, PoPageDynamicSearchFilters } from '@po-ui/ng-templates';
@@ -27,7 +27,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   private poDialog = inject(PoDialogService);
   private router = inject(Router);
 
-  hiringProcesses: Array<object>;
+  hiringProcesses = signal<Array<object>>([]);
   hiringProcessesColumns: Array<PoTableColumn>;
   quickSearchWidth: number = 6;
   hideRemoveAllDisclaimer = false;
@@ -84,7 +84,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   ];
 
   ngOnInit() {
-    this.hiringProcesses = this.sampleHiringProcessesService.getItems();
+    this.hiringProcesses.set(this.sampleHiringProcessesService.getItems());
     this.hiringProcessesColumns = this.sampleHiringProcessesService.getColumns();
     this.jobDescriptionOptions = this.sampleHiringProcessesService.getJobs();
     this.statusOptions = this.sampleHiringProcessesService.getHireStatus();
@@ -113,7 +113,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   }
 
   private beforeRedirect(itemBreadcrumbLabel) {
-    if (this.hiringProcesses.some(candidate => candidate['$selected'])) {
+    if (this.hiringProcesses().some(candidate => candidate['$selected'])) {
       this.poDialog.confirm({
         title: `Confirm redirect to ${itemBreadcrumbLabel}`,
         message: `There is data selected. Are you sure you want to quit?`,
@@ -125,7 +125,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   }
 
   private disableHireButton() {
-    return !this.hiringProcesses.find(candidate => candidate['$selected']);
+    return !this.hiringProcesses().find(candidate => candidate['$selected']);
   }
 
   private hireCandidate() {
@@ -133,7 +133,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
     const progress = '2';
     const canceled = '3';
 
-    const selectedCandidate = this.hiringProcesses.find(candidate => candidate['$selected']);
+    const selectedCandidate = this.hiringProcesses().find(candidate => candidate['$selected']);
     switch (selectedCandidate['hireStatus']) {
       case progress:
         selectedCandidate['hireStatus'] = 'hired';
@@ -151,11 +151,11 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   }
 
   private resetFilters() {
-    this.hiringProcesses = this.sampleHiringProcessesService.resetFilterHiringProcess();
+    this.hiringProcesses.set(this.sampleHiringProcessesService.resetFilterHiringProcess());
   }
 
   private searchItems(filter) {
-    this.hiringProcesses = this.sampleHiringProcessesService.filter(filter);
+    this.hiringProcesses.set(this.sampleHiringProcessesService.filter(filter));
   }
 
   private updateFilters() {
@@ -164,7 +164,7 @@ export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit
   }
 
   private findOnGoogle() {
-    const selectedItem = this.hiringProcesses.find(item => item['$selected']);
+    const selectedItem = this.hiringProcesses().find(item => item['$selected']);
     const jobDescription = selectedItem ? selectedItem['jobDescription'] : '';
     window.open(`http://google.com/search?q=${jobDescription}`, '_blank');
   }

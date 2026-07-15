@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 
 import { PoComboOption, PoDisclaimer, PoTableColumn } from '@po-ui/ng-components';
 
@@ -16,7 +16,7 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
 
   climate: string;
   columns: Array<PoTableColumn>;
-  filteredItems: Array<any> = [];
+  filteredItems = signal<Array<any>>([]);
   filters: Array<PoDisclaimer> = [];
   items: Array<any>;
   name: string;
@@ -28,7 +28,7 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
   ngOnInit() {
     this.disclaimerGroupSwPlanetsService.getItems().subscribe(items => {
       this.items = items;
-      this.filteredItems = [...this.items];
+      this.filteredItems.set([...this.items]);
     });
     this.columns = this.disclaimerGroupSwPlanetsService.getColumns();
     this.climates = this.disclaimerGroupSwPlanetsService.getClimates();
@@ -68,10 +68,10 @@ export class SamplePoDisclaimerGroupSwPlanetsComponent implements OnInit {
       item[filter.property].toLocaleLowerCase().includes(filter.value.toLocaleLowerCase());
     const filterItems = item => filters.every(filter => filterCondition(filter, item));
 
-    this.filteredItems = this.items.filter(filterItems);
+    this.filteredItems.set(this.items.filter(filterItems));
   }
 
   private resetFilters() {
-    this.filteredItems = [...(this.items || [])];
+    this.filteredItems.set([...(this.items || [])]);
   }
 }
