@@ -70,8 +70,8 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   private _required: boolean = false;
 
   /** Indica se o campo será opcional. */
-  @Input('p-optional') set optional(value: boolean) {
-    this._optional = convertToBoolean(value);
+  @Input({ alias: 'p-optional', transform: convertToBoolean }) set optional(value: boolean) {
+    this._optional = value;
   }
 
   get optional() {
@@ -79,8 +79,8 @@ export class PoFieldContainerComponent implements OnInit, OnChanges {
   }
 
   /** Indica se o campo será obrigatório. */
-  @Input('p-required') set required(value: boolean) {
-    this._required = convertToBoolean(value);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(value: boolean) {
+    this._required = value;
   }
 
   get required() {

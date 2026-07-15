@@ -237,8 +237,8 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
-    this._noAutocomplete = convertToBoolean(value);
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) set noAutocomplete(value: boolean) {
+    this._noAutocomplete = value;
   }
 
   get noAutocomplete() {
@@ -262,17 +262,17 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
     return this._placeholder;
   }
 
-  @Input('p-disabled') set setDisabled(disabled: string) {
-    this.disabled = disabled === '' ? true : convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set setDisabled(disabled: boolean) {
+    this.disabled = disabled;
     this.validateModel(this._timeValue);
   }
 
-  @Input('p-readonly') set setReadonly(readonly: string) {
-    this.readonly = readonly === '' ? true : convertToBoolean(readonly);
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) set setReadonly(readonly: boolean) {
+    this.readonly = readonly;
   }
 
-  @Input('p-required') set setRequired(required: string) {
-    this.required = required === '' ? true : convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set setRequired(required: boolean) {
+    this.required = required;
     this.validateModel(this._timeValue);
   }
 
@@ -301,8 +301,8 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
     return this._size ?? getDefaultSizeFn(PoFieldSize);
   }
 
-  @Input('p-clean') set setClean(clean: string) {
-    this.clean = clean === '' ? true : convertToBoolean(clean);
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) set setClean(clean: boolean) {
+    this.clean = clean;
   }
 
   /**
@@ -405,8 +405,8 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-show-seconds') set showSeconds(value: boolean) {
-    this._showSeconds = value === true || <any>value === 'true' || <any>value === '';
+  @Input({ alias: 'p-show-seconds', transform: convertToBoolean }) set showSeconds(value: boolean) {
+    this._showSeconds = value;
     this.updateMask();
     this.refreshValue(this._timeValue);
   }
@@ -459,8 +459,8 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-loading') set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+  @Input({ alias: 'p-loading', transform: convertToBoolean }) set loading(value: boolean) {
+    this._loading = value;
     this.cd?.markForCheck();
   }
 

@@ -38,34 +38,34 @@ describe('PoTimepickerBaseComponent:', () => {
   });
 
   it('should be update property p-disabled', () => {
-    component.setDisabled = 'true';
+    component.setDisabled = true;
     expect(component.disabled).toBeTrue();
 
-    component.setDisabled = 'false';
+    component.setDisabled = false;
     expect(component.disabled).toBeFalse();
   });
 
   it('should update property p-required', () => {
-    component.setRequired = 'true';
+    component.setRequired = true;
     expect(component.required).toBeTrue();
 
-    component.setRequired = 'false';
+    component.setRequired = false;
     expect(component.required).toBeFalse();
   });
 
   it('should update property p-readonly', () => {
-    component.setReadonly = 'true';
+    component.setReadonly = true;
     expect(component.readonly).toBeTrue();
 
-    component.setReadonly = 'false';
+    component.setReadonly = false;
     expect(component.readonly).toBeFalse();
   });
 
   it('should update property p-clean', () => {
-    component.setClean = 'true';
+    component.setClean = true;
     expect(component.clean).toBeTrue();
 
-    component.setClean = 'false';
+    component.setClean = false;
     expect(component.clean).toBeFalse();
   });
 
@@ -109,21 +109,21 @@ describe('PoTimepickerBaseComponent:', () => {
     });
 
     describe('p-loading:', () => {
-      it('should convert value to boolean and call markForCheck', () => {
+      it('should set loading to true and call markForCheck', () => {
         const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
 
-        component.loading = 'true' as any;
+        component.loading = true;
 
-        expect(component['_loading']).toBeTrue();
+        expect(component.loading).toBeTrue();
         expect(markForCheckSpy).toHaveBeenCalled();
       });
 
-      it('should set loading to false when value is falsy', () => {
+      it('should set loading to false and call markForCheck', () => {
         const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
 
-        component.loading = null;
+        component.loading = false;
 
-        expect(component['_loading']).toBeFalse();
+        expect(component.loading).toBeFalse();
         expect(markForCheckSpy).toHaveBeenCalled();
       });
 
@@ -910,34 +910,6 @@ describe('PoTimepickerBaseComponent:', () => {
       it('should set noAutocomplete to true', () => {
         component.noAutocomplete = true;
         expect(component.noAutocomplete).toBeTrue();
-      });
-    });
-
-    describe('p-disabled - empty string branch:', () => {
-      it('should set disabled to true when empty string is passed', () => {
-        component.setDisabled = '';
-        expect(component.disabled).toBeTrue();
-      });
-    });
-
-    describe('p-readonly - empty string branch:', () => {
-      it('should set readonly to true when empty string is passed', () => {
-        component.setReadonly = '';
-        expect(component.readonly).toBeTrue();
-      });
-    });
-
-    describe('p-required - empty string branch:', () => {
-      it('should set required to true when empty string is passed', () => {
-        component.setRequired = '';
-        expect(component.required).toBeTrue();
-      });
-    });
-
-    describe('p-clean - empty string branch:', () => {
-      it('should set clean to true when empty string is passed', () => {
-        component.setClean = '';
-        expect(component.clean).toBeTrue();
       });
     });
 

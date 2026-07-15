@@ -227,8 +227,8 @@ export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(value: boolean) {
-    this._disabled = convertToBoolean(value);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(value: boolean) {
+    this._disabled = value;
   }
 
   get disabled(): boolean {

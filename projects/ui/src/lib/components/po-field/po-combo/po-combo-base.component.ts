@@ -218,8 +218,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-infinite-scroll') set infiniteScroll(value: boolean) {
-    this._infiniteScroll = convertToBoolean(value);
+  @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) set infiniteScroll(value: boolean) {
+    this._infiniteScroll = value;
   }
 
   get infiniteScroll() {
@@ -323,7 +323,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-remove-initial-filter')
+  @Input({ alias: 'p-remove-initial-filter', transform: convertToBoolean })
   set removeInitialFilter(value: boolean) {
     this._removeInitialFilter = value;
     if (value) {
@@ -557,8 +557,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `false`
    *
    */
-  @Input('p-disabled-init-filter') set disabledInitFilter(value: boolean) {
-    this._disabledInitFilter = convertToBoolean(value);
+  @Input({ alias: 'p-disabled-init-filter', transform: convertToBoolean }) set disabledInitFilter(value: boolean) {
+    this._disabledInitFilter = value;
   }
 
   get disabledInitFilter(): boolean {
@@ -647,8 +647,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel(this.selectedValue);
   }
@@ -698,8 +698,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-change-on-enter') set changeOnEnter(changeOnEnter: boolean) {
-    this._changeOnEnter = convertToBoolean(changeOnEnter);
+  @Input({ alias: 'p-change-on-enter', transform: convertToBoolean }) set changeOnEnter(changeOnEnter: boolean) {
+    this._changeOnEnter = changeOnEnter;
   }
 
   get changeOnEnter() {
@@ -714,8 +714,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(disabled: boolean) {
+    this._disabled = disabled;
 
     this.validateModel(this.selectedValue);
   }
@@ -733,9 +733,9 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @default `false`
    */
   @HostBinding('attr.p-loading')
-  @Input('p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
   set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+    this._loading = value;
     this.changeDetector?.markForCheck();
   }
 
@@ -748,8 +748,8 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   /** Indica que a lista definida na propriedade p-options será ordenada pela descrição. */
-  @Input('p-sort') set sort(sort: boolean) {
-    this._sort = convertToBoolean(sort);
+  @Input({ alias: 'p-sort', transform: convertToBoolean }) set sort(sort: boolean) {
+    this._sort = sort;
     this.comboListDefinitions();
   }
 

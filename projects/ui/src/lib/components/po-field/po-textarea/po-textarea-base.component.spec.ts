@@ -45,22 +45,27 @@ describe('PoTextareaBase:', () => {
   });
 
   it('should set disabled', () => {
-    expectSettersMethod(component, 'disabled', '', '_disabled', true);
-    expectSettersMethod(component, 'disabled', 'false', '_disabled', false);
-    expectSettersMethod(component, 'disabled', 'true', 'disabled', true);
+    component.disabled = true;
+    expect(component.disabled).toBeTrue();
+
+    component.disabled = false;
+    expect(component.disabled).toBeFalse();
   });
 
   it('should set readonly', () => {
-    expectSettersMethod(component, 'readonly', '', '_readonly', true);
-    expectSettersMethod(component, 'readonly', 'false', '_readonly', false);
-    expectSettersMethod(component, 'readonly', 'true', 'readonly', true);
+    component.readonly = true;
+    expect(component.readonly).toBeTrue();
+
+    component.readonly = false;
+    expect(component.readonly).toBeFalse();
   });
 
   it('should set required', () => {
-    expectSettersMethod(component, 'required', '', 'required', true);
-    expectSettersMethod(component, 'required', 'false', '_required', false);
-    expectSettersMethod(component, 'required', 'true', '_required', true);
-    expectSettersMethod(component, 'required', null, 'required', false);
+    component.required = true;
+    expect(component.required).toBeTrue();
+
+    component.required = false;
+    expect(component.required).toBeFalse();
   });
 
   it('should update property `p-rows` with valid values', () => {

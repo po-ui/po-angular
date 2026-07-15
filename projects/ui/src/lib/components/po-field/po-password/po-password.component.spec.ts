@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
-import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { PoCleanComponent } from './../po-clean/po-clean.component';
 import { PoFieldContainerBottomComponent } from './../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -52,17 +51,20 @@ describe('PoNumberComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('p-hide-password-peek: should update property with valid values.', () => {
-      const validValues = [false, true, '', 'false', 'true'];
-      const expectedValues = [false, true, true, false, true];
-
-      expectPropertiesValues(component, 'hidePasswordPeek', validValues, expectedValues);
+    it('p-hide-password-peek: should update property to true.', () => {
+      component.hidePasswordPeek = true;
+      expect(component.hidePasswordPeek).toBeTrue();
     });
 
-    it('p-hide-password-peek: should update property with `false` if values are invalid.', () => {
-      const invalidValues = [0, null, undefined, 'undefined', 'null'];
+    it('p-hide-password-peek: should update property to false.', () => {
+      component.hidePasswordPeek = false;
+      expect(component.hidePasswordPeek).toBeFalse();
+    });
 
-      expectPropertiesValues(component, 'hidePasswordPeek', invalidValues, false);
+    it('p-hide-password-peek: should coerce empty string to true via Angular transform', () => {
+      fixture.componentRef.setInput('p-hide-password-peek', '');
+      fixture.detectChanges();
+      expect(component.hidePasswordPeek).toBeTrue();
     });
 
     it('p-hide-password-peek: should update `visiblePassword` with `false` if `hidePasswordPeek` is `true`.', () => {

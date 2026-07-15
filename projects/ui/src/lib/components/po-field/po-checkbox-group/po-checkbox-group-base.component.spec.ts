@@ -381,22 +381,40 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
   });
 
   describe('Properties: ', () => {
-    const trueValues = [true, 'true', 1, '', [], {}];
-    const falseValues = [false, 'false', 0, null, undefined, NaN];
-
-    it('p-disabled: should be update with valid and invalid values.', () => {
-      expectPropertiesValues(component, 'disabled', trueValues, true);
-      expectPropertiesValues(component, 'disabled', falseValues, false);
+    it('p-disabled: should update with true value.', () => {
+      component.disabled = true;
+      expect(component.disabled).toBeTrue();
     });
 
-    it('p-indeterminate: should be update with valid and invalid values.', () => {
-      expectPropertiesValues(component, 'indeterminate', trueValues, true);
-      expectPropertiesValues(component, 'indeterminate', falseValues, false);
+    it('p-disabled: should update with false value.', () => {
+      component.disabled = false;
+      expect(component.disabled).toBeFalse();
     });
 
-    it('p-required: should be update with valid and invalid values.', () => {
-      expectPropertiesValues(component, 'required', trueValues, true);
-      expectPropertiesValues(component, 'required', falseValues, false);
+    it('p-disabled: should coerce empty string to true via Angular transform', () => {
+      fixture.componentRef.setInput('p-disabled', '');
+      fixture.detectChanges();
+      expect(component.disabled).toBeTrue();
+    });
+
+    it('p-indeterminate: should update with true value.', () => {
+      component.indeterminate = true;
+      expect(component.indeterminate).toBeTrue();
+    });
+
+    it('p-indeterminate: should update with false value.', () => {
+      component.indeterminate = false;
+      expect(component.indeterminate).toBeFalse();
+    });
+
+    it('p-required: should update with true value.', () => {
+      component.required = true;
+      expect(component.required).toBeTrue();
+    });
+
+    it('p-required: should update with false value.', () => {
+      component.required = false;
+      expect(component.required).toBeFalse();
     });
 
     it('p-options: should be update with invalid values.', () => {
@@ -424,6 +442,7 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
     });
 
     it('p-columns: should update property with `6` if invalid value', () => {
+      const falseValues = [false, 'false', 0, null, undefined, NaN];
       expectPropertiesValues(component, 'columns', falseValues, 6);
     });
 

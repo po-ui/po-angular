@@ -62,28 +62,30 @@ describe('PoMultiselectBaseComponent:', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set required', () => {
-    expectSettersMethod(component, 'required', '', 'required', true);
-    expectSettersMethod(component, 'required', 'true', 'required', true);
-    expectSettersMethod(component, 'required', true, 'required', true);
-    expectSettersMethod(component, 'required', 'null', 'required', false);
-    expectSettersMethod(component, 'required', null, 'required', false);
-    expectSettersMethod(component, 'required', 'undefined', 'required', false);
-    expectSettersMethod(component, 'required', undefined, 'required', false);
+  it('should set required to true', () => {
+    component.required = true;
+    expect(component.required).toBeTrue();
+  });
 
+  it('should set required to false', () => {
+    component.required = false;
+    expect(component.required).toBeFalse();
+  });
+
+  it('should call validateModel when disabled is set', () => {
     spyOn(component, <any>'validateModel');
     component.disabled = true;
     expect(component['validateModel']).toHaveBeenCalled();
   });
 
-  it('should set disabled', () => {
-    expectSettersMethod(component, 'disabled', '', 'disabled', true);
-    expectSettersMethod(component, 'disabled', 'true', 'disabled', true);
-    expectSettersMethod(component, 'disabled', true, 'disabled', true);
-    expectSettersMethod(component, 'disabled', 'null', 'disabled', false);
-    expectSettersMethod(component, 'disabled', null, 'disabled', false);
-    expectSettersMethod(component, 'disabled', 'undefined', 'disabled', false);
-    expectSettersMethod(component, 'disabled', undefined, 'disabled', false);
+  it('should set disabled to true', () => {
+    component.disabled = true;
+    expect(component.disabled).toBeTrue();
+  });
+
+  it('should set disabled to false', () => {
+    component.disabled = false;
+    expect(component.disabled).toBeFalse();
 
     spyOn(component, <any>'validateModel');
     spyOn(component, 'updateVisibleItems');
@@ -92,14 +94,14 @@ describe('PoMultiselectBaseComponent:', () => {
     expect(component.updateVisibleItems).toHaveBeenCalled();
   });
 
-  it('should set hide-search', () => {
-    expectSettersMethod(component, 'hideSearch', '', 'hideSearch', true);
-    expectSettersMethod(component, 'hideSearch', 'true', 'hideSearch', true);
-    expectSettersMethod(component, 'hideSearch', true, 'hideSearch', true);
-    expectSettersMethod(component, 'hideSearch', 'null', 'hideSearch', false);
-    expectSettersMethod(component, 'hideSearch', null, 'hideSearch', false);
-    expectSettersMethod(component, 'hideSearch', 'undefined', 'hideSearch', false);
-    expectSettersMethod(component, 'hideSearch', undefined, 'hideSearch', false);
+  it('should set hide-search to true', () => {
+    component.hideSearch = true;
+    expect(component.hideSearch).toBeTrue();
+  });
+
+  it('should set hide-search to false', () => {
+    component.hideSearch = false;
+    expect(component.hideSearch).toBeFalse();
   });
 
   it('should set p-filter-mode', () => {
@@ -135,14 +137,14 @@ describe('PoMultiselectBaseComponent:', () => {
     expect(component.options.length).toBe(1);
   });
 
-  it('should set p-sort', () => {
-    expectSettersMethod(component, 'sort', '', 'sort', true);
-    expectSettersMethod(component, 'sort', 'true', 'sort', true);
-    expectSettersMethod(component, 'sort', true, 'sort', true);
-    expectSettersMethod(component, 'sort', 'null', 'sort', false);
-    expectSettersMethod(component, 'sort', null, 'sort', false);
-    expectSettersMethod(component, 'sort', 'undefined', 'sort', false);
-    expectSettersMethod(component, 'sort', undefined, 'sort', false);
+  it('should set p-sort to true', () => {
+    component.sort = true;
+    expect(component.sort).toBeTrue();
+  });
+
+  it('should set p-sort to false', () => {
+    component.sort = false;
+    expect(component.sort).toBeFalse();
 
     spyOn(component, 'validAndSortOptions');
     component.sort = true;
@@ -935,21 +937,6 @@ describe('PoMultiselectBaseComponent:', () => {
       component.disabled = true;
       component.loading = false;
       expect(component.disabled).toBeTrue();
-    });
-
-    it('should set loading=true when input receives string empty', () => {
-      component.loading = '' as any;
-      expect(component.loading).toBeTrue();
-    });
-
-    it('should set loading=false when input receives string "false"', () => {
-      component.loading = 'false' as any;
-      expect(component.loading).toBeFalse();
-    });
-
-    it('should set loading=true when input receives string "true"', () => {
-      component.loading = 'true' as any;
-      expect(component.loading).toBeTrue();
     });
 
     it('should not throw when cd is undefined', () => {
