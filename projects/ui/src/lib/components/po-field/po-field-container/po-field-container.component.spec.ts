@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite, expectPropertiesValues } from './../../../util-test/util-expect.spec';
+import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
 import { PoFieldContainerComponent } from './po-field-container.component';
 import { poFieldContainerLiterals } from './po-field-container-literals';
@@ -29,40 +29,40 @@ describe('PoFieldContainerComponent:', () => {
   });
 
   describe('Properties: ', () => {
-    it('p-optional: should update property with `true` if valid values', () => {
-      const validValues = ['', true, 'true'];
-
-      expectPropertiesValues(component, 'optional', validValues, true);
+    it('p-optional: should update property with `true`', () => {
+      component.optional = true;
+      expect(component.optional).toBeTrue();
     });
 
-    it('p-optional: should update propert with `false` if invalid values', () => {
-      const invalidValues = ['false', false, 'abc', undefined, null];
-
-      expectPropertiesValues(component, 'optional', invalidValues, false);
+    it('p-optional: should update property with `false`', () => {
+      component.optional = false;
+      expect(component.optional).toBeFalse();
     });
 
-    it('p-required: should update property with `true` if valid values', () => {
-      const validValues = ['', true, 'true'];
-
-      expectPropertiesValues(component, 'required', validValues, true);
+    it('p-optional: should coerce empty string to true via Angular transform', () => {
+      fixture.componentRef.setInput('p-optional', '');
+      fixture.detectChanges();
+      expect(component.optional).toBeTrue();
     });
 
-    it('p-required: should update propert with `false` if invalid values', () => {
-      const invalidValues = ['false', false, 'abc', undefined, null];
-
-      expectPropertiesValues(component, 'required', invalidValues, false);
+    it('p-required: should update property with `true`', () => {
+      component.required = true;
+      expect(component.required).toBeTrue();
     });
 
-    it('p-show-required: should update property with `true` if valid values', () => {
-      const validValues = ['', true, 'true'];
-
-      expectPropertiesValues(component, 'required', validValues, true);
+    it('p-required: should update property with `false`', () => {
+      component.required = false;
+      expect(component.required).toBeFalse();
     });
 
-    it('p-show-required: should update propert with `false` if invalid values', () => {
-      const invalidValues = ['false', false, 'abc', undefined, null];
+    it('p-show-required: should update property with `true`', () => {
+      component.showRequired = true;
+      expect(component.showRequired).toBeTrue();
+    });
 
-      expectPropertiesValues(component, 'required', invalidValues, false);
+    it('p-show-required: should update property with `false`', () => {
+      component.showRequired = false;
+      expect(component.showRequired).toBeFalse();
     });
   });
 

@@ -315,9 +315,9 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    * @default `false`
    */
   @HostBinding('attr.p-loading')
-  @Input('p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
   set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+    this._loading = value;
     this.changeDetector?.markForCheck();
   }
 

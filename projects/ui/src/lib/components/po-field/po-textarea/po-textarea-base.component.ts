@@ -271,8 +271,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(disabled: boolean) {
+    this._disabled = disabled;
   }
 
   get disabled(): boolean {
@@ -288,8 +288,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-readonly') set readonly(readonly: boolean) {
-    this._readonly = convertToBoolean(readonly);
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) set readonly(readonly: boolean) {
+    this._readonly = readonly;
   }
 
   get readonly(): boolean {
@@ -306,8 +306,8 @@ export abstract class PoTextareaBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel();
   }

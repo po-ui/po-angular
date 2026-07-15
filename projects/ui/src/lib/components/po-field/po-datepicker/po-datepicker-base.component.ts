@@ -298,8 +298,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
-    this._noAutocomplete = convertToBoolean(value);
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) set noAutocomplete(value: boolean) {
+    this._noAutocomplete = value;
   }
 
   get noAutocomplete() {
@@ -324,8 +324,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   /** Desabilita o campo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   disabled?: boolean = false;
-  @Input('p-disabled') set setDisabled(disabled: string) {
-    this.disabled = disabled === '' ? true : convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set setDisabled(disabled: boolean) {
+    this.disabled = disabled;
 
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
   }
@@ -333,8 +333,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   /** Torna o elemento somente leitura. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly?: boolean = false;
-  @Input('p-readonly') set setReadonly(readonly: string) {
-    this.readonly = readonly === '' ? true : convertToBoolean(readonly);
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) set setReadonly(readonly: boolean) {
+    this.readonly = readonly;
   }
 
   /**
@@ -348,8 +348,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   required?: boolean = false;
-  @Input('p-required') set setRequired(required: string) {
-    this.required = required === '' ? true : convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set setRequired(required: boolean) {
+    this.required = required;
 
     this.validateModel(convertDateToISOExtended(this.date, this.hour));
   }
@@ -387,8 +387,8 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   /** Habilita ação para limpar o campo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   clean?: boolean = false;
-  @Input('p-clean') set setClean(clean: string) {
-    this.clean = clean === '' ? true : convertToBoolean(clean);
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) set setClean(clean: boolean) {
+    this.clean = clean;
   }
 
   /**

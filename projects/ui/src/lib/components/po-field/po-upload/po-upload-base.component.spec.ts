@@ -573,16 +573,14 @@ describe('PoUploadBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('p-drag-drop: should set `dragDrop` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'dragDrop', validValues, true);
+    it('p-drag-drop: should set `dragDrop` to true', () => {
+      component.dragDrop = true;
+      expect(component.dragDrop).toBeTrue();
     });
 
-    it('p-drag-drop: should set `dragDrop` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
-      expectPropertiesValues(component, 'dragDrop', invalidValues, false);
+    it('p-drag-drop: should set `dragDrop` to false', () => {
+      component.dragDrop = false;
+      expect(component.dragDrop).toBeFalse();
     });
 
     it('formField: should set `formField` with valid values', () => {
@@ -597,16 +595,20 @@ describe('PoUploadBaseComponent:', () => {
       expectPropertiesValues(component, 'formField', invalidValues, 'files');
     });
 
-    it('disabled: should set `disabled` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'disabled', validValues, true);
+    it('disabled: should set `disabled` to true', () => {
+      component.disabled = true;
+      expect(component.disabled).toBeTrue();
     });
 
-    it('disabled: should set `disabled` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+    it('disabled: should set `disabled` to false', () => {
+      component.disabled = false;
+      expect(component.disabled).toBeFalse();
+    });
 
-      expectPropertiesValues(component, 'disabled', invalidValues, false);
+    it('disabled: should coerce empty string to true via Angular transform', () => {
+      fixture.componentRef.setInput('p-disabled', '');
+      fixture.detectChanges();
+      expect(component.disabled).toBeTrue();
     });
 
     it('fileRestrictions: should set `fileRestrictions` calling `initRestrictions` and call `setAllowedExtensions`', () => {
@@ -623,16 +625,14 @@ describe('PoUploadBaseComponent:', () => {
       expect(component['setAllowedExtensions']).toHaveBeenCalled();
     });
 
-    it('hideRestrictionsInfo: should set `hideRestrictionsInfo` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'hideRestrictionsInfo', validValues, true);
+    it('hideRestrictionsInfo: should set `hideRestrictionsInfo` to true', () => {
+      component.hideRestrictionsInfo = true;
+      expect(component.hideRestrictionsInfo).toBeTrue();
     });
 
-    it('hideRestrictionsInfo: should set `hideRestrictionsInfo` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
-      expectPropertiesValues(component, 'hideRestrictionsInfo', invalidValues, false);
+    it('hideRestrictionsInfo: should set `hideRestrictionsInfo` to false', () => {
+      component.hideRestrictionsInfo = false;
+      expect(component.hideRestrictionsInfo).toBeFalse();
     });
 
     it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
@@ -696,58 +696,52 @@ describe('PoUploadBaseComponent:', () => {
       expectPropertiesValues(component, 'literals', invalidValues, poUploadLiteralsDefault[poLocaleDefault]);
     });
 
-    it('required: should set `required` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
+    it('required: should set `required` to true', () => {
       spyOn(component, <any>'validateModel');
 
-      expectPropertiesValues(component, 'required', validValues, true);
+      component.required = true;
+
+      expect(component.required).toBeTrue();
       expect(component['validateModel']).toHaveBeenCalled();
     });
 
-    it('required: should set `required` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
+    it('required: should set `required` to false', () => {
       spyOn(component, <any>'validateModel');
 
-      expectPropertiesValues(component, 'required', invalidValues, false);
+      component.required = false;
+
+      expect(component.required).toBeFalse();
       expect(component['validateModel']).toHaveBeenCalled();
     });
 
-    it('hideSelectButton: should set `hideSelectButton` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'hideSelectButton', validValues, true);
+    it('hideSelectButton: should set `hideSelectButton` to true', () => {
+      component.hideSelectButton = true;
+      expect(component.hideSelectButton).toBeTrue();
     });
 
-    it('hideSelectButton: should set `hideSelectButton` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
-      expectPropertiesValues(component, 'hideSelectButton', invalidValues, false);
+    it('hideSelectButton: should set `hideSelectButton` to false', () => {
+      component.hideSelectButton = false;
+      expect(component.hideSelectButton).toBeFalse();
     });
 
-    it('hideSendButton: should set `hideSendButton` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'hideSendButton', validValues, true);
+    it('hideSendButton: should set `hideSendButton` to true', () => {
+      component.hideSendButton = true;
+      expect(component.hideSendButton).toBeTrue();
     });
 
-    it('hideSendButton: should set `hideSendButton` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
-      expectPropertiesValues(component, 'hideSendButton', invalidValues, false);
+    it('hideSendButton: should set `hideSendButton` to false', () => {
+      component.hideSendButton = false;
+      expect(component.hideSendButton).toBeFalse();
     });
 
-    it('directory: should set `directory` with valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'directory', validValues, true);
+    it('directory: should set `directory` to true', () => {
+      component.directory = true;
+      expect(component.directory).toBeTrue();
     });
 
-    it('directory: should set `directory` to false with invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
-      expectPropertiesValues(component, 'directory', invalidValues, false);
+    it('directory: should set `directory` to false', () => {
+      component.directory = false;
+      expect(component.directory).toBeFalse();
     });
 
     it('disabledRemoveFile: should set `disabledRemoveFile` with valid values', () => {
@@ -822,16 +816,14 @@ describe('PoUploadBaseComponent:', () => {
       expect(component.setDirectoryAttribute).toHaveBeenCalledWith(false);
     });
 
-    it('isMultiple: should set `isMultiple` with `true` if valid values', () => {
-      const validValues = ['', true, 1, [], {}, 'true'];
-
-      expectPropertiesValues(component, 'isMultiple', validValues, true);
+    it('isMultiple: should set `isMultiple` to true', () => {
+      component.isMultiple = true;
+      expect(component.isMultiple).toBeTrue();
     });
 
-    it('isMultiple: should set `isMultiple` with `false` if invalid values', () => {
-      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
-
-      expectPropertiesValues(component, 'isMultiple', invalidValues, false);
+    it('isMultiple: should set `isMultiple` to false', () => {
+      component.isMultiple = false;
+      expect(component.isMultiple).toBeFalse();
     });
 
     it('isMultiple: should return true if `diretory` is true', () => {

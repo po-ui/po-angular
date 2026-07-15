@@ -36,15 +36,19 @@ describe('PoCheckboxBaseComponent:', () => {
 
   describe('Properties:', () => {
     it('disabled: should update with true value', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'disabled', booleanValidTrueValues, true);
+      component.disabled = true;
+      expect(component.disabled).toBeTrue();
     });
 
     it('disabled: should update with false value', () => {
-      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
+      component.disabled = false;
+      expect(component.disabled).toBeFalse();
+    });
 
-      expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
+    it('disabled: should coerce empty string to true via Angular transform', () => {
+      fixture.componentRef.setInput('p-disabled', '');
+      fixture.detectChanges();
+      expect(component.disabled).toBeTrue();
     });
 
     describe('p-size', () => {

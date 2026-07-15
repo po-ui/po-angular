@@ -693,8 +693,8 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
-    this._noAutocomplete = convertToBoolean(value);
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) set noAutocomplete(value: boolean) {
+    this._noAutocomplete = value;
   }
 
   get noAutocomplete() {
@@ -711,8 +711,8 @@ export abstract class PoLookupBaseComponent
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel(this.valueToModel);
   }
@@ -737,8 +737,9 @@ export abstract class PoLookupBaseComponent
    * @default false
    * @optional
    */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = <any>disabled === '' ? true : convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean })
+  set disabled(disabled: boolean) {
+    this._disabled = disabled;
   }
 
   get disabled(): boolean {
@@ -754,9 +755,9 @@ export abstract class PoLookupBaseComponent
    * @default `false`
    */
   @HostBinding('attr.p-loading')
-  @Input('p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
   set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+    this._loading = value;
   }
 
   get loading(): boolean {

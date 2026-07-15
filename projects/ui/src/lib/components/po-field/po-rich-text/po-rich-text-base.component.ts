@@ -289,8 +289,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-readonly') set readonly(value: boolean) {
-    this._readonly = convertToBoolean(value);
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) set readonly(value: boolean) {
+    this._readonly = value;
   }
 
   get readonly() {
@@ -306,8 +306,8 @@ export abstract class PoRichTextBaseComponent implements ControlValueAccessor, V
    *
    * @default `false`
    */
-  @Input('p-required') set required(value: boolean) {
-    this._required = convertToBoolean(value);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(value: boolean) {
+    this._required = value;
 
     this.validateModel(this.value);
   }

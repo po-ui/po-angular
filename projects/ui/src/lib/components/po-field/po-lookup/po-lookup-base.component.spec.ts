@@ -104,42 +104,34 @@ describe('PoLookupBaseComponent:', () => {
     expectSettersMethod(component, 'name', 'campo', 'name', 'campo');
   });
 
-  it('should set disabled', () => {
-    expectSettersMethod(component, 'disabled', '', '_disabled', true);
-    expectSettersMethod(component, 'disabled', 'true', 'disabled', true);
-    expectSettersMethod(component, 'disabled', true, 'disabled', true);
-    expectSettersMethod(component, 'disabled', 'false', '_disabled', false);
-    expectSettersMethod(component, 'disabled', false, '_disabled', false);
-    expectSettersMethod(component, 'disabled', 'null', 'disabled', false);
-    expectSettersMethod(component, 'disabled', null, 'disabled', false);
-    expectSettersMethod(component, 'disabled', 'undefined', 'disabled', false);
-    expectSettersMethod(component, 'disabled', undefined, 'disabled', false);
+  it('should set disabled to true', () => {
+    component.disabled = true;
+    expect(component.disabled).toBeTrue();
   });
 
-  it('should set required', () => {
-    expectSettersMethod(component, 'required', '', 'required', true);
-    expectSettersMethod(component, 'required', 'true', '_required', true);
-    expectSettersMethod(component, 'required', true, '_required', true);
-    expectSettersMethod(component, 'required', 'false', '_required', false);
-    expectSettersMethod(component, 'required', false, '_required', false);
-    expectSettersMethod(component, 'required', null, 'required', false);
-    expectSettersMethod(component, 'required', 'null', 'required', false);
-    expectSettersMethod(component, 'required', NaN, 'required', false);
-    expectSettersMethod(component, 'required', 'undefined', 'required', false);
-    expectSettersMethod(component, 'required', undefined, 'required', false);
+  it('should set disabled to false', () => {
+    component.disabled = false;
+    expect(component.disabled).toBeFalse();
   });
 
-  it('should set no autocomplete', () => {
-    expectSettersMethod(component, 'noAutocomplete', true, 'noAutocomplete', true);
-    expectSettersMethod(component, 'noAutocomplete', true, '_noAutocomplete', true);
-    expectSettersMethod(component, 'noAutocomplete', false, 'noAutocomplete', false);
-    expectSettersMethod(component, 'noAutocomplete', false, '_noAutocomplete', false);
-    expectSettersMethod(component, 'noAutocomplete', '', 'noAutocomplete', true);
-    expectSettersMethod(component, 'noAutocomplete', '', '_noAutocomplete', true);
-    expectSettersMethod(component, 'noAutocomplete', null, 'noAutocomplete', false);
-    expectSettersMethod(component, 'noAutocomplete', null, '_noAutocomplete', false);
-    expectSettersMethod(component, 'noAutocomplete', undefined, 'noAutocomplete', false);
-    expectSettersMethod(component, 'noAutocomplete', undefined, '_noAutocomplete', false);
+  it('should set required to true', () => {
+    component.required = true;
+    expect(component.required).toBeTrue();
+  });
+
+  it('should set required to false', () => {
+    component.required = false;
+    expect(component.required).toBeFalse();
+  });
+
+  it('should set noAutocomplete to true', () => {
+    component.noAutocomplete = true;
+    expect(component.noAutocomplete).toBeTrue();
+  });
+
+  it('should set noAutocomplete to false', () => {
+    component.noAutocomplete = false;
+    expect(component.noAutocomplete).toBeFalse();
   });
 
   it('p-hide-columns-manager: should update property `p-hide-columns-manager` with valid value', () => {
@@ -1028,9 +1020,6 @@ describe('PoLookupBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    const trueValues = [true, 'true', 1, '', [], {}];
-    const falseValues = [false, 'false', 0, null, undefined, NaN];
-
     it('p-filter-service: shoul call `setService` with `filterService`', () => {
       spyOn(component, <any>'setService');
 
@@ -1039,9 +1028,14 @@ describe('PoLookupBaseComponent:', () => {
       expect(component['setService']).toHaveBeenCalledWith(component.filterService);
     });
 
-    it('p-required: should be update with valid and invalid values.', () => {
-      expectPropertiesValues(component, 'required', trueValues, true);
-      expectPropertiesValues(component, 'required', falseValues, false);
+    it('p-required: should be update with true value.', () => {
+      component.required = true;
+      expect(component.required).toBeTrue();
+    });
+
+    it('p-required: should be update with false value.', () => {
+      component.required = false;
+      expect(component.required).toBeFalse();
     });
 
     it('p-field-label: should apply the received value to `keysDescription`', () => {
@@ -1081,21 +1075,6 @@ describe('PoLookupBaseComponent:', () => {
         component.disabled = true;
         component.loading = false;
         expect(component.disabled).toBeTrue();
-      });
-
-      it('should set loading=true when input receives empty string', () => {
-        component.loading = '' as any;
-        expect(component.loading).toBeTrue();
-      });
-
-      it('should set loading=false when input receives string "false"', () => {
-        component.loading = 'false' as any;
-        expect(component.loading).toBeFalse();
-      });
-
-      it('should set loading=true when input receives string "true"', () => {
-        component.loading = 'true' as any;
-        expect(component.loading).toBeTrue();
       });
 
       it('should not throw when cd is undefined', () => {
