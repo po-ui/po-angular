@@ -20,10 +20,6 @@ describe('PoSelectComponent:', () => {
   let nativeElement;
   let changeDetectorRef: jasmine.SpyObj<any>;
 
-  const booleanValidFalseValues = [false, 'false'];
-  const booleanValidTrueValues = [true, 'true', ''];
-  const booleanInvalidValues = [undefined, null, 2, 'string'];
-
   const event = new MouseEvent('click', { 'bubbles': false, 'cancelable': true });
 
   beforeEach(() => {
@@ -93,6 +89,12 @@ describe('PoSelectComponent:', () => {
       expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
     });
 
+    it('should coerce empty string to true via Angular transform', () => {
+      fixture.componentRef.setInput('p-loading', '');
+      fixture.detectChanges();
+      expect(component.loading).toBeTrue();
+    });
+
     it('loading should not affect disabled state', () => {
       component.disabled = false;
 
@@ -102,21 +104,6 @@ describe('PoSelectComponent:', () => {
       component.disabled = true;
       component.loading = false;
       expect(component.disabled).toBeTrue();
-    });
-
-    it('should set loading=true when input receives string empty', () => {
-      component.loading = '' as any;
-      expect(component.loading).toBeTrue();
-    });
-
-    it('should set loading=false when input receives string "false"', () => {
-      component.loading = 'false' as any;
-      expect(component.loading).toBeFalse();
-    });
-
-    it('should set loading=true when input receives string "true"', () => {
-      component.loading = 'true' as any;
-      expect(component.loading).toBeTrue();
     });
 
     it('should not throw when cd is undefined', () => {

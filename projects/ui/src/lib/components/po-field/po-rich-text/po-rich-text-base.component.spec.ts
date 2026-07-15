@@ -39,9 +39,6 @@ describe('PoRichTextBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    const booleanInvalidValues = [undefined, null, 2, 'string'];
-    const booleanValidTrueValues = [true, 'true', 1, ''];
-
     it('p-compact-label: should update property with `true` when input is true', () => {
       fixture.componentRef.setInput('p-compact-label', true);
       fixture.detectChanges();
@@ -72,18 +69,23 @@ describe('PoRichTextBaseComponent:', () => {
     });
 
     it('p-readonly: should update property with valid values.', () => {
-      expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+      component.readonly = true;
+      expect(component.readonly).toBeTrue();
     });
 
     it('p-readonly: should update property with invalid values.', () => {
-      expectPropertiesValues(component, 'readonly', booleanInvalidValues, false);
+      component.readonly = false;
+      expect(component.readonly).toBeFalse();
     });
 
     it('p-required: should update property with valid values, invalid values and call `validateModel`', () => {
       spyOn(component, <any>'validateModel');
 
-      expectPropertiesValues(component, 'required', booleanValidTrueValues, true);
-      expectPropertiesValues(component, 'required', booleanInvalidValues, false);
+      component.required = true;
+      expect(component.required).toBeTrue();
+
+      component.required = false;
+      expect(component.required).toBeFalse();
 
       expect(component['validateModel']).toHaveBeenCalledWith(component.value);
     });

@@ -315,8 +315,8 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(disabled: boolean) {
+    this._disabled = disabled;
 
     this.validateModel();
   }
@@ -334,8 +334,8 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel();
   }

@@ -417,8 +417,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-clean') set clean(clean: boolean) {
-    this._clean = convertToBoolean(clean);
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) set clean(clean: boolean) {
+    this._clean = clean;
   }
 
   get clean() {
@@ -434,8 +434,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(value: boolean) {
-    this._disabled = convertToBoolean(value);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(value: boolean) {
+    this._disabled = value;
 
     this.validateModel(this.dateRange);
   }
@@ -522,8 +522,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-loading') set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+  @Input({ alias: 'p-loading', transform: convertToBoolean }) set loading(value: boolean) {
+    this._loading = value;
     this.changeDetector?.markForCheck();
   }
 
@@ -592,8 +592,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
-    this._noAutocomplete = convertToBoolean(value);
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) set noAutocomplete(value: boolean) {
+    this._noAutocomplete = value;
   }
 
   get noAutocomplete() {
@@ -609,8 +609,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-readonly') set readonly(value: boolean) {
-    this._readonly = convertToBoolean(value);
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) set readonly(value: boolean) {
+    this._readonly = value;
 
     this.validateModel(this.dateRange);
   }
@@ -628,8 +628,8 @@ export abstract class PoDatepickerRangeBaseComponent implements ControlValueAcce
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel(this.dateRange);
   }

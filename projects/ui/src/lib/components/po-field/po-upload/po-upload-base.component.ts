@@ -698,8 +698,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-directory') set directory(value: boolean) {
-    this._directory = convertToBoolean(value);
+  @Input({ alias: 'p-directory', transform: convertToBoolean }) set directory(value: boolean) {
+    this._directory = value;
 
     this.canHandleDirectory = this._directory && !PoUtils.isIE() && !PoUtils.isMobile();
     this.setDirectoryAttribute(this.canHandleDirectory);
@@ -721,8 +721,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-drag-drop') set dragDrop(value: boolean) {
-    this._dragDrop = convertToBoolean(value);
+  @Input({ alias: 'p-drag-drop', transform: convertToBoolean }) set dragDrop(value: boolean) {
+    this._dragDrop = value;
   }
 
   get dragDrop() {
@@ -738,8 +738,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-hide-restrictions-info') set hideRestrictionsInfo(value: boolean) {
-    this._hideRestrictionsInfo = convertToBoolean(value);
+  @Input({ alias: 'p-hide-restrictions-info', transform: convertToBoolean }) set hideRestrictionsInfo(value: boolean) {
+    this._hideRestrictionsInfo = value;
   }
 
   get hideRestrictionsInfo() {
@@ -758,8 +758,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-hide-select-button') set hideSelectButton(value: boolean) {
-    this._hideSelectButton = convertToBoolean(value);
+  @Input({ alias: 'p-hide-select-button', transform: convertToBoolean }) set hideSelectButton(value: boolean) {
+    this._hideSelectButton = value;
   }
   get hideSelectButton(): boolean {
     return this._hideSelectButton;
@@ -777,8 +777,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-hide-send-button') set hideSendButton(value: boolean) {
-    this._hideSendButton = convertToBoolean(value);
+  @Input({ alias: 'p-hide-send-button', transform: convertToBoolean }) set hideSendButton(value: boolean) {
+    this._hideSendButton = value;
   }
   get hideSendButton(): boolean {
     return this._hideSendButton;
@@ -872,8 +872,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * Indica que o campo será desabilitado.
    */
-  @Input('p-disabled') set disabled(value: boolean) {
-    this._disabled = convertToBoolean(value);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(value: boolean) {
+    this._disabled = value;
 
     this.validateModel(this.currentFiles);
   }
@@ -915,8 +915,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * > Se utilizada a `p-directory`, habilita-se automaticamente esta propriedade.
    */
-  @Input('p-multiple') set isMultiple(value: boolean) {
-    this._isMultiple = convertToBoolean(value);
+  @Input({ alias: 'p-multiple', transform: convertToBoolean }) set isMultiple(value: boolean) {
+    this._isMultiple = value;
   }
 
   get isMultiple() {
@@ -932,8 +932,8 @@ export abstract class PoUploadBaseComponent implements ControlValueAccessor, Val
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel(this.currentFiles);
   }

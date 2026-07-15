@@ -558,8 +558,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = <any>required === '' ? true : convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
     this.validateModel();
   }
 
@@ -609,8 +609,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(disabled: boolean) {
-    this._disabled = <any>disabled === '' ? true : convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(disabled: boolean) {
+    this._disabled = disabled;
     this.validateModel();
 
     this.updateVisibleItems();
@@ -629,9 +629,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @default `false`
    */
   @HostBinding('attr.p-loading')
-  @Input('p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
   set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+    this._loading = value;
     this.cd?.markForCheck();
   }
 
@@ -652,8 +652,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-hide-search') set hideSearch(hideSearch: boolean) {
-    this._hideSearch = <any>hideSearch === '' ? true : convertToBoolean(hideSearch);
+  @Input({ alias: 'p-hide-search', transform: convertToBoolean }) set hideSearch(hideSearch: boolean) {
+    this._hideSearch = hideSearch;
   }
 
   get hideSearch() {
@@ -706,8 +706,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * @default `false`
    */
-  @Input('p-sort') set sort(sort: boolean) {
-    this._sort = <any>sort === '' ? true : convertToBoolean(sort);
+  @Input({ alias: 'p-sort', transform: convertToBoolean }) set sort(sort: boolean) {
+    this._sort = sort;
 
     this.validAndSortOptions();
   }

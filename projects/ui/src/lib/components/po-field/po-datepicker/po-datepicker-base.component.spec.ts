@@ -45,9 +45,8 @@ describe('PoDatepickerBaseComponent:', () => {
     spyOn(component, <any>'validateModel');
     spyOn(UtilsFunctions, 'convertDateToISOExtended');
 
-    expectSettersMethod(component, 'setDisabled', '', 'disabled', true);
-    expectSettersMethod(component, 'setDisabled', 'true', 'disabled', true);
-    expectSettersMethod(component, 'setDisabled', 'false', 'disabled', false);
+    expectSettersMethod(component, 'setDisabled', true, 'disabled', true);
+    expectSettersMethod(component, 'setDisabled', false, 'disabled', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
     expect(UtilsFunctions.convertDateToISOExtended).toHaveBeenCalled();
@@ -57,24 +56,21 @@ describe('PoDatepickerBaseComponent:', () => {
     spyOn(component, <any>'validateModel');
     spyOn(UtilsFunctions, 'convertDateToISOExtended');
 
-    expectSettersMethod(component, 'setRequired', '', 'required', true);
-    expectSettersMethod(component, 'setRequired', 'true', 'required', true);
-    expectSettersMethod(component, 'setRequired', 'false', 'required', false);
+    expectSettersMethod(component, 'setRequired', true, 'required', true);
+    expectSettersMethod(component, 'setRequired', false, 'required', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
     expect(UtilsFunctions.convertDateToISOExtended).toHaveBeenCalled();
   });
 
   it('should update property p-readonly', () => {
-    expectSettersMethod(component, 'setReadonly', '', 'readonly', true);
-    expectSettersMethod(component, 'setReadonly', 'true', 'readonly', true);
-    expectSettersMethod(component, 'setReadonly', 'false', 'readonly', false);
+    expectSettersMethod(component, 'setReadonly', true, 'readonly', true);
+    expectSettersMethod(component, 'setReadonly', false, 'readonly', false);
   });
 
   it('should update property p-clean', () => {
-    expectSettersMethod(component, 'setClean', '', 'clean', true);
-    expectSettersMethod(component, 'setClean', 'true', 'clean', true);
-    expectSettersMethod(component, 'setClean', 'false', 'clean', false);
+    expectSettersMethod(component, 'setClean', true, 'clean', true);
+    expectSettersMethod(component, 'setClean', false, 'clean', false);
   });
 
   it('should be update property p-min-date with 0 hours using string', () => {
@@ -150,7 +146,7 @@ describe('PoDatepickerBaseComponent:', () => {
   });
 
   it('should be null to invalid date', () => {
-    component['setRequired'] = 'false';
+    component['setRequired'] = false;
     component.format = 'dd/MM/yyyy';
 
     const date = component.getDateFromString('05/13/2017');
@@ -723,14 +719,14 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component.compactLabel()).toBe(false);
     });
 
-    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
-      const invalidValues = [undefined, null, 0, 'false', 'string'];
-      expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
+    it('p-no-autocomplete: should update property to false.', () => {
+      component.noAutocomplete = false;
+      expect(component.noAutocomplete).toBeFalse();
     });
 
-    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
-      const validValues = [true, 'true', 1, ' '];
-      expectPropertiesValues(component, 'noAutocomplete', validValues, true);
+    it('p-no-autocomplete: should update property to true.', () => {
+      component.noAutocomplete = true;
+      expect(component.noAutocomplete).toBeTrue();
     });
 
     it('isExtendedISO: should be false.', () => {
@@ -811,21 +807,21 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(UtilsFunctions.setYearFrom0To100).toHaveBeenCalled();
     });
 
-    it('should convert value to boolean and call markForCheck', () => {
+    it('should set loading to true and call markForCheck', () => {
       const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
 
-      component.loading = 'true' as any;
+      component.loading = true;
 
-      expect(component['_loading']).toBeTrue();
+      expect(component.loading).toBeTrue();
       expect(markForCheckSpy).toHaveBeenCalled();
     });
 
-    it('should set loading to false when value is falsy', () => {
+    it('should set loading to false and call markForCheck', () => {
       const markForCheckSpy = spyOn(component['cd'], 'markForCheck');
 
-      component.loading = null;
+      component.loading = false;
 
-      expect(component['_loading']).toBeFalse();
+      expect(component.loading).toBeFalse();
       expect(markForCheckSpy).toHaveBeenCalled();
     });
 
