@@ -72,16 +72,16 @@ export class PoPasswordComponent extends PoInputGeneric implements OnChanges {
    *
    * @default `false`
    */
-  @Input('p-hide-password-peek') set hidePasswordPeek(value: boolean) {
-    this._hidePasswordPeek = convertToBoolean(value);
+  @Input({ alias: 'p-hide-password-peek', transform: convertToBoolean }) set hidePasswordPeek(value: boolean) {
+    this._hidePasswordPeek = value;
     if (value) {
       this.visiblePassword = false;
       this.type = 'password';
     }
   }
 
-  @Input('p-no-autocomplete') override set noAutocomplete(value: boolean) {
-    this._noAutocompletePassword = convertToBoolean(value);
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) override set noAutocomplete(value: boolean) {
+    this._noAutocompletePassword = value;
   }
 
   override get noAutocomplete() {

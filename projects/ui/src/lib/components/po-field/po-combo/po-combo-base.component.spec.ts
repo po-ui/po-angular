@@ -72,24 +72,35 @@ describe('PoComboBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    const trueValues = [true, 'true', 1, '', [], {}];
-    const falseValues = [false, 'false', 0, null, undefined, NaN];
-
-    it('p-required: should be update with valid and invalid values and call validateModel with selectedValue.', () => {
+    it('p-required: should update with true value and call validateModel.', () => {
       spyOn(component, <any>'validateModel');
 
-      expectPropertiesValues(component, 'required', trueValues, true);
-      expectPropertiesValues(component, 'required', falseValues, false);
-
+      component.required = true;
+      expect(component.required).toBeTrue();
       expect(component['validateModel']).toHaveBeenCalledWith(component.selectedValue);
     });
 
-    it('p-disabled: should be update with valid and invalid values and call validateModel with selectedValue.', () => {
+    it('p-required: should update with false value and call validateModel.', () => {
       spyOn(component, <any>'validateModel');
 
-      expectPropertiesValues(component, 'disabled', trueValues, true);
-      expectPropertiesValues(component, 'disabled', falseValues, false);
+      component.required = false;
+      expect(component.required).toBeFalse();
+      expect(component['validateModel']).toHaveBeenCalledWith(component.selectedValue);
+    });
 
+    it('p-disabled: should update with true value and call validateModel.', () => {
+      spyOn(component, <any>'validateModel');
+
+      component.disabled = true;
+      expect(component.disabled).toBeTrue();
+      expect(component['validateModel']).toHaveBeenCalledWith(component.selectedValue);
+    });
+
+    it('p-disabled: should update with false value and call validateModel.', () => {
+      spyOn(component, <any>'validateModel');
+
+      component.disabled = false;
+      expect(component.disabled).toBeFalse();
       expect(component['validateModel']).toHaveBeenCalledWith(component.selectedValue);
     });
 
@@ -130,12 +141,14 @@ describe('PoComboBaseComponent:', () => {
       expect(spycomboListDefinitions).toHaveBeenCalled();
     });
 
-    it('p-infinite-scroll: should update property `p-infinite-scroll` with false.', () => {
-      expectPropertiesValues(component, 'infiniteScroll', falseValues, false);
+    it('p-infinite-scroll: should update property to false.', () => {
+      component.infiniteScroll = false;
+      expect(component.infiniteScroll).toBeFalse();
     });
 
-    it('p-infinite-scroll: should update property `p-infinite-scroll` with true.', () => {
-      expectPropertiesValues(component, 'infiniteScroll', trueValues, true);
+    it('p-infinite-scroll: should update property to true.', () => {
+      component.infiniteScroll = true;
+      expect(component.infiniteScroll).toBeTrue();
     });
 
     it('p-infinite-scroll-distance: should update property `p-infinite-scroll-distance` with valid values .', () => {
@@ -201,15 +214,14 @@ describe('PoComboBaseComponent:', () => {
       });
 
       describe('p-sort: ', () => {
-        const booleanInvalidValues = [undefined, null, 2, 'string'];
-        const booleanValidTrueValues = [true, 'true', 1, ''];
-
-        it('should update property `p-sort` with valid values.', () => {
-          expectPropertiesValues(component, 'sort', booleanValidTrueValues, true);
+        it('should update property `p-sort` to true.', () => {
+          component.sort = true;
+          expect(component.sort).toBeTrue();
         });
 
-        it('should update property `p-sort` with invalid values.', () => {
-          expectPropertiesValues(component, 'sort', booleanInvalidValues, false);
+        it('should update property `p-sort` to false.', () => {
+          component.sort = false;
+          expect(component.sort).toBeFalse();
         });
 
         it('should call `comboListDefinitions`', () => {
@@ -246,21 +258,6 @@ describe('PoComboBaseComponent:', () => {
         component.disabled = true;
         component.loading = false;
         expect(component.disabled).toBeTrue();
-      });
-
-      it('should set loading=true when input receives string empty', () => {
-        component.loading = '' as any;
-        expect(component.loading).toBeTrue();
-      });
-
-      it('should set loading=false when input receives string "false"', () => {
-        component.loading = 'false' as any;
-        expect(component.loading).toBeFalse();
-      });
-
-      it('should set loading=true when input receives string "true"', () => {
-        component.loading = 'true' as any;
-        expect(component.loading).toBeTrue();
       });
 
       it('should not throw when cd is undefined', () => {
@@ -401,16 +398,14 @@ describe('PoComboBaseComponent:', () => {
     expectSettersMethod(component, 'filterMode', PoComboFilterMode.endsWith, 'filterMode', PoComboFilterMode.endsWith);
   });
 
-  it('should update property `p-disabled-init-filter` with false when invalid values', () => {
-    const invalidValues = [undefined, null, 2, 'string'];
-
-    expectPropertiesValues(component, 'disabledInitFilter', invalidValues, false);
+  it('should update property `p-disabled-init-filter` to false', () => {
+    component.disabledInitFilter = false;
+    expect(component.disabledInitFilter).toBeFalse();
   });
 
-  it('should update property `p-disabled-init-filter` with valid values', () => {
-    const validValues = [true, 'true', 1, ''];
-
-    expectPropertiesValues(component, 'disabledInitFilter', validValues, true);
+  it('should update property `p-disabled-init-filter` to true', () => {
+    component.disabledInitFilter = true;
+    expect(component.disabledInitFilter).toBeTrue();
   });
 
   it('should update property `p-filter-minlength` with 0 when invalid values', () => {

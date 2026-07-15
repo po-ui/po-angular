@@ -216,23 +216,29 @@ describe('PoRadioGroupBase: ', () => {
   });
 
   describe('Properties:', () => {
-    const validValues = [true, 'true', 1, ''];
-    const invalidValues = [false, 'false', 0, null, undefined, NaN];
     const validateModel: any = 'validateModel';
 
     it('p-disabled: should be update with valid and invalid values.', () => {
       spyOn(component, validateModel);
 
-      expectPropertiesValues(component, 'disabled', validValues, true);
-      expectPropertiesValues(component, 'disabled', invalidValues, false);
+      component.disabled = true;
+      expect(component.disabled).toBeTrue();
+
+      component.disabled = false;
+      expect(component.disabled).toBeFalse();
+
       expect(component[validateModel]).toHaveBeenCalled();
     });
 
     it('p-required: should be update with valid and invalid values.', () => {
       spyOn(component, validateModel);
 
-      expectPropertiesValues(component, 'required', validValues, true);
-      expectPropertiesValues(component, 'required', invalidValues, false);
+      component.required = true;
+      expect(component.required).toBeTrue();
+
+      component.required = false;
+      expect(component.required).toBeFalse();
+
       expect(component[validateModel]).toHaveBeenCalled();
     });
 
@@ -244,6 +250,7 @@ describe('PoRadioGroupBase: ', () => {
     });
 
     it('p-columns: should update property with `6` if invalid value', () => {
+      const invalidValues = [false, 'false', 0, null, undefined, NaN];
       expectPropertiesValues(component, 'columns', invalidValues, 6);
     });
 

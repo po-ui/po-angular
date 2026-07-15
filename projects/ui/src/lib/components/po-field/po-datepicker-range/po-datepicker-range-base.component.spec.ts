@@ -47,26 +47,24 @@ describe('PoDatepickerRangeBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
-    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
-      const invalidValues = [undefined, null, 0, 'false', 'string'];
-      expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
+    it('p-no-autocomplete: should update property with false when set with invalid values.', () => {
+      component.noAutocomplete = false;
+      expect(component.noAutocomplete).toBeFalse();
     });
 
-    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
-      const validValues = [true, 'true', 1, ' '];
-      expectPropertiesValues(component, 'noAutocomplete', validValues, true);
+    it('p-no-autocomplete: should update property with true when set with valid values.', () => {
+      component.noAutocomplete = true;
+      expect(component.noAutocomplete).toBeTrue();
     });
 
     it('clean: should update with true value.', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'clean', booleanValidTrueValues, true);
+      component.clean = true;
+      expect(component.clean).toBeTrue();
     });
 
     it('clean: should update with false value.', () => {
-      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
-
-      expectPropertiesValues(component, 'clean', booleanInvalidValues, false);
+      component.clean = false;
+      expect(component.clean).toBeFalse();
     });
 
     it('max-date: should be update property p-max-date using string', () => {
@@ -114,15 +112,13 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('disabled: should update with true value.', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'disabled', booleanValidTrueValues, true);
+      component.disabled = true;
+      expect(component.disabled).toBeTrue();
     });
 
     it('disabled: should update with false value.', () => {
-      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
-
-      expectPropertiesValues(component, 'disabled', booleanInvalidValues, false);
+      component.disabled = false;
+      expect(component.disabled).toBeFalse();
     });
 
     it('disabled: should call `validateModel` with `dateRange`.', () => {
@@ -220,15 +216,13 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('readonly: should update with true value.', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'readonly', booleanValidTrueValues, true);
+      component.readonly = true;
+      expect(component.readonly).toBeTrue();
     });
 
     it('readonly: should update with false value.', () => {
-      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
-
-      expectPropertiesValues(component, 'readonly', booleanInvalidValues, false);
+      component.readonly = false;
+      expect(component.readonly).toBeFalse();
     });
 
     it('readonly: should call `validateModel`.', () => {
@@ -240,15 +234,13 @@ describe('PoDatepickerRangeBaseComponent:', () => {
     });
 
     it('required: should update with true value.', () => {
-      const booleanValidTrueValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'required', booleanValidTrueValues, true);
+      component.required = true;
+      expect(component.required).toBeTrue();
     });
 
     it('required: should update with false value.', () => {
-      const booleanInvalidValues = [undefined, null, 2, 'string', 0, NaN, false];
-
-      expectPropertiesValues(component, 'required', booleanInvalidValues, false);
+      component.required = false;
+      expect(component.required).toBeFalse();
     });
 
     it('required: should call `validateModel`.', () => {

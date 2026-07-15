@@ -53,33 +53,29 @@ describe('PoInputBase:', async () => {
   it('should set disabled', () => {
     spyOn(component, <any>'validateModel');
 
-    expectSettersMethod(component, 'setDisabled', '', 'disabled', true);
-    expectSettersMethod(component, 'setDisabled', 'true', 'disabled', true);
-    expectSettersMethod(component, 'setDisabled', 'false', 'disabled', false);
+    expectSettersMethod(component, 'setDisabled', true, 'disabled', true);
+    expectSettersMethod(component, 'setDisabled', false, 'disabled', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
   });
 
   it('should set readonly', () => {
-    expectSettersMethod(component, 'setReadonly', '', 'readonly', true);
-    expectSettersMethod(component, 'setReadonly', 'true', 'readonly', true);
-    expectSettersMethod(component, 'setReadonly', 'false', 'readonly', false);
+    expectSettersMethod(component, 'setReadonly', true, 'readonly', true);
+    expectSettersMethod(component, 'setReadonly', false, 'readonly', false);
   });
 
   it('should set required', () => {
     spyOn(component, <any>'validateModel');
 
-    expectSettersMethod(component, 'setRequired', '', 'required', true);
-    expectSettersMethod(component, 'setRequired', 'true', 'required', true);
-    expectSettersMethod(component, 'setRequired', 'false', 'required', false);
+    expectSettersMethod(component, 'setRequired', true, 'required', true);
+    expectSettersMethod(component, 'setRequired', false, 'required', false);
 
     expect(component['validateModel']).toHaveBeenCalled();
   });
 
   it('should set clean', () => {
-    expectSettersMethod(component, 'setClean', '', 'clean', true);
-    expectSettersMethod(component, 'setClean', 'true', 'clean', true);
-    expectSettersMethod(component, 'setClean', 'false', 'clean', false);
+    expectSettersMethod(component, 'setClean', true, 'clean', true);
+    expectSettersMethod(component, 'setClean', false, 'clean', false);
   });
 
   it('should set pattern', () => {
@@ -99,13 +95,12 @@ describe('PoInputBase:', async () => {
   it('should set maskFormatModel', () => {
     spyOn(component, <any>'validateModel');
 
-    expectSettersMethod(component, 'setMaskFormatModel', '', 'maskFormatModel', true);
-    expectSettersMethod(component, 'setMaskFormatModel', 'true', 'maskFormatModel', true);
-    expectSettersMethod(component, 'setMaskFormatModel', 'false', 'maskFormatModel', false);
+    expectSettersMethod(component, 'setMaskFormatModel', true, 'maskFormatModel', true);
+    expectSettersMethod(component, 'setMaskFormatModel', false, 'maskFormatModel', false);
 
     component.objMask = new PoMask('', true);
 
-    expectSettersMethod(component, 'setMaskFormatModel', 'true', 'maskFormatModel', true);
+    expectSettersMethod(component, 'setMaskFormatModel', true, 'maskFormatModel', true);
     expect(component.objMask.formatModel).toBeTruthy();
 
     expect(component['validateModel']).toHaveBeenCalled();
@@ -261,14 +256,14 @@ describe('PoInputBase:', async () => {
       expectPropertiesValues(component, 'minlength', invalidValues, undefined);
     });
 
-    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
-      const invalidValues = [undefined, null, 0, 'false', 'string'];
-      expectPropertiesValues(component, 'noAutocomplete', invalidValues, false);
+    it('p-no-autocomplete: should update property to false.', () => {
+      component.noAutocomplete = false;
+      expect(component.noAutocomplete).toBeFalse();
     });
 
-    it('p-no-autocomplete: should update property with valid values with valid values.', () => {
-      const validValues = [true, 'true', 1, ' '];
-      expectPropertiesValues(component, 'noAutocomplete', validValues, true);
+    it('p-no-autocomplete: should update property to true.', () => {
+      component.noAutocomplete = true;
+      expect(component.noAutocomplete).toBeTrue();
     });
 
     describe('p-mask-no-length-validation:', () => {
@@ -618,21 +613,6 @@ describe('PoInputBase:', async () => {
         component.disabled = true;
         component.loading = false;
         expect(component.disabled).toBeTrue();
-      });
-
-      it('should set loading=true when input receives string empty', () => {
-        component.loading = '' as any;
-        expect(component.loading).toBeTrue();
-      });
-
-      it('should set loading=false when input receives string "false"', () => {
-        component.loading = 'false' as any;
-        expect(component.loading).toBeFalse();
-      });
-
-      it('should set loading=true when input receives string "true"', () => {
-        component.loading = 'true' as any;
-        expect(component.loading).toBeTrue();
       });
 
       it('should not throw when cd is undefined', () => {

@@ -264,8 +264,8 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input('p-disabled') set disabled(value: boolean) {
-    this._disabled = convertToBoolean(value);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set disabled(value: boolean) {
+    this._disabled = value;
 
     this.validateModel(this.checkIndeterminate());
   }
@@ -287,8 +287,8 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input('p-indeterminate') set indeterminate(indeterminate: boolean) {
-    this._indeterminate = convertToBoolean(indeterminate);
+  @Input({ alias: 'p-indeterminate', transform: convertToBoolean }) set indeterminate(indeterminate: boolean) {
+    this._indeterminate = indeterminate;
   }
 
   get indeterminate() {
@@ -321,8 +321,8 @@ export class PoCheckboxGroupBaseComponent implements ControlValueAccessor, Valid
    *
    * @default `false`
    */
-  @Input('p-required') set required(required: boolean) {
-    this._required = convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set required(required: boolean) {
+    this._required = required;
 
     this.validateModel(this.checkIndeterminate());
   }

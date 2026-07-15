@@ -261,8 +261,10 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @default `false`
    */
-  @Input('p-mask-no-length-validation') set maskNoLengthValidation(value: boolean) {
-    this._maskNoLengthValidation = convertToBoolean(value);
+  @Input({ alias: 'p-mask-no-length-validation', transform: convertToBoolean }) set maskNoLengthValidation(
+    value: boolean
+  ) {
+    this._maskNoLengthValidation = value;
 
     this.validateModel();
   }
@@ -363,8 +365,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @default `false`
    */
-  @Input('p-no-autocomplete') set noAutocomplete(value: boolean) {
-    this._noAutocomplete = convertToBoolean(value);
+  @Input({ alias: 'p-no-autocomplete', transform: convertToBoolean }) set noAutocomplete(value: boolean) {
+    this._noAutocomplete = value;
   }
 
   get noAutocomplete() {
@@ -396,8 +398,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   disabled?: boolean = false;
-  @Input('p-disabled') set setDisabled(disabled: string) {
-    this.disabled = disabled === '' ? true : convertToBoolean(disabled);
+  @Input({ alias: 'p-disabled', transform: convertToBoolean }) set setDisabled(disabled: boolean) {
+    this.disabled = disabled;
 
     this.validateModel();
   }
@@ -411,9 +413,9 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    * @default `false`
    */
   @HostBinding('attr.p-loading')
-  @Input('p-loading')
+  @Input({ alias: 'p-loading', transform: convertToBoolean })
   set loading(value: boolean) {
-    this._loading = convertToBoolean(value);
+    this._loading = value;
     this.cd?.markForCheck();
   }
 
@@ -428,8 +430,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   /** Indica que o campo será somente leitura. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly?: boolean = false;
-  @Input('p-readonly') set setReadonly(readonly: string) {
-    this.readonly = readonly === '' ? true : convertToBoolean(readonly);
+  @Input({ alias: 'p-readonly', transform: convertToBoolean }) set setReadonly(readonly: boolean) {
+    this.readonly = readonly;
   }
 
   /**
@@ -444,8 +446,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   required?: boolean = false;
-  @Input('p-required') set setRequired(required: string) {
-    this.required = required === '' ? true : convertToBoolean(required);
+  @Input({ alias: 'p-required', transform: convertToBoolean }) set setRequired(required: boolean) {
+    this.required = required;
 
     this.validateModel();
   }
@@ -483,8 +485,8 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
   /** Se verdadeiro, o campo receberá um botão para ser limpo. */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   clean?: boolean = false;
-  @Input('p-clean') set setClean(clean: string) {
-    this.clean = clean === '' ? true : convertToBoolean(clean);
+  @Input({ alias: 'p-clean', transform: convertToBoolean }) set setClean(clean: boolean) {
+    this.clean = clean;
   }
 
   /**
@@ -575,8 +577,10 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    */
   // eslint-disable-next-line @typescript-eslint/member-ordering
   maskFormatModel?: boolean = false;
-  @Input('p-mask-format-model') set setMaskFormatModel(maskFormatModel: string) {
-    this.maskFormatModel = maskFormatModel === '' ? true : convertToBoolean(maskFormatModel);
+  @Input({ alias: 'p-mask-format-model', transform: convertToBoolean }) set setMaskFormatModel(
+    maskFormatModel: boolean
+  ) {
+    this.maskFormatModel = maskFormatModel;
 
     if (this.objMask instanceof PoMask) {
       this.objMask.formatModel = this.maskFormatModel;
