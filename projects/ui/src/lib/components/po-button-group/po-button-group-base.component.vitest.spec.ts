@@ -1,0 +1,230 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
+import { PoButtonGroupItem } from './po-button-group-item.interface';
+
+import { PoThemeA11yEnum } from '../../services';
+import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+
+describe('PoButtonGroupBaseComponent', () => {
+  let component: PoButtonGroupBaseComponent;
+  let fixture: ComponentFixture<PoButtonGroupBaseComponent>;
+  let fakeButtons: Array<PoButtonGroupItem>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoButtonGroupBaseComponent]
+    });
+
+    fixture = TestBed.createComponent(PoButtonGroupBaseComponent);
+    component = fixture.componentInstance;
+
+    fakeButtons = [
+      {
+        label: 'acao',
+        disabled: false,
+        action: () => {},
+        selected: true
+      }
+    ];
+  });
+
+  it('should be created', () => {
+    expect(component instanceof PoButtonGroupBaseComponent).toBeTruthy();
+    expect(component.buttons().length).toBe(0);
+  });
+
+  it('validate type of p-buttons (PoButtonGroupItem)', () => {
+    fixture.componentRef.setInput('p-buttons', fakeButtons);
+    const buttonGroupItem = component.buttons()[0];
+
+    expect(typeof buttonGroupItem.label).toBe('string');
+    expect(typeof buttonGroupItem.disabled).toBe('boolean');
+    expect(typeof buttonGroupItem.action).toBe('function');
+    expect(typeof buttonGroupItem.selected).toBe('boolean');
+  });
+
+  it('validate if action can be called', () => {
+    fixture.componentRef.setInput('p-buttons', fakeButtons);
+
+    const buttons = component.buttons();
+    const actionSpy = vi.spyOn(buttons[0], 'action');
+    buttons[0].action();
+
+    expect(actionSpy).toHaveBeenCalled();
+  });
+
+  describe('Properties: ', () => {
+    it('p-toggle: should update property `p-toggle` with valid values.', () => {
+      const validValues = ['multiple', 'single', 'none'];
+
+      expectPropertiesValues(component, 'toggle', validValues, validValues);
+    });
+
+    it('p-toggle: should update property `p-toggle` with invalid values.', () => {
+      const invalidValues = [false, true, {}, 'invalid', []];
+
+      expectPropertiesValues(component, 'toggle', invalidValues, 'none');
+    });
+
+    describe('p-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        document.documentElement.setAttribute('data-a11y', 'AAA');
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        const applySizeSpy = vi.spyOn(component as any, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect(applySizeSpy).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Methods: ', () => {
+    let buttons: Array<PoButtonGroupItem>;
+
+    beforeEach(() => {
+      buttons = [
+        {
+          action: () => {},
+          label: 'button0',
+          selected: false
+        },
+        {
+          action: () => {},
+          label: 'button1',
+          selected: true
+        },
+        {
+          action: () => {},
+          label: 'button2',
+          selected: false
+        },
+        {
+          action: () => {},
+          label: 'button3',
+          selected: true
+        }
+      ];
+
+      fixture.componentRef.setInput('p-buttons', buttons);
+    });
+
+    it('onButtonClick: should desselect all buttons and select clicked button when toogle is single.', () => {
+      component.toggle = 'single';
+
+      const buttonsValue = component.buttons();
+      component.onButtonClick(buttonsValue[0], 0);
+
+      expect(buttonsValue[0].selected).toBeTruthy();
+      expect(buttonsValue[1].selected).toBeFalsy();
+      expect(buttonsValue[2].selected).toBeFalsy();
+      expect(buttonsValue[3].selected).toBeFalsy();
+    });
+
+    it('onButtonClick: should not desselect all buttons and select clicked button when toogle is multiple.', () => {
+      component.toggle = 'multiple';
+
+      const buttonsValue = component.buttons();
+      component.onButtonClick(buttonsValue[0], 0);
+
+      expect(buttonsValue[0].selected).toBeTruthy();
+      expect(buttonsValue[1].selected).toBeTruthy();
+      expect(buttonsValue[2].selected).toBeFalsy();
+      expect(buttonsValue[3].selected).toBeTruthy();
+    });
+
+    it('onButtonClick: should desselect all buttons when tooggle is none.', () => {
+      component.toggle = 'none';
+
+      const buttonsValue = component.buttons();
+      component.onButtonClick(buttonsValue[0], 0);
+
+      expect(buttonsValue[0].selected).toBeFalsy();
+      expect(buttonsValue[1].selected).toBeFalsy();
+      expect(buttonsValue[2].selected).toBeFalsy();
+      expect(buttonsValue[3].selected).toBeFalsy();
+    });
+
+    it('checkSelecteds: should call deselectAllButtons when toggle is none', () => {
+      const deselectSpy = vi.spyOn(component as any, 'deselectAllButtons');
+
+      component['checkSelecteds']('none');
+
+      expect(deselectSpy).toHaveBeenCalled();
+    });
+
+    it('checkSelecteds: should call deselectAllButtons when toggle is single', () => {
+      const deselectSpy = vi.spyOn(component as any, 'deselectAllButtons');
+
+      component['checkSelecteds']('single');
+
+      expect(deselectSpy).toHaveBeenCalled();
+    });
+
+    it('checkSelecteds: should not call deselectAllButtons when toggle is single', () => {
+      const deselectSpy = vi.spyOn(component as any, 'deselectAllButtons');
+
+      component['checkSelecteds']('multiple');
+
+      expect(deselectSpy).not.toHaveBeenCalled();
+    });
+
+    it('deselectAllButtons: should sselect all buttons', () => {
+      component['deselectAllButtons']();
+
+      expect(component.buttons()[0].selected).toBeFalsy();
+      expect(component.buttons()[1].selected).toBeFalsy();
+      expect(component.buttons()[2].selected).toBeFalsy();
+      expect(component.buttons()[3].selected).toBeFalsy();
+    });
+  });
+});

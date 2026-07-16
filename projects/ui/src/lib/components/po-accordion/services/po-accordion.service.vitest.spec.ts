@@ -1,0 +1,44 @@
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { TestBed } from '@angular/core/testing';
+
+import { Observable } from 'rxjs';
+
+import { PoAccordionService } from './po-accordion.service';
+
+describe('PoAccordionService:', () => {
+  let accordionService: PoAccordionService;
+
+  const accordionItem = {
+    label: 'Accordion 1'
+  };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [PoAccordionService]
+    });
+
+    accordionService = TestBed.inject(PoAccordionService);
+  });
+
+  describe('Methods:', () => {
+    it('should call subjectChild.next with accordionItem in sendToParentAccordionItemClicked', () => {
+      const nextSpy = vi.spyOn(accordionService['subjectChild'], 'next');
+      accordionService.sendToParentAccordionItemClicked(accordionItem as any);
+
+      expect(nextSpy).toHaveBeenCalledWith(accordionItem as any);
+    });
+
+    it('should call subjectChild.asObservable in receiveFromChildAccordionClicked', () => {
+      const asObservableSpy = vi.spyOn(accordionService['subjectChild'], 'asObservable');
+      accordionService.receiveFromChildAccordionClicked();
+
+      expect(asObservableSpy).toHaveBeenCalled();
+    });
+
+    it('should return an instanceof Observable receiveFromChildAccordionClicked', () => {
+      const result = accordionService.receiveFromChildAccordionClicked();
+
+      expect(result instanceof Observable).toBeTruthy();
+    });
+  });
+});
