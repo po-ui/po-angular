@@ -10,10 +10,10 @@ import { PoButtonComponent } from './po-button.component';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoButtonType } from './enums/po-button-type.enum';
 
-describe('PoButtonComponent (Vitest): ', () => {
+describe('PoButtonComponent: ', () => {
   let component: PoButtonComponent;
   let fixture: ComponentFixture<PoButtonComponent>;
-  let nativeElement: any;
+  let nativeElement: HTMLElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -77,6 +77,38 @@ describe('PoButtonComponent (Vitest): ', () => {
     expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Button);
   });
 
+  it('should propagate [p-tabindex] input to the inner button element', () => {
+    fixture.componentRef.setInput('p-tabindex', -1);
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('should propagate p-tabindex=0 to the inner button element', () => {
+    fixture.componentRef.setInput('p-tabindex', 0);
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('tabindex')).toBe('0');
+  });
+
+  it('should not set tabindex on inner button when p-tabindex input is null', () => {
+    fixture.componentRef.setInput('p-tabindex', null);
+    fixture.detectChanges();
+    expect(nativeElement.querySelector('button').getAttribute('tabindex')).toBeNull();
+  });
+
+  it('should set type to `submit`.', () => {
+    fixture.componentRef.setInput('p-type', PoButtonType.Submit);
+    fixture.detectChanges();
+
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Submit);
+  });
+
+  it('should set type to `reset`.', () => {
+    fixture.componentRef.setInput('p-type', PoButtonType.Reset);
+    fixture.detectChanges();
+
+    expect(nativeElement.querySelector('button').getAttribute('type')).toBe(PoButtonType.Reset);
+  });
+
   describe('Properties: ', () => {
     it('p-loading: should attribute the propertie when set valid values.', () => {
       const booleanTrueValues = [true, 'true', 1, ''];
@@ -94,17 +126,19 @@ describe('PoButtonComponent (Vitest): ', () => {
 
       expect(nativeElement.querySelector('span.po-button-label')).toBeTruthy();
     });
+
+    it('p-label: should not add i tag if `p-label` has not been declared', () => {
+      fixture.componentRef.setInput('p-label', undefined);
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('i.po-button-label')).toBeFalsy();
+    });
   });
 
   describe('Methods:', () => {
     it('focus: should call `focus` of button', () => {
-      component.buttonElement = {
-        nativeElement: {
-          focus: () => {}
-        }
-      };
-
-      const focusSpy = vi.spyOn(component.buttonElement.nativeElement, 'focus');
+      const buttonElement = nativeElement.querySelector('button');
+      const focusSpy = vi.spyOn(buttonElement!, 'focus');
 
       component.focus();
 
@@ -145,6 +179,39 @@ describe('PoButtonComponent (Vitest): ', () => {
 
       it('should return "sm" when size is empty', () => {
         expect(component.mapSizeToIcon('')).toBe('sm');
+      });
+    });
+  });
+
+  describe('Templates: ', () => {
+    describe('Loading: ', () => {
+      let button: HTMLButtonElement;
+
+      beforeEach(() => {
+        component.loading = true;
+        button = fixture.debugElement.nativeElement.querySelector('button');
+        fixture.detectChanges();
+      });
+
+      it('should disabled button when propertie is setted.', () => {
+        expect(button.getAttribute('disabled')).not.toBeNull();
+        expect(button.getElementsByClassName('po-button-loading-icon').length).toBeTruthy();
+      });
+
+      it('should keep button disabled independently of type.', () => {
+        const buttonTypes = ['default', 'danger', 'primary', 'link'];
+
+        for (const type of buttonTypes) {
+          component.kind = type;
+          fixture.detectChanges();
+          expect(button.getAttribute('disabled')).not.toBeNull();
+          expect(button.getElementsByClassName('po-button-loading-icon').length).toBeTruthy();
+        }
+      });
+
+      it('should keep disabled when `disabled` equals false.', () => {
+        component.disabled = false;
+        expect(button.getAttribute('disabled')).not.toBeNull();
       });
     });
   });
