@@ -69,7 +69,7 @@ Caso prefira instalar com o yarn:
 yarn install
 ```
 
-### Observação para Angular 22+
+### Observação para Angular 19+
 
 Em versões mais recentes do Angular, o projeto pode utilizar o novo build system baseado em **@angular/build**. Caso ocorra o erro:
 
