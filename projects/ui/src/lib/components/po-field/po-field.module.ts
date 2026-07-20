@@ -64,7 +64,7 @@ import { PoLinkModule } from '../po-link';
  * @description
  *
  * Módulo dos componentes: po-checkbox, po-checkbox-group, po-combo, po-datepicker, po-datetimepicker, po-datepicker-range, po-email, po-input,
- * po-lookup, po-number, po-multiselect, po-password, po-radio-group, po-select, po-switch, po-textarea, po-upload, po-url e po-search-ai.
+ * po-lookup, po-number, po-multiselect, po-password, po-radio-group, po-select, po-switch, po-textarea, po-timepicker, po-upload, po-url e po-search-ai.
  *
  * > Não esqueça de importar o módulo `FormsModule` para usar os componentes de formulários e caso esteja trabalhando com
  * > formulários reativos, importe o módulo `ReactiveFormsModule`, ambos nativos do Angular.
