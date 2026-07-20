@@ -88,20 +88,6 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
 
   ngAfterViewInit(): void {
     PoHelperComponent.instances.push(this);
-    queueMicrotask(() => {
-      this.setPopoverPositionByScreen();
-    });
-  }
-
-  public setPopoverPositionByScreen(): void {
-    if (!this.target?.nativeElement) return;
-    const rect = this.target.nativeElement.getBoundingClientRect();
-    const screenWidth = window.innerWidth || document.documentElement.clientWidth;
-    if (rect.right + 400 > screenWidth) {
-      this.popoverPosition = 'left';
-    } else {
-      this.popoverPosition = 'right';
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -50,6 +50,19 @@ export class PoPopoverBaseComponent {
   @Input('p-corner-aligned') cornerAligned = false;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o espaçamento (em pixels) entre o componente alvo (`p-target`) e o `po-popover`.
+   * Útil para componentes com targets pequenos (como ícones) onde o espaçamento padrão é
+   * proporcionalmente muito grande e cria desalinhamento visual.
+   *
+   * @default `8`
+   */
+  @Input('p-offset') offset: number = 8;
+
+  /**
    * @description
    *
    * ElementRef do componente de origem responsável por abrir o popover.

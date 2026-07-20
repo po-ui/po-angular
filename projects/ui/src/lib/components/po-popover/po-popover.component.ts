@@ -162,6 +162,7 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
   private showPopover(): void {
     requestAnimationFrame(() => {
+      this.stabilizePopoverWidth();
       this.setElementsControlPosition();
       this.setPopoverPosition();
       this.setOpacity(1);
@@ -169,6 +170,39 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
       this.observeContentResize();
       this.cd.detectChanges();
     });
+  }
+
+  private stabilizePopoverWidth(): void {
+    if (this.width != null || this.widthPopover != null) return;
+    const el = this.popoverElement?.nativeElement as HTMLElement | undefined;
+    const target = this.targetElement as HTMLElement | undefined;
+    if (!el || !target) return;
+
+    el.style.left = '0px';
+    el.style.top = '0px';
+    const natural = el.getBoundingClientRect().width;
+
+    const tRect = target.getBoundingClientRect();
+    const cx = tRect.left + tRect.width / 2;
+    const halfTarget = tRect.width / 2;
+    const vp = window.innerWidth;
+    const safety = 2;
+
+    const candidates: Array<number> = [];
+    if (cx + 15 <= vp) candidates.push(cx + 15 - safety);
+    if (cx - 15 >= 0) candidates.push(vp - cx + 15 - safety);
+    const centered = 2 * Math.min(cx, vp - cx) - safety;
+    if (centered > 0) candidates.push(centered);
+    const leftMax = cx - halfTarget - this.offset - safety;
+    if (leftMax > 0) candidates.push(leftMax);
+    const rightMax = vp - cx - halfTarget - this.offset - safety;
+    if (rightMax > 0) candidates.push(rightMax);
+
+    const minWidth = 240;
+    const maxFit = candidates.length ? Math.max(...candidates) : natural;
+
+    this.widthPopover = Math.max(minWidth, Math.min(natural, maxFit));
+    this.cd.detectChanges();
   }
 
   public ensurePopoverPosition(): void {
@@ -269,10 +303,9 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
   }
 
   private setElementsControlPosition() {
-    const popoverOffset = 8;
     this.poControlPosition.setElements(
       this.popoverElement.nativeElement,
-      popoverOffset,
+      this.offset,
       this.target,
       undefined,
       false,
@@ -400,10 +433,10 @@ export class PoPopoverComponent extends PoPopoverBaseComponent implements AfterV
 
     if (!this.popoverElement?.nativeElement) return;
 
-    let initialCall = true;
+    let baselineFired = false;
     this.resizeObserver = new ResizeObserver(() => {
-      if (initialCall) {
-        initialCall = false;
+      if (!baselineFired) {
+        baselineFired = true;
         return;
       }
       this.setElementsControlPosition();

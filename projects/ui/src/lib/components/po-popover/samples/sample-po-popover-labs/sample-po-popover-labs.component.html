@@ -2,6 +2,7 @@
   p-trigger="click"
   [p-hide-arrow]="properties.includes('hideArrow')"
   [p-position]="position"
+  [p-offset]="offset"
   [p-target]="buttonClickRef"
   [p-title]="title"
 >
@@ -12,6 +13,7 @@
   p-trigger="hover"
   [p-hide-arrow]="properties.includes('hideArrow')"
   [p-position]="position"
+  [p-offset]="offset"
   [p-target]="buttonHoverRef"
   [p-title]="title"
 >
@@ -55,6 +57,18 @@
       [p-options]="propertiesOptions"
     >
     </po-checkbox-group>
+  </div>
+
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-12"
+      name="offset"
+      [(ngModel)]="offset"
+      [p-columns]="5"
+      p-label="Offset (px)"
+      [p-options]="offsetOptions"
+    >
+    </po-radio-group>
   </div>
 
   <div class="po-row">
