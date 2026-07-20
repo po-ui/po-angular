@@ -11,8 +11,7 @@ import {
   ChangeDetectorRef,
   SimpleChanges,
   ElementRef,
-  HostListener,
-  ViewChild
+  HostListener
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -48,7 +47,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-size') size: string;
   @Input('p-hide-today-button') hideTodayButton: boolean = false;
   @Input('p-presets') hasPresets: boolean = false;
-  // Template customizado para o header do calendário. Para uso interno do datepicker/datepicker-range.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
   private _locale: string;
   @Input('p-locale') set locale(value: string) {
@@ -64,7 +62,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Output('p-select-today') selectTodayEvent = new EventEmitter<void>();
   readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
-  // Evento para fechar o calendário. Para uso interno do datepicker/datepicker-range.
   @Output('p-close-calendar') closeCalendar = new EventEmitter<void>();
 
   currentYear: number;
@@ -421,8 +418,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     return index === this.focusedDayIndex ? 0 : -1;
   }
 
-  // --- 4. Navegação (Setas) ---
-
   onNextMonth() {
     const newMonth = this.displayMonthNumber < 11 ? this.displayMonthNumber + 1 : 0;
     const newYear = this.displayMonthNumber < 11 ? this.displayYear : this.displayYear + 1;
@@ -545,7 +540,6 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   private handleSelectKey(day: Date, index: number): void {
-    // Bloqueia seleção de dias desabilitados
     if (this.isDayDisabled(day)) {
       return;
     }

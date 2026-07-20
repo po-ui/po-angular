@@ -13,12 +13,14 @@ import { PoMenuItemsService } from '../services/po-menu-items.service';
 import { PoMenuItemComponent } from './po-menu-item.component';
 
 @Component({
+  selector: 'app-menu-item-search',
   template: 'Search',
   standalone: false
 })
 export class SearchComponent {}
 
 @Component({
+  selector: 'app-menu-item-home',
   template: 'Home',
   standalone: false
 })

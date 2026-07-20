@@ -157,7 +157,13 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
   }
 
   get showSeparator(): boolean {
-    return !this.placeholder?.trim() || this.hasValue();
+    if (!this.placeholder?.trim()) {
+      return true;
+    }
+    if (this.hasValue()) {
+      return true;
+    }
+    return this.placeholder.includes(':');
   }
 
   private get customPlaceholderSegments(): Array<string> {

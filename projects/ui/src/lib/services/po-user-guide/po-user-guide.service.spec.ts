@@ -163,11 +163,9 @@ describe('PoUserGuideService:', () => {
       const errorSpy = spyOn(console, 'error');
 
       service.setSteps([{ content: 'a' }]);
-      service.start();
+      const startPromise = service.start();
 
-      await Promise.resolve();
-      await Promise.resolve();
-      await Promise.resolve();
+      await startPromise.catch(() => {});
 
       expect(errorSpy).toHaveBeenCalled();
       const errArg = errorSpy.calls.mostRecent().args[0];
@@ -1703,10 +1701,8 @@ describe('PoUserGuideService:', () => {
 
       const errorSpy = spyOn(console, 'error');
       service.setSteps([{ content: 'a' }]);
-      service.start();
-      await Promise.resolve();
-      await Promise.resolve();
-      await Promise.resolve();
+      const startPromise = service.start();
+      await startPromise.catch(() => {});
 
       expect(service.isActive()).toBeFalse();
       expect(service.getCurrentIndex()).toBe(-1);

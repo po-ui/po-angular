@@ -112,6 +112,7 @@ describe('PoNavbarItemsComponent:', () => {
     });
 
     it('checkRouterChildrenFragments: should return `/` if `url` is `undefined`', () => {
+      spyOn(console, 'warn');
       spyOnProperty(component['router'], 'url').and.returnValue(undefined);
 
       const result = component['checkRouterChildrenFragments']();

@@ -107,9 +107,14 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should get input width', () => {
-    const inputElement = fixture.debugElement.nativeElement.querySelector('.po-multiselect-input');
-    Object.defineProperty(inputElement, 'offsetWidth', { value: 200, configurable: true });
-    expect(component.getInputWidth() > 0).toBeTruthy();
+    const inputEl = fixture.nativeElement.querySelector('.po-multiselect-input');
+    if (inputEl && inputEl.offsetWidth > 0) {
+      expect(component.getInputWidth() > 0).toBeTruthy();
+    } else {
+      // In headless environments the element may not be laid out; mock offsetWidth
+      spyOnProperty(inputEl, 'offsetWidth', 'get').and.returnValue(200);
+      expect(component.getInputWidth() > 0).toBeTruthy();
+    }
   });
 
   it('should get tags width', () => {
@@ -1517,15 +1522,14 @@ describe('PoMultiselectComponent:', () => {
 
     it('applyFilter: should be called', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;
+      component.setService(poMultiselectFilterServiceStub);
       spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
-      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+      spyOn(component.service, <any>'getFilteredData').and.returnValue(throwError([]));
 
-      component.applyFilter('').subscribe(
-        () => {},
-        () => {
-          expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
-        }
-      );
+      component.applyFilter('').subscribe();
+      flush();
+
+      expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
     }));
 
     it('should call service.getFilteredData and set options on success', () => {
@@ -1552,15 +1556,14 @@ describe('PoMultiselectComponent:', () => {
 
     it('applyFilter: should be called with undefined', fakeAsync(() => {
       component.filterService = poMultiselectFilterServiceStub;
+      component.setService(poMultiselectFilterServiceStub);
       spyOn(component, <any>'setOptionsByApplyFilter').and.callThrough();
-      spyOn(component.filterService, <any>'getFilteredData').and.returnValue(throwError([]));
+      spyOn(component.service, <any>'getFilteredData').and.returnValue(throwError([]));
 
-      component.applyFilter(undefined).subscribe(
-        () => {},
-        () => {
-          expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
-        }
-      );
+      component.applyFilter(undefined).subscribe();
+      flush();
+
+      expect(component['setOptionsByApplyFilter']).toHaveBeenCalled();
     }));
 
     it('focusOnNextTag: should select attribute unselected', () => {

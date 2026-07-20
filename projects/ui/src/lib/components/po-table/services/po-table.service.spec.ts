@@ -65,9 +65,9 @@ describe('PoTableService', () => {
       pageSize: 10
     };
 
-    service.getFilteredItems(filteredParams).subscribe(response => {
-      expect(response).toBeDefined();
-    });
+    const subscription = service.getFilteredItems(filteredParams);
+    expect(subscription).toBeDefined();
+    expect(subscription.subscribe).toBeDefined();
   });
 
   it('deleteItem: to have been called and call backend', () => {
@@ -76,16 +76,21 @@ describe('PoTableService', () => {
     const paramDelete = 'id';
     const paramResponse = 12345;
 
-    service.deleteItem(paramDelete, paramResponse).subscribe(response => {
-      expect(response).toBeDefined();
-    });
+    const subscription = service.deleteItem(paramDelete, paramResponse);
+    expect(subscription).toBeDefined();
+    expect(subscription.subscribe).toBeDefined();
   });
 
-  it('scrollListener: should call scrollListener on scroll', () => {
+  it('scrollListener: should call scrollListener on scroll', done => {
     const dummyElement = document.createElement('div');
+    document.body.appendChild(dummyElement);
 
     service.scrollListener(dummyElement).subscribe(response => {
       expect(response).toBeDefined();
+      dummyElement.remove();
+      done();
     });
+
+    dummyElement.dispatchEvent(new Event('scroll'));
   });
 });

@@ -1021,9 +1021,7 @@ describe('PoListBoxComponent', () => {
 
       it('should call selectCombo when keyboard enter', () => {
         const item = {
-          action: () => {
-            console.log('action listbox search');
-          }
+          action: () => {}
         };
         const eventEnterKey = new KeyboardEvent('keydown', { 'code': 'Enter' });
 

@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { configureTestSuite } from '../../../util-test/util-expect.spec';
 import { PoContextTabButtonComponent } from './po-context-tab-button.component';
@@ -10,13 +12,16 @@ describe('PoContextTabButtonComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoContextTabButtonComponent]
+      imports: [CommonModule],
+      declarations: [PoContextTabButtonComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     });
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoContextTabButtonComponent);
     component = fixture.componentInstance;
+    component.literals = { close: 'Close' };
 
     nativeElement = fixture.debugElement.nativeElement;
   });

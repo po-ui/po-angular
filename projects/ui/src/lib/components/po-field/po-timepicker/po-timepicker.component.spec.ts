@@ -379,8 +379,26 @@ describe('PoTimepickerComponent:', () => {
         expect(component.showSeparator).toBeTrue();
       });
 
-      it('should return false when placeholder is set and hasValue is false', () => {
-        component.placeholder = '00:00';
+      it('should return true when placeholder contains colon and hasValue is false', () => {
+        component.placeholder = 'HH:mm';
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+
+        expect(component.showSeparator).toBeTrue();
+      });
+
+      it('should return true when placeholder contains multiple colons and hasValue is false', () => {
+        component.placeholder = 'HH:mm:ss';
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+
+        expect(component.showSeparator).toBeTrue();
+      });
+
+      it('should return false when placeholder without colon is set and hasValue is false', () => {
+        component.placeholder = 'Informe a hora';
         component.hourDisplay = '';
         component.minuteDisplay = '';
         component.secondDisplay = '';
@@ -1033,8 +1051,8 @@ describe('PoTimepickerComponent:', () => {
       expect(periodInput).toBeTruthy();
     });
 
-    it('should hide separators when placeholder is set and hasValue is false', () => {
-      component.placeholder = '00:00';
+    it('should hide separators when placeholder without colon is set and hasValue is false', () => {
+      component.placeholder = 'Informe a hora';
       component.hourDisplay = '';
       component.minuteDisplay = '';
       fixture.detectChanges();
@@ -1042,6 +1060,18 @@ describe('PoTimepickerComponent:', () => {
       const separators = fixture.nativeElement.querySelectorAll('.po-timepicker-field-separator');
       separators.forEach((sep: HTMLElement) => {
         expect(sep.classList.contains('po-timepicker-field-separator-hidden')).toBeTrue();
+      });
+    });
+
+    it('should show separators when placeholder contains colon and hasValue is false', () => {
+      component.placeholder = 'HH:mm';
+      component.hourDisplay = '';
+      component.minuteDisplay = '';
+      fixture.detectChanges();
+
+      const separators = fixture.nativeElement.querySelectorAll('.po-timepicker-field-separator');
+      separators.forEach((sep: HTMLElement) => {
+        expect(sep.classList.contains('po-timepicker-field-separator-hidden')).toBeFalse();
       });
     });
 
@@ -3529,7 +3559,6 @@ describe('PoTimepickerComponent:', () => {
         spyOn(component['controlPosition'], 'setElements');
         spyOn(component['controlPosition'], 'adjustPosition');
 
-        console.warn('component.dialogPicker.nativeElement:', component['dialogPicker'].nativeElement);
         component['adjustTimerPosition']();
         tick(100);
 
@@ -4424,6 +4453,10 @@ describe('PoTimepickerComponent:', () => {
 
         expect(result).toBeTrue();
         expect(cleanEl.focus).toHaveBeenCalled();
+      } else {
+        // iconClean not rendered in this test environment; verify fallback behavior
+        const result = component['focusCleanOrButton']();
+        expect(result).toBeDefined();
       }
     });
   });

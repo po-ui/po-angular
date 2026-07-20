@@ -11,12 +11,14 @@ import { PoMenuPanelComponent } from './po-menu-panel.component';
 import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service';
 
 @Component({
+  selector: 'app-menu-panel-search',
   template: 'Search',
   standalone: false
 })
 export class SearchComponent {}
 
 @Component({
+  selector: 'app-menu-panel-home',
   template: 'Home',
   standalone: false
 })
