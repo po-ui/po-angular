@@ -157,7 +157,7 @@ describe('PoComboFilterService ', () => {
       comboService.fieldValue = 'cpf';
 
       spyOn(comboService, <any>'addMessage').and.callThrough();
-      spyOn(console, 'error').and.callThrough();
+      spyOn(console, 'error');
       spyOnProperty(comboService, 'url', 'get').and.returnValue('http://mockurl.com');
 
       comboService.getFilteredData(filterParam).subscribe(response => {
@@ -270,12 +270,17 @@ describe('PoComboFilterService ', () => {
       expect(params).toEqual(expectedParams);
     });
 
-    it('scrollListener: should call scrollListener on scroll', () => {
+    it('scrollListener: should call scrollListener on scroll', done => {
       const dummyElement = document.createElement('div');
+      document.body.appendChild(dummyElement);
 
       comboService.scrollListener(dummyElement).subscribe(response => {
         expect(response).toBeDefined();
+        dummyElement.remove();
+        done();
       });
+
+      dummyElement.dispatchEvent(new Event('scroll'));
     });
   });
 });

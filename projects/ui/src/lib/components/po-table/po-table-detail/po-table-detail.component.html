@@ -6,7 +6,7 @@
           <th class="po-table-header po-table-column-selectable"></th>
         }
         <th class="po-table-header po-table-header-column po-table-header-master-detail"></th>
-        @for (detail of detail.columns; track detail) {
+        @for (detail of detail.columns; track $index) {
           <th class="po-table-header po-table-header-ellipsis">
             <div
               class="po-table-header-flex"
@@ -20,7 +20,7 @@
     </thead>
   }
   <tbody>
-    @for (item of items; track item) {
+    @for (item of items; track $index) {
       <tr class="po-table-detail-row" [class.po-table-row-active]="item.$selected && isSelectable">
         @if (isSelectable) {
           <td class="po-table-column-master-detail-space-checkbox"></td>
@@ -35,7 +35,7 @@
         } @else {
           <td class="po-table-column-master-detail-space"></td>
         }
-        @for (detail of detailColumns; track detail) {
+        @for (detail of detailColumns; track $index) {
           <td
             class="po-table-column-master-detail po-table-master-detail-label"
             (click)="isSelectable ? onSelectRow(item) : 'javascript:;'"

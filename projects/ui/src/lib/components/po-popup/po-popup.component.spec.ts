@@ -91,6 +91,10 @@ describe('PoPopupComponent:', () => {
     });
 
     it('clickoutListener: should call `closePopupOnClickout` on click in document', () => {
+      const targetEl = document.createElement('button');
+      document.body.appendChild(targetEl);
+      component.target = targetEl;
+
       component.open();
       fixture.detectChanges();
 
@@ -101,6 +105,7 @@ describe('PoPopupComponent:', () => {
       fixture.detectChanges();
 
       expect(component['closePopupOnClickout']).toHaveBeenCalled();
+      targetEl.remove();
     });
 
     it('resizeListener: should call `close` on resize window', () => {

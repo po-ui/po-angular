@@ -116,7 +116,7 @@
             @if (placeholder && !disclaimers?.length) {
               <span class="po-lookup-input-placeholder">{{ placeholder }}</span>
             }
-            @for (disclaimer of visibleDisclaimers; track disclaimer) {
+            @for (disclaimer of visibleDisclaimers; track $index) {
               <po-disclaimer
                 class="po-lookup-input-disclaimer"
                 [p-label]="disclaimer.label"

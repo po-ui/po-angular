@@ -129,7 +129,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     const customPresets = hasCustomPresets ? rangePresetOptions : [];
     const combined = [...defaultPresets, ...customPresets];
 
-    // Regra: o preset "today" é obrigatório e deve estar presente mesmo com apenas presets customizados
     if (combined.length > 0 && !combined.some(p => p.label.toLowerCase() === 'today')) {
       const todayPreset = PO_CALENDAR_DEFAULT_RANGE_PRESETS.find(p => p.label === 'today');
       if (todayPreset) {
@@ -395,9 +394,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     const newModel = this.convertDateToISO(this.value);
     this.updateModel(newModel);
 
-    // Em modo date-time, se a seleção é do preset "Hoje", emite close primeiro
-    // para sinalizar ao consumidor que é uma operação atômica de preset,
-    // depois emite change e changeTime.
     if (this.isDateTime && this.timerComponent && this.isTodayPresetSelection) {
       this.close.emit();
       this.change.emit(newModel);
@@ -431,6 +427,9 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   onCloseCalendar() {
+    if (this.isDateTime) {
+      return;
+    }
     this.change.emit(this.value);
     this.close.emit();
   }
@@ -516,7 +515,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       return 1; // Presente
     };
 
-    // Ordena em ASC: Futuro → Presente → Passado, proximidade crescente dentro de cada grupo
     const sorted = [...presets].sort((a, b) => {
       const rangeA = a.dateRange(today);
       const rangeB = b.dateRange(today);
@@ -533,7 +531,6 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     });
 
     const resolvedOrder = order ?? this.rangePresetsOrder;
-    // DESC: inverte completamente a lista (Passado → Presente → Futuro, mais distante primeiro)
     return resolvedOrder === 'desc' ? sorted.reverse() : sorted;
   }
 

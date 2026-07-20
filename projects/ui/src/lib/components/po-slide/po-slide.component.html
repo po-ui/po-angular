@@ -1,7 +1,7 @@
 <div class="po-slide-wrapper">
   <div class="po-slide-outer">
     <div class="po-slide-inner" #slide>
-      @for (item of slideItems; track item; let index = $index) {
+      @for (item of slideItems; track $index; let index = $index) {
         <po-slide-item
           [p-action]="item.action"
           [p-data]="item"

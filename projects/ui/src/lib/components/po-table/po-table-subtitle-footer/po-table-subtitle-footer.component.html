@@ -1,5 +1,5 @@
 <div class="po-table-subtitle-footer-container">
-  @for (subtitle of subtitles; track subtitle) {
+  @for (subtitle of subtitles; track $index) {
     <div class="po-table-subtitle-footer">
       <po-table-subtitle-circle p-hide-title="true" [p-subtitle]="subtitle"> </po-table-subtitle-circle>
       <span class="po-table-subtitle-text">{{ subtitle.label }}</span>

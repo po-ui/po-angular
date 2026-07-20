@@ -1456,7 +1456,7 @@ describe('PoDatetimepickerComponent:', () => {
 
     it('should register scroll listener', () => {
       component.visible = true;
-      spyOn(component['controlPosition'], 'adjustPosition');
+      const spy = spyOn(component['controlPosition'], 'adjustPosition');
       component['initializeListeners']();
 
       const scrollableEl = document.createElement('div');
@@ -1465,6 +1465,8 @@ describe('PoDatetimepickerComponent:', () => {
 
       // scroll with capture=true is on window, dispatch on document
       window.dispatchEvent(new Event('scroll'));
+
+      expect(spy).toHaveBeenCalled();
 
       component['removeListeners']();
       scrollableEl.remove();

@@ -9,12 +9,14 @@ import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite/po-bread
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
 @Component({
+  selector: 'app-breadcrumb-documentation',
   template: 'Documentation',
   standalone: false
 })
 export class DocumentationComponent {}
 
 @Component({
+  selector: 'app-breadcrumb-guides',
   template: 'Guides',
   standalone: false
 })
@@ -438,6 +440,7 @@ describe('PoBreadcrumbComponent:', () => {
         { label: 'Teste nível 4', link: '/test/nivel/4' }
       ];
 
+      component['_breadcrumbItemsLenght'] = 400;
       spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
 
       component['calcBreadcrumb']();
