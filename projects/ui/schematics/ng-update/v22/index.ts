@@ -22,18 +22,26 @@ function askQuestion(query: string): Promise<string> {
 }
 
 async function main(): Promise<Rule> {
-  const answer = await askQuestion(
-    '\nAntes de atualizar o PO UI para a versão 22, é necessário que o Angular do seu projeto ' +
-      'já esteja na versão 22.\n' +
-      'Siga o guia oficial de atualização do Angular: https://angular.dev/update-guide\n\n' +
-      'Você já executou "ng update @angular/core@22 @angular/cli@22" e as migrações necessárias do Angular 22? (yes/no) '
-  );
+  const message =
+    '\n⚠️  Antes de atualizar o PO UI para a versão 22, é necessário que o Angular do seu projeto ' +
+    'já esteja na versão 22.\n' +
+    'Siga o guia oficial de atualização do Angular: https://angular.dev/update-guide\n\n' +
+    'Você já executou "ng update @angular/core@22 @angular/cli@22" e as migrações necessárias do Angular 22? (yes/no) ';
+
+  let answer = 'yes';
+
+  if (process.stdin.isTTY) {
+    answer = await askQuestion(message);
+  } else {
+    console.log(message);
+    console.log('Execução em modo não-interativo detectada. Assumindo "yes" como padrão.\n');
+  }
 
   const confirmed = ['yes', 'y', 'sim', 's', ''].includes(answer.trim().toLowerCase());
 
   if (!confirmed) {
     console.log(
-      '\nAtualização cancelada. Execute primeiro as migrações do Angular 22:\n' +
+      '\n❌ Atualização cancelada. Execute primeiro as migrações do Angular 22:\n' +
         '   ng update @angular/core@22 @angular/cli@22\n' +
         '   Consulte: https://angular.dev/update-guide\n'
     );
