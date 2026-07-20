@@ -493,66 +493,6 @@ describe('PoHelperComponent', () => {
     });
   });
 
-  describe('setPopoverPositionByScreen', () => {
-    let originalInnerWidth: number;
-
-    beforeEach(() => {
-      originalInnerWidth = window.innerWidth;
-    });
-
-    afterEach(() => {
-      Object.defineProperty(window, 'innerWidth', { configurable: true, value: originalInnerWidth });
-    });
-
-    it('should not change popoverPosition when target or nativeElement are falsy', () => {
-      (component as any).popoverPosition = 'left';
-      component.target = undefined as any;
-      expect(() => component.setPopoverPositionByScreen()).not.toThrow();
-      expect((component as any).popoverPosition).toBe('left');
-
-      (component as any).popoverPosition = 'right';
-      (component as any).target = {} as any;
-      expect(() => component.setPopoverPositionByScreen()).not.toThrow();
-      expect((component as any).popoverPosition).toBe('right');
-    });
-
-    it('should set popoverPosition to "left" when rect.right + 400 > screenWidth', () => {
-      Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1000 });
-      const rect = { right: 700 } as DOMRect;
-      (component as any).target = {
-        nativeElement: { getBoundingClientRect: () => rect }
-      };
-
-      component.setPopoverPositionByScreen();
-      expect((component as any).popoverPosition).toBe('left');
-    });
-
-    it('should set popoverPosition to "right" when rect.right + 400 <= screenWidth', () => {
-      Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1000 });
-      const rect = { right: 500 } as DOMRect;
-      (component as any).target = {
-        nativeElement: { getBoundingClientRect: () => rect }
-      };
-      component.setPopoverPositionByScreen();
-      expect((component as any).popoverPosition).toBe('right');
-    });
-
-    it('should use document.documentElement.clientWidth when window.innerWidth is falsy', () => {
-      Object.defineProperty(window, 'innerWidth', { configurable: true, value: 0 });
-
-      spyOnProperty(document.documentElement, 'clientWidth', 'get').and.returnValue(900);
-
-      const rect = { right: 400 } as DOMRect;
-      (component as any).target = {
-        nativeElement: { getBoundingClientRect: () => rect }
-      };
-
-      component.setPopoverPositionByScreen();
-
-      expect((component as any).popoverPosition).toBe('right');
-    });
-  });
-
   describe('helperIsVisible', () => {
     it('should return falsy when popover is undefined', () => {
       component.popover = undefined;

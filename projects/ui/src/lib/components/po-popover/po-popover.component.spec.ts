@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -16,11 +17,40 @@ describe('PoPopoverComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [CommonModule],
+      imports: [CommonModule, OverlayModule, NgTemplateOutlet],
       declarations: [PoPopoverComponent],
       providers: [PoControlPositionService],
       schemas: [NO_ERRORS_SCHEMA]
     });
+  });
+
+  // Stash originals so individual tests can invoke the real hooks when needed.
+  const originalNgAfterViewInit = PoPopoverComponent.prototype.ngAfterViewInit;
+  const originalNgOnDestroy = PoPopoverComponent.prototype.ngOnDestroy;
+
+  beforeAll(() => {
+    // The popover template puts `#popoverElement` inside an
+    // <ng-template #sharedPopoverContent> rendered via *ngTemplateOutlet.
+    // Under `NO_ERRORS_SCHEMA`, Angular's JIT compiler skips the outlet, so
+    // the ViewChild `popoverElement` never resolves, and every
+    // `fixture.detectChanges()` in `beforeEach` would crash inside
+    // `ngAfterViewInit -> setElementsControlPosition`.
+    //
+    // We stub the lifecycle hooks at the prototype level so the default
+    // fixture setup does not throw. Tests that need the real behavior can
+    // restore the hook via `PoPopoverComponent.prototype.ngAfterViewInit =
+    // originalNgAfterViewInit` in an inner beforeEach/afterEach.
+    PoPopoverComponent.prototype.ngAfterViewInit = function (this: PoPopoverComponent) {
+      (this as any).afterViewInitWasCalled = true;
+    };
+    PoPopoverComponent.prototype.ngOnDestroy = function () {
+      // no-op; individual tests exercise the real one explicitly.
+    };
+  });
+
+  afterAll(() => {
+    PoPopoverComponent.prototype.ngAfterViewInit = originalNgAfterViewInit;
+    PoPopoverComponent.prototype.ngOnDestroy = originalNgOnDestroy;
   });
 
   beforeEach(() => {
@@ -30,6 +60,15 @@ describe('PoPopoverComponent:', () => {
     const target = document.createElement('button');
     document.body.appendChild(target);
     component.target = target;
+
+    // Provide fallbacks so any code path reading these does not throw
+    // even though the template stubs are neutralized.
+    if (!component.popoverElement) {
+      (component as any).popoverElement = { nativeElement: document.createElement('div') };
+    }
+    if (!(component as any).resizeListener) {
+      (component as any).resizeListener = () => {};
+    }
 
     fixture.detectChanges();
     nativeElement = fixture.debugElement.nativeElement;
@@ -79,7 +118,7 @@ describe('PoPopoverComponent:', () => {
   it('should call setElement and setRendererListenInit in ngAfterViewInit', () => {
     spyOn(component['poControlPosition'], 'setElements');
     spyOn(component, 'setRendererListenInit');
-    component.ngAfterViewInit();
+    originalNgAfterViewInit.call(component);
     expect(component['poControlPosition'].setElements).toHaveBeenCalled();
     expect(component.setRendererListenInit).toHaveBeenCalled();
   });
@@ -579,7 +618,9 @@ describe('PoPopoverComponent:', () => {
     eventScroll.initEvent('scroll', false, true);
 
     spyOn(component, 'setPopoverPosition');
+    spyOn(window, 'requestAnimationFrame');
 
+    originalNgAfterViewInit.call(component);
     component.open();
 
     window.dispatchEvent(eventScroll);
@@ -588,11 +629,12 @@ describe('PoPopoverComponent:', () => {
   });
 
   describe('Methods:', () => {
-    it('showPopover: should call setElementsControlPosition, setPopoverPosition, setOpacity, openPopover.emit, observeContentResize and detectChanges', () => {
+    it('showPopover: should call stabilizePopoverWidth, setElementsControlPosition, setPopoverPosition, setOpacity, openPopover.emit, observeContentResize and detectChanges', () => {
       spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
         cb(0);
         return 0;
       });
+      spyOn(component, <any>'stabilizePopoverWidth');
       spyOn(component, 'setPopoverPosition');
       spyOn(component, <any>'setElementsControlPosition');
       spyOn(component, 'setOpacity');
@@ -601,6 +643,7 @@ describe('PoPopoverComponent:', () => {
 
       component['showPopover']();
 
+      expect(component['stabilizePopoverWidth']).toHaveBeenCalled();
       expect(component['setElementsControlPosition']).toHaveBeenCalled();
       expect(component.setPopoverPosition).toHaveBeenCalled();
       expect(component.setOpacity).toHaveBeenCalledWith(1);
@@ -608,10 +651,28 @@ describe('PoPopoverComponent:', () => {
       expect(component['observeContentResize']).toHaveBeenCalled();
     });
 
+    it('showPopover: should call stabilizePopoverWidth before setElementsControlPosition and setPopoverPosition', () => {
+      spyOn(window, 'requestAnimationFrame').and.callFake((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+      const order: Array<string> = [];
+      spyOn<any>(component, 'stabilizePopoverWidth').and.callFake(() => order.push('stabilize'));
+      spyOn<any>(component, 'setElementsControlPosition').and.callFake(() => order.push('setElements'));
+      spyOn(component, 'setPopoverPosition').and.callFake(() => order.push('setPosition'));
+      spyOn(component, 'setOpacity');
+      spyOn<any>(component, 'observeContentResize');
+      spyOn(component.openPopover, 'emit');
+
+      component['showPopover']();
+
+      expect(order).toEqual(['stabilize', 'setElements', 'setPosition']);
+    });
+
     it(`ngAfterViewInit: should call 'setElementsControlPosition'`, () => {
       spyOn(component, <any>'setElementsControlPosition');
 
-      component.ngAfterViewInit();
+      originalNgAfterViewInit.call(component);
 
       expect(component['setElementsControlPosition']).toHaveBeenCalled();
     });
@@ -620,7 +681,7 @@ describe('PoPopoverComponent:', () => {
       spyOn(component, <any>'disconnectResizeObserver');
       spyOn(component, <any>'removeListeners');
 
-      component.ngOnDestroy();
+      originalNgOnDestroy.call(component);
 
       expect(component['disconnectResizeObserver']).toHaveBeenCalled();
       expect(component['removeListeners']).toHaveBeenCalled();
@@ -672,12 +733,12 @@ describe('PoPopoverComponent:', () => {
 
     describe('removeListeners:', () => {
       it('should remove click and resize listeners.', () => {
-        spyOn(component, <any>'clickoutListener');
+        (component as any).clickoutListener = jasmine.createSpy('clickoutListener');
         spyOn(component, <any>'resizeListener');
 
         component['removeListeners']();
 
-        expect(component['clickoutListener']).toHaveBeenCalled();
+        expect((component as any).clickoutListener).toHaveBeenCalled();
         expect(component['resizeListener']).toHaveBeenCalled();
       });
 
@@ -792,6 +853,341 @@ describe('PoPopoverComponent:', () => {
         false,
         true
       );
+    });
+
+    it(`setElementsControlPosition: should pass the custom offset when 'p-offset' input is set`, () => {
+      const customOffset = 4;
+      component.popoverElement.nativeElement = '<po-popover></po-popover>';
+      component.target = <any>'<div></div>';
+      component.offset = customOffset;
+
+      spyOn(component['poControlPosition'], 'setElements');
+
+      component['setElementsControlPosition']();
+
+      expect(component['poControlPosition'].setElements).toHaveBeenCalledWith(
+        component.popoverElement.nativeElement,
+        customOffset,
+        component.target,
+        undefined,
+        false,
+        false
+      );
+    });
+
+    describe('stabilizePopoverWidth:', () => {
+      let originalInnerWidth: PropertyDescriptor | undefined;
+
+      beforeEach(() => {
+        originalInnerWidth = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      });
+
+      afterEach(() => {
+        if (originalInnerWidth) {
+          Object.defineProperty(window, 'innerWidth', originalInnerWidth);
+        }
+      });
+
+      function mockInnerWidth(value: number): void {
+        Object.defineProperty(window, 'innerWidth', { configurable: true, get: () => value });
+      }
+
+      function makeFakeThis(overrides: Partial<any> = {}) {
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 300 })
+        };
+        const targetEl = {
+          getBoundingClientRect: () => ({ left: 100, top: 0, width: 24, height: 24 })
+        };
+        return {
+          width: undefined,
+          widthPopover: undefined,
+          offset: 8,
+          popoverElement: { nativeElement: nativeEl },
+          targetElement: targetEl,
+          cd: { detectChanges: jasmine.createSpy('detectChanges') },
+          ...overrides
+        };
+      }
+
+      it('should early-return when `width` input is defined', () => {
+        const fakeThis = makeFakeThis({ width: 400 });
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBeUndefined();
+        expect(fakeThis.cd.detectChanges).not.toHaveBeenCalled();
+      });
+
+      it('should early-return when `widthPopover` is already set', () => {
+        const fakeThis = makeFakeThis({ widthPopover: 250 });
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBe(250);
+        expect(fakeThis.cd.detectChanges).not.toHaveBeenCalled();
+      });
+
+      it('should early-return when popoverElement.nativeElement is missing', () => {
+        const fakeThis = makeFakeThis({ popoverElement: { nativeElement: undefined } });
+
+        expect(() => (component as any).stabilizePopoverWidth.call(fakeThis)).not.toThrow();
+        expect(fakeThis.widthPopover).toBeUndefined();
+      });
+
+      it('should early-return when targetElement is missing', () => {
+        const fakeThis = makeFakeThis({ targetElement: undefined });
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBeUndefined();
+      });
+
+      it('should move the popover to (0,0) to measure natural width in an unconstrained location', () => {
+        const nativeEl = {
+          style: { width: '', left: '25px', top: '25px' },
+          getBoundingClientRect: () => ({ width: 300 })
+        };
+        const fakeThis = makeFakeThis({ popoverElement: { nativeElement: nativeEl } });
+        // desktop-ish viewport
+        mockInnerWidth(1920);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(nativeEl.style.left).toBe('0px');
+        expect(nativeEl.style.top).toBe('0px');
+      });
+
+      it('should set widthPopover to natural width when it fits within the feasible cap (wide viewport)', () => {
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 300 })
+        };
+        const fakeThis = makeFakeThis({ popoverElement: { nativeElement: nativeEl } });
+        mockInnerWidth(1920);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        // Natural (300) fits any position on a wide viewport → keep natural.
+        expect(fakeThis.widthPopover).toBe(300);
+        expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
+      });
+
+      it('should cap widthPopover to the largest feasible candidate on a narrow viewport', () => {
+        // Target near the center of a narrow viewport: cx=180 in vp=360.
+        // maxFit candidates (safety=2):
+        //   top-left  = cx + 15 - 2 = 193
+        //   top-right = vp - cx + 15 - 2 = 193
+        //   centered  = 2 * min(cx, vp - cx) - 2 = 358
+        //   left      = cx - target.w/2 - offset - safety = 158
+        //   right     = vp - cx - target.w/2 - offset - safety = 158
+        // The largest candidate is 358 (centered), so widthPopover = min(natural=500, 358) = 358.
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 500 })
+        };
+        const targetEl = {
+          getBoundingClientRect: () => ({ left: 168, top: 0, width: 24, height: 24 })
+        };
+        const fakeThis = makeFakeThis({
+          popoverElement: { nativeElement: nativeEl },
+          targetElement: targetEl
+        });
+        mockInnerWidth(360);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBe(358);
+      });
+
+      it('should enforce min-width of 240 even when candidates fall below it', () => {
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 500 })
+        };
+        const targetEl = {
+          getBoundingClientRect: () => ({ left: 88, top: 0, width: 24, height: 24 })
+        };
+        const fakeThis = makeFakeThis({
+          popoverElement: { nativeElement: nativeEl },
+          targetElement: targetEl
+        });
+        mockInnerWidth(200);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBe(240);
+      });
+
+      it('should skip candidates whose geometry is infeasible for the target (off-screen)', () => {
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 400 })
+        };
+        const targetEl = {
+          getBoundingClientRect: () => ({ left: 488, top: 0, width: 24, height: 24 })
+        };
+        const fakeThis = makeFakeThis({
+          popoverElement: { nativeElement: nativeEl },
+          targetElement: targetEl
+        });
+        mockInnerWidth(360);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBe(400);
+      });
+
+      it('should include the current `offset` input in the left/right candidates', () => {
+        // Target on the left half with a larger offset to shrink the `right` candidate.
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 500 })
+        };
+        const targetEl = {
+          getBoundingClientRect: () => ({ left: 88, top: 0, width: 24, height: 24 })
+        };
+        const fakeThis = makeFakeThis({
+          popoverElement: { nativeElement: nativeEl },
+          targetElement: targetEl,
+          offset: 32
+        });
+        // cx = 100, vp = 360
+        //   right = vp - cx - target.w/2 - offset - safety = 360 - 100 - 12 - 32 - 2 = 214
+        //   centered = 2 * min(100, 260) - 2 = 198
+        //   top-right = 360 - 100 + 15 - 2 = 273
+        //   top-left  = 100 + 15 - 2 = 113
+        //   left      = 100 - 12 - 32 - 2 = 54
+        // Max = 273 (top-right)
+        mockInnerWidth(360);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBe(273);
+      });
+
+      it('should call cd.detectChanges after setting widthPopover so the [style.width.px] binding applies', () => {
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 300 })
+        };
+        const fakeThis = makeFakeThis({ popoverElement: { nativeElement: nativeEl } });
+        mockInnerWidth(1920);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.cd.detectChanges).toHaveBeenCalledTimes(1);
+      });
+
+      it('should fall back to natural width when no candidate is feasible (empty candidates)', () => {
+        const nativeEl = {
+          style: { width: '', left: '', top: '' },
+          getBoundingClientRect: () => ({ width: 300 })
+        };
+        const targetEl = {
+          getBoundingClientRect: () => ({ left: -12, top: 0, width: 24, height: 24 })
+        };
+        const fakeThis = makeFakeThis({
+          popoverElement: { nativeElement: nativeEl },
+          targetElement: targetEl
+        });
+        mockInnerWidth(5);
+
+        (component as any).stabilizePopoverWidth.call(fakeThis);
+
+        expect(fakeThis.widthPopover).toBe(300);
+      });
+    });
+
+    describe('observeContentResize:', () => {
+      let originalResizeObserver: any;
+      let capturedCallback: (entries: Array<any>) => void;
+      let observeSpy: jasmine.Spy;
+      let disconnectSpy: jasmine.Spy;
+
+      beforeEach(() => {
+        originalResizeObserver = (window as any).ResizeObserver;
+        observeSpy = jasmine.createSpy('observe');
+        disconnectSpy = jasmine.createSpy('disconnect');
+        (window as any).ResizeObserver = function (cb: (entries: Array<any>) => void) {
+          capturedCallback = cb;
+          return { observe: observeSpy, disconnect: disconnectSpy };
+        };
+      });
+
+      afterEach(() => {
+        (window as any).ResizeObserver = originalResizeObserver;
+      });
+
+      it('should early-return without creating a ResizeObserver when popoverElement is missing', () => {
+        const fakeThis: any = {
+          disconnectResizeObserver: jasmine.createSpy('disconnectResizeObserver'),
+          popoverElement: undefined,
+          setElementsControlPosition: () => {},
+          setPopoverPosition: () => {},
+          cd: { detectChanges: () => {} }
+        };
+
+        (component as any).observeContentResize.call(fakeThis);
+
+        expect(fakeThis.disconnectResizeObserver).toHaveBeenCalled();
+        expect(fakeThis.resizeObserver).toBeUndefined();
+      });
+
+      it('should observe the popover element and disconnect a previous observer', () => {
+        const el = document.createElement('div');
+        const fakeThis: any = {
+          disconnectResizeObserver: jasmine.createSpy('disconnectResizeObserver'),
+          popoverElement: { nativeElement: el },
+          setElementsControlPosition: jasmine.createSpy('setElementsControlPosition'),
+          setPopoverPosition: jasmine.createSpy('setPopoverPosition'),
+          cd: { detectChanges: jasmine.createSpy('detectChanges') }
+        };
+
+        (component as any).observeContentResize.call(fakeThis);
+
+        expect(fakeThis.disconnectResizeObserver).toHaveBeenCalled();
+        expect(observeSpy).toHaveBeenCalledWith(el);
+      });
+
+      it('should skip the first (baseline) fire without repositioning', () => {
+        const el = document.createElement('div');
+        const fakeThis: any = {
+          disconnectResizeObserver: () => {},
+          popoverElement: { nativeElement: el },
+          setElementsControlPosition: jasmine.createSpy('setElementsControlPosition'),
+          setPopoverPosition: jasmine.createSpy('setPopoverPosition'),
+          cd: { detectChanges: jasmine.createSpy('detectChanges') }
+        };
+
+        (component as any).observeContentResize.call(fakeThis);
+        capturedCallback([]);
+
+        expect(fakeThis.setElementsControlPosition).not.toHaveBeenCalled();
+        expect(fakeThis.setPopoverPosition).not.toHaveBeenCalled();
+        expect(fakeThis.cd.detectChanges).not.toHaveBeenCalled();
+      });
+
+      it('should re-run positioning on every fire AFTER the baseline', () => {
+        const el = document.createElement('div');
+        const fakeThis: any = {
+          disconnectResizeObserver: () => {},
+          popoverElement: { nativeElement: el },
+          setElementsControlPosition: jasmine.createSpy('setElementsControlPosition'),
+          setPopoverPosition: jasmine.createSpy('setPopoverPosition'),
+          cd: { detectChanges: jasmine.createSpy('detectChanges') }
+        };
+
+        (component as any).observeContentResize.call(fakeThis);
+        capturedCallback([]); // baseline (ignored)
+        capturedCallback([]); // real resize (should reposition)
+        capturedCallback([]); // another resize (should reposition again)
+
+        expect(fakeThis.setElementsControlPosition).toHaveBeenCalledTimes(2);
+        expect(fakeThis.setPopoverPosition).toHaveBeenCalledTimes(2);
+        expect(fakeThis.cd.detectChanges).toHaveBeenCalledTimes(2);
+      });
     });
   });
 

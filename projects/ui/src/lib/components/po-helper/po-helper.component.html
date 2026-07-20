@@ -10,7 +10,7 @@
   [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
   [class.po-helper-disabled]="disabled()"
   (keydown)="onKeyDown($event)"
-  (click)="openHelperPopover(); emitClick($event); popover.ensurePopoverPosition()"
+  (click)="openHelperPopover(); emitClick($event)"
 >
   <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
   <po-popover
@@ -19,6 +19,7 @@
     [p-target]="target"
     [p-title]="helper()?.title"
     [p-append-in-body]="appendBox()"
+    [p-offset]="8"
     p-custom-classes="po-helper-popover"
     p-trigger="function"
     (p-close)="handleClose()"

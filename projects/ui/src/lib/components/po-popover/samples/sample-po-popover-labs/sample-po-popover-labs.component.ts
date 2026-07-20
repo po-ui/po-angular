@@ -15,6 +15,7 @@ export class SamplePoPopoverLabsComponent {
   position: string = '';
   properties: Array<string> = [];
   title: string = '';
+  offset: number = 8;
 
   public readonly positionOptions: Array<PoRadioGroupOption> = [
     { label: 'Right', value: 'right' },
@@ -31,6 +32,14 @@ export class SamplePoPopoverLabsComponent {
     { label: 'Top-right', value: 'top-right' }
   ];
 
+  public readonly offsetOptions: Array<PoRadioGroupOption> = [
+    { label: '0', value: 0 },
+    { label: '4', value: 4 },
+    { label: '8 (default)', value: 8 },
+    { label: '16', value: 16 },
+    { label: '32', value: 32 }
+  ];
+
   public readonly propertiesOptions: Array<PoCheckboxGroupOption> = [{ value: 'hideArrow', label: 'Hide arrow' }];
 
   restore() {
@@ -38,5 +47,6 @@ export class SamplePoPopoverLabsComponent {
     this.position = undefined;
     this.properties = [];
     this.title = '';
+    this.offset = 8;
   }
 }
