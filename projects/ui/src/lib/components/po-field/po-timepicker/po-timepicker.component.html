@@ -61,7 +61,9 @@
             />
           </div>
 
-          <div class="po-timepicker-field-separator">:</div>
+          <div class="po-timepicker-field-separator" [class.po-timepicker-field-separator-hidden]="!showSeparator">
+            :
+          </div>
 
           <div class="po-timepicker-field-segment" [attr.data-value]="minuteDisplay || minutePlaceholder || '  '">
             <input
@@ -88,7 +90,9 @@
           </div>
 
           @if (showSeconds) {
-            <div class="po-timepicker-field-separator">:</div>
+            <div class="po-timepicker-field-separator" [class.po-timepicker-field-separator-hidden]="!showSeparator">
+              :
+            </div>
 
             <div class="po-timepicker-field-segment" [attr.data-value]="secondDisplay || secondPlaceholder || '  '">
               <input
@@ -115,7 +119,7 @@
             </div>
           }
 
-          @if (is12HourFormat) {
+          @if (is12HourFormat && hasValue()) {
             <div
               class="po-timepicker-field-segment po-timepicker-field-period"
               [attr.data-value]="periodDisplay || 'AM'"

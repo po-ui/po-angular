@@ -156,6 +156,10 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     return !this.hourDisplay && !this.minuteDisplay && (!this.showSeconds || !this.secondDisplay);
   }
 
+  get showSeparator(): boolean {
+    return !this.placeholder?.trim() || this.hasValue();
+  }
+
   private get customPlaceholderSegments(): Array<string> {
     if (!this.placeholder?.trim()) {
       return [];

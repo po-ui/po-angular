@@ -364,6 +364,38 @@ describe('PoTimepickerComponent:', () => {
       });
     });
 
+    describe('showSeparator:', () => {
+      it('should return true when no placeholder is set', () => {
+        component.placeholder = '';
+        component.hourDisplay = '';
+
+        expect(component.showSeparator).toBeTrue();
+      });
+
+      it('should return true when placeholder is set but hasValue is true', () => {
+        component.placeholder = '00:00';
+        component.hourDisplay = '10';
+
+        expect(component.showSeparator).toBeTrue();
+      });
+
+      it('should return false when placeholder is set and hasValue is false', () => {
+        component.placeholder = '00:00';
+        component.hourDisplay = '';
+        component.minuteDisplay = '';
+        component.secondDisplay = '';
+
+        expect(component.showSeparator).toBeFalse();
+      });
+
+      it('should return true when placeholder is whitespace only (treated as no placeholder)', () => {
+        component.placeholder = '   ';
+        component.hourDisplay = '';
+
+        expect(component.showSeparator).toBeTrue();
+      });
+    });
+
     describe('getErrorPattern:', () => {
       it('should return empty string when no error pattern', () => {
         component.errorPattern = '';
@@ -956,6 +988,7 @@ describe('PoTimepickerComponent:', () => {
     it('should render readonly period input with default AM in 12h format', () => {
       component.format = PoTimerFormat.Format12;
       component.readonly = true;
+      component.hourDisplay = '10';
       fixture.detectChanges();
 
       const periodInput = fixture.nativeElement.querySelector('.po-timepicker-period-input') as HTMLInputElement;
@@ -979,6 +1012,59 @@ describe('PoTimepickerComponent:', () => {
 
       const field = fixture.nativeElement.querySelector('.po-timepicker-field');
       expect(field.classList.contains('po-timepicker-field-readonly')).toBeTrue();
+    });
+
+    it('should not render period input when is12HourFormat but hasValue is false', () => {
+      component.format = PoTimerFormat.Format12;
+      component.hourDisplay = '';
+      component.minuteDisplay = '';
+      fixture.detectChanges();
+
+      const periodInput = fixture.nativeElement.querySelector('.po-timepicker-period-input');
+      expect(periodInput).toBeNull();
+    });
+
+    it('should render period input when is12HourFormat and hasValue is true', () => {
+      component.format = PoTimerFormat.Format12;
+      component.hourDisplay = '10';
+      fixture.detectChanges();
+
+      const periodInput = fixture.nativeElement.querySelector('.po-timepicker-period-input');
+      expect(periodInput).toBeTruthy();
+    });
+
+    it('should hide separators when placeholder is set and hasValue is false', () => {
+      component.placeholder = '00:00';
+      component.hourDisplay = '';
+      component.minuteDisplay = '';
+      fixture.detectChanges();
+
+      const separators = fixture.nativeElement.querySelectorAll('.po-timepicker-field-separator');
+      separators.forEach((sep: HTMLElement) => {
+        expect(sep.classList.contains('po-timepicker-field-separator-hidden')).toBeTrue();
+      });
+    });
+
+    it('should show separators when hasValue is true regardless of placeholder', () => {
+      component.placeholder = '00:00';
+      component.hourDisplay = '10';
+      fixture.detectChanges();
+
+      const separators = fixture.nativeElement.querySelectorAll('.po-timepicker-field-separator');
+      separators.forEach((sep: HTMLElement) => {
+        expect(sep.classList.contains('po-timepicker-field-separator-hidden')).toBeFalse();
+      });
+    });
+
+    it('should show separators when no placeholder is set even without value', () => {
+      component.placeholder = '';
+      component.hourDisplay = '';
+      fixture.detectChanges();
+
+      const separators = fixture.nativeElement.querySelectorAll('.po-timepicker-field-separator');
+      separators.forEach((sep: HTMLElement) => {
+        expect(sep.classList.contains('po-timepicker-field-separator-hidden')).toBeFalse();
+      });
     });
   });
 
@@ -2956,6 +3042,7 @@ describe('PoTimepickerComponent:', () => {
     describe('focusLastSegment (private):', () => {
       it('should focus period input in 12h format', () => {
         component.format = PoTimerFormat.Format12;
+        component.hourDisplay = '10';
         fixture.detectChanges();
 
         spyOn(component.periodInputEl.nativeElement, 'focus');
@@ -3038,6 +3125,8 @@ describe('PoTimepickerComponent:', () => {
       it('should focus period when current is minute and is12HourFormat and not showSeconds', () => {
         component.format = PoTimerFormat.Format12;
         component.showSeconds = false;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
         fixture.detectChanges();
         spyOn(component.periodInputEl.nativeElement, 'focus');
 
@@ -3049,6 +3138,9 @@ describe('PoTimepickerComponent:', () => {
       it('should focus period when current is second and is12HourFormat', () => {
         component.format = PoTimerFormat.Format12;
         component.showSeconds = true;
+        component.hourDisplay = '10';
+        component.minuteDisplay = '30';
+        component.secondDisplay = '00';
         fixture.detectChanges();
         spyOn(component.periodInputEl.nativeElement, 'focus');
 
