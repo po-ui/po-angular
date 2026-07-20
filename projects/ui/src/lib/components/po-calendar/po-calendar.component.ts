@@ -94,6 +94,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   selectedMonth: number | null;
   selectedYear: number | null;
 
+  private isTodayPresetSelection = false;
+
   private readonly _isRange = signal(false);
   private readonly _rangePresetsValue = signal<boolean | Array<string>>(false);
   private readonly _rangePresetOptionsValue = signal<Array<PoCalendarRangePreset> | undefined>(undefined);
@@ -392,10 +394,14 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.value = newValue;
     const newModel = this.convertDateToISO(this.value);
     this.updateModel(newModel);
-    this.change.emit(newModel);
 
-    // Em modo date-time, se a data selecionada é "hoje", define a hora atual no timer
-    if (this.isDateTime && this.timerComponent && this.poCalendarService.isToday(selectedDate)) {
+    // Em modo date-time, se a seleção é do preset "Hoje", emite close primeiro
+    // para sinalizar ao consumidor que é uma operação atômica de preset,
+    // depois emite change e changeTime.
+    if (this.isDateTime && this.timerComponent && this.isTodayPresetSelection) {
+      this.close.emit();
+      this.change.emit(newModel);
+
       const now = new Date();
       const hours = ('0' + now.getHours()).slice(-2);
       const minutes = ('0' + now.getMinutes()).slice(-2);
@@ -404,11 +410,18 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
       this.timerComponent.writeValue(currentTime);
       this.changeTime.emit(currentTime);
+      this.isTodayPresetSelection = false;
+    } else {
+      this.change.emit(newModel);
     }
   }
 
   onHoverDate(date) {
     this.hoverValue = date;
+  }
+
+  onSelectTodayPreset(): void {
+    this.isTodayPresetSelection = true;
   }
 
   onHeaderChange({ month, year }, partType) {
