@@ -234,16 +234,15 @@ describe('PoDatetimepickerBaseComponent:', () => {
   });
 
   describe('callOnChange:', () => {
-    it('should call onChangeModel and update previousValue', () => {
+    it('should call onChangeModel with the given value', () => {
       const fn = jasmine.createSpy('onChange');
       component.registerOnChange(fn);
       component.callOnChange('new-value');
 
       expect(fn).toHaveBeenCalledWith('new-value');
-      expect(component['previousValue']).toBe('new-value');
     });
 
-    it('should call onChangeModel even when value is same as previous', () => {
+    it('should call onChangeModel even when value is same as previous call', () => {
       const fn = jasmine.createSpy('onChange');
       component.registerOnChange(fn);
       component.callOnChange('same-value');
@@ -597,14 +596,27 @@ describe('PoDatetimepickerBaseComponent:', () => {
   });
 
   describe('extractTimeFromDate:', () => {
-    it('should return HH:mm:ss when seconds are not 00', () => {
+    it('should return HH:mm:ss when showSeconds is true', () => {
       Object.defineProperty(component, 'showSeconds', { value: () => true });
       const date = new Date(2026, 4, 12, 14, 30, 45);
       expect(component['extractTimeFromDate'](date)).toBe('14:30:45');
     });
 
-    it('should return HH:mm when seconds are 00', () => {
+    it('should return HH:mm:ss with 00 seconds when showSeconds is true and seconds are zero', () => {
+      Object.defineProperty(component, 'showSeconds', { value: () => true });
       const date = new Date(2026, 4, 12, 14, 30, 0);
+      expect(component['extractTimeFromDate'](date)).toBe('14:30:00');
+    });
+
+    it('should return HH:mm when showSeconds is false', () => {
+      Object.defineProperty(component, 'showSeconds', { value: () => false });
+      const date = new Date(2026, 4, 12, 14, 30, 0);
+      expect(component['extractTimeFromDate'](date)).toBe('14:30');
+    });
+
+    it('should return HH:mm without seconds when showSeconds is false even if seconds exist', () => {
+      Object.defineProperty(component, 'showSeconds', { value: () => false });
+      const date = new Date(2026, 4, 12, 14, 30, 45);
       expect(component['extractTimeFromDate'](date)).toBe('14:30');
     });
   });

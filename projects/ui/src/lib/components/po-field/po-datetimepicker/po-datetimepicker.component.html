@@ -173,6 +173,7 @@
       [p-show-seconds]="showSeconds()"
       (p-change)="onDateChange($event)"
       (p-change-time)="onTimeChange($event)"
+      (p-close)="onCalendarClose()"
       (p-change-month-year)="adjustCalendarPosition()"
       (p-timer-boundary-tab)="onTimerBoundaryTab($event)"
       (keydown)="eventOnCalendarKeydown($event)"
