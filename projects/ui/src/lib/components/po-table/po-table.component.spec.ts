@@ -29,12 +29,14 @@ import { PoThemeA11yEnum } from '../../services';
 import { PoSearchAiResponseType } from '../po-field/po-search-ai/interfaces/po-search-ai.interface';
 
 @Component({
+  selector: 'app-table-search',
   template: 'Search',
   standalone: false
 })
 export class SearchComponent {}
 
 @Component({
+  selector: 'app-table-test-menu',
   template: 'Home',
   standalone: false
 })
@@ -3315,6 +3317,7 @@ describe('PoTableComponent:', () => {
         } as TemplateRef<any>
       };
 
+      spyOn(console, 'warn');
       component.tableColumnTemplates.reset([tableColumnTemplate, tableColumnTemplate2]);
       const res = component.getTemplate(column);
       expect(res).toBeNull();

@@ -554,7 +554,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
         this._locale = this.shortLanguage;
       }
 
-      // Recalcula o formato de data baseado no locale (se não foi definido explicitamente)
       this._format = this.resolveFormat();
 
       this.objMask = this.buildMask(
@@ -652,7 +651,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
 
     this.refreshValue(this._date);
 
-    // Normaliza o model para ISO 8601 se o valor recebido era Date ou string válida
     if (this._date && this._timeValue) {
       this.callOnChange(this.getModelValue());
     }
@@ -694,12 +692,10 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       return { required: { valid: false } };
     }
 
-    // Validação de range de data (p-min-date / p-max-date)
     if (this._date && !this.isDateInRange()) {
       return { date: { valid: false } };
     }
 
-    // Validação de range de hora (p-min-time / p-max-time)
     if (this._timeValue && !this.isTimeInRange(this._timeValue)) {
       return { time: { valid: false } };
     }
@@ -725,16 +721,10 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     this._timeValue = value;
   }
 
-  // Retorna o formato de data efetivo, considerando:
-  // 1. Valor explícito de `p-date-format`
-  // 2. Formato padrão do locale
   get format(): string {
     return this._format || this.resolveFormat();
   }
 
-  // Retorna o formato de hora efetivo, considerando:
-  // 1. Valor explícito de `p-format` (timerFormat)
-  // 2. Formato padrão do locale (12h para en, 24h para pt/es/ru)
   get resolvedTimerFormat(): PoTimerFormat {
     const explicit = this.timerFormat();
     if (explicit) {
@@ -744,7 +734,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return localeTimeFormat === '12' ? PoTimerFormat.Format12 : PoTimerFormat.Format24;
   }
 
-  // Indica se o formato de hora é 12h (AM/PM).
   get is12HourFormat(): boolean {
     return this.resolvedTimerFormat === PoTimerFormat.Format12;
   }
@@ -797,27 +786,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
 
   abstract refreshValue(value: Date): void;
 
-  // Retorna o valor do model no formato ISO 8601 combinando data e hora com timezone local.
-  //
-  // Formato de saída: `yyyy-mm-ddTHH:mm:ss+/-HH:mm` ou `yyyy-mm-ddTHH:mm+/-HH:mm`.
-  //
-  // O componente opera internamente em **local timezone**:
-  // - O valor exibido ao usuário é sempre em horário local.
-  // - O valor emitido no model inclui o offset do timezone local para que consumidores
-  //   possam converter para UTC ou outro timezone conforme necessário.
-  // - Ao receber um valor via `writeValue`, strings ISO com timezone são convertidas
-  //   para horário local antes de serem armazenadas.
-  // - Objetos `Date` do JavaScript já representam instantes em UTC internamente,
-  //   mas são exibidos em horário local — o componente segue esse comportamento.
-  //
-  // Exemplos de saída (timezone -03:00 / Brasília):
-  // - `2026-05-09T14:30:00-03:00`
-  // - `2026-05-09T14:30-03:00`
-  //
-  // Considerações sobre horário de verão:
-  // - O offset é calculado no momento da emissão do valor, usando `Date.getTimezoneOffset()`
-  //   da data selecionada. Isso garante que o offset correto seja aplicado mesmo quando
-  //   a data selecionada está em período de horário de verão diferente do momento atual.
   getModelValue(): string {
     if (!this._date) {
       return '';
@@ -830,12 +798,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return `${dateISO}T${time}${timezone}`;
   }
 
-  // Retorna o offset do timezone local no formato `+/-HH:mm`.
-  //
-  // Usa a data informada para calcular o offset, garantindo que o horário de verão
-  // seja considerado corretamente (o offset pode variar conforme a data).
-  //
-  // @param date Data de referência para cálculo do offset.
   getTimezoneOffset(date?: Date): string {
     const referenceDate = date || new Date();
     const offset = referenceDate.getTimezoneOffset();
@@ -847,7 +809,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return `${sign}${hours}:${minutes}`;
   }
 
-  // Executa a função onChange propagando o valor para o formulário.
   callOnChange(value: any, retry: boolean = true): void {
     if (this.onChangeModel) {
       this.onChangeModel(value);
@@ -856,21 +817,16 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     }
   }
 
-  // Atualiza o model com o valor combinado de data e hora.
   controlModel(): void {
     const modelValue = this.getModelValue();
     this.callOnChange(modelValue || '');
   }
 
-  // Formata o horário para exibição no input.
-  // Em formato 12h, converte de 24h para 12h (sem sufixo AM/PM — gerenciado separadamente).
-  // Trunca segundos quando showSeconds está desabilitado.
   formatTimeForDisplay(time: string): string {
     if (!time) {
       return this.is12HourFormat ? '12:00' : '00:00';
     }
 
-    // Trunca segundos se showSeconds está desabilitado
     const parts = time.split(':');
     if (!this.showSeconds() && parts.length > 2) {
       time = `${parts[0]}:${parts[1]}`;
@@ -880,7 +836,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       return time;
     }
 
-    // Converte de 24h para 12h (sem AM/PM — o período é gerenciado separadamente)
     let hours = Number.parseInt(parts[0], 10);
     const minutes = parts[1];
     const seconds = this.showSeconds() && parts.length > 2 ? parts[2] : null;
@@ -897,14 +852,9 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
 
   // --- Protected / Private ---
 
-  // Constrói a máscara para o input de datetime.
-  // Formato resultante: "99/99/9999 99:99" (24h e 12h)
-  // Com segundos: "99/99/9999 99:99:99"
-  // Nota: O sufixo AM/PM em formato 12h é gerenciado separadamente (não faz parte da máscara).
   protected buildMask(format: string = this.format) {
     let mask = format.toUpperCase();
 
-    // Parte da data
     mask = mask.replace(/DD/g, '99');
     mask = mask.replace(/MM/g, '99');
     mask = mask.replace(/YYYY/g, '9999');
@@ -916,8 +866,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       mask += ' 99:99';
     }
 
-    // AM/PM NÃO é incluído na máscara — é gerenciado como sufixo fixo no componente.
-
     return new PoMask(mask, true);
   }
 
@@ -927,18 +875,14 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     }
   }
 
-  // Retorna a data mínima resolvida (cacheada).
   get resolvedMinDate(): Date | undefined {
     return this._resolvedMinDate;
   }
 
-  // Retorna a data máxima resolvida (cacheada).
   get resolvedMaxDate(): Date | undefined {
     return this._resolvedMaxDate;
   }
 
-  // Verifica se a data selecionada está dentro do intervalo [minDate, maxDate].
-  // Segue o mesmo padrão do po-datepicker: `PoUtils.validateDateRange`.
   private isDateInRange(): boolean {
     if (!this._date) {
       return true;
@@ -946,8 +890,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return PoUtils.validateDateRange(this._date, this.resolvedMinDate, this.resolvedMaxDate);
   }
 
-  // Verifica se o horário selecionado está dentro do intervalo [minTime, maxTime].
-  // Segue o mesmo padrão do po-timepicker: converte para segundos e compara.
   private isTimeInRange(time: string): boolean {
     if (!time) {
       return true;
@@ -974,7 +916,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return true;
   }
 
-  // Converte uma string de horário (HH:mm ou HH:mm:ss) para total de segundos.
   private timeToSeconds(time: string): number {
     const parts = time.split(':');
     const hours = Number.parseInt(parts[0], 10) || 0;
@@ -983,7 +924,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return hours * 3600 + minutes * 60 + seconds;
   }
 
-  // Resolve o formato de data efetivo baseado no input explícito ou no locale.
   private resolveFormat(): string {
     const explicit = this.dateFormat?.();
     if (explicit) {
@@ -995,37 +935,23 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     return PoDatetimepickerFormatByLocale[this.locale] || poDatepickerFormatDefault;
   }
 
-  // Processa um valor string recebido via writeValue.
-  // Formatos aceitos:
-  // - `yyyy-mm-ddTHH:mm:ss+/-HH:mm` (ISO 8601 com timezone)
-  // - `yyyy-mm-ddTHH:mm:ssZ` (UTC)
-  // - `yyyy-mm-ddTHH:mm:ss` (sem timezone, interpretado como local)
-  // - `yyyy-mm-ddTHH:mm` (sem segundos)
-  // - `yyyy-mm-dd` (apenas data, hora assume 00:00)
-  //
-  // Quando o valor contém timezone, é convertido para horário local antes de ser armazenado.
-  // Isso garante que o valor exibido ao usuário sempre represente o horário local.
   private processStringValue(value: string): void {
     if (value.includes('T')) {
       const tIndex = value.indexOf('T');
       const datePart = value.substring(0, tIndex);
       const timeAndTz = value.substring(tIndex + 1);
 
-      // Tenta fazer parse completo via Date para respeitar timezone
       const fullDate = new Date(value);
 
       if (!isNaN(fullDate.getTime())) {
-        // Parse bem-sucedido — Date converte automaticamente para local timezone
         this._date = new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate());
         this._timeValue = this.extractTimeFromDate(fullDate);
       } else {
-        // Fallback: parse manual sem timezone
         const parsedDate = convertIsoToDate(datePart, false, false);
         this._date = parsedDate;
         this._timeValue = this.normalizeTimePart(timeAndTz);
       }
     } else {
-      // Apenas data (yyyy-mm-dd)
       const parsedDate = convertIsoToDate(value, false, false);
       this._date = parsedDate;
       this._timeValue = '00:00';

@@ -567,7 +567,7 @@ describe('PoChartGridUtils', () => {
         name: 'Série A'
       };
 
-      utils.setTooltipRadar(params1);
+      expect(() => utils.setTooltipRadar(params1)).not.toThrow();
 
       mockCtx.options = {};
       const params2 = {
@@ -575,14 +575,14 @@ describe('PoChartGridUtils', () => {
         name: 'Série B'
       };
 
-      utils.setTooltipRadar(params2);
+      expect(() => utils.setTooltipRadar(params2)).not.toThrow();
 
       const params3 = {
         value: null,
         name: 'Série C'
       };
 
-      utils.setTooltipRadar(params3);
+      expect(() => utils.setTooltipRadar(params3)).not.toThrow();
 
       mockCtx.options = {
         radar: {
@@ -594,13 +594,13 @@ describe('PoChartGridUtils', () => {
         name: 'Série D'
       };
 
-      utils.setTooltipRadar(params4);
+      expect(() => utils.setTooltipRadar(params4)).not.toThrow();
 
       const params5 = {
         name: 'Série E'
       };
 
-      utils.setTooltipRadar(params5);
+      expect(() => utils.setTooltipRadar(params5)).not.toThrow();
     });
   });
 

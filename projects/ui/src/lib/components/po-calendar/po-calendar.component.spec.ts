@@ -686,7 +686,7 @@ describe('PoCalendarComponent:', () => {
       expect(component['changeDetector'].markForCheck).toHaveBeenCalled();
     });
 
-    it('onCloseCalendar: should emit change with current value', () => {
+    it('onCloseCalendar: should emit change with current value when not in date-time mode', () => {
       const currentValue = new Date(2024, 4, 10);
 
       component.value = currentValue;
@@ -697,12 +697,23 @@ describe('PoCalendarComponent:', () => {
       expect(component.change.emit).toHaveBeenCalledWith(currentValue as any);
     });
 
-    it('onCloseCalendar: should emit close event', () => {
+    it('onCloseCalendar: should emit close event when not in date-time mode', () => {
       spyOn(component.close, 'emit');
 
       component.onCloseCalendar();
 
       expect(component.close.emit).toHaveBeenCalled();
+    });
+
+    it('onCloseCalendar: should NOT emit close in date-time mode (Tab flows to timer)', () => {
+      spyOnProperty(component, 'isDateTime').and.returnValue(true);
+      spyOn(component.close, 'emit');
+      spyOn(component.change, 'emit');
+
+      component.onCloseCalendar();
+
+      expect(component.close.emit).not.toHaveBeenCalled();
+      expect(component.change.emit).not.toHaveBeenCalled();
     });
 
     it('onTimeChange: should emit changeTime with the time value', () => {
@@ -793,7 +804,7 @@ describe('PoCalendarComponent:', () => {
       });
 
       it('should emit close before change for Today preset', () => {
-        const emitOrder: string[] = [];
+        const emitOrder: Array<string> = [];
         spyOn(component.close, 'emit').and.callFake(() => emitOrder.push('close'));
         spyOn(component.change, 'emit').and.callFake(() => emitOrder.push('change'));
         spyOn(component.changeTime, 'emit').and.callFake(() => emitOrder.push('changeTime'));
