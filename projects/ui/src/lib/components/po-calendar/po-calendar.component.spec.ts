@@ -739,10 +739,11 @@ describe('PoCalendarComponent:', () => {
         expect(component.change.emit).toHaveBeenCalledWith('');
       });
 
-      it('should set current time on timer and emit changeTime when selecting today in date-time mode', () => {
+      it('should set current time on timer and emit changeTime when isTodayPresetSelection is true', () => {
         spyOn(component.changeTime, 'emit');
         const today = new Date();
 
+        component['isTodayPresetSelection'] = true;
         component.onSelectDate(today);
 
         expect(component['timerComponent'].writeValue).toHaveBeenCalled();
@@ -752,15 +753,25 @@ describe('PoCalendarComponent:', () => {
         expect(emittedTime).toMatch(/^\d{2}:\d{2}$/);
       });
 
-      it('should include seconds in time when showSeconds is true and selecting today', () => {
+      it('should include seconds in time when showSeconds is true and isTodayPresetSelection is true', () => {
         spyOn(component.changeTime, 'emit');
         component.showSeconds = true;
         const today = new Date();
 
+        component['isTodayPresetSelection'] = true;
         component.onSelectDate(today);
 
         const emittedTime = (component.changeTime.emit as jasmine.Spy).calls.mostRecent().args[0];
         expect(emittedTime).toMatch(/^\d{2}:\d{2}:\d{2}$/);
+      });
+
+      it('should not set time on timer when selecting today without isTodayPresetSelection', () => {
+        spyOn(component.changeTime, 'emit');
+        const today = new Date();
+
+        component.onSelectDate(today);
+
+        expect(component.changeTime.emit).not.toHaveBeenCalled();
       });
 
       it('should not set time on timer when selecting a date that is not today', () => {
@@ -770,6 +781,30 @@ describe('PoCalendarComponent:', () => {
         component.onSelectDate(notToday);
 
         expect(component.changeTime.emit).not.toHaveBeenCalled();
+      });
+
+      it('should reset isTodayPresetSelection flag after setting time', () => {
+        const today = new Date();
+
+        component['isTodayPresetSelection'] = true;
+        component.onSelectDate(today);
+
+        expect(component['isTodayPresetSelection']).toBe(false);
+      });
+
+      it('should emit close before change for Today preset', () => {
+        const emitOrder: string[] = [];
+        spyOn(component.close, 'emit').and.callFake(() => emitOrder.push('close'));
+        spyOn(component.change, 'emit').and.callFake(() => emitOrder.push('change'));
+        spyOn(component.changeTime, 'emit').and.callFake(() => emitOrder.push('changeTime'));
+        const today = new Date();
+
+        component['isTodayPresetSelection'] = true;
+        component.onSelectDate(today);
+
+        expect(emitOrder[0]).toBe('close');
+        expect(emitOrder[1]).toBe('change');
+        expect(emitOrder[2]).toBe('changeTime');
       });
     });
 
@@ -791,6 +826,14 @@ describe('PoCalendarComponent:', () => {
 
       it('should return false for undefined', () => {
         expect(component['poCalendarService'].isToday(undefined)).toBe(false);
+      });
+    });
+
+    describe('onSelectTodayPreset:', () => {
+      it('should set isTodayPresetSelection flag to true', () => {
+        component['isTodayPresetSelection'] = false;
+        component.onSelectTodayPreset();
+        expect(component['isTodayPresetSelection']).toBe(true);
       });
     });
 

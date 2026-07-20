@@ -122,13 +122,10 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
   private _size?: string = undefined;
   private _date: Date;
   private _timeValue: string = '';
-  private previousValue: any;
   private _resolvedMinDate: Date | undefined;
   private _resolvedMaxDate: Date | undefined;
 
   protected hasValidatorRequired: boolean;
-  protected hour: string = 'T00:00:00-00:00';
-  protected isExtendedISO: boolean = false;
   protected objMask: any;
   protected onChangeModel: any = null;
   protected onTouchedModel: any = null;
@@ -854,7 +851,6 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
   callOnChange(value: any, retry: boolean = true): void {
     if (this.onChangeModel) {
       this.onChangeModel(value);
-      this.previousValue = value;
     } else if (retry) {
       setTimeout(() => this.callOnChange(value, false));
     }
@@ -866,12 +862,9 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     this.callOnChange(modelValue || '');
   }
 
-  // Formata o horário para exibição, incluindo AM/PM quando em formato 12h.
-  //
-  // @param time Horário no formato HH:mm ou HH:mm:ss (24h interno)
-  // @returns Horário formatado para exibição (ex: "02:30" ou "14:30")
-  // Nota: Para formato 12h, retorna apenas a parte numérica (sem AM/PM).
-  // O período é exibido no input separado gerenciado pelo componente.
+  // Formata o horário para exibição no input.
+  // Em formato 12h, converte de 24h para 12h (sem sufixo AM/PM — gerenciado separadamente).
+  // Trunca segundos quando showSeconds está desabilitado.
   formatTimeForDisplay(time: string): string {
     if (!time) {
       return this.is12HourFormat ? '12:00' : '00:00';
@@ -1049,7 +1042,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     const minutes = ('0' + date.getMinutes()).slice(-2);
     const seconds = ('0' + date.getSeconds()).slice(-2);
 
-    if (this.showSeconds() && seconds !== '00') {
+    if (this.showSeconds()) {
       return `${hours}:${minutes}:${seconds}`;
     }
 

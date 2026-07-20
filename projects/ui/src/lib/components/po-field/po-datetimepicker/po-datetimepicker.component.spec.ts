@@ -75,6 +75,70 @@ describe('PoDatetimepickerComponent:', () => {
         expect(timer.initAllColumnOffsets).toHaveBeenCalled();
       }
     }));
+
+    it('should set hadValueOnOpen to false when field is empty on open', () => {
+      component['date'] = undefined;
+      component['timeValue'] = '';
+      component.visible = false;
+      component.togglePicker();
+
+      expect(component['hadValueOnOpen']).toBe(false);
+    });
+
+    it('should set hadValueOnOpen to true when field has date and time on open', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '14:30';
+      component.visible = false;
+      component.togglePicker();
+
+      expect(component['hadValueOnOpen']).toBe(true);
+    });
+
+    it('should set hadValueOnOpen to false when field has only date on open', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '';
+      component.visible = false;
+      component.togglePicker();
+
+      expect(component['hadValueOnOpen']).toBe(false);
+    });
+
+    it('should sync date from input when opening calendar with partial date typed', () => {
+      component['date'] = undefined;
+      component['timeValue'] = '';
+      component.inputEl.nativeElement.value = '10/10/2010 --:--';
+      component.visible = false;
+      component.togglePicker();
+
+      expect(component['date']).toBeDefined();
+      expect(component['date'].getFullYear()).toBe(2010);
+      expect(component['date'].getMonth()).toBe(9);
+      expect(component['date'].getDate()).toBe(10);
+    });
+
+    it('should sync full datetime from input when opening calendar with complete value typed', () => {
+      component['date'] = undefined;
+      component['timeValue'] = '';
+      component.inputEl.nativeElement.value = '10/10/2010 14:30';
+      component['objMask'] = { valueToModel: '101020101430' } as any;
+      component.visible = false;
+      component.togglePicker();
+
+      expect(component['date']).toBeDefined();
+      expect(component['date'].getFullYear()).toBe(2010);
+      expect(component['timeValue']).toBe('14:30');
+    });
+
+    it('should not override date when it is already set on open', () => {
+      const existingDate = new Date(2026, 4, 12);
+      component['date'] = existingDate;
+      component['timeValue'] = '10:00';
+      component.inputEl.nativeElement.value = '12/05/2026 10:00';
+      component.visible = false;
+      component.togglePicker();
+
+      expect(component['date']).toBe(existingDate);
+    });
   });
 
   describe('closeCalendar:', () => {
@@ -132,6 +196,27 @@ describe('PoDatetimepickerComponent:', () => {
 
       expect(component.keydown.emit).toHaveBeenCalledWith(event);
     });
+
+    it('should emit keydown event when target is input even if readonly', () => {
+      component['_readonly'] = true;
+      spyOn(component.keydown, 'emit');
+      const event = new KeyboardEvent('keydown', { key: 'F9' });
+      Object.defineProperty(event, 'target', { value: component.inputEl.nativeElement });
+      component.onKeydown(event);
+
+      expect(component.keydown.emit).toHaveBeenCalledWith(event);
+    });
+
+    it('should not process Escape when readonly', () => {
+      component['_readonly'] = true;
+      component.visible = true;
+      spyOn(component, 'togglePicker');
+      const event = new KeyboardEvent('keydown', { key: 'Escape' });
+      Object.defineProperty(event, 'target', { value: component.inputEl.nativeElement });
+      component.onKeydown(event);
+
+      expect(component.togglePicker).not.toHaveBeenCalled();
+    });
   });
 
   describe('onTimeChange:', () => {
@@ -163,6 +248,24 @@ describe('PoDatetimepickerComponent:', () => {
       component.onTimeChange('14:30');
 
       expect(component.controlModel).not.toHaveBeenCalled();
+    });
+
+    it('should close calendar when hadValueOnOpen is false (empty field)', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['hadValueOnOpen'] = false;
+      spyOn(component, 'closeCalendar');
+      component.onTimeChange('14:30');
+
+      expect(component.closeCalendar).toHaveBeenCalledWith(true);
+    });
+
+    it('should NOT close calendar when hadValueOnOpen is true (editing existing value)', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['hadValueOnOpen'] = true;
+      spyOn(component, 'closeCalendar');
+      component.onTimeChange('14:30');
+
+      expect(component.closeCalendar).not.toHaveBeenCalled();
     });
   });
 
@@ -202,6 +305,89 @@ describe('PoDatetimepickerComponent:', () => {
     });
   });
 
+  describe('onCalendarClose (preset close):', () => {
+    it('should always close calendar regardless of hadValueOnOpen', () => {
+      component.visible = true;
+      component['hadValueOnOpen'] = true;
+      spyOn(component, 'closeCalendar');
+
+      component.onCalendarClose();
+
+      expect(component.closeCalendar).toHaveBeenCalledWith(false);
+    });
+
+    it('should close calendar when hadValueOnOpen is false', () => {
+      component.visible = true;
+      component['hadValueOnOpen'] = false;
+      spyOn(component, 'closeCalendar');
+
+      component.onCalendarClose();
+
+      expect(component.closeCalendar).toHaveBeenCalledWith(false);
+    });
+
+    it('should set isTodayPresetInProgress to true', () => {
+      component.visible = true;
+      component['isTodayPresetInProgress'] = false;
+
+      component.onCalendarClose();
+
+      expect(component['isTodayPresetInProgress']).toBe(true);
+    });
+  });
+
+  describe('Today preset single emission:', () => {
+    it('should emit p-change only once for Hoje preset flow', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '14:30';
+      component['valueBeforeChange'] = '2026-05-12T14:30:00-03:00';
+      component.visible = true;
+      spyOn(component.onchange, 'emit');
+
+      // Simula o fluxo: close → dateChange → timeChange
+      component.onCalendarClose();
+      component.onDateChange('2026-07-17');
+      component.onTimeChange('10:25');
+
+      expect(component.onchange.emit).toHaveBeenCalledTimes(1);
+    });
+
+    it('should skip emission in onDateChange when isTodayPresetInProgress is true', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '14:30';
+      component['valueBeforeChange'] = '2026-05-12T14:30:00-03:00';
+      component['isTodayPresetInProgress'] = true;
+      spyOn(component.onchange, 'emit');
+
+      component.onDateChange('2026-07-17');
+
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+    });
+
+    it('should reset isTodayPresetInProgress after onTimeChange', () => {
+      component['date'] = new Date(2026, 6, 17);
+      component['isTodayPresetInProgress'] = true;
+
+      component.onTimeChange('10:25');
+
+      expect(component['isTodayPresetInProgress']).toBe(false);
+    });
+  });
+
+  describe('onDateChange - Limpar preset always closes:', () => {
+    it('should close calendar with focusInput=false on Limpar (empty string)', () => {
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '14:30';
+      component['hadValueOnOpen'] = true;
+      component.visible = true;
+      spyOn(component, 'closeCalendar');
+
+      component.onDateChange('');
+
+      expect(component.closeCalendar).toHaveBeenCalledWith(false);
+    });
+  });
+
   describe('clear:', () => {
     it('should clear date, timeValue and input', () => {
       component['date'] = new Date(2026, 4, 12);
@@ -220,6 +406,19 @@ describe('PoDatetimepickerComponent:', () => {
       component.clear();
 
       expect(component.callOnChange).toHaveBeenCalledWith('');
+    });
+
+    it('should reset objMask.valueToModel and valueToInput to prevent stale state', () => {
+      component['objMask'] = { valueToModel: '120520261430', valueToInput: '12/05/2026 14:30' } as any;
+      component.clear();
+
+      expect(component['objMask'].valueToModel).toBe('');
+      expect(component['objMask'].valueToInput).toBe('');
+    });
+
+    it('should not throw when objMask is null', () => {
+      component['objMask'] = null;
+      expect(() => component.clear()).not.toThrow();
     });
   });
 
@@ -516,15 +715,32 @@ describe('PoDatetimepickerComponent:', () => {
     it('should parse and sync when valueToModel length meets expected length', () => {
       component['objMask'] = {
         keyup: jasmine.createSpy('keyup'),
-        valueToModel: '121020261430'
+        valueToModel: '12/10/2026 14:30'
       } as any;
       component.inputEl.nativeElement.value = '12/10/2026 14:30';
 
-      spyOn<any>(component, 'parseInputAndSync');
+      spyOn<any>(component, 'parseDateTimeFromInput').and.returnValue({ date: new Date(2026, 9, 12), time: '14:30' });
+      spyOn(component, 'controlModel');
       const event = { target: component.inputEl.nativeElement } as any;
       component.onKeyup(event);
 
-      expect(component['parseInputAndSync']).toHaveBeenCalledWith('12/10/2026 14:30');
+      expect(component['parseDateTimeFromInput']).toHaveBeenCalledWith('12/10/2026 14:30');
+      expect(component.controlModel).toHaveBeenCalled();
+    });
+
+    it('should not set invalidDatetime during typing when parse fails', () => {
+      component['objMask'] = {
+        keyup: jasmine.createSpy('keyup'),
+        valueToModel: '12/10/2026 14:30'
+      } as any;
+      component.inputEl.nativeElement.value = '12/10/2026 14:30';
+
+      spyOn<any>(component, 'parseDateTimeFromInput').and.returnValue(null);
+      spyOn(component, 'callOnChange');
+      const event = { target: component.inputEl.nativeElement } as any;
+      component.onKeyup(event);
+
+      expect(component.callOnChange).not.toHaveBeenCalledWith(component.literals.invalidDatetime);
     });
 
     it('should clear date and timeValue when objMask.valueToModel is falsy and not empty string', () => {
@@ -540,6 +756,98 @@ describe('PoDatetimepickerComponent:', () => {
 
       expect(component['date']).toBeUndefined();
       expect(component['timeValue']).toBe('');
+    });
+
+    it('should set currentPeriod to PM when parsed time hours >= 12 in 12h format', () => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+
+      component['objMask'] = {
+        keyup: jasmine.createSpy('keyup'),
+        valueToModel: '12/10/2026 02:30'
+      } as any;
+      component.inputEl.nativeElement.value = '12/10/2026 02:30';
+      component.currentPeriod = 'AM';
+
+      spyOn<any>(component, 'parseDateTimeFromInput').and.returnValue({ date: new Date(2026, 9, 12), time: '14:30' });
+      const event = { target: component.inputEl.nativeElement } as any;
+      component.onKeyup(event);
+
+      expect(component.currentPeriod).toBe('PM');
+    });
+
+    it('should set currentPeriod to AM when parsed time hours < 12 in 12h format', () => {
+      fixture.componentRef.setInput('p-format-time', '12');
+      fixture.detectChanges();
+
+      component['objMask'] = {
+        keyup: jasmine.createSpy('keyup'),
+        valueToModel: '12/10/2026 09:30'
+      } as any;
+      component.inputEl.nativeElement.value = '12/10/2026 09:30';
+      component.currentPeriod = 'PM';
+
+      spyOn<any>(component, 'parseDateTimeFromInput').and.returnValue({ date: new Date(2026, 9, 12), time: '09:30' });
+      const event = { target: component.inputEl.nativeElement } as any;
+      component.onKeyup(event);
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+
+    it('should not change currentPeriod in 24h format', () => {
+      fixture.componentRef.setInput('p-format-time', '24');
+      fixture.detectChanges();
+
+      component['objMask'] = {
+        keyup: jasmine.createSpy('keyup'),
+        valueToModel: '12/10/2026 14:30'
+      } as any;
+      component.inputEl.nativeElement.value = '12/10/2026 14:30';
+      component.currentPeriod = 'AM';
+
+      spyOn<any>(component, 'parseDateTimeFromInput').and.returnValue({ date: new Date(2026, 9, 12), time: '14:30' });
+      const event = { target: component.inputEl.nativeElement } as any;
+      component.onKeyup(event);
+
+      expect(component.currentPeriod).toBe('AM');
+    });
+  });
+
+  describe('normalizeTimeWithSeconds:', () => {
+    it('should append :00 when showSeconds is true and time has only HH:mm', () => {
+      fixture.componentRef.setInput('p-show-seconds', true);
+      fixture.detectChanges();
+
+      expect(component['normalizeTimeWithSeconds']('14:30')).toBe('14:30:00');
+    });
+
+    it('should not modify time when it already has seconds', () => {
+      fixture.componentRef.setInput('p-show-seconds', true);
+      fixture.detectChanges();
+
+      expect(component['normalizeTimeWithSeconds']('14:30:45')).toBe('14:30:45');
+    });
+
+    it('should return time unchanged when showSeconds is false', () => {
+      fixture.componentRef.setInput('p-show-seconds', false);
+      fixture.detectChanges();
+
+      expect(component['normalizeTimeWithSeconds']('14:30')).toBe('14:30');
+    });
+
+    it('should return empty string unchanged', () => {
+      fixture.componentRef.setInput('p-show-seconds', true);
+      fixture.detectChanges();
+
+      expect(component['normalizeTimeWithSeconds']('')).toBe('');
+    });
+
+    it('should return null/undefined unchanged', () => {
+      fixture.componentRef.setInput('p-show-seconds', true);
+      fixture.detectChanges();
+
+      expect(component['normalizeTimeWithSeconds'](null)).toBeNull();
+      expect(component['normalizeTimeWithSeconds'](undefined)).toBeUndefined();
     });
   });
 
@@ -628,7 +936,7 @@ describe('PoDatetimepickerComponent:', () => {
     it('should emit p-change with invalidDatetime when value is complete but invalid', () => {
       component['objMask'] = {
         blur: jasmine.createSpy('blur'),
-        valueToModel: '999999999999'
+        valueToModel: '99/99/9999 99:99'
       } as any;
       component.inputEl.nativeElement.value = '99/99/9999 99:99';
       component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
@@ -643,7 +951,7 @@ describe('PoDatetimepickerComponent:', () => {
     it('should emit p-change with invalidDatetime when time part is invalid on blur', () => {
       component['objMask'] = {
         blur: jasmine.createSpy('blur'),
-        valueToModel: '150620262500'
+        valueToModel: '15/06/2026 25:00'
       } as any;
       component.inputEl.nativeElement.value = '15/06/2026 25:00';
       component['valueBeforeChange'] = '2026-06-20T08:30:00-03:00';
@@ -659,7 +967,7 @@ describe('PoDatetimepickerComponent:', () => {
     it('should parse input and emit change when valueToModel meets expected length', () => {
       component['objMask'] = {
         blur: jasmine.createSpy('blur'),
-        valueToModel: '121020261430'
+        valueToModel: '12/10/2026 14:30'
       } as any;
       component.inputEl.nativeElement.value = '12/10/2026 14:30';
       component['valueBeforeChange'] = '';
@@ -748,12 +1056,13 @@ describe('PoDatetimepickerComponent:', () => {
     });
   });
 
-  describe('onDateChange - isToday with timeValue branch:', () => {
-    it('should close calendar and emit change when selecting today with existing timeValue', () => {
+  describe('onDateChange - today behaves like any other date:', () => {
+    it('should not close calendar when selecting today with existing timeValue (same as any other date)', () => {
       const today = new Date();
       const todayISO = `${today.getFullYear()}-${('0' + (today.getMonth() + 1)).slice(-2)}-${('0' + today.getDate()).slice(-2)}`;
 
       component['timeValue'] = '14:30';
+      component['valueBeforeChange'] = '2026-05-09T14:30:00-03:00';
       component.visible = true;
       spyOn(component, 'closeCalendar');
       spyOn(component, 'controlModel');
@@ -761,7 +1070,7 @@ describe('PoDatetimepickerComponent:', () => {
       component.onDateChange(todayISO);
 
       expect(component.controlModel).toHaveBeenCalled();
-      expect(component.closeCalendar).toHaveBeenCalledWith(true);
+      expect(component.closeCalendar).not.toHaveBeenCalled();
     });
 
     it('should not close calendar when selecting today without timeValue', () => {
@@ -1009,6 +1318,25 @@ describe('PoDatetimepickerComponent:', () => {
         expect(component['parseTimeFromInput']('02:30:60 AM')).toBeNull();
       });
     });
+
+    describe('with showSeconds enabled:', () => {
+      beforeEach(() => {
+        fixture.componentRef.setInput('p-show-seconds', true);
+        fixture.detectChanges();
+      });
+
+      it('should return null when only HH:mm is provided without seconds', () => {
+        expect(component['parseTimeFromInput']('14:30')).toBeNull();
+      });
+
+      it('should return valid time when HH:mm:ss is provided', () => {
+        expect(component['parseTimeFromInput']('14:30:45')).toBe('14:30:45');
+      });
+
+      it('should return null for invalid seconds value', () => {
+        expect(component['parseTimeFromInput']('14:30:60')).toBeNull();
+      });
+    });
   });
 
   describe('showAdditionalHelp - helperEl branches:', () => {
@@ -1048,36 +1376,36 @@ describe('PoDatetimepickerComponent:', () => {
   });
 
   describe('getExpectedInputLength:', () => {
-    it('should return 12 for default 24h without seconds', () => {
+    it('should return 16 for default 24h without seconds (formatted length)', () => {
       fixture.componentRef.setInput('p-show-seconds', false);
       fixture.componentRef.setInput('p-format-time', '24');
       fixture.detectChanges();
 
-      expect(component['getExpectedInputLength']()).toBe(12);
+      expect(component['getExpectedInputLength']()).toBe(16);
     });
 
-    it('should return 14 when showSeconds is true', () => {
+    it('should return 19 when showSeconds is true (formatted length)', () => {
       fixture.componentRef.setInput('p-show-seconds', true);
       fixture.componentRef.setInput('p-format-time', '24');
       fixture.detectChanges();
 
-      expect(component['getExpectedInputLength']()).toBe(14);
+      expect(component['getExpectedInputLength']()).toBe(19);
     });
 
-    it('should return 12 for 12h format without seconds (AM/PM is separate input)', () => {
+    it('should return 16 for 12h format without seconds (AM/PM is separate input)', () => {
       fixture.componentRef.setInput('p-show-seconds', false);
       fixture.componentRef.setInput('p-format-time', '12');
       fixture.detectChanges();
 
-      expect(component['getExpectedInputLength']()).toBe(12);
+      expect(component['getExpectedInputLength']()).toBe(16);
     });
 
-    it('should return 14 for 12h format with seconds (AM/PM is separate input)', () => {
+    it('should return 19 for 12h format with seconds (AM/PM is separate input)', () => {
       fixture.componentRef.setInput('p-show-seconds', true);
       fixture.componentRef.setInput('p-format-time', '12');
       fixture.detectChanges();
 
-      expect(component['getExpectedInputLength']()).toBe(14);
+      expect(component['getExpectedInputLength']()).toBe(19);
     });
   });
 
@@ -1423,7 +1751,7 @@ describe('PoDatetimepickerComponent:', () => {
       component['date'] = new Date(2026, 4, 12);
       component['timeValue'] = '02:30';
       component.inputEl.nativeElement.value = '12/05/2026 02:30';
-      component['objMask'] = { valueToModel: '120520260230' } as any;
+      component['objMask'] = { valueToModel: '12/05/2026 02:30' } as any;
       component.currentPeriod = 'AM';
       component['valueBeforeChange'] = '';
 
@@ -1490,12 +1818,11 @@ describe('PoDatetimepickerComponent:', () => {
       component.writeValue('2026-06-20T08:30:00-03:00');
 
       const displayedValue = component.inputEl.nativeElement.value;
-      const valueToModel = displayedValue.replace(/\D/g, '');
 
       spyOn(component.onchange, 'emit');
       component['objMask'] = {
         blur: jasmine.createSpy('blur'),
-        valueToModel: valueToModel
+        valueToModel: displayedValue
       } as any;
       component.inputEl.nativeElement.value = displayedValue;
 

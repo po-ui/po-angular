@@ -77,6 +77,7 @@
     [p-hide-today-button]="effectivePresets().length > 0"
     (p-header-change)="onHeaderChange($event, partType)"
     (p-select-date)="onSelectDate($event, partType)"
+    (p-select-today)="onSelectTodayPreset()"
     (p-hover-date)="onHoverDate($event)"
     (p-close-calendar)="onCloseCalendar()"
     [p-header-template]="headerTemplate"

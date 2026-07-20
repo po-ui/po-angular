@@ -61,6 +61,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   @Output('p-header-change') headerChange = new EventEmitter<any>();
   @Output('p-select-date') selectDate = new EventEmitter<any>();
+  @Output('p-select-today') selectTodayEvent = new EventEmitter<void>();
   readonly hoverDateSource = new Subject<Date>();
   @Output('p-hover-date') hoverDate = this.hoverDateSource.pipe(debounceTime(100));
   // Evento para fechar o calendário. Para uso interno do datepicker/datepicker-range.
@@ -474,6 +475,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   onSelectToday(): void {
+    this.selectTodayEvent.emit();
     this.onSelectDate(this.today);
 
     if (this.displayMonthNumber !== this.today.getMonth() || this.displayYear !== this.today.getFullYear()) {

@@ -3672,6 +3672,20 @@ describe('PoCalendarWrapperComponent', () => {
       expect(spy).toHaveBeenCalled();
     });
 
+    it('should emit selectTodayEvent before calling onSelectDate', () => {
+      const today = new Date(2026, 1, 27);
+      component.today = today;
+      component.displayYear = today.getFullYear();
+      component.displayMonthNumber = today.getMonth();
+      component.displayDays = [today];
+      spyOn(component.selectTodayEvent, 'emit');
+      spyOn(component, 'onSelectDate');
+      component.onSelectToday();
+
+      expect(component.selectTodayEvent.emit).toHaveBeenCalled();
+      expect(component.onSelectDate).toHaveBeenCalledWith(today);
+    });
+
     it('should call onSelectDate, updateDisplay, set focusedDayIndex and call detectChanges', () => {
       const today = new Date(2026, 1, 27);
       component.today = today;

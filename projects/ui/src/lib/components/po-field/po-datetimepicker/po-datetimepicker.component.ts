@@ -18,7 +18,6 @@ import { PoLanguageService } from '../../../services';
 import { PoDatetimepickerLiterals } from './po-datetimepicker.literals';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { isMobile, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
-import { PoCalendarService } from '../../po-calendar/services/po-calendar.service';
 import { PoDatetimepickerBaseComponent } from './po-datetimepicker-base.component';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
@@ -77,14 +76,12 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
   @ViewChild('iconCalendar') iconDatepicker: PoButtonComponent;
   @ViewChild('calendar') calendarComponent: PoCalendarComponent;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
-  @ViewChild('iconClean', { read: ElementRef }) iconClean!: ElementRef<HTMLElement>;
   @ViewChild('dialogPicker', { read: ElementRef, static: false }) dialogPicker: ElementRef;
   @ViewChild('helperEl', { read: PoHelperComponent, static: false }) helperEl?: PoHelperComponent;
   @ViewChild('datetimepickerField', { read: ElementRef, static: true }) datetimepickerField: ElementRef;
 
   private readonly renderer = inject(Renderer2);
   private readonly cd = inject(ChangeDetectorRef);
-  private readonly poCalendarService = inject(PoCalendarService);
   private readonly controlPosition = inject(PoControlPositionService);
 
   public id = `po-datetimepicker[${uuid()}]`;
@@ -98,6 +95,8 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
   private clickListener: () => void;
   private eventResizeListener: () => void;
   private valueBeforeChange: string = '';
+  private hadValueOnOpen: boolean = false;
+  private isTodayPresetInProgress: boolean = false;
 
   constructor() {
     const languageService = inject(PoLanguageService);
@@ -135,6 +134,8 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
 
     if (!this.visible) {
       this.visible = true;
+      this.hadValueOnOpen = !!(this.date && this.timeValue);
+      this.syncDateFromInput();
       this.setCalendarPosition();
       this.initializeListeners();
       this.syncCalendarAndTimer();
@@ -214,26 +215,63 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     this.objMask?.keyup($event);
 
     if (this.objMask?.valueToModel || this.objMask?.valueToModel === '') {
-      const inputValue = this.inputEl.nativeElement.value;
-      const minLength = this.getExpectedInputLength();
-
-      if (this.objMask.valueToModel.length >= minLength) {
-        this.parseInputAndSync(inputValue);
-      } else {
-        this.date = undefined;
-        this.timeValue = '';
-        this.controlModel();
-        this.syncCalendarAndTimer();
-      }
+      this.processKeyupWithMask();
     } else {
-      this.date = undefined;
-      this.timeValue = '';
+      this.clearDateTimeState();
       this.syncCalendarAndTimer();
     }
   }
 
+  private processKeyupWithMask(): void {
+    const inputValue = this.inputEl.nativeElement.value;
+    const minLength = this.getExpectedInputLength();
+
+    if (this.objMask.valueToModel.length >= minLength) {
+      this.tryParseCompleteInput(inputValue);
+    } else {
+      this.clearDateTimeState();
+      this.controlModel();
+      this.syncCalendarAndTimer();
+    }
+  }
+
+  // Input completo — tenta parsear e sincronizar.
+  // Se o parse falha, apenas limpa a data/hora internas sem marcar como inválido.
+  // A validação com estado de erro é feita no blur.
+  private tryParseCompleteInput(inputValue: string): void {
+    const parsed = this.parseDateTimeFromInput(inputValue);
+
+    if (parsed) {
+      this.date = parsed.date;
+      this.timeValue = this.normalizeTimeWithSeconds(parsed.time);
+
+      if (this.is12HourFormat) {
+        const hours = Number.parseInt(parsed.time.split(':')[0], 10);
+        this.currentPeriod = hours >= 12 ? 'PM' : 'AM';
+      }
+
+      this.controlModel();
+      this.syncCalendarAndTimer();
+    } else {
+      this.clearDateTimeState();
+      this.controlModel();
+      this.syncCalendarAndTimer();
+    }
+  }
+
+  private clearDateTimeState(): void {
+    this.date = undefined;
+    this.timeValue = '';
+  }
+
   @HostListener('keydown', ['$event'])
   onKeydown($event: any): void {
+    // Sempre emite p-keydown quando o evento vem do input, mesmo em readonly,
+    // para permitir que o consumidor acione showAdditionalHelp() via (p-keydown).
+    if ($event?.target === this.inputEl?.nativeElement) {
+      this.keydown.emit($event);
+    }
+
     if (this.isReadonly) {
       return;
     }
@@ -247,7 +285,6 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
 
     if ($event?.target === this.inputEl?.nativeElement) {
       this.objMask?.keydown($event);
-      this.keydown.emit($event);
     }
   }
 
@@ -353,7 +390,15 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     }
   }
 
-  // Sobrescreve writeValue para sincronizar valueBeforeChange,
+  // Chamado quando o calendário emite p-close (preset "Hoje" selecionado).
+  // Sempre fecha o calendário e foca no botão toggle, independente de hadValueOnOpen.
+  // Sinaliza que uma operação de preset está em andamento para evitar emissões duplicadas.
+  onCalendarClose(): void {
+    this.isTodayPresetInProgress = true;
+    this.closeCalendar(false);
+  }
+
+  // Sobrescreve writeValue para sincronizar valueBeforeChange com o valor inicial.
   override writeValue(value: any): void {
     super.writeValue(value);
     this.valueBeforeChange = this.getModelValue();
@@ -381,34 +426,47 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     this.cd?.markForCheck();
   }
 
-  // Chamado quando o timer emite uma mudança de horário.
-  // Atualiza o valor, propaga o model, emite p-change e fecha o calendário.
+  // Chamado quando o timer emite uma mudança de horário (p-change-time).
   // Só processa se já há data válida selecionada (seleção completa = data + hora).
+  //
+  // Comportamento de fechamento:
+  // - Preset "Hoje": calendário já foi fechado via onCalendarClose, apenas reseta a flag.
+  // - Seleção manual com campo vazio ao abrir: fecha o calendário (primeira seleção completa).
+  // - Seleção manual com campo preenchido ao abrir: mantém o calendário aberto.
   onTimeChange(time: string): void {
     if (!time) {
       return;
     }
-    this.timeValue = time;
+    this.timeValue = this.normalizeTimeWithSeconds(time);
 
     if (this.date && !Number.isNaN(this.date.getTime())) {
       this.controlModel();
       this.refreshValue(this.date);
       this.emitChangeIfDifferent(this.getModelValue());
-      this.closeCalendar(true);
+
+      // Preset "Hoje": o calendário já foi fechado via onCalendarClose.
+      // Seleção manual: fecha apenas se campo estava vazio ao abrir.
+      if (this.isTodayPresetInProgress) {
+        this.isTodayPresetInProgress = false;
+      } else if (!this.hadValueOnOpen) {
+        this.closeCalendar(true);
+      }
+
       this.cd.markForCheck();
     }
   }
 
-  // Chamado quando o calendário emite uma mudança de data.
+  // Chamado quando o calendário emite uma mudança de data (p-change).
   //
-  // Distingue entre:
-  // - "Limpar": calendar emite change('') — string vazia
-  // - Tab/close interno: calendar emite change(null) — ignorar
-  // - Seleção de data: calendar emite change('yyyy-mm-dd') — processar
+  // Casos tratados:
+  // - "Limpar": string vazia — limpa tudo, fecha e foca no botão.
+  // - null/undefined: ignorado (tab/close interno do calendário).
+  // - ISO date: processa a data selecionada.
   //
-  // Ao selecionar uma data, NÃO emite p-change nem propaga model com hora 00:00.
-  // O p-change só será emitido quando o timer completar a seleção (data + hora).
-  // Exceção: "Hoje" define data+hora simultaneamente, então emite e fecha.
+  // Ao selecionar uma data, NÃO emite p-change se não há hora preenchida.
+  // Aguarda a seleção de hora no timer para emitir o valor completo.
+  // No preset "Hoje", o onCalendarClose seta isTodayPresetInProgress,
+  // fazendo com que este método apenas atualize this.date sem emitir.
   onDateChange(date: any): void {
     if (date === null || date === undefined) {
       return;
@@ -420,7 +478,7 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
       this.callOnChange('');
       this.emitChangeIfDifferent('');
       this.refreshValue(undefined);
-      this.closeCalendar(true);
+      this.closeCalendar(false);
       this.cd.markForCheck();
       return;
     }
@@ -433,13 +491,9 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
 
     this.date = parsedDate;
 
-    // "Hoje" — hora já foi definida via p-change-time antes deste evento.
-    // Emite model completo e fecha.
-    if (this.poCalendarService.isToday(parsedDate) && this.timeValue) {
-      this.controlModel();
-      this.refreshValue(this.date);
-      this.emitChangeIfDifferent(this.getModelValue());
-      this.closeCalendar(true);
+    // Se é uma operação de preset "Hoje", não emite aqui — o onTimeChange
+    // emitirá o valor final completo (data + hora atual).
+    if (this.isTodayPresetInProgress) {
       return;
     }
 
@@ -464,6 +518,14 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     this.timeValue = '';
     this.currentPeriod = 'AM';
     this.inputEl.nativeElement.value = '';
+
+    // Reseta o estado interno da máscara para evitar que um keyup posterior
+    // (do Space/Enter que acionou o clean) trate o valueToModel antigo como válido.
+    if (this.objMask) {
+      this.objMask.valueToModel = '';
+      this.objMask.valueToInput = '';
+    }
+
     if (triggeredByKeyboard) {
       setTimeout(() => {
         this.focus();
@@ -561,16 +623,14 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     return `${dateFormatted} ${timeDisplay}`;
   }
 
-  // Faz o parse do valor digitado no input e sincroniza com o calendário e timer.
-  //
-  // Formato esperado: "dd/mm/yyyy HH:mm" ou "mm/dd/yyyy HH:mm" (conforme locale)
-  // Para 12h: "dd/mm/yyyy hh:mm AM/PM"
+  // Faz o parse do valor do input e sincroniza data/hora internos.
+  // Chamado no blur e no togglePeriod. Se o parse falha, marca o model como inválido.
   private parseInputAndSync(inputValue: string): void {
     const parsed = this.parseDateTimeFromInput(inputValue);
 
     if (parsed) {
       this.date = parsed.date;
-      this.timeValue = parsed.time;
+      this.timeValue = this.normalizeTimeWithSeconds(parsed.time);
 
       // Sincroniza currentPeriod com o horário parseado (formato 24h)
       if (this.is12HourFormat) {
@@ -729,8 +789,12 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
       if (!this.isValidSeconds(seconds)) {
         return null;
       }
-
       return `${hoursStr}:${minutesStr}:${this.padTime(seconds)}`;
+    }
+
+    // Quando showSeconds está habilitado, segundos são obrigatórios.
+    if (this.showSeconds()) {
+      return null;
     }
 
     return `${hoursStr}:${minutesStr}`;
@@ -742,6 +806,51 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
 
   private padTime(value: number): string {
     return ('0' + value).slice(-2);
+  }
+
+  // Normaliza o valor de tempo para incluir segundos (:00) quando showSeconds está habilitado
+  // e o valor recebido não contém a parte de segundos.
+  private normalizeTimeWithSeconds(time: string): string {
+    if (!time || !this.showSeconds()) {
+      return time;
+    }
+    const parts = time.split(':');
+    if (parts.length === 2) {
+      return `${time}:00`;
+    }
+    return time;
+  }
+
+  // Tenta extrair a data (e opcionalmente a hora) do input quando this.date não está
+  // definida. Isso permite que, ao abrir o calendário, o valor parcial digitado
+  // (ex: apenas a data sem hora) seja refletido no calendário.
+  private syncDateFromInput(): void {
+    if (this.date) {
+      return;
+    }
+
+    const inputValue = this.inputEl?.nativeElement?.value;
+    if (!inputValue || inputValue.length < 10) {
+      return;
+    }
+
+    const separator = this.languageService.getDateSeparator(this.localeInput());
+
+    // Tenta parsear datetime completo primeiro
+    const fullParsed = this.parseDateTimeFromInput(inputValue);
+    if (fullParsed) {
+      this.date = fullParsed.date;
+      this.timeValue = this.normalizeTimeWithSeconds(fullParsed.time);
+      return;
+    }
+
+    // Se não conseguiu datetime completo, tenta extrair apenas a data
+    const datePart = inputValue.substring(0, 10);
+    const parsedDate = this.getDateFromFormattedString(datePart, separator);
+
+    if (parsedDate) {
+      this.date = parsedDate;
+    }
   }
 
   // Sincroniza o calendário e o timer com os valores internos de date e timeValue.
@@ -769,14 +878,15 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     }
   }
 
-  // Retorna o comprimento mínimo esperado do input (sem formatação) para considerar completo.
-  // Formato 24h: ddmmyyyyHHmm = 12 chars (ou 14 com segundos)
-  // Formato 12h: ddmmyyyyHHmm = 12 chars (ou 14 com segundos) — AM/PM é sufixo fixo, não conta.
+  // Retorna o comprimento mínimo esperado do input (formatado, incluindo separadores)
+  // para considerar a entrada completa e pronta para parse.
+  // Formato 24h: "dd/mm/yyyy HH:mm" = 16 chars (ou "dd/mm/yyyy HH:mm:ss" = 19 com segundos)
+  // Formato 12h: mesmo padrão — AM/PM é sufixo fixo gerenciado separadamente.
   private getExpectedInputLength(): number {
-    let length = 12; // ddmmyyyy + HHmm
+    let length = 16; // "dd/mm/yyyy HH:mm" com separadores
 
     if (this.showSeconds()) {
-      length += 2; // ss
+      length += 3; // ":ss"
     }
 
     return length;
