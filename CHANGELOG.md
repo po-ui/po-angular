@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.19](https://github.com/po-ui/po-angular/compare/v19.39.18...v19.39.19) (2026-07-21)
+
+
+### Bug Fixes
+
+* **button-group:** ajusta visualização do tooltip ([beceac8](https://github.com/po-ui/po-angular/commit/beceac8f3f7b9a3f229028a4bf40ec43c47036e3))
+* **dependencies:** corrige vulnerabilidades high e critical ([3f50c45](https://github.com/po-ui/po-angular/commit/3f50c457930d38df399568e750bbd8a013cf1960))
+* **list-view:** corrige visible como função por item nas ações ([573f632](https://github.com/po-ui/po-angular/commit/573f6321f36fa68972cb5889918939d6a0d88783))
+
+
 ### [19.39.18](https://github.com/po-ui/po-angular/compare/v19.39.17...v19.39.18) (2026-07-14)
 
 
