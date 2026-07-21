@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.24.0](https://github.com/po-ui/po-angular/compare/v21.23.1...v21.24.0) (2026-07-21)
+
+
+### Bug Fixes
+
+* **button-group:** ajusta visualização do tooltip ([397e11b](https://github.com/po-ui/po-angular/commit/397e11b684bfe2896c345f44dd58ced1364e3728))
+* **dependencies:** corrige vulnerabilidades high e critical ([bfdafbd](https://github.com/po-ui/po-angular/commit/bfdafbdd406d1740561e3be09f7f314dd35debb7))
+* **dialog:** detecta mudanças após abertura ([2517632](https://github.com/po-ui/po-angular/commit/2517632db7cf8a03c4c748648a9924c10dcc3a6a))
+* **list-view:** corrige visible como função por item nas ações ([434d37f](https://github.com/po-ui/po-angular/commit/434d37fb86bd86ddcd5b4799c2429ee6de354e63))
+* **page-content:** detecta mudança de opacidade ([b5eda01](https://github.com/po-ui/po-angular/commit/b5eda01bfa2cb76de6fed991cf363a030d5360a1))
+* **table:** detecta mudança de opacidade ([b287f87](https://github.com/po-ui/po-angular/commit/b287f871c7ac01e1aa52c69525b5165698ecdd7e))
+
+
 ### [21.23.1](https://github.com/po-ui/po-angular/compare/v21.23.0...v21.23.1) (2026-07-14)
 
 
