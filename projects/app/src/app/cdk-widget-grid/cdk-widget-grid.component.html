@@ -1,0 +1,162 @@
+<po-page-default
+  p-title="Fase 2.1 — CDK + Widget + Linhas Explícitas"
+  p-subtitle="Linhas controladas por código: big numbers se empilham automaticamente ao lado de charts."
+>
+  <p class="poc-status">{{ lastAction() }}</p>
+
+  <div class="widget-grid">
+    @for (row of rows(); track row.id) {
+
+      @if (isMixedRow(row)) {
+        <div class="grid-row mixed-row">
+
+          @for (cell of getChartsInRow(row); track cell.id) {
+            <div
+              class="grid-cell chart-cell"
+              [style.flex]="cell.colSpan"
+              cdkDropList
+              [id]="cell.id"
+              [cdkDropListData]="cell.widget ? [cell.widget] : []"
+              [cdkDropListConnectedTo]="allCellIds()"
+              (cdkDropListDropped)="onDrop($event)"
+            >
+              @if (cell.widget) {
+                <po-widget
+                  cdkDrag
+                  class="widget-full"
+                  [p-title]="cell.widget.title"
+                  [p-tag]="cell.widget.tag ?? ''"
+                  p-primary-label="Ver detalhes"
+                  (p-primary-action)="onWidgetActionClick(cell.widget)"
+                >
+                  <div class="widget-placeholder" *cdkDragPlaceholder></div>
+                  <span class="drag-handle" cdkDragHandle title="Arrastar">⠿</span>
+                  <po-chart
+                    [p-type]="cell.widget.chartType!"
+                    [p-series]="cell.widget.chartSeries!"
+                    [p-categories]="cell.widget.chartCategories ?? []"
+                    [p-height]="getChartHeight(row, cell)"
+                  ></po-chart>
+                </po-widget>
+              }
+            </div>
+          }
+
+          <div
+            class="big-number-stack"
+            [style.flex]="getBigNumbersInRow(row)[0]?.colSpan ?? 4"
+          >
+            @for (cell of getBigNumbersInRow(row); track $index) {
+              @if (cell) {
+                <div
+                  class="grid-cell big-number-cell"
+                  cdkDropList
+                  [id]="cell.id"
+                  [cdkDropListData]="cell.widget ? [cell.widget] : []"
+                  [cdkDropListConnectedTo]="allCellIds()"
+                  (cdkDropListDropped)="onDrop($event)"
+                >
+                  @if (cell.widget) {
+                    <po-widget
+                      cdkDrag
+                      class="widget-full"
+                      [p-title]="cell.widget.title"
+                      [p-tag]="cell.widget.tag ?? ''"
+                      p-primary-label="Ver detalhes"
+                      (p-primary-action)="onWidgetActionClick(cell.widget)"
+                    >
+                      <div class="widget-placeholder" *cdkDragPlaceholder></div>
+                      <span class="drag-handle" cdkDragHandle title="Arrastar">⠿</span>
+                      <div class="big-number">{{ cell.widget.value }}</div>
+                      <div class="big-number-label">Valor acumulado no período</div>
+                    </po-widget>
+                  }
+                </div>
+              } @else {
+                <div class="grid-cell big-number-cell empty-slot">
+                  <span class="empty-slot-label">Arraste um widget aqui</span>
+                </div>
+              }
+            }
+          </div>
+
+        </div>
+
+      } @else {
+        <div class="grid-row">
+          @for (cell of row.cells; track cell.id) {
+            <div
+              class="grid-cell"
+              [style.flex]="cell.colSpan"
+              cdkDropList
+              [id]="cell.id"
+              [cdkDropListData]="cell.widget ? [cell.widget] : []"
+              [cdkDropListConnectedTo]="allCellIds()"
+              (cdkDropListDropped)="onDrop($event)"
+            >
+              @if (cell.widget) {
+                <po-widget
+                  cdkDrag
+                  class="widget-full"
+                  [p-title]="cell.widget.title"
+                  [p-tag]="cell.widget.tag ?? ''"
+                  p-primary-label="Ver detalhes"
+                  (p-primary-action)="onWidgetActionClick(cell.widget)"
+                >
+                  <div class="widget-placeholder" *cdkDragPlaceholder></div>
+                  <span class="drag-handle" cdkDragHandle title="Arrastar">⠿</span>
+
+                  @switch (cell.widget.type) {
+                    @case ('bigNumber') {
+                      <div class="big-number">{{ cell.widget.value }}</div>
+                      <div class="big-number-label">Valor acumulado no período</div>
+                    }
+                    @case ('chart') {
+                      <po-chart
+                        [p-type]="cell.widget.chartType!"
+                        [p-series]="cell.widget.chartSeries!"
+                        [p-categories]="cell.widget.chartCategories ?? []"
+                        [p-height]="getChartHeight(row, cell)"
+                      ></po-chart>
+                    }
+                    @case ('routine') {
+                      <div class="routine-list">
+                        <div class="routine-item">
+                          <span class="routine-dot routine-high"></span>
+                          <span>Tarefa prioritária #001</span>
+                        </div>
+                        <div class="routine-item">
+                          <span class="routine-dot routine-mid"></span>
+                          <span>Tarefa em andamento #002</span>
+                        </div>
+                        <div class="routine-item">
+                          <span class="routine-dot routine-low"></span>
+                          <span>Tarefa pendente #003</span>
+                        </div>
+                      </div>
+                    }
+                  }
+                </po-widget>
+              }
+            </div>
+          }
+        </div>
+      }
+
+    }
+  </div>
+</po-page-default>
+
+<po-modal
+  #widgetModal
+  [p-title]="selectedWidget()?.title ?? ''"
+  [p-primary-action]="modalPrimaryAction"
+>
+  @if (selectedWidget(); as widget) {
+    <p><strong>Tipo:</strong> {{ widget.type }}</p>
+    @if (widget.value) {
+      <p><strong>Valor:</strong> {{ widget.value }}</p>
+    }
+    <p><strong>Categoria:</strong> {{ widget.tag }}</p>
+  }
+</po-modal>

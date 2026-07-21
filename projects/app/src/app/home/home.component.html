@@ -1,0 +1,80 @@
+<po-page-default
+  p-title="Spike: Drag &amp; Drop de Widgets"
+  p-subtitle="Investigação técnica sobre a viabilidade de reordenação de widgets via drag &amp; drop pelo usuário."
+>
+  <!-- História -->
+  <div class="po-row po-mb-3">
+    <div class="po-xl-12">
+      <po-container class="po-p-medium">
+        <div class="po-row">
+          <div class="po-xl-12">
+            <span class="po-tag po-tag-color-01 po-mb-2">User Story</span>
+            <h3 class="po-subtitle po-mt-1">História</h3>
+            <p>
+              Como <strong>desenvolvedor</strong>, eu gostaria de poder disponibilizar uma lista de widgets que podem
+              ser <strong>reordenados via drag &amp; drop</strong> pelos usuários.
+            </p>
+          </div>
+        </div>
+      </po-container>
+    </div>
+  </div>
+
+  <!-- Questões a investigar -->
+  <div class="po-row po-mb-3">
+    <div class="po-xl-12 po-mb-2">
+      <h3 class="po-subtitle">Questões a Investigar</h3>
+    </div>
+
+    <div class="po-xl-12">
+      <po-accordion p-show-manager-accordion="true">
+        @for (item of investigationItems; track item.title) {
+          <po-accordion-item [p-label]="item.title">
+            <p class="po-text-color-neutral-dark-70">{{ item.description }}</p>
+          </po-accordion-item>
+        }
+      </po-accordion>
+    </div>
+  </div>
+
+  <!-- Fases -->
+  <div class="po-row">
+    <div class="po-xl-12 po-mb-2">
+      <h3 class="po-subtitle">Fases do Spike</h3>
+    </div>
+
+    <div class="po-xl-6 po-lg-6 po-md-12 po-mb-2">
+      <po-container class="po-p-medium">
+        <div class="po-row">
+          <div class="po-xl-12">
+            <div class="po-display-flex po-align-items-center po-mb-1">
+              <span class="po-tag po-mr-1">Fase 1</span>
+              <strong>CDK Puro</strong>
+            </div>
+            <p class="po-text-color-neutral-dark-70">
+              Exploração do Angular CDK DragDropModule sem dependência de bibliotecas de widget. Avaliação de
+              customização de breakpoints, largura e altura dos cards, adequação das linhas via grid layout.
+            </p>
+          </div>
+        </div>
+      </po-container>
+    </div>
+
+    <div class="po-xl-6 po-lg-6 po-md-12 po-mb-2">
+      <po-container class="po-p-medium">
+        <div class="po-row">
+          <div class="po-xl-12">
+            <div class="po-display-flex po-align-items-center po-mb-1">
+              <span class="po-tag po-mr-1">Fase 2</span>
+              <strong>CDK + Widget</strong>
+            </div>
+            <p class="po-text-color-neutral-dark-70">
+              Integração do CDK com os recursos do SUI relacionados a widgets. Validação das funcionalidades
+              disponíveis, compatibilidade e definição de UX sobre os comportamentos esperados.
+            </p>
+          </div>
+        </div>
+      </po-container>
+    </div>
+  </div>
+</po-page-default>

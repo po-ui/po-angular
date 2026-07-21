@@ -9,6 +9,7 @@
   (click)="onClick($event)"
   (keydown)="onKeyDown($event)"
   [tabindex]="disabled || !click.observers.length ? -1 : 0"
+  [poWidgetDraggable]="draggable()"
 >
   @if (avatarCustomTemplate() || avatarSrc()) {
     <div

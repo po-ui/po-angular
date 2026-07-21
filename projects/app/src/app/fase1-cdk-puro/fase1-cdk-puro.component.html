@@ -1,0 +1,72 @@
+<po-page-default
+  p-title="Fase 1 — CDK Puro"
+  p-subtitle="Exploração do Angular CDK DragDropModule sem dependência de bibliotecas de widget."
+>
+  <po-container class="po-p-large">
+    <div class="po-row">
+      <div class="po-xl-12">
+        <div class="poc-wrapper">
+          <p class="poc-status">{{ lastAction() }}</p>
+
+          <div class="poc-columns">
+            <!-- LISTA A: card inteiro arrastável -->
+            <section>
+              <h3>Card inteiro arrastável</h3>
+              <div
+                cdkDropList
+                class="drop-list"
+                [cdkDropListData]="cardsWholeDrag()"
+                (cdkDropListDropped)="dropWholeCard($event)"
+              >
+                @for (card of cardsWholeDrag(); track card.id) {
+                  <div class="card" [class]="card.type" cdkDrag>
+                    <div class="card-placeholder" *cdkDragPlaceholder></div>
+                    <div class="card-header">
+                      <strong>{{ card.title }}</strong>
+                    </div>
+                    <div class="card-body">
+                      @if (card.value) {
+                        <span class="card-value">{{ card.value }}</span>
+                      } @else {
+                        <span class="card-fake-chart">[gráfico mock]</span>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+
+            <!-- LISTA B: só o handle no cabeçalho arrasta -->
+            <section>
+              <h3>Somente handle arrastável (resto clicável) - Essa é a opção que está no vercel.app</h3>
+              <div
+                cdkDropList
+                class="drop-list"
+                [cdkDropListData]="cardsHandleDrag()"
+                (cdkDropListDropped)="dropHandleCard($event)"
+              >
+                @for (card of cardsHandleDrag(); track card.id) {
+                  <div class="card" [class]="card.type" cdkDrag (cdkDragEnded)="teste($event)">
+                    <div class="card-placeholder" *cdkDragPlaceholder></div>
+                    <div class="card-header">
+                      <span class="grip" cdkDragHandle title="Arrastar">⠿</span>
+                      <strong>{{ card.title }}</strong>
+                      <button type="button" class="card-action" (click)="onCardActionClick(card)">ação</button>
+                    </div>
+                    <div class="card-body">
+                      @if (card.value) {
+                        <span class="card-value">{{ card.value }}</span>
+                      } @else {
+                        <span class="card-fake-chart">[gráfico mock]</span>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </po-container>
+</po-page-default>

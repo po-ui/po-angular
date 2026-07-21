@@ -1,0 +1,105 @@
+.poc-wrapper {
+  padding: 16px;
+  font-family: sans-serif;
+}
+
+.poc-status {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.poc-columns {
+  display: flex;
+  gap: 32px;
+
+  section {
+    flex: 1;
+  }
+}
+
+.drop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 60px;
+}
+
+.card {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+  cursor: grab;
+
+  &.bigNumber {
+    border-left: 4px solid #2e7d32;
+  }
+  &.chart {
+    border-left: 4px solid #1565c0;
+  }
+  &.routine {
+    border-left: 4px solid #ef6c00;
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.grip {
+  cursor: grab;
+  color: #888;
+  font-size: 16px;
+}
+
+.card-action {
+  margin-left: auto;
+  font-size: 11px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.card-value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.card-fake-chart {
+  font-size: 12px;
+  color: #999;
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 5px 15px pink;
+  border-radius: 12px;
+  opacity: 0.8;
+}
+
+.cdk-drag-placeholder {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+  cursor: grab;
+  height: 60px;
+  transform: none !important; /** precisa para que o tracejado não saia do lugar */
+}
+
+.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
+  /* transition: none; */
+  transform: none !important; /** precisa para que o card de destino não saia do lugar */
+}
+
+/** Quando solta o card que estava sendo arrastado */
+.cdk-drag-animating {
+  /* transition: transform 600ms cubic-bezier(0.25, 0.8, 0.25, 1); */
+  background: purple;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}

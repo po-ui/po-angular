@@ -69,6 +69,7 @@ const PO_WIDGET_TAG_POSITION_DEFAULT = 'right';
 export class PoWidgetBaseComponent {
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
+  draggable = input<boolean, string>(false, { alias: 'p-draggable', transform: convertToBoolean });
 
   /** Descrição da segunda ação. */
   /**
