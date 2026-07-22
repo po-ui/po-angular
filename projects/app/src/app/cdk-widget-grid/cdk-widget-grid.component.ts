@@ -60,10 +60,33 @@ export class CdkWidgetGridComponent {
 
   rows = signal<GridRow[]>([
     {
+      // Row 1 — 4 bigNumbers × colSpan 3 (equivalente à Row 1 da Fase 2.3)
       id: 'row-0',
       cells: [
         {
-          id: 'cell-0-0', colSpan: 8,
+          id: 'cell-0-0', colSpan: 3,
+          widget: { id: 'w2', title: 'Faturamento do mês', type: 'bigNumber', value: 'R$ 128.450', tag: 'Compras' }
+        },
+        {
+          id: 'cell-0-1', colSpan: 3,
+          widget: { id: 'w3', title: 'Ticket médio', type: 'bigNumber', value: 'R$ 342', tag: 'Financeiro' }
+        },
+        {
+          id: 'cell-0-2', colSpan: 3,
+          widget: { id: 'w4', title: 'Índice de inadimplência', type: 'bigNumber', value: 'R$ 3.120', tag: 'Financeiro' }
+        },
+        {
+          id: 'cell-0-3', colSpan: 3,
+          widget: { id: 'w5', title: 'Margem de Contribuição', type: 'bigNumber', value: 'R$ 9.180', tag: 'Financeiro' }
+        }
+      ]
+    },
+    {
+      // Row 2 — 2 charts × colSpan 6 (equivalente à Row 2 da Fase 2.3)
+      id: 'row-1',
+      cells: [
+        {
+          id: 'cell-1-0', colSpan: 6,
           widget: {
             id: 'w1', title: 'Tendência de Faturamento', type: 'chart', tag: 'Financeiro',
             chartType: PoChartType.Column,
@@ -75,33 +98,7 @@ export class CdkWidgetGridComponent {
           }
         },
         {
-          id: 'cell-0-1', colSpan: 4,
-          widget: { id: 'w2', title: 'Faturamento do mês', type: 'bigNumber', value: 'R$ 128.450', tag: 'Compras' }
-        }
-      ]
-    },
-    {
-      id: 'row-1',
-      cells: [
-        {
-          id: 'cell-1-0', colSpan: 4,
-          widget: { id: 'w3', title: 'Ticket médio', type: 'bigNumber', value: 'R$ 342', tag: 'Financeiro' }
-        },
-        {
-          id: 'cell-1-1', colSpan: 4,
-          widget: { id: 'w4', title: 'Índice de inadimplência', type: 'bigNumber', value: 'R$ 3.120', tag: 'Financeiro' }
-        },
-        {
-          id: 'cell-1-2', colSpan: 4,
-          widget: { id: 'w5', title: 'Margem de Contribuição', type: 'bigNumber', value: 'R$ 9.180', tag: 'Financeiro' }
-        }
-      ]
-    },
-    {
-      id: 'row-2',
-      cells: [
-        {
-          id: 'cell-2-0', colSpan: 6,
+          id: 'cell-1-1', colSpan: 6,
           widget: {
             id: 'w6', title: 'Performance por Canal', type: 'chart', tag: 'Financeiro',
             chartType: PoChartType.Donut,
@@ -113,9 +110,33 @@ export class CdkWidgetGridComponent {
               { label: 'Inside Sales', data: 11 }
             ]
           }
+        }
+      ]
+    },
+    {
+      // Row 3 — 3 compactos × colSpan 4 (equivalente à Row 3 da Fase 2.3)
+      id: 'row-2',
+      cells: [
+        {
+          id: 'cell-2-0', colSpan: 4,
+          widget: { id: 'w8', title: 'Pendências de Aprovação', type: 'routine', tag: 'Compras' }
         },
         {
-          id: 'cell-2-1', colSpan: 6,
+          id: 'cell-2-1', colSpan: 4,
+          widget: { id: 'w9', title: 'Agenda de Cobrança', type: 'routine', tag: 'Financeiro' }
+        },
+        {
+          id: 'cell-2-2', colSpan: 4,
+          widget: { id: 'w10', title: 'Conciliação Bancária', type: 'routine', tag: 'Financeiro' }
+        }
+      ]
+    },
+    {
+      // Row 4 — 1 chart full-width × colSpan 12 (equivalente à Row 4 da Fase 2.3)
+      id: 'row-3',
+      cells: [
+        {
+          id: 'cell-3-0', colSpan: 12,
           widget: {
             id: 'w7', title: 'Evolução de Churn', type: 'chart', tag: 'Financeiro',
             chartType: PoChartType.Line,
@@ -124,23 +145,6 @@ export class CdkWidgetGridComponent {
               { label: 'Churn Rate (%)', data: [3.2, 2.8, 3.5, 2.1, 1.9, 2.4, 2.0, 1.7, 1.5, 1.3] }
             ]
           }
-        }
-      ]
-    },
-    {
-      id: 'row-3',
-      cells: [
-        {
-          id: 'cell-3-0', colSpan: 4,
-          widget: { id: 'w8', title: 'Pendências de Aprovação', type: 'routine', tag: 'Compras' }
-        },
-        {
-          id: 'cell-3-1', colSpan: 4,
-          widget: { id: 'w9', title: 'Conciliação Bancária', type: 'routine', tag: 'Financeiro' }
-        },
-        {
-          id: 'cell-3-2', colSpan: 4,
-          widget: { id: 'w10', title: 'Agenda de Cobrança', type: 'routine', tag: 'Financeiro' }
         }
       ]
     }

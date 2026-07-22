@@ -134,17 +134,27 @@ export class Fase2CdkWidgetComponent {
   }
 
   onDrop(event: CdkDragDrop<WidgetContent[]>, targetIndex: number): void {
-    if (event.previousContainer === event.container) return;
+    console.log('previousContainer: ', event.previousContainer);
+    console.log('container: ', event.container);
+    console.log('targetIndex - pra onde ele vai', targetIndex);
+    if (event.previousContainer.id === event.container.id) return;
 
-    const sourceIndex = this.allListIds().indexOf(event.previousContainer.id);
+    const sourceIndex = this.allListIds().indexOf(event.previousContainer.id); // pega o index do card de origem
     if (sourceIndex === -1) return;
 
+    console.log('cells ', this.cells());
     const updated = this.cells().map(cell => ({ ...cell }));
+    console.log('updated ', updated);
     const temp = updated[sourceIndex];
+    console.log('temp ', temp);
+
+    // altera a ordem dos cards
     updated[sourceIndex] = updated[targetIndex];
     updated[targetIndex] = temp;
 
+    // atualiza células
     this.cells.set(updated);
+    console.log('cells atualizado ', this.cells());
     this.lastAction.set(
       `"${updated[targetIndex].widget.title}" e "${updated[sourceIndex].widget.title}" trocaram de posição`
     );

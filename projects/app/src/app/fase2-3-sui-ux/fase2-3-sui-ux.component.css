@@ -1,0 +1,259 @@
+.poc-status {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.poc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.poc-dense-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--color-neutral-light-20);
+  color: var(--color-neutral-dark-70);
+}
+
+.poc-dense-badge.active {
+  background: var(--color-action-default);
+  color: #fff;
+}
+
+/* ─── Auto-grid — 12 colunas conforme handoff ─── */
+
+.auto-grid {
+  display: grid;
+
+  /*
+   * gap: 16px conforme Figma Dev Mode (spacing/sm = 16).
+   * Calculado na validação do handoff:
+   *   11 gaps × 16px = 176px de gutter em 1334px de área útil.
+   */
+  gap: 16px;
+
+  /*
+   * row base de 200px conforme Figma Dev Mode:
+   *   card compacto: 321.5 × 200
+   *   card gráfico:  434 × 400
+   */
+  grid-auto-rows: 200px;
+  grid-auto-flow: row;
+
+  /* mobile: 1 coluna (<768px) */
+  grid-template-columns: repeat(1, 1fr);
+}
+
+/* dense mode: preenche buracos automaticamente */
+.auto-grid.dense {
+  grid-auto-flow: row dense;
+}
+
+/* tablet: 2 colunas (≥768px) */
+@media (min-width: 768px) {
+  .auto-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/*
+ * desktop: 12 colunas (≥1280px)
+ * Grid base do Figma — cada coluna mede 96.5px com gap de 16px.
+ */
+@media (min-width: 1280px) {
+  .auto-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+/* ─── Itens do grid ─── */
+
+.grid-item {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  /*
+   * Posicionamento relativo necessário para o drag-handle-bar ficar
+   * fixo no topo central da célula via position: absolute.
+   */
+  position: relative;
+}
+
+/* Remove margin-bottom padrão do po-widget para respeitar o gap do grid */
+.grid-item po-widget {
+  margin-bottom: 0;
+}
+
+.widget-full {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Handle central superior — conforme handoff ─── */
+
+/*
+ * "O drag na secao Apps é iniciado pelo handle central superior"
+ * O handle é uma barra estreita centralizada no topo do card,
+ * tornando clara a área de início do arraste.
+ */
+.drag-handle-bar {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 12px;
+  border-radius: 4px;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  background: var(--color-neutral-light-10);
+}
+
+/* Exibe o handle ao passar o mouse sobre o card */
+.grid-item:hover .drag-handle-bar {
+  opacity: 1;
+}
+
+/* Mantém visível durante o drag */
+.cdk-drag-dragging .drag-handle-bar {
+  opacity: 1;
+}
+
+.drag-handle-icon {
+  font-size: 16px;
+  color: var(--color-neutral-dark-70);
+  user-select: none;
+  line-height: 1;
+}
+
+/* ─── Destaque do alvo durante dragOver ─── */
+
+/*
+ * "Durante o dragOver, o layout NÃO é refluído em tempo real —
+ * apenas o alvo recebe highlight."
+ */
+.grid-item.cdk-drop-list-receiving {
+  outline: 2px solid var(--color-action-default);
+  border-radius: 6px;
+}
+
+/* ─── Ghost de arraste — conforme handoff ─── */
+
+/*
+ * Ghost customizado conforme spec:
+ *   opacity: 0.8
+ *   border: 2px solid #00445B  (color/action/default do Figma)
+ *   border-radius: 12px
+ *   sombra elevada
+ */
+.cdk-drag-preview {
+  opacity: 0.8;
+  border: 2px solid #00445b;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.18),
+    0 24px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* ─── Placeholder tracejado na posição de origem ─── */
+
+/*
+ * "A origem vira um placeholder tracejado —
+ * o card real não desaparece sem referência espacial."
+ */
+.widget-placeholder {
+  border: 2px dashed var(--color-neutral-light-30);
+  border-radius: 6px;
+  background: var(--color-neutral-light-05);
+  width: 100%;
+  height: 100%;
+  min-height: 80px;
+}
+
+/* Oculta a div do CDK-drag enquanto o placeholder é visível */
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ─── Badge de span (debug) ─── */
+
+.span-badge {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--color-neutral-light-20);
+  color: var(--color-neutral-dark-70);
+  font-family: monospace;
+}
+
+/* ─── Big Number ─── */
+
+.big-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-neutral-dark-90);
+  margin: 8px 0 4px;
+}
+
+.big-number-label {
+  font-size: 12px;
+  color: var(--color-neutral-dark-70);
+}
+
+/* ─── Routine list ─── */
+
+.routine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.routine-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.routine-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.routine-high { background: var(--color-feedback-negative-base); }
+.routine-mid  { background: var(--color-feedback-warning-base); }
+.routine-low  { background: var(--color-feedback-positive-base); }
+
+/* ─── Action list ─── */
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}

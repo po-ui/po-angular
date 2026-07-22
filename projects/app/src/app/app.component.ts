@@ -44,6 +44,18 @@ export class AppComponent {
       icon: 'an an-grid-four',
       link: '/fase2-1',
       shortLabel: 'Fase 2.1'
+    },
+    {
+      label: 'Fase 2.2 - Grid Layout SUI',
+      icon: 'an an-squares-four',
+      link: '/fase2-2',
+      shortLabel: 'Fase 2.2'
+    },
+    {
+      label: 'Fase 2.3 - SUI + UX',
+      icon: 'an an-cursor-click',
+      link: '/fase2-3',
+      shortLabel: 'Fase 2.3'
     }
   ];
 

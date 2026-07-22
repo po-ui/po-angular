@@ -11,13 +11,13 @@
 
 /* Borda de debug para identificar os quadrantes */
 .cell {
-  box-sizing: border-box;
+  /* box-sizing: border-box;
   padding: 0 4px;
-  min-height: 80px;
-  border: 1px dashed #f00;
+  min-height: 80px; */
+  /* border: 1px dashed #f00; */
 }
 
-/* Força o po-widget a ocupar 100% da célula */
+/* Força o po-widget a ocupar 100% da célula/div */
 .widget-full {
   display: block;
   width: 100%;

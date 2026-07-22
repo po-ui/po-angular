@@ -303,3 +303,171 @@ IDs **estáveis e semânticos** (`cell-linha-coluna`). Nunca mudam — a célula
 | **IDs das células** | Por índice posicional (`cell-0`) | Estáveis e semânticos (`cell-0-1`) |
 | **Complexidade** | Simples — template único | Maior — dois templates condicionais |
 | **Responsividade** | Via classes PO UI (`po-lg-N`) | Apenas `xl` — sem breakpoints implementados |
+
+---
+
+# Fase 2.2 — `fase2-2-grid-layout-sui`
+
+> Grid automático baseado em CSS Grid nativo com `grid-auto-flow: row dense`. Spans lógicos por `displaySize`. Substitui o modelo de linhas explícitas da Fase 2.1.
+
+---
+
+## 9. Modelo de Dados
+
+```typescript
+export type DisplaySize = 'extrasmall' | 'small' | 'medium' | 'large' | 'extralarge';
+
+export const DISPLAY_SIZE_SPANS: Record<DisplaySize, CardSpan> = {
+  extrasmall: { col: 1, row: 1 },
+  small:      { col: 1, row: 2 },
+  medium:     { col: 2, row: 2 },
+  large:      { col: 3, row: 2 },
+  extralarge: { col: 4, row: 2 }
+};
+
+export interface WidgetCard {
+  id: string;
+  title: string;
+  type: WidgetType;
+  displaySize?: DisplaySize; // opcional — fallback por tipo se ausente
+  ...
+}
+
+cards = signal<WidgetCard[]>([...]) // lista plana, sem linhas
+```
+
+- Estrutura **plana** — sem conceito de linha ou coluna fixa
+- O tamanho é um **enum lógico** (`displaySize`) mapeado para spans `col × row`
+- Fallback automático por tipo: `chart` → `medium`, `actionlist` → `small`, demais → `extrasmall`
+- Spans viajam **junto com o card** no swap (diferença crítica em relação à Fase 2.1)
+
+---
+
+## 10. Arquitetura de Layout
+
+### `fase2-2-grid-layout-sui` — CSS Grid automático com `dense`
+
+```css
+.auto-grid {
+  display: grid;
+  gap: var(--spacing-sm, 8px);
+  grid-auto-rows: 10.8rem;          /* altura de linha fixa conforme spec */
+  grid-auto-flow: row dense;        /* preenche buracos automaticamente */
+  grid-template-columns: repeat(3, 1fr); /* varia por breakpoint */
+}
+```
+
+```typescript
+// Estilo inline calculado por card
+getCardGridStyle(card: WidgetCard): Record<string, string> {
+  const span = this.getSpan(card); // { col: 2, row: 2 }
+  return {
+    'grid-column': `span ${span.col}`,
+    'grid-row':    `span ${span.row}`
+  };
+}
+```
+
+```html
+<div class="auto-grid" [class.dense]="isDense()">
+  @for (card of cards(); track card.id) {
+    <div class="grid-item"
+         [ngStyle]="getCardGridStyle(card)"
+         cdkDropList ...>
+      <po-widget cdkDrag>...</po-widget>
+    </div>
+  }
+</div>
+```
+
+**Como funciona:** cada card recebe `grid-column: span N` e `grid-row: span N` calculados a partir do `displaySize`. O `grid-auto-flow: row dense` faz o navegador tentar preencher lacunas com cards menores que aparecem depois na ordem do DOM, minimizando espaços vazios.
+
+**Breakpoints responsivos:**
+
+| Breakpoint | Largura | Colunas |
+|---|---|---|
+| `xs` | até 850px | 1 |
+| `sm` | 850px+ | 2 |
+| `md` | 1366px+ | 3 |
+| `lg` | 1650px+ | 4 |
+| `xl` | 2110px+ | 5 |
+
+---
+
+## 11. Comportamento do Swap (Drag & Drop)
+
+```typescript
+onDrop(event: CdkDragDrop<WidgetCard[]>, targetCard: WidgetCard): void {
+  if (event.previousContainer.id === event.container.id) return;
+
+  const sourceId = event.previousContainer.id; // id do card arrastado
+  const targetId = targetCard.id;              // id do card de destino
+
+  const updated = this.cards().map(c => ({ ...c }));
+  const sourceIdx = updated.findIndex(c => c.id === sourceId);
+  const targetIdx = updated.findIndex(c => c.id === targetId);
+
+  // Swap completo: conteúdo E displaySize viajam juntos
+  [updated[sourceIdx], updated[targetIdx]] = [updated[targetIdx], updated[sourceIdx]];
+
+  this.cards.set(updated);
+}
+```
+
+- Swap de **card inteiro** — `displaySize` muda de posição junto com o conteúdo
+- O layout se reorganiza após cada swap (o grid recalcula o posicionamento automático)
+- `onDrop` recebe o `targetCard` diretamente via parâmetro do `@for`
+- IDs dos cards são estáveis — o drop list usa `card.id` como `[id]`
+
+---
+
+## 12. Altura dos Charts
+
+```typescript
+getChartHeight(card: WidgetCard): number {
+  const span = this.getSpan(card);
+  // 10.8rem ≈ 173px por linha; desconta ~80px do header/footer do po-widget
+  return span.row * 173 - 80;
+}
+```
+
+Altura **proporcional ao `row span`** do card:
+- `extrasmall`/`small` (1 linha): ~93px
+- `medium`/`large`/`extralarge` (2 linhas): ~266px
+
+---
+
+## 13. Dense Mode
+
+```html
+<div class="auto-grid" [class.dense]="isDense()">
+```
+
+```css
+.auto-grid.dense {
+  grid-auto-flow: row dense;
+}
+```
+
+Toggle via botões na toolbar. Quando `dense` está ativo, o CSS Grid tenta preencher lacunas com cards que cabem no espaço vago — o que pode alterar a ordem visual em relação à ordem do DOM.
+
+---
+
+## 14. Comparativo Geral — Todas as Fases
+
+| Aspecto | `fase2-cdk-widget` (Fase 2) | `cdk-widget-grid` (Fase 2.1) | `fase2-2-grid-layout-sui` (Fase 2.2) |
+|---|---|---|---|
+| **Estrutura de dados** | Lista plana `GridCell[]` | Hierarquia `GridRow[] > GridCell[]` | Lista plana `WidgetCard[]` |
+| **Definição de tamanho** | String CSS (`po-xl-6`) | Número inteiro (`colSpan: 6`) | Enum lógico (`displaySize: 'medium'`) |
+| **Motor de layout** | `flex-wrap` + classes PO UI | Flex por linha explícita | CSS Grid nativo |
+| **Controle de linhas** | Nenhum (CSS puro) | Explícito no código | Automático (grid algorithm) |
+| **Preenchimento de buracos** | Não | Não | Sim (`dense`) |
+| **Consciência de vizinhos** | Não | Sim (via `GridRow`) | Não necessário |
+| **Swap no drop** | Célula inteira (col + widget) | Só widget (col fixo) | Card inteiro (size + widget) |
+| **Breakpoints responsivos** | Via classes PO UI | Apenas `xl` | 5 breakpoints customizados |
+| **Linha mista** | Não detectada | Detectada via `isMixedRow()` | Não necessária — grid resolve |
+| **Stack de bigNumbers** | Não existe | Empilhamento automático | Não existe (dense resolve) |
+| **Slots vazios** | Não existem | Existem para completar stack | Não existem |
+| **Altura do chart** | Fixa (180px) | Dinâmica por `colSpan` e linha | Proporcional ao `row span` |
+| **Complexidade do template** | Simples — 1 template | Alta — 2 templates condicionais | Simples — 1 template |
+| **Complexidade do CSS** | Baixa | Média | Baixa (grid faz o trabalho) |

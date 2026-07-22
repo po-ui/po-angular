@@ -1,0 +1,117 @@
+<po-page-default
+  p-title="Fase 2.2 — Grid Layout SUI"
+  p-subtitle="CSS Grid automático com grid-auto-flow: row dense. Spans lógicos por displaySize. Cards de tamanhos mistos se encaixam sem buracos."
+>
+  <p class="poc-status">{{ lastAction() }}</p>
+
+  <div class="poc-toolbar">
+    <po-button
+      p-label="Ativar dense"
+      p-kind="secondary"
+      p-size="sm"
+      [p-disabled]="isDense()"
+      (p-click)="toggleDense()"
+    ></po-button>
+    <po-button
+      p-label="Desativar dense"
+      p-kind="secondary"
+      p-size="sm"
+      [p-disabled]="!isDense()"
+      (p-click)="toggleDense()"
+    ></po-button>
+    <span class="poc-dense-badge" [class.active]="isDense()">
+      dense: {{ isDense() ? 'ativado' : 'desativado' }}
+    </span>
+  </div>
+
+  <div class="auto-grid" [class.dense]="isDense()">
+
+    @for (card of cards(); track card.id) {
+      <div
+        class="grid-item"
+        [ngStyle]="getCardGridStyle(card)"
+        cdkDropList
+        [id]="card.id"
+        [cdkDropListData]="[card]"
+        [cdkDropListConnectedTo]="allCardIds()"
+        (cdkDropListDropped)="onDrop($event, card)"
+      >
+        <po-widget
+          cdkDrag
+          class="widget-full"
+          [p-title]="card.title"
+          [p-tag]="card.tag ?? ''"
+          p-primary-label="Ver detalhes"
+          (p-primary-action)="onCardActionClick(card)"
+        >
+          <div class="widget-placeholder" *cdkDragPlaceholder></div>
+
+          <div class="card-header-meta">
+            <span class="drag-handle" cdkDragHandle title="Arrastar">⠿</span>
+            <span class="size-badge">{{ getSizeLabel(card) }}</span>
+          </div>
+
+          @switch (card.type) {
+            @case ('bigNumber') {
+              <div class="big-number">{{ card.value }}</div>
+              <div class="big-number-label">Valor acumulado no período</div>
+            }
+            @case ('chart') {
+              <po-chart
+                [p-type]="card.chartType!"
+                [p-series]="card.chartSeries!"
+                [p-categories]="card.chartCategories ?? []"
+                [p-height]="getChartHeight(card)"
+              ></po-chart>
+            }
+            @case ('routine') {
+              <div class="routine-list">
+                <div class="routine-item">
+                  <span class="routine-dot routine-high"></span>
+                  <span>Tarefa prioritária #001</span>
+                </div>
+                <div class="routine-item">
+                  <span class="routine-dot routine-mid"></span>
+                  <span>Tarefa em andamento #002</span>
+                </div>
+                <div class="routine-item">
+                  <span class="routine-dot routine-low"></span>
+                  <span>Tarefa pendente #003</span>
+                </div>
+              </div>
+            }
+            @case ('actionlist') {
+              <div class="action-list">
+                <div class="action-item">
+                  <po-button p-label="Conciliar" p-kind="secondary" p-size="sm"></po-button>
+                  <span>Conta corrente XPTO</span>
+                </div>
+                <div class="action-item">
+                  <po-button p-label="Revisar" p-kind="secondary" p-size="sm"></po-button>
+                  <span>Lançamentos pendentes</span>
+                </div>
+              </div>
+            }
+          }
+        </po-widget>
+      </div>
+    }
+
+  </div>
+
+</po-page-default>
+
+<po-modal
+  #cardModal
+  [p-title]="selectedCard()?.title ?? ''"
+  [p-primary-action]="modalPrimaryAction"
+>
+  @if (selectedCard(); as card) {
+    <p><strong>Tipo:</strong> {{ card.type }}</p>
+    <p><strong>Tamanho:</strong> {{ card.displaySize ?? 'fallback por tipo' }} ({{ getSizeLabel(card) }})</p>
+    @if (card.value) {
+      <p><strong>Valor:</strong> {{ card.value }}</p>
+    }
+    <p><strong>Categoria:</strong> {{ card.tag }}</p>
+  }
+</po-modal>

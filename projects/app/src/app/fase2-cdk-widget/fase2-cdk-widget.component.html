@@ -6,6 +6,7 @@
 
   <div class="widgets-grid">
     @for (cell of cells(); track cell.widget.id; let i = $index) {
+      <!-- atribui o id da div de acordo com o id da célula -->
       <div
         class="cell po-mb-2"
         [ngClass]="cell.colClass"
