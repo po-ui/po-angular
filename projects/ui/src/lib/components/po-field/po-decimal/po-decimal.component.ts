@@ -22,6 +22,7 @@ import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { convertToInt, setHelperSettings, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import { PoDecimalAblFormat } from './po-decimal-abl-format';
 
 const poDecimalDefaultDecimalsLength = 2;
 const poDecimalDefaultThousandMaxlength = 13;
@@ -97,6 +98,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   private _locale?: string;
   private _min?: number;
   private _max?: number;
+  private _ablFormat?: PoDecimalAblFormat;
 
   private decimalSeparator: string;
   private fireChange: boolean = false;
@@ -247,6 +249,59 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     return this._max;
   }
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma máscara de formatação numérica no padrão **ABL** (Progress 4GL), permitindo
+   * exibir o valor com zeros à esquerda, supressão de zeros e separadores em posições específicas.
+   *
+   * Quando definida, esta propriedade sobrepõe a formatação padrão do `po-decimal`:
+   * - A quantidade de casas decimais passa a ser determinada pela *picture* (sobrepondo `p-decimals-length`);
+   * - A entrada de dados passa a ser da direita para a esquerda (estilo calculadora), preenchendo
+   *   automaticamente com zeros à esquerda conforme a máscara.
+   *
+   * Caracteres suportados:
+   *
+   * | Caractere | Significado |
+   * |-----------|-------------|
+   * | `9`       | Posição de dígito obrigatória (exibe `0` quando não há dígito significativo). |
+   * | `>` / `Z` | Posição de dígito com supressão de zero à esquerda (exibe espaço em branco). |
+   * | `<`       | Posição de dígito decimal com supressão de zero à direita. |
+   * | `,`       | Separador de grupo (posição literal respeitada). |
+   * | `.`       | Separador decimal. |
+   * | `-` / `+` | Sinal (prefixo ou sufixo). |
+   *
+   * > A renderização respeita o separador decimal e de milhar do *locale* definido em `p-locale`.
+   *
+   * Exemplos (locale pt-BR):
+   * - `p-format-abl="999.9"` → valor `0.1` exibe `000,1`;
+   * - `p-format-abl=">>>,>>>,>>9.99"` → valor `4567.8` exibe `4.567,80`;
+   * - `p-format-abl="->>,>,>>>,>>9"` → valor `-4568` exibe `-        4.568`.
+   */
+  @Input('p-format-abl') set formatAbl(value: string) {
+    if (value) {
+      this._ablFormat = new PoDecimalAblFormat(value);
+      this._decimalsLength = Math.min(this._ablFormat.decimalsLength, poDecimalMaxDecimalsLength);
+      this._thousandMaxlength = Math.min(
+        this._ablFormat.integerLength || poDecimalDefaultThousandMaxlength,
+        poDecimalDefaultThousandMaxlength
+      );
+    } else {
+      this._ablFormat = undefined;
+    }
+
+    if (this.inputEl?.nativeElement && this.decimalSeparator) {
+      const currentValue = this.ablDigitsToModel(this.getScreenValue());
+      this.setViewValue(currentValue === undefined ? '' : this.formatToViewValue(currentValue));
+    }
+  }
+
+  get formatAbl(): string {
+    return this._ablFormat?.format ?? '';
+  }
+
   constructor() {
     const cd = inject(ChangeDetectorRef);
 
@@ -367,6 +422,15 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   onBlur(event: any) {
     this.onTouched?.();
 
+    if (this._ablFormat) {
+      const model = this.ablDigitsToModel(event.target.value);
+      this.setViewValue(model === undefined ? '' : this.formatToViewValue(model));
+      this.callOnChange(model);
+      this.blur.emit();
+      this.controlChangeEmitter();
+      return;
+    }
+
     const value = event.target.value;
 
     if (value) {
@@ -399,6 +463,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   onInput(event: any) {
+    if (this._ablFormat) {
+      this.onInputAbl(event);
+      return;
+    }
+
     const selectionStart = event.target.selectionStart;
     const selectionEnd = event.target.selectionEnd;
 
@@ -456,6 +525,11 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   onKeyPress(event: KeyboardEvent) {
+    if (this._ablFormat) {
+      this.isValidKeyAbl(event);
+      return;
+    }
+
     this.isValidKey(event);
   }
 
@@ -485,6 +559,58 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     const isDecimalSeparator = value === this.decimalSeparator;
 
     return isDecimalSeparator ? `0${value}` : value;
+  }
+
+  // Converte o conteúdo exibido em model numérico no modo de entrada ABL (direita para esquerda).
+  private ablDigitsToModel(view: string = ''): number | undefined {
+    if (!this._ablFormat) {
+      return undefined;
+    }
+
+    const negative = view.includes('-');
+    let digits = view.replace(/[^0-9]/g, '');
+
+    // Limita à capacidade total da máscara (parte inteira + decimais).
+    const maxLength = this._ablFormat.integerLength + this._ablFormat.decimalsLength;
+    if (maxLength > 0 && digits.length > maxLength) {
+      digits = digits.slice(0, maxLength);
+    }
+
+    if (!digits) {
+      return undefined;
+    }
+
+    const model = parseInt(digits, 10) / Math.pow(10, this._ablFormat.decimalsLength);
+
+    return negative ? -model : model;
+  }
+
+  // Trata a entrada de dados quando `p-format-abl` está definido (estilo calculadora).
+  private onInputAbl(event: any): void {
+    const model = this.ablDigitsToModel(event.target.value);
+    const viewValue = model === undefined ? '' : this.formatToViewValue(model);
+
+    this.setViewValue(viewValue);
+
+    const cursorPosition = viewValue.length;
+    event.target.setSelectionRange?.(cursorPosition, cursorPosition);
+
+    this.callOnChange(model);
+
+    if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
+      this.verifyErrorAsync(model);
+    }
+  }
+
+  // Valida as teclas permitidas no modo `p-format-abl` (apenas dígitos e sinal).
+  private isValidKeyAbl(event: KeyboardEvent): void {
+    const key = event.key;
+
+    if (key === '-' || /^[0-9]$/.test(key)) {
+      return;
+    }
+
+    event.preventDefault();
   }
 
   setHelper(label?: string, additionalHelpTooltip?: string) {
@@ -546,6 +672,10 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
   }
 
   private formatToViewValue(value: string) {
+    if (this._ablFormat) {
+      return this._ablFormat.format(value, this.decimalSeparator, this.thousandSeparator);
+    }
+
     // - Necessário para tratar valores que contenham decimalSeparator
     value = this.replaceCommaToDot(value);
 

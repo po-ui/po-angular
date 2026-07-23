@@ -1,0 +1,174 @@
+<po-page-default p-title="Análise: Limitações po-number e po-decimal (Zeros à Esquerda / Formato ABL)">
+
+  <!-- ============================================================== -->
+  <!-- SEÇÃO 1: po-number — Limitações fundamentais                   -->
+  <!-- ============================================================== -->
+  <po-divider p-label="1. po-number — input type=number nativo"></po-divider>
+
+  <p><b>Limitação:</b> po-number usa <code>&lt;input type="number"&gt;</code> nativo do browser.
+    O browser REMOVE zeros à esquerda automaticamente. Não há como exibir "000.1" num input number.</p>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-4"
+      p-label="po-number (valor=1) — exibe '1', não '000.1'"
+      [(ngModel)]="valorSimples">
+    </po-number>
+
+    <po-number
+      class="po-md-4"
+      p-label="po-number (valor=5) — exibe '5', não '000.5'"
+      [(ngModel)]="valorPequeno">
+    </po-number>
+
+    <po-number
+      class="po-md-4"
+      p-label="po-number (valor=4567.8) — exibe '4567.8'"
+      [(ngModel)]="f04">
+    </po-number>
+  </div>
+
+  <p><b>p-mask no po-number:</b> A propriedade é EXPLICITAMENTE desabilitada (override para string vazia).
+    A documentação diz: "incompatível com po-number".</p>
+
+  <div class="po-row">
+    <po-number
+      class="po-md-6"
+      p-label="po-number com p-mask='999.9' — MÁSCARA IGNORADA"
+      p-mask="999.9"
+      [(ngModel)]="valorSimples">
+    </po-number>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SEÇÃO 2: po-decimal — Limitações de formatação                 -->
+  <!-- ============================================================== -->
+  <po-divider p-label="2. po-decimal — formatação de casas decimais"></po-divider>
+
+  <p><b>Capacidade:</b> po-decimal usa <code>&lt;input type="text"&gt;</code> com formatação própria.
+    Suporta separador de milhar e casas decimais FIXAS (p-decimals-length).</p>
+  <p><b>Limitação:</b> NÃO suporta zeros à esquerda na parte inteira. A formatação é
+    exclusivamente: separador de milhar + casas decimais fixas após separador decimal.</p>
+
+  <div class="po-row">
+    <po-decimal
+      class="po-md-4"
+      p-label="po-decimal (valor=1, 1 casa decimal) — exibe '1,0' não '000,1'"
+      p-decimals-length="1"
+      p-thousand-maxlength="3"
+      [(ngModel)]="valorSimples">
+    </po-decimal>
+
+    <po-decimal
+      class="po-md-4"
+      p-label="po-decimal (valor=5, 1 casa decimal) — exibe '5,0' não '000,5'"
+      p-decimals-length="1"
+      p-thousand-maxlength="3"
+      [(ngModel)]="valorPequeno">
+    </po-decimal>
+
+    <po-decimal
+      class="po-md-4"
+      p-label="po-decimal (valor=42, 1 casa decimal) — exibe '42,0' não '004,2'"
+      p-decimals-length="1"
+      p-thousand-maxlength="3"
+      [(ngModel)]="valorMedio">
+    </po-decimal>
+  </div>
+
+  <div class="po-row">
+    <po-decimal
+      class="po-md-6"
+      p-label="f01: valor=5002.9234, 2 casas — exibe '5.002,92' (ABL esperado: '50,02,92,34')"
+      p-decimals-length="2"
+      [(ngModel)]="f01">
+    </po-decimal>
+
+    <po-decimal
+      class="po-md-6"
+      p-label="f02: valor=4567.888, 2 casas — exibe '4.567,89' (OK para >>>,>>>,>>9.99)"
+      p-decimals-length="2"
+      [(ngModel)]="f02">
+    </po-decimal>
+  </div>
+
+  <div class="po-row">
+    <po-decimal
+      class="po-md-6"
+      p-label="f06: valor=4567.8, 4 casas — exibe '4.567,8000' (ABL esperado: '00,004,5,67.8000')"
+      p-decimals-length="4"
+      [(ngModel)]="f06">
+    </po-decimal>
+
+    <po-decimal
+      class="po-md-6"
+      p-label="f05: valor=4567.8, 0 casas — exibe '4.568' (arredondado, OK)"
+      p-decimals-length="0"
+      [(ngModel)]="f05">
+    </po-decimal>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SEÇÃO 3: po-input com p-mask — Tentativa de simular formato    -->
+  <!-- ============================================================== -->
+  <po-divider p-label="3. po-input com p-mask — PoMask posicional"></po-divider>
+
+  <p><b>Capacidade:</b> PoMask suporta máscara posicional: cada '9' = aceita dígito 0-9.
+    Caracteres fixos (., -, /) são inseridos automaticamente.</p>
+  <p><b>Limitação:</b> A máscara é POSICIONAL e requer que o usuário preencha TODOS os caracteres.
+    Se a máscara é "999.9", o usuário precisa digitar 4 dígitos. Não há preenchimento automático
+    com zeros à esquerda. O model resultante é STRING, não número.</p>
+
+  <div class="po-row">
+    <po-input
+      class="po-md-4"
+      p-label="po-input mask='999.9' — usuário precisa digitar 4 dígitos"
+      p-mask="999.9">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      p-label="po-input mask='999.9' com p-mask-format-model — model formatado"
+      p-mask="999.9"
+      p-mask-format-model="true">
+    </po-input>
+
+    <po-input
+      class="po-md-4"
+      p-label="po-input mask='99.999.999' — simula formato numérico"
+      p-mask="99.999.999">
+    </po-input>
+  </div>
+
+  <p><b>Problema central:</b> Se o usuário digita apenas "1", a máscara exibe "1" sem completar
+    com zeros. Não existe lógica de "pad left" (zeros à esquerda) no PoMask.</p>
+
+  <!-- ============================================================== -->
+  <!-- SEÇÃO 4: Resumo das Limitações                                -->
+  <!-- ============================================================== -->
+  <po-divider p-label="4. Resumo — O que NÃO é suportado hoje"></po-divider>
+
+  <div class="po-row">
+    <div class="po-md-12">
+      <p><b>Formato ABL requerido:</b> <code>&gt;9,99,99,99</code> / <code>&gt;&gt;&gt;,&gt;&gt;&gt;,&gt;&gt;9.99</code> / <code>999.9</code></p>
+      <p><b>Comportamento esperado:</b> Entrada = 1, Saída formatada = 000.1 (zeros à esquerda preenchidos automaticamente)</p>
+
+      <ul>
+        <li><b>po-number:</b> Usa input type=number. Browser remove zeros à esquerda. Máscara desabilitada. Impossível sem refatoração.</li>
+        <li><b>po-decimal:</b> Usa input type=text, mas a formatação é fixa (milhar + decimais). Não interpreta format strings ABL. Não faz pad-left com zeros.</li>
+        <li><b>po-input + PoMask:</b> Suporta máscara posicional, mas exige preenchimento completo pelo usuário. Sem auto-fill de zeros. Model é string.</li>
+      </ul>
+
+      <p><b>Gaps para implementar a demanda:</b></p>
+      <ol>
+        <li>Nenhum componente interpreta format strings no padrão ABL (>, &lt;, Z, 9, etc.)</li>
+        <li>Nenhum componente faz "pad left" automático com zeros na parte inteira</li>
+        <li>po-number não pode exibir zeros à esquerda por limitação do input type=number</li>
+        <li>po-decimal não tem propriedade para definir largura fixa da parte inteira</li>
+        <li>PoMask não tem conceito de "preenchimento automático a partir da direita"</li>
+        <li>Separadores customizados por posição (ex: 99,999,9,99.9999) não são suportados</li>
+      </ol>
+    </div>
+  </div>
+
+</po-page-default>
