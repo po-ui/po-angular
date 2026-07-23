@@ -4,11 +4,13 @@
   role="tab"
   [tabindex]="status === 'disabled' || disabledClick ? -1 : 0"
   [attr.aria-selected]="status === 'active'"
+  [attr.aria-current]="status === 'active' ? 'step' : null"
   [attr.aria-disabled]="status === 'disabled'"
   [attr.aria-required]="status === 'error'"
   [class.po-stepper-disabled-click]="disabledClick"
   (click)="onClick()"
-  (keydown.enter)="onEnter()"
+  (keydown.enter)="onEnter($event)"
+  (keydown.space)="onEnter($event)"
 >
   <div class="po-stepper-step-container">
     <po-stepper-circle

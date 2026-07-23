@@ -13,7 +13,7 @@ import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.i
 import { PoJobSchedulerParametersTemplateDirective } from './po-page-job-scheduler-parameters';
 import { PoPageJobSchedulerComponent } from './po-page-job-scheduler.component';
 import { PoPageJobSchedulerModule } from './po-page-job-scheduler.module';
-import { PoStepperOrientation } from '@po-ui/ng-components';
+import { PoStepperOrientation, PoStepperStatus } from '@po-ui/ng-components';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PoPageJobSchedulerComponent:', () => {
@@ -230,13 +230,61 @@ describe('PoPageJobSchedulerComponent:', () => {
         expect(component.step).toEqual(currrentStep);
       });
 
-      it(`should prevent skipping several steps in the 'previous' operation`, () => {
-        const currentStep = 3;
+      it(`should allow navigating back several steps when 'allowDirectNavigation' is true`, () => {
+        component.allowDirectNavigation = true;
+        component.step = 3;
+        component['steps'][0].status = PoStepperStatus.Done;
+        component['steps'][1].status = PoStepperStatus.Done;
 
+        component.nextStep(1);
+
+        expect(component.step).toEqual(1);
+      });
+
+      it(`should prevent navigating back several steps when 'allowDirectNavigation' is false`, () => {
+        component.allowDirectNavigation = false;
+
+        const currentStep = 3;
         component.step = currentStep;
+        component['steps'][0].status = PoStepperStatus.Done;
+        component['steps'][1].status = PoStepperStatus.Done;
+
         component.nextStep(1);
 
         expect(component.step).toEqual(currentStep);
+      });
+
+      it(`should reset all steps ahead of the target to 'Default' when navigating back`, () => {
+        component.allowDirectNavigation = true;
+        component.step = 3;
+        component['steps'][0].status = PoStepperStatus.Done;
+        component['steps'][1].status = PoStepperStatus.Done;
+        component['steps'][2].status = PoStepperStatus.Active;
+
+        component.nextStep(1);
+
+        expect(component['steps'][1].status).toBe(PoStepperStatus.Default);
+        expect(component['steps'][2].status).toBe(PoStepperStatus.Default);
+      });
+
+      it(`should keep steps before the target unchanged when navigating back`, () => {
+        component.step = 3;
+        component['steps'][0].status = PoStepperStatus.Done;
+        component['steps'][1].status = PoStepperStatus.Done;
+        component['steps'][2].status = PoStepperStatus.Active;
+
+        component.nextStep(2);
+
+        expect(component['steps'][0].status).toBe(PoStepperStatus.Done);
+        expect(component['steps'][1].status).toBe(PoStepperStatus.Done);
+        expect(component['steps'][2].status).toBe(PoStepperStatus.Default);
+      });
+
+      it(`should set step status to 'Done' when advancing`, () => {
+        component.step = 1;
+        component.nextStep(2);
+
+        expect(component['steps'][0].status).toBe(PoStepperStatus.Done);
       });
 
       it(`should navigate to the next step, the current step is 'Execution' and the form for validation`, () => {
@@ -318,6 +366,26 @@ describe('PoPageJobSchedulerComponent:', () => {
         component.nextStep(nextStep);
 
         expect(component.step).toEqual(nextStep);
+      });
+
+      it(`should not navigate back when form parameters are invalid`, () => {
+        const currentStep = 2;
+        component.step = currentStep;
+        component.schedulerParameters = { form: <NgForm>{ invalid: true } };
+
+        component.nextStep(1);
+
+        expect(component.step).toEqual(currentStep);
+      });
+
+      it(`should update 'jobSchedulerActions' when navigating back from last step`, () => {
+        component.allowDirectNavigation = true;
+        const stepsLength = component['steps'].length;
+        component.step = stepsLength;
+
+        component.nextStep(1);
+
+        expect(component.jobSchedulerActions[0].label).toBe(component.literals.next);
       });
     });
 
