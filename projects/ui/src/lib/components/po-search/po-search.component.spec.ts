@@ -1318,4 +1318,26 @@ describe('PoSearchComponent', () => {
       expect(component.listboxOpen).toBeFalse();
     });
   });
+
+  describe('ngOnDestroy', () => {
+    it('should call removeListeners and disconnect locateCounterResize', () => {
+      const disconnectSpy = jasmine.createSpy('disconnect');
+      component['locateCounterResize'] = { disconnect: disconnectSpy } as any;
+
+      const removeListenersSpy = spyOn(component as any, 'removeListeners');
+
+      component.ngOnDestroy();
+
+      expect(removeListenersSpy).toHaveBeenCalled();
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+
+    it('should not throw when locateCounterResize is undefined', () => {
+      component['locateCounterResize'] = undefined;
+
+      spyOn(component as any, 'removeListeners');
+
+      expect(() => component.ngOnDestroy()).not.toThrow();
+    });
+  });
 });

@@ -230,6 +230,19 @@ describe('PoStepperStepComponent:', () => {
       expect(component.enter.emit).not.toHaveBeenCalled();
     });
 
+    it('onEnter: should call `event.preventDefault` and `enter.emit` when a keyboard event is provided and status is not `disabled`.', () => {
+      component.status = PoStepperStatus.Active;
+      const event = new KeyboardEvent('keydown', { key: ' ' });
+
+      spyOn(event, 'preventDefault');
+      spyOn(component.enter, 'emit');
+
+      component.onEnter(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.enter.emit).toHaveBeenCalled();
+    });
+
     it('setDefaultStepSize: should increase step size by 8px if status is `Active` and step size is default.', () => {
       (component as any)._stepSize = 24;
       component.status = PoStepperStatus.Active;

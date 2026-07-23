@@ -49,6 +49,11 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  *  <file name="sample-po-page-job-scheduler-directives/sample-po-page-job-scheduler-directives.component.ts"> </file>
  * </example>
  *
+ * <example name="po-page-job-scheduler-flexible-navigation" title="PO Page Job Scheduler - Navegação Flexível">
+ *  <file name="sample-po-page-job-scheduler-flexible-navigation/sample-po-page-job-scheduler-flexible-navigation.component.html"> </file>
+ *  <file name="sample-po-page-job-scheduler-flexible-navigation/sample-po-page-job-scheduler-flexible-navigation.component.ts"> </file>
+ * </example>
+ *
  */
 @Component({
   selector: 'po-page-job-scheduler',
@@ -171,31 +176,39 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   nextStep(stepNumber: number) {
     const operation: 'back' | 'next' = stepNumber > this.step ? 'next' : 'back';
 
-    // Previne o usuário pular etapas
-    const jumpStep = (stepNumber - this.step) * (operation === 'back' ? -1 : 1);
-    if (jumpStep > 1) {
-      return;
+    if (!this.canNavigate(stepNumber, operation)) return;
+
+    this.prepareNavigation(operation, stepNumber);
+    this.applyStep(stepNumber, operation);
+  }
+
+  private canNavigate(stepNumber: number, operation: 'back' | 'next'): boolean {
+    const jumpStep = Math.abs(stepNumber - this.step);
+
+    if (operation === 'next' && jumpStep > 1) return false;
+
+    if (operation === 'back' && jumpStep > 1 && !this.allowDirectNavigation) {
+      return false;
     }
 
-    if (!this.validateStepExecution()) {
-      return;
-    }
+    return (
+      this.validateStepExecution() && this.validateStepSchedulerParameters() && this.validateStepTemplateParameters()
+    );
+  }
 
-    if (operation === 'next' && !this.validateStepSchedulerParameters()) {
-      return;
-    }
-
-    if (operation === 'next' && !this.validateStepTemplateParameters()) {
-      return;
+  private prepareNavigation(operation: 'back' | 'next', stepNumber: number): void {
+    if (operation === 'back') {
+      this.resetStepsStatus(stepNumber);
     }
 
     if (this.step === this.stepExecution) {
       this.setModelRecurrent();
     }
 
-    // Busca os parâmetros do template
     this.setPropertiesFromTemplate();
+  }
 
+  private applyStep(stepNumber: number, operation: 'back' | 'next'): void {
     if (stepNumber === this.steps.length) {
       const model = JSON.parse(JSON.stringify(this.model));
       this.publicValues = this.hidesSecretValues(model);
@@ -206,9 +219,13 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
     this.changePageActionsBySteps(this.step, stepNumber);
     this.step = stepNumber;
 
-    // Caso já tenha iniciado a etapa de parametrização,
-    // guarda essa informação para não precisar renderizar novamente
     this.stepParametersInitialized = this.stepParametersInitialized || stepNumber === this.stepParameters;
+  }
+
+  private resetStepsStatus(fromStep: number): void {
+    for (let i = fromStep; i < this.step; i++) {
+      this.steps[i].status = PoStepperStatus.Default;
+    }
   }
 
   onChangeProcess(process: { processId: string; existAPI: boolean }) {
@@ -360,7 +377,6 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   private resetJobSchedulerForm() {
     this.schedulerExecution.form.reset();
 
-    // radiogroup não estava atribuindo novo valor, fica vermelho sem o timetout.
     setTimeout(() => {
       this.model = new PoPageJobSchedulerInternal();
 

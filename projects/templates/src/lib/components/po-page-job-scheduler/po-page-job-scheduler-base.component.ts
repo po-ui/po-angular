@@ -278,6 +278,24 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
    *
    * @description
    *
+   * Permite a navegação direta ao clicar em um step (passo) previamente preenchido e validado,
+   * sem a necessidade de retornar passo a passo utilizando o botão "Voltar".
+   *
+   * Quando habilitado (`true`), o usuário pode clicar diretamente em qualquer step anterior
+   * que já tenha sido concluído para retornar a ele imediatamente.
+   *
+   * > Steps futuros (ainda não preenchidos) permanecerão bloqueados para clique,
+   * independentemente do valor desta propriedade.
+   *
+   * @default `false`
+   */
+  @Input('p-allow-direct-navigation') allowDirectNavigation: boolean = false;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao concluir o processo de agendamento com sucesso.
    */
   @Output('p-success') success = new EventEmitter<any>();

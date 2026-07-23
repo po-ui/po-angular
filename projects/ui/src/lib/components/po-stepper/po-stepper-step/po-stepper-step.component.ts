@@ -177,8 +177,9 @@ export class PoStepperStepComponent implements OnChanges {
     }
   }
 
-  onEnter(): void {
+  onEnter(event?: KeyboardEvent): void {
     if (this.status !== PoStepperStatus.Disabled && !this.disabledClick) {
+      event?.preventDefault();
       this.enter.emit();
     }
   }
