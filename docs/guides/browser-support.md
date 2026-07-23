@@ -15,11 +15,11 @@ Atualmente o PO está homologado para os seguintes navegadores:
     <tbody>
       <tr class="po-table-row">
         <th class="po-table-column">Chrome</th>
-        <td class="po-table-column">versões mais recentes (latest)</td>
+        <td class="po-table-column">2 versões mais recentes</td>
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">Firefox</th>
-        <td class="po-table-column">versões mais recentes (latest)</td>
+        <td class="po-table-column">versão mais recente e versão de suporte estendido (ESR)</td>
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">Edge</th>
