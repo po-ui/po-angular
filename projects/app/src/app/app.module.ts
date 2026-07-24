@@ -14,6 +14,7 @@ import { Fase2CdkWidgetComponent } from './fase2-cdk-widget/fase2-cdk-widget.com
 import { CdkWidgetGridComponent } from './cdk-widget-grid/cdk-widget-grid.component';
 import { Fase22GridLayoutSuiComponent } from './fase2-2-grid-layout-sui/fase2-2-grid-layout-sui.component';
 import { Fase23SuiUxComponent } from './fase2-3-sui-ux/fase2-3-sui-ux.component';
+import { PoDashboardDemoComponent } from './po-dashboard-demo/po-dashboard-demo.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,11 +23,12 @@ const routes: Routes = [
   { path: 'fase2-1', component: CdkWidgetGridComponent },
   { path: 'fase2-2', component: Fase22GridLayoutSuiComponent },
   { path: 'fase2-3', component: Fase23SuiUxComponent },
+  { path: 'po-dashboard', component: PoDashboardDemoComponent },
   { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, PoDashboardDemoComponent],
   bootstrap: [AppComponent],
   imports: [BrowserModule, CommonModule, FormsModule, RouterModule.forRoot(routes, { useHash: true }), PoModule],
   providers: [provideHttpClient(withInterceptorsFromDi())]

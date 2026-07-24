@@ -1,1 +1,144 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* ==========================================================================
+   po-dashboard — estilos temporários para desenvolvimento local
+   Em produção, este bloco deve migrar para po-style/src/css/components/po-dashboard/
+   ========================================================================== */
+
+/* Big Number */
+.demo-big-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-neutral-dark-90);
+  margin: 8px 0 4px;
+}
+
+.demo-big-number-label {
+  font-size: 12px;
+  color: var(--color-neutral-dark-70);
+}
+
+/* Routine list */
+.demo-routine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.demo-routine-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.demo-routine-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.demo-routine-high { background: var(--color-feedback-negative-base); }
+.demo-routine-mid  { background: var(--color-feedback-warning-base); }
+.demo-routine-low  { background: var(--color-feedback-positive-base); }
+
+/* Action list */
+.demo-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.demo-action-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   po-dashboard — grid e drag
+   ========================================================================== */
+
+po-dashboard {
+  display: block;
+}
+
+.po-dashboard {
+  display: grid;
+  grid-auto-flow: row dense;
+  grid-auto-rows: 10.8rem;
+  gap: var(--spacing-sm, 1rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  /* xs: 1 coluna */
+  grid-template-columns: repeat(1, 1fr);
+}
+
+/* sm: 2 colunas — 850px */
+@media (min-width: 850px) {
+  .po-dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* md: 3 colunas — 1366px */
+@media (min-width: 1366px) {
+  .po-dashboard {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* lg: 4 colunas — 1650px */
+@media (min-width: 1650px) {
+  .po-dashboard {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* xl: 5 colunas — 2110px */
+@media (min-width: 2110px) {
+  .po-dashboard {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Card item */
+.po-dashboard-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Card draggável: cursor e transição */
+.po-dashboard-draggable .po-dashboard-card-dragging {
+  cursor: grab;
+  transition: box-shadow 120ms ease;
+}
+
+.po-dashboard-draggable .po-dashboard-card-dragging:active {
+  cursor: grabbing;
+}
+
+/* Placeholder: espaço vazio exibido na posição de origem durante o drag */
+.po-dashboard-card-placeholder {
+  background: var(--color-neutral-light-10, #f5f5f5);
+  border: 2px dashed var(--color-neutral-light-30, #ccc);
+  border-radius: var(--border-radius-md, 4px);
+  width: 100%;
+  height: 100%;
+}
+
+/* Preview: card sendo arrastado */
+.po-dashboard-card-preview {
+  width: 300px;
+  opacity: 0.85;
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+  border-radius: var(--border-radius-md, 4px);
+  background: var(--color-neutral-light-00, #fff);
+  overflow: hidden;
+}

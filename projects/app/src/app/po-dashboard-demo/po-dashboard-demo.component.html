@@ -1,0 +1,139 @@
+<po-page-default p-title="PO Dashboard" p-subtitle="Grid automático de cards com drag and drop">
+  <div class="po-row po-mb-3">
+    <po-checkbox-group
+      class="po-md-12"
+      name="properties"
+      p-label="Properties"
+      [p-options]="propertiesOptions"
+      [ngModel]="properties"
+      (ngModelChange)="properties = $event"
+    ></po-checkbox-group>
+  </div>
+
+  <div class="po-row po-mb-3">
+    <po-info class="po-md-12" p-label="Último reorder" [p-value]="lastReorder"></po-info>
+  </div>
+
+  <div class="po-row po-mb-2">
+    <po-button class="po-md-3" p-label="Restore" (p-click)="restore()"></po-button>
+  </div>
+
+  <hr />
+
+  <po-dashboard
+    [p-cards]="cards"
+    [p-draggable]="properties.includes('draggable')"
+    (p-cards-reorder)="onReorder($event)"
+  ></po-dashboard>
+</po-page-default>
+
+<!-- =====================================================================
+     Card templates — fora do po-dashboard para resolução dos ViewChild
+     ===================================================================== -->
+
+<!-- Linha 1 — 4 bigNumbers (extrasmall 1×1) -->
+
+<ng-template #tplReceitaProjetada>
+  <po-widget p-title="Receita Projetada" p-tag="Compras" p-primary-label="Ver detalhes">
+    <div class="demo-big-number">R$ 12.840,00</div>
+    <div class="demo-big-number-label">Valor acumulado no período</div>
+  </po-widget>
+</ng-template>
+
+<ng-template #tplCustosOperacionais>
+  <po-widget p-title="Custos Operacionais" p-tag="Compras" p-primary-label="Ver detalhes">
+    <div class="demo-big-number">R$ 7.340,00</div>
+    <div class="demo-big-number-label">Valor acumulado no período</div>
+  </po-widget>
+</ng-template>
+
+<ng-template #tplMargemContribuicao>
+  <po-widget p-title="Margem de Contribuição" p-tag="Financeiro" p-primary-label="Ver detalhes">
+    <div class="demo-big-number">R$ 9.180,00</div>
+    <div class="demo-big-number-label">Valor acumulado no período</div>
+  </po-widget>
+</ng-template>
+
+<ng-template #tplIndiceInadimplencia>
+  <po-widget p-title="Índice de Inadimplência" p-tag="Financeiro" p-primary-label="Ver detalhes">
+    <div class="demo-big-number">R$ 3.120,00</div>
+    <div class="demo-big-number-label">Valor acumulado no período</div>
+  </po-widget>
+</ng-template>
+
+<!-- Linha 2 — 2 charts (medium 2×2) -->
+
+<ng-template #tplPerformanceCanal>
+  <po-widget p-title="Performance por Canal" p-tag="Financeiro" [p-height]="348">
+    <po-chart
+      [p-type]="chartTypeDonut"
+      [p-series]="seriesPerformance"
+      [p-height]="260"
+    ></po-chart>
+  </po-widget>
+</ng-template>
+
+<ng-template #tplPipelineAtendimentos>
+  <po-widget p-title="Pipeline de Atendimentos" p-tag="Financeiro" [p-height]="348">
+    <po-chart
+      [p-type]="chartTypePie"
+      [p-series]="seriesPipeline"
+      [p-height]="260"
+    ></po-chart>
+  </po-widget>
+</ng-template>
+
+<!-- Linha 3 — 2 routines + 1 actionlist (extrasmall 1×1) -->
+
+<ng-template #tplConciliacaoBancaria>
+  <po-widget p-title="Conciliação Bancária" p-tag="Financeiro" p-primary-label="Ver detalhes">
+    <div class="demo-routine-list">
+      <div class="demo-routine-item">
+        <span class="demo-routine-dot demo-routine-high"></span>
+        <span>Tarefa prioritária #001</span>
+      </div>
+      <div class="demo-routine-item">
+        <span class="demo-routine-dot demo-routine-mid"></span>
+        <span>Tarefa em andamento #002</span>
+      </div>
+      <div class="demo-routine-item">
+        <span class="demo-routine-dot demo-routine-low"></span>
+        <span>Tarefa pendente #003</span>
+      </div>
+    </div>
+  </po-widget>
+</ng-template>
+
+<ng-template #tplCadastroFornecedores>
+  <po-widget p-title="Cadastro de Fornecedores" p-tag="Compras" p-primary-label="Ver detalhes">
+    <div class="demo-routine-list">
+      <div class="demo-routine-item">
+        <span class="demo-routine-dot demo-routine-high"></span>
+        <span>Tarefa prioritária #001</span>
+      </div>
+      <div class="demo-routine-item">
+        <span class="demo-routine-dot demo-routine-mid"></span>
+        <span>Tarefa em andamento #002</span>
+      </div>
+      <div class="demo-routine-item">
+        <span class="demo-routine-dot demo-routine-low"></span>
+        <span>Tarefa pendente #003</span>
+      </div>
+    </div>
+  </po-widget>
+</ng-template>
+
+<ng-template #tplAgendaCobranca>
+  <po-widget p-title="Agenda de Cobrança" p-tag="Financeiro" p-primary-label="Ver detalhes">
+    <div class="demo-action-list">
+      <div class="demo-action-item">
+        <po-button p-label="Conciliar" p-kind="secondary" p-size="small"></po-button>
+        <span>Conta corrente XPTO</span>
+      </div>
+      <div class="demo-action-item">
+        <po-button p-label="Revisar" p-kind="secondary" p-size="small"></po-button>
+        <span>Lançamentos pendentes</span>
+      </div>
+    </div>
+  </po-widget>
+</ng-template>

@@ -1,0 +1,35 @@
+<!-- Trigger sync de cards do input com o signal interno -->
+@if (syncedCards()) { }
+
+<ul
+  class="po-dashboard"
+  [class.po-dashboard-draggable]="draggable()"
+  cdkDropList
+  cdkDropListOrientation="mixed"
+  [cdkDropListData]="internalCards()"
+  [cdkDropListDisabled]="!draggable()"
+  (cdkDropListDropped)="onDrop($event)"
+  aria-label="Dashboard de cards"
+>
+  @for (card of internalCards(); track card.id) {
+    <li
+      class="po-dashboard-card"
+      [class.po-dashboard-card-dragging]="draggable()"
+      [style.grid-column]="'span ' + getColSpan(card)"
+      [style.grid-row]="'span ' + getRowSpan(card)"
+      cdkDrag
+      [cdkDragDisabled]="!draggable()"
+      [cdkDragData]="card"
+    >
+      <!-- Placeholder visual exibido na posição de origem durante o drag -->
+      <div *cdkDragPlaceholder class="po-dashboard-card-placeholder"></div>
+
+      <!-- Preview customizado arrastado pelo cursor -->
+      <div *cdkDragPreview class="po-dashboard-card-preview">
+        <ng-template [ngTemplateOutlet]="card.template"></ng-template>
+      </div>
+
+      <ng-template [ngTemplateOutlet]="card.template"></ng-template>
+    </li>
+  }
+</ul>
