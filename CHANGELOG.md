@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.25.0](https://github.com/po-ui/po-angular/compare/v21.24.0...v21.25.0) (2026-07-24)
+
+
+### Features
+
+* **components:** implementa melhorias no helper e popover ([4606118](https://github.com/po-ui/po-angular/commit/4606118ba073bc1f5986644d2b52bdbd5bb7c74f))
+
+
 ### [21.24.0](https://github.com/po-ui/po-angular/compare/v21.23.1...v21.24.0) (2026-07-21)
 
 
