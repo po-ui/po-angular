@@ -97,6 +97,40 @@ export interface PoHeaderActionTool {
    */
   link?: string;
 
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Função executada quando o popup ou popover da ação é aberto.
+   *
+   * Esse evento é disparado toda vez que o usuário clica no botão da ação e o popup (quando há `items`)
+   * ou o popover (quando há `popover`) é exibido.
+   *
+   * O callback recebe como parâmetro o `label` da ação que disparou o evento.
+   *
+   * Exemplo: `onOpen: (label) => console.log('Aberto:', label)`
+   */
+  onOpen?: (label?: string) => void;
+
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Função executada quando o popup ou popover da ação é fechado.
+   *
+   * Esse evento é disparado toda vez que o popup (quando há `items`) ou o popover (quando há `popover`)
+   * é ocultado, seja por clique fora do elemento ou por ação programática.
+   *
+   * O callback recebe como parâmetro o `label` da ação que disparou o evento.
+   *
+   * Exemplo: `onClose: (label) => console.log('Fechado:', label)`
+   */
+  onClose?: (label?: string) => void;
+
   //interno
   $selected?;
 }

@@ -243,6 +243,15 @@ describe('PoPopupComponent:', () => {
       expect(component['oldTarget']).toBe('targetValue');
     });
 
+    it('open: should emit openEvent when popup is opened.', () => {
+      spyOn(component.openEvent, 'emit');
+      spyOn(component, <any>'validateInitialContent');
+
+      component.open();
+
+      expect(component.openEvent.emit).toHaveBeenCalled();
+    });
+
     it('toggle: should call `open` if showPopup is false shouldn`t call `close` method', () => {
       const param = { name: 'po' };
 

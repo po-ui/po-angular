@@ -107,6 +107,8 @@ describe('PoMultiselectComponent:', () => {
   });
 
   it('should get input width', () => {
+    const inputElement = fixture.debugElement.nativeElement.querySelector('.po-multiselect-input');
+    Object.defineProperty(inputElement, 'offsetWidth', { value: 200, configurable: true });
     expect(component.getInputWidth() > 0).toBeTruthy();
   });
 
