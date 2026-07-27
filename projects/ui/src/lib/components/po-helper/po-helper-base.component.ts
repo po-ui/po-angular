@@ -1,7 +1,9 @@
 import { Component, HostBinding, input } from '@angular/core';
-import { PoHelperOptions } from './interfaces/po-helper.interface';
+
 import { validateSizeFn } from '../../utils/util';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
+import { PoHelperOptions } from './interfaces/po-helper.interface';
+import { PoHelperCustomAction } from './interfaces/po-helper-custom-action.interface';
 /**
  * @description
  *
@@ -85,6 +87,9 @@ export class PoHelperBaseComponent {
     alias: 'p-helper',
     transform: this.transformHelper.bind(this)
   });
+
+  /** @docsPrivate */
+  customAction = input<PoHelperCustomAction>(undefined, { alias: 'p-custom-action' });
 
   /**
    * @optional

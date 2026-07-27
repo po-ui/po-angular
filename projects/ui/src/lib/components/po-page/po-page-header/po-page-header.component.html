@@ -46,15 +46,23 @@
                 >
               }
             </span>
-            @if (helper()) {
+            @if (customAction()) {
+              <po-helper [p-custom-action]="customAction()" [p-size]="size"></po-helper>
+            } @else if (helper()) {
               <po-helper [p-helper]="helper()" [p-size]="size"></po-helper>
             }
           </div>
         }
-        @if (title && !subtitle && helper()) {
-          <div class="po-page-header-subtitle">
-            <po-helper [p-helper]="helper()" [p-size]="size"></po-helper>
-          </div>
+        @if (title && !subtitle) {
+          @if (customAction()) {
+            <div class="po-page-header-subtitle">
+              <po-helper [p-custom-action]="customAction()" [p-size]="size"></po-helper>
+            </div>
+          } @else if (helper()) {
+            <div class="po-page-header-subtitle">
+              <po-helper [p-helper]="helper()" [p-size]="size"></po-helper>
+            </div>
+          }
         }
       </div>
     }

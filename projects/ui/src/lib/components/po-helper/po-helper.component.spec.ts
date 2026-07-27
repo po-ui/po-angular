@@ -609,4 +609,80 @@ describe('PoHelperComponent', () => {
       expect(component['contentFragments']()).toEqual([]);
     });
   });
+
+  describe('executeCustomAction:', () => {
+    it('should call action function from customAction', () => {
+      const actionSpy = jasmine.createSpy('action');
+      (component as any).customAction = () => ({ icon: 'ICON_REFRESH', action: actionSpy });
+
+      const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+      spyOn(event, 'preventDefault');
+      spyOn(event, 'stopPropagation');
+
+      (component as any).executeCustomAction(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+      expect(actionSpy).toHaveBeenCalled();
+    });
+
+    it('should set refreshAnimating to true when action is called', () => {
+      const actionSpy = jasmine.createSpy('action');
+      (component as any).customAction = () => ({ icon: 'ICON_REFRESH', action: actionSpy });
+
+      const event = new MouseEvent('click');
+      (component as any).executeCustomAction(event);
+
+      expect(component.refreshAnimating).toBeTrue();
+    });
+
+    it('should not call action if customAction is undefined', () => {
+      (component as any).customAction = () => undefined;
+
+      const event = new MouseEvent('click');
+      expect(() => (component as any).executeCustomAction(event)).not.toThrow();
+      expect(component.refreshAnimating).toBeFalse();
+    });
+
+    it('should not call action if action is not a function', () => {
+      (component as any).customAction = () => ({ icon: 'ICON_REFRESH', action: 'not a function' });
+
+      const event = new MouseEvent('click');
+      expect(() => (component as any).executeCustomAction(event)).not.toThrow();
+      expect(component.refreshAnimating).toBeFalse();
+    });
+
+    it('should reset and retrigger animation on rapid successive clicks', () => {
+      const actionSpy = jasmine.createSpy('action');
+      (component as any).customAction = () => ({ icon: 'ICON_REFRESH', action: actionSpy });
+      const cdrSpy = spyOn(component['cdr'], 'detectChanges');
+
+      const event = new MouseEvent('click');
+
+      // First click
+      (component as any).executeCustomAction(event);
+      expect(component.refreshAnimating).toBeTrue();
+      expect(cdrSpy).not.toHaveBeenCalled();
+
+      // Second click while animation is still running
+      (component as any).executeCustomAction(event);
+      expect(cdrSpy).toHaveBeenCalled();
+      expect(component.refreshAnimating).toBeTrue();
+      expect(actionSpy).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('onRefreshAnimationEnd:', () => {
+    it('should set refreshAnimating to false', () => {
+      component.refreshAnimating = true;
+      (component as any).onRefreshAnimationEnd();
+      expect(component.refreshAnimating).toBeFalse();
+    });
+  });
+
+  describe('refreshAnimating:', () => {
+    it('should be false by default', () => {
+      expect(component.refreshAnimating).toBeFalse();
+    });
+  });
 });

@@ -1,18 +1,19 @@
 import {
+  computed,
   Component,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
   OnDestroy,
   OnChanges,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
   SimpleChanges,
-  ChangeDetectorRef,
-  computed
+  ChangeDetectorRef
 } from '@angular/core';
+
+import { PoButtonComponent } from '../po-button';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
 import { PoPopoverComponent } from '../po-popover/po-popover.component';
-import { PoButtonComponent } from '../po-button';
 import { parseSafeText, PoTextFragment, PoFormattingTag } from '../../utils/safe-text-parser';
 
 /** Tags de formatação aceitas pelo po-helper. */
@@ -49,6 +50,7 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
   @ViewChild('popover', { static: false }) popover: PoPopoverComponent;
   @ViewChild(PoButtonComponent, { read: ElementRef, static: true }) poButton: PoButtonComponent;
 
+  refreshAnimating = false;
   private static instances: Array<PoHelperComponent> = [];
   private static idCounter = 0;
   protected popoverPosition = 'right';
@@ -223,5 +225,23 @@ export class PoHelperComponent extends PoHelperBaseComponent implements AfterVie
     if (this.boundFocusIn) {
       window.removeEventListener('focusin', this.boundFocusIn, true);
     }
+  }
+
+  protected executeCustomAction(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const action = this.customAction();
+    if (action && typeof action.action === 'function') {
+      if (this.refreshAnimating) {
+        this.refreshAnimating = false;
+        this.cdr.detectChanges();
+      }
+      this.refreshAnimating = true;
+      action.action();
+    }
+  }
+
+  protected onRefreshAnimationEnd(): void {
+    this.refreshAnimating = false;
   }
 }

@@ -3,6 +3,7 @@ import { Directive, Input, input } from '@angular/core';
 import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
 import { parseSafeText, PoFormattingTag, PoTextFragment } from '../../../utils/safe-text-parser';
+import { PoHelperCustomAction } from '../../po-helper/interfaces/po-helper-custom-action.interface';
 
 /** Tags aceitas pelo subtítulo do po-page-header. */
 const PAGE_SUBTITLE_ALLOWED_TAGS: Array<PoFormattingTag> = ['b', 'i', 'u', 'strong', 'em'];
@@ -22,6 +23,9 @@ export class PoPageHeaderBaseComponent {
 
   /** Define o conteúdo do po-helper. */
   helper = input<PoHelperOptions | string>(undefined, { alias: 'p-helper' });
+
+  /** Define a ação customizada para o po-helper (uso interno entre componentes). */
+  customAction = input<PoHelperCustomAction>(undefined, { alias: 'p-custom-action' });
 
   /** Define o tamanho dos componentes no header. */
   @Input('p-size') size: string;

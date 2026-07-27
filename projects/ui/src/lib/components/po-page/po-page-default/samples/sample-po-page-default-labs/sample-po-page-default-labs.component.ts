@@ -43,6 +43,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
   helperTitle: string = '';
   helperType: 'help' | 'info' = 'info';
   showHelper: boolean = false;
+  showRefresh: boolean = false;
 
   public readonly helperTypeOptions: Array<PoSelectOption> = [
     { label: 'help', value: 'help' },
@@ -155,6 +156,10 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.poNotification.information('Back button clicked (p-back event)');
   }
 
+  onRefresh = (): void => {
+    this.poNotification.success('Page refreshed (p-refresh event)');
+  };
+
   restore() {
     this.actions = [];
     this.breadcrumb = { items: [] };
@@ -170,6 +175,7 @@ export class SamplePoPageDefaultLabsComponent implements OnInit {
     this.pageActionsLayout = 'default';
     this.pageHeaderType = 'primary';
     this.showHelper = false;
+    this.showRefresh = false;
     this.subtitle = '';
     this.title = 'PO Page Default';
     this.restoreActionForm();
