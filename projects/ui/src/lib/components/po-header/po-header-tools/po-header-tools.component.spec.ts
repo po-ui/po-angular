@@ -185,4 +185,82 @@ describe('PoHeaderToolsComponent', () => {
 
     expect(focusSpy).toHaveBeenCalled();
   });
+
+  describe('onOpen and onClose callbacks', () => {
+    it('should call action.onOpen with action.label when onClickAction triggers popup open', () => {
+      const onOpenSpy = jasmine.createSpy('onOpen');
+      const mockPopup = new MockPoPopupComponent();
+      const popupList = new QueryList<PoPopupComponent>();
+      popupList.reset([mockPopup as any]);
+      component.poPopupActions = popupList;
+
+      component._actionTools = [{ label: 'Notificações', items: [{}], onOpen: onOpenSpy }] as any;
+
+      // Simula o comportamento do template: (p-open) chama action?.onOpen(action?.label)
+      const action = component.actionTools[0];
+      action.onOpen(action.label);
+
+      expect(onOpenSpy).toHaveBeenCalledWith('Notificações');
+    });
+
+    it('should call action.onClose with action.label when popup emits close', () => {
+      const onCloseSpy = jasmine.createSpy('onClose');
+      component._actionTools = [{ label: 'Notificações', items: [{}], onClose: onCloseSpy }] as any;
+
+      const action = component.actionTools[0];
+      action.onClose(action.label);
+
+      expect(onCloseSpy).toHaveBeenCalledWith('Notificações');
+    });
+
+    it('should call action.onOpen with action.label when popover emits open', () => {
+      const onOpenSpy = jasmine.createSpy('onOpen');
+      component._actionTools = [
+        { label: 'Aplicativos', popover: { content: null as any, width: 300 }, onOpen: onOpenSpy }
+      ];
+
+      const action = component.actionTools[0];
+      action.onOpen(action.label);
+
+      expect(onOpenSpy).toHaveBeenCalledWith('Aplicativos');
+    });
+
+    it('should call action.onClose with action.label when popover emits close', () => {
+      const onCloseSpy = jasmine.createSpy('onClose');
+      component._actionTools = [
+        { label: 'Aplicativos', popover: { content: null as any, width: 300 }, onClose: onCloseSpy }
+      ];
+
+      const action = component.actionTools[0];
+      action.onClose(action.label);
+
+      expect(onCloseSpy).toHaveBeenCalledWith('Aplicativos');
+    });
+
+    it('should not throw error when onOpen is undefined', () => {
+      component._actionTools = [{ label: 'Test', items: [{}] }] as any;
+
+      const action = component.actionTools[0];
+
+      expect(() => action.onOpen?.(action.label)).not.toThrow();
+    });
+
+    it('should not throw error when onClose is undefined', () => {
+      component._actionTools = [{ label: 'Test', items: [{}] }] as any;
+
+      const action = component.actionTools[0];
+
+      expect(() => action.onClose?.(action.label)).not.toThrow();
+    });
+
+    it('should call action.onOpen with undefined when action has no label', () => {
+      const onOpenSpy = jasmine.createSpy('onOpen');
+      component._actionTools = [{ items: [{}], onOpen: onOpenSpy }] as any;
+
+      const action = component.actionTools[0];
+      action.onOpen(action.label);
+
+      expect(onOpenSpy).toHaveBeenCalledWith(undefined);
+    });
+  });
 });

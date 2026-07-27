@@ -40,6 +40,8 @@
     [p-target]="targetRef"
     [p-hide-arrow]="true"
     p-position="bottom-left"
+    (p-close)="headerUser?.onClose?.()"
+    (p-open)="headerUser?.onOpen?.()"
     [p-size]="size()"
   >
   </po-popup>
@@ -53,6 +55,8 @@
     [p-target]="targetRef"
     [p-hide-arrow]="true"
     [p-corner-aligned]="true"
+    (p-close)="headerUser?.onClose?.()"
+    (p-open)="headerUser?.onOpen?.()"
   >
     <ng-container *ngTemplateOutlet="headerUser.popover.content"></ng-container>
   </po-popover>

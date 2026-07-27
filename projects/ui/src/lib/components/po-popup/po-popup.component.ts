@@ -95,6 +95,7 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     this.changeDetector.detectChanges();
 
     this.validateInitialContent();
+    this.openEvent.emit();
   }
 
   returnBooleanValue(popupAction: any, property: string) {

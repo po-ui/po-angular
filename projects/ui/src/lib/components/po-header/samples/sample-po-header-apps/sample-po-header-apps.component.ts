@@ -78,22 +78,32 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
       tooltip: 'Aplicativos do sistema',
       popover: {
         content: this.meuTemplate
-      }
+      },
+      onOpen: (label?: string) => this.onOpenTool(label),
+      onClose: (label?: string) => this.onCloseTool(label)
     },
     {
       label: 'Notificações',
       icon: 'an an-chat-circle-dots',
       tooltip: 'Notificações do usuário',
       badge: 5,
-      items: this.listItem
+      items: this.listItem,
+      onOpen: (label?: string) => this.onOpenTool(label),
+      onClose: (label?: string) => this.onCloseTool(label)
     }
   ];
 
   headerUser: PoHeaderUser = {
     avatar: '../../../assets/graphics/avatar1.png',
     customerBrand: '../../../assets/po-logos/po_black.png',
-    action: this.myAction.bind(this, 'Meu Usuário'),
-    status: 'positive'
+    status: 'positive',
+    items: [
+      { label: 'Meu perfil', action: this.myAction.bind(this, 'Meu perfil') },
+      { label: 'Configurações', action: this.myAction.bind(this, 'Configurações') },
+      { label: 'Sair', action: this.myAction.bind(this, 'Sair') }
+    ],
+    onOpen: () => this.onOpenUser(),
+    onClose: () => this.onCloseUser()
   };
 
   systemApps = [
@@ -147,5 +157,37 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
 
   myAction(action: string): any {
     this.poNotification.success({ message: `Action clicked: ${action}`, orientation: PoToasterOrientation.Top });
+  }
+
+  /** Callback de abertura para ações do `p-actions-tools`. Recebe o `label` da ação. */
+  onOpenTool(label?: string): void {
+    this.poNotification.information({
+      message: `Opened: ${label} (p-actions-tools)`,
+      orientation: PoToasterOrientation.Top
+    });
+  }
+
+  /** Callback de fechamento para ações do `p-actions-tools`. Recebe o `label` da ação. */
+  onCloseTool(label?: string): void {
+    this.poNotification.warning({
+      message: `Closed: ${label} (p-actions-tools)`,
+      orientation: PoToasterOrientation.Top
+    });
+  }
+
+  /** Callback de abertura para o `p-header-user`. */
+  onOpenUser(): void {
+    this.poNotification.information({
+      message: 'Opened: User menu (p-header-user)',
+      orientation: PoToasterOrientation.Top
+    });
+  }
+
+  /** Callback de fechamento para o `p-header-user`. */
+  onCloseUser(): void {
+    this.poNotification.warning({
+      message: 'Closed: User menu (p-header-user)',
+      orientation: PoToasterOrientation.Top
+    });
   }
 }

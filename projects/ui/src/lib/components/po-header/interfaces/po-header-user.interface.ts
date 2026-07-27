@@ -77,4 +77,34 @@ export interface PoHeaderUser {
    *
    */
   items?: Array<PoHeaderActionToolItem>;
+
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Função executada quando o popup ou popover da seção de Customer é aberto.
+   *
+   * Esse evento é disparado toda vez que o usuário clica no botão da seção de Customer e o popup
+   * (quando há `items`) ou o popover (quando há `popover`) é exibido.
+   *
+   * Exemplo: `onOpen: this.onOpenNotifications.bind(this)`
+   */
+  onOpen?: Function;
+
+  /**
+   *
+   * @optional
+   *
+   * @description
+   *
+   * Função executada quando o popup ou popover da seção de Customer é fechado.
+   *
+   * Esse evento é disparado toda vez que o popup (quando há `items`) ou o popover (quando há `popover`)
+   * é ocultado, seja por clique fora do elemento ou por ação programática.
+   *
+   * Exemplo: `onClose: this.onCloseNotifications.bind(this)`
+   */
+  onClose?: Function;
 }
