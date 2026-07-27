@@ -30,6 +30,11 @@ import { backNavigationAriaLabels, PoPageDefaultBaseComponent } from './po-page-
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.component.css"> </file>
  *  <file name="sample-po-page-default-dashboard/sample-po-page-default-dashboard.service.ts"> </file>
  * </example>
+ *
+ * <example name="po-page-default-refresh" title="PO Page Default - Refresh">
+ *  <file name="sample-po-page-default-refresh/sample-po-page-default-refresh.component.html"> </file>
+ *  <file name="sample-po-page-default-refresh/sample-po-page-default-refresh.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-page-default',

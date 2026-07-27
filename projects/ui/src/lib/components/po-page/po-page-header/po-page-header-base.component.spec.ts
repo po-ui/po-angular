@@ -19,6 +19,12 @@ describe('PoPageHeaderBaseComponent', () => {
     });
   });
 
+  describe('customAction property:', () => {
+    it('should have customAction input with undefined as default value', () => {
+      expect(component.customAction()).toBeUndefined();
+    });
+  });
+
   describe('subtitle property:', () => {
     it('should store the raw subtitle value', () => {
       component.subtitle = 'Texto simples';

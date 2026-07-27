@@ -83,7 +83,8 @@
       @case ('secondary') {
         <po-page-header
           [p-type]="'secondary'"
-          [p-helper]="helper()"
+          [p-helper]="refreshCustomAction() ? undefined : helper()"
+          [p-custom-action]="refreshCustomAction()"
           [p-size]="componentsSize"
           [p-subtitle]="subtitle"
           [p-title]="title"
@@ -116,7 +117,8 @@
       @case ('tertiary') {
         <po-page-header
           [p-type]="'tertiary'"
-          [p-helper]="helper()"
+          [p-helper]="refreshCustomAction() ? undefined : helper()"
+          [p-custom-action]="refreshCustomAction()"
           [p-size]="componentsSize"
           [p-subtitle]="subtitle"
           [p-title]="title"
@@ -139,7 +141,8 @@
       @default {
         <po-page-header
           [p-breadcrumb]="breadcrumb"
-          [p-helper]="helper()"
+          [p-helper]="refreshCustomAction() ? undefined : helper()"
+          [p-custom-action]="refreshCustomAction()"
           [p-size]="componentsSize"
           [p-subtitle]="subtitle"
           [p-title]="title"

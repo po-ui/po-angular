@@ -6,6 +6,7 @@
   [p-literals]="customLiterals ?? {}"
   [p-page-actions-layout]="pageActionsLayout"
   [p-page-header-type]="pageHeaderType"
+  [p-refresh]="showRefresh ? onRefresh : null"
   [p-title]="title"
   [p-subtitle]="subtitle"
   (p-back)="onBack()"
@@ -20,7 +21,10 @@
 
     <po-input class="po-md-6" name="subtitle" [(ngModel)]="subtitle" p-label="Subtitle"> </po-input>
 
-    <po-checkbox class="po-md-12 po-pt-2 po-pb-2" name="showHelper" [(ngModel)]="showHelper" p-label="Helper">
+    <po-checkbox class="po-md-6 po-pt-2 po-pb-2" name="showHelper" [(ngModel)]="showHelper" p-label="Helper">
+    </po-checkbox>
+
+    <po-checkbox class="po-md-6 po-pt-2 po-pb-2" name="showRefresh" [(ngModel)]="showRefresh" p-label="Refresh">
     </po-checkbox>
 
     @if (showHelper) {

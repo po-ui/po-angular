@@ -1,5 +1,5 @@
-import { Directive } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Component, Directive } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
@@ -15,12 +15,21 @@ class PoPageDefaultComponent extends PoPageDefaultBaseComponent {
   getVisibleActions() {}
 }
 
+@Component({
+  selector: 'po-page-default-test-host',
+  template: '',
+  standalone: false
+})
+class PoPageDefaultTestHostComponent extends PoPageDefaultComponent {}
+
 describe('PoPageDefaultBaseComponent:', () => {
   let languageService: PoLanguageService;
   let component: PoPageDefaultComponent;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
+    await TestBed.configureTestingModule({
+      declarations: [PoPageDefaultTestHostComponent]
+    }).compileComponents();
 
     languageService = new PoLanguageService();
 
@@ -292,6 +301,109 @@ describe('PoPageDefaultBaseComponent:', () => {
       it('should handle null value', () => {
         const result = component['transformPageHelper'](null);
         expect(result).toBeNull();
+      });
+    });
+
+    describe('p-refresh:', () => {
+      let fixtureHost: ComponentFixture<PoPageDefaultTestHostComponent>;
+      let hostComponent: PoPageDefaultTestHostComponent;
+
+      beforeEach(() => {
+        fixtureHost = TestBed.createComponent(PoPageDefaultTestHostComponent);
+        hostComponent = fixtureHost.componentInstance;
+        fixtureHost.detectChanges();
+      });
+
+      it('should have refresh input with undefined as default value', () => {
+        expect(hostComponent.refresh()).toBeUndefined();
+      });
+
+      it('should accept a function value', () => {
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+        expect(hostComponent.refresh()).toBe(fn);
+      });
+
+      it('should accept null value', () => {
+        fixtureHost.componentRef.setInput('p-refresh', null);
+        expect(hostComponent.refresh()).toBeNull();
+      });
+    });
+
+    describe('refreshCustomAction:', () => {
+      let fixtureHost: ComponentFixture<PoPageDefaultTestHostComponent>;
+      let hostComponent: PoPageDefaultTestHostComponent;
+
+      beforeEach(() => {
+        fixtureHost = TestBed.createComponent(PoPageDefaultTestHostComponent);
+        hostComponent = fixtureHost.componentInstance;
+        fixtureHost.detectChanges();
+      });
+
+      it('should return undefined when refresh is null', () => {
+        fixtureHost.componentRef.setInput('p-refresh', null);
+        expect((hostComponent as any).refreshCustomAction()).toBeUndefined();
+      });
+
+      it('should return undefined when refresh is not a function', () => {
+        fixtureHost.componentRef.setInput('p-refresh', 'not a function');
+        expect((hostComponent as any).refreshCustomAction()).toBeUndefined();
+      });
+
+      it('should return PoHelperCustomAction when refresh is a valid function', () => {
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+
+        const result = (hostComponent as any).refreshCustomAction();
+
+        expect(result).toBeDefined();
+        expect(result.icon).toBe('ICON_REFRESH');
+        expect(result.action).toBe(fn);
+      });
+
+      it('should return ariaLabel based on language (pt)', () => {
+        hostComponent['language'] = 'pt';
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+
+        const result = (hostComponent as any).refreshCustomAction();
+        expect(result.ariaLabel).toBe('Atualizar');
+      });
+
+      it('should return ariaLabel based on language (en)', () => {
+        hostComponent['language'] = 'en';
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+
+        const result = (hostComponent as any).refreshCustomAction();
+        expect(result.ariaLabel).toBe('Refresh');
+      });
+
+      it('should return ariaLabel based on language (es)', () => {
+        hostComponent['language'] = 'es';
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+
+        const result = (hostComponent as any).refreshCustomAction();
+        expect(result.ariaLabel).toBe('Actualizar');
+      });
+
+      it('should return ariaLabel based on language (ru)', () => {
+        hostComponent['language'] = 'ru';
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+
+        const result = (hostComponent as any).refreshCustomAction();
+        expect(result.ariaLabel).toBe('Обновить');
+      });
+
+      it('should fallback to EN ariaLabel for unsupported language', () => {
+        hostComponent['language'] = 'zw';
+        const fn = () => {};
+        fixtureHost.componentRef.setInput('p-refresh', fn);
+
+        const result = (hostComponent as any).refreshCustomAction();
+        expect(result.ariaLabel).toBe('Refresh');
       });
     });
   });

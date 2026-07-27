@@ -1,52 +1,68 @@
-<div
-  class="po-helper-container po-helper-target"
-  #target
-  [attr.tabindex]="disabled() ? null : 0"
-  role="button"
-  [attr.aria-label]="ariaLabel()"
-  [attr.aria-haspopup]="'dialog'"
-  [attr.aria-expanded]="!popover.isHidden"
-  [attr.aria-controls]="'popover-content-' + id"
-  [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
-  [class.po-helper-disabled]="disabled()"
-  (keydown)="onKeyDown($event)"
-  (click)="openHelperPopover(); emitClick($event)"
->
-  <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
-  <po-popover
-    #popover
-    [p-position]="popoverPosition"
-    [p-target]="target"
-    [p-title]="helper()?.title"
-    [p-append-in-body]="appendBox()"
-    [p-offset]="8"
-    p-custom-classes="po-helper-popover"
-    p-trigger="function"
-    (p-close)="handleClose()"
-    (p-open)="handleOpen()"
+@if (customAction()) {
+  <div
+    class="po-helper-container po-helper-target"
+    [class.po-helper-refresh-animating]="refreshAnimating"
+    [attr.tabindex]="0"
+    role="button"
+    [attr.aria-label]="customAction().ariaLabel || ''"
+    (keydown.enter)="executeCustomAction($event)"
+    (keydown.space)="executeCustomAction($event)"
+    (click)="executeCustomAction($event)"
+    (animationend)="onRefreshAnimationEnd()"
   >
-    <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
-      <span class="po-helper-content-text">
-        @for (fragment of contentFragments(); track $index) {
-          <span
-            [class.po-text-bold]="fragment.bold"
-            [class.po-text-italic]="fragment.italic"
-            [class.po-text-underline]="fragment.underline"
-            >{{ fragment.text }}</span
+    <po-icon [p-icon]="customAction().icon"></po-icon>
+  </div>
+} @else {
+  <div
+    class="po-helper-container po-helper-target"
+    #target
+    [attr.tabindex]="disabled() ? null : 0"
+    role="button"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-haspopup]="'dialog'"
+    [attr.aria-expanded]="!popover.isHidden"
+    [attr.aria-controls]="'popover-content-' + id"
+    [attr.aria-describedby]="!popover.isHidden ? 'popover-content-' + id : null"
+    [class.po-helper-disabled]="disabled()"
+    (keydown)="onKeyDown($event)"
+    (click)="openHelperPopover(); emitClick($event)"
+  >
+    <po-icon [p-icon]="helper()?.type === 'info' ? 'ICON_INFO' : 'ICON_HELP'"></po-icon>
+    <po-popover
+      #popover
+      [p-position]="popoverPosition"
+      [p-target]="target"
+      [p-title]="helper()?.title"
+      [p-append-in-body]="appendBox()"
+      [p-offset]="8"
+      p-custom-classes="po-helper-popover"
+      p-trigger="function"
+      (p-close)="handleClose()"
+      (p-open)="handleOpen()"
+    >
+      <div [id]="'popover-content-' + id" role="dialog" aria-modal="false" tabindex="-1">
+        <span class="po-helper-content-text">
+          @for (fragment of contentFragments(); track $index) {
+            <span
+              [class.po-text-bold]="fragment.bold"
+              [class.po-text-italic]="fragment.italic"
+              [class.po-text-underline]="fragment.underline"
+              >{{ fragment.text }}</span
+            >
+          }
+        </span>
+        @if (helper()?.type === 'help' && helper()?.footerAction) {
+          <po-divider></po-divider>
+          <po-link
+            class="po-helper-footer-action-link"
+            (keydown.enter)="$event.stopPropagation()"
+            (keydown.space)="$event.stopPropagation()"
+            (p-action)="helper()?.footerAction?.action()"
+            [p-label]="helper()?.footerAction?.label"
           >
+          </po-link>
         }
-      </span>
-      @if (helper()?.type === 'help' && helper()?.footerAction) {
-        <po-divider></po-divider>
-        <po-link
-          class="po-helper-footer-action-link"
-          (keydown.enter)="$event.stopPropagation()"
-          (keydown.space)="$event.stopPropagation()"
-          (p-action)="helper()?.footerAction?.action()"
-          [p-label]="helper()?.footerAction?.label"
-        >
-        </po-link>
-      }
-    </div>
-  </po-popover>
-</div>
+      </div>
+    </po-popover>
+  </div>
+}

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PoHelperBaseComponent } from './po-helper-base.component';
 import { PoHelperOptions } from './interfaces/po-helper.interface';
+import { PoHelperCustomAction } from './interfaces/po-helper-custom-action.interface';
 
 describe('PoHelperBaseComponent:', () => {
   let component: PoHelperBaseComponent;
@@ -33,6 +34,42 @@ describe('PoHelperBaseComponent:', () => {
       };
       fixture.componentRef.setInput('p-helper', options);
       expect(component.helper()).toEqual(options);
+    });
+
+    describe('p-custom-action:', () => {
+      it('should have customAction input with undefined as default value', () => {
+        expect(component.customAction()).toBeUndefined();
+      });
+
+      it('should accept a valid PoHelperCustomAction object', () => {
+        const action: PoHelperCustomAction = {
+          icon: 'ICON_REFRESH',
+          ariaLabel: 'Refresh',
+          action: () => {}
+        };
+        fixture.componentRef.setInput('p-custom-action', action);
+        expect(component.customAction()).toEqual(action);
+      });
+
+      it('should accept a PoHelperCustomAction without ariaLabel', () => {
+        const action: PoHelperCustomAction = {
+          icon: 'ICON_REFRESH',
+          action: () => {}
+        };
+        fixture.componentRef.setInput('p-custom-action', action);
+        expect(component.customAction()).toEqual(action);
+        expect(component.customAction().ariaLabel).toBeUndefined();
+      });
+
+      it('should accept undefined value', () => {
+        fixture.componentRef.setInput('p-custom-action', undefined);
+        expect(component.customAction()).toBeUndefined();
+      });
+
+      it('should accept null value', () => {
+        fixture.componentRef.setInput('p-custom-action', null);
+        expect(component.customAction()).toBeNull();
+      });
     });
   });
 

@@ -1,17 +1,17 @@
-import { Directive, HostBinding, HostListener, Input, ViewChild, input, output } from '@angular/core';
-
-import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
-import { PoLanguageService } from './../../../services/po-language/po-language.service';
+import { Directive, HostBinding, HostListener, Input, ViewChild, computed, input, output } from '@angular/core';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
-import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
-import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
-import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
-import { PoPageAction } from '../interfaces/po-page-action.interface';
-import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
-import { PoPageActionsLayout } from './enums/po-page-actions-layout.enum';
 import { PoPageHeaderType } from './enums/po-page-header-type.enum';
+import { PoPageAction } from '../interfaces/po-page-action.interface';
+import { getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
+import { PoPageActionsLayout } from './enums/po-page-actions-layout.enum';
+import { PoBreadcrumb } from '../../po-breadcrumb/po-breadcrumb.interface';
 import { PoPageDefaultLiterals } from './po-page-default-literals.interface';
+import { PoHelperOptions } from '../../po-helper/interfaces/po-helper.interface';
+import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
+import { poLocaleDefault } from './../../../services/po-language/po-language.constant';
+import { PoLanguageService } from './../../../services/po-language/po-language.service';
+import { PoHelperCustomAction } from '../../po-helper/interfaces/po-helper-custom-action.interface';
 
 export const poPageDefaultLiteralsDefault = {
   en: <PoPageDefaultLiterals>{
@@ -33,6 +33,13 @@ export const backNavigationAriaLabels = {
   es: 'Volver',
   pt: 'Voltar',
   ru: 'Назад'
+};
+
+export const refreshAriaLabels = {
+  en: 'Refresh',
+  es: 'Actualizar',
+  pt: 'Atualizar',
+  ru: 'Обновить'
 };
 
 /**
@@ -259,6 +266,39 @@ export abstract class PoPageDefaultBaseComponent {
   get pageHeaderType(): string {
     return this._pageHeaderType;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define a função de callback executada ao clicar no botão de atualização (refresh) ao lado do subtítulo da página.
+   *
+   * Quando não houver subtítulo (`p-subtitle`), o refresh será exibido logo abaixo do título.
+   *
+   * > Esta propriedade possui precedência sobre a configuração de `p-helper`.
+   *
+   * Exemplo de uso:
+   * ```html
+   * <po-page-default
+   *   p-title="Dashboard"
+   *   [p-refresh]="onRefresh"
+   * ></po-page-default>
+   * ```
+   */
+  refresh = input<Function>(undefined, { alias: 'p-refresh' });
+
+  protected readonly refreshCustomAction = computed<PoHelperCustomAction | undefined>(() => {
+    const fn = this.refresh();
+    if (fn && typeof fn === 'function') {
+      return {
+        icon: 'ICON_REFRESH',
+        ariaLabel: refreshAriaLabels[this.language] || refreshAriaLabels['en'],
+        action: fn
+      };
+    }
+    return undefined;
+  });
 
   /**
    * @optional
