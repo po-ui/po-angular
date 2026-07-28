@@ -1,0 +1,197 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+
+import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoListBoxBaseComponent, poListBoxLiteralsDefault } from './po-listbox-base.component';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoThemeA11yEnum } from '../../services';
+
+describe('PoListboxBaseComponent', () => {
+  const languageService = new PoLanguageService();
+  let component: PoListBoxBaseComponent;
+
+  beforeEach(() => {
+    component = new PoListBoxBaseComponent(languageService);
+  });
+
+  it('should be created', () => {
+    expect(component instanceof PoListBoxBaseComponent).toBeTruthy();
+  });
+
+  describe('Properties: ', () => {
+    it('should update property `p-type` with valid values', () => {
+      const validValues = ['action', 'check', 'option'];
+
+      expectPropertiesValues(component, 'type', validValues, validValues);
+    });
+    it('should update property `p-type` with invalid values', () => {
+      const invalidValues = ['secondary', 'primary', 'default'];
+
+      expectPropertiesValues(component, 'type', invalidValues, 'action');
+    });
+
+    it('should update property `p-items` with valid values', () => {
+      const items = [
+        { label: 'a', value: 'a' },
+        { label: 'b', value: 'b' },
+        { label: 'c', value: 'c' }
+      ];
+      const validValues = [items];
+
+      expectPropertiesValues(component, 'items', validValues, validValues);
+    });
+    it('should update property `p-items` with valid values', () => {
+      const invalidValues = ['items', undefined];
+
+      expectPropertiesValues(component, 'items', invalidValues, []);
+    });
+
+    describe('p-literals:', () => {
+      it('should be in portuguese if browser is setted with an unsuported language', () => {
+        Object.defineProperty(component, 'language', { value: 'zw', configurable: true });
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poListBoxLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should be in portuguese if browser is setted with `pt`', () => {
+        Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poListBoxLiteralsDefault.pt);
+      });
+
+      it('should be in english if browser is setted with `en`', () => {
+        Object.defineProperty(component, 'language', { value: 'en', configurable: true });
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poListBoxLiteralsDefault.en);
+      });
+
+      it('should be in spanish if browser is setted with `es`', () => {
+        Object.defineProperty(component, 'language', { value: 'es', configurable: true });
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poListBoxLiteralsDefault.es);
+      });
+
+      it('should be in russian if browser is setted with `ru`', () => {
+        Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
+
+        component.literals = {};
+
+        expect(component.literals).toEqual(poListBoxLiteralsDefault.ru);
+      });
+
+      it('should accept custom literals', () => {
+        Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
+
+        const customLiterals = Object.assign({}, poListBoxLiteralsDefault[poLocaleDefault]);
+
+        // Custom some literals
+        customLiterals.noItems = 'No data custom';
+
+        component.literals = customLiterals;
+
+        expect(component.literals).toEqual(customLiterals);
+      });
+
+      it('should update property with default literals if is setted with invalid values', () => {
+        const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+
+        Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
+
+        expectPropertiesValues(component, 'literals', invalidValues, poListBoxLiteralsDefault[poLocaleDefault]);
+      });
+
+      it('should get literals directly from poListBoxLiteralsDefault if it not initialized', () => {
+        Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+        component['_literals'] = null;
+        expect(component.literals).toEqual(poListBoxLiteralsDefault['pt']);
+      });
+    });
+
+    describe('p-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+        component.size = 'small';
+        expect(component.size).toBe('small');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+        component.size = 'small';
+        expect(component.size).toBe('medium');
+
+        component.size = 'medium';
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
+
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+        component['_size'] = undefined;
+        expect(component.size).toBe('medium');
+      });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        vi.spyOn(component as any, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Methods: ', () => {
+    it('should return true when items length is greater than 0 and first item has "options"', () => {
+      component.items = [{ options: ['option1', 'option2'] }];
+
+      const result = component.isItemListGroup;
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when first item does not have "options"', () => {
+      component.items = [{ someProperty: 'value' }];
+
+      const result = component.isItemListGroup;
+
+      expect(result).toBe(false);
+    });
+  });
+});
