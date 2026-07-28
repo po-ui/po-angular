@@ -1,14 +1,50 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, input } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { PoListViewActionsLayout } from './enums/po-list-view-actions-layout.enum';
+import { PoListViewDetailDisplay } from './enums/po-list-view-detail-display.enum';
+import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
 
+/**
+ * @docsPrivate
+ *
+ * Valida o valor recebido pela propriedade `p-selection-mode`, retornando `multiple` como padrão
+ * quando o valor informado não pertencer ao enum `PoListViewSelectionMode`.
+ */
+export function convertToSelectionMode(value: string | PoListViewSelectionMode): PoListViewSelectionMode {
+  return value === PoListViewSelectionMode.Single ? PoListViewSelectionMode.Single : PoListViewSelectionMode.Multiple;
+}
+
+/**
+ * @docsPrivate
+ *
+ * Valida o valor recebido pela propriedade `p-detail-display`, retornando `inline` como padrão
+ * quando o valor informado não pertencer ao enum `PoListViewDetailDisplay`.
+ */
+export function convertToDetailDisplay(value: string | PoListViewDetailDisplay): PoListViewDetailDisplay {
+  return value === PoListViewDetailDisplay.Modal ? PoListViewDetailDisplay.Modal : PoListViewDetailDisplay.Inline;
+}
+
+/**
+ * @docsPrivate
+ *
+ * Valida o valor recebido pela propriedade `p-actions-layout`, retornando `default` como padrão
+ * quando o valor informado não pertencer ao enum `PoListViewActionsLayout`.
+ */
+export function convertToActionsLayout(value: string | PoListViewActionsLayout): PoListViewActionsLayout {
+  return value === PoListViewActionsLayout.Animalia
+    ? PoListViewActionsLayout.Animalia
+    : PoListViewActionsLayout.Default;
+}
+
 export const poListViewLiteralsDefault = {
   en: <PoListViewLiterals>{
+    detailModalTitle: 'View details',
     hideDetails: 'Hide details',
     loadMoreData: 'Load more data',
     noData: 'No data found',
@@ -16,6 +52,7 @@ export const poListViewLiteralsDefault = {
     showDetails: 'Show details'
   },
   es: <PoListViewLiterals>{
+    detailModalTitle: 'Ver detalles',
     hideDetails: 'Ocultar detalles',
     loadMoreData: 'Cargar más resultados',
     noData: 'Datos no encontrados',
@@ -23,6 +60,7 @@ export const poListViewLiteralsDefault = {
     showDetails: 'Mostrar detalles'
   },
   pt: <PoListViewLiterals>{
+    detailModalTitle: 'Ver detalhes',
     hideDetails: 'Ocultar detalhes',
     loadMoreData: 'Carregar mais resultados',
     noData: 'Nenhum dado encontrado',
@@ -30,6 +68,7 @@ export const poListViewLiteralsDefault = {
     showDetails: 'Exibir detalhes'
   },
   ru: <PoListViewLiterals>{
+    detailModalTitle: 'Посмотреть детали',
     hideDetails: 'Скрыть детали',
     loadMoreData: 'Загрузить больше результатов',
     noData: 'Данные не найдены',
@@ -270,6 +309,103 @@ export class PoListViewBaseComponent {
    *
    * @description
    *
+   * Define o modo de seleção dos itens quando a seleção estiver habilitada através da propriedade `p-select`:
+   * - `multiple`: permite selecionar um ou mais itens simultaneamente, exibindo a opção "Selecionar todos".
+   * - `single`: permite selecionar apenas um item por vez, ocultando a opção "Selecionar todos".
+   *
+   * @default `multiple`
+   */
+  selectionMode = input<PoListViewSelectionMode, string | PoListViewSelectionMode>(PoListViewSelectionMode.Multiple, {
+    alias: 'p-selection-mode',
+    transform: convertToSelectionMode
+  });
+
+  /** Indica se a seleção está configurada no modo `single` (seleção única). */
+  get isSingleSelection(): boolean {
+    return this.selectionMode() === PoListViewSelectionMode.Single;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define como o detalhe do item (diretiva `p-list-view-detail-template`) será exibido:
+   * - `inline`: expande o conteúdo do detalhe abaixo do item.
+   * - `modal`: exibe o conteúdo do detalhe no corpo de um `po-modal`.
+   *
+   * @default `inline`
+   */
+  detailDisplay = input<PoListViewDetailDisplay, string | PoListViewDetailDisplay>(PoListViewDetailDisplay.Inline, {
+    alias: 'p-detail-display',
+    transform: convertToDetailDisplay
+  });
+
+  /** Indica se o detalhe está configurado para ser exibido em `po-modal`. */
+  get isDetailModal(): boolean {
+    return this.detailDisplay() === PoListViewDetailDisplay.Modal;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Nome da propriedade do objeto que será utilizada para exibir um subtítulo (linha de apoio)
+   * abaixo do título de cada item, como por exemplo uma informação de data/hora.
+   */
+  propertySubtitle = input<string>(undefined, { alias: 'p-property-subtitle' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Nome da propriedade *booleana* do objeto que, quando `true`, aplica um destaque visual ao item
+   * (por exemplo, para representar um item "não lido").
+   *
+   * > O destaque é independente da seleção (`p-select`).
+   */
+  propertyHighlighted = input<string>(undefined, { alias: 'p-property-highlighted' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define o layout de renderização das ações de cada item:
+   * - `default`: comportamento legado (até duas ações *inline* e menu de "três pontos" a partir de três).
+   * - `animalia`: define o tipo da ação pelo número de ações — **Advanced** (apenas ação de título, seta à direita),
+   * **Single** (uma ação, botão secundário) e **Multiple** (duas ou mais ações, menu de "três pontos").
+   *
+   * @default `default`
+   */
+  actionsLayout = input<PoListViewActionsLayout, string | PoListViewActionsLayout>(PoListViewActionsLayout.Default, {
+    alias: 'p-actions-layout',
+    transform: convertToActionsLayout
+  });
+
+  /** Indica se as ações estão configuradas no layout `animalia`. */
+  get isAnimaliaActions(): boolean {
+    return this.actionsLayout() === PoListViewActionsLayout.Animalia;
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Aplica a classe de host `po-list-view-animalia` para habilitar, via CSS (po-style), o visual
+   * Animalia escopado sem afetar os consumidores atuais.
+   */
+  @HostBinding('class.po-list-view-animalia')
+  get animaliaVisualClass(): boolean {
+    return this.isAnimaliaActions;
+  }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Indica que o botão `Carregar Mais Resultados` será desabilitado.
    */
   @Input('p-show-more-disabled') set showMoreDisabled(value: boolean) {
@@ -311,6 +447,16 @@ export class PoListViewBaseComponent {
   }
 
   selectListItem(row: any) {
+    if (this.selectionMode() === PoListViewSelectionMode.Single) {
+      const willSelect = !row.$selected;
+
+      this.items.forEach(item => (item.$selected = false));
+      row.$selected = willSelect;
+      this.selectAll = false;
+
+      return;
+    }
+
     row.$selected = !row.$selected;
 
     this.selectAll = this.checkIfItemsAreSelected(this.items);
@@ -354,6 +500,12 @@ export class PoListViewBaseComponent {
   }
 
   private showMainHeader() {
-    this.showHeader = !!(this.select && !this.hideSelectAll && this.items && this.items.length);
+    this.showHeader = !!(
+      this.select &&
+      this.selectionMode() === PoListViewSelectionMode.Multiple &&
+      !this.hideSelectAll &&
+      this.items &&
+      this.items.length
+    );
   }
 }

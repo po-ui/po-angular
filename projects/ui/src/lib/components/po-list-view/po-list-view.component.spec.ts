@@ -9,6 +9,7 @@ import fc from 'fast-check';
 
 import { PoUtils as UtilsFunctions } from '../../utils/util';
 import { PoButtonModule } from '../po-button';
+import { PoModalModule } from '../po-modal';
 import { PoPopupModule } from '../po-popup';
 
 import { PoListViewBaseComponent } from './po-list-view-base.component';
@@ -26,7 +27,13 @@ describe('PoListViewComponent:', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
-      imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule],
+      imports: [
+        BrowserAnimationsModule,
+        RouterTestingModule.withRoutes([]),
+        PoButtonModule,
+        PoPopupModule,
+        PoModalModule
+      ],
       providers: [provideNgReflectAttributes()]
     }).compileComponents();
 
@@ -46,6 +53,190 @@ describe('PoListViewComponent:', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
     expect(component instanceof PoListViewBaseComponent).toBeTruthy();
+  });
+
+  describe('Selection mode template:', () => {
+    it('should render `po-checkbox` per item when selection mode is `multiple` (default)', () => {
+      component.select = true;
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('po-checkbox')).toBeTruthy();
+      expect(debugElement.querySelector('.po-list-view-select po-radio')).toBeNull();
+    });
+
+    it('should render `po-radio` per item when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      component.select = true;
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-select po-radio')).toBeTruthy();
+    });
+  });
+
+  describe('Subtitle template:', () => {
+    it('should render `.po-list-view-subtitle` when `p-property-subtitle` is set and item has value', () => {
+      component.items = [{ id: 1, name: 'register', createdAt: 'Há 5 min' }];
+      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
+      fixture.detectChanges();
+
+      const subtitle = debugElement.querySelector('.po-list-view-subtitle');
+
+      expect(subtitle).toBeTruthy();
+      expect(subtitle.textContent.trim()).toBe('Há 5 min');
+    });
+
+    it('should not render `.po-list-view-subtitle` when `p-property-subtitle` is not set', () => {
+      component.items = [{ id: 1, name: 'register', createdAt: 'Há 5 min' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-subtitle')).toBeNull();
+    });
+
+    it('should not render `.po-list-view-subtitle` when item does not have the subtitle value', () => {
+      component.items = [{ id: 1, name: 'register' }];
+      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-subtitle')).toBeNull();
+    });
+  });
+
+  describe('Highlighted item:', () => {
+    it('should apply `po-list-view-highlighted` class when `p-property-highlighted` field is truthy', () => {
+      component.items = [{ id: 1, name: 'register', unread: true }];
+      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-container.po-list-view-highlighted')).toBeTruthy();
+    });
+
+    it('should not apply `po-list-view-highlighted` class when `p-property-highlighted` field is falsy', () => {
+      component.items = [{ id: 1, name: 'register', unread: false }];
+      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-container.po-list-view-highlighted')).toBeNull();
+    });
+
+    it('should not apply `po-list-view-highlighted` class when `p-property-highlighted` is not set', () => {
+      component.items = [{ id: 1, name: 'register', unread: true }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-highlighted')).toBeNull();
+    });
+  });
+
+  describe('Detail display modal:', () => {
+    beforeEach(() => {
+      component.listViewDetailTemplate = <any>{ templateRef: null };
+      fixture.componentRef.setInput('p-detail-display', 'modal');
+      fixture.detectChanges();
+    });
+
+    it('openDetailModal: should set item and index, emit `p-show-detail` and open the modal', () => {
+      spyOn(component.showDetail, 'emit');
+      spyOn(component.detailModal, 'open');
+      const listItem = { id: 5, name: 'x' };
+
+      component.openDetailModal(listItem, 2);
+
+      expect(component.detailModalItem).toBe(listItem);
+      expect(component.detailModalIndex).toBe(2);
+      expect(component.showDetail.emit).toHaveBeenCalledWith(listItem);
+      expect(component.detailModal.open).toHaveBeenCalled();
+    });
+
+    it('onCloseDetailModal: should reset `detailModalItem` to `null`', () => {
+      component.detailModalItem = { id: 1 };
+
+      component.onCloseDetailModal();
+
+      expect(component.detailModalItem).toBeNull();
+    });
+
+    it('should not render the inline detail (`.po-list-view-detail`) when detail display is `modal`', () => {
+      component.items = [{ id: 1, name: 'x', $showDetail: true }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-detail')).toBeNull();
+    });
+  });
+
+  describe('Actions layout animalia:', () => {
+    it('getItemActionType: should return `multiple` when there are two or more visible actions', () => {
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+
+      expect(component.getItemActionType(item)).toBe('multiple');
+    });
+
+    it('getItemActionType: should return `single` when there is one visible action', () => {
+      component.actions = [{ label: 'a' }];
+
+      expect(component.getItemActionType(item)).toBe('single');
+    });
+
+    it('getItemActionType: should return `advanced` when there is no action but the title has an action', () => {
+      component.actions = [];
+      spyOnProperty(component, 'titleHasAction', 'get').and.returnValue(true);
+
+      expect(component.getItemActionType(item)).toBe('advanced');
+    });
+
+    it('getItemActionType: should return `none` when there is no action and no title action', () => {
+      component.actions = [];
+      spyOnProperty(component, 'titleHasAction', 'get').and.returnValue(false);
+
+      expect(component.getItemActionType(item)).toBe('none');
+    });
+
+    it('should render the advanced arrow-right button when animalia and only the title has an action', () => {
+      fixture.componentRef.setInput('p-actions-layout', 'animalia');
+      component.actions = [];
+      component.titleAction.observers.push(<any>[new Observable()]);
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-actions po-button')).toBeTruthy();
+    });
+
+    it('should render a single button when animalia and there is one action', () => {
+      fixture.componentRef.setInput('p-actions-layout', 'animalia');
+      component.actions = [{ label: 'Edit', action: () => {} }];
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-actions po-button')).toBeTruthy();
+    });
+
+    it('should render the three-dots popup when animalia and there are two or more actions', () => {
+      fixture.componentRef.setInput('p-actions-layout', 'animalia');
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-more-icon')).toBeTruthy();
+    });
+
+    it('should apply the `po-list-view-animalia` host class when actions layout is `animalia`', () => {
+      fixture.componentRef.setInput('p-actions-layout', 'animalia');
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.classList.contains('po-list-view-animalia')).toBe(true);
+    });
+
+    it('should not apply the `po-list-view-animalia` host class in the default layout', () => {
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.classList.contains('po-list-view-animalia')).toBe(false);
+    });
+
+    it('should apply the `po-list-view-selected` class on the selected item container', () => {
+      component.select = true;
+      component.items = [{ id: 1, name: 'x', $selected: true }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-container.po-list-view-selected')).toBeTruthy();
+    });
   });
 
   describe('Properties:', () => {

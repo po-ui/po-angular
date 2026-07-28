@@ -12,9 +12,11 @@ import {
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoUtils } from '../../utils/util';
+import { PoModalComponent } from '../po-modal/po-modal.component';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
+import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
 import { PoListViewDetailTemplateDirective } from './po-list-view-detail-template/po-list-view-detail-template.directive';
@@ -62,8 +64,11 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   listViewDetailTemplate: PoListViewDetailTemplateDirective;
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
+  @ViewChild('detailModal', { static: true }) detailModal: PoModalComponent;
 
   popupActions: Array<PoListViewAction> = [];
+  detailModalItem: any = null;
+  detailModalIndex: number;
 
   private readonly differ;
 
@@ -127,6 +132,21 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return index;
   }
 
+  // Define o tipo de ação Animalia do item conforme o número de ações visíveis e a ação de título (§2-B.8).
+  getItemActionType(item: any): 'advanced' | 'single' | 'multiple' | 'none' {
+    const visibleActions = this.getVisibleActions(item);
+
+    if (visibleActions.length >= 2) {
+      return 'multiple';
+    }
+
+    if (visibleActions.length === 1) {
+      return 'single';
+    }
+
+    return this.titleHasAction ? 'advanced' : 'none';
+  }
+
   togglePopup(item, targetRef: HTMLElement) {
     this.popupTarget = targetRef;
     this.popupActions = this.getVisibleActions(item);
@@ -137,6 +157,18 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   onAnimationEvent(event: AnimationEvent, detail) {
     this.showDetail.emit(detail);
+  }
+
+  openDetailModal(item: any, index: number) {
+    this.detailModalItem = item;
+    this.detailModalIndex = index;
+    this.showDetail.emit(item);
+    this.changeDetector.detectChanges();
+    this.detailModal.open();
+  }
+
+  onCloseDetailModal() {
+    this.detailModalItem = null;
   }
 
   // Avalia a visibilidade das ações por item, passando o item corrente.
@@ -151,7 +183,14 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
       this.selectAll = null;
     }
 
-    if (changesItems && this.items && this.items.length && this.select && !this.hideSelectAll) {
+    if (
+      changesItems &&
+      this.items &&
+      this.items.length &&
+      this.select &&
+      this.selectionMode() === PoListViewSelectionMode.Multiple &&
+      !this.hideSelectAll
+    ) {
       this.showHeader = true;
     }
   }

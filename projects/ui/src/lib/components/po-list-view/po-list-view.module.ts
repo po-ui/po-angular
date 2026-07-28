@@ -5,8 +5,10 @@ import { RouterModule } from '@angular/router';
 
 import { PoButtonModule } from '../po-button/po-button.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoPopupModule } from '../po-popup/po-popup.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
+import { PoRadioModule } from './../po-field/po-radio/po-radio.module';
 
 import { PoListViewComponent } from './po-list-view.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
@@ -64,7 +66,9 @@ import { PoContainerModule } from '../po-container/po-container.module';
     PoButtonModule,
     PoIconModule,
     PoPopupModule,
+    PoModalModule,
     PoCheckboxModule,
+    PoRadioModule,
     PoContainerModule
   ],
   declarations: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],

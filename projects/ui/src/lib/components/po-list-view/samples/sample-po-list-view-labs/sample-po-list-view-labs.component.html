@@ -8,6 +8,7 @@
   [p-property-link]="propertyLink"
   [p-property-title]="propertyTitle"
   [p-select]="properties.includes('select')"
+  [p-selection-mode]="selectionMode"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
   (p-show-more)="showMore()"
   (p-title-action)="changeAction('p-title-action')"
@@ -95,6 +96,16 @@
       p-label="Components size"
       p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
       [p-options]="componentsSizeOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="selectionMode"
+      [(ngModel)]="selectionMode"
+      p-label="Selection mode"
+      p-help='Define o modo de seleção quando a opção "Select" está habilitada. Em "single" a opção "Selecionar todos" é ocultada.'
+      [p-options]="selectionModeOptions"
     >
     </po-radio-group>
   </div>

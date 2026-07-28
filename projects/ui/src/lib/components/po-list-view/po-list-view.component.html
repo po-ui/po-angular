@@ -33,18 +33,31 @@
       @let visibleActionsForItem = getVisibleActions(item);
 
       <po-container [p-no-padding]="true">
-        <div class="po-list-view-container">
+        <div
+          class="po-list-view-container"
+          [class.po-list-view-highlighted]="propertyHighlighted() && item[propertyHighlighted()]"
+          [class.po-list-view-selected]="item.$selected"
+        >
           <div class="po-list-view-header">
             <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
               @if (select) {
                 <div class="po-list-view-select">
-                  <po-checkbox
-                    [(ngModel)]="item.$selected"
-                    name="checkbox"
-                    [p-size]="componentsSize"
-                    (p-change)="selectListItem(item)"
-                    (click)="selectListItem(item)"
-                  ></po-checkbox>
+                  @if (isSingleSelection) {
+                    <po-radio
+                      name="po-list-view-selection"
+                      [p-checked]="item.$selected"
+                      [p-size]="componentsSize"
+                      (p-change)="selectListItem(item)"
+                    ></po-radio>
+                  } @else {
+                    <po-checkbox
+                      [(ngModel)]="item.$selected"
+                      name="checkbox"
+                      [p-size]="componentsSize"
+                      (p-change)="selectListItem(item)"
+                      (click)="selectListItem(item)"
+                    ></po-checkbox>
+                  }
                 </div>
               }
 
@@ -75,30 +88,79 @@
               </span>
             </div>
 
-            @if (visibleActionsForItem.length > 0 && visibleActionsForItem.length <= 2) {
-              <div class="po-list-view-actions">
-                @for (action of visibleActionsForItem; track action) {
-                  <po-button
-                    [p-disabled]="returnBooleanValue(action, item, 'disabled')"
-                    [p-icon]="action.icon"
-                    [p-label]="action.label"
-                    [p-danger]="action.type === 'danger'"
-                    [p-size]="componentsSize"
-                    (p-click)="onClickAction(action, item)"
-                  >
-                  </po-button>
+            @if (isAnimaliaActions) {
+              @switch (getItemActionType(item)) {
+                @case ('advanced') {
+                  <div class="po-list-view-actions">
+                    <po-button
+                      p-kind="tertiary"
+                      p-icon="ICON_ARROW_RIGHT"
+                      [p-size]="componentsSize"
+                      (p-click)="runTitleAction(item)"
+                    >
+                    </po-button>
+                  </div>
                 }
-              </div>
-            }
-
-            @if (visibleActionsForItem.length > 2) {
-              <div class="po-list-view-more-actions">
-                <div #popupTarget class="po-list-view-more-icon po-clickable" (click)="togglePopup(item, popupTarget)">
-                  <po-icon p-icon="ICON_MORE"></po-icon>
+                @case ('single') {
+                  <div class="po-list-view-actions">
+                    <po-button
+                      p-kind="secondary"
+                      [p-disabled]="returnBooleanValue(visibleActionsForItem[0], item, 'disabled')"
+                      [p-icon]="visibleActionsForItem[0].icon"
+                      [p-label]="visibleActionsForItem[0].label"
+                      [p-danger]="visibleActionsForItem[0].type === 'danger'"
+                      [p-size]="componentsSize"
+                      (p-click)="onClickAction(visibleActionsForItem[0], item)"
+                    >
+                    </po-button>
+                  </div>
+                }
+                @case ('multiple') {
+                  <div class="po-list-view-more-actions">
+                    <div
+                      #popupTarget
+                      class="po-list-view-more-icon po-clickable"
+                      (click)="togglePopup(item, popupTarget)"
+                    >
+                      <po-icon p-icon="ICON_MORE"></po-icon>
+                    </div>
+                  </div>
+                }
+              }
+            } @else {
+              @if (visibleActionsForItem.length > 0 && visibleActionsForItem.length <= 2) {
+                <div class="po-list-view-actions">
+                  @for (action of visibleActionsForItem; track action) {
+                    <po-button
+                      [p-disabled]="returnBooleanValue(action, item, 'disabled')"
+                      [p-icon]="action.icon"
+                      [p-label]="action.label"
+                      [p-danger]="action.type === 'danger'"
+                      [p-size]="componentsSize"
+                      (p-click)="onClickAction(action, item)"
+                    >
+                    </po-button>
+                  }
                 </div>
-              </div>
+              }
+
+              @if (visibleActionsForItem.length > 2) {
+                <div class="po-list-view-more-actions">
+                  <div
+                    #popupTarget
+                    class="po-list-view-more-icon po-clickable"
+                    (click)="togglePopup(item, popupTarget)"
+                  >
+                    <po-icon p-icon="ICON_MORE"></po-icon>
+                  </div>
+                </div>
+              }
             }
           </div>
+
+          @if (propertySubtitle() && item[propertySubtitle()]) {
+            <div class="po-list-view-subtitle">{{ item[propertySubtitle()] }}</div>
+          }
 
           @if (hasContentTemplate) {
             <div class="po-list-view-content">
@@ -110,7 +172,7 @@
             </div>
           }
 
-          @if (hasDetailTemplate && item.$showDetail) {
+          @if (hasDetailTemplate && !isDetailModal && item.$showDetail) {
             <div
               @showHideDetail
               (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
@@ -127,13 +189,23 @@
 
         @if (hasDetailTemplate) {
           <div class="po-list-view-detail-button">
-            <po-button
-              p-kind="tertiary"
-              [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
-              [p-size]="componentsSize"
-              (p-click)="item.$showDetail = !item.$showDetail"
-            >
-            </po-button>
+            @if (isDetailModal) {
+              <po-button
+                p-kind="tertiary"
+                [p-label]="literals.detailModalTitle"
+                [p-size]="componentsSize"
+                (p-click)="openDetailModal(item, index)"
+              >
+              </po-button>
+            } @else {
+              <po-button
+                p-kind="tertiary"
+                [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
+                [p-size]="componentsSize"
+                (p-click)="item.$showDetail = !item.$showDetail"
+              >
+              </po-button>
+            }
           </div>
         }
       </po-container>
@@ -154,3 +226,18 @@
 }
 
 <po-popup #popup [p-actions]="popupActions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>
+
+<po-modal
+  #detailModal
+  [p-title]="literals.detailModalTitle"
+  [p-components-size]="componentsSize"
+  (p-close)="onCloseDetailModal()"
+>
+  @if (detailModalItem && hasDetailTemplate) {
+    <ng-template
+      [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
+      [ngTemplateOutletContext]="{ $implicit: detailModalItem, index: detailModalIndex }"
+    >
+    </ng-template>
+  }
+</po-modal>
