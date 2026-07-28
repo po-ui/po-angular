@@ -1,0 +1,412 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+
+import { poLocaleDefault } from '../../services/po-language/po-language.constant';
+import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+
+import { PoThemeA11yEnum } from '../../services';
+import { PoListViewBaseComponent, poListViewLiteralsDefault } from './po-list-view-base.component';
+
+describe('PoListViewBaseComponent:', () => {
+  const languageService: PoLanguageService = new PoLanguageService();
+  let component: PoListViewBaseComponent;
+
+  beforeEach(() => {
+    component = new PoListViewBaseComponent(languageService);
+  });
+
+  describe('Properties:', () => {
+    it('p-items: should update property with `[]` if it`s not an array', () => {
+      const invalidValues = [undefined, null, 0, '', NaN];
+      const expectedValue = [];
+
+      expectPropertiesValues(component, 'items', invalidValues, expectedValue);
+    });
+
+    it('p-items: should update property with valid values if is an array', () => {
+      const validValues = [[{ id: 1, name: 'register' }], []];
+
+      expectPropertiesValues(component, 'items', validValues, validValues);
+    });
+
+    it('p-actions: should update property with `[]` if it`s not an array', () => {
+      const invalidValues = [undefined, null, 0, '', NaN];
+      const expectedValue = [];
+
+      expectPropertiesValues(component, 'actions', invalidValues, expectedValue);
+    });
+
+    it('p-actions: should update property with valid values if is an array', () => {
+      const validValues = [[{ label: 'action', action: () => true }], []];
+
+      expectPropertiesValues(component, 'actions', validValues, validValues);
+    });
+
+    describe('p-components-size', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('small');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+        component.componentsSize = 'small';
+        expect(component.componentsSize).toBe('medium');
+
+        component.componentsSize = 'medium';
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
+
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+        component['_componentsSize'] = undefined;
+        expect(component.componentsSize).toBe('medium');
+      });
+
+      it('onThemeChange: should call applySizeBasedOnA11y', () => {
+        vi.spyOn<any>(component, 'applySizeBasedOnA11y');
+        component['onThemeChange']();
+        expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+      });
+    });
+
+    it('p-height: should update property with valid values', () => {
+      const validValues = [0, 5, 200, 1000];
+
+      expectPropertiesValues(component, 'height', validValues, validValues);
+    });
+
+    it('p-hide-select-all: should update property with valid values and call `showMainHeader`', () => {
+      const validValuesTrue = [true, 'true', 1, ''];
+      const validValuesFalse = [false, 'false', 0];
+
+      vi.spyOn(component, 'showMainHeader' as any);
+
+      expectPropertiesValues(component, 'hideSelectAll', validValuesTrue, true);
+      expectPropertiesValues(component, 'hideSelectAll', validValuesFalse, false);
+      expect(component['showMainHeader']).toHaveBeenCalled();
+    });
+
+    it('p-hide-select-all: should update property with false if invalid values and call `showMainHeader`', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      vi.spyOn(component, 'showMainHeader' as any);
+
+      expectPropertiesValues(component, 'hideSelectAll', invalidValues, false);
+      expect(component['showMainHeader']).toHaveBeenCalled();
+    });
+
+    it('p-literals: should be in portuguese if browser is setted with an unsupported language', () => {
+      Object.defineProperty(component, 'language', { value: 'zw', configurable: true });
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poListViewLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('p-literals: should be in portuguese if browser is setted with `pt`', () => {
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poListViewLiteralsDefault.pt);
+    });
+
+    it('p-literals: should be in english if browser is setted with `en`', () => {
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poListViewLiteralsDefault.en);
+    });
+
+    it('p-literals: should be in spanish if browser is setted with `es`', () => {
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poListViewLiteralsDefault.es);
+    });
+
+    it('p-literals: should be in russian if browser is setted with `ru`', () => {
+      Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
+
+      component.literals = {};
+
+      expect(component.literals).toEqual(poListViewLiteralsDefault.ru);
+    });
+
+    it('p-literals: should accept custom literals', () => {
+      Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
+
+      const customLiterals = Object.assign({}, poListViewLiteralsDefault[poLocaleDefault]);
+
+      // Custom some literals
+      customLiterals.loadMoreData = 'Load more';
+
+      component.literals = customLiterals;
+
+      expect(component.literals).toEqual(customLiterals);
+    });
+
+    it('p-literals: should update property with default literals if is setted with invalid values', () => {
+      const invalidValues = [null, undefined, false, true, '', 'literals', 0, 10, [], [1, 2], () => {}];
+
+      Object.defineProperty(component, 'language', { value: poLocaleDefault, configurable: true });
+
+      expectPropertiesValues(component, 'literals', invalidValues, poListViewLiteralsDefault[poLocaleDefault]);
+    });
+
+    it('p-select: should update property with valid values and call `showMainHeader`', () => {
+      const validValuesTrue = [true, 'true', 1, ''];
+      const validValuesFalse = [false, 'false', 0];
+
+      vi.spyOn(component, 'showMainHeader' as any);
+
+      expectPropertiesValues(component, 'select', validValuesTrue, true);
+      expectPropertiesValues(component, 'select', validValuesFalse, false);
+      expect(component['showMainHeader']).toHaveBeenCalled();
+    });
+
+    it('p-select: should update property with false if invalid values and call `showMainHeader`', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      vi.spyOn(component, 'showMainHeader' as any);
+
+      expectPropertiesValues(component, 'select', invalidValues, false);
+      expect(component['showMainHeader']).toHaveBeenCalled();
+    });
+
+    it('p-show-more-disabled: should update property `p-show-more-disabled` with valid values', () => {
+      const validValues = [true, 'true', 1, ''];
+
+      expectPropertiesValues(component, 'showMoreDisabled', validValues, true);
+    });
+
+    it('p-show-more-disabled: should update property `p-show-more-disabled` with `false` if invalid values', () => {
+      const invalidValues = [undefined, null, 2, 'string', 0, NaN];
+
+      expectPropertiesValues(component, 'showMoreDisabled', invalidValues, false);
+    });
+  });
+
+  describe('Methods:', () => {
+    const item = { id: 1, name: 'Register 1' };
+
+    it('onClickAction: should call `listViewAction.action` with item parameter', () => {
+      const listViewAction = { label: 'Action 1', action: arg => {} };
+
+      vi.spyOn(component, 'deleteInternalAttrs' as any).mockReturnValue(item);
+      vi.spyOn(listViewAction, 'action');
+
+      component.onClickAction(listViewAction, item);
+
+      expect(listViewAction.action).toHaveBeenCalledWith(item);
+      expect(component['deleteInternalAttrs']).toHaveBeenCalled();
+    });
+
+    it('onClickAction: should not call `listViewAction.action`', () => {
+      const listViewAction = { label: 'Action 1' };
+
+      vi.spyOn(component, 'deleteInternalAttrs' as any).mockReturnValue(item);
+
+      component.onClickAction(listViewAction, item);
+
+      expect(component['deleteInternalAttrs']).toHaveBeenCalled();
+    });
+
+    it('onShowMore: should call `showMore.emit`', () => {
+      vi.spyOn(component.showMore, 'emit' as any);
+
+      component.onShowMore();
+
+      expect(component.showMore.emit).toHaveBeenCalled();
+    });
+
+    it('selectAllListItems: should select all list items', () => {
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = false));
+
+      component.select = true;
+      component.hideSelectAll = false;
+
+      component.selectAllListItems();
+
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(true));
+    });
+
+    it('selectAllListItems: should not select all list items if hide select all is active', () => {
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = false));
+      component.select = true;
+      component.hideSelectAll = true;
+
+      component.selectAllListItems();
+
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
+    });
+
+    it('selectListItem: should set all select to true', () => {
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = false));
+
+      component.select = true;
+      component.hideSelectAll = false;
+      component.items.forEach(listItem => component.selectListItem(listItem));
+
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(true));
+    });
+
+    it('selectListItem: should set all select to false', () => {
+      component.items = [
+        { name: 'Name 1', email: 'email 1' },
+        { name: 'Name 2', email: 'email 2' }
+      ];
+      component.items.forEach(listItem => (listItem.$selected = true));
+
+      component.select = true;
+      component.hideSelectAll = false;
+      component.items.forEach(listItem => component.selectListItem(listItem));
+
+      component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
+    });
+
+    it('deleteInternalAttrs: should return `object` without property that starts with `$`', () => {
+      const dirtyItem = { label: 'item label', $showDetail: 'test', $selected: true };
+      const expectedItem = { label: 'item label' };
+
+      expect(component['deleteInternalAttrs'](dirtyItem)).toEqual(expectedItem);
+      expect(dirtyItem).toEqual({ label: 'item label', $showDetail: 'test', $selected: true });
+    });
+
+    it('deleteInternalAttrs: should return same `object` if property not starts with `$`', () => {
+      expect(component['deleteInternalAttrs'](item)).toEqual(item);
+    });
+
+    it('deleteInternalAttrs: should return same parameter if it`s not defined', () => {
+      expect(component['deleteInternalAttrs'](undefined)).toEqual(undefined);
+    });
+
+    describe('checkIfItemsAreSelected:', () => {
+      let items;
+
+      beforeEach(() => {
+        items = [
+          { name: 'Name 1', email: 'email 1', $selected: true },
+          { name: 'Name 2', email: 'email 2', $selected: true }
+        ];
+      });
+
+      it('should return `true` if every items is selected', () => {
+        expect(component['checkIfItemsAreSelected'](items)).toBeTruthy();
+      });
+
+      it('should return `null` if some items selected is false', () => {
+        items[1].$selected = false;
+
+        const isIndeterminate = component['checkIfItemsAreSelected'](items) === null;
+
+        expect(isIndeterminate).toBeTruthy();
+      });
+
+      it('should return `false` if every items isn`t selected', () => {
+        items[0].$selected = false;
+        items[1].$selected = false;
+
+        expect(component['checkIfItemsAreSelected'](items)).toBeFalsy();
+      });
+    });
+
+    it('showMainHeader: should set showHeader to `true` if `select` is `true`, `hideSelectAll` is `false` and have items', () => {
+      component.showHeader = false;
+      component.items = [{ name: 'Name 1', email: 'email 1', $selected: true }];
+      component.select = true;
+      component.hideSelectAll = false;
+
+      component['showMainHeader']();
+
+      expect(component.showHeader).toBe(true);
+    });
+
+    it('showMainHeader: should set showHeader to `false` if `select` is false', () => {
+      component.select = false;
+
+      component['showMainHeader']();
+
+      expect(component.showHeader).toBe(false);
+    });
+
+    it('showMainHeader: should set showHeader to `false` if `hideSelectAll` is `true`', () => {
+      component.select = true;
+      component.hideSelectAll = true;
+
+      component['showMainHeader']();
+
+      expect(component.showHeader).toBe(false);
+    });
+
+    it('showMainHeader: should set showHeader to `false` if no have items', () => {
+      component.items = [];
+      component.select = true;
+      component.hideSelectAll = true;
+
+      component['showMainHeader']();
+
+      expect(component.showHeader).toBe(false);
+    });
+
+    it('runTitleAction: should call `titleAction.emit` and `deleteInternalAttrs`', () => {
+      const listItem = { label: 'item label', $showDetail: 'test' };
+      const expectedItem = { label: 'item label' };
+
+      vi.spyOn(component.titleAction, 'emit' as any);
+      vi.spyOn(component, 'deleteInternalAttrs' as any).mockReturnValue(expectedItem);
+
+      component.runTitleAction(listItem);
+
+      expect(component.titleAction.emit).toHaveBeenCalledWith(expectedItem);
+      expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(listItem);
+    });
+  });
+});
