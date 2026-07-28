@@ -1,0 +1,520 @@
+import { By } from '@angular/platform-browser';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement, NO_ERRORS_SCHEMA, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PoButtonModule } from '../po-button';
+
+import { PoActiveOverlayService } from '../../services/po-active-overlay/po-active-overlay.service';
+import { PoModalAction } from './po-modal-action.interface';
+import { PoModalBaseComponent } from './po-modal-base.component';
+import { PoModalComponent } from './po-modal.component';
+import { PoModalFooterComponent } from '.';
+
+@Component({
+  template: `
+    <po-modal p-title="i'm the title" [p-primary-action]="primaryAction">
+      <form>
+        <input name="teste" placeholder="Teste" />
+        <input name="userName" placeholder="Nome" />
+      </form>
+    </po-modal>
+  `,
+  standalone: false
+})
+class ContentProjectionComponent {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+  primaryAction: PoModalAction = { label: 'action', action: () => {} };
+  openModal() {
+    this.poModal.open();
+  }
+}
+
+describe('PoModalComponent:', () => {
+  let component: PoModalComponent;
+  let fixture: ComponentFixture<PoModalComponent>;
+  let element: DebugElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoButtonModule],
+      declarations: [PoModalComponent, PoModalFooterComponent, ContentProjectionComponent],
+      providers: [PoActiveOverlayService],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoModalComponent);
+    component = fixture.componentInstance;
+    element = fixture.debugElement;
+
+    component.primaryAction = { label: 'primaryLabel', action: () => {} };
+
+    fixture.detectChanges();
+  });
+
+  it('should create component', () => {
+    expect(component instanceof PoModalBaseComponent).toBe(true);
+    expect(component instanceof PoModalComponent).toBe(true);
+  });
+
+  it('should be loaded with title bar', () => {
+    component.title = 'title';
+    component.open();
+    fixture.detectChanges();
+    expect(element.query(By.css('.po-modal-title')).nativeElement.textContent).toContain('title');
+  });
+
+  it('should be loaded with just primaryAction', () => {
+    component.open();
+    fixture.detectChanges();
+
+    expect(element.query(By.css('.po-modal-footer')).nativeElement.textContent).toContain('primaryLabel');
+  });
+
+  it('should be loaded with primaryAction and secondaryAction', () => {
+    component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
+    component.open();
+    fixture.detectChanges();
+    expect(element.query(By.css('.po-modal-footer')).nativeElement.textContent).toContain('primaryLabel');
+    expect(element.query(By.css('.po-modal-footer')).nativeElement.textContent).toContain('secondaryLabel');
+  });
+
+  it('should call primaryAction() method', () => {
+    const spy = vi.spyOn(component.primaryAction, 'action');
+    component.primaryAction.action();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call secondaryAction() method', () => {
+    component.secondaryAction = { label: 'secondaryLabel', action: () => {} };
+    const spy = vi.spyOn(component.secondaryAction, 'action');
+    component.secondaryAction.action();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call close() method', () => {
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).toContain('po-modal');
+    component.close();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).not.toContain('po-modal');
+  });
+
+  it('should call open() method', () => {
+    expect(fixture.nativeElement.innerHTML).not.toContain('po-modal');
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).toContain('po-modal');
+  });
+
+  it('should focus on modal when opened', async () => {
+    component.open();
+    fixture.detectChanges();
+    const modal = element.nativeElement;
+    const modalFooterButton = modal.querySelector('.po-button-modal-first-action');
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(modal.ownerDocument.activeElement).toBe(modalFooterButton.ownerDocument.activeElement);
+  });
+
+  it('should keep focus on element inside modal', async () => {
+    const spy = vi.spyOn(component as any, 'handleFocus');
+    component.open();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should not focus on element outside modal', async () => {
+    component.open();
+    fixture.detectChanges();
+
+    const modal = element.nativeElement;
+    const modalFooterButton = modal.querySelector('.po-button-modal-first-action');
+
+    const outsideElement = modal.ownerDocument.querySelector('div');
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    outsideElement.focus();
+    expect(modal.ownerDocument.activeElement).toBe(modalFooterButton.ownerDocument.activeElement);
+  });
+
+  it('should focus on first input of modal', async () => {
+    const fixtureTest = TestBed.createComponent(ContentProjectionComponent);
+    const testComponent = fixtureTest.componentInstance;
+
+    const spy = vi.spyOn(testComponent.poModal, 'open');
+    testComponent.openModal();
+    fixtureTest.detectChanges();
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should be modal with medium size', () => {
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-md');
+  });
+
+  it('should be modal with small size', () => {
+    component.size = 'sm';
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-sm');
+  });
+
+  it('should be modal with medium size (explicit)', () => {
+    component.size = 'md';
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-md');
+  });
+
+  it('should be modal with large size', () => {
+    component.size = 'lg';
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-lg');
+  });
+
+  it('should be modal with extra-large size', () => {
+    component.size = 'xl';
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-xl');
+  });
+
+  it('should be modal with auto size', () => {
+    component.size = 'auto';
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('po-modal-auto');
+  });
+
+  it('should be modal with close button', () => {
+    component.open();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('an-x');
+  });
+
+  it('should be one button in modal', () => {
+    component.primaryAction = { label: 'primaryLabel', action: () => {} };
+    component.secondaryAction = undefined;
+    component.open();
+    fixture.detectChanges();
+
+    expect(element.nativeElement.querySelector('.po-button-modal-first-action')).toBeTruthy();
+    expect(element.nativeElement.querySelectorAll('.po-button:not([p-kind="tertiary"])').length).toBe(1);
+  });
+
+  it(`focusFunction: should call 'stopPropagation' if 'activeOverlay' is equal to id`, () => {
+    const fakeEvent = {
+      target: {
+        closest: () => null
+      },
+      stopPropagation: vi.fn()
+    };
+
+    component['firstElement'] = {
+      focus: vi.fn()
+    } as any;
+    Object.defineProperty(component, 'id', { value: '1', configurable: true });
+    Object.defineProperty(component, 'poActiveOverlayService', { value: { activeOverlay: ['1'] }, configurable: true });
+    component['modalContent'] = {
+      nativeElement: {
+        contains: () => 0
+      }
+    } as any;
+    component['setFirstElement'] = () => {};
+
+    component.hideClose = true;
+    component['initFocus']();
+
+    fixture.detectChanges();
+
+    component['focusFunction'](fakeEvent);
+
+    expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+  });
+
+  describe('Methods:', () => {
+    it('onClickOut: shouldn`t call close when clickOut is true and click in modal content.', () => {
+      const fakeEvent = {
+        target: 10
+      };
+
+      const fakeThis = {
+        modalContent: {
+          nativeElement: {
+            contains: () => 10
+          }
+        },
+        clickOut: true,
+        close: vi.fn()
+      };
+
+      component.onClickOut.call(fakeThis, fakeEvent);
+
+      expect(fakeThis.close).not.toHaveBeenCalled();
+    });
+
+    it('onClickOut: shouldn`t call close when clickOut is false.', () => {
+      const fakeEvent = {
+        target: 10
+      };
+
+      const fakeThis = {
+        modalContent: {
+          nativeElement: {
+            contains: () => 0
+          }
+        },
+        clickOut: false,
+        close: vi.fn()
+      };
+
+      component.onClickOut.call(fakeThis, fakeEvent);
+
+      expect(fakeThis.close).not.toHaveBeenCalled();
+    });
+
+    it('onClickOut: should call close when clickOut is true and not click in modal.', () => {
+      const fakeEvent = {
+        target: 10
+      };
+
+      const fakeThis = {
+        modalContent: {
+          nativeElement: {
+            contains: () => 0
+          }
+        },
+        clickOut: true,
+        close: vi.fn()
+      };
+
+      component.onClickOut.call(fakeThis, fakeEvent);
+
+      expect(fakeThis.close).toHaveBeenCalled();
+    });
+
+    it('open: should set source element as document.ActiveElement', () => {
+      component.open();
+      expect(component['sourceElement']).toBe(document.activeElement);
+    });
+
+    it(`open: should call 'handleFocus'.`, () => {
+      const spy = vi.spyOn(component as any, 'handleFocus');
+
+      component.open();
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it(`open: should append id to 'poActiveOverlayService.activeOverlay'.`, () => {
+      const expectedResult = [component['id']];
+
+      component.open();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual(expectedResult);
+    });
+
+    it('close: should focus on source element ', () => {
+      component.open();
+      const spy = vi.spyOn(component['sourceElement'], 'focus');
+      component.close();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('close: should remove id from `poActiveOverlayService.activeOverlay` list', () => {
+      component.open();
+
+      fixture.detectChanges();
+
+      component.close();
+
+      expect(component['poActiveOverlayService'].activeOverlay).toEqual([]);
+    });
+
+    describe('closeModalOnEscapeKey:', () => {
+      const eventEscapeKey = new KeyboardEvent('keydown', { key: 'Esc' });
+      const eventEnterKey = new KeyboardEvent('keydown', { key: 'Enter' });
+
+      it('should call `close` when typed escape key and `hideClose` is false.', () => {
+        component.hideClose = false;
+        component.open();
+        fixture.detectChanges();
+
+        const modal = fixture.debugElement.query(By.css('.po-modal')).nativeElement;
+        const spy = vi.spyOn(component, 'close');
+        modal.dispatchEvent(eventEscapeKey);
+
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `close` when typed other than escape key and `hideClose` is false.', () => {
+        component.hideClose = false;
+        component.open();
+        fixture.detectChanges();
+
+        const modal = fixture.debugElement.query(By.css('.po-modal')).nativeElement;
+        const spy = vi.spyOn(component, 'close');
+        modal.dispatchEvent(eventEnterKey);
+
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `close` when typed escape key and `hideClose` is true.', () => {
+        component.hideClose = true;
+        component.open();
+        fixture.detectChanges();
+
+        const modal = fixture.debugElement.query(By.css('.po-modal')).nativeElement;
+        const spy = vi.spyOn(component, 'close');
+        modal.dispatchEvent(eventEscapeKey);
+
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('should call preventDefault and stopPropagation of event.', () => {
+        const fakeEvent = {
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
+        };
+
+        component.closeModalOnEscapeKey(fakeEvent);
+
+        expect(fakeEvent.preventDefault).toHaveBeenCalled();
+        expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('shouldn`t call preventDefault and stopPropagation of event if `hideClose` is true.', () => {
+        const fakeEvent = {
+          preventDefault: vi.fn(),
+          stopPropagation: vi.fn()
+        };
+
+        component.hideClose = true;
+        component.closeModalOnEscapeKey(fakeEvent);
+
+        expect(fakeEvent.preventDefault).not.toHaveBeenCalled();
+        expect(fakeEvent.stopPropagation).not.toHaveBeenCalled();
+      });
+    });
+
+    it(`getSecondaryActionButtonDanger: should return 'true' if 'primaryAction.danger' is 'false'
+    and 'secondaryAction.danger' is 'true'`, () => {
+      component.primaryAction.danger = false;
+      component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
+
+      expect(component.getSecondaryActionButtonDanger()).toBe('true');
+    });
+
+    it(`getSecondaryActionButtonDanger: should return 'false' if 'primaryAction.danger' is 'true'
+    and 'secondaryAction.danger' is 'false'`, () => {
+      component.primaryAction.danger = true;
+      component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: false };
+
+      expect(component.getSecondaryActionButtonDanger()).toBe('false');
+    });
+
+    it(`getSecondaryActionButtonDanger: should return 'false' if 'primaryAction.danger' is 'true'
+    and 'secondaryAction.danger' is 'true'`, () => {
+      component.primaryAction.danger = true;
+      component.secondaryAction = { action: () => {}, label: 'primaryLabel', danger: true };
+
+      expect(component.getSecondaryActionButtonDanger()).toBe('false');
+    });
+
+    it(`removeEventListeners: should call 'removeEventListener' with 'focus', 'focusFunction' and 'true' params.`, () => {
+      const spy = vi.spyOn(document, 'removeEventListener');
+
+      component['removeEventListeners']();
+
+      expect(spy).toHaveBeenCalledWith('focus', component['focusFunction'], true);
+    });
+
+    it('setFirstElement: should focus on modal if haven`t a focusable elements.', () => {
+      component.hideClose = true;
+      component.primaryAction.loading = true;
+      component.open();
+      fixture.detectChanges();
+      const modal = element.nativeElement.querySelector('.po-modal .po-modal-content');
+
+      component['setFirstElement']();
+
+      expect(component['firstElement']).toEqual(modal);
+    });
+  });
+
+  describe('Templates:', () => {
+    function getModalActionDisabled() {
+      return element.nativeElement.querySelector(
+        '.po-modal .po-modal-footer .po-button-modal-first-action button:disabled'
+      );
+    }
+
+    function getModalActionIconLoading() {
+      return element.nativeElement.querySelector(`
+        .po-modal .po-modal-footer .po-button-modal-first-action button:disabled div.po-button-loading-icon
+      `);
+    }
+
+    it('iconClose: should display close when `hideClose` is true.', () => {
+      component.hideClose = true;
+      component.open();
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).not.toContain(
+        'po-modal-header-close-button'
+      );
+    });
+
+    it('iconClose: should display close when `hideClose` is false.', () => {
+      component.hideClose = false;
+      component.open();
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('.po-modal')).nativeElement.innerHTML).toContain('an-x');
+    });
+
+    it('action disabled: should disabled primary action if `primaryAction.disabled` is `true`.', () => {
+      component.primaryAction = { action: () => {}, label: 'primaryLabel', disabled: true };
+      component.open();
+      fixture.detectChanges();
+
+      expect(getModalActionDisabled()).toBeTruthy();
+    });
+
+    it('action loading: should disabled primary action if `primaryAction.loading` is `true`.', () => {
+      component.primaryAction = { action: () => {}, label: 'primaryLabel', loading: true };
+      component.open();
+      fixture.detectChanges();
+
+      expect(getModalActionDisabled()).toBeTruthy();
+      expect(getModalActionIconLoading()).toBeTruthy();
+    });
+
+    it('should call `onClickOut` on mousedown', () => {
+      component.open();
+      fixture.detectChanges();
+
+      const containerElement = fixture.debugElement.query(By.css('.po-modal-overlay')).nativeElement;
+
+      const spy = vi.spyOn(component, 'onClickOut');
+
+      containerElement.dispatchEvent(new Event('mousedown'));
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not found `.po-button` if `modalFooter` is truthy', () => {
+      component.modalFooter = {} as any;
+      component.open();
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('.po-button:not([p-kind="tertiary"])'))).toBeNull();
+    });
+  });
+});
