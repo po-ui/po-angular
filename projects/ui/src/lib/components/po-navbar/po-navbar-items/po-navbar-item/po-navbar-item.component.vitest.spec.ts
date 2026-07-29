@@ -1,0 +1,121 @@
+import { provideNgReflectAttributes } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+
+import { PoNavbarItemComponent } from './po-navbar-item.component';
+
+describe('PoNavbarItemComponent:', () => {
+  let component: PoNavbarItemComponent;
+  let fixture: ComponentFixture<PoNavbarItemComponent>;
+  let nativeElement: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PoNavbarItemComponent],
+      imports: [RouterModule.forRoot([], {})],
+      providers: [provideNgReflectAttributes()]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoNavbarItemComponent);
+    component = fixture.componentInstance;
+
+    nativeElement = fixture.debugElement.nativeElement;
+
+    fixture.detectChanges();
+  });
+
+  it('should be created', () => {
+    expect(component instanceof PoNavbarItemComponent).toBe(true);
+  });
+
+  describe('Properties:', () => {
+    it('type: should return `externalLink` if link is external link', () => {
+      component.link = 'http://fakeUrlPo.com';
+
+      expect(component.type).toBe('externalLink');
+    });
+
+    it('type: should return `internalLink` if link is internal link', () => {
+      component.link = 'test/';
+
+      expect(component.type).toBe('internalLink');
+    });
+  });
+
+  describe('Methods:', () => {
+    it('itemClick: should call `action` with `link` and `label` if `action` is defined', () => {
+      component.action = () => {};
+
+      const label = 'label test';
+      const link = 'test/';
+
+      const spy = vi.spyOn(component, 'action');
+
+      component.itemClick(label, link);
+
+      expect(spy).toHaveBeenCalledWith({ label, link });
+    });
+
+    it('itemClick: should call `click.emit`', () => {
+      const spy = vi.spyOn(component.click, 'emit');
+
+      component.itemClick();
+
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
+  describe('Templates: ', () => {
+    it('should contain `a` element with href if `type` is `externalLink`', () => {
+      component.link = 'http://fakeUrlPo.com';
+
+      fixture.detectChanges();
+
+      const anchor = nativeElement.querySelector('a');
+
+      expect(anchor.attributes.getNamedItem('href').name).toEqual('href');
+    });
+
+    it('should call `itemClick` without parameters if `type` is `externalLink`', () => {
+      component.link = 'http://fakeUrlPo.com';
+
+      fixture.detectChanges();
+
+      const spy = vi.spyOn(component, 'itemClick');
+
+      const eventClick = document.createEvent('MouseEvents');
+      eventClick.initEvent('click', false, true);
+
+      const anchor = nativeElement.querySelector('a');
+      anchor.dispatchEvent(eventClick);
+
+      expect(spy).toHaveBeenCalledWith();
+    });
+
+    it('should contain `a` element with `ng-reflect-router-link` if `type` is `internalLink`', () => {
+      component.link = 'test/';
+
+      fixture.detectChanges();
+
+      const anchor = nativeElement.querySelector('a');
+
+      expect(anchor.attributes.getNamedItem('ng-reflect-router-link').name).toEqual('ng-reflect-router-link');
+    });
+
+    it('should call `itemClick` with label and link if `type` is `internalLink`', () => {
+      component.link = 'test/';
+      component.label = 'label test';
+
+      fixture.detectChanges();
+
+      const spy = vi.spyOn(component, 'itemClick');
+
+      const eventClick = new Event('click');
+
+      const anchor = nativeElement.querySelector('a');
+      anchor.dispatchEvent(eventClick);
+
+      expect(spy).toHaveBeenCalledWith(component.label, component.link);
+    });
+  });
+});
