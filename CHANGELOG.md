@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.20](https://github.com/po-ui/po-angular/compare/v19.39.19...v19.39.20) (2026-07-30)
+
+
+### Bug Fixes
+
+* **fields:** aceita boolean, number e string nas propriedades booleanas ([698402b](https://github.com/po-ui/po-angular/commit/698402b0def726a6befe348a192245f6af72074b))
+
+
 ### [19.39.19](https://github.com/po-ui/po-angular/compare/v19.39.18...v19.39.19) (2026-07-21)
 
 
