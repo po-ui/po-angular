@@ -1,0 +1,1510 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+
+import { PoControlPositionService } from './../../services/po-control-position/po-control-position.service';
+import { PoPopoverComponent } from './po-popover.component';
+
+// Polyfill ResizeObserver for jsdom
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as any;
+}
+
+describe('PoPopoverComponent:', () => {
+  let component: PoPopoverComponent;
+  let fixture: ComponentFixture<PoPopoverComponent>;
+  let nativeElement;
+
+  const eventClick = document.createEvent('MouseEvents');
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CommonModule],
+      declarations: [PoPopoverComponent],
+      providers: [PoControlPositionService],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(PoPopoverComponent);
+    component = fixture.componentInstance;
+
+    const target = document.createElement('button');
+    document.body.appendChild(target);
+    component.target = target;
+
+    fixture.detectChanges();
+    nativeElement = fixture.debugElement.nativeElement;
+
+    component.target = component.popoverElement;
+    component.targetElement = component.popoverElement.nativeElement;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('ngOnChanges: should call removeListeners and initEvents when target is changed', () => {
+    vi.spyOn(component as any, 'removeListeners').mockImplementation(() => {});
+    vi.spyOn(component, 'initEvents').mockImplementation(() => {});
+
+    component.afterViewInitWasCalled = true;
+
+    component.ngOnChanges({
+      target: {
+        currentValue: 'value',
+        previousValue: undefined,
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+
+    expect(component['removeListeners']).toHaveBeenCalled();
+    expect(component['initEvents']).toHaveBeenCalled();
+  });
+
+  it('ngOnChanges: should call attachPopoverKeydown when appendBox is changed', () => {
+    vi.spyOn(component as any, 'attachPopoverKeydown').mockImplementation(() => {});
+    component.afterViewInitWasCalled = true;
+    component.ngOnChanges({
+      appendBox: {
+        currentValue: true,
+        previousValue: undefined,
+        firstChange: true,
+        isFirstChange: () => true
+      }
+    });
+
+    expect(component['attachPopoverKeydown']).toHaveBeenCalled();
+  });
+
+  it('should call setElement and setRendererListenInit in ngAfterViewInit', () => {
+    vi.spyOn(component['poControlPosition'], 'setElements').mockImplementation(() => {});
+    vi.spyOn(component, 'setRendererListenInit').mockImplementation(() => {});
+    component.ngAfterViewInit();
+    expect(component['poControlPosition'].setElements).toHaveBeenCalled();
+    expect(component.setRendererListenInit).toHaveBeenCalled();
+  });
+
+  it('should set targetElement in ngAfterViewInit', () => {
+    component.ngAfterViewInit();
+    expect(component.targetElement).toBeTruthy();
+  });
+
+  it('should call setPopoverPosition in debounceResize', async () => {
+    vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+    component.debounceResize();
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    expect(component.setPopoverPosition).toHaveBeenCalled();
+  });
+
+  it('should call adjustPosition and set arrowDirection in setPopoverPosition', () => {
+    const fakeThis = {
+      poControlPosition: {
+        adjustPosition: position => true,
+        getArrowDirection: () => 'top'
+      },
+      position: 'bottom',
+      arrowDirection: ''
+    };
+
+    vi.spyOn(fakeThis.poControlPosition, 'adjustPosition');
+
+    component.setPopoverPosition.call(fakeThis);
+
+    expect(fakeThis.poControlPosition.adjustPosition).toHaveBeenCalledWith('bottom');
+    expect(fakeThis.arrowDirection).toBe('top');
+  });
+
+  describe('setRendererListenInit:', () => {
+    it(`should listen for 'mouseenter' `, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('hover', component);
+      component.targetElement = component.popoverElement.nativeElement;
+
+      vi.spyOn(fakeEvent, 'open').mockImplementation(() => {});
+
+      component.setRendererListenInit.call(fakeEvent);
+
+      const event = document.createEvent('MouseEvents');
+      event.initEvent('mouseenter', false, true);
+      fakeEvent.target.nativeElement.dispatchEvent(event);
+
+      expect(fakeEvent.open).toHaveBeenCalled();
+    });
+
+    it(`should listen for 'mouseleave' `, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('hover', component);
+
+      vi.spyOn(fakeEvent, 'close').mockImplementation(() => {});
+
+      component.setRendererListenInit.call(fakeEvent);
+
+      const event = document.createEvent('MouseEvents');
+      event.initEvent('mouseleave', false, true);
+      fakeEvent.target.nativeElement.dispatchEvent(event);
+
+      expect(fakeEvent.close).toHaveBeenCalled();
+    });
+
+    it(`should listen for 'click'`, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('click', component);
+
+      vi.spyOn(fakeEvent, 'togglePopup').mockImplementation(() => {});
+
+      component.setRendererListenInit.call(fakeEvent);
+
+      eventClick.initEvent('click', false, true);
+
+      document.dispatchEvent(eventClick);
+
+      expect(fakeEvent.togglePopup).toHaveBeenCalled();
+    });
+
+    it(`should listen for 'resize' `, () => {
+      const fakeEvent = getFakeToSetRendererListenInit('resize', component);
+      const fakeThis = { ...fakeEvent, isHidden: false };
+      vi.spyOn(fakeThis, 'debounceResize').mockImplementation(() => {});
+
+      component.setRendererListenInit.call(fakeThis);
+
+      window.dispatchEvent(new Event('resize'));
+
+      expect(fakeThis.debounceResize).toHaveBeenCalled();
+    });
+
+    it('should intercept TAB and focus first focusable when appendBox=true and popover is open', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: true,
+        isHidden: false,
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
+      };
+
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true
+      });
+      const defaultPreventedBefore = ev.defaultPrevented;
+      fakeThis.targetElement.dispatchEvent(ev);
+
+      expect(defaultPreventedBefore).toBe(false);
+      expect(fakeThis.focusOnFirstFocusable).toHaveBeenCalled();
+      expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
+    });
+
+    it('should intercept SHIFT+TAB and focus previous before target when appendBox=true and popover is open', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: true,
+        isHidden: false,
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
+      };
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true
+      });
+      fakeThis.targetElement.dispatchEvent(ev);
+
+      expect(fakeThis.focusPrevBeforeTarget).toHaveBeenCalled();
+      expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
+    });
+
+    it('should NOT intercept TAB when appendBox=false', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: false,
+        isHidden: false,
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
+      };
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true
+      });
+      fakeThis.targetElement.dispatchEvent(ev);
+
+      expect(ev.defaultPrevented).toBe(false);
+      expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
+      expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
+    });
+
+    it('should NOT intercept TAB when popover is hidden', () => {
+      const fake = getFakeToSetRendererListenInit('click', component);
+      const fakeThis = {
+        ...fake,
+        appendBox: true,
+        isHidden: true,
+        focusOnFirstFocusable: vi.fn(),
+        focusPrevBeforeTarget: vi.fn()
+      };
+      fakeThis.targetElement = document.body;
+      component.setRendererListenInit.call(fakeThis);
+      const ev = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true
+      });
+
+      fakeThis.targetElement.dispatchEvent(ev);
+      expect(ev.defaultPrevented).toBe(false);
+      expect(fakeThis.focusOnFirstFocusable).not.toHaveBeenCalled();
+      expect(fakeThis.focusPrevBeforeTarget).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should open popover in togglePopup when click on target', () => {
+    component.popoverElement.nativeElement.hidden = true;
+    component.target = component.popoverElement;
+    component.targetElement = component.popoverElement.nativeElement;
+
+    vi.spyOn(component, 'open').mockImplementation(() => {});
+
+    eventClick.initEvent('click', false, true);
+
+    component.target.nativeElement.dispatchEvent(eventClick);
+    component.target.nativeElement.click();
+
+    component.togglePopup(eventClick);
+
+    expect(component.open).toHaveBeenCalled();
+  });
+
+  it('should close popover in togglePopup when click on target', () => {
+    component.popoverElement.nativeElement.hidden = false;
+    component.target = component.popoverElement;
+    component.targetElement = component.popoverElement.nativeElement;
+
+    vi.spyOn(component, 'close').mockImplementation(() => {});
+
+    eventClick.initEvent('click', false, true);
+
+    component.target.nativeElement.dispatchEvent(eventClick);
+    component.target.nativeElement.click();
+
+    component.togglePopup(eventClick);
+
+    expect(component.close).toHaveBeenCalled();
+  });
+
+  it('shouldn`t call open and close in togglePopup when click on popoverElement', () => {
+    const fakePopover = {
+      popoverElement: component.popoverElement,
+      target: {
+        nativeElement: document.head
+      },
+      targetElement: document.head,
+      close: () => {},
+      open: () => {}
+    };
+
+    vi.spyOn(fakePopover, 'close');
+    vi.spyOn(fakePopover, 'open');
+
+    eventClick.initEvent('click', false, true);
+
+    fakePopover.popoverElement.nativeElement.dispatchEvent(eventClick);
+    fakePopover.popoverElement.nativeElement.click();
+
+    component.togglePopup.call(fakePopover, eventClick);
+
+    expect(fakePopover.close).not.toHaveBeenCalled();
+    expect(fakePopover.open).not.toHaveBeenCalled();
+  });
+
+  it('should open popover', () => {
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
+    const fakeThis = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      position: 'top',
+      openPopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: arg => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} },
+      showPopover: undefined as any
+    };
+
+    fakeThis.showPopover = () => {
+      requestAnimationFrame(() => {
+        fakeThis.setElementsControlPosition();
+        fakeThis.setPopoverPosition();
+        fakeThis.setOpacity(1);
+        fakeThis.openPopover.emit();
+        fakeThis.observeContentResize();
+        fakeThis.cd.detectChanges();
+      });
+    };
+
+    vi.spyOn(fakeThis, 'addScrollEventListener').mockImplementation(() => {});
+    vi.spyOn(fakeThis, 'setOpacity').mockImplementation(() => {});
+    vi.spyOn(fakeThis, 'setElementsControlPosition').mockImplementation(() => {});
+    vi.spyOn(fakeThis, 'observeContentResize').mockImplementation(() => {});
+    vi.spyOn(fakeThis.cd, 'detectChanges').mockImplementation(() => {});
+    component.open.call(fakeThis);
+
+    expect(fakeThis.isHidden).toBeFalsy();
+    expect(fakeThis.addScrollEventListener).toHaveBeenCalled();
+    expect(fakeThis.setOpacity).toHaveBeenCalledWith(1);
+    expect(fakeThis.setElementsControlPosition).toHaveBeenCalled();
+    expect(fakeThis.observeContentResize).toHaveBeenCalled();
+    expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
+  });
+
+  it('open: should set widthPopover from getBoundingClientRect when cornerAligned is true and width is undefined', () => {
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
+    const fakeNativeElement = {
+      style: { width: '', opacity: 0, visibility: '', left: '' },
+      getBoundingClientRect: () => ({ width: 250 })
+    };
+
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: true,
+      width: undefined,
+      widthPopover: undefined,
+      popoverElement: { nativeElement: fakeNativeElement },
+      openPopover: { emit: () => {} },
+      setPopoverPosition: vi.fn(),
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
+    };
+
+    component.open.call(fakeThis);
+
+    expect(fakeNativeElement.style.visibility).toBe('');
+    expect(fakeNativeElement.style.left).toBe('');
+    expect(fakeThis.widthPopover).toBe(250);
+    expect(window.requestAnimationFrame).toHaveBeenCalled();
+  });
+
+  it('open: should NOT set widthPopover when cornerAligned is false', () => {
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: false,
+      width: undefined,
+      widthPopover: undefined,
+      openPopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
+    };
+
+    component.open.call(fakeThis);
+
+    expect(fakeThis.widthPopover).toBeUndefined();
+  });
+
+  it('open: should NOT set widthPopover when width input is defined', () => {
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: true,
+      width: 300,
+      widthPopover: undefined,
+      openPopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} },
+      showPopover: () => {}
+    };
+
+    component.open.call(fakeThis);
+
+    expect(fakeThis.widthPopover).toBeUndefined();
+  });
+
+  it('open: should recalculate widthPopover on second open after close resets it when cornerAligned is true', () => {
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+
+    const fakeNativeElement = {
+      style: { width: '', opacity: 0, visibility: '', left: '' },
+      getBoundingClientRect: vi.fn().mockReturnValue({ width: 200 })
+    };
+
+    const fakeThis: any = {
+      addScrollEventListener: () => {},
+      isHidden: true,
+      cornerAligned: true,
+      width: undefined,
+      widthPopover: undefined,
+      popoverElement: { nativeElement: fakeNativeElement },
+      openPopover: { emit: () => {} },
+      closePopover: { emit: () => {} },
+      setPopoverPosition: () => {},
+      setElementsControlPosition: () => {},
+      setOpacity: () => {},
+      observeContentResize: () => {},
+      cd: { detectChanges: () => {} },
+      showPopover: () => {},
+      disconnectResizeObserver: () => {},
+      mutationObserver: null,
+      clickoutListener: undefined,
+      trigger: 'click'
+    };
+
+    // First open — should calculate widthPopover
+    component.open.call(fakeThis);
+    expect(fakeThis.widthPopover).toBe(200);
+    expect(fakeNativeElement.getBoundingClientRect).toHaveBeenCalledTimes(1);
+
+    // Close — widthPopover is reset to undefined
+    component.close.call(fakeThis);
+    expect(fakeThis.widthPopover).toBeUndefined();
+
+    // Second open — should recalculate because close reset widthPopover
+    fakeThis.isHidden = true;
+    fakeNativeElement.getBoundingClientRect.mockClear();
+    fakeNativeElement.getBoundingClientRect.mockReturnValue({ width: 300 });
+    component.open.call(fakeThis);
+    expect(fakeThis.widthPopover).toBe(300);
+    expect(fakeNativeElement.getBoundingClientRect).toHaveBeenCalledTimes(1);
+  });
+
+  it('open: should set clickoutListener when trigger is function', () => {
+    const fakeListener = vi.fn();
+
+    const fakeThis: any = {
+      trigger: 'function',
+      renderer: {
+        listen: vi.fn().mockImplementation((_target, _event, callback) => {
+          callback({});
+          return fakeListener;
+        })
+      },
+      togglePopup: vi.fn(),
+      addScrollEventListener: () => {},
+      setOpacity: () => {},
+      setElementsControlPosition: () => {},
+      setPopoverPosition: () => {},
+      observeContentResize: () => {},
+      openPopover: { emit: () => {} },
+      cd: { detectChanges: () => {} },
+      isHidden: true,
+      showPopover: () => {}
+    };
+
+    component.open.call(fakeThis);
+
+    expect(fakeThis.renderer.listen).toHaveBeenCalledWith('document', 'click', expect.any(Function));
+    expect(fakeThis.togglePopup).toHaveBeenCalled();
+    expect(fakeThis.clickoutListener).toBe(fakeListener);
+  });
+
+  it('should close popover and call `closePopover.emit` and `disconnectResizeObserver`', () => {
+    vi.spyOn(component.closePopover, 'emit');
+    vi.spyOn(component as any, 'disconnectResizeObserver').mockImplementation(() => {});
+    component.isHidden = false;
+
+    component.close();
+
+    expect(component.isHidden).toBeTruthy();
+    expect(component['disconnectResizeObserver']).toHaveBeenCalled();
+    expect(component.closePopover.emit).toHaveBeenCalled();
+  });
+
+  it('close: should call clickoutListener when trigger is function and clickoutListener exists', () => {
+    const fakeThis = {
+      isHidden: false,
+      trigger: 'function',
+      closePopover: { emit: () => {} },
+      clickoutListener: () => {},
+      disconnectResizeObserver: () => {},
+      cd: { detectChanges: () => {} }
+    };
+
+    vi.spyOn(fakeThis.closePopover, 'emit');
+    vi.spyOn(fakeThis, 'clickoutListener').mockImplementation(() => {});
+    vi.spyOn(fakeThis, 'disconnectResizeObserver').mockImplementation(() => {});
+    vi.spyOn(fakeThis.cd, 'detectChanges').mockImplementation(() => {});
+
+    component.close.call(fakeThis);
+
+    expect(fakeThis.isHidden).toBeTruthy();
+    expect(fakeThis.disconnectResizeObserver).toHaveBeenCalled();
+    expect(fakeThis.closePopover.emit).toHaveBeenCalled();
+    expect(fakeThis.clickoutListener).toHaveBeenCalled();
+    expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
+  });
+
+  it('should set opacity', () => {
+    const fakePopover = {
+      popoverElement: {
+        nativeElement: {
+          style: {
+            opacity: null
+          }
+        }
+      }
+    };
+    component.setOpacity.call(fakePopover, 1);
+    expect(fakePopover.popoverElement.nativeElement.style.opacity).toBe(1);
+  });
+
+  it('should listen scrolEventListener and call setPopoverPosition', () => {
+    const eventScroll = document.createEvent('MouseEvents');
+    eventScroll.initEvent('scroll', false, true);
+
+    vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+
+    component.open();
+
+    window.dispatchEvent(eventScroll);
+
+    expect(component.setPopoverPosition).toHaveBeenCalled();
+  });
+
+  describe('Methods:', () => {
+    it('showPopover: should call setElementsControlPosition, setPopoverPosition, setOpacity, openPopover.emit, observeContentResize and detectChanges', () => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+      vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+      vi.spyOn(component as any, 'setElementsControlPosition').mockImplementation(() => {});
+      vi.spyOn(component, 'setOpacity').mockImplementation(() => {});
+      vi.spyOn(component as any, 'observeContentResize').mockImplementation(() => {});
+      vi.spyOn(component.openPopover, 'emit');
+
+      component['showPopover']();
+
+      expect(component['setElementsControlPosition']).toHaveBeenCalled();
+      expect(component.setPopoverPosition).toHaveBeenCalled();
+      expect(component.setOpacity).toHaveBeenCalledWith(1);
+      expect(component.openPopover.emit).toHaveBeenCalled();
+      expect(component['observeContentResize']).toHaveBeenCalled();
+    });
+
+    it(`ngAfterViewInit: should call 'setElementsControlPosition'`, () => {
+      vi.spyOn(component as any, 'setElementsControlPosition').mockImplementation(() => {});
+
+      component.ngAfterViewInit();
+
+      expect(component['setElementsControlPosition']).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy: should call disconnectResizeObserver and removeListeners.', () => {
+      vi.spyOn(component as any, 'disconnectResizeObserver').mockImplementation(() => {});
+      vi.spyOn(component as any, 'removeListeners').mockImplementation(() => {});
+
+      component.ngOnDestroy();
+
+      expect(component['disconnectResizeObserver']).toHaveBeenCalled();
+      expect(component['removeListeners']).toHaveBeenCalled();
+    });
+
+    it('onThemeChange: should call setPopoverPosition inside requestAnimationFrame', () => {
+      vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      component['onThemeChange']();
+
+      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(component.setPopoverPosition).toHaveBeenCalled();
+    });
+
+    it('onThemeChange: should be triggered by window PoUiThemeChange event', () => {
+      vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+        cb(0);
+        return 0;
+      });
+
+      window.dispatchEvent(new Event('PoUiThemeChange'));
+
+      expect(component.setPopoverPosition).toHaveBeenCalled();
+    });
+
+    it('should call setElementsControlPosition, setPopoverPosition and cd.detectChanges after timeout', async () => {
+      const fakeThis = {
+        setElementsControlPosition: () => {},
+        setPopoverPosition: () => {},
+        cd: { detectChanges: () => {} }
+      };
+
+      vi.spyOn(fakeThis, 'setElementsControlPosition').mockImplementation(() => {});
+      vi.spyOn(fakeThis, 'setPopoverPosition').mockImplementation(() => {});
+      vi.spyOn(fakeThis.cd, 'detectChanges').mockImplementation(() => {});
+
+      component.ensurePopoverPosition.call(fakeThis);
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(fakeThis.setElementsControlPosition).toHaveBeenCalled();
+      expect(fakeThis.setPopoverPosition).toHaveBeenCalled();
+      expect(fakeThis.cd.detectChanges).toHaveBeenCalled();
+    });
+
+    describe('removeListeners:', () => {
+      it('should remove click and resize listeners.', () => {
+        vi.spyOn(component as any, 'clickoutListener').mockImplementation(() => {});
+        vi.spyOn(component as any, 'resizeListener').mockImplementation(() => {});
+
+        component['removeListeners']();
+
+        expect(component['clickoutListener']).toHaveBeenCalled();
+        expect(component['resizeListener']).toHaveBeenCalled();
+      });
+
+      it('should remove mouse enter and mouse leave listeners.', () => {
+        component.trigger = 'hover';
+        component.setRendererListenInit();
+        component['clickoutListener'] = undefined;
+        vi.spyOn(component as any, 'mouseEnterListener').mockImplementation(() => {});
+        vi.spyOn(component as any, 'mouseLeaveListener').mockImplementation(() => {});
+
+        component['removeListeners']();
+
+        expect(component['mouseEnterListener']).toHaveBeenCalled();
+        expect(component['mouseLeaveListener']).toHaveBeenCalled();
+      });
+    });
+
+    it('togglePopup: should call `close` method.', () => {
+      const fakeThis = {
+        close: () => {},
+        popoverElement: {
+          nativeElement: {
+            contains: () => {}
+          }
+        },
+        target: {
+          nativeElement: {
+            contains: () => {}
+          }
+        },
+        targetElement: {
+          contains: () => undefined,
+          hidden: false
+        }
+      };
+
+      vi.spyOn(fakeThis, 'close').mockImplementation(() => {});
+
+      component.togglePopup.call(fakeThis, {});
+
+      expect(fakeThis.close).toHaveBeenCalled();
+    });
+
+    it(`togglePopup: should close popover in togglePopup if isHidden is false, popoverElement not contains event.target and target not
+    contains event.target`, () => {
+      const fakeEvent = {
+        target: 'a'
+      };
+      const fakeThis = {
+        isHidden: false,
+        popoverElement: {
+          nativeElement: {
+            contains: () => undefined,
+            hidden: false
+          }
+        },
+        target: {
+          nativeElement: {
+            contains: () => undefined
+          }
+        },
+        targetElement: {
+          contains: () => undefined,
+          hidden: false
+        },
+        close: () => {},
+        open: () => {}
+      };
+
+      vi.spyOn(fakeThis, 'close').mockImplementation(() => {});
+
+      component.togglePopup.call(fakeThis, fakeEvent);
+
+      expect(fakeThis.close).toHaveBeenCalled();
+    });
+
+    it(`setElementsControlPosition: should call 'poControlPosition.setElements' with 'popoverElement.nativeElement',
+     target and popoverOffset equals to 8`, () => {
+      const popoverOffset = 8;
+      component.popoverElement.nativeElement = '<po-popover></po-popover>';
+      component.target = <any>'<div></div>';
+
+      vi.spyOn(component['poControlPosition'], 'setElements').mockImplementation(() => {});
+
+      component['setElementsControlPosition']();
+
+      expect(component['poControlPosition'].setElements).toHaveBeenCalledWith(
+        component.popoverElement.nativeElement,
+        popoverOffset,
+        component.target,
+        undefined,
+        false,
+        false
+      );
+    });
+
+    it(`setElementsControlPosition: should pass cornerAligned=true when cornerAligned is true`, () => {
+      const popoverOffset = 8;
+      component.popoverElement.nativeElement = '<po-popover></po-popover>';
+      component.target = <any>'<div></div>';
+      component.cornerAligned = true;
+
+      vi.spyOn(component['poControlPosition'], 'setElements').mockImplementation(() => {});
+
+      component['setElementsControlPosition']();
+
+      expect(component['poControlPosition'].setElements).toHaveBeenCalledWith(
+        component.popoverElement.nativeElement,
+        popoverOffset,
+        component.target,
+        undefined,
+        false,
+        true
+      );
+    });
+  });
+
+  describe('Focus utilities:', () => {
+    let host: HTMLElement;
+    let targetBtn: HTMLButtonElement;
+
+    beforeEach(() => {
+      host = document.createElement('div');
+      document.body.appendChild(host);
+
+      (component.popoverElement as any) = { nativeElement: host };
+
+      targetBtn = document.createElement('button');
+      targetBtn.id = 'target-btn';
+      document.body.appendChild(targetBtn);
+
+      component.targetElement = targetBtn;
+    });
+
+    afterEach(() => {
+      host?.remove();
+      targetBtn?.remove();
+    });
+
+    // ---------------- focusOnTarget ----------------
+    it('focusOnTarget: should focus the target element safely', () => {
+      const fakeThis = {
+        targetElement: targetBtn
+      } as any;
+
+      vi.spyOn(targetBtn, 'focus').mockImplementation(() => {});
+      (component as any).focusOnTarget.call(fakeThis);
+      expect(targetBtn.focus).toHaveBeenCalled();
+    });
+
+    // ---------------- focusOnFirstFocusable ----------------
+    it('focusOnFirstFocusable: should fallback to focusOnTarget when host does not exist', () => {
+      const fakeThis = {
+        popoverElement: undefined,
+        targetElement: targetBtn,
+        focusOnTarget: vi.fn()
+      } as any;
+
+      (component as any).focusOnFirstFocusable.call(fakeThis);
+
+      expect(fakeThis.focusOnTarget).toHaveBeenCalled();
+    });
+
+    it('focusOnFirstFocusable: should focus action button inside .po-helper-footer-action-link', () => {
+      const footer = document.createElement('div');
+      footer.className = 'po-helper-footer-action-link';
+      const innerBtn = document.createElement('button');
+      footer.appendChild(innerBtn);
+      host.appendChild(footer);
+
+      vi.spyOn(innerBtn, 'focus').mockImplementation(() => {});
+
+      (component as any).focusOnFirstFocusable.call(component);
+
+      expect(innerBtn.focus).toHaveBeenCalled();
+    });
+
+    it('focusOnFirstFocusable: should close and move focusNextAfterTarget when [role="dialog"] exists', () => {
+      const dialog = document.createElement('div');
+      dialog.setAttribute('role', 'dialog');
+      host.appendChild(dialog);
+
+      const closeSpy = vi.spyOn(component, 'close').mockImplementation(() => {});
+      const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget').mockImplementation(() => {});
+
+      (component as any).focusOnFirstFocusable.call(component);
+
+      expect(closeSpy).toHaveBeenCalled();
+      expect(focusNextAfterTargetSpy).toHaveBeenCalled();
+    });
+
+    it('focusOnFirstFocusable: should set temporary tabindex and focus host as fallback, removing tabindex on blur', () => {
+      expect(host.hasAttribute('tabindex')).toBe(false);
+
+      const focusSpy = vi.spyOn(host, 'focus').mockImplementation(() => {
+        setTimeout(() => host.dispatchEvent(new Event('blur')), 0);
+      });
+
+      (component as any).focusOnFirstFocusable.call(component);
+
+      expect(host.getAttribute('tabindex')).toBe('-1');
+      expect(focusSpy).toHaveBeenCalled();
+      host.dispatchEvent(new Event('blur'));
+
+      expect(host.hasAttribute('tabindex')).toBe(false);
+    });
+
+    // ---------------- attachPopoverKeydown ----------------
+    describe('attachPopoverKeydown (Tab trapping inside popover with appendBox):', () => {
+      let firstEl: HTMLInputElement;
+      let lastEl: HTMLButtonElement;
+
+      beforeEach(() => {
+        firstEl = document.createElement('input');
+        firstEl.id = 'first';
+        host.appendChild(firstEl);
+
+        const midEl = document.createElement('a');
+        midEl.href = '#';
+        midEl.id = 'mid';
+        host.appendChild(midEl);
+
+        lastEl = document.createElement('button');
+        lastEl.id = 'last';
+        host.appendChild(lastEl);
+
+        (component as any).appendBox = true;
+        (component as any).isHidden = false;
+      });
+
+      it('should call preventDefault and focusNextAfterTarget when active id includes "popover-content"', () => {
+        const localHost = document.createElement('div');
+        document.body.appendChild(localHost);
+
+        const btn = document.createElement('button');
+        btn.id = 'my-popover-content-btn';
+        localHost.appendChild(btn);
+
+        (component as any).appendBox = true;
+        (component as any).isHidden = false;
+        (component as any).popoverElement = { nativeElement: localHost };
+
+        vi.spyOn(component as any, 'getTabbablesIn').mockReturnValue([btn, document.createElement('button')]);
+
+        const spyFocusNext = vi.spyOn(component as any, 'focusNextAfterTarget').mockImplementation(() => {});
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        Object.defineProperty(document, 'activeElement', { get: () => btn, configurable: true });
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        const spyPrevent = vi.spyOn(ev, 'preventDefault');
+
+        localHost.dispatchEvent(ev);
+
+        expect(spyPrevent).toHaveBeenCalled();
+        expect(spyFocusNext).toHaveBeenCalled();
+
+        // Restore activeElement
+        Object.defineProperty(document, 'activeElement', { get: () => document.body, configurable: true });
+        localHost.remove();
+      });
+
+      it('Shift+Tab on first should preventDefault and focus target', () => {
+        const focusOnTargetSpy = vi.spyOn(component as any, 'focusOnTarget').mockImplementation(() => {});
+        vi.spyOn(component as any, 'getTabbablesIn').mockReturnValue([firstEl, lastEl]);
+        (component as any).attachPopoverKeydown.call(component);
+
+        Object.defineProperty(document, 'activeElement', { get: () => firstEl, configurable: true });
+
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+        const preventedSpy = vi.spyOn(ev, 'preventDefault');
+
+        host.dispatchEvent(ev);
+        expect(preventedSpy).toHaveBeenCalled();
+        expect(focusOnTargetSpy).toHaveBeenCalled();
+
+        Object.defineProperty(document, 'activeElement', { get: () => document.body, configurable: true });
+      });
+
+      it('Tab on last should preventDefault and call focusNextAfterTarget', () => {
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget').mockImplementation(() => {});
+        vi.spyOn(component as any, 'getTabbablesIn').mockReturnValue([firstEl, lastEl]);
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        Object.defineProperty(document, 'activeElement', { get: () => lastEl, configurable: true });
+
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        const preventedSpy = vi.spyOn(ev, 'preventDefault');
+
+        host.dispatchEvent(ev);
+
+        expect(preventedSpy).toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).toHaveBeenCalled();
+
+        Object.defineProperty(document, 'activeElement', { get: () => document.body, configurable: true });
+      });
+
+      it('Tab when active element id includes "popover-content" should forward focusNextAfterTarget', () => {
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget').mockImplementation(() => {});
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        const special = document.createElement('button');
+        special.id = 'popover-content-action';
+        host.appendChild(special);
+
+        Object.defineProperty(document, 'activeElement', { get: () => special, configurable: true });
+
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        const preventedSpy = vi.spyOn(ev, 'preventDefault');
+
+        host.dispatchEvent(ev);
+
+        expect(preventedSpy).toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).toHaveBeenCalled();
+
+        Object.defineProperty(document, 'activeElement', { get: () => document.body, configurable: true });
+      });
+
+      it('should NOT intercept when key is not Tab', () => {
+        const focusOnTargetSpy = vi.spyOn(component as any, 'focusOnTarget').mockImplementation(() => {});
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget').mockImplementation(() => {});
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        const ev = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+        host.dispatchEvent(ev);
+
+        expect(focusOnTargetSpy).not.toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).not.toHaveBeenCalled();
+      });
+
+      it('should do nothing if appendBox=false', () => {
+        (component as any).appendBox = false;
+
+        const focusOnTargetSpy = vi.spyOn(component as any, 'focusOnTarget').mockImplementation(() => {});
+        const focusNextAfterTargetSpy = vi.spyOn(component as any, 'focusNextAfterTarget').mockImplementation(() => {});
+
+        (component as any).attachPopoverKeydown.call(component);
+
+        lastEl.focus();
+        const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+        host.dispatchEvent(ev);
+
+        expect(focusOnTargetSpy).not.toHaveBeenCalled();
+        expect(focusNextAfterTargetSpy).not.toHaveBeenCalled();
+      });
+
+      it('should do nothing if host is undefined', () => {
+        (component as any).appendBox = true;
+
+        const fakeThis = {
+          popoverElement: undefined,
+          renderer: component['renderer']
+        } as any;
+
+        expect(() => (component as any).attachPopoverKeydown.call(fakeThis)).not.toThrow();
+      });
+    });
+
+    // ---------------- isVisible ----------------
+    describe('isVisible:', () => {
+      let originalGetComputed: typeof window.getComputedStyle;
+
+      beforeEach(() => {
+        originalGetComputed = window.getComputedStyle;
+      });
+
+      afterEach(() => {
+        (window as any).getComputedStyle = originalGetComputed;
+      });
+
+      it('should return false when element or any ancestor is display:none / visibility:hidden', () => {
+        const parent = document.createElement('div');
+        document.body.appendChild(parent);
+
+        const child = document.createElement('button');
+        parent.appendChild(child);
+
+        vi.spyOn(window, 'getComputedStyle').mockImplementation((el: Element) => {
+          if (el === parent) {
+            return { display: 'none', visibility: 'visible' } as any;
+          }
+          return { display: 'block', visibility: 'visible' } as any;
+        });
+
+        const res = (component as any).isVisible(child);
+        expect(res).toBe(false);
+        parent.remove();
+      });
+
+      it('should return true when element has size and is visible', () => {
+        const el = document.createElement('button');
+        document.body.appendChild(el);
+
+        vi.spyOn(window, 'getComputedStyle').mockReturnValue({ display: 'block', visibility: 'visible' } as any);
+        vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ width: 10, height: 10 } as any);
+        vi.spyOn(el, 'getClientRects').mockReturnValue({ length: 1 } as any);
+
+        const res = (component as any).isVisible(el);
+
+        expect(res).toBe(true);
+        el.remove();
+      });
+
+      it('should return false when the element itself has visibility:hidden', () => {
+        const el = document.createElement('button');
+        document.body.appendChild(el);
+        vi.spyOn(window, 'getComputedStyle').mockImplementation((node: Element) => {
+          if (node === el) {
+            return { display: 'block', visibility: 'hidden' } as any;
+          }
+          return { display: 'block', visibility: 'visible' } as any;
+        });
+
+        vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ width: 10, height: 10 } as any);
+        vi.spyOn(el, 'getClientRects').mockReturnValue({ length: 1 } as any);
+        const res = (component as any).isVisible(el);
+        expect(res).toBe(false);
+        el.remove();
+      });
+
+      it('should return false when any ancestor has visibility:hidden', () => {
+        const parent = document.createElement('div');
+        const child = document.createElement('button');
+        parent.appendChild(child);
+        document.body.appendChild(parent);
+
+        vi.spyOn(window, 'getComputedStyle').mockImplementation((node: Element) => {
+          if (node === parent) {
+            return { display: 'block', visibility: 'hidden' } as any;
+          }
+          return { display: 'block', visibility: 'visible' } as any;
+        });
+
+        const res = (component as any).isVisible(child);
+        expect(res).toBe(false);
+
+        parent.remove();
+      });
+
+      it('should return true when width/height are 0 but getClientRects().length > 0', () => {
+        const el = document.createElement('button');
+        document.body.appendChild(el);
+        vi.spyOn(window, 'getComputedStyle').mockReturnValue({ display: 'block', visibility: 'visible' } as any);
+        vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ width: 0, height: 0 } as any);
+        vi.spyOn(el, 'getClientRects').mockReturnValue({ length: 1 } as any);
+
+        const res = (component as any).isVisible(el);
+        expect(res).toBe(true);
+        el.remove();
+      });
+    });
+
+    // ---------------- getTabbablesIn / getDocumentTabbables ----------------
+    it('getTabbablesIn: should return only visible and enabled tabbables in the container', () => {
+      const btn1 = document.createElement('button');
+      const btn2 = document.createElement('button');
+      btn2.setAttribute('disabled', 'true');
+      const link = document.createElement('a');
+      link.href = '#';
+
+      host.appendChild(btn1);
+      host.appendChild(btn2);
+      host.appendChild(link);
+
+      vi.spyOn(component as any, 'isVisible').mockReturnValue(true);
+
+      const items = (component as any).getTabbablesIn(host);
+      expect(items).toContain(btn1);
+      expect(items).toContain(link);
+      expect(items).not.toContain(btn2);
+    });
+
+    it('getDocumentTabbables: should return visible and enabled tabbables from document', () => {
+      const docBtn = document.createElement('button');
+      const docDisabled = document.createElement('button');
+      docDisabled.disabled = true;
+      const docLink = document.createElement('a');
+      docLink.href = '#';
+
+      document.body.appendChild(docBtn);
+      document.body.appendChild(docDisabled);
+      document.body.appendChild(docLink);
+
+      vi.spyOn(component as any, 'isVisible').mockReturnValue(true);
+
+      const all = (component as any).getDocumentTabbables();
+
+      expect(all).toContain(docBtn);
+      expect(all).toContain(docLink);
+      expect(all).not.toContain(docDisabled);
+
+      docBtn.remove();
+      docDisabled.remove();
+      docLink.remove();
+    });
+
+    // ---------------- focusNextAfterTarget ----------------
+    describe('focusNextAfterTarget:', () => {
+      it('should focus the next tabbable after target; wrap to first if target is last', () => {
+        const first = document.createElement('button');
+        const second = document.createElement('button');
+        const third = document.createElement('button');
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+        document.body.appendChild(third);
+
+        const focusSpySecond = vi.spyOn(second, 'focus').mockImplementation(() => {});
+        const focusSpyFirst = vi.spyOn(first, 'focus').mockImplementation(() => {});
+
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([first, second, third]);
+        (component as any).targetElement = first;
+        (component as any).focusNextAfterTarget();
+
+        expect(focusSpySecond).toHaveBeenCalled();
+        focusSpySecond.mockClear();
+        (component as any).targetElement = third;
+        (component as any).focusNextAfterTarget();
+
+        expect(focusSpyFirst).toHaveBeenCalled();
+        first.remove();
+        second.remove();
+        third.remove();
+      });
+
+      it('should fallback using last tabbable inside popover if target not found in doc list', () => {
+        const a = document.createElement('button');
+        const b = document.createElement('button');
+        const c = document.createElement('button');
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+        document.body.appendChild(c);
+
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([a, b, c]);
+        vi.spyOn(component as any, 'getTabbablesIn').mockReturnValue([b, c]);
+
+        (component.popoverElement as any) = { nativeElement: host };
+
+        (component as any).targetElement = document.createElement('button');
+
+        const focusSpy = vi.spyOn(a, 'focus').mockImplementation(() => {});
+        (component as any).focusNextAfterTarget();
+        expect(focusSpy).toHaveBeenCalled();
+        a.remove();
+        b.remove();
+        c.remove();
+      });
+
+      it('should early-return when there are no document tabbables', () => {
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([]);
+        const getTabbablesInSpy = vi.spyOn(component as any, 'getTabbablesIn');
+
+        const fakeTarget = document.createElement('button');
+        const focusSpy = vi.spyOn(fakeTarget, 'focus');
+        (component as any).targetElement = fakeTarget;
+
+        expect(() => (component as any).focusNextAfterTarget()).not.toThrow();
+        expect(getTabbablesInSpy).not.toHaveBeenCalled();
+        expect(focusSpy).not.toHaveBeenCalled();
+
+        fakeTarget.remove();
+      });
+
+      it('should set startIndex to -1 when target is null', () => {
+        const a = document.createElement('button');
+        const b = document.createElement('button');
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([a, b]);
+
+        (component as any).targetElement = null;
+        const focusSpy = vi.spyOn(a, 'focus').mockImplementation(() => {});
+
+        (component as any).focusNextAfterTarget();
+        expect(focusSpy).toHaveBeenCalled();
+        a.remove();
+        b.remove();
+      });
+    });
+
+    // ---------------- observeContentResize ----------------
+    describe('observeContentResize:', () => {
+      let originalResizeObserver: typeof ResizeObserver;
+
+      beforeEach(() => {
+        originalResizeObserver = window.ResizeObserver;
+      });
+
+      afterEach(() => {
+        (window as any).ResizeObserver = originalResizeObserver;
+      });
+
+      it('should create a ResizeObserver and observe the popoverElement', () => {
+        const observeSpy = vi.fn();
+        const disconnectSpy = vi.fn();
+
+        (window as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
+          return { observe: observeSpy, disconnect: disconnectSpy, unobserve: vi.fn() };
+        };
+
+        (component as any).observeContentResize();
+
+        expect(observeSpy).toHaveBeenCalledWith(component.popoverElement.nativeElement);
+        expect(component['resizeObserver']).toBeTruthy();
+      });
+
+      it('should disconnect existing observer before creating a new one', () => {
+        const disconnectSpy = vi.fn();
+        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} };
+
+        (globalThis as any).ResizeObserver = function (_callback: ResizeObserverCallback) {
+          return {
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+            unobserve: vi.fn()
+          };
+        };
+
+        (component as any).observeContentResize();
+
+        expect(disconnectSpy).toHaveBeenCalled();
+      });
+
+      it('should skip the initial ResizeObserver callback invocation', () => {
+        let capturedCallback: ResizeObserverCallback;
+
+        (globalThis as any).ResizeObserver = function (callback: ResizeObserverCallback) {
+          capturedCallback = callback;
+          return {
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+            unobserve: vi.fn()
+          };
+        };
+
+        vi.spyOn(component as any, 'setElementsControlPosition').mockImplementation(() => {});
+        vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+
+        (component as any).observeContentResize();
+
+        // First call (initial) should be skipped
+        capturedCallback!([], {} as any);
+
+        expect(component['setElementsControlPosition']).not.toHaveBeenCalled();
+        expect(component.setPopoverPosition).not.toHaveBeenCalled();
+      });
+
+      it('should recalculate position on subsequent ResizeObserver callbacks', () => {
+        let capturedCallback: ResizeObserverCallback;
+
+        (globalThis as any).ResizeObserver = function (callback: ResizeObserverCallback) {
+          capturedCallback = callback;
+          return {
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+            unobserve: vi.fn()
+          };
+        };
+
+        vi.spyOn(component as any, 'setElementsControlPosition').mockImplementation(() => {});
+        vi.spyOn(component, 'setPopoverPosition').mockImplementation(() => {});
+        vi.spyOn(component['cd'], 'detectChanges').mockImplementation(() => {});
+
+        (component as any).observeContentResize();
+
+        // First call (initial) — skipped
+        capturedCallback!([], {} as any);
+
+        // Second call — should recalculate
+        capturedCallback!([], {} as any);
+
+        expect(component['setElementsControlPosition']).toHaveBeenCalled();
+        expect(component.setPopoverPosition).toHaveBeenCalled();
+        expect(component['cd'].detectChanges).toHaveBeenCalled();
+      });
+
+      it('should not create observer when popoverElement is undefined', () => {
+        (component as any).popoverElement = undefined;
+
+        const constructorSpy = vi.fn();
+        (window as any).ResizeObserver = constructorSpy;
+
+        (component as any).observeContentResize();
+
+        expect(constructorSpy).not.toHaveBeenCalled();
+        expect(component['resizeObserver']).toBeNull();
+      });
+    });
+
+    // ---------------- disconnectResizeObserver ----------------
+    describe('disconnectResizeObserver:', () => {
+      it('should disconnect and nullify the resizeObserver', () => {
+        const disconnectSpy = vi.fn();
+        component['resizeObserver'] = { disconnect: disconnectSpy, observe: () => {}, unobserve: () => {} };
+
+        (component as any).disconnectResizeObserver();
+
+        expect(disconnectSpy).toHaveBeenCalled();
+        expect(component['resizeObserver']).toBeNull();
+      });
+
+      it('should not throw when resizeObserver is null', () => {
+        component['resizeObserver'] = null;
+
+        expect(() => (component as any).disconnectResizeObserver()).not.toThrow();
+        expect(component['resizeObserver']).toBeNull();
+      });
+
+      it('should not throw when resizeObserver is undefined', () => {
+        component['resizeObserver'] = undefined;
+
+        expect(() => (component as any).disconnectResizeObserver()).not.toThrow();
+        expect(component['resizeObserver']).toBeNull();
+      });
+    });
+
+    // ---------------- focusPrevBeforeTarget ----------------
+    describe('focusPrevBeforeTarget:', () => {
+      it('should focus previous tabbable before target; wrap to last when target is first', () => {
+        const first = document.createElement('button');
+        const second = document.createElement('button');
+        const third = document.createElement('button');
+
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+        document.body.appendChild(third);
+
+        const focusSpyFirst = vi.spyOn(first, 'focus').mockImplementation(() => {});
+        const focusSpyThird = vi.spyOn(third, 'focus').mockImplementation(() => {});
+
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([first, second, third]);
+        (component as any).targetElement = second;
+
+        (component as any).focusPrevBeforeTarget();
+
+        expect(focusSpyFirst).toHaveBeenCalled();
+
+        focusSpyFirst.mockClear();
+        (component as any).targetElement = first;
+
+        (component as any).focusPrevBeforeTarget();
+        expect(focusSpyThird).toHaveBeenCalled();
+
+        first.remove();
+        second.remove();
+        third.remove();
+      });
+
+      it('should early-return when there are no document tabbables', () => {
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([]);
+
+        const fakeTarget = document.createElement('button');
+        const focusSpy = vi.spyOn(fakeTarget, 'focus');
+        (component as any).targetElement = fakeTarget;
+
+        expect(() => (component as any).focusPrevBeforeTarget()).not.toThrow();
+        expect(focusSpy).not.toHaveBeenCalled();
+
+        fakeTarget.remove();
+      });
+
+      it('should fallback to last when target is null (idx = -1)', () => {
+        const first = document.createElement('button');
+        const second = document.createElement('button');
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([first, second]);
+
+        (component as any).targetElement = null;
+        const focusSpy = vi.spyOn(second, 'focus').mockImplementation(() => {});
+
+        (component as any).focusPrevBeforeTarget();
+
+        expect(focusSpy).toHaveBeenCalled();
+
+        first.remove();
+        second.remove();
+      });
+
+      it('should fallback to last when target is not found in docTabs (idx = -1)', () => {
+        const a = document.createElement('button');
+        const b = document.createElement('button');
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+
+        vi.spyOn(component as any, 'getDocumentTabbables').mockReturnValue([a, b]);
+        (component as any).targetElement = document.createElement('button');
+        const focusSpy = vi.spyOn(b, 'focus').mockImplementation(() => {});
+        (component as any).focusPrevBeforeTarget();
+        expect(focusSpy).toHaveBeenCalled();
+
+        a.remove();
+        b.remove();
+      });
+    });
+  });
+});
+
+function getFakeToSetRendererListenInit(trigger, component) {
+  return {
+    trigger: trigger,
+    renderer: component['renderer'],
+    target: {
+      nativeElement: document.body
+    },
+    targetElement: document.body,
+    open: () => {},
+    close: () => {},
+    togglePopup: () => {},
+    debounceResize: () => {},
+    setPopoverPosition: () => {},
+    attachPopoverKeydown: () => {}
+  };
+}
