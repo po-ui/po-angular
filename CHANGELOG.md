@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.26.0](https://github.com/po-ui/po-angular/compare/v21.25.0...v21.26.0) (2026-07-30)
+
+
+### Features
+
+* **page-default:** habilita ação p-refresh no header ([3300840](https://github.com/po-ui/po-angular/commit/3300840282d561bf4955cc4047c8717ae7799523))
+* **page-job-scheduler:** permite navegação direta em passos anteriores ([3870eec](https://github.com/po-ui/po-angular/commit/3870eecfeb6bb58451d311ea71de260ca8224564))
+
+
+### Bug Fixes
+
+* **fields:** aceita boolean, number e string nas propriedades booleanas ([a57062b](https://github.com/po-ui/po-angular/commit/a57062bcbcf5e634bfb208216dc28baa15a9036d))
+
+
 ## [21.25.0](https://github.com/po-ui/po-angular/compare/v21.24.0...v21.25.0) (2026-07-24)
 
 
