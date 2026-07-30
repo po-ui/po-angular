@@ -1,0 +1,258 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { of } from 'rxjs';
+
+import { PoBreadcrumbModule } from '../../po-breadcrumb/po-breadcrumb.module';
+import { PoButtonModule } from '../../po-button';
+
+import { PoPageComponent } from '../po-page.component';
+import { PoPageContentComponent } from '../po-page-content/po-page-content.component';
+import { PoPageEditComponent } from './po-page-edit.component';
+import { PoPageHeaderComponent } from '../po-page-header/po-page-header.component';
+
+@Component({
+  template: `
+    <po-page-edit p-title="Unit Test" (p-cancel)="cancel()" (p-save)="save()" (p-save-new)="saveNew()"> </po-page-edit>
+  `,
+  standalone: false
+})
+class ContainerComponent {
+  cancel(): boolean {
+    return true;
+  }
+
+  save(): boolean {
+    return true;
+  }
+
+  saveNew(): boolean {
+    return true;
+  }
+}
+
+describe('PoPageEditComponent', () => {
+  let component: PoPageEditComponent;
+  let fixture: ComponentFixture<PoPageEditComponent>;
+
+  let containerFixture: ComponentFixture<ContainerComponent>;
+  let debugElement;
+  const event = document.createEvent('Event');
+  event.initEvent('p-click', false, true);
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoBreadcrumbModule, PoButtonModule],
+      declarations: [
+        ContainerComponent,
+        PoPageComponent,
+        PoPageEditComponent,
+        PoPageContentComponent,
+        PoPageHeaderComponent
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoPageEditComponent);
+    component = fixture.componentInstance;
+
+    debugElement = fixture.debugElement.nativeElement;
+
+    containerFixture = TestBed.createComponent(ContainerComponent);
+
+    containerFixture.detectChanges();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should be created', () => {
+    expect(component instanceof PoPageEditComponent).toBe(true);
+  });
+
+  it('should click on button to call action', () => {
+    const poButton = containerFixture.debugElement.nativeElement.querySelector('po-button > button');
+
+    const spy = vi.spyOn(poButton, 'dispatchEvent');
+    poButton.dispatchEvent(event);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should return true if has the any function', () => {
+    component.save.observers.push(of({}) as any);
+
+    expect(component.hasAnyAction()).toBe(true);
+  });
+
+  describe('Methods:', () => {
+    it('getIcon: should return "ICON_CLOSE" if icon is "cancel" and "cancel" is primary action', () => {
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
+
+      expect(component.getIcon('cancel')).toBe('ICON_CLOSE');
+    });
+
+    it('getIcon: should return "ICON_OK" if icon is "saveNew" and "saveNew" is primary action', () => {
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
+
+      expect(component.getIcon('saveNew')).toBe('ICON_OK');
+    });
+
+    it('getIcon: should return a empty string if icon isn`t "saveNew" or "cancel"', () => {
+      expect(component.getIcon('test')).toBe('');
+    });
+
+    it('getType: should return "primary" if type is "cancel" and "cancel" is primary action', () => {
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
+
+      expect(component.getType('cancel')).toBe('primary');
+    });
+
+    it('getType: should return "primary" if type is "saveNew" and "saveNew" is primary action', () => {
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(true);
+
+      expect(component.getType('saveNew')).toBe('primary');
+    });
+
+    it('getType: should return "secondary" if type isn`t "saveNew" or "cancel"', () => {
+      expect(component.getType('test')).toBe('secondary');
+    });
+
+    it('getType: should return "secondary" if type is "saveNew" and isn`t primary action', () => {
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(false);
+
+      expect(component.getType('saveNew')).toBe('secondary');
+    });
+
+    it('getType: should return "secondary" if type is "cancel" and isn`t primary action', () => {
+      vi.spyOn(component as any, 'isPrimaryAction').mockReturnValue(false);
+
+      expect(component.getType('cancel')).toBe('secondary');
+    });
+
+    it('hasPageHeader: should return true if has breadcrumb', () => {
+      vi.spyOn(component, 'hasAnyAction').mockReturnValue(false);
+
+      component.title = undefined;
+      component.breadcrumb = { items: [{ label: 'Breadcrumb' }] };
+
+      expect(component.hasPageHeader()).toBe(true);
+    });
+
+    it('hasPageHeader: should return true if has actions', () => {
+      component.breadcrumb = undefined;
+      component.title = undefined;
+
+      vi.spyOn(component, 'hasAnyAction').mockReturnValue(true);
+
+      expect(component.hasPageHeader()).toBe(true);
+    });
+
+    it('hasPageHeader: should return true if has title', () => {
+      vi.spyOn(component, 'hasAnyAction').mockReturnValue(false);
+
+      component.breadcrumb = undefined;
+      component.title = 'Title';
+
+      expect(component.hasPageHeader()).toBe(true);
+    });
+
+    it('hasPageHeader: should return false if doesn`t have actions, breadcrumb and title', () => {
+      vi.spyOn(component, 'hasAnyAction').mockReturnValue(false);
+
+      component.breadcrumb = undefined;
+      component.title = undefined;
+
+      expect(component.hasPageHeader()).toBe(false);
+    });
+
+    it('isPrimaryAction: should return true if action is "saveNew" and save function is undefined', () => {
+      vi.spyOn(component, 'hasEvent').mockReturnValueOnce(false).mockReturnValueOnce(false);
+
+      expect(component['isPrimaryAction']('saveNew')).toBeTruthy();
+    });
+
+    it('isPrimaryAction: should return false if action is "saveNew" and save funtion is defined', () => {
+      vi.spyOn(component, 'hasEvent').mockReturnValueOnce(true).mockReturnValueOnce(true);
+
+      expect(component['isPrimaryAction']('saveNew')).toBeFalsy();
+    });
+
+    it('isPrimaryAction: should return true if action is "cancel", saveNew and save function are undefined', () => {
+      expect(component['isPrimaryAction']('cancel')).toBeTruthy();
+    });
+
+    it('isPrimaryAction: should return false if action is "cancel" and saveNew funtion is defined', () => {
+      component.cancel.observers.push(of({}) as any);
+      component.saveNew.observers.push(of({}) as any);
+
+      expect(component['isPrimaryAction']('cancel')).toBeFalsy();
+    });
+
+    it('isPrimaryAction: should return false if action is "cancel" and save funtion is defined', () => {
+      component.save.observers.push(of({}) as any);
+      component.cancel.observers.push(of({}) as any);
+
+      expect(component['isPrimaryAction']('cancel')).toBeFalsy();
+    });
+
+    it('isPrimaryAction: should return false if action isn`t "cancel" or "saveNew"', () => {
+      component.save.observers.push(of({}) as any);
+      component.cancel.observers.push(of({}) as any);
+
+      expect(component['isPrimaryAction']('test')).toBeFalsy();
+    });
+  });
+
+  describe('Templates:', () => {
+    it('should show page header if `hasPageHeader` return true', () => {
+      vi.spyOn(component, 'hasPageHeader').mockReturnValue(true);
+      fixture.detectChanges();
+      expect(debugElement.querySelector('po-page-header')).toBeTruthy();
+    });
+
+    it('should hide page header if `hasPageHeader` return false', () => {
+      vi.spyOn(component, 'hasPageHeader').mockReturnValue(false);
+      fixture.detectChanges();
+      expect(debugElement.querySelector('po-page-header')).toBeFalsy();
+    });
+
+    it('should only contain icon in "save" primary action if "save" function is defined.', () => {
+      component.cancel.observers.push(of({}) as any);
+      component.saveNew.observers.push(of({}) as any);
+      component.save.observers.push(of({}) as any);
+
+      fixture.detectChanges();
+
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="an an-check po-fonts-icon"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="an an-x po-fonts-icon"]');
+
+      expect(saveIcon.length).toBe(1);
+      expect(cancelIcon.length).toBe(0);
+    });
+
+    it('should only contain icon in "saveNew" primary action if "save" function is undefined.', () => {
+      component.saveNew.observers.push(of({}) as any);
+      component.save.observers.push(of({}) as any);
+
+      fixture.detectChanges();
+
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="an an-check po-fonts-icon"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="an an-x po-fonts-icon"]');
+
+      expect(saveIcon.length).toBe(1);
+      expect(cancelIcon.length).toBe(0);
+    });
+
+    it('should only contain icon in "cancel" primary action if "saveNew" and "save" function is undefined.', () => {
+      component.cancel.observers.push(of({}) as any);
+
+      fixture.detectChanges();
+
+      const saveIcon = debugElement.querySelectorAll('po-button button po-icon i[class="an an-check po-fonts-icon"]');
+      const cancelIcon = debugElement.querySelectorAll('po-button button po-icon i[class="an an-x po-fonts-icon"]');
+
+      expect(saveIcon.length).toBe(0);
+      expect(cancelIcon.length).toBe(1);
+    });
+  });
+});
