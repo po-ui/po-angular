@@ -1,0 +1,187 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { By } from '@angular/platform-browser';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+
+import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
+
+import { PoTabButtonComponent } from './po-tab-button.component';
+
+describe('PoTabButtonComponent:', () => {
+  let component: PoTabButtonComponent;
+  let fixture: ComponentFixture<PoTabButtonComponent>;
+  let nativeElement: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PoTabButtonComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoTabButtonComponent);
+    component = fixture.componentInstance;
+
+    nativeElement = fixture.debugElement.nativeElement;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('Properties:', () => {
+    it('active: should call `emitActivated`', () => {
+      vi.spyOn(component as any, 'emitActivated').mockImplementation(() => {});
+      component.active = true;
+      expect(component['emitActivated']).toHaveBeenCalled();
+    });
+
+    it('hide: should set `hide` with valid values', () => {
+      const validValues = ['', true, 1, [], {}, 'true'];
+
+      expectPropertiesValues(component, 'hide', validValues, true);
+    });
+
+    it('hide: should set `hide` to false with invalid values', () => {
+      const invalidValues = [null, undefined, NaN, false, 0, 'false', 'teste'];
+
+      expectPropertiesValues(component, 'hide', invalidValues, false);
+    });
+
+    it('hide: should call `setDisplayOnHide`', () => {
+      vi.spyOn(component as any, 'setDisplayOnHide').mockImplementation(() => {});
+      component.hide = true;
+      expect(component['setDisplayOnHide']).toHaveBeenCalled();
+    });
+  });
+
+  describe('Methods:', () => {
+    it('ngOnChanges: should emit `changeState` if hide currentValue is true', () => {
+      vi.spyOn(component.changeState, 'emit');
+
+      component.ngOnChanges(<any>{ hide: { currentValue: true } });
+
+      expect(component.changeState.emit).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should emit `changeState` if disabled currentValue is true', () => {
+      vi.spyOn(component.changeState, 'emit');
+
+      component.ngOnChanges(<any>{ disabled: { currentValue: true } });
+
+      expect(component.changeState.emit).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: shouldn`t emit `changeState` if hide or disabled currentValue is false', () => {
+      vi.spyOn(component.changeState, 'emit');
+
+      component.ngOnChanges(<any>{ disabled: { currentValue: false }, hide: { currentValue: false } });
+
+      expect(component.changeState.emit).not.toHaveBeenCalled();
+    });
+
+    it('onClick: should emit `click` if `disabled` is false', () => {
+      vi.spyOn(component.click, 'emit');
+
+      component.disabled = false;
+      component.onClick();
+
+      expect(component.click.emit).toHaveBeenCalled();
+    });
+
+    it('onClick: shouldn`t emit `click` if `disabled` is true', () => {
+      vi.spyOn(component.click, 'emit');
+
+      component.disabled = true;
+      component.onClick();
+
+      expect(component.click.emit).not.toHaveBeenCalled();
+    });
+
+    it('emitActivated: should emit `activated` if `active` is true', () => {
+      vi.spyOn(component.activated, 'emit');
+
+      component.active = true;
+      component['emitActivated']();
+
+      expect(component.activated.emit).toHaveBeenCalled();
+    });
+
+    it('emitActivated: shouldn`t emit `activated` if `active` is false', () => {
+      vi.spyOn(component.activated, 'emit');
+
+      component.active = false;
+      component['emitActivated']();
+
+      expect(component.activated.emit).not.toHaveBeenCalled();
+    });
+
+    it('setDisplayOnHide: should set `elementRef` display none if `hide` is true', () => {
+      component.hide = true;
+      component['setDisplayOnHide']();
+
+      expect(component['elementRef'].nativeElement.style.display).toBe('none');
+    });
+
+    it('setDisplayOnHide: should set `elementRef` display empty if `hide` is false', () => {
+      component.hide = false;
+      component['setDisplayOnHide']();
+
+      expect(component['elementRef'].nativeElement.style.display).toBe('');
+    });
+  });
+
+  describe('Templates:', () => {
+    it('should add disabled class if `disabled` is true', () => {
+      component.disabled = true;
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tab-button-disabled')).toBeTruthy();
+    });
+
+    it('shouldn`t add disabled class if `disabled` is false', () => {
+      component.disabled = false;
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tab-button-disabled')).toBeFalsy();
+    });
+
+    it(`shouldn't contains 'tabindex="0"' if 'disabled' is 'true'.`, () => {
+      component.disabled = true;
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tab-button-md[tabindex="0"]')).toBeFalsy();
+    });
+
+    it('should add active class if `active` is true', () => {
+      component.active = true;
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tab-button-active')).toBeTruthy();
+    });
+
+    it('shouldn`t add active class if `active` is false', () => {
+      component.active = false;
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-tab-button-active')).toBeFalsy();
+    });
+
+    it('should have label', () => {
+      const label = 'Tab';
+
+      component.label = label;
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-tab-button-label').innerHTML).toContain(label);
+    });
+
+    it('should call `onClick` if `enter` is pressed in `po-tab-button-md`.', () => {
+      const eventEnterKey = new KeyboardEvent('keyup', { 'key': 'Enter' });
+      const poTabButton = fixture.debugElement.query(By.css('.po-tab-button-default')).nativeElement;
+
+      vi.spyOn(component as any, 'onClick').mockImplementation(() => {});
+      poTabButton.dispatchEvent(eventEnterKey);
+
+      expect(component['onClick']).toHaveBeenCalled();
+    });
+  });
+});
