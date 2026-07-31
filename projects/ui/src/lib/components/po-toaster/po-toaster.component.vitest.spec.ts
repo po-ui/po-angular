@@ -1,0 +1,571 @@
+import { Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { PoThemeA11yEnum } from '../../services';
+import { PoButtonModule } from '../po-button';
+import { PoIconModule } from '../po-icon';
+import { PoToasterMode } from './enum/po-toaster-mode.enum';
+import { PoToasterOrientation } from './enum/po-toaster-orientation.enum';
+import { PoToasterType } from './enum/po-toaster-type.enum';
+import { PoToaster } from './interface/po-toaster.interface';
+import { PoToasterComponent } from './po-toaster.component';
+
+describe('PoToasterComponent', () => {
+  let component: PoToasterComponent;
+  let fixture: ComponentFixture<PoToasterComponent>;
+  let renderer: Renderer2;
+
+  const toasterErrorWithAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Error,
+    message: 'toasterErrorWithAction',
+    action: () => {}
+  };
+
+  const toasterErrorWithoutAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Error,
+    message: 'toasterErrorWithoutAction'
+  };
+
+  const toasterInfoWithAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Information,
+    message: 'toasterInfoWithAction',
+    action: () => {},
+    actionLabel: 'Texto Botão'
+  };
+
+  const toasterInfoWithoutAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Information,
+    message: 'toasterInfoWithoutAction'
+  };
+
+  const toasterSuccessWithAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Success,
+    message: 'toasterSuccessWithAction',
+    action: () => {}
+  };
+
+  const toasterSuccessWithoutAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Success,
+    message: 'toasterSuccessWithoutAction'
+  };
+
+  const toasterWarningWithAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Warning,
+    message: 'toasterWarning',
+    action: () => {}
+  };
+
+  const toasterWarningWithoutAction: PoToaster = {
+    position: 1,
+    type: PoToasterType.Warning,
+    message: 'toasterWarningWithoutAction'
+  };
+
+  const toasterBottom: PoToaster = {
+    position: 1,
+    type: PoToasterType.Error,
+    message: 'toasterBottom',
+    orientation: PoToasterOrientation.Bottom
+  };
+  const toasterTop: PoToaster = {
+    position: 1,
+    type: PoToasterType.Error,
+    message: 'toasterTop',
+    orientation: PoToasterOrientation.Top
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoButtonModule, PoIconModule],
+      declarations: [PoToasterComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoToasterComponent);
+    component = fixture.componentInstance;
+    renderer = fixture.componentRef.injector.get<Renderer2>(Renderer2);
+    vi.spyOn<any>(component, 'returnHeightToaster').mockReturnValue(62);
+    fixture.detectChanges();
+  });
+
+  afterEach(async () => {
+    // Flush any pending setTimeout from changePosition to avoid unhandled errors
+    await new Promise(r => setTimeout(r, 50));
+    vi.restoreAllMocks();
+  });
+
+  it('should be load `component` correctly', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should be load `component.message` attribute correctly', () => {
+    component.configToaster(toasterErrorWithAction);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-message')).nativeElement.innerHTML).toContain('toasterError');
+  });
+
+  it('should be load `component.orientation`with PoToasterOrientation.Bottom atribute correctly', () => {
+    component.configToaster(toasterBottom);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-bottom'))).toBeTruthy();
+  });
+
+  it('should be load `component.orientation`with PoToasterOrientation.Top atribute correctly', () => {
+    component.configToaster(toasterTop);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-bottom'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-top'))).toBeTruthy();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Error and with action correctly', () => {
+    component.configToaster(toasterErrorWithAction);
+    component.mode = PoToasterMode.Alert;
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.po-toaster-error'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Info and with action correctly', () => {
+    component.configToaster(toasterInfoWithAction);
+    component.mode = PoToasterMode.Alert;
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.po-toaster-info'))).not.toBeNull();
+  });
+
+  it('should be load `component` with PoToasterType.Info if the type is not valid', () => {
+    component.configToaster(toasterInfoWithAction);
+    component.mode = PoToasterMode.Inline;
+    component.type = 'teste' as any;
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.po-toaster-info'))).not.toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Success and with action correctly', () => {
+    component.configToaster(toasterSuccessWithAction);
+    component.mode = PoToasterMode.Alert;
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.po-toaster-success'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Warning and with action correctly', () => {
+    component.configToaster(toasterWarningWithAction);
+    component.mode = PoToasterMode.Alert;
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.po-toaster-warning'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Error and without action correctly', () => {
+    component.configToaster(toasterErrorWithoutAction);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Info and without action correctly', () => {
+    component.configToaster(toasterInfoWithoutAction);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Success and without action correctly', () => {
+    component.configToaster(toasterSuccessWithoutAction);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be load `component` with all `PoToasterType` with PoToasterType.Warning and without action correctly', () => {
+    component.configToaster(toasterWarningWithoutAction);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.po-toaster-action po-button'))).toBeNull();
+  });
+
+  it('should be call the `component.action` method how must call a function correctly', () => {
+    component.configToaster(toasterErrorWithAction);
+    const event = {
+      metaKey: false,
+      preventDefault: () => {},
+      stopPropagation: () => {}
+    };
+    fixture.detectChanges();
+    vi.spyOn(component, 'action' as any).mockImplementation(() => {});
+    component.poToasterAction(event);
+    expect(component.action).toHaveBeenCalled();
+  });
+
+  it('should set the `alive` attribute to false after the end of the component lifetime', async () => {
+    component.configToaster(toasterInfoWithoutAction);
+    fixture.detectChanges();
+    fixture.destroy();
+
+    await new Promise(r => setTimeout(r, 100));
+
+    expect(component.alive).toBe(false);
+  });
+
+  describe('Methods:', () => {
+    it('onButtonClose: should call `close` if action and actionLabel are truthy', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyClose = vi.spyOn(component, 'close').mockImplementation(() => {});
+      const spyToasterAction = vi.spyOn(component, 'poToasterAction').mockImplementation(() => {});
+
+      component.onButtonClose(event);
+
+      expect(spyToasterAction).not.toHaveBeenCalled();
+      expect(spyClose).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `poToasterAction` if action are truthy and actionLabel is null', () => {
+      component.action = () => {};
+      component.actionLabel = null;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyToasterAction = vi.spyOn(component, 'poToasterAction').mockImplementation(() => {});
+
+      component.onButtonClose(event);
+
+      expect(spyToasterAction).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `close` if actionLabel are truthy and action is null', () => {
+      component.action = null;
+      component.actionLabel = 'Details';
+      component.mode = PoToasterMode.Alert;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyCloseCall = vi.spyOn(component, 'close');
+
+      component.onButtonClose(event);
+
+      expect(spyCloseCall).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `hide` on close if mode is `inline`', () => {
+      component.action = null;
+      component.actionLabel = 'Details';
+      component.mode = PoToasterMode.Inline;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyCloseCall = vi.spyOn(component, 'close');
+      const spyHideCall = vi.spyOn(component, 'hide');
+
+      component.onButtonClose(event);
+
+      expect(spyCloseCall).toHaveBeenCalled();
+      expect(spyHideCall).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `poToasterAction` if action is truthy and actionLabel is null', () => {
+      component.action = () => {};
+      component.actionLabel = null;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyToasterAction = vi.spyOn(component, 'poToasterAction').mockImplementation(() => {});
+      const spyClose = vi.spyOn(component, 'close').mockImplementation(() => {});
+
+      component.onButtonClose(event);
+
+      expect(spyClose).not.toHaveBeenCalled();
+      expect(spyToasterAction).toHaveBeenCalled();
+    });
+
+    it('onButtonClose: should call `close` if action and actionLabel are null', () => {
+      component.action = null;
+      component.actionLabel = null;
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      const spyToasterAction = vi.spyOn(component, 'poToasterAction').mockImplementation(() => {});
+      const spyClose = vi.spyOn(component, 'close').mockImplementation(() => {});
+
+      component.onButtonClose(event);
+
+      expect(spyClose).toHaveBeenCalled();
+      expect(spyToasterAction).not.toHaveBeenCalled();
+    });
+
+    it('setFadeOut: if the class is `po-toaster-invisible` it must keep fade out', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+
+      component.toaster.nativeElement.className = 'po-toaster-invisible';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-invisible');
+      expect(component.toaster.nativeElement.className).not.toContain('po-toaster-visible');
+    });
+
+    it('setFadeOut: if the css class is different from fade-in/out, it must keep the same class', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'po-toaster-test';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).not.toContain('fade-in');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-test');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-invisible');
+    });
+
+    it('setFadeOut: if the class is `po-toaster-visible` it must change to `po-toaster-invisible`', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'po-toaster-visible';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).not.toContain('po-toaster-visible');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-invisible');
+    });
+
+    it('poToasterAction: should call `action` when called action attribute', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      const event = {
+        metaKey: false,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      };
+
+      component.poToasterAction(event);
+
+      const spyAction = vi.spyOn(component, 'action' as any);
+
+      expect(spyAction).toBeTruthy();
+    });
+
+    it('should set the margin correctly for one toaster', async () => {
+      component.action = () => {};
+      component.actionLabel = 'changePosition';
+      component.toaster.nativeElement.className = 'po-toaster-visible';
+      const position = 1;
+
+      vi.spyOn<any>(component, 'returnHeightToaster').mockReturnValue(62);
+
+      component.changePosition(position);
+      await new Promise(r => setTimeout(r, 0));
+      component.orientation = PoToasterOrientation.Top;
+
+      expect((component as any).margin).toBe(78);
+
+      component.changePosition(position);
+      await new Promise(r => setTimeout(r, 0));
+      component.orientation = PoToasterOrientation.Bottom;
+
+      expect((component as any).margin).toBe(78);
+    });
+
+    it('changePosition: Margin should receive the default value plus the next toaster concatenated by the default margin value', async () => {
+      const expectResult = 8 + 80 + 8 + 150 + 8;
+      vi.spyOn(component, 'returnHeightToaster' as any).mockImplementation((position: number) => {
+        if (position === 1) {
+          return 80;
+        } else {
+          return 150;
+        }
+      });
+
+      component.changePosition(1);
+      await new Promise(r => setTimeout(r, 0));
+      component.changePosition(2);
+      await new Promise(r => setTimeout(r, 0));
+
+      expect(component['margin']).toEqual(expectResult);
+    });
+
+    it('show: should set isHide to true, call setFadeIn and remove hidden attribute from toaster element', () => {
+      component.mode = PoToasterMode.Inline;
+
+      vi.spyOn(component, 'setFadeIn');
+      vi.spyOn(renderer, 'removeAttribute');
+
+      component.show();
+
+      expect(component.isHide).toBe(true);
+      expect(component.setFadeIn).toHaveBeenCalled();
+      expect(renderer.removeAttribute).toHaveBeenCalledWith(component.toaster.nativeElement, 'hidden');
+    });
+
+    it('ngOnChanges: should call hide() when isHide changes to true', () => {
+      vi.spyOn(component, 'hide').mockImplementation(() => {});
+      vi.spyOn(component, 'show').mockImplementation(() => {});
+      vi.spyOn(component.changeDetector, 'detectChanges').mockImplementation(() => {});
+
+      const changes: SimpleChanges = {
+        isHide: new SimpleChange(false, true, false)
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.hide).toHaveBeenCalled();
+      expect(component.show).not.toHaveBeenCalled();
+      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should call show() when isHide changes to false', () => {
+      vi.spyOn(component, 'hide').mockImplementation(() => {});
+      vi.spyOn(component, 'show').mockImplementation(() => {});
+      vi.spyOn(component.changeDetector, 'detectChanges').mockImplementation(() => {});
+
+      const changes: SimpleChanges = {
+        isHide: new SimpleChange(true, false, false)
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.hide).not.toHaveBeenCalled();
+      expect(component.show).toHaveBeenCalled();
+      expect(component.changeDetector.detectChanges).toHaveBeenCalled();
+    });
+
+    it('ngOnChanges: should not call hide() or show() if isHide previous value is undefined', () => {
+      vi.spyOn(component, 'hide').mockImplementation(() => {});
+      vi.spyOn(component, 'show').mockImplementation(() => {});
+      vi.spyOn(component.changeDetector, 'detectChanges').mockImplementation(() => {});
+
+      const changes: SimpleChanges = {
+        isHide: new SimpleChange(undefined, false, true)
+      };
+
+      component.ngOnChanges(changes);
+
+      expect(component.hide).not.toHaveBeenCalled();
+      expect(component.show).not.toHaveBeenCalled();
+      expect(component.changeDetector.detectChanges).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Properties', () => {
+    it('icon: should get icon', () => {
+      component['icon'] = 'icone';
+
+      expect(component.getIcon()).toBe('icone');
+    });
+
+    it('toasterPosition: should get toasterPosition', () => {
+      component['toasterPosition'] = 'toasterPosition';
+
+      expect(component.getToasterPosition()).toBe('toasterPosition');
+    });
+
+    it('toasterType: should get toasterType', () => {
+      component.type = PoToasterType.Information;
+      component['toasterType'] = 'po-toaster-info';
+
+      expect(component.getToasterType()).toBe('po-toaster-info');
+    });
+
+    describe('p-size-actions', () => {
+      beforeEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('data-a11y');
+        localStorage.removeItem('po-default-size');
+      });
+
+      it('should set property with valid values for accessibility level is AA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+        component.sizeActions = 'small';
+        expect(component.sizeActions).toBe('small');
+
+        component.sizeActions = 'medium';
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should set property with valid values for accessibility level is AAA', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+        component.sizeActions = 'small';
+        expect(component.sizeActions).toBe('medium');
+
+        component.sizeActions = 'medium';
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('small');
+      });
+
+      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'medium');
+
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+        component['_sizeActions'] = undefined;
+        expect(component.sizeActions).toBe('medium');
+      });
+
+      it('should keep sizeActions dynamic after configToaster when initial value is undefined', () => {
+        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+        localStorage.setItem('po-default-size', 'small');
+
+        component.sizeActions = undefined;
+        expect(component.sizeActions).toBe('small');
+
+        component.configToaster(component);
+
+        localStorage.setItem('po-default-size', 'medium');
+        component['onThemeChange']();
+
+        expect(component.sizeActions).toBe('medium');
+      });
+    });
+  });
+});
