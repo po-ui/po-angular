@@ -1,0 +1,36 @@
+<div class="po-row">
+  <po-container class="po-lg-6 po-md-12" p-title="CPF / CNPJ com ngModel">
+    <div class="po-row">
+      <po-input
+        class="po-md-12"
+        name="document"
+        p-clean
+        p-label="CPF / CNPJ"
+        p-placeholder="Informe o CPF ou o CNPJ"
+        [p-mask]="mask"
+        [(ngModel)]="document"
+        (p-keydown)="handleKeydown($event)"
+        (paste)="handlePaste($event)"
+        (p-change-model)="handleChangeModel($event)"
+      >
+      </po-input>
+    </div>
+  </po-container>
+
+  <po-container class="po-lg-6 po-md-12" p-title="CPF / CNPJ com Reactive Forms">
+    <div class="po-row" [formGroup]="form">
+      <po-input
+        class="po-md-12"
+        formControlName="document"
+        p-clean
+        p-label="CPF / CNPJ"
+        p-placeholder="Informe o CPF ou o CNPJ"
+        [p-mask]="formMask"
+        (p-keydown)="handleFormKeydown($event)"
+        (paste)="handleFormPaste($event)"
+        (p-change-model)="handleFormChangeModel($event)"
+      >
+      </po-input>
+    </div>
+  </po-container>
+</div>
