@@ -1,0 +1,79 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
+
+import { PoStepComponent } from './po-step.component';
+import { PoStepperModule } from '../po-stepper.module';
+import { PoStepperStatus } from '../enums/po-stepper-status.enum';
+
+describe('PoStepComponent:', () => {
+  let component: PoStepComponent;
+  let fixture: ComponentFixture<PoStepComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoStepperModule]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(PoStepComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should be created', () => {
+    expect(component instanceof PoStepComponent).toBeTruthy();
+  });
+
+  describe('Properties:', () => {
+    it('status: should call `setDisplayOnActiveOrError`', () => {
+      vi.spyOn(component as any, 'setDisplayOnActiveOrError').mockImplementation(() => {});
+
+      component.status = PoStepperStatus.Active;
+
+      expect(component['setDisplayOnActiveOrError']).toHaveBeenCalled();
+    });
+  });
+
+  describe('Methods:', () => {
+    it('ngAfterContentInit: should call `setDisplayOnActiveOrError`', () => {
+      vi.spyOn(component as any, 'setDisplayOnActiveOrError').mockImplementation(() => {});
+
+      component.ngAfterContentInit();
+
+      expect(component['setDisplayOnActiveOrError']).toHaveBeenCalled();
+    });
+
+    it('setDisplayOnActiveOrError: should set display style of `elementRef` to `none` if `status` is `Default`', () => {
+      component['elementRef'].nativeElement.style.display = 'block';
+      component.status = PoStepperStatus.Default;
+
+      component['setDisplayOnActiveOrError']();
+
+      expect(component['elementRef'].nativeElement.style.display).toBe('none');
+    });
+
+    it('setDisplayOnActiveOrError: should set display style of `elementRef` to empty if `status` is `Active`', () => {
+      component['elementRef'].nativeElement.style.display = 'none';
+      component.status = PoStepperStatus.Active;
+
+      component['setDisplayOnActiveOrError']();
+
+      expect(component['elementRef'].nativeElement.style.display).toBe('');
+    });
+
+    it('setDisplayOnActiveOrError: should set display style of `elementRef` to empty if `status` is `Error`', () => {
+      component['elementRef'].nativeElement.style.display = 'none';
+      component.status = PoStepperStatus.Error;
+
+      component['setDisplayOnActiveOrError']();
+
+      expect(component['elementRef'].nativeElement.style.display).toBe('');
+    });
+  });
+});
