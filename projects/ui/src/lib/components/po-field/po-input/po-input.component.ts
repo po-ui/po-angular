@@ -34,6 +34,12 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *  <file name="sample-po-input-reactive-form/sample-po-input-reactive-form.component.html"> </file>
  *  <file name="sample-po-input-reactive-form/sample-po-input-reactive-form.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-input-mask-dynamic" title="PO Input - Dynamic Mask (CPF/CNPJ)">
+ *  <file name="sample-po-input-mask-dynamic/sample-po-input-mask-dynamic.component.html"> </file>
+ *  <file name="sample-po-input-mask-dynamic/sample-po-input-mask-dynamic.component.ts"> </file>
+ *  <file name="sample-po-input-mask-dynamic/document-mask.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-input',
