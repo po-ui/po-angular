@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.27.0](https://github.com/po-ui/po-angular/compare/v21.26.0...v21.27.0) (2026-08-03)
+
+
+### Features
+
+* **header:** adiciona eventos open e close nas seções de tools e user ([b105934](https://github.com/po-ui/po-angular/commit/b105934a4ebb7f03dd3407d07bced7dadee205bf))
+
+
 ## [21.26.0](https://github.com/po-ui/po-angular/compare/v21.25.0...v21.26.0) (2026-07-30)
 
 
