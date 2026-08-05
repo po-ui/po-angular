@@ -1,0 +1,394 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PoThemeA11yEnum } from '../po-theme';
+import { PoDialogType } from './enums/po-dialog.enum';
+import { PoDialogAlertOptions, PoDialogConfirmOptions } from './interfaces/po-dialog.interface';
+import { poDialogAlertLiteralsDefault, PoDialogComponent, poDialogConfirmLiteralsDefault } from './po-dialog.component';
+import { PoDialogModule } from './po-dialog.module';
+
+describe('PoDialogComponent:', () => {
+  let component: PoDialogComponent;
+  let fixture: ComponentFixture<PoDialogComponent>;
+
+  const alertOptions: PoDialogAlertOptions = {
+    title: 'Title',
+    message: 'Message',
+    ok: () => {}
+  };
+
+  const confirmOptions: PoDialogConfirmOptions = {
+    title: 'Title',
+    message: 'Message',
+    confirm: () => {},
+    cancel: () => {},
+    close: () => {}
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoDialogModule]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoDialogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should be created', () => {
+    expect(component instanceof PoDialogComponent).toBeTruthy();
+  });
+
+  it('should call primaryAction and close', () => {
+    vi.spyOn(component, 'close');
+    component.primaryAction.action();
+    component.close();
+    expect(component.primaryAction.label).toBe('ok');
+    expect(component.close).toHaveBeenCalled();
+  });
+
+  it('should call primaryAction and secondaryAction', () => {
+    component.configDialog(
+      'teste',
+      () => {},
+      'teste',
+      () => {}
+    );
+
+    vi.spyOn(component, 'close');
+    component.primaryAction.action();
+    expect(component.close).toHaveBeenCalled();
+
+    component.secondaryAction.action();
+    expect(component.close).toHaveBeenCalled();
+  });
+
+  it('should call primaryAction and secondaryAction with undefined functions', () => {
+    component.configDialog('teste', undefined, 'teste');
+
+    vi.spyOn(component, 'close');
+    component.primaryAction.action();
+    expect(component.close).toHaveBeenCalled();
+
+    component.secondaryAction.action();
+    expect(component.close).toHaveBeenCalled();
+  });
+
+  it('should close poModal and destroy', () => {
+    const fakeThis = {
+      poModal: {
+        close: () => {}
+      },
+      destroy: () => {}
+    };
+
+    vi.spyOn(fakeThis.poModal, 'close');
+    vi.spyOn(fakeThis, 'destroy');
+
+    component.close.call(fakeThis);
+
+    expect(fakeThis.poModal.close).toHaveBeenCalled();
+    expect(fakeThis.destroy).toHaveBeenCalled();
+  });
+
+  it('Should call destroy if was closed with X', async () => {
+    vi.spyOn(component, 'destroy');
+
+    component.poModal.close(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.destroy).toHaveBeenCalled();
+  });
+
+  it('Should call closeAction if has closeAction callback and was closed with X', async () => {
+    component.closeAction = () => {};
+    vi.spyOn(component, 'closeAction');
+
+    component.poModal.close(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.closeAction).toHaveBeenCalled();
+  });
+
+  it('should set var configDialog', () => {
+    const fakeThis = {
+      primaryAction: {
+        label: 'primaryLabel',
+        action: () => {}
+      },
+      secondaryAction: {
+        label: 'secondaryLabel',
+        action: () => {}
+      }
+    };
+    component.configDialog.call(fakeThis, 'primaryLabel', 'primaryAction', 'secondaryLabel', 'secondaryAction');
+    expect(fakeThis.primaryAction.label).toBe('primaryLabel');
+    expect(fakeThis.secondaryAction.label).toBe('secondaryLabel');
+  });
+
+  it('should be call destroy method from componentRef', () => {
+    const sourceObject = { componentRef: { destroy: function () {} } };
+    Object.assign(component, sourceObject);
+
+    vi.spyOn(sourceObject.componentRef, 'destroy');
+
+    component.destroy();
+
+    Object.assign(component, { componentRef: null });
+    component.destroy();
+
+    expect(sourceObject.componentRef.destroy).toHaveBeenCalled();
+  });
+
+  describe('p-components-size', () => {
+    beforeEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('data-a11y');
+      localStorage.removeItem('po-default-size');
+    });
+
+    it('should set property with valid values for accessibility level is AA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+
+      component.componentsSize = 'small';
+      expect(component.componentsSize).toBe('small');
+
+      component.componentsSize = 'medium';
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should set property with valid values for accessibility level is AAA', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+
+      component.componentsSize = 'small';
+      expect(component.componentsSize).toBe('medium');
+
+      component.componentsSize = 'medium';
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'small');
+
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('small');
+    });
+
+    it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      localStorage.setItem('po-default-size', 'medium');
+
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
+      component['_componentsSize'] = undefined;
+      expect(component.componentsSize).toBe('medium');
+    });
+
+    it('onThemeChange: should call applySizeBasedOnA11y', () => {
+      vi.spyOn<any>(component, 'applySizeBasedOnA11y');
+      component['onThemeChange']();
+      expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
+    });
+  });
+
+  describe('Methods:', () => {
+    it('closeSubscription: should unsubscribe closeSubscription on destroy.', () => {
+      component['closeSubscription'] = <any>{ unsubscribe: () => {} };
+
+      vi.spyOn(component['closeSubscription'], <any>'unsubscribe');
+
+      component.ngOnDestroy();
+
+      expect(component['closeSubscription'].unsubscribe).toHaveBeenCalled();
+    });
+
+    it('open: should set `title` and `message` with dialogOptions properties.', () => {
+      component.literalsConfirm = { 'cancel': 'Cancel', 'confirm': 'Confirm' };
+      component.title = undefined;
+      component.message = undefined;
+
+      vi.spyOn(component, 'setDialogLiterals' as any).mockImplementation(() => {});
+      vi.spyOn(component, 'configDialog').mockImplementation(() => {});
+      vi.spyOn(component.poModal, 'open').mockImplementation(() => {});
+
+      component.open(confirmOptions, PoDialogType.Confirm);
+
+      expect(component.title).toEqual(confirmOptions.title);
+      expect(component.message).toEqual(confirmOptions.message);
+    });
+
+    it('open: should call `setDialogLiterals()` with `dialogOptions` and `dialogType`.', () => {
+      component.literalsConfirm = { 'cancel': 'Cancel', 'confirm': 'Confirm' };
+
+      vi.spyOn(component, 'setDialogLiterals' as any).mockImplementation(() => {});
+      vi.spyOn(component, 'configDialog').mockImplementation(() => {});
+      vi.spyOn(component.poModal, 'open').mockImplementation(() => {});
+
+      component.open(confirmOptions, PoDialogType.Confirm);
+
+      expect(component['setDialogLiterals']).toHaveBeenCalledWith(confirmOptions, PoDialogType.Confirm);
+    });
+
+    it(`open: should call 'configDialog()' with 'literals.ok', 'dialogOptions.ok()' if 'dialogType' is 'PoDialogType.Alert'.`, () => {
+      component.literalsAlert = { 'ok': 'Ok' };
+
+      vi.spyOn(component, 'setDialogLiterals' as any).mockImplementation(() => {});
+      vi.spyOn(component, 'configDialog').mockImplementation(() => {});
+      vi.spyOn(component.poModal, 'open').mockImplementation(() => {});
+
+      component.open(alertOptions, PoDialogType.Alert);
+
+      expect(component.configDialog).toHaveBeenCalledWith(component.literalsAlert.ok, alertOptions.ok);
+    });
+
+    it(`open: should call 'configDialog()' with 'literals.confirm', 'dialogOptions.confirm()', 'literals.cancel',
+        'dialogOptions.cancel()', and 'dialogOptions.close()' if 'dialogType' is 'PoDialogType.Confirm'.`, () => {
+      component.literalsConfirm = { 'cancel': 'Cancel', 'confirm': 'Confirm' };
+
+      vi.spyOn(component, 'setDialogLiterals' as any).mockImplementation(() => {});
+      vi.spyOn(component, 'configDialog').mockImplementation(() => {});
+      vi.spyOn(component.poModal, 'open').mockImplementation(() => {});
+
+      component.open(confirmOptions, PoDialogType.Confirm);
+
+      expect(component.configDialog).toHaveBeenCalledWith(
+        component.literalsConfirm.confirm,
+        confirmOptions.confirm,
+        component.literalsConfirm.cancel,
+        confirmOptions.cancel,
+        confirmOptions.close
+      );
+    });
+
+    it('open: should call `PoModal.open()`.', () => {
+      component.literalsAlert = { 'ok': 'Ok' };
+
+      vi.spyOn(component, 'setDialogLiterals' as any).mockImplementation(() => {});
+      vi.spyOn(component, 'configDialog').mockImplementation(() => {});
+      vi.spyOn(component.poModal, 'open').mockImplementation(() => {});
+
+      component.open(alertOptions, PoDialogType.Alert);
+
+      expect(component.poModal.open).toHaveBeenCalled();
+    });
+
+    it('setDialogLiterals: should set `literalsAlert` in portuguese if browser is setted with an unsupported language.', () => {
+      Object.defineProperty(component, 'language', { value: 'xx', configurable: true });
+
+      component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(poDialogAlertLiteralsDefault.pt);
+    });
+
+    it('setDialogLiterals: should set `literalsConfirm` in portuguese if browser is setted with an unsupported language.', () => {
+      Object.defineProperty(component, 'language', { value: 'xx', configurable: true });
+
+      component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
+
+      expect(component.literalsConfirm).toEqual(poDialogConfirmLiteralsDefault.pt);
+    });
+
+    it(`setDialogLiterals: should set 'literalsAlert' in english.`, () => {
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
+
+      component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(poDialogAlertLiteralsDefault.en);
+    });
+
+    it(`setDialogLiterals: should set 'literalsAlert' in spanish.`, () => {
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
+
+      component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(poDialogAlertLiteralsDefault.es);
+    });
+
+    it(`setDialogLiterals: should set 'literalsAlert' in portuguese.`, () => {
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+
+      component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(poDialogAlertLiteralsDefault.pt);
+    });
+
+    it(`setDialogLiterals: should set 'literalsConfirm' in english.`, () => {
+      Object.defineProperty(component, 'language', { value: 'en', configurable: true });
+
+      component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
+
+      expect(component.literalsConfirm).toEqual(poDialogConfirmLiteralsDefault.en);
+    });
+
+    it(`setDialogLiterals: should set 'literalsConfirm' in spanish.`, () => {
+      Object.defineProperty(component, 'language', { value: 'es', configurable: true });
+
+      component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
+
+      expect(component.literalsConfirm).toEqual(poDialogConfirmLiteralsDefault.es);
+    });
+
+    it(`setDialogLiterals: should set 'literalsAlert' in russian.`, () => {
+      Object.defineProperty(component, 'language', { value: 'ru', configurable: true });
+
+      component['setDialogLiterals'](alertOptions, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(poDialogAlertLiteralsDefault.ru);
+    });
+
+    it(`setDialogLiterals: should set 'literalsConfirm' in portuguese.`, () => {
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+
+      component['setDialogLiterals'](confirmOptions, PoDialogType.Confirm);
+
+      expect(component.literalsConfirm).toEqual(poDialogConfirmLiteralsDefault.pt);
+    });
+
+    it(`setDialogLiterals: should set 'literalsAlert' as 'dialogOptions.literals' if 'dialogOptions.literals' is defined
+        and 'dialogType' is 'PoDialogType.Alert'.`, () => {
+      const alertOptionsCustom: PoDialogAlertOptions = {
+        literals: { ok: 'Finish' },
+        title: 'Title',
+        message: 'Message',
+        ok: () => {}
+      };
+
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+
+      component['setDialogLiterals'](alertOptionsCustom, PoDialogType.Alert);
+
+      expect(component.literalsAlert).toEqual(alertOptionsCustom.literals);
+    });
+
+    it(`setDialogLiterals: should set 'literalsConfirm' as 'dialogOptions.literals' if 'dialogOptions.literals' is defined
+        and 'dialogType' is 'PoDialogType.Confirm'.`, () => {
+      const confirmOptionsCustom: PoDialogConfirmOptions = {
+        literals: { cancel: 'No', confirm: 'Yes' },
+        title: 'Title',
+        message: 'Message',
+        confirm: () => {},
+        cancel: () => {}
+      };
+
+      Object.defineProperty(component, 'language', { value: 'pt', configurable: true });
+
+      component['setDialogLiterals'](confirmOptionsCustom, PoDialogType.Confirm);
+
+      expect(component.literalsConfirm).toEqual(confirmOptionsCustom.literals);
+    });
+  });
+});

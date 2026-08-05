@@ -1,0 +1,89 @@
+import { Component, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PoComponentInjectorService } from './../po-component-injector/po-component-injector.service';
+import { PoDialogComponent } from './po-dialog.component';
+import { PoDialogService } from './po-dialog.service';
+import { PoDialogAlertOptions, PoDialogConfirmOptions, PoDialogType } from '../../services/po-dialog';
+import { PoModalModule } from '../../components/po-modal';
+
+@NgModule({
+  imports: [CommonModule, PoModalModule],
+  declarations: [PoDialogComponent],
+  providers: [PoComponentInjectorService, PoDialogService]
+})
+class TestModule {}
+
+@Component({
+  template: ` test component `,
+  providers: [PoComponentInjectorService, PoDialogService],
+  standalone: false
+})
+class TestComponent {
+  constructor(poDialog: PoDialogService) {}
+}
+
+describe('PoDialogService', () => {
+  let fixture: ComponentFixture<TestComponent>;
+  let poDialogService: PoDialogService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestModule],
+      providers: [PoDialogService],
+      declarations: [TestComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestComponent);
+    poDialogService = TestBed.inject(PoDialogService);
+
+    const modalContainer = document.body.querySelectorAll('po-modal');
+    Array.from(modalContainer).forEach(modal => {
+      modal.remove();
+    });
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should open a alert options dialog', () => {
+    const alertOptions: PoDialogAlertOptions = {
+      title: 'Alerta',
+      message: 'O teste continua!',
+      ok: () => {}
+    };
+
+    poDialogService.openDialog(PoDialogType.Alert, alertOptions);
+
+    fixture.detectChanges();
+
+    const modalContainer = document.body.querySelector('po-modal');
+    expect(modalContainer.querySelector('.po-modal-title').innerHTML).toContain(alertOptions.title);
+    expect(modalContainer.querySelector('.po-modal-body').innerHTML).toContain(alertOptions.message);
+    modalContainer.remove();
+  });
+
+  it('should open a confirm options dialog', () => {
+    const confirmOptions: PoDialogConfirmOptions = {
+      literals: { cancel: 'Cancelar', confirm: 'Confirmar' },
+      title: 'Confirmar',
+      message: 'Deseja prosseguir com o teste?',
+      confirm: () => {},
+      cancel: () => {}
+    };
+
+    poDialogService.openDialog(PoDialogType.Confirm, confirmOptions);
+
+    fixture.detectChanges();
+
+    const modalContainer = document.body.querySelector('po-modal');
+    expect(modalContainer.querySelector('.po-modal-title').innerHTML).toContain(confirmOptions.title);
+    expect(modalContainer.querySelector('.po-modal-body').innerHTML).toContain(confirmOptions.message);
+    expect(modalContainer.querySelector('.po-button:not([p-kind="tertiary"])').innerHTML).toContain('Cancelar');
+    modalContainer.remove();
+  });
+});
