@@ -1,5 +1,6 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { ChangeDetectorRef } from '@angular/core';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, Subject } from 'rxjs';
 import { PoMenuGlobalService } from '../po-menu';
@@ -30,7 +31,9 @@ describe('PoHeaderComponent', () => {
     changeDetectorRefMock = { detectChanges: vi.fn() };
 
     await TestBed.configureTestingModule({
+      imports: [CommonModule],
       declarations: [PoHeaderComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       providers: [
         { provide: ChangeDetectorRef, useValue: changeDetectorRefMock },
         { provide: PoMenuGlobalService, useValue: menuGlobalServiceMock }
@@ -42,6 +45,11 @@ describe('PoHeaderComponent', () => {
     fixture = TestBed.createComponent(PoHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    component.ngOnDestroy();
+    fixture.destroy();
   });
 
   it('should create the component', () => {
