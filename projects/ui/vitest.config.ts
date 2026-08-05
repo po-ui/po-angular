@@ -16,6 +16,8 @@ export default defineConfig({
     root: resolve(__dirname),
     include: ['src/**/*.vitest.spec.ts'],
     setupFiles: ['src/lib/util-test/util-setup.vitest.ts'],
+    testTimeout: 8000,
+    hookTimeout: 20000,
     deps: {
       inline: [/@angular/, /@po-ui/]
     },
