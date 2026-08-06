@@ -293,6 +293,61 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.draggable;
   }
 
+  private _displayedColumnsCache: string[] = [];
+  private _displayedColumnsCacheKey: string = '';
+
+  get displayedColumns(): string[] {
+    const columns: string[] = [];
+
+    if (this.hasSelectableColumn) {
+      columns.push('po-select');
+    }
+
+    if (
+      (this.hasMasterDetailColumn || this.hasRowTemplate) &&
+      this.hasMainColumns &&
+      !this.hasRowTemplateWithArrowDirectionRight
+    ) {
+      columns.push('po-master-detail-left');
+    }
+
+    if (!this.actionRight && this.hasItems && this.hasMainColumns && (this.visibleActions.length > 1 || this.isSingleAction)) {
+      columns.push('po-actions-left');
+    }
+
+    if (this.hasMainColumns) {
+      for (const col of this.mainColumns) {
+        columns.push(col.property);
+      }
+    }
+
+    if (
+      this.hasRowTemplateWithArrowDirectionRight &&
+      this.hasMainColumns &&
+      (this.hasVisibleActions || this.hideColumnsManager)
+    ) {
+      columns.push('po-master-detail-right');
+    }
+
+    if (
+      this.hasVisibleActions &&
+      this.actionRight &&
+      this.hasItems &&
+      this.hasMainColumns &&
+      (this.visibleActions.length > 1 || this.isSingleAction)
+    ) {
+      columns.push('po-actions-right');
+    }
+
+    const key = columns.join(',');
+    if (key !== this._displayedColumnsCacheKey) {
+      this._displayedColumnsCacheKey = key;
+      this._displayedColumnsCache = columns;
+    }
+
+    return this._displayedColumnsCache;
+  }
+
   public get inverseOfTranslation(): string {
     if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
       return '-0px';
@@ -666,6 +721,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return index;
   }
 
+  getRowIndex(row: any): number {
+    return this.filteredItems.indexOf(row);
+  }
+
   validateTableAction(row: any, tableAction: any) {
     if (typeof tableAction.disabled === 'function') {
       return tableAction.disabled(row);
@@ -913,13 +972,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      let scrollHeight = 0;
-
-      if (this.virtualScroll) {
-        scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
-      } else {
-        scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
-      }
+      const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
 
       if (scrollHeight >= this.height) {
         this.includeInfiniteScroll();
@@ -1081,26 +1134,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   private hasInfiniteScroll(): boolean {
-    let scrollHeight = 0;
-
-    if (this.virtualScroll && this.tableVirtualScroll) {
-      scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
-    }
-    if (!this.virtualScroll && this.tableScrollable) {
-      scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
-    }
+    const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
 
     return this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height > 0 && scrollHeight > 0;
   }
 
   private includeInfiniteScroll(): void {
-    let element: HTMLElement | null = null;
-
-    if (this.virtualScroll) {
-      element = this.tableVirtualScroll?.nativeElement;
-    } else {
-      element = this.tableScrollable.nativeElement.closest('.po-table-container-overflow');
-    }
+    const element = this.tableScrollable?.nativeElement?.closest('.po-table-container-overflow');
 
     if (element) {
       this.scrollEvent$ = this.defaultService.scrollListener(element);
