@@ -1,5 +1,4 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { DecimalPipe } from '@angular/common';
 import {
@@ -135,7 +134,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('filterInput') filterInput: ElementRef;
   @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
   @ViewChild(PoSearchAiComponent) searchAiComponent: PoSearchAiComponent;
-  @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
+  @ViewChild('virtualScrollViewport', { read: ElementRef, static: false }) virtualScrollViewport: ElementRef;
 
   poNotification = inject(PoNotificationService);
 
@@ -153,6 +152,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   newOrderColumns: Array<PoTableColumn>;
   sizeLoading: string = 'sm';
   headerWidth: number;
+
+  /** Virtual scroll state */
+  vsFirst: number = 0;
+  vsLast: number = 0;
+  vsVisibleItems: Array<any> = [];
+  vsContentTransform: string = 'translateY(0px)';
+  vsSpacerHeight: number = 0;
+  vsBottomSpacerHeight: number = 0;
+  private vsNumToleratedItems: number = 0;
+  private vsScrolling: boolean = false;
 
   close: PoModalAction = {
     action: () => {
@@ -349,13 +358,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   public get inverseOfTranslation(): string {
-    if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
-      return '-0px';
-    }
-
-    const offset = this.viewPort['_renderedContentOffset'];
-
-    return `-${offset}px`;
+    return '-0px';
   }
 
   ngOnInit() {
@@ -743,6 +746,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     } else {
       this.filteredItems = items;
     }
+
+    if (this.virtualScroll) {
+      this.vsCalculateOptions();
+    }
   }
 
   get searchAiColumns(): Array<PoSearchAiColumn> {
@@ -959,7 +966,84 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.heightTableContainer = height ? height - this.getHeightTableFooter() : undefined;
     this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - this.itemSize : undefined;
     this.setTableOpacity(1);
+
+    if (this.virtualScroll && this.heightTableContainer) {
+      this.vsCalculateOptions();
+    }
+
     this.changeDetector.markForCheck();
+  }
+
+  /**
+   * Calcula quantos itens cabem no viewport e define o buffer (tolerância).
+   * Usa buffer equivalente ao cdk-virtual-scroll-viewport com minBufferPx = heightTableContainer.
+   */
+  vsCalculateOptions(): void {
+    if (!this.itemSize || !this.heightTableContainer) {
+      return;
+    }
+
+    const numItemsInViewport = Math.ceil(this.heightTableContainer / this.itemSize);
+    // Buffer = 1 viewport inteiro em cada direção (equivalente ao minBufferPx/maxBufferPx do CDK no master)
+    this.vsNumToleratedItems = numItemsInViewport;
+
+    const totalItems = this.filteredItems?.length || 0;
+    this.vsLast = Math.min(numItemsInViewport + 2 * this.vsNumToleratedItems, totalItems);
+    this.vsFirst = 0;
+
+    this.vsUpdateVisibleItems();
+  }
+
+  /**
+   * Handler do evento de scroll no viewport virtual.
+   */
+  onVirtualScroll(event: Event): void {
+    if (this.vsScrolling) {
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+    if (!target || !this.itemSize) {
+      return;
+    }
+
+    const scrollTop = target.scrollTop;
+    const totalItems = this.filteredItems?.length || 0;
+    const numItemsInViewport = Math.ceil(this.heightTableContainer / this.itemSize);
+
+    const currentIndex = Math.floor(scrollTop / this.itemSize);
+
+    let newFirst = Math.max(0, currentIndex - this.vsNumToleratedItems);
+    let newLast = Math.min(totalItems, currentIndex + numItemsInViewport + this.vsNumToleratedItems);
+
+    if (newFirst !== this.vsFirst || newLast !== this.vsLast) {
+      this.vsScrolling = true;
+      this.vsFirst = newFirst;
+      this.vsLast = newLast;
+      this.vsUpdateVisibleItems();
+      this.changeDetector.detectChanges();
+
+      // Restaura o scrollTop correto após o DOM ser atualizado
+      // (a mudança do spacer de topo pode ter alterado o scrollTop)
+      target.scrollTop = scrollTop;
+
+      requestAnimationFrame(() => {
+        this.vsScrolling = false;
+      });
+    }
+  }
+
+  /**
+   * Atualiza os items visíveis, o transform e o spacer.
+   */
+  private vsUpdateVisibleItems(): void {
+    const items = this.filteredItems || [];
+    const totalItems = items.length;
+
+    this.vsVisibleItems = items.slice(this.vsFirst, this.vsLast);
+    this.vsContentTransform = `translateY(${this.vsFirst * this.itemSize}px)`;
+    this.vsSpacerHeight = totalItems * this.itemSize;
+    this.vsBottomSpacerHeight = Math.max(0, (totalItems - this.vsLast) * this.itemSize);
   }
 
   protected verifyCalculateHeightTableContainer() {

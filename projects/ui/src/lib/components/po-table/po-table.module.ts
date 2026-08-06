@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CdkTableModule } from '@angular/cdk/table';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { PoButtonModule } from './../po-button/po-button.module';
@@ -50,7 +49,6 @@ import { PoSearchModule } from '../po-search/po-search.module';
     CommonModule,
     FormsModule,
     CdkTableModule,
-    ScrollingModule,
     DragDropModule,
     RouterModule,
     PoButtonModule,
