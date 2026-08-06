@@ -142,7 +142,26 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
+      displayFormat: '>>>,>>>,>>9.99',
       icon: 'an an-currency-circle-dollar'
+    },
+    {
+      property: 'revenue',
+      label: 'Revenue',
+      type: 'currency',
+      gridColumns: 3,
+      gridSmColumns: 6,
+      displayFormat: '->>,>,>>>,>>9',
+      decimalsLength: 0
+    },
+    {
+      property: 'adjustment',
+      label: 'Adjustment',
+      type: 'currency',
+      gridColumns: 3,
+      gridSmColumns: 6,
+      displayFormat: '->>9.99',
+      optional: true
     },
     {
       property: 'hobbies',
