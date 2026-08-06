@@ -266,6 +266,46 @@
         }
       }
     },
+    "visual-app": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "e2e/visual",
+      "sourceRoot": "e2e/visual",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": {
+              "base": "dist/visual-app"
+            },
+            "index": "e2e/visual/app/index.html",
+            "polyfills": ["e2e/visual/app/polyfills.ts"],
+            "tsConfig": "e2e/visual/tsconfig.visual.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "node_modules/@po-ui/style/images",
+                "output": "/assets/images"
+              }
+            ],
+            "styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css"],
+            "scripts": [],
+            "extractLicenses": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true,
+            "browser": "e2e/visual/app/main.ts"
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "visual-app:build"
+          }
+        }
+      }
+    },
     "portal": {
       "projectType": "application",
       "schematics": {},
