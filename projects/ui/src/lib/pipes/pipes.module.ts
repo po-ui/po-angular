@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 
+import { PoDecimalFormatModule } from '../pipes/po-decimal/po-decimal.module';
 import { PoTimeModule } from '../pipes/po-time/po-time.module';
 
 @NgModule({
   declarations: [],
-  imports: [PoTimeModule],
-  exports: [PoTimeModule],
+  imports: [PoTimeModule, PoDecimalFormatModule],
+  exports: [PoTimeModule, PoDecimalFormatModule],
   providers: [],
   bootstrap: []
 })

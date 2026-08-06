@@ -3,16 +3,18 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
   forwardRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
   inject,
+  Input,
   input,
   OnChanges,
-  SimpleChanges
+  OnDestroy,
+  OnInit,
+  signal,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
@@ -22,6 +24,13 @@ import { maxFailed, maxlengpoailed, minFailed } from '../validators';
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
 import { convertToInt, setHelperSettings, uuid } from '../../../utils/util';
 import { PoInputBaseComponent } from '../po-input/po-input-base.component';
+import {
+  applyDecimalFormat,
+  getFormatLimits,
+  parseDecimalFormat,
+  PoDecimalFormatParsed,
+  validateAgainstFormat
+} from './utils/po-decimal-format.util';
 
 const poDecimalDefaultDecimalsLength = 2;
 const poDecimalDefaultThousandMaxlength = 13;
@@ -65,6 +74,11 @@ const poDecimalTotalLengthLimit = 16;
  * <example name="po-decimal-hourly-wage-reactive-form" title="PO Decimal - Hourly Wage Reactive Form">
  *  <file name="sample-po-decimal-hourly-wage-reactive-form/sample-po-decimal-hourly-wage-reactive-form.component.html"> </file>
  *  <file name="sample-po-decimal-hourly-wage-reactive-form/sample-po-decimal-hourly-wage-reactive-form.component.ts"> </file>
+ * </example>
+ *
+ * <example name="po-decimal-format-abl" title="PO Decimal - Format ABL">
+ *  <file name="sample-po-decimal-format-abl/sample-po-decimal-format-abl.component.html"> </file>
+ *  <file name="sample-po-decimal-format-abl/sample-po-decimal-format-abl.component.ts"> </file>
  * </example>
  */
 @Component({
@@ -128,6 +142,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
    * - A soma total de `p-decimals-length` com `p-thousand-maxlength` limita-se à 16;
    * - Esta propriedade sobrepõe apenas o valor **padrão** de `p-thousand-maxlength`;
    * - Caso `p-thousand-maxlength` tenha um valor definido, esta propriedade poderá receber apenas o valor restante do limite total (16).
+   * - Quando utilizado com `p-format`, esta propriedade tem **prioridade** sobre o número de casas decimais definido no formato.
    *
    * @default `2`
    */
@@ -143,6 +158,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     }
 
     this._decimalsLength = decimalsLength;
+    this.refreshOnPropertyChange();
   }
 
   get decimalsLength() {
@@ -160,6 +176,8 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
    * - O valor máximo permitido é 13;
    * - A soma total de `p-decimals-length` com `p-thousand-maxlength` limita-se à 16;
    * - Esta propriedade sobrepõe o valor definido em `p-decimals-length`.
+   * - Quando utilizado com `p-format`, esta propriedade tem **prioridade** sobre o número de dígitos inteiros definido no
+   * formato.
    *
    * @default `13`
    */
@@ -179,6 +197,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     }
 
     this._thousandMaxlength = thousandMaxlength;
+    this.refreshOnPropertyChange();
   }
 
   get thousandMaxlength() {
@@ -200,6 +219,33 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     this._locale = locale;
     this.setNumbersSeparators();
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define uma máscara de formatação numérica avançada para o campo.
+   *
+   * Simbologia suportada:
+   * - `9`: Dígito obrigatório (preenche com zero à esquerda no blur);
+   * - `>`: Supressão de zero à esquerda (dígito não obrigatório);
+   * - `<`: Decimal flutuante, supressão de zeros à direita (dígito não obrigatório);
+   * - `,` e `.`: Separadores de milhar/grupo e decimal (convertidos conforme `p-locale`);
+   * - `-`: Sinal negativo (deve ser o primeiro caractere do formato).
+   *
+   * > **Importante:**
+   * - A formatação via `p-format-abl` é apenas visual; o valor do model é sempre o número puro.
+   * - Quando o valor pré-preenchido não atende ao formato (overflow ou negativo sem `-`), o campo exibe com a formatação padrão do `po-decimal` (separadores de milhar + `p-decimals-length` casas decimais).
+   * - `p-decimals-length` e `p-thousand-maxlength` têm **prioridade** sobre o formato — limitam as casas decimais e dígitos inteiros respectivamente.
+   * - Incompatível com `p-mask`, `p-mask-format-model`, `p-mask-no-length-validation` e `p-pattern`.
+   *
+   * Exemplos de formato: `>>>,>>>,>>9.99`, `->>,>>9.99`, `999.9`, `>>>,>>9.9<<<<<<`
+   *
+   */
+  readonly formatAbl = input<string | undefined>(undefined, { alias: 'p-format-abl' });
+
+  private readonly formatParsed = signal<PoDecimalFormatParsed | null>(null);
 
   /**
    * @optional
@@ -252,6 +298,12 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
     super(cd);
     this.isKeyboardAndroid = !!navigator.userAgent.match(/Android/i);
+
+    effect(() => {
+      const formatValue = this.formatAbl();
+      this.formatParsed.set(parseDecimalFormat(formatValue));
+      this.refreshOnPropertyChange();
+    });
   }
 
   ngOnInit() {
@@ -377,11 +429,16 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       }
 
       const valueWithoutThousandSeparator = this.formatValueWithoutThousandSeparator(value);
-      const formatedViewValue = this.formatToViewValue(valueWithoutThousandSeparator);
-      this.setViewValue(formatedViewValue);
-      if (!formatedViewValue) {
-        this.callOnChange(undefined);
-        return;
+
+      if (this.formatParsed()) {
+        this.applyFormatOnBlurAndSetView(valueWithoutThousandSeparator, value);
+      } else {
+        const formatedViewValue = this.formatToViewValue(valueWithoutThousandSeparator);
+        this.setViewValue(formatedViewValue);
+        if (!formatedViewValue) {
+          this.callOnChange(undefined);
+          return;
+        }
       }
     }
 
@@ -411,6 +468,15 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
     modelValue = this.formatValueWithoutThousandSeparator(event.target.value);
     modelValue = this.addZeroBefore(modelValue);
+
+    if (this.formatParsed()) {
+      const blockResult = this.validateFormatOnInput(event, modelValue, selectionStart);
+      if (blockResult.blocked) {
+        return;
+      }
+      modelValue = blockResult.modelValue;
+    }
+
     const viewValue = this.formatMask(modelValue);
 
     // validação para não quebrar IE com placeholder definido e Input vazio
@@ -463,7 +529,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
     let formatedViewValue;
     if (this.inputEl) {
       if (value || value === 0) {
-        formatedViewValue = this.formatToViewValue(value);
+        formatedViewValue = this.resolveViewValue(value);
         this.setViewValue(formatedViewValue);
       } else {
         this.setViewValue('');
@@ -495,6 +561,106 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  private applyFormatOnBlur(value: number | undefined | null) {
+    const effectiveParsed = this.getEffectiveFormatParsed();
+    return applyDecimalFormat(value, effectiveParsed, this.decimalSeparator, this.thousandSeparator);
+  }
+
+  private resolveViewValue(value: any): string {
+    if (this.formatParsed()) {
+      const numValue = typeof value === 'string' ? Number.parseFloat(value) : value;
+      const result = this.applyFormatOnBlur(numValue);
+      return result.isValid && result.viewValue?.trim() ? result.viewValue : this.formatToViewValue(value);
+    }
+    return this.formatToViewValue(value);
+  }
+
+  private applyFormatOnBlurAndSetView(valueWithoutThousandSeparator: string, originalValue: string): void {
+    const cleanValue = valueWithoutThousandSeparator.replaceAll(/\s/g, '');
+    const modelValue = this.formatToModelValue(cleanValue);
+
+    if (modelValue === undefined || modelValue === null) {
+      this.setViewValue('');
+      this.callOnChange(undefined);
+    } else {
+      const result = this.applyFormatOnBlur(modelValue);
+      if (!result.isValid || !result.viewValue?.trim()) {
+        const fallbackView = this.formatToViewValue(cleanValue);
+        this.setViewValue(fallbackView || originalValue);
+      } else {
+        this.setViewValue(result.viewValue);
+      }
+    }
+  }
+
+  private validateFormatOnInput(
+    event: any,
+    modelValue: string,
+    selectionStart: number
+  ): { blocked: boolean; modelValue: string } {
+    const effectiveParsed = this.getEffectiveFormatParsed();
+
+    if (!effectiveParsed.allowNegative && modelValue.includes(this.minusSign)) {
+      const withoutMinus = event.target.value.replaceAll('-', '');
+      this.setViewValue(withoutMinus);
+      event.target.setSelectionRange(selectionStart - 1, selectionStart - 1);
+      modelValue = this.formatValueWithoutThousandSeparator(withoutMinus);
+    }
+
+    const isValid = validateAgainstFormat(modelValue, effectiveParsed, this.decimalSeparator);
+    if (!isValid) {
+      const previousValue =
+        event.target.value.substring(0, selectionStart - 1) + event.target.value.substring(selectionStart);
+      this.setViewValue(previousValue);
+      event.target.setSelectionRange(selectionStart - 1, selectionStart - 1);
+      return { blocked: true, modelValue };
+    }
+
+    return { blocked: false, modelValue };
+  }
+
+  private getEffectiveFormatParsed(): PoDecimalFormatParsed | null {
+    const parsed = this.formatParsed();
+    if (!parsed) {
+      return null;
+    }
+
+    const limits = getFormatLimits(parsed);
+
+    return {
+      ...parsed,
+      integerDigitCount: Math.min(limits.thousandMaxlength, this._thousandMaxlength),
+      decimalDigitCount: Math.min(limits.decimalsLength, this._decimalsLength)
+    };
+  }
+
+  private getModelValueFromView(): number | undefined {
+    if (!this.inputEl) {
+      return undefined;
+    }
+    const currentView = this.getScreenValue();
+    if (!currentView) {
+      return undefined;
+    }
+    const rawValue = this.formatValueWithoutThousandSeparator(currentView);
+    return this.formatToModelValue(rawValue);
+  }
+
+  private refreshOnPropertyChange(): void {
+    const modelValue = this.getModelValueFromView();
+    if (modelValue == null || !this.inputEl) {
+      return;
+    }
+    if (this.formatParsed()) {
+      const result = this.applyFormatOnBlur(modelValue);
+      const viewValue =
+        result.isValid && result.viewValue?.trim() ? result.viewValue : this.formatToViewValue(String(modelValue));
+      this.setViewValue(viewValue);
+    } else {
+      this.setViewValue(this.formatToViewValue(String(modelValue)));
+    }
   }
 
   private containsComma(value) {

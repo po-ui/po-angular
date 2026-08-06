@@ -149,6 +149,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * **Componente compatível:** `po-input`.
    * > também é atribuído ao utilizar a propriedade `type: time`.
+   *
+   * > Incompatível com `po-decimal`.
    */
   mask?: string;
 
@@ -203,12 +205,16 @@ export interface PoDynamicFormField extends PoDynamicField {
   /**  Quantidade máxima de casas decimais.
    *
    * > Esta propriedade só pode ser utilizada quando o `type` for *currency* ou *decimal*.
+   *
+   * > Quando utilizado com `format`, esta propriedade tem **prioridade** sobre o número de casas decimais definido no formato.
    */
   decimalsLength?: number;
 
   /** Quantidade máxima de dígitos antes do separador decimal. O valor máximo permitido é 13
    *
    * > Esta propriedade só pode ser utilizada quando o `type` for *currency* ou *decimal*.
+   *
+   * > Quando utilizado com `format`, esta propriedade tem **prioridade** sobre o número de dígitos inteiros definido no formato.
    */
   thousandMaxlength?: number;
 
@@ -216,6 +222,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Regex para validação do campo.
    *
    * **Componentes compatíveis:** `po-input`, `po-password`.
+   *
+   * > Incompatível com `po-decimal`.
    * */
   pattern?: string;
 
@@ -439,6 +447,28 @@ export interface PoDynamicFormField extends PoDynamicField {
    * **Componentes compatíveis:** `po-datepicker`, `po-datetimepicker`, `po-timepicker`, `po-lookup`.
    */
   format?: string | Array<string>;
+
+  /**
+   * Define uma máscara de formatação numérica avançada para o campo.
+   *
+   * Simbologia suportada:
+   * - `9`: Dígito obrigatório (preenche com zero à esquerda no blur);
+   * - `>`: Supressão de zero à esquerda (dígito não obrigatório);
+   * - `<`: Decimal flutuante, supressão de zeros à direita (dígito não obrigatório);
+   * - `.`: Separador decimal (convertido conforme locale);
+   * - `,`: Separador de milhar/grupo (convertido conforme locale);
+   * - `-`: Sinal negativo (deve ser o primeiro caractere do formato).
+   *
+   * > **Importante:**
+   * - `decimalsLength` e `thousandMaxlength` têm **prioridade** sobre o formato.
+   *
+   * Exemplos: `'>>>,>>>,>>9.99'`, `'->>9.99'`, `'999.9'`
+   *
+   * > Esta propriedade só pode ser utilizada quando o `type` for *currency* ou *decimal*.
+   *
+   * **Componente compatível:** `po-decimal`.
+   */
+  formatAbl?: string;
 
   /**
    * Nome da propriedade do objeto retornado que será utilizado como descrição do campo.
