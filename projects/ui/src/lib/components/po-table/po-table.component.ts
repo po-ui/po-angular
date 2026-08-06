@@ -162,6 +162,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   vsBottomSpacerHeight: number = 0;
   private vsNumToleratedItems: number = 0;
   private vsScrolling: boolean = false;
+  private vsRafId: number = 0;
+  private vsPendingScrollTop: number = -1;
 
   close: PoModalAction = {
     action: () => {
@@ -402,6 +404,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+
+    if (this.vsRafId) {
+      cancelAnimationFrame(this.vsRafId);
+    }
   }
 
   /**
@@ -724,6 +730,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return index;
   }
 
+  /**
+   * TrackBy para virtual scroll — usa a referência do item para estabilidade.
+   * Evita re-criação de DOM quando os mesmos itens aparecem em posições diferentes.
+   */
+  vsTrackBy(index: number, item: any): any {
+    return item;
+  }
+
   getRowIndex(row: any): number {
     return this.filteredItems.indexOf(row);
   }
@@ -996,18 +1010,31 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   /**
    * Handler do evento de scroll no viewport virtual.
+   * Usa requestAnimationFrame para coalescer múltiplos eventos de scroll em 1 update por frame.
    */
   onVirtualScroll(event: Event): void {
-    if (this.vsScrolling) {
-      return;
-    }
-
     const target = event.target as HTMLElement;
     if (!target || !this.itemSize) {
       return;
     }
 
-    const scrollTop = target.scrollTop;
+    this.vsPendingScrollTop = target.scrollTop;
+
+    // Coalesce: agenda apenas 1 processamento por frame
+    if (!this.vsRafId) {
+      this.vsRafId = requestAnimationFrame(() => {
+        this.vsRafId = 0;
+        this.vsProcessScroll(target);
+      });
+    }
+  }
+
+  private vsProcessScroll(target: HTMLElement): void {
+    if (this.vsScrolling) {
+      return;
+    }
+
+    const scrollTop = this.vsPendingScrollTop;
     const totalItems = this.filteredItems?.length || 0;
     const numItemsInViewport = Math.ceil(this.heightTableContainer / this.itemSize);
 
@@ -1016,7 +1043,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     let newFirst = Math.max(0, currentIndex - this.vsNumToleratedItems);
     let newLast = Math.min(totalItems, currentIndex + numItemsInViewport + this.vsNumToleratedItems);
 
-    if (newFirst !== this.vsFirst || newLast !== this.vsLast) {
+    // Hysteresis: só atualiza se o shift for significativo (> 25% do buffer)
+    const threshold = Math.max(1, Math.floor(this.vsNumToleratedItems / 4));
+    const firstDiff = Math.abs(newFirst - this.vsFirst);
+    const lastDiff = Math.abs(newLast - this.vsLast);
+
+    if (firstDiff >= threshold || lastDiff >= threshold) {
       this.vsScrolling = true;
       this.vsFirst = newFirst;
       this.vsLast = newLast;
@@ -1024,7 +1056,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.changeDetector.detectChanges();
 
       // Restaura o scrollTop correto após o DOM ser atualizado
-      // (a mudança do spacer de topo pode ter alterado o scrollTop)
       target.scrollTop = scrollTop;
 
       requestAnimationFrame(() => {

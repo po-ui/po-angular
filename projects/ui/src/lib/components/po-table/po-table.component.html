@@ -357,7 +357,7 @@
       @if (hasMainColumns) {
         <tbody class="po-table-group-row">
           <tr [style.height.px]="vsFirst * itemSize"></tr>
-          @for (row of vsVisibleItems; track trackBy($index + vsFirst); let rowIndex = $index) {
+          @for (row of vsVisibleItems; track row; let rowIndex = $index) {
             <tr
               class="po-table-row"
               [class.po-table-row-active]="row.$selected || (row.$selected === null && selectable)"
