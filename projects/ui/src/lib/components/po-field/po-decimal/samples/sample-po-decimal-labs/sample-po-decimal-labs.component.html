@@ -1,11 +1,13 @@
 <po-decimal
   class="po-md-12"
   name="decimal"
-  [(ngModel)]="decimal"
+  [ngModel]="decimal"
+  (ngModelChange)="decimal = $event"
   [p-helper]="helperText"
   [p-clean]="properties.includes('clean')"
   [p-decimals-length]="decimalsLength"
   [p-disabled]="properties.includes('disabled')"
+  [p-display-format]="displayFormat"
   [p-help]="help"
   [p-icon]="icon"
   [p-label]="label"
@@ -53,6 +55,16 @@
 
   <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern"> </po-input>
 
+  <po-input
+    class="po-md-6"
+    name="displayFormat"
+    [(ngModel)]="displayFormat"
+    p-clean
+    p-label="Display Format"
+    p-help="Ex: >>>,>>9.99 | ->>9.99 | 999.9 | >>9.9<<"
+  >
+  </po-input>
+
   <po-select class="po-md-6 po-lg-3" name="icon" [(ngModel)]="icon" p-clean p-label="Icon" [p-options]="iconOptions">
   </po-select>
 
@@ -97,7 +109,7 @@
     class="po-md-12"
     name="properties"
     [(ngModel)]="properties"
-    p-columns="4"
+    [p-columns]="4"
     p-label="Properties"
     [p-options]="propertiesOptions"
   >

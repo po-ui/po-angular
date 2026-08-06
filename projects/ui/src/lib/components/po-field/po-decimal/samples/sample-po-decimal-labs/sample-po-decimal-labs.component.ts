@@ -12,6 +12,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
   decimal: number;
   decimalsLength: number;
   event: string;
+  displayFormat: string;
   help: string;
   icon: string;
   label: string;
@@ -78,6 +79,7 @@ export class SamplePoDecimalLabsComponent implements OnInit {
     this.decimal = undefined;
     this.decimalsLength = undefined;
     this.event = '';
+    this.displayFormat = undefined;
     this.help = undefined;
     this.icon = undefined;
     this.label = undefined;

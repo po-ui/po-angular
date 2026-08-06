@@ -1,0 +1,110 @@
+<div class="po-font-title">Order Simulation</div>
+
+<po-divider />
+
+<div class="po-row">
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="price"
+    p-label="Unit Price"
+    p-help="Enter the product price"
+    p-display-format=">>>>>>>>9.99"
+    p-icon="an an-tag-simple"
+    [ngModel]="price"
+    (ngModelChange)="price = $event"
+  >
+  </po-decimal>
+
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="quantity"
+    p-label="Quantity"
+    p-help="Enter the number of items"
+    p-display-format="999"
+    [p-decimals-length]="0"
+    [ngModel]="quantity"
+    (ngModelChange)="quantity = $event"
+  >
+  </po-decimal>
+
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="discount"
+    p-label="Discount"
+    p-help="Enter a discount (use negative for deduction)"
+    p-display-format="->>9.99"
+    [ngModel]="discount"
+    (ngModelChange)="discount = $event"
+  >
+  </po-decimal>
+</div>
+
+<div class="po-row">
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="tax"
+    p-label="Tax (%)"
+    p-help="Tax percentage applied to the subtotal"
+    p-display-format=">>9.9<<"
+    [p-decimals-length]="3"
+    [ngModel]="tax"
+    (ngModelChange)="tax = $event"
+  >
+  </po-decimal>
+
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="shipping"
+    p-label="Shipping"
+    p-help="Shipping cost"
+    p-display-format=">>>,>>9.99"
+    [p-optional]="true"
+    [ngModel]="shipping"
+    (ngModelChange)="shipping = $event"
+  >
+  </po-decimal>
+
+  <div class="po-lg-4 po-md-6 po-mt-4">
+    <po-button p-label="Calculate Total" p-icon="an an-calculator" p-kind="primary" (p-click)="calculate()">
+    </po-button>
+  </div>
+</div>
+
+<po-divider></po-divider>
+
+<div class="po-row">
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="subtotal"
+    p-label="Subtotal"
+    p-display-format=">>>,>>>,>>9.99"
+    p-icon="an an-equals"
+    [p-readonly]="true"
+    [ngModel]="subtotal"
+    (ngModelChange)="subtotal = $event"
+  >
+  </po-decimal>
+
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="taxValue"
+    p-label="Taxes"
+    p-display-format=">>>,>>>,>>9.99"
+    [p-readonly]="true"
+    [ngModel]="taxValue"
+    (ngModelChange)="taxValue = $event"
+  >
+  </po-decimal>
+
+  <po-decimal
+    class="po-lg-4 po-md-6"
+    name="totalOrder"
+    p-label="Order Total"
+    p-display-format=">>>,>>>,>>9.99"
+    p-icon="an an-currency-dollar-simple"
+    [p-readonly]="true"
+    [ngModel]="totalOrder"
+    (ngModelChange)="totalOrder = $event"
+  >
+  </po-decimal>
+</div>
