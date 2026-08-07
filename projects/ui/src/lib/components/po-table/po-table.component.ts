@@ -154,6 +154,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   sizeLoading: string = 'sm';
   headerWidth: number;
 
+  /** Cache de offsets left para colunas fixas (evita a diretiva pFrozenColumn imperativa) */
+  private _frozenColumnOffsets: Map<string, number> = new Map();
+  private _frozenColumnOffsetsKey: string = '';
+  private _lastFrozenColumnProperty: string = '';
+
   /** Virtual scroll state */
   vsFirst: number = 0;
   vsLast: number = 0;
@@ -985,6 +990,50 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   public hasSomeFixed() {
     return this.columns.some(item => item.fixed === true);
+  }
+
+  /**
+   * Retorna o offset left (em px) para uma coluna fixa no virtual scroll.
+   * Calcula a soma acumulada das larguras das colunas fixas anteriores.
+   * Usa cache para evitar recálculos desnecessários a cada CD.
+   */
+  getFrozenColumnLeft(column: PoTableColumn): string | null {
+    if (!column.fixed) {
+      return null;
+    }
+
+    // Recalcula apenas se as colunas mudaram
+    const key = this.mainColumns.map(c => `${c.property}:${c.fixed}:${c.width}`).join('|');
+    if (key !== this._frozenColumnOffsetsKey) {
+      this._frozenColumnOffsetsKey = key;
+      this._frozenColumnOffsets.clear();
+
+      let accumulatedLeft = 0;
+      for (const col of this.mainColumns) {
+        if (col.fixed) {
+          this._frozenColumnOffsets.set(col.property, accumulatedLeft);
+          const width = parseInt(col.width, 10) || 0;
+          accumulatedLeft += width;
+        }
+      }
+
+      // Determina qual é a última coluna fixa
+      const fixedCols = this.mainColumns.filter(c => c.fixed);
+      this._lastFrozenColumnProperty = fixedCols.length ? fixedCols[fixedCols.length - 1].property : '';
+    }
+
+    const offset = this._frozenColumnOffsets.get(column.property);
+    return offset !== undefined ? `${offset}px` : null;
+  }
+
+  /** Retorna true se a coluna é a última coluna fixa (para aplicar box-shadow de borda). */
+  isLastFrozenColumn(column: PoTableColumn): boolean {
+    if (!column.fixed) {
+      return false;
+    }
+    // Garante que o cache está atualizado
+    this.getFrozenColumnLeft(column);
+    return column.property === this._lastFrozenColumnProperty;
   }
 
   protected calculateHeightTableContainer(height: number) {
