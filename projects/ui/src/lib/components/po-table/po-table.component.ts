@@ -1093,6 +1093,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
         }
       });
     });
+
+    // Configura infinite scroll no virtual viewport (se habilitado)
+    if (this.infiniteScroll && !this.subscriptionScrollEvent) {
+      this.includeInfiniteScrollForVirtualViewport(viewportEl);
+    }
   }
 
   /**
@@ -1164,12 +1169,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
-
-      if (scrollHeight >= this.height) {
-        this.includeInfiniteScroll();
+      if (this.virtualScroll) {
+        // No virtual scroll, o viewport é o container de scroll
+        const viewportEl = this.virtualScrollViewport?.nativeElement;
+        if (viewportEl) {
+          this.includeInfiniteScrollForVirtualViewport(viewportEl);
+        }
       } else {
-        this.infiniteScroll = false;
+        const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
+
+        if (scrollHeight >= this.height) {
+          this.includeInfiniteScroll();
+        } else {
+          this.infiniteScroll = false;
+        }
       }
     }
     this.changeDetector.detectChanges();
@@ -1232,6 +1245,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     if (changesItems && !this.hasColumns && this.hasItems) {
       this.columns = this.getDefaultColumns(this.items[0]);
+    }
+
+    // Quando itens mudam (ex: infinite scroll), atualiza o virtual scroll mantendo a posição
+    if (changesItems && this.virtualScroll && this.hasItems) {
+      this.vsUpdateVisibleItems();
     }
   }
 
@@ -1336,6 +1354,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   private hasInfiniteScroll(): boolean {
+    if (this.virtualScroll) {
+      // No virtual scroll, o scroll height é virtual (vsSpacerHeight), sempre > height
+      return this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height > 0;
+    }
+
     const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
 
     return this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height > 0 && scrollHeight > 0;
@@ -1350,6 +1373,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
 
     this.changeDetector.detectChanges();
+  }
+
+  private includeInfiniteScrollForVirtualViewport(viewportEl: HTMLElement): void {
+    if (this.subscriptionScrollEvent) {
+      return;
+    }
+
+    this.scrollEvent$ = this.defaultService.scrollListener(viewportEl);
+    this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
   }
 
   private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
