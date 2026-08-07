@@ -155,7 +155,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   headerWidth: number;
 
   /** Cache de offsets left para colunas fixas (evita a diretiva pFrozenColumn imperativa) */
-  private _frozenColumnOffsets: Map<string, number> = new Map();
+  private readonly _frozenColumnOffsets: Map<string, number> = new Map();
   private _frozenColumnOffsetsKey: string = '';
   private _lastFrozenColumnProperty: string = '';
 
@@ -1025,18 +1025,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       for (const col of this.mainColumns) {
         if (col.fixed) {
           this._frozenColumnOffsets.set(col.property, accumulatedLeft);
-          const width = parseInt(col.width, 10) || 0;
+          const width = Number.parseInt(col.width, 10) || 0;
           accumulatedLeft += width;
         }
       }
 
       // Determina qual é a última coluna fixa
       const fixedCols = this.mainColumns.filter(c => c.fixed);
-      this._lastFrozenColumnProperty = fixedCols.length ? fixedCols[fixedCols.length - 1].property : '';
+      this._lastFrozenColumnProperty = fixedCols.length ? fixedCols.at(-1).property : '';
     }
 
     const offset = this._frozenColumnOffsets.get(column.property);
-    return offset !== undefined ? `${offset}px` : null;
+    return offset === undefined ? null : `${offset}px`;
   }
 
   /** Retorna true se a coluna é a última coluna fixa (para aplicar box-shadow de borda). */
