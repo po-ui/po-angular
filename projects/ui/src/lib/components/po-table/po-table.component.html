@@ -384,11 +384,17 @@
                 </td>
               }
               @if (!actionRight && (visibleActions.length > 1 || isSingleAction)) {
-                <ng-template
-                  [ngTemplateOutlet]="ActionsColumnTemplate"
-                  [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex + vsFirst }"
+                <td
+                  [class.po-table-column]="isSingleAction"
+                  [class.po-table-column-single-action]="isSingleAction"
+                  [class.po-table-column-actions]="visibleActions.length > 1"
                 >
-                </ng-template>
+                  <ng-template
+                    [ngTemplateOutlet]="ActionsColumnTemplate"
+                    [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex + vsFirst }"
+                  >
+                  </ng-template>
+                </td>
               }
               @for (column of mainColumns; track trackBy(columnIndex); let columnIndex = $index) {
                 <td
@@ -487,11 +493,17 @@
                 </td>
               }
               @if (actionRight) {
-                <ng-template
-                  [ngTemplateOutlet]="ActionsColumnTemplate"
-                  [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex + vsFirst }"
+                <td
+                  [class.po-table-column]="isSingleAction"
+                  [class.po-table-column-single-action]="isSingleAction"
+                  [class.po-table-column-actions]="visibleActions.length > 1"
                 >
-                </ng-template>
+                  <ng-template
+                    [ngTemplateOutlet]="ActionsColumnTemplate"
+                    [ngTemplateOutletContext]="{ row: row, rowIndex: rowIndex + vsFirst }"
+                  >
+                  </ng-template>
+                </td>
               }
             </tr>
             @if (hasMainColumns && hasRowTemplate && row.$showDetail && isShowRowTemplate(row, rowIndex + vsFirst)) {
@@ -591,7 +603,10 @@
       <th cdk-header-cell *cdkHeaderCellDef
         [class.po-table-header-master-detail]="!isSingleAction"
         [class.po-table-header-single-action]="isSingleAction"></th>
-      <td cdk-cell *cdkCellDef="let row">
+      <td cdk-cell *cdkCellDef="let row"
+        [class.po-table-column]="isSingleAction"
+        [class.po-table-column-single-action]="isSingleAction"
+        [class.po-table-column-actions]="visibleActions.length > 1">
         <ng-template
           [ngTemplateOutlet]="ActionsColumnTemplate"
           [ngTemplateOutletContext]="{ row: row, rowIndex: getRowIndex(row) }">
@@ -748,7 +763,10 @@
       <th cdk-header-cell *cdkHeaderCellDef
         [class.po-table-header-single-action]="isSingleAction"
         [class.po-table-header-actions]="!isSingleAction"></th>
-      <td cdk-cell *cdkCellDef="let row">
+      <td cdk-cell *cdkCellDef="let row"
+        [class.po-table-column]="isSingleAction"
+        [class.po-table-column-single-action]="isSingleAction"
+        [class.po-table-column-actions]="visibleActions.length > 1">
         <ng-template
           [ngTemplateOutlet]="ActionsColumnTemplate"
           [ngTemplateOutletContext]="{ row: row, rowIndex: getRowIndex(row) }">
@@ -869,38 +887,26 @@
   }
 </ng-template>
 
-<!-- Template de ações -->
+<!-- Template de ações (conteúdo interno — o <td> é fornecido pelo contexto de uso) -->
 <ng-template #ActionsColumnTemplate let-row="row" let-rowIndex="rowIndex">
-  @if (isSingleAction) {
-    <td
-      class="po-table-column po-table-column-single-action"
-      [style.width.px]="height && actionRight ? getWidthColumnManager() : ''"
-      [style.max-width.px]="height && !actionRight ? getColumnWidthActionsLeft() : ''"
-      [style.width.px]="height && !actionRight ? getColumnWidthActionsLeft() : ''"
+  @if (isSingleAction && firstAction.visible !== false) {
+    <div
+      class="po-table-single-action po-clickable"
+      [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
+      (click)="executeTableAction(row, firstAction)"
     >
-      @if (firstAction.visible !== false) {
-        <div
-          class="po-table-single-action po-clickable"
-          [class.po-table-action-disabled]="firstAction.disabled ? validateTableAction(row, firstAction) : false"
-          (click)="executeTableAction(row, firstAction)"
-        >
-          @if (firstAction.icon) {
-            <po-icon class="po-table-single-action-content" [p-icon]="firstAction.icon"></po-icon>
-          }
-          @if (firstAction.label) {
-            <span>{{ firstAction.label }}</span>
-          }
-        </div>
+      @if (firstAction.icon) {
+        <po-icon class="po-table-single-action-content" [p-icon]="firstAction.icon"></po-icon>
       }
-    </td>
+      @if (firstAction.label) {
+        <span>{{ firstAction.label }}</span>
+      }
+    </div>
   }
-
   @if (visibleActions.length > 1) {
-    <td class="po-table-column-actions">
-      <div #popupTarget class="po-clickable" (click)="togglePopup(row, popupTarget)">
-        <po-icon class="po-field-icon" p-icon="ICON_MORE"></po-icon>
-      </div>
-    </td>
+    <div #popupTarget class="po-clickable" (click)="togglePopup(row, popupTarget)">
+      <po-icon class="po-field-icon" p-icon="ICON_MORE"></po-icon>
+    </div>
   }
 </ng-template>
 
