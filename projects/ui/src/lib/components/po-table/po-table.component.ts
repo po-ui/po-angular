@@ -1213,6 +1213,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  /** Override para sincronizar o virtual scroll após ordenação */
+  sortArray(column: PoTableColumn, ascending: boolean, item?: Array<any>) {
+    super.sortArray(column, ascending, item);
+
+    if (this.virtualScroll) {
+      // Mantém a posição de scroll atual e apenas recalcula os itens visíveis
+      this.vsUpdateVisibleItems();
+    }
+  }
+
   private checkChangesItems() {
     const changesItems = this.differ.diff(this.items);
 
