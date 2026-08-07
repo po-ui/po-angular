@@ -189,6 +189,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
+  private _displayedColumnsCache: Array<string> = [];
+  private _displayedColumnsCacheKey: string = '';
   private readonly differ;
   private footerHeight;
   private timeoutResize;
@@ -312,11 +314,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.draggable;
   }
 
-  private _displayedColumnsCache: string[] = [];
-  private _displayedColumnsCacheKey: string = '';
-
-  get displayedColumns(): string[] {
-    const columns: string[] = [];
+  get displayedColumns(): Array<string> {
+    const columns: Array<string> = [];
 
     if (this.hasSelectableColumn) {
       columns.push('po-select');
@@ -1131,8 +1130,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     const currentIndex = Math.floor(scrollTop / this.itemSize);
 
-    let newFirst = Math.max(0, currentIndex - this.vsNumToleratedItems);
-    let newLast = Math.min(totalItems, currentIndex + numItemsInViewport + this.vsNumToleratedItems);
+    const newFirst = Math.max(0, currentIndex - this.vsNumToleratedItems);
+    const newLast = Math.min(totalItems, currentIndex + numItemsInViewport + this.vsNumToleratedItems);
 
     // Hysteresis: só atualiza se o shift for significativo (> 25% do buffer)
     const threshold = Math.max(1, Math.floor(this.vsNumToleratedItems / 4));
