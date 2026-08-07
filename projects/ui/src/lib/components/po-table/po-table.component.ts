@@ -330,7 +330,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       columns.push('po-master-detail-left');
     }
 
-    if (!this.actionRight && this.hasItems && this.hasMainColumns && (this.visibleActions.length > 1 || this.isSingleAction)) {
+    if (
+      !this.actionRight &&
+      this.hasItems &&
+      this.hasMainColumns &&
+      (this.visibleActions.length > 1 || this.isSingleAction)
+    ) {
       columns.push('po-actions-left');
     }
 
