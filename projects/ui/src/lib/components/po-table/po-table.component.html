@@ -361,6 +361,7 @@
             <tr
               class="po-table-row"
               [class.po-table-row-active]="row.$selected || (row.$selected === null && selectable)"
+              [class.po-table-row-last]="(rowIndex + vsFirst) === filteredItems.length - 1"
             >
               @if (selectable) {
                 <td class="po-table-column-selectable">
