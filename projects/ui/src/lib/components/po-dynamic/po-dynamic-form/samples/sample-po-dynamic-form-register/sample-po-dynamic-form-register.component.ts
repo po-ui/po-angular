@@ -131,7 +131,27 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 12,
       decimalsLength: 2,
       thousandMaxlength: 7,
+      formatAbl: '>>>,>>>,>>9.99',
       icon: 'an an-currency-circle-dollar'
+    },
+    {
+      property: 'employeeCode',
+      label: 'Employee code',
+      type: 'currency',
+      gridColumns: 3,
+      gridSmColumns: 6,
+      formatAbl: '999',
+      decimalsLength: 0
+    },
+    {
+      property: 'overtime',
+      label: 'Overtime hours',
+      type: 'currency',
+      gridColumns: 3,
+      gridSmColumns: 6,
+      formatAbl: '>>9.9<<',
+      decimalsLength: 3,
+      optional: true
     },
     {
       property: 'hobbies',

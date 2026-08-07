@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+﻿import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -144,6 +144,68 @@ describe('PoDecimalComponent:', () => {
       component.max = 5;
 
       expect(component.validate(new UntypedFormControl('10'))).not.toBeNull();
+    });
+
+    describe('p-format-abl: ', () => {
+      it('should set formatParsed signal when format is defined', () => {
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+
+        const parsed = component['formatParsed']();
+
+        expect(parsed).not.toBeNull();
+        expect(parsed.integerDigitCount).toBe(6);
+        expect(parsed.decimalDigitCount).toBe(2);
+      });
+
+      it('should set formatParsed signal to null when format is undefined', () => {
+        fixture.componentRef.setInput('p-format-abl', undefined);
+        fixture.detectChanges();
+
+        const parsed = component['formatParsed']();
+
+        expect(parsed).toBeNull();
+      });
+
+      it('should set formatParsed signal to null when format is empty string', () => {
+        fixture.componentRef.setInput('p-format-abl', '');
+        fixture.detectChanges();
+
+        const parsed = component['formatParsed']();
+
+        expect(parsed).toBeNull();
+      });
+
+      it('should detect allowNegative from format starting with dash', () => {
+        fixture.componentRef.setInput('p-format-abl', '->>,>>9.99');
+        fixture.detectChanges();
+
+        const parsed = component['formatParsed']();
+
+        expect(parsed.allowNegative).toBe(true);
+      });
+    });
+
+    describe('decimalsLength: ', () => {
+      it('should call refreshOnPropertyChange when set', () => {
+        fixture.detectChanges();
+        const spy = spyOn(component as never, 'refreshOnPropertyChange' as never);
+
+        component.decimalsLength = 4;
+
+        expect(spy).toHaveBeenCalled();
+      });
+    });
+
+    describe('thousandMaxlength: ', () => {
+      it('should call refreshOnPropertyChange when set', () => {
+        fixture.detectChanges();
+        const spy = spyOn(component as never, 'refreshOnPropertyChange' as never);
+
+        component.thousandMaxlength = 8;
+
+        expect(spy).toHaveBeenCalled();
+      });
     });
   });
 
@@ -1651,6 +1713,336 @@ describe('PoDecimalComponent:', () => {
         component['verifyErrorAsync']('value');
 
         expect(unsubscribeSpy).toHaveBeenCalled();
+      });
+    });
+
+    describe('applyFormatOnBlur: ', () => {
+      it('should call applyDecimalFormat with effective parsed format and separators', () => {
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+
+        const result = component['applyFormatOnBlur'](1234.56);
+
+        expect(result.isValid).toBe(true);
+        expect(result.viewValue).toContain('1.234');
+        expect(result.viewValue).toContain(',56');
+      });
+
+      it('should return isValid false when formatParsed is null', () => {
+        const result = component['applyFormatOnBlur'](1234.56);
+
+        expect(result.isValid).toBe(false);
+        expect(result.viewValue).toBe('');
+      });
+
+      it('should return isValid true with empty viewValue when value is null', () => {
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+
+        const result = component['applyFormatOnBlur'](null);
+
+        expect(result.isValid).toBe(true);
+        expect(result.viewValue).toBe('');
+      });
+    });
+
+    describe('getEffectiveFormatParsed: ', () => {
+      it('should return null when formatParsed signal is null', () => {
+        const result = component['getEffectiveFormatParsed']();
+
+        expect(result).toBeNull();
+      });
+
+      it('should return parsed with min of format limits and component thousandMaxlength', () => {
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>>,>>9.99');
+        fixture.detectChanges();
+        component.thousandMaxlength = 5;
+
+        const result = component['getEffectiveFormatParsed']();
+
+        expect(result.integerDigitCount).toBe(5);
+      });
+
+      it('should return parsed with min of format limits and component decimalsLength', () => {
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.9999');
+        fixture.detectChanges();
+        component.decimalsLength = 2;
+
+        const result = component['getEffectiveFormatParsed']();
+
+        expect(result.decimalDigitCount).toBe(2);
+      });
+    });
+
+    describe('getModelValueFromView: ', () => {
+      it('should return undefined when inputEl is not set', () => {
+        component.inputEl = undefined;
+
+        const result = component['getModelValueFromView']();
+
+        expect(result).toBe(undefined);
+      });
+
+      it('should return undefined when screen value is empty', () => {
+        fixture.detectChanges();
+        component['setViewValue']('');
+
+        const result = component['getModelValueFromView']();
+
+        expect(result).toBe(undefined);
+      });
+
+      it('should return model value from current screen value', () => {
+        fixture.detectChanges();
+        component['setViewValue']('1.234,56');
+
+        const result = component['getModelValueFromView']();
+
+        expect(result).toBe(1234.56);
+      });
+    });
+
+    describe('refreshOnPropertyChange: ', () => {
+      it('should not call setViewValue when modelValue is null', () => {
+        fixture.detectChanges();
+        component['setViewValue']('');
+        const spy = spyOn(component as never, 'setViewValue' as never);
+
+        component['refreshOnPropertyChange']();
+
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('should not call setViewValue when inputEl is undefined', () => {
+        component.inputEl = undefined;
+        const spy = spyOn(component as never, 'setViewValue' as never);
+
+        component['refreshOnPropertyChange']();
+
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('should re-format view value using format when formatParsed is set', () => {
+        fixture.detectChanges();
+        component['setViewValue']('1234,56');
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+
+        const screenValue = component.getScreenValue();
+
+        expect(screenValue).toContain('1.234');
+        expect(screenValue).toContain(',56');
+      });
+
+      it('should re-format view value using default formatToViewValue when formatParsed is null', () => {
+        fixture.detectChanges();
+        component['setViewValue']('1234,56');
+        component['formatParsed'].set(null);
+
+        component['refreshOnPropertyChange']();
+
+        const screenValue = component.getScreenValue();
+        expect(screenValue).toBe('1.234,56');
+      });
+
+      it('should use formatToViewValue fallback when value overflows format on property change', () => {
+        fixture.detectChanges();
+        component['setViewValue']('99999,99');
+        fixture.componentRef.setInput('p-format-abl', '99.99');
+        fixture.detectChanges();
+
+        component['refreshOnPropertyChange']();
+
+        const screenValue = component.getScreenValue();
+        expect(screenValue).toContain('99.999');
+        expect(screenValue).toContain(',99');
+      });
+    });
+
+    describe('onBlur with formatAbl: ', () => {
+      beforeEach(() => {
+        fixture.detectChanges();
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+        component['onTouched'] = () => {};
+      });
+
+      it('should apply format on blur when formatParsed is active and value is valid', () => {
+        const fakeEvent = { target: { value: '1234,56' } };
+        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.onBlur(fakeEvent);
+
+        const lastCall = spy.calls.mostRecent().args[0] as string;
+        expect(lastCall).toContain('1.234');
+        expect(lastCall).toContain(',56');
+      });
+
+      it('should clear model when value results in null model', () => {
+        const fakeEvent = { target: { value: '' } };
+        spyOn(component as never, 'callOnChange' as never);
+
+        component.onBlur(fakeEvent);
+
+        expect(component['callOnChange']).not.toHaveBeenCalled();
+      });
+
+      it('should use fallback format when applyFormatOnBlur returns isValid false', () => {
+        fixture.componentRef.setInput('p-format-abl', '99.99');
+        fixture.detectChanges();
+
+        const fakeEvent = { target: { value: '99999,99' } };
+        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.onBlur(fakeEvent);
+
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('should call callOnChange with undefined when model value is undefined', () => {
+        const fakeEvent = { target: { value: 'ABC' } };
+        spyOn(component as never, 'callOnChange' as never);
+
+        component.onBlur(fakeEvent);
+
+        expect(component['callOnChange']).toHaveBeenCalledWith(undefined);
+      });
+
+      it('should call callOnChange(undefined) and set empty view when formatToModelValue returns undefined', () => {
+        const fakeEvent = { target: { value: ',' } };
+        const spyChange = spyOn(component as any, 'callOnChange');
+        const spyView = spyOn(component as any, 'setViewValue').and.callThrough();
+
+        component.onBlur(fakeEvent);
+
+        expect(spyChange).toHaveBeenCalledWith(undefined);
+        expect(spyView).toHaveBeenCalledWith('');
+      });
+
+      it('should use originalValue as fallback when formatToViewValue returns empty on overflow', () => {
+        fixture.componentRef.setInput('p-format-abl', '99.99');
+        fixture.detectChanges();
+        spyOn(component as any, 'formatToViewValue').and.returnValue('');
+        spyOn(component as any, 'formatToModelValue').and.returnValue(99999.99);
+        const spyView = spyOn(component as any, 'setViewValue').and.callThrough();
+
+        component['applyFormatOnBlurAndSetView']('99999,99', '99.999,99');
+
+        expect(spyView).toHaveBeenCalledWith('99.999,99');
+      });
+    });
+
+    describe('onInput with formatAbl: ', () => {
+      beforeEach(() => {
+        fixture.detectChanges();
+        fixture.componentRef.setInput('p-format-abl', '->>,>>9.99');
+        fixture.detectChanges();
+      });
+
+      it('should block negative sign when format does not allow negative', () => {
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+
+        const fakeEvent = {
+          target: {
+            value: '-123',
+            selectionStart: 1,
+            selectionEnd: 1,
+            setSelectionRange: jasmine.createSpy('setSelectionRange')
+          }
+        };
+
+        spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.onInput(fakeEvent);
+
+        expect(fakeEvent.target.setSelectionRange).toHaveBeenCalledWith(0, 0);
+      });
+
+      it('should revert to previous value when input exceeds format integer capacity', () => {
+        fixture.componentRef.setInput('p-format-abl', '999.99');
+        fixture.detectChanges();
+
+        const fakeEvent = {
+          target: {
+            value: '1234,5',
+            selectionStart: 5,
+            selectionEnd: 5,
+            setSelectionRange: jasmine.createSpy('setSelectionRange')
+          }
+        };
+
+        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.onInput(fakeEvent);
+
+        expect(spy).toHaveBeenCalled();
+        expect(fakeEvent.target.setSelectionRange).toHaveBeenCalledWith(4, 4);
+      });
+
+      it('should allow valid input that fits within format', () => {
+        const fakeEvent = {
+          target: {
+            value: '123,45',
+            selectionStart: 6,
+            selectionEnd: 6,
+            setSelectionRange: jasmine.createSpy('setSelectionRange')
+          }
+        };
+
+        spyOn(component as never, 'callOnChange' as never);
+
+        component.onInput(fakeEvent);
+
+        expect(component['callOnChange']).toHaveBeenCalled();
+      });
+    });
+
+    describe('writeValueModel with formatAbl: ', () => {
+      beforeEach(() => {
+        fixture.detectChanges();
+        fixture.componentRef.setInput('p-format-abl', '>>>,>>9.99');
+        fixture.detectChanges();
+      });
+
+      it('should format value using advanced format when formatParsed is active', () => {
+        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.writeValueModel(1234.56);
+
+        const lastCall = spy.calls.mostRecent().args[0] as string;
+        expect(lastCall).toContain('1.234');
+        expect(lastCall).toContain(',56');
+      });
+
+      it('should use fallback format when value overflows format capacity', () => {
+        fixture.componentRef.setInput('p-format-abl', '99.99');
+        fixture.detectChanges();
+
+        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.writeValueModel(9999.99);
+
+        const lastCall = spy.calls.mostRecent().args[0] as string;
+        expect(lastCall).toContain('9.999');
+      });
+
+      it('should set empty view value when value is falsy', () => {
+        const spy = spyOn(component as any, 'setViewValue').and.callThrough();
+
+        component.writeValueModel(undefined);
+
+        expect(spy).toHaveBeenCalledWith('');
+      });
+
+      it('should format string value parsed to number', () => {
+        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+
+        component.writeValueModel('4567.89');
+
+        const lastCall = spy.calls.mostRecent().args[0] as string;
+        expect(lastCall).toContain('4.567');
+        expect(lastCall).toContain(',89');
       });
     });
   });
