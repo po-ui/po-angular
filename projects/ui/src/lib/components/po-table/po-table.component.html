@@ -549,6 +549,9 @@
     [multiTemplateDataRows]="true"
     [trackBy]="trackBy"
     class="po-table"
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="drop($event)"
     [ngClass]="{
       'po-table-interactive': selectable || sort,
       'po-table-selectable': selectable,
@@ -806,9 +809,6 @@
 
     <!-- Header Row -->
     <tr cdk-header-row *cdkHeaderRowDef="displayedColumns; sticky: height > 0"
-      cdkDropList
-      cdkDropListOrientation="horizontal"
-      (cdkDropListDropped)="drop($event)"
       [class.po-table-header]="!height"
       [attr.p-spacing]="spacing ?? (componentsSize === 'small' ? 'extraSmall' : 'medium')">
     </tr>
