@@ -190,7 +190,6 @@
     #virtualScrollViewport
     class="po-table-virtual-viewport"
     [style.height.px]="heightTableContainer"
-    (scroll)="onVirtualScroll($event)"
   >
     <table
       class="po-table"
@@ -399,8 +398,7 @@
                   [class.po-table-column-center]="column.type === 'subtitle'"
                   [class.po-table-column-icons]="column.type === 'icon'"
                   [ngClass]="getClassColor(row, column)"
-                  [pFrozenColumn]="column.fixed"
-                  class="p-element po-frozen-column"
+                  class="p-element"
                   (click)="hasSelectableRow() ? selectRow(row) : 'javascript:;'"
                 >
                   <div

@@ -10,6 +10,7 @@ import {
   DoCheck,
   ElementRef,
   IterableDiffers,
+  NgZone,
   OnDestroy,
   OnInit,
   QueryList,
@@ -164,6 +165,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private vsScrolling: boolean = false;
   private vsRafId: number = 0;
   private vsPendingScrollTop: number = -1;
+  private vsScrollUnlisten: (() => void) | null = null;
 
   close: PoModalAction = {
     action: () => {
@@ -217,11 +219,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
-    renderer: Renderer2,
+    private readonly renderer: Renderer2,
     poLanguageService: PoLanguageService,
     private readonly changeDetector: ChangeDetectorRef,
     private readonly decimalPipe: DecimalPipe,
-    private readonly defaultService: PoTableService
+    private readonly defaultService: PoTableService,
+    private readonly ngZone: NgZone
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
@@ -380,6 +383,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeSizeLoading();
     this.applyFixedColumns();
     this.initializeVisibleElement();
+    this.setupVirtualScrollListener();
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -390,6 +394,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   ngDoCheck() {
+    // Skip expensive checks during virtual scroll update (vsScrolling flag is true)
+    if (this.vsScrolling) {
+      return;
+    }
+
     this.applyFixedColumns();
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
@@ -407,6 +416,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     if (this.vsRafId) {
       cancelAnimationFrame(this.vsRafId);
+    }
+
+    if (this.vsScrollUnlisten) {
+      this.vsScrollUnlisten();
     }
   }
 
@@ -1009,24 +1022,35 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   /**
-   * Handler do evento de scroll no viewport virtual.
-   * Usa requestAnimationFrame para coalescer múltiplos eventos de scroll em 1 update por frame.
+   * Configura o listener de scroll fora do NgZone para evitar que cada evento de scroll
+   * dispare change detection no Angular.
    */
-  onVirtualScroll(event: Event): void {
-    const target = event.target as HTMLElement;
-    if (!target || !this.itemSize) {
+  private setupVirtualScrollListener(): void {
+    if (!this.virtualScroll || !this.virtualScrollViewport) {
       return;
     }
 
-    this.vsPendingScrollTop = target.scrollTop;
+    const viewportEl = this.virtualScrollViewport.nativeElement;
 
-    // Coalesce: agenda apenas 1 processamento por frame
-    if (!this.vsRafId) {
-      this.vsRafId = requestAnimationFrame(() => {
-        this.vsRafId = 0;
-        this.vsProcessScroll(target);
+    this.ngZone.runOutsideAngular(() => {
+      this.vsScrollUnlisten = this.renderer.listen(viewportEl, 'scroll', () => {
+        this.vsPendingScrollTop = viewportEl.scrollTop;
+
+        if (!this.vsRafId) {
+          this.vsRafId = requestAnimationFrame(() => {
+            this.vsRafId = 0;
+            this.vsProcessScroll(viewportEl);
+          });
+        }
       });
-    }
+    });
+  }
+
+  /**
+   * Handler do evento de scroll no viewport virtual (DEPRECATED — mantido para compatibilidade do template).
+   */
+  onVirtualScroll(event: Event): void {
+    // No-op: scroll é agora gerenciado via listener fora do NgZone em setupVirtualScrollListener
   }
 
   private vsProcessScroll(target: HTMLElement): void {
@@ -1053,7 +1077,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.vsFirst = newFirst;
       this.vsLast = newLast;
       this.vsUpdateVisibleItems();
-      this.changeDetector.detectChanges();
+
+      // Roda detectChanges dentro do NgZone para atualizar o DOM
+      this.ngZone.run(() => {
+        this.changeDetector.detectChanges();
+      });
 
       // Restaura o scrollTop correto após o DOM ser atualizado
       target.scrollTop = scrollTop;
