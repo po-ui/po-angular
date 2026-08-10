@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.28.0](https://github.com/po-ui/po-angular/compare/v21.27.0...v21.28.0) (2026-08-10)
+
+
+### Bug Fixes
+
+* **datetimepicker:** corrige inconsistências no componente ([6fed4f3](https://github.com/po-ui/po-angular/commit/6fed4f3706433205e285fd08160183918d561837))
+* **timepicker:** esconde ":" ao usar placeholder ou formato 12h ([e2ff037](https://github.com/po-ui/po-angular/commit/e2ff037e5a8870458bfecb056492c7f0867a0037))
+
 ## [21.27.0](https://github.com/po-ui/po-angular/compare/v21.26.0...v21.27.0) (2026-08-03)
 
 
