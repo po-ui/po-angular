@@ -25,6 +25,7 @@
   [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   [p-compact-label]="properties?.includes('compactLabel')"
   (p-change)="changeEvent('p-change')"
+  (p-change-model)="changeEvent('p-change-model')"
   (p-keydown)="changeEvent('p-keydown')"
   [p-error-limit]="properties?.includes('errorLimit')"
   [p-range-presets]="rangePresets"

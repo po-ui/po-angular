@@ -607,6 +607,21 @@ export abstract class PoLookupBaseComponent
    * @optional
    *
    * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento disparado ao fechar o popover do gerenciador de colunas após alterar as colunas visíveis.
    *
    * O componente envia como parâmetro um array de string com as colunas visíveis atualizadas.
@@ -627,6 +642,7 @@ export abstract class PoLookupBaseComponent
 
   displayAdditionalHelp: boolean = false;
   service: any;
+  modelLastUpdate: any;
 
   protected selectedOptions = [];
   protected getSubscription: Subscription;
@@ -905,6 +921,15 @@ export abstract class PoLookupBaseComponent
         this.updateLookupInputHeight();
       }
     });
+
+    this.controlChangeModelEmitter(value);
+  }
+
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
+    }
   }
 
   //Transforma o tamanho do input para o tamanho do ícone de loading correspondente
@@ -980,6 +1005,7 @@ export abstract class PoLookupBaseComponent
       this.searchById(value);
     } else {
       this.cleanViewValue();
+      this.controlChangeModelEmitter(undefined);
     }
   }
 

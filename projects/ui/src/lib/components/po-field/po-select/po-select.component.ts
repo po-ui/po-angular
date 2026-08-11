@@ -149,6 +149,21 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
    *
    * @description
    *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Função para atualizar o ngModel do componente, necessário quando não for utilizado dentro da tag form.
    *
    * Na versão 12.2.0 do Angular a verificação `strictTemplates` vem true como default. Portanto, para utilizar
@@ -215,6 +230,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
   displayValue;
   id = `po-select[${uuid()}]`;
   modelValue: any;
+  modelLastUpdate: any;
   selectedValue: any;
   optionsDefault = [];
   listGroupOptions = [];
@@ -511,6 +527,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
       this.updateModel(this.getValueUpdate(option));
       this.displayValue = option[this.fieldLabel];
       this.emitChange(option[this.fieldValue]);
+      this.controlChangeModelEmitter(option[this.fieldValue]);
     }
   }
 
@@ -532,6 +549,7 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
     this.modelValue = value;
     this.changeDetector.detectChanges();
+    this.controlChangeModelEmitter(this.selectedValue);
   }
 
   extraValidation(c: AbstractControl): { [key: string]: any } {
@@ -593,6 +611,13 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
       this.size,
       this.isAdditionalHelpEventTriggered() ? this.additionalHelp : undefined
     );
+  }
+
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
+    }
   }
 
   private isEqual(value: any, inputValue: any): boolean {

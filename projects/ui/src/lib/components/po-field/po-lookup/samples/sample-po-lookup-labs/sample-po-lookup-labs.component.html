@@ -30,6 +30,7 @@
   [p-label-text-wrap]="properties?.includes('labelTextWrap')"
   [p-virtual-scroll]="properties.includes('virtualScroll')"
   (p-change)="changeEvent('p-change')"
+  (p-change-model)="changeEvent('p-change-model')"
   (p-error)="changeEvent('p-error')"
   (p-keydown)="changeEvent('p-keydown')"
   (p-selected)="changeEvent('p-selected')"

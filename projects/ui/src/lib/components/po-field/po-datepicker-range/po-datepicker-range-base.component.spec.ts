@@ -944,7 +944,8 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('updateModel: should call `onChangeModel` with `value` if `onChangeModel` is valid.', () => {
       const fakeThis = {
-        onChangeModel: arg => {}
+        onChangeModel: arg => {},
+        controlChangeModelEmitter: arg => {}
       };
       const value: any = 'value';
 
@@ -957,7 +958,8 @@ describe('PoDatepickerRangeBaseComponent:', () => {
 
     it('updateModel: should call `onChangeModel` with `value` object if `onChangeModel` is valid.', () => {
       const fakeThis = {
-        onChangeModel: arg => {}
+        onChangeModel: arg => {},
+        controlChangeModelEmitter: arg => {}
       };
       const value: any = { key: 'value' };
 
@@ -1102,6 +1104,84 @@ describe('PoDatepickerRangeBaseComponent:', () => {
       component.maxDate = new Date(2021, 11, 14);
 
       expect(component['validateDateInRange'](date)).toBeTruthy();
+    });
+  });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value
+    it('should emit changeModel when writeValue receives a new range value (Property 1)', () => {
+      const newRange = { start: '2023-01-10', end: '2023-01-20' };
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(newRange);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith({ start: '2023-01-10', end: '2023-01-20' });
+      expect(component.modelLastUpdate).toEqual({ start: '2023-01-10', end: '2023-01-20' });
+    });
+
+    // Feature: p-change-model-fields, Property 4: Deep equality for complex values
+    it('should NOT emit changeModel when writeValue receives same range content with different reference (Property 4)', () => {
+      component.modelLastUpdate = { start: '2023-01-10', end: '2023-01-20' };
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue({ start: '2023-01-10', end: '2023-01-20' });
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission
+    it('should emit changeModel on user interaction via updateModel (Property 5)', () => {
+      component.modelLastUpdate = { start: '', end: '' };
+      component.registerOnChange(() => {});
+
+      spyOn(component.changeModel, 'emit');
+
+      const newRange = { start: '2023-03-01', end: '2023-03-15' };
+      component['updateModel'](newRange);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith({ start: '2023-03-01', end: '2023-03-15' });
+      expect(component.modelLastUpdate).toEqual({ start: '2023-03-01', end: '2023-03-15' });
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    it('should NOT emit change event on writeValue (Property 6)', () => {
+      const newRange = { start: '2023-02-01', end: '2023-02-28' };
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.onChange, 'emit');
+
+      component.writeValue(newRange);
+
+      expect(component.onChange.emit).not.toHaveBeenCalled();
+    });
+
+    it('should store modelLastUpdate as object copy when value is an object', () => {
+      component.modelLastUpdate = undefined;
+
+      const range = { start: '2023-05-01', end: '2023-05-31' };
+      component.controlChangeModelEmitter(range);
+
+      expect(component.modelLastUpdate).toEqual(range);
+      expect(component.modelLastUpdate).not.toBe(range);
+    });
+
+    it('should store modelLastUpdate as primitive when value is not an object', () => {
+      component.modelLastUpdate = undefined;
+
+      component.controlChangeModelEmitter(null);
+
+      expect(component.modelLastUpdate).toBeNull();
+    });
+
+    it('should store modelLastUpdate as primitive when value is undefined', () => {
+      component.modelLastUpdate = { start: '2023-01-01', end: '2023-01-31' };
+
+      component.controlChangeModelEmitter(undefined);
+
+      expect(component.modelLastUpdate).toBeUndefined();
     });
   });
 });

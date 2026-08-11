@@ -259,6 +259,21 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
    * @optional
    *
    * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
    * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
    */
@@ -266,6 +281,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
 
   displayAdditionalHelp: boolean = false;
   mdColumns: number = poRadioGroupColumnsDefaultLength;
+  modelLastUpdate: any;
   value: any;
 
   protected readonly cd = inject(ChangeDetectorRef);
@@ -395,6 +411,13 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     this.applySizeBasedOnA11y();
   }
 
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
+    }
+  }
+
   // Função que controla quando deve ser emitido onChange e atualiza o Model
   changeValue(changedValue: any) {
     if (this.onChangePropagate) {
@@ -406,6 +429,7 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     }
 
     this.value = changedValue;
+    this.controlChangeModelEmitter(changedValue);
   }
 
   // Função implementada do ControlValueAccessor
@@ -444,6 +468,10 @@ export abstract class PoRadioGroupBaseComponent implements ControlValueAccessor,
     if (!element && this.onChangePropagate) {
       this.value = undefined;
       this.onChangePropagate(this.value);
+    }
+
+    if (this.value != null) {
+      this.controlChangeModelEmitter(this.value);
     }
   }
 

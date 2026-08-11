@@ -332,7 +332,8 @@ describe('PoSelectComponent:', () => {
         displayValue: label => {},
         updateModel: value => {},
         emitChange: value => {},
-        getValueUpdate: value => {}
+        getValueUpdate: value => {},
+        controlChangeModelEmitter: value => {}
       };
 
       spyOn(fakeThis, 'emitChange');
@@ -676,6 +677,74 @@ describe('PoSelectComponent:', () => {
       const defaultLabel = 'label';
       expectSettersMethod(component, 'fieldLabel', '', 'fieldLabel', defaultLabel);
       expect(component.fieldLabel).toEqual(defaultLabel);
+    });
+  });
+
+  describe('p-change-model:', () => {
+    it('should emit changeModel when writeValue receives a new value different from modelLastUpdate', () => {
+      const newValue = 1;
+      component.modelLastUpdate = undefined;
+      component.options = [
+        { value: 1, label: 'Option 1' },
+        { value: 2, label: 'Option 2' }
+      ];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(newValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(newValue);
+      expect(component.modelLastUpdate).toBe(newValue);
+    });
+
+    it('should NOT emit changeModel when writeValue receives the same value as modelLastUpdate', () => {
+      const sameValue = 1;
+      component.modelLastUpdate = sameValue;
+      component.selectedValue = sameValue;
+      component.options = [
+        { value: 1, label: 'Option 1' },
+        { value: 2, label: 'Option 2' }
+      ];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(sameValue);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    it('should emit changeModel when user selects a different option via onSelectChange', () => {
+      component.options = [
+        { value: 1, label: 'Option 1' },
+        { value: 2, label: 'Option 2' }
+      ];
+      component.selectedValue = 1;
+      component.modelLastUpdate = 1;
+      component['onModelTouched'] = () => {};
+
+      spyOn(component.changeModel, 'emit');
+
+      component.onSelectChange(2);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(2);
+      expect(component.modelLastUpdate).toBe(2);
+    });
+
+    it('should NOT emit change event when writeValue is called (only changeModel should emit)', () => {
+      const newValue = 1;
+      component.modelLastUpdate = undefined;
+      component.options = [
+        { value: 1, label: 'Option 1' },
+        { value: 2, label: 'Option 2' }
+      ];
+
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(newValue);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledWith(newValue);
     });
   });
 

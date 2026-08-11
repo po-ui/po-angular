@@ -388,6 +388,21 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
    * @optional
    *
    * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
    * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
    */
@@ -472,6 +487,7 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   isFirstFilter: boolean = true;
   isFiltering: boolean = false;
   keyupSubscribe: any;
+  modelLastUpdate: any;
   onModelChange: any;
   previousSearchValue: string = '';
   selectedOption: any;
@@ -1017,6 +1033,13 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
     return this.onModelChange ? this.onModelChange(value) : this.ngModelChange.emit(value);
   }
 
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
+    }
+  }
+
   isEqual(value: any, inputValue: any): boolean {
     if ((value || value === 0) && inputValue) {
       return value.toString() === inputValue.toString();
@@ -1424,16 +1447,14 @@ export abstract class PoComboBaseComponent implements ControlValueAccessor, OnIn
   }
 
   private updateModel(value: any): void {
-    if (value !== this.selectedValue) {
-      if (!this.fromWriteValue) {
-        this.callModelChange(this.getValueUpdate(value, this.selectedOption));
-      }
-
+    if (value !== this.selectedValue && !this.fromWriteValue) {
+      this.callModelChange(this.getValueUpdate(value, this.selectedOption));
       this.change.emit(this.emitObjectValue ? this.selectedOption : value);
     }
 
     this.selectedValue = value;
     this.fromWriteValue = false;
+    this.controlChangeModelEmitter(value);
   }
 
   private updateSelectedValueWithOldOption() {

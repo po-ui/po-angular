@@ -930,7 +930,7 @@ describe('PoComboBaseComponent:', () => {
       expect(component.selectedValue).toBe(value);
     });
 
-    it('updateModel: shouldn`t call `callModelChange` and should call `change.emit` if `fromWriteValue` is true', () => {
+    it('updateModel: shouldn`t call `callModelChange` and shouldn`t call `change.emit` if `fromWriteValue` is true', () => {
       const value = 1;
 
       component.selectedValue = undefined;
@@ -942,7 +942,7 @@ describe('PoComboBaseComponent:', () => {
       component['updateModel'](value);
 
       expect(spyCallModelChange).not.toHaveBeenCalled();
-      expect(spyChangeEmit).toHaveBeenCalled();
+      expect(spyChangeEmit).not.toHaveBeenCalled();
 
       expect(component.selectedValue).toBe(value);
     });
@@ -1833,6 +1833,110 @@ describe('PoComboBaseComponent:', () => {
       const expectLabel = component['checkIfService']('value');
 
       expect(expectLabel).toEqual('valueTest');
+    });
+  });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value
+    it('should emit changeModel when writeValue receives a new value (Property 1)', () => {
+      const newValue = 'newValue';
+      const option = { label: 'New', value: newValue };
+
+      component['comboOptionsList'] = [option];
+      component.options = [option];
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(newValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(newValue);
+      expect(component.modelLastUpdate).toBe(newValue);
+    });
+
+    // Feature: p-change-model-fields, Property 2: Deduplication
+    it('should NOT emit changeModel when writeValue receives the same value (Property 2)', () => {
+      const sameValue = 'sameValue';
+      const option = { label: 'Same', value: sameValue };
+
+      component['comboOptionsList'] = [option];
+      component.options = [option];
+      component.modelLastUpdate = sameValue;
+      component.selectedValue = sameValue;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(sameValue);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission
+    it('should emit changeModel on user selection with new value (Property 5)', () => {
+      const newValue = 2;
+      component.selectedValue = 1;
+      component.modelLastUpdate = 1;
+
+      spyOn(component.changeModel, 'emit');
+      spyOn(component, 'callModelChange');
+
+      component['fromWriteValue'] = false;
+      component['updateModel'](newValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(newValue);
+      expect(component.modelLastUpdate).toBe(newValue);
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    it('should NOT emit change event on writeValue (Property 6)', () => {
+      const newValue = 'testValue';
+      const option = { label: 'Test', value: newValue };
+
+      component['comboOptionsList'] = [option];
+      component.options = [option];
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.change, 'emit');
+
+      component.writeValue(newValue);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 1 edge: writeValue(null) with non-null modelLastUpdate
+    it('should emit changeModel when writeValue(null) and modelLastUpdate is non-null (Property 1 edge)', () => {
+      component.modelLastUpdate = 'previousValue';
+      component.selectedValue = 'previousValue';
+      component['comboOptionsList'] = [];
+      component.options = [];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(null);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(undefined);
+      expect(component.modelLastUpdate).toBe(undefined);
+    });
+
+    // Feature: p-change-model-fields, Property 1: Async scenario with service
+    it('should emit changeModel after async service resolution (Property 1 async)', () => {
+      const value = 'asyncValue';
+
+      component.modelLastUpdate = undefined;
+      component.selectedValue = undefined;
+      component['fromWriteValue'] = true;
+
+      spyOn(component.changeModel, 'emit');
+      spyOn(component, 'callModelChange');
+
+      // Simulate what happens after getObjectByValue resolves:
+      // updateModel is called with the resolved value
+      component['updateModel'](value);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(value);
+      expect(component.modelLastUpdate).toBe(value);
+      // change should NOT emit because fromWriteValue was true
+      expect(component['fromWriteValue']).toBe(false);
     });
   });
 });

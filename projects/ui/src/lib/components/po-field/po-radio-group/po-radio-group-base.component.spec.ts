@@ -215,6 +215,74 @@ describe('PoRadioGroupBase: ', () => {
     });
   });
 
+  describe('p-change-model:', () => {
+    it('should emit changeModel when writeValue receives a new value different from modelLastUpdate', () => {
+      const newValue = 'option1';
+      component.modelLastUpdate = undefined;
+      component.options = [
+        { label: 'Option 1', value: 'option1' },
+        { label: 'Option 2', value: 'option2' }
+      ];
+
+      spyOn(component, 'getElementByValue').and.returnValue(true);
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(newValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(newValue);
+      expect(component.modelLastUpdate).toBe(newValue);
+    });
+
+    it('should NOT emit changeModel when writeValue receives the same value as modelLastUpdate', () => {
+      const sameValue = 'option1';
+      component.modelLastUpdate = sameValue;
+      component.options = [
+        { label: 'Option 1', value: 'option1' },
+        { label: 'Option 2', value: 'option2' }
+      ];
+
+      spyOn(component, 'getElementByValue').and.returnValue(true);
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(sameValue);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.modelLastUpdate).toBe(sameValue);
+    });
+
+    it('should emit changeModel when user selects a different radio option via changeValue', () => {
+      const newValue = 'option2';
+      component.value = 'option1';
+      component.modelLastUpdate = 'option1';
+      component['onChangePropagate'] = (v: any) => {};
+
+      spyOn(component.changeModel, 'emit');
+
+      component.changeValue(newValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(newValue);
+      expect(component.modelLastUpdate).toBe(newValue);
+    });
+
+    it('should NOT emit change event when writeValue is called (only changeModel should emit)', () => {
+      const newValue = 'option1';
+      component.modelLastUpdate = undefined;
+      component.options = [
+        { label: 'Option 1', value: 'option1' },
+        { label: 'Option 2', value: 'option2' }
+      ];
+
+      spyOn(component, 'getElementByValue').and.returnValue(true);
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(newValue);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledWith(newValue);
+    });
+  });
+
   describe('Properties:', () => {
     const validateModel: any = 'validateModel';
 

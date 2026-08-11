@@ -530,6 +530,23 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
    */
   @Output('p-keydown') keydown = new EventEmitter<KeyboardEvent>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter<any>();
+
+  modelLastUpdate: any;
+
   constructor(protected languageService: PoLanguageService) {
     // p-clean
     effect(() => {
@@ -812,8 +829,16 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
   callOnChange(value: any, retry: boolean = true): void {
     if (this.onChangeModel) {
       this.onChangeModel(value);
+      this.controlChangeModelEmitter(value);
     } else if (retry) {
       setTimeout(() => this.callOnChange(value, false));
+    }
+  }
+
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
     }
   }
 

@@ -359,7 +359,13 @@ export abstract class PoInputBaseComponent implements ControlValueAccessor, Vali
    *
    * @description
    *
-   * Evento disparado ao alterar valor do model.
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
    */
   @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
 

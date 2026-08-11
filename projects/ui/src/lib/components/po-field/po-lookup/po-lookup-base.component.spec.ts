@@ -260,7 +260,8 @@ describe('PoLookupBaseComponent:', () => {
       onChangePropagate: '',
       change: {
         emit: () => {}
-      }
+      },
+      controlChangeModelEmitter: () => {}
     };
 
     spyOn<any>(component, 'onChangePropagate');
@@ -1231,6 +1232,104 @@ describe('PoLookupBaseComponent:', () => {
 
         expect(component.spacing).toBe(defaultSpacing);
       });
+    });
+  });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value via async resolution
+    it('should emit changeModel when writeValue receives a new value after async resolution (Property 1)', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+        const searchValue = '123';
+        const resolvedObject = { value: 123, label: 'teste' };
+
+        component.fieldValue = 'value';
+        component.fieldLabel = 'label';
+        component.service = lookupFilterService;
+        component.modelLastUpdate = undefined;
+
+        spyOn(component.changeModel, 'emit');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(of(resolvedObject));
+
+        component.writeValue(searchValue);
+
+        tick();
+
+        expect(component.changeModel.emit).toHaveBeenCalledOnceWith(123);
+        expect(component.modelLastUpdate).toBe(123);
+      })
+    ));
+
+    // Feature: p-change-model-fields, Property 2: Deduplication — suppression on same value
+    it('should NOT emit changeModel when writeValue receives the same value (Property 2)', fakeAsync(
+      inject([LookupFilterService], (lookupFilterService: LookupFilterService) => {
+        const searchValue = '123';
+        const resolvedObject = { value: 123, label: 'teste' };
+
+        component.fieldValue = 'value';
+        component.fieldLabel = 'label';
+        component.service = lookupFilterService;
+        component.modelLastUpdate = 123;
+
+        spyOn(component.changeModel, 'emit');
+        spyOn(component.service, 'getObjectByValue').and.returnValue(of(resolvedObject));
+
+        component.writeValue(searchValue);
+
+        tick();
+
+        expect(component.changeModel.emit).not.toHaveBeenCalled();
+      })
+    ));
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission (modal selection)
+    it('should emit changeModel on user selection in modal with new value (Property 5)', () => {
+      const valueSelected = { value: 456, label: 'Selected Item' };
+
+      component.fieldValue = 'value';
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.selectValue(valueSelected);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(456);
+      expect(component.modelLastUpdate).toBe(456);
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    // Note: In po-lookup, writeValue calls searchById → selectModel → selectValue → callOnChange.
+    // The change event suppression relies on oldValueToModel === valueToModel check.
+    // When writing the same value (re-entry scenario), change should NOT emit.
+    it('should NOT emit change event on writeValue when oldValueToModel matches valueToModel (Property 6)', () => {
+      const valueSelected = { value: 123, label: 'teste' };
+
+      component.fieldValue = 'value';
+      component['valueToModel'] = valueSelected;
+      component['oldValueToModel'] = valueSelected;
+      component.modelLastUpdate = 123;
+
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      // Directly call callOnChange simulating the writeValue completion
+      // with same valueToModel already set
+      component.callOnChange(123);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 1 edge: writeValue(undefined) cleans and emits changeModel(undefined)
+    it('should emit changeModel(undefined) when writeValue(undefined) and modelLastUpdate is non-null (Property 1 edge)', () => {
+      component.modelLastUpdate = 'previousValue';
+
+      spyOn(component.changeModel, 'emit');
+      spyOn(component, <any>'cleanViewValue');
+
+      component.writeValue(undefined);
+
+      expect(component['cleanViewValue']).toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(undefined);
+      expect(component.modelLastUpdate).toBeUndefined();
     });
   });
 });

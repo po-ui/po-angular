@@ -1144,4 +1144,67 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component['validateYearRange'](date, minDate, maxDate)).toBeTrue();
     });
   });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value
+    it('should emit changeModel when writeValue triggers callOnChange with a new date value (Property 1)', () => {
+      const newValue = '2023-05-15';
+      component.modelLastUpdate = undefined;
+      component['onChangeModel'] = (v: any) => {};
+      component['previousValue'] = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.callOnChange(newValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(newValue);
+      expect(component.modelLastUpdate).toBe(newValue);
+    });
+
+    // Feature: p-change-model-fields, Property 2: Deduplication
+    it('should NOT emit changeModel when callOnChange receives same value as modelLastUpdate (Property 2)', () => {
+      const sameValue = '2023-05-15';
+      component.modelLastUpdate = sameValue;
+      component['onChangeModel'] = (v: any) => {};
+      component['previousValue'] = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.callOnChange(sameValue);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.modelLastUpdate).toBe(sameValue);
+    });
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission (calendar selection)
+    it('should emit changeModel when calendar selection triggers callOnChange with new value (Property 5)', () => {
+      const newDateValue = '2023-08-20';
+      component.modelLastUpdate = '2023-05-15';
+      component['onChangeModel'] = (v: any) => {};
+      component['previousValue'] = '2023-05-15';
+
+      spyOn(component.changeModel, 'emit');
+
+      component.callOnChange(newDateValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(newDateValue);
+      expect(component.modelLastUpdate).toBe(newDateValue);
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    it('should NOT emit onchange (p-change) when callOnChange is invoked via writeValue flow (Property 6)', () => {
+      const newValue = '2023-05-15';
+      component.modelLastUpdate = undefined;
+      component['onChangeModel'] = (v: any) => {};
+      component['previousValue'] = undefined;
+
+      spyOn(component.onchange, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.callOnChange(newValue);
+
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(newValue);
+    });
+  });
 });
