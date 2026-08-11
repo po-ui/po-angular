@@ -481,6 +481,60 @@ describe('PoCheckboxComponent:', () => {
     });
   });
 
+  describe('p-change-model:', () => {
+    it('should emit changeModel when writeValue receives true and modelLastUpdate is undefined', () => {
+      component.modelLastUpdate = undefined;
+      component.checkboxValue = false;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(true);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(true);
+      expect(component.modelLastUpdate).toBe(true);
+    });
+
+    it('should NOT emit changeModel when writeValue receives the same value as modelLastUpdate', () => {
+      component.checkboxValue = true;
+      component.modelLastUpdate = true;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(true);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.modelLastUpdate).toBe(true);
+    });
+
+    it('should emit changeModel when user clicks to toggle checkbox via checkOption', () => {
+      component.checkboxValue = false;
+      component.modelLastUpdate = false;
+      component.disabled = false;
+      component.propagateChange = (v: any) => {};
+
+      spyOn(component.changeModel, 'emit');
+
+      const fakeEvent = { target: { closest: () => null } };
+      component.checkOption(fakeEvent, false);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(true);
+      expect(component.modelLastUpdate).toBe(true);
+    });
+
+    it('should NOT emit change event when writeValue is called (only changeModel should emit)', () => {
+      component.modelLastUpdate = undefined;
+      component.checkboxValue = false;
+
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(true);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledWith(true);
+    });
+  });
+
   describe('Templates:', () => {
     it('should have label.', () => {
       const newLabel = 'PO';

@@ -709,6 +709,9 @@ export class PoTimepickerComponent extends PoTimepickerBaseComponent implements 
     }
 
     this.valueBeforeChange = this.timeValue;
+    if (value != null) {
+      this.controlChangeModelEmitter(this.formatOutput(this.timeValue) || this.timeValue);
+    }
   }
 
   verifyMobile() {

@@ -153,6 +153,21 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
   /** Evento disparado ao alterar valor do campo. */
   @Output('p-change') onchange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
   /** Evento disparado quando uma tecla é pressionada enquanto o foco está no componente. */
   @Output('p-keydown') keydown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
@@ -199,6 +214,8 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
 
   /** Habilita ação para limpar o campo. */
   clean?: boolean = false;
+
+  modelLastUpdate: any;
 
   protected onChangeModel: any = null;
   protected validatorChange: any;
@@ -666,6 +683,15 @@ export abstract class PoTimepickerBaseComponent implements ControlValueAccessor,
       this.pendingChangeValue = null;
     } else {
       this.pendingChangeValue = { value: formatted };
+    }
+
+    this.controlChangeModelEmitter(formatted);
+  }
+
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
     }
   }
 

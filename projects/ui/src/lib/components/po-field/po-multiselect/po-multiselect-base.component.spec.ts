@@ -282,14 +282,17 @@ describe('PoMultiselectBaseComponent:', () => {
       onModelChange: v => {},
       eventChange: v => {},
       getValuesFromOptions: v => [],
-      getValueUpdate: v => []
+      getValueUpdate: v => [],
+      controlChangeModelEmitter: v => {}
     };
 
     spyOn(fakeThis, 'onModelChange');
     spyOn(fakeThis, 'eventChange');
+    spyOn(fakeThis, 'controlChangeModelEmitter');
     component.callOnChange.call(fakeThis, []);
     expect(fakeThis.onModelChange).toHaveBeenCalledWith([]);
     expect(fakeThis.eventChange).toHaveBeenCalledWith([]);
+    expect(fakeThis.controlChangeModelEmitter).toHaveBeenCalledWith([]);
   });
 
   it('shouldn`t call eventChange', () => {
@@ -991,6 +994,142 @@ describe('PoMultiselectBaseComponent:', () => {
       component.loading = false;
 
       expect(component.isDisabled).toBeTrue();
+    });
+  });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value
+    it('should emit changeModel when writeValue receives a new array value (Property 1)', () => {
+      const options = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+      component.options = options;
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue([1, 2]);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith([1, 2]);
+      expect(component.modelLastUpdate).toEqual([1, 2]);
+    });
+
+    // Feature: p-change-model-fields, Property 4: Deep equality for complex values
+    it('should NOT emit changeModel when writeValue receives same array content with different reference (Property 4)', () => {
+      const options = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+      component.options = options;
+      component.modelLastUpdate = [1, 2];
+      component.selectedOptions = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue([1, 2]);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission
+    it('should emit changeModel on user selection via callOnChange (Property 5)', () => {
+      component.modelLastUpdate = [];
+      component.registerOnChange(() => {});
+
+      const selectedOptions = [{ value: 1, label: 'One' }];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.callOnChange(selectedOptions);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith([1]);
+      expect(component.modelLastUpdate).toEqual([1]);
+    });
+
+    // Feature: p-change-model-fields, Property 5: User deselection triggers emission
+    it('should emit changeModel on user deselection via callOnChange (Property 5)', () => {
+      component.modelLastUpdate = [1, 2];
+      component.registerOnChange(() => {});
+
+      const selectedOptions = [{ value: 1, label: 'One' }];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.callOnChange(selectedOptions);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith([1]);
+      expect(component.modelLastUpdate).toEqual([1]);
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    it('should NOT emit change event on writeValue (Property 6)', () => {
+      const options = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+      component.options = options;
+      component.modelLastUpdate = undefined;
+      component.selectedOptions = [];
+
+      spyOn(component.change, 'emit');
+
+      component.writeValue([1]);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+    });
+
+    it('should NOT emit changeModel when writeValue receives null', () => {
+      component.options = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(null);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    it('should NOT emit changeModel when writeValue receives empty array', () => {
+      component.options = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue([]);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    it('should store modelLastUpdate as array copy when value is an array', () => {
+      component.options = [
+        { value: 1, label: 'One' },
+        { value: 2, label: 'Two' }
+      ];
+      component.modelLastUpdate = undefined;
+      component.selectedOptions = [];
+
+      component.writeValue([1, 2]);
+
+      expect(component.modelLastUpdate).toEqual([1, 2]);
+      expect(component.modelLastUpdate).not.toBe([1, 2]);
+    });
+
+    it('should store modelLastUpdate as primitive when value is not an array', () => {
+      component.modelLastUpdate = undefined;
+
+      component.controlChangeModelEmitter('single');
+
+      expect(component.modelLastUpdate).toBe('single');
     });
   });
 });

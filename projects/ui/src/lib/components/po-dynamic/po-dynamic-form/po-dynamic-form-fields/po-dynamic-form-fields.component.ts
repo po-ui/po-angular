@@ -86,7 +86,11 @@ export class PoDynamicFormFieldsComponent extends PoDynamicFormFieldsBaseCompone
         await this.validateField(changedField, changedFieldIndex, visibleField);
       }
 
-      this.triggerValidationOnForm(changedFieldIndex);
+      // Quando validateOnInput está ativo, o onChangeFieldModel já disparou o triggerValidationOnForm.
+      // Evita disparo duplicado para componentes onde p-change e p-change-model ocorrem no mesmo ciclo.
+      if (!this.validateOnInput) {
+        this.triggerValidationOnForm(changedFieldIndex);
+      }
     }
 
     this.updatePreviousValue();

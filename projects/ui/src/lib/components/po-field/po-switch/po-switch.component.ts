@@ -4,11 +4,13 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   forwardRef,
   inject,
   InjectOptions,
   Injector,
   Input,
+  Output,
   ViewChild,
   OnDestroy,
   HostListener,
@@ -383,6 +385,23 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    */
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  modelLastUpdate: any;
+
   private readonly el: ElementRef = inject(ElementRef);
   private readonly injectOptions: InjectOptions = {
     self: true
@@ -467,6 +486,7 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
         this.updateModel(value);
       }
       this.emitChange(this.value);
+      this.controlChangeModelEmitter(this.value);
     }
   }
 
@@ -484,6 +504,9 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
         this.value = !!value;
       }
       this.changeDetector.markForCheck();
+    }
+    if (value != null) {
+      this.controlChangeModelEmitter(this.value);
     }
   }
 
@@ -573,6 +596,13 @@ export class PoSwitchComponent extends PoFieldModel<any> implements Validator, A
    */
   override showAdditionalHelp(): boolean {
     return super.showAdditionalHelp(this.helperEl, this.poHelperComponent());
+  }
+
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
+    }
   }
 
   private applySizeBasedOnA11y(): void {

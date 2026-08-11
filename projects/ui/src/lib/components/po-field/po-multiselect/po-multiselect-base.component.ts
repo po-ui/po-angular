@@ -308,6 +308,21 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    * @optional
    *
    * @description
+   *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
    * Evento disparado quando uma tecla é pressionada enquanto o foco está no componente.
    * Retorna um objeto `KeyboardEvent` com informações sobre a tecla.
    */
@@ -383,6 +398,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   service: PoMultiselectFilterService;
   defaultService: PoMultiselectFilterService;
   displayAdditionalHelp: boolean = false;
+  modelLastUpdate: any;
 
   // eslint-disable-next-line
   protected onModelTouched: any = null;
@@ -864,8 +880,10 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
   callOnChange(selectedOptions: Array<PoMultiselectOption | any>) {
     if (this.onModelChange) {
-      this.onModelChange(this.getValueUpdate(selectedOptions));
+      const value = this.getValueUpdate(selectedOptions);
+      this.onModelChange(value);
       this.eventChange(selectedOptions);
+      this.controlChangeModelEmitter(value);
     }
     setTimeout(() => {
       if (this.autoHeight) {
@@ -879,6 +897,15 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
       this.change.emit(selectedOptions);
     }
     this.lastLengthModel = selectedOptions ? selectedOptions.length : null;
+  }
+
+  controlChangeModelEmitter(value: any) {
+    const current = JSON.stringify(this.modelLastUpdate);
+    const incoming = JSON.stringify(value);
+    if (current !== incoming) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = Array.isArray(value) ? [...value] : value;
+    }
   }
 
   getValuesFromOptions(selectedOptions: Array<PoMultiselectOption | any>) {
@@ -968,6 +995,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   }
 
   writeValue(values: any): void {
+    const originalValues = values;
     values = this.getValueWrite(values);
 
     if (values !== null && values !== undefined && !Array.isArray(values)) {
@@ -987,6 +1015,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
 
       if (this.selectedOptions && this.selectedOptions.length < values.length) {
         this.callOnChange(this.selectedOptions);
+      } else if (originalValues != null && (!Array.isArray(originalValues) || originalValues.length > 0)) {
+        this.controlChangeModelEmitter(this.getValuesFromOptions(this.selectedOptions));
       }
     }
   }

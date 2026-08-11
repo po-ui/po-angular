@@ -289,6 +289,21 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * @description
    *
+   * Evento disparado sempre que o valor do model é alterado, seja por interação do usuário
+   * ou por atualização programática (ex: `setValue`, `patchValue`, carregamento assíncrono).
+   *
+   * Diferentemente do `p-change`, que é disparado apenas por interação do usuário,
+   * o `p-change-model` cobre todos os cenários de alteração de valor.
+   *
+   * Não emite quando o novo valor é idêntico ao anterior (deduplicação automática).
+   */
+  @Output('p-change-model') changeModel: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
    * Evento disparado ao sair do campo.
    */
   @Output('p-blur') onblur: EventEmitter<any> = new EventEmitter<any>();
@@ -336,6 +351,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    */
   labelTextWrap = input<boolean>(false, { alias: 'p-label-text-wrap' });
 
+  modelLastUpdate: any;
   offset: number;
   protected firstStart = true;
   protected hour: string = 'T00:00:00-00:00';
@@ -738,8 +754,16 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
     if (this.onChangeModel && value !== this.previousValue) {
       this.onChangeModel(value);
       this.previousValue = value;
+      this.controlChangeModelEmitter(value);
     } else if (retry) {
       setTimeout(() => this.callOnChange(value, false));
+    }
+  }
+
+  controlChangeModelEmitter(value: any) {
+    if (this.modelLastUpdate !== value) {
+      this.changeModel.emit(value);
+      this.modelLastUpdate = value;
     }
   }
 

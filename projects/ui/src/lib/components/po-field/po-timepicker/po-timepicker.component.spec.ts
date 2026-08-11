@@ -4580,4 +4580,61 @@ describe('PoTimepickerComponent:', () => {
       expect(component['periodDisplay']).toBe('AM');
     });
   });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value
+    it('should emit changeModel when writeValue receives a new valid time (Property 1)', () => {
+      fixture.detectChanges();
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue('10:30');
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith('10:30');
+      expect(component.modelLastUpdate).toBe('10:30');
+    });
+
+    // Feature: p-change-model-fields, Property 2: Deduplication
+    it('should NOT emit changeModel when writeValue receives the same time value as modelLastUpdate (Property 2)', () => {
+      fixture.detectChanges();
+      component.modelLastUpdate = '10:30';
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue('10:30');
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission
+    it('should emit changeModel when user selects time via timer panel (Property 5)', () => {
+      fixture.detectChanges();
+      component.modelLastUpdate = undefined;
+      component['onChangeModel'] = jasmine.createSpy('onChangeModel');
+      component['previousValue'] = '';
+
+      spyOn(component.changeModel, 'emit');
+
+      component.timerSelected('14:30');
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith('14:30');
+      expect(component.modelLastUpdate).toBe('14:30');
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    it('should NOT emit onchange (p-change) when writeValue is called (Property 6)', fakeAsync(() => {
+      fixture.detectChanges();
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.onchange, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue('10:30');
+      tick(300);
+
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledWith('10:30');
+    }));
+  });
 });

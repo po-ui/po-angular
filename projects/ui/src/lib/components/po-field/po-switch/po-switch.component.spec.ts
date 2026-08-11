@@ -665,6 +665,57 @@ describe('PoSwitchComponent', () => {
     });
   });
 
+  describe('p-change-model:', () => {
+    it('should emit changeModel when writeValue receives a new value different from modelLastUpdate', () => {
+      component.modelLastUpdate = undefined;
+      component.value = false;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(true);
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(true);
+      expect(component.modelLastUpdate).toBe(true);
+    });
+
+    it('should NOT emit changeModel when writeValue receives the same value as modelLastUpdate', () => {
+      component.value = true;
+      component.modelLastUpdate = true;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(true);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    it('should emit changeModel when user clicks to toggle value via eventClick', () => {
+      component.value = false;
+      component.disabled = false;
+      component.modelLastUpdate = false;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.eventClick();
+
+      expect(component.changeModel.emit).toHaveBeenCalledWith(true);
+      expect(component.modelLastUpdate).toBe(true);
+    });
+
+    it('should NOT emit change event when writeValue is called (only changeModel should emit)', () => {
+      component.modelLastUpdate = undefined;
+      component.value = false;
+
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(true);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalledWith(true);
+    });
+  });
+
   describe('Template:', () => {
     it('should set tabindex to -1 when switch is disabled', () => {
       component.disabled = true;

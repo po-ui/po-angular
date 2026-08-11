@@ -620,6 +620,69 @@ describe('PoDatetimepickerBaseComponent:', () => {
       expect(component['extractTimeFromDate'](date)).toBe('14:30');
     });
   });
+
+  describe('p-change-model:', () => {
+    it('should emit changeModel when writeValue receives a new datetime value different from modelLastUpdate', () => {
+      component.modelLastUpdate = undefined;
+      spyOn(component, 'refreshValue');
+      spyOn(component.changeModel, 'emit');
+      component.registerOnChange(() => {});
+
+      const dateValue = new Date(2026, 4, 12, 14, 30);
+      component.writeValue(dateValue);
+
+      expect(component.changeModel.emit).toHaveBeenCalledTimes(1);
+      const emittedValue = (component.changeModel.emit as jasmine.Spy).calls.mostRecent().args[0];
+      expect(emittedValue).toContain('2026-05-12T14:30');
+      expect(component.modelLastUpdate).toBe(emittedValue);
+    });
+
+    it('should NOT emit changeModel when writeValue receives the same datetime value as modelLastUpdate', () => {
+      spyOn(component, 'refreshValue');
+      component.registerOnChange(() => {});
+
+      const dateValue = new Date(2026, 4, 12, 14, 30);
+      component.writeValue(dateValue);
+
+      const firstEmittedValue = component.modelLastUpdate;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(new Date(2026, 4, 12, 14, 30));
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.modelLastUpdate).toBe(firstEmittedValue);
+    });
+
+    it('should emit changeModel when user triggers controlModel with a new datetime value', () => {
+      component.registerOnChange(() => {});
+      component.modelLastUpdate = undefined;
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '14:30';
+
+      spyOn(component.changeModel, 'emit');
+
+      component.controlModel();
+
+      expect(component.changeModel.emit).toHaveBeenCalledTimes(1);
+      const emittedValue = (component.changeModel.emit as jasmine.Spy).calls.mostRecent().args[0];
+      expect(emittedValue).toContain('2026-05-12T14:30');
+    });
+
+    it('should NOT emit change event (p-change) when writeValue is called', () => {
+      component.modelLastUpdate = undefined;
+      spyOn(component, 'refreshValue');
+      spyOn(component.onchange, 'emit');
+      spyOn(component.changeModel, 'emit');
+      component.registerOnChange(() => {});
+
+      const dateValue = new Date(2026, 4, 12, 14, 30);
+      component.writeValue(dateValue);
+
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).toHaveBeenCalled();
+    });
+  });
 });
 
 describe('PoDatetimepickerBaseComponent - Effects (with fixture):', () => {

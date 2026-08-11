@@ -530,4 +530,60 @@ describe('PoCheckboxGroupBaseComponent: ', () => {
       });
     });
   });
+
+  describe('p-change-model:', () => {
+    // Feature: p-change-model-fields, Property 1: Emission on new value
+    it('should emit changeModel when writeValue receives a new array value (Property 1)', () => {
+      component.options = [].concat(options);
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(['1']);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(['1']);
+      expect(component.modelLastUpdate).toEqual(['1']);
+    });
+
+    // Feature: p-change-model-fields, Property 4: Deep equality for complex values
+    it('should NOT emit changeModel when writeValue receives same array content with different reference (Property 4)', () => {
+      component.options = [].concat(options);
+      component.modelLastUpdate = ['1'];
+      component.checkedOptionsList = ['1'];
+
+      spyOn(component.changeModel, 'emit');
+
+      component.writeValue(['1']);
+
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+    });
+
+    // Feature: p-change-model-fields, Property 5: User interaction triggers emission
+    it('should emit changeModel on user checkbox toggle via checkOption (Property 5)', () => {
+      component.options = [].concat(options);
+      component.checkedOptionsList = [];
+      component.indeterminate = false;
+      component.modelLastUpdate = [];
+      component.propagateChange = () => {};
+
+      spyOn(component.changeModel, 'emit');
+
+      component.checkOption(options[0]);
+
+      expect(component.changeModel.emit).toHaveBeenCalledOnceWith(['1']);
+      expect(component.modelLastUpdate).toEqual(['1']);
+    });
+
+    // Feature: p-change-model-fields, Property 6: WriteValue does not emit p-change
+    it('should NOT emit change event on writeValue (Property 6)', () => {
+      component.options = [].concat(options);
+      component.modelLastUpdate = undefined;
+
+      spyOn(component.change, 'emit');
+
+      component.writeValue(['1']);
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+    });
+  });
 });

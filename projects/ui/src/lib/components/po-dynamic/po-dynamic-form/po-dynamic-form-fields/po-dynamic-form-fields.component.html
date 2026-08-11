@@ -48,6 +48,7 @@
         [p-show-required]="field.showRequired"
         [p-year-range-limit]="field.yearRangeLimit"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         [p-placeholder]="field.placeholder"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-keydown)="field.keydown?.($event)"
@@ -89,6 +90,7 @@
         [p-show-required]="field.showRequired"
         [p-size]="field.size || componentsSize"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-datetimepicker>
@@ -126,6 +128,7 @@
         [p-range-presets-order]="field.rangePresetsOrder"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-datepicker-range>
@@ -163,6 +166,7 @@
         [p-show-seconds]="field.showSeconds"
         [p-size]="field.size || componentsSize"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-timepicker>
@@ -317,6 +321,7 @@
         [p-size]="field.size || componentsSize"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
         [p-placeholder]="field.placeholder"
         [p-readonly]="field.readonly"
@@ -347,6 +352,7 @@
         [p-size]="field.size || componentsSize"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-radio-group>
@@ -376,6 +382,7 @@
         [p-size]="field.size || componentsSize"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-switch>
@@ -397,6 +404,7 @@
         [p-size]="field.size || componentsSize"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-checkbox>
@@ -433,6 +441,7 @@
         [p-error-limit]="field.errorLimit"
         [p-show-required]="field.showRequired"
         (p-change)="onChangeField(field, $event)"
+        (p-change-model)="onChangeFieldModel(field)"
         [p-icon]="field.icon"
         [p-placeholder]="field.placeholder"
         [p-filter-minlength]="field.filterMinlength"
@@ -485,6 +494,7 @@
         [p-show-required]="field.showRequired"
         [p-size]="field.size || componentsSize"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         [p-placeholder]="field.placeholder"
         [p-advanced-filters]="field.advancedFilters"
         (p-additional-help)="field.additionalHelp?.($event)"
@@ -518,6 +528,7 @@
         [p-size]="field.size || componentsSize"
         (p-additional-help)="field.additionalHelp?.($event)"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         (p-keydown)="field.keydown?.($event)"
       >
       </po-checkbox-group>
@@ -546,6 +557,7 @@
         [p-error-limit]="field.errorLimit"
         [p-show-required]="field.showRequired"
         (p-change)="onChangeField(field)"
+        (p-change-model)="onChangeFieldModel(field)"
         [p-placeholder]="field.placeholder"
         [p-field-label]="field.fieldLabel"
         [p-field-value]="field.fieldValue"
