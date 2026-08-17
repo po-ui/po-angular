@@ -102,7 +102,7 @@
     "@animaliads/animalia-icon": "^1.1.0",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-angular": "^18.4.3",
-    "@po-ui/ng-schematics": "^18.0.0",
+    "@po-ui/ng-schematics": "file:dist/ng-schematics",
     "@types/jasmine": "~5.1.4",
     "@types/jasminewd2": "~2.0.13",
     "@types/node": "25.0.1",
