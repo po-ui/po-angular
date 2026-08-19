@@ -1,0 +1,226 @@
+name: PO-UI Publish
+
+env:
+  SCHEMATICS_NPM_PATH: po-ui/ng-schematics
+  STORAGE_NPM_PATH: po-ui/ng-storage
+  SYNC_NPM_PATH: po-ui/ng-sync
+  COMPONENTS_NPM_PATH: po-ui/ng-components
+  TEMPLATES_NPM_PATH: po-ui/ng-templates
+  CODE_EDITOR_NPM_PATH: po-ui/ng-code-editor
+  MCP_NPM_PATH: po-ui/mcp
+  WORKING_DIR: /home/runner/work/po-angular/po-angular/po-angular
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_channel:
+        description: 'Canal de publicação'
+        required: true
+        type: choice
+        options:
+          - v19-lts
+          - v20-ng
+          - beta
+          - next
+          - latest
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Resolve as configurações de acordo com o canal escolhido
+  # ─────────────────────────────────────────────────────────────────────────────
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      npm_tag:      ${{ steps.cfg.outputs.npm_tag }}
+      required_branch: ${{ steps.cfg.outputs.required_branch }}
+      with_mcp:     ${{ steps.cfg.outputs.with_mcp }}
+    steps:
+      - name: Resolver configurações do canal
+        id: cfg
+        run: |
+          CHANNEL="${{ github.event.inputs.release_channel }}"
+
+          case "$CHANNEL" in
+            v19-lts)
+              echo "npm_tag=v19-lts"                       >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/19.x.x"     >> "$GITHUB_OUTPUT"
+              echo "with_mcp=false"                        >> "$GITHUB_OUTPUT"
+              ;;
+            v20-ng)
+              echo "npm_tag=v20-ng"                        >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/20.x.x"     >> "$GITHUB_OUTPUT"
+              echo "with_mcp=false"                        >> "$GITHUB_OUTPUT"
+              ;;
+            beta)
+              echo "npm_tag=beta"                          >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/beta"       >> "$GITHUB_OUTPUT"
+              echo "with_mcp=false"                        >> "$GITHUB_OUTPUT"
+              ;;
+            next)
+              echo "npm_tag=next"                          >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/master"     >> "$GITHUB_OUTPUT"
+              echo "with_mcp=true"                         >> "$GITHUB_OUTPUT"
+              ;;
+            latest)
+              echo "npm_tag=latest"                        >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/master"     >> "$GITHUB_OUTPUT"
+              echo "with_mcp=true"                         >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      # Bloqueia execução se o canal exige uma branch específica e não bate
+      - name: Verificar branch obrigatória
+        if: ${{ steps.cfg.outputs.required_branch != '' }}
+        run: |
+          if [ "${{ github.ref }}" != "${{ steps.cfg.outputs.required_branch }}" ]; then
+            echo "❌ Canal '${{ github.event.inputs.release_channel }}' só pode ser publicado a partir de '${{ steps.cfg.outputs.required_branch }}'."
+            echo "   Branch atual: ${{ github.ref }}"
+            exit 1
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Build e publicação dos pacotes npm
+  # ─────────────────────────────────────────────────────────────────────────────
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC (Trusted Publishing)
+      contents: read
+    needs: setup
+    steps:
+      - name: Check out po-angular
+        uses: actions/checkout@v4
+        with:
+          path: po-angular
+
+      - name: Check out style
+        uses: actions/checkout@v4
+        with:
+          repository: po-ui/po-style
+          path: po-style
+
+      - name: Check out lint
+        uses: actions/checkout@v4
+        with:
+          repository: po-ui/po-tslint
+          path: po-tslint
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install and Build
+        run: npm install && npm run build
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Build MCP
+        if: needs.setup.outputs.with_mcp == 'true'
+        run: npm run build:mcp
+        working-directory: ${{ env.WORKING_DIR }}
+
+      # Pega as versões publicadas no NPM e salva no arquivo versions.json
+      - name: Obter todas as versões publicadas
+        run: npm show @${{ env.COMPONENTS_NPM_PATH }} versions --json > versions.json
+
+      # Pega a versão no package.json
+      - name: Get package.json version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: po-angular
+
+      # Verifica se a versão a ser publicada já existe no NPM
+      - name: Verificar se a versão existe
+        id: version
+        run: |
+          VERSION_TO_CHECK=${{ steps.package-version.outputs.current-version }}
+          if jq -e --arg version "$VERSION_TO_CHECK" '.[] | select(. == $version)' versions.json; then
+            echo "publish=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=yes" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── ng-schematics ──────────────────────────────────────────────────────
+      - name: ng-schematics - publish
+        if: contains(steps.version.outputs.publish, 'yes')
+        run: npm publish ${{ env.WORKING_DIR }}/dist/ng-schematics --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: ng-schematics - add tag
+        if: contains(steps.version.outputs.publish, 'no')
+        run: npm dist-tags add @${{ env.SCHEMATICS_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── ng-storage ─────────────────────────────────────────────────────────
+      - name: ng-storage - publish
+        if: contains(steps.version.outputs.publish, 'yes')
+        run: npm publish ${{ env.WORKING_DIR }}/dist/ng-storage --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: ng-storage - add tag
+        if: contains(steps.version.outputs.publish, 'no')
+        run: npm dist-tags add @${{ env.STORAGE_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── ng-sync ────────────────────────────────────────────────────────────
+      - name: ng-sync - publish
+        if: contains(steps.version.outputs.publish, 'yes')
+        run: npm publish ${{ env.WORKING_DIR }}/dist/ng-sync --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: ng-sync - add tag
+        if: contains(steps.version.outputs.publish, 'no')
+        run: npm dist-tags add @${{ env.SYNC_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── ng-components ──────────────────────────────────────────────────────
+      - name: ng-components - publish
+        if: contains(steps.version.outputs.publish, 'yes')
+        run: npm publish ${{ env.WORKING_DIR }}/dist/ng-components --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: ng-components - add tag
+        if: contains(steps.version.outputs.publish, 'no')
+        run: npm dist-tags add @${{ env.COMPONENTS_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── ng-templates ───────────────────────────────────────────────────────
+      - name: ng-templates - publish
+        if: contains(steps.version.outputs.publish, 'yes')
+        run: npm publish ${{ env.WORKING_DIR }}/dist/ng-templates --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: ng-templates - add tag
+        if: contains(steps.version.outputs.publish, 'no')
+        run: npm dist-tags add @${{ env.TEMPLATES_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── ng-code-editor ─────────────────────────────────────────────────────
+      - name: ng-code-editor - publish
+        if: contains(steps.version.outputs.publish, 'yes')
+        run: npm publish ${{ env.WORKING_DIR }}/dist/ng-code-editor --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: ng-code-editor - add tag
+        if: contains(steps.version.outputs.publish, 'no')
+        run: npm dist-tags add @${{ env.CODE_EDITOR_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── mcp (apenas latest / next) ─────────────────────────────────────────
+      - name: mcp - publish
+        if: contains(steps.version.outputs.publish, 'yes') && needs.setup.outputs.with_mcp == 'true'
+        run: npm publish ${{ env.WORKING_DIR }}/dist/mcp --tag "${{ needs.setup.outputs.npm_tag }}" --provenance --ignore-scripts
+
+      - name: mcp - add tag
+        if: contains(steps.version.outputs.publish, 'no') && needs.setup.outputs.with_mcp == 'true'
+        run: npm dist-tags add @${{ env.MCP_NPM_PATH }}@${{ steps.package-version.outputs.current-version }} "${{ needs.setup.outputs.npm_tag }}"
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

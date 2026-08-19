@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.29.0](https://github.com/po-ui/po-angular/compare/v21.28.0...v21.29.0) (2026-08-19)
+
+
+### Features
+
+* **decimal:** adiciona formatação avançada via p-display-format ([e50a556](https://github.com/po-ui/po-angular/commit/e50a55690cb3a0d4f648b281ca2add5817f71b55))
+
 ### [21.28.0](https://github.com/po-ui/po-angular/compare/v21.27.0...v21.28.0) (2026-08-10)
 
 
