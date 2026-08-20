@@ -1,0 +1,71 @@
+<div class="po-row">
+  <po-container class="po-md-4" [p-height]="500">
+    <po-divider p-label="A Fazer"></po-divider>
+
+    <div
+      class="po-row"
+      [p-drop-list]="todoList()"
+      p-drop-list-id="list-todo"
+      [p-drop-list-connected-to]="['list-doing', 'list-done']"
+      (p-dropped)="onDropped($event, 'todo')"
+    >
+      @for (task of todoList(); track task.id) {
+        <po-widget
+          class="po-md-12 po-mb-2"
+          [p-drag]="task"
+          [p-title]="tasksWidgets()[task.id]?.title"
+          p-tag="A Fazer"
+          p-tag-type="warning"
+        >
+        </po-widget>
+      }
+    </div>
+  </po-container>
+
+  <po-container class="po-md-4" [p-height]="500">
+    <po-divider p-label="Em Andamento"></po-divider>
+
+    <div
+      class="po-row"
+      [p-drop-list]="doingList()"
+      p-drop-list-id="list-doing"
+      [p-drop-list-connected-to]="['list-todo', 'list-done']"
+      (p-dropped)="onDropped($event, 'doing')"
+    >
+      @for (task of doingList(); track task.id) {
+        <po-widget
+          class="po-md-12 po-mb-2"
+          [p-drag]="task"
+          [p-title]="tasksWidgets()[task.id]?.title"
+          p-tag="Em Andamento"
+          p-tag-type="info"
+        >
+        </po-widget>
+      }
+    </div>
+  </po-container>
+
+  <po-container class="po-md-4" [p-height]="500">
+    <po-divider p-label="Concluído"></po-divider>
+
+    <div
+      class="po-row"
+      [p-drop-list]="doneList()"
+      p-drop-list-id="list-done"
+      [p-drop-list-connected-to]="['list-todo', 'list-doing']"
+      (p-dropped)="onDropped($event, 'done')"
+      p-drop-list-disabled
+    >
+      @for (task of doneList(); track task.id) {
+        <po-widget
+          class="po-md-12 po-mb-2"
+          [p-drag]="task"
+          [p-title]="tasksWidgets()[task.id]?.title"
+          p-tag="Concluído"
+          p-tag-type="success"
+        >
+        </po-widget>
+      }
+    </div>
+  </po-container>
+</div>
