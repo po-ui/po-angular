@@ -1,0 +1,27 @@
+<po-container p-title="Dashboard — Orientação Mixed">
+  <p class="po-font-text po-mb-3">
+    Arraste os cards para reorganizar o layout do dashboard. A orientação mixed detecta trocas nos eixos X e Y, ideal
+    para layouts em grid onde os itens quebram em múltiplas linhas.
+  </p>
+
+  <div class="po-row">
+    <div
+      class="po-md-12"
+      [p-drop-list]="cards()"
+      p-drop-list-id="list-mixed"
+      p-drop-list-orientation="mixed"
+      (p-dropped)="onDropped($event)"
+    >
+      @for (card of cards(); track card.id) {
+        <po-widget
+          class="po-md-4 po-mb-2"
+          [p-drag]="card"
+          [p-title]="cardsWidgets()[card.id]?.title"
+          p-tag-type="neutral"
+        >
+          <p>{{ cardsWidgets()[card.id]?.title }}</p>
+        </po-widget>
+      }
+    </div>
+  </div>
+</po-container>
