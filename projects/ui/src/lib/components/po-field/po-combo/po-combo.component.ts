@@ -114,6 +114,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   @ViewChild('outerContainer ', { read: ElementRef }) outerContainer: ElementRef;
   @ViewChild('containerElement', { read: ElementRef }) containerElement: ElementRef;
   @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef;
+  @ViewChild('fieldContainerInput', { read: ElementRef }) fieldContainerInput: ElementRef;
   @ViewChild('iconArrow', { read: ElementRef, static: true }) iconElement: ElementRef;
   @ViewChild('inp', { read: ElementRef, static: true }) inputEl: ElementRef;
   @ViewChild('poListbox') poListbox: PoListBoxComponent;
@@ -811,7 +812,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
     this.controlPosition?.setElements(
       this.containerElement?.nativeElement,
       poComboContainerOffset,
-      this.inputEl,
+      this.fieldContainerInput,
       ['top', 'bottom'],
       true
     );

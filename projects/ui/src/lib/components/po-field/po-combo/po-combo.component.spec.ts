@@ -1302,7 +1302,7 @@ describe('PoComboComponent:', () => {
       expect(spySetElements).toHaveBeenCalledWith(
         component.containerElement.nativeElement,
         containerOffset,
-        component.inputEl,
+        component.fieldContainerInput,
         customPositions,
         isSetElementWidth
       );
