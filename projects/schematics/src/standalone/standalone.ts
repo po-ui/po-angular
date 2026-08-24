@@ -1,6 +1,6 @@
 import { Rule, Tree } from '@angular-devkit/schematics';
 
-import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
+import * as ts from 'typescript';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { addRootProvider } from '@schematics/angular/utility';
 import { applyToUpdateRecorder } from '@schematics/angular/utility/change';
@@ -15,7 +15,7 @@ export function importProvidersFrom(
   moduleName: string,
   packageName: string,
   argsImportProvidersFrom: string
-) {
+): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
@@ -44,7 +44,7 @@ function addProvider(
   return addRootProvider(
     projectName,
     ({ code, external }) => code`${external('importProvidersFrom', '@angular/core')}(${argsImportProvidersFrom})`
-  );
+  ) as unknown as Rule;
 }
 
 function addImport(host: Tree, filePath: string, symbolName: string, moduleName: string): void {
