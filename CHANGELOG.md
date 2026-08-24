@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.30.0](https://github.com/po-ui/po-angular/compare/v21.29.0...v21.30.0) (2026-08-24)
+
+
+### Features
+
+* **fields:** adiciona p-change-model nos componentes de formulário ([7de2b6b](https://github.com/po-ui/po-angular/commit/7de2b6b02f8379b91119fe1362696fd812572004))
+
+
+### Bug Fixes
+
+* **combo:** corrige largura do po-listbox em diferentes navegadores ([bb5ad95](https://github.com/po-ui/po-angular/commit/bb5ad957faf9acf1e39c6602c629c721f89ca495))
+
 ## [21.29.0](https://github.com/po-ui/po-angular/compare/v21.28.0...v21.29.0) (2026-08-19)
 
 
