@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.22](https://github.com/po-ui/po-angular/compare/v19.39.21...v19.39.22) (2026-08-24)
+
+
+### Bug Fixes
+
+* **combo:** corrige largura do po-listbox em diferentes navegadores ([8508279](https://github.com/po-ui/po-angular/commit/8508279d678d76ac31d96463608d3b933eddd489))
+
 ### [19.39.21](https://github.com/po-ui/po-angular/compare/v19.39.20...v19.39.21) (2026-08-19)
 
 Compatibilidade com @totvs/thf-components@19.39.21
