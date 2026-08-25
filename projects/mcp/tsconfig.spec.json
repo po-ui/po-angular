@@ -5,7 +5,7 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "declaration": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "outDir": null
   },
   "include": ["src/**/*.ts"],

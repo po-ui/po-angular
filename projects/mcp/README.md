@@ -120,7 +120,7 @@ Em clientes compatíveis com servidores MCP locais, configure um servidor `stdio
 
 ## Ferramentas disponíveis
 
-O servidor expõe quatro ferramentas somente de leitura.
+O servidor expõe seis ferramentas somente de leitura.
 
 ### `list_components`
 
@@ -151,6 +151,40 @@ Exemplo:
 
 ```json
 { "slug": "PoButtonComponent" }
+```
+
+### `get_component_examples`
+
+Retorna exemplos oficiais de um componente, buscados diretamente do repositório `po-ui/po-angular`. Cada exemplo inclui os arquivos que o compõem (TypeScript, HTML, estilos e configuração), com o conteúdo e o link para o código-fonte.
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `slug` | `string` | sim | Identificador do componente. Aceita slug (`po-button`), seletor (`<po-button>`) ou nome de classe (`PoButtonComponent`). |
+| `example` | `string` | não | Filtro pelo nome do exemplo, sem diferenciar maiúsculas e minúsculas. Exemplos: `basic`, `labs`. |
+| `max_examples` | número inteiro de 1 a 5 | não | Quantidade máxima de exemplos. O padrão é `3`. |
+
+Quando o componente informado não possui exemplos próprios, o servidor procura os exemplos do componente pai (por exemplo, `po-tab` retorna exemplos de `po-tabs`) e sinaliza a origem na resposta.
+
+Exemplo:
+
+```json
+{ "slug": "po-button", "example": "basic", "max_examples": 2 }
+```
+
+> Esta ferramenta consulta a API pública do GitHub. Consulte a seção [Limitação de taxa da API do GitHub](#limitação-de-taxa-da-api-do-github).
+
+### `get_best_practices`
+
+Retorna, em Markdown, um documento oficial de boas práticas do PO UI, junto com o título e o link da fonte.
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `topic` | `"contributing" \| "development-flow" \| "getting-started" \| "theme-service"` | sim | Tema das recomendações. |
+
+Exemplo:
+
+```json
+{ "topic": "getting-started" }
 ```
 
 ### `search_docs`
@@ -193,6 +227,8 @@ Exemplo:
 - “Como usar o `PoThemeService`?”
 - “Pesquise por `p-loading` na documentação do PO UI.”
 - “Liste os guias disponíveis e traga o guia de schematics.”
+- “Mostre exemplos oficiais do `po-table`.”
+- “Quais são as boas práticas de customização de tema do PO UI?”
 
 ## Fontes de dados
 
@@ -202,8 +238,11 @@ Exemplo:
 | Documentação consolidada | `https://po-ui.io/llms-full.txt` | — |
 | Documentação por recurso | `https://po-ui.io/llms-generated/{slug}.md` | `https://raw.githubusercontent.com/po-ui/po-angular/master/projects/portal/src/llms-generated/{slug}.md` |
 | Guias | `https://raw.githubusercontent.com/po-ui/po-angular/master/docs/guides/{name}.md` | — |
+| Índice de exemplos | `https://api.github.com/repos/po-ui/po-angular/git/trees/master?recursive=1` | — |
+| Arquivos de exemplo | `https://raw.githubusercontent.com/po-ui/po-angular/master/{path}` | — |
+| Boas práticas | `https://raw.githubusercontent.com/po-ui/po-angular/master/{doc}` | — |
 
-O índice `llms.txt` é mantido em memória durante a execução do servidor. Para forçar uma nova leitura, reinicie o servidor no cliente MCP.
+O índice `llms.txt` é mantido em memória durante a execução do servidor. O índice de exemplos (árvore do repositório) também é mantido em cache durante a execução. Para forçar uma nova leitura de qualquer um deles, reinicie o servidor no cliente MCP.
 
 ## Solução de problemas
 
@@ -213,7 +252,13 @@ Confirme que o Node.js 18 ou superior está instalado e que `npx` está disponí
 
 ### Erro ao carregar o índice ou a documentação
 
-Verifique se o ambiente permite acesso HTTPS a `po-ui.io` e `raw.githubusercontent.com`. Cada requisição possui timeout de 10 segundos.
+Verifique se o ambiente permite acesso HTTPS a `po-ui.io`, `raw.githubusercontent.com` e `api.github.com`. Cada requisição possui timeout de 10 segundos.
+
+### Limitação de taxa da API do GitHub
+
+A ferramenta `get_component_examples` consulta a API pública do GitHub para localizar os exemplos no repositório. Sem autenticação, o GitHub limita as requisições a 60 por hora por endereço IP. Ao atingir esse limite, a API responde com HTTP 403 e a ferramenta retorna uma mensagem de erro correspondente.
+
+Para reduzir o consumo, o servidor mantém a árvore do repositório em cache durante a execução: apenas a primeira chamada a `get_component_examples` consulta a API do GitHub; as demais reutilizam o resultado em memória. Se você atingir o limite, aguarde a renovação da cota ou reinicie o servidor mais tarde. Ambientes com IP compartilhado (proxies corporativos, por exemplo) podem atingir o limite com mais frequência.
 
 ### Recurso não encontrado
 
