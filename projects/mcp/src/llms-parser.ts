@@ -38,7 +38,7 @@ export function parseLlmsTxt(text: string): LlmsEntry[] {
     // Extract slug from URL path:
     // https://po-ui.io/llms-generated/po-button.md  → po-button
     // https://po-ui.io/guides/getting-started        → getting-started
-    const lastSegment = url.split('/').pop() ?? '';
+    const lastSegment = url.slice(url.lastIndexOf('/') + 1);
     const slug = lastSegment.endsWith('.md') ? lastSegment.slice(0, -3) : lastSegment;
 
     entries.push({

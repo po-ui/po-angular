@@ -10,47 +10,47 @@ import {
 // ── normaliseSlug ────────────────────────────────────────────────────────────
 
 describe('normaliseSlug', () => {
-  it('deve retornar slug kebab-case inalterado', () => {
+  it('should keep a kebab-case slug unchanged', () => {
     expect(normaliseSlug('po-button')).toBe('po-button');
   });
 
-  it('deve fazer trim de espacos', () => {
+  it('should trim surrounding whitespace', () => {
     expect(normaliseSlug('  po-button  ')).toBe('po-button');
   });
 
-  it('deve remover angle brackets', () => {
+  it('should strip angle brackets', () => {
     expect(normaliseSlug('<po-button>')).toBe('po-button');
   });
 
-  it('deve converter CamelCase para kebab-case', () => {
+  it('should convert CamelCase to kebab-case', () => {
     expect(normaliseSlug('PoButtonComponent')).toBe('po-button');
   });
 
-  it('deve remover sufixo -component', () => {
+  it('should drop the -component suffix', () => {
     expect(normaliseSlug('PoTableComponent')).toBe('po-table');
   });
 
-  it('deve converter class name de servico', () => {
+  it('should convert a service class name', () => {
     expect(normaliseSlug('PoDialogService')).toBe('po-dialog-service');
   });
 
-  it('deve converter siglas em CamelCase corretamente', () => {
+  it('should convert acronyms in CamelCase correctly', () => {
     expect(normaliseSlug('PoHTTPInterceptor')).toBe('po-http-interceptor');
   });
 
-  it('deve manter slug com numeros', () => {
+  it('should keep a slug containing numbers', () => {
     expect(normaliseSlug('po-chart-v2')).toBe('po-chart-v2');
   });
 
-  it('nao deve converter quando ja e lowercase', () => {
+  it('should not convert a slug that is already lowercase', () => {
     expect(normaliseSlug('po-dialog-service')).toBe('po-dialog-service');
   });
 
-  it('deve lidar com string vazia', () => {
+  it('should handle an empty string', () => {
     expect(normaliseSlug('')).toBe('');
   });
 
-  it('deve lidar com angle brackets vazios', () => {
+  it('should handle empty angle brackets', () => {
     expect(normaliseSlug('<>')).toBe('');
   });
 });
@@ -58,27 +58,27 @@ describe('normaliseSlug', () => {
 // ── extractHeading ───────────────────────────────────────────────────────────
 
 describe('extractHeading', () => {
-  it('deve extrair heading de linha com #', () => {
+  it('should extract the heading from a line starting with #', () => {
     expect(extractHeading(['# PoButton', '', 'Descricao'])).toBe('PoButton');
   });
 
-  it('deve retornar "Desconhecido" quando nao ha heading', () => {
+  it('should return "Desconhecido" when there is no heading', () => {
     expect(extractHeading(['Sem heading', 'Outra linha'])).toBe('Desconhecido');
   });
 
-  it('deve retornar "Desconhecido" para array vazio', () => {
+  it('should return "Desconhecido" for an empty array', () => {
     expect(extractHeading([])).toBe('Desconhecido');
   });
 
-  it('deve fazer trim do heading', () => {
+  it('should trim the heading', () => {
     expect(extractHeading(['# PoButton  '])).toBe('PoButton');
   });
 
-  it('deve pegar apenas o primeiro heading', () => {
+  it('should take only the first heading', () => {
     expect(extractHeading(['# Primeiro', '# Segundo'])).toBe('Primeiro');
   });
 
-  it('nao deve confundir ## com #', () => {
+  it('should not treat ## as #', () => {
     expect(extractHeading(['## SubHeading', 'texto'])).toBe('Desconhecido');
   });
 });
@@ -88,23 +88,23 @@ describe('extractHeading', () => {
 describe('findMatchingLineIndexes', () => {
   const lines = ['Linha zero', 'Linha com BUSCA aqui', 'Outra linha', 'Mais busca aqui'];
 
-  it('deve encontrar indices das linhas que contem a query', () => {
+  it('should find the indexes of the lines containing the query', () => {
     expect(findMatchingLineIndexes(lines, 'busca')).toEqual([1, 3]);
   });
 
-  it('deve ser case-insensitive (query ja vem em lowercase)', () => {
+  it('should be case-insensitive (the query already comes in lowercase)', () => {
     expect(findMatchingLineIndexes(lines, 'busca')).toEqual([1, 3]);
   });
 
-  it('deve retornar array vazio quando nao encontra', () => {
+  it('should return an empty array when there is no match', () => {
     expect(findMatchingLineIndexes(lines, 'inexistente')).toEqual([]);
   });
 
-  it('deve retornar todos os indices para match universal', () => {
+  it('should return every index for a query that matches all lines', () => {
     expect(findMatchingLineIndexes(lines, 'linha')).toEqual([0, 1, 2]);
   });
 
-  it('deve lidar com array vazio', () => {
+  it('should handle an empty array', () => {
     expect(findMatchingLineIndexes([], 'busca')).toEqual([]);
   });
 });
@@ -125,7 +125,7 @@ describe('buildContextSnippet', () => {
     'Linha 9' // 9
   ];
 
-  it('deve incluir +-2 linhas ao redor do match', () => {
+  it('should include 2 lines around the match', () => {
     const result = buildContextSnippet(lines, [5]);
     expect(result).toContain('Linha 3');
     expect(result).toContain('Linha 4');
@@ -135,7 +135,7 @@ describe('buildContextSnippet', () => {
     expect(result).toContain('...');
   });
 
-  it('deve respeitar limite inferior (indice 0)', () => {
+  it('should respect the lower bound (index 0)', () => {
     const result = buildContextSnippet(lines, [1]);
     expect(result).toContain('Linha 0');
     expect(result).toContain('Linha 1');
@@ -143,32 +143,32 @@ describe('buildContextSnippet', () => {
     expect(result).toContain('Linha 3');
   });
 
-  it('deve respeitar limite superior (ultimo indice)', () => {
+  it('should respect the upper bound (last index)', () => {
     const result = buildContextSnippet(lines, [9]);
     expect(result).toContain('Linha 7');
     expect(result).toContain('Linha 8');
     expect(result).toContain('Linha 9');
   });
 
-  it('deve limitar a 3 matches para contexto', () => {
+  it('should limit the context to 3 matches', () => {
     const result = buildContextSnippet(lines, [0, 3, 6, 9]);
     // Deve ter no maximo 3 separadores "..." (um por match usado)
     const ellipsisCount = (result.match(/\.\.\./g) || []).length;
     expect(ellipsisCount).toBeLessThanOrEqual(3);
   });
 
-  it('deve nao duplicar linhas em matches proximos', () => {
+  it('should not duplicate lines when matches are close to each other', () => {
     const result = buildContextSnippet(lines, [4, 5]);
     const resultLines = result.split('\n').filter(l => l !== '...' && l !== '');
     const uniqueLines = [...new Set(resultLines)];
     expect(resultLines.length).toBe(uniqueLines.length);
   });
 
-  it('deve retornar string vazia para array de indexes vazio', () => {
+  it('should return an empty string for an empty index array', () => {
     expect(buildContextSnippet(lines, [])).toBe('');
   });
 
-  it('deve incluir separador ... apos cada bloco de contexto', () => {
+  it('should append the ... separator after each context block', () => {
     const result = buildContextSnippet(lines, [2]);
     expect(result).toContain('...');
   });
@@ -220,54 +220,54 @@ describe('searchFullText', () => {
     '| p-required | boolean |'
   ].join('\n');
 
-  it('deve encontrar resultados em multiplas secoes', () => {
+  it('should find results across multiple sections', () => {
     const results = searchFullText(fullText, 'p-loading', 10);
     expect(results).toHaveLength(2);
     expect(results[0].componentName).toBe('PoButtonComponent');
     expect(results[1].componentName).toBe('PoInputComponent');
   });
 
-  it('deve ser case-insensitive', () => {
+  it('should be case-insensitive', () => {
     const results = searchFullText(fullText, 'P-LOADING', 10);
     expect(results).toHaveLength(2);
   });
 
-  it('deve respeitar maxResults', () => {
+  it('should respect maxResults', () => {
     const results = searchFullText(fullText, 'p-loading', 1);
     expect(results).toHaveLength(1);
     expect(results[0].componentName).toBe('PoButtonComponent');
   });
 
-  it('deve retornar array vazio quando nao encontra', () => {
+  it('should return an empty array when there is no match', () => {
     const results = searchFullText(fullText, 'xyznonexistent', 10);
     expect(results).toHaveLength(0);
   });
 
-  it('deve retornar array vazio para texto vazio', () => {
+  it('should return an empty array for an empty text', () => {
     const results = searchFullText('', 'busca', 10);
     expect(results).toHaveLength(0);
   });
 
-  it('deve retornar "Desconhecido" quando secao nao tem heading', () => {
+  it('should return "Desconhecido" when the section has no heading', () => {
     const text = 'Secao sem heading\nalgum texto com busca\noutro texto';
     const results = searchFullText(text, 'busca', 10);
     expect(results).toHaveLength(1);
     expect(results[0].componentName).toBe('Desconhecido');
   });
 
-  it('deve incluir contexto no resultado', () => {
+  it('should include the context in the result', () => {
     const results = searchFullText(fullText, 'lazy load', 10);
     expect(results).toHaveLength(1);
     expect(results[0].context).toContain('lazy load');
     expect(results[0].context).toContain('...');
   });
 
-  it('deve encontrar todas as secoes quando query e comum', () => {
+  it('should find every section when the query is common to all of them', () => {
     const results = searchFullText(fullText, 'Propriedade', 10);
     expect(results).toHaveLength(3);
   });
 
-  it('deve ter componentName e context como strings nao-vazias', () => {
+  it('should return componentName and context as non-empty strings', () => {
     const results = searchFullText(fullText, 'tabela', 10);
     expect(results).toHaveLength(1);
     expect(typeof results[0].componentName).toBe('string');
@@ -276,7 +276,7 @@ describe('searchFullText', () => {
     expect(results[0].context.length).toBeGreaterThan(0);
   });
 
-  it('deve ignorar secao quando contem query no texto completo mas nenhuma linha individual contem', () => {
+  it('should skip a section that matches the whole text but has no single matching line', () => {
     // Query que cruza quebra de linha: presente na secao mas nao em linhas individuais
     const text = 'abc\ndef';
     const results = searchFullText(text, 'abc\ndef', 10);
@@ -284,7 +284,7 @@ describe('searchFullText', () => {
   });
 });
 
-// ── createServer - tool handlers (com mock do McpServer) ────────────────────
+// ── createServer - tool handlers (with a mocked McpServer) ──────────────────
 
 describe('createServer - tool handlers', () => {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -302,6 +302,8 @@ describe('createServer - tool handlers', () => {
 
   /* eslint-disable @typescript-eslint/no-var-requires */
   const docsClient = require('./docs-client') as {
+    fetchBestPractices: jest.Mock;
+    fetchComponentExamples: jest.Mock;
     fetchLlmsTxt: jest.Mock;
     fetchLlmsFullTxt: jest.Mock;
     fetchComponentDoc: jest.Mock;
@@ -345,16 +347,18 @@ describe('createServer - tool handlers', () => {
   // ── list_components ──────────────────────────────────────────────────
 
   describe('list_components', () => {
-    it('deve listar todos os componentes com section=all', async () => {
+    it('should list every component with section=all', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all' });
       expect(result.content[0].text).toContain('PoButton');
       expect(result.content[0].text).toContain('PoTable');
       expect(result.content[0].text).toContain('PoDialogService');
+      expect(result.structuredContent.count).toBe(4);
+      expect(result.structuredContent.items[0].url).toContain('po-ui.io');
     });
 
-    it('deve usar section=all como padrao quando nao informado', async () => {
+    it('should default to section=all when it is not provided', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       const result = await handler({});
@@ -362,7 +366,7 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('PoDialogService');
     });
 
-    it('deve filtrar por section especifica', async () => {
+    it('should filter by a specific section', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'guides' });
@@ -370,7 +374,7 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).not.toContain('PoButton');
     });
 
-    it('deve aplicar filtro de texto', async () => {
+    it('should apply the free text filter', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all', filter: 'tabela' });
@@ -378,29 +382,31 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).not.toContain('PoDialogService');
     });
 
-    it('deve retornar mensagem quando nenhum resultado e encontrado', async () => {
+    it('should return a message when no result is found', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all', filter: 'xyzinexistente' });
       expect(result.content[0].text).toContain('Nenhum resultado encontrado');
+      expect(result.structuredContent).toEqual({ count: 0, items: [], section: 'all' });
     });
 
-    it('deve retornar erro quando fetchLlmsTxt falha', async () => {
+    it('should return an error when fetchLlmsTxt fails', async () => {
       docsClient.fetchLlmsTxt.mockRejectedValue(new Error('Network error'));
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all' });
       expect(result.content[0].text).toContain('Erro ao carregar');
       expect(result.content[0].text).toContain('Network error');
+      expect(result.isError).toBe(true);
     });
 
-    it('deve agrupar resultados por secao', async () => {
+    it('should group the results by section', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all' });
       expect(result.content[0].text).toContain('Componentes e Diretivas');
     });
 
-    it('deve usar cache de entradas na segunda chamada', async () => {
+    it('should reuse the cached entries on the second call', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('list_components')!;
       await handler({ section: 'all' });
@@ -408,7 +414,7 @@ describe('createServer - tool handlers', () => {
       expect(docsClient.fetchLlmsTxt).toHaveBeenCalledTimes(1);
     });
 
-    it('deve converter erro nao-Error para string quando fetchLlmsTxt rejeita com valor nao-Error', async () => {
+    it('should stringify a non-Error rejection from fetchLlmsTxt', async () => {
       docsClient.fetchLlmsTxt.mockRejectedValue('erro simples');
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all' });
@@ -416,7 +422,7 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('erro simples');
     });
 
-    it('deve usar nome da secao como fallback quando nao ha label em SECTION_LABELS', async () => {
+    it('should fall back to the raw section name when SECTION_LABELS has no label', async () => {
       docsClient.fetchLlmsTxt.mockResolvedValue(
         '## Secao Desconhecida\n- [Foo](https://po-ui.io/llms-generated/foo.md): descricao'
       );
@@ -429,29 +435,35 @@ describe('createServer - tool handlers', () => {
   // ── get_component_docs ───────────────────────────────────────────────
 
   describe('get_component_docs', () => {
-    it('deve retornar documentacao do componente com sucesso', async () => {
+    it('should return the component documentation successfully', async () => {
       docsClient.fetchComponentDoc.mockResolvedValue('# PoButton\nDocumentacao completa');
       const handler = registeredTools.get('get_component_docs')!;
       const result = await handler({ slug: 'po-button' });
       expect(result.content[0].text).toContain('# PoButton');
       expect(result.content[0].text).toContain('Documentacao completa');
+      expect(result.structuredContent).toEqual({
+        content: '# PoButton\nDocumentacao completa',
+        documentationUrl: 'https://po-ui.io/documentation/po-button',
+        slug: 'po-button',
+        sourceUrl: 'https://po-ui.io/llms-generated/po-button.md'
+      });
     });
 
-    it('deve normalizar slug antes de buscar', async () => {
+    it('should normalise the slug before fetching', async () => {
       docsClient.fetchComponentDoc.mockResolvedValue('# PoButton\nDoc');
       const handler = registeredTools.get('get_component_docs')!;
       await handler({ slug: 'PoButtonComponent' });
       expect(docsClient.fetchComponentDoc).toHaveBeenCalledWith('po-button');
     });
 
-    it('deve normalizar slug com angle brackets', async () => {
+    it('should normalise a slug written with angle brackets', async () => {
       docsClient.fetchComponentDoc.mockResolvedValue('# PoButton\nDoc');
       const handler = registeredTools.get('get_component_docs')!;
       await handler({ slug: '<po-button>' });
       expect(docsClient.fetchComponentDoc).toHaveBeenCalledWith('po-button');
     });
 
-    it('deve tentar slug original quando normalizado falha', async () => {
+    it('should retry with the original slug when the normalised one fails', async () => {
       docsClient.fetchComponentDoc
         .mockRejectedValueOnce(new Error('Not found'))
         .mockResolvedValueOnce('# CustomSlug\nDoc');
@@ -461,15 +473,16 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('# CustomSlug');
     });
 
-    it('deve retornar sugestoes quando componente nao encontrado', async () => {
+    it('should return suggestions when the component is not found', async () => {
       docsClient.fetchComponentDoc.mockRejectedValue(new Error('Not found'));
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('get_component_docs')!;
       const result = await handler({ slug: 'po-button' });
       expect(result.content[0].text).toContain('n\u00e3o encontrado');
+      expect(result.isError).toBe(true);
     });
 
-    it('deve retornar mensagem generica quando sugestoes falham', async () => {
+    it('should return a generic message when loading the suggestions fails', async () => {
       docsClient.fetchComponentDoc.mockRejectedValue(new Error('Not found'));
       docsClient.fetchLlmsTxt.mockRejectedValue(new Error('Index error'));
       const handler = registeredTools.get('get_component_docs')!;
@@ -478,63 +491,214 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('list_components');
     });
 
-    it('deve retornar mensagem sem sugestoes quando slug nao corresponde a nenhuma entrada', async () => {
+    it('should return a message without suggestions when the slug matches no entry', async () => {
       docsClient.fetchComponentDoc.mockRejectedValue(new Error('Not found'));
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('get_component_docs')!;
       const result = await handler({ slug: 'xyz-totally-unrelated' });
       expect(result.content[0].text).toContain('Use list_components para ver todos os slugs dispon\u00edveis.');
+      expect(result.isError).toBe(true);
+    });
+  });
+
+  // ── get_component_examples ──────────────────────────────────────────
+
+  describe('get_component_examples', () => {
+    const examples = [
+      {
+        name: 'sample-po-button-basic',
+        url: 'https://github.com/po-ui/po-angular/tree/master/sample-po-button-basic',
+        files: [
+          {
+            content: '<po-button></po-button>',
+            language: 'html',
+            name: 'sample-po-button-basic.component.html',
+            url: 'https://github.com/po-ui/po-angular/blob/master/sample-po-button-basic.component.html'
+          }
+        ]
+      }
+    ];
+
+    it('should return official component examples with structured content', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples,
+        sourceSlug: 'po-button',
+        status: 'available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'PoButtonComponent', example: 'basic', max_examples: 1 });
+
+      expect(docsClient.fetchComponentExamples).toHaveBeenCalledWith('po-button', 1, 'basic');
+      expect(result.content[0].text).toContain('sample-po-button-basic');
+      expect(result.structuredContent.slug).toBe('po-button');
+      expect(result.structuredContent.examples).toEqual(examples);
+      expect(result.structuredContent.sourceSlug).toBe('po-button');
+      expect(result.structuredContent.status).toBe('available');
+    });
+
+    it('should use three examples as the default limit', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples,
+        sourceSlug: 'po-button',
+        status: 'available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      await handler({ slug: 'po-button' });
+
+      expect(docsClient.fetchComponentExamples).toHaveBeenCalledWith('po-button', 3, undefined);
+    });
+
+    it('should identify examples returned from the parent component', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples,
+        sourceSlug: 'po-tabs',
+        status: 'available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-tab' });
+
+      expect(result.content[0].text).toContain('componente pai "po-tabs"');
+      expect(result.structuredContent.sourceSlug).toBe('po-tabs');
+    });
+
+    it('should return structured empty content when no example matches', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples: [],
+        sourceSlug: 'po-button',
+        status: 'no_match'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-button', example: 'inexistente' });
+
+      expect(result.isError).toBeUndefined();
+      expect(result.content[0].text).toContain('corresponde ao filtro');
+      expect(result.structuredContent.examples).toEqual([]);
+      expect(result.structuredContent.status).toBe('no_match');
+    });
+
+    it('should explain when the component has no official examples', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples: [],
+        sourceSlug: 'po-navbar',
+        status: 'not_available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-navbar' });
+
+      expect(result.isError).toBeUndefined();
+      expect(result.content[0].text).toContain('não possui exemplos oficiais próprios');
+      expect(result.structuredContent.status).toBe('not_available');
+    });
+
+    it('should return a tool error when examples cannot be loaded', async () => {
+      docsClient.fetchComponentExamples.mockRejectedValue(new Error('GitHub unavailable'));
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-button' });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('GitHub unavailable');
+    });
+  });
+
+  // ── get_best_practices ──────────────────────────────────────────────
+
+  describe('get_best_practices', () => {
+    it('should return the selected official source with structured content', async () => {
+      docsClient.fetchBestPractices.mockResolvedValue({
+        content: '# Primeiros passos',
+        title: 'Primeiros passos',
+        url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+      });
+      const handler = registeredTools.get('get_best_practices')!;
+
+      const result = await handler({ topic: 'getting-started' });
+
+      expect(docsClient.fetchBestPractices).toHaveBeenCalledWith('getting-started');
+      expect(result.content[0].text).toContain('Fonte oficial');
+      expect(result.structuredContent).toEqual({
+        content: '# Primeiros passos',
+        source: {
+          title: 'Primeiros passos',
+          url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+        },
+        topic: 'getting-started'
+      });
+    });
+
+    it('should return a tool error when best practices cannot be loaded', async () => {
+      docsClient.fetchBestPractices.mockRejectedValue('source unavailable');
+      const handler = registeredTools.get('get_best_practices')!;
+
+      const result = await handler({ topic: 'contributing' });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('source unavailable');
     });
   });
 
   // ── search_docs ──────────────────────────────────────────────────────
 
   describe('search_docs', () => {
-    it('deve retornar resultados de busca formatados', async () => {
+    it('should return formatted search results', async () => {
       docsClient.fetchLlmsFullTxt.mockResolvedValue(MOCK_LLMS_FULL_TXT);
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'p-loading' });
       expect(result.content[0].text).toContain('Encontrados');
       expect(result.content[0].text).toContain('PoButton');
+      expect(result.structuredContent.results[0]).toEqual(
+        expect.objectContaining({
+          componentName: 'PoButton',
+          slug: 'po-button',
+          url: 'https://po-ui.io/documentation/po-button'
+        })
+      );
     });
 
-    it('deve usar max_results padrao de 10', async () => {
+    it('should default max_results to 10', async () => {
       docsClient.fetchLlmsFullTxt.mockResolvedValue(MOCK_LLMS_FULL_TXT);
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'Componente' });
       expect(result.content[0].text).toContain('Encontrados');
     });
 
-    it('deve respeitar max_results personalizado', async () => {
+    it('should respect a custom max_results', async () => {
       docsClient.fetchLlmsFullTxt.mockResolvedValue(MOCK_LLMS_FULL_TXT);
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'Componente', max_results: 1 });
       expect(result.content[0].text).toContain('1 resultado(s)');
     });
 
-    it('deve retornar mensagem quando nao encontra resultados', async () => {
+    it('should return a message when there is no result', async () => {
       docsClient.fetchLlmsFullTxt.mockResolvedValue(MOCK_LLMS_FULL_TXT);
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'xyzinexistente' });
       expect(result.content[0].text).toContain('Nenhum resultado encontrado');
+      expect(result.structuredContent).toEqual({ count: 0, query: 'xyzinexistente', results: [] });
     });
 
-    it('deve retornar erro quando fetchLlmsFullTxt falha', async () => {
+    it('should return an error when fetchLlmsFullTxt fails', async () => {
       docsClient.fetchLlmsFullTxt.mockRejectedValue(new Error('Timeout'));
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'botao' });
       expect(result.content[0].text).toContain('Erro ao carregar');
       expect(result.content[0].text).toContain('Timeout');
+      expect(result.isError).toBe(true);
     });
 
-    it('deve incluir contexto nos resultados', async () => {
+    it('should include the context in the results', async () => {
       docsClient.fetchLlmsFullTxt.mockResolvedValue(MOCK_LLMS_FULL_TXT);
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'lazy load' });
       expect(result.content[0].text).toContain('PoTable');
     });
 
-    it('deve converter erro nao-Error para string no search_docs', async () => {
+    it('should stringify a non-Error rejection in search_docs', async () => {
       docsClient.fetchLlmsFullTxt.mockRejectedValue('timeout string');
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'botao' });
@@ -546,15 +710,20 @@ describe('createServer - tool handlers', () => {
   // ── get_guide ────────────────────────────────────────────────────────
 
   describe('get_guide', () => {
-    it('deve retornar conteudo do guia com sucesso', async () => {
+    it('should return the guide content successfully', async () => {
       docsClient.fetchGuide.mockResolvedValue('# Getting Started\nConteudo do guia');
       const handler = registeredTools.get('get_guide')!;
       const result = await handler({ guide: 'getting-started' });
       expect(result.content[0].text).toContain('# Getting Started');
       expect(result.content[0].text).toContain('Conteudo do guia');
+      expect(result.structuredContent).toEqual({
+        content: '# Getting Started\nConteudo do guia',
+        guide: 'getting-started',
+        url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+      });
     });
 
-    it('deve retornar erro com lista de guias disponiveis quando falha', async () => {
+    it('should return an error listing the available guides when it fails', async () => {
       docsClient.fetchGuide.mockRejectedValue(new Error('Not found'));
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('get_guide')!;
@@ -562,9 +731,10 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('Erro');
       expect(result.content[0].text).toContain('Guias dispon\u00edveis');
       expect(result.content[0].text).toContain('Getting Started');
+      expect(result.isError).toBe(true);
     });
 
-    it('deve retornar apenas erro quando indice tambem falha', async () => {
+    it('should return only the error when the index also fails', async () => {
       docsClient.fetchGuide.mockRejectedValue(new Error('Not found'));
       docsClient.fetchLlmsTxt.mockRejectedValue(new Error('Index error'));
       const handler = registeredTools.get('get_guide')!;
@@ -573,7 +743,7 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('Not found');
     });
 
-    it('deve converter erro nao-Error para string no get_guide', async () => {
+    it('should stringify a non-Error rejection in get_guide', async () => {
       docsClient.fetchGuide.mockRejectedValue('string error');
       docsClient.fetchLlmsTxt.mockResolvedValue(MOCK_LLMS_TXT);
       const handler = registeredTools.get('get_guide')!;
@@ -582,7 +752,7 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('string error');
     });
 
-    it('deve exibir "Nenhum guia no indice" quando nao ha guias no indice', async () => {
+    it('should show "Nenhum guia no índice" when the index has no guide', async () => {
       docsClient.fetchGuide.mockRejectedValue(new Error('Not found'));
       docsClient.fetchLlmsTxt.mockResolvedValue(
         '## Componentes e Diretivas\n- [PoButton](https://po-ui.io/llms-generated/po-button.md): Componente'
@@ -591,19 +761,54 @@ describe('createServer - tool handlers', () => {
       const result = await handler({ guide: 'xyz' });
       expect(result.content[0].text).toContain('Nenhum guia no \u00edndice');
     });
+
+    it('should strip the .md extension from the returned guide name', async () => {
+      docsClient.fetchGuide.mockResolvedValue('# Getting Started');
+      const handler = registeredTools.get('get_guide')!;
+      const result = await handler({ guide: 'getting-started.md' });
+      expect(result.structuredContent).toEqual({
+        content: '# Getting Started',
+        guide: 'getting-started',
+        url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+      });
+      expect(docsClient.fetchGuide).toHaveBeenCalledWith('getting-started.md');
+    });
+  });
+
+  // ── getErrorMessage (via handlers) ───────────────────────────────────
+
+  describe('getErrorMessage', () => {
+    it('should serialise with JSON.stringify an error that is neither Error nor string', async () => {
+      docsClient.fetchLlmsTxt.mockRejectedValue({ code: 500, reason: 'rate limit' });
+      const handler = registeredTools.get('list_components')!;
+      const result = await handler({ section: 'all' });
+      expect(result.content[0].text).toContain('Erro ao carregar');
+      expect(result.content[0].text).toContain('{"code":500,"reason":"rate limit"}');
+      expect(result.isError).toBe(true);
+    });
+
+    it('should return "Erro desconhecido." when the error cannot be serialised', async () => {
+      const circular: Record<string, unknown> = {};
+      circular.self = circular;
+      docsClient.fetchLlmsTxt.mockRejectedValue(circular);
+      const handler = registeredTools.get('list_components')!;
+      const result = await handler({ section: 'all' });
+      expect(result.content[0].text).toContain('Erro desconhecido.');
+      expect(result.isError).toBe(true);
+    });
   });
 });
 
-// ── createServer (instancia real) ───────────────────────────────────────────
+// ── createServer (real instance) ────────────────────────────────────────────
 
 describe('createServer', () => {
-  it('deve criar uma instancia do McpServer', () => {
+  it('should create an McpServer instance', () => {
     const server = createServer();
     expect(server).toBeDefined();
     expect(typeof server).toBe('object');
   });
 
-  it('deve ter o nome "po-ui"', () => {
+  it('should be named "po-ui"', () => {
     const server = createServer();
     expect(server).toBeDefined();
   });
