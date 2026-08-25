@@ -1,14 +1,22 @@
 <po-list-view
   [p-actions]="actions"
   [p-components-size]="componentsSize"
+  [p-detail-display]="detailDisplay"
   [p-height]="height"
   [p-hide-select-all]="properties.includes('hideSelectAll')"
   [p-items]="items"
   [p-literals]="customLiterals"
+  [p-property-avatar]="propertyAvatar"
+  [p-property-highlighted]="propertyHighlighted"
   [p-property-link]="propertyLink"
+  [p-property-subtitle]="propertySubtitle"
+  [p-property-tag]="propertyTag"
+  [p-property-tag-type]="propertyTagType"
   [p-property-title]="propertyTitle"
   [p-select]="properties.includes('select')"
+  [p-selection-mode]="selectionMode"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
+  [p-tag-position]="tagPosition"
   (p-show-more)="showMore()"
   (p-title-action)="changeAction('p-title-action')"
 >
@@ -97,6 +105,81 @@
       [p-options]="componentsSizeOptions"
     >
     </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="selectionMode"
+      [(ngModel)]="selectionMode"
+      p-label="Selection mode"
+      p-help='Define o modo de seleção quando a opção "Select" está habilitada. Em "single" a opção "Selecionar todos" é ocultada.'
+      [p-options]="selectionModeOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="detailDisplay"
+      [(ngModel)]="detailDisplay"
+      p-label="Detail display"
+      p-help="Define se o detalhe é exibido inline (expand) ou em modal."
+      [p-options]="detailDisplayOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="tagPosition"
+      [(ngModel)]="tagPosition"
+      p-label="Tag position"
+      p-help="Posicionamento da tag em relação ao título (right, top, bottom)."
+      [p-options]="tagPositionOptions"
+    >
+    </po-radio-group>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyTag"
+      [(ngModel)]="propertyTag"
+      p-help='Ex.: "tag"'
+      p-label="Property tag"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyTagType"
+      [(ngModel)]="propertyTagType"
+      p-help='Ex.: "tagType"'
+      p-label="Property tag type"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertySubtitle"
+      [(ngModel)]="propertySubtitle"
+      p-help='Ex.: "subtitle"'
+      p-label="Property subtitle"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyAvatar"
+      [(ngModel)]="propertyAvatar"
+      p-help='Ex.: "avatar"'
+      p-label="Property avatar"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyHighlighted"
+      [(ngModel)]="propertyHighlighted"
+      p-help='Ex.: "unread"'
+      p-label="Property highlighted"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">

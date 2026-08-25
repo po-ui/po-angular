@@ -6,6 +6,9 @@
  * Interface para definição das literais usadas no `po-list-view`.
  */
 export interface PoListViewLiterals {
+  /** Título padrão do `po-modal` de detalhes, exibido quando `p-detail-display` é `modal`. */
+  detailModalTitle?: string;
+
   /** Rótulo do botão que oculta os detalhes do item. */
   hideDetails?: string;
 

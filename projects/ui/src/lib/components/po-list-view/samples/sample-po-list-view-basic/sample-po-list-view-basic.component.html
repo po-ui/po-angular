@@ -1,13 +1,38 @@
 <po-list-view
   p-property-title="name"
+  p-property-subtitle="subtitle"
+  p-property-tag="tag"
+  p-property-tag-type="tagType"
+  p-tag-position="bottom"
+  p-property-avatar="avatar"
   [p-items]="[
-    { name: 'Registro 1', email: 'register@po-ui.com' },
-    { name: 'Registro 2', email: 'register2@po-ui.com' }
+    {
+      name: 'Relatório de faturamento',
+      subtitle: 'Há 5 min',
+      tag: 'Concluído',
+      tagType: 'success',
+      avatar: 'https://i.pravatar.cc/150?img=1'
+    },
+    {
+      name: 'Solicitação de férias',
+      subtitle: 'Há 12 min',
+      tag: 'Em andamento',
+      tagType: 'info',
+      avatar: 'https://i.pravatar.cc/150?img=2'
+    },
+    {
+      name: 'Atualização do sistema',
+      subtitle: 'Há 30 min',
+      tag: 'Aviso',
+      tagType: 'warning',
+      avatar: 'https://i.pravatar.cc/150?img=3'
+    }
   ]"
+  (p-title-action)="(undefined)"
 >
   <ng-template p-list-view-content-template let-item>
     <div class="po-row">
-      <po-info class="po-md-12" p-label="Email" [p-value]="item.email"></po-info>
+      <span class="po-font-text-small">{{ item.subtitle }}</span>
     </div>
   </ng-template>
 </po-list-view>
