@@ -3,7 +3,6 @@ import { PoFieldSize } from '../enums/po-field-size.enum';
 import { poLocaleDefault, poLocales } from '../services/po-language/po-language.constant';
 import { ElementRef } from '@angular/core';
 import { PoThemeA11yEnum } from '../services/po-theme/enum/po-theme-a11y.enum';
-import { PoThemeService } from '../services/po-theme/po-theme.service';
 import { PoTableColumnSpacing } from '../components/po-table/enums/po-table-spacing.enum';
 
 /**
@@ -39,15 +38,6 @@ export function getBrowserLanguage(): string {
   const shortLanguage = getShortLanguage(language);
 
   return poLocales.includes(shortLanguage) ? language : poLocaleDefault;
-}
-
-/**
- * @deprecated use getDefaultSizeFn
- *
- * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
- */
-export function getDefaultSize<T>(poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
-  return poThemeService.getA11yDefaultSize() === 'small' ? sizeEnum['Small'] : sizeEnum['Medium'];
 }
 
 /**
@@ -683,24 +673,6 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
       }
     });
   }
-}
-
-/**
- * @deprecated use validateSizeFn
- *
- * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
- */
-export function validateSize<T>(value: string, poThemeService: PoThemeService, sizeEnum: T): T[keyof T] {
-  const validSizes = Object.values(sizeEnum) as Array<string>;
-
-  if (value && validSizes.includes(value)) {
-    if (value === sizeEnum['Small'] && poThemeService.getA11yLevel() === PoThemeA11yEnum.AAA) {
-      return sizeEnum['Medium'];
-    }
-    return value as T[keyof T];
-  }
-
-  return getDefaultSize(poThemeService, sizeEnum);
 }
 
 /**
