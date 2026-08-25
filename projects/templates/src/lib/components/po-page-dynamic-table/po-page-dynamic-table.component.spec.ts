@@ -836,7 +836,7 @@ describe('PoPageDynamicTableComponent:', () => {
         component.items = [{ name: 'Anne', id: 2, seqItem: 9 }];
 
         spyOn(component['poPageDynamicService'], 'getResources').and.returnValue(of(response));
-        spyOn(utilsFunctions, 'removeDuplicateItemsWithArrayKey');
+        spyOn(utilsFunctions, 'removeDuplicateItemsWithArrayKey').and.returnValue(undefined);
 
         component['loadData']({ page: 2 }).subscribe();
 

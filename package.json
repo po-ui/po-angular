@@ -27,7 +27,7 @@
     "test:sync:schematics": "gulp build:schematics --lib sync && jasmine \"dist/ng-sync/schematics/**/*.spec.js\"",
     "test:sync:browse": "ng test sync --code-coverage --browsers=Chrome --source-map",
     "test:ui": "ng test ui --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
-    "test:ui:schematics": "gulp build:schematics --lib ui && jasmine \"./dist/ng-components/schematics/**/*.spec.js\"",
+    "test:ui:schematics": "gulp clean:schematics --lib ui && gulp build:schematics:lib && gulp build:schematics:spec --lib ui && jasmine \"./dist/ng-components/schematics/**/*.spec.js\"",
     "test:ui:browse": "ng test ui --code-coverage --browsers=Chrome --source-map",
     "test:templates": "ng test templates --watch=false --code-coverage --browsers=ChromeHeadless --source-map",
     "test:templates:schematics": "gulp build:schematics --lib templates && jasmine \"dist/ng-templates/schematics/**/*.spec.js\"",
