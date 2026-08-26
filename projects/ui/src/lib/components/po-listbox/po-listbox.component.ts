@@ -11,9 +11,11 @@ import {
   SimpleChanges,
   ViewChild,
   ViewChildren,
+  effect,
   inject
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
 
 import { PoListBoxBaseComponent } from './po-listbox-base.component';
 import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
@@ -46,6 +48,8 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
   @ViewChild('searchElement') searchElement: PoSearchListComponent;
   @ViewChild('popupHeaderContainer') popupHeaderContainer: ElementRef;
   @ViewChildren('listboxItem') listboxItems!: QueryList<ElementRef>;
+  @ViewChild('listboxItemList', { read: CdkListbox }) cdkListbox?: CdkListbox;
+  @ViewChildren(CdkOption) cdkOptions?: QueryList<CdkOption>;
 
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
@@ -54,6 +58,14 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     const languageService = inject(PoLanguageService);
 
     super(languageService);
+
+    effect(() => {
+      const visible = this.visible();
+
+      if (visible && this.type === 'option' && !this.listboxSubitems) {
+        this.scrollToAndSelectCurrentItem();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -87,7 +99,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
       this.setListBoxWidth();
     }
 
-    if (this.visible && this.infiniteScroll) {
+    if (this.visible() && this.infiniteScroll) {
       this.checkInfiniteScroll();
     }
   }
@@ -259,6 +271,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
       this.items.filter(item =>
         item[this.fieldValue] === option[this.fieldValue] ? (item['selected'] = true) : (item['selected'] = false)
       );
+      this.cdkListbox.selectValue(option[this.fieldLabel]);
       this.selectCombo.emit({ ...option });
     }
   }
@@ -305,6 +318,43 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
 
   setFocus() {
     this.listboxItemList?.nativeElement?.focus();
+  }
+
+  private getSelectedItem(): any {
+    if (!this.items?.length) {
+      return undefined;
+    }
+
+    return this.items.find(item => this.isSelectedItem(item) || item?.selected);
+  }
+
+  scrollToAndSelectCurrentItem() {
+    const targetOption = this.listboxItems?.toArray() ?? [];
+    const selectedOption = targetOption.find(item => item.nativeElement.getAttribute('aria-selected') === 'true');
+    const selectedItem = this.getSelectedItem();
+
+    selectedOption?.nativeElement.scrollIntoView({
+      block: 'nearest'
+    });
+
+    if (selectedItem) {
+      this.cdkListbox?.selectValue(selectedItem[this.fieldLabel]);
+    }
+  }
+
+  protected onListboxFocusIn(event: FocusEvent): void {
+    if (this.type !== 'option' || this.listboxSubitems || !this.cdkListbox) {
+      return;
+    }
+
+    const focusedElement = event.target as HTMLElement;
+    const focusedOption = this.cdkOptions?.find(
+      option => option.element === focusedElement || option.element.contains(focusedElement)
+    );
+
+    if (focusedOption && !this.cdkListbox.isActive(focusedOption)) {
+      this.cdkListbox._setActiveOption(focusedOption);
+    }
   }
 
   protected checkInfiniteScroll(): void {

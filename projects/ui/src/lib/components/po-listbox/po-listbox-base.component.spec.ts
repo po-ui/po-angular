@@ -1,16 +1,30 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoListBoxBaseComponent, poListBoxLiteralsDefault } from './po-listbox-base.component';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoThemeA11yEnum } from '../../services';
 
-describe('PoListboxBaseComponent', () => {
-  const languageService = new PoLanguageService();
-  let component: PoListBoxBaseComponent;
+@Component({
+  template: '',
+  standalone: true
+})
+class TestComponent extends PoListBoxBaseComponent {}
 
-  beforeEach(() => {
-    component = new PoListBoxBaseComponent(languageService);
+describe('PoListboxBaseComponent', () => {
+  let component: PoListBoxBaseComponent;
+  let fixture: ComponentFixture<TestComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should be created', () => {
