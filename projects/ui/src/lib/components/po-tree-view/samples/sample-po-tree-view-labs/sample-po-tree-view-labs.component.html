@@ -1,20 +1,22 @@
 <po-tree-view
   [p-components-size]="componentsSize"
+  [p-disabled]="disabled"
   [p-items]="items"
+  [p-max-level]="maxLevel"
   [p-selectable]="selectable"
+  [p-single-select]="singleSelect"
+  (p-activated)="changeEvent('p-activated', $event)"
   (p-collapsed)="changeEvent('p-collapsed', $event)"
   (p-expanded)="changeEvent('p-expanded', $event)"
   (p-selected)="changeEvent('p-selected', $event)"
   (p-unselected)="changeEvent('p-unselected', $event)"
-  [p-max-level]="maxLevel"
-  [p-single-select]="singleSelect"
 >
 </po-tree-view>
 
 <po-divider p-label="Events"></po-divider>
 
 <div class="po-row">
-  <po-info p-label="Event" [p-value]="event"> </po-info>
+  <po-info class="po-md-12" p-label="Event" [p-value]="event"> </po-info>
 </div>
 
 <po-divider p-label="Po Tree View Config"></po-divider>
@@ -24,13 +26,13 @@
   <po-switch class="po-md-6 po-lg-2" name="selectable" [(ngModel)]="selectable" p-label="Selectable"> </po-switch>
   <po-switch class="po-md-6 po-lg-2" name="singleSelect" [(ngModel)]="singleSelect" p-label="Single Select">
   </po-switch>
+  <po-switch class="po-md-6 po-lg-2" name="disabled" [(ngModel)]="disabled" p-label="Disabled"> </po-switch>
 
   <po-radio-group
-    class="po-lg-5"
+    class="po-lg-3"
     name="componentsSize"
     [(ngModel)]="componentsSize"
     p-label="Components size"
-    p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
     [p-options]="componentsSizeOptions"
   >
   </po-radio-group>
@@ -59,10 +61,10 @@
 
   <div class="po-row">
     <po-checkbox-group
-      class="po-md-6"
+      class="po-md-12"
       name="itemProperties"
       [(ngModel)]="itemProperties"
-      p-columns="3"
+      p-columns="4"
       p-label="Item Properties"
       [p-options]="itemPropertiesOptions"
     >
@@ -71,7 +73,7 @@
 
   <div class="po-row">
     <po-button
-      class="o-md-4 po-lg-2"
+      class="po-md-4 po-lg-2"
       p-label="Add"
       [p-disabled]="treeViewItemForm.invalid"
       (p-click)="add(treeViewItem); treeViewItemForm.reset(); this.itemProperties = []"

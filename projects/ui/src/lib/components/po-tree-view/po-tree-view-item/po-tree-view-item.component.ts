@@ -1,11 +1,11 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 
 import { PoTreeViewService } from '../services/po-tree-view.service';
 import { PoTreeViewItem } from './po-tree-view-item.interface';
 
 @Component({
-  selector: 'po-tree-view-item',
+  selector: '[po-tree-view-item]',
   templateUrl: './po-tree-view-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
@@ -37,31 +37,36 @@ import { PoTreeViewItem } from './po-tree-view-item.interface';
 export class PoTreeViewItemComponent {
   private readonly treeViewService = inject(PoTreeViewService);
 
-  @Input('p-components-size') componentsSize: string;
+  readonly componentsSize = input<string>(undefined, { alias: 'p-components-size' });
 
-  @Input('p-item') item: PoTreeViewItem;
+  readonly item = input<PoTreeViewItem>(undefined, { alias: 'p-item' });
 
-  @Input('p-selectable') selectable: boolean;
+  readonly level = input<number>(0, { alias: 'p-level' });
 
-  @Input('p-single-select') singleSelect: boolean;
+  readonly selectable = input<boolean>(false, { alias: 'p-selectable' });
 
-  @Input('p-selected-value') selectedValue: string | number;
+  readonly selectedValue = input<string | number>(undefined, { alias: 'p-selected-value' });
+
+  readonly singleSelect = input<boolean>(false, { alias: 'p-single-select' });
 
   get hasSubItems() {
-    return !!(this.item.subItems && this.item.subItems.length);
+    const item = this.item();
+    return !!item?.subItems?.length;
   }
 
-  onClick(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
+  onClick() {
+    const item = this.item();
+    item.expanded = !item.expanded;
 
-    this.item.expanded = !this.item.expanded;
-
-    this.treeViewService.emitExpandedEvent({ ...this.item });
+    this.treeViewService.emitExpandedEvent({ ...item });
   }
 
   onSelect(selectedItem: PoTreeViewItem) {
     this.treeViewService.emitSelectedEvent({ ...selectedItem });
+  }
+
+  onActivate(activatedItem: PoTreeViewItem) {
+    this.treeViewService.emitActivatedEvent({ ...activatedItem });
   }
 
   trackByFunction(index: number) {
