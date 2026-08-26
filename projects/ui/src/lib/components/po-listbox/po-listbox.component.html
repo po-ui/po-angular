@@ -3,7 +3,7 @@
   class="po-listbox"
   [class.po-listbox-check]="type === 'check' || type === 'option'"
   [attr.data-type]="type"
-  [hidden]="visible"
+  [hidden]="visible()"
 >
   <div #popupHeaderContainer>
     <ng-content select="[p-popup-header-template]"></ng-content>
@@ -21,7 +21,13 @@
   }
 
   @if (checkTemplate() && !listboxSubitems) {
-    <ul #listboxItemList cdkListbox [cdkListboxMultiple]="type === 'check'" class="po-listbox-list">
+    <ul
+      #listboxItemList
+      cdkListbox
+      [cdkListboxMultiple]="type === 'check'"
+      class="po-listbox-list"
+      (focusin)="onListboxFocusIn($event)"
+    >
       @if (type === 'check' && items.length && !searchElement?.inputValue && !hideSelectAll) {
         <li
           cdkOption="selectAll"
@@ -44,7 +50,8 @@
       }
       @for (item of items; track item) {
         <li
-          [class.po-listbox-item]="visible"
+          #listboxItem
+          [class.po-listbox-item]="visible()"
           [class.po-listbox-item-type-check]="type === 'check'"
           [cdkOption]="item[fieldLabel]"
           [cdkOptionDisabled]="
@@ -134,7 +141,7 @@
         @for (item of currentItems; track item) {
           <li
             #listboxItem
-            [class.po-listbox-item]="visible"
+            [class.po-listbox-item]="visible()"
             [cdkOption]="item[fieldLabel]"
             [cdkOptionDisabled]="returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false"
             [attr.aria-selected]="isSelectedItem(item) || item.selected"

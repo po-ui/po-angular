@@ -669,7 +669,7 @@ describe('PoListBoxComponent', () => {
       it('should call `checkInfiniteScroll` if infiniteScroll is true', () => {
         const checkInfiniteScroll = spyOn<any>(component, 'checkInfiniteScroll');
         component.infiniteScroll = true;
-        component.visible = true;
+        fixture.componentRef.setInput('p-visible', true);
         component.items = [
           { label: 'Item 1', value: 1 },
           { label: 'Item 2', value: 2 },
@@ -889,6 +889,46 @@ describe('PoListBoxComponent', () => {
       });
     });
 
+    describe('getSelectedItem:', () => {
+      it('should return undefined when items is empty', () => {
+        component.items = [];
+
+        expect(component['getSelectedItem']()).toBeUndefined();
+      });
+
+      it('should return undefined when items is undefined', () => {
+        component.items = undefined;
+
+        expect(component['getSelectedItem']()).toBeUndefined();
+      });
+
+      it('should return the item when it is selected by `isSelectedItem`', () => {
+        const item = { label: 'Option 2', value: 'value2' };
+        component.items = [{ label: 'Option 1', value: 'value1' }, item];
+        component.selectedOptions = [{ label: 'Option 2', value: 'value2' }];
+
+        expect(component['getSelectedItem']()).toBe(item);
+      });
+
+      it('should return the item when it has the `selected` property', () => {
+        const item = { label: 'Option 2', value: 'value2', selected: true };
+        component.items = [{ label: 'Option 1', value: 'value1' }, item];
+        component.selectedOptions = [];
+
+        expect(component['getSelectedItem']()).toBe(item);
+      });
+
+      it('should return undefined when no item matches', () => {
+        component.items = [
+          { label: 'Option 1', value: 'value1' },
+          { label: 'Option 2', value: 'value2' }
+        ];
+        component.selectedOptions = [];
+
+        expect(component['getSelectedItem']()).toBeUndefined();
+      });
+    });
+
     describe('onKeydown:', () => {
       it('should call onSelectCheckBoxItem if event is `enter` and type is `check`', () => {
         const item = { label: 'a', value: 'a' };
@@ -954,6 +994,7 @@ describe('PoListBoxComponent', () => {
 
       it('comboClicked: should emit selectCombo if `p-type` is option', () => {
         component.type = 'option';
+        component.cdkListbox = { selectValue: () => {} } as any;
         spyOn(component.selectCombo, 'emit');
 
         component.items = [{ label: 'a', value: 'a' }];
@@ -966,6 +1007,7 @@ describe('PoListBoxComponent', () => {
       it('comboClicked: should emit selectCombo if `p-type` is option', () => {
         spyOn(component.selectCombo, 'emit');
         component.type = 'option';
+        component.cdkListbox = { selectValue: () => {} } as any;
         component.items = [
           { label: 'option 1', value: 'option 2' },
           { label: 'option 3', value: 'option 4' }
@@ -1028,6 +1070,7 @@ describe('PoListBoxComponent', () => {
         spyOn(component.selectCombo, 'emit');
 
         component.type = 'option';
+        component.cdkListbox = { selectValue: () => {} } as any;
         component.onKeyDown(item, eventEnterKey);
 
         expect(component.selectCombo.emit).toHaveBeenCalled();
@@ -1150,7 +1193,7 @@ describe('PoListBoxComponent', () => {
         { label: 'd', value: 'd' }
       ];
       component.items = items;
-      component.visible = true;
+      fixture.componentRef.setInput('p-visible', true);
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-listbox-item')).toBeTruthy();
@@ -1223,6 +1266,302 @@ describe('PoListBoxComponent', () => {
       item.self = item;
       const result = component.formatItemList(item);
       expect(result).toBe(item);
+    });
+  });
+
+  describe('visible effect:', () => {
+    it(`should call 'scrollToAndSelectCurrentItem' when visible is true, type is 'option' and listboxSubitems is false`, () => {
+      const scrollToAndSelectCurrentItem = spyOn<any>(component, 'scrollToAndSelectCurrentItem');
+      component.type = 'option';
+      component.listboxSubitems = false;
+
+      fixture.componentRef.setInput('p-visible', true);
+      fixture.detectChanges();
+
+      expect(scrollToAndSelectCurrentItem).toHaveBeenCalled();
+    });
+
+    it(`should not call 'scrollToAndSelectCurrentItem' when visible is false`, () => {
+      const scrollToAndSelectCurrentItem = spyOn<any>(component, 'scrollToAndSelectCurrentItem');
+      component.type = 'option';
+      component.listboxSubitems = false;
+
+      fixture.componentRef.setInput('p-visible', false);
+      fixture.detectChanges();
+
+      expect(scrollToAndSelectCurrentItem).not.toHaveBeenCalled();
+    });
+
+    it(`should not call 'scrollToAndSelectCurrentItem' when type is not 'option'`, () => {
+      const scrollToAndSelectCurrentItem = spyOn<any>(component, 'scrollToAndSelectCurrentItem');
+      component.type = 'check';
+      component.listboxSubitems = false;
+
+      fixture.componentRef.setInput('p-visible', true);
+      fixture.detectChanges();
+
+      expect(scrollToAndSelectCurrentItem).not.toHaveBeenCalled();
+    });
+
+    it(`should not call 'scrollToAndSelectCurrentItem' when listboxSubitems is true`, () => {
+      const scrollToAndSelectCurrentItem = spyOn<any>(component, 'scrollToAndSelectCurrentItem');
+      component.type = 'option';
+      component.listboxSubitems = true;
+
+      fixture.componentRef.setInput('p-visible', true);
+      fixture.detectChanges();
+
+      expect(scrollToAndSelectCurrentItem).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getSelectedItem:', () => {
+    it('should return undefined when items is empty', () => {
+      component.items = [];
+
+      expect(component['getSelectedItem']()).toBeUndefined();
+    });
+
+    it('should return undefined when items is undefined', () => {
+      component.items = undefined;
+
+      expect(component['getSelectedItem']()).toBeUndefined();
+    });
+
+    it('should return the item flagged with `selected`', () => {
+      const selectedItem = { label: 'b', value: 'b', selected: true };
+      component.items = [{ label: 'a', value: 'a' }, selectedItem];
+      spyOn(component, 'isSelectedItem').and.returnValue(false);
+
+      expect(component['getSelectedItem']()).toBe(selectedItem);
+    });
+
+    it('should return the item found by `isSelectedItem`', () => {
+      const selectedItem = { label: 'a', value: 'a' };
+      component.items = [selectedItem, { label: 'b', value: 'b' }];
+      spyOn(component, 'isSelectedItem').and.callFake((item: any) => item.value === 'a');
+
+      expect(component['getSelectedItem']()).toBe(selectedItem);
+    });
+
+    it('should return undefined when there is no selected item', () => {
+      component.items = [
+        { label: 'a', value: 'a' },
+        { label: 'b', value: 'b' }
+      ];
+      spyOn(component, 'isSelectedItem').and.returnValue(false);
+
+      expect(component['getSelectedItem']()).toBeUndefined();
+    });
+  });
+
+  describe('scrollToAndSelectCurrentItem:', () => {
+    it('should call `scrollIntoView` on the item with `aria-selected` true and `selectValue` when there is a selected item', () => {
+      const scrollIntoViewSpy = jasmine.createSpy('scrollIntoView');
+      const selectedElement = {
+        nativeElement: {
+          getAttribute: (attr: string) => (attr === 'aria-selected' ? 'true' : null),
+          scrollIntoView: scrollIntoViewSpy
+        }
+      };
+      const notSelectedElement = {
+        nativeElement: {
+          getAttribute: () => 'false',
+          scrollIntoView: jasmine.createSpy('scrollIntoView')
+        }
+      };
+      component.listboxItems = {
+        toArray: () => [notSelectedElement, selectedElement]
+      } as any;
+
+      const selectedItem = { label: 'b', value: 'b' };
+      spyOn<any>(component, 'getSelectedItem').and.returnValue(selectedItem);
+      const selectValueSpy = jasmine.createSpy('selectValue');
+      component.cdkListbox = { selectValue: selectValueSpy } as any;
+
+      component.scrollToAndSelectCurrentItem();
+
+      expect(scrollIntoViewSpy).toHaveBeenCalledWith({ block: 'nearest' });
+      expect(selectValueSpy).toHaveBeenCalledWith(selectedItem[component.fieldLabel]);
+    });
+
+    it('should not call `selectValue` when there is no selected item', () => {
+      const element = {
+        nativeElement: {
+          getAttribute: () => 'false',
+          scrollIntoView: jasmine.createSpy('scrollIntoView')
+        }
+      };
+      component.listboxItems = {
+        toArray: () => [element]
+      } as any;
+
+      spyOn<any>(component, 'getSelectedItem').and.returnValue(undefined);
+      const selectValueSpy = jasmine.createSpy('selectValue');
+      component.cdkListbox = { selectValue: selectValueSpy } as any;
+
+      component.scrollToAndSelectCurrentItem();
+
+      expect(selectValueSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not throw and default to empty array when `listboxItems` is undefined', () => {
+      component.listboxItems = undefined as any;
+      spyOn<any>(component, 'getSelectedItem').and.returnValue(undefined);
+      const selectValueSpy = jasmine.createSpy('selectValue');
+      component.cdkListbox = { selectValue: selectValueSpy } as any;
+
+      expect(() => component.scrollToAndSelectCurrentItem()).not.toThrow();
+      expect(selectValueSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not throw when `cdkListbox` is undefined even if there is a selected item', () => {
+      const element = {
+        nativeElement: {
+          getAttribute: () => 'false',
+          scrollIntoView: jasmine.createSpy('scrollIntoView')
+        }
+      };
+      component.listboxItems = {
+        toArray: () => [element]
+      } as any;
+
+      const selectedItem = { label: 'b', value: 'b' };
+      spyOn<any>(component, 'getSelectedItem').and.returnValue(selectedItem);
+      component.cdkListbox = undefined;
+
+      expect(() => component.scrollToAndSelectCurrentItem()).not.toThrow();
+    });
+  });
+
+  describe('onListboxFocusIn:', () => {
+    let setActiveOptionSpy: jasmine.Spy;
+    let isActiveSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      setActiveOptionSpy = jasmine.createSpy('_setActiveOption');
+      isActiveSpy = jasmine.createSpy('isActive').and.returnValue(false);
+      component.cdkListbox = {
+        _setActiveOption: setActiveOptionSpy,
+        isActive: isActiveSpy
+      } as any;
+    });
+
+    it('should return early when `type` is not `option`', () => {
+      component.type = 'check';
+      component.listboxSubitems = false;
+
+      component['onListboxFocusIn']({ target: document.createElement('li') } as any);
+
+      expect(setActiveOptionSpy).not.toHaveBeenCalled();
+    });
+
+    it('should return early when `listboxSubitems` is true', () => {
+      component.type = 'option';
+      component.listboxSubitems = true;
+
+      component['onListboxFocusIn']({ target: document.createElement('li') } as any);
+
+      expect(setActiveOptionSpy).not.toHaveBeenCalled();
+    });
+
+    it('should return early when `cdkListbox` is undefined', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      component.cdkListbox = undefined;
+
+      expect(() => component['onListboxFocusIn']({ target: document.createElement('li') } as any)).not.toThrow();
+      expect(setActiveOptionSpy).not.toHaveBeenCalled();
+    });
+
+    it('should call `_setActiveOption` when the focused element is the option element and it is not active', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const focusedElement = document.createElement('li');
+      const focusedOption = { element: focusedElement } as any;
+      component.cdkOptions = { find: (cb: any) => [focusedOption].find(cb) } as any;
+
+      component['onListboxFocusIn']({ target: focusedElement } as any);
+
+      expect(setActiveOptionSpy).toHaveBeenCalledWith(focusedOption);
+    });
+
+    it('should find the option when the focused element is a child of the option element', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const optionElement = document.createElement('li');
+      const childElement = document.createElement('span');
+      optionElement.appendChild(childElement);
+      const focusedOption = { element: optionElement } as any;
+      component.cdkOptions = { find: (cb: any) => [focusedOption].find(cb) } as any;
+
+      component['onListboxFocusIn']({ target: childElement } as any);
+
+      expect(setActiveOptionSpy).toHaveBeenCalledWith(focusedOption);
+    });
+
+    it('should not call `_setActiveOption` when the focused option is already active', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      isActiveSpy.and.returnValue(true);
+      const focusedElement = document.createElement('li');
+      const focusedOption = { element: focusedElement } as any;
+      component.cdkOptions = { find: (cb: any) => [focusedOption].find(cb) } as any;
+
+      component['onListboxFocusIn']({ target: focusedElement } as any);
+
+      expect(setActiveOptionSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not call `_setActiveOption` when no matching option is found', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const focusedElement = document.createElement('li');
+      component.cdkOptions = { find: () => undefined } as any;
+
+      component['onListboxFocusIn']({ target: focusedElement } as any);
+
+      expect(setActiveOptionSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not throw when `cdkOptions` is undefined', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      component.cdkOptions = undefined;
+
+      expect(() => component['onListboxFocusIn']({ target: document.createElement('li') } as any)).not.toThrow();
+      expect(setActiveOptionSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('optionClicked:', () => {
+    it('should call `cdkListbox.selectValue` and emit `selectCombo` when type is `option`', () => {
+      component.type = 'option';
+      component.items = [
+        { label: 'a', value: 'a' },
+        { label: 'b', value: 'b' }
+      ];
+      const selectValueSpy = jasmine.createSpy('selectValue');
+      component.cdkListbox = { selectValue: selectValueSpy } as any;
+      spyOn(component.selectCombo, 'emit');
+
+      const option = { label: 'b', value: 'b' };
+      component.optionClicked(option);
+
+      expect(selectValueSpy).toHaveBeenCalledWith(option[component.fieldLabel]);
+      expect(component.selectCombo.emit).toHaveBeenCalledWith({ ...option });
+    });
+
+    it('should not call `cdkListbox.selectValue` when type is not `option`', () => {
+      component.type = 'action';
+      const selectValueSpy = jasmine.createSpy('selectValue');
+      component.cdkListbox = { selectValue: selectValueSpy } as any;
+      spyOn(component.selectCombo, 'emit');
+
+      component.optionClicked({ label: 'a', value: 'a' });
+
+      expect(selectValueSpy).not.toHaveBeenCalled();
+      expect(component.selectCombo.emit).not.toHaveBeenCalled();
     });
   });
 });

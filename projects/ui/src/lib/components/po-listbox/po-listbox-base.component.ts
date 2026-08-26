@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, input, Input, Output, TemplateRef } from '@angular/core';
 
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -46,7 +46,7 @@ export class PoListBoxBaseComponent {
 
   @Input('p-listbox-subitems') listboxSubitems = false;
 
-  @Input({ alias: 'p-visible', transform: convertToBoolean }) visible: boolean = false;
+  visible = input<boolean>(false, { alias: 'p-visible', transform: convertToBoolean });
 
   @Input('p-type') set type(value: string) {
     this._type = PoItemListType[value] ?? 'action';
