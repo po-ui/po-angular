@@ -1,12 +1,15 @@
+import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
 
+import { PoButtonModule } from '../../po-button';
+import { PoIconModule } from '../../po-icon/po-icon.module';
 import { PoFieldModule } from '../../po-field/po-field.module';
 
-import { PoTreeViewItemComponent } from './po-tree-view-item.component';
-import { PoTreeViewItemHeaderComponent } from '../po-tree-view-item-header/po-tree-view-item-header.component';
 import { PoTreeViewService } from '../services/po-tree-view.service';
+import { PoTreeViewItemComponent } from './po-tree-view-item.component';
+import { PoTreeViewKeyboardService } from '../services/po-tree-view-keyboard.service';
+import { PoTreeViewItemContentComponent } from '../po-tree-view-item-content/po-tree-view-item-content.component';
 
 describe('PoTreeviewItemComponent:', () => {
   let component: PoTreeViewItemComponent;
@@ -14,15 +17,16 @@ describe('PoTreeviewItemComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule],
-      declarations: [PoTreeViewItemComponent, PoTreeViewItemHeaderComponent],
-      providers: [PoTreeViewService]
+      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule, PoButtonModule, PoIconModule],
+      declarations: [PoTreeViewItemComponent, PoTreeViewItemContentComponent],
+      providers: [PoTreeViewService, PoTreeViewKeyboardService]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoTreeViewItemComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('p-item', { label: 'Test', value: '1' });
   });
 
   it('should create', () => {
@@ -32,83 +36,57 @@ describe('PoTreeviewItemComponent:', () => {
 
   describe('Properties:', () => {
     it('hasSubItems: should return true if has subItems', () => {
-      component.item = {
+      fixture.componentRef.setInput('p-item', {
         label: 'Nivel 0',
         value: '220',
         subItems: [{ label: 'Nivel 01', value: 11 }]
-      };
+      });
 
       expect(component.hasSubItems).toBe(true);
     });
 
     it('hasSubItems: should return false if subItems is undefined', () => {
-      component.item = {
+      fixture.componentRef.setInput('p-item', {
         label: 'Nivel 0',
         value: '220',
         subItems: undefined
-      };
+      });
 
       expect(component.hasSubItems).toBe(false);
     });
   });
 
   describe('Methods:', () => {
-    it('onClick: should call event.preventDefault, event.stopPropagation and treeViewService.emitExpandedEvent with item', () => {
-      component.item = { label: 'Label 01', value: 12 };
+    it('onClick: should toggle expanded and call treeViewService.emitExpandedEvent', () => {
+      const item = { label: 'Label 01', value: 12, expanded: false };
+      fixture.componentRef.setInput('p-item', item);
 
-      const fakeEvent = {
-        preventDefault: () => {},
-        stopPropagation: () => {}
-      };
-
-      const spyPreventDefault = spyOn(fakeEvent, 'preventDefault');
-      const spyStopPropagation = spyOn(fakeEvent, 'stopPropagation');
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitExpandedEvent');
 
-      component.onClick(<any>fakeEvent);
+      component.onClick();
 
-      expect(component.item.expanded).toBe(true);
-      expect(spyPreventDefault).toHaveBeenCalled();
-      expect(spyStopPropagation).toHaveBeenCalled();
-      expect(spyEmitEvent).toHaveBeenCalledWith(component.item);
+      expect(item.expanded).toBe(true);
+      expect(spyEmitEvent).toHaveBeenCalled();
     });
 
     it('onSelect: should call treeViewService.emitSelectedEvent with item', () => {
-      component.item = { label: 'Label 01', value: 12 };
+      const item = { label: 'Label 01', value: 12 };
 
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitSelectedEvent');
 
-      component.onSelect(component.item);
+      component.onSelect(item);
 
-      expect(spyEmitEvent).toHaveBeenCalledWith(component.item);
-    });
-  });
-
-  describe('Templates:', () => {
-    it('should find .po-tree-view-item-group if has subItems', () => {
-      component.item = {
-        label: 'Nivel 01',
-        subItems: [{ label: 'Nivel 02', value: 12 }],
-        value: '110'
-      };
-
-      fixture.detectChanges();
-
-      const treeViewItemGroup = fixture.debugElement.nativeElement.querySelector('.po-tree-view-item-group');
-      expect(treeViewItemGroup).toBeTruthy();
+      expect(spyEmitEvent).toHaveBeenCalledWith({ ...item });
     });
 
-    it('shouldn`t find .po-tree-view-item-group if hasn`t subItems', () => {
-      component.item = {
-        label: 'Nivel 01',
-        value: '1',
-        subItems: undefined
-      };
+    it('onActivate: should call treeViewService.emitActivatedEvent with item', () => {
+      const item = { label: 'Label 01', value: 12 };
 
-      fixture.detectChanges();
+      const spyEmitEvent = spyOn(component['treeViewService'], 'emitActivatedEvent');
 
-      const treeViewItemGroup = fixture.debugElement.nativeElement.querySelector('.po-tree-view-item-group');
-      expect(treeViewItemGroup).toBe(null);
+      component.onActivate(item);
+
+      expect(spyEmitEvent).toHaveBeenCalledWith({ ...item });
     });
 
     it('trackByFunction: should return index param', () => {
