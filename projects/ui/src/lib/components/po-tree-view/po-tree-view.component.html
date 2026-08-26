@@ -1,16 +1,25 @@
 @if (hasItems) {
-  <po-container p-no-padding>
-    <ul class="po-tree-view">
-      @for (item of items; track trackByFunction($index)) {
-        <po-tree-view-item
-          [p-components-size]="componentsSize"
-          [p-item]="item"
-          [p-selectable]="selectable"
-          [p-single-select]="singleSelect"
-          [p-selected-value]="selectedValue"
-        >
-        </po-tree-view-item>
-      }
-    </ul>
+  <po-container [p-no-padding]="true" [p-no-border]="noBorder()">
+    <div role="application" [attr.aria-label]="literals.treeView">
+      <ul class="po-tree-view" role="tree" tabindex="0" (focus)="onTreeFocus($event)" (keydown)="onTreeKeydown($event)">
+        @for (item of items; track trackByFunction($index); let last = $last) {
+          <li
+            po-tree-view-item
+            class="po-tree-view-item"
+            [p-components-size]="componentsSize"
+            [p-item]="item"
+            [p-selectable]="selectable()"
+            [p-single-select]="singleSelect()"
+            [p-selected-value]="selectedValue"
+          ></li>
+
+          @if (!last) {
+            <po-divider></po-divider>
+          }
+        }
+      </ul>
+    </div>
+
+    <span class="po-sr-only" aria-live="polite" aria-atomic="true">{{ ariaLiveMessage }}</span>
   </po-container>
 }
