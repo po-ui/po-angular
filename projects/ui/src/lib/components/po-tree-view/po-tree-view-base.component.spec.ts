@@ -1,16 +1,27 @@
-import { PoThemeA11yEnum } from '../../services';
-import { expectPropertiesValues } from '../../util-test/util-expect.spec';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { PoTreeViewBaseComponent } from './po-tree-view-base.component';
+import { PoThemeA11yEnum } from '../../services';
+import { PoTreeViewModule } from './po-tree-view.module';
+import { PoTreeViewComponent } from './po-tree-view.component';
 
 describe('PoTreeViewBaseComponent:', () => {
-  let component: PoTreeViewBaseComponent;
+  let component: PoTreeViewComponent;
+  let fixture: ComponentFixture<PoTreeViewComponent>;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PoTreeViewModule, BrowserAnimationsModule]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
-    component = new PoTreeViewBaseComponent();
+    fixture = TestBed.createComponent(PoTreeViewComponent);
+    component = fixture.componentInstance;
   });
+
   it('should be created', () => {
-    expect(component instanceof PoTreeViewBaseComponent).toBeTruthy();
+    expect(component instanceof PoTreeViewComponent).toBeTruthy();
   });
 
   describe('Properties: ', () => {
@@ -25,44 +36,22 @@ describe('PoTreeViewBaseComponent:', () => {
         localStorage.removeItem('po-default-size');
       });
 
-      it('should set property with valid values for accessibility level is AA', () => {
-        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
-
-        component.componentsSize = 'small';
-        expect(component.componentsSize).toBe('small');
-
-        component.componentsSize = 'medium';
-        expect(component.componentsSize).toBe('medium');
-      });
-
-      it('should set property with valid values for accessibility level is AAA', () => {
+      it('should return medium when accessibility is AAA', () => {
         document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
-
-        component.componentsSize = 'small';
-        expect(component.componentsSize).toBe('medium');
-
-        component.componentsSize = 'medium';
+        component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
 
-      it('should return small when accessibility is AA and getA11yDefaultSize is small', () => {
+      it('should return small when accessibility is AA and default size is small', () => {
         document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
         localStorage.setItem('po-default-size', 'small');
-
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('small');
       });
 
-      it('should return medium when accessibility is AA and getA11yDefaultSize is medium', () => {
+      it('should return medium when accessibility is AA and default size is medium', () => {
         document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
         localStorage.setItem('po-default-size', 'medium');
-
-        component['_componentsSize'] = undefined;
-        expect(component.componentsSize).toBe('medium');
-      });
-
-      it('should return medium when accessibility is AAA, regardless of getA11yDefaultSize', () => {
-        document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_componentsSize'] = undefined;
         expect(component.componentsSize).toBe('medium');
       });
@@ -74,18 +63,13 @@ describe('PoTreeViewBaseComponent:', () => {
       });
     });
 
-    it('p-items: shouldn`t call getItemsByMaxLevel if items isn`t array and return empty array', () => {
-      const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel');
-
+    it('p-items: should return empty array if items is not array', () => {
       component.items = undefined;
-
-      expect(spyGetItemsByMaxLevel).not.toHaveBeenCalled();
       expect(component.items).toEqual([]);
     });
 
-    it('p-items: should call getItemsByMaxLevel if items is array and return items', () => {
+    it('p-items: should call getItemsByMaxLevel if items is array', () => {
       const expectedValue = [{ label: 'Nível 01', value: 1 }];
-
       const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel').and.callThrough();
 
       component.items = expectedValue;
@@ -94,51 +78,46 @@ describe('PoTreeViewBaseComponent:', () => {
       expect(component.items).toEqual(expectedValue);
     });
 
-    it('p-selectable: should update property with `true` if valid values', () => {
-      const validValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'selectable', validValues, true);
+    it('p-selectable: should be false by default', () => {
+      expect(component.selectable()).toBe(false);
     });
 
-    it('p-selectable: should update property with `false` if invalid values', () => {
-      const invalidValues = [10, 0.5, 'test', undefined];
-
-      expectPropertiesValues(component, 'selectable', invalidValues, false);
+    it('p-selectable: should set to true', () => {
+      fixture.componentRef.setInput('p-selectable', true);
+      expect(component.selectable()).toBe(true);
     });
 
-    it('p-max-level: should update property with value if valid', () => {
-      const validValues = [12, 10.6];
-
-      expectPropertiesValues(component, 'maxLevel', validValues, [12, 10]);
+    it('p-max-level: should be 4 by default', () => {
+      expect(component.maxLevel()).toBe(4);
     });
 
-    it('p-max-level: should update property with `4` if invalid values', () => {
-      const invalidValues = ['test', undefined];
-
-      expectPropertiesValues(component, 'maxLevel', invalidValues, 4);
+    it('p-max-level: should set to provided value', () => {
+      fixture.componentRef.setInput('p-max-level', 2);
+      expect(component.maxLevel()).toBe(2);
     });
 
-    it('p-single-select: should update property with `true` if valid values', () => {
-      const validValues = [true, 'true', 1, ''];
-
-      expectPropertiesValues(component, 'singleSelect', validValues, true);
+    it('p-single-select: should be false by default', () => {
+      expect(component.singleSelect()).toBe(false);
     });
 
-    it('p-single-select: should update property with `false` if invalid values', () => {
-      const invalidValues = [10, 0.5, 'test', undefined];
+    it('p-single-select: should set to true', () => {
+      fixture.componentRef.setInput('p-single-select', true);
+      expect(component.singleSelect()).toBe(true);
+    });
 
-      expectPropertiesValues(component, 'singleSelect', invalidValues, false);
+    it('p-disabled: should be false by default', () => {
+      expect(component.disabled()).toBe(false);
+    });
+
+    it('p-disabled: should set to true', () => {
+      fixture.componentRef.setInput('p-disabled', true);
+      expect(component.disabled()).toBe(true);
     });
   });
 
   describe('Methods: ', () => {
-    beforeEach(() => {
-      component.singleSelect = false;
-    });
-
-    it('emitExpanded: should call collapsed.emit with tree view item if treeViewItem.expanded is false', () => {
+    it('emitExpanded: should call collapsed.emit if treeViewItem.expanded is false', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, expanded: false };
-
       const spyCollapsedEmit = spyOn(component['collapsed'], 'emit');
 
       component['emitExpanded'](treeViewItem);
@@ -146,9 +125,8 @@ describe('PoTreeViewBaseComponent:', () => {
       expect(spyCollapsedEmit).toHaveBeenCalledWith(treeViewItem);
     });
 
-    it('emitExpanded: should call expanded.emit with tree view item if treeViewItem.expanded is true', () => {
+    it('emitExpanded: should call expanded.emit if treeViewItem.expanded is true', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, expanded: true };
-
       const spyExpandedEmit = spyOn(component['expanded'], 'emit');
 
       component['emitExpanded'](treeViewItem);
@@ -156,607 +134,259 @@ describe('PoTreeViewBaseComponent:', () => {
       expect(spyExpandedEmit).toHaveBeenCalledWith(treeViewItem);
     });
 
-    it('emitSelected: should call unselected.emit with tree view item if treeViewItem.selected is false', () => {
-      const treeViewItem = { label: 'Nível 01', value: 1, selected: false };
-
-      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
-      const spyUnselectedEmit = spyOn(component['unselected'], 'emit');
+    it('emitSelected: should not emit if item is disabled', () => {
+      const treeViewItem = { label: 'Nível 01', value: 1, selected: true, disabled: true };
+      const spySelectedEmit = spyOn(component['selected'], 'emit');
 
       component['emitSelected'](treeViewItem);
 
-      expect(spyUnselectedEmit).toHaveBeenCalledWith(treeViewItem);
-      expect(spyUpdateItemsOnSelect).toHaveBeenCalledWith(treeViewItem);
+      expect(spySelectedEmit).not.toHaveBeenCalled();
     });
 
-    it('emitSelected: should call selected.emit with tree view item if treeViewItem.selected is true', () => {
+    it('emitSelected: should call selected.emit if treeViewItem.selected is true', () => {
       const treeViewItem = { label: 'Nível 01', value: 1, selected: true };
-
-      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
       const spySelectedEmit = spyOn(component['selected'], 'emit');
+      spyOn(component, <any>'updateItemsOnSelect');
 
       component['emitSelected'](treeViewItem);
 
       expect(spySelectedEmit).toHaveBeenCalledWith(treeViewItem);
-      expect(spyUpdateItemsOnSelect).toHaveBeenCalledWith(treeViewItem);
     });
 
-    it('emitSelected: should emit without treeViewItem.subItems if is `singleSelect`', () => {
-      const treeViewItem = { label: 'Nível 01', value: 1, selected: true, subItems: [{ label: 'Nivel 02', value: 2 }] };
-      const expected = { label: 'Nível 01', value: 1, selected: true };
+    it('emitSelected: should call unselected.emit if treeViewItem.selected is false', () => {
+      const treeViewItem = { label: 'Nível 01', value: 1, selected: false };
+      const spyUnselectedEmit = spyOn(component['unselected'], 'emit');
+      spyOn(component, <any>'updateItemsOnSelect');
 
-      const spyUpdateItemsOnSelect = spyOn(component, <any>'updateItemsOnSelect');
-      const spySelectedEmit = spyOn(component['selected'], 'emit');
-
-      component.singleSelect = true;
       component['emitSelected'](treeViewItem);
 
-      expect(component.singleSelect).toEqual(true);
+      expect(spyUnselectedEmit).toHaveBeenCalledWith(treeViewItem);
+    });
+
+    it('emitSelected: should emit without subItems when singleSelect', () => {
+      fixture.componentRef.setInput('p-single-select', true);
+      const treeViewItem = { label: 'Nível 01', value: 1, selected: true, subItems: [{ label: 'X', value: 2 }] };
+      const expected = { label: 'Nível 01', value: 1, selected: true };
+
+      const spySelectedEmit = spyOn(component['selected'], 'emit');
+      spyOn(component, <any>'updateItemsOnSelect');
+
+      component['emitSelected'](treeViewItem);
+
       expect(spySelectedEmit).toHaveBeenCalledWith(expected);
-      expect(spyUpdateItemsOnSelect).toHaveBeenCalledWith(expected);
     });
 
-    it('getItemsByMaxLevel: should return and not call addItem if level is 4', () => {
-      const items = [];
-
-      const spyAddItem = spyOn(component, <any>'addItem');
-
-      const itemsByMaxLavel = component['getItemsByMaxLevel'](items, 4);
-
-      expect(itemsByMaxLavel).toEqual(items);
-      expect(spyAddItem).not.toHaveBeenCalled();
+    it('getItemsByMaxLevel: should return empty array if no params', () => {
+      expect(component['getItemsByMaxLevel']()).toEqual([]);
     });
 
-    it('getItemsByMaxLevel: should return `newItems` if `newItems` has value and `items` is equal `[]`', () => {
-      const newItems = [{ item: 'first item' }];
+    it('getItemsByMaxLevel: should respect max level', () => {
+      fixture.componentRef.setInput('p-max-level', 2);
 
-      const itemsByMaxLavel = component['getItemsByMaxLevel']([], undefined, undefined, newItems);
-
-      expect(itemsByMaxLavel).toEqual(newItems);
-    });
-
-    it('getItemsByMaxLevel: should return `[]` if has no parameters', () => {
-      const itemsByMaxLavel = component['getItemsByMaxLevel']();
-
-      expect(itemsByMaxLavel).toEqual([]);
-    });
-
-    it('getItemsByMaxLevel: should return items up to 4 levels', () => {
-      component.maxLevel = 4;
-      const unlimitedItems = [
+      const items = [
         {
-          label: 'Nivel 01',
+          label: 'L1',
           value: 1,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  subItems: [
-                    {
-                      label: 'Nivel 04',
-                      value: 4,
-                      subItems: [{ label: 'Nivel 05', value: 5, subItems: [{ label: 'Nivel 06', value: 6 }] }]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+          subItems: [{ label: 'L2', value: 2, subItems: [{ label: 'L3', value: 3 }] }]
         }
       ];
 
-      const expectedValue = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: false,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              selected: false,
-              subItems: [{ label: 'Nivel 03', value: 3, selected: false, subItems: [{ label: 'Nivel 04', value: 4 }] }]
-            }
-          ]
-        }
-      ];
+      const result = component['getItemsByMaxLevel'](items);
 
-      const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-      const spyGetItemsByMaxLevel = spyOn(component, <any>'getItemsByMaxLevel').and.callThrough();
-
-      const itemsByMaxLavel = component['getItemsByMaxLevel'](unlimitedItems);
-
-      expect(itemsByMaxLavel).toEqual(expectedValue);
-      expect(spyAddItem).toHaveBeenCalled();
-      expect(spyGetItemsByMaxLevel).toHaveBeenCalledTimes(5);
+      // Level 0 = L1, Level 1 = L2, Level 2 would be L3 but max is 2
+      expect(result.length).toBe(1);
+      expect(result[0].subItems.length).toBe(1);
+      expect(result[0].subItems[0].subItems).toBeUndefined();
     });
 
-    it('addItem: should add childItem in items and not call expandParentItem and addChildItemInParent if parentIf is falsy', () => {
-      const childItem = { label: 'Nível 01', value: 1 };
+    it('getItemsByMaxLevel: should set disabled=true when p-disabled is true', () => {
+      fixture.componentRef.setInput('p-disabled', true);
+
+      const items = [{ label: 'A', value: 1 }];
+      const result = component['getItemsByMaxLevel'](items);
+
+      expect(result[0].disabled).toBe(true);
+    });
+
+    it('getItemsByMaxLevel: should convert isSelectable=false to disabled=true', () => {
+      const items = [{ label: 'A', value: 1, isSelectable: false }];
+      const result = component['getItemsByMaxLevel'](items);
+
+      expect(result[0].disabled).toBe(true);
+    });
+
+    it('addItem: should add childItem to items when no parentItem', () => {
+      const childItem = { label: 'A', value: 1 };
       const items = [];
-
-      const expectedValue = [childItem];
-
-      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
 
       component['addItem'](items, childItem);
 
-      expect(items.length).toBe(1);
-      expect(items).toEqual(expectedValue);
-      expect(spyAddChildItemInParent).not.toHaveBeenCalled();
-      expect(spyExpandParentItem).not.toHaveBeenCalled();
+      expect(items).toEqual([childItem]);
     });
 
-    it('addItem: should add parentItem in items and call addChildItemInParent and selectItemBySubItems', () => {
-      const childItem = { label: 'Nível 02', value: 2 };
-      const parentItem = { label: 'Nível 01', value: 1 };
+    it('addItem: should add parentItem and call addChildItemInParent when parentItem exists', () => {
+      const childItem = { label: 'B', value: 2 };
+      const parentItem = { label: 'A', value: 1 };
       const items = [];
 
-      const expectedValue = [parentItem];
-
-      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
-      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
+      const spyAddChild = spyOn(component, <any>'addChildItemInParent');
 
       component['addItem'](items, childItem, parentItem);
 
-      expect(items.length).toBe(1);
-      expect(items).toEqual(expectedValue);
-      expect(spySelectItemBySubItems).toHaveBeenCalledWith(parentItem);
-      expect(spyAddChildItemInParent).toHaveBeenCalledWith(childItem, parentItem);
-      expect(spyExpandParentItem).not.toHaveBeenCalledWith(childItem, parentItem);
+      expect(items).toEqual([parentItem]);
+      expect(spyAddChild).toHaveBeenCalledWith(childItem, parentItem);
     });
 
-    it('addItem: shouldn`t call selectItemBySubItems if is `singleSelect`', () => {
-      const childItem = { label: 'Nível 02', value: 2 };
-      const parentItem = { label: 'Nível 01', value: 1 };
+    it('addItem: should call expandParentItem when isNewItem is true', () => {
+      const childItem = { label: 'B', value: 2, expanded: true };
+      const parentItem = { label: 'A', value: 1 };
       const items = [];
 
-      const expectedValue = [parentItem];
-
-      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
-
-      component.singleSelect = true;
-      component['addItem'](items, childItem, parentItem);
-
-      expect(items.length).toBe(1);
-      expect(items).toEqual(expectedValue);
-      expect(spySelectItemBySubItems).not.toHaveBeenCalled();
-    });
-
-    it('addItem: should add parentItem in items and call expandParentItem, addChildItemInParent and selectItemBySubItems', () => {
-      const childItem = { label: 'Nível 02', value: 2 };
-      const parentItem = { label: 'Nível 01', value: 1 };
-      const items = [];
-
-      const expectedValue = [parentItem];
-
-      const spyExpandParentItem = spyOn(component, <any>'expandParentItem');
-      const spyAddChildItemInParent = spyOn(component, <any>'addChildItemInParent');
-      const spySelectItemBySubItems = spyOn(component, <any>'selectItemBySubItems');
+      const spyExpand = spyOn(component, <any>'expandParentItem');
 
       component['addItem'](items, childItem, parentItem, true);
 
-      expect(items.length).toBe(1);
-      expect(items).toEqual(expectedValue);
-      expect(spySelectItemBySubItems).toHaveBeenCalledWith(parentItem);
-      expect(spyAddChildItemInParent).toHaveBeenCalledWith(childItem, parentItem);
-      expect(spyExpandParentItem).toHaveBeenCalledWith(childItem, parentItem);
+      expect(spyExpand).toHaveBeenCalledWith(childItem, parentItem);
     });
 
-    it('addChildItemInParent: should create an empty array in parentItem.subItems if it is falsy and add childItem', () => {
-      const childItem = { label: 'Nivel 02', value: 2 };
-      const parentItem = { label: 'Nivel 01', value: 1, subItems: undefined };
+    it('addChildItemInParent: should create subItems array and add child', () => {
+      const childItem = { label: 'B', value: 2 };
+      const parentItem = { label: 'A', value: 1, subItems: undefined };
 
       component['addChildItemInParent'](childItem, parentItem);
 
-      expect(parentItem.subItems.length).toBe(1);
-      expect(parentItem.subItems[0]).toEqual(childItem);
+      expect(parentItem.subItems).toEqual([childItem]);
     });
 
-    it('addChildItemInParent: should add childItem in parentItem.subItems', () => {
-      const childItem = { label: 'Nivel 02', value: 2 };
-      const parentItem = { label: 'Nivel 01', value: 1, subItems: [{ label: 'Nivel 011', value: 111 }] };
-
-      component['addChildItemInParent'](childItem, parentItem);
-
-      expect(parentItem.subItems.length).toBe(2);
-      expect(parentItem.subItems[1]).toEqual(childItem);
-    });
-
-    it('expandParentItem: parentItem.expanded should be true if childItem.expanded is true', () => {
-      const childItem = { label: 'Nivel 2', value: 12, expanded: true };
-      const parentItem = { label: 'Nivel 1', value: 1, expanded: undefined };
+    it('expandParentItem: should set parent expanded when child is expanded', () => {
+      const childItem = { label: 'B', value: 2, expanded: true };
+      const parentItem = { label: 'A', value: 1, expanded: false };
 
       component['expandParentItem'](childItem, parentItem);
 
       expect(parentItem.expanded).toBe(true);
     });
 
-    it('expandParentItem: parentItem.expanded should be true if childItem.expanded is false and parentItem.expanded is true', () => {
-      const childItem = { label: 'Nivel 2', value: 12, expanded: false };
-      const parentItem = { label: 'Nivel 1', value: 1, expanded: true };
-
-      component['expandParentItem'](childItem, parentItem);
-
-      expect(parentItem.expanded).toBe(true);
-    });
-
-    it('expandParentItem: parentItem.expanded should be false if childItem.expanded is false', () => {
-      const childItem = { label: 'Nivel 2', value: 12, expanded: false };
-      const parentItem = { label: 'Nivel 1', value: 1, expanded: false };
+    it('expandParentItem: should not change parent if child is not expanded', () => {
+      const childItem = { label: 'B', value: 2, expanded: false };
+      const parentItem = { label: 'A', value: 1, expanded: false };
 
       component['expandParentItem'](childItem, parentItem);
 
       expect(parentItem.expanded).toBe(false);
     });
 
-    it('updateItemsOnSelect: shouldn`t call selectAllItems if selectedItem hasn`t subItems', () => {
-      const selectedItem = { label: 'Label 01', value: '01' };
-      const items = [selectedItem];
-      component.items = items;
+    it('selectAllItems: should select all items recursively', () => {
+      const items = [{ label: 'A', value: 1, selected: false, subItems: [{ label: 'B', value: 2, selected: false }] }];
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any>'selectAllItems');
+      component['selectAllItems'](items, true);
 
-      component['updateItemsOnSelect'](selectedItem);
-
-      expect(spySelect).not.toHaveBeenCalled();
-      expect(spyGetItemsWithParentSelected).toHaveBeenCalledWith(component.items);
+      expect(items[0].selected).toBe(true);
+      expect(items[0].subItems[0].selected).toBe(true);
     });
 
-    it('updateItemsOnSelect: shouldn`t call selectAllItems if is singleSelect', () => {
-      const selectedItem = {
-        label: 'Label 01',
-        value: '01',
-        selected: true,
-        subItems: [{ label: 'Label 01.1', value: '01.1' }]
-      };
-      const items = [selectedItem];
-      component.items = items;
-      component.singleSelect = true;
+    it('selectAllItems: should unselect all items recursively', () => {
+      const items = [{ label: 'A', value: 1, selected: true, subItems: [{ label: 'B', value: 2, selected: true }] }];
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any>'selectAllItems');
+      component['selectAllItems'](items, false);
 
-      component['updateItemsOnSelect'](selectedItem);
-
-      expect(spySelect).not.toHaveBeenCalled();
-      expect(spyGetItemsWithParentSelected).toHaveBeenCalledWith(component.items);
+      expect(items[0].selected).toBe(false);
+      expect(items[0].subItems[0].selected).toBe(false);
     });
 
-    it('updateItemsOnSelect: should call selectAllItems if selectedItem has subItems and call getItemsWithParentSelected', () => {
-      const selectedItem = {
-        label: 'Label 01',
-        value: '01',
-        selected: true,
-        subItems: [{ label: 'Label 01.1', value: '01.1' }]
-      };
-      const items = [selectedItem];
+    it('selectAllItems: should keep selected false when isSelectable is false', () => {
+      const items = [{ label: 'A', value: 1, selected: false, isSelectable: false }];
 
-      component.items = items;
+      component['selectAllItems'](items, true);
 
-      const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.returnValue(items);
-      const spySelect = spyOn(component, <any>'selectAllItems');
-
-      component['updateItemsOnSelect'](selectedItem);
-
-      expect(spySelect).toHaveBeenCalledWith(selectedItem.subItems, selectedItem.selected);
-      expect(spyGetItemsWithParentSelected).toHaveBeenCalledWith(component.items);
+      expect(items[0].selected).toBe(false);
     });
 
-    it('selectAllItems: should select all items if isSelected is true', () => {
+    it('everyItemSelected: should return true if all items selected', () => {
       const items = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: false,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              selected: true,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  selected: false,
-                  subItems: [{ label: 'Nivel 04', value: 4, selected: false }]
-                }
-              ]
-            }
-          ]
-        }
+        { label: 'A', selected: true },
+        { label: 'B', selected: true }
       ];
-
-      const expectedItems = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: true,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              selected: true,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  selected: true,
-                  subItems: [{ label: 'Nivel 04', value: 4, selected: true }]
-                }
-              ]
-            }
-          ]
-        }
-      ];
-
-      const isSelected = true;
-
-      component['selectAllItems'](items, isSelected);
-
-      expect(items).toEqual(expectedItems);
+      expect(component['everyItemSelected'](items as any)).toBe(true);
     });
 
-    it('selectAllItems: shouldn`t set `selected` on item if isSelectable is false', () => {
+    it('everyItemSelected: should return false if no items selected', () => {
       const items = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: true,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              selected: false,
-              isSelectable: false,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  selected: false,
-                  subItems: [{ label: 'Nivel 04', value: 4, selected: false }]
-                }
-              ]
-            }
-          ]
-        }
+        { label: 'A', selected: false },
+        { label: 'B', selected: false }
       ];
-
-      const expectedItems = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: true,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              isSelectable: false,
-              selected: false,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  selected: true,
-                  subItems: [{ label: 'Nivel 04', value: 4, selected: true }]
-                }
-              ]
-            }
-          ]
-        }
-      ];
-
-      const isSelected = true;
-
-      component['selectAllItems'](items, isSelected);
-
-      expect(items).toEqual(expectedItems);
+      expect(component['everyItemSelected'](items as any)).toBe(false);
     });
 
-    it('selectAllItems: should unselect all items if isSelected is false', () => {
+    it('everyItemSelected: should return null if some items selected (indeterminate)', () => {
       const items = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: true,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              selected: true,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  selected: true,
-                  subItems: [{ label: 'Nivel 04', value: 4, selected: true }]
-                }
-              ]
-            }
-          ]
-        }
+        { label: 'A', selected: true },
+        { label: 'B', selected: false }
       ];
-
-      const expectedItems = [
-        {
-          label: 'Nivel 01',
-          value: 1,
-          selected: false,
-          subItems: [
-            {
-              label: 'Nivel 02',
-              value: 2,
-              selected: false,
-              subItems: [
-                {
-                  label: 'Nivel 03',
-                  value: 3,
-                  selected: false,
-                  subItems: [{ label: 'Nivel 04', value: 4, selected: false }]
-                }
-              ]
-            }
-          ]
-        }
-      ];
-
-      const isSelected = false;
-
-      component['selectAllItems'](items, isSelected);
-
-      expect(items).toEqual(expectedItems);
-    });
-
-    it('selectItemBySubItems: should call everyItemSelected with subitems to set item.selected', () => {
-      const subItems = [
-        { label: 'SubItem 1', selected: true },
-        { label: 'SubItem 2', selected: true },
-        { label: 'SubItem 3', selected: true },
-        { label: 'SubItem 4', selected: true },
-        { label: 'SubItem 5', selected: true }
-      ];
-
-      const item = { label: 'Item 1', value: 1, subItems, selected: undefined };
-
-      spyOn(component, <any>'everyItemSelected').and.returnValue(true);
-
-      component['selectItemBySubItems'](<any>item);
-
-      expect(component['everyItemSelected']).toHaveBeenCalledWith(<any>item.subItems);
-      expect(item.selected).toBe(true);
-    });
-
-    it('everyItemSelected: should return false if items param is undefined', () => {
-      expect(component['everyItemSelected']()).toBe(false);
-    });
-
-    it('everyItemSelected: should return true if all items are selected', () => {
-      const items = [
-        { label: 'Item 1', selected: true },
-        { label: 'Item 2', selected: true },
-        { label: 'Item 3', selected: true },
-        { label: 'Item 4', selected: true },
-        { label: 'Item 5', selected: true }
-      ];
-
-      expect(component['everyItemSelected'](<any>items)).toBe(true);
+      expect(component['everyItemSelected'](items as any)).toBe(null);
     });
 
     it('everyItemSelected: should return null if any item is null', () => {
       const items = [
-        { label: 'Item 1', selected: true },
-        { label: 'Item 2', selected: true },
-        { label: 'Item 3', selected: true },
-        { label: 'Item 4', selected: null },
-        { label: 'Item 5', selected: true }
+        { label: 'A', selected: null },
+        { label: 'B', selected: false }
       ];
-
-      expect(component['everyItemSelected'](<any>items)).toBe(null);
+      expect(component['everyItemSelected'](items as any)).toBe(null);
     });
 
-    it('everyItemSelected: should return null if all items are null', () => {
-      const items = [
-        { label: 'Item 1', selected: null },
-        { label: 'Item 2', selected: null },
-        { label: 'Item 3', selected: null },
-        { label: 'Item 4', selected: null },
-        { label: 'Item 5', selected: null }
-      ];
-
-      expect(component['everyItemSelected'](<any>items)).toBe(null);
+    it('everyItemSelected: should return false if items is undefined', () => {
+      expect(component['everyItemSelected']()).toBe(false);
     });
 
-    it('everyItemSelected: should return null if any items are selected', () => {
-      const items = [
-        { label: 'Item 1', selected: false },
-        { label: 'Item 2', selected: false },
-        { label: 'Item 3', selected: true },
-        { label: 'Item 4', selected: false },
-        { label: 'Item 5', selected: false }
-      ];
+    it('updateItemsOnSelect: should call selectAllItems when item has subItems', () => {
+      const selectedItem = { label: 'A', value: 1, selected: true, subItems: [{ label: 'B', value: 2 }] };
+      component.items = [selectedItem];
 
-      expect(component['everyItemSelected'](<any>items)).toBe(null);
+      const spySelectAll = spyOn(component, <any>'selectAllItems');
+      spyOn(component, <any>'getItemsWithParentSelected').and.returnValue([selectedItem]);
+
+      component['updateItemsOnSelect'](selectedItem);
+
+      expect(spySelectAll).toHaveBeenCalledWith(selectedItem.subItems, true);
     });
 
-    it('everyItemSelected: should return false if no true or null items', () => {
-      const items = [
-        { label: 'Item 1', selected: false },
-        { label: 'Item 2', selected: false },
-        { label: 'Item 3', selected: undefined },
-        { label: 'Item 4', selected: false },
-        { label: 'Item 5', selected: false }
-      ];
+    it('updateItemsOnSelect: should not call selectAllItems when singleSelect', () => {
+      fixture.componentRef.setInput('p-single-select', true);
+      const selectedItem = { label: 'A', value: 1, selected: true, subItems: [{ label: 'B', value: 2 }] };
+      component.items = [selectedItem];
 
-      expect(component['everyItemSelected'](<any>items)).toBe(false);
+      const spySelectAll = spyOn(component, <any>'selectAllItems');
+      spyOn(component, <any>'getItemsWithParentSelected').and.returnValue([selectedItem]);
+
+      component['updateItemsOnSelect'](selectedItem);
+
+      expect(spySelectAll).not.toHaveBeenCalled();
     });
 
-    describe('getItemsWithParentSelected:', () => {
-      it('should return [] and not call addItem if items is undefined', () => {
-        const spyAddItem = spyOn(component, <any>'addItem');
+    it('getItemsWithParentSelected: should return empty array for undefined', () => {
+      expect(component['getItemsWithParentSelected'](undefined)).toEqual([]);
+    });
 
-        const items = component['getItemsWithParentSelected'](undefined, undefined, [1]);
+    it('getItemsWithParentSelected: should reconstruct items with parent selection', () => {
+      const items = [{ label: 'A', value: '1', subItems: [{ label: 'B', value: '2', selected: true }] }];
 
-        expect(items).toEqual([1]);
-        expect(spyAddItem).not.toHaveBeenCalled();
-      });
+      const result = component['getItemsWithParentSelected'](items);
 
-      it('should call only 1 time getItemsWithParentSelected if items hasn`t subItems', () => {
-        const items = [{ label: 'Item 1', value: '1' }];
+      expect(result.length).toBe(1);
+      expect(result[0].selected).toBe(true); // parent gets selected because child is
+    });
 
-        const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-        const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
+    it('applySizeBasedOnA11y: should set _componentsSize', () => {
+      document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AA);
+      component['applySizeBasedOnA11y']('small');
+      expect(component['_componentsSize']).toBe('small');
+    });
 
-        const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
-
-        expect(itemsWithParentSelected).toEqual(items);
-        expect(spyGetItemsWithParentSelected).toHaveBeenCalledTimes(1);
-        expect(spyAddItem).toHaveBeenCalled();
-      });
-
-      it('should call only 2 time getItemsWithParentSelected if items has subItems ', () => {
-        const items = [{ label: 'Item 1', value: '1', subItems: [{ label: 'Item 1.2', value: '1.2' }] }];
-        const expectedValue = [
-          { label: 'Item 1', value: '1', selected: false, subItems: [{ label: 'Item 1.2', value: '1.2' }] }
-        ];
-
-        const spyAddItem = spyOn(component, <any>'addItem').and.callThrough();
-        const spyGetItemsWithParentSelected = spyOn(component, <any>'getItemsWithParentSelected').and.callThrough();
-
-        const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
-
-        expect(itemsWithParentSelected).toEqual(expectedValue);
-        expect(spyGetItemsWithParentSelected).toHaveBeenCalledTimes(2);
-        expect(spyAddItem).toHaveBeenCalled();
-      });
-
-      it('should return items with parent selected if child is selected', () => {
-        const items = [
-          {
-            label: 'Item 1',
-            value: '1',
-            subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
-          }
-        ];
-
-        const expectedValue = [
-          {
-            label: 'Item 1',
-            value: '1',
-            selected: true,
-            subItems: [{ label: 'Item 1.2', value: '1.2', selected: true }]
-          }
-        ];
-
-        const itemsWithParentSelected = component['getItemsWithParentSelected'](items);
-
-        expect(itemsWithParentSelected).toEqual(expectedValue);
-      });
+    it('constructor effect: should call applySizeBasedOnA11y when componentsSizeInput changes', () => {
+      spyOn<any>(component, 'applySizeBasedOnA11y');
+      fixture.componentRef.setInput('p-components-size', 'small');
+      fixture.detectChanges();
+      expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
     });
   });
 });

@@ -1,0 +1,81 @@
+<div class="po-tree-view-item-content-wrapper">
+  <div
+    #lineElement
+    class="po-tree-view-item-content-padding"
+    [class.po-tree-view-item-content-line-disabled]="isDisabled"
+    role="treeitem"
+    tabindex="-1"
+    [attr.aria-expanded]="hasSubItems ? isExpanded : null"
+    [attr.aria-selected]="selectable() ? !!item().selected : null"
+    [attr.aria-disabled]="isDisabled || null"
+    [attr.aria-label]="item().label"
+    (click)="onLineClick($event)"
+    (keydown)="onKeydown($event)"
+    (focus)="onLineFocus($event)"
+  >
+    <div
+      class="po-tree-view-item-content"
+      [class.po-tree-view-item-content-selected]="isSelected"
+      [class.po-tree-view-item-content-level-max]="isMaxLevel"
+    >
+      @if (hasSubItems) {
+        <po-button
+          class="po-tree-view-item-content-button-icon"
+          p-kind="tertiary"
+          p-tabindex="-1"
+          [p-icon]="expandIcon"
+          [p-size]="componentsSize()"
+          [p-aria-label]="item().expanded ? literals.collapse : literals.expand"
+        >
+        </po-button>
+      }
+
+      @if (itemIcon) {
+        <po-icon
+          [p-icon]="itemIcon"
+          class="po-tree-view-item-content-icon"
+          [class.po-tree-view-item-content-disabled]="isDisabled"
+        >
+        </po-icon>
+      }
+
+      @if (selectable()) {
+        @if (singleSelect()) {
+          <po-radio
+            #inputRadio
+            class="po-tree-view-item-content-selectable"
+            [class.po-tree-view-item-content-disabled]="isDisabled"
+            [name]="idRadio"
+            [(ngModel)]="item().selected"
+            [p-label]="item().label"
+            [p-value]="item().value"
+            [p-checked]="item().value === selectedValue()"
+            [p-size]="componentsSize()"
+            (p-change-selected)="selected.emit(item())"
+            [p-disabled]="isDisabled"
+          >
+          </po-radio>
+        } @else {
+          <po-checkbox
+            class="po-tree-view-item-content-selectable"
+            [class.po-tree-view-item-content-disabled]="isDisabled"
+            [(ngModel)]="item().selected"
+            [p-label]="item().label"
+            [p-disabled]="isDisabled"
+            [p-size]="componentsSize()"
+            (p-change)="selected.emit(item())"
+          >
+          </po-checkbox>
+        }
+      } @else {
+        <span
+          class="po-tree-view-item-content-label"
+          [class.po-tree-view-item-content-label-padding-left]="!hasSubItems && !itemIcon"
+          [class.po-tree-view-item-content-disabled]="isDisabled"
+        >
+          {{ item().label }}
+        </span>
+      }
+    </div>
+  </div>
+</div>
