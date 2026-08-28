@@ -71,6 +71,21 @@ const providers = [
  *   </po-lookup>
  *   ```
  *
+ * - Ao utilizar a propriedade `p-advanced-filters`, a janela de busca avançada é construída
+ * a partir do `po-dynamic-form`. Em aplicações que não importam o `PoModule`, como projetos
+ * *standalone* ou que utilizam módulos específicos, é necessário importar o `PoDynamicModule`
+ * no componente ou módulo onde o `po-lookup` é utilizado, caso contrário será lançado o erro
+ * `NG0201: No provider found for _TitleCasePipe` ao abrir a busca avançada.
+ *   ```
+ *   import { PoDynamicModule, PoFieldModule } from '@po-ui/ng-components';
+ *
+ *   @Component({
+ *     standalone: true,
+ *     imports: [PoFieldModule, PoDynamicModule]
+ *   })
+ *   export class MyComponent {}
+ *   ```
+ *
  * #### Tokens customizáveis
  *
  * É possível alterar o estilo do componente usando os seguintes tokens (CSS):

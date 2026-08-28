@@ -308,6 +308,11 @@ export abstract class PoLookupBaseComponent
    *
    * > Caso não seja passado um objeto ou então ele esteja em branco o link de busca avançada ficará escondido.
    *
+   * > A busca avançada é construída a partir do `po-dynamic-form`. Em aplicações que não importam o `PoModule`,
+   * como projetos *standalone* ou que utilizam módulos específicos, é necessário importar o `PoDynamicModule`
+   * no componente ou módulo onde o `po-lookup` é utilizado, caso contrário será lançado o erro
+   * `NG0201: No provider found for _TitleCasePipe` ao abrir a busca avançada.
+   *
    * Exemplo de URL com busca avançada:
    *
    * ```
