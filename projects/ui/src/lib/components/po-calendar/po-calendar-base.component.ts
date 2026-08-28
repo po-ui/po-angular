@@ -342,7 +342,15 @@ export class PoCalendarBaseComponent {
   //
   //  O valor informado determina o intervalo de anos anterior e posterior
   //  à data corrente que será disponibilizado para seleção.
-  @Input('p-year-range-limit') yearRangeLimit?: number = 150;
+  @Input('p-year-range-limit') set yearRangeLimit(value: number) {
+    this._yearRangeLimit = value ?? 150;
+  }
+
+  get yearRangeLimit(): number {
+    return this._yearRangeLimit;
+  }
+
+  private _yearRangeLimit: number = 150;
 
   // --- Outputs ---
 
