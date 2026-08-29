@@ -1,0 +1,91 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
+  <!-- State: basic -->
+  <div data-testid="state-basic">
+    <po-lookup
+      name="basic"
+      p-placeholder="Pesquisar"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
+  </div>
+
+  <!-- State: label -->
+  <div data-testid="state-label">
+    <po-lookup
+      name="label"
+      p-label="Label do campo"
+      p-placeholder="Campo com label"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
+  </div>
+
+  <!-- State: label + helper -->
+  <div data-testid="state-label-helper">
+    <po-lookup
+      name="label-helper"
+      p-label="Label do campo"
+      p-helper="Texto de ajuda do helper"
+      p-placeholder="Campo com label e helper"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
+  </div>
+
+  <!-- State: label + help-text -->
+  <div data-testid="state-label-help">
+    <po-lookup
+      name="label-help"
+      p-label="Label do campo"
+      p-help="Texto de apoio do campo"
+      p-placeholder="Campo com label e help"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
+  </div>
+
+  <!-- State: disabled -->
+  <div data-testid="state-disabled">
+    <po-lookup
+      name="disabled"
+      p-label="Campo desabilitado"
+      [p-disabled]="true"
+      p-placeholder="Campo desabilitado"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
+  </div>
+
+  <!-- State: required -->
+  <div data-testid="state-required">
+    <po-lookup
+      name="required"
+      p-label="Campo obrigatorio"
+      p-required
+      [p-show-required]="true"
+      p-placeholder="Campo obrigatorio"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+    ></po-lookup>
+  </div>
+
+  <!-- State: clean -->
+  <div data-testid="state-clean">
+    <po-lookup
+      name="clean"
+      p-label="Campo com clean"
+      [p-clean]="true"
+      p-placeholder="Campo com botao limpar"
+      p-field-label="label"
+      p-field-value="value"
+      [p-filter-service]="filterService"
+      [(ngModel)]="cleanValue"
+    ></po-lookup>
+  </div>
+</div>
