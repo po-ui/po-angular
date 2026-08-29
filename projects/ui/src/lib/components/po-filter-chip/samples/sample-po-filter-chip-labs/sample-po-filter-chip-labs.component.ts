@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PoFilterChipSelectedChange } from '@po-ui/ng-components/lib';
 
 @Component({
   selector: 'sample-po-filter-chip-labs',
   templateUrl: './sample-po-filter-chip-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoFilterChipLabsComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -37,6 +37,7 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
 @Component({
   selector: 'po-dynamic-form',
   templateUrl: './po-dynamic-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDynamicFormComponent extends PoDynamicFormBaseComponent implements OnInit, OnDestroy {

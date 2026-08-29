@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
 import {
@@ -10,6 +10,7 @@ import {
 @Component({
   selector: 'sample-po-page-dynamic-table-hotels',
   templateUrl: './sample-po-page-dynamic-table-hotels.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDynamicTableHotelsComponent {

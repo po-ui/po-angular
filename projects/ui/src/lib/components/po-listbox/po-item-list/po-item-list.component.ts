@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -9,6 +9,7 @@ import { PoItemListBaseComponent } from './po-item-list-base.component';
 @Component({
   selector: 'po-item-list',
   templateUrl: './po-item-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoItemListComponent extends PoItemListBaseComponent implements OnChanges {

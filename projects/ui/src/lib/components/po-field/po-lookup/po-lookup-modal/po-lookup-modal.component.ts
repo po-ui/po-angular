@@ -41,6 +41,8 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   componentRef: ComponentRef<any>;
   dynamicForm: NgForm;
 
+  private dynamicFormReady: Promise<void>;
+
   constructor() {
     const poLanguage = inject(PoLanguageService);
     const changeDetector = inject(ChangeDetectorRef);
@@ -140,9 +142,9 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     }
   }
 
-  onAdvancedFilter() {
+  onAdvancedFilter(): void {
     this.setupModalAdvancedFilter();
-    this.createDynamicForm();
+    this.dynamicFormReady = this.createDynamicForm();
   }
 
   private setTableHeight(): void {
@@ -166,24 +168,26 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     //  PoLookupModalService -> PoLookupModalComponent -> PoDynamicFormComponent
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    import('./../../../po-dynamic/po-dynamic-form/po-dynamic-form.component').then(({ PoDynamicFormComponent }) => {
-      this.componentRef = this.container.createComponent(PoDynamicFormComponent);
-      this.componentRef.instance.fields = this.advancedFilters;
-      this.componentRef.instance.value = this.dynamicFormValue;
-      this.componentRef.instance.componentsSize = this.size;
+    return import('./../../../po-dynamic/po-dynamic-form/po-dynamic-form.component').then(
+      ({ PoDynamicFormComponent }) => {
+        this.componentRef = this.container.createComponent(PoDynamicFormComponent);
+        this.componentRef.instance.fields = this.advancedFilters;
+        this.componentRef.instance.value = this.dynamicFormValue;
+        this.componentRef.instance.componentsSize = this.size;
 
-      this.componentRef.instance.formOutput
-        .pipe(
-          tap((form: NgForm) => {
-            this.dynamicForm = form;
+        this.componentRef.instance.formOutput
+          .pipe(
+            tap((form: NgForm) => {
+              this.dynamicForm = form;
+              this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
+            }),
+            switchMap((form: NgForm) => form.valueChanges)
+          )
+          .subscribe(() => {
             this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
-          }),
-          switchMap((form: NgForm) => form.valueChanges)
-        )
-        .subscribe(() => {
-          this.primaryActionAdvancedFilter.disabled = this.dynamicForm.invalid;
-        });
-      this.changeDetector.markForCheck();
-    });
+          });
+        this.changeDetector.markForCheck();
+      }
+    );
   }
 }

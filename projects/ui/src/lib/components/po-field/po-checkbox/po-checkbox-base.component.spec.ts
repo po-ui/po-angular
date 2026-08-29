@@ -1,4 +1,4 @@
-import { Component, Directive } from '@angular/core';
+import { Component, Directive, ChangeDetectionStrategy } from '@angular/core';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
 
@@ -9,6 +9,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 @Component({
   selector: 'po-checkbox-base-host',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoCheckboxBaseHostComponent extends PoCheckboxBaseComponent {

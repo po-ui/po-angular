@@ -1,6 +1,6 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { PoLookupFilter } from '../../../../components/po-field/po-lookup/interfaces/po-lookup-filter.interface';
@@ -10,10 +10,10 @@ import { PoComponentInjectorService } from '../../../../services/po-component-in
 import { PoDynamicModule } from '../../../po-dynamic/po-dynamic.module';
 import { PoTableColumnSortType } from '../../../po-table/enums/po-table-column-sort-type.enum';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoTableColumnSpacing } from '../../../po-table';
-import { PoFieldSize } from 'projects/ui/src/lib/enums/po-field-size.enum';
-import { PoThemeA11yEnum } from 'projects/ui/src/public-api';
+import { PoFieldSize } from '../../../../enums/po-field-size.enum';
+import { PoThemeA11yEnum } from '../../../../../public-api';
 
 class LookupFilterService implements PoLookupFilter {
   getFilteredItems(params: any): Observable<any> {
@@ -38,7 +38,7 @@ describe('PoLookupModalComponent', () => {
       providers: [
         LookupFilterService,
         PoComponentInjectorService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
         provideRouter([])
       ]
@@ -333,17 +333,16 @@ describe('PoLookupModalComponent', () => {
   });
 
   describe('AdvancedSearch: ', () => {
-    beforeEach(fakeAsync(() => {
+    beforeEach(async () => {
       component.advancedFilters = advancedFilters;
       fixture.detectChanges();
       component.onAdvancedFilter();
+      await (component as any).dynamicFormReady;
 
-      tick(10);
       fixture.detectChanges();
-
-      flush();
-      discardPeriodicTasks();
-    }));
+      await fixture.whenStable();
+      fixture.detectChanges();
+    });
 
     afterEach(() => {
       component.advancedFilters = [];

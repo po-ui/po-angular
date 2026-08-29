@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, of } from 'rxjs';
@@ -22,7 +22,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn, PoUtils as util } f
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { isExternalLink, removeDuplicateItemsWithArrayKey, PoUtils } from '../../utils/util';
+import { isExternalLink, PoUtils } from '../../utils/util';
 import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/interfaces/po-page-dynamic-search-literals.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
@@ -160,6 +160,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
   selector: 'po-page-dynamic-table',
   templateUrl: './po-page-dynamic-table.component.html',
   providers: [PoPageDynamicService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
@@ -869,9 +870,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       tap(response => {
         let newArray;
         if (fullParams.page === 1) {
-          newArray = removeDuplicateItemsWithArrayKey(response.items, response.items, this.keys);
+          newArray = util.removeDuplicateItemsWithArrayKey(response.items, response.items, this.keys);
         } else {
-          newArray = removeDuplicateItemsWithArrayKey(this.items, response.items, this.keys);
+          newArray = util.removeDuplicateItemsWithArrayKey(this.items, response.items, this.keys);
         }
         this.items = newArray ? [...newArray] : this.items;
         this.page = fullParams.page;

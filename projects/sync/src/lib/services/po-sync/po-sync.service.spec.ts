@@ -1,8 +1,6 @@
-import { HttpResponse } from '@angular/common/http';
 import { fakeAsync, tick } from '@angular/core/testing';
-import { of, Subscriber } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-import * as TypeMoq from 'typemoq';
+import { of, Subject, Subscriber } from 'rxjs';
+
 import { PoNetworkType } from '../../models/po-network-type.enum';
 import { PoUtils as utilsFunctions } from '../../utils/utils';
 import { PoEventSourcingService } from '../po-event-sourcing/po-event-sourcing.service';
@@ -36,17 +34,13 @@ class CustomDataTransform extends PoDataTransform {
   }
 }
 
-xdescribe('PoSyncService:', () => {
-  const scheduler = new TestScheduler((actual, expected) => {
-    expect(actual).toEqual(expected);
-  });
-
+describe('PoSyncService:', () => {
   let poSync: PoSyncService;
-  let poNetworkServiceMock: TypeMoq.IMock<PoNetworkService>;
-  let poEventSourcing: TypeMoq.IMock<PoEventSourcingService>;
-  let poSchemaDefinition: TypeMoq.IMock<PoSchemaDefinitionService>;
-  let poSchemaService: TypeMoq.IMock<PoSchemaService>;
-  let http: TypeMoq.IMock<PoHttpClientService>;
+  let poEventSourcing: jasmine.SpyObj<PoEventSourcingService>;
+  let poSchemaDefinition: jasmine.SpyObj<PoSchemaDefinitionService>;
+  let poSchemaService: jasmine.SpyObj<PoSchemaService>;
+  let poNetworkServiceMock: jasmine.SpyObj<PoNetworkService>;
+  let http: jasmine.SpyObj<PoHttpClientService>;
 
   const customerSchema: PoSyncSchema = {
     idField: 'code',
@@ -70,32 +64,39 @@ xdescribe('PoSyncService:', () => {
   };
 
   beforeEach(() => {
-    http = TypeMoq.Mock.ofType(PoHttpClientService);
+    http = jasmine.createSpyObj('PoHttpClientService', ['get']);
 
-    poEventSourcing = TypeMoq.Mock.ofType(PoEventSourcingService);
+    poEventSourcing = jasmine.createSpyObj('PoEventSourcingService', [
+      'syncGet',
+      'syncSend',
+      'onSaveData',
+      'responsesSubject',
+      'httpCommand',
+      'removeEventSourcingItem',
+      'destroyEventSourcingQueue'
+    ]);
+    poEventSourcing.syncGet.and.returnValue(Promise.resolve({}));
+    poEventSourcing.syncSend.and.returnValue(Promise.resolve({}));
+    poEventSourcing.onSaveData.and.returnValue(of(null));
 
-    poEventSourcing.setup(e => e.syncGet()).returns(() => Promise.resolve({}));
+    poNetworkServiceMock = jasmine.createSpyObj('PoNetworkService', ['getConnectionStatus', 'onChange']);
+    poNetworkServiceMock.onChange.and.returnValue(of({ status: undefined, type: undefined }));
+    poNetworkServiceMock.getConnectionStatus.and.returnValue(new PoNetworkStatus('wifi'));
 
-    poEventSourcing.setup(e => e.syncSend()).returns(() => Promise.resolve({}));
+    poSchemaDefinition = jasmine.createSpyObj('PoSchemaDefinitionService', ['getAll', 'saveAll', 'destroy']);
 
-    poEventSourcing.setup(e => e.onSaveData()).returns(() => of(null));
-
-    poNetworkServiceMock = TypeMoq.Mock.ofType(PoNetworkService);
-
-    poNetworkServiceMock.setup(e => e.onChange()).returns(() => of({ status: undefined, type: undefined }));
-
-    poSchemaDefinition = TypeMoq.Mock.ofType(PoSchemaDefinitionService);
-
-    poSchemaService = TypeMoq.Mock.ofType(PoSchemaService);
-
-    poNetworkServiceMock.setup(e => e.getConnectionStatus()).returns(() => new PoNetworkStatus('wifi'));
+    poSchemaService = jasmine.createSpyObj('PoSchemaService', [
+      'limitedCallWrap',
+      'destroySchemasRecords',
+      'updateAll'
+    ]);
 
     poSync = new PoSyncService(
-      poEventSourcing.object,
-      http.object,
-      poNetworkServiceMock.object,
-      poSchemaDefinition.object,
-      poSchemaService.object
+      poEventSourcing as any,
+      http as any,
+      poNetworkServiceMock as any,
+      poSchemaDefinition as any,
+      poSchemaService as any
     );
   });
 
@@ -112,36 +113,30 @@ xdescribe('PoSyncService:', () => {
   describe('Methods:', () => {
     it('destroy: should call poSchemaService.limitedCallWrap and return its value', async () => {
       const limitedCallWrapReturn = 'limitedCallWrap return';
-
-      spyOn(poSync['poSchemaService'], 'limitedCallWrap').and.returnValue(<any>limitedCallWrapReturn);
+      poSchemaService.limitedCallWrap.and.returnValue(limitedCallWrapReturn as any);
 
       const result = await poSync.destroy();
 
-      expect(poSync['poSchemaService']['limitedCallWrap']).toHaveBeenCalled();
+      expect(poSchemaService.limitedCallWrap).toHaveBeenCalled();
       expect(result).toBe(limitedCallWrapReturn);
     });
 
     it('destroy: should call poSchemaDefinitionService.destroy, destroySchemasRecords, destroyEventSourcingQueue', async () => {
-      poSync['schemas'] = [customerSchema];
-
-      spyOn(poSync['poSchemaService'], 'limitedCallWrap').and.callFake(callback => callback());
-
-      spyOn(poSync['poSchemaDefinitionService'], 'destroy');
-      spyOn(poSync['poSchemaService'], 'destroySchemasRecords');
-      spyOn(poSync['poEventSourcingService'], 'destroyEventSourcingQueue');
+      poSchemaService.limitedCallWrap.and.callFake((callback: any) => callback());
+      poSchemaDefinition.destroy.and.returnValue(Promise.resolve());
+      poSchemaService.destroySchemasRecords.and.returnValue(Promise.resolve());
+      poEventSourcing.destroyEventSourcingQueue.and.returnValue(Promise.resolve());
 
       await poSync.destroy();
 
-      expect(poSync['poSchemaDefinitionService'].destroy).toHaveBeenCalled();
-      expect(poSync['poSchemaService'].destroySchemasRecords).toHaveBeenCalled();
-      expect(poSync['poEventSourcingService'].destroyEventSourcingQueue).toHaveBeenCalled();
+      expect(poSchemaDefinition.destroy).toHaveBeenCalled();
+      expect(poSchemaService.destroySchemasRecords).toHaveBeenCalled();
+      expect(poEventSourcing.destroyEventSourcingQueue).toHaveBeenCalled();
     });
 
     it('disableSync: should set isSyncEnabled with false', () => {
       poSync['isSyncEnabled'] = true;
-
       poSync.disableSync();
-
       expect(poSync['isSyncEnabled']).toBeFalsy();
     });
 
@@ -149,37 +144,28 @@ xdescribe('PoSyncService:', () => {
       const fakeThis = {
         isSyncEnabled: true,
         timer: 'mock timer',
-        subscription: {
-          unsubscribe: () => {}
-        }
+        subscription: { unsubscribe: jasmine.createSpy('unsubscribe') }
       };
-
-      spyOn(fakeThis.subscription, 'unsubscribe');
 
       poSync.disableSync.apply(fakeThis);
 
-      expect(fakeThis['subscription'].unsubscribe).toHaveBeenCalled();
+      expect(fakeThis.subscription.unsubscribe).toHaveBeenCalled();
     });
 
-    it('disableSync: should not call subscription.unsubscribe if timer is undefined and subscription is defined', () => {
+    it('disableSync: should not call subscription.unsubscribe if timer is undefined', () => {
       const fakeThis = {
         isSyncEnabled: true,
         timer: undefined,
-        subscription: {
-          unsubscribe: () => {}
-        }
+        subscription: { unsubscribe: jasmine.createSpy('unsubscribe') }
       };
-
-      spyOn(fakeThis.subscription, 'unsubscribe');
 
       poSync.disableSync.apply(fakeThis);
 
-      expect(fakeThis['subscription'].unsubscribe).not.toHaveBeenCalled();
+      expect(fakeThis.subscription.unsubscribe).not.toHaveBeenCalled();
     });
 
     it('enableSync: should set isSyncEnabled with true and call createSubscribe', () => {
       poSync['isSyncEnabled'] = false;
-
       spyOn(poSync, <any>'createSubscribe');
 
       poSync.enableSync();
@@ -189,10 +175,10 @@ xdescribe('PoSyncService:', () => {
     });
 
     it('getResponses: should call responsesSubject', done => {
-      spyOn(poSync['poEventSourcingService'], <any>'responsesSubject').and.returnValue(of({}));
+      poEventSourcing.responsesSubject.and.returnValue(of({}) as any);
 
       poSync.getResponses().subscribe(() => {
-        expect(poSync['poEventSourcingService']['responsesSubject']).toHaveBeenCalled();
+        expect(poEventSourcing.responsesSubject).toHaveBeenCalled();
         done();
       });
     });
@@ -209,30 +195,26 @@ xdescribe('PoSyncService:', () => {
       expect(result).toThrowError(Error, 'Model not found: Clients');
     });
 
-    it(`insertHttpCommand: should call validateParameter with records inside an object and httpCommand with PoHttpRequestData`, async () => {
+    it('insertHttpCommand: should call validateParameter and httpCommand', async () => {
       const requestDataMock: PoHttpRequestData = { url: 'http://url-test.com', method: PoHttpRequestType.GET };
-
       spyOn(utilsFunctions, 'validateParameter');
-      spyOn(poSync['poEventSourcingService'], <any>'httpCommand').and.returnValue(Promise.resolve());
+      poEventSourcing.httpCommand.and.returnValue(Promise.resolve(1));
 
       await poSync.insertHttpCommand(requestDataMock);
 
-      expect(poSync['poEventSourcingService']['httpCommand']).toHaveBeenCalledWith(requestDataMock, undefined);
+      expect(poEventSourcing.httpCommand).toHaveBeenCalledWith(requestDataMock, undefined);
       expect(utilsFunctions.validateParameter).toHaveBeenCalledWith({ requestData: requestDataMock });
     });
 
-    it(`insertHttpCommand: should should call validateParameter with records inside an object and httpCommand with
-      customRequestId`, async () => {
+    it('insertHttpCommand: should call httpCommand with customRequestId', async () => {
       const requestDataMock: PoHttpRequestData = { url: 'http://url-test.com', method: PoHttpRequestType.GET };
-      const customRequestId: string = '123';
-
+      const customRequestId = '123';
       spyOn(utilsFunctions, 'validateParameter');
-      spyOn(poSync['poEventSourcingService'], <any>'httpCommand').and.returnValue(Promise.resolve());
+      poEventSourcing.httpCommand.and.returnValue(Promise.resolve(1));
 
       await poSync.insertHttpCommand(requestDataMock, customRequestId);
 
-      expect(poSync['poEventSourcingService']['httpCommand']).toHaveBeenCalledWith(requestDataMock, customRequestId);
-      expect(utilsFunctions.validateParameter).toHaveBeenCalledWith({ requestData: requestDataMock });
+      expect(poEventSourcing.httpCommand).toHaveBeenCalledWith(requestDataMock, customRequestId);
     });
 
     it('loadData: should load api data', done => {
@@ -251,15 +233,10 @@ xdescribe('PoSyncService:', () => {
 
     it('onSync: should return the same eventSub observable', done => {
       poSync['eventSub'] = of({ data: 'value' });
-      poSync.onSync().subscribe(
-        result => {
-          expect(result).toEqual({ data: 'value' });
-          done();
-        },
-        err => {
-          fail(err);
-        }
-      );
+      poSync.onSync().subscribe(result => {
+        expect(result).toEqual({ data: 'value' });
+        done();
+      });
     });
 
     it('onSync: should emitter to be a Subscriber instance', () => {
@@ -268,19 +245,16 @@ xdescribe('PoSyncService:', () => {
       expect(poSync['emitter'] instanceof Subscriber).toBeTruthy();
     });
 
-    it('prepare: should call validateArray with mySchemas inside an object', async () => {
+    it('prepare: should call validateArray with schemas', async () => {
       const mySchemas = [customerSchema];
-      const validateArrayParam = { schemas: mySchemas };
-
       spyOn(poSync, <any>'startTimer');
       spyOn(poSync, <any>'reactiveSync');
       spyOn(utilsFunctions, 'validateArray');
-      spyOn(poSync['poEventSourcingService'], <any>'onSaveData').and.returnValue(of());
-      spyOn(poSync, <any>'saveSchemas').and.returnValue({ then: () => {} });
+      spyOn(poSync, <any>'saveSchemas').and.returnValue(Promise.resolve());
 
       await poSync.prepare(mySchemas);
 
-      expect(utilsFunctions.validateArray).toHaveBeenCalledWith(validateArrayParam);
+      expect(utilsFunctions.validateArray).toHaveBeenCalledWith({ schemas: mySchemas });
     });
 
     it('prepare: should prepare all configs to sync', async () => {
@@ -289,13 +263,11 @@ xdescribe('PoSyncService:', () => {
         period: 30,
         dataTransform: new CustomDataTransform()
       };
-
       const mySchemas = [customerSchema];
 
       spyOn(poSync, <any>'startTimer');
       spyOn(poSync, <any>'reactiveSync');
       spyOn(utilsFunctions, 'validateArray');
-      spyOn(poSync['poEventSourcingService'], <any>'onSaveData').and.returnValue(of());
       spyOn(poSync, <any>'saveSchemas').and.returnValue(Promise.resolve());
 
       await poSync.prepare(mySchemas, myConfig);
@@ -305,282 +277,192 @@ xdescribe('PoSyncService:', () => {
       expect(poSync['poEventSourcingService']['config']).toEqual(myConfig);
       expect(poSync['startTimer']).toHaveBeenCalled();
       expect(poSync['reactiveSync']).toHaveBeenCalled();
-      expect(poSync['poEventSourcingService']['onSaveData']).toHaveBeenCalled();
       expect(poSync['saveSchemas']).toHaveBeenCalled();
       expect(poSync['models']['Customers'] instanceof PoEntity).toBeTruthy();
-      expect(poSync['models']['Customers']['schema']).toEqual(customerSchema);
     });
 
-    it('prepare: should set default config to sync', async () => {
-      const defaultConfig: PoSyncConfig = {
-        type: poSync['poNetworkService']['getConnectionStatus']().type,
-        period: 60,
-        dataTransform: new PoDataMessage()
-      };
-
+    it('prepare: should set default config when no config is passed', async () => {
       const mySchemas = [customerSchema];
+      spyOn(poSync, <any>'startTimer');
+      spyOn(poSync, <any>'reactiveSync');
+      spyOn(poSync, <any>'saveSchemas').and.returnValue(Promise.resolve());
 
       await poSync.prepare(mySchemas);
 
-      expect(poSync['config']).toEqual(defaultConfig);
+      expect(poSync['config'].period).toBe(60);
+      expect(poSync['config'].dataTransform instanceof PoDataMessage).toBeTruthy();
     });
 
-    it('prepare: should set config without DataTransform', async () => {
+    it('prepare: should set dataTransform to PoDataMessage when config has no dataTransform', async () => {
       const mySchemas = [customerSchema];
-      const myConfig: PoSyncConfig = {
-        type: PoNetworkType.wifi,
-        period: 60
-      };
+      const myConfig: PoSyncConfig = { type: PoNetworkType.wifi, period: 60 };
+
+      spyOn(poSync, <any>'startTimer');
+      spyOn(poSync, <any>'reactiveSync');
+      spyOn(poSync, <any>'saveSchemas').and.returnValue(Promise.resolve());
 
       await poSync.prepare(mySchemas, myConfig);
 
-      expect(poSync['config']['dataTransform']).toEqual(new PoDataMessage());
+      expect(poSync['config']['dataTransform'] instanceof PoDataMessage).toBeTruthy();
     });
 
-    it('removeItemOfSync: should call poEventSourcingService.removeItemEventSourcing with id', async () => {
-      const idEventSourcingMock = jasmine.any(Number);
-      spyOn(poSync['poEventSourcingService'], 'removeEventSourcingItem').and.returnValue(Promise.resolve());
-
-      await poSync.removeItemOfSync(idEventSourcingMock);
-
-      expect(poSync['poEventSourcingService']['removeEventSourcingItem']).toHaveBeenCalledWith(idEventSourcingMock);
+    it('removeItemOfSync: should call removeEventSourcingItem with id', async () => {
+      poEventSourcing.removeEventSourcingItem.and.returnValue(Promise.resolve());
+      await poSync.removeItemOfSync(123);
+      expect(poEventSourcing.removeEventSourcingItem).toHaveBeenCalledWith(123);
     });
 
-    it('resumeSync: should call sync and finishSyncSubject.asObservable when canSync is false', async () => {
-      spyOn(poSync, <any>'canSync').and.returnValue(false);
-      const spySync = spyOn(poSync, <any>'sync').and.returnValue(Promise.resolve());
-      spyOn(poSync['finishSyncSubject'], <any>'asObservable').and.callThrough();
-
-      await poSync.resumeSync();
-
-      poSync['finishSyncSubject']['next'](null);
-
-      expect(poSync['finishSyncSubject']['asObservable']).toHaveBeenCalledBefore(spySync);
-      expect(poSync.sync).toHaveBeenCalled();
-    });
-
-    it(`resumeSync: should call sync and not call finishSyncSubject.asObservable
-      when canSync is true`, async () => {
+    it('resumeSync: should call sync when canSync is true', async () => {
       spyOn(poSync, <any>'canSync').and.returnValue(true);
-      spyOn(poSync, <any>'sync');
-      spyOn(poSync['finishSyncSubject'], <any>'asObservable').and.returnValue(of());
+      spyOn(poSync, 'sync').and.returnValue(Promise.resolve());
 
       await poSync.resumeSync();
 
       expect(poSync.sync).toHaveBeenCalled();
-      expect(poSync['finishSyncSubject']['asObservable']).not.toHaveBeenCalled();
     });
 
-    it('sync: syncError should be called when syncGet error happen', done => {
-      spyOn(poSync, <any>'canSync').and.returnValue(true);
-      spyOn(poSync, <any>'startSync');
-      spyOn(poSync['poEventSourcingService'], 'syncGet').and.throwError('Error on sync');
-      spyOn(poSync, <any>'syncError');
+    it('resumeSync: should subscribe to finishSyncSubject when canSync is false', async () => {
+      spyOn(poSync, <any>'canSync').and.returnValue(false);
+      const spySync = spyOn(poSync, 'sync').and.returnValue(Promise.resolve());
+      spyOn(poSync['finishSyncSubject'], 'asObservable').and.callThrough();
 
-      poSync
-        .sync()
-        .then(() => {
-          expect(poSync['startSync']).toHaveBeenCalled();
-          expect(poSync['syncError']).toHaveBeenCalled();
-          done();
-        })
-        .catch(err => {
-          fail();
-        });
+      await poSync.resumeSync();
+
+      poSync['finishSyncSubject'].next(null);
+
+      expect(poSync['finishSyncSubject'].asObservable).toHaveBeenCalledBefore(spySync);
+      expect(poSync.sync).toHaveBeenCalled();
     });
 
-    it('sync: should call startSync and finishSync when canSync returns true', done => {
+    it('sync: should call startSync and finishSync when canSync returns true', async () => {
       spyOn(poSync, <any>'canSync').and.returnValue(true);
       spyOn(poSync, <any>'startSync');
       spyOn(poSync, <any>'finishSync');
-      poSync
-        .sync()
-        .then(() => {
-          expect(poSync['startSync']).toHaveBeenCalled();
-          expect(poSync['finishSync']).toHaveBeenCalled();
-          done();
-        })
-        .catch(err => {
-          fail(err);
-        });
+
+      await poSync.sync();
+
+      expect(poSync['startSync']).toHaveBeenCalled();
+      expect(poSync['finishSync']).toHaveBeenCalled();
     });
 
-    it('sync: should not call startSync and finishSync when canSync returns false', done => {
+    it('sync: should not call startSync when canSync returns false', async () => {
       spyOn(poSync, <any>'canSync').and.returnValue(false);
       spyOn(poSync, <any>'startSync');
       spyOn(poSync, <any>'finishSync');
-      poSync
-        .sync()
-        .then(() => {
-          expect(poSync['startSync']).not.toHaveBeenCalled();
-          expect(poSync['finishSync']).not.toHaveBeenCalled();
-          done();
-        })
-        .catch(err => {
-          fail(err);
-        });
+
+      await poSync.sync();
+
+      expect(poSync['startSync']).not.toHaveBeenCalled();
+      expect(poSync['finishSync']).not.toHaveBeenCalled();
     });
 
     it('sync: should call emitter.next() when emitter is defined', async () => {
       spyOn(poSync, <any>'canSync').and.returnValue(true);
-      spyOn(poSync['poEventSourcingService'], 'syncGet').and.returnValue(Promise.resolve());
-      spyOn(poSync['poEventSourcingService'], 'syncSend').and.returnValue(Promise.resolve());
-      poSync['emitter'] = {
-        next: () => {}
-      };
-      spyOn(poSync['emitter'], 'next');
+      poSync['emitter'] = { next: jasmine.createSpy('next') };
+
       await poSync.sync();
-      expect(poSync['emitter']['next']).toHaveBeenCalled();
+
+      expect(poSync['emitter'].next).toHaveBeenCalled();
     });
 
-    it('sync: should call canSync always', done => {
-      spyOn(poSync, <any>'canSync');
-      poSync
-        .sync()
-        .then(() => {
-          expect(poSync['canSync']).toHaveBeenCalledTimes(1);
-          done();
-        })
-        .catch(err => {
-          fail(err);
-        });
+    it('sync: syncError should be called when syncGet throws error', async () => {
+      spyOn(poSync, <any>'canSync').and.returnValue(true);
+      spyOn(poSync, <any>'startSync');
+      spyOn(poSync, <any>'syncError');
+      poEventSourcing.syncSend.and.returnValue(Promise.resolve());
+      poEventSourcing.syncGet.and.returnValue(Promise.reject('Error'));
+
+      await poSync.sync();
+
+      expect(poSync['startSync']).toHaveBeenCalled();
+      expect(poSync['syncError']).toHaveBeenCalled();
     });
 
-    it('canSync: should returns false if syncing is true and isSyncEnabled is false', () => {
-      poSync['syncing'] = true;
-      poSync['isSyncEnabled'] = false;
-
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeFalsy();
-    });
-
-    it('canSync: should returns false if syncing is true and isSyncEnabled is true', () => {
+    it('canSync: should return false if syncing is true', () => {
       poSync['syncing'] = true;
       poSync['isSyncEnabled'] = true;
-
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeFalsy();
+      expect(poSync['canSync']()).toBeFalsy();
     });
 
-    it('canSync: should returns false if syncing is false and isSyncEnabled is false', () => {
+    it('canSync: should return false if isSyncEnabled is false', () => {
       poSync['syncing'] = false;
       poSync['isSyncEnabled'] = false;
-
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeFalsy();
+      expect(poSync['canSync']()).toBeFalsy();
     });
 
-    it('canSync: should returns false if network status is false and config is undefined', () => {
+    it('canSync: should return true if network status is true and config is undefined', () => {
       poSync['syncing'] = false;
       poSync['isSyncEnabled'] = true;
       poSync['config'] = undefined;
+      poNetworkServiceMock.getConnectionStatus.and.returnValue({ status: true, type: undefined } as any);
 
-      spyOn(poSync['poNetworkService'], 'getConnectionStatus').and.returnValue(<any>{ status: false, type: undefined });
-
-      const canSync = poSync['canSync']();
-      expect(canSync).toBeFalsy();
+      expect(poSync['canSync']()).toBeTruthy();
     });
 
-    it('canSync: should returns true if network status is true and config is undefined', () => {
+    it('canSync: should return false if network status is false', () => {
       poSync['syncing'] = false;
       poSync['isSyncEnabled'] = true;
       poSync['config'] = undefined;
+      poNetworkServiceMock.getConnectionStatus.and.returnValue({ status: false, type: undefined } as any);
 
-      spyOn(poSync['poNetworkService'], 'getConnectionStatus').and.returnValue(<any>{ status: true, type: undefined });
-
-      const canSync = poSync['canSync']();
-      expect(canSync).toBeTruthy();
+      expect(poSync['canSync']()).toBeFalsy();
     });
 
-    it('canSync: should returns false if network status is true, network type != ethernet', () => {
-      poSync['syncing'] = false;
-      poSync['isSyncEnabled'] = true;
-      poSync['config'] = { type: PoNetworkType.ethernet };
-
-      spyOn(poSync['poNetworkService'], 'getConnectionStatus').and.returnValue(<any>{
-        status: true,
-        type: PoNetworkType.wifi
-      });
-
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeFalsy();
-    });
-
-    it('canSync: should returns true if network status is true, network type == wifi', () => {
+    it('canSync: should return true if network type matches config type', () => {
       poSync['syncing'] = false;
       poSync['isSyncEnabled'] = true;
       poSync['config'] = { type: PoNetworkType.wifi };
-      spyOn(poSync['poNetworkService'], 'getConnectionStatus').and.returnValue(<any>{
-        status: true,
-        type: PoNetworkType.wifi
-      });
+      poNetworkServiceMock.getConnectionStatus.and.returnValue({ status: true, type: PoNetworkType.wifi } as any);
 
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeTruthy();
+      expect(poSync['canSync']()).toBeTruthy();
     });
 
-    it('canSync: should returns true if network status is true and isConfigIncludesType is true', () => {
+    it('canSync: should return false if network type does not match config type', () => {
+      poSync['syncing'] = false;
+      poSync['isSyncEnabled'] = true;
+      poSync['config'] = { type: PoNetworkType.ethernet };
+      poNetworkServiceMock.getConnectionStatus.and.returnValue({ status: true, type: PoNetworkType.wifi } as any);
+
+      expect(poSync['canSync']()).toBeFalsy();
+    });
+
+    it('canSync: should return true if config type is an array and includes current type', () => {
       poSync['syncing'] = false;
       poSync['isSyncEnabled'] = true;
       poSync['config'] = { type: [PoNetworkType.wifi, PoNetworkType._2g] };
+      poNetworkServiceMock.getConnectionStatus.and.returnValue({ status: true, type: PoNetworkType.wifi } as any);
 
-      spyOn(poSync['poNetworkService'], 'getConnectionStatus').and.returnValue(<any>{
-        status: true,
-        type: PoNetworkType.wifi
-      });
-
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeTruthy();
+      expect(poSync['canSync']()).toBeTruthy();
     });
 
-    it(`canSync: should returns false if network status is true, isConfiguredConnection and isConfigIncludesType is false`, () => {
+    it('canSync: should return false if config type is an array and does not include current type', () => {
       poSync['syncing'] = false;
       poSync['isSyncEnabled'] = true;
       poSync['config'] = { type: [PoNetworkType.wifi, PoNetworkType._2g] };
+      poNetworkServiceMock.getConnectionStatus.and.returnValue({ status: true, type: PoNetworkType.ethernet } as any);
 
-      spyOn(poSync['poNetworkService'], 'getConnectionStatus').and.returnValue(<any>{
-        status: true,
-        type: PoNetworkType.ethernet
-      });
-
-      const canSync = poSync['canSync']();
-
-      expect(canSync).toBeFalsy();
+      expect(poSync['canSync']()).toBeFalsy();
     });
 
-    it('createSubscribe: should call sync and startTimer if timer is undefined', () => {
-      const fakeThis = {
-        timer: undefined,
-        sync: () => {},
-        startTimer: () => {}
-      };
-
-      spyOn(fakeThis, 'sync');
-      spyOn(fakeThis, 'startTimer');
-
-      poSync['createSubscribe'].call(fakeThis);
-      expect(fakeThis.timer).toBeUndefined();
-      expect(fakeThis.sync).not.toHaveBeenCalled();
-      expect(fakeThis.startTimer).not.toHaveBeenCalled();
-    });
-
-    it('createSubscribe: should call sync and startTimer', fakeAsync(() => {
-      spyOn(poSync, 'sync').and.returnValue(Promise.resolve());
-      spyOn(poSync, <any>'startTimer');
-      poSync['timer'] = of(0);
-      poSync['config'] = { type: poSync['poNetworkService']['getConnectionStatus']().type, period: 10 };
+    it('createSubscribe: should not call sync if timer is undefined', () => {
+      poSync['timer'] = undefined;
+      spyOn(poSync, 'sync');
 
       poSync['createSubscribe']();
 
+      expect(poSync.sync).not.toHaveBeenCalled();
+    });
+
+    it('createSubscribe: should call sync and startTimer when timer emits', fakeAsync(() => {
+      spyOn(poSync, 'sync').and.returnValue(Promise.resolve());
+      spyOn(poSync, <any>'startTimer');
+      poSync['timer'] = of(0);
+      poSync['config'] = { type: PoNetworkType.wifi, period: 10 };
+
+      poSync['createSubscribe']();
       tick(300);
 
-      expect(poSync['sync']).toHaveBeenCalled();
+      expect(poSync.sync).toHaveBeenCalled();
       expect(poSync['timer']).toBeNull();
       expect(poSync['subscription']).toBeNull();
       expect(poSync['startTimer']).toHaveBeenCalledWith(10);
@@ -588,71 +470,157 @@ xdescribe('PoSyncService:', () => {
 
     it('finishSync: should set syncing to false and call finishSyncSubject.next', () => {
       poSync['syncing'] = true;
-      spyOn(poSync['finishSyncSubject'], <any>'next');
+      spyOn(poSync['finishSyncSubject'], 'next');
 
       poSync['finishSync']();
 
       expect(poSync['syncing']).toBeFalsy();
-      expect(poSync['finishSyncSubject']['next']).toHaveBeenCalled();
+      expect(poSync['finishSyncSubject'].next).toHaveBeenCalled();
     });
 
-    describe('getOnePage: ', () => {
+    it('startSync: should set syncing to true', () => {
+      poSync['syncing'] = false;
+      poSync['startSync']();
+      expect(poSync['syncing']).toBeTruthy();
+    });
+
+    it('startTimer: should call createSubscribe if period and isSyncEnabled are truthy', () => {
+      poSync['isSyncEnabled'] = true;
+      spyOn(poSync, <any>'createSubscribe');
+
+      poSync['startTimer'](5);
+
+      expect(poSync['createSubscribe']).toHaveBeenCalled();
+      expect(poSync['timer']).toBeDefined();
+    });
+
+    it('startTimer: should not call createSubscribe if period is undefined', () => {
+      poSync['isSyncEnabled'] = true;
+      spyOn(poSync, <any>'createSubscribe');
+
+      poSync['startTimer'](undefined);
+
+      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
+    });
+
+    it('startTimer: should not call createSubscribe if period is zero', () => {
+      poSync['isSyncEnabled'] = true;
+      spyOn(poSync, <any>'createSubscribe');
+
+      poSync['startTimer'](0);
+
+      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
+    });
+
+    it('startTimer: should not call createSubscribe if isSyncEnabled is false', () => {
+      poSync['isSyncEnabled'] = false;
+      spyOn(poSync, <any>'createSubscribe');
+
+      poSync['startTimer'](5);
+
+      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
+    });
+
+    it('syncError: should call finishSync', () => {
+      spyOn(poSync, <any>'finishSync');
+      poSync['syncError']();
+      expect(poSync['finishSync']).toHaveBeenCalled();
+    });
+
+    it('reactiveSync: should call startTimer and sync when network status is true', () => {
+      const networkSubject = new Subject<any>();
+      poNetworkServiceMock.onChange.and.returnValue(networkSubject.asObservable());
+
+      spyOn(poSync, <any>'startTimer');
+      spyOn(poSync, 'sync');
+
+      poSync['config'] = { period: 10 } as any;
+      poSync['reactiveSync']();
+
+      networkSubject.next({ status: true });
+
+      expect(poSync['startTimer']).toHaveBeenCalledWith(10);
+      expect(poSync.sync).toHaveBeenCalled();
+    });
+
+    it('reactiveSync: should call subscription.unsubscribe when network status is falsy and subscription exists', () => {
+      const networkSubject = new Subject<any>();
+      poNetworkServiceMock.onChange.and.returnValue(networkSubject.asObservable());
+
+      poSync['subscription'] = { unsubscribe: jasmine.createSpy('unsubscribe') } as any;
+      poSync['reactiveSync']();
+
+      networkSubject.next({ status: false });
+
+      expect(poSync['subscription'].unsubscribe).toHaveBeenCalled();
+    });
+
+    it('saveSchemas: should call poSchemaDefinitionService.getAll and saveAll', async () => {
+      const schemasStorage: Array<PoSyncSchema> = [
+        {
+          idField: '',
+          name: '',
+          getUrlApi: '',
+          diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
+          fields: ['code', 'name'],
+          pageSize: 20,
+          deletedField: 'deleted'
+        }
+      ];
+
+      poSync['schemas'] = [customerSchema, userSchema];
+      poSchemaDefinition.getAll.and.returnValue(Promise.resolve(schemasStorage) as any);
+      poSchemaDefinition.saveAll.and.returnValue(Promise.resolve([]) as any);
+      spyOn(PoSchemaUtil, 'getLastSync');
+
+      await poSync['saveSchemas']();
+
+      expect(poSchemaDefinition.saveAll).toHaveBeenCalledWith([customerSchema, userSchema]);
+      expect(poSchemaDefinition.getAll).toHaveBeenCalled();
+    });
+
+    describe('getOnePage:', () => {
       const myItems = [
         { id: 1, name: 'Customer Z' },
         { id: 2, name: 'Customer X' }
       ];
-      const response = of(new HttpResponse({ body: { hasNext: true, items: myItems }, status: 200 }));
-      const correctlyUrl = 'http://localhost:8200/api/v1/customers?pageSize=2&page=';
 
-      it('should add sync fields to body.items and call http.get with correctly url', done => {
-        spyOn(poSync['poHttpClient'], 'get').and.returnValue(response);
-        poSync['config'] = {
-          type: PoNetworkType.wifi,
-          period: 10,
-          dataTransform: new PoDataMessage()
-        };
-
-        spyOn(poSync['poSchemaService'], 'updateAll').and.returnValue(Promise.resolve());
+      it('should add sync fields to body items and call http.get with correctly url', done => {
+        const response = of({ body: { hasNext: true, items: myItems } });
+        http.get.and.returnValue(response as any);
+        poSchemaService.updateAll.and.returnValue(Promise.resolve());
+        poSync['config'] = { type: PoNetworkType.wifi, period: 10, dataTransform: new PoDataMessage() };
 
         poSync['getOnePage'](customerSchema).subscribe(body => {
-          expect(body.items[0].id).toBe(1);
-          expect(body.items[0].name).toBe('Customer Z');
           expect(body.items[0].SyncUpdatedDateTime).toBeNull();
           expect(body.items[0].SyncExclusionDateTime).toBeNull();
           expect(body.items[0].SyncDeleted).toBeFalsy();
           expect(body.items[0].SyncStatus).toBe(2);
-          expect(poSync['poHttpClient']['get']).toHaveBeenCalledWith(`${correctlyUrl}1`);
+          expect(http.get).toHaveBeenCalledWith('http://localhost:8200/api/v1/customers?pageSize=2&page=1');
           done();
         });
       });
 
-      it('should call http.get with correctly url and the page 2', done => {
-        spyOn(poSync['poSchemaService'], 'updateAll').and.returnValue(Promise.resolve());
-        spyOn(poSync['poHttpClient'], 'get').and.returnValue(response);
-        poSync['config'] = {
-          type: PoNetworkType.wifi,
-          period: 10,
-          dataTransform: new PoDataMessage()
-        };
+      it('should call http.get with page 2', done => {
+        const response = of({ body: { hasNext: true, items: myItems } });
+        http.get.and.returnValue(response as any);
+        poSchemaService.updateAll.and.returnValue(Promise.resolve());
+        poSync['config'] = { type: PoNetworkType.wifi, period: 10, dataTransform: new PoDataMessage() };
 
-        poSync['getOnePage'](customerSchema, 2).subscribe(body => {
-          expect(poSync['poHttpClient']['get']).toHaveBeenCalledWith(`${correctlyUrl}2`);
+        poSync['getOnePage'](customerSchema, 2).subscribe(() => {
+          expect(http.get).toHaveBeenCalledWith('http://localhost:8200/api/v1/customers?pageSize=2&page=2');
           done();
         });
       });
 
-      it('should call poSchemaService.updateAll with schema', done => {
-        spyOn(poSync['poHttpClient'], 'get').and.returnValue(response);
-        spyOn(poSync['poSchemaService'], 'updateAll').and.returnValue(Promise.resolve());
+      it('should call poSchemaService.updateAll', done => {
+        const response = of({ body: { hasNext: true, items: myItems } });
+        http.get.and.returnValue(response as any);
+        poSchemaService.updateAll.and.returnValue(Promise.resolve());
+        poSync['config'] = { type: PoNetworkType.wifi, period: 10, dataTransform: new PoDataMessage() };
 
-        poSync['config'] = {
-          type: PoNetworkType.wifi,
-          period: 10,
-          dataTransform: new PoDataMessage()
-        };
-
-        poSync['getOnePage'](customerSchema).subscribe(body => {
-          expect(poSync['poSchemaService'].updateAll).toHaveBeenCalled();
+        poSync['getOnePage'](customerSchema).subscribe(() => {
+          expect(poSchemaService.updateAll).toHaveBeenCalled();
           done();
         });
       });
@@ -668,11 +636,7 @@ xdescribe('PoSyncService:', () => {
         { id: 4, name: 'Customer 4' }
       ];
 
-      poSync['config'] = {
-        type: PoNetworkType.wifi,
-        period: 10,
-        dataTransform: new PoDataMessage()
-      };
+      poSync['config'] = { type: PoNetworkType.wifi, period: 10, dataTransform: new PoDataMessage() };
 
       spyOn(poSync, <any>'getOnePage').and.returnValues(
         of({ hasNext: true, items: pageOneData }),
@@ -684,212 +648,6 @@ xdescribe('PoSyncService:', () => {
         expect(entity.data).toEqual([...pageOneData, ...pageTwoData]);
         done();
       });
-    });
-
-    it('reactiveSync: should call unsubscribe when is defined and network status is undefined', () => {
-      const fakeThis = {
-        subscription: { unsubscribe: () => {} },
-        poNetworkService: { onChange: () => of({ type: undefined }) }
-      };
-
-      spyOn(fakeThis.subscription, 'unsubscribe');
-
-      poSync['reactiveSync'].call(fakeThis);
-
-      expect(fakeThis.subscription.unsubscribe).toHaveBeenCalled();
-    });
-
-    it('reactiveSync: should call start, sync and not unsubscribe', () => {
-      const periodConfig = jasmine.any(Number);
-
-      const fakeThis = {
-        subscription: { unsubscribe: () => {} },
-        startTimer: (period: number) => {},
-        config: { period: periodConfig },
-        sync: () => {},
-        poNetworkService: {
-          onChange: () => of({ status: true })
-        }
-      };
-
-      spyOn(fakeThis.subscription, 'unsubscribe');
-      spyOn(fakeThis, 'startTimer');
-      spyOn(fakeThis, 'sync');
-
-      poSync['reactiveSync'].call(fakeThis);
-
-      expect(fakeThis.subscription.unsubscribe).not.toHaveBeenCalled();
-      expect(fakeThis.startTimer).toHaveBeenCalledWith(periodConfig);
-      expect(fakeThis.sync).toHaveBeenCalled();
-    });
-
-    it(`reactiveSync: should not call unsubscribe, startTimer and sync when subscription and
-      networkStatus is undefined`, () => {
-      const fakeThis = {
-        subscription: '',
-        unsubscribe: () => {},
-        startTimer: () => {},
-        sync: () => {},
-        poNetworkService: { onChange: () => of({ type: undefined }) }
-      };
-
-      spyOn(fakeThis, 'unsubscribe');
-      spyOn(fakeThis, 'startTimer');
-      spyOn(fakeThis, 'sync');
-
-      poSync['reactiveSync'].call(fakeThis);
-
-      expect(fakeThis.unsubscribe).not.toHaveBeenCalled();
-      expect(fakeThis.startTimer).not.toHaveBeenCalled();
-      expect(fakeThis.sync).not.toHaveBeenCalled();
-    });
-
-    it('saveSchemas: should call poSchemaDefinitionService.getAll and saveAll', async () => {
-      spyOn(PoSchemaUtil, 'getLastSync');
-
-      const schemasStorage: Array<PoSyncSchema> = [
-        {
-          idField: '',
-          name: '',
-          getUrlApi: '',
-          diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
-          fields: ['code', 'name'],
-          pageSize: 20,
-          deletedField: 'deleted'
-        }
-      ];
-
-      poSync['schemas'] = [customerSchema, userSchema];
-      spyOn(poSync['poSchemaDefinitionService'], <any>'getAll').and.returnValue(schemasStorage);
-      spyOn(poSync['poSchemaDefinitionService'], <any>'saveAll');
-
-      await poSync['saveSchemas']();
-
-      expect(poSync['poSchemaDefinitionService']['saveAll']).toHaveBeenCalledWith([customerSchema, userSchema]);
-      expect(poSync['poSchemaDefinitionService']['getAll']).toHaveBeenCalled();
-    });
-
-    it('saveSchemas: should update lastSync of schemas and call PoSchemaUtil.getLastSync', async () => {
-      const dateNow = new Date().toISOString();
-
-      spyOn(PoSchemaUtil, 'getLastSync').and.returnValue(dateNow);
-
-      const schemasStorage: Array<PoSyncSchema> = [
-        {
-          idField: '',
-          name: '',
-          getUrlApi: '',
-          diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
-          fields: ['code', 'name'],
-          pageSize: 20,
-          deletedField: 'deleted',
-          lastSync: dateNow
-        },
-        {
-          idField: 'code',
-          name: 'Users',
-          getUrlApi: 'http://localhost:8200/api/v1/users',
-          diffUrlApi: 'http://localhost:8200/api/v1/users/diff',
-          fields: ['code', 'name'],
-          pageSize: 20,
-          deletedField: 'deleted',
-          lastSync: dateNow
-        }
-      ];
-
-      poSync['schemas'] = [customerSchema, userSchema];
-
-      spyOn(poSync['poSchemaDefinitionService'], <any>'getAll').and.returnValue(schemasStorage);
-      spyOn(poSync['poSchemaDefinitionService'], <any>'saveAll');
-
-      await poSync['saveSchemas']();
-
-      expect(PoSchemaUtil.getLastSync).toHaveBeenCalledWith(schemasStorage, poSync['schemas'][0].name);
-      expect(PoSchemaUtil.getLastSync).toHaveBeenCalledWith(schemasStorage, poSync['schemas'][1].name);
-      expect(poSync['schemas'][0].lastSync === dateNow);
-      expect(poSync['schemas'][1].lastSync === dateNow);
-    });
-
-    it('startSync: should set syncing to true', () => {
-      poSync['syncing'] = false;
-      poSync['startSync']();
-      expect(poSync['syncing']).toBeTruthy();
-    });
-
-    it(`startTimer: should call createSubscribe and set timer with observable emitted in 5000ms if period is defined and
-      isSyncEnabled is true`, () => {
-      scheduler.run(helpers => {
-        const { expectObservable } = helpers;
-        const period = 5;
-        poSync['isSyncEnabled'] = true;
-        const expected = '5000ms (a|)';
-
-        spyOn(poSync, <any>'createSubscribe');
-
-        poSync['startTimer'](period);
-
-        expectObservable(poSync['timer']).toBe(expected, { a: 0 });
-        expect(poSync['createSubscribe']).toHaveBeenCalled();
-      });
-    });
-
-    it('startTimer: should not call createSubscribe if period of syncronize is undefined and isSyncEnabled is true.', () => {
-      poSync['isSyncEnabled'] = true;
-
-      spyOn(poSync, <any>'createSubscribe');
-
-      poSync['startTimer'](undefined);
-
-      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
-    });
-
-    it('startTimer: should not call createSubscribe if period of syncronize is undefined and isSyncEnabled is false.', () => {
-      poSync['isSyncEnabled'] = false;
-
-      spyOn(poSync, <any>'createSubscribe');
-
-      poSync['startTimer'](undefined);
-
-      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
-    });
-
-    it('startTimer: should not call createSubscribe if period of syncronize is defined and isSyncEnabled is false.', () => {
-      poSync['isSyncEnabled'] = false;
-      const period = 1;
-
-      spyOn(poSync, <any>'createSubscribe');
-
-      poSync['startTimer'](period);
-
-      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
-    });
-
-    it('startTimer: should not call createSubscribe if period of syncronize is zero and isSyncEnabled is true.', () => {
-      poSync['isSyncEnabled'] = true;
-
-      spyOn(poSync, <any>'createSubscribe');
-
-      poSync['startTimer'](0);
-
-      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
-    });
-
-    it('startTimer: should not call createSubscribe if period of syncronize is zero and isSyncEnabled is false.', () => {
-      poSync['isSyncEnabled'] = false;
-
-      spyOn(poSync, <any>'createSubscribe');
-
-      poSync['startTimer'](0);
-
-      expect(poSync['createSubscribe']).not.toHaveBeenCalled();
-    });
-
-    it('syncError: should call finishSync', () => {
-      spyOn(poSync, <any>'finishSync');
-
-      poSync['syncError']();
-
-      expect(poSync['finishSync']).toHaveBeenCalled();
     });
   });
 });

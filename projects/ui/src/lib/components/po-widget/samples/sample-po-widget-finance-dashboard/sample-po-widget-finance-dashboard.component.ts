@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalComponent, PoMultiselectOption, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoModalComponent, PoMultiselectOption, PoNotificationService, PoTableCo
   selector: 'sample-po-widget-finance-dashboard',
   templateUrl: './sample-po-widget-finance-dashboard.component.html',
   styleUrls: ['./sample-po-widget-finance-dashboard.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoWidgetFinanceDashboardComponent {
