@@ -21,13 +21,21 @@ export class SamplePoListViewLabsComponent implements OnInit {
   actions: Array<PoListViewAction>;
   componentsSize: string = 'medium';
   customLiterals: PoListViewLiterals;
+  detailDisplay: string = 'inline';
   height: number;
   items: Array<any>;
   literals: string;
   properties: Array<string>;
+  propertyAvatar: string;
+  propertyHighlighted: string;
   propertyLink: string;
   propertyLinkValue: string;
+  propertySubtitle: string;
+  propertyTag: string;
+  propertyTagType: string;
   propertyTitle: string;
+  selectionMode: string = 'multiple';
+  tagPosition: string = 'bottom';
   titleAction: string;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -48,6 +56,17 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { label: 'medium', value: 'medium' }
   ];
 
+  readonly detailDisplayOptions: Array<PoRadioGroupOption> = [
+    { label: 'inline', value: 'inline' },
+    { label: 'modal', value: 'modal' }
+  ];
+
+  readonly tagPositionOptions: Array<PoRadioGroupOption> = [
+    { label: 'right', value: 'right' },
+    { label: 'top', value: 'top' },
+    { label: 'bottom', value: 'bottom' }
+  ];
+
   readonly iconOptions: Array<PoSelectOption> = [
     { value: 'an an-newspaper', label: 'an an-newspaper' },
     { value: 'an an-magnifying-glass', label: 'an an-magnifying-glass' },
@@ -61,6 +80,11 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { value: 'email', label: 'email' },
     { value: 'phone', label: 'phone' },
     { value: 'location', label: 'location' }
+  ];
+
+  readonly selectionModeOptions: Array<PoRadioGroupOption> = [
+    { label: 'multiple', value: 'multiple' },
+    { label: 'single', value: 'single' }
   ];
 
   readonly typeOptions: Array<PoSelectOption> = [
@@ -109,13 +133,21 @@ export class SamplePoListViewLabsComponent implements OnInit {
   restore() {
     this.actions = [];
     this.componentsSize = 'medium';
+    this.detailDisplay = 'inline';
     this.items = [];
     this.height = undefined;
     this.literals = '';
     this.properties = [];
+    this.propertyAvatar = '';
+    this.propertyHighlighted = '';
     this.propertyLink = 'url';
     this.propertyLinkValue = '';
+    this.propertySubtitle = '';
+    this.propertyTag = '';
+    this.propertyTagType = '';
     this.propertyTitle = '';
+    this.selectionMode = 'multiple';
+    this.tagPosition = 'bottom';
     this.titleAction = '';
     this.restoreActionForm();
   }
@@ -125,6 +157,8 @@ export class SamplePoListViewLabsComponent implements OnInit {
   }
 
   private generateNewItem(index) {
+    const tagTypes = ['success', 'info', 'warning', 'danger', 'neutral'];
+
     return {
       name: `Register ${index}`,
       email: `register${index}@po-ui.com`,
@@ -132,7 +166,12 @@ export class SamplePoListViewLabsComponent implements OnInit {
       location: 'Brazil',
       company: `Company ${index}`,
       url: this.propertyLinkValue,
-      zipCode: `${index}221`
+      zipCode: `${index}221`,
+      tag: index % 2 === 0 ? 'Concluído' : 'Em andamento',
+      tagType: tagTypes[index % tagTypes.length],
+      subtitle: `Há ${index * 5} min`,
+      avatar: `https://i.pravatar.cc/150?img=${index}`,
+      unread: index % 3 === 0
     };
   }
 

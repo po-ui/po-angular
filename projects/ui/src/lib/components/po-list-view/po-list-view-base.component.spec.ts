@@ -1,16 +1,32 @@
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoThemeA11yEnum } from '../../services';
 import { PoListViewBaseComponent, poListViewLiteralsDefault } from './po-list-view-base.component';
+import { PoListViewDetailDisplay } from './enums/po-list-view-detail-display.enum';
+import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
+
+@Component({
+  template: '',
+  standalone: true
+})
+class PoListViewTestComponent extends PoListViewBaseComponent {}
 
 describe('PoListViewBaseComponent:', () => {
-  const languageService: PoLanguageService = new PoLanguageService();
-  let component: PoListViewBaseComponent;
+  let component: PoListViewTestComponent;
+  let fixture: ComponentFixture<PoListViewTestComponent>;
 
-  beforeEach(() => {
-    component = new PoListViewBaseComponent(languageService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoListViewTestComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoListViewTestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   describe('Properties:', () => {
@@ -308,6 +324,140 @@ describe('PoListViewBaseComponent:', () => {
       component.items.forEach(listItem => component.selectListItem(listItem));
 
       component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
+    });
+
+    it('p-selection-mode: should have `multiple` as default value', () => {
+      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Multiple);
+    });
+
+    it('p-selection-mode: should update to `single` when set with `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Single);
+    });
+
+    it('p-selection-mode: should fallback to `multiple` when set with an invalid value', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'invalid');
+      fixture.detectChanges();
+
+      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Multiple);
+    });
+
+    it('selectListItem: should keep only one item selected when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      component.items = [
+        { name: 'Name 1', $selected: false },
+        { name: 'Name 2', $selected: false },
+        { name: 'Name 3', $selected: false }
+      ];
+      component.select = true;
+
+      component.selectListItem(component.items[0]);
+      expect(component.items[0].$selected).toBe(true);
+
+      component.selectListItem(component.items[2]);
+      expect(component.items[0].$selected).toBe(false);
+      expect(component.items[2].$selected).toBe(true);
+      expect(component.selectAll).toBe(false);
+    });
+
+    it('selectListItem: should keep the current item selected when clicked again in `single` mode', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      component.items = [{ name: 'Name 1', $selected: false }];
+      component.select = true;
+
+      component.selectListItem(component.items[0]);
+      expect(component.items[0].$selected).toBe(true);
+
+      component.selectListItem(component.items[0]);
+      expect(component.items[0].$selected).toBe(true);
+    });
+
+    it('showMainHeader: should not show the header when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      component.items = [{ name: 'Name 1' }];
+      component.hideSelectAll = false;
+      component.select = true;
+
+      expect(component.showHeader).toBe(false);
+    });
+
+    it('showMainHeader: should show the header when selection mode is `multiple`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'multiple');
+      fixture.detectChanges();
+
+      component.items = [{ name: 'Name 1' }];
+      component.hideSelectAll = false;
+      component.select = true;
+
+      expect(component.showHeader).toBe(true);
+    });
+
+    it('isSingleSelection: should return `true` when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      expect(component.isSingleSelection).toBe(true);
+    });
+
+    it('isSingleSelection: should return `false` when selection mode is `multiple`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'multiple');
+      fixture.detectChanges();
+
+      expect(component.isSingleSelection).toBe(false);
+    });
+
+    it('p-detail-display: should have `inline` as default value', () => {
+      expect(component.detailDisplay()).toBe(PoListViewDetailDisplay.Inline);
+    });
+
+    it('p-detail-display: should update to `modal` when set with `modal`', () => {
+      fixture.componentRef.setInput('p-detail-display', 'modal');
+      fixture.detectChanges();
+
+      expect(component.detailDisplay()).toBe(PoListViewDetailDisplay.Modal);
+    });
+
+    it('p-detail-display: should fallback to `inline` when set with an invalid value', () => {
+      fixture.componentRef.setInput('p-detail-display', 'invalid');
+      fixture.detectChanges();
+
+      expect(component.detailDisplay()).toBe(PoListViewDetailDisplay.Inline);
+    });
+
+    it('isDetailModal: should return `true` when detail display is `modal`', () => {
+      fixture.componentRef.setInput('p-detail-display', 'modal');
+      fixture.detectChanges();
+
+      expect(component.isDetailModal).toBe(true);
+    });
+
+    it('isDetailModal: should return `false` when detail display is `inline`', () => {
+      fixture.componentRef.setInput('p-detail-display', 'inline');
+      fixture.detectChanges();
+
+      expect(component.isDetailModal).toBe(false);
+    });
+
+    it('p-property-subtitle: should update value when set', () => {
+      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
+      fixture.detectChanges();
+
+      expect(component.propertySubtitle()).toBe('createdAt');
+    });
+
+    it('p-property-highlighted: should update value when set', () => {
+      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.detectChanges();
+
+      expect(component.propertyHighlighted()).toBe('unread');
     });
 
     it('deleteInternalAttrs: should return `object` without property that starts with `$`', () => {
