@@ -18,7 +18,7 @@ export class AllGaugeCasesComponent implements OnInit {
   // CASO 2: Todas as propriedades
   // ═══════════════════════════════════════════════════════════════
   currentValue = 85;
-  gaugeRanges: PoGaugeRanges[] = [
+  gaugeRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 40, label: 'Baixo', color: 'red' },
     { from: 40, to: 70, label: 'Médio', color: 'yellow' },
     { from: 70, to: 100, label: 'Alto', color: 'green' }
@@ -29,21 +29,21 @@ export class AllGaugeCasesComponent implements OnInit {
   // CASO 3: Ranges variações
   // ═══════════════════════════════════════════════════════════════
   score = 72;
-  scoreRanges: PoGaugeRanges[] = [
+  scoreRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 50, label: 'Ruim', color: '#c64840' },
     { from: 50, to: 75, label: 'Regular', color: '#f5a623' },
     { from: 75, to: 100, label: 'Bom', color: '#0c9abe' }
   ];
 
   // Ranges sem label (legenda oculta)
-  rangesWithoutLabel: PoGaugeRanges[] = [
+  rangesWithoutLabel: Array<PoGaugeRanges> = [
     { from: 0, to: 33, color: '#c64840' },
     { from: 33, to: 66, color: '#f5a623' },
     { from: 66, to: 100, color: '#0c9abe' }
   ];
 
   // Ranges com cores hexadecimais
-  rangesHexColor: PoGaugeRanges[] = [
+  rangesHexColor: Array<PoGaugeRanges> = [
     { from: 0, to: 25, label: 'Q1', color: '#FF5733' },
     { from: 25, to: 50, label: 'Q2', color: '#33FF57' },
     { from: 50, to: 75, label: 'Q3', color: '#3357FF' },
@@ -51,14 +51,14 @@ export class AllGaugeCasesComponent implements OnInit {
   ];
 
   // Ranges com cores RGB
-  rangesRgbColor: PoGaugeRanges[] = [
+  rangesRgbColor: Array<PoGaugeRanges> = [
     { from: 0, to: 33, label: 'Low', color: 'rgb(198, 72, 64)' },
     { from: 33, to: 66, label: 'Mid', color: 'rgb(245, 166, 35)' },
     { from: 66, to: 100, label: 'High', color: 'rgb(12, 154, 190)' }
   ];
 
   // Ranges com cores do tema PO
-  rangesThemeColor: PoGaugeRanges[] = [
+  rangesThemeColor: Array<PoGaugeRanges> = [
     { from: 0, to: 25, label: 'Color 01', color: 'color-01' },
     { from: 25, to: 50, label: 'Color 02', color: 'color-02' },
     { from: 50, to: 75, label: 'Color 03', color: 'color-03' },
@@ -109,7 +109,7 @@ export class AllGaugeCasesComponent implements OnInit {
   // CASO 5: Atributos estáticos
   // ═══════════════════════════════════════════════════════════════
   dynamicValue = 88;
-  myRanges: PoGaugeRanges[] = [
+  myRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 30, label: 'Frio', color: 'blue' },
     { from: 30, to: 70, label: 'Morno', color: 'orange' },
     { from: 70, to: 100, label: 'Quente', color: 'red' }
@@ -119,13 +119,13 @@ export class AllGaugeCasesComponent implements OnInit {
   // CASO 6: Múltiplos gauges
   // ═══════════════════════════════════════════════════════════════
   cpu = 45;
-  cpuRanges: PoGaugeRanges[] = [
+  cpuRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 60, label: 'Normal', color: 'green' },
     { from: 60, to: 85, label: 'Alto', color: 'yellow' },
     { from: 85, to: 100, label: 'Crítico', color: 'red' }
   ];
   memory = 72;
-  memRanges: PoGaugeRanges[] = [
+  memRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 50, label: 'OK', color: 'green' },
     { from: 50, to: 80, label: 'Atenção', color: 'yellow' },
     { from: 80, to: 100, label: 'Crítico', color: 'red' }
@@ -136,7 +136,7 @@ export class AllGaugeCasesComponent implements OnInit {
   // CASO 7: Conteúdo projetado
   // ═══════════════════════════════════════════════════════════════
   progress = 60;
-  ranges: PoGaugeRanges[] = [
+  ranges: Array<PoGaugeRanges> = [
     { from: 0, to: 50, label: 'Baixo', color: '#c64840' },
     { from: 50, to: 80, label: 'Médio', color: '#f5a623' },
     { from: 80, to: 100, label: 'Alto', color: '#0c9abe' }
@@ -172,7 +172,7 @@ export class AllGaugeCasesComponent implements OnInit {
   // ═══════════════════════════════════════════════════════════════
   showPointerFlag = true;
   showLegendFlag = false;
-  properties: string[] = ['showFromToLegend', 'showPointer'];
+  properties: Array<string> = ['showFromToLegend', 'showPointer'];
 
   // ═══════════════════════════════════════════════════════════════
   // CASO 11: Convivência com po-chart
@@ -184,13 +184,13 @@ export class AllGaugeCasesComponent implements OnInit {
   // CASO 12: Indentação e formatação
   // ═══════════════════════════════════════════════════════════════
   longVariableName = 67;
-  rangesArray: PoGaugeRanges[] = [
+  rangesArray: Array<PoGaugeRanges> = [
     { from: 0, to: 33, label: 'Baixo', color: 'red' },
     { from: 33, to: 66, label: 'Médio', color: 'yellow' },
     { from: 66, to: 100, label: 'Alto', color: 'green' }
   ];
   x = 55;
-  r: PoGaugeRanges[] = [
+  r: Array<PoGaugeRanges> = [
     { from: 0, to: 50, color: '#c64840' },
     { from: 50, to: 100, color: '#0c9abe' }
   ];
@@ -213,25 +213,25 @@ export class AllGaugeCasesComponent implements OnInit {
   // ═══════════════════════════════════════════════════════════════
   // CASO 17: Ranges com valores extremos
   // ═══════════════════════════════════════════════════════════════
-  rangesStartAt20: PoGaugeRanges[] = [
+  rangesStartAt20: Array<PoGaugeRanges> = [
     { from: 20, to: 50, label: 'Baixo', color: 'blue' },
     { from: 50, to: 80, label: 'Alto', color: 'red' }
   ];
 
-  rangesEndAt80: PoGaugeRanges[] = [
+  rangesEndAt80: Array<PoGaugeRanges> = [
     { from: 0, to: 40, label: 'Baixo', color: 'blue' },
     { from: 40, to: 80, label: 'Alto', color: 'red' }
   ];
 
-  negativeRanges: PoGaugeRanges[] = [
+  negativeRanges: Array<PoGaugeRanges> = [
     { from: -50, to: -20, label: 'Muito Baixo', color: 'blue' },
     { from: -20, to: 0, label: 'Baixo', color: 'cyan' },
     { from: 0, to: 50, label: 'Normal', color: 'green' }
   ];
 
-  singleRange: PoGaugeRanges[] = [{ from: 0, to: 100, label: 'Total', color: 'green' }];
+  singleRange: Array<PoGaugeRanges> = [{ from: 0, to: 100, label: 'Total', color: 'green' }];
 
-  manyRanges: PoGaugeRanges[] = [
+  manyRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 8, label: 'R1', color: 'color-01' },
     { from: 8, to: 16, label: 'R2', color: 'color-02' },
     { from: 16, to: 24, label: 'R3', color: 'color-03' },
@@ -249,13 +249,13 @@ export class AllGaugeCasesComponent implements OnInit {
   // ═══════════════════════════════════════════════════════════════
   // CASO 18: Uso dentro de po-container (sample-summary)
   // ═══════════════════════════════════════════════════════════════
-  turnoverRanges: PoGaugeRanges[] = [
+  turnoverRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 50, label: 'Low rate', color: '#00b28e' },
     { from: 50, to: 75, label: 'Average rate', color: '#ea9b3e' },
     { from: 75, to: 100, label: 'High rate', color: '#c64840' }
   ];
 
-  salesRanges: PoGaugeRanges[] = [
+  salesRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 50, label: 'Sales reduction', color: '#c64840' },
     { from: 50, to: 75, label: 'Average sales', color: '#ea9b3e' },
     { from: 75, to: 100, label: 'Sales soared', color: '#00b28e' }
@@ -271,7 +271,7 @@ export class AllGaugeCasesComponent implements OnInit {
   // ═══════════════════════════════════════════════════════════════
   gaugeValue$: Observable<number> = of(68);
   gaugeTitle$: Observable<string> = of('Async Gauge');
-  gaugeRanges$: Observable<PoGaugeRanges[]> = of([
+  gaugeRanges$: Observable<Array<PoGaugeRanges>> = of([
     { from: 0, to: 50, label: 'Low', color: 'red' },
     { from: 50, to: 100, label: 'High', color: 'green' }
   ]);
@@ -296,7 +296,7 @@ export class AllGaugeCasesComponent implements OnInit {
   // ═══════════════════════════════════════════════════════════════
   // CASO 25: Expressões complexas
   // ═══════════════════════════════════════════════════════════════
-  gaugeData: { value: number; title: string; ranges: PoGaugeRanges[] } = {
+  gaugeData: { value: number; title: string; ranges: Array<PoGaugeRanges> } = {
     value: 78,
     title: 'Object Gauge',
     ranges: [
@@ -308,16 +308,16 @@ export class AllGaugeCasesComponent implements OnInit {
   // ═══════════════════════════════════════════════════════════════
   // CASO 28: Ranges vazios e null
   // ═══════════════════════════════════════════════════════════════
-  emptyRanges: PoGaugeRanges[] = [];
+  emptyRanges: Array<PoGaugeRanges> = [];
   // @ts-ignore
-  nullRanges: PoGaugeRanges[] = undefined;
+  nullRanges: Array<PoGaugeRanges> = undefined;
 
   // ═══════════════════════════════════════════════════════════════
   // CASO 32: Labs-style (tudo dinâmico)
   // ═══════════════════════════════════════════════════════════════
   labsDescription = 'Labs Description';
   labsHeight = 350;
-  labsRanges: PoGaugeRanges[] = [
+  labsRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 30, label: 'Baixo', color: '#c64840' },
     { from: 30, to: 60, label: 'Médio', color: '#f5a623' },
     { from: 60, to: 100, label: 'Alto', color: '#0c9abe' }
@@ -344,7 +344,7 @@ export class AllGaugeCasesComponent implements OnInit {
   @Input() inputValue = 50;
   @Input() inputTitle = 'Input Title';
   @Input() inputDescription = 'Input Desc';
-  @Input() inputRanges: PoGaugeRanges[] = [
+  @Input() inputRanges: Array<PoGaugeRanges> = [
     { from: 0, to: 50, color: 'blue' },
     { from: 50, to: 100, color: 'green' }
   ];
