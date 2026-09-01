@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  TemplateRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Subscription, filter } from 'rxjs';
 
 import { convertToBoolean } from '../../../utils/util';

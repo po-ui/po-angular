@@ -1,4 +1,14 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 

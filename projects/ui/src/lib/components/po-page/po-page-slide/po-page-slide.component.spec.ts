@@ -331,10 +331,11 @@ describe('PoPageSlideComponent', () => {
       component.duration = '0ms';
       component.animateEnter(<any>{ target: rootElement, animationComplete });
 
-      expect(rootAnimateSpy).toHaveBeenCalledWith(
-        [{ opacity: 0 }, { opacity: 1 }],
-        { duration: 70, easing: 'linear', fill: 'forwards' }
-      );
+      expect(rootAnimateSpy).toHaveBeenCalledWith([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 70,
+        easing: 'linear',
+        fill: 'forwards'
+      });
     });
 
     it('parseDuration: should parse ms value', () => {

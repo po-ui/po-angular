@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '@po-ui/ng-components';

@@ -1,4 +1,14 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  Output,
+  TemplateRef,
+  input,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 

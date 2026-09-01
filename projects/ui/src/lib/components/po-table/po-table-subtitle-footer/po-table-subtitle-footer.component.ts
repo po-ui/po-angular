@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, Input, OnDestroy, Renderer2, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  ElementRef,
+  Input,
+  OnDestroy,
+  Renderer2,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { PoTableSubtitleColumn } from './po-table-subtitle-column.interface';
 

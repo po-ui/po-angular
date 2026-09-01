@@ -1,11 +1,4 @@
-import { 
-  Injectable, 
-  ComponentRef, 
-  ApplicationRef, 
-  Injector, 
-  createComponent, 
-  Type 
-} from '@angular/core';
+import { Injectable, ComponentRef, ApplicationRef, Injector, createComponent, Type } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'

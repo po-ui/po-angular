@@ -1,4 +1,12 @@
-import { AfterContentInit, Component, ElementRef, OnChanges, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  OnChanges,
+  SimpleChanges,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { PoTabBaseComponent } from './po-tab-base.component';
 import { PoTabsService } from '../po-tabs.service';

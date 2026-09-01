@@ -6,8 +6,5 @@
     "noUnusedParameters": false
   },
   "include": ["schematics/**/*.spec.ts"],
-  "exclude": [
-    "schematics/**/*/files/**/*",
-    "schematics/ng-update/v22/gauge-manual-test/**/*"
-  ]
+  "exclude": ["schematics/**/*/files/**/*", "schematics/ng-update/v22/gauge-manual-test/**/*"]
 }

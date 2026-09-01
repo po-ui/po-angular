@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoMenuFilterLiterals } from './po-menu-filter-literals.interface';
 

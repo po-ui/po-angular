@@ -1,4 +1,13 @@
-import { AfterContentInit, Component, inject, OnChanges, OnDestroy, Renderer2, SimpleChange, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  inject,
+  OnChanges,
+  OnDestroy,
+  Renderer2,
+  SimpleChange,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoLanguageService } from './../../../services/po-language/po-language.service';

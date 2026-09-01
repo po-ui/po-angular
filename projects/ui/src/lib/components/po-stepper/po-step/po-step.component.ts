@@ -1,4 +1,12 @@
-import { AfterContentInit, Component, ElementRef, Input, TemplateRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  Input,
+  TemplateRef,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { uuid } from '../../../utils/util';

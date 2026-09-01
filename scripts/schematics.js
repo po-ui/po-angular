@@ -91,10 +91,7 @@ task('build:schematics', series('tsc:schematics', 'copy-resources:schematics'));
  *
  * ex: gulp build:schematics:spec --lib ui
  */
-task(
-  'build:schematics:spec',
-  series('tsc:schematics', 'copy-resources:schematics', 'tsc:schematics:spec')
-);
+task('build:schematics:spec', series('tsc:schematics', 'copy-resources:schematics', 'tsc:schematics:spec'));
 
 /** build ./project/schematics */
 task('build:schematics:lib', series('clean:schematics:lib', 'tsc:schematics:lib', 'copy-resources:schematics:lib'));

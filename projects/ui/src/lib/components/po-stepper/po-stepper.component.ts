@@ -1,4 +1,12 @@
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, QueryList, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChildren,
+  QueryList,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { Observable, of, throwError } from 'rxjs';
 import { take, tap, catchError, map, mergeMap } from 'rxjs/operators';

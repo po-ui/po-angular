@@ -1,4 +1,12 @@
-import { Component, ContentChildren, OnDestroy, QueryList, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ContentChildren,
+  OnDestroy,
+  QueryList,
+  ViewChildren,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 

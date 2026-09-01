@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Optional, Output, forwardRef, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  Optional,
+  Output,
+  forwardRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';

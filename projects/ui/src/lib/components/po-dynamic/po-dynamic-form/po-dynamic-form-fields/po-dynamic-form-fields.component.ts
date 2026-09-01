@@ -1,5 +1,14 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnChanges, QueryList, SimpleChanges, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnChanges,
+  QueryList,
+  SimpleChanges,
+  ViewChildren,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';

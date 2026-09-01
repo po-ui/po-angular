@@ -1,4 +1,12 @@
-import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';

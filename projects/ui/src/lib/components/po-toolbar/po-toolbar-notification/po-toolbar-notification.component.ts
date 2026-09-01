@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 

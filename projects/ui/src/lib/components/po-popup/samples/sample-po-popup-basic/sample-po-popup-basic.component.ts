@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
   selector: 'sample-po-popup-basic',

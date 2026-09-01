@@ -1,4 +1,14 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { PoLanguage, poLanguageDefault, PoLanguageService, PoSelectOption } from '@po-ui/ng-components';
 

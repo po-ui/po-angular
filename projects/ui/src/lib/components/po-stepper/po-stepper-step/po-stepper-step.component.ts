@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  TemplateRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { getShortBrowserLanguage, convertToBoolean, isTypeof } from './../../../utils/util';
 import { poLocaleDefault } from './../../../services/po-language/po-language.constant';

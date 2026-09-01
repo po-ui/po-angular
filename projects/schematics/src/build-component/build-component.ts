@@ -118,9 +118,7 @@ function addImportToModule(options: ComponentOptions, styleGuide: FileNameStyleG
     const modulePath = options.module;
     const { moduleFileName } = getFileNames(options.name, styleGuide);
 
-    const componentModulePath = normalize(
-      `/${options.path}/` + strings.dasherize(options.name) + '/' + moduleFileName
-    );
+    const componentModulePath = normalize(`/${options.path}/` + strings.dasherize(options.name) + '/' + moduleFileName);
 
     const relativePath = buildRelativePath(modulePath, componentModulePath);
     const classifiedModuleName = strings.classify(`${options.name}Module`);
@@ -138,9 +136,7 @@ function addDeclarationToModule(options: ComponentOptions, styleGuide: FileNameS
     const modulePath = options.module;
     const { componentFileName } = getFileNames(options.name, styleGuide);
 
-    const componentPath = normalize(
-      `/${options.path}/` + strings.dasherize(options.name) + '/' + componentFileName
-    );
+    const componentPath = normalize(`/${options.path}/` + strings.dasherize(options.name) + '/' + componentFileName);
 
     const relativePath = buildRelativePath(modulePath, componentPath);
     const classifiedName = strings.classify(`${options.name}Component`);
