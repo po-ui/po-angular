@@ -116,7 +116,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
       label: undefined,
       visible: null,
       parent: undefined
-    } as any;
+    };
   }
 
   private getActionNode(items: Array<PoPopupAction>, value: string): PoPopupAction | undefined {

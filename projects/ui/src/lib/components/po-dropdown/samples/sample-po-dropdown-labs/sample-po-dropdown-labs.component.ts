@@ -131,7 +131,7 @@ export class SamplePoDropdownLabsComponent implements OnInit {
       label: undefined,
       visible: null,
       parent: undefined
-    } as any;
+    };
   }
 
   showAction(label: string): void {

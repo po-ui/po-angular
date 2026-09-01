@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
 

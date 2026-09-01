@@ -11,7 +11,6 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  inject,
   ChangeDetectionStrategy
 } from '@angular/core';
 

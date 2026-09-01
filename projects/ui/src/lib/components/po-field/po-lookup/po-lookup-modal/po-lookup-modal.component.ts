@@ -167,8 +167,8 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
     // PoDynamicFormComponent -> PoDynamicFormFieldsComponent-> PoLookupComponent ->
     //  PoLookupModalService -> PoLookupModalComponent -> PoDynamicFormComponent
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     return import('./../../../po-dynamic/po-dynamic-form/po-dynamic-form.component').then(
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       ({ PoDynamicFormComponent }) => {
         this.componentRef = this.container.createComponent(PoDynamicFormComponent);
         this.componentRef.instance.fields = this.advancedFilters;

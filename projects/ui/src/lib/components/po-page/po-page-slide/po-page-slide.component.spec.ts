@@ -397,7 +397,7 @@ describe('PoPageSlideComponent', () => {
       const containerAnimation: any = {};
       const containerAnimateSpy = spyOn(container, 'animate').and.returnValue(containerAnimation);
 
-      component.animateEnter(<any>{ target: rootElement, animationComplete });
+      component.animateEnter({ target: rootElement, animationComplete });
 
       expect(rootAnimateSpy).toHaveBeenCalledWith(
         [{ opacity: 0 }, { opacity: 1 }],
@@ -423,7 +423,7 @@ describe('PoPageSlideComponent', () => {
       const containerAnimation: any = {};
       spyOn(container, 'animate').and.returnValue(containerAnimation);
 
-      component.animateLeave(<any>{ target: rootElement, animationComplete });
+      component.animateLeave({ target: rootElement, animationComplete });
 
       containerAnimation.onfinish();
       expect(animationComplete).toHaveBeenCalled();
@@ -434,7 +434,7 @@ describe('PoPageSlideComponent', () => {
       const animationComplete = jasmine.createSpy('animationComplete');
       spyOn(rootElement, 'animate').and.returnValue({} as any);
 
-      component.animateEnter(<any>{ target: rootElement, animationComplete });
+      component.animateEnter({ target: rootElement, animationComplete });
 
       expect(animationComplete).toHaveBeenCalled();
     });
@@ -452,7 +452,7 @@ describe('PoPageSlideComponent', () => {
 
       // parseDuration retorna 0 para string '0ms', ativando o fallback || 70
       component.duration = '0ms';
-      component.animateEnter(<any>{ target: rootElement, animationComplete });
+      component.animateEnter({ target: rootElement, animationComplete });
 
       expect(rootAnimateSpy).toHaveBeenCalledWith([{ opacity: 0 }, { opacity: 1 }], {
         duration: 70,
@@ -513,7 +513,7 @@ describe('PoPageSlideComponent', () => {
       const animationComplete = jasmine.createSpy('animationComplete');
       spyOn(rootElement, 'animate').and.returnValue({} as any);
 
-      component.animateLeave(<any>{ target: rootElement, animationComplete });
+      component.animateLeave({ target: rootElement, animationComplete });
 
       expect(animationComplete).not.toHaveBeenCalled();
 
