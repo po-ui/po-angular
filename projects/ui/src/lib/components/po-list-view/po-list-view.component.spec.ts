@@ -164,7 +164,7 @@ describe('PoListViewComponent:', () => {
       spyOn(component.showDetail, 'emit');
 
       const item = { name: 'test' };
-      component.animateDetailEnter(<any>{ target: element, animationComplete }, item);
+      component.animateDetailEnter({ target: element, animationComplete }, item);
 
       expect(component.showDetail.emit).toHaveBeenCalledWith(item);
       expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '60px' }], {
@@ -183,7 +183,7 @@ describe('PoListViewComponent:', () => {
       Object.defineProperty(element, 'scrollHeight', { value: 40 });
       spyOn(element, 'animate').and.returnValue(animation);
 
-      component.animateDetailLeave(<any>{ target: element, animationComplete });
+      component.animateDetailLeave({ target: element, animationComplete });
 
       expect(element.animate).toHaveBeenCalledWith([{ height: '40px' }, { height: '0px' }], {
         duration: 100,

@@ -12,7 +12,17 @@ import sonarjs from 'eslint-plugin-sonarjs';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'node_modules/**', '.angular/**', 'coverage/**', 'out-tsc/**']
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '.angular/**',
+      'coverage/**',
+      'out-tsc/**',
+      // Fixtures de teste manual da migracao do po-gauge: arquivos de entrada
+      // propositalmente crafted (usos de po-gauge, @ts-ignore, etc.) que servem
+      // de material para a schematic transformar; nao devem ser lintados.
+      'projects/ui/schematics/ng-update/v22/gauge-manual-test/**'
+    ]
   },
   {
     // O modelo legado (.eslintrc.json) nao reportava diretivas eslint-disable
@@ -172,6 +182,40 @@ export default tseslint.config(
       '@angular-eslint/prefer-on-push-component-change-detection': 'off'
     }
   },
+  // Arquivos de schematics sao compilados com tsconfig.schematics.json
+  // (strictNullChecks: true). Type-checa-los com o mesmo tsconfig evita que
+  // regras type-aware (ex.: no-unnecessary-type-assertion) divirjam do build:
+  // sem isso, o lint usa o tsconfig.lib.json (strict: false) e considera
+  // desnecessarios os `!`/casts que o build strict realmente exige.
+  {
+    files: ['projects/*/schematics/**/*.ts'],
+    ignores: ['projects/*/schematics/**/*.spec.ts', 'projects/*/schematics/**/files/**/*'],
+    languageOptions: {
+      parserOptions: {
+        project: [
+          'projects/code-editor/tsconfig.schematics.json',
+          'projects/storage/tsconfig.schematics.json',
+          'projects/sync/tsconfig.schematics.json',
+          'projects/templates/tsconfig.schematics.json',
+          'projects/ui/tsconfig.schematics.json'
+        ],
+        tsconfigRootDir: import.meta.dirname
+      }
+    }
+  },
+  // Specs de schematics: build strict via tsconfig.schematics-spec.json
+  // (apenas ui possui esse tsconfig atualmente).
+  {
+    files: ['projects/ui/schematics/**/*.spec.ts'],
+    ignores: ['projects/ui/schematics/**/files/**/*'],
+    languageOptions: {
+      parserOptions: {
+        project: ['projects/ui/tsconfig.schematics-spec.json'],
+        tsconfigRootDir: import.meta.dirname
+      }
+    }
+  },
+
   // ---------------------------------------------------------------------------
   // Overrides por projeto (equivalentes aos .eslintrc.json de cada projeto).
   // Aplicados apos o bloco compartilhado; em flat config, blocos posteriores

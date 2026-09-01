@@ -757,7 +757,7 @@ describe('PoTableColumnManagerComponent:', () => {
       it(`should return 'column.label' if it has 'column.label'`, () => {
         const fakeColumn = { property: 'name', label: 'Name' };
 
-        expect(component['getColumnTitleLabel'](<any>fakeColumn)).toBe(fakeColumn.label);
+        expect(component['getColumnTitleLabel'](fakeColumn)).toBe(fakeColumn.label);
       });
 
       it(`should call 'capitalizeFirstLetter' to set 'getColumnTitleLabel' if 'column.label' is undefined`, () => {

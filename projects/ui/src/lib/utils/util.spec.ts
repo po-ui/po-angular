@@ -1940,7 +1940,7 @@ describe('getTextColor:', () => {
         };
         return tokens[token] || '';
       }
-    } as CSSStyleDeclaration);
+    });
   });
 
   afterEach(() => {
@@ -2007,7 +2007,7 @@ describe('getTextColorFromBackgroundColor:', () => {
         };
         return tokens[token] || '';
       }
-    } as CSSStyleDeclaration);
+    });
   });
 
   afterEach(() => {

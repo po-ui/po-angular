@@ -398,9 +398,9 @@ describe('PoI18nService:', () => {
           const translations = {};
 
           spyOn(service as any, 'mergeObject').and.callThrough();
-          spyOn(service, 'searchInVarI18n' as keyof PoI18nService).and.returnValue('');
-          spyOn(service, 'countObject' as keyof PoI18nService).and.returnValue('0');
-          spyOn(service, 'getLiteralsLocalStorageAndCache' as keyof PoI18nService);
+          spyOn(service, 'searchInVarI18n').and.returnValue('');
+          spyOn(service, 'countObject').and.returnValue('0');
+          spyOn(service, 'getLiteralsLocalStorageAndCache');
 
           service['getLiteralsFromContextService'](
             language,

@@ -703,7 +703,7 @@ describe('PoProgressComponent:', () => {
           paddingBottom: '0px',
           paddingLeft: '0px',
           paddingRight: '0px'
-        } as CSSStyleDeclaration);
+        });
         const el = document.createElement('div');
         el.style.width = '200px';
         el.style.height = '150px';
@@ -725,7 +725,7 @@ describe('PoProgressComponent:', () => {
           paddingBottom: '10px',
           paddingLeft: '10px',
           paddingRight: '10px'
-        } as CSSStyleDeclaration);
+        });
 
         const el = document.createElement('div');
         el.style.width = '200px';

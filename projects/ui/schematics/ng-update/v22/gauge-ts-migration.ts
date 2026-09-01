@@ -278,6 +278,8 @@ function buildReferenceEdits(
   const visit = (node: ts.Node): void => {
     if (ts.isIdentifier(node) && referenceRenameMap.has(node.text) && !isWithinRanges(node, sourceFile, importRanges)) {
       if (isRenameableReference(node)) {
+        // O `!` é necessário sob strictNullChecks (build de schematics): a
+        // condição do `if` acima garante que a chave existe no mapa.
         const target = referenceRenameMap.get(node.text)!;
         const array = getContainingArrayElement(node);
 
@@ -348,11 +350,9 @@ function collectExistingArrayNames(
   const names = new Set<string>();
 
   for (const element of array.elements) {
-    if (ts.isIdentifier(element)) {
-      // Nomes que não são gauge já contam como presentes com seu próprio nome.
-      if (!referenceRenameMap.has(element.text)) {
-        names.add(element.text);
-      }
+    // Nomes que não são gauge já contam como presentes com seu próprio nome.
+    if (ts.isIdentifier(element) && !referenceRenameMap.has(element.text)) {
+      names.add(element.text);
     }
   }
 

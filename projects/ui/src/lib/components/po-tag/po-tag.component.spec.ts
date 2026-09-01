@@ -388,7 +388,7 @@ describe('PoTagComponent:', () => {
           };
           return tokens[token] || '';
         }
-      } as CSSStyleDeclaration);
+      });
     }
 
     it('should set text color to dark for light backgrounds', () => {

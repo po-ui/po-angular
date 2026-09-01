@@ -121,7 +121,7 @@ describe('PoTreeviewItemComponent:', () => {
       Object.defineProperty(element, 'scrollHeight', { value: 150 });
       spyOn(element, 'animate').and.returnValue(animation);
 
-      component.animateEnter(<any>{ target: element, animationComplete });
+      component.animateEnter({ target: element, animationComplete });
 
       expect(element.animate).toHaveBeenCalledWith(
         [
@@ -143,7 +143,7 @@ describe('PoTreeviewItemComponent:', () => {
       Object.defineProperty(element, 'scrollHeight', { value: 90 });
       spyOn(element, 'animate').and.returnValue(animation);
 
-      component.animateLeave(<any>{ target: element, animationComplete });
+      component.animateLeave({ target: element, animationComplete });
 
       expect(element.animate).toHaveBeenCalledWith(
         [

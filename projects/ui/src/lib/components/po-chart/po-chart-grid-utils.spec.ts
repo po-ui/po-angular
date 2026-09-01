@@ -87,7 +87,7 @@ describe('PoChartGridUtils', () => {
     it('should set areaStyle.color using computedStyle when serie.color is var(...)', () => {
       const spyGetComputed = spyOn(globalThis, 'getComputedStyle').and.returnValue({
         getPropertyValue: () => '#445566'
-      } as unknown as CSSStyleDeclaration);
+      });
 
       const serie: any = {
         isTypeArea: true,

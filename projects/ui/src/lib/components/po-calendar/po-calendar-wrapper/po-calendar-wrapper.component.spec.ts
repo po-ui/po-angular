@@ -599,7 +599,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('getDayBackgroundColor: should return empty string when date is falsy', () => {
-      expect(component.getDayBackgroundColor(null as any)).toBe('');
+      expect(component.getDayBackgroundColor(null)).toBe('');
     });
 
     it('getDayForegroundColor: should call `getDayColor` with `date` and `foreground`', () => {
@@ -2725,7 +2725,7 @@ describe('PoCalendarWrapperComponent', () => {
 
       it('should return "invalid-index" when the date is null', () => {
         const index = 5;
-        expect(component.trackByDay(index, null as any)).toBe('invalid-5');
+        expect(component.trackByDay(index, null)).toBe('invalid-5');
       });
 
       it('should return "invalid-index" when the object is not an instance of Date', () => {
@@ -2768,7 +2768,7 @@ describe('PoCalendarWrapperComponent', () => {
     });
 
     it('trackByDay: deve retornar fallback para data inválida', () => {
-      expect(component.trackByDay(5, null as any)).toBe('invalid-5');
+      expect(component.trackByDay(5, null)).toBe('invalid-5');
     });
   });
 

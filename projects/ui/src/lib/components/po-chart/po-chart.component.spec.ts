@@ -1108,7 +1108,7 @@ describe('PoChartComponent', () => {
 
       spyOn(window, 'getComputedStyle').and.returnValue({
         getPropertyValue: () => ''
-      } as unknown as CSSStyleDeclaration);
+      });
 
       const result = (component as any).getCSSVariable('--non-existent-variable', '.invalid-selector');
 
@@ -1393,7 +1393,7 @@ describe('PoChartComponent', () => {
     it('should call getComputedStyle with document.documentElement and use its value for var(...) color', () => {
       const spyGetComputed = spyOn(window, 'getComputedStyle').and.returnValue({
         getPropertyValue: (prop: string) => '#112233'
-      } as unknown as CSSStyleDeclaration);
+      });
 
       component.series = [{ label: 'Serie Var2', data: [1, 2], color: 'var(--color-test)' }];
       component.type = PoChartType.Column;
@@ -2308,7 +2308,7 @@ describe('PoChartComponent', () => {
     it('should use default font size of 16px if parent font size is undefined', () => {
       spyOn<any>(component, 'getCSSVariable').and.returnValue('2em');
       spyOn(document, 'querySelector').and.returnValue(null);
-      spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '16px' } as CSSStyleDeclaration);
+      spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '16px' });
 
       const result = (component as any)['chartGridUtils'].resolvePx('2em');
 
@@ -2321,7 +2321,7 @@ describe('PoChartComponent', () => {
 
       spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
       spyOn(document, 'querySelector').and.returnValue(mockParentElement);
-      spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '18px' } as CSSStyleDeclaration);
+      spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '18px' });
 
       const result = (component as any)['chartGridUtils'].resolvePx('--some-size', '.some-selector');
 

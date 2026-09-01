@@ -123,7 +123,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
 
   animateEnter(event: AnimationCallbackEvent): void {
     const rootElement = event.target as HTMLElement;
-    const container = rootElement.querySelector('.po-page-slide-container') as HTMLElement;
+    const container = rootElement.querySelector('.po-page-slide-container');
 
     const fadeDuration = this.parseDuration(this.duration) || 70;
     const { duration: slideDuration, easing: slideEasing } = this.parseTiming(this.timing);
@@ -151,7 +151,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
 
   animateLeave(event: AnimationCallbackEvent): void {
     const rootElement = event.target as HTMLElement;
-    const container = rootElement.querySelector('.po-page-slide-container') as HTMLElement;
+    const container = rootElement.querySelector('.po-page-slide-container');
 
     const leaveDuration = 150;
 

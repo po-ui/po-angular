@@ -189,7 +189,7 @@ describe('PoDecimalComponent:', () => {
     describe('decimalsLength: ', () => {
       it('should call refreshOnPropertyChange when set', () => {
         fixture.detectChanges();
-        const spy = spyOn(component as never, 'refreshOnPropertyChange' as never);
+        const spy = spyOn(component, 'refreshOnPropertyChange');
 
         component.decimalsLength = 4;
 
@@ -200,7 +200,7 @@ describe('PoDecimalComponent:', () => {
     describe('thousandMaxlength: ', () => {
       it('should call refreshOnPropertyChange when set', () => {
         fixture.detectChanges();
-        const spy = spyOn(component as never, 'refreshOnPropertyChange' as never);
+        const spy = spyOn(component, 'refreshOnPropertyChange');
 
         component.thousandMaxlength = 8;
 
@@ -1816,7 +1816,7 @@ describe('PoDecimalComponent:', () => {
       it('should not call setViewValue when modelValue is null', () => {
         fixture.detectChanges();
         component['setViewValue']('');
-        const spy = spyOn(component as never, 'setViewValue' as never);
+        const spy = spyOn(component, 'setViewValue');
 
         component['refreshOnPropertyChange']();
 
@@ -1825,7 +1825,7 @@ describe('PoDecimalComponent:', () => {
 
       it('should not call setViewValue when inputEl is undefined', () => {
         component.inputEl = undefined;
-        const spy = spyOn(component as never, 'setViewValue' as never);
+        const spy = spyOn(component, 'setViewValue');
 
         component['refreshOnPropertyChange']();
 
@@ -1879,7 +1879,7 @@ describe('PoDecimalComponent:', () => {
 
       it('should apply format on blur when formatParsed is active and value is valid', () => {
         const fakeEvent = { target: { value: '1234,56' } };
-        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        const spy = spyOn(component, 'setViewValue').and.callThrough();
 
         component.onBlur(fakeEvent);
 
@@ -1890,7 +1890,7 @@ describe('PoDecimalComponent:', () => {
 
       it('should clear model when value results in null model', () => {
         const fakeEvent = { target: { value: '' } };
-        spyOn(component as never, 'callOnChange' as never);
+        spyOn(component, 'callOnChange');
 
         component.onBlur(fakeEvent);
 
@@ -1902,7 +1902,7 @@ describe('PoDecimalComponent:', () => {
         fixture.detectChanges();
 
         const fakeEvent = { target: { value: '99999,99' } };
-        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        const spy = spyOn(component, 'setViewValue').and.callThrough();
 
         component.onBlur(fakeEvent);
 
@@ -1911,7 +1911,7 @@ describe('PoDecimalComponent:', () => {
 
       it('should call callOnChange with undefined when model value is undefined', () => {
         const fakeEvent = { target: { value: 'ABC' } };
-        spyOn(component as never, 'callOnChange' as never);
+        spyOn(component, 'callOnChange');
 
         component.onBlur(fakeEvent);
 
@@ -1962,7 +1962,7 @@ describe('PoDecimalComponent:', () => {
           }
         };
 
-        spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        spyOn(component, 'setViewValue').and.callThrough();
 
         component.onInput(fakeEvent);
 
@@ -1982,7 +1982,7 @@ describe('PoDecimalComponent:', () => {
           }
         };
 
-        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        const spy = spyOn(component, 'setViewValue').and.callThrough();
 
         component.onInput(fakeEvent);
 
@@ -2000,7 +2000,7 @@ describe('PoDecimalComponent:', () => {
           }
         };
 
-        spyOn(component as never, 'callOnChange' as never);
+        spyOn(component, 'callOnChange');
 
         component.onInput(fakeEvent);
 
@@ -2078,7 +2078,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should format value using advanced format when formatParsed is active', () => {
-        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        const spy = spyOn(component, 'setViewValue').and.callThrough();
 
         component.writeValueModel(1234.56);
 
@@ -2091,7 +2091,7 @@ describe('PoDecimalComponent:', () => {
         fixture.componentRef.setInput('p-display-format', '99.99');
         fixture.detectChanges();
 
-        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        const spy = spyOn(component, 'setViewValue').and.callThrough();
 
         component.writeValueModel(9999.99);
 
@@ -2108,7 +2108,7 @@ describe('PoDecimalComponent:', () => {
       });
 
       it('should format string value parsed to number', () => {
-        const spy = spyOn(component as never, 'setViewValue' as never).and.callThrough();
+        const spy = spyOn(component, 'setViewValue').and.callThrough();
 
         component.writeValueModel('4567.89');
 

@@ -400,13 +400,13 @@ describe('v22 migration-v22 chain — integração (SchematicTestRunner.callRule
    * **Validates: Requirement 8.7**
    */
   it('should not transform files nor schedule install when Angular 22 confirmation is declined (Req 8.7)', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
     const readline = require('readline');
     const fakeInterface = {
       question: (_query: string, callback: (answer: string) => void) => callback('no'),
       close: () => undefined
     };
-    const readlineSpy = spyOn(readline, 'createInterface').and.returnValue(fakeInterface as never);
+    const readlineSpy = spyOn(readline, 'createInterface').and.returnValue(fakeInterface);
 
     // Força o caminho interativo (askQuestion) em vez do modo não-TTY.
     (process.stdin as unknown as { isTTY?: boolean }).isTTY = true;
@@ -607,7 +607,7 @@ describe('v22 migration-v22 chain — idempotência multi-execução (property-b
 
     // Segunda execução capturando os logs do runner.
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    const infoMessages: string[] = [];
+    const infoMessages: Array<string> = [];
     runner.logger.subscribe(entry => {
       if (entry.level === 'info') {
         infoMessages.push(entry.message);
