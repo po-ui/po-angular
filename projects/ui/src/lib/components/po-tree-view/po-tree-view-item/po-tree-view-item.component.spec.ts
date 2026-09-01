@@ -1,6 +1,5 @@
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoButtonModule } from '../../po-button';
 import { PoIconModule } from '../../po-icon/po-icon.module';
@@ -17,7 +16,7 @@ describe('PoTreeviewItemComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, FormsModule, PoFieldModule, PoButtonModule, PoIconModule],
+      imports: [FormsModule, PoFieldModule, PoButtonModule, PoIconModule],
       declarations: [PoTreeViewItemComponent, PoTreeViewItemContentComponent],
       providers: [PoTreeViewService, PoTreeViewKeyboardService]
     }).compileComponents();
@@ -42,7 +41,7 @@ describe('PoTreeviewItemComponent:', () => {
         subItems: [{ label: 'Nivel 01', value: 11 }]
       });
 
-      expect(component.hasSubItems).toBe(true);
+      expect(component['hasSubItems']).toBe(true);
     });
 
     it('hasSubItems: should return false if subItems is undefined', () => {
@@ -52,7 +51,7 @@ describe('PoTreeviewItemComponent:', () => {
         subItems: undefined
       });
 
-      expect(component.hasSubItems).toBe(false);
+      expect(component['hasSubItems']).toBe(false);
     });
   });
 
@@ -63,7 +62,7 @@ describe('PoTreeviewItemComponent:', () => {
 
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitExpandedEvent');
 
-      component.onClick();
+      component['onClick']();
 
       expect(item.expanded).toBe(true);
       expect(spyEmitEvent).toHaveBeenCalled();
@@ -74,7 +73,7 @@ describe('PoTreeviewItemComponent:', () => {
 
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitSelectedEvent');
 
-      component.onSelect(item);
+      component['onSelect'](item);
 
       expect(spyEmitEvent).toHaveBeenCalledWith({ ...item });
     });
@@ -90,7 +89,43 @@ describe('PoTreeviewItemComponent:', () => {
     });
 
     it('trackByFunction: should return index param', () => {
-      expect(component.trackByFunction(1)).toBe(1);
+      expect(component['trackByFunction'](1)).toBe(1);
+    });
+
+    it('animateEnter: should animate height from 0 to scrollHeight and call animationComplete', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 120 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component['animateEnter'](<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '120px' }], {
+        duration: 200,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateLeave: should animate height from scrollHeight to 0 and call animationComplete', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 80 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component['animateLeave'](<any>{ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith([{ height: '80px' }, { height: '0px' }], {
+        duration: 200,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
     });
   });
 });

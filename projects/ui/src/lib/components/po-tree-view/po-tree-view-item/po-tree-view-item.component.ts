@@ -1,5 +1,4 @@
-import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { AnimationCallbackEvent, ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 
 import { PoTreeViewService } from '../services/po-tree-view.service';
 import { PoTreeViewItem } from './po-tree-view-item.interface';
@@ -8,30 +7,6 @@ import { PoTreeViewItem } from './po-tree-view-item.interface';
   selector: '[po-tree-view-item]',
   templateUrl: './po-tree-view-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('toggleBody', [
-      transition(':enter', [
-        style({
-          'overflow-y': 'hidden',
-          visibility: 'hidden',
-          opacity: 0,
-          height: '0'
-        }),
-        animate(200, style({ height: '*' })),
-        animate(100, style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({
-          'overflow-y': 'hidden',
-          visibility: 'visible',
-          opacity: 1,
-          height: '*'
-        }),
-        animate(200, style({ height: 0 })),
-        animate(100, style({ opacity: 0 }))
-      ])
-    ])
-  ],
   standalone: false
 })
 export class PoTreeViewItemComponent {
@@ -49,19 +24,27 @@ export class PoTreeViewItemComponent {
 
   readonly singleSelect = input<boolean>(false, { alias: 'p-single-select' });
 
-  get hasSubItems() {
+  protected animateEnter(event: AnimationCallbackEvent): void {
+    this.animateHeight(event, '0px', `${(event.target as HTMLElement).scrollHeight}px`);
+  }
+
+  protected animateLeave(event: AnimationCallbackEvent): void {
+    this.animateHeight(event, `${(event.target as HTMLElement).scrollHeight}px`, '0px');
+  }
+
+  protected get hasSubItems() {
     const item = this.item();
     return !!item?.subItems?.length;
   }
 
-  onClick() {
+  protected onClick() {
     const item = this.item();
     item.expanded = !item.expanded;
 
     this.treeViewService.emitExpandedEvent({ ...item });
   }
 
-  onSelect(selectedItem: PoTreeViewItem) {
+  protected onSelect(selectedItem: PoTreeViewItem) {
     this.treeViewService.emitSelectedEvent({ ...selectedItem });
   }
 
@@ -69,7 +52,23 @@ export class PoTreeViewItemComponent {
     this.treeViewService.emitActivatedEvent({ ...activatedItem });
   }
 
-  trackByFunction(index: number) {
+  protected trackByFunction(index: number) {
     return index;
+  }
+
+  private animateHeight(event: AnimationCallbackEvent, from: string, to: string): void {
+    const element = event.target as HTMLElement;
+    const previousOverflow = element.style.overflow;
+    element.style.overflow = 'hidden';
+
+    const animation = element.animate([{ height: from }, { height: to }], {
+      duration: 200,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      element.style.overflow = previousOverflow;
+      event.animationComplete();
+    };
   }
 }
