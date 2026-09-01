@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.30.1](https://github.com/po-ui/po-angular/compare/v21.30.0...v21.30.1) (2026-09-01)
+
+
+### Bug Fixes
+
+* **listbox:** ajusta foco de item selecionado ([6fb23df](https://github.com/po-ui/po-angular/commit/6fb23df3279d5fbfe36ae44789f2c627a8c7c3a6))
+
 ## [21.30.0](https://github.com/po-ui/po-angular/compare/v21.29.0...v21.30.0) (2026-08-24)
 
 
