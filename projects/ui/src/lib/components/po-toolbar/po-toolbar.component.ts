@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { PoToolbarBaseComponent } from './po-toolbar-base.component';

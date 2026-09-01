@@ -770,6 +770,7 @@ describe('PoListViewComponent:', () => {
         const getStyleSpy = spyOn(window, 'getComputedStyle');
 
         ['none', 'normal', '""', "''", ''].forEach(content => {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           getStyleSpy.and.returnValue({ content } as unknown as CSSStyleDeclaration);
           expect(component['isIconGlyphEmpty'](el)).withContext(`content=${content}`).toBeTrue();
         });
@@ -777,6 +778,7 @@ describe('PoListViewComponent:', () => {
 
       it('isIconGlyphEmpty: should return false when `::before` has a glyph content', () => {
         const el = document.createElement('i');
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({ content: '"\\e900"' } as CSSStyleDeclaration);
 
         expect(component['isIconGlyphEmpty'](el)).toBeFalse();
@@ -788,6 +790,7 @@ describe('PoListViewComponent:', () => {
         root.appendChild(avatarContainer);
 
         Object.defineProperty(component['elementRef'], 'nativeElement', { get: () => root, configurable: true });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({ content: 'none' } as CSSStyleDeclaration);
         const setStyleSpy = spyOn(component['renderer'], 'setStyle');
 
@@ -804,6 +807,7 @@ describe('PoListViewComponent:', () => {
         root.appendChild(avatarContainer);
 
         Object.defineProperty(component['elementRef'], 'nativeElement', { get: () => root, configurable: true });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({ content: '"\\e900"' } as CSSStyleDeclaration);
         const removeStyleSpy = spyOn(component['renderer'], 'removeStyle');
 
@@ -1319,6 +1323,7 @@ describe('PoListViewComponent:', () => {
       const selectSpy = spyOn(component, 'selectListItem');
       spyOn(component.itemClick, 'emit');
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(() => component['onItemClick'](testItem, null as any)).not.toThrow();
       expect(selectSpy).toHaveBeenCalledWith(testItem);
       expect(component.itemClick.emit).toHaveBeenCalled();

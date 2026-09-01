@@ -350,7 +350,7 @@ describe('PoUserGuideService:', () => {
       expect(() => service.goTo(-1)).toThrowError(/fora do intervalo/);
       expect(() => service.goTo(2)).toThrowError(/fora do intervalo/);
       expect(() => service.goTo(Number.MAX_SAFE_INTEGER)).toThrowError(/fora do intervalo/);
-      expect(() => service.goTo(1.5 as any)).toThrowError(/fora do intervalo/);
+      expect(() => service.goTo(1.5)).toThrowError(/fora do intervalo/);
       expect(() => service.goTo('a' as any)).toThrowError(/fora do intervalo/);
     });
   });
@@ -911,7 +911,7 @@ describe('PoUserGuideService:', () => {
       service.setSteps([{ content: 'a' }, { content: 'b' }]);
       expect(() => service.start(-1)).toThrowError(/fora do intervalo/);
       expect(() => service.start(5)).toThrowError(/fora do intervalo/);
-      expect(() => service.start(1.5 as any)).toThrowError(/fora do intervalo/);
+      expect(() => service.start(1.5)).toThrowError(/fora do intervalo/);
       expect(() => service.start('a' as any)).toThrowError(/fora do intervalo/);
     });
   });
@@ -1374,11 +1374,11 @@ describe('PoUserGuideService:', () => {
 
   describe('setSteps validation:', () => {
     it('should throw when steps is null', () => {
-      expect(() => service.setSteps(null as any)).toThrowError(/obrigatória/);
+      expect(() => service.setSteps(null)).toThrowError(/obrigatória/);
     });
 
     it('should throw when steps is undefined', () => {
-      expect(() => service.setSteps(undefined as any)).toThrowError(/obrigatória/);
+      expect(() => service.setSteps(undefined)).toThrowError(/obrigatória/);
     });
 
     it('should throw when steps is not an array', () => {
@@ -1390,7 +1390,7 @@ describe('PoUserGuideService:', () => {
     });
 
     it('should throw when a step entry is null', () => {
-      expect(() => service.setSteps([null] as any)).toThrowError(/índice 0 é inválido/);
+      expect(() => service.setSteps([null])).toThrowError(/índice 0 é inválido/);
     });
 
     it('should throw when a step is missing the content property', () => {

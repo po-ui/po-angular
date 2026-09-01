@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, TemplateRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { isExternalLink, PoUtils } from '../../../../utils/util';

@@ -696,6 +696,7 @@ describe('PoProgressComponent:', () => {
 
     describe('measureAndSetParentSize:', () => {
       it('should set parentSize based on element dimensions', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({
           height: '150px',
           width: '200px',
@@ -718,6 +719,7 @@ describe('PoProgressComponent:', () => {
       });
 
       it('should subtract padding from dimensions', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({
           height: '200px',
           width: '200px',

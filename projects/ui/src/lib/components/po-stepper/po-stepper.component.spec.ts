@@ -409,6 +409,7 @@ describe('PoStepperComponent:', () => {
       const step = { status: 'default' } as PoStepComponent;
       const previousStep = { status: 'active' } as PoStepperItem;
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep as unknown as PoStepComponent);
       spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
 
@@ -421,6 +422,7 @@ describe('PoStepperComponent:', () => {
       const step = { status: 'disabled' } as PoStepComponent;
       const previousStep = { status: 'default' } as PoStepperItem;
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep as unknown as PoStepComponent);
       spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
 
