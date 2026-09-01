@@ -2,9 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Inject,
   Input,
-  Optional,
   Output,
   forwardRef,
   ChangeDetectionStrategy

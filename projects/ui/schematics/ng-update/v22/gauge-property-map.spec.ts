@@ -179,7 +179,10 @@ describe('v22 gauge-property-map ranges preservation (property-based):', () => {
 
         // Apenas p-ranges: a expressão é preservada verbatim em p-series.
         expect(result.pSeries).toBe(arrayLiteral);
-        // A quantidade de faixas (N) é mantida.
+        // A quantidade de faixas (N) é mantida. O `!` e exigido pelo build
+        // strict (tsconfig.schematics-spec.json); a regra no-unnecessary-type-
+        // assertion gera falso positivo por nao propagar o narrowing do expect.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(countTopLevelElements(result.pSeries!)).toBe(ranges.length);
         // Cada faixa original aparece textualmente no resultado.
         ranges.forEach(range => expect(result.pSeries).toContain(range));
@@ -213,7 +216,10 @@ describe('v22 gauge-property-map ranges preservation (property-based):', () => {
         expect(result.pSeries).toBe(arrayLiteral);
         // p-value vai para pValueGaugeMultiple (como this.valuesMultiple = this.value).
         expect(result.pValueGaugeMultiple).toBe(value.trim());
-        // A quantidade de faixas (N) é mantida.
+        // A quantidade de faixas (N) é mantida. O `!` e exigido pelo build
+        // strict (tsconfig.schematics-spec.json); a regra no-unnecessary-type-
+        // assertion gera falso positivo por nao propagar o narrowing do expect.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(countTopLevelElements(result.pSeries!)).toBe(ranges.length);
         // Cada faixa original aparece textualmente no resultado.
         ranges.forEach(range => expect(result.pSeries).toContain(range));
