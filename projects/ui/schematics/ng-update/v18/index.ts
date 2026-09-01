@@ -134,7 +134,7 @@ export function addProviderToModuleProvider(
 ) {
   const moduleSource = getSourceFile(tree, modulePath);
   const changes = addProviderToModule(
-    moduleSource as any,
+    moduleSource,
     modulePath,
     `
     ${provider}`,

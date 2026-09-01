@@ -48,11 +48,11 @@ describe('PoUserGuideBaseService:', () => {
 
   describe('validateSteps:', () => {
     it('should throw when steps is null', () => {
-      expect(() => service['validateSteps'](null as any)).toThrowError(/obrigatória/);
+      expect(() => service['validateSteps'](null)).toThrowError(/obrigatória/);
     });
 
     it('should throw when steps is undefined', () => {
-      expect(() => service['validateSteps'](undefined as any)).toThrowError(/obrigatória/);
+      expect(() => service['validateSteps'](undefined)).toThrowError(/obrigatória/);
     });
 
     it('should throw when steps is an empty array', () => {
@@ -64,7 +64,7 @@ describe('PoUserGuideBaseService:', () => {
     });
 
     it('should throw when a step entry is null', () => {
-      expect(() => service['validateSteps']([null] as any)).toThrowError(/índice 0 é inválido/);
+      expect(() => service['validateSteps']([null])).toThrowError(/índice 0 é inválido/);
     });
 
     it('should throw when a step is missing the content property', () => {

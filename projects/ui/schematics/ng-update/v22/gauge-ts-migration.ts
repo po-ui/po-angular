@@ -278,6 +278,12 @@ function buildReferenceEdits(
   const visit = (node: ts.Node): void => {
     if (ts.isIdentifier(node) && referenceRenameMap.has(node.text) && !isWithinRanges(node, sourceFile, importRanges)) {
       if (isRenameableReference(node)) {
+        // O `!` é necessário sob strictNullChecks (build de schematics): a
+        // condição do `if` acima garante que a chave existe no mapa, mas o
+        // compilador nao relaciona Map.has() com Map.get(), entao get() ainda
+        // e `string | undefined`. A regra @typescript-eslint/no-unnecessary-
+        // type-assertion gera um falso positivo aqui.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         const target = referenceRenameMap.get(node.text)!;
         const array = getContainingArrayElement(node);
 
@@ -348,11 +354,9 @@ function collectExistingArrayNames(
   const names = new Set<string>();
 
   for (const element of array.elements) {
-    if (ts.isIdentifier(element)) {
-      // Nomes que não são gauge já contam como presentes com seu próprio nome.
-      if (!referenceRenameMap.has(element.text)) {
-        names.add(element.text);
-      }
+    // Nomes que não são gauge já contam como presentes com seu próprio nome.
+    if (ts.isIdentifier(element) && !referenceRenameMap.has(element.text)) {
+      names.add(element.text);
     }
   }
 

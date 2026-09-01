@@ -2372,7 +2372,7 @@ describe('PoTimerComponent:', () => {
         component['buildDisplayArrays']();
         component['focusedDisplayIndex']['hour'] = 0;
 
-        expect(() => component['selectFocusedItem']('period' as any)).not.toThrow();
+        expect(() => component['selectFocusedItem']('period')).not.toThrow();
       });
     });
 

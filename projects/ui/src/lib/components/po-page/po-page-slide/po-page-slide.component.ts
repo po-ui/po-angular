@@ -123,7 +123,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
 
   animateEnter(event: AnimationCallbackEvent): void {
     const rootElement = event.target as HTMLElement;
-    const container = rootElement.querySelector('.po-page-slide-container') as HTMLElement;
+    const container = rootElement.querySelector('.po-page-slide-container');
 
     const fadeDuration = this.parseDuration(this.duration) || 70;
     const { duration: slideDuration, easing: slideEasing } = this.parseTiming(this.timing);
@@ -151,7 +151,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
 
   animateLeave(event: AnimationCallbackEvent): void {
     const rootElement = event.target as HTMLElement;
-    const container = rootElement.querySelector('.po-page-slide-container') as HTMLElement;
+    const container = rootElement.querySelector('.po-page-slide-container');
 
     const leaveDuration = 150;
 
@@ -179,22 +179,23 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     if (!value) {
       return 70;
     }
-    const match = value.match(/^(\d+(?:\.\d+)?)(ms|s)$/);
+    const match = /^(\d+(?:\.\d+)?)(ms|s)$/.exec(value);
     if (!match) {
       return 70;
     }
-    return match[2] === 's' ? parseFloat(match[1]) * 1000 : parseFloat(match[1]);
+    return match[2] === 's' ? Number.parseFloat(match[1]) * 1000 : Number.parseFloat(match[1]);
   }
 
   private parseTiming(value: string): { duration: number; easing: string } {
     if (!value) {
       return { duration: 700, easing: 'cubic-bezier(0.35, 0, 0.1, 1)' };
     }
-    const durationMatch = value.match(/^(\d+(?:\.\d+)?)(ms|s)\s+(.+)$/);
+    const durationMatch = /^(\d+(?:\.\d+)?)(ms|s)\s+(.+)$/.exec(value);
     if (!durationMatch) {
       return { duration: 700, easing: 'cubic-bezier(0.35, 0, 0.1, 1)' };
     }
-    const duration = durationMatch[2] === 's' ? parseFloat(durationMatch[1]) * 1000 : parseFloat(durationMatch[1]);
+    const duration =
+      durationMatch[2] === 's' ? Number.parseFloat(durationMatch[1]) * 1000 : Number.parseFloat(durationMatch[1]);
     return { duration, easing: durationMatch[3] };
   }
 

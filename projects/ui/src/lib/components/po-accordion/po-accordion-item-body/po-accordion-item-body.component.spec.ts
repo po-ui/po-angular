@@ -58,7 +58,7 @@ describe('PoAccordionItemBodyComponent:', () => {
       Object.defineProperty(element, 'scrollHeight', { value: 120 });
       spyOn(element, 'animate').and.returnValue(animation);
 
-      component.animateEnter(<any>{ target: element, animationComplete });
+      component.animateEnter({ target: element, animationComplete });
 
       expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '120px' }], {
         duration: 200,
@@ -76,7 +76,7 @@ describe('PoAccordionItemBodyComponent:', () => {
       Object.defineProperty(element, 'scrollHeight', { value: 80 });
       spyOn(element, 'animate').and.returnValue(animation);
 
-      component.animateLeave(<any>{ target: element, animationComplete });
+      component.animateLeave({ target: element, animationComplete });
 
       expect(element.animate).toHaveBeenCalledWith([{ height: '80px' }, { height: '0px' }], {
         duration: 200,
