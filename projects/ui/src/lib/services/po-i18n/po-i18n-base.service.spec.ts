@@ -398,8 +398,11 @@ describe('PoI18nService:', () => {
           const translations = {};
 
           spyOn(service as any, 'mergeObject').and.callThrough();
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           spyOn(service, 'searchInVarI18n' as keyof PoI18nService).and.returnValue('');
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           spyOn(service, 'countObject' as keyof PoI18nService).and.returnValue('0');
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           spyOn(service, 'getLiteralsLocalStorageAndCache' as keyof PoI18nService);
 
           service['getLiteralsFromContextService'](
