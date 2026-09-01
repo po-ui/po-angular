@@ -248,7 +248,7 @@ describe('v22 gauge-ts-migration (property-based):', () => {
             chosenNonGauge,
             chosenWithout,
             gaugeFirst,
-            structure: structure as 'none' | 'ngmodule' | 'standalone'
+            structure
           });
 
           const once = migrateTypeScriptContent(source, isStandalone).content;

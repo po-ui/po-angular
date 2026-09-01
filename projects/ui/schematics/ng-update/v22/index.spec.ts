@@ -586,7 +586,7 @@ describe('v22 migration-v22 chain — idempotência multi-execução (property-b
 
     // Segunda execução capturando os logs do runner.
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    const infoMessages: string[] = [];
+    const infoMessages: Array<string> = [];
     runner.logger.subscribe(entry => {
       if (entry.level === 'info') {
         infoMessages.push(entry.message);
