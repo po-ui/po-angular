@@ -409,7 +409,8 @@ describe('PoStepperComponent:', () => {
       const step = { status: 'default' } as PoStepComponent;
       const previousStep = { status: 'active' } as PoStepperItem;
 
-      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep as unknown as PoStepComponent);
       spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
 
       const result = component.isDashedBorderTop(step, 1);
@@ -421,7 +422,8 @@ describe('PoStepperComponent:', () => {
       const step = { status: 'disabled' } as PoStepComponent;
       const previousStep = { status: 'default' } as PoStepperItem;
 
-      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      spyOn(component, 'getPreviousPoSteps').and.returnValue(previousStep as unknown as PoStepComponent);
       spyOn(component, 'getPreviousSteps').and.returnValue(previousStep);
 
       const result = component.isDashedBorderTop(step, 1);

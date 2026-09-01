@@ -696,6 +696,7 @@ describe('PoProgressComponent:', () => {
 
     describe('measureAndSetParentSize:', () => {
       it('should set parentSize based on element dimensions', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({
           height: '150px',
           width: '200px',
@@ -703,7 +704,7 @@ describe('PoProgressComponent:', () => {
           paddingBottom: '0px',
           paddingLeft: '0px',
           paddingRight: '0px'
-        });
+        } as CSSStyleDeclaration);
         const el = document.createElement('div');
         el.style.width = '200px';
         el.style.height = '150px';
@@ -718,6 +719,7 @@ describe('PoProgressComponent:', () => {
       });
 
       it('should subtract padding from dimensions', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({
           height: '200px',
           width: '200px',
@@ -725,7 +727,7 @@ describe('PoProgressComponent:', () => {
           paddingBottom: '10px',
           paddingLeft: '10px',
           paddingRight: '10px'
-        });
+        } as CSSStyleDeclaration);
 
         const el = document.createElement('div');
         el.style.width = '200px';

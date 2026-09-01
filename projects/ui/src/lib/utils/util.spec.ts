@@ -1932,6 +1932,7 @@ describe('getTextColor:', () => {
   let getComputedStyleSpy: jasmine.Spy;
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     getComputedStyleSpy = spyOn(window, 'getComputedStyle').and.returnValue({
       getPropertyValue: (token: string) => {
         const tokens = {
@@ -1940,7 +1941,7 @@ describe('getTextColor:', () => {
         };
         return tokens[token] || '';
       }
-    });
+    } as CSSStyleDeclaration);
   });
 
   afterEach(() => {
@@ -1999,6 +2000,7 @@ describe('getTextColor:', () => {
 
 describe('getTextColorFromBackgroundColor:', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     spyOn(window, 'getComputedStyle').and.returnValue({
       getPropertyValue: (token: string) => {
         const tokens = {
@@ -2007,7 +2009,7 @@ describe('getTextColorFromBackgroundColor:', () => {
         };
         return tokens[token] || '';
       }
-    });
+    } as CSSStyleDeclaration);
   });
 
   afterEach(() => {

@@ -85,9 +85,10 @@ describe('PoChartGridUtils', () => {
     });
 
     it('should set areaStyle.color using computedStyle when serie.color is var(...)', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const spyGetComputed = spyOn(globalThis, 'getComputedStyle').and.returnValue({
         getPropertyValue: () => '#445566'
-      });
+      } as unknown as CSSStyleDeclaration);
 
       const serie: any = {
         isTypeArea: true,

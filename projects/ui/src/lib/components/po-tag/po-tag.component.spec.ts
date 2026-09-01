@@ -377,6 +377,7 @@ describe('PoTagComponent:', () => {
     });
 
     function mockGetComputedStyle(backgroundColor: string) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(window, 'getComputedStyle').and.returnValue({
         backgroundColor: backgroundColor,
         getPropertyValue: (token: string) => {
@@ -388,7 +389,7 @@ describe('PoTagComponent:', () => {
           };
           return tokens[token] || '';
         }
-      });
+      } as CSSStyleDeclaration);
     }
 
     it('should set text color to dark for light backgrounds', () => {
