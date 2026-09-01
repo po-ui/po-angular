@@ -24,14 +24,14 @@ export class PoTreeViewKeyboardService {
     }
   }
 
-  getVisibleNodes(): Array<HTMLElement> {
+  private getVisibleNodes(): Array<HTMLElement> {
     if (!this.hostElement) {
       return [];
     }
     return Array.from(this.hostElement.nativeElement.querySelectorAll('.po-tree-view-item-content-padding[tabindex]'));
   }
 
-  getFocusableNodes(): Array<HTMLElement> {
+  private getFocusableNodes(): Array<HTMLElement> {
     return this.getVisibleNodes().filter(node => this.isNodeFocusable(node));
   }
 

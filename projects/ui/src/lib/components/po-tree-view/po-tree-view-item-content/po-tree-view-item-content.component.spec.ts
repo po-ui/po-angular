@@ -34,67 +34,67 @@ describe('PoTreeViewItemContentComponent:', () => {
   describe('Properties:', () => {
     it('hasSubItems: should return true if item has subItems', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, subItems: [{ label: 'B', value: 2 }] });
-      expect(component.hasSubItems).toBe(true);
+      expect(component['hasSubItems']).toBe(true);
     });
 
     it('hasSubItems: should return false if item has no subItems', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1 });
-      expect(component.hasSubItems).toBe(false);
+      expect(component['hasSubItems']).toBe(false);
     });
 
     it('expandIcon: should return ICON_ARROW_DOWN when expanded', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, expanded: true });
-      expect(component.expandIcon).toBe('ICON_ARROW_DOWN');
+      expect(component['expandIcon']).toBe('ICON_ARROW_DOWN');
     });
 
     it('expandIcon: should return ICON_ARROW_RIGHT when collapsed', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, expanded: false });
-      expect(component.expandIcon).toBe('ICON_ARROW_RIGHT');
+      expect(component['expandIcon']).toBe('ICON_ARROW_RIGHT');
     });
 
     it('isDisabled: should return true when item is disabled', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, disabled: true });
-      expect(component.isDisabled).toBe(true);
+      expect(component['isDisabled']).toBe(true);
     });
 
     it('isDisabled: should return false when item is not disabled', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1 });
-      expect(component.isDisabled).toBe(false);
+      expect(component['isDisabled']).toBe(false);
     });
 
     it('isExpanded: should return true when item is expanded', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, expanded: true });
-      expect(component.isExpanded).toBe(true);
+      expect(component['isExpanded']).toBe(true);
     });
 
     it('isSelected: should return true when item is selected in multi-select', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, selected: true });
       fixture.componentRef.setInput('p-selectable', true);
-      expect(component.isSelected).toBe(true);
+      expect(component['isSelected']).toBe(true);
     });
 
     it('isSelected: should use selectedValue in single-select mode', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1 });
       fixture.componentRef.setInput('p-single-select', true);
       fixture.componentRef.setInput('p-selected-value', 1);
-      expect(component.isSelected).toBe(true);
+      expect(component['isSelected']).toBe(true);
     });
 
     it('isSelected: should return false when value does not match in single-select', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1 });
       fixture.componentRef.setInput('p-single-select', true);
       fixture.componentRef.setInput('p-selected-value', 2);
-      expect(component.isSelected).toBe(false);
+      expect(component['isSelected']).toBe(false);
     });
 
     it('isMaxLevel: should return true when level >= 3', () => {
       fixture.componentRef.setInput('p-level', 3);
-      expect(component.isMaxLevel).toBe(true);
+      expect(component['isMaxLevel']).toBe(true);
     });
 
     it('isMaxLevel: should return false when level < 3', () => {
       fixture.componentRef.setInput('p-level', 2);
-      expect(component.isMaxLevel).toBe(false);
+      expect(component['isMaxLevel']).toBe(false);
     });
 
     it('itemIcon: should return ICON_FOLDER_SIMPLE for items with subItems and showIcon', () => {
@@ -104,23 +104,23 @@ describe('PoTreeViewItemContentComponent:', () => {
         showIcon: true,
         subItems: [{ label: 'B', value: 2 }]
       });
-      expect(component.itemIcon).toBe('ICON_FOLDER_SIMPLE');
+      expect(component['itemIcon']).toBe('ICON_FOLDER_SIMPLE');
     });
 
     it('itemIcon: should return ICON_FILE for leaf items with showIcon', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, showIcon: true });
-      expect(component.itemIcon).toBe('ICON_FILE');
+      expect(component['itemIcon']).toBe('ICON_FILE');
     });
 
     it('itemIcon: should return undefined when showIcon is false', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1 });
-      expect(component.itemIcon).toBeUndefined();
+      expect(component['itemIcon']).toBeUndefined();
     });
 
     it('itemIcon: should return undefined when selectable is true', () => {
       fixture.componentRef.setInput('p-item', { label: 'A', value: 1, showIcon: true });
       fixture.componentRef.setInput('p-selectable', true);
-      expect(component.itemIcon).toBeUndefined();
+      expect(component['itemIcon']).toBeUndefined();
     });
   });
 
@@ -132,7 +132,7 @@ describe('PoTreeViewItemContentComponent:', () => {
       spyOn(component.expanded, 'emit');
       const event = { target: fixture.nativeElement.querySelector('.po-tree-view-item-content-padding') } as any;
 
-      component.onLineClick(event);
+      component['onLineClick'](event);
 
       expect(component.expanded.emit).toHaveBeenCalled();
     });
@@ -144,7 +144,7 @@ describe('PoTreeViewItemContentComponent:', () => {
       spyOn(component.activated, 'emit');
       const event = { target: fixture.nativeElement.querySelector('.po-tree-view-item-content-padding') } as any;
 
-      component.onLineClick(event);
+      component['onLineClick'](event);
 
       expect(component.activated.emit).toHaveBeenCalled();
     });
@@ -156,7 +156,7 @@ describe('PoTreeViewItemContentComponent:', () => {
       spyOn(component.activated, 'emit');
       const event = { target: fixture.nativeElement.querySelector('.po-tree-view-item-content-padding') } as any;
 
-      component.onLineClick(event);
+      component['onLineClick'](event);
 
       expect(component.activated.emit).not.toHaveBeenCalled();
     });
@@ -170,7 +170,7 @@ describe('PoTreeViewItemContentComponent:', () => {
       const checkbox = fixture.nativeElement.querySelector('po-checkbox') || document.createElement('po-checkbox');
       const event = { target: checkbox } as any;
 
-      component.onLineClick(event);
+      component['onLineClick'](event);
 
       expect(component.expanded.emit).not.toHaveBeenCalled();
     });
@@ -188,7 +188,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusNext).toHaveBeenCalledWith(node);
       });
@@ -199,7 +199,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusPrevious).toHaveBeenCalledWith(node);
       });
@@ -216,7 +216,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(component.expanded.emit).toHaveBeenCalled();
       });
@@ -233,7 +233,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusFirstChild).toHaveBeenCalledWith(node);
       });
@@ -246,7 +246,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(component.expanded.emit).not.toHaveBeenCalled();
         expect(keyboardService.focusFirstChild).not.toHaveBeenCalled();
@@ -264,7 +264,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(component.expanded.emit).toHaveBeenCalled();
       });
@@ -277,7 +277,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusParent).toHaveBeenCalledWith(node);
       });
@@ -290,7 +290,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusParent).not.toHaveBeenCalled();
       });
@@ -300,7 +300,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'Home' });
         Object.defineProperty(event, 'currentTarget', { value: document.createElement('div') });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusFirst).toHaveBeenCalled();
       });
@@ -310,7 +310,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'End' });
         Object.defineProperty(event, 'currentTarget', { value: document.createElement('div') });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusLast).toHaveBeenCalled();
       });
@@ -323,7 +323,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         Object.defineProperty(event, 'currentTarget', { value: document.createElement('div') });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(component.selected.emit).toHaveBeenCalled();
       });
@@ -336,7 +336,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
         Object.defineProperty(event, 'currentTarget', { value: document.createElement('div') });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(component.activated.emit).toHaveBeenCalled();
       });
@@ -349,7 +349,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         Object.defineProperty(event, 'currentTarget', { value: document.createElement('div') });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(component.selected.emit).not.toHaveBeenCalled();
       });
@@ -360,7 +360,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'a' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusByCharacter).toHaveBeenCalledWith('a', node);
       });
@@ -371,7 +371,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'a', ctrlKey: true });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusByCharacter).not.toHaveBeenCalled();
       });
@@ -382,7 +382,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'Shift' });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusByCharacter).not.toHaveBeenCalled();
       });
@@ -393,7 +393,7 @@ describe('PoTreeViewItemContentComponent:', () => {
         const event = new KeyboardEvent('keydown', { key: 'a', altKey: true });
         Object.defineProperty(event, 'currentTarget', { value: node });
 
-        component.onKeydown(event);
+        component['onKeydown'](event);
 
         expect(keyboardService.focusByCharacter).not.toHaveBeenCalled();
       });
@@ -405,7 +405,7 @@ describe('PoTreeViewItemContentComponent:', () => {
       const node = document.createElement('div');
       const event = { currentTarget: node } as any;
 
-      component.onLineFocus(event);
+      component['onLineFocus'](event);
 
       expect(keyboardService.setLastFocusedNode).toHaveBeenCalledWith(node);
     });

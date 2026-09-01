@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, inject, input, output } from '@angular/core';
 
 import { uuid } from '../../../utils/util';
-import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface';
-import { poTreeViewItemContentLiterals } from './po-tree-view-item-content.literals';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
+import { PoTreeViewItem } from '../po-tree-view-item/po-tree-view-item.interface';
 import { PoTreeViewKeyboardService } from '../services/po-tree-view-keyboard.service';
+import { poTreeViewItemContentLiterals } from './po-tree-view-item-content.literals';
 
 @Component({
   selector: 'po-tree-view-item-content',
@@ -16,10 +16,12 @@ export class PoTreeViewItemContentComponent {
   private readonly keyboardService = inject(PoTreeViewKeyboardService);
   private readonly languageService = inject(PoLanguageService);
 
-  readonly literals = poTreeViewItemContentLiterals[this.languageService.getShortLanguage()];
+  protected readonly literals = poTreeViewItemContentLiterals[this.languageService.getShortLanguage()];
 
-  @ViewChild('inputCheckbox') inputCheckbox;
-  @ViewChild('lineElement', { static: false }) lineElement: ElementRef<HTMLElement>;
+  protected idRadio = `po-radio[${uuid()}]`;
+
+  @ViewChild('inputCheckbox') private inputCheckbox;
+  @ViewChild('lineElement', { static: false }) private lineElement: ElementRef<HTMLElement>;
 
   readonly componentsSize = input<string>(undefined, { alias: 'p-components-size' });
 
@@ -35,41 +37,39 @@ export class PoTreeViewItemContentComponent {
 
   readonly expanded = output<void>({ alias: 'p-expanded' });
 
-  readonly selected = output<any>({ alias: 'p-selected' });
+  readonly selected = output<PoTreeViewItem>({ alias: 'p-selected' });
 
-  readonly activated = output<any>({ alias: 'p-activated' });
+  readonly activated = output<PoTreeViewItem>({ alias: 'p-activated' });
 
-  idRadio = `po-radio[${uuid()}]`;
-
-  get hasSubItems() {
+  protected get hasSubItems() {
     const item = this.item();
     return !!item?.subItems?.length;
   }
 
-  get expandIcon(): string {
+  protected get expandIcon(): string {
     return this.item()?.expanded ? 'ICON_ARROW_DOWN' : 'ICON_ARROW_RIGHT';
   }
 
-  get isDisabled(): boolean {
+  protected get isDisabled(): boolean {
     return !!this.item()?.disabled;
   }
 
-  get isExpanded(): boolean {
+  protected get isExpanded(): boolean {
     return !!this.item()?.expanded;
   }
 
-  get isSelected(): boolean {
+  protected get isSelected(): boolean {
     if (this.singleSelect()) {
       return this.item()?.value === this.selectedValue();
     }
     return !!this.item()?.selected;
   }
 
-  get isMaxLevel(): boolean {
+  protected get isMaxLevel(): boolean {
     return this.level() >= 3;
   }
 
-  get itemIcon(): string | undefined {
+  protected get itemIcon(): string | undefined {
     const item = this.item();
     if (!item?.showIcon || this.selectable()) {
       return undefined;
@@ -77,11 +77,11 @@ export class PoTreeViewItemContentComponent {
     return this.hasSubItems ? 'ICON_FOLDER_SIMPLE' : 'ICON_FILE';
   }
 
-  onLineFocus(event: FocusEvent) {
+  protected onLineFocus(event: FocusEvent) {
     this.keyboardService.setLastFocusedNode(event.currentTarget as HTMLElement);
   }
 
-  onLineClick(event: MouseEvent) {
+  protected onLineClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
 
     if (target.closest('po-checkbox, po-radio, input, label.po-checkbox-label')) {
@@ -105,7 +105,7 @@ export class PoTreeViewItemContentComponent {
     }
   }
 
-  onKeydown(event: KeyboardEvent) {
+  protected onKeydown(event: KeyboardEvent) {
     const node = event.currentTarget as HTMLElement;
 
     switch (event.key) {

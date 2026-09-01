@@ -78,6 +78,31 @@ describe('PoTreeViewBaseComponent:', () => {
       expect(component.items).toEqual(expectedValue);
     });
 
+    it('p-items: should keep the PoTreeViewItem interface types', () => {
+      component.items = [
+        {
+          label: 'Nível 01',
+          value: 1,
+          disabled: false,
+          expanded: true,
+          selected: false,
+          showIcon: true,
+          subItems: [{ label: 'Nível 02', value: '2' }]
+        }
+      ];
+
+      const item = component.items[0];
+
+      expect(typeof item.label).toBe('string');
+      expect(typeof item.value).toBe('number');
+      expect(typeof item.disabled).toBe('boolean');
+      expect(typeof item.expanded).toBe('boolean');
+      expect(typeof item.selected).toBe('boolean');
+      expect(typeof item.showIcon).toBe('boolean');
+      expect(Array.isArray(item.subItems)).toBe(true);
+      expect(typeof item.subItems[0].value).toBe('string');
+    });
+
     it('p-selectable: should be false by default', () => {
       expect(component.selectable()).toBe(false);
     });

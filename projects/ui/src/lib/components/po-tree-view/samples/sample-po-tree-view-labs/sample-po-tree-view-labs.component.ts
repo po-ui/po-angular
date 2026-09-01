@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng-components';
 
@@ -58,6 +59,12 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
 
     this.items = [].concat(this.items);
     this.parentList = this.updateParentList(this.items);
+  }
+
+  addItem(treeViewItemForm: NgForm) {
+    this.add(this.treeViewItem);
+    treeViewItemForm.reset();
+    this.itemProperties = [];
   }
 
   changeEvent(event: string, treeViewItem: PoTreeViewItem) {

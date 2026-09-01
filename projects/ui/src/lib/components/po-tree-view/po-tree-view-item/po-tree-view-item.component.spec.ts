@@ -84,7 +84,7 @@ describe('PoTreeviewItemComponent:', () => {
 
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitActivatedEvent');
 
-      component.onActivate(item);
+      component['onActivate'](item);
 
       expect(spyEmitEvent).toHaveBeenCalledWith({ ...item });
     });

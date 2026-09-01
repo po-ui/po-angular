@@ -65,7 +65,7 @@ export class PoTreeViewItemComponent {
     this.treeViewService.emitSelectedEvent({ ...selectedItem });
   }
 
-  onActivate(activatedItem: PoTreeViewItem) {
+  protected onActivate(activatedItem: PoTreeViewItem) {
     this.treeViewService.emitActivatedEvent({ ...activatedItem });
   }
 
