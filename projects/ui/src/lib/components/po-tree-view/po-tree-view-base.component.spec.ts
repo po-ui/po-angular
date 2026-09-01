@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoThemeA11yEnum } from '../../services';
 import { PoTreeViewModule } from './po-tree-view.module';
@@ -11,7 +10,7 @@ describe('PoTreeViewBaseComponent:', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [PoTreeViewModule, BrowserAnimationsModule]
+      imports: [PoTreeViewModule]
     }).compileComponents();
   }));
 
