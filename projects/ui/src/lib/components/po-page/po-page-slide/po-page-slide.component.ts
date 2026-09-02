@@ -194,7 +194,8 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     if (!durationMatch) {
       return { duration: 700, easing: 'cubic-bezier(0.35, 0, 0.1, 1)' };
     }
-    const duration = durationMatch[2] === 's' ? Number.parseFloat(durationMatch[1]) * 1000 : Number.parseFloat(durationMatch[1]);
+    const duration =
+      durationMatch[2] === 's' ? Number.parseFloat(durationMatch[1]) * 1000 : Number.parseFloat(durationMatch[1]);
     return { duration, easing: durationMatch[3] };
   }
 
