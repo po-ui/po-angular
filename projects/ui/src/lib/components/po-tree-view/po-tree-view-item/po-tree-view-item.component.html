@@ -1,31 +1,33 @@
-<li class="po-tree-view-item">
-  <po-tree-view-item-header
-    [p-components-size]="componentsSize"
-    [p-item]="item"
-    [p-selectable]="selectable"
-    [p-single-select]="singleSelect"
-    [p-selected-value]="selectedValue"
-    (p-expanded)="onClick($event)"
-    (p-selected)="onSelect(item)"
-  >
-  </po-tree-view-item-header>
+<po-tree-view-item-content
+  [p-components-size]="componentsSize()"
+  [p-item]="item()"
+  [p-level]="level()"
+  [p-selectable]="selectable()"
+  [p-single-select]="singleSelect()"
+  [p-selected-value]="selectedValue()"
+  (p-expanded)="onClick()"
+  (p-selected)="onSelect(item())"
+  (p-activated)="onActivate($event)"
+>
+</po-tree-view-item-content>
 
-  @if (hasSubItems) {
-    <ul class="po-tree-view-item-group">
-      @if (item.expanded) {
-        <div @toggleBody>
-          @for (subItem of item.subItems; track trackByFunction($index)) {
-            <po-tree-view-item
-              [p-components-size]="componentsSize"
-              [p-item]="subItem"
-              [p-selectable]="selectable"
-              [p-single-select]="singleSelect"
-              [p-selected-value]="selectedValue"
-            >
-            </po-tree-view-item>
-          }
-        </div>
-      }
-    </ul>
-  }
-</li>
+@if (hasSubItems) {
+  <ul class="po-tree-view-item-group" role="group">
+    @if (item().expanded) {
+      <div @toggleBody>
+        @for (subItem of item().subItems; track trackByFunction($index)) {
+          <li
+            po-tree-view-item
+            class="po-tree-view-item"
+            [p-components-size]="componentsSize()"
+            [p-item]="subItem"
+            [p-level]="level() + 1"
+            [p-selectable]="selectable()"
+            [p-single-select]="singleSelect()"
+            [p-selected-value]="selectedValue()"
+          ></li>
+        }
+      </div>
+    }
+  </ul>
+}

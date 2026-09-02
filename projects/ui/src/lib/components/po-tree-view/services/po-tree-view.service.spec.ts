@@ -17,10 +17,7 @@ describe('PoTreeViewService:', () => {
   });
 
   it('emitExpandedEvent: should call expandedEvent.next with treeViewItem', () => {
-    const treeViewItem: PoTreeViewItem = {
-      label: 'Nível 01',
-      value: 1
-    };
+    const treeViewItem: PoTreeViewItem = { label: 'Nível 01', value: 1 };
 
     const spyEmitExpandedEvent = spyOn(treeViewService['expandedEvent'], 'next');
 
@@ -30,16 +27,11 @@ describe('PoTreeViewService:', () => {
   });
 
   it('onExpand: should return an instanceof Observable', () => {
-    const onExpand = treeViewService.onExpand();
-
-    expect(onExpand instanceof Observable).toBeTruthy();
+    expect(treeViewService.onExpand() instanceof Observable).toBeTruthy();
   });
 
   it('emitSelectedEvent: should call selectedEvent.next with treeViewItem', () => {
-    const treeViewItem: PoTreeViewItem = {
-      label: 'Nível 01',
-      value: 1
-    };
+    const treeViewItem: PoTreeViewItem = { label: 'Nível 01', value: 1 };
 
     const spyEmitSelectedEvent = spyOn(treeViewService['selectedEvent'], 'next');
 
@@ -49,8 +41,20 @@ describe('PoTreeViewService:', () => {
   });
 
   it('onSelect: should return an instanceof Observable', () => {
-    const onSelect = treeViewService.onSelect();
+    expect(treeViewService.onSelect() instanceof Observable).toBeTruthy();
+  });
 
-    expect(onSelect instanceof Observable).toBeTruthy();
+  it('emitActivatedEvent: should call activatedEvent.next with treeViewItem', () => {
+    const treeViewItem: PoTreeViewItem = { label: 'Nível 01', value: 1 };
+
+    const spyEmitActivatedEvent = spyOn(treeViewService['activatedEvent'], 'next');
+
+    treeViewService.emitActivatedEvent(treeViewItem);
+
+    expect(spyEmitActivatedEvent).toHaveBeenCalledWith(treeViewItem);
+  });
+
+  it('onActivate: should return an instanceof Observable', () => {
+    expect(treeViewService.onActivate() instanceof Observable).toBeTruthy();
   });
 });

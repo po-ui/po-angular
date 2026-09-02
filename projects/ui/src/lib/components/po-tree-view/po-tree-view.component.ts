@@ -1,8 +1,19 @@
-import { ChangeDetectionStrategy, Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import {
+  OnInit,
+  inject,
+  effect,
+  Component,
+  DestroyRef,
+  ElementRef,
+  AfterViewInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { PoTreeViewService } from './services/po-tree-view.service';
 import { PoTreeViewBaseComponent } from './po-tree-view-base.component';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
-import { PoTreeViewService } from './services/po-tree-view.service';
+import { PoTreeViewKeyboardService } from './services/po-tree-view-keyboard.service';
 
 /**
  * @docsExtends PoTreeViewBaseComponent
@@ -33,33 +44,72 @@ import { PoTreeViewService } from './services/po-tree-view.service';
   selector: 'po-tree-view',
   templateUrl: './po-tree-view.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PoTreeViewService],
+  providers: [PoTreeViewService, PoTreeViewKeyboardService],
   standalone: false
 })
-export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit, OnChanges {
+export class PoTreeViewComponent extends PoTreeViewBaseComponent implements OnInit, AfterViewInit {
+  private readonly elementRef = inject(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly treeViewService = inject(PoTreeViewService);
+  private readonly keyboardService = inject(PoTreeViewKeyboardService);
 
   get hasItems() {
-    return !!(this.items && this.items.length);
+    return !!this?.items?.length;
+  }
+
+  constructor() {
+    super();
+
+    effect(() => {
+      const items = this.inputedItems();
+      this.disabled();
+      this.items = items;
+    });
   }
 
   ngOnInit() {
-    this.treeViewService.onExpand().subscribe((treeViewItem: PoTreeViewItem) => {
-      this.emitExpanded(treeViewItem);
-    });
+    this.treeViewService
+      .onExpand()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((treeViewItem: PoTreeViewItem) => {
+        this.emitExpanded(treeViewItem);
+      });
 
-    this.treeViewService.onSelect().subscribe((treeViewItem: PoTreeViewItem) => {
-      this.emitSelected(treeViewItem);
-    });
+    this.treeViewService
+      .onSelect()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((treeViewItem: PoTreeViewItem) => {
+        this.emitSelected(treeViewItem);
+      });
+
+    this.treeViewService
+      .onActivate()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((treeViewItem: PoTreeViewItem) => {
+        this.activated.emit({ ...treeViewItem });
+      });
   }
 
-  ngOnChanges(changes?: SimpleChanges) {
-    if (changes?.['inputedItems']) {
-      this.items = this.inputedItems;
+  ngAfterViewInit() {
+    this.keyboardService.setHostElement(this.elementRef);
+  }
+
+  protected onTreeFocus(event: FocusEvent) {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('po-tree-view')) {
+      this.keyboardService.focusLastOrFirst();
     }
   }
 
-  trackByFunction(index: number) {
+  protected onTreeKeydown(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      const tree = event.currentTarget as HTMLElement;
+      tree.setAttribute('tabindex', '-1');
+      setTimeout(() => tree.setAttribute('tabindex', '0'));
+    }
+  }
+
+  protected trackByFunction(index: number) {
     return index;
   }
 }
