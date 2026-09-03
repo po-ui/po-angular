@@ -32,7 +32,7 @@
       #popover
       [p-position]="popoverPosition"
       [p-target]="target"
-      [p-title]="$safeNavigationMigration(helper()?.title)"
+      [p-title]="helper()?.title"
       [p-append-in-body]="appendBox()"
       [p-offset]="8"
       p-custom-classes="po-helper-popover"
@@ -58,7 +58,7 @@
             (keydown.enter)="$event.stopPropagation()"
             (keydown.space)="$event.stopPropagation()"
             (p-action)="helper()?.footerAction?.action()"
-            [p-label]="$safeNavigationMigration(helper()?.footerAction?.label)"
+            [p-label]="helper()?.footerAction?.label"
           >
           </po-link>
         }
