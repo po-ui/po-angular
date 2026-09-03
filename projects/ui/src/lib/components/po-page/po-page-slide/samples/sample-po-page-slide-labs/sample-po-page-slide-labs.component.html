@@ -8,6 +8,11 @@
   #poPageSlide
 >
   {{ content }}
+
+  <po-page-slide-footer>
+    <po-button p-kind="secondary" p-label="Cancelar" (p-click)="closePage()"></po-button>
+    <po-button p-kind="primary" p-label="Fechar" (p-click)="closePage()"></po-button>
+  </po-page-slide-footer>
 </po-page-slide>
 
 <po-button p-label="Open Page Slide" [p-disabled]="f.form.invalid" (p-click)="openPage()"></po-button>
@@ -27,6 +32,15 @@
     [p-options]="propertiesOptions"
   ></po-checkbox-group>
 
+  @if (isFullSize) {
+    <div class="po-md-12 po-text-color-warning">
+      <po-icon p-icon="ICON_WARNING"></po-icon>
+      No modo <strong>full</strong> a página ocupa 100% da largura, portanto não há área externa para clicar e a
+      propriedade <strong>Click Out</strong> não é aplicável. Utilize o botão do cabeçalho, a tecla
+      <strong>Esc</strong> ou um botão no rodapé para fechar.
+    </div>
+  }
+
   <po-radio-group
     class="po-md-12"
     name="Size"
@@ -35,6 +49,7 @@
     p-label="Size"
     [p-options]="sizeOptions"
     p-optional
+    (ngModelChange)="onChangeSize()"
   ></po-radio-group>
 
   <po-radio-group

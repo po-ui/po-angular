@@ -109,6 +109,15 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     this.loadingCompleted.pipe(take(1)).pipe(delay(0)).subscribe(this.handleFocus.bind(this));
   }
 
+  protected override hasAlternativeCloseAction(): boolean {
+    // No modo `full` não há overlay/click-out; um footer pode prover a ação de fechar.
+    if (this.size === 'full') {
+      return !!this.pageSlideFooter;
+    }
+
+    return super.hasAlternativeCloseAction();
+  }
+
   public close(): void {
     if (
       this.poActiveOverlayService.activeOverlay.length > 0 &&

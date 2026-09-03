@@ -2,6 +2,7 @@ import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } fro
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
+import { PoPageSlideSize } from './po-page-slide-size.type';
 
 /**
  * @description
@@ -83,6 +84,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../uti
  * | `--page-slide-width-md`                  | Tamanho da largura do componente no tamanho `medium`              | `50%`                                                                         |
  * | `--page-slide-width-lg`                  | Tamanho da largura do componente no tamanho `large`               | `60%`                                                                         |
  * | `--page-slide-width-xl`                  | Tamanho da largura do componente no tamanho `extra large`         | `70%`                                                                         |
+ * | `--page-slide-width-full`                | Tamanho da largura do componente no tamanho `full`                | `100vw`                                                                       |
  * | `--page-slide-min-width-auto`            | Tamanho da largura mínima do componente no tamanho `auto`         | `40%`                                                                         |
  * | `--page-slide-max-width-auto`            | Tamanho da largura máxima do componente no tamanho `auto`         | `90%`                                                                         |
  *
@@ -152,7 +154,7 @@ export class PoPageSlideBaseComponent {
 
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
-  private _size = 'md';
+  private _size: PoPageSlideSize = 'md';
 
   /**
    * @optional
@@ -167,17 +169,22 @@ export class PoPageSlideBaseComponent {
    *  - `lg` (grande)
    *  - `xl` (extra-grande)
    *  - `auto` (automático)
+   *  - `full` (tela cheia): a página ocupa 100% da largura da tela e o overlay de fundo não é renderizado.
    *
-   * > Todas as opções de tamanho, exceto `auto`, possuem uma largura máxima de **768px**.
+   * > Todas as opções de tamanho, exceto `auto` e `full`, possuem uma largura máxima de **768px**.
+   *
+   * > No modo `full`, como não há overlay, o fechamento por clique fora (`p-click-out`) não é aplicável.
+   * > O encerramento continua disponível pelo botão do cabeçalho, pela tecla `Escape`, pelo método `#close()`
+   * > ou por um botão no [`po-page-slide-footer`](/documentation/po-page-slide-footer).
    *
    * @default `md`
    */
-  @Input('p-size') set size(value: string) {
-    const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
+  @Input('p-size') set size(value: PoPageSlideSize) {
+    const sizes: Array<PoPageSlideSize> = ['sm', 'md', 'lg', 'xl', 'auto', 'full'];
     this._size = sizes.indexOf(value) > -1 ? value : 'md';
   }
 
-  get size() {
+  get size(): PoPageSlideSize {
     return this._size;
   }
 
@@ -236,11 +243,15 @@ export class PoPageSlideBaseComponent {
    */
   public open() {
     // Evita com que a página seja aberta sem que seja possível fechá-la.
-    if (this.hideClose && !this.clickOut) {
+    if (this.hideClose && !this.hasAlternativeCloseAction()) {
       this.hideClose = false;
     }
 
     this.hidden = false;
+  }
+
+  protected hasAlternativeCloseAction(): boolean {
+    return this.clickOut;
   }
 
   /**

@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoActiveOverlayService } from '../../../services/po-active-overlay';
 import { PoFieldModule } from '../../po-field';
+import { PoPageSlideFooterComponent } from './po-page-slide-footer/po-page-slide-footer.component';
 import { PoPageSlideComponent } from './po-page-slide.component';
 
 @Component({
@@ -260,5 +261,96 @@ describe('PoPageSlideComponent', () => {
     };
 
     expect(component['getTextDefault'].call(fakeThis)).toBe('Fechar');
+  });
+
+  describe('full size:', () => {
+    it('should not render the overlay when size is `full`', () => {
+      component.size = 'full';
+      component.open();
+      fixture.detectChanges();
+
+      expect(debugElement.query(By.css('.po-page-slide-overlay'))).toBeNull();
+    });
+
+    it('should render the overlay when size is different from `full`', () => {
+      component.size = 'md';
+      component.open();
+      fixture.detectChanges();
+
+      expect(debugElement.query(By.css('.po-page-slide-overlay'))).not.toBeNull();
+    });
+
+    it('should apply the `po-page-slide-full` class to the container when size is `full`', () => {
+      component.size = 'full';
+      component.open();
+      fixture.detectChanges();
+
+      expect(debugElement.query(By.css('.po-page-slide-full'))).not.toBeNull();
+    });
+
+    it('should close by close() method when size is `full`', () => {
+      component.size = 'full';
+      component.open();
+      fixture.detectChanges();
+
+      component.close();
+      fixture.detectChanges();
+
+      expect(component.hidden).toBe(true);
+    });
+
+    describe('hasAlternativeCloseAction:', () => {
+      it('should return true when size is `full` and a footer is present', () => {
+        component.size = 'full';
+        component.pageSlideFooter = new PoPageSlideFooterComponent();
+
+        expect(component['hasAlternativeCloseAction']()).toBe(true);
+      });
+
+      it('should return false when size is `full` and there is no footer', () => {
+        component.size = 'full';
+        component.pageSlideFooter = undefined;
+
+        expect(component['hasAlternativeCloseAction']()).toBe(false);
+      });
+
+      it('should delegate to the base behavior when size is different from `full`', () => {
+        component.size = 'md';
+        component.clickOut = true;
+
+        expect(component['hasAlternativeCloseAction']()).toBe(true);
+
+        component.clickOut = false;
+        expect(component['hasAlternativeCloseAction']()).toBe(false);
+      });
+    });
+  });
+
+  describe('ARIA:', () => {
+    it('should set role `dialog` and aria-modal `true` on the container', () => {
+      component.title = 'My title';
+      component.open();
+      fixture.detectChanges();
+
+      const container = debugElement.query(By.css('.po-page-slide-container')).nativeElement;
+
+      expect(container.getAttribute('role')).toBe('dialog');
+      expect(container.getAttribute('aria-modal')).toBe('true');
+      expect(container.getAttribute('aria-label')).toBe('My title');
+    });
+  });
+
+  describe('animation params:', () => {
+    it('fadeParams: should use the fallback duration when `duration` is empty', () => {
+      component.duration = '';
+
+      expect(component.fadeParams.params.duration).toBe('70ms');
+    });
+
+    it('slideParams: should use the fallback timing when `timing` is empty', () => {
+      component.timing = '';
+
+      expect(component.slideParams.params.timing).toBe('700ms cubic-bezier(0.35, 0, 0.1, 1)');
+    });
   });
 });

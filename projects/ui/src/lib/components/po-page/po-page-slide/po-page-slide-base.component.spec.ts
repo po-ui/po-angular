@@ -16,7 +16,7 @@ describe('PoPageSlideBaseComponent', () => {
   });
 
   it('should update property size with valid values', () => {
-    const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
+    const sizes = ['sm', 'md', 'lg', 'xl', 'auto', 'full'];
     expectPropertiesValues(component, 'size', sizes, sizes);
   });
 
@@ -111,6 +111,35 @@ describe('PoPageSlideBaseComponent', () => {
   it('should call open method', () => {
     component.open();
     expect(component.hidden).toBe(false);
+  });
+
+  describe('open (hideClose guard):', () => {
+    it('should reset hideClose to false when there is no alternative close action', () => {
+      component.hideClose = true;
+      component.clickOut = false;
+
+      component.open();
+
+      expect(component.hideClose).toBe(false);
+      expect(component.hidden).toBe(false);
+    });
+
+    it('should keep hideClose true when clickOut is enabled', () => {
+      component.hideClose = true;
+      component.clickOut = true;
+
+      component.open();
+
+      expect(component.hideClose).toBe(true);
+    });
+
+    it('hasAlternativeCloseAction: should return the clickOut value by default', () => {
+      component.clickOut = true;
+      expect(component['hasAlternativeCloseAction']()).toBe(true);
+
+      component.clickOut = false;
+      expect(component['hasAlternativeCloseAction']()).toBe(false);
+    });
   });
 
   it('close: should call close method and emit output p-close', () => {
