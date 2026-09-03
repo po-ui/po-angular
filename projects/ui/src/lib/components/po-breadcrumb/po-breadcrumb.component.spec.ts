@@ -67,6 +67,19 @@ describe('PoBreadcrumbComponent:', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    // O ambiente roda com `teardown: { destroyAfterEach: false }`, então o
+    // `ngOnDestroy` não é chamado automaticamente entre os testes. Sem isso, o
+    // listener de `window:resize` registrado em `ngAfterViewInit` (via
+    // `initializeResizeListener`) permanece vivo apontando para uma instância
+    // órfã. Ao acumularem-se entre os testes, qualquer `window.dispatchEvent('resize')`
+    // de outros specs dispara esses callbacks órfãos (agendando setTimeout que
+    // acessa `breadcrumbElement` de componentes já descartados), corrompendo a
+    // execução e a medição de cobertura da suíte completa.
+    // Destruir o fixture aqui remove o listener e limpa o timer pendente.
+    fixture?.destroy();
+  });
+
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
@@ -238,8 +251,21 @@ describe('PoBreadcrumbComponent:', () => {
 
       it('should called when window resize.', () => {
         spyOn(component, <any>'debounceResize');
+
+        // Captura o callback registrado para 'resize' e o invoca diretamente, em vez
+        // de disparar um evento global em `window` (que dependeria de listeners de
+        // outras instâncias). O `removeResizeListener` ao final evita vazamento.
+        let resizeCallback: (event: Event) => void;
+        spyOn(component['renderer'], 'listen').and.callFake((target: any, eventName: string, callback: any) => {
+          if (target === 'window' && eventName === 'resize') {
+            resizeCallback = callback;
+          }
+          return () => {};
+        });
+
         component['initializeResizeListener']();
-        window.dispatchEvent(eventResize);
+        resizeCallback(eventResize);
+        component['removeResizeListener']();
 
         expect(component[debounceResize]).toHaveBeenCalled();
       });
