@@ -190,11 +190,22 @@ describe('PoPopoverComponent:', () => {
 
       spyOn(fakeEvent, 'togglePopup').and.callFake(() => {});
 
+      // Captura o callback registrado para 'click' no document ao invés de disparar
+      // um evento global em `document`, que acionaria listeners vazados de outras
+      // instâncias/testes e tornaria o teste intermitente.
+      let clickCallback: (event: MouseEvent) => void;
+      spyOn(fakeEvent.renderer, 'listen').and.callFake((target: any, eventName: string, callback: any) => {
+        if (target === 'document' && eventName === 'click') {
+          clickCallback = callback;
+        }
+        return () => {};
+      });
+
       component.setRendererListenInit.call(fakeEvent);
 
       eventClick.initEvent('click', false, true);
 
-      document.dispatchEvent(eventClick);
+      clickCallback(eventClick as unknown as MouseEvent);
 
       expect(fakeEvent.togglePopup).toHaveBeenCalled();
     });

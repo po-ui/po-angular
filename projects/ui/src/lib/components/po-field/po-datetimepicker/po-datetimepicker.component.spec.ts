@@ -22,6 +22,12 @@ describe('PoDatetimepickerComponent:', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    // Garante o ngOnDestroy -> removeListeners(), evitando que listeners globais
+    // (ex.: 'click' no document) vazem entre os testes e causem intermitência.
+    fixture?.destroy();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -1435,10 +1441,21 @@ describe('PoDatetimepickerComponent:', () => {
   describe('initializeListeners:', () => {
     it('should register click listener that calls wasClickedOnPicker', () => {
       spyOn(component, 'wasClickedOnPicker');
+
+      // Captura o callback registrado para 'click' no document ao invés de disparar
+      // um evento global em `document`, que acionaria listeners vazados de outras
+      // instâncias/testes e tornaria o teste intermitente.
+      let clickCallback: (event: MouseEvent) => void;
+      spyOn(component['renderer'], 'listen').and.callFake((target: any, eventName: string, callback: any) => {
+        if (target === 'document' && eventName === 'click') {
+          clickCallback = callback;
+        }
+        return () => {};
+      });
+
       component['initializeListeners']();
 
-      const event = new MouseEvent('click');
-      document.dispatchEvent(event);
+      clickCallback(new MouseEvent('click'));
 
       expect(component.wasClickedOnPicker).toHaveBeenCalled();
       component['removeListeners']();
