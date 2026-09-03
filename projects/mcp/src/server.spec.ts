@@ -302,6 +302,8 @@ describe('createServer - tool handlers', () => {
 
   /* eslint-disable @typescript-eslint/no-var-requires */
   const docsClient = require('./docs-client') as {
+    fetchBestPractices: jest.Mock;
+    fetchComponentExamples: jest.Mock;
     fetchLlmsTxt: jest.Mock;
     fetchLlmsFullTxt: jest.Mock;
     fetchComponentDoc: jest.Mock;
@@ -352,6 +354,8 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('PoButton');
       expect(result.content[0].text).toContain('PoTable');
       expect(result.content[0].text).toContain('PoDialogService');
+      expect(result.structuredContent.count).toBe(4);
+      expect(result.structuredContent.items[0].url).toContain('po-ui.io');
     });
 
     it('deve usar section=all como padrao quando nao informado', async () => {
@@ -383,6 +387,7 @@ describe('createServer - tool handlers', () => {
       const handler = registeredTools.get('list_components')!;
       const result = await handler({ section: 'all', filter: 'xyzinexistente' });
       expect(result.content[0].text).toContain('Nenhum resultado encontrado');
+      expect(result.structuredContent).toEqual({ count: 0, items: [], section: 'all' });
     });
 
     it('deve retornar erro quando fetchLlmsTxt falha', async () => {
@@ -391,6 +396,7 @@ describe('createServer - tool handlers', () => {
       const result = await handler({ section: 'all' });
       expect(result.content[0].text).toContain('Erro ao carregar');
       expect(result.content[0].text).toContain('Network error');
+      expect(result.isError).toBe(true);
     });
 
     it('deve agrupar resultados por secao', async () => {
@@ -435,6 +441,12 @@ describe('createServer - tool handlers', () => {
       const result = await handler({ slug: 'po-button' });
       expect(result.content[0].text).toContain('# PoButton');
       expect(result.content[0].text).toContain('Documentacao completa');
+      expect(result.structuredContent).toEqual({
+        content: '# PoButton\nDocumentacao completa',
+        documentationUrl: 'https://po-ui.io/documentation/po-button',
+        slug: 'po-button',
+        sourceUrl: 'https://po-ui.io/llms-generated/po-button.md'
+      });
     });
 
     it('deve normalizar slug antes de buscar', async () => {
@@ -467,6 +479,7 @@ describe('createServer - tool handlers', () => {
       const handler = registeredTools.get('get_component_docs')!;
       const result = await handler({ slug: 'po-button' });
       expect(result.content[0].text).toContain('n\u00e3o encontrado');
+      expect(result.isError).toBe(true);
     });
 
     it('deve retornar mensagem generica quando sugestoes falham', async () => {
@@ -484,6 +497,148 @@ describe('createServer - tool handlers', () => {
       const handler = registeredTools.get('get_component_docs')!;
       const result = await handler({ slug: 'xyz-totally-unrelated' });
       expect(result.content[0].text).toContain('Use list_components para ver todos os slugs dispon\u00edveis.');
+      expect(result.isError).toBe(true);
+    });
+  });
+
+  // ── get_component_examples ──────────────────────────────────────────
+
+  describe('get_component_examples', () => {
+    const examples = [
+      {
+        name: 'sample-po-button-basic',
+        url: 'https://github.com/po-ui/po-angular/tree/master/sample-po-button-basic',
+        files: [
+          {
+            content: '<po-button></po-button>',
+            language: 'html',
+            name: 'sample-po-button-basic.component.html',
+            url: 'https://github.com/po-ui/po-angular/blob/master/sample-po-button-basic.component.html'
+          }
+        ]
+      }
+    ];
+
+    it('should return official component examples with structured content', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples,
+        sourceSlug: 'po-button',
+        status: 'available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'PoButtonComponent', example: 'basic', max_examples: 1 });
+
+      expect(docsClient.fetchComponentExamples).toHaveBeenCalledWith('po-button', 1, 'basic');
+      expect(result.content[0].text).toContain('sample-po-button-basic');
+      expect(result.structuredContent.slug).toBe('po-button');
+      expect(result.structuredContent.examples).toEqual(examples);
+      expect(result.structuredContent.sourceSlug).toBe('po-button');
+      expect(result.structuredContent.status).toBe('available');
+    });
+
+    it('should use three examples as the default limit', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples,
+        sourceSlug: 'po-button',
+        status: 'available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      await handler({ slug: 'po-button' });
+
+      expect(docsClient.fetchComponentExamples).toHaveBeenCalledWith('po-button', 3, undefined);
+    });
+
+    it('should identify examples returned from the parent component', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples,
+        sourceSlug: 'po-tabs',
+        status: 'available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-tab' });
+
+      expect(result.content[0].text).toContain('componente pai "po-tabs"');
+      expect(result.structuredContent.sourceSlug).toBe('po-tabs');
+    });
+
+    it('should return structured empty content when no example matches', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples: [],
+        sourceSlug: 'po-button',
+        status: 'no_match'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-button', example: 'inexistente' });
+
+      expect(result.isError).toBeUndefined();
+      expect(result.content[0].text).toContain('corresponde ao filtro');
+      expect(result.structuredContent.examples).toEqual([]);
+      expect(result.structuredContent.status).toBe('no_match');
+    });
+
+    it('should explain when the component has no official examples', async () => {
+      docsClient.fetchComponentExamples.mockResolvedValue({
+        examples: [],
+        sourceSlug: 'po-navbar',
+        status: 'not_available'
+      });
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-navbar' });
+
+      expect(result.isError).toBeUndefined();
+      expect(result.content[0].text).toContain('não possui exemplos oficiais próprios');
+      expect(result.structuredContent.status).toBe('not_available');
+    });
+
+    it('should return a tool error when examples cannot be loaded', async () => {
+      docsClient.fetchComponentExamples.mockRejectedValue(new Error('GitHub unavailable'));
+      const handler = registeredTools.get('get_component_examples')!;
+
+      const result = await handler({ slug: 'po-button' });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('GitHub unavailable');
+    });
+  });
+
+  // ── get_best_practices ──────────────────────────────────────────────
+
+  describe('get_best_practices', () => {
+    it('should return the selected official source with structured content', async () => {
+      docsClient.fetchBestPractices.mockResolvedValue({
+        content: '# Primeiros passos',
+        title: 'Primeiros passos',
+        url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+      });
+      const handler = registeredTools.get('get_best_practices')!;
+
+      const result = await handler({ topic: 'getting-started' });
+
+      expect(docsClient.fetchBestPractices).toHaveBeenCalledWith('getting-started');
+      expect(result.content[0].text).toContain('Fonte oficial');
+      expect(result.structuredContent).toEqual({
+        content: '# Primeiros passos',
+        source: {
+          title: 'Primeiros passos',
+          url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+        },
+        topic: 'getting-started'
+      });
+    });
+
+    it('should return a tool error when best practices cannot be loaded', async () => {
+      docsClient.fetchBestPractices.mockRejectedValue('source unavailable');
+      const handler = registeredTools.get('get_best_practices')!;
+
+      const result = await handler({ topic: 'contributing' });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('source unavailable');
     });
   });
 
@@ -496,6 +651,13 @@ describe('createServer - tool handlers', () => {
       const result = await handler({ query: 'p-loading' });
       expect(result.content[0].text).toContain('Encontrados');
       expect(result.content[0].text).toContain('PoButton');
+      expect(result.structuredContent.results[0]).toEqual(
+        expect.objectContaining({
+          componentName: 'PoButton',
+          slug: 'po-button',
+          url: 'https://po-ui.io/documentation/po-button'
+        })
+      );
     });
 
     it('deve usar max_results padrao de 10', async () => {
@@ -517,6 +679,7 @@ describe('createServer - tool handlers', () => {
       const handler = registeredTools.get('search_docs')!;
       const result = await handler({ query: 'xyzinexistente' });
       expect(result.content[0].text).toContain('Nenhum resultado encontrado');
+      expect(result.structuredContent).toEqual({ count: 0, query: 'xyzinexistente', results: [] });
     });
 
     it('deve retornar erro quando fetchLlmsFullTxt falha', async () => {
@@ -525,6 +688,7 @@ describe('createServer - tool handlers', () => {
       const result = await handler({ query: 'botao' });
       expect(result.content[0].text).toContain('Erro ao carregar');
       expect(result.content[0].text).toContain('Timeout');
+      expect(result.isError).toBe(true);
     });
 
     it('deve incluir contexto nos resultados', async () => {
@@ -552,6 +716,11 @@ describe('createServer - tool handlers', () => {
       const result = await handler({ guide: 'getting-started' });
       expect(result.content[0].text).toContain('# Getting Started');
       expect(result.content[0].text).toContain('Conteudo do guia');
+      expect(result.structuredContent).toEqual({
+        content: '# Getting Started\nConteudo do guia',
+        guide: 'getting-started',
+        url: 'https://github.com/po-ui/po-angular/blob/master/docs/guides/getting-started.md'
+      });
     });
 
     it('deve retornar erro com lista de guias disponiveis quando falha', async () => {
@@ -562,6 +731,7 @@ describe('createServer - tool handlers', () => {
       expect(result.content[0].text).toContain('Erro');
       expect(result.content[0].text).toContain('Guias dispon\u00edveis');
       expect(result.content[0].text).toContain('Getting Started');
+      expect(result.isError).toBe(true);
     });
 
     it('deve retornar apenas erro quando indice tambem falha', async () => {

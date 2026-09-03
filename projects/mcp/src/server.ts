@@ -1,6 +1,16 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { fetchLlmsTxt, fetchLlmsFullTxt, fetchComponentDoc, fetchGuide } from './docs-client';
+import {
+  BEST_PRACTICE_TOPICS,
+  BestPracticeTopic,
+  ComponentExample,
+  fetchBestPractices,
+  fetchComponentDoc,
+  fetchComponentExamples,
+  fetchGuide,
+  fetchLlmsFullTxt,
+  fetchLlmsTxt
+} from './docs-client';
 import { parseLlmsTxt, LlmsEntry } from './llms-parser';
 
 // Session-scoped cache for the llms.txt index
@@ -49,6 +59,62 @@ export function normaliseSlug(input: string): string {
 interface SearchResult {
   componentName: string;
   context: string;
+}
+
+type ComponentSection = 'components' | 'services' | 'interfaces' | 'enums' | 'guides' | 'all';
+
+interface ToolRegistration {
+  description: string;
+  inputSchema: Record<string, z.ZodTypeAny>;
+  outputSchema?: Record<string, z.ZodTypeAny>;
+}
+
+type RegisterToolWithoutSdkInference = (name: string, registration: ToolRegistration, handler: unknown) => void;
+
+const PO_UI_URL = 'https://po-ui.io';
+
+function getComponentDocumentationUrl(slug: string): string {
+  return `${PO_UI_URL}/documentation/${slug}`;
+}
+
+function getComponentSourceUrl(slug: string): string {
+  return `${PO_UI_URL}/llms-generated/${slug}.md`;
+}
+
+function getGuideUrl(guide: string): string {
+  return `https://github.com/po-ui/po-angular/blob/master/docs/guides/${guide}.md`;
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return 'Erro desconhecido.';
+  }
+}
+
+function createToolError(message: string): { content: Array<{ type: 'text'; text: string }>; isError: true } {
+  return { content: [{ type: 'text', text: message }], isError: true };
+}
+
+function formatExamples(examples: Array<ComponentExample>): string {
+  return examples
+    .map(example => {
+      const files = example.files
+        .map(file => `#### [${file.name}](${file.url})\n\n\`\`\`${file.language}\n${file.content}\n\`\`\``)
+        .join('\n\n');
+
+      return `### [${example.name}](${example.url})\n\n${files}`;
+    })
+    .join('\n\n');
 }
 
 /** Extract the heading text from the first `# ...` line, or fallback. */
@@ -125,10 +191,10 @@ export function createServer(): McpServer {
     name: 'po-ui',
     version: '1.0.0'
   });
+  const registerTool = server.registerTool.bind(server) as unknown as RegisterToolWithoutSdkInference;
 
   // ── list_components ─────────────────────────────────────────────────────────
-  // @ts-ignore — TS2589: limitação de inferência genérica do @modelcontextprotocol/sdk com zod
-  server.registerTool(
+  registerTool(
     'list_components',
     {
       description:
@@ -140,16 +206,28 @@ export function createServer(): McpServer {
           .optional()
           .describe('Filtrar por seção: "components", "services", "interfaces", "enums", "guides" ou "all" (padrão).'),
         filter: z.string().optional().describe('Filtro de texto livre no nome ou descrição (case-insensitive).')
+      },
+      outputSchema: {
+        count: z.number().int(),
+        items: z.array(
+          z.object({
+            description: z.string(),
+            name: z.string(),
+            section: z.string(),
+            slug: z.string(),
+            url: z.string()
+          })
+        ),
+        section: z.string()
       }
     },
-    async ({ section, filter }) => {
+    async ({ section, filter }: { section?: ComponentSection; filter?: string }) => {
       const resolvedSection = section ?? 'all';
       let entries: LlmsEntry[];
       try {
         entries = await getLlmsEntries();
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: 'text', text: `Erro ao carregar índice: ${msg}` }] };
+        return createToolError(`Erro ao carregar índice: ${getErrorMessage(err)}`);
       }
 
       let results = resolvedSection === 'all' ? entries : entries.filter(e => e.section === resolvedSection);
@@ -160,7 +238,10 @@ export function createServer(): McpServer {
       }
 
       if (results.length === 0) {
-        return { content: [{ type: 'text', text: 'Nenhum resultado encontrado.' }] };
+        return {
+          content: [{ type: 'text' as const, text: 'Nenhum resultado encontrado.' }],
+          structuredContent: { count: 0, items: [], section: resolvedSection }
+        };
       }
 
       // Group by section
@@ -181,12 +262,25 @@ export function createServer(): McpServer {
         lines.push('');
       }
 
-      return { content: [{ type: 'text', text: lines.join('\n') }] };
+      return {
+        content: [{ type: 'text' as const, text: lines.join('\n') }],
+        structuredContent: {
+          count: results.length,
+          items: results.map(item => ({
+            description: item.description,
+            name: item.name,
+            section: item.section,
+            slug: item.slug,
+            url: item.url
+          })),
+          section: resolvedSection
+        }
+      };
     }
   );
 
   // ── get_component_docs ───────────────────────────────────────────────────────
-  server.registerTool(
+  registerTool(
     'get_component_docs',
     {
       description:
@@ -200,20 +294,42 @@ export function createServer(): McpServer {
               'Aceita também nomes de classe ("PoButtonComponent") e seletores HTML ("<po-button>"). ' +
               'Use list_components para descobrir slugs disponíveis.'
           )
+      },
+      outputSchema: {
+        content: z.string(),
+        documentationUrl: z.string(),
+        slug: z.string(),
+        sourceUrl: z.string()
       }
     },
-    async ({ slug }) => {
+    async ({ slug }: { slug: string }) => {
       const normalised = normaliseSlug(slug);
 
       try {
         const markdown = await fetchComponentDoc(normalised);
-        return { content: [{ type: 'text', text: markdown }] };
+        return {
+          content: [{ type: 'text' as const, text: markdown }],
+          structuredContent: {
+            content: markdown,
+            documentationUrl: getComponentDocumentationUrl(normalised),
+            slug: normalised,
+            sourceUrl: getComponentSourceUrl(normalised)
+          }
+        };
       } catch {
         // If normalised slug failed, try the original input as-is
         if (normalised !== slug) {
           try {
             const markdown = await fetchComponentDoc(slug);
-            return { content: [{ type: 'text', text: markdown }] };
+            return {
+              content: [{ type: 'text' as const, text: markdown }],
+              structuredContent: {
+                content: markdown,
+                documentationUrl: getComponentDocumentationUrl(slug),
+                slug,
+                sourceUrl: getComponentSourceUrl(slug)
+              }
+            };
           } catch {
             // Fall through to error with suggestions
           }
@@ -229,35 +345,147 @@ export function createServer(): McpServer {
             .map(e => `- ${e.name} (\`${e.slug}\`)`)
             .join('\n');
 
-          return {
-            content: [
-              {
-                type: 'text',
-                text:
-                  `Componente "${slug}" não encontrado.\n\n` +
-                  (suggestions
-                    ? `Sugestões:\n${suggestions}\n\nUse list_components para ver todos.`
-                    : 'Use list_components para ver todos os slugs disponíveis.')
-              }
-            ]
-          };
+          return createToolError(
+            `Componente "${slug}" não encontrado.\n\n` +
+              (suggestions
+                ? `Sugestões:\n${suggestions}\n\nUse list_components para ver todos.`
+                : 'Use list_components para ver todos os slugs disponíveis.')
+          );
         } catch {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: `Componente "${slug}" não encontrado. Use list_components para ver os slugs disponíveis.`
-              }
-            ]
-          };
+          return createToolError(
+            `Componente "${slug}" não encontrado. Use list_components para ver os slugs disponíveis.`
+          );
         }
       }
     }
   );
 
+  // ── get_component_examples ──────────────────────────────────────────────────
+  registerTool(
+    'get_component_examples',
+    {
+      description:
+        'Retorna exemplos oficiais de um componente PO UI diretamente do repositório. ' +
+        'Inclui os arquivos TypeScript, HTML e estilos necessários para compreender cada exemplo.',
+      inputSchema: {
+        slug: z.string().describe('Slug do componente. Exemplos: "po-button", "po-table" ou "PoButtonComponent".'),
+        example: z
+          .string()
+          .optional()
+          .describe('Filtro opcional pelo nome do exemplo. Exemplos: "basic", "labs" ou "airfare".'),
+        max_examples: z
+          .number()
+          .int()
+          .min(1)
+          .max(5)
+          .optional()
+          .describe('Quantidade máxima de exemplos. Padrão: 3. Máximo: 5.')
+      },
+      outputSchema: {
+        documentationUrl: z.string(),
+        examples: z.array(
+          z.object({
+            files: z.array(z.object({ content: z.string(), language: z.string(), name: z.string(), url: z.string() })),
+            name: z.string(),
+            url: z.string()
+          })
+        ),
+        slug: z.string(),
+        sourceSlug: z.string(),
+        status: z.enum(['available', 'no_match', 'not_available'])
+      }
+    },
+    async ({ slug, example, max_examples }: { slug: string; example?: string; max_examples?: number }) => {
+      const normalised = normaliseSlug(slug);
+
+      try {
+        const result = await fetchComponentExamples(normalised, max_examples ?? 3, example);
+        const structuredContent = {
+          documentationUrl: getComponentDocumentationUrl(normalised),
+          examples: result.examples,
+          slug: normalised,
+          sourceSlug: result.sourceSlug,
+          status: result.status
+        };
+
+        if (result.status === 'not_available') {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: `O componente "${normalised}" não possui exemplos oficiais próprios. Consulte ${structuredContent.documentationUrl}.`
+              }
+            ],
+            structuredContent
+          };
+        }
+
+        if (result.status === 'no_match') {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: `Nenhum exemplo de "${result.sourceSlug}" corresponde ao filtro "${example}".`
+              }
+            ],
+            structuredContent
+          };
+        }
+
+        const parentNotice =
+          result.sourceSlug === normalised
+            ? ''
+            : `Os exemplos abaixo pertencem ao componente pai "${result.sourceSlug}".\n\n`;
+
+        return {
+          content: [{ type: 'text' as const, text: `${parentNotice}${formatExamples(result.examples)}` }],
+          structuredContent
+        };
+      } catch (err) {
+        return createToolError(`Erro ao carregar exemplos de "${slug}": ${getErrorMessage(err)}`);
+      }
+    }
+  );
+
+  // ── get_best_practices ──────────────────────────────────────────────────────
+  registerTool(
+    'get_best_practices',
+    {
+      description:
+        'Retorna recomendações oficiais do PO UI para contribuição, fluxo de desenvolvimento, ' +
+        'configuração inicial ou customização de temas.',
+      inputSchema: {
+        topic: z
+          .enum(BEST_PRACTICE_TOPICS)
+          .describe('Tema das recomendações: contributing, development-flow, getting-started ou theme-service.')
+      },
+      outputSchema: {
+        content: z.string(),
+        source: z.object({ title: z.string(), url: z.string() }),
+        topic: z.string()
+      }
+    },
+    async ({ topic }: { topic: BestPracticeTopic }) => {
+      try {
+        const document = await fetchBestPractices(topic);
+        const text = `Fonte oficial: ${document.url}\n\n${document.content}`;
+
+        return {
+          content: [{ type: 'text' as const, text }],
+          structuredContent: {
+            content: document.content,
+            source: { title: document.title, url: document.url },
+            topic
+          }
+        };
+      } catch (err) {
+        return createToolError(`Erro ao carregar boas práticas de "${topic}": ${getErrorMessage(err)}`);
+      }
+    }
+  );
+
   // ── search_docs ──────────────────────────────────────────────────────────────
-  // @ts-ignore — TS2589: limitação de inferência genérica do @modelcontextprotocol/sdk com zod
-  server.registerTool(
+  registerTool(
     'search_docs',
     {
       description:
@@ -275,23 +503,44 @@ export function createServer(): McpServer {
           .max(50)
           .optional()
           .describe('Número máximo de resultados (padrão: 10, máximo: 50).')
+      },
+      outputSchema: {
+        count: z.number().int(),
+        query: z.string(),
+        results: z.array(
+          z.object({
+            componentName: z.string(),
+            context: z.string(),
+            slug: z.string(),
+            url: z.string()
+          })
+        )
       }
     },
-    async ({ query, max_results }) => {
+    async ({ query, max_results }: { query: string; max_results?: number }) => {
       const limit = max_results ?? 10;
       let fullText: string;
       try {
         fullText = await fetchLlmsFullTxt();
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: 'text', text: `Erro ao carregar documentação completa: ${msg}` }] };
+        return createToolError(`Erro ao carregar documentação completa: ${getErrorMessage(err)}`);
       }
 
       const results = searchFullText(fullText, query, limit);
+      const structuredResults = results.map(result => {
+        const slug = normaliseSlug(result.componentName);
+        return {
+          componentName: result.componentName,
+          context: result.context,
+          slug,
+          url: getComponentDocumentationUrl(slug)
+        };
+      });
 
       if (results.length === 0) {
         return {
-          content: [{ type: 'text', text: `Nenhum resultado encontrado para "${query}".` }]
+          content: [{ type: 'text' as const, text: `Nenhum resultado encontrado para "${query}".` }],
+          structuredContent: { count: 0, query, results: [] }
         };
       }
 
@@ -300,12 +549,15 @@ export function createServer(): McpServer {
         ...results.map((r, i) => `### Resultado ${i + 1}: ${r.componentName}\n\`\`\`\n${r.context}\n\`\`\``)
       ].join('\n\n');
 
-      return { content: [{ type: 'text', text: output }] };
+      return {
+        content: [{ type: 'text' as const, text: output }],
+        structuredContent: { count: structuredResults.length, query, results: structuredResults }
+      };
     }
   );
 
   // ── get_guide ────────────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTool(
     'get_guide',
     {
       description:
@@ -318,14 +570,23 @@ export function createServer(): McpServer {
             'Nome do guia sem extensão. Exemplos: "getting-started", "schematics", "browser-support", "llms". ' +
               'Aceita também com extensão: "getting-started.md".'
           )
+      },
+      outputSchema: {
+        content: z.string(),
+        guide: z.string(),
+        url: z.string()
       }
     },
-    async ({ guide }) => {
+    async ({ guide }: { guide: string }) => {
+      const guideName = guide.endsWith('.md') ? guide.slice(0, -3) : guide;
       try {
         const content = await fetchGuide(guide);
-        return { content: [{ type: 'text', text: content }] };
+        return {
+          content: [{ type: 'text' as const, text: content }],
+          structuredContent: { content, guide: guideName, url: getGuideUrl(guideName) }
+        };
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
+        const msg = getErrorMessage(err);
 
         // Build helpful error with guide list from the index
         try {
@@ -335,16 +596,9 @@ export function createServer(): McpServer {
             .map(e => `- ${e.name} (\`${e.slug}\`)`)
             .join('\n');
 
-          return {
-            content: [
-              {
-                type: 'text',
-                text: `Erro: ${msg}\n\nGuias disponíveis:\n${guideList || 'Nenhum guia no índice.'}`
-              }
-            ]
-          };
+          return createToolError(`Erro: ${msg}\n\nGuias disponíveis:\n${guideList || 'Nenhum guia no índice.'}`);
         } catch {
-          return { content: [{ type: 'text', text: `Erro: ${msg}` }] };
+          return createToolError(`Erro: ${msg}`);
         }
       }
     }
