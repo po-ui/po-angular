@@ -2,6 +2,7 @@ import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } fro
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../../utils/util';
+import { PoPageSlideSize } from './po-page-slide-size.type';
 
 /**
  * @description
@@ -110,7 +111,10 @@ export class PoPageSlideBaseComponent {
    *
    * Oculta o botão de encerramento da página.
    *
-   * Esta opção só é possível se a propriedade `p-click-out` estiver habilitada.
+   * > Para evitar que o usuário fique sem forma de fechar, esta opção só é mantida quando houver uma
+   * > ação alternativa de fechamento: `p-click-out` habilitado ou, no modo `full`, um
+   * > [`po-page-slide-footer`](/documentation/po-page-slide-footer) com ação de fechar.
+   * > Caso contrário, o botão de fechar é reexibido automaticamente ao abrir.
    *
    * @default `false`
    */
@@ -152,7 +156,7 @@ export class PoPageSlideBaseComponent {
 
   private _componentsSize?: string = undefined;
   private _initialComponentsSize?: string = undefined;
-  private _size = 'md';
+  private _size: PoPageSlideSize = 'md';
 
   /**
    * @optional
@@ -167,17 +171,22 @@ export class PoPageSlideBaseComponent {
    *  - `lg` (grande)
    *  - `xl` (extra-grande)
    *  - `auto` (automático)
+   *  - `full` (tela cheia): a página ocupa 100% da largura da tela e o overlay de fundo não é renderizado.
    *
-   * > Todas as opções de tamanho, exceto `auto`, possuem uma largura máxima de **768px**.
+   * > Todas as opções de tamanho, exceto `auto` e `full`, possuem uma largura máxima de **768px**.
+   *
+   * > No modo `full`, como não há overlay, o fechamento por clique fora (`p-click-out`) não é aplicável.
+   * > O encerramento continua disponível pelo botão do cabeçalho, pela tecla `Escape`, pelo método `#close()`
+   * > ou por um botão no [`po-page-slide-footer`](/documentation/po-page-slide-footer).
    *
    * @default `md`
    */
   @Input('p-size') set size(value: string) {
-    const sizes = ['sm', 'md', 'lg', 'xl', 'auto'];
-    this._size = sizes.indexOf(value) > -1 ? value : 'md';
+    const sizes: Array<PoPageSlideSize> = ['sm', 'md', 'lg', 'xl', 'auto', 'full'];
+    this._size = sizes.includes(value as PoPageSlideSize) ? (value as PoPageSlideSize) : 'md';
   }
 
-  get size() {
+  get size(): PoPageSlideSize {
     return this._size;
   }
 
@@ -236,11 +245,15 @@ export class PoPageSlideBaseComponent {
    */
   public open() {
     // Evita com que a página seja aberta sem que seja possível fechá-la.
-    if (this.hideClose && !this.clickOut) {
+    if (this.hideClose && !this.hasAlternativeCloseAction()) {
       this.hideClose = false;
     }
 
     this.hidden = false;
+  }
+
+  protected hasAlternativeCloseAction(): boolean {
+    return this.clickOut;
   }
 
   /**
