@@ -3980,4 +3980,35 @@ describe('PoTableComponent:', () => {
       expect(component.searchAiComponent.search).toHaveBeenCalled();
     });
   });
+
+  describe('initializeVisibleElement:', () => {
+    it('should call debounceResize, checkInfiniteScroll and set visibleElement when wrapper has width and element is not visible', () => {
+      // Exercita o método REAL do componente de forma determinística, sem depender
+      // do offsetWidth calculado pelo layout do headless (que oscila e tornava a
+      // cobertura deste trecho intermitente).
+      component['tableWrapperElement'] = { nativeElement: { offsetWidth: 100 } } as any;
+      component['visibleElement'] = false;
+      spyOn(component, <any>'debounceResize');
+      spyOn(component, <any>'checkInfiniteScroll');
+
+      component['initializeVisibleElement']();
+
+      expect(component['debounceResize']).toHaveBeenCalled();
+      expect(component['checkInfiniteScroll']).toHaveBeenCalled();
+      expect(component['visibleElement']).toBeTrue();
+    });
+
+    it('should not do anything when wrapper width is 0', () => {
+      component['tableWrapperElement'] = { nativeElement: { offsetWidth: 0 } } as any;
+      component['visibleElement'] = false;
+      spyOn(component, <any>'debounceResize');
+      spyOn(component, <any>'checkInfiniteScroll');
+
+      component['initializeVisibleElement']();
+
+      expect(component['debounceResize']).not.toHaveBeenCalled();
+      expect(component['checkInfiniteScroll']).not.toHaveBeenCalled();
+      expect(component['visibleElement']).toBeFalse();
+    });
+  });
 });

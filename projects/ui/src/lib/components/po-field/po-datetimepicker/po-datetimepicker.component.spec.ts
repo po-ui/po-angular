@@ -18,8 +18,42 @@ describe('PoDatetimepickerComponent:', () => {
     component = fixture.componentInstance;
     nativeElement = fixture.nativeElement;
 
+    // Diversos testes atribuem um `objMask` mockado parcial (ex.: apenas
+    // `{ valueToModel }`), sem os métodos `blur`/`keyup`/`keydown`/`click`. Como o
+    // ambiente roda com `teardown: { destroyAfterEach: false }`, a instância
+    // permanece no DOM e o listener `(blur)` do template continua ativo; quando o
+    // foco sai do input (de forma assíncrona, por outros specs ou pelo teardown
+    // geral), `eventOnBlur` executa `this.objMask?.blur()` e lança
+    // `TypeError: this.objMask?.blur is not a function`.
+    //
+    // Sem alterar o componente, interceptamos as atribuições de `objMask` para
+    // garantir, de forma centralizada e à prova de timing, que os métodos usados
+    // pelos handlers existam como no-op quando o mock não os fornecer. Mocks que
+    // definem seus próprios métodos (ex.: spies) são preservados.
+    let objMaskValue: any;
+    Object.defineProperty(component, 'objMask', {
+      configurable: true,
+      get: () => objMaskValue,
+      set: (value: any) => {
+        if (value && typeof value === 'object') {
+          for (const method of ['blur', 'keyup', 'keydown', 'click'] as const) {
+            if (typeof value[method] !== 'function') {
+              value[method] = () => {};
+            }
+          }
+        }
+        objMaskValue = value;
+      }
+    });
+
     fixture.componentRef.setInput('p-locale', 'pt');
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    // Garante o ngOnDestroy -> removeListeners() e remove o elemento (com seus
+    // listeners) do DOM, evitando que listeners vazem entre os testes.
+    fixture?.destroy();
   });
 
   it('should create', () => {
@@ -1435,10 +1469,21 @@ describe('PoDatetimepickerComponent:', () => {
   describe('initializeListeners:', () => {
     it('should register click listener that calls wasClickedOnPicker', () => {
       spyOn(component, 'wasClickedOnPicker');
+
+      // Captura o callback registrado para 'click' no document ao invés de disparar
+      // um evento global em `document`, que acionaria listeners vazados de outras
+      // instâncias/testes e tornaria o teste intermitente.
+      let clickCallback: (event: MouseEvent) => void;
+      spyOn(component['renderer'], 'listen').and.callFake((target: any, eventName: string, callback: any) => {
+        if (target === 'document' && eventName === 'click') {
+          clickCallback = callback;
+        }
+        return () => {};
+      });
+
       component['initializeListeners']();
 
-      const event = new MouseEvent('click');
-      document.dispatchEvent(event);
+      clickCallback(new MouseEvent('click'));
 
       expect(component.wasClickedOnPicker).toHaveBeenCalled();
       component['removeListeners']();
