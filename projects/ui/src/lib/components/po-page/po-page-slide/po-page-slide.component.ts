@@ -13,16 +13,20 @@ import { PoPageSlideFooterComponent } from './po-page-slide-footer/po-page-slide
 
 export const poPageSlideLiteralsDefault = {
   en: <PoPageSlideLiterals>{
-    close: 'Close'
+    close: 'Close',
+    label: 'Panel'
   },
   es: <PoPageSlideLiterals>{
-    close: 'Cerrar'
+    close: 'Cerrar',
+    label: 'Panel'
   },
   pt: <PoPageSlideLiterals>{
-    close: 'Fechar'
+    close: 'Fechar',
+    label: 'Painel'
   },
   ru: <PoPageSlideLiterals>{
-    close: 'Закрывать'
+    close: 'Закрывать',
+    label: 'Панель'
   }
 };
 
@@ -79,6 +83,7 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private readonly loadingCompleted = new ReplaySubject<void>();
   private sourceElement: any;
   buttonAriaLabel: string;
+  defaultDialogLabel: string;
   duration: string = '70ms';
   timing: string = '700ms Cubic-Bezier(0.35, 0, 0.1, 1)';
 
@@ -101,12 +106,26 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     super();
     this.setTimeFromCSS();
     this.buttonAriaLabel = this.getTextDefault();
+    this.defaultDialogLabel = this.getLabelDefault();
+  }
+
+  get titleId(): string {
+    return `po-page-slide-title-${this.id}`;
   }
 
   public open(): void {
     this.sourceElement = document.activeElement;
     super.open();
     this.loadingCompleted.pipe(take(1)).pipe(delay(0)).subscribe(this.handleFocus.bind(this));
+  }
+
+  protected override hasAlternativeCloseAction(): boolean {
+    // No modo `full` não há overlay/click-out; um footer pode prover a ação de fechar.
+    if (this.size === 'full') {
+      return !!this.pageSlideFooter;
+    }
+
+    return super.hasAlternativeCloseAction();
   }
 
   public close(): void {
@@ -139,6 +158,12 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     const language = this.languageService.getShortLanguage();
 
     return poPageSlideLiteralsDefault[language].close;
+  }
+
+  private getLabelDefault(): string {
+    const language = this.languageService.getShortLanguage();
+
+    return poPageSlideLiteralsDefault[language].label;
   }
 
   private handleFocus(): void {

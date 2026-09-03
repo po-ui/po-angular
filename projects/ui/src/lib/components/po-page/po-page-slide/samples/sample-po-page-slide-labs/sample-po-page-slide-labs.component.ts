@@ -23,16 +23,23 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
     { label: 'medium', value: 'medium' }
   ];
 
-  public propertiesOptions: Array<PoCheckboxGroupOption> = [
-    {
-      value: 'click-out',
-      label: 'Click Out'
-    },
-    {
-      value: 'hide-close',
-      label: 'Hide Close'
-    }
-  ];
+  public get isFullSize(): boolean {
+    return this.size === 'full';
+  }
+
+  public get propertiesOptions(): Array<PoCheckboxGroupOption> {
+    return [
+      {
+        value: 'click-out',
+        label: 'Click Out',
+        disabled: this.isFullSize
+      },
+      {
+        value: 'hide-close',
+        label: 'Hide Close'
+      }
+    ];
+  }
 
   public sizeOptions: Array<PoRadioGroupOption> = [
     {
@@ -54,6 +61,10 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
     {
       label: 'Automatic',
       value: 'auto'
+    },
+    {
+      label: 'Full',
+      value: 'full'
     }
   ];
 
@@ -63,6 +74,16 @@ export class SamplePoPageSlideLabsComponent implements OnInit {
 
   public openPage() {
     this.poPageSlide.open();
+  }
+
+  public closePage() {
+    this.poPageSlide.close();
+  }
+
+  public onChangeSize() {
+    if (this.isFullSize && this.properties.includes('click-out')) {
+      this.properties = this.properties.filter(property => property !== 'click-out');
+    }
   }
 
   public restore() {
