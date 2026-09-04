@@ -111,5 +111,34 @@ describe('PoPageContentComponent:', () => {
       expect(expectedHeight).toBeGreaterThan(0);
       expect(component.height).toBe(`${expectedHeight}px`);
     }));
+
+    it('should fallback to 90% when calculated height is zero or negative with .po-page ancestor', fakeAsync(() => {
+      const poPage = document.createElement('div');
+      poPage.classList.add('po-page');
+      poPage.appendChild(fixture.nativeElement);
+      document.body.appendChild(poPage);
+
+      // Sem po-page-header, contentTop vem do topo do .po-page. Forçamos um top
+      // maior que a altura da janela para que newHeight <= 0 e caia no fallback,
+      // cobrindo o ramo '90%' do ternário no caminho com .po-page.
+      spyOn(poPage, 'getBoundingClientRect').and.returnValue({
+        top: window.innerHeight + 100,
+        bottom: window.innerHeight + 200,
+        left: 0,
+        right: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => {}
+      } as DOMRect);
+
+      component.recalculateHeaderSize();
+      tick(100);
+
+      expect(component.height).toBe('90%');
+
+      document.body.removeChild(poPage);
+    }));
   });
 });

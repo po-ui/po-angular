@@ -761,6 +761,31 @@ describe('PoMultiselectComponent:', () => {
       expect(fakeThis.visibleElement).toBeFalsy();
     });
 
+    it(`ngDoCheck: should call debounceResize via second condition when element is already visible
+      but isCalculateVisibleItems is true`, () => {
+      // Primeiro grupo falha em !visibleElement (visibleElement = true), forçando a
+      // avaliação do segundo grupo (inputWidth && isCalculateVisibleItems), que cobre
+      // o ramo do isCalculateVisibleItems.
+      const fakeThis = {
+        inputElement: {
+          nativeElement: {
+            offsetWidth: 10
+          }
+        },
+        visibleElement: true,
+        initialized: true,
+        isCalculateVisibleItems: true,
+        debounceResize: () => true
+      };
+
+      spyOn(fakeThis, 'debounceResize');
+
+      component.ngDoCheck.call(fakeThis);
+
+      expect(fakeThis.debounceResize).toHaveBeenCalled();
+      expect(fakeThis.visibleElement).toBeTruthy();
+    });
+
     it('ngOnDestroy: should call removeListeners and call unsubscribe from subscription', () => {
       const removeListenersSpy = spyOn(component, <any>'removeListeners');
       component['getObjectsByValuesSubscription'] = <any>{ unsubscribe: () => {} };
