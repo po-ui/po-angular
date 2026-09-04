@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng-components';
+import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoTreeViewItem } from 'projects/ui/src/public-api';
 
 @Component({
   selector: 'sample-po-tree-view-labs',
@@ -50,14 +50,12 @@ export class SamplePoTreeViewLabsComponent implements OnInit {
     } else {
       const treeViewItemNode = this.getTreeViewItemNode(this.items, this.parent);
 
-      if (!treeViewItemNode.subItems) {
-        treeViewItemNode.subItems = [];
-      }
+      treeViewItemNode.subItems ??= [];
 
       treeViewItemNode.subItems = [...treeViewItemNode.subItems, treeViewItemClone];
     }
 
-    this.items = [].concat(this.items);
+    this.items = this.items.flat();
     this.parentList = this.updateParentList(this.items);
   }
 

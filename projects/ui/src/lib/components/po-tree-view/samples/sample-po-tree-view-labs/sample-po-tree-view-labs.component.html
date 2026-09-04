@@ -45,7 +45,8 @@
     <po-select
       class="po-md-6 po-lg-4"
       name="parent"
-      [(ngModel)]="parent"
+      [ngModel]="parent"
+      (ngModelChange)="parent = $event"
       p-label="Parent Item"
       p-placeholder="Add tree view item"
       [p-options]="parentList"
@@ -63,8 +64,9 @@
     <po-checkbox-group
       class="po-md-12"
       name="itemProperties"
-      [(ngModel)]="itemProperties"
-      p-columns="4"
+      [ngModel]="itemProperties"
+      (ngModelChange)="itemProperties = $event"
+      [p-columns]="4"
       p-label="Item Properties"
       [p-options]="itemPropertiesOptions"
     >
@@ -75,7 +77,7 @@
     <po-button
       class="po-md-4 po-lg-2"
       p-label="Add"
-      [p-disabled]="treeViewItemForm.invalid"
+      [p-disabled]="!!treeViewItemForm.invalid"
       (p-click)="addItem(treeViewItemForm)"
     >
     </po-button>

@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-
 import { PoStepperComponent, PoTableColumn, PoTreeViewItem } from '@po-ui/ng-components';
 
 @Component({
@@ -75,10 +74,8 @@ export class SamplePoTreeViewSupermarketComponent {
           this.itemsListSelected.push({ item: itemSelected.label });
         }
       });
-    } else {
-      if (!this.itemsListSelected.some(item => item.item === seletectedItem.label)) {
-        this.itemsListSelected.push({ item: seletectedItem.label });
-      }
+    } else if (!this.itemsListSelected.some(item => item.item === seletectedItem.label)) {
+      this.itemsListSelected.push({ item: seletectedItem.label });
     }
   }
 
@@ -93,10 +90,8 @@ export class SamplePoTreeViewSupermarketComponent {
 
   removeItem(unseletectedItem) {
     if (unseletectedItem.subItems) {
-      const removedValues = unseletectedItem.subItems.map(item => item.label);
-      this.itemsListSelected = this.itemsListSelected.filter(
-        itemSelected => !removedValues.includes(itemSelected.item)
-      );
+      const removedValues = new Set(unseletectedItem.subItems.map(item => item.label));
+      this.itemsListSelected = this.itemsListSelected.filter(itemSelected => !removedValues.has(itemSelected.item));
     } else {
       this.itemsListSelected = this.itemsListSelected.filter(
         itemSelected => unseletectedItem.label !== itemSelected.item
