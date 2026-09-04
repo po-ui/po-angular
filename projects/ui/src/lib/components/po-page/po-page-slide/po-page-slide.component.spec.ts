@@ -1,8 +1,7 @@
-import { Component, DebugElement, ElementRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoActiveOverlayService } from '../../../services/po-active-overlay';
 import { PoFieldModule } from '../../po-field';
@@ -17,6 +16,7 @@ import { PoPageSlideComponent } from './po-page-slide.component';
       </form>
     </po-page-slide>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestComponent {
@@ -39,7 +39,7 @@ describe('PoPageSlideComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, NoopAnimationsModule, PoFieldModule],
+      imports: [FormsModule, PoFieldModule],
       declarations: [PoPageSlideComponent, TestComponent],
       providers: [PoActiveOverlayService]
     }).compileComponents();
@@ -260,5 +260,143 @@ describe('PoPageSlideComponent', () => {
     };
 
     expect(component['getTextDefault'].call(fakeThis)).toBe('Fechar');
+  });
+
+  describe('Animation methods:', () => {
+    it('animateEnter: should animate overlay opacity and container translateX', () => {
+      const rootElement = document.createElement('div');
+      const container = document.createElement('div');
+      container.classList.add('po-page-slide-container');
+      rootElement.appendChild(container);
+
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const rootAnimateSpy = spyOn(rootElement, 'animate').and.returnValue({} as any);
+      const containerAnimation: any = {};
+      const containerAnimateSpy = spyOn(container, 'animate').and.returnValue(containerAnimation);
+
+      component.animateEnter({ target: rootElement, animationComplete });
+
+      expect(rootAnimateSpy).toHaveBeenCalledWith(
+        [{ opacity: 0 }, { opacity: 1 }],
+        jasmine.objectContaining({ easing: 'linear', fill: 'forwards' })
+      );
+      expect(containerAnimateSpy).toHaveBeenCalledWith(
+        [{ transform: 'translateX(50px)' }, { transform: 'none' }],
+        jasmine.objectContaining({ fill: 'forwards' })
+      );
+
+      containerAnimation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateLeave: should animate overlay opacity to 0 and container translateX out', () => {
+      const rootElement = document.createElement('div');
+      const container = document.createElement('div');
+      container.classList.add('po-page-slide-container');
+      rootElement.appendChild(container);
+
+      const animationComplete = jasmine.createSpy('animationComplete');
+      spyOn(rootElement, 'animate').and.returnValue({} as any);
+      const containerAnimation: any = {};
+      spyOn(container, 'animate').and.returnValue(containerAnimation);
+
+      component.animateLeave({ target: rootElement, animationComplete });
+
+      containerAnimation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateEnter: should call animationComplete immediately if container not found', () => {
+      const rootElement = document.createElement('div');
+      const animationComplete = jasmine.createSpy('animationComplete');
+      spyOn(rootElement, 'animate').and.returnValue({} as any);
+
+      component.animateEnter({ target: rootElement, animationComplete });
+
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateEnter: should use fallback duration 70 when parseDuration returns 0', () => {
+      const rootElement = document.createElement('div');
+      const container = document.createElement('div');
+      container.classList.add('po-page-slide-container');
+      rootElement.appendChild(container);
+
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const containerAnimation: any = {};
+      const rootAnimateSpy = spyOn(rootElement, 'animate').and.returnValue({} as any);
+      spyOn(container, 'animate').and.returnValue(containerAnimation);
+
+      // parseDuration retorna 0 para string '0ms', ativando o fallback || 70
+      component.duration = '0ms';
+      component.animateEnter({ target: rootElement, animationComplete });
+
+      expect(rootAnimateSpy).toHaveBeenCalledWith([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 70,
+        easing: 'linear',
+        fill: 'forwards'
+      });
+    });
+
+    it('parseDuration: should parse ms value', () => {
+      expect(component['parseDuration']('200ms')).toBe(200);
+    });
+
+    it('parseDuration: should parse s value', () => {
+      expect(component['parseDuration']('1.5s')).toBe(1500);
+    });
+
+    it('parseDuration: should return default for invalid value', () => {
+      expect(component['parseDuration']('')).toBe(70);
+      expect(component['parseDuration']('invalid')).toBe(70);
+    });
+
+    it('parseTiming: should parse duration and easing', () => {
+      const result = component['parseTiming']('700ms cubic-bezier(0.35, 0, 0.1, 1)');
+      expect(result.duration).toBe(700);
+      expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
+    });
+
+    it('parseTiming: should return default for empty value', () => {
+      const result = component['parseTiming']('');
+      expect(result.duration).toBe(700);
+      expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
+    });
+
+    it('parseTiming: should parse seconds value', () => {
+      const result = component['parseTiming']('1.5s ease-out');
+      expect(result.duration).toBe(1500);
+      expect(result.easing).toBe('ease-out');
+    });
+
+    it('parseTiming: should return default for invalid value', () => {
+      const result = component['parseTiming']('invalid');
+      expect(result.duration).toBe(700);
+      expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
+    });
+
+    it('parseDuration: should return default for null value', () => {
+      expect(component['parseDuration'](null)).toBe(70);
+    });
+
+    it('parseTiming: should return default for null value', () => {
+      const result = component['parseTiming'](null);
+      expect(result.duration).toBe(700);
+      expect(result.easing).toBe('cubic-bezier(0.35, 0, 0.1, 1)');
+    });
+
+    it('animateLeave: should use setTimeout when container is not found', fakeAsync(() => {
+      const rootElement = document.createElement('div');
+      const animationComplete = jasmine.createSpy('animationComplete');
+      spyOn(rootElement, 'animate').and.returnValue({} as any);
+
+      component.animateLeave({ target: rootElement, animationComplete });
+
+      expect(animationComplete).not.toHaveBeenCalled();
+
+      tick(150);
+
+      expect(animationComplete).toHaveBeenCalled();
+    }));
   });
 });

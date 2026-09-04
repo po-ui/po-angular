@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -11,6 +11,7 @@ import {
 @Component({
   selector: 'sample-po-modal-labs',
   templateUrl: './sample-po-modal-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoModalLabsComponent implements OnInit {

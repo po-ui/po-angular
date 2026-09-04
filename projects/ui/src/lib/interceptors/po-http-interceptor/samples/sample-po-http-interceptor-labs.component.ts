@@ -1,6 +1,6 @@
 // import { PoRadioGroupOption } from './../../../../../../../dist/ng-components/lib/components/po-field/po-radio-group/po-radio-group-option.interface.d';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoRadioGroupOption } from '@po-ui/ng-components';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'sample-po-http-interceptor-labs',
   templateUrl: './sample-po-http-interceptor-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoHttpInterceptorLabsComponent implements OnDestroy, OnInit {

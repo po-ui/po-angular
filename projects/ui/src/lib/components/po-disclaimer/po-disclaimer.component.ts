@@ -19,6 +19,7 @@ import { PoDisclaimerBaseComponent } from './po-disclaimer-base.component';
 @Component({
   selector: 'po-disclaimer',
   templateUrl: './po-disclaimer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDisclaimerComponent extends PoDisclaimerBaseComponent {

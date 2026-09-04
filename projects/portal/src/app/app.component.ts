@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoMenuItem, PoNavbarIconAction, PoNavbarItem, PoThemeA11yEnum } from '@po-ui/ng-components';
 
-import { PoDensityMode } from 'projects/ui/src/lib/enums/po-density-mode.enum';
+import { PoDensityMode } from '../../../ui/src/lib/enums/po-density-mode.enum';
 import { firstValueFrom } from 'rxjs';
 import { PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
 import { poThemeConstant } from './shared/po-theme.constant';
@@ -12,6 +12,7 @@ import { VersionService } from './shared/version.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {

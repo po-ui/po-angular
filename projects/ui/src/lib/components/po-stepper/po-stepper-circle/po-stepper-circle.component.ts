@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoStepperStatus } from '../enums/po-stepper-status.enum';
 
@@ -15,6 +15,7 @@ const poLargeStepSize = 48;
 @Component({
   selector: 'po-stepper-circle',
   templateUrl: './po-stepper-circle.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoStepperCircleComponent {

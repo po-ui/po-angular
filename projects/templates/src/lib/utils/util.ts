@@ -1,4 +1,4 @@
-import { poLocaleDefault, poLocales, PoThemeA11yEnum, PoThemeService } from '@po-ui/ng-components';
+import { poLocaleDefault, poLocales, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { PoPageComponentsSize } from '../components/enums/po-page-components-size.enum';
 
 /**
@@ -141,15 +141,6 @@ export function formatYear(year: number) {
   if (year >= 0 && year < 10) {
     return `000${year}`;
   }
-}
-
-/**
- * @deprecated use getDefaultSizeFn
- *
- * Retorna o tamanho padrão dos componentes conforme o nível de acessibilidade.
- */
-export function getDefaultSize(poThemeService: PoThemeService): string {
-  return poThemeService.getA11yDefaultSize() === 'small' ? PoPageComponentsSize.Small : PoPageComponentsSize.Medium;
 }
 
 /**
@@ -483,21 +474,6 @@ export function sortArrayOfObjects(items, key, isAscendingOrder) {
       return isAscendingOrder ? compareResult : -compareResult;
     }
   });
-}
-
-/**
- * @deprecated use validateSizeFn
- *
- * Valida e retorna um tamanho permitido para os componentes, considerando a acessibilidade.
- */
-export function validateSize(value: string, poThemeService: PoThemeService): string {
-  if (value && Object.values(PoPageComponentsSize).includes(value as PoPageComponentsSize)) {
-    if (value === PoPageComponentsSize.Small && poThemeService.getA11yLevel() !== 'AA') {
-      return PoPageComponentsSize.Medium;
-    }
-    return value;
-  }
-  return getDefaultSize(poThemeService);
 }
 
 /**

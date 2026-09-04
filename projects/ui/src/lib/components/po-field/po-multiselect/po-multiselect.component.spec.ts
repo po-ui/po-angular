@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { HttpClient, HttpHandler, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, HttpHandler, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
@@ -65,7 +65,7 @@ describe('PoMultiselectComponent:', () => {
         Renderer2,
         PoMultiselectFilterService,
         PoControlPositionService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();
@@ -759,6 +759,31 @@ describe('PoMultiselectComponent:', () => {
 
       expect(fakeThis.debounceResize).not.toHaveBeenCalled();
       expect(fakeThis.visibleElement).toBeFalsy();
+    });
+
+    it(`ngDoCheck: should call debounceResize via second condition when element is already visible
+      but isCalculateVisibleItems is true`, () => {
+      // Primeiro grupo falha em !visibleElement (visibleElement = true), forçando a
+      // avaliação do segundo grupo (inputWidth && isCalculateVisibleItems), que cobre
+      // o ramo do isCalculateVisibleItems.
+      const fakeThis = {
+        inputElement: {
+          nativeElement: {
+            offsetWidth: 10
+          }
+        },
+        visibleElement: true,
+        initialized: true,
+        isCalculateVisibleItems: true,
+        debounceResize: () => true
+      };
+
+      spyOn(fakeThis, 'debounceResize');
+
+      component.ngDoCheck.call(fakeThis);
+
+      expect(fakeThis.debounceResize).toHaveBeenCalled();
+      expect(fakeThis.visibleElement).toBeTruthy();
     });
 
     it('ngOnDestroy: should call removeListeners and call unsubscribe from subscription', () => {

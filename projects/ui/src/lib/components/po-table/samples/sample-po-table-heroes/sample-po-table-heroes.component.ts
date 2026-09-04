@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
 
 import { SamplePoTableHeroesService } from './sample-po-table-heroes.service';
@@ -7,6 +7,7 @@ import { SamplePoTableHeroesService } from './sample-po-table-heroes.service';
   selector: 'sample-po-table-heroes',
   templateUrl: './sample-po-table-heroes.component.html',
   providers: [SamplePoTableHeroesService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTableHeroesComponent implements OnInit {

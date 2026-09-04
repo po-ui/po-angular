@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { PoDynamicViewService } from './po-dynamic-view.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoDynamicViewService:', () => {
   let httpMock: HttpTestingController;
@@ -11,7 +11,11 @@ describe('PoDynamicViewService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoDynamicViewService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoDynamicViewService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     poDynamicViewService = TestBed.inject(PoDynamicViewService);

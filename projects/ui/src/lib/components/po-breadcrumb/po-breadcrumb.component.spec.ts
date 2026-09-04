@@ -1,23 +1,25 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { provideLocationMocks } from '@angular/common/testing';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Routes, RouterModule } from '@angular/router';
 
 import { PoBreadcrumbComponent } from './po-breadcrumb.component';
 import { PoBreadcrumbFavoriteComponent } from './po-breadcrumb-favorite/po-breadcrumb-favorite.component';
 import { PoBreadcrumbItem } from './po-breadcrumb-item.interface';
 
 @Component({
-  selector: 'app-breadcrumb-documentation',
+  selector: 'app-documentation-test',
   template: 'Documentation',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class DocumentationComponent {}
 
 @Component({
-  selector: 'app-breadcrumb-guides',
+  selector: 'app-guides-test',
   template: 'Guides',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GuidesComponent {}
@@ -51,9 +53,9 @@ describe('PoBreadcrumbComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
+      imports: [RouterModule.forRoot(routes)],
       declarations: [PoBreadcrumbComponent, PoBreadcrumbFavoriteComponent, DocumentationComponent, GuidesComponent],
-      providers: [HttpClient, HttpHandler]
+      providers: [provideLocationMocks(), HttpClient, HttpHandler]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoBreadcrumbComponent);
@@ -63,6 +65,19 @@ describe('PoBreadcrumbComponent:', () => {
     nativeElement = fixture.debugElement.nativeElement;
 
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    // O ambiente roda com `teardown: { destroyAfterEach: false }`, então o
+    // `ngOnDestroy` não é chamado automaticamente entre os testes. Sem isso, o
+    // listener de `window:resize` registrado em `ngAfterViewInit` (via
+    // `initializeResizeListener`) permanece vivo apontando para uma instância
+    // órfã. Ao acumularem-se entre os testes, qualquer `window.dispatchEvent('resize')`
+    // de outros specs dispara esses callbacks órfãos (agendando setTimeout que
+    // acessa `breadcrumbElement` de componentes já descartados), corrompendo a
+    // execução e a medição de cobertura da suíte completa.
+    // Destruir o fixture aqui remove o listener e limpa o timer pendente.
+    fixture?.destroy();
   });
 
   it('should be created', () => {
@@ -236,8 +251,21 @@ describe('PoBreadcrumbComponent:', () => {
 
       it('should called when window resize.', () => {
         spyOn(component, <any>'debounceResize');
+
+        // Captura o callback registrado para 'resize' e o invoca diretamente, em vez
+        // de disparar um evento global em `window` (que dependeria de listeners de
+        // outras instâncias). O `removeResizeListener` ao final evita vazamento.
+        let resizeCallback: (event: Event) => void;
+        spyOn(component['renderer'], 'listen').and.callFake((target: any, eventName: string, callback: any) => {
+          if (target === 'window' && eventName === 'resize') {
+            resizeCallback = callback;
+          }
+          return () => {};
+        });
+
         component['initializeResizeListener']();
-        window.dispatchEvent(eventResize);
+        resizeCallback(eventResize);
+        component['removeResizeListener']();
 
         expect(component[debounceResize]).toHaveBeenCalled();
       });
@@ -440,7 +468,7 @@ describe('PoBreadcrumbComponent:', () => {
         { label: 'Teste nível 4', link: '/test/nivel/4' }
       ];
 
-      component['_breadcrumbItemsLenght'] = 400;
+      component['_breadcrumbItemsLenght'] = 500;
       spyOn(component, <any>'getBreadcrumbWidth').and.returnValue(300);
 
       component['calcBreadcrumb']();

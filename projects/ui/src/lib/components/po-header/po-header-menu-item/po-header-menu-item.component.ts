@@ -10,7 +10,8 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
@@ -37,6 +38,7 @@ export const poHeaderMoreLiteralsDefault = {
 @Component({
   selector: 'po-header-menu-item',
   templateUrl: './po-header-menu-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHeaderMenuItemComponent implements OnChanges, OnInit, OnDestroy {
