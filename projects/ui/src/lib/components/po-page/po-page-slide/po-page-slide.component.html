@@ -1,8 +1,13 @@
 @if (!hidden) {
   <div class="po-page-slide" tabindex="0" (keydown.esc)="close()" [@fade]="fadeParams">
-    <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)"></div>
+    @if (size !== 'full') {
+      <div class="po-page-slide-overlay" (mousedown)="onClickOut($event)"></div>
+    }
     <div
       class="po-page-slide-container po-page-slide-right po-page-slide-{{ size }}"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="title"
       [@slide]="slideParams"
       [ngStyle]="{ 'width': flexibleWidth ? '' : size === 'auto' ? 'auto' : '' }"
     >
