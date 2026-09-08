@@ -397,6 +397,25 @@ describe('PoLookupModalComponent', () => {
       expect(spyComponentRefDestroy).toHaveBeenCalled();
     });
 
+    it('primaryActionAdvancedFilter should set isAdvancedFilterApplied to true', () => {
+      spyOn(component, <any>'createDisclaimer');
+      spyOn(component.componentRef, <any>'destroy');
+      component.isAdvancedFilterApplied = false;
+
+      component.primaryActionAdvancedFilter.action();
+
+      expect(component.isAdvancedFilterApplied).toBe(true);
+    });
+
+    it('secondaryActionAdvancedFilter should not change isAdvancedFilterApplied', () => {
+      spyOn(component.componentRef, <any>'destroy');
+      component.isAdvancedFilterApplied = false;
+
+      component.secondaryActionAdvancedFilter.action();
+
+      expect(component.isAdvancedFilterApplied).toBe(false);
+    });
+
     it('should not destroy dynamicForm if its null', () => {
       const spyDestroyDynamicForm = spyOn(component.componentRef, <any>'destroy');
       component.componentRef = null;
@@ -415,6 +434,96 @@ describe('PoLookupModalComponent', () => {
       component.sortBy(expectedValue);
 
       expect(component['sort']).toEqual(expectedValue);
+    });
+
+    it('getInitialValuesFromFilter: should return an object with the initValue of each filter', () => {
+      const filters = [
+        { property: 'name', initValue: 'John' },
+        { property: 'active', initValue: false },
+        { property: 'age', initValue: 0 }
+      ];
+
+      expect(component['getInitialValuesFromFilter'](filters)).toEqual({ name: 'John', active: false, age: 0 });
+    });
+
+    it('getInitialValuesFromFilter: should ignore filters without initValue', () => {
+      const filters = [{ property: 'name', initValue: 'John' }, { property: 'email' }];
+
+      expect(component['getInitialValuesFromFilter'](filters)).toEqual({ name: 'John' });
+    });
+
+    it('getInitialValuesFromFilter: should return an empty object if no filter contains initValue', () => {
+      const filters = [{ property: 'name' }, { property: 'email' }];
+
+      expect(component['getInitialValuesFromFilter'](filters)).toEqual({});
+    });
+
+    it('getInitialValuesFromFilter: should return an empty object if advancedFilters is undefined', () => {
+      expect(component['getInitialValuesFromFilter'](undefined)).toEqual({});
+    });
+
+    it('getInitialValuesFromFilter: should return an empty object if advancedFilters is null', () => {
+      expect(component['getInitialValuesFromFilter'](null)).toEqual({});
+    });
+
+    it('setupModalAdvancedFilter: should set dynamicFormValue with the initValue of the filters', () => {
+      component.advancedFilters = [{ property: 'name', initValue: 'John' }, { property: 'email' }];
+
+      component['setupModalAdvancedFilter']();
+
+      expect(component.dynamicFormValue).toEqual({ name: 'John' });
+      expect(component.isAdvancedFilter).toBe(true);
+    });
+
+    it(`setupModalAdvancedFilter: should set dynamicFormValue with the applied disclaimers instead of the initValue
+      if isAdvancedFilterApplied is true`, () => {
+      component.advancedFilters = [{ property: 'active', initValue: true }, { property: 'name' }];
+      component.isAdvancedFilterApplied = true;
+      component.disclaimerGroup = {
+        title: 'Filters',
+        disclaimers: [
+          { property: 'active', value: false, label: 'Ativo: Não' },
+          { property: 'name', value: 'John', label: 'Name: John' }
+        ]
+      };
+
+      component['setupModalAdvancedFilter']();
+
+      expect(component.dynamicFormValue).toEqual({ active: false, name: 'John' });
+      expect(component.isAdvancedFilter).toBe(true);
+    });
+
+    it(`setupModalAdvancedFilter: should set dynamicFormValue with an empty object if isAdvancedFilterApplied is true
+      and there are no disclaimers`, () => {
+      component.advancedFilters = [{ property: 'active', initValue: true }];
+      component.isAdvancedFilterApplied = true;
+      component.disclaimerGroup = { title: 'Filters', disclaimers: [] };
+
+      component['setupModalAdvancedFilter']();
+
+      expect(component.dynamicFormValue).toEqual({});
+    });
+
+    it('getValuesFromDisclaimers: should return an object with the value of each disclaimer', () => {
+      const disclaimers = [
+        { property: 'name', value: 'John', label: 'Name: John' },
+        { property: 'active', value: false, label: 'Ativo: Não' },
+        { property: 'company', value: [1, 2], label: 'Company: Totvs, PO UI' }
+      ];
+
+      expect(component['getValuesFromDisclaimers'](disclaimers)).toEqual({
+        name: 'John',
+        active: false,
+        company: [1, 2]
+      });
+    });
+
+    it('getValuesFromDisclaimers: should return an empty object if disclaimers is undefined', () => {
+      expect(component['getValuesFromDisclaimers'](undefined)).toEqual({});
+    });
+
+    it('getValuesFromDisclaimers: should return an empty object if disclaimers is null', () => {
+      expect(component['getValuesFromDisclaimers'](null)).toEqual({});
     });
 
     it('onSelect: should concat table item in selecteds', () => {
