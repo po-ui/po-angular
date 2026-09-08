@@ -1,0 +1,32 @@
+<div class="po-row">
+  <po-info
+    class="po-lg-12"
+    p-label="Advanced filter with initial value"
+    p-value="Click on the magnifying glass, then on 'Advanced search': the Hero field is already filled with 'Hulk'. Just apply the filter to get the result."
+  >
+  </po-info>
+</div>
+
+<po-divider />
+
+<div class="po-row">
+  <po-lookup
+    class="po-md-6"
+    name="hero"
+    [(ngModel)]="hero"
+    p-field-label="name"
+    p-field-value="nickname"
+    p-help="Select a hero"
+    p-label="Hero"
+    p-clean
+    [p-columns]="columns"
+    [p-filter-service]="service"
+    [p-advanced-filters]="advancedFilters"
+    [p-literals]="{ 'modalTitle': 'Select a hero' }"
+  >
+  </po-lookup>
+</div>
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Selected value" [p-value]="hero || '-'"> </po-info>
+</div>

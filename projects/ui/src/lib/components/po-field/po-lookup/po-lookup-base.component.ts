@@ -326,6 +326,20 @@ export abstract class PoLookupBaseComponent
    * url + ?page=1&pageSize=20&name=Tony%20Stark,Peter%20Parker,Gohan
    * ```
    *
+   * Também é possível definir um valor inicial para os campos da busca avançada através da propriedade `initValue`,
+   * que será atribuído ao campo na primeira abertura da janela de busca avançada. Após o usuário aplicar o filtro,
+   * os campos são preenchidos com os valores filtrados:
+   *
+   * ```
+   * advancedFilters: Array<PoLookupAdvancedFilter> = [
+   *   { property: 'nickname', label: 'Apelido' },
+   *   { property: 'active', label: 'Ativo', initValue: false, options: [
+   *     { label: 'Sim', value: true },
+   *     { label: 'Não', value: false }
+   *   ]}
+   * ];
+   * ```
+   *
    */
   @Input('p-advanced-filters') advancedFilters: Array<PoLookupAdvancedFilter>;
 

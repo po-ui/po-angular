@@ -35,6 +35,7 @@ export * from './po-search-ai/interfaces/po-search-ai-column.interface';
 export * from './po-search-ai/interfaces/po-search-ai.interface';
 export * from './po-search-ai/interfaces/po-search-ai-literals.interface';
 export * from './po-login/po-login.component';
+export * from './po-lookup/interfaces/po-lookup-advanced-filter.interface';
 export * from './po-lookup/interfaces/po-lookup-column.interface';
 export * from './po-lookup/interfaces/po-lookup-filter.interface';
 export * from './po-lookup/interfaces/po-lookup-filtered-items-params.interface';
