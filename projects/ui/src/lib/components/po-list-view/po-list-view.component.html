@@ -30,113 +30,167 @@
     }
 
     @for (item of items; track trackBy($index); let index = $index) {
-      @let visibleActionsForItem = getVisibleActions(item);
-
-      <po-container [p-no-padding]="true">
-        <div class="po-list-view-container">
-          <div class="po-list-view-header">
-            <div class="po-list-view-title" [ngSwitch]="checkTitleType(item)">
-              @if (select) {
-                <div class="po-list-view-select">
-                  <po-checkbox
-                    [(ngModel)]="item.$selected"
-                    name="checkbox"
-                    [p-size]="componentsSize"
-                    (p-change)="selectListItem(item)"
-                    (click)="selectListItem(item)"
-                  ></po-checkbox>
-                </div>
+      <div
+        class="po-list-view-item-wrapper"
+        [class.po-list-view-highlighted]="getItemHighlighted(item)"
+        [class.po-list-view-selected]="item.$selected"
+        [class.po-list-view-clickable]="isItemClickable(item)"
+        [attr.tabindex]="isItemClickable(item) ? 0 : null"
+        [attr.role]="isItemClickable(item) ? 'button' : null"
+        (click)="onItemClick(item, $event)"
+        (keydown)="onItemKeyDown(item, $event)"
+      >
+        <div class="po-list-view-item-row">
+          @if (select) {
+            <div class="po-list-view-select">
+              @if (isSingleSelection) {
+                <po-radio
+                  name="po-list-view-selection"
+                  [p-checked]="item.$selected"
+                  [p-size]="componentsSize"
+                  (p-change)="selectListItem(item)"
+                ></po-radio>
+              } @else {
+                <po-checkbox
+                  [(ngModel)]="item.$selected"
+                  name="checkbox"
+                  [p-size]="componentsSize"
+                  (p-change)="selectListItem(item)"
+                  (click)="selectListItem(item)"
+                ></po-checkbox>
               }
-
-              <a
-                *ngSwitchCase="'externalLink'"
-                class="po-list-view-title-link"
-                target="_blank"
-                [href]="item[propertyLink]"
-                (click)="runTitleAction(item)"
-              >
-                {{ getItemTitle(item) }}
-              </a>
-              <a
-                *ngSwitchCase="'internalLink'"
-                class="po-list-view-title-link"
-                [routerLink]="item[propertyLink]"
-                (click)="runTitleAction(item)"
-              >
-                {{ getItemTitle(item) }}
-              </a>
-              <span
-                *ngSwitchCase="'noLink'"
-                class="po-list-view-title-no-link"
-                [class.po-list-view-title-link]="titleHasAction"
-                (click)="titleHasAction && runTitleAction(item)"
-              >
-                {{ getItemTitle(item) }}
-              </span>
-            </div>
-
-            @if (visibleActionsForItem.length > 0 && visibleActionsForItem.length <= 2) {
-              <div class="po-list-view-actions">
-                @for (action of visibleActionsForItem; track action) {
-                  <po-button
-                    [p-disabled]="returnBooleanValue(action, item, 'disabled')"
-                    [p-icon]="action.icon"
-                    [p-label]="action.label"
-                    [p-danger]="action.type === 'danger'"
-                    [p-size]="componentsSize"
-                    (p-click)="onClickAction(action, item)"
-                  >
-                  </po-button>
-                }
-              </div>
-            }
-
-            @if (visibleActionsForItem.length > 2) {
-              <div class="po-list-view-more-actions">
-                <div #popupTarget class="po-list-view-more-icon po-clickable" (click)="togglePopup(item, popupTarget)">
-                  <po-icon p-icon="ICON_MORE"></po-icon>
-                </div>
-              </div>
-            }
-          </div>
-
-          @if (hasContentTemplate) {
-            <div class="po-list-view-content">
-              <ng-template
-                [ngTemplateOutlet]="listViewContentTemplate.templateRef"
-                [ngTemplateOutletContext]="{ $implicit: item, index: index }"
-              >
-              </ng-template>
             </div>
           }
 
-          @if (hasDetailTemplate && item.$showDetail) {
+          @if (getAvatarType(item) === 'icon') {
+            @let avatarIcon = getAvatarData(item);
             <div
-              @showHideDetail
-              (@showHideDetail.start)="item.$showDetail ? onAnimationEvent($event, item) : 'undefined'"
-              class="po-list-view-detail"
+              class="po-list-view-avatar-icon"
+              [style.background-color]="avatarIcon?.backgroundColor || '#f0f0f0'"
+              [style.color]="avatarIcon?.color || '#333'"
             >
-              <ng-template
-                [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
-                [ngTemplateOutletContext]="{ $implicit: item, index: index }"
-              >
-              </ng-template>
+              <po-icon [p-icon]="avatarIcon?.icon"></po-icon>
             </div>
+          }
+
+          @if (getAvatarType(item) === 'progress') {
+            @let avatarProgress = getAvatarData(item);
+            <div
+              class="po-list-view-avatar-progress"
+              [class.po-progress-circle-medium]="avatarProgress?.size === 'medium'"
+              [class.po-progress-circle-large]="avatarProgress?.size !== 'medium'"
+              [class.po-progress-success]="avatarProgress?.status === 'success'"
+              [class.po-progress-error]="avatarProgress?.status === 'error'"
+            >
+              <po-progress-circle
+                [p-value]="avatarProgress?.progress ?? 0"
+                [p-indeterminate]="avatarProgress?.indeterminate ?? false"
+                [p-show-percentage]="avatarProgress?.showPercentage ?? false"
+                [p-status]="avatarProgress?.status ?? 'default'"
+                [p-size]="avatarProgress?.size ?? 'large'"
+                [p-radius]="avatarProgress?.radius ?? 20"
+                [p-aria-label]="avatarProgress?.ariaLabel ?? ''"
+              ></po-progress-circle>
+            </div>
+          }
+
+          @if (isItemClickable(item)) {
+            <po-widget
+              [p-title]="getItemTitle(item)"
+              [p-tag]="getItemTag(item)"
+              [p-tag-type]="getItemTagType(item)"
+              [p-tag-position]="tagPosition()"
+              [p-avatar]="getItemAvatar(item)"
+              [p-no-shadow]="true"
+              [p-size]="componentsSize"
+              [p-actions]="getWidgetActions(item)"
+            >
+              @if (getItemSubtitle(item)) {
+                <div class="po-list-view-subtitle">{{ getItemSubtitle(item) }}</div>
+              }
+
+              @if (hasContentTemplate) {
+                <ng-template
+                  [ngTemplateOutlet]="listViewContentTemplate.templateRef"
+                  [ngTemplateOutletContext]="{ $implicit: item, index: index }"
+                >
+                </ng-template>
+              }
+            </po-widget>
+          } @else {
+            <po-widget
+              [p-title]="getItemTitle(item)"
+              [p-tag]="getItemTag(item)"
+              [p-tag-type]="getItemTagType(item)"
+              [p-tag-position]="tagPosition()"
+              [p-avatar]="getItemAvatar(item)"
+              [p-no-shadow]="true"
+              [p-size]="componentsSize"
+              [p-actions]="getWidgetActions(item)"
+              (p-title-action)="runTitleAction(item)"
+            >
+              @if (getItemSubtitle(item)) {
+                <div class="po-list-view-subtitle">{{ getItemSubtitle(item) }}</div>
+              }
+
+              @if (hasContentTemplate) {
+                <ng-template
+                  [ngTemplateOutlet]="listViewContentTemplate.templateRef"
+                  [ngTemplateOutletContext]="{ $implicit: item, index: index }"
+                >
+                </ng-template>
+              }
+            </po-widget>
+          }
+
+          @if (getItemActionType(item) === 'advanced') {
+            <po-button
+              class="po-list-view-action-advanced"
+              p-kind="tertiary"
+              p-icon="ICON_ARROW_RIGHT"
+              [p-size]="componentsSize"
+              (p-click)="isItemClickable(item) ? null : onAdvancedArrowClick(item)"
+            >
+            </po-button>
           }
         </div>
 
-        @if (hasDetailTemplate) {
-          <div class="po-list-view-detail-button">
-            <po-button
-              p-kind="tertiary"
-              [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
-              [p-size]="componentsSize"
-              (p-click)="item.$showDetail = !item.$showDetail"
+        @if (hasDetailTemplate && !isDetailModal && item?.$showDetail) {
+          <div
+            [@showHideDetail]
+            (@showHideDetail.start)="item?.$showDetail ? onAnimationEvent($event, item) : undefined"
+            class="po-list-view-detail"
+          >
+            <ng-template
+              [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
+              [ngTemplateOutletContext]="{ $implicit: item, index: index }"
             >
-            </po-button>
+            </ng-template>
           </div>
         }
-      </po-container>
+
+        @if (hasDetailTemplate) {
+          <div class="po-list-view-detail-button">
+            @if (isDetailModal) {
+              <po-button
+                p-kind="tertiary"
+                [p-label]="literals.detailModalTitle"
+                [p-size]="componentsSize"
+                (p-click)="openDetailModal(item, index)"
+              >
+              </po-button>
+            } @else {
+              <po-button
+                p-kind="tertiary"
+                [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
+                [p-size]="componentsSize"
+                (p-click)="item.$showDetail = !item.$showDetail"
+              >
+              </po-button>
+            }
+          </div>
+        }
+      </div>
     }
   </div>
 </div>
@@ -154,3 +208,18 @@
 }
 
 <po-popup #popup [p-actions]="popupActions" [p-size]="componentsSize" [p-target]="popupTarget"> </po-popup>
+
+<po-modal
+  #detailModal
+  [p-title]="literals?.detailModalTitle || ''"
+  [p-components-size]="componentsSize"
+  (p-close)="onCloseDetailModal()"
+>
+  @if (detailModalItem && hasDetailTemplate) {
+    <ng-template
+      [ngTemplateOutlet]="listViewDetailTemplate.templateRef"
+      [ngTemplateOutletContext]="{ $implicit: detailModalItem, index: detailModalIndex }"
+    >
+    </ng-template>
+  }
+</po-modal>

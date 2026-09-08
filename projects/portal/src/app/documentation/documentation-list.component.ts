@@ -21,8 +21,8 @@ export class DocumentationListComponent implements OnInit {
   private _items: Array<Documentation> = [];
 
   private _listActions: Array<PoListViewAction> = [
-    { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'ICON_DOCUMENT_DOUBLE' },
-    { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'ICON_LIGHT' }
+    { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'ICON_LIGHT' },
+    { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'ICON_DOCUMENT_DOUBLE' }
   ];
 
   constructor(
@@ -32,8 +32,13 @@ export class DocumentationListComponent implements OnInit {
 
   ngOnInit() {
     this.docService.findDocs('api').subscribe(docs => {
-      this._items = this.sortDocs(docs);
-      this._items.forEach(item => (item.title = item.title.replace('Po ', '')));
+      this._items = this.sortDocs(docs).map(item => ({
+        ...item,
+        title: item.title.replace('Po ', ''),
+        description: item.module ? `Módulo: ${item.module}` : '',
+        tagLabel: this.getTypeLabel(item.type),
+        tagType: this.getTypeColor(item.type)
+      }));
       this.filteredItems = this._items;
     });
 
@@ -73,5 +78,15 @@ export class DocumentationListComponent implements OnInit {
 
   private sortDocs(docs) {
     return docs.sort((prev, next) => (prev.name < next.name ? -1 : 1));
+  }
+
+  private getTypeLabel(type: string): string {
+    const labels = { components: 'Component', directives: 'Directive', services: 'Service', interfaces: 'Interface' };
+    return labels[type] || type || '';
+  }
+
+  private getTypeColor(type: string): string {
+    const colors = { components: 'success', directives: 'info', services: 'neutral', interfaces: 'warning' };
+    return colors[type] || 'neutral';
   }
 }
