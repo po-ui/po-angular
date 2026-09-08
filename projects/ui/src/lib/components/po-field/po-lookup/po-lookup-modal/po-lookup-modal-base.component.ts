@@ -232,6 +232,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   disclaimer!: PoDisclaimer;
   disclaimerGroup!: PoDisclaimerGroup;
   isAdvancedFilter = false;
+  isAdvancedFilterApplied = false;
   primaryActionAdvancedFilter!: PoModalAction;
   secondaryActionAdvancedFilter!: PoModalAction;
   selecteds: Array<any> = [];
@@ -506,6 +507,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       action: () => {
         this.destroyDynamicForm();
         this.isAdvancedFilter = false;
+        this.isAdvancedFilterApplied = true;
         this.page = 1;
         this.createDisclaimer();
       },
