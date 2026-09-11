@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PoRadioGroupOption } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-checkbox-labs',
   templateUrl: './sample-po-checkbox-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoCheckboxLabsComponent implements OnInit {

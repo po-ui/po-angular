@@ -600,14 +600,27 @@ describe('PoSearchComponent', () => {
       component['eventResizeListener'] = undefined;
       const spyRemoveListeners = spyOn(component, <any>'removeListeners');
 
+      // Captura os callbacks registrados e os invoca diretamente, em vez de disparar
+      // eventos globais (document/window) que acionariam handlers vazados de outras
+      // instâncias e tornavam o teste intermitente (erro 'contains' de undefined).
+      const listeners: { [key: string]: (event?: any) => void } = {};
+      spyOn(component['renderer'], 'listen').and.callFake((target: any, eventName: string, callback: any) => {
+        listeners[`${target}:${eventName}`] = callback;
+        return () => {};
+      });
+      spyOn(component, 'clickedOutsideInput');
+      spyOn(component, <any>'adjustContainerPosition');
+
       component['initializeListeners']();
 
-      document.dispatchEvent(eventClick);
-      window.dispatchEvent(new Event('resize'));
+      // Exercita os callbacks de forma determinística.
+      listeners['document:click']?.(eventClick);
+      listeners['window:resize']?.();
 
       expect(spyRemoveListeners).toHaveBeenCalled();
       expect(component['clickoutListener']).toBeDefined();
       expect(component['eventResizeListener']).toBeDefined();
+      expect(component.clickedOutsideInput).toHaveBeenCalled();
     });
 
     it('should hide the listbox when was click out of the input', () => {
@@ -1131,13 +1144,19 @@ describe('PoSearchComponent', () => {
 
   describe('locateCounter ViewChild setter', () => {
     let observeSpy: jasmine.Spy;
+    let originalResizeObserver: typeof ResizeObserver;
 
     beforeEach(() => {
+      originalResizeObserver = window.ResizeObserver;
       observeSpy = jasmine.createSpy('observe');
       (window as any).ResizeObserver = function (callback) {
         callback();
         return { observe: observeSpy };
       };
+    });
+
+    afterEach(() => {
+      (window as any).ResizeObserver = originalResizeObserver;
     });
 
     it('should set _locateCounter, create ResizeObserver and observe the element', () => {

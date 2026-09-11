@@ -1,5 +1,4 @@
-import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { AnimationCallbackEvent, ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 
 import { PoTreeViewService } from '../services/po-tree-view.service';
 import { PoTreeViewItem } from './po-tree-view-item.interface';
@@ -8,30 +7,6 @@ import { PoTreeViewItem } from './po-tree-view-item.interface';
   selector: 'po-tree-view-item',
   templateUrl: './po-tree-view-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('toggleBody', [
-      transition(':enter', [
-        style({
-          'overflow-y': 'hidden',
-          visibility: 'hidden',
-          opacity: 0,
-          height: '0'
-        }),
-        animate(200, style({ height: '*' })),
-        animate(100, style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({
-          'overflow-y': 'hidden',
-          visibility: 'visible',
-          opacity: 1,
-          height: '*'
-        }),
-        animate(200, style({ height: 0 })),
-        animate(100, style({ opacity: 0 }))
-      ])
-    ])
-  ],
   standalone: false
 })
 export class PoTreeViewItemComponent {
@@ -66,5 +41,49 @@ export class PoTreeViewItemComponent {
 
   trackByFunction(index: number) {
     return index;
+  }
+
+  animateEnter(event: AnimationCallbackEvent): void {
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    const previousOverflowY = element.style.overflowY;
+    element.style.overflowY = 'hidden';
+
+    // Sequência equivalente à animação legada: height 0 -> auto (200ms) e, em seguida, opacity 0 -> 1 (100ms).
+    const animation = element.animate(
+      [
+        { height: '0px', opacity: 0, offset: 0 },
+        { height: `${height}px`, opacity: 0, offset: 0.6667 },
+        { height: `${height}px`, opacity: 1, offset: 1 }
+      ],
+      { duration: 300, easing: 'linear' }
+    );
+
+    animation.onfinish = () => {
+      element.style.overflowY = previousOverflowY;
+      event.animationComplete();
+    };
+  }
+
+  animateLeave(event: AnimationCallbackEvent): void {
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    const previousOverflowY = element.style.overflowY;
+    element.style.overflowY = 'hidden';
+
+    // Sequência equivalente à animação legada: height auto -> 0 (200ms) e, em seguida, opacity 1 -> 0 (100ms).
+    const animation = element.animate(
+      [
+        { height: `${height}px`, opacity: 1, offset: 0 },
+        { height: '0px', opacity: 1, offset: 0.6667 },
+        { height: '0px', opacity: 0, offset: 1 }
+      ],
+      { duration: 300, easing: 'linear' }
+    );
+
+    animation.onfinish = () => {
+      element.style.overflowY = previousOverflowY;
+      event.animationComplete();
+    };
   }
 }

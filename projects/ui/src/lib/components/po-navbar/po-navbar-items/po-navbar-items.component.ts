@@ -7,7 +7,8 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
@@ -19,6 +20,7 @@ import { PoNavbarItemComponent } from './po-navbar-item/po-navbar-item.component
 @Component({
   selector: 'po-navbar-items',
   templateUrl: './po-navbar-items.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoNavbarItemsComponent implements OnInit, OnDestroy {

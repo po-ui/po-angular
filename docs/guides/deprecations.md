@@ -25,10 +25,15 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
         </tr>
       </thead>
       <tbody>
-      <tr class="po-table-row">
-        <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
           <td class="po-table-column">Componente descontinuado</td>
           <td class="po-table-column" style="text-align: center;">v23</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></th>
+          <td class="po-table-column">Componente descontinuado</td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
         </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
@@ -70,6 +75,43 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
 ## Depreciações
 
 Esta seção contém uma lista completa de todos os recursos obsoletos com detalhes para ajudá-lo a planejar sua migração.
+
+### PoGauge
+
+<div class="po-row">
+  <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
+    <table class="po-table po-text-color-neutral-dark-40">
+      <thead>
+        <tr class="po-table-header">
+          <th class="po-table-header-ellipsis">Recurso</th>
+          <th class="po-table-header-ellipsis">Substituição</th>
+          <th class="po-table-header-ellipsis">Anúncio da Depreciação</th>
+          <th class="po-table-header-ellipsis">Removido em</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr class="po-table-row">
+          <th class="po-table-column">Componente po-gauge</th>
+          <td class="po-table-column"><a href="documentation/po-chart">po-chart (type=gauge)</a></td>
+          <td class="po-table-column" style="text-align: center;">v19</td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+O componente `po-gauge` foi removido. Utilize o `po-chart` com `p-type="gauge"` como alternativa.
+
+Antes:
+```
+<po-gauge [p-value]="72" [p-ranges]="ranges"></po-gauge>
+```
+
+Depois:
+```
+<po-chart p-type="gauge" [p-options]="gaugeOptions" [p-series]="gaugeSeries"></po-chart>
+```
 
 ### PoButton
 
@@ -222,6 +264,12 @@ Depois - Animalia Icons (atual)
         </tr>
       </thead>
       <tbody>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></th>
+          <td class="po-table-column">Componente descontinuado</td>
+          <td class="po-table-column"><a href="documentation/po-chart">PoChart (type=gauge)</a></td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
+        </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
           <td class="po-table-column">Componente descontinuado</td>

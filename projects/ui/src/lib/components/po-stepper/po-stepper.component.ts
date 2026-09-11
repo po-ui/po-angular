@@ -1,4 +1,12 @@
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, QueryList, inject } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChildren,
+  QueryList,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { Observable, of, throwError } from 'rxjs';
 import { take, tap, catchError, map, mergeMap } from 'rxjs/operators';
@@ -43,6 +51,7 @@ import { PoStepperItem } from './po-stepper-item.interface';
 @Component({
   selector: 'po-stepper',
   templateUrl: './po-stepper.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoStepperComponent extends PoStepperBaseComponent implements AfterContentInit {
@@ -240,10 +249,6 @@ export class PoStepperComponent extends PoStepperBaseComponent implements AfterC
         stepChild.status = PoStepperStatus.Done;
       }
     });
-  }
-
-  trackByFn(step: PoStepComponent) {
-    return step.id;
   }
 
   private activeFirstStep() {

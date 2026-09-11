@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoComboOption, PoComboOptionGroup, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -9,6 +9,7 @@ import { SamplePoComboSchedulingService } from './sample-po-combo-scheduling.ser
   templateUrl: './sample-po-combo-scheduling.component.html',
   styleUrls: ['./sample-po-combo-scheduling.component.css'],
   providers: [SamplePoComboSchedulingService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoComboSchedulingComponent implements OnInit {

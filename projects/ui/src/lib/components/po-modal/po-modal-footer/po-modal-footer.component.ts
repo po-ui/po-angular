@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * @description
@@ -19,6 +19,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'po-modal-footer',
   templateUrl: './po-modal-footer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoModalFooterComponent {

@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalComponent, PoSlideItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-slide-landscapes',
   templateUrl: './sample-po-slide-landscapes.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSlideLandscapesComponent {

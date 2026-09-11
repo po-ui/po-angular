@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.service';
 
 @Component({
@@ -6,6 +6,7 @@ import { SamplePoSearchFindPeopleService } from './sample-po-search-find-people.
   templateUrl: './sample-po-search-find-people.component.html',
   styleUrls: ['./sample-po-search-find-people.component.css'],
   providers: [SamplePoSearchFindPeopleService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSearchFindPeopleComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoAccordionItemComponent,
@@ -12,6 +12,7 @@ import {
 @Component({
   selector: 'sample-po-accordion-labs',
   templateUrl: './sample-po-accordion-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoAccordionLabsComponent implements OnInit {

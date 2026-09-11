@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoMultiselectOption, PoRadioGroupOption } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-multiselect-vacation-reactive-form',
   templateUrl: './sample-po-multiselect-vacation-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMultiselectVacationReactiveFormComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { isTypeof } from '../../utils/util';
@@ -23,6 +23,7 @@ const MAX_LENGHT: number = 125;
 @Component({
   selector: 'po-logo',
   templateUrl: './po-logo.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoLogoComponent {

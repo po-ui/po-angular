@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoChartOptions, PoChartType } from '@po-ui/ng-components';
 import { PoChartRadarOptions } from '@po-ui/ng-components/lib/components/po-chart/interfaces/po-chart-radar-options.interface';
 
 @Component({
   selector: 'sample-po-chart-technology-skill',
   templateUrl: './sample-po-chart-technology-skill.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoChartTechnologySkillComponent {

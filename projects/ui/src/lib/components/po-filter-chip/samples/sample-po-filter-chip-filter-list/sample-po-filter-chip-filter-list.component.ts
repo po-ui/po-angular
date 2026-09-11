@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoFilterChipSelectedChange } from '@po-ui/ng-components/lib';
 
 interface FilterOption {
@@ -14,6 +14,7 @@ interface Product {
 @Component({
   selector: 'sample-po-filter-chip-filter-list',
   templateUrl: './sample-po-filter-chip-filter-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoFilterChipFilterListComponent {

@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoDatepickerComponent, PoNotificationService, PoSelectOption } from '@p
 @Component({
   selector: 'sample-po-combo-hotels',
   templateUrl: './sample-po-combo-hotels.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoComboHotelsComponent {

@@ -1,5 +1,12 @@
-import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
-import { Component, ContentChild, ElementRef, ViewChild, inject } from '@angular/core';
+import {
+  AnimationCallbackEvent,
+  Component,
+  ContentChild,
+  ElementRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
 
@@ -50,22 +57,7 @@ export const poPageSlideLiteralsDefault = {
   selector: 'po-page-slide',
   templateUrl: './po-page-slide.component.html',
   providers: [],
-  animations: [
-    trigger('fade', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        group([animate(`{{duration}}`, style({ opacity: 1 })), query('@slide', animateChild())])
-      ]),
-      transition(':leave', group([query('@slide', animateChild()), animate('150ms', style({ opacity: 0 }))]))
-    ]),
-    trigger('slide', [
-      transition(':enter', [
-        style({ transform: 'translateX(50px)' }),
-        animate(`{{timing }}`, style({ transform: 'none' }))
-      ]),
-      transition(':leave', [animate('150ms', style({ transform: 'translateX(50px)' }))])
-    ])
-  ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageSlideComponent extends PoPageSlideBaseComponent {
@@ -129,6 +121,84 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
     }
   }
 
+  animateEnter(event: AnimationCallbackEvent): void {
+    const rootElement = event.target as HTMLElement;
+    const container = rootElement.querySelector('.po-page-slide-container');
+
+    const fadeDuration = this.parseDuration(this.duration) || 70;
+    const { duration: slideDuration, easing: slideEasing } = this.parseTiming(this.timing);
+
+    // Animate overlay fade in
+    rootElement.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: fadeDuration,
+      easing: 'linear',
+      fill: 'forwards'
+    });
+
+    // Animate container slide in (in parallel)
+    if (container) {
+      const slideAnimation = container.animate([{ transform: 'translateX(50px)' }, { transform: 'none' }], {
+        duration: slideDuration,
+        easing: slideEasing,
+        fill: 'forwards'
+      });
+
+      slideAnimation.onfinish = () => event.animationComplete();
+    } else {
+      event.animationComplete();
+    }
+  }
+
+  animateLeave(event: AnimationCallbackEvent): void {
+    const rootElement = event.target as HTMLElement;
+    const container = rootElement.querySelector('.po-page-slide-container');
+
+    const leaveDuration = 150;
+
+    // Animate overlay fade out and slide out in parallel
+    rootElement.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: leaveDuration,
+      easing: 'linear',
+      fill: 'forwards'
+    });
+
+    if (container) {
+      const slideAnimation = container.animate([{ transform: 'none' }, { transform: 'translateX(50px)' }], {
+        duration: leaveDuration,
+        easing: 'linear',
+        fill: 'forwards'
+      });
+
+      slideAnimation.onfinish = () => event.animationComplete();
+    } else {
+      setTimeout(() => event.animationComplete(), leaveDuration);
+    }
+  }
+
+  private parseDuration(value: string): number {
+    if (!value) {
+      return 70;
+    }
+    const match = /^(\d+(?:\.\d+)?)(ms|s)$/.exec(value);
+    if (!match) {
+      return 70;
+    }
+    return match[2] === 's' ? Number.parseFloat(match[1]) * 1000 : Number.parseFloat(match[1]);
+  }
+
+  private parseTiming(value: string): { duration: number; easing: string } {
+    if (!value) {
+      return { duration: 700, easing: 'cubic-bezier(0.35, 0, 0.1, 1)' };
+    }
+    const durationMatch = /^(\d+(?:\.\d+)?)(ms|s)\s+(.+)$/.exec(value);
+    if (!durationMatch) {
+      return { duration: 700, easing: 'cubic-bezier(0.35, 0, 0.1, 1)' };
+    }
+    const duration =
+      durationMatch[2] === 's' ? Number.parseFloat(durationMatch[1]) * 1000 : Number.parseFloat(durationMatch[1]);
+    return { duration, easing: durationMatch[3] };
+  }
+
   private setTimeFromCSS(): void {
     const rootStyles = getComputedStyle(document.documentElement);
     this.duration = rootStyles.getPropertyValue('--transition-duration').trim();
@@ -179,19 +249,5 @@ export class PoPageSlideComponent extends PoPageSlideBaseComponent {
   private removeEventListeners(): void {
     document.removeEventListener('focus', this.focusEvent, true);
     this.loadingCompleted.complete();
-  }
-
-  get fadeParams() {
-    return {
-      value: true,
-      params: { duration: this.duration || '70ms' }
-    };
-  }
-
-  get slideParams() {
-    return {
-      value: true,
-      params: { timing: this.timing || '700ms cubic-bezier(0.35, 0, 0.1, 1)' }
-    };
   }
 }

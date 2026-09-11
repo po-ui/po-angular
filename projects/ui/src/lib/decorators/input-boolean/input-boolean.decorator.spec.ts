@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { configureTestSuite, expectPropertiesValues } from '../../util-test/util-expect.spec';
@@ -7,6 +7,7 @@ import { InputBoolean } from './input-boolean.decorator';
 @Component({
   selector: 'mock-component',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoMockComponent {

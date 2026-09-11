@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PoPageLoginAuthenticationType } from './enums/po-page-login-authentication-type.enum';
 import { PoPageLoginService } from './po-page-login.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageLoginService:', () => {
   let httpMock: HttpTestingController;
@@ -12,7 +12,11 @@ describe('PoPageLoginService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoPageLoginService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoPageLoginService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     poPageLoginService = TestBed.inject(PoPageLoginService);
