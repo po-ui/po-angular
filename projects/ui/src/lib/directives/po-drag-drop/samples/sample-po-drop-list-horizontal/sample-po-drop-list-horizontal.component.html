@@ -1,0 +1,21 @@
+<po-container p-title="Pipeline — Orientação Horizontal">
+  <p class="po-font-text po-mb-3">
+    Arraste as etapas para reordenar o pipeline. Os itens ficam lado a lado e a troca é detectada pelo eixo X.
+  </p>
+
+  <div class="po-row">
+    <div
+      class="po-md-12"
+      [p-drop-list]="steps()"
+      p-drop-list-id="list-horizontal"
+      p-drop-list-orientation="horizontal"
+      (p-dropped)="onDropped($event)"
+    >
+      @for (step of steps(); track step.id) {
+        <po-widget class="po-md-3 po-mb-2" [p-drag]="step" [p-title]="stepsWidgets()[step.id]?.title" p-tag-type="info">
+          <p>{{ stepsWidgets()[step.id]?.title }}</p>
+        </po-widget>
+      }
+    </div>
+  </div>
+</po-container>
