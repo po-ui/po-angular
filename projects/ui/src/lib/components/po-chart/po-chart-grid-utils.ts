@@ -3,6 +3,13 @@ import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
 import { PoChartRadarOptions } from './interfaces/po-chart-radar-options.interface';
 
+/**
+ * Preenchimento de série aceito pelo ECharts em `itemStyle.color`.
+ * Pode ser uma cor sólida (`string`) ou um padrão gerado a partir de um canvas
+ * (`{ image, repeat: 'repeat' }`) quando o modo de padrões está habilitado.
+ */
+export type PoChartSerieFill = string | { image: HTMLCanvasElement; repeat: 'repeat' };
+
 const gridPaddingValues = {
   paddingBottomWithTopLegend: 48,
   paddingBottomWithBottomLegend: 72,
@@ -166,11 +173,11 @@ export class PoChartGridUtils {
     }
   }
 
-  setSerieTypeBarColumn(serie: any, color: string) {
+  setSerieTypeBarColumn(serie: any, color: string, fill: PoChartSerieFill = color) {
     if (serie.type === 'bar') {
       serie.itemStyle = {
         borderRadius: this.resolvePx('--border-radius-bar', '.po-chart'),
-        color: color
+        color: fill
       };
       serie.emphasis = { focus: 'series' };
       serie.blur = {
@@ -188,7 +195,7 @@ export class PoChartGridUtils {
     }
   }
 
-  setSerieTypeDonutPie(serie: any, color: string) {
+  setSerieTypeDonutPie(serie: any, color: string, fill: PoChartSerieFill = color) {
     if (this.component.listTypePieDonut?.length) {
       const borderWidth = this.resolvePx('--border-width-sm');
       const borderColor = this.component.getCSSVariable('--border-color', '.po-chart');
@@ -198,7 +205,7 @@ export class PoChartGridUtils {
         itemStyle: {
           borderWidth: borderWidth,
           borderColor: borderColor,
-          color: color,
+          color: fill,
           borderRadius: this.component.options?.borderRadius
         }
       };

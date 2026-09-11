@@ -19,6 +19,8 @@ import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { PoTooltipDirective } from '../../directives';
 import { PoColorService } from '../../services/po-color';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { PoThemeA11yEnum } from '../../services/po-theme/enum/po-theme-a11y.enum';
+import { getA11yLevel } from '../../utils/util';
 import { PoChartLabelFormat } from '../po-chart/enums/po-chart-label-format.enum';
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoModalAction } from '../po-modal';
@@ -27,7 +29,8 @@ import { PoTableColumn } from '../po-table';
 import { PoChartBaseComponent } from './po-chart-base.component';
 
 import { PoChartType } from '../po-chart/enums/po-chart-type.enum';
-import { PoChartGridUtils } from './po-chart-grid-utils';
+import { PoChartGridUtils, PoChartSerieFill } from './po-chart-grid-utils';
+import { PoChartPatternService } from './services/po-chart-pattern.service';
 
 import { BarChart, CustomChart, GaugeChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
 import {
@@ -107,7 +110,8 @@ use([
 @Component({
   selector: 'po-chart',
   templateUrl: './po-chart.component.html',
-  standalone: false
+  standalone: false,
+  providers: [PoChartPatternService]
 })
 export class PoChartComponent extends PoChartBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   el = inject(ElementRef);
@@ -115,6 +119,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   private readonly decimalPipe = inject(DecimalPipe);
   private readonly colorService = inject(PoColorService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly patternService = inject(PoChartPatternService);
 
   @ViewChildren(PoTooltipDirective) poTooltip: QueryList<PoTooltipDirective>;
   @ViewChild('targetPopup', { read: ElementRef, static: false }) targetRef: ElementRef;
@@ -153,6 +158,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   protected popupActions: Array<PoPopupAction> = [];
   private chartInstance!: echarts.ECharts;
   private currentRenderer: 'svg' | 'canvas';
+  private patternSvgWarningEmitted = false;
   private resizeObserver: ResizeObserver;
   private intersectionObserver: IntersectionObserver;
   private hideDomEchartsDiv = false;
@@ -172,6 +178,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   changeTheme = (event: any) => {
     this.chartInstance?.dispose();
     this.chartInstance = undefined;
+    this.patternSvgWarningEmitted = false;
     this.initECharts();
     this.checkShowCEcharts();
   };
@@ -402,6 +409,7 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       return;
     }
     this.currentRenderer = this.options?.rendererOption || 'canvas';
+    this.patternSvgWarningEmitted = false;
     this.chartInstance = echarts.init(echartsDiv, null, { renderer: this.currentRenderer });
     this.observeContainerResize();
     this.setChartsProperties();
@@ -625,8 +633,12 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       this.chartGridUtils.setListTypeRadar();
     }
 
+    let supportedPositionCounter = 0;
+    const usePatterns = this.isPatternModeEnabled();
+
     const seriesUpdated = newSeries.map((serie, index) => {
       serie.name = serie.name || (serie.label && typeof serie.label === 'string') ? (serie.name ?? serie.label) : ' ';
+      const resolvedType: PoChartType = serie.type || this.type || typeDefault;
       !serie.type ? this.setTypeSerie(serie, this.type || typeDefault) : this.setTypeSerie(serie, serie.type);
 
       let colorVariable: string;
@@ -641,12 +653,46 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
         colorVariable = serie.color;
       }
 
-      this.chartGridUtils.setSerieTypeDonutPie(serie, colorVariable);
+      let fill: PoChartSerieFill = colorVariable;
+
+      if (
+        usePatterns &&
+        this.currentRenderer === 'canvas' &&
+        this.patternService.isPatternSupportedType(resolvedType)
+      ) {
+        if (colorVariable === undefined || colorVariable === null || colorVariable === '') {
+          // Cor do tema ativo indisponível/indefinida: mantém cor sólida (fill já é colorVariable)
+          // e registra indicação de erro sinalizando cor de tema indisponível (Requirement 9.3).
+          console.error(
+            'po-chart: cor do tema ativo indisponível para a série; o padrão (usePatterns) não será aplicado e a série será renderizada com cor sólida.'
+          );
+        } else {
+          const patternIndex = this.resolvePatternIndex(serie, supportedPositionCounter);
+
+          try {
+            fill = this.patternService.getPatternFill(colorVariable, patternIndex);
+          } catch {
+            fill = colorVariable;
+          }
+        }
+
+        supportedPositionCounter++;
+      } else if (
+        usePatterns &&
+        this.currentRenderer === 'svg' &&
+        this.patternService.isPatternSupportedType(resolvedType)
+      ) {
+        // Renderer SVG não suporta os padrões: mantém a Effective_Color em cor sólida
+        // (fill já é colorVariable) e emite exatamente um aviso por instância (Requirements 7.2, 7.3).
+        this.emitPatternSvgWarning();
+      }
+
+      this.chartGridUtils.setSerieTypeDonutPie(serie, colorVariable, fill);
       this.chartGaugeUtils.setSerieTypeGauge(serie, colorVariable);
       this.setSerieEmphasis(serie, colorVariable, tokenBorderWidthMd);
       this.chartGridUtils.setSerieTypeLine(serie, tokenBorderWidthMd, colorVariable);
       this.chartGridUtils.setSerieTypeArea(serie, index);
-      this.chartGridUtils.setSerieTypeBarColumn(serie, colorVariable);
+      this.chartGridUtils.setSerieTypeBarColumn(serie, colorVariable, fill);
       this.chartGridUtils.setSerieTypeRadar(serie, tokenBorderWidthMd, colorVariable);
 
       return serie;
@@ -661,6 +707,63 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     }
 
     return seriesUpdated;
+  }
+
+  /**
+   * Resolve o `Pattern_Index` de uma série de tipo suportado de forma determinística.
+   *
+   * - Quando `serie.patternIndex` for um inteiro, ele é respeitado e normalizado
+   *   para o intervalo `0..7` (Requirements 5.2 e 5.4).
+   * - Caso contrário (ausente, nulo ou não inteiro), aplica-se a atribuição
+   *   automática cíclica com base na posição da série entre as séries de tipo
+   *   suportado: `position % PATTERN_COUNT` (Requirements 4.1, 4.3 e 5.5).
+   *
+   * @param serie Série a ter o padrão resolvido.
+   * @param position Índice base-zero da série entre as séries de tipo suportado.
+   * @returns Índice de padrão no intervalo `0..7`.
+   */
+  private resolvePatternIndex(serie: PoChartSerie, position: number): number {
+    if (Number.isInteger(serie?.patternIndex)) {
+      return this.patternService.normalizePatternIndex(serie.patternIndex);
+    }
+
+    return position % PoChartPatternService.PATTERN_COUNT;
+  }
+
+  /**
+   * Resolve se o modo de padrões (cor + textura) deve ser aplicado.
+   *
+   * - Quando `options.usePatterns` é informado explicitamente (`true` ou `false`),
+   *   o valor do consumidor é respeitado.
+   * - Quando `options.usePatterns` não é informado, o modo é habilitado
+   *   automaticamente se o nível de acessibilidade do tema ativo for `AAA`,
+   *   reforçando a diretriz de não depender apenas de cor nesse nível.
+   *
+   * @returns `true` se os padrões devem ser aplicados às séries suportadas.
+   */
+  private isPatternModeEnabled(): boolean {
+    if (typeof this.options?.usePatterns === 'boolean') {
+      return this.options.usePatterns;
+    }
+
+    return getA11yLevel() === PoThemeA11yEnum.AAA;
+  }
+
+  /**
+   * Emite exatamente um aviso por instância de gráfico informando que os padrões
+   * não são aplicados no renderer `svg`, mantendo o fallback de cor sólida
+   * (Requirements 7.2 e 7.3). O controle é feito pela flag `patternSvgWarningEmitted`,
+   * resetada sempre que a instância do ECharts é recriada (`initECharts`/`changeTheme`).
+   */
+  private emitPatternSvgWarning(): void {
+    if (this.patternSvgWarningEmitted) {
+      return;
+    }
+
+    this.patternSvgWarningEmitted = true;
+    console.warn(
+      'po-chart: os padrões (usePatterns) não são aplicados no renderer "svg". As séries suportadas serão renderizadas com cor sólida.'
+    );
   }
 
   private setSerieEmphasis(serie, color: string, tokenBorder: number) {
@@ -866,16 +969,22 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       return;
     }
 
-    if (this.currentRenderer === 'svg') {
-      this.exportSvgAsImage(type);
-    } else {
-      const chartImage = new Image();
-      chartImage.src = this.chartInstance.getDataURL({
-        type: type,
-        pixelRatio: 2,
-        backgroundColor: this.getCSSVariable('--color-neutral-light-00')
-      });
-      this.configureImageCanvas(type, chartImage);
+    // Requirement 8.5: qualquer falha na exportação PNG/JPG deve sinalizar erro ao usuário
+    // sem propagar exceção e sem mutar o estado atual do gráfico exibido na tela.
+    try {
+      if (this.currentRenderer === 'svg') {
+        this.exportSvgAsImage(type);
+      } else {
+        const chartImage = new Image();
+        chartImage.src = this.chartInstance.getDataURL({
+          type: type,
+          pixelRatio: 2,
+          backgroundColor: this.getCSSVariable('--color-neutral-light-00')
+        });
+        this.configureImageCanvas(type, chartImage);
+      }
+    } catch {
+      this.notifyExportImageError(type);
     }
   }
 
@@ -897,35 +1006,57 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
   }
 
   private configureImageCanvas(type: 'png' | 'jpeg', chartImage: HTMLImageElement) {
-    chartImage.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-
-      if (!ctx) return;
-
-      const chartElement = this.el.nativeElement.querySelector('#chart-id') as HTMLDivElement;
-      const headerElement = this.el.nativeElement.querySelector('.po-chart-header') as HTMLDivElement;
-
-      const chartWidth = chartElement.clientWidth;
-      const chartHeight = chartElement.clientHeight;
-
-      const headerHeight = headerElement?.clientHeight || 40;
-
-      canvas.width = chartWidth;
-      canvas.height = headerHeight + chartHeight + 40;
-      ctx.fillStyle = this.getCSSVariable('--color-neutral-light-00');
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      this.setHeaderProperties(ctx, headerElement, chartWidth, headerHeight);
-      ctx.drawImage(chartImage, 0, headerHeight, chartWidth, chartHeight);
-
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL(`image/${type}`);
-      link.download = `grafico-exportado.${type}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    // Requirement 8.5: falha no carregamento da imagem-fonte sinaliza erro sem alterar o gráfico.
+    chartImage.onerror = () => {
+      this.notifyExportImageError(type);
     };
+
+    chartImage.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          this.notifyExportImageError(type);
+          return;
+        }
+
+        const chartElement = this.el.nativeElement.querySelector('#chart-id') as HTMLDivElement;
+        const headerElement = this.el.nativeElement.querySelector('.po-chart-header') as HTMLDivElement;
+
+        const chartWidth = chartElement.clientWidth;
+        const chartHeight = chartElement.clientHeight;
+
+        const headerHeight = headerElement?.clientHeight || 40;
+
+        canvas.width = chartWidth;
+        canvas.height = headerHeight + chartHeight + 40;
+        ctx.fillStyle = this.getCSSVariable('--color-neutral-light-00');
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        this.setHeaderProperties(ctx, headerElement, chartWidth, headerHeight);
+        ctx.drawImage(chartImage, 0, headerHeight, chartWidth, chartHeight);
+
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL(`image/${type}`);
+        link.download = `grafico-exportado.${type}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch {
+        // Requirement 8.5: falha ao gerar o data URL/canvas não propaga e preserva o gráfico atual.
+        this.notifyExportImageError(type);
+      }
+    };
+  }
+
+  private notifyExportImageError(type: 'png' | 'jpeg') {
+    // Requirement 8.5: indica ao usuário que a exportação falhou. O fluxo de exportação apenas
+    // lê o gráfico (getDataURL) e opera sobre um canvas/âncora fora da tela, portanto o estado
+    // atual do gráfico exibido permanece inalterado.
+    console.error(
+      `po-chart: falha ao exportar o gráfico como imagem ${type.toUpperCase()}. O gráfico exibido permanece inalterado.`
+    );
   }
 
   private setHeaderProperties(ctx, headerElement, chartWidth, headerHeight) {
