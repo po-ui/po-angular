@@ -15,6 +15,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import { PO_TABLE_ROW_HEIGHT_BY_SPACING, sortArrayOfObjects } from '../../../../utils/util';
 import { PoTableColumnSpacing } from '../../../po-table';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
+import { PoLookupAdvancedFilter } from '../interfaces/po-lookup-advanced-filter.interface';
 import { PoLookupModalBaseComponent } from '../po-lookup-modal/po-lookup-modal-base.component';
 import { PoLanguageService } from './../../../../services/po-language/po-language.service';
 import { PoFieldSize } from './../../../../../lib/enums/po-field-size.enum';
@@ -156,8 +157,20 @@ export class PoLookupModalComponent extends PoLookupModalBaseComponent implement
   }
 
   private setupModalAdvancedFilter() {
-    this.dynamicFormValue = {};
+    this.dynamicFormValue = this.getInitialValuesFromFilter(this.advancedFilters);
     this.isAdvancedFilter = true;
+  }
+
+  private getInitialValuesFromFilter(filters: Array<PoLookupAdvancedFilter>): Record<string, any> {
+    const initialValues: Record<string, any> = {};
+
+    filters?.forEach(filter => {
+      if (filter.initValue !== undefined) {
+        initialValues[filter.property] = filter.initValue;
+      }
+    });
+
+    return initialValues;
   }
 
   private createDynamicForm() {

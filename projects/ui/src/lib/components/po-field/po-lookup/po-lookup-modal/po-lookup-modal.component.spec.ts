@@ -417,6 +417,45 @@ describe('PoLookupModalComponent', () => {
       expect(component['sort']).toEqual(expectedValue);
     });
 
+    it('getInitialValuesFromFilter: should return an object with the initValue of each filter', () => {
+      const filters = [
+        { property: 'name', initValue: 'John' },
+        { property: 'active', initValue: false },
+        { property: 'age', initValue: 0 }
+      ];
+
+      expect(component['getInitialValuesFromFilter'](filters)).toEqual({ name: 'John', active: false, age: 0 });
+    });
+
+    it('getInitialValuesFromFilter: should ignore filters without initValue', () => {
+      const filters = [{ property: 'name', initValue: 'John' }, { property: 'email' }];
+
+      expect(component['getInitialValuesFromFilter'](filters)).toEqual({ name: 'John' });
+    });
+
+    it('getInitialValuesFromFilter: should return an empty object if no filter contains initValue', () => {
+      const filters = [{ property: 'name' }, { property: 'email' }];
+
+      expect(component['getInitialValuesFromFilter'](filters)).toEqual({});
+    });
+
+    it('getInitialValuesFromFilter: should return an empty object if advancedFilters is undefined', () => {
+      expect(component['getInitialValuesFromFilter'](undefined)).toEqual({});
+    });
+
+    it('getInitialValuesFromFilter: should return an empty object if advancedFilters is null', () => {
+      expect(component['getInitialValuesFromFilter'](null)).toEqual({});
+    });
+
+    it('setupModalAdvancedFilter: should set dynamicFormValue with the initValue of the filters', () => {
+      component.advancedFilters = [{ property: 'name', initValue: 'John' }, { property: 'email' }];
+
+      component['setupModalAdvancedFilter']();
+
+      expect(component.dynamicFormValue).toEqual({ name: 'John' });
+      expect(component.isAdvancedFilter).toBe(true);
+    });
+
     it('onSelect: should concat table item in selecteds', () => {
       component.multiple = true;
       component.selectedItems = [{ value: 'Doe', label: 'Jane' }];

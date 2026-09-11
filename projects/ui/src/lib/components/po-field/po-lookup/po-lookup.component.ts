@@ -143,6 +143,12 @@ const providers = [
  *  <file name="sample-po-lookup.service.ts"> </file>
  * </example>
  *
+ * <example name="po-lookup-advanced-filter" title="PO Lookup - Advanced Filter">
+ *  <file name="sample-po-lookup-advanced-filter/sample-po-lookup-advanced-filter.component.html"> </file>
+ *  <file name="sample-po-lookup-advanced-filter/sample-po-lookup-advanced-filter.component.ts"> </file>
+ *  <file name="sample-po-lookup.service.ts"> </file>
+ * </example>
+ *
  * <example name="po-lookup-sw-films" title="PO Lookup - Star Wars films">
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.html"> </file>
  *  <file name="sample-po-lookup-sw-films/sample-po-lookup-sw-films.component.ts"> </file>
