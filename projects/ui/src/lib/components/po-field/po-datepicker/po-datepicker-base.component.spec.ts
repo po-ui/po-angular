@@ -914,6 +914,28 @@ describe('PoDatepickerBaseComponent:', () => {
         expect((component as any).applySizeBasedOnA11y).toHaveBeenCalled();
       });
     });
+
+    it('p-year-range-limit: should accept a valid number', () => {
+      component.yearRangeLimit = 50;
+
+      expect(component.yearRangeLimit).toBe(50);
+    });
+
+    it('p-year-range-limit: should fallback to 150 when value is null', () => {
+      component.yearRangeLimit = null;
+
+      expect(component.yearRangeLimit).toBe(150);
+    });
+
+    it('p-year-range-limit: should fallback to 150 when value is undefined', () => {
+      component.yearRangeLimit = undefined;
+
+      expect(component.yearRangeLimit).toBe(150);
+    });
+
+    it('p-year-range-limit: should have default value of 150', () => {
+      expect(component.yearRangeLimit).toBe(150);
+    });
   });
 
   describe('Getters:', () => {
