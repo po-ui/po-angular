@@ -1,9 +1,14 @@
 <po-page-list p-title="Hiring processes" [p-actions]="pageActions" [p-filter]="filterSettings">
   <po-list-view
     p-hide-select-all
+    p-property-avatar="avatar"
     p-property-link="url"
+    p-property-subtitle="jobDescription"
+    p-property-tag="hireStatus"
+    p-property-tag-type="hireTagType"
     p-property-title="name"
     p-select
+    p-tag-position="bottom"
     [p-actions]="actions"
     [p-items]="hiringProcessesFiltered"
     (p-title-action)="showDetailModal($event)"
