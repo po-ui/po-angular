@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.31.0](https://github.com/po-ui/po-angular/compare/v21.30.1...v21.31.0) (2026-09-15)
+
+
+### Features
+
+* **drag-drop:** nova diretiva ([6428c2a](https://github.com/po-ui/po-angular/commit/6428c2a4e4c9cdc8700a8165eeb93ad426decbb1))
+* **mcp:** adiciona exemplos e boas práticas ([c4bf27f](https://github.com/po-ui/po-angular/commit/c4bf27f8380b1333c6a235a40d0102c39c92dd4c))
+* **page-slide:** adiciona tamanho full ([c0587bb](https://github.com/po-ui/po-angular/commit/c0587bb561758105fcec259e7291e8c2fee52abe))
+
 ### [21.30.1](https://github.com/po-ui/po-angular/compare/v21.30.0...v21.30.1) (2026-09-01)
 
 
