@@ -1,4 +1,5 @@
 <po-header
+  class="example-notification-header"
   [p-brand]="headerBrand"
   [p-menu-items]="menuItems"
   [p-actions-tools]="actionTools"
@@ -14,6 +15,60 @@
       @for (app of systemApps; track app.icon) {
         <po-button [p-icon]="app.icon"></po-button>
       }
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #notificationTemplate>
+  <div class="po-row po-pr-1 po-pl-1 po-pt-2 po-pb-0">
+    <div class="po-md-6">
+      <span class="po-font-subtitle">Notificações</span>
+    </div>
+    <div class="po-md-6 po-text-right">
+      <po-button
+        p-icon="an an-checks"
+        p-label="Marcar todas como lidas"
+        p-kind="tertiary"
+        [p-disabled]="!hasNotifications"
+        (p-click)="markAllAsRead()"
+      ></po-button>
+    </div>
+  </div>
+
+  <po-divider></po-divider>
+
+  <po-list-view
+    p-property-title="title"
+    p-property-subtitle="content"
+    p-property-tag="tag"
+    p-property-tag-type="tagType"
+    p-property-avatar="avatar"
+    p-property-highlighted="checked"
+    p-tag-position="top"
+    p-avatar-size="md"
+    [p-items]="notificationList"
+    [p-actions]="notificationActions"
+    [p-select]="false"
+    [p-literals]="notificationLiterals"
+  >
+  </po-list-view>
+
+  <po-divider></po-divider>
+
+  <div class="po-row po-pr-1 po-pl-1 po-pt-0 po-pb-2">
+    <div class="po-md-12 po-text-right">
+      <po-button
+        class="po-mr-1"
+        p-label="Ver todas notificações"
+        p-kind="primary"
+        (p-click)="resetNotifications()"
+      ></po-button>
+      <po-button
+        p-icon="an an-arrow-counter-clockwise"
+        p-kind="tertiary"
+        p-aria-label="Marcar todas como não lidas"
+        (p-click)="markAllAsUnread()"
+      ></po-button>
     </div>
   </div>
 </ng-template>
