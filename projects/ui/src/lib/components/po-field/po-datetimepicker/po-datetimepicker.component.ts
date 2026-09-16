@@ -297,6 +297,10 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     this.objMask?.blur($event);
     this.onblur.emit();
 
+    if (this.isBlurWithinPicker($event)) {
+      return;
+    }
+
     const inputValue = this.inputEl.nativeElement.value;
 
     if (!inputValue) {
@@ -323,6 +327,22 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
       this.emitChangeIfDifferent(this.literals.invalidDatetime);
       this.syncCalendarAndTimer();
     }
+  }
+
+  private isBlurWithinPicker($event?: FocusEvent): boolean {
+    if (this.visible) {
+      return true;
+    }
+
+    const relatedTarget = $event?.relatedTarget as HTMLElement | null;
+    if (!relatedTarget) {
+      return false;
+    }
+
+    const dialogEl = this.dialogPicker?.nativeElement;
+    const iconEl = this.iconDatepicker?.buttonElement?.nativeElement;
+
+    return !!(dialogEl?.contains(relatedTarget) || iconEl?.contains(relatedTarget));
   }
 
   eventOnButtonKeydown(event: KeyboardEvent) {

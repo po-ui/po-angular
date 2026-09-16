@@ -440,6 +440,92 @@ describe('PoDatetimepickerComponent:', () => {
 
       expect(component.callOnChange).toHaveBeenCalledWith('');
     });
+
+    it('should not invalidate or clear state when calendar is open (selection in progress)', () => {
+      component.visible = true;
+      component['date'] = new Date(2026, 8, 15);
+      component['timeValue'] = '';
+      component['objMask'] = {
+        blur: jasmine.createSpy('blur'),
+        valueToModel: '15/09/2026'
+      } as any;
+      component.inputEl.nativeElement.value = '15/09/2026';
+
+      spyOn(component, 'callOnChange');
+      spyOn(component.onchange, 'emit');
+      component.eventOnBlur({ target: component.inputEl.nativeElement });
+
+      expect(component['date']).toEqual(new Date(2026, 8, 15));
+      expect(component.callOnChange).not.toHaveBeenCalled();
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+    });
+
+    it('should not invalidate when focus moves into the calendar dialog (relatedTarget inside picker)', () => {
+      component.visible = false;
+      const dialogEl = document.createElement('div');
+      const cell = document.createElement('button');
+      dialogEl.appendChild(cell);
+      component.dialogPicker = { nativeElement: dialogEl } as any;
+
+      component['date'] = new Date(2026, 8, 15);
+      component['timeValue'] = '';
+      component['objMask'] = { blur: jasmine.createSpy('blur'), valueToModel: '15/09/2026' } as any;
+      component.inputEl.nativeElement.value = '15/09/2026';
+
+      spyOn(component, 'callOnChange');
+      spyOn(component.onchange, 'emit');
+      component.eventOnBlur({ target: component.inputEl.nativeElement, relatedTarget: cell });
+
+      expect(component['date']).toEqual(new Date(2026, 8, 15));
+      expect(component.callOnChange).not.toHaveBeenCalled();
+      expect(component.onchange.emit).not.toHaveBeenCalled();
+    });
+
+    it('should invalidate incomplete input when calendar is closed and focus leaves the component', () => {
+      component.visible = false;
+      component.dialogPicker = { nativeElement: document.createElement('div') } as any;
+      component['objMask'] = { blur: jasmine.createSpy('blur'), valueToModel: '1234' } as any;
+      component.inputEl.nativeElement.value = '12/1';
+
+      spyOn(component, 'callOnChange');
+      const outsideEl = document.createElement('input');
+      component.eventOnBlur({ target: component.inputEl.nativeElement, relatedTarget: outsideEl });
+
+      expect(component.callOnChange).toHaveBeenCalledWith(component.literals.invalidDatetime);
+      expect(component['date']).toBeUndefined();
+    });
+  });
+
+  describe('isBlurWithinPicker:', () => {
+    it('should return true when calendar is visible', () => {
+      component.visible = true;
+
+      expect(component['isBlurWithinPicker']({} as FocusEvent)).toBeTrue();
+    });
+
+    it('should return false when calendar is closed and there is no relatedTarget', () => {
+      component.visible = false;
+
+      expect(component['isBlurWithinPicker']({ relatedTarget: null } as FocusEvent)).toBeFalse();
+    });
+
+    it('should return true when relatedTarget is inside the calendar icon button', () => {
+      component.visible = false;
+      const iconEl = document.createElement('button');
+      component.iconDatepicker = { buttonElement: { nativeElement: iconEl } } as any;
+      component.dialogPicker = { nativeElement: document.createElement('div') } as any;
+
+      expect(component['isBlurWithinPicker']({ relatedTarget: iconEl } as unknown as FocusEvent)).toBeTrue();
+    });
+
+    it('should return false when relatedTarget is outside the picker', () => {
+      component.visible = false;
+      component.dialogPicker = { nativeElement: document.createElement('div') } as any;
+      component.iconDatepicker = { buttonElement: { nativeElement: document.createElement('button') } } as any;
+      const outsideEl = document.createElement('input');
+
+      expect(component['isBlurWithinPicker']({ relatedTarget: outsideEl } as unknown as FocusEvent)).toBeFalse();
+    });
   });
 
   describe('eventOnClick:', () => {
