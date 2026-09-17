@@ -2156,6 +2156,47 @@ describe('PoChartComponent', () => {
       });
       expect(component['configureImageCanvas']).toHaveBeenCalledWith('jpeg', mockImage);
     });
+
+    it('should signal error and not propagate exception when getDataURL fails (Requirement 8.5)', () => {
+      const mockChartInstance = {
+        getDataURL: jasmine.createSpy('getDataURL').and.throwError('boom')
+      };
+      (component as any).chartInstance = mockChartInstance;
+      component['currentRenderer'] = 'canvas';
+
+      const notifySpy = spyOn<any>(component, 'notifyExportImageError');
+      const configureSpy = spyOn<any>(component, 'configureImageCanvas');
+
+      expect(() => (component as any).exportImage('png')).not.toThrow();
+      expect(notifySpy).toHaveBeenCalledWith('png');
+      expect(configureSpy).not.toHaveBeenCalled();
+    });
+
+    it('should signal error and not propagate exception when svg export fails (Requirement 8.5)', () => {
+      (component as any).chartInstance = { getDataURL: jasmine.createSpy('getDataURL') };
+      component['currentRenderer'] = 'svg';
+
+      spyOn<any>(component, 'exportSvgAsImage').and.throwError('boom');
+      const notifySpy = spyOn<any>(component, 'notifyExportImageError');
+
+      expect(() => (component as any).exportImage('jpeg')).not.toThrow();
+      expect(notifySpy).toHaveBeenCalledWith('jpeg');
+    });
+  });
+
+  describe('notifyExportImageError:', () => {
+    it('should log an error indication without mutating the chart instance (Requirement 8.5)', () => {
+      const consoleSpy = spyOn(console, 'error');
+      const chartInstance = { getDataURL: jasmine.createSpy('getDataURL') };
+      (component as any).chartInstance = chartInstance;
+
+      (component as any).notifyExportImageError('png');
+
+      expect(consoleSpy).toHaveBeenCalledTimes(1);
+      expect(consoleSpy.calls.mostRecent().args[0]).toContain('PNG');
+      // O gráfico exibido permanece inalterado: a instância não é recriada nem descartada.
+      expect((component as any).chartInstance).toBe(chartInstance);
+    });
   });
 
   it('exportSvgAsImage: should serialize svg, create blob, url and call configureImageCanvas', () => {
@@ -2212,6 +2253,60 @@ describe('PoChartComponent', () => {
       mockImage.onload?.(new Event('load'));
 
       expect(component['setHeaderProperties']).not.toHaveBeenCalled();
+    });
+
+    it('should signal error when the canvas context is null (Requirement 8.5)', () => {
+      const mockImage = new Image();
+      const canvas = document.createElement('canvas');
+      spyOn(canvas, 'getContext').and.returnValue(null);
+
+      spyOn(document, 'createElement').and.callFake((tag: string) => {
+        if (tag === 'canvas') return canvas;
+        return document.createElement(tag);
+      });
+
+      const notifySpy = spyOn<any>(component, 'notifyExportImageError');
+
+      component['configureImageCanvas']('png', mockImage);
+      mockImage.onload?.(new Event('load'));
+
+      expect(notifySpy).toHaveBeenCalledWith('png');
+    });
+
+    it('should signal error via onerror handler when the source image fails to load (Requirement 8.5)', () => {
+      const mockImage = new Image();
+      const notifySpy = spyOn<any>(component, 'notifyExportImageError');
+
+      component['configureImageCanvas']('jpeg', mockImage);
+      mockImage.onerror?.(new Event('error'));
+
+      expect(notifySpy).toHaveBeenCalledWith('jpeg');
+    });
+
+    it('should signal error without propagating exception when toDataURL fails (Requirement 8.5)', () => {
+      const chartElement = document.createElement('div');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      spyOn(canvas, 'getContext').and.returnValue(ctx);
+      spyOn(canvas, 'toDataURL').and.throwError('boom');
+
+      const originalCreateElement = document.createElement;
+      spyOn(document, 'createElement').and.callFake((tag: string) => {
+        if (tag === 'canvas') return canvas;
+        return originalCreateElement.call(document, tag);
+      });
+
+      spyOn<any>(component, 'setHeaderProperties');
+      const notifySpy = spyOn<any>(component, 'notifyExportImageError');
+
+      const mockImage = document.createElement('img');
+      Object.defineProperty(mockImage, 'width', { value: 800 });
+      Object.defineProperty(mockImage, 'height', { value: 600 });
+
+      component['configureImageCanvas']('png', mockImage);
+
+      expect(() => mockImage.onload?.(new Event('load'))).not.toThrow();
+      expect(notifySpy).toHaveBeenCalledWith('png');
     });
 
     it('should create and download a PNG image correctly', done => {
@@ -2387,6 +2482,272 @@ describe('PoChartComponent', () => {
       component['setPopupActions']();
 
       expect(component['popupActions']).toEqual([...initialPopupActions, ...newActions]);
+    });
+  });
+
+  describe('setSeries - usePatterns (acessibilidade cor + padrão):', () => {
+    function mockGetPropertyValue(prop: string): string {
+      const values: { [key: string]: string } = {
+        '--color-01': '#0000ff',
+        '--color-02': '#00ff00',
+        '--color-neutral-light-00': '#ffffff',
+        '--border-width-md': '2px'
+      };
+      return values[prop] || '';
+    }
+
+    function mockGetComputedStyle(): CSSStyleDeclaration {
+      return {
+        getPropertyValue: mockGetPropertyValue
+      } as CSSStyleDeclaration;
+    }
+
+    function isPatternFill(color: any): boolean {
+      return !!color && typeof color === 'object' && 'image' in color && color.repeat === 'repeat';
+    }
+
+    beforeEach(() => {
+      spyOn(colorService, 'getColors').and.callFake((series: Array<any>) => series);
+      window.getComputedStyle = mockGetComputedStyle;
+      component['currentRenderer'] = 'canvas';
+    });
+
+    it('should keep solid color (never image fill) when usePatterns is undefined (Property 1)', () => {
+      component.series = [
+        { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Serie 2', data: [4, 5, 6], type: PoChartType.Column, color: 'po-color-02' }
+      ];
+      component.options = {};
+
+      const result = component['setSeries']();
+
+      result.forEach(serie => {
+        expect(isPatternFill(serie.itemStyle?.color)).toBeFalse();
+      });
+    });
+
+    it('should keep solid color (never image fill) when usePatterns is false (Property 1)', () => {
+      component.series = [
+        { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Serie 2', data: [4, 5, 6], type: PoChartType.Column, color: 'po-color-02' }
+      ];
+      component.options = { usePatterns: false };
+
+      const result = component['setSeries']();
+
+      result.forEach(serie => {
+        expect(isPatternFill(serie.itemStyle?.color)).toBeFalse();
+      });
+      expect(result[0].itemStyle.color).toBe('#0000ff');
+    });
+
+    it('should ignore patternIndex when usePatterns is disabled (Requirement 10.3)', () => {
+      const getPatternFillSpy = spyOn(component['patternService'], 'getPatternFill').and.callThrough();
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01', patternIndex: 3 }];
+      component.options = { usePatterns: false };
+
+      const result = component['setSeries']();
+
+      expect(getPatternFillSpy).not.toHaveBeenCalled();
+      expect(isPatternFill(result[0].itemStyle.color)).toBeFalse();
+    });
+
+    it('should apply image fill to supported types and solid color to unsupported types on canvas (Property 8)', () => {
+      component.series = [
+        { label: 'Column', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Bar', data: [4, 5, 6], type: PoChartType.Bar, color: 'po-color-02' },
+        { label: 'Line', data: [7, 8, 9], type: PoChartType.Line, color: 'po-color-01' }
+      ];
+      component.options = { usePatterns: true };
+
+      const result = component['setSeries']();
+
+      expect(isPatternFill(result[0].itemStyle.color)).toBeTrue();
+      expect(isPatternFill(result[1].itemStyle.color)).toBeTrue();
+      expect(isPatternFill(result[2].itemStyle?.color)).toBeFalse();
+    });
+
+    it('should cycle pattern indices 0..7,0,1 for 10 supported column series (Property 4)', () => {
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+
+      component.series = Array.from({ length: 10 }, (_, i) => ({
+        label: `Serie ${i + 1}`,
+        data: [i, i + 1, i + 2],
+        type: PoChartType.Column,
+        color: 'po-color-01'
+      }));
+      component.options = { usePatterns: true };
+
+      component['setSeries']();
+
+      expect(capturedIndices).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 0, 1]);
+    });
+
+    it('should count only supported series when mixing column and line (Property 5)', () => {
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+
+      component.series = [
+        { label: 'Column 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Line 1', data: [4, 5, 6], type: PoChartType.Line, color: 'po-color-02' },
+        { label: 'Column 2', data: [7, 8, 9], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Line 2', data: [1, 1, 1], type: PoChartType.Line, color: 'po-color-02' },
+        { label: 'Column 3', data: [2, 2, 2], type: PoChartType.Column, color: 'po-color-01' }
+      ];
+      component.options = { usePatterns: true };
+
+      component['setSeries']();
+
+      // Apenas as 3 séries suportadas (column) recebem índices, contadas de forma independente das line.
+      expect(capturedIndices).toEqual([0, 1, 2]);
+    });
+
+    it('should respect an explicit in-range patternIndex (Requirements 5.2)', () => {
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01', patternIndex: 5 }];
+      component.options = { usePatterns: true };
+
+      component['setSeries']();
+
+      expect(capturedIndices).toEqual([5]);
+    });
+
+    it('should normalize an out-of-range explicit patternIndex by modulo 8 (Requirements 5.4)', () => {
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+
+      component.series = [
+        { label: 'A', data: [1], type: PoChartType.Column, color: 'po-color-01', patternIndex: 9 },
+        { label: 'B', data: [2], type: PoChartType.Column, color: 'po-color-01', patternIndex: -1 }
+      ];
+      component.options = { usePatterns: true };
+
+      component['setSeries']();
+
+      expect(capturedIndices).toEqual([1, 7]);
+    });
+
+    it('should fall back to automatic index when patternIndex is null or non-integer (Requirements 5.5)', () => {
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+
+      component.series = [
+        { label: 'A', data: [1], type: PoChartType.Column, color: 'po-color-01', patternIndex: null as any },
+        { label: 'B', data: [2], type: PoChartType.Column, color: 'po-color-01', patternIndex: 2.5 as any }
+      ];
+      component.options = { usePatterns: true };
+
+      component['setSeries']();
+
+      // null e não inteiro são ignorados → automático por posição (0, 1).
+      expect(capturedIndices).toEqual([0, 1]);
+    });
+
+    it('should use solid color and emit exactly one console.warn per instance on svg renderer (Property 9)', () => {
+      const warnSpy = spyOn(console, 'warn');
+      component['currentRenderer'] = 'svg';
+      component['patternSvgWarningEmitted'] = false;
+
+      component.series = [
+        { label: 'Column 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Column 2', data: [4, 5, 6], type: PoChartType.Column, color: 'po-color-02' },
+        { label: 'Column 3', data: [7, 8, 9], type: PoChartType.Column, color: 'po-color-01' }
+      ];
+      component.options = { usePatterns: true };
+
+      const result = component['setSeries']();
+
+      result.forEach(serie => {
+        expect(isPatternFill(serie.itemStyle?.color)).toBeFalse();
+      });
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should fall back to solid color without throwing when getPatternFill fails (Property 10)', () => {
+      spyOn(component['patternService'], 'getPatternFill').and.throwError('canvas indisponível');
+
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' }];
+      component.options = { usePatterns: true };
+
+      let result: Array<any>;
+      expect(() => (result = component['setSeries']())).not.toThrow();
+      expect(isPatternFill(result[0].itemStyle.color)).toBeFalse();
+      expect(result[0].itemStyle.color).toBe('#0000ff');
+    });
+
+    it('should produce the same itemStyle.color per serie across two setSeries runs with the same data (Property 7)', () => {
+      const buildSeries = (): Array<PoChartSerie> => [
+        { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Serie 2', data: [4, 5, 6], type: PoChartType.Column, color: 'po-color-02' }
+      ];
+
+      component.options = { usePatterns: true };
+
+      component.series = buildSeries();
+      const firstRun = component['setSeries']().map(serie => serie.itemStyle?.color);
+
+      component.series = buildSeries();
+      const secondRun = component['setSeries']().map(serie => serie.itemStyle?.color);
+
+      firstRun.forEach((color, index) => {
+        expect(isPatternFill(color)).toBeTrue();
+        expect(isPatternFill(secondRun[index])).toBeTrue();
+      });
+      // Mesmos dados/ordem/configuração → mesmo índice de padrão por série.
+      const firstIndices = [0, 1];
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+      component.series = buildSeries();
+      component['setSeries']();
+      expect(capturedIndices).toEqual(firstIndices);
+    });
+
+    it('should regenerate fill with active theme color and preserve pattern index after PoUiThemeChange (Requirements 9.1, 9.2)', () => {
+      const capturedIndices: Array<number> = [];
+      spyOn(component['patternService'], 'getPatternFill').and.callFake((color: string, patternIndex: number) => {
+        capturedIndices.push(patternIndex);
+        return { image: document.createElement('canvas'), repeat: 'repeat' };
+      });
+
+      component.series = [
+        { label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' },
+        { label: 'Serie 2', data: [4, 5, 6], type: PoChartType.Column, color: 'po-color-02' }
+      ];
+      component.options = { usePatterns: true };
+
+      // Primeira renderização.
+      component['setSeries']();
+      const indicesBefore = [...capturedIndices];
+      capturedIndices.length = 0;
+
+      // Simula recriação da instância após troca de tema (dispose + initECharts reexecuta setSeries).
+      component['patternSvgWarningEmitted'] = false;
+      component['setSeries']();
+      const indicesAfter = [...capturedIndices];
+
+      expect(indicesBefore).toEqual([0, 1]);
+      expect(indicesAfter).toEqual(indicesBefore);
     });
   });
 });
