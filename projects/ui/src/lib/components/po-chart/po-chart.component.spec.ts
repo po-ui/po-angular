@@ -15,6 +15,8 @@ import { PoChartOptions } from '../po-chart/interfaces/po-chart-options.interfac
 import { PoChartSerie } from '../po-chart/interfaces/po-chart-serie.interface';
 import { PoChartBaseComponent } from './po-chart-base.component';
 import { PoChartComponent } from './po-chart.component';
+import { PoChartGridUtils } from './po-chart-grid-utils';
+
 class EChartsMock {
   setOption = jasmine.createSpy('setOption');
   resize = jasmine.createSpy('resize');
@@ -1719,6 +1721,9 @@ describe('PoChartComponent', () => {
   });
 
   describe('setOptionLegend', () => {
+    beforeEach(() => {
+      component['chartGridUtils'] = new PoChartGridUtils(component);
+    });
     it('should configure legend with scroll type', () => {
       spyOn(component as any, 'getCSSVariable').and.returnValue('#000');
 
@@ -1751,6 +1756,34 @@ describe('PoChartComponent', () => {
       expect(options.legend.pageIconColor).toBe('');
       expect(options.legend.pageIconInactiveColor).toBe('');
       expect(options.legend.left).toBe('right');
+    });
+    it('should resolve legend textStyle fontSize to a number and fontWeight to a number', () => {
+      spyOn(component['chartGridUtils'], 'resolvePx').and.returnValue(12);
+      spyOn(component as any, 'getCSSVariable').and.callFake((variable: string) =>
+        variable === '--font-weight-grid' ? '400' : '#000'
+      );
+
+      const options: any = {};
+
+      component['setOptionLegend'](options);
+
+      expect(component['chartGridUtils'].resolvePx).toHaveBeenCalledWith('--font-size-grid', '.po-chart');
+      expect(options.legend.textStyle.fontSize).toBe(12);
+      expect(options.legend.textStyle.fontWeight).toBe(400);
+    });
+
+    it('should keep legend textStyle fontSize as the value returned by resolvePx', () => {
+      spyOn(component['chartGridUtils'], 'resolvePx').and.returnValue(16);
+      spyOn(component as any, 'getCSSVariable').and.callFake((variable: string) =>
+        variable === '--font-weight-grid' ? '700' : '#000'
+      );
+
+      const options: any = {};
+
+      component['setOptionLegend'](options);
+
+      expect(options.legend.textStyle.fontSize).toBe(16);
+      expect(options.legend.textStyle.fontWeight).toBe(700);
     });
   });
 
