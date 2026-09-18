@@ -1,7 +1,7 @@
 import { AnimationCallbackEvent, ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 
-import { PoTreeViewService } from '../services/po-tree-view.service';
 import { PoTreeViewItem } from './po-tree-view-item.interface';
+import { PoTreeViewService } from '../services/po-tree-view.service';
 
 @Component({
   selector: '[po-tree-view-item]',
@@ -25,11 +25,23 @@ export class PoTreeViewItemComponent {
   readonly singleSelect = input<boolean>(false, { alias: 'p-single-select' });
 
   protected animateEnter(event: AnimationCallbackEvent): void {
-    this.animateHeight(event, '0px', `${(event.target as HTMLElement).scrollHeight}px`);
+    const height = `${(event.target as HTMLElement).scrollHeight}px`;
+
+    this.animateToggle(event, [
+      { height: '0px', opacity: 0, offset: 0 },
+      { height, opacity: 0, offset: 0.66 },
+      { height, opacity: 1, offset: 1 }
+    ]);
   }
 
   protected animateLeave(event: AnimationCallbackEvent): void {
-    this.animateHeight(event, `${(event.target as HTMLElement).scrollHeight}px`, '0px');
+    const height = `${(event.target as HTMLElement).scrollHeight}px`;
+
+    this.animateToggle(event, [
+      { height, opacity: 1, offset: 0 },
+      { height, opacity: 0, offset: 0.33 },
+      { height: '0px', opacity: 0, offset: 1 }
+    ]);
   }
 
   protected get hasSubItems() {
@@ -48,7 +60,7 @@ export class PoTreeViewItemComponent {
     this.treeViewService.emitSelectedEvent({ ...selectedItem });
   }
 
-  onActivate(activatedItem: PoTreeViewItem) {
+  protected onActivate(activatedItem: PoTreeViewItem) {
     this.treeViewService.emitActivatedEvent({ ...activatedItem });
   }
 
@@ -56,14 +68,14 @@ export class PoTreeViewItemComponent {
     return index;
   }
 
-  private animateHeight(event: AnimationCallbackEvent, from: string, to: string): void {
+  private animateToggle(event: AnimationCallbackEvent, keyframes: Array<Keyframe>): void {
     const element = event.target as HTMLElement;
     const previousOverflow = element.style.overflow;
     element.style.overflow = 'hidden';
 
-    const animation = element.animate([{ height: from }, { height: to }], {
-      duration: 200,
-      easing: 'linear'
+    const animation = element.animate(keyframes, {
+      duration: 300,
+      easing: 'ease-in-out'
     });
 
     animation.onfinish = () => {
