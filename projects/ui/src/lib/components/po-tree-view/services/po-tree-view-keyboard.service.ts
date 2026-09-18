@@ -24,14 +24,14 @@ export class PoTreeViewKeyboardService {
     }
   }
 
-  getVisibleNodes(): Array<HTMLElement> {
+  private getVisibleNodes(): Array<HTMLElement> {
     if (!this.hostElement) {
       return [];
     }
     return Array.from(this.hostElement.nativeElement.querySelectorAll('.po-tree-view-item-content-padding[tabindex]'));
   }
 
-  getFocusableNodes(): Array<HTMLElement> {
+  private getFocusableNodes(): Array<HTMLElement> {
     return this.getVisibleNodes().filter(node => this.isNodeFocusable(node));
   }
 
@@ -45,7 +45,7 @@ export class PoTreeViewKeyboardService {
   focusLast(): void {
     const nodes = this.getFocusableNodes();
     if (nodes.length) {
-      this.focusNode(nodes[nodes.length - 1]);
+      this.focusNode(nodes.at(-1));
     }
   }
 

@@ -22,7 +22,7 @@
 <po-divider p-label="Po Tree View Config"></po-divider>
 
 <div class="po-row">
-  <po-input class="po-md-6 po-lg-3" name="level" [(ngModel)]="maxLevel" p-label="Max Level"> </po-input>
+  <po-number class="po-md-6 po-lg-3" name="level" [(ngModel)]="maxLevel" p-label="Max Level"> </po-number>
   <po-switch class="po-md-6 po-lg-2" name="selectable" [(ngModel)]="selectable" p-label="Selectable"> </po-switch>
   <po-switch class="po-md-6 po-lg-2" name="singleSelect" [(ngModel)]="singleSelect" p-label="Single Select">
   </po-switch>
@@ -76,7 +76,7 @@
       class="po-md-4 po-lg-2"
       p-label="Add"
       [p-disabled]="treeViewItemForm.invalid"
-      (p-click)="add(treeViewItem); treeViewItemForm.reset(); this.itemProperties = []"
+      (p-click)="addTreeViewItem(treeViewItemForm)"
     >
     </po-button>
   </div>

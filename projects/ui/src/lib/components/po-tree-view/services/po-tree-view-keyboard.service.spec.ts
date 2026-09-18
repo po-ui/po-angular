@@ -58,29 +58,29 @@ describe('PoTreeViewKeyboardService:', () => {
   describe('getVisibleNodes:', () => {
     it('should return empty array when hostElement is not set', () => {
       service.setHostElement(undefined);
-      expect(service.getVisibleNodes()).toEqual([]);
+      expect(service['getVisibleNodes']()).toEqual([]);
     });
 
     it('should return all nodes with tabindex attribute', () => {
       buildTree([createNode('A'), createNode('B'), createNode('C')]);
-      expect(service.getVisibleNodes().length).toBe(3);
+      expect(service['getVisibleNodes']().length).toBe(3);
     });
   });
 
   describe('getFocusableNodes:', () => {
     it('should include enabled nodes', () => {
       buildTree([createNode('A'), createNode('B')]);
-      expect(service.getFocusableNodes().length).toBe(2);
+      expect(service['getFocusableNodes']().length).toBe(2);
     });
 
     it('should exclude disabled nodes without subItems', () => {
       buildTree([createNode('A'), createNode('B', { disabled: true }), createNode('C')]);
-      expect(service.getFocusableNodes().length).toBe(2);
+      expect(service['getFocusableNodes']().length).toBe(2);
     });
 
     it('should include disabled nodes with subItems', () => {
       buildTree([createNode('A'), createNode('B', { disabled: true, hasSubItems: true }), createNode('C')]);
-      expect(service.getFocusableNodes().length).toBe(3);
+      expect(service['getFocusableNodes']().length).toBe(3);
     });
   });
 

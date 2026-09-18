@@ -83,7 +83,7 @@ describe('PoTreeviewItemComponent:', () => {
 
       const spyEmitEvent = spyOn(component['treeViewService'], 'emitActivatedEvent');
 
-      component.onActivate(item);
+      component['onActivate'](item);
 
       expect(spyEmitEvent).toHaveBeenCalledWith({ ...item });
     });
@@ -92,39 +92,53 @@ describe('PoTreeviewItemComponent:', () => {
       expect(component['trackByFunction'](1)).toBe(1);
     });
 
-    it('animateEnter: should animate height from 0 to scrollHeight and call animationComplete', () => {
+    it('animateEnter: should animate height and opacity from hidden to visible and call animationComplete', () => {
       const animationComplete = jasmine.createSpy('animationComplete');
       const animation: any = {};
       const element = document.createElement('div');
+      element.style.overflow = 'auto';
       Object.defineProperty(element, 'scrollHeight', { value: 120 });
       spyOn(element, 'animate').and.returnValue(animation);
 
       component['animateEnter'](<any>{ target: element, animationComplete });
 
-      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '120px' }], {
-        duration: 200,
-        easing: 'linear'
-      });
+      expect(element.animate).toHaveBeenCalledWith(
+        [
+          { height: '0px', opacity: 0, offset: 0 },
+          { height: '120px', opacity: 0, offset: 0.66 },
+          { height: '120px', opacity: 1, offset: 1 }
+        ],
+        { duration: 300, easing: 'ease-in-out' }
+      );
+      expect(element.style.overflow).toBe('hidden');
 
       animation.onfinish();
+      expect(element.style.overflow).toBe('auto');
       expect(animationComplete).toHaveBeenCalled();
     });
 
-    it('animateLeave: should animate height from scrollHeight to 0 and call animationComplete', () => {
+    it('animateLeave: should animate height and opacity from visible to hidden and call animationComplete', () => {
       const animationComplete = jasmine.createSpy('animationComplete');
       const animation: any = {};
       const element = document.createElement('div');
+      element.style.overflow = 'auto';
       Object.defineProperty(element, 'scrollHeight', { value: 80 });
       spyOn(element, 'animate').and.returnValue(animation);
 
       component['animateLeave'](<any>{ target: element, animationComplete });
 
-      expect(element.animate).toHaveBeenCalledWith([{ height: '80px' }, { height: '0px' }], {
-        duration: 200,
-        easing: 'linear'
-      });
+      expect(element.animate).toHaveBeenCalledWith(
+        [
+          { height: '80px', opacity: 1, offset: 0 },
+          { height: '80px', opacity: 0, offset: 0.33 },
+          { height: '0px', opacity: 0, offset: 1 }
+        ],
+        { duration: 300, easing: 'ease-in-out' }
+      );
+      expect(element.style.overflow).toBe('hidden');
 
       animation.onfinish();
+      expect(element.style.overflow).toBe('auto');
       expect(animationComplete).toHaveBeenCalled();
     });
   });
