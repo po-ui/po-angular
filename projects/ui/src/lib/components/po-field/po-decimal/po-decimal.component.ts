@@ -337,6 +337,7 @@ export class PoDecimalComponent extends PoInputBaseComponent implements AfterVie
 
   clear(value) {
     this.callOnChange(value);
+    this.valueBeforeChange = undefined;
     this.controlChangeEmitter();
 
     if (this.errorAsyncProperties?.triggerMode === 'changeModel') {

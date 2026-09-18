@@ -842,6 +842,27 @@ describe('PoDecimalComponent:', () => {
     expect(component['callOnChange']).toHaveBeenCalled();
   });
 
+  it('clear: should emit p-change even without prior focus', fakeAsync(() => {
+    fixture.detectChanges();
+    spyOn(component.change, 'emit');
+
+    component.clear(undefined);
+    tick(250);
+
+    expect(component.change.emit).toHaveBeenCalled();
+  }));
+
+  it('clear: should emit p-change when field had prior focus', fakeAsync(() => {
+    fixture.detectChanges();
+    component['valueBeforeChange'] = '123,45';
+    spyOn(component.change, 'emit');
+
+    component.clear(undefined);
+    tick(250);
+
+    expect(component.change.emit).toHaveBeenCalled();
+  }));
+
   it('should call hasLessDot', () => {
     const fakeThis = {
       oldValue: ''
