@@ -1,15 +1,16 @@
 @if (hasItems) {
-  <po-container p-no-padding>
-    <ul class="po-tree-view">
+  <po-container [p-no-padding]="true">
+    <ul class="po-tree-view" role="tree" tabindex="0" (focus)="onTreeFocus($event)" (keydown)="onTreeKeydown($event)">
       @for (item of items; track trackByFunction($index)) {
-        <po-tree-view-item
+        <li
+          po-tree-view-item
+          class="po-tree-view-item"
           [p-components-size]="componentsSize"
           [p-item]="item"
-          [p-selectable]="selectable"
-          [p-single-select]="singleSelect"
+          [p-selectable]="selectable()"
+          [p-single-select]="singleSelect()"
           [p-selected-value]="selectedValue"
-        >
-        </po-tree-view-item>
+        ></li>
       }
     </ul>
   </po-container>

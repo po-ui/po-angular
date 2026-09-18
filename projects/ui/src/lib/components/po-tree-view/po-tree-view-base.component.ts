@@ -1,80 +1,68 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
-
-import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { Directive, HostBinding, HostListener, effect, input, output } from '@angular/core';
 
 import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoTreeViewItem } from './po-tree-view-item/po-tree-view-item.interface';
+import { convertToBoolean, convertToInt, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 
 const poTreeViewMaxLevel = 4;
 
 /**
  * @description
  *
- * O componente fornece um modelo de visualização em árvore, possibilitando a visualização das informações de maneira
- * hierárquica, desta forma sendo possível utilizar até 4 níveis.
+ * O componente fornece um modelo de visualização em árvore, possibilitando a exibição de informações de maneira
+ * hierárquica com suporte a múltiplos níveis (configurável via `p-max-level`).
  *
- * Nele é possível navegar entre os itens através da tecla *tab*, permitindo expandir ou colapsar o item em foco
- * por meio das teclas *enter* e *space*.
+ * O componente permite:
+ * - Navegação completa por teclado seguindo o padrão WAI-ARIA TreeView;
+ * - Expansão e recolhimento de itens agrupadores;
+ * - Seleção múltipla (checkbox) ou única (radio) dos itens;
+ * - Exibição de ícones automáticos para agrupadores e itens finais;
+ * - Estado desabilitado global ou individual por item;
+ * - Execução de itens finais via clique ou teclado.
  *
- * Além da navegação, o componente possibilita também a seleção dos itens do primeiro ao último nível, tanto de forma parcial como completa.
+ * #### Navegação por teclado
  *
- * O componente também possui eventos disparados ao marcar/desmarcar e expandir/colapsar os itens.
+ * | Tecla                 | Descrição                                                                                                 |
+ * |-----------------------|-----------------------------------------------------------------------------------------------------------|
+ * | **Tab**               | Entra no componente posicionando o foco no primeiro nó ativo. Ao pressionar novamente, sai do componente. |
+ * | **ArrowDown**         | Move o foco para o próximo nó visível.                                                                    |
+ * | **ArrowUp**           | Move o foco para o nó visível anterior.                                                                   |
+ * | **ArrowRight**        | Se colapsado, expande o nó. Se expandido, move o foco para o nó filho.                                    |
+ * | **ArrowLeft**         | Se expandido, recolhe o nó. Se filho, move o foco para o nó pai.                                          |
+ * | **Home**              | Move o foco para o primeiro nó visível.                                                                   |
+ * | **End**               | Move o foco para o último nó visível.                                                                     |
+ * | **Enter / Space**     | Com `p-selectable`: alterna a seleção do item. Sem `p-selectable`: executa o item final.                  |
+ * | **Caractere**         | Move o foco para o próximo nó cujo label inicia com o caractere pressionado (busca cíclica).              |
+ *
+ * #### Tokens customizáveis
+ *
+ * É possível alterar o estilo do componente usando os seguintes tokens (CSS):
+ *
+ * > Para maiores informações, acesse o guia [Personalizando o Tema Padrão com Tokens CSS](https://po-ui.io/guides/theme-customization).
+ *
+ * | Propriedade                            | Descrição                                             | Valor Padrão                                    |
+ * |----------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+ * | **Default**                            |                                                       |                                                 |
+ * | `--background-color`                   | Cor de background do item                             | `var(--color-neutral-light-00)`                 |
+ * | `--divider-color`                      | Cor do divider dos agrupadores de nível 0             | `var(--color-neutral-mid-40)`                   |
+ * | `--font-family`                        | Família tipográfica                                   | `var(--font-family-theme)`                      |
+ * | `--font-size`                          | Tamanho da fonte                                      | `var(--font-size-default)`                      |
+ * | `--line-height`                        | Altura da linha                                       | `var(--line-height-md)`                         |
+ * | `--color`                              | Cor padrão do item                                    | `var(--color-action-default)`                   |
+ * | **Hover**                              |                                                       |                                                 |
+ * | `--color-hover`                        | Cor do item em hover                                  | `var(--color-action-hover)`                     |
+ * | **Pressed**                            |                                                       |                                                 |
+ * | `--color-pressed`                      | Cor do item em pressed                                | `var(--color-action-pressed)`                   |
+ * | **Disabled**                           |                                                       |                                                 |
+ * | `--color-disabled`                     | Cor do item desabilitado                              | `var(--color-action-disabled)`                  |
+ * | **Selected**                           |                                                       |                                                 |
+ * | `--title-color`                        | Cor do label quando selecionado                       | `var(--color-action-focus)`                     |
  */
 @Directive()
 export class PoTreeViewBaseComponent {
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será disparada ao colapsar um item.
-   *
-   * > Como parâmetro o componente envia o item colapsado.
-   */
-  @Output('p-collapsed') collapsed = new EventEmitter<PoTreeViewItem>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será disparada ao expandir um item.
-   *
-   * > Como parâmetro o componente envia o item expandido.
-   */
-  @Output('p-expanded') expanded = new EventEmitter<PoTreeViewItem>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será disparada ao selecionar um item.
-   *
-   * > Como parâmetro o componente envia o item selecionado.
-   */
-  @Output('p-selected') selected = new EventEmitter<PoTreeViewItem>();
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Ação que será disparada ao desfazer a seleção de um item.
-   *
-   * > Como parâmetro o componente envia o item que foi desmarcado.
-   */
-  @Output('p-unselected') unselected = new EventEmitter<PoTreeViewItem>();
-
-  private _componentsSize: string = undefined;
-  private _initialComponentsSize: string = undefined;
-  private _items: Array<PoTreeViewItem> = [];
-  private _selectable: boolean = false;
-  private _maxLevel = poTreeViewMaxLevel;
-  private _singleSelect: boolean = false;
-
-  // armazena o value do item selecionado
-  selectedValue: string | number;
+  // ==============================
+  // #region Inputs
+  // ==============================
 
   /**
    * @optional
@@ -90,63 +78,33 @@ export class PoTreeViewBaseComponent {
    *
    * @default `medium`
    */
-  set componentsSize(value: string) {
-    this._initialComponentsSize = value;
-    this.applySizeBasedOnA11y();
-  }
+  readonly componentsSizeInput = input<string>(undefined, { alias: 'p-components-size' });
 
-  @Input('p-components-size')
-  @HostBinding('attr.p-components-size')
-  get componentsSize(): string {
-    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
-  }
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Desabilita o componente inteiro.
+   *
+   * Quando `true`, todos os itens do tree-view serão exibidos no estado desabilitado,
+   * independentemente do valor individual da propriedade `disabled` de cada item.
+   *
+   * > O botão de expansão/recolhimento (arrow) permanece interativo mesmo quando o componente está desabilitado.
+   *
+   * @default `false`
+   */
+  readonly disabled = input<boolean, boolean>(false, {
+    alias: 'p-disabled',
+    transform: (value: boolean) => convertToBoolean(value)
+  });
 
   /**
    * Lista de itens do tipo `PoTreeViewItem` que será renderizada pelo componente.
+   *
+   * > Consulte a documentação de `PoTreeViewItem` para detalhes sobre as propriedades disponíveis em cada item.
    */
-  @Input('p-items') inputedItems: Array<PoTreeViewItem>;
-
-  set items(value: Array<PoTreeViewItem>) {
-    this._items = Array.isArray(value) ? this.getItemsByMaxLevel(value) : [];
-  }
-
-  get items() {
-    return this._items;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Habilita uma caixa de seleção para selecionar e/ou desmarcar um item da lista.
-   *
-   * @default false
-   */
-  @Input('p-selectable') set selectable(value: boolean) {
-    this._selectable = convertToBoolean(value);
-  }
-
-  get selectable() {
-    return this._selectable;
-  }
-
-  /**
-   * @optional
-   *
-   * @description
-   *
-   * Habilita a seleção para item único atráves de po-radio.
-   *
-   * @default false
-   */
-  @Input('p-single-select') set singleSelect(value: boolean) {
-    this._singleSelect = convertToBoolean(value);
-  }
-
-  get singleSelect() {
-    return this._singleSelect;
-  }
+  readonly inputedItems = input<Array<PoTreeViewItem>>([], { alias: 'p-items' });
 
   /**
    * @optional
@@ -159,37 +117,166 @@ export class PoTreeViewBaseComponent {
    *
    * @default 4
    */
-  @Input('p-max-level') set maxLevel(value: number) {
-    this._maxLevel = convertToInt(value, poTreeViewMaxLevel);
+  readonly maxLevel = input<number, number>(poTreeViewMaxLevel, {
+    alias: 'p-max-level',
+    transform: (value: number) => convertToInt(value, poTreeViewMaxLevel)
+  });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita uma caixa de seleção para selecionar e/ou desmarcar um item da lista.
+   *
+   * > Quando habilitado, a propriedade `showIcon` dos itens não será aplicada.
+   *
+   * @default false
+   */
+  readonly selectable = input<boolean, boolean>(false, {
+    alias: 'p-selectable',
+    transform: (value: boolean) => convertToBoolean(value)
+  });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita a seleção para item único atráves de po-radio.
+   *
+   * @default false
+   */
+  readonly singleSelect = input<boolean, boolean>(false, {
+    alias: 'p-single-select',
+    transform: (value: boolean) => convertToBoolean(value)
+  });
+  // ==============================
+  // #endregion
+  // ==============================
+
+  // ==============================
+  // #region Outputs
+  // ==============================
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será disparada ao colapsar um item.
+   *
+   * > Como parâmetro o componente envia o item colapsado.
+   */
+  readonly collapsed = output<PoTreeViewItem>({ alias: 'p-collapsed' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será disparada ao expandir um item.
+   *
+   * > Como parâmetro o componente envia o item expandido.
+   */
+  readonly expanded = output<PoTreeViewItem>({ alias: 'p-expanded' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será disparada ao selecionar um item.
+   *
+   * > Como parâmetro o componente envia o item selecionado.
+   */
+  readonly selected = output<PoTreeViewItem>({ alias: 'p-selected' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será disparada ao desfazer a seleção de um item.
+   *
+   * > Como parâmetro o componente envia o item que foi desmarcado.
+   */
+  readonly unselected = output<PoTreeViewItem>({ alias: 'p-unselected' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Ação que será disparada ao executar um item final (sem `subItems`).
+   *
+   * > Como parâmetro o componente envia o item executado.
+   */
+  readonly activated = output<PoTreeViewItem>({ alias: 'p-activated' });
+  // ==============================
+  // #endregion
+  // ==============================
+
+  // ==============================
+  // #region Internal Properties
+  // ==============================
+
+  private _componentsSize: string = undefined;
+  private _items: Array<PoTreeViewItem> = [];
+
+  // armazena o value do item selecionado
+  selectedValue: string | number;
+
+  @HostBinding('attr.p-components-size')
+  get componentsSize(): string {
+    return this._componentsSize ?? getDefaultSizeFn(PoFieldSize);
   }
 
-  get maxLevel() {
-    return this._maxLevel;
+  set items(value: Array<PoTreeViewItem>) {
+    this._items = Array.isArray(value) ? this.getItemsByMaxLevel(value) : [];
+  }
+
+  get items() {
+    return this._items;
+  }
+
+  constructor() {
+    effect(() => {
+      const value = this.componentsSizeInput();
+      this.applySizeBasedOnA11y(value);
+    });
   }
 
   @HostListener('window:PoUiThemeChange')
   protected onThemeChange(): void {
-    this.applySizeBasedOnA11y();
+    this.applySizeBasedOnA11y(this.componentsSizeInput());
   }
 
   protected emitExpanded(treeViewItem: PoTreeViewItem) {
-    const event = treeViewItem.expanded ? 'expanded' : 'collapsed';
-
-    this[event].emit({ ...treeViewItem });
+    if (treeViewItem.expanded) {
+      this.expanded.emit({ ...treeViewItem });
+    } else {
+      this.collapsed.emit({ ...treeViewItem });
+    }
   }
 
   protected emitSelected(treeViewItem: PoTreeViewItem) {
-    const event = treeViewItem.selected ? 'selected' : 'unselected';
+    if (treeViewItem.disabled) {
+      return;
+    }
 
     this.selectedValue = treeViewItem.value;
 
-    // Não emitir subItems quando for singleSelect
     const { subItems, ...rest } = treeViewItem;
-    const treeViewToEmit = this.singleSelect ? { ...rest } : treeViewItem;
+    const treeViewToEmit = this.singleSelect() ? { ...rest } : treeViewItem;
 
     this.updateItemsOnSelect(treeViewToEmit);
 
-    this[event].emit({ ...treeViewToEmit });
+    if (treeViewItem.selected) {
+      this.selected.emit({ ...treeViewToEmit });
+    } else {
+      this.unselected.emit({ ...treeViewToEmit });
+    }
   }
 
   private addChildItemInParent(childItem: PoTreeViewItem, parentItem: PoTreeViewItem) {
@@ -200,11 +287,6 @@ export class PoTreeViewBaseComponent {
     parentItem.subItems.push(childItem);
   }
 
-  // caso houver parentItem:
-  //  - expande o parentItem caso o filho estiver expandido;
-  //  - adiciona o childItem no parentItem;
-  //  - marca o parentItem caso conter subItems marcodos ou nulos;
-  // Se não conter parentItem, adiciona o childItem no items.
   private addItem(items: Array<PoTreeViewItem>, childItem: PoTreeViewItem, parentItem?: PoTreeViewItem, isNewItem?) {
     if (parentItem) {
       if (isNewItem) {
@@ -213,7 +295,7 @@ export class PoTreeViewBaseComponent {
 
       this.addChildItemInParent(childItem, parentItem);
 
-      if (!this.singleSelect) {
+      if (!this.singleSelect()) {
         this.selectItemBySubItems(parentItem);
       }
 
@@ -237,10 +319,6 @@ export class PoTreeViewBaseComponent {
     item.selected = this.everyItemSelected(item.subItems);
   }
 
-  // retornará:
-  //  - true: se todos os items estiverem marcados;
-  //  - null: se no minimo um item esteja marcado ou nullo (indeterminate)
-  //  - false: caso não corresponda em nenhuma das opções acima, no caso, nenhum marcado ou nulo;
   private everyItemSelected(items: Array<PoTreeViewItem> = []): boolean | null {
     const itemsLength = items.length;
 
@@ -259,7 +337,6 @@ export class PoTreeViewBaseComponent {
     return false;
   }
 
-  // expande o item pai caso o filho estiver expandido.
   private expandParentItem(childItem: PoTreeViewItem, parentItem: PoTreeViewItem) {
     if (childItem.expanded) {
       parentItem.expanded = true;
@@ -272,11 +349,23 @@ export class PoTreeViewBaseComponent {
     parentItem?: PoTreeViewItem,
     newItems = []
   ) {
+    const globalDisabled = this.disabled();
+
     items.forEach(item => {
       const { subItems, ...currentItem } = item;
 
-      if (level === this.maxLevel) {
+      if (level === this.maxLevel()) {
         return;
+      }
+
+      // Compatibilidade: isSelectable === false é redirecionado para disabled
+      if (currentItem.isSelectable === false && !currentItem.disabled) {
+        currentItem.disabled = true;
+      }
+
+      // p-disabled global prevalece sobre o estado individual
+      if (globalDisabled) {
+        currentItem.disabled = true;
       }
 
       if (Array.isArray(subItems)) {
@@ -314,15 +403,18 @@ export class PoTreeViewBaseComponent {
   }
 
   private updateItemsOnSelect(selectedItem: PoTreeViewItem) {
-    if (selectedItem.subItems && !this.singleSelect) {
+    if (selectedItem.subItems && !this.singleSelect()) {
       this.selectAllItems(selectedItem.subItems, selectedItem.selected);
     }
 
     this._items = this.getItemsWithParentSelected(this.items);
   }
 
-  private applySizeBasedOnA11y(): void {
-    const size = validateSizeFn(this._initialComponentsSize, PoFieldSize);
+  private applySizeBasedOnA11y(initialValue: string): void {
+    const size = validateSizeFn(initialValue, PoFieldSize);
     this._componentsSize = size;
   }
+  // ==============================
+  // #endregion
+  // ==============================
 }
