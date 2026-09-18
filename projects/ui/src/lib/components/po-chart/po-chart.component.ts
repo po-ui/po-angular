@@ -588,9 +588,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       icon: 'roundRect',
       textStyle: {
         color: this.getCSSVariable('--color-legend', '.po-chart'),
-        fontSize: this.getCSSVariable('--font-size-grid', '.po-chart'),
+        fontSize: this.chartGridUtils.resolvePx('--font-size-grid', '.po-chart'),
         fontFamily: this.getCSSVariable('--font-family-grid', '.po-chart'),
-        fontWeight: this.getCSSVariable('--font-weight-grid', '.po-chart')
+        fontWeight: Number(this.getCSSVariable('--font-weight-grid', '.po-chart'))
       }
     };
   }
