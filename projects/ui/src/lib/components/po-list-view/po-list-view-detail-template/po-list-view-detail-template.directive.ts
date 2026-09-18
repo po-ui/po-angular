@@ -44,6 +44,12 @@ import { Directive, TemplateRef, Input } from '@angular/core';
  * ...
  *
  * ```
+ *
+ * > O modo de exibição do detalhe é definido pela propriedade
+ * [`p-detail-display`](/documentation/po-list-view) do `po-list-view`, que utiliza os valores do
+ * enum `PoListViewDetailDisplay`:
+ *  - `inline`: expande o conteúdo do detalhe abaixo do item (padrão);
+ *  - `modal`: exibe o conteúdo do detalhe no corpo de um `po-modal`.
  */
 @Directive({
   selector: '[p-list-view-detail-template]',

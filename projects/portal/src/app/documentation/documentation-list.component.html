@@ -1,12 +1,19 @@
 <po-page-list p-title="API Reference" [p-filter]="filter">
   <po-list-view
     p-property-title="title"
+    p-property-subtitle="description"
+    p-property-tag="tagLabel"
+    p-property-tag-type="tagType"
+    p-tag-position="right"
+    p-detail-display="inline"
     [p-actions]="listActions"
     [p-items]="filteredItems"
-    (p-title-action)="viewDocumentation($event)"
+    (p-title-action)="viewSample($event)"
   >
-    <ng-template p-list-view-content-template let-item>
-      <div class="list-item-preview" [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
+    <ng-template p-list-view-detail-template let-item>
+      @if (item.preview) {
+        <div [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
+      }
     </ng-template>
   </po-list-view>
 </po-page-list>

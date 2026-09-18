@@ -1,14 +1,16 @@
 <po-list-view
   [p-actions]="actions"
   [p-components-size]="componentsSize"
+  [p-detail-display]="detailDisplay"
+  [p-field-properties]="fieldProperties"
   [p-height]="height"
   [p-hide-select-all]="properties.includes('hideSelectAll')"
   [p-items]="items"
   [p-literals]="customLiterals"
-  [p-property-link]="propertyLink"
-  [p-property-title]="propertyTitle"
   [p-select]="properties.includes('select')"
+  [p-selection-mode]="selectionMode"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
+  [p-tag-position]="tagPosition"
   (p-show-more)="showMore()"
   (p-title-action)="changeAction('p-title-action')"
 >
@@ -82,7 +84,7 @@
       class="po-md-12 po-lg-6"
       name="literals"
       [(ngModel)]="literals"
-      p-help='Ex.: { "hideDetails": "Esconder detalhes", "showDetails": "Ver detalhes", "loadMoreData": "Ver mais", "noData": "Sem itens cadastrados" }'
+      p-help='Ex.: { "hideDetails": "Hide details", "showDetails": "Show details", "loadMoreData": "Load more", "noData": "No registered items" }'
       p-label="Literals"
       (p-change)="changeLiterals()"
     >
@@ -93,10 +95,85 @@
       name="size"
       [(ngModel)]="componentsSize"
       p-label="Components size"
-      p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
+      p-help="To apply the small size, set the accessibility level to AA, adjustable in the navbar or theme service (https://po-ui.io/documentation/po-theme)."
       [p-options]="componentsSizeOptions"
     >
     </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="selectionMode"
+      [(ngModel)]="selectionMode"
+      p-label="Selection mode"
+      p-help='Defines the selection mode when the "Select" option is enabled. In "single" the "Select all" option is hidden.'
+      [p-options]="selectionModeOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="detailDisplay"
+      [(ngModel)]="detailDisplay"
+      p-label="Detail display"
+      p-help="Defines whether the detail is shown inline (expand) or in a modal."
+      [p-options]="detailDisplayOptions"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-lg-6"
+      name="tagPosition"
+      [(ngModel)]="tagPosition"
+      p-label="Tag position"
+      p-help="Tag positioning relative to the title (right, top, bottom)."
+      [p-options]="tagPositionOptions"
+    >
+    </po-radio-group>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyTag"
+      [(ngModel)]="propertyTag"
+      p-help='Ex.: "tag"'
+      p-label="Property tag"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyTagType"
+      [(ngModel)]="propertyTagType"
+      p-help='Ex.: "tagType"'
+      p-label="Property tag type"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertySubtitle"
+      [(ngModel)]="propertySubtitle"
+      p-help='Ex.: "subtitle"'
+      p-label="Property subtitle"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyAvatar"
+      [(ngModel)]="propertyAvatar"
+      p-help='Ex.: "avatar"'
+      p-label="Property avatar"
+    >
+    </po-input>
+
+    <po-input
+      class="po-md-6 po-lg-3"
+      name="propertyHighlighted"
+      [(ngModel)]="propertyHighlighted"
+      p-help='Ex.: "unread"'
+      p-label="Property highlighted"
+    >
+    </po-input>
   </div>
 
   <div class="po-row">

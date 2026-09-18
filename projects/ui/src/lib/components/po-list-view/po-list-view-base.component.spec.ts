@@ -1,16 +1,32 @@
 import { poLocaleDefault } from '../../services/po-language/po-language.constant';
-import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 
 import { PoThemeA11yEnum } from '../../services';
 import { PoListViewBaseComponent, poListViewLiteralsDefault } from './po-list-view-base.component';
+import { PoListViewDetailDisplay } from './enums/po-list-view-detail-display.enum';
+import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
+
+@Component({
+  template: '',
+  standalone: true
+})
+class PoListViewTestComponent extends PoListViewBaseComponent {}
 
 describe('PoListViewBaseComponent:', () => {
-  const languageService: PoLanguageService = new PoLanguageService();
-  let component: PoListViewBaseComponent;
+  let component: PoListViewTestComponent;
+  let fixture: ComponentFixture<PoListViewTestComponent>;
 
-  beforeEach(() => {
-    component = new PoListViewBaseComponent(languageService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PoListViewTestComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoListViewTestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   describe('Properties:', () => {
@@ -308,6 +324,246 @@ describe('PoListViewBaseComponent:', () => {
       component.items.forEach(listItem => component.selectListItem(listItem));
 
       component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
+    });
+
+    it('p-selection-mode: should have `multiple` as default value', () => {
+      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Multiple);
+    });
+
+    it('p-selection-mode: should update to `single` when set with `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Single);
+    });
+
+    it('p-selection-mode: should fallback to `multiple` when set with an invalid value', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'invalid');
+      fixture.detectChanges();
+
+      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Multiple);
+    });
+
+    it('selectListItem: should keep only one item selected when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      component.items = [
+        { name: 'Name 1', $selected: false },
+        { name: 'Name 2', $selected: false },
+        { name: 'Name 3', $selected: false }
+      ];
+      component.select = true;
+
+      component.selectListItem(component.items[0]);
+      expect(component.items[0].$selected).toBe(true);
+
+      component.selectListItem(component.items[2]);
+      expect(component.items[0].$selected).toBe(false);
+      expect(component.items[2].$selected).toBe(true);
+      expect(component.selectAll).toBe(false);
+    });
+
+    it('selectListItem: should keep the current item selected when clicked again in `single` mode', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      component.items = [{ name: 'Name 1', $selected: false }];
+      component.select = true;
+
+      component.selectListItem(component.items[0]);
+      expect(component.items[0].$selected).toBe(true);
+
+      component.selectListItem(component.items[0]);
+      expect(component.items[0].$selected).toBe(true);
+    });
+
+    it('showMainHeader: should not show the header when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      component.items = [{ name: 'Name 1' }];
+      component.hideSelectAll = false;
+      component.select = true;
+
+      expect(component.showHeader).toBe(false);
+    });
+
+    it('showMainHeader: should show the header when selection mode is `multiple`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'multiple');
+      fixture.detectChanges();
+
+      component.items = [{ name: 'Name 1' }];
+      component.hideSelectAll = false;
+      component.select = true;
+
+      expect(component.showHeader).toBe(true);
+    });
+
+    it('isSingleSelection: should return `true` when selection mode is `single`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'single');
+      fixture.detectChanges();
+
+      expect(component.isSingleSelection).toBe(true);
+    });
+
+    it('isSingleSelection: should return `false` when selection mode is `multiple`', () => {
+      fixture.componentRef.setInput('p-selection-mode', 'multiple');
+      fixture.detectChanges();
+
+      expect(component.isSingleSelection).toBe(false);
+    });
+
+    it('p-detail-display: should have `inline` as default value', () => {
+      expect(component.detailDisplay()).toBe(PoListViewDetailDisplay.Inline);
+    });
+
+    it('p-detail-display: should update to `modal` when set with `modal`', () => {
+      fixture.componentRef.setInput('p-detail-display', 'modal');
+      fixture.detectChanges();
+
+      expect(component.detailDisplay()).toBe(PoListViewDetailDisplay.Modal);
+    });
+
+    it('p-detail-display: should fallback to `inline` when set with an invalid value', () => {
+      fixture.componentRef.setInput('p-detail-display', 'invalid');
+      fixture.detectChanges();
+
+      expect(component.detailDisplay()).toBe(PoListViewDetailDisplay.Inline);
+    });
+
+    it('isDetailModal: should return `true` when detail display is `modal`', () => {
+      fixture.componentRef.setInput('p-detail-display', 'modal');
+      fixture.detectChanges();
+
+      expect(component.isDetailModal).toBe(true);
+    });
+
+    it('isDetailModal: should return `false` when detail display is `inline`', () => {
+      fixture.componentRef.setInput('p-detail-display', 'inline');
+      fixture.detectChanges();
+
+      expect(component.isDetailModal).toBe(false);
+    });
+
+    it('p-property-subtitle: should update value when set', () => {
+      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
+      fixture.detectChanges();
+
+      expect(component['propertySubtitle']()).toBe('createdAt');
+    });
+
+    it('p-property-highlighted: should update value when set', () => {
+      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.detectChanges();
+
+      expect(component['propertyHighlighted']()).toBe('unread');
+    });
+
+    describe('p-field-properties:', () => {
+      it('should be undefined by default', () => {
+        expect(component.fieldProperties()).toBeUndefined();
+      });
+
+      it('should update value when set', () => {
+        const fieldProperties = {
+          title: 'name',
+          subtitle: 'role',
+          link: 'url',
+          avatar: 'photo',
+          highlighted: 'unread',
+          tag: { value: 'status', type: 'statusType' }
+        };
+
+        fixture.componentRef.setInput('p-field-properties', fieldProperties);
+        fixture.detectChanges();
+
+        expect(component.fieldProperties()).toEqual(fieldProperties);
+      });
+    });
+
+    describe('resolved field properties (precedence):', () => {
+      it('resolvedPropertyTitle: should prioritize `p-field-properties` over the deprecated input', () => {
+        component['propertyTitle'] = 'legacyTitle';
+        fixture.componentRef.setInput('p-field-properties', { title: 'name' });
+        fixture.detectChanges();
+
+        expect(component['resolvedPropertyTitle']).toBe('name');
+      });
+
+      it('resolvedPropertyTitle: should fallback to the deprecated input when not set in `p-field-properties`', () => {
+        component['propertyTitle'] = 'legacyTitle';
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+
+        expect(component['resolvedPropertyTitle']).toBe('legacyTitle');
+      });
+
+      it('resolvedPropertyLink: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        component['propertyLink'] = 'legacyUrl';
+        fixture.componentRef.setInput('p-field-properties', { link: 'url' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyLink']).toBe('url');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyLink']).toBe('legacyUrl');
+      });
+
+      it('resolvedPropertySubtitle: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-subtitle', 'legacySubtitle');
+        fixture.componentRef.setInput('p-field-properties', { subtitle: 'subtitle' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertySubtitle']).toBe('subtitle');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertySubtitle']).toBe('legacySubtitle');
+      });
+
+      it('resolvedPropertyHighlighted: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-highlighted', 'legacyUnread');
+        fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyHighlighted']).toBe('unread');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyHighlighted']).toBe('legacyUnread');
+      });
+
+      it('resolvedPropertyAvatar: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-avatar', 'legacyAvatar');
+        fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyAvatar']).toBe('avatar');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyAvatar']).toBe('legacyAvatar');
+      });
+
+      it('resolvedPropertyTag: should prioritize `p-field-properties.tag.value` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-tag', 'legacyTag');
+        fixture.componentRef.setInput('p-field-properties', { tag: { value: 'status' } });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTag']).toBe('status');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTag']).toBe('legacyTag');
+      });
+
+      it('resolvedPropertyTagType: should prioritize `p-field-properties.tag.type` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-tag-type', 'legacyTagType');
+        fixture.componentRef.setInput('p-field-properties', { tag: { type: 'statusType' } });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTagType']).toBe('statusType');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTagType']).toBe('legacyTagType');
+      });
     });
 
     it('deleteInternalAttrs: should return `object` without property that starts with `$`', () => {

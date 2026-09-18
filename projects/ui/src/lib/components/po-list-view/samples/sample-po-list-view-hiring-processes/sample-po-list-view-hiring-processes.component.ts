@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoListViewAction,
+  PoListViewFieldProperties,
   PoModalComponent,
   PoNotificationService,
   PoPageAction,
@@ -28,6 +29,14 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
   modalDetail: boolean = false;
   selectedActionItem = {};
   titleDetailsModal: string = 'User Detail';
+
+  readonly fieldProperties: PoListViewFieldProperties = {
+    title: 'name',
+    subtitle: 'jobDescription',
+    link: 'url',
+    avatar: 'avatar',
+    tag: { value: 'hireStatus', type: 'hireTagType' }
+  };
 
   readonly actions: Array<PoListViewAction> = [
     {
