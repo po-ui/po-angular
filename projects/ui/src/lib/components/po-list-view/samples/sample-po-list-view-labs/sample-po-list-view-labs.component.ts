@@ -3,6 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import {
   PoCheckboxGroupOption,
   PoListViewAction,
+  PoListViewFieldProperties,
   PoListViewLiterals,
   PoNotificationService,
   PoRadioGroupOption,
@@ -92,6 +93,17 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { label: 'Danger', value: 'danger' }
   ];
 
+  get fieldProperties(): PoListViewFieldProperties {
+    return {
+      title: this.propertyTitle,
+      subtitle: this.propertySubtitle,
+      link: this.propertyLink,
+      avatar: this.propertyAvatar,
+      highlighted: this.propertyHighlighted,
+      tag: { value: this.propertyTag, type: this.propertyTagType }
+    };
+  }
+
   ngOnInit() {
     this.restore();
   }
@@ -167,9 +179,9 @@ export class SamplePoListViewLabsComponent implements OnInit {
       company: `Company ${index}`,
       url: this.propertyLinkValue,
       zipCode: `${index}221`,
-      tag: index % 2 === 0 ? 'Concluído' : 'Em andamento',
+      tag: index % 2 === 0 ? 'Completed' : 'In progress',
       tagType: tagTypes[index % tagTypes.length],
-      subtitle: `Há ${index * 5} min`,
+      subtitle: `${index * 5} min ago`,
       avatar: `https://i.pravatar.cc/150?img=${index}`,
       unread: index % 3 === 0
     };

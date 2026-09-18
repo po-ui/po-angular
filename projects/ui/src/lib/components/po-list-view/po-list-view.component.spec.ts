@@ -13,41 +13,20 @@ import { PoWidgetModule } from '../po-widget';
 
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewComponent } from './po-list-view.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 
 describe('PoListViewComponent:', () => {
   let component: PoListViewComponent;
   let fixture: ComponentFixture<PoListViewComponent>;
   let debugElement;
-  let event: any;
-  let detail: any;
-
   const item = { id: 1, name: 'register' };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
-      imports: [
-        NoopAnimationsModule, // <- ADICIONADO AQUI: Resolve o erro de synthetic listener
-        PoButtonModule,
-        PoPopupModule,
-        PoModalModule,
-        PoWidgetModule
-      ],
+      imports: [PoButtonModule, PoPopupModule, PoModalModule, PoWidgetModule],
       providers: [provideNgReflectAttributes(), provideRouter([])]
     }).compileComponents();
-
-    detail = { test: 'test' };
-    event = {
-      fromState: 'void',
-      toState: '*',
-      totalTime: 100,
-      phaseName: 'start',
-      element: null,
-      triggerName: 'showHideDetail',
-      disabled: false
-    };
 
     fixture = TestBed.createComponent(PoListViewComponent);
 
@@ -152,23 +131,23 @@ describe('PoListViewComponent:', () => {
 
     it('openDetailModal: should set item and index, emit `p-show-detail` and open the modal', () => {
       spyOn(component.showDetail, 'emit');
-      spyOn(component.detailModal, 'open');
+      spyOn(component['detailModal'], 'open');
       const listItem = { id: 5, name: 'x' };
 
-      component.openDetailModal(listItem, 2);
+      component['openDetailModal'](listItem, 2);
 
-      expect(component.detailModalItem).toBe(listItem);
-      expect(component.detailModalIndex).toBe(2);
+      expect(component['detailModalItem']).toBe(listItem);
+      expect(component['detailModalIndex']).toBe(2);
       expect(component.showDetail.emit).toHaveBeenCalledWith(listItem);
-      expect(component.detailModal.open).toHaveBeenCalled();
+      expect(component['detailModal'].open).toHaveBeenCalled();
     });
 
     it('onCloseDetailModal: should reset `detailModalItem` to `null`', () => {
-      component.detailModalItem = { id: 1 };
+      component['detailModalItem'] = { id: 1 };
 
-      component.onCloseDetailModal();
+      component['onCloseDetailModal']();
 
-      expect(component.detailModalItem).toBeNull();
+      expect(component['detailModalItem']).toBeNull();
     });
 
     it('should not render the inline detail (`.po-list-view-detail`) when detail display is `modal`', () => {
@@ -183,27 +162,27 @@ describe('PoListViewComponent:', () => {
     it('getItemActionType: should return `multiple` when there are two or more visible actions', () => {
       component.actions = [{ label: 'a' }, { label: 'b' }];
 
-      expect(component.getItemActionType(item)).toBe('multiple');
+      expect(component['getItemActionType'](item)).toBe('multiple');
     });
 
     it('getItemActionType: should return `advanced` when there is one visible action', () => {
       component.actions = [{ label: 'a' }];
 
-      expect(component.getItemActionType(item)).toBe('advanced');
+      expect(component['getItemActionType'](item)).toBe('advanced');
     });
 
     it('getItemActionType: should return `none` when there is no action but the title has an action', () => {
       component.actions = [];
       spyOnProperty(component, 'titleHasAction', 'get').and.returnValue(true);
 
-      expect(component.getItemActionType(item)).toBe('none');
+      expect(component['getItemActionType'](item)).toBe('none');
     });
 
     it('getItemActionType: should return `none` when there is no action and no title action', () => {
       component.actions = [];
       spyOnProperty(component, 'titleHasAction', 'get').and.returnValue(false);
 
-      expect(component.getItemActionType(item)).toBe('none');
+      expect(component['getItemActionType'](item)).toBe('none');
     });
 
     it('should not render the advanced arrow-right button when only the title has an action', () => {
@@ -228,7 +207,7 @@ describe('PoListViewComponent:', () => {
     it('should render the three-dots popup (via widget) when there are two or more actions', () => {
       component.actions = [{ label: 'a' }, { label: 'b' }];
       component.items = [{ id: 1, name: 'x' }];
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       fixture.detectChanges();
 
       expect(debugElement.querySelector('po-widget')).toBeTruthy();
@@ -248,7 +227,7 @@ describe('PoListViewComponent:', () => {
         { id: 1, name: 'Item 1' },
         { id: 2, name: 'Item 2' }
       ];
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       fixture.detectChanges();
 
       const widgets = debugElement.querySelectorAll('po-widget');
@@ -257,14 +236,14 @@ describe('PoListViewComponent:', () => {
     });
 
     it('getItemAvatar: should return undefined when p-property-avatar is not set', () => {
-      expect(component.getItemAvatar({ avatar: 'http://img.png' })).toBeUndefined();
+      expect(component['getItemAvatar']({ avatar: 'http://img.png' })).toBeUndefined();
     });
 
     it('getItemAvatar: should return object with `src` and `size` when item value is a string', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ avatar: 'http://img.png' })).toEqual({ src: 'http://img.png', size: 'md' });
+      expect(component['getItemAvatar']({ avatar: 'http://img.png' })).toEqual({ src: 'http://img.png', size: 'md' });
     });
 
     it('getItemAvatar: should return the object with `size` added when item value is an object', () => {
@@ -272,7 +251,7 @@ describe('PoListViewComponent:', () => {
       fixture.detectChanges();
 
       const avatarObj = { src: 'http://img.png', size: 'sm' };
-      const result = component.getItemAvatar({ avatar: avatarObj });
+      const result = component['getItemAvatar']({ avatar: avatarObj });
       expect(result.src).toBe('http://img.png');
       expect(result.size).toBe('md');
     });
@@ -284,7 +263,7 @@ describe('PoListViewComponent:', () => {
         { label: 'b', action: () => {} }
       ];
 
-      const result = component.getWidgetActions(item);
+      const result = component['getWidgetActions'](item);
 
       expect(result.length).toBe(2);
       expect(result[0].label).toBe('a');
@@ -297,14 +276,14 @@ describe('PoListViewComponent:', () => {
       component.actions = [];
       component.titleAction.observers = [];
 
-      expect(component.getWidgetActions(item)).toEqual([]);
+      expect(component['getWidgetActions'](item)).toEqual([]);
     });
 
     it('getWidgetActions: should return empty array when no visible actions but title has action (advanced renders arrow outside)', () => {
       component.actions = [];
       component.titleAction.observers.push(<any>[new Observable()]);
 
-      const result = component.getWidgetActions(item);
+      const result = component['getWidgetActions'](item);
 
       expect(result).toEqual([]);
     });
@@ -313,19 +292,19 @@ describe('PoListViewComponent:', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ name: 'x' })).toBeUndefined();
+      expect(component['getItemAvatar']({ name: 'x' })).toBeUndefined();
     });
 
     it('getItemActionType: should return `none` when there are no actions and no title action observer', () => {
       component.actions = [];
       component.titleAction.observers = [];
 
-      expect(component.getItemActionType(item)).toBe('none');
+      expect(component['getItemActionType'](item)).toBe('none');
     });
 
     it('should emit `p-title-action` when widget title action is triggered', () => {
       component.items = [{ id: 1, name: 'Test' }];
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.titleAction.observers.push(<any>[new Observable()]);
       fixture.detectChanges();
 
@@ -337,7 +316,7 @@ describe('PoListViewComponent:', () => {
 
     it('should render the title as plain text (no title-action) when `itemClickable` is true', () => {
       component.items = [{ id: 1, name: 'Test' }];
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.itemClick.subscribe(() => {});
       fixture.detectChanges();
 
@@ -347,7 +326,7 @@ describe('PoListViewComponent:', () => {
 
     it('should render the title as an action (title-action) when `itemClickable` is false and title has action', () => {
       component.items = [{ id: 1, name: 'Test' }];
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.titleAction.observers.push(<any>[new Observable()]);
       fixture.detectChanges();
 
@@ -365,53 +344,53 @@ describe('PoListViewComponent:', () => {
 
   describe('Avatar helpers:', () => {
     it('getAvatarType: should return empty string when p-property-avatar is not set', () => {
-      expect(component.getAvatarType(item)).toBe('');
+      expect(component['getAvatarType'](item)).toBe('');
     });
 
     it('getAvatarType: should return "image" when item value is a string', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getAvatarType({ avatar: 'http://img.png' })).toBe('image');
+      expect(component['getAvatarType']({ avatar: 'http://img.png' })).toBe('image');
     });
 
     it('getAvatarType: should return "icon" when item value has icon property', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getAvatarType({ avatar: { icon: 'an an-user' } })).toBe('icon');
+      expect(component['getAvatarType']({ avatar: { icon: 'an an-user' } })).toBe('icon');
     });
 
     it('getAvatarType: should return "progress" when item value has progress property', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getAvatarType({ avatar: { progress: 50 } })).toBe('progress');
+      expect(component['getAvatarType']({ avatar: { progress: 50 } })).toBe('progress');
     });
 
     it('getAvatarType: should return "progress" when item value has indeterminate property', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getAvatarType({ avatar: { indeterminate: true } })).toBe('progress');
+      expect(component['getAvatarType']({ avatar: { indeterminate: true } })).toBe('progress');
     });
 
     it('getAvatarType: should return "custom" when item value is an object without icon/progress', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getAvatarType({ avatar: { customTemplate: {} } })).toBe('custom');
+      expect(component['getAvatarType']({ avatar: { customTemplate: {} } })).toBe('custom');
     });
 
     it('getAvatarType: should return empty string when item has no value for the property', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getAvatarType({ name: 'x' })).toBe('');
+      expect(component['getAvatarType']({ name: 'x' })).toBe('');
     });
 
     it('getAvatarData: should return undefined when p-property-avatar is not set', () => {
-      expect(component.getAvatarData(item)).toBeUndefined();
+      expect(component['getAvatarData'](item)).toBeUndefined();
     });
 
     it('getAvatarData: should return the avatar value from the item', () => {
@@ -419,14 +398,14 @@ describe('PoListViewComponent:', () => {
       fixture.detectChanges();
 
       const data = { icon: 'an an-user', color: '#fff' };
-      expect(component.getAvatarData({ avatar: data })).toBe(data);
+      expect(component['getAvatarData']({ avatar: data })).toBe(data);
     });
 
     it('getItemAvatar: should return object with src and size when item value is a string', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      const result = component.getItemAvatar({ avatar: 'http://img.png' });
+      const result = component['getItemAvatar']({ avatar: 'http://img.png' });
       expect(result.src).toBe('http://img.png');
       expect(result.size).toBeDefined();
     });
@@ -435,28 +414,28 @@ describe('PoListViewComponent:', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ avatar: { icon: 'an an-user' } })).toBeUndefined();
+      expect(component['getItemAvatar']({ avatar: { icon: 'an an-user' } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is progress', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ avatar: { progress: 50 } })).toBeUndefined();
+      expect(component['getItemAvatar']({ avatar: { progress: 50 } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is indeterminate', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ avatar: { indeterminate: true } })).toBeUndefined();
+      expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return avatar object with size for custom template', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      const result = component.getItemAvatar({ avatar: { customTemplate: {} } });
+      const result = component['getItemAvatar']({ avatar: { customTemplate: {} } });
       expect(result.customTemplate).toBeDefined();
       expect(result.size).toBeDefined();
     });
@@ -464,54 +443,54 @@ describe('PoListViewComponent:', () => {
 
   describe('Type-safe helpers:', () => {
     it('getItemTag: should return undefined when p-property-tag is not set', () => {
-      expect(component.getItemTag(item)).toBeUndefined();
+      expect(component['getItemTag'](item)).toBeUndefined();
     });
 
     it('getItemTag: should return tag value from item', () => {
       fixture.componentRef.setInput('p-property-tag', 'tag');
       fixture.detectChanges();
 
-      expect(component.getItemTag({ tag: 'Success' })).toBe('Success');
+      expect(component['getItemTag']({ tag: 'Success' })).toBe('Success');
     });
 
     it('getItemTagType: should return empty string when p-property-tag-type is not set', () => {
-      expect(component.getItemTagType(item)).toBe('');
+      expect(component['getItemTagType'](item)).toBe('');
     });
 
     it('getItemTagType: should return tag type value from item', () => {
       fixture.componentRef.setInput('p-property-tag-type', 'tagType');
       fixture.detectChanges();
 
-      expect(component.getItemTagType({ tagType: 'success' })).toBe('success');
+      expect(component['getItemTagType']({ tagType: 'success' })).toBe('success');
     });
 
     it('getItemSubtitle: should return undefined when p-property-subtitle is not set', () => {
-      expect(component.getItemSubtitle(item)).toBeUndefined();
+      expect(component['getItemSubtitle'](item)).toBeUndefined();
     });
 
     it('getItemSubtitle: should return subtitle value from item', () => {
       fixture.componentRef.setInput('p-property-subtitle', 'subtitle');
       fixture.detectChanges();
 
-      expect(component.getItemSubtitle({ subtitle: 'Há 5 min' })).toBe('Há 5 min');
+      expect(component['getItemSubtitle']({ subtitle: 'Há 5 min' })).toBe('Há 5 min');
     });
 
     it('getItemHighlighted: should return false when p-property-highlighted is not set', () => {
-      expect(component.getItemHighlighted(item)).toBe(false);
+      expect(component['getItemHighlighted'](item)).toBe(false);
     });
 
     it('getItemHighlighted: should return true when item field is truthy', () => {
       fixture.componentRef.setInput('p-property-highlighted', 'unread');
       fixture.detectChanges();
 
-      expect(component.getItemHighlighted({ unread: true })).toBe(true);
+      expect(component['getItemHighlighted']({ unread: true })).toBe(true);
     });
 
     it('getItemHighlighted: should return false when item field is falsy', () => {
       fixture.componentRef.setInput('p-property-highlighted', 'unread');
       fixture.detectChanges();
 
-      expect(component.getItemHighlighted({ unread: false })).toBe(false);
+      expect(component['getItemHighlighted']({ unread: false })).toBe(false);
     });
   });
 
@@ -520,8 +499,8 @@ describe('PoListViewComponent:', () => {
       component.actions = [{ label: 'a' }, { label: 'b' }];
       const testItem = { id: 99, name: 'cache-test' };
 
-      const first = component.getWidgetActions(testItem);
-      const second = component.getWidgetActions(testItem);
+      const first = component['getWidgetActions'](testItem);
+      const second = component['getWidgetActions'](testItem);
 
       expect(first).toBe(second);
     });
@@ -529,10 +508,10 @@ describe('PoListViewComponent:', () => {
     it('should invalidate cache when actions reference changes', () => {
       const testItem = { id: 99, name: 'cache-test' };
       component.actions = [{ label: 'a' }, { label: 'b' }];
-      const first = component.getWidgetActions(testItem);
+      const first = component['getWidgetActions'](testItem);
 
       component.actions = [{ label: 'x' }, { label: 'y' }, { label: 'z' }];
-      const second = component.getWidgetActions(testItem);
+      const second = component['getWidgetActions'](testItem);
 
       expect(first).not.toBe(second);
       expect(second.length).toBe(3);
@@ -540,7 +519,7 @@ describe('PoListViewComponent:', () => {
 
     it('should return empty array for 0-1 actions', () => {
       component.actions = [{ label: 'only-one' }];
-      expect(component.getWidgetActions(item)).toEqual([]);
+      expect(component['getWidgetActions'](item)).toEqual([]);
     });
   });
 
@@ -598,21 +577,21 @@ describe('PoListViewComponent:', () => {
 
   describe('getItemAvatar edge cases:', () => {
     it('should return undefined when p-property-avatar is not set', () => {
-      expect(component.getItemAvatar(item)).toBeUndefined();
+      expect(component['getItemAvatar'](item)).toBeUndefined();
     });
 
     it('should return undefined when item has no value for avatar property', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ name: 'x' })).toBeUndefined();
+      expect(component['getItemAvatar']({ name: 'x' })).toBeUndefined();
     });
 
     it('should return undefined when item avatar value is null', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      expect(component.getItemAvatar({ avatar: null })).toBeUndefined();
+      expect(component['getItemAvatar']({ avatar: null })).toBeUndefined();
     });
   });
 
@@ -625,7 +604,7 @@ describe('PoListViewComponent:', () => {
         { label: 'b', action: () => {} }
       ];
 
-      const result = component.getWidgetActions(testItem);
+      const result = component['getWidgetActions'](testItem);
       result[0].action();
 
       expect(actionSpy).toHaveBeenCalledWith({ id: 1, name: 'test' });
@@ -639,7 +618,7 @@ describe('PoListViewComponent:', () => {
         { label: 'b', url: '/other' }
       ];
 
-      const result = component.getWidgetActions(testItem);
+      const result = component['getWidgetActions'](testItem);
       result[0].action();
 
       expect(component['router'].navigate).toHaveBeenCalledWith(['/page']);
@@ -653,7 +632,7 @@ describe('PoListViewComponent:', () => {
         { label: 'b', url: 'https://other.com' }
       ];
 
-      const result = component.getWidgetActions(testItem);
+      const result = component['getWidgetActions'](testItem);
       result[0].action();
 
       expect(window.open).toHaveBeenCalled();
@@ -722,11 +701,11 @@ describe('PoListViewComponent:', () => {
     it('itemClickable: should return `true` when `itemClick` has observers', () => {
       component.itemClick.subscribe(() => {});
 
-      expect(component.itemClickable).toBe(true);
+      expect(component['itemClickable']).toBe(true);
     });
 
     it('itemClickable: should return `false` when `itemClick` has no observers', () => {
-      expect(component.itemClickable).toBe(false);
+      expect(component['itemClickable']).toBe(false);
     });
   });
 
@@ -782,12 +761,25 @@ describe('PoListViewComponent:', () => {
       expect(component.popupTarget).toEqual(targetRef);
     });
 
-    it(`onAnimationEvent: should emit detail on showDetail`, () => {
+    it(`animateDetailEnter: should emit showDetail and animate height from 0 to scrollHeight`, () => {
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 60 });
+      element.style.overflowY = 'visible';
+      spyOn(element, 'animate').and.returnValue(animation);
       spyOn(component.showDetail, 'emit');
 
-      component.onAnimationEvent(event, detail);
+      component['animateDetailEnter']({ target: element } as any, item);
 
-      expect(component.showDetail.emit).toHaveBeenCalledWith(detail);
+      expect(component.showDetail.emit).toHaveBeenCalledWith(item);
+      expect(element.style.overflowY).toBe('hidden');
+      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '60px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(element.style.overflowY).toBe('visible');
     });
 
     it('trackBy: should return `index`', () => {
@@ -802,9 +794,9 @@ describe('PoListViewComponent:', () => {
 
       spyOn(component.itemClick, 'emit');
       spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
-      spyOn(component, 'isItemClickable').and.returnValue(true);
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
 
-      component.onItemClick(testItem, {} as MouseEvent);
+      component['onItemClick'](testItem, {} as MouseEvent);
 
       expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
       expect(component.itemClick.emit).toHaveBeenCalledWith(expectedItem);
@@ -812,9 +804,9 @@ describe('PoListViewComponent:', () => {
 
     it('onItemClick: should not emit `itemClick` when `itemClickable` is false', () => {
       spyOn(component.itemClick, 'emit');
-      spyOnProperty(component, 'itemClickable').and.returnValue(false);
+      spyOnProperty(component, <any>'itemClickable').and.returnValue(false);
 
-      component.onItemClick(item, new MouseEvent('click'));
+      component['onItemClick'](item, new MouseEvent('click'));
 
       expect(component.itemClick.emit).not.toHaveBeenCalled();
     });
@@ -831,9 +823,9 @@ describe('PoListViewComponent:', () => {
       spyOn(component.itemClick, 'emit');
       spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
 
-      spyOn(component, 'isItemClickable').and.returnValue(true);
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
 
-      component.onItemKeyDown(testItem, keyEvent);
+      component['onItemKeyDown'](testItem, keyEvent);
 
       expect(keyEvent.preventDefault).toHaveBeenCalled();
       expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
@@ -852,9 +844,9 @@ describe('PoListViewComponent:', () => {
       spyOn(component.itemClick, 'emit');
       spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
 
-      spyOn(component, 'isItemClickable').and.returnValue(true);
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
 
-      component.onItemKeyDown(testItem, keyEvent);
+      component['onItemKeyDown'](testItem, keyEvent);
 
       expect(keyEvent.preventDefault).toHaveBeenCalled();
       expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
@@ -870,7 +862,7 @@ describe('PoListViewComponent:', () => {
         spyOn(component, 'onClickAction');
         spyOn<any>(component, 'runTitleAction');
 
-        component.onAdvancedArrowClick(item);
+        component['onAdvancedArrowClick'](item);
 
         expect(component['getVisibleActions']).toHaveBeenCalledWith(item);
         expect(component.onClickAction).toHaveBeenCalledWith(mockActions[0], item);
@@ -885,7 +877,7 @@ describe('PoListViewComponent:', () => {
         spyOn(component, 'onClickAction');
         spyOn<any>(component, 'runTitleAction');
 
-        component.onAdvancedArrowClick(item);
+        component['onAdvancedArrowClick'](item);
 
         expect(component['getVisibleActions']).toHaveBeenCalledWith(item);
         expect(component['runTitleAction']).toHaveBeenCalledWith(item);
@@ -900,7 +892,7 @@ describe('PoListViewComponent:', () => {
         spyOn(component, 'onClickAction');
         spyOn<any>(component, 'runTitleAction');
 
-        component.onAdvancedArrowClick(item);
+        component['onAdvancedArrowClick'](item);
 
         expect(component['getVisibleActions']).toHaveBeenCalledWith(item);
         expect(component['runTitleAction']).toHaveBeenCalledWith(item);
@@ -912,9 +904,9 @@ describe('PoListViewComponent:', () => {
       const keyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
 
       spyOn(component.itemClick, 'emit');
-      spyOnProperty(component, 'itemClickable').and.returnValue(false);
+      spyOnProperty(component, <any>'itemClickable').and.returnValue(false);
 
-      component.onItemKeyDown(item, keyEvent);
+      component['onItemKeyDown'](item, keyEvent);
 
       expect(component.itemClick.emit).not.toHaveBeenCalled();
     });
@@ -923,9 +915,9 @@ describe('PoListViewComponent:', () => {
       const keyEvent = new KeyboardEvent('keydown', { key: 'Tab' });
 
       spyOn(component.itemClick, 'emit');
-      spyOnProperty(component, 'itemClickable').and.returnValue(true);
+      spyOnProperty(component, <any>'itemClickable').and.returnValue(true);
 
-      component.onItemKeyDown(item, keyEvent);
+      component['onItemKeyDown'](item, keyEvent);
 
       expect(component.itemClick.emit).not.toHaveBeenCalled();
     });
@@ -1031,28 +1023,28 @@ describe('PoListViewComponent:', () => {
 
     it('checkTitleType: should return title`s type with "externalLink"', () => {
       const register: any = { url: 'http://www.uol.com.br' };
-      component.propertyLink = 'url';
+      component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('externalLink');
     });
 
     it('checkTitleType: should return title`s type with "internalLink"', () => {
       const register: any = { url: '/home' };
-      component.propertyLink = 'url';
+      component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('internalLink');
     });
 
     it('checkTitleType: should return title`s type with "noLink" if propertyLink doesn`t have value', () => {
       const register: any = { url: '/home' };
-      component.propertyLink = null;
+      component['propertyLink'] = null;
 
       expect(component['checkTitleType'](register)).toBe('noLink');
     });
 
     it('checkTitleType: should return title`s type with "noLink" if regiter doesn`t have `url` property', () => {
       const register: any = { route: '/home' };
-      component.propertyLink = 'url';
+      component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('noLink');
     });
@@ -1074,7 +1066,7 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item and not call the formatting function of the title if 'hasContentTemplate' is false and
       'listViewContentTemplate.title' is defined`, () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.listViewContentTemplate = { title: () => '', templateRef: undefined };
 
       spyOn(component.listViewContentTemplate, 'title');
@@ -1088,7 +1080,7 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item if 'hasContentTemplate' is true and 'listViewContentTemplate.title'
       is undefined`, () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
       spyOnProperty(component, 'hasContentTemplate').and.returnValue(true);
@@ -1100,7 +1092,7 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item if 'hasContentTemplate' is false and 'listViewContentTemplate.title'
       is undefined`, () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
       spyOnProperty(component, 'hasContentTemplate').and.returnValue(false);
@@ -1162,7 +1154,7 @@ describe('PoListViewComponent:', () => {
 
       fixture.detectChanges();
 
-      expect(component.getWidgetActions(item)).toEqual([]);
+      expect(component['getWidgetActions'](item)).toEqual([]);
     });
 
     it('should pass actions to po-widget `p-actions` when 2+ actions', () => {
@@ -1315,7 +1307,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('should pass the title to po-widget via `p-title`', () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.items = [{ id: 1, name: 'register', url: 'http://po.com.br' }];
 
       fixture.detectChanges();
@@ -1443,7 +1435,7 @@ describe('PoListViewComponent:', () => {
 
       fixture.detectChanges();
 
-      const widgetActions = component.getWidgetActions(component.items[0]);
+      const widgetActions = component['getWidgetActions'](component.items[0]);
       const labels = widgetActions.map((a: any) => a.label);
 
       expect(widgetActions).toHaveSize(2);
@@ -1461,7 +1453,7 @@ describe('PoListViewComponent:', () => {
 
       fixture.detectChanges();
 
-      const widgetActions = component.getWidgetActions(component.items[0]);
+      const widgetActions = component['getWidgetActions'](component.items[0]);
       expect(widgetActions).toEqual([]);
     });
   });

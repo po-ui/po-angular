@@ -1,6 +1,6 @@
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import {
   AfterContentInit,
+  AnimationCallbackEvent,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -32,6 +32,11 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  *  <file name="sample-po-list-view-basic/sample-po-list-view-basic.component.ts"> </file>
  * </example>
  *
+ * <example name="po-list-view-field-properties" title="PO List View - Field Properties">
+ *  <file name="sample-po-list-view-field-properties/sample-po-list-view-field-properties.component.html"> </file>
+ *  <file name="sample-po-list-view-field-properties/sample-po-list-view-field-properties.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-list-view-labs" title="PO List View Labs">
  *  <file name="sample-po-list-view-labs/sample-po-list-view-labs.component.html"> </file>
  *  <file name="sample-po-list-view-labs/sample-po-list-view-labs.component.ts"> </file>
@@ -46,14 +51,6 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
 @Component({
   selector: 'po-list-view',
   templateUrl: './po-list-view.component.html',
-  animations: [
-    trigger('showHideDetail', [
-      state('*', style({ 'overflow-y': 'visible' })),
-      state('void', style({ 'overflow-y': 'hidden' })),
-      transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
-      transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
-    ])
-  ],
   standalone: false
 })
 export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
@@ -66,11 +63,11 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   listViewDetailTemplate: PoListViewDetailTemplateDirective;
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
-  @ViewChild('detailModal', { static: true }) detailModal: PoModalComponent;
+  @ViewChild('detailModal', { static: true }) protected detailModal: PoModalComponent;
 
   popupActions: Array<PoListViewAction> = [];
-  detailModalItem: any = null;
-  detailModalIndex: number;
+  protected detailModalItem: any = null;
+  protected detailModalIndex: number;
 
   private readonly differ;
   private readonly widgetActionsCache = new Map<any, Array<any>>();
@@ -100,28 +97,28 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return this.titleAction.observers.length > 0;
   }
 
-  get itemClickable(): boolean {
+  protected get itemClickable(): boolean {
     return this.itemClick.observed;
   }
 
-  isItemClickable(item: any): boolean {
+  protected isItemClickable(item: any): boolean {
     return this.itemClick.observed && this.getVisibleActions(item).length <= 1;
   }
 
-  onItemClick(item: any, event: MouseEvent): void {
+  protected onItemClick(item: any, event: MouseEvent): void {
     if (this.isItemClickable(item)) {
       this.itemClick.emit(this.deleteInternalAttrs(item));
     }
   }
 
-  onItemKeyDown(item: any, event: KeyboardEvent): void {
+  protected onItemKeyDown(item: any, event: KeyboardEvent): void {
     if (this.isItemClickable(item) && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       this.itemClick.emit(this.deleteInternalAttrs(item));
     }
   }
 
-  onAdvancedArrowClick(item: any): void {
+  protected onAdvancedArrowClick(item: any): void {
     const visibleActions = this.getVisibleActions(item);
     if (visibleActions.length === 1) {
       this.onClickAction(visibleActions[0], item);
@@ -139,8 +136,8 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   }
 
   checkTitleType(item: any) {
-    if (this.propertyLink && item[this.propertyLink]) {
-      return item[this.propertyLink].startsWith('http') ? 'externalLink' : 'internalLink';
+    if (this.resolvedPropertyLink && item[this.resolvedPropertyLink]) {
+      return item[this.resolvedPropertyLink].startsWith('http') ? 'externalLink' : 'internalLink';
     }
 
     return 'noLink';
@@ -149,7 +146,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   getItemTitle(item) {
     return this.hasContentTemplate && this.listViewContentTemplate.title
       ? this.listViewContentTemplate.title(item)
-      : item[this.propertyTitle];
+      : item[this.resolvedPropertyTitle];
   }
 
   hasItems(): boolean {
@@ -183,7 +180,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     super.onClickAction(listViewAction, item);
   }
 
-  getItemActionType(item: any): 'advanced' | 'multiple' | 'none' {
+  protected getItemActionType(item: any): 'advanced' | 'multiple' | 'none' {
     const visibleActions = this.getVisibleActions(item);
 
     if (visibleActions.length >= 2) {
@@ -197,32 +194,32 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return 'none';
   }
 
-  getItemTag(item: any): string | undefined {
-    const prop = this.propertyTag();
+  protected getItemTag(item: any): string | undefined {
+    const prop = this.resolvedPropertyTag;
     return prop ? item[prop] : undefined;
   }
 
-  getItemTagType(item: any): string {
-    const prop = this.propertyTagType();
+  protected getItemTagType(item: any): string {
+    const prop = this.resolvedPropertyTagType;
     return prop && item[prop] ? item[prop] : '';
   }
 
-  getItemSubtitle(item: any): string | undefined {
-    const prop = this.propertySubtitle();
+  protected getItemSubtitle(item: any): string | undefined {
+    const prop = this.resolvedPropertySubtitle;
     return prop ? item[prop] : undefined;
   }
 
-  getItemHighlighted(item: any): boolean {
-    const prop = this.propertyHighlighted();
+  protected getItemHighlighted(item: any): boolean {
+    const prop = this.resolvedPropertyHighlighted;
     return prop ? !!item[prop] : false;
   }
 
-  getItemAvatar(item: any): any {
-    if (!this.propertyAvatar()) {
+  protected getItemAvatar(item: any): any {
+    if (!this.resolvedPropertyAvatar) {
       return undefined;
     }
 
-    const value = item[this.propertyAvatar()];
+    const value = item[this.resolvedPropertyAvatar];
 
     if (!value) {
       return undefined;
@@ -241,12 +238,12 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return avatar;
   }
 
-  getAvatarType(item: any): string {
-    if (!this.propertyAvatar()) {
+  protected getAvatarType(item: any): string {
+    if (!this.resolvedPropertyAvatar) {
       return '';
     }
 
-    const value = item[this.propertyAvatar()];
+    const value = item[this.resolvedPropertyAvatar];
 
     if (!value) {
       return '';
@@ -267,14 +264,14 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return 'custom';
   }
 
-  getAvatarData(item: any): any {
-    if (!this.propertyAvatar()) {
+  protected getAvatarData(item: any): any {
+    if (!this.resolvedPropertyAvatar) {
       return undefined;
     }
-    return item[this.propertyAvatar()];
+    return item[this.resolvedPropertyAvatar];
   }
 
-  getWidgetActions(item: any): Array<any> {
+  protected getWidgetActions(item: any): Array<any> {
     if (this.cachedActionsRef !== this.actions) {
       this.widgetActionsCache.clear();
       this.cachedActionsRef = this.actions;
@@ -320,11 +317,25 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     this.poPopupComponent.toggle(item);
   }
 
-  onAnimationEvent(event: AnimationEvent, detail) {
-    this.showDetail.emit(detail);
+  protected animateDetailEnter(event: AnimationCallbackEvent, item: any): void {
+    this.showDetail.emit(item);
+
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    const previousOverflowY = element.style.overflowY;
+    element.style.overflowY = 'hidden';
+
+    const animation = element.animate([{ height: '0px' }, { height: `${height}px` }], {
+      duration: 100,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      element.style.overflowY = previousOverflowY;
+    };
   }
 
-  openDetailModal(item: any, index: number) {
+  protected openDetailModal(item: any, index: number) {
     this.detailModalItem = item;
     this.detailModalIndex = index;
     this.showDetail.emit(item);
@@ -332,7 +343,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     this.detailModal.open();
   }
 
-  onCloseDetailModal() {
+  protected onCloseDetailModal() {
     this.detailModalItem = null;
   }
 

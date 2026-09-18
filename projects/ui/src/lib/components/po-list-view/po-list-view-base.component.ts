@@ -7,6 +7,7 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/
 import { PoListViewDetailDisplay } from './enums/po-list-view-detail-display.enum';
 import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
+import { PoListViewFieldProperties } from './interfaces/po-list-view-field-properties.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
 
 /**
@@ -109,10 +110,22 @@ export const poListViewLiteralsDefault = {
  */
 @Directive()
 export class PoListViewBaseComponent {
-  /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será usado como link para o título. */
+  /**
+   * @deprecated v23.x.x
+   *
+   * Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será usado como link para o título.
+   *
+   * > **Depreciado:** utilize a propriedade `link` do *input* [`p-field-properties`](/documentation/po-list-view#fieldProperties).
+   */
   @Input('p-property-link') propertyLink?: string;
 
-  /** Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será exibido como o título de cada item. */
+  /**
+   * @deprecated v23.x.x
+   *
+   * Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será exibido como o título de cada item.
+   *
+   * > **Depreciado:** utilize a propriedade `title` do *input* [`p-field-properties`](/documentation/po-list-view#fieldProperties).
+   */
   @Input('p-property-title') propertyTitle?: string;
 
   /**
@@ -368,7 +381,6 @@ export class PoListViewBaseComponent {
     transform: convertToSelectionMode
   });
 
-  /** Indica se a seleção está configurada no modo `single` (seleção única). */
   get isSingleSelection(): boolean {
     return this.selectionMode() === PoListViewSelectionMode.Single;
   }
@@ -389,7 +401,6 @@ export class PoListViewBaseComponent {
     transform: convertToDetailDisplay
   });
 
-  /** Indica se o detalhe está configurado para ser exibido em `po-modal`. */
   get isDetailModal(): boolean {
     return this.detailDisplay() === PoListViewDetailDisplay.Modal;
   }
@@ -397,15 +408,21 @@ export class PoListViewBaseComponent {
   /**
    * @optional
    *
+   * @deprecated v23.x.x
+   *
    * @description
    *
    * Nome da propriedade do objeto que será utilizada para exibir um subtítulo (linha de apoio)
    * abaixo do título de cada item, como por exemplo uma informação de data/hora.
+   *
+   * > **Depreciado:** utilize a propriedade `subtitle` do *input* `p-field-properties`.
    */
   propertySubtitle = input<string>(undefined, { alias: 'p-property-subtitle' });
 
   /**
    * @optional
+   *
+   * @deprecated v23.x.x
    *
    * @description
    *
@@ -413,25 +430,35 @@ export class PoListViewBaseComponent {
    * (por exemplo, para representar um item "não lido").
    *
    * > O destaque é independente da seleção (`p-select`).
+   *
+   * > **Depreciado:** utilize a propriedade `highlighted` do *input* `p-field-properties`.
    */
   propertyHighlighted = input<string>(undefined, { alias: 'p-property-highlighted' });
 
   /**
    * @optional
    *
+   * @deprecated v23.x.x
+   *
    * @description
    *
    * Nome da propriedade do objeto que será utilizada para exibir a label da `po-tag` de cada item.
+   *
+   * > **Depreciado:** utilize a propriedade `tag.value` do *input* `p-field-properties`.
    */
   propertyTag = input<string>(undefined, { alias: 'p-property-tag' });
 
   /**
    * @optional
    *
+   * @deprecated v23.x.x
+   *
    * @description
    *
    * Nome da propriedade do objeto que define o tipo da `po-tag` de cada item (`success`, `warning`, `danger`, `info`, `neutral`).
    * Caso não informado, utiliza `success` como padrão.
+   *
+   * > **Depreciado:** utilize a propriedade `tag.type` do *input* `p-field-properties`.
    */
   propertyTagType = input<string>(undefined, { alias: 'p-property-tag-type' });
 
@@ -451,6 +478,8 @@ export class PoListViewBaseComponent {
 
   /**
    * @optional
+   *
+   * @deprecated v23.x.x
    *
    * @description
    *
@@ -488,8 +517,75 @@ export class PoListViewBaseComponent {
    * ```
    *
    * > O conteúdo varia por item, mas o tamanho (`p-avatar-size`) é aplicado globalmente a todos os itens.
+   *
+   * > **Depreciado:** utilize a propriedade `avatar` do *input* `p-field-properties`.
    */
   propertyAvatar = input<string>(undefined, { alias: 'p-property-avatar' });
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Consolida, em um único objeto tipado ([`PoListViewFieldProperties`](/documentation/po-list-view#fieldProperties)),
+   * o mapeamento entre as propriedades do item e as áreas visuais do componente (título, subtítulo,
+   * link, avatar, destaque e tag).
+   *
+   * ```
+   * <po-list-view
+   *   [p-field-properties]="{
+   *     title: 'name',
+   *     subtitle: 'jobDescription',
+   *     link: 'url',
+   *     avatar: 'avatar',
+   *     highlighted: 'unread',
+   *     tag: { value: 'hireStatus', type: 'hireTagType' }
+   *   }">
+   * </po-list-view>
+   * ```
+   *
+   * > Quando informado, tem **precedência** sobre os *inputs* individuais depreciados
+   * (`p-property-title`, `p-property-subtitle`, `p-property-link`, `p-property-avatar`,
+   * `p-property-highlighted`, `p-property-tag` e `p-property-tag-type`). Caso uma propriedade não
+   * seja informada no objeto, o valor do *input* individual correspondente é utilizado como *fallback*.
+   */
+  fieldProperties = input<PoListViewFieldProperties>(undefined, { alias: 'p-field-properties' });
+
+  // Resolve o nome da propriedade do título, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertyTitle(): string {
+    // Acesso via bracket notation ao input depreciado (fallback de retrocompatibilidade).
+    return this.fieldProperties()?.title ?? this['propertyTitle'];
+  }
+
+  // Resolve o nome da propriedade de link, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertyLink(): string {
+    return this.fieldProperties()?.link ?? this['propertyLink'];
+  }
+
+  // Resolve o nome da propriedade de subtítulo, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertySubtitle(): string {
+    return this.fieldProperties()?.subtitle ?? this['propertySubtitle']();
+  }
+
+  // Resolve o nome da propriedade de destaque, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertyHighlighted(): string {
+    return this.fieldProperties()?.highlighted ?? this['propertyHighlighted']();
+  }
+
+  // Resolve o nome da propriedade de avatar, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertyAvatar(): string {
+    return this.fieldProperties()?.avatar ?? this['propertyAvatar']();
+  }
+
+  // Resolve o nome da propriedade do texto da tag, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertyTag(): string {
+    return this.fieldProperties()?.tag?.value ?? this['propertyTag']();
+  }
+
+  // Resolve o nome da propriedade do tipo da tag, priorizando `p-field-properties` sobre o input depreciado.
+  protected get resolvedPropertyTagType(): string {
+    return this.fieldProperties()?.tag?.type ?? this['propertyTagType']();
+  }
 
   /**
    * @optional

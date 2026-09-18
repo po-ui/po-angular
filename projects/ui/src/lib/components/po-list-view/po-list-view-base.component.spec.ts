@@ -450,14 +450,120 @@ describe('PoListViewBaseComponent:', () => {
       fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
       fixture.detectChanges();
 
-      expect(component.propertySubtitle()).toBe('createdAt');
+      expect(component['propertySubtitle']()).toBe('createdAt');
     });
 
     it('p-property-highlighted: should update value when set', () => {
       fixture.componentRef.setInput('p-property-highlighted', 'unread');
       fixture.detectChanges();
 
-      expect(component.propertyHighlighted()).toBe('unread');
+      expect(component['propertyHighlighted']()).toBe('unread');
+    });
+
+    describe('p-field-properties:', () => {
+      it('should be undefined by default', () => {
+        expect(component.fieldProperties()).toBeUndefined();
+      });
+
+      it('should update value when set', () => {
+        const fieldProperties = {
+          title: 'name',
+          subtitle: 'role',
+          link: 'url',
+          avatar: 'photo',
+          highlighted: 'unread',
+          tag: { value: 'status', type: 'statusType' }
+        };
+
+        fixture.componentRef.setInput('p-field-properties', fieldProperties);
+        fixture.detectChanges();
+
+        expect(component.fieldProperties()).toEqual(fieldProperties);
+      });
+    });
+
+    describe('resolved field properties (precedence):', () => {
+      it('resolvedPropertyTitle: should prioritize `p-field-properties` over the deprecated input', () => {
+        component['propertyTitle'] = 'legacyTitle';
+        fixture.componentRef.setInput('p-field-properties', { title: 'name' });
+        fixture.detectChanges();
+
+        expect(component['resolvedPropertyTitle']).toBe('name');
+      });
+
+      it('resolvedPropertyTitle: should fallback to the deprecated input when not set in `p-field-properties`', () => {
+        component['propertyTitle'] = 'legacyTitle';
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+
+        expect(component['resolvedPropertyTitle']).toBe('legacyTitle');
+      });
+
+      it('resolvedPropertyLink: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        component['propertyLink'] = 'legacyUrl';
+        fixture.componentRef.setInput('p-field-properties', { link: 'url' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyLink']).toBe('url');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyLink']).toBe('legacyUrl');
+      });
+
+      it('resolvedPropertySubtitle: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-subtitle', 'legacySubtitle');
+        fixture.componentRef.setInput('p-field-properties', { subtitle: 'subtitle' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertySubtitle']).toBe('subtitle');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertySubtitle']).toBe('legacySubtitle');
+      });
+
+      it('resolvedPropertyHighlighted: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-highlighted', 'legacyUnread');
+        fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyHighlighted']).toBe('unread');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyHighlighted']).toBe('legacyUnread');
+      });
+
+      it('resolvedPropertyAvatar: should prioritize `p-field-properties` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-avatar', 'legacyAvatar');
+        fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyAvatar']).toBe('avatar');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyAvatar']).toBe('legacyAvatar');
+      });
+
+      it('resolvedPropertyTag: should prioritize `p-field-properties.tag.value` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-tag', 'legacyTag');
+        fixture.componentRef.setInput('p-field-properties', { tag: { value: 'status' } });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTag']).toBe('status');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTag']).toBe('legacyTag');
+      });
+
+      it('resolvedPropertyTagType: should prioritize `p-field-properties.tag.type` and fallback to deprecated input', () => {
+        fixture.componentRef.setInput('p-property-tag-type', 'legacyTagType');
+        fixture.componentRef.setInput('p-field-properties', { tag: { type: 'statusType' } });
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTagType']).toBe('statusType');
+
+        fixture.componentRef.setInput('p-field-properties', {});
+        fixture.detectChanges();
+        expect(component['resolvedPropertyTagType']).toBe('legacyTagType');
+      });
     });
 
     it('deleteInternalAttrs: should return `object` without property that starts with `$`', () => {

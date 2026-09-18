@@ -4,7 +4,7 @@
  * @description
  *
  * Define o modo de exibição do detalhe do item do `po-list-view`, utilizado em conjunto com a
- * diretiva `p-list-view-detail-template`.
+ * diretiva [`p-list-view-detail-template`](/documentation/po-list-view-detail-template).
  */
 export enum PoListViewDetailDisplay {
   /** Exibe o detalhe expandindo o conteúdo abaixo do item (comportamento padrão). */
