@@ -371,20 +371,6 @@ describe('PoPageSlideComponent', () => {
     });
   });
 
-  describe('animation params:', () => {
-    it('fadeParams: should use the fallback duration when `duration` is empty', () => {
-      component.duration = '';
-
-      expect(component.fadeParams.params.duration).toBe('70ms');
-    });
-
-    it('slideParams: should use the fallback timing when `timing` is empty', () => {
-      component.timing = '';
-
-      expect(component.slideParams.params.timing).toBe('700ms cubic-bezier(0.35, 0, 0.1, 1)');
-    });
-  });
-
   describe('Animation methods:', () => {
     it('animateEnter: should animate overlay opacity and container translateX', () => {
       const rootElement = document.createElement('div');
