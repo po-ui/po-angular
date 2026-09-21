@@ -127,7 +127,7 @@
               [p-no-shadow]="true"
               [p-size]="componentsSize"
               [p-actions]="getWidgetActions(item)"
-              (p-title-action)="runTitleAction(item)"
+              (p-title-action)="onTitleClick(item)"
             >
               @if (getItemSubtitle(item)) {
                 <div class="po-list-view-subtitle">{{ getItemSubtitle(item) }}</div>
@@ -159,6 +159,7 @@
           <div
             class="po-list-view-detail"
             (animate.enter)="item?.$showDetail ? animateDetailEnter($event, item) : undefined"
+            (animate.leave)="animateDetailLeave($event)"
           >
             <ng-template
               [ngTemplateOutlet]="listViewDetailTemplate.templateRef"

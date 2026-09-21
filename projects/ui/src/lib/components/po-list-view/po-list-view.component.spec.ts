@@ -782,6 +782,25 @@ describe('PoListViewComponent:', () => {
       expect(element.style.overflowY).toBe('visible');
     });
 
+    it(`animateDetailLeave: should animate height from scrollHeight to 0 and call animationComplete`, () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 60 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component['animateDetailLeave']({ target: element, animationComplete } as any);
+
+      expect(element.style.overflowY).toBe('hidden');
+      expect(element.animate).toHaveBeenCalledWith([{ height: '60px' }, { height: '0px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
     it('trackBy: should return `index`', () => {
       const index = 1;
 
@@ -1047,6 +1066,28 @@ describe('PoListViewComponent:', () => {
       component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('noLink');
+    });
+
+    it('onTitleClick: should navigate internally when the title link is an internal route', () => {
+      const register: any = { url: '/home' };
+      component['propertyLink'] = 'url';
+      spyOn(component['router'], 'navigate');
+      spyOn<any>(component, 'runTitleAction');
+
+      component['onTitleClick'](register);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['/home']);
+      expect(component['runTitleAction']).not.toHaveBeenCalled();
+    });
+
+    it('onTitleClick: should call `runTitleAction` when there is no title link', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = null;
+      spyOn<any>(component, 'runTitleAction');
+
+      component['onTitleClick'](register);
+
+      expect(component['runTitleAction']).toHaveBeenCalledWith(register);
     });
 
     it(`getItemTitle: should call the formatting function of the title and return its value if 'hasContentTemplate' is true and

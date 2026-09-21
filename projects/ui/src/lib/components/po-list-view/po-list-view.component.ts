@@ -127,6 +127,21 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     }
   }
 
+  protected onTitleClick(item: any): void {
+    const link = this.resolvedPropertyLink && item[this.resolvedPropertyLink];
+
+    if (link) {
+      if (isExternalLink(link)) {
+        openExternalLink(link);
+      } else {
+        this.router.navigate([link]);
+      }
+      return;
+    }
+
+    this.runTitleAction(item);
+  }
+
   ngAfterContentInit(): void {
     this.initShowDetail();
   }
@@ -332,6 +347,21 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
     animation.onfinish = () => {
       element.style.overflowY = previousOverflowY;
+    };
+  }
+
+  protected animateDetailLeave(event: AnimationCallbackEvent): void {
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    element.style.overflowY = 'hidden';
+
+    const animation = element.animate([{ height: `${height}px` }, { height: '0px' }], {
+      duration: 100,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      event.animationComplete();
     };
   }
 
