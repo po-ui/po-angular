@@ -8,7 +8,7 @@
   [p-items]="items"
   [p-literals]="customLiterals"
   [p-select]="properties.includes('select')"
-  [p-selection-mode]="selectionMode"
+  [p-single-select]="properties.includes('singleSelect')"
   [p-show-more-disabled]="properties.includes('showMoreDisabled')"
   [p-tag-position]="tagPosition"
   (p-show-more)="showMore()"
@@ -97,16 +97,6 @@
       p-label="Components size"
       p-help="To apply the small size, set the accessibility level to AA, adjustable in the navbar or theme service (https://po-ui.io/documentation/po-theme)."
       [p-options]="componentsSizeOptions"
-    >
-    </po-radio-group>
-
-    <po-radio-group
-      class="po-lg-6"
-      name="selectionMode"
-      [(ngModel)]="selectionMode"
-      p-label="Selection mode"
-      p-help='Defines the selection mode when the "Select" option is enabled. In "single" the "Select all" option is hidden.'
-      [p-options]="selectionModeOptions"
     >
     </po-radio-group>
 

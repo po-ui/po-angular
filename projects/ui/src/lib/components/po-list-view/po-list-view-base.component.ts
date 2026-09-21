@@ -5,20 +5,9 @@ import { poLocaleDefault } from '../../services/po-language/po-language.constant
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoListViewDetailDisplay } from './enums/po-list-view-detail-display.enum';
-import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
 import { PoListViewFieldProperties } from './interfaces/po-list-view-field-properties.interface';
 import { PoListViewLiterals } from './interfaces/po-list-view-literals.interface';
-
-/**
- * @docsPrivate
- *
- * Valida o valor recebido pela propriedade `p-selection-mode`, retornando `multiple` como padrão
- * quando o valor informado não pertencer ao enum `PoListViewSelectionMode`.
- */
-export function convertToSelectionMode(value: string | PoListViewSelectionMode): PoListViewSelectionMode {
-  return value === PoListViewSelectionMode.Single ? PoListViewSelectionMode.Single : PoListViewSelectionMode.Multiple;
-}
 
 /**
  * @docsPrivate
@@ -203,6 +192,7 @@ export class PoListViewBaseComponent {
   private _literals: PoListViewLiterals;
   private _select: boolean;
   private _showMoreDisabled: boolean;
+  private _singleSelect: boolean = false;
   private readonly language: string = poLocaleDefault;
 
   /**
@@ -370,19 +360,24 @@ export class PoListViewBaseComponent {
    *
    * @description
    *
-   * Define o modo de seleção dos itens quando a seleção estiver habilitada através da propriedade `p-select`:
-   * - `multiple`: permite selecionar um ou mais itens simultaneamente, exibindo a opção "Selecionar todos".
-   * - `single`: permite selecionar apenas um item por vez, ocultando a opção "Selecionar todos".
+   * Define que somente um item da lista pode ser selecionado quando a seleção estiver habilitada
+   * através da propriedade `p-select`.
    *
-   * @default `multiple`
+   * > Quando habilitado, a opção "Selecionar todos" é ocultada.
+   *
+   * @default `false`
    */
-  selectionMode = input<PoListViewSelectionMode, string | PoListViewSelectionMode>(PoListViewSelectionMode.Multiple, {
-    alias: 'p-selection-mode',
-    transform: convertToSelectionMode
-  });
+  @Input('p-single-select') set singleSelect(value: boolean) {
+    this._singleSelect = convertToBoolean(value);
+    this.showMainHeader();
+  }
+
+  get singleSelect(): boolean {
+    return this._singleSelect;
+  }
 
   get isSingleSelection(): boolean {
-    return this.selectionMode() === PoListViewSelectionMode.Single;
+    return this.singleSelect;
   }
 
   /**
@@ -659,7 +654,7 @@ export class PoListViewBaseComponent {
   }
 
   selectListItem(row: any) {
-    if (this.selectionMode() === PoListViewSelectionMode.Single) {
+    if (this.singleSelect) {
       if (row.$selected) {
         return;
       }
@@ -714,11 +709,6 @@ export class PoListViewBaseComponent {
   }
 
   private showMainHeader() {
-    this.showHeader = !!(
-      this.select &&
-      this.selectionMode() === PoListViewSelectionMode.Multiple &&
-      !this.hideSelectAll &&
-      this.items?.length
-    );
+    this.showHeader = !!(this.select && !this.singleSelect && !this.hideSelectAll && this.items?.length);
   }
 }

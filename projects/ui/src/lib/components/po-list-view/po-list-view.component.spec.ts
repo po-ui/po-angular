@@ -52,8 +52,8 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-select po-radio')).toBeNull();
     });
 
-    it('should render `po-radio` per item when selection mode is `single`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'single');
+    it('should render `po-radio` per item when `singleSelect` is true', () => {
+      component.singleSelect = true;
       component.select = true;
       fixture.detectChanges();
 

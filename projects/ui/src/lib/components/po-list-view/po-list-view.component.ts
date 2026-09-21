@@ -17,7 +17,6 @@ import { PoModalComponent } from '../po-modal/po-modal.component';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
-import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
 import { PoListViewDetailTemplateDirective } from './po-list-view-detail-template/po-list-view-detail-template.directive';
@@ -393,13 +392,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
       this.selectAll = null;
     }
 
-    if (
-      changesItems &&
-      this.items?.length &&
-      this.select &&
-      this.selectionMode() === PoListViewSelectionMode.Multiple &&
-      !this.hideSelectAll
-    ) {
+    if (changesItems && this.items?.length && this.select && !this.singleSelect && !this.hideSelectAll) {
       this.showHeader = true;
     }
   }

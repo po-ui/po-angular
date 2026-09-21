@@ -35,12 +35,12 @@ export class SamplePoListViewLabsComponent implements OnInit {
   propertyTag: string;
   propertyTagType: string;
   propertyTitle: string;
-  selectionMode: string = 'multiple';
   tagPosition: string = 'bottom';
   titleAction: string;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'select', label: 'Select' },
+    { value: 'singleSelect', label: 'Single Select' },
     { value: 'hideSelectAll', label: 'Hide Select All', disabled: true },
     { value: 'showMoreDisabled', label: 'Show More Disabled' }
   ];
@@ -81,11 +81,6 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { value: 'email', label: 'email' },
     { value: 'phone', label: 'phone' },
     { value: 'location', label: 'location' }
-  ];
-
-  readonly selectionModeOptions: Array<PoRadioGroupOption> = [
-    { label: 'multiple', value: 'multiple' },
-    { label: 'single', value: 'single' }
   ];
 
   readonly typeOptions: Array<PoSelectOption> = [
@@ -158,7 +153,6 @@ export class SamplePoListViewLabsComponent implements OnInit {
     this.propertyTag = '';
     this.propertyTagType = '';
     this.propertyTitle = '';
-    this.selectionMode = 'multiple';
     this.tagPosition = 'bottom';
     this.titleAction = '';
     this.restoreActionForm();

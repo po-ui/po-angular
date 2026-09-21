@@ -7,7 +7,6 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoThemeA11yEnum } from '../../services';
 import { PoListViewBaseComponent, poListViewLiteralsDefault } from './po-list-view-base.component';
 import { PoListViewDetailDisplay } from './enums/po-list-view-detail-display.enum';
-import { PoListViewSelectionMode } from './enums/po-list-view-selection-mode.enum';
 
 @Component({
   template: '',
@@ -326,26 +325,26 @@ describe('PoListViewBaseComponent:', () => {
       component.items.forEach(listItem => expect(listItem.$selected).toBe(false));
     });
 
-    it('p-selection-mode: should have `multiple` as default value', () => {
-      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Multiple);
+    it('p-single-select: should be false by default', () => {
+      expect(component.singleSelect).toBe(false);
     });
 
-    it('p-selection-mode: should update to `single` when set with `single`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'single');
+    it('p-single-select: should be true when set', () => {
+      component.singleSelect = true;
       fixture.detectChanges();
 
-      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Single);
+      expect(component.singleSelect).toBe(true);
     });
 
-    it('p-selection-mode: should fallback to `multiple` when set with an invalid value', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'invalid');
+    it('p-single-select: should be false when not set', () => {
+      component.singleSelect = false;
       fixture.detectChanges();
 
-      expect(component.selectionMode()).toBe(PoListViewSelectionMode.Multiple);
+      expect(component.singleSelect).toBe(false);
     });
 
-    it('selectListItem: should keep only one item selected when selection mode is `single`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'single');
+    it('selectListItem: should keep only one item selected when singleSelect is true', () => {
+      component.singleSelect = true;
       fixture.detectChanges();
 
       component.items = [
@@ -365,7 +364,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('selectListItem: should keep the current item selected when clicked again in `single` mode', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'single');
+      component.singleSelect = true;
       fixture.detectChanges();
 
       component.items = [{ name: 'Name 1', $selected: false }];
@@ -378,8 +377,8 @@ describe('PoListViewBaseComponent:', () => {
       expect(component.items[0].$selected).toBe(true);
     });
 
-    it('showMainHeader: should not show the header when selection mode is `single`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'single');
+    it('showMainHeader: should not show the header when singleSelect is true', () => {
+      component.singleSelect = true;
       fixture.detectChanges();
 
       component.items = [{ name: 'Name 1' }];
@@ -390,7 +389,7 @@ describe('PoListViewBaseComponent:', () => {
     });
 
     it('showMainHeader: should show the header when selection mode is `multiple`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'multiple');
+      component.singleSelect = false;
       fixture.detectChanges();
 
       component.items = [{ name: 'Name 1' }];
@@ -400,15 +399,15 @@ describe('PoListViewBaseComponent:', () => {
       expect(component.showHeader).toBe(true);
     });
 
-    it('isSingleSelection: should return `true` when selection mode is `single`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'single');
+    it('isSingleSelection: should return `true` when singleSelect is true', () => {
+      component.singleSelect = true;
       fixture.detectChanges();
 
       expect(component.isSingleSelection).toBe(true);
     });
 
     it('isSingleSelection: should return `false` when selection mode is `multiple`', () => {
-      fixture.componentRef.setInput('p-selection-mode', 'multiple');
+      component.singleSelect = false;
       fixture.detectChanges();
 
       expect(component.isSingleSelection).toBe(false);
