@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@angular/cdk": "~21.2.14",
-    "@po-ui/style": "0.0.0-PLACEHOLDER",
+    "@po-ui/style": "21.31.0-beta.1",
     "@po-ui/ng-schematics": "0.0.0-PLACEHOLDER",
     "driver.js": "~1.4.0",
     "echarts": "^6.1.0",
@@ -39,7 +39,7 @@
     "@angular/platform-browser-dynamic": "^21",
     "@angular/router": "^21",
     "@angular-devkit/schematics": "^21",
-    "@po-ui/style": "0.0.0-PLACEHOLDER",
+    "@po-ui/style": "21.31.0-beta.1",
     "rxjs": "~7.8.1",
     "zone.js": "~0.15.0"
   }
