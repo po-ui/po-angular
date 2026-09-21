@@ -41,6 +41,40 @@
       [p-size]="size()"
     ></po-header-tools>
 
+    <li class="po-header-fixed-icon" style="list-style: none; display: inline-flex; align-items: center">
+      <po-button
+        p-kind="tertiary"
+        p-aria-label="Lynn"
+        [p-icon]="lynnIconTemplate"
+        [p-size]="size()"
+      ></po-button>
+    </li>
+
+    <ng-template #lynnIconTemplate>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M3.96075 0.729685C8.65954 4.75605 14.0308 4.75605 18.7296 0.729685C18.8771 0.60668 19.0904 0.60668 19.2298 0.746085C19.3692 0.885491 19.3692 1.0987 19.2461 1.2463C15.2198 5.94509 15.2198 11.3163 19.2461 16.0151L3.96075 0.729685ZM19.5086 17.2697C18.9673 16.7285 18.3851 16.2119 17.7619 15.7608C13.301 12.5218 8.33974 12.7759 3.96075 16.5317C3.81315 16.6547 3.59994 16.6547 3.46054 16.5153C3.38673 16.4416 3.35394 16.3513 3.35394 16.2611C3.35394 16.1709 3.37854 16.0889 3.44413 16.0151C7.19989 11.6361 7.4541 6.67492 4.21497 2.21394C3.76395 1.59072 3.24733 1.0167 2.70611 0.467273C1.70566 -0.533166 0 0.180264 0 1.59072V18.3932C0 19.2707 0.713428 19.9758 1.58266 19.9758H18.3852C19.7956 19.9758 20.5008 18.2702 19.5086 17.2697Z"
+          fill="url(#paint0_radial_42675_20040)"
+          style="fill: url(#paint0_radial_42675_20040)"
+        />
+        <defs>
+          <radialGradient
+            id="paint0_radial_42675_20040"
+            cx="0"
+            cy="0"
+            r="1"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="translate(-3.59281 23.8922) rotate(-46.1314) scale(47.1778 131.826)"
+          >
+            <stop offset="0.230769" stop-color="#E0CDFF" />
+            <stop offset="0.375" stop-color="#C4F0FF" />
+            <stop offset="0.558322" stop-color="#7FF4FF" />
+            <stop offset="0.673827" stop-color="#C4FAFF" />
+          </radialGradient>
+        </defs>
+      </svg>
+    </ng-template>
+
     @if (headerUser?.customerBrand && headerUser?.avatar) {
       <po-header-customer [p-header-user]="headerUser" [p-size]="size()"></po-header-customer>
     }
