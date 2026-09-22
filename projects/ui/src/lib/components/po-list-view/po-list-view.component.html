@@ -158,7 +158,7 @@
             <po-button
               class="po-list-view-action-advanced"
               p-kind="tertiary"
-              p-icon="ICON_ARROW_RIGHT"
+              [p-icon]="getVisibleActions(item)[0]?.icon || 'ICON_ARROW_RIGHT'"
               [p-size]="componentsSize"
               (p-click)="isItemClickable(item) ? null : onAdvancedArrowClick(item)"
             >

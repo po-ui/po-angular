@@ -794,7 +794,7 @@ describe('PoListViewComponent:', () => {
       Object.defineProperty(element, 'scrollHeight', { value: 60 });
       spyOn(element, 'animate').and.returnValue(animation);
 
-      component['animateDetailLeave']({ target: element, animationComplete } as any);
+      component['animateDetailLeave']({ target: element, animationComplete });
 
       expect(element.style.overflowY).toBe('hidden');
       expect(element.animate).toHaveBeenCalledWith([{ height: '60px' }, { height: '0px' }], {

@@ -487,12 +487,12 @@ export class PoListViewBaseComponent {
    * { avatar: 'https://url-da-imagem.png' }
    * ```
    *
-   * - **Objeto com `icon`:** Renderiza um ícone circular. Propriedades: `icon` (obrigatório), `color` (opcional), `backgroundColor` (opcional).
+   * - **Objeto com `icon`:** Renderiza um ícone circular com tamanho fixo (não afetado por `p-avatar-size`). Propriedades: `icon` (obrigatório), `color` (opcional), `backgroundColor` (opcional).
    * ```
    * { avatar: { icon: 'an an-shield-warning', color: '#dc2626', backgroundColor: '#fee2e2' } }
    * ```
    *
-   * - **Objeto com `progress`:** Renderiza um `po-progress-circle`. Todas as propriedades do componente são suportadas:
+   * - **Objeto com `progress`:** Renderiza um `po-progress-circle` (não afetado por `p-avatar-size`; o tamanho é definido pelas propriedades `size`/`radius`). Todas as propriedades do componente são suportadas:
    * - `progress` (number): valor de 0-100.
    * - `indeterminate` (boolean): animação contínua (ignora `progress`).
    * - `showPercentage` (boolean): exibe porcentagem no centro.
@@ -587,7 +587,8 @@ export class PoListViewBaseComponent {
    *
    * @description
    *
-   * Define o tamanho do avatar aplicado a **todos** os itens da lista.
+   * Define o tamanho do avatar do tipo **imagem** (quando o valor mapeado é uma URL) aplicado a
+   * **todos** os itens da lista.
    *
    * Valores válidos:
    *  - `xs` (24x24)
@@ -595,6 +596,12 @@ export class PoListViewBaseComponent {
    *  - `md` (64x64)
    *  - `lg` (96x96)
    *  - `xl` (144x144)
+   *
+   * > Aplica-se somente ao avatar do tipo **imagem**. Os demais tipos possuem dimensionamento próprio
+   * e **não** são afetados por esta propriedade:
+   * > - `icon`: tamanho fixo;
+   * > - `progress`: definido pelas propriedades `size`/`radius` do próprio objeto (`po-progress-circle`);
+   * > - `customTemplate`: definido pelo *template* informado.
    *
    * @default `md`
    */
