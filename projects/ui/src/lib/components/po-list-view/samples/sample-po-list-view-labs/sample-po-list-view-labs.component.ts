@@ -36,6 +36,8 @@ export class SamplePoListViewLabsComponent implements OnInit {
   propertyTagType: string;
   propertyTitle: string;
   tagPosition: string = 'bottom';
+  tagTypeValue: string = '';
+  highlightedValue: string = 'read';
   titleAction: string;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
@@ -83,6 +85,25 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { value: 'location', label: 'location' }
   ];
 
+  // Único campo do item cujo valor é um avatar válido (URL de imagem) no dataset do labs.
+  readonly avatarPropertyOptions: Array<PoSelectOption> = [{ value: 'avatar', label: 'avatar' }];
+
+  // Valores de tipo de tag aplicados ao campo `tagType` de todos os itens.
+  readonly tagTypeValueOptions: Array<PoSelectOption> = [
+    { value: '', label: 'None' },
+    { value: 'info', label: 'Info' },
+    { value: 'danger', label: 'Danger' },
+    { value: 'success', label: 'Success' },
+    { value: 'warning', label: 'Warning' },
+    { value: 'neutral', label: 'Neutral' }
+  ];
+
+  // Estado de leitura aplicado ao campo `unread` (highlighted) de todos os itens.
+  readonly highlightedValueOptions: Array<PoSelectOption> = [
+    { value: 'read', label: 'read' },
+    { value: 'unread', label: 'unread' }
+  ];
+
   readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Default', value: 'default' },
     { label: 'Danger', value: 'danger' }
@@ -113,6 +134,15 @@ export class SamplePoListViewLabsComponent implements OnInit {
 
   addItem() {
     this.items.push(this.generateNewItem(this.items.length + 1));
+  }
+
+  applyTagType() {
+    this.items = this.items.map(item => ({ ...item, tagType: this.tagTypeValue }));
+  }
+
+  applyHighlighted() {
+    const unread = this.highlightedValue === 'unread';
+    this.items = this.items.map(item => ({ ...item, unread }));
   }
 
   changeAction(action) {
@@ -146,14 +176,16 @@ export class SamplePoListViewLabsComponent implements OnInit {
     this.literals = '';
     this.properties = [];
     this.propertyAvatar = '';
-    this.propertyHighlighted = '';
+    this.propertyHighlighted = 'unread';
     this.propertyLink = 'url';
     this.propertyLinkValue = '';
     this.propertySubtitle = '';
     this.propertyTag = '';
-    this.propertyTagType = '';
+    this.propertyTagType = 'tagType';
     this.propertyTitle = '';
     this.tagPosition = 'bottom';
+    this.tagTypeValue = '';
+    this.highlightedValue = 'read';
     this.titleAction = '';
     this.restoreActionForm();
   }
@@ -174,10 +206,10 @@ export class SamplePoListViewLabsComponent implements OnInit {
       url: this.propertyLinkValue,
       zipCode: `${index}221`,
       tag: index % 2 === 0 ? 'Completed' : 'In progress',
-      tagType: tagTypes[index % tagTypes.length],
+      tagType: this.tagTypeValue || tagTypes[index % tagTypes.length],
       subtitle: `${index * 5} min ago`,
       avatar: `https://i.pravatar.cc/150?img=${index}`,
-      unread: index % 3 === 0
+      unread: this.highlightedValue === 'unread' ? true : index % 3 === 0
     };
   }
 

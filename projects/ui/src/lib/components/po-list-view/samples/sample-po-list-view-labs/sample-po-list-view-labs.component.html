@@ -120,50 +120,60 @@
     >
     </po-radio-group>
 
-    <po-input
+    <po-select
       class="po-md-6 po-lg-3"
       name="propertyTag"
       [(ngModel)]="propertyTag"
+      p-clean
       p-help='Ex.: "tag"'
       p-label="Property tag"
+      [p-options]="propertyTitleOptions"
     >
-    </po-input>
+    </po-select>
 
-    <po-input
+    <po-select
       class="po-md-6 po-lg-3"
-      name="propertyTagType"
-      [(ngModel)]="propertyTagType"
-      p-help='Ex.: "tagType"'
+      name="tagTypeValue"
+      [(ngModel)]="tagTypeValue"
+      p-help="Applies the type to the tagType field of all items."
       p-label="Property tag type"
+      [p-options]="tagTypeValueOptions"
+      (p-change)="applyTagType()"
     >
-    </po-input>
+    </po-select>
 
-    <po-input
+    <po-select
       class="po-md-6 po-lg-3"
       name="propertySubtitle"
       [(ngModel)]="propertySubtitle"
+      p-clean
       p-help='Ex.: "subtitle"'
       p-label="Property subtitle"
+      [p-options]="propertyTitleOptions"
     >
-    </po-input>
+    </po-select>
 
-    <po-input
+    <po-select
       class="po-md-6 po-lg-3"
       name="propertyAvatar"
       [(ngModel)]="propertyAvatar"
+      p-clean
       p-help='Ex.: "avatar"'
       p-label="Property avatar"
+      [p-options]="avatarPropertyOptions"
     >
-    </po-input>
+    </po-select>
 
-    <po-input
+    <po-select
       class="po-md-6 po-lg-3"
-      name="propertyHighlighted"
-      [(ngModel)]="propertyHighlighted"
-      p-help='Ex.: "unread"'
+      name="highlightedValue"
+      [(ngModel)]="highlightedValue"
+      p-help="Applies the read/unread state to all items."
       p-label="Property highlighted"
+      [p-options]="highlightedValueOptions"
+      (p-change)="applyHighlighted()"
     >
-    </po-input>
+    </po-select>
   </div>
 
   <div class="po-row">

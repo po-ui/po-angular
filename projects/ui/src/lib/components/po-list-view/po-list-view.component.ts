@@ -56,9 +56,9 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
 
-  @ContentChild(PoListViewContentTemplateDirective, { static: true })
+  @ContentChild(PoListViewContentTemplateDirective, { static: false })
   listViewContentTemplate: PoListViewContentTemplateDirective;
-  @ContentChild(PoListViewDetailTemplateDirective, { static: true })
+  @ContentChild(PoListViewDetailTemplateDirective, { static: false })
   listViewDetailTemplate: PoListViewDetailTemplateDirective;
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
