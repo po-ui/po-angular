@@ -200,7 +200,7 @@
           </div>
         }
 
-        @if (hasDetailTemplate) {
+        @if (hasDetailTemplate && !isItemClickable(item)) {
           <div class="po-list-view-detail-button">
             @if (isDetailModal) {
               <po-button

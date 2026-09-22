@@ -1314,6 +1314,15 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-detail-button')).toBeNull();
     });
 
+    it('shouldn`t find `po-list-view-detail-button` when the item is clickable (`p-item-click`)', () => {
+      component.listViewDetailTemplate = { showDetail: () => true, templateRef: null };
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-detail-button')).toBeNull();
+    });
+
     it('should render content inside po-widget if contains listViewContentTemplate', () => {
       component.listViewContentTemplate = { templateRef: null, title: null };
 

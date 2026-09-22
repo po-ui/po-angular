@@ -153,6 +153,11 @@ export class PoListViewBaseComponent {
    * Ação que será executada ao clicar no botão exibir detalhes.
    *
    * Ao ser disparado, o método passa como parâmetros os detalhes que serão exibidos.
+   *
+   * > **Incompatibilidade com `p-item-click`:** para itens em que o `p-item-click` está ativo
+   * (itens com **0 ou 1 ação visível**), o botão de exibir detalhes **não é exibido**, evitando
+   * conflito com o clique do item. O detalhe fica disponível para itens com **2 ou mais ações
+   * visíveis** (situação em que o `p-item-click` é desabilitado automaticamente para aquele item).
    */
   @Output('p-show-detail') showDetail: EventEmitter<any> = new EventEmitter<any>();
 
@@ -184,6 +189,8 @@ export class PoListViewBaseComponent {
    * O clique na área do item — incluindo a seta de navegação — dispara somente o `p-item-click`.
    * - **`p-title-action` não é emitido:** o clique no título dispara apenas o `p-item-click`, não o
    * evento `p-title-action`.
+   * - **Botão de detalhes (`p-show-detail`) não é exibido:** para evitar conflito com o clique do
+   * item, o botão de exibir detalhes é ocultado quando o `p-item-click` está ativo no item.
    *
    * > Ambos os comportamentos voltam ao normal para itens com **2 ou mais ações visíveis**, pois nesse
    * caso o `p-item-click` é desabilitado automaticamente e a interação passa a ser feita pelo menu de
