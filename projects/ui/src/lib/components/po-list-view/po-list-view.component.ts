@@ -100,10 +100,6 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return this.titleAction.observers.length > 0 || !!(this.resolvedPropertyLink && item[this.resolvedPropertyLink]);
   }
 
-  protected get itemClickable(): boolean {
-    return this.itemClick.observed;
-  }
-
   protected isItemClickable(item: any): boolean {
     return this.itemClick.observed && this.getVisibleActions(item).length <= 1;
   }

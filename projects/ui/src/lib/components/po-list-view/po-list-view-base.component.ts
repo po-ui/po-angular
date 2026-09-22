@@ -136,6 +136,12 @@ export class PoListViewBaseComponent {
    * Ação que será executada ao clicar no título.
    *
    * Ao ser disparado, o método inserido na ação irá receber como parâmetro o item da lista clicado.
+   *
+   * > **Incompatibilidade com `p-item-click`:** para itens em que o `p-item-click` está ativo
+   * (itens com **0 ou 1 ação visível**), este evento **não é emitido**. Nesse cenário o clique no
+   * título — assim como em qualquer área do item — dispara apenas o `p-item-click`. O `p-title-action`
+   * volta a ser emitido somente quando o item possui **2 ou mais ações visíveis** (situação em que o
+   * `p-item-click` é desabilitado automaticamente para aquele item).
    */
   @Output('p-title-action') titleAction: EventEmitter<any> = new EventEmitter<any>();
 
@@ -172,6 +178,16 @@ export class PoListViewBaseComponent {
    * A avaliação é feita **por item**, respeitando a propriedade `visible` das ações (que pode ser
    * uma função). Assim, itens diferentes na mesma lista podem ou não ser clicáveis conforme a
    * quantidade de ações visíveis de cada um.
+   *
+   * **Incompatibilidades quando `p-item-click` está ativo no item (0 ou 1 ação visível):**
+   * - **Ação single não é emitida:** a `action` da única ação visível (`p-actions`) **não é executada**.
+   * O clique na área do item — incluindo a seta de navegação — dispara somente o `p-item-click`.
+   * - **`p-title-action` não é emitido:** o clique no título dispara apenas o `p-item-click`, não o
+   * evento `p-title-action`.
+   *
+   * > Ambos os comportamentos voltam ao normal para itens com **2 ou mais ações visíveis**, pois nesse
+   * caso o `p-item-click` é desabilitado automaticamente e a interação passa a ser feita pelo menu de
+   * ações (ícone de três pontos).
    *
    * Ao ser disparado, o método inserido recebe como parâmetro o item clicado (sem propriedades internas `$`).
    *

@@ -256,6 +256,34 @@ describe('PoListViewComponent:', () => {
       expect(result.size).toBe('md');
     });
 
+    it('getItemAvatar: should return undefined when item value is an object with `icon`', () => {
+      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { icon: 'an an-user' } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `progress`', () => {
+      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { progress: 50 } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `indeterminate`', () => {
+      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `customTemplate`', () => {
+      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { customTemplate: {} } })).toBeUndefined();
+    });
+
     it('getWidgetActions: should map visible actions wrapping each action callback when 2+ actions', () => {
       const actionSpy = jasmine.createSpy('actionSpy');
       component.actions = [
@@ -702,16 +730,6 @@ describe('PoListViewComponent:', () => {
 
       expect(component.titleHasAction).toBe(true);
     });
-
-    it('itemClickable: should return `true` when `itemClick` has observers', () => {
-      component.itemClick.subscribe(() => {});
-
-      expect(component['itemClickable']).toBe(true);
-    });
-
-    it('itemClickable: should return `false` when `itemClick` has no observers', () => {
-      expect(component['itemClickable']).toBe(false);
-    });
   });
 
   describe('Methods:', () => {
@@ -826,9 +844,9 @@ describe('PoListViewComponent:', () => {
       expect(component.itemClick.emit).toHaveBeenCalledWith(expectedItem);
     });
 
-    it('onItemClick: should not emit `itemClick` when `itemClickable` is false', () => {
+    it('onItemClick: should not emit `itemClick` when `isItemClickable` is false', () => {
       spyOn(component.itemClick, 'emit');
-      spyOnProperty(component, <any>'itemClickable').and.returnValue(false);
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
 
       component['onItemClick'](item, new MouseEvent('click'));
 
@@ -924,11 +942,11 @@ describe('PoListViewComponent:', () => {
       });
     });
 
-    it('onItemKeyDown: should not emit `itemClick` when `itemClickable` is false', () => {
+    it('onItemKeyDown: should not emit `itemClick` when `isItemClickable` is false', () => {
       const keyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
 
       spyOn(component.itemClick, 'emit');
-      spyOnProperty(component, <any>'itemClickable').and.returnValue(false);
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
 
       component['onItemKeyDown'](item, keyEvent);
 
@@ -939,7 +957,7 @@ describe('PoListViewComponent:', () => {
       const keyEvent = new KeyboardEvent('keydown', { key: 'Tab' });
 
       spyOn(component.itemClick, 'emit');
-      spyOnProperty(component, <any>'itemClickable').and.returnValue(true);
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
 
       component['onItemKeyDown'](item, keyEvent);
 
@@ -1085,6 +1103,20 @@ describe('PoListViewComponent:', () => {
       expect(component['runTitleAction']).not.toHaveBeenCalled();
     });
 
+    it('onTitleClick: should open external link when the title link is an external url', () => {
+      const register: any = { url: 'http://po-ui.io' };
+      component['propertyLink'] = 'url';
+      spyOn(window, 'open');
+      spyOn(component['router'], 'navigate');
+      spyOn<any>(component, 'runTitleAction');
+
+      component['onTitleClick'](register);
+
+      expect(window.open).toHaveBeenCalled();
+      expect(component['router'].navigate).not.toHaveBeenCalled();
+      expect(component['runTitleAction']).not.toHaveBeenCalled();
+    });
+
     it('onTitleClick: should call `runTitleAction` when there is no title link', () => {
       const register: any = { name: 'item' };
       component['propertyLink'] = null;
@@ -1113,6 +1145,14 @@ describe('PoListViewComponent:', () => {
     it('isTitleClickable: should return false when there is no title action and no link', () => {
       const register: any = { name: 'item' };
       component['propertyLink'] = null;
+
+      expect(component['isTitleClickable'](register)).toBe(false);
+    });
+
+    it('isTitleClickable: should return false when `propertyLink` is set but the item has no value for it', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = 'url';
+      component.titleAction.observers = [];
 
       expect(component['isTitleClickable'](register)).toBe(false);
     });
