@@ -1095,6 +1095,28 @@ describe('PoListViewComponent:', () => {
       expect(component['runTitleAction']).toHaveBeenCalledWith(register);
     });
 
+    it('isTitleClickable: should return true when there is an observer on `p-title-action`', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = null;
+      component.titleAction.subscribe(() => {});
+
+      expect(component['isTitleClickable'](register)).toBe(true);
+    });
+
+    it('isTitleClickable: should return true when the item has a title link', () => {
+      const register: any = { url: '/home' };
+      component['propertyLink'] = 'url';
+
+      expect(component['isTitleClickable'](register)).toBe(true);
+    });
+
+    it('isTitleClickable: should return false when there is no title action and no link', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = null;
+
+      expect(component['isTitleClickable'](register)).toBe(false);
+    });
+
     it(`getItemTitle: should call the formatting function of the title and return its value if 'hasContentTemplate' is true and
       'listViewContentTemplate.title' is defined`, () => {
       const title = 'Title value';

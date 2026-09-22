@@ -35,6 +35,7 @@
         [class.po-list-view-highlighted]="getItemHighlighted(item)"
         [class.po-list-view-selected]="item.$selected"
         [class.po-list-view-clickable]="isItemClickable(item)"
+        [class.po-list-view-no-title]="!getItemTitle(item)"
         [attr.tabindex]="isItemClickable(item) ? 0 : null"
         [attr.role]="isItemClickable(item) ? 'button' : null"
         (click)="onItemClick(item, $event)"
@@ -129,17 +130,7 @@
               }
             </po-widget>
           } @else {
-            <po-widget
-              [p-title]="getItemTitle(item)"
-              [p-tag]="getItemTag(item)"
-              [p-tag-type]="getItemTagType(item)"
-              [p-tag-position]="tagPosition()"
-              [p-avatar]="getItemAvatar(item)"
-              [p-no-shadow]="true"
-              [p-size]="componentsSize"
-              [p-actions]="getWidgetActions(item)"
-              (p-title-action)="onTitleClick(item)"
-            >
+            <ng-template #itemContent>
               @if (getItemSubtitle(item)) {
                 <div class="po-list-view-subtitle">{{ getItemSubtitle(item) }}</div>
               }
@@ -151,7 +142,36 @@
                 >
                 </ng-template>
               }
-            </po-widget>
+            </ng-template>
+
+            @if (isTitleClickable(item)) {
+              <po-widget
+                [p-title]="getItemTitle(item)"
+                [p-tag]="getItemTag(item)"
+                [p-tag-type]="getItemTagType(item)"
+                [p-tag-position]="tagPosition()"
+                [p-avatar]="getItemAvatar(item)"
+                [p-no-shadow]="true"
+                [p-size]="componentsSize"
+                [p-actions]="getWidgetActions(item)"
+                (p-title-action)="onTitleClick(item)"
+              >
+                <ng-template [ngTemplateOutlet]="itemContent"></ng-template>
+              </po-widget>
+            } @else {
+              <po-widget
+                [p-title]="getItemTitle(item)"
+                [p-tag]="getItemTag(item)"
+                [p-tag-type]="getItemTagType(item)"
+                [p-tag-position]="tagPosition()"
+                [p-avatar]="getItemAvatar(item)"
+                [p-no-shadow]="true"
+                [p-size]="componentsSize"
+                [p-actions]="getWidgetActions(item)"
+              >
+                <ng-template [ngTemplateOutlet]="itemContent"></ng-template>
+              </po-widget>
+            }
           }
 
           @if (getItemActionType(item) === 'advanced') {
