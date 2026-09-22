@@ -445,20 +445,6 @@ describe('PoListViewBaseComponent:', () => {
       expect(component.isDetailModal).toBe(false);
     });
 
-    it('p-property-subtitle: should update value when set', () => {
-      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
-      fixture.detectChanges();
-
-      expect(component['propertySubtitle']()).toBe('createdAt');
-    });
-
-    it('p-property-highlighted: should update value when set', () => {
-      fixture.componentRef.setInput('p-property-highlighted', 'unread');
-      fixture.detectChanges();
-
-      expect(component['propertyHighlighted']()).toBe('unread');
-    });
-
     describe('p-field-properties:', () => {
       it('should be undefined by default', () => {
         expect(component.fieldProperties()).toBeUndefined();
@@ -509,59 +495,54 @@ describe('PoListViewBaseComponent:', () => {
         expect(component['resolvedPropertyLink']).toBe('legacyUrl');
       });
 
-      it('resolvedPropertySubtitle: should prioritize `p-field-properties` and fallback to deprecated input', () => {
-        fixture.componentRef.setInput('p-property-subtitle', 'legacySubtitle');
+      it('resolvedPropertySubtitle: should return the value from `p-field-properties`', () => {
         fixture.componentRef.setInput('p-field-properties', { subtitle: 'subtitle' });
         fixture.detectChanges();
         expect(component['resolvedPropertySubtitle']).toBe('subtitle');
 
         fixture.componentRef.setInput('p-field-properties', {});
         fixture.detectChanges();
-        expect(component['resolvedPropertySubtitle']).toBe('legacySubtitle');
+        expect(component['resolvedPropertySubtitle']).toBeUndefined();
       });
 
-      it('resolvedPropertyHighlighted: should prioritize `p-field-properties` and fallback to deprecated input', () => {
-        fixture.componentRef.setInput('p-property-highlighted', 'legacyUnread');
+      it('resolvedPropertyHighlighted: should return the value from `p-field-properties`', () => {
         fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
         fixture.detectChanges();
         expect(component['resolvedPropertyHighlighted']).toBe('unread');
 
         fixture.componentRef.setInput('p-field-properties', {});
         fixture.detectChanges();
-        expect(component['resolvedPropertyHighlighted']).toBe('legacyUnread');
+        expect(component['resolvedPropertyHighlighted']).toBeUndefined();
       });
 
-      it('resolvedPropertyAvatar: should prioritize `p-field-properties` and fallback to deprecated input', () => {
-        fixture.componentRef.setInput('p-property-avatar', 'legacyAvatar');
+      it('resolvedPropertyAvatar: should return the value from `p-field-properties`', () => {
         fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
         fixture.detectChanges();
         expect(component['resolvedPropertyAvatar']).toBe('avatar');
 
         fixture.componentRef.setInput('p-field-properties', {});
         fixture.detectChanges();
-        expect(component['resolvedPropertyAvatar']).toBe('legacyAvatar');
+        expect(component['resolvedPropertyAvatar']).toBeUndefined();
       });
 
-      it('resolvedPropertyTag: should prioritize `p-field-properties.tag.value` and fallback to deprecated input', () => {
-        fixture.componentRef.setInput('p-property-tag', 'legacyTag');
+      it('resolvedPropertyTag: should return the value from `p-field-properties.tag.value`', () => {
         fixture.componentRef.setInput('p-field-properties', { tag: { value: 'status' } });
         fixture.detectChanges();
         expect(component['resolvedPropertyTag']).toBe('status');
 
         fixture.componentRef.setInput('p-field-properties', {});
         fixture.detectChanges();
-        expect(component['resolvedPropertyTag']).toBe('legacyTag');
+        expect(component['resolvedPropertyTag']).toBeUndefined();
       });
 
-      it('resolvedPropertyTagType: should prioritize `p-field-properties.tag.type` and fallback to deprecated input', () => {
-        fixture.componentRef.setInput('p-property-tag-type', 'legacyTagType');
+      it('resolvedPropertyTagType: should return the value from `p-field-properties.tag.type`', () => {
         fixture.componentRef.setInput('p-field-properties', { tag: { type: 'statusType' } });
         fixture.detectChanges();
         expect(component['resolvedPropertyTagType']).toBe('statusType');
 
         fixture.componentRef.setInput('p-field-properties', {});
         fixture.detectChanges();
-        expect(component['resolvedPropertyTagType']).toBe('legacyTagType');
+        expect(component['resolvedPropertyTagType']).toBeUndefined();
       });
     });
 

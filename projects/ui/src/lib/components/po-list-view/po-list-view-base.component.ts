@@ -100,20 +100,24 @@ export const poListViewLiteralsDefault = {
 @Directive()
 export class PoListViewBaseComponent {
   /**
-   * @deprecated v23.x.x
+   * @deprecated v23.x.x use `p-field-properties`
+   *
+   * @optional
+   *
+   * @description
    *
    * Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será usado como link para o título.
-   *
-   * > **Depreciado:** utilize a propriedade `link` do *input* [`p-field-properties`](/documentation/po-list-view#fieldProperties).
    */
   @Input('p-property-link') propertyLink?: string;
 
   /**
-   * @deprecated v23.x.x
+   * @deprecated v23.x.x use `p-field-properties`
+   *
+   * @optional
+   *
+   * @description
    *
    * Recebe uma propriedade que será utilizada para recuperar o valor do objeto que será exibido como o título de cada item.
-   *
-   * > **Depreciado:** utilize a propriedade `title` do *input* [`p-field-properties`](/documentation/po-list-view#fieldProperties).
    */
   @Input('p-property-title') propertyTitle?: string;
 
@@ -426,63 +430,6 @@ export class PoListViewBaseComponent {
   /**
    * @optional
    *
-   * @deprecated v23.x.x
-   *
-   * @description
-   *
-   * Nome da propriedade do objeto que será utilizada para exibir um subtítulo (linha de apoio)
-   * abaixo do título de cada item, como por exemplo uma informação de data/hora.
-   *
-   * > **Depreciado:** utilize a propriedade `subtitle` do *input* `p-field-properties`.
-   */
-  propertySubtitle = input<string>(undefined, { alias: 'p-property-subtitle' });
-
-  /**
-   * @optional
-   *
-   * @deprecated v23.x.x
-   *
-   * @description
-   *
-   * Nome da propriedade *booleana* do objeto que, quando `true`, aplica um destaque visual ao item
-   * (por exemplo, para representar um item "não lido").
-   *
-   * > O destaque é independente da seleção (`p-select`).
-   *
-   * > **Depreciado:** utilize a propriedade `highlighted` do *input* `p-field-properties`.
-   */
-  propertyHighlighted = input<string>(undefined, { alias: 'p-property-highlighted' });
-
-  /**
-   * @optional
-   *
-   * @deprecated v23.x.x
-   *
-   * @description
-   *
-   * Nome da propriedade do objeto que será utilizada para exibir a label da `po-tag` de cada item.
-   *
-   * > **Depreciado:** utilize a propriedade `tag.value` do *input* `p-field-properties`.
-   */
-  propertyTag = input<string>(undefined, { alias: 'p-property-tag' });
-
-  /**
-   * @optional
-   *
-   * @deprecated v23.x.x
-   *
-   * @description
-   *
-   * Nome da propriedade do objeto que define o tipo da `po-tag` de cada item (`success`, `warning`, `danger`, `info`, `neutral`).
-   * Caso não informado, utiliza `success` como padrão.
-   *
-   * > **Depreciado:** utilize a propriedade `tag.type` do *input* `p-field-properties`.
-   */
-  propertyTagType = input<string>(undefined, { alias: 'p-property-tag-type' });
-
-  /**
-   * @optional
-   *
    * @description
    *
    * Define o posicionamento da `po-tag` em relação ao título dentro do item:
@@ -493,52 +440,6 @@ export class PoListViewBaseComponent {
    * @default `bottom`
    */
   tagPosition = input<string>('bottom', { alias: 'p-tag-position' });
-
-  /**
-   * @optional
-   *
-   * @deprecated v23.x.x
-   *
-   * @description
-   *
-   * Nome da propriedade do objeto que será utilizada para exibir o avatar de cada item.
-   *
-   * O valor aceita 4 formatos:
-   *
-   * - **String (URL):** Renderiza o `po-avatar` com a imagem informada.
-   * ```
-   * { avatar: 'https://url-da-imagem.png' }
-   * ```
-   *
-   * - **Objeto com `icon`:** Renderiza um ícone circular com tamanho fixo (não afetado por `p-avatar-size`). Propriedades: `icon` (obrigatório), `color` (opcional), `backgroundColor` (opcional).
-   * ```
-   * { avatar: { icon: 'an an-shield-warning', color: '#dc2626', backgroundColor: '#fee2e2' } }
-   * ```
-   *
-   * - **Objeto com `progress`:** Renderiza um `po-progress-circle` (não afetado por `p-avatar-size`; o tamanho é definido pelas propriedades `size`/`radius`). Todas as propriedades do componente são suportadas:
-   * - `progress` (number): valor de 0-100.
-   * - `indeterminate` (boolean): animação contínua (ignora `progress`).
-   * - `showPercentage` (boolean): exibe porcentagem no centro.
-   * - `status` (string): `'default'`, `'success'`, `'error'`.
-   * - `size` (string): `'medium'` (stroke 4px) ou `'large'` (stroke 8px).
-   * - `radius` (number): raio do círculo em px.
-   * - `ariaLabel` (string): label de acessibilidade.
-   * ```
-   * { avatar: { progress: 65, showPercentage: true, size: 'large', radius: 40 } }
-   * { avatar: { indeterminate: true, size: 'large', radius: 40 } }
-   * { avatar: { progress: 100, status: 'success', size: 'large', radius: 40 } }
-   * ```
-   *
-   * - **Objeto com `customTemplate`:** Renderiza um template customizado (compatível com `PoWidgetAvatar`).
-   * ```
-   * { avatar: { customTemplate: myTemplateRef } }
-   * ```
-   *
-   * > O conteúdo varia por item, mas o tamanho (`p-avatar-size`) é aplicado globalmente a todos os itens.
-   *
-   * > **Depreciado:** utilize a propriedade `avatar` do *input* `p-field-properties`.
-   */
-  propertyAvatar = input<string>(undefined, { alias: 'p-property-avatar' });
 
   /**
    * @optional
@@ -562,10 +463,9 @@ export class PoListViewBaseComponent {
    * </po-list-view>
    * ```
    *
-   * > Quando informado, tem **precedência** sobre os *inputs* individuais depreciados
-   * (`p-property-title`, `p-property-subtitle`, `p-property-link`, `p-property-avatar`,
-   * `p-property-highlighted`, `p-property-tag` e `p-property-tag-type`). Caso uma propriedade não
-   * seja informada no objeto, o valor do *input* individual correspondente é utilizado como *fallback*.
+   * > É a forma recomendada de mapear os campos do item. Para `title` e `link`, quando informados no
+   * objeto, têm **precedência** sobre os *inputs* depreciados `p-property-title` e `p-property-link`
+   * (usados como *fallback* caso não sejam definidos no objeto).
    */
   fieldProperties = input<PoListViewFieldProperties>(undefined, { alias: 'p-field-properties' });
 
@@ -580,29 +480,29 @@ export class PoListViewBaseComponent {
     return this.fieldProperties()?.link ?? this['propertyLink'];
   }
 
-  // Resolve o nome da propriedade de subtítulo, priorizando `p-field-properties` sobre o input depreciado.
+  // Resolve o nome da propriedade de subtítulo a partir de `p-field-properties`.
   protected get resolvedPropertySubtitle(): string {
-    return this.fieldProperties()?.subtitle ?? this['propertySubtitle']();
+    return this.fieldProperties()?.subtitle;
   }
 
-  // Resolve o nome da propriedade de destaque, priorizando `p-field-properties` sobre o input depreciado.
+  // Resolve o nome da propriedade de destaque a partir de `p-field-properties`.
   protected get resolvedPropertyHighlighted(): string {
-    return this.fieldProperties()?.highlighted ?? this['propertyHighlighted']();
+    return this.fieldProperties()?.highlighted;
   }
 
-  // Resolve o nome da propriedade de avatar, priorizando `p-field-properties` sobre o input depreciado.
+  // Resolve o nome da propriedade de avatar a partir de `p-field-properties`.
   protected get resolvedPropertyAvatar(): string {
-    return this.fieldProperties()?.avatar ?? this['propertyAvatar']();
+    return this.fieldProperties()?.avatar;
   }
 
-  // Resolve o nome da propriedade do texto da tag, priorizando `p-field-properties` sobre o input depreciado.
+  // Resolve o nome da propriedade do texto da tag a partir de `p-field-properties`.
   protected get resolvedPropertyTag(): string {
-    return this.fieldProperties()?.tag?.value ?? this['propertyTag']();
+    return this.fieldProperties()?.tag?.value;
   }
 
-  // Resolve o nome da propriedade do tipo da tag, priorizando `p-field-properties` sobre o input depreciado.
+  // Resolve o nome da propriedade do tipo da tag a partir de `p-field-properties`.
   protected get resolvedPropertyTagType(): string {
-    return this.fieldProperties()?.tag?.type ?? this['propertyTagType']();
+    return this.fieldProperties()?.tag?.type;
   }
 
   /**

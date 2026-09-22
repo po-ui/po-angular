@@ -62,9 +62,9 @@ describe('PoListViewComponent:', () => {
   });
 
   describe('Subtitle template:', () => {
-    it('should render `.po-list-view-subtitle` when `p-property-subtitle` is set and item has value', () => {
+    it('should render `.po-list-view-subtitle` when `p-field-properties` subtitle is set and item has value', () => {
       component.items = [{ id: 1, name: 'register', createdAt: 'Há 5 min' }];
-      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
+      fixture.componentRef.setInput('p-field-properties', { subtitle: 'createdAt' });
       fixture.detectChanges();
 
       const subtitle = debugElement.querySelector('.po-list-view-subtitle');
@@ -73,7 +73,7 @@ describe('PoListViewComponent:', () => {
       expect(subtitle.textContent.trim()).toBe('Há 5 min');
     });
 
-    it('should not render `.po-list-view-subtitle` when `p-property-subtitle` is not set', () => {
+    it('should not render `.po-list-view-subtitle` when `p-field-properties` subtitle is not set', () => {
       component.items = [{ id: 1, name: 'register', createdAt: 'Há 5 min' }];
       fixture.detectChanges();
 
@@ -82,7 +82,7 @@ describe('PoListViewComponent:', () => {
 
     it('should not render `.po-list-view-subtitle` when item does not have the subtitle value', () => {
       component.items = [{ id: 1, name: 'register' }];
-      fixture.componentRef.setInput('p-property-subtitle', 'createdAt');
+      fixture.componentRef.setInput('p-field-properties', { subtitle: 'createdAt' });
       fixture.detectChanges();
 
       expect(debugElement.querySelector('.po-list-view-subtitle')).toBeNull();
@@ -92,7 +92,7 @@ describe('PoListViewComponent:', () => {
   describe('Highlighted item:', () => {
     it('should apply `po-list-view-highlighted` class when the highlighted property is truthy', () => {
       component.items = [{ id: 1, name: 'register', unread: true }];
-      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
       fixture.detectChanges();
 
       expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-highlighted')).toBeTruthy();
@@ -100,7 +100,7 @@ describe('PoListViewComponent:', () => {
 
     it('should not apply `po-list-view-highlighted` class when the highlighted property is falsy', () => {
       component.items = [{ id: 1, name: 'register', unread: false }];
-      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
       fixture.detectChanges();
 
       expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-highlighted')).toBeNull();
@@ -114,7 +114,7 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-highlighted')).toBeNull();
     });
 
-    it('should not apply `po-list-view-highlighted` class when `p-property-highlighted` is not set', () => {
+    it('should not apply `po-list-view-highlighted` class when `p-field-properties` highlighted is not set', () => {
       component.items = [{ id: 1, name: 'register' }];
       fixture.detectChanges();
 
@@ -235,19 +235,19 @@ describe('PoListViewComponent:', () => {
       expect(widgets.length).toBe(2);
     });
 
-    it('getItemAvatar: should return undefined when p-property-avatar is not set', () => {
+    it('getItemAvatar: should return undefined when p-field-properties avatar is not set', () => {
       expect(component['getItemAvatar']({ avatar: 'http://img.png' })).toBeUndefined();
     });
 
     it('getItemAvatar: should return object with `src` and `size` when item value is a string', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: 'http://img.png' })).toEqual({ src: 'http://img.png', size: 'md' });
     });
 
     it('getItemAvatar: should return the object with `size` added when item value is an object', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       const avatarObj = { src: 'http://img.png', size: 'sm' };
@@ -257,28 +257,28 @@ describe('PoListViewComponent:', () => {
     });
 
     it('getItemAvatar: should return undefined when item value is an object with `icon`', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { icon: 'an an-user' } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is an object with `progress`', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { progress: 50 } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is an object with `indeterminate`', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is an object with `customTemplate`', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { customTemplate: {} } })).toBeUndefined();
@@ -317,7 +317,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('getItemAvatar: should return undefined when item has no value for the avatar property', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ name: 'x' })).toBeUndefined();
@@ -371,65 +371,65 @@ describe('PoListViewComponent:', () => {
   });
 
   describe('Avatar helpers:', () => {
-    it('getAvatarType: should return empty string when p-property-avatar is not set', () => {
+    it('getAvatarType: should return empty string when p-field-properties avatar is not set', () => {
       expect(component['getAvatarType'](item)).toBe('');
     });
 
     it('getAvatarType: should return "image" when item value is a string', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ avatar: 'http://img.png' })).toBe('image');
     });
 
     it('getAvatarType: should return "icon" when item value has icon property', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ avatar: { icon: 'an an-user' } })).toBe('icon');
     });
 
     it('getAvatarType: should return "progress" when item value has progress property', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ avatar: { progress: 50 } })).toBe('progress');
     });
 
     it('getAvatarType: should return "progress" when item value has indeterminate property', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ avatar: { indeterminate: true } })).toBe('progress');
     });
 
     it('getAvatarType: should return "custom" when item value is an object without icon/progress', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ avatar: { customTemplate: {} } })).toBe('custom');
     });
 
     it('getAvatarType: should return empty string for an object without icon, progress or customTemplate', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ avatar: { foo: 'bar' } })).toBe('');
     });
 
     it('getAvatarType: should return empty string when item has no value for the property', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getAvatarType']({ name: 'x' })).toBe('');
     });
 
-    it('getAvatarData: should return undefined when p-property-avatar is not set', () => {
+    it('getAvatarData: should return undefined when p-field-properties avatar is not set', () => {
       expect(component['getAvatarData'](item)).toBeUndefined();
     });
 
     it('getAvatarData: should return the avatar value from the item', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       const data = { icon: 'an an-user', color: '#fff' };
@@ -437,7 +437,7 @@ describe('PoListViewComponent:', () => {
     });
 
     it('getItemAvatar: should return object with src and size when item value is a string', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       const result = component['getItemAvatar']({ avatar: 'http://img.png' });
@@ -446,28 +446,28 @@ describe('PoListViewComponent:', () => {
     });
 
     it('getItemAvatar: should return undefined when item value is icon', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { icon: 'an an-user' } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is progress', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { progress: 50 } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined when item value is indeterminate', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
     });
 
     it('getItemAvatar: should return undefined for custom template (rendered via ngTemplateOutlet, not po-widget)', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: { customTemplate: {} } })).toBeUndefined();
@@ -475,52 +475,52 @@ describe('PoListViewComponent:', () => {
   });
 
   describe('Type-safe helpers:', () => {
-    it('getItemTag: should return undefined when p-property-tag is not set', () => {
+    it('getItemTag: should return undefined when `p-field-properties` tag is not set', () => {
       expect(component['getItemTag'](item)).toBeUndefined();
     });
 
     it('getItemTag: should return tag value from item', () => {
-      fixture.componentRef.setInput('p-property-tag', 'tag');
+      fixture.componentRef.setInput('p-field-properties', { tag: { value: 'tag' } });
       fixture.detectChanges();
 
       expect(component['getItemTag']({ tag: 'Success' })).toBe('Success');
     });
 
-    it('getItemTagType: should return empty string when p-property-tag-type is not set', () => {
+    it('getItemTagType: should return empty string when `p-field-properties` tag type is not set', () => {
       expect(component['getItemTagType'](item)).toBe('');
     });
 
     it('getItemTagType: should return tag type value from item', () => {
-      fixture.componentRef.setInput('p-property-tag-type', 'tagType');
+      fixture.componentRef.setInput('p-field-properties', { tag: { type: 'tagType' } });
       fixture.detectChanges();
 
       expect(component['getItemTagType']({ tagType: 'success' })).toBe('success');
     });
 
-    it('getItemSubtitle: should return undefined when p-property-subtitle is not set', () => {
+    it('getItemSubtitle: should return undefined when `p-field-properties` subtitle is not set', () => {
       expect(component['getItemSubtitle'](item)).toBeUndefined();
     });
 
     it('getItemSubtitle: should return subtitle value from item', () => {
-      fixture.componentRef.setInput('p-property-subtitle', 'subtitle');
+      fixture.componentRef.setInput('p-field-properties', { subtitle: 'subtitle' });
       fixture.detectChanges();
 
       expect(component['getItemSubtitle']({ subtitle: 'Há 5 min' })).toBe('Há 5 min');
     });
 
-    it('getItemHighlighted: should return false when p-property-highlighted is not set', () => {
+    it('getItemHighlighted: should return false when `p-field-properties` highlighted is not set', () => {
       expect(component['getItemHighlighted'](item)).toBe(false);
     });
 
     it('getItemHighlighted: should return true when item field is truthy', () => {
-      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
       fixture.detectChanges();
 
       expect(component['getItemHighlighted']({ unread: true })).toBe(true);
     });
 
     it('getItemHighlighted: should return false when item field is falsy', () => {
-      fixture.componentRef.setInput('p-property-highlighted', 'unread');
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
       fixture.detectChanges();
 
       expect(component['getItemHighlighted']({ unread: false })).toBe(false);
@@ -609,19 +609,19 @@ describe('PoListViewComponent:', () => {
   });
 
   describe('getItemAvatar edge cases:', () => {
-    it('should return undefined when p-property-avatar is not set', () => {
+    it('should return undefined when p-field-properties avatar is not set', () => {
       expect(component['getItemAvatar'](item)).toBeUndefined();
     });
 
     it('should return undefined when item has no value for avatar property', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ name: 'x' })).toBeUndefined();
     });
 
     it('should return undefined when item avatar value is null', () => {
-      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
       fixture.detectChanges();
 
       expect(component['getItemAvatar']({ avatar: null })).toBeUndefined();
