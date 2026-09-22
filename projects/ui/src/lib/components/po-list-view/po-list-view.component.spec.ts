@@ -382,6 +382,13 @@ describe('PoListViewComponent:', () => {
       expect(component['getAvatarType']({ avatar: { customTemplate: {} } })).toBe('custom');
     });
 
+    it('getAvatarType: should return empty string for an object without icon, progress or customTemplate', () => {
+      fixture.componentRef.setInput('p-property-avatar', 'avatar');
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: { foo: 'bar' } })).toBe('');
+    });
+
     it('getAvatarType: should return empty string when item has no value for the property', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
@@ -431,13 +438,11 @@ describe('PoListViewComponent:', () => {
       expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
     });
 
-    it('getItemAvatar: should return avatar object with size for custom template', () => {
+    it('getItemAvatar: should return undefined for custom template (rendered via ngTemplateOutlet, not po-widget)', () => {
       fixture.componentRef.setInput('p-property-avatar', 'avatar');
       fixture.detectChanges();
 
-      const result = component['getItemAvatar']({ avatar: { customTemplate: {} } });
-      expect(result.customTemplate).toBeDefined();
-      expect(result.size).toBeDefined();
+      expect(component['getItemAvatar']({ avatar: { customTemplate: {} } })).toBeUndefined();
     });
   });
 

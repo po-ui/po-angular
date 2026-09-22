@@ -243,7 +243,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
       return { src: value, size: this.avatarSize() };
     }
 
-    if (value.icon || value.progress !== undefined || value.indeterminate) {
+    if (value.icon || value.progress !== undefined || value.indeterminate || value.customTemplate) {
       return undefined;
     }
 
@@ -275,7 +275,11 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
       return 'progress';
     }
 
-    return 'custom';
+    if (value.customTemplate) {
+      return 'custom';
+    }
+
+    return '';
   }
 
   protected getAvatarData(item: any): any {

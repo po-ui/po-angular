@@ -94,6 +94,17 @@
             </div>
           }
 
+          @if (getAvatarType(item) === 'custom') {
+            @let avatarCustom = getAvatarData(item);
+            <div class="po-list-view-avatar-custom">
+              <ng-template
+                [ngTemplateOutlet]="avatarCustom?.customTemplate"
+                [ngTemplateOutletContext]="{ $implicit: item, index: index }"
+              >
+              </ng-template>
+            </div>
+          }
+
           @if (isItemClickable(item)) {
             <po-widget
               [p-title]="getItemTitle(item)"
