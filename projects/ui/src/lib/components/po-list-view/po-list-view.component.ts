@@ -329,7 +329,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   togglePopup(item, targetRef: HTMLElement) {
     this.popupTarget = targetRef;
-    this.popupActions = this.getVisibleActions(item);
+    this.popupActions = this.getWidgetActions(item);
     this.changeDetector.detectChanges();
 
     this.poPopupComponent.toggle(item);

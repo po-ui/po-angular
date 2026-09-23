@@ -115,7 +115,6 @@
               [p-avatar]="getItemAvatar(item)"
               [p-no-shadow]="true"
               [p-size]="componentsSize"
-              [p-actions]="getWidgetActions(item)"
             >
               @if (getItemSubtitle(item)) {
                 <div class="po-list-view-subtitle">{{ getItemSubtitle(item) }}</div>
@@ -153,7 +152,6 @@
                 [p-avatar]="getItemAvatar(item)"
                 [p-no-shadow]="true"
                 [p-size]="componentsSize"
-                [p-actions]="getWidgetActions(item)"
                 (p-title-action)="onTitleClick(item)"
               >
                 <ng-template [ngTemplateOutlet]="itemContent"></ng-template>
@@ -167,7 +165,6 @@
                 [p-avatar]="getItemAvatar(item)"
                 [p-no-shadow]="true"
                 [p-size]="componentsSize"
-                [p-actions]="getWidgetActions(item)"
               >
                 <ng-template [ngTemplateOutlet]="itemContent"></ng-template>
               </po-widget>
@@ -181,6 +178,16 @@
               [p-icon]="getVisibleActions(item)[0]?.icon || 'ICON_ARROW_RIGHT'"
               [p-size]="componentsSize"
               (p-click)="isItemClickable(item) ? null : onAdvancedArrowClick(item)"
+            >
+            </po-button>
+          } @else if (getItemActionType(item) === 'multiple') {
+            <po-button
+              #multipleActionsButton
+              class="po-list-view-action-advanced"
+              p-kind="tertiary"
+              p-icon="ICON_MORE_OUT_VERT_FILL"
+              [p-size]="componentsSize"
+              (p-click)="togglePopup(item, multipleActionsButton.buttonElement.nativeElement)"
             >
             </po-button>
           }

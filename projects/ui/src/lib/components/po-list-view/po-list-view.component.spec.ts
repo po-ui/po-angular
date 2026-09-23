@@ -204,16 +204,38 @@ describe('PoListViewComponent:', () => {
       expect(arrowButton).toBeTruthy('arrow button (.po-list-view-action-advanced) should be in the DOM');
     });
 
-    it('should render the three-dots popup (via widget) when there are two or more actions', () => {
+    it('should render the three-dots button in the row (outside widget) when there are two or more actions', () => {
       component.actions = [{ label: 'a' }, { label: 'b' }];
       component.items = [{ id: 1, name: 'x' }];
-      component['propertyTitle'] = 'name';
+      fixture.componentRef.setInput('p-property-title', 'name');
       fixture.detectChanges();
 
       expect(debugElement.querySelector('po-widget')).toBeTruthy();
 
-      const buttonWrapper = debugElement.querySelector('.po-widget-button-wrapper');
-      expect(buttonWrapper).toBeTruthy('po-widget-button-wrapper should be in the DOM when 2+ actions');
+      // O botão de múltiplas ações fica na row (irmão do po-widget), com a mesma base do ícone único.
+      const kebabButton = debugElement.querySelector('.po-list-view-action-advanced');
+      expect(kebabButton).toBeTruthy('multiple actions button should be in the row (.po-list-view-action-advanced)');
+
+      // Não deve renderizar o botão interno do widget (p-actions não é mais repassado ao widget).
+      expect(debugElement.querySelector('.po-widget-button-wrapper')).toBeFalsy();
+    });
+
+    it('togglePopup: should open the popup with wrapped actions when clicking the multiple-actions button', () => {
+      component.actions = [
+        { label: 'a', action: () => {} },
+        { label: 'b', action: () => {} }
+      ];
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const toggleSpy = spyOn(component.poPopupComponent, 'toggle');
+      const kebabButton = debugElement.querySelector('.po-list-view-action-advanced') as HTMLElement;
+      kebabButton.querySelector('button').dispatchEvent(new Event('click'));
+      fixture.detectChanges();
+
+      expect(component.popupActions.length).toBe(2);
+      expect(toggleSpy).toHaveBeenCalled();
     });
 
     it('should apply the `po-list-view-widget-mode` host class', () => {
