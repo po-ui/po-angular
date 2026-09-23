@@ -1,11 +1,8 @@
 <po-page-list p-title="API Reference" [p-filter]="filter">
   <po-list-view
-    p-property-title="title"
-    p-property-subtitle="description"
-    p-property-tag="tagLabel"
-    p-property-tag-type="tagType"
     p-tag-position="right"
     p-detail-display="inline"
+    [p-field-properties]="fieldProperties"
     [p-actions]="listActions"
     [p-items]="filteredItems"
     (p-title-action)="viewSample($event)"

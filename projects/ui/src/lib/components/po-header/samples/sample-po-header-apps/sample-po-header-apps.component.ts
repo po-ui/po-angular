@@ -6,6 +6,7 @@ import {
   PoHeaderActionToolItem,
   PoHeaderBrand,
   PoHeaderUser,
+  PoListViewFieldProperties,
   PoNotificationService,
   PoToasterOrientation
 } from '@po-ui/ng-components';
@@ -59,6 +60,14 @@ import {
 export class SamplePoHeaderAppsComponent implements AfterViewInit {
   @ViewChild('meuTemplate') meuTemplate!: TemplateRef<any>;
   @ViewChild('notificationTemplate') notificationTemplate!: TemplateRef<any>;
+
+  fieldProperties: PoListViewFieldProperties = {
+    title: 'title',
+    subtitle: 'content',
+    avatar: 'avatar',
+    highlighted: 'checked',
+    tag: { value: 'tag', type: 'tagType' }
+  };
 
   private readonly initialNotifications = [
     {

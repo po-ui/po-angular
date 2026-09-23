@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoListViewAction } from '@po-ui/ng-components';
+import { PoListViewAction, PoListViewFieldProperties } from '@po-ui/ng-components';
 
 import { Documentation } from './documentation.class';
 import { DocumentationService } from '../documentation/documentation.service';
@@ -12,6 +12,12 @@ import { DocumentationService } from '../documentation/documentation.service';
 })
 export class DocumentationListComponent implements OnInit {
   public filteredItems;
+
+  public fieldProperties: PoListViewFieldProperties = {
+    title: 'title',
+    subtitle: 'description',
+    tag: { value: 'tagLabel', type: 'tagType' }
+  };
 
   public filter = {
     placeholder: 'Pesquise',
