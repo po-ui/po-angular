@@ -3,6 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import {
   PoCheckboxGroupOption,
   PoListViewAction,
+  PoListViewFieldProperties,
   PoListViewLiterals,
   PoNotificationService,
   PoRadioGroupOption,
@@ -21,17 +22,27 @@ export class SamplePoListViewLabsComponent implements OnInit {
   actions: Array<PoListViewAction>;
   componentsSize: string = 'medium';
   customLiterals: PoListViewLiterals;
+  detailDisplay: string = 'inline';
   height: number;
   items: Array<any>;
   literals: string;
   properties: Array<string>;
+  propertyAvatar: string;
+  propertyHighlighted: string;
   propertyLink: string;
   propertyLinkValue: string;
+  propertySubtitle: string;
+  propertyTag: string;
+  propertyTagType: string;
   propertyTitle: string;
+  tagPosition: string = 'bottom';
+  tagTypeValue: string = '';
+  highlightedValue: string = 'read';
   titleAction: string;
 
   propertiesOptions: Array<PoCheckboxGroupOption> = [
     { value: 'select', label: 'Select' },
+    { value: 'singleSelect', label: 'Single Select' },
     { value: 'hideSelectAll', label: 'Hide Select All', disabled: true },
     { value: 'showMoreDisabled', label: 'Show More Disabled' }
   ];
@@ -46,6 +57,17 @@ export class SamplePoListViewLabsComponent implements OnInit {
   readonly componentsSizeOptions: Array<PoRadioGroupOption> = [
     { label: 'small', value: 'small' },
     { label: 'medium', value: 'medium' }
+  ];
+
+  readonly detailDisplayOptions: Array<PoRadioGroupOption> = [
+    { label: 'inline', value: 'inline' },
+    { label: 'modal', value: 'modal' }
+  ];
+
+  readonly tagPositionOptions: Array<PoRadioGroupOption> = [
+    { label: 'right', value: 'right' },
+    { label: 'top', value: 'top' },
+    { label: 'bottom', value: 'bottom' }
   ];
 
   readonly iconOptions: Array<PoSelectOption> = [
@@ -63,10 +85,40 @@ export class SamplePoListViewLabsComponent implements OnInit {
     { value: 'location', label: 'location' }
   ];
 
+  // Único campo do item cujo valor é um avatar válido (URL de imagem) no dataset do labs.
+  readonly avatarPropertyOptions: Array<PoSelectOption> = [{ value: 'avatar', label: 'avatar' }];
+
+  // Valores de tipo de tag aplicados ao campo `tagType` de todos os itens.
+  readonly tagTypeValueOptions: Array<PoSelectOption> = [
+    { value: '', label: 'None' },
+    { value: 'info', label: 'Info' },
+    { value: 'danger', label: 'Danger' },
+    { value: 'success', label: 'Success' },
+    { value: 'warning', label: 'Warning' },
+    { value: 'neutral', label: 'Neutral' }
+  ];
+
+  // Estado de leitura aplicado ao campo `unread` (highlighted) de todos os itens.
+  readonly highlightedValueOptions: Array<PoSelectOption> = [
+    { value: 'read', label: 'read' },
+    { value: 'unread', label: 'unread' }
+  ];
+
   readonly typeOptions: Array<PoSelectOption> = [
     { label: 'Default', value: 'default' },
     { label: 'Danger', value: 'danger' }
   ];
+
+  get fieldProperties(): PoListViewFieldProperties {
+    return {
+      title: this.propertyTitle,
+      subtitle: this.propertySubtitle,
+      link: this.propertyLink,
+      avatar: this.propertyAvatar,
+      highlighted: this.propertyHighlighted,
+      tag: { value: this.propertyTag, type: this.propertyTagType }
+    };
+  }
 
   ngOnInit() {
     this.restore();
@@ -82,6 +134,15 @@ export class SamplePoListViewLabsComponent implements OnInit {
 
   addItem() {
     this.items.push(this.generateNewItem(this.items.length + 1));
+  }
+
+  applyTagType() {
+    this.items = this.items.map(item => ({ ...item, tagType: this.tagTypeValue }));
+  }
+
+  applyHighlighted() {
+    const unread = this.highlightedValue === 'unread';
+    this.items = this.items.map(item => ({ ...item, unread }));
   }
 
   changeAction(action) {
@@ -109,13 +170,22 @@ export class SamplePoListViewLabsComponent implements OnInit {
   restore() {
     this.actions = [];
     this.componentsSize = 'medium';
+    this.detailDisplay = 'inline';
     this.items = [];
     this.height = undefined;
     this.literals = '';
     this.properties = [];
+    this.propertyAvatar = '';
+    this.propertyHighlighted = 'unread';
     this.propertyLink = 'url';
     this.propertyLinkValue = '';
+    this.propertySubtitle = '';
+    this.propertyTag = '';
+    this.propertyTagType = 'tagType';
     this.propertyTitle = '';
+    this.tagPosition = 'bottom';
+    this.tagTypeValue = '';
+    this.highlightedValue = 'read';
     this.titleAction = '';
     this.restoreActionForm();
   }
@@ -125,6 +195,8 @@ export class SamplePoListViewLabsComponent implements OnInit {
   }
 
   private generateNewItem(index) {
+    const tagTypes = ['success', 'info', 'warning', 'danger', 'neutral'];
+
     return {
       name: `Register ${index}`,
       email: `register${index}@po-ui.com`,
@@ -132,7 +204,12 @@ export class SamplePoListViewLabsComponent implements OnInit {
       location: 'Brazil',
       company: `Company ${index}`,
       url: this.propertyLinkValue,
-      zipCode: `${index}221`
+      zipCode: `${index}221`,
+      tag: index % 2 === 0 ? 'Completed' : 'In progress',
+      tagType: this.tagTypeValue || tagTypes[index % tagTypes.length],
+      subtitle: `${index * 5} min ago`,
+      avatar: `https://i.pravatar.cc/150?img=${index}`,
+      unread: this.highlightedValue === 'unread' ? true : index % 3 === 0
     };
   }
 

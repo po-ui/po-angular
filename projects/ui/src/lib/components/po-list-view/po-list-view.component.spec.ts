@@ -1,37 +1,33 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 
 import fc from 'fast-check';
 
 import { PoUtils as UtilsFunctions } from '../../utils/util';
-import { PoButtonModule } from '../po-button';
+import { PoButtonComponent, PoButtonModule } from '../po-button';
+import { PoModalModule } from '../po-modal';
 import { PoPopupModule } from '../po-popup';
+import { PoWidgetModule } from '../po-widget';
 
 import { PoListViewBaseComponent } from './po-list-view-base.component';
 import { PoListViewComponent } from './po-list-view.component';
+import { provideRouter } from '@angular/router';
 
 describe('PoListViewComponent:', () => {
   let component: PoListViewComponent;
   let fixture: ComponentFixture<PoListViewComponent>;
   let debugElement;
-  let event: AnimationEvent;
-  let detail: any;
-
   const item = { id: 1, name: 'register' };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
-      imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule],
-      providers: [provideNgReflectAttributes()]
+      imports: [PoButtonModule, PoPopupModule, PoModalModule, PoWidgetModule],
+      providers: [provideNgReflectAttributes(), provideRouter([])]
     }).compileComponents();
-
-    detail = { test: 'test' };
-    event = new AnimationEvent('animationstart', { animationName: 'test', elapsedTime: 100 });
 
     fixture = TestBed.createComponent(PoListViewComponent);
 
@@ -46,6 +42,655 @@ describe('PoListViewComponent:', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
     expect(component instanceof PoListViewBaseComponent).toBeTruthy();
+  });
+
+  describe('Selection mode template:', () => {
+    it('should render `po-checkbox` per item when selection mode is `multiple` (default)', () => {
+      component.select = true;
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('po-checkbox')).toBeTruthy();
+      expect(debugElement.querySelector('.po-list-view-select po-radio')).toBeNull();
+    });
+
+    it('should render `po-radio` per item when `singleSelect` is true', () => {
+      component.singleSelect = true;
+      component.select = true;
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-select po-radio')).toBeTruthy();
+    });
+  });
+
+  describe('Subtitle template:', () => {
+    it('should render `.po-list-view-subtitle` when `p-field-properties` subtitle is set and item has value', () => {
+      component.items = [{ id: 1, name: 'register', createdAt: 'Há 5 min' }];
+      fixture.componentRef.setInput('p-field-properties', { subtitle: 'createdAt' });
+      fixture.detectChanges();
+
+      const subtitle = debugElement.querySelector('.po-list-view-subtitle');
+
+      expect(subtitle).toBeTruthy();
+      expect(subtitle.textContent.trim()).toBe('Há 5 min');
+    });
+
+    it('should not render `.po-list-view-subtitle` when `p-field-properties` subtitle is not set', () => {
+      component.items = [{ id: 1, name: 'register', createdAt: 'Há 5 min' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-subtitle')).toBeNull();
+    });
+
+    it('should not render `.po-list-view-subtitle` when item does not have the subtitle value', () => {
+      component.items = [{ id: 1, name: 'register' }];
+      fixture.componentRef.setInput('p-field-properties', { subtitle: 'createdAt' });
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-subtitle')).toBeNull();
+    });
+  });
+
+  describe('Highlighted item:', () => {
+    it('should apply `po-list-view-highlighted` class when the highlighted property is truthy', () => {
+      component.items = [{ id: 1, name: 'register', unread: true }];
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-highlighted')).toBeTruthy();
+    });
+
+    it('should not apply `po-list-view-highlighted` class when the highlighted property is falsy', () => {
+      component.items = [{ id: 1, name: 'register', unread: false }];
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-highlighted')).toBeNull();
+    });
+
+    it('should not apply `po-list-view-highlighted` class based on selection (highlight is independent of `p-select`)', () => {
+      component.items = [{ id: 1, name: 'register', $selected: true }];
+      component.select = true;
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-highlighted')).toBeNull();
+    });
+
+    it('should not apply `po-list-view-highlighted` class when `p-field-properties` highlighted is not set', () => {
+      component.items = [{ id: 1, name: 'register' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-highlighted')).toBeNull();
+    });
+  });
+
+  describe('Detail display modal:', () => {
+    beforeEach(() => {
+      component.listViewDetailTemplate = <any>{ templateRef: null };
+      fixture.componentRef.setInput('p-detail-display', 'modal');
+      fixture.detectChanges();
+    });
+
+    it('openDetailModal: should set item and index, emit `p-show-detail` and open the modal', () => {
+      spyOn(component.showDetail, 'emit');
+      spyOn(component['detailModal'], 'open');
+      const listItem = { id: 5, name: 'x' };
+
+      component['openDetailModal'](listItem, 2);
+
+      expect(component['detailModalItem']).toBe(listItem);
+      expect(component['detailModalIndex']).toBe(2);
+      expect(component.showDetail.emit).toHaveBeenCalledWith(listItem);
+      expect(component['detailModal'].open).toHaveBeenCalled();
+    });
+
+    it('onCloseDetailModal: should reset `detailModalItem` to `null`', () => {
+      component['detailModalItem'] = { id: 1 };
+
+      component['onCloseDetailModal']();
+
+      expect(component['detailModalItem']).toBeNull();
+    });
+
+    it('should not render the inline detail (`.po-list-view-detail`) when detail display is `modal`', () => {
+      component.items = [{ id: 1, name: 'x', $showDetail: true }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-detail')).toBeNull();
+    });
+  });
+
+  describe('Actions layout:', () => {
+    it('getItemActionType: should return `multiple` when there are two or more visible actions', () => {
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+
+      expect(component['getItemActionType'](item)).toBe('multiple');
+    });
+
+    it('getItemActionType: should return `advanced` when there is one visible action', () => {
+      component.actions = [{ label: 'a' }];
+
+      expect(component['getItemActionType'](item)).toBe('advanced');
+    });
+
+    it('getItemActionType: should return `none` when there is no action but the title has an action', () => {
+      component.actions = [];
+      spyOnProperty(component, 'titleHasAction', 'get').and.returnValue(true);
+
+      expect(component['getItemActionType'](item)).toBe('none');
+    });
+
+    it('getItemActionType: should return `none` when there is no action and no title action', () => {
+      component.actions = [];
+      spyOnProperty(component, 'titleHasAction', 'get').and.returnValue(false);
+
+      expect(component['getItemActionType'](item)).toBe('none');
+    });
+
+    it('should not render the advanced arrow-right button when only the title has an action', () => {
+      component.actions = [];
+      component.titleAction.observers.push(<any>[new Observable()]);
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-action-advanced')).toBeFalsy();
+    });
+
+    it('should render a single button when there is one action', () => {
+      component.actions = [{ label: 'Edit', action: () => {} }];
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
+      const arrowButton = debugElement.querySelector('.po-list-view-action-advanced');
+      expect(arrowButton).toBeTruthy('arrow button (.po-list-view-action-advanced) should be in the DOM');
+    });
+
+    it('should render the three-dots button in the row (outside widget) when there are two or more actions', () => {
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
+
+      const kebabButton = debugElement.querySelector('.po-list-view-action-advanced');
+      expect(kebabButton).toBeTruthy('multiple actions button should be in the row (.po-list-view-action-advanced)');
+
+      expect(debugElement.querySelector('.po-widget-button-wrapper')).toBeFalsy();
+    });
+
+    it('togglePopup: should open the popup with wrapped actions when clicking the multiple-actions button', () => {
+      component.actions = [
+        { label: 'a', action: () => {} },
+        { label: 'b', action: () => {} }
+      ];
+      component.items = [{ id: 1, name: 'x' }];
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const toggleSpy = spyOn(component.poPopupComponent, 'toggle');
+      const kebabButton = debugElement.querySelector('.po-list-view-action-advanced') as HTMLElement;
+      kebabButton.querySelector('button').dispatchEvent(new Event('click'));
+      fixture.detectChanges();
+
+      expect(component.popupActions.length).toBe(2);
+      expect(toggleSpy).toHaveBeenCalled();
+    });
+
+    it('should apply the `po-list-view-widget-mode` host class', () => {
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.classList.contains('po-list-view-widget-mode')).toBe(true);
+    });
+
+    it('should render `po-widget` per item (default)', () => {
+      component.items = [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' }
+      ];
+      component['propertyTitle'] = 'name';
+      fixture.detectChanges();
+
+      const widgets = debugElement.querySelectorAll('po-widget');
+
+      expect(widgets.length).toBe(2);
+    });
+
+    it('getItemAvatar: should return undefined when p-field-properties avatar is not set', () => {
+      expect(component['getItemAvatar']({ avatar: 'http://img.png' })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return object with `src` and `size` when item value is a string', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: 'http://img.png' })).toEqual({ src: 'http://img.png', size: 'md' });
+    });
+
+    it('getItemAvatar: should return the object with `size` added when item value is an object', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      const avatarObj = { src: 'http://img.png', size: 'sm' };
+      const result = component['getItemAvatar']({ avatar: avatarObj });
+      expect(result.src).toBe('http://img.png');
+      expect(result.size).toBe('md');
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `icon`', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { icon: 'an an-user' } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `progress`', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { progress: 50 } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `indeterminate`', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is an object with `customTemplate`', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { customTemplate: {} } })).toBeUndefined();
+    });
+
+    it('getWidgetActions: should map visible actions wrapping each action callback when 2+ actions', () => {
+      const actionSpy = jasmine.createSpy('actionSpy');
+      component.actions = [
+        { label: 'a', action: actionSpy },
+        { label: 'b', action: () => {} }
+      ];
+
+      const result = component['getWidgetActions'](item);
+
+      expect(result.length).toBe(2);
+      expect(result[0].label).toBe('a');
+
+      result[0].action();
+      expect(actionSpy).toHaveBeenCalledWith(item);
+    });
+
+    it('getWidgetActions: should return empty array when no visible actions and no title action', () => {
+      component.actions = [];
+      component.titleAction.observers = [];
+
+      expect(component['getWidgetActions'](item)).toEqual([]);
+    });
+
+    it('getWidgetActions: should return empty array when no visible actions but title has action (advanced renders arrow outside)', () => {
+      component.actions = [];
+      component.titleAction.observers.push(<any>[new Observable()]);
+
+      const result = component['getWidgetActions'](item);
+
+      expect(result).toEqual([]);
+    });
+
+    it('getItemAvatar: should return undefined when item has no value for the avatar property', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ name: 'x' })).toBeUndefined();
+    });
+
+    it('getItemActionType: should return `none` when there are no actions and no title action observer', () => {
+      component.actions = [];
+      component.titleAction.observers = [];
+
+      expect(component['getItemActionType'](item)).toBe('none');
+    });
+
+    it('should emit `p-title-action` when widget title action is triggered', () => {
+      component.items = [{ id: 1, name: 'Test' }];
+      component['propertyTitle'] = 'name';
+      component.titleAction.observers.push(<any>[new Observable()]);
+      fixture.detectChanges();
+
+      spyOn(component.titleAction, 'emit');
+      component.runTitleAction(component.items[0]);
+
+      expect(component.titleAction.emit).toHaveBeenCalled();
+    });
+
+    it('should render the title as plain text (no title-action) when `itemClickable` is true', () => {
+      component.items = [{ id: 1, name: 'Test' }];
+      component['propertyTitle'] = 'name';
+      component.itemClick.subscribe(() => {});
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-widget-title-action')).toBeNull();
+      expect(debugElement.querySelector('.po-widget-text')).toBeTruthy();
+    });
+
+    it('should render the title as an action (title-action) when `itemClickable` is false and title has action', () => {
+      component.items = [{ id: 1, name: 'Test' }];
+      component['propertyTitle'] = 'name';
+      component.titleAction.observers.push(<any>[new Observable()]);
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-widget-title-action')).toBeTruthy();
+    });
+
+    it('should apply the `po-list-view-selected` class on the selected item', () => {
+      component.select = true;
+      component.items = [{ id: 1, name: 'x', $selected: true }];
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-item-wrapper.po-list-view-selected')).toBeTruthy();
+    });
+  });
+
+  describe('Avatar helpers:', () => {
+    it('getAvatarType: should return empty string when p-field-properties avatar is not set', () => {
+      expect(component['getAvatarType'](item)).toBe('');
+    });
+
+    it('getAvatarType: should return "image" when item value is a string', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: 'http://img.png' })).toBe('image');
+    });
+
+    it('getAvatarType: should return "icon" when item value has icon property', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: { icon: 'an an-user' } })).toBe('icon');
+    });
+
+    it('getAvatarType: should return "progress" when item value has progress property', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: { progress: 50 } })).toBe('progress');
+    });
+
+    it('getAvatarType: should return "progress" when item value has indeterminate property', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: { indeterminate: true } })).toBe('progress');
+    });
+
+    it('getAvatarType: should return "custom" when item value is an object without icon/progress', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: { customTemplate: {} } })).toBe('custom');
+    });
+
+    it('getAvatarType: should return empty string for an object without icon, progress or customTemplate', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ avatar: { foo: 'bar' } })).toBe('');
+    });
+
+    it('getAvatarType: should return empty string when item has no value for the property', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getAvatarType']({ name: 'x' })).toBe('');
+    });
+
+    it('getAvatarData: should return undefined when p-field-properties avatar is not set', () => {
+      expect(component['getAvatarData'](item)).toBeUndefined();
+    });
+
+    it('getAvatarData: should return the avatar value from the item', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      const data = { icon: 'an an-user', color: '#fff' };
+      expect(component['getAvatarData']({ avatar: data })).toBe(data);
+    });
+
+    it('getItemAvatar: should return object with src and size when item value is a string', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      const result = component['getItemAvatar']({ avatar: 'http://img.png' });
+      expect(result.src).toBe('http://img.png');
+      expect(result.size).toBeDefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is icon', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { icon: 'an an-user' } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is progress', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { progress: 50 } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined when item value is indeterminate', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { indeterminate: true } })).toBeUndefined();
+    });
+
+    it('getItemAvatar: should return undefined for custom template (rendered via ngTemplateOutlet, not po-widget)', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: { customTemplate: {} } })).toBeUndefined();
+    });
+  });
+
+  describe('Type-safe helpers:', () => {
+    it('getItemTag: should return undefined when `p-field-properties` tag is not set', () => {
+      expect(component['getItemTag'](item)).toBeUndefined();
+    });
+
+    it('getItemTag: should return tag value from item', () => {
+      fixture.componentRef.setInput('p-field-properties', { tag: { value: 'tag' } });
+      fixture.detectChanges();
+
+      expect(component['getItemTag']({ tag: 'Success' })).toBe('Success');
+    });
+
+    it('getItemTagType: should return empty string when `p-field-properties` tag type is not set', () => {
+      expect(component['getItemTagType'](item)).toBe('');
+    });
+
+    it('getItemTagType: should return tag type value from item', () => {
+      fixture.componentRef.setInput('p-field-properties', { tag: { type: 'tagType' } });
+      fixture.detectChanges();
+
+      expect(component['getItemTagType']({ tagType: 'success' })).toBe('success');
+    });
+
+    it('getItemSubtitle: should return undefined when `p-field-properties` subtitle is not set', () => {
+      expect(component['getItemSubtitle'](item)).toBeUndefined();
+    });
+
+    it('getItemSubtitle: should return subtitle value from item', () => {
+      fixture.componentRef.setInput('p-field-properties', { subtitle: 'subtitle' });
+      fixture.detectChanges();
+
+      expect(component['getItemSubtitle']({ subtitle: 'Há 5 min' })).toBe('Há 5 min');
+    });
+
+    it('getItemHighlighted: should return false when `p-field-properties` highlighted is not set', () => {
+      expect(component['getItemHighlighted'](item)).toBe(false);
+    });
+
+    it('getItemHighlighted: should return true when item field is truthy', () => {
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
+      fixture.detectChanges();
+
+      expect(component['getItemHighlighted']({ unread: true })).toBe(true);
+    });
+
+    it('getItemHighlighted: should return false when item field is falsy', () => {
+      fixture.componentRef.setInput('p-field-properties', { highlighted: 'unread' });
+      fixture.detectChanges();
+
+      expect(component['getItemHighlighted']({ unread: false })).toBe(false);
+    });
+  });
+
+  describe('Widget actions cache:', () => {
+    it('should return cached result on second call with same item', () => {
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+      const testItem = { id: 99, name: 'cache-test' };
+
+      const first = component['getWidgetActions'](testItem);
+      const second = component['getWidgetActions'](testItem);
+
+      expect(first).toBe(second);
+    });
+
+    it('should invalidate cache when actions reference changes', () => {
+      const testItem = { id: 99, name: 'cache-test' };
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+      const first = component['getWidgetActions'](testItem);
+
+      component.actions = [{ label: 'x' }, { label: 'y' }, { label: 'z' }];
+      const second = component['getWidgetActions'](testItem);
+
+      expect(first).not.toBe(second);
+      expect(second.length).toBe(3);
+    });
+
+    it('should return empty array for 0-1 actions', () => {
+      component.actions = [{ label: 'only-one' }];
+      expect(component['getWidgetActions'](item)).toEqual([]);
+    });
+  });
+
+  describe('onClickAction with url:', () => {
+    it('should navigate internally when action has internal url', () => {
+      spyOn(component['router'], 'navigate');
+      const action = { label: 'Go', url: '/documentation/po-button' };
+
+      component.onClickAction(action, item);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['/documentation/po-button']);
+    });
+
+    it('should open external link when action has external url', () => {
+      const action = { label: 'Go', url: 'https://po-ui.io' };
+
+      spyOn<any>(window, 'open');
+      component.onClickAction(action, item);
+
+      expect(window.open).toHaveBeenCalled();
+    });
+
+    it('should call super.onClickAction when action has no url', () => {
+      const actionSpy = jasmine.createSpy('action');
+      const action = { label: 'Do', action: actionSpy };
+
+      component.onClickAction(action, item);
+
+      expect(actionSpy).toHaveBeenCalled();
+    });
+
+    it('should not call action when action has url (url takes priority)', () => {
+      const actionSpy = jasmine.createSpy('action');
+      spyOn(component['router'], 'navigate');
+      const action = { label: 'Go', url: '/page', action: actionSpy };
+
+      component.onClickAction(action, item);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['/page']);
+      expect(actionSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('selectListItem override:', () => {
+    it('should call detectChanges after selection', () => {
+      component.select = true;
+      component.items = [{ name: 'A', $selected: false }];
+      spyOn(component['changeDetector'], 'detectChanges');
+
+      component.selectListItem(component.items[0]);
+
+      expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
+    });
+  });
+
+  describe('getItemAvatar edge cases:', () => {
+    it('should return undefined when p-field-properties avatar is not set', () => {
+      expect(component['getItemAvatar'](item)).toBeUndefined();
+    });
+
+    it('should return undefined when item has no value for avatar property', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ name: 'x' })).toBeUndefined();
+    });
+
+    it('should return undefined when item avatar value is null', () => {
+      fixture.componentRef.setInput('p-field-properties', { avatar: 'avatar' });
+      fixture.detectChanges();
+
+      expect(component['getItemAvatar']({ avatar: null })).toBeUndefined();
+    });
+  });
+
+  describe('getWidgetActions mapped action execution:', () => {
+    it('should execute action with clean item when mapped action is called', () => {
+      const actionSpy = jasmine.createSpy('action');
+      const testItem = { id: 1, name: 'test', $selected: true };
+      component.actions = [
+        { label: 'a', action: actionSpy },
+        { label: 'b', action: () => {} }
+      ];
+
+      const result = component['getWidgetActions'](testItem);
+      result[0].action();
+
+      expect(actionSpy).toHaveBeenCalledWith({ id: 1, name: 'test' });
+    });
+
+    it('should navigate when mapped action with url is called', () => {
+      spyOn(component['router'], 'navigate');
+      const testItem = { id: 1, name: 'test' };
+      component.actions = [
+        { label: 'a', url: '/page' },
+        { label: 'b', url: '/other' }
+      ];
+
+      const result = component['getWidgetActions'](testItem);
+      result[0].action();
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['/page']);
+    });
+
+    it('should open external link when mapped action with external url is called', () => {
+      spyOn<any>(window, 'open');
+      const testItem = { id: 1, name: 'test' };
+      component.actions = [
+        { label: 'a', url: 'https://po-ui.io' },
+        { label: 'b', url: 'https://other.com' }
+      ];
+
+      const result = component['getWidgetActions'](testItem);
+      result[0].action();
+
+      expect(window.open).toHaveBeenCalled();
+    });
   });
 
   describe('Properties:', () => {
@@ -160,18 +805,396 @@ describe('PoListViewComponent:', () => {
       expect(component.popupTarget).toEqual(targetRef);
     });
 
-    it(`onAnimationEvent: should emit detail on showDetail`, () => {
+    it(`animateDetailEnter: should emit showDetail and animate height from 0 to scrollHeight`, () => {
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 60 });
+      element.style.overflowY = 'visible';
+      spyOn(element, 'animate').and.returnValue(animation);
       spyOn(component.showDetail, 'emit');
 
-      component.onAnimationEvent(event, detail);
+      component['animateDetailEnter']({ target: element } as any, item);
 
-      expect(component.showDetail.emit).toHaveBeenCalledWith(detail);
+      expect(component.showDetail.emit).toHaveBeenCalledWith(item);
+      expect(element.style.overflowY).toBe('hidden');
+      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '60px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(element.style.overflowY).toBe('visible');
+    });
+
+    it(`animateDetailLeave: should animate height from scrollHeight to 0 and call animationComplete`, () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 60 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component['animateDetailLeave']({ target: element, animationComplete });
+
+      expect(element.style.overflowY).toBe('hidden');
+      expect(element.animate).toHaveBeenCalledWith([{ height: '60px' }, { height: '0px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
     });
 
     it('trackBy: should return `index`', () => {
       const index = 1;
 
       expect(component.trackBy(index)).toBe(index);
+    });
+
+    it('onItemClick: should emit `itemClick` with clean item when `isItemClickable` returns true', () => {
+      const testItem = { id: 1, name: 'test', $selected: true };
+      const expectedItem = { id: 1, name: 'test' };
+
+      spyOn(component.itemClick, 'emit');
+      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalledWith(expectedItem);
+    });
+
+    it('onItemClick: should not emit `itemClick` when `isItemClickable` is false', () => {
+      spyOn(component.itemClick, 'emit');
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+
+      component['onItemClick'](item, new MouseEvent('click'));
+
+      expect(component.itemClick.emit).not.toHaveBeenCalled();
+    });
+
+    it('onItemClick: should call `selectListItem` when `select` and `isSingleSelection` are true', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(true);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(selectSpy).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('onItemClick: should not call `selectListItem` when `select` is true but `isSingleSelection` is false', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(selectSpy).not.toHaveBeenCalled();
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('onItemClick: should not call `selectListItem` when `isSingleSelection` is true but `select` is false', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = false;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(true);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(selectSpy).not.toHaveBeenCalled();
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('should stop propagation and keep selection when checkbox is clicked', () => {
+      component.select = true;
+      component.items = [{ id: 1, name: 'test', $selected: false }];
+      fixture.detectChanges();
+
+      const stopPropagationSpy = spyOn(MouseEvent.prototype, 'stopPropagation').and.callThrough();
+      const selectListItemSpy = spyOn(component, 'selectListItem').and.callThrough();
+      const checkbox = debugElement.querySelector('.po-list-view-select po-checkbox');
+
+      checkbox.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+
+      expect(stopPropagationSpy).toHaveBeenCalled();
+      expect(selectListItemSpy).not.toHaveBeenCalled();
+      expect(component.items[0].$selected).toBeFalse();
+    });
+
+    it('should stop propagation when a multiple-actions button is clicked', () => {
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+      component.items = [{ id: 1, name: 'test' }];
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const togglePopupSpy = spyOn(component, 'togglePopup').and.callThrough();
+      const button = debugElement.querySelector('.po-list-view-action-advanced');
+
+      button.querySelector('button').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+
+      expect(togglePopupSpy).toHaveBeenCalled();
+    });
+
+    it('onItemKeyDown: should emit `itemClick` with clean item when key is Enter and `isItemClickable` returns true', () => {
+      const testItem = { id: 1, name: 'test', $selected: true };
+      const expectedItem = { id: 1, name: 'test' };
+
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component.itemClick, 'emit');
+      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).toHaveBeenCalled();
+      expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalledWith(expectedItem);
+    });
+
+    it('onItemKeyDown: should emit `itemClick` with clean item when key is Space and `isItemClickable` returns true', () => {
+      const testItem = { id: 1, name: 'test' };
+      const expectedItem = { id: 1, name: 'test' };
+
+      const keyEvent = {
+        key: ' ',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component.itemClick, 'emit');
+      spyOn(component, <any>'deleteInternalAttrs').and.returnValue(expectedItem);
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).toHaveBeenCalled();
+      expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalledWith(expectedItem);
+    });
+
+    it('onItemKeyDown: should call `selectListItem` when key is Enter and `select` with `isSingleSelection` are true', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(true);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(selectSpy).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('onItemKeyDown: should not call `selectListItem` when key is Enter, `select` is true but `isSingleSelection` is false', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(selectSpy).not.toHaveBeenCalled();
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    describe('onAdvancedArrowClick:', () => {
+      it('should call `onClickAction` with the action and item when `getVisibleActions` returns exactly 1 action', () => {
+        const item = { id: 1, name: 'Item 1' };
+        const mockActions = [{ label: 'Edit', action: () => {} }];
+
+        spyOn<any>(component, 'getVisibleActions').and.returnValue(mockActions);
+        spyOn(component, 'onClickAction');
+        spyOn<any>(component, 'runTitleAction');
+
+        component['onAdvancedArrowClick'](item);
+
+        expect(component['getVisibleActions']).toHaveBeenCalledWith(item);
+        expect(component.onClickAction).toHaveBeenCalledWith(mockActions[0], item);
+        expect(component['runTitleAction']).not.toHaveBeenCalled();
+      });
+
+      it('should call `runTitleAction` when `getVisibleActions` returns 0 actions', () => {
+        const item = { id: 2, name: 'Item 2' };
+        const mockActions = []; // Nenhuma ação
+
+        spyOn<any>(component, 'getVisibleActions').and.returnValue(mockActions);
+        spyOn(component, 'onClickAction');
+        spyOn<any>(component, 'runTitleAction');
+
+        component['onAdvancedArrowClick'](item);
+
+        expect(component['getVisibleActions']).toHaveBeenCalledWith(item);
+        expect(component['runTitleAction']).toHaveBeenCalledWith(item);
+        expect(component.onClickAction).not.toHaveBeenCalled();
+      });
+
+      it('should call `runTitleAction` when `getVisibleActions` returns more than 1 action', () => {
+        const item = { id: 3, name: 'Item 3' };
+        const mockActions = [{ label: 'Edit' }, { label: 'Delete' }]; // Duas ações
+
+        spyOn<any>(component, 'getVisibleActions').and.returnValue(mockActions);
+        spyOn(component, 'onClickAction');
+        spyOn<any>(component, 'runTitleAction');
+
+        component['onAdvancedArrowClick'](item);
+
+        expect(component['getVisibleActions']).toHaveBeenCalledWith(item);
+        expect(component['runTitleAction']).toHaveBeenCalledWith(item);
+        expect(component.onClickAction).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onTitleKeyDown:', () => {
+      it('should call `preventDefault`, `stopPropagation` and `onTitleClick` when key is Enter', () => {
+        const testItem = { id: 1, name: 'test' };
+        const keyEvent = {
+          key: 'Enter',
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as any;
+
+        spyOn(component, <any>'onTitleClick');
+
+        component['onTitleKeyDown'](testItem, keyEvent);
+
+        expect(keyEvent.preventDefault).toHaveBeenCalled();
+        expect(keyEvent.stopPropagation).toHaveBeenCalled();
+        expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+      });
+
+      it('should call `preventDefault`, `stopPropagation` and `onTitleClick` when key is Space', () => {
+        const testItem = { id: 1, name: 'test' };
+        const keyEvent = {
+          key: ' ',
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as any;
+
+        spyOn(component, <any>'onTitleClick');
+
+        component['onTitleKeyDown'](testItem, keyEvent);
+
+        expect(keyEvent.preventDefault).toHaveBeenCalled();
+        expect(keyEvent.stopPropagation).toHaveBeenCalled();
+        expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+      });
+
+      it('should not call `onTitleClick` when key is neither Enter nor Space', () => {
+        const testItem = { id: 1, name: 'test' };
+        const keyEvent = {
+          key: 'Tab',
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as any;
+
+        spyOn(component, <any>'onTitleClick');
+
+        component['onTitleKeyDown'](testItem, keyEvent);
+
+        expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+        expect(keyEvent.stopPropagation).not.toHaveBeenCalled();
+        expect(component['onTitleClick']).not.toHaveBeenCalled();
+      });
+    });
+
+    it('onItemKeyDown: should not emit `itemClick` when `isItemClickable` is false', () => {
+      const keyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+
+      spyOn(component.itemClick, 'emit');
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+
+      component['onItemKeyDown'](item, keyEvent);
+
+      expect(component.itemClick.emit).not.toHaveBeenCalled();
+    });
+
+    it('onItemKeyDown: should not emit `itemClick` when key is not Enter or Space', () => {
+      const keyEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+
+      spyOn(component.itemClick, 'emit');
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+
+      component['onItemKeyDown'](item, keyEvent);
+
+      expect(component.itemClick.emit).not.toHaveBeenCalled();
+    });
+
+    it('title: should make internal title element focusable and respond to Enter/Space', () => {
+      component.items = [{ id: 1, name: 'title-item' }];
+      component.titleAction.subscribe(() => {});
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const titleEl: HTMLElement = debugElement.querySelector('.po-widget-title-action');
+      expect(titleEl).toBeTruthy('expected to find internal widget title element');
+      expect(titleEl.getAttribute('tabindex')).toBe('0', 'title should be focusable (tabindex=0)');
+
+      const titleSpy = spyOn<any>(component, 'onTitleClick');
+
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+      expect(titleSpy).toHaveBeenCalledWith(component.items[0]);
+
+      titleSpy.calls.reset();
+
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      fixture.detectChanges();
+      expect(titleSpy).toHaveBeenCalledWith(component.items[0]);
+    });
+
+    it('title click should not bubble to item wrapper (stopPropagation)', () => {
+      component.items = [{ id: 1, name: 'title-item' }];
+      component.titleAction.subscribe(() => {});
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const stopPropagationSpy = spyOn(MouseEvent.prototype, 'stopPropagation').and.callThrough();
+      spyOn(component.itemClick, 'emit');
+
+      const titleEl: HTMLElement = debugElement.querySelector('.po-widget-title-action');
+      expect(titleEl).toBeTruthy();
+
+      titleEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+
+      expect(stopPropagationSpy).toHaveBeenCalled();
+      expect(component.itemClick.emit).not.toHaveBeenCalled();
     });
 
     it('getVisibleActions: should return `[]` if doesn`t have action.', () => {
@@ -275,30 +1298,96 @@ describe('PoListViewComponent:', () => {
 
     it('checkTitleType: should return title`s type with "externalLink"', () => {
       const register: any = { url: 'http://www.uol.com.br' };
-      component.propertyLink = 'url';
+      component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('externalLink');
     });
 
     it('checkTitleType: should return title`s type with "internalLink"', () => {
       const register: any = { url: '/home' };
-      component.propertyLink = 'url';
+      component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('internalLink');
     });
 
     it('checkTitleType: should return title`s type with "noLink" if propertyLink doesn`t have value', () => {
       const register: any = { url: '/home' };
-      component.propertyLink = null;
+      component['propertyLink'] = null;
 
       expect(component['checkTitleType'](register)).toBe('noLink');
     });
 
     it('checkTitleType: should return title`s type with "noLink" if regiter doesn`t have `url` property', () => {
       const register: any = { route: '/home' };
-      component.propertyLink = 'url';
+      component['propertyLink'] = 'url';
 
       expect(component['checkTitleType'](register)).toBe('noLink');
+    });
+
+    it('onTitleClick: should navigate internally when the title link is an internal route', () => {
+      const register: any = { url: '/home' };
+      component['propertyLink'] = 'url';
+      spyOn(component['router'], 'navigate');
+      spyOn<any>(component, 'runTitleAction');
+
+      component['onTitleClick'](register);
+
+      expect(component['router'].navigate).toHaveBeenCalledWith(['/home']);
+      expect(component['runTitleAction']).not.toHaveBeenCalled();
+    });
+
+    it('onTitleClick: should open external link when the title link is an external url', () => {
+      const register: any = { url: 'http://po-ui.io' };
+      component['propertyLink'] = 'url';
+      spyOn(window, 'open');
+      spyOn(component['router'], 'navigate');
+      spyOn<any>(component, 'runTitleAction');
+
+      component['onTitleClick'](register);
+
+      expect(window.open).toHaveBeenCalled();
+      expect(component['router'].navigate).not.toHaveBeenCalled();
+      expect(component['runTitleAction']).not.toHaveBeenCalled();
+    });
+
+    it('onTitleClick: should call `runTitleAction` when there is no title link', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = null;
+      spyOn<any>(component, 'runTitleAction');
+
+      component['onTitleClick'](register);
+
+      expect(component['runTitleAction']).toHaveBeenCalledWith(register);
+    });
+
+    it('isTitleClickable: should return true when there is an observer on `p-title-action`', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = null;
+      component.titleAction.subscribe(() => {});
+
+      expect(component['isTitleClickable'](register)).toBe(true);
+    });
+
+    it('isTitleClickable: should return true when the item has a title link', () => {
+      const register: any = { url: '/home' };
+      component['propertyLink'] = 'url';
+
+      expect(component['isTitleClickable'](register)).toBe(true);
+    });
+
+    it('isTitleClickable: should return false when there is no title action and no link', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = null;
+
+      expect(component['isTitleClickable'](register)).toBe(false);
+    });
+
+    it('isTitleClickable: should return false when `propertyLink` is set but the item has no value for it', () => {
+      const register: any = { name: 'item' };
+      component['propertyLink'] = 'url';
+      component.titleAction.observers = [];
+
+      expect(component['isTitleClickable'](register)).toBe(false);
     });
 
     it(`getItemTitle: should call the formatting function of the title and return its value if 'hasContentTemplate' is true and
@@ -318,7 +1407,7 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item and not call the formatting function of the title if 'hasContentTemplate' is false and
       'listViewContentTemplate.title' is defined`, () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.listViewContentTemplate = { title: () => '', templateRef: undefined };
 
       spyOn(component.listViewContentTemplate, 'title');
@@ -332,7 +1421,7 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item if 'hasContentTemplate' is true and 'listViewContentTemplate.title'
       is undefined`, () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
       spyOnProperty(component, 'hasContentTemplate').and.returnValue(true);
@@ -344,7 +1433,7 @@ describe('PoListViewComponent:', () => {
 
     it(`getItemTitle: should return title of item if 'hasContentTemplate' is false and 'listViewContentTemplate.title'
       is undefined`, () => {
-      component.propertyTitle = 'name';
+      component['propertyTitle'] = 'name';
       component.listViewContentTemplate = { title: undefined, templateRef: undefined };
 
       spyOnProperty(component, 'hasContentTemplate').and.returnValue(false);
@@ -392,28 +1481,29 @@ describe('PoListViewComponent:', () => {
   describe('Templates:', () => {
     const listViewAction = { label: 'PO ', action: () => {} };
 
-    it('should find `po-list-view-actions` if contains actions', () => {
+    it('should find `po-widget` with actions when actions are provided', () => {
       component.actions = [listViewAction];
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-list-view-actions')).toBeTruthy();
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
     });
 
-    it('shouldn`t find `po-list-view-actions` if doesn`t contain actions', () => {
+    it('shouldn`t find action-advanced if doesn`t contain actions and no title action', () => {
       component.actions = [];
+      component.titleAction.observers = [];
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-list-view-actions')).toBeNull();
+      expect(component['getWidgetActions'](item)).toEqual([]);
     });
 
-    it('should find `po-list-view-more-actions` if `actions.length` is greater than 2', () => {
+    it('should pass actions to po-widget `p-actions` when 2+ actions', () => {
       component.actions = [{ label: 'Ação 1' }, { label: 'Ação 2' }, { label: 'Ação 3' }];
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-list-view-more-actions')).toBeTruthy();
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
     });
 
     it('should find `po-list-view-detail` if `showDetail` is true.', () => {
@@ -433,12 +1523,12 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-detail')).toBeFalsy();
     });
 
-    it('shouldn`t find `po-list-view-more-actions` if `actions.length` is lower than 3', () => {
+    it('should render po-widget for items with 2 or fewer actions', () => {
       component.actions = [listViewAction, listViewAction];
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-list-view-more-actions')).toBeNull();
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
     });
 
     it('should find `po-list-view-detail-button` if contains listViewDetailTemplate', () => {
@@ -457,12 +1547,21 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-detail-button')).toBeNull();
     });
 
-    it('should find `po-list-view-content` if contains listViewContentTemplate', () => {
+    it('shouldn`t find `po-list-view-detail-button` when the item is clickable (`p-item-click`)', () => {
+      component.listViewDetailTemplate = { showDetail: () => true, templateRef: null };
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+
+      fixture.detectChanges();
+
+      expect(debugElement.querySelector('.po-list-view-detail-button')).toBeNull();
+    });
+
+    it('should render content inside po-widget if contains listViewContentTemplate', () => {
       component.listViewContentTemplate = { templateRef: null, title: null };
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-list-view-content')).toBeTruthy();
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
     });
 
     it('shouldn`t find `po-list-view-content` if doesn`t contain listViewContentTemplate', () => {
@@ -557,119 +1656,52 @@ describe('PoListViewComponent:', () => {
       expect(debugElement.querySelector('.po-list-view-select')).toBeNull();
     });
 
-    it('should contain the attributes `href` and `target` if title is an external link and call getItemTitle with lisItem', () => {
-      spyOn(component, 'getItemTitle');
-      spyOn(component, 'checkTitleType').and.returnValue('externalLink');
-
-      const listItem = { id: 1, name: 'register', url: 'http://po.com.br' };
-      component.propertyLink = 'url';
-      component.items = [listItem];
+    it('should pass the title to po-widget via `p-title`', () => {
+      component['propertyTitle'] = 'name';
+      component.items = [{ id: 1, name: 'register', url: 'http://po.com.br' }];
 
       fixture.detectChanges();
 
-      let link = debugElement.querySelector('.po-list-view-title-link[ng-reflect-router-link="null"]');
-      expect(link).toBeFalsy();
-
-      link = debugElement.querySelector('.po-list-view-title-no-link');
-      expect(link).toBeFalsy();
-
-      link = debugElement.querySelector('.po-list-view-title-link[href="http://po.com.br"][target="_blank"]');
-      expect(link).toBeTruthy();
-
-      expect(component.getItemTitle).toHaveBeenCalledWith(listItem);
+      const widget = debugElement.querySelector('po-widget');
+      expect(widget).toBeTruthy();
     });
 
-    it('should contain the attribute `routerLink` if title is an internal link and call getItemTitle with lisItem', () => {
-      spyOn(component, 'getItemTitle');
-      spyOn(component, 'checkTitleType').and.returnValue('internalLink');
-
-      const listItem = { id: 1, name: 'register', url: '/home' };
-      component.propertyLink = 'url';
+    it('should call runTitleAction when title action is triggered', () => {
+      spyOn(component, 'runTitleAction');
+      const listItem = { id: 1, name: 'register' };
       component.items = [listItem];
 
-      fixture.detectChanges();
+      component.runTitleAction(listItem);
 
-      let link = debugElement.querySelector('.po-list-view-title-link[ng-reflect-router-link="/home"]');
-      expect(link).toBeTruthy();
-
-      link = debugElement.querySelector('.po-list-view-title-no-link');
-      expect(link).toBeFalsy();
-
-      link = debugElement.querySelector('.po-list-view-title-link[href="null"][target="_blank"]');
-      expect(link).toBeFalsy();
-
-      expect(component.getItemTitle).toHaveBeenCalledWith(listItem);
+      expect(component.runTitleAction).toHaveBeenCalledWith(listItem);
     });
 
-    it('should contain class `po-list-view-title-no-link` if title doesn`t have link and call getItemTitle with lisItem', () => {
-      spyOn(component, 'getItemTitle');
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
-
-      const listItem = { id: 1, name: 'register', url: 'http://po.com.br' };
-      component.items = [listItem];
-
-      fixture.detectChanges();
-
-      let link = debugElement.querySelector('.po-list-view-title-link[ng-reflect-router-link="null"]');
-      expect(link).toBeFalsy();
-
-      link = debugElement.querySelector('.po-list-view-title-no-link');
-      expect(link).toBeTruthy();
-
-      link = debugElement.querySelector('.po-list-view-title-link[href="null"][target="_blank"]');
-      expect(link).toBeFalsy();
-
-      expect(component.getItemTitle).toHaveBeenCalledWith(listItem);
-    });
-
-    it('should apply class `po-list-view-title-no-link` if `titleHasAction` is true', () => {
+    it('should render po-widget with p-title-action binding', () => {
       component.titleAction.observers.push(<any>[new Observable()]);
+      component.items = [{ id: 1, name: 'test' }];
 
       fixture.detectChanges();
 
-      expect(debugElement.querySelector('.po-list-view-title-link')).toBeTruthy();
+      expect(debugElement.querySelector('po-widget')).toBeTruthy();
     });
 
-    it('shouldn`t apply class `po-list-view-title-no-link` if `titleHasAction` is not true', () => {
-      component.titleAction = null;
-
-      expect(debugElement.querySelector('.po-list-view-title-link')).toBeFalsy();
-    });
-
-    it(`should call 'runTitleAction' with 'clickableItem' if 'titleAction' is clicked, 'titleHasAction' return
-      true and 'checkTitleType' return noLink`, waitForAsync(() => {
+    it(`should call 'runTitleAction' with item when invoked directly`, () => {
       const clickableItem = { label: 'item label' };
       component.items = [clickableItem];
 
       spyOn(component, 'runTitleAction');
-      spyOnProperty(component, 'titleHasAction').and.returnValue(true);
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
 
-      fixture.detectChanges();
+      component.runTitleAction(clickableItem);
 
-      const titleAction = fixture.debugElement.nativeElement.querySelector('.po-list-view-title-no-link');
-      titleAction.click();
+      expect(component.runTitleAction).toHaveBeenCalledWith(clickableItem);
+    });
 
-      fixture.whenStable().then(() => {
-        expect(component.runTitleAction).toHaveBeenCalledWith(clickableItem);
-      });
-    }));
+    it(`should not emit titleAction if titleAction has no observers`, () => {
+      spyOn(component.titleAction, 'emit');
+      component.titleAction.observers = [];
 
-    it(`should not call 'runTitleAction' if 'titleAction' is clicked, 'titleHasAction' return false and 'checkTitleType' return
-      noLink`, waitForAsync(() => {
-      spyOnProperty(component, 'titleHasAction').and.returnValue(false);
-      spyOn(component, 'checkTitleType').and.returnValue('noLink');
-      spyOn(component, 'runTitleAction');
-
-      fixture.detectChanges();
-
-      const titleAction = fixture.debugElement.nativeElement.querySelector('.po-list-view-title-no-link');
-      titleAction.click();
-
-      fixture.whenStable().then(() => {
-        expect(component.runTitleAction).not.toHaveBeenCalled();
-      });
-    }));
+      expect(component.titleHasAction).toBe(false);
+    });
 
     it(`should aply class 'po-list-view-container-no-data' if items is undefined`, waitForAsync(() => {
       component.items = undefined;
@@ -694,7 +1726,7 @@ describe('PoListViewComponent:', () => {
 
   describe('Visible as function:', () => {
     function getItemContainers(): Array<HTMLElement> {
-      return Array.from(debugElement.querySelectorAll('.po-list-view-container'));
+      return Array.from(debugElement.querySelectorAll('.po-list-view-item-wrapper'));
     }
 
     it(`should show the action in the item where 'visible' function returns 'true' and hide it in the item
@@ -708,11 +1740,11 @@ describe('PoListViewComponent:', () => {
       fixture.detectChanges();
 
       const containers = getItemContainers();
-      const activeButtons = containers[0].querySelectorAll('.po-list-view-actions po-button');
-      const inactiveButtons = containers[1].querySelectorAll('.po-list-view-actions po-button');
+      const activeActions = component['getVisibleActions'](component.items[0]);
+      const inactiveActions = component['getVisibleActions'](component.items[1]);
 
-      expect(activeButtons).toHaveSize(1);
-      expect(inactiveButtons).toHaveSize(0);
+      expect(activeActions).toHaveSize(1);
+      expect(inactiveActions).toHaveSize(0);
     });
 
     it(`should call the 'visible' function with the list item instead of the function itself`, () => {
@@ -732,8 +1764,7 @@ describe('PoListViewComponent:', () => {
       expect(calledWith).not.toContain(visibleSpy);
     });
 
-    it(`should show the popup icon if the item has more than 2 visible actions and the inline buttons
-      if it has 1 or 2`, () => {
+    it(`should render po-widget for each item, with actions passed to widget p-actions based on visibility`, () => {
       component.items = [
         { id: 1, perm: true },
         { id: 2, perm: false }
@@ -744,44 +1775,36 @@ describe('PoListViewComponent:', () => {
 
       const containers = getItemContainers();
 
-      expect(containers[0].querySelector('.po-list-view-more-actions')).toBeTruthy();
-
-      expect(containers[1].querySelector('.po-list-view-actions')).toBeTruthy();
-      expect(containers[1].querySelectorAll('.po-list-view-actions po-button')).toHaveSize(2);
-      expect(containers[1].querySelector('.po-list-view-more-actions')).toBeNull();
+      expect(containers[0].querySelector('po-widget')).toBeTruthy();
+      expect(containers[1].querySelector('po-widget')).toBeTruthy();
     });
 
-    it(`should feed 'po-popup' only with the visible actions of the toggled item`, () => {
+    it(`should pass only visible actions to widget via getWidgetActions`, () => {
       component.items = [{ id: 1, perm: false }];
       component.actions = [{ label: 'A' }, { label: 'B' }, { label: 'C', visible: (item: any) => item.perm }];
 
       fixture.detectChanges();
 
-      const target = debugElement.querySelector('.po-list-view-container');
-      component.togglePopup(component.items[0], <HTMLElement>target);
-      fixture.detectChanges();
+      const widgetActions = component['getWidgetActions'](component.items[0]);
+      const labels = widgetActions.map((a: any) => a.label);
 
-      const popupActions = component.poPopupComponent.actions || [];
-      const labels = popupActions.map((action: any) => action.label);
-
-      expect(popupActions).toHaveSize(2);
+      expect(widgetActions).toHaveSize(2);
       expect(labels).not.toContain('C');
     });
 
-    it(`shouldn't show the popup icon nor the inline buttons if all actions are hidden for the item`, () => {
+    it(`shouldn't render action-advanced if all actions are hidden for the item and no title action`, () => {
       component.items = [{ id: 1, perm: false }];
       component.actions = [
         { label: 'A', visible: (item: any) => item.perm },
         { label: 'B', visible: (item: any) => item.perm },
         { label: 'C', visible: (item: any) => item.perm }
       ];
+      component.titleAction.observers = [];
 
       fixture.detectChanges();
 
-      const container = debugElement.querySelector('.po-list-view-container');
-
-      expect(container.querySelector('.po-list-view-more-actions')).toBeNull();
-      expect(container.querySelector('.po-list-view-actions')).toBeNull();
+      const widgetActions = component['getWidgetActions'](component.items[0]);
+      expect(widgetActions).toEqual([]);
     });
   });
 
@@ -797,7 +1820,7 @@ describe('PoListViewComponent:', () => {
     }
 
     function getFirstContainer(): HTMLElement {
-      return debugElement.querySelector('.po-list-view-container');
+      return debugElement.querySelector('.po-list-view-item-wrapper');
     }
 
     it(`should keep showing the inline buttons or the popup icon by the count of actions where 'visible' is
@@ -811,22 +1834,9 @@ describe('PoListViewComponent:', () => {
           component.actions = actions;
           fixture.detectChanges();
 
-          const container = getFirstContainer();
-          const inlineGroup = container.querySelector('.po-list-view-actions');
-          const popupIcon = container.querySelector('.po-list-view-more-actions');
-          const inlineButtons = container.querySelectorAll('.po-list-view-actions po-button');
+          const visibleActions = component['getVisibleActions'](component.items[0]);
 
-          if (expectedVisibleCount === 0) {
-            expect(inlineGroup).toBeNull();
-            expect(popupIcon).toBeNull();
-          } else if (expectedVisibleCount <= 2) {
-            expect(inlineGroup).toBeTruthy();
-            expect(inlineButtons).toHaveSize(expectedVisibleCount);
-            expect(popupIcon).toBeNull();
-          } else {
-            expect(popupIcon).toBeTruthy();
-            expect(inlineGroup).toBeNull();
-          }
+          expect(visibleActions.length).toBe(expectedVisibleCount);
         }),
         { numRuns }
       );
@@ -873,6 +1883,601 @@ describe('PoListViewComponent:', () => {
 
       popup.actions = [{ label: 'A', visible: () => false }];
       expect(popup['checkAllActionIsInvisible']()).toBeFalsy();
+    });
+  });
+
+  describe('Accessibility attributes:', () => {
+    it('should set `p-aria-label` on the single (advanced) action button using the action label', () => {
+      component.items = [{ id: 1, name: 'register' }];
+      component.actions = [{ label: 'Editar', action: () => {} }];
+      fixture.detectChanges();
+
+      const button = debugElement.querySelector('po-button.po-list-view-action-advanced');
+      const buttonInstance = fixture.debugElement.query(By.css('po-button.po-list-view-action-advanced'))
+        .componentInstance as PoButtonComponent;
+
+      expect(button).toBeTruthy();
+      expect(buttonInstance.ariaLabel()).toBe('Editar');
+    });
+
+    it('should fallback `p-aria-label` to the item title when the single action has no label', () => {
+      component['propertyTitle'] = 'name';
+      component.items = [{ id: 1, name: 'register' }];
+      component.actions = [{ action: () => {} } as any];
+      fixture.detectChanges();
+
+      const buttonInstance = fixture.debugElement.query(By.css('po-button.po-list-view-action-advanced'))
+        .componentInstance as PoButtonComponent;
+
+      expect(buttonInstance.ariaLabel()).toBe('register');
+    });
+
+    it('should set `p-aria-expanded` to `false` on the inline detail button when detail is hidden', () => {
+      component.items = [{ id: 1, name: 'register', $showDetail: false }];
+      component.listViewDetailTemplate = { showDetail: () => true, templateRef: null };
+      fixture.detectChanges();
+
+      const buttonInstance = fixture.debugElement.query(By.css('.po-list-view-detail-button po-button'))
+        .componentInstance as PoButtonComponent;
+
+      expect(buttonInstance.ariaExpanded).toBe(false);
+    });
+
+    it('should set `p-aria-expanded` to `true` on the inline detail button when detail is shown', () => {
+      component.items = [{ id: 1, name: 'register', $showDetail: true }];
+      component.listViewDetailTemplate = { showDetail: () => true, templateRef: null };
+      fixture.detectChanges();
+
+      const buttonInstance = fixture.debugElement.query(By.css('.po-list-view-detail-button po-button'))
+        .componentInstance as PoButtonComponent;
+
+      expect(buttonInstance.ariaExpanded).toBe(true);
+    });
+
+    it('should expose `aria-setsize` and `aria-posinset` on clickable item cards', () => {
+      component.items = [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' }
+      ];
+      component.itemClick.subscribe(() => {});
+      fixture.detectChanges();
+
+      const wrappers = debugElement.querySelectorAll('.po-list-view-item-wrapper');
+
+      expect(wrappers[0].getAttribute('aria-setsize')).toBe('2');
+      expect(wrappers[0].getAttribute('aria-posinset')).toBe('1');
+      expect(wrappers[1].getAttribute('aria-setsize')).toBe('2');
+      expect(wrappers[1].getAttribute('aria-posinset')).toBe('2');
+    });
+
+    it('should not expose `aria-setsize`/`aria-posinset` when the card is not clickable', () => {
+      component.items = [{ id: 1, name: 'Item 1' }];
+      fixture.detectChanges();
+
+      const wrapper = debugElement.querySelector('.po-list-view-item-wrapper');
+
+      expect(wrapper.getAttribute('aria-setsize')).toBeNull();
+      expect(wrapper.getAttribute('aria-posinset')).toBeNull();
+    });
+
+    it('should not expose `aria-setsize`/`aria-posinset` on single-selection clickable cards', () => {
+      component.items = [{ id: 1, name: 'Item 1' }];
+      component.select = true;
+      component.singleSelect = true;
+      component.itemClick.subscribe(() => {});
+      fixture.detectChanges();
+
+      const wrapper = debugElement.querySelector('.po-list-view-item-wrapper');
+
+      expect(wrapper.getAttribute('aria-setsize')).toBeNull();
+      expect(wrapper.getAttribute('aria-posinset')).toBeNull();
+    });
+  });
+
+  describe('Keyboard accessibility for title actions:', () => {
+    it('should render focusable wrapper when title action is available and item click is inactive', () => {
+      component.titleAction.subscribe(() => {});
+      component.items = [{ id: 1, name: 'test' }];
+      fixture.detectChanges();
+
+      const itemWrapper = debugElement.querySelector('.po-list-view-item-wrapper');
+
+      expect(itemWrapper.getAttribute('tabindex')).toBe('0');
+      expect(itemWrapper.getAttribute('role')).toBe('button');
+    });
+
+    it('onItemKeyDown: should call `onTitleClick` when title is clickable and item click is not active', () => {
+      const testItem = { id: 1, name: 'test' };
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      spyOn(component, <any>'onTitleClick');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).toHaveBeenCalled();
+      expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+    });
+
+    it('onItemKeyDown: should call `onTitleClick` when key is Space, title is clickable and item click is not active', () => {
+      const testItem = { id: 1, name: 'test' };
+      const keyEvent = {
+        key: ' ',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      spyOn(component, <any>'onTitleClick');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).toHaveBeenCalled();
+      expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+    });
+
+    it('onItemKeyDown: should not call `onTitleClick` when title is clickable but key is neither Enter nor Space', () => {
+      const testItem = { id: 1, name: 'test' };
+      const keyEvent = {
+        key: 'Tab',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      spyOn(component, <any>'onTitleClick');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+      expect(component['onTitleClick']).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should toggle selection when Enter is pressed on a multiple checkbox item', () => {
+    component.select = true;
+    component.items = [{ id: 1, name: 'test', $selected: false }];
+    fixture.detectChanges();
+
+    const checkbox = debugElement.querySelector('.po-list-view-select po-checkbox');
+    const keydownEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+
+    checkbox.dispatchEvent(keydownEvent);
+    fixture.detectChanges();
+
+    expect(component.items[0].$selected).toBeTrue();
+  });
+
+  it('should toggle selection when Space is pressed on a multiple checkbox item', () => {
+    component.select = true;
+    component.items = [{ id: 1, name: 'test', $selected: false }];
+    fixture.detectChanges();
+
+    const checkbox = debugElement.querySelector('.po-list-view-select po-checkbox');
+    const keydownEvent = new KeyboardEvent('keydown', { key: ' ', code: 'Space', bubbles: true, cancelable: true });
+
+    checkbox.dispatchEvent(keydownEvent);
+    fixture.detectChanges();
+
+    expect(component.items[0].$selected).toBeTrue();
+  });
+
+  describe('onMultipleSelectionKeydown:', () => {
+    it('should toggle selection when key is `Enter`', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should toggle selection when `keyCode` is 13 (Enter)', () => {
+      const testItem = { id: 1, name: 'test', $selected: true };
+      const event = {
+        key: '',
+        keyCode: 13,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, false);
+    });
+
+    it('should toggle selection when key is `Spacebar`', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: 'Spacebar',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should toggle selection when `code` is `Space`', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: '',
+        code: 'Space',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should toggle selection when `keyCode` is 32 (Space)', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: '',
+        keyCode: 32,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should not toggle selection when key is neither Enter nor Space', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: 'Tab',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(event.stopPropagation).not.toHaveBeenCalled();
+      expect(changeSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updateTitleFocusableElements:', () => {
+    function buildRoot(
+      options: {
+        withTitle?: boolean;
+        withContainer?: boolean;
+        withCheckbox?: boolean;
+        titleTabindex?: string;
+        bound?: boolean;
+        checkboxBound?: boolean;
+      } = {}
+    ): { root: HTMLElement; wrapper: HTMLElement; titleEl: HTMLElement | null; checkboxEl: HTMLElement | null } {
+      const root = document.createElement('div');
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('po-list-view-item-wrapper');
+
+      let titleEl: HTMLElement | null = null;
+      if (options.withTitle) {
+        titleEl = document.createElement('span');
+        titleEl.classList.add('po-widget-title-action');
+        if (options.titleTabindex !== undefined) {
+          titleEl.setAttribute('tabindex', options.titleTabindex);
+        }
+        wrapper.appendChild(titleEl);
+      }
+
+      if (options.withContainer) {
+        const container = document.createElement('div');
+        container.classList.add('po-widget-container');
+        wrapper.appendChild(container);
+      }
+
+      let checkboxEl: HTMLElement | null = null;
+      if (options.withCheckbox) {
+        checkboxEl = document.createElement('po-checkbox');
+        wrapper.appendChild(checkboxEl);
+      }
+
+      if (options.bound) {
+        wrapper.setAttribute('data-po-list-view-bound', '1');
+      }
+      if (options.checkboxBound) {
+        wrapper.setAttribute('data-po-list-view-checkbox-bound', '1');
+      }
+
+      root.appendChild(wrapper);
+      return { root, wrapper, titleEl, checkboxEl };
+    }
+
+    function mockRoot(root: HTMLElement): void {
+      Object.defineProperty(component['elementRef'], 'nativeElement', {
+        get: () => root,
+        configurable: true
+      });
+    }
+
+    it('should return early when there are no items', () => {
+      component.items = undefined;
+      const { root } = buildRoot({ withTitle: true });
+      mockRoot(root);
+      const setAttrSpy = spyOn(component['renderer'], 'setAttribute');
+
+      component['updateTitleFocusableElements']();
+
+      expect(setAttrSpy).not.toHaveBeenCalled();
+    });
+
+    it('should return early when the root element is not available', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      mockRoot(null);
+      const setAttrSpy = spyOn(component['renderer'], 'setAttribute');
+
+      expect(() => component['updateTitleFocusableElements']()).not.toThrow();
+      expect(setAttrSpy).not.toHaveBeenCalled();
+    });
+
+    it('should set tabindex=0 on title and tabindex=-1 on container when title is clickable and not yet focusable', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, withContainer: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBe('0');
+      expect(wrapper.querySelector('.po-widget-container').getAttribute('tabindex')).toBe('-1');
+      expect(wrapper.getAttribute('data-po-list-view-bound')).toBe('1');
+    });
+
+    it('should not set tabindex again when title already has tabindex=0', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true, titleTabindex: '0' });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      const setAttrSpy = spyOn(component['renderer'], 'setAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      const titleTabindexCalls = setAttrSpy.calls
+        .allArgs()
+        .filter(args => args[0] === titleEl && args[1] === 'tabindex');
+      expect(titleTabindexCalls.length).toBe(0);
+    });
+
+    it('should not bind the keydown handler again when the wrapper is already bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true, bound: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      const addListenerSpy = spyOn(titleEl, 'addEventListener');
+
+      component['updateTitleFocusableElements']();
+
+      expect(addListenerSpy).not.toHaveBeenCalled();
+    });
+
+    it('should call `onTitleClick` when the bound title handler receives Enter/Space and ignore other keys', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      const onTitleClickSpy = spyOn(component, <any>'onTitleClick');
+
+      component['updateTitleFocusableElements']();
+
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(onTitleClickSpy).toHaveBeenCalledWith(component.items[0]);
+
+      onTitleClickSpy.calls.reset();
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      expect(onTitleClickSpy).toHaveBeenCalledWith(component.items[0]);
+
+      onTitleClickSpy.calls.reset();
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+      expect(onTitleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('should remove tabindex and bound attribute when title is present but not clickable', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, titleTabindex: '0', bound: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBeNull();
+      expect(wrapper.hasAttribute('data-po-list-view-bound')).toBe(false);
+    });
+
+    it('should not remove attributes when title is not clickable and has no tabindex nor bound flag', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeAttrSpy = spyOn(component['renderer'], 'removeAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBeNull();
+      expect(removeAttrSpy).not.toHaveBeenCalled();
+    });
+
+    it('should remove only the tabindex when title is not clickable, has tabindex but is not bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, titleTabindex: '0' });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeAttrSpy = spyOn(component['renderer'], 'removeAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBeNull();
+      expect(removeAttrSpy).toHaveBeenCalledWith(titleEl, 'tabindex');
+      expect(wrapper.hasAttribute('data-po-list-view-bound')).toBe(false);
+    });
+
+    it('should remove only the bound attribute when title is not clickable, is bound but has no tabindex', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, bound: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeAttrSpy = spyOn(component['renderer'], 'removeAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(removeAttrSpy).not.toHaveBeenCalledWith(titleEl, 'tabindex');
+      expect(wrapper.hasAttribute('data-po-list-view-bound')).toBe(false);
+    });
+
+    it('should bind the checkbox capture handler when select is on and single selection is off', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      component.select = true;
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+
+      component['updateTitleFocusableElements']();
+
+      expect(wrapper.getAttribute('data-po-list-view-checkbox-bound')).toBe('1');
+      expect((checkboxEl as any).__po_list_view_space_capture).toBeDefined();
+    });
+
+    it('should call `onMultipleSelectionChange` when the checkbox handler receives Enter/Space and ignore other keys', () => {
+      component.items = [{ id: 1, name: 'test', $selected: false }];
+      component.select = true;
+      const { root, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const multiSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['updateTitleFocusableElements']();
+
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(multiSpy).toHaveBeenCalledWith(component.items[0], true);
+
+      multiSpy.calls.reset();
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', code: 'Space' }));
+      expect(multiSpy).toHaveBeenCalledWith(component.items[0], true);
+
+      multiSpy.calls.reset();
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+      expect(multiSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not call `onMultipleSelectionChange` from checkbox handler when there is no item at the index', () => {
+      component.items = [{ id: 1, name: 'test', $selected: false }];
+      component.select = true;
+      const { root, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const multiSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['updateTitleFocusableElements']();
+
+      // O setter de `items` normaliza valores não-array para `[]` (truthy), então o campo privado
+      // é zerado diretamente para tornar `this.items` falsy e exercitar o ramo `: undefined`
+      // do ternário `this.items ? this.items[index] : undefined` ao disparar o handler.
+      component['_items'] = undefined;
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(multiSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not bind the checkbox handler again when the wrapper is already checkbox-bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      component.select = true;
+      const { root, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const addListenerSpy = spyOn(checkboxEl, 'addEventListener');
+
+      component['updateTitleFocusableElements']();
+
+      expect(addListenerSpy).not.toHaveBeenCalled();
+    });
+
+    it('should unbind the checkbox handler when select/single-selection no longer allow multiple selection', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      const existingHandler = () => {};
+      (checkboxEl as any).__po_list_view_space_capture = existingHandler;
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeListenerSpy = spyOn(checkboxEl, 'removeEventListener').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(removeListenerSpy).toHaveBeenCalledWith('keydown', existingHandler, true);
+      expect((checkboxEl as any).__po_list_view_space_capture).toBeUndefined();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
+    });
+
+    it('should not throw when checkbox is bound but there is no stored handler to remove', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+
+      expect(() => component['updateTitleFocusableElements']()).not.toThrow();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
+      void checkboxEl;
+    });
+
+    it('should swallow errors thrown by `removeEventListener` and still clean up handler and attribute', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      const existingHandler = () => {};
+      (checkboxEl as any).__po_list_view_space_capture = existingHandler;
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      spyOn(checkboxEl, 'removeEventListener').and.throwError('remove error');
+
+      expect(() => component['updateTitleFocusableElements']()).not.toThrow();
+      expect((checkboxEl as any).__po_list_view_space_capture).toBeUndefined();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
+    });
+
+    it('should not enter the unbind branch when checkbox exists but the wrapper is not checkbox-bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeListenerSpy = spyOn(checkboxEl, 'removeEventListener');
+
+      component['updateTitleFocusableElements']();
+
+      expect(removeListenerSpy).not.toHaveBeenCalled();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
     });
   });
 });

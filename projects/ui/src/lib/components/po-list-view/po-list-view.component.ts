@@ -1,17 +1,22 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   AfterContentInit,
+  AfterViewChecked,
+  AnimationCallbackEvent,
   ChangeDetectorRef,
   Component,
   ContentChild,
   DoCheck,
+  ElementRef,
   IterableDiffers,
+  Renderer2,
   ViewChild,
   inject
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { PoUtils } from '../../utils/util';
+import { isExternalLink, openExternalLink, PoUtils } from '../../utils/util';
+import { PoModalComponent } from '../po-modal/po-modal.component';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 
 import { PoListViewAction } from './interfaces/po-list-view-action.interface';
@@ -29,6 +34,11 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  *  <file name="sample-po-list-view-basic/sample-po-list-view-basic.component.ts"> </file>
  * </example>
  *
+ * <example name="po-list-view-field-properties" title="PO List View - Field Properties">
+ *  <file name="sample-po-list-view-field-properties/sample-po-list-view-field-properties.component.html"> </file>
+ *  <file name="sample-po-list-view-field-properties/sample-po-list-view-field-properties.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-list-view-labs" title="PO List View Labs">
  *  <file name="sample-po-list-view-labs/sample-po-list-view-labs.component.html"> </file>
  *  <file name="sample-po-list-view-labs/sample-po-list-view-labs.component.ts"> </file>
@@ -43,29 +53,32 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
 @Component({
   selector: 'po-list-view',
   templateUrl: './po-list-view.component.html',
-  animations: [
-    trigger('showHideDetail', [
-      state('*', style({ 'overflow-y': 'visible' })),
-      state('void', style({ 'overflow-y': 'hidden' })),
-      transition('* => void', [style({ height: '*', 'overflow-y': 'hidden' }), animate(100, style({ height: 0 }))]),
-      transition('void => *', [style({ height: '0' }), animate(100, style({ height: '*' }))])
-    ])
-  ],
   standalone: false
 })
-export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
+export class PoListViewComponent
+  extends PoListViewBaseComponent
+  implements AfterContentInit, DoCheck, AfterViewChecked
+{
   private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
 
-  @ContentChild(PoListViewContentTemplateDirective, { static: true })
+  @ContentChild(PoListViewContentTemplateDirective, { static: false })
   listViewContentTemplate: PoListViewContentTemplateDirective;
-  @ContentChild(PoListViewDetailTemplateDirective, { static: true })
+  @ContentChild(PoListViewDetailTemplateDirective, { static: false })
   listViewDetailTemplate: PoListViewDetailTemplateDirective;
 
   @ViewChild('popup', { static: true }) poPopupComponent: PoPopupComponent;
+  @ViewChild('detailModal', { static: true }) protected detailModal: PoModalComponent;
 
   popupActions: Array<PoListViewAction> = [];
+  protected detailModalItem: any = null;
+  protected detailModalIndex: number;
 
   private readonly differ;
+  private readonly widgetActionsCache = new Map<any, Array<any>>();
+  private cachedActionsRef: Array<any> = null;
 
   constructor() {
     const differs = inject(IterableDiffers);
@@ -91,6 +104,161 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return this.titleAction.observers.length > 0;
   }
 
+  protected isTitleClickable(item: any): boolean {
+    return this.titleAction.observers.length > 0 || !!(this.resolvedPropertyLink && item[this.resolvedPropertyLink]);
+  }
+
+  protected isItemClickable(item: any): boolean {
+    return this.itemClick.observed && this.getVisibleActions(item).length <= 1;
+  }
+
+  protected onItemClick(item: any, event: MouseEvent): void {
+    if (this.isItemClickable(item)) {
+      if (this.select && this.isSingleSelection) {
+        this.selectListItem(item);
+      }
+      this.itemClick.emit(this.deleteInternalAttrs(item));
+    }
+  }
+
+  protected onItemKeyDown(item: any, event: KeyboardEvent): void {
+    if (this.isItemClickable(item) && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      if (this.select && this.isSingleSelection) {
+        this.selectListItem(item);
+      }
+      this.itemClick.emit(this.deleteInternalAttrs(item));
+      return;
+    }
+
+    if (!this.isItemClickable(item) && this.isTitleClickable(item) && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      this.onTitleClick(item);
+    }
+  }
+
+  protected onTitleKeyDown(item: any, event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.onTitleClick(item);
+    }
+  }
+
+  private updateTitleFocusableElements(): void {
+    try {
+      const root: HTMLElement = (this.elementRef && this.elementRef.nativeElement) as HTMLElement;
+      if (!root || !this.items) {
+        return;
+      }
+
+      const wrappers = Array.from(root.querySelectorAll('.po-list-view-item-wrapper'));
+
+      wrappers.forEach((wrapper, index) => {
+        const titleEl = wrapper.querySelector('.po-widget-title-action');
+        const alreadyBound = wrapper.getAttribute('data-po-list-view-bound');
+
+        if (titleEl && this.isTitleClickable(this.items[index])) {
+          if (titleEl.getAttribute('tabindex') !== '0') {
+            this.renderer.setAttribute(titleEl, 'tabindex', '0');
+          }
+
+          const container = wrapper.querySelector('.po-widget-container');
+          if (container) {
+            this.renderer.setAttribute(container, 'tabindex', '-1');
+          }
+
+          if (!alreadyBound) {
+            const handler = (ev: KeyboardEvent) => {
+              if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.onTitleClick(this.items[index]);
+              }
+            };
+            titleEl.addEventListener('keydown', handler);
+            wrapper.setAttribute('data-po-list-view-bound', '1');
+          }
+        } else if (titleEl) {
+          if (titleEl.getAttribute('tabindex')) {
+            this.renderer.removeAttribute(titleEl, 'tabindex');
+          }
+          if (wrapper.hasAttribute('data-po-list-view-bound')) {
+            wrapper.removeAttribute('data-po-list-view-bound');
+          }
+        }
+        try {
+          const checkboxEl = wrapper.querySelector('po-checkbox');
+          const checkboxBound = wrapper.getAttribute('data-po-list-view-checkbox-bound');
+
+          if (checkboxEl && this.select && !this.isSingleSelection) {
+            if (!checkboxBound) {
+              const captureHandler = (ev: KeyboardEvent) => {
+                const isEnter = ev.key === 'Enter' || ev.keyCode === 13;
+                const isSpace = ev.key === ' ' || ev.key === 'Spacebar' || ev.code === 'Space' || ev.keyCode === 32;
+
+                if (isEnter || isSpace) {
+                  try {
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                  } catch (e) {}
+
+                  const item = this.items ? this.items[index] : undefined;
+                  if (item) {
+                    this.onMultipleSelectionChange(item, !item.$selected);
+                  }
+                }
+              };
+
+              (checkboxEl as any).__po_list_view_space_capture = captureHandler;
+              checkboxEl.addEventListener('keydown', captureHandler, true);
+              wrapper.setAttribute('data-po-list-view-checkbox-bound', '1');
+            }
+          } else if (checkboxEl && checkboxBound) {
+            const existingHandler = (checkboxEl as any).__po_list_view_space_capture;
+            if (existingHandler) {
+              try {
+                checkboxEl.removeEventListener('keydown', existingHandler, true);
+              } catch (e) {}
+              delete (checkboxEl as any).__po_list_view_space_capture;
+            }
+            wrapper.removeAttribute('data-po-list-view-checkbox-bound');
+          }
+        } catch (e) {}
+      });
+    } catch (e) {
+      // falha ao atualizar elementos focáveis do título, não é crítico, apenas logar o erro
+    }
+  }
+
+  protected stopPropagation(event?: Event | null): void {
+    event?.stopPropagation?.();
+  }
+
+  protected onAdvancedArrowClick(item: any): void {
+    const visibleActions = this.getVisibleActions(item);
+    if (visibleActions.length === 1) {
+      this.onClickAction(visibleActions[0], item);
+    } else {
+      this.runTitleAction(item);
+    }
+  }
+
+  protected onTitleClick(item: any): void {
+    const link = this.resolvedPropertyLink && item[this.resolvedPropertyLink];
+
+    if (link) {
+      if (isExternalLink(link)) {
+        openExternalLink(link);
+      } else {
+        this.router.navigate([link]);
+      }
+      return;
+    }
+
+    this.runTitleAction(item);
+  }
+
   ngAfterContentInit(): void {
     this.initShowDetail();
   }
@@ -99,9 +267,13 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     this.checkItemsChange();
   }
 
+  ngAfterViewChecked(): void {
+    this.updateTitleFocusableElements();
+  }
+
   checkTitleType(item: any) {
-    if (this.propertyLink && item[this.propertyLink]) {
-      return item[this.propertyLink].startsWith('http') ? 'externalLink' : 'internalLink';
+    if (this.resolvedPropertyLink && item[this.resolvedPropertyLink]) {
+      return item[this.resolvedPropertyLink].startsWith('http') ? 'externalLink' : 'internalLink';
     }
 
     return 'noLink';
@@ -110,7 +282,7 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   getItemTitle(item) {
     return this.hasContentTemplate && this.listViewContentTemplate.title
       ? this.listViewContentTemplate.title(item)
-      : item[this.propertyTitle];
+      : item[this.resolvedPropertyTitle];
   }
 
   hasItems(): boolean {
@@ -127,16 +299,224 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     return index;
   }
 
+  override selectListItem(row: any) {
+    super.selectListItem(row);
+    this.changeDetector.detectChanges();
+  }
+
+  protected onMultipleSelectionChange(item: any, value: boolean): void {
+    item.$selected = value;
+    this.selectAll = this['checkIfItemsAreSelected'](this.items);
+    this.changeDetector.detectChanges();
+  }
+
+  protected onMultipleSelectionKeydown(item: any, event: KeyboardEvent): void {
+    const isEnter = event.key === 'Enter' || event.keyCode === 13;
+    const isSpace = event.key === ' ' || event.key === 'Spacebar' || event.code === 'Space' || event.keyCode === 32;
+
+    if (isEnter || isSpace) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.onMultipleSelectionChange(item, !item.$selected);
+    }
+  }
+
+  override onClickAction(listViewAction: PoListViewAction, item: any) {
+    if (listViewAction.url) {
+      if (isExternalLink(listViewAction.url)) {
+        openExternalLink(listViewAction.url);
+      } else {
+        this.router.navigate([listViewAction.url]);
+      }
+      return;
+    }
+    super.onClickAction(listViewAction, item);
+  }
+
+  protected getItemActionType(item: any): 'advanced' | 'multiple' | 'none' {
+    const visibleActions = this.getVisibleActions(item);
+
+    if (visibleActions.length >= 2) {
+      return 'multiple';
+    }
+
+    if (visibleActions.length === 1) {
+      return 'advanced';
+    }
+
+    return 'none';
+  }
+
+  protected getItemTag(item: any): string | undefined {
+    const prop = this.resolvedPropertyTag;
+    return prop ? item[prop] : undefined;
+  }
+
+  protected getItemTagType(item: any): string {
+    const prop = this.resolvedPropertyTagType;
+    return prop && item[prop] ? item[prop] : '';
+  }
+
+  protected getItemSubtitle(item: any): string | undefined {
+    const prop = this.resolvedPropertySubtitle;
+    return prop ? item[prop] : undefined;
+  }
+
+  protected getItemHighlighted(item: any): boolean {
+    const prop = this.resolvedPropertyHighlighted;
+    return prop ? !!item[prop] : false;
+  }
+
+  protected getItemAvatar(item: any): any {
+    if (!this.resolvedPropertyAvatar) {
+      return undefined;
+    }
+
+    const value = item[this.resolvedPropertyAvatar];
+
+    if (!value) {
+      return undefined;
+    }
+
+    if (typeof value === 'string') {
+      return { src: value, size: this.avatarSize() };
+    }
+
+    if (value.icon || value.progress !== undefined || value.indeterminate || value.customTemplate) {
+      return undefined;
+    }
+
+    const avatar = { ...value };
+    avatar.size = this.avatarSize();
+    return avatar;
+  }
+
+  protected getAvatarType(item: any): string {
+    if (!this.resolvedPropertyAvatar) {
+      return '';
+    }
+
+    const value = item[this.resolvedPropertyAvatar];
+
+    if (!value) {
+      return '';
+    }
+
+    if (typeof value === 'string') {
+      return 'image';
+    }
+
+    if (value.icon) {
+      return 'icon';
+    }
+
+    if (value.progress !== undefined || value.indeterminate) {
+      return 'progress';
+    }
+
+    if (value.customTemplate) {
+      return 'custom';
+    }
+
+    return '';
+  }
+
+  protected getAvatarData(item: any): any {
+    if (!this.resolvedPropertyAvatar) {
+      return undefined;
+    }
+    return item[this.resolvedPropertyAvatar];
+  }
+
+  protected getWidgetActions(item: any): Array<any> {
+    if (this.cachedActionsRef !== this.actions) {
+      this.widgetActionsCache.clear();
+      this.cachedActionsRef = this.actions;
+    }
+
+    if (this.widgetActionsCache.has(item)) {
+      return this.widgetActionsCache.get(item);
+    }
+
+    const visibleActions = this.getVisibleActions(item);
+
+    let result: Array<any>;
+
+    if (visibleActions.length >= 2) {
+      result = visibleActions.map(listAction => ({
+        ...listAction,
+        action: () => {
+          if (listAction.url) {
+            if (isExternalLink(listAction.url)) {
+              openExternalLink(listAction.url);
+            } else {
+              this.router.navigate([listAction.url]);
+            }
+          } else if (listAction.action) {
+            const cleanItem = this['deleteInternalAttrs'](item);
+            listAction.action(cleanItem);
+          }
+        }
+      }));
+    } else {
+      result = [];
+    }
+
+    this.widgetActionsCache.set(item, result);
+    return result;
+  }
+
   togglePopup(item, targetRef: HTMLElement) {
     this.popupTarget = targetRef;
-    this.popupActions = this.getVisibleActions(item);
+    this.popupActions = this.getWidgetActions(item);
     this.changeDetector.detectChanges();
 
     this.poPopupComponent.toggle(item);
   }
 
-  onAnimationEvent(event: AnimationEvent, detail) {
-    this.showDetail.emit(detail);
+  protected animateDetailEnter(event: AnimationCallbackEvent, item: any): void {
+    this.showDetail.emit(item);
+
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    const previousOverflowY = element.style.overflowY;
+    element.style.overflowY = 'hidden';
+
+    const animation = element.animate([{ height: '0px' }, { height: `${height}px` }], {
+      duration: 100,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      element.style.overflowY = previousOverflowY;
+    };
+  }
+
+  protected animateDetailLeave(event: AnimationCallbackEvent): void {
+    const element = event.target as HTMLElement;
+    const height = element.scrollHeight;
+    element.style.overflowY = 'hidden';
+
+    const animation = element.animate([{ height: `${height}px` }, { height: '0px' }], {
+      duration: 100,
+      easing: 'linear'
+    });
+
+    animation.onfinish = () => {
+      event.animationComplete();
+    };
+  }
+
+  protected openDetailModal(item: any, index: number) {
+    this.detailModalItem = item;
+    this.detailModalIndex = index;
+    this.showDetail.emit(item);
+    this.changeDetector.detectChanges();
+    this.detailModal.open();
+  }
+
+  protected onCloseDetailModal() {
+    this.detailModalItem = null;
   }
 
   // Avalia a visibilidade das ações por item, passando o item corrente.
@@ -147,11 +527,15 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   private checkItemsChange() {
     const changesItems = this.differ.diff(this.items);
 
+    if (changesItems) {
+      this.widgetActionsCache.clear();
+    }
+
     if (changesItems && this.selectAll) {
       this.selectAll = null;
     }
 
-    if (changesItems && this.items && this.items.length && this.select && !this.hideSelectAll) {
+    if (changesItems && this.items?.length && this.select && !this.singleSelect && !this.hideSelectAll) {
       this.showHeader = true;
     }
   }

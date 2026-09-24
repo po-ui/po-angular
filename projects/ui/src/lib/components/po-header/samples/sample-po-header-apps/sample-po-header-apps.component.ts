@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import {
   PoHeaderActions,
@@ -6,6 +6,7 @@ import {
   PoHeaderActionToolItem,
   PoHeaderBrand,
   PoHeaderUser,
+  PoListViewFieldProperties,
   PoNotificationService,
   PoToasterOrientation
 } from '@po-ui/ng-components';
@@ -14,34 +15,125 @@ import {
   selector: 'sample-po-header-apps',
   templateUrl: './sample-po-header-apps.component.html',
   standalone: false,
+  encapsulation: ViewEncapsulation.None,
   styles: `
-    .app-wrapper {
+    sample-po-header-apps {
+      display: block;
+      min-height: 768px;
+    }
+
+    sample-po-header-apps .app-wrapper {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       justify-items: center;
     }
 
-    .custom-template {
+    sample-po-header-apps .custom-template {
       padding: 0.5rem;
     }
 
-    .custom-template p {
+    sample-po-header-apps .custom-template p {
       text-align: center;
       font-weight: bold;
       color: var(--color-neutral-dark-90);
     }
 
-    /* alterado apenas para demonstração no portal*/
-    po-header {
+    sample-po-header-apps po-header {
       --nav-position: flex;
+    }
+
+    po-header.example-notification-header po-list-view {
+      --po-density-gap-spacing: 0px;
+    }
+
+    po-header.example-notification-header po-divider {
+      --po-density-gap-spacing: 0;
+    }
+
+    po-header.example-notification-header po-list-view po-widget {
+      --padding-header: 0;
+      --padding-body: 0.5rem 0;
     }
   `
 })
 export class SamplePoHeaderAppsComponent implements AfterViewInit {
   @ViewChild('meuTemplate') meuTemplate!: TemplateRef<any>;
+  @ViewChild('notificationTemplate') notificationTemplate!: TemplateRef<any>;
 
-  listItem: Array<PoHeaderActionToolItem> = [
+  fieldProperties: PoListViewFieldProperties = {
+    title: 'title',
+    subtitle: 'content',
+    avatar: 'avatar',
+    highlighted: 'checked',
+    tag: { value: 'tag', type: 'tagType' }
+  };
+
+  private readonly initialNotifications = [
+    {
+      title: 'Relatório de faturamento',
+      content: 'O arquivo solicitado já está disponível para download',
+      tag: 'Concluído',
+      tagType: 'success',
+      avatar: { progress: 100, status: 'success', showPercentage: true, size: 'large', radius: 35 },
+      checked: true
+    },
+    {
+      title: 'Folha de pagamento',
+      content: 'O cálculo da folha de pagamento está em andamento',
+      tag: 'Em andamento',
+      tagType: 'info',
+      avatar: { progress: 80, showPercentage: true, size: 'large', radius: 35 },
+      checked: true
+    },
+    {
+      title: 'Nova versão TOTVS 2.1',
+      content: 'Atualize seu sistema para a versão TOTVS 2.1',
+      tag: 'Novidade',
+      tagType: 'neutral',
+      avatar: { icon: 'an an-arrow-circle-up', color: '#ffffff', backgroundColor: '#000000' },
+      checked: true
+    },
+    {
+      title: '6 novos colaboradores',
+      content: 'Você tem 6 novos colaboradores cadastrados',
+      tag: 'Info',
+      tagType: 'info',
+      avatar: { icon: 'an an-user', color: '#753399', backgroundColor: '#f0e6f5' },
+      checked: true
+    },
+    {
+      title: 'Novo usuário',
+      content: 'Novo usuário adicionado ao grupo Financeiro',
+      tag: 'Info',
+      tagType: 'info',
+      avatar: 'https://i.pravatar.cc/150?img=12',
+      checked: true
+    }
+  ];
+
+  private allNotifications = this.initialNotifications.map(item => ({ ...item }));
+
+  notificationList = this.allNotifications.filter(item => item.checked);
+
+  readonly notificationActions = [
+    {
+      label: 'Marcar como lida',
+      icon: 'an an-check',
+      action: (item: any) => this.readNotification(item)
+    }
+  ];
+
+  get hasNotifications(): boolean {
+    return this.notificationList.some(item => item.checked);
+  }
+
+  readonly notificationLiterals = {
+    noData:
+      'Você está atualizado! Você não tem novas notificações no momento. Assim que surgirem novidades ou alertas, eles aparecerão aqui.'
+  };
+
+  readonly listItem: Array<PoHeaderActionToolItem> = [
     {
       label: 'Ação 1',
       action: this.myAction.bind(this, 'Ação 1')
@@ -50,13 +142,13 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
     { label: 'Ação 3', action: this.myAction.bind(this, 'Ação 3') }
   ];
 
-  headerBrand: PoHeaderBrand = {
+  readonly headerBrand: PoHeaderBrand = {
     title: 'PO UI',
     logo: '../../../assets/po-logos/po_color.png',
     action: this.myAction.bind(this, 'Logo ação')
   };
 
-  menuItems: Array<PoHeaderActions> = [
+  readonly menuItems: Array<PoHeaderActions> = [
     {
       label: 'Item 1',
       action: this.myAction.bind(this, 'Item 1')
@@ -84,16 +176,19 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
     },
     {
       label: 'Notificações',
-      icon: 'an an-chat-circle-dots',
+      icon: 'an an-bell',
       tooltip: 'Notificações do usuário',
       badge: 5,
-      items: this.listItem,
+      popover: {
+        content: this.notificationTemplate,
+        width: 480
+      },
       onOpen: (label?: string) => this.onOpenTool(label),
       onClose: (label?: string) => this.onCloseTool(label)
     }
   ];
 
-  headerUser: PoHeaderUser = {
+  readonly headerUser: PoHeaderUser = {
     avatar: '../../../assets/graphics/avatar1.png',
     customerBrand: '../../../assets/po-logos/po_black.png',
     status: 'positive',
@@ -106,7 +201,7 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
     onClose: () => this.onCloseUser()
   };
 
-  systemApps = [
+  readonly systemApps = [
     {
       icon: 'an an-reddit-logo',
       action: this.myAction.bind(this, 'Aplicativo 1')
@@ -140,14 +235,11 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.actionTools = this.actionTools.map(action => {
-      if (action.popover) {
-        return {
-          ...action,
-          popover: {
-            ...action.popover,
-            content: this.meuTemplate
-          }
-        };
+      if (action.label === 'Aplicativos' && action.popover) {
+        return { ...action, popover: { ...action.popover, content: this.meuTemplate } };
+      }
+      if (action.label === 'Notificações' && action.popover) {
+        return { ...action, popover: { ...action.popover, content: this.notificationTemplate } };
       }
       return action;
     });
@@ -156,7 +248,60 @@ export class SamplePoHeaderAppsComponent implements AfterViewInit {
   }
 
   myAction(action: string): any {
-    this.poNotification.success({ message: `Action clicked: ${action}`, orientation: PoToasterOrientation.Top });
+    this.poNotification.success({ message: `Action clicked: ${action}`, orientation: PoToasterOrientation.Bottom });
+  }
+
+  markAllAsRead(): void {
+    this.allNotifications.forEach(item => (item.checked = false));
+    this.notificationList = this.allNotifications.filter(item => item.checked);
+    this.setNotificationBadge(undefined);
+
+    this.poNotification.success({
+      message: 'Todas as notificações foram marcadas como lidas.',
+      orientation: PoToasterOrientation.Top
+    });
+  }
+
+  readNotification(item: any): void {
+    const notification = this.allNotifications.find(current => current.title === item?.title);
+    if (notification) {
+      notification.checked = false;
+    }
+
+    setTimeout(() => {
+      this.notificationList = this.allNotifications.filter(current => current.checked);
+      const unread = this.notificationList.length;
+      this.setNotificationBadge(unread > 0 ? unread : undefined);
+    });
+
+    this.poNotification.information({
+      message: `Notificação lida: ${item?.title}`,
+      orientation: PoToasterOrientation.Top
+    });
+  }
+
+  resetNotifications(): void {
+    this.notificationList = this.allNotifications.map(current => ({ ...current }));
+  }
+
+  markAllAsUnread(): void {
+    this.allNotifications.forEach(item => (item.checked = true));
+    this.notificationList = this.allNotifications.filter(item => item.checked);
+    this.setNotificationBadge(this.allNotifications.length);
+
+    this.poNotification.information({
+      message: 'Todas as notificações foram marcadas como não lidas.',
+      orientation: PoToasterOrientation.Top
+    });
+  }
+
+  private setNotificationBadge(badge: number | undefined): void {
+    setTimeout(() => {
+      this.actionTools = this.actionTools.map(action =>
+        action.label === 'Notificações' ? { ...action, badge } : action
+      );
+      this.cd.detectChanges();
+    });
   }
 
   /** Callback de abertura para ações do `p-actions-tools`. Recebe o `label` da ação. */

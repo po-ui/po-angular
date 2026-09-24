@@ -5,8 +5,12 @@ import { RouterModule } from '@angular/router';
 
 import { PoButtonModule } from '../po-button/po-button.module';
 import { PoIconModule } from '../po-icon/po-icon.module';
+import { PoModalModule } from '../po-modal/po-modal.module';
 import { PoPopupModule } from '../po-popup/po-popup.module';
+import { PoProgressCircleComponent } from '../po-progress/po-progress-circle/po-progress-circle.component';
+import { PoWidgetModule } from '../po-widget/po-widget.module';
 import { PoCheckboxModule } from './../po-field/po-checkbox/po-checkbox.module';
+import { PoRadioModule } from './../po-field/po-radio/po-radio.module';
 
 import { PoListViewComponent } from './po-list-view.component';
 import { PoListViewContentTemplateDirective } from './po-list-view-content-template/po-list-view-content-template.directive';
@@ -18,41 +22,20 @@ import { PoContainerModule } from '../po-container/po-container.module';
  *
  * Módulo do componente `po-list-view`.
  *
- * > Para o correto funcionamento do componente `po-list-view`, deve ser importado o módulo `BrowserAnimationsModule` no
- * > módulo principal da sua aplicação.
+ * > Para o correto funcionamento das animações do componente `po-list-view`, você deve prover
+ * > as animações na inicialização da sua aplicação.
  *
- * Módulo da aplicação:
+ * Em aplicações Standalone (padrão recomendado):
  * ```
- * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
- * import { PoModule } from '@po-ui/ng-components';
- * ...
- *
- * @NgModule({
- *   imports: [
- *     BrowserModule,
- *     BrowserAnimationsModule,
- *     ...
- *     PoModule
- *   ],
- *   declarations: [
- *     AppComponent,
- *     ...
- *   ],
- *   providers: [],
- *   bootstrap: [AppComponent]
- * })
- * export class AppModule { }
- * ```
- *
- * Em aplicações Standalone, utilize a seguinte configuração para o bootstrap:
- *
- * ```
+ * import { provideAnimations } from '@angular/platform-browser/animations';
  * import { bootstrapApplication } from '@angular/platform-browser';
- * import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
  * import { AppComponent } from './app.component';
  *
  * bootstrapApplication(AppComponent, {
- *   providers: [importProvidersFrom(BrowserAnimationsModule)]
+ *   providers: [
+ *     provideAnimations(),
+ *     // ou provideAnimationsAsync() para lazy loading das animações
+ *   ]
  * }).catch(err => console.error(err));
  * ```
  */
@@ -64,8 +47,12 @@ import { PoContainerModule } from '../po-container/po-container.module';
     PoButtonModule,
     PoIconModule,
     PoPopupModule,
+    PoModalModule,
     PoCheckboxModule,
-    PoContainerModule
+    PoRadioModule,
+    PoContainerModule,
+    PoWidgetModule,
+    PoProgressCircleComponent
   ],
   declarations: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
   exports: [PoListViewComponent, PoListViewContentTemplateDirective, PoListViewDetailTemplateDirective],
