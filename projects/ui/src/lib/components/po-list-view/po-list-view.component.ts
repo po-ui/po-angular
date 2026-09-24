@@ -1,11 +1,14 @@
 import {
   AfterContentInit,
+  AfterViewChecked,
   AnimationCallbackEvent,
   ChangeDetectorRef,
   Component,
   ContentChild,
   DoCheck,
+  ElementRef,
   IterableDiffers,
+  Renderer2,
   ViewChild,
   inject
 } from '@angular/core';
@@ -52,9 +55,14 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
   templateUrl: './po-list-view.component.html',
   standalone: false
 })
-export class PoListViewComponent extends PoListViewBaseComponent implements AfterContentInit, DoCheck {
+export class PoListViewComponent
+  extends PoListViewBaseComponent
+  implements AfterContentInit, DoCheck, AfterViewChecked
+{
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
+  private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
 
   @ContentChild(PoListViewContentTemplateDirective, { static: false })
   listViewContentTemplate: PoListViewContentTemplateDirective;
@@ -106,6 +114,9 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
 
   protected onItemClick(item: any, event: MouseEvent): void {
     if (this.isItemClickable(item)) {
+      if (this.select && this.isSingleSelection) {
+        this.selectListItem(item);
+      }
       this.itemClick.emit(this.deleteInternalAttrs(item));
     }
   }
@@ -113,8 +124,115 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   protected onItemKeyDown(item: any, event: KeyboardEvent): void {
     if (this.isItemClickable(item) && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
+      if (this.select && this.isSingleSelection) {
+        this.selectListItem(item);
+      }
       this.itemClick.emit(this.deleteInternalAttrs(item));
+      return;
     }
+
+    if (!this.isItemClickable(item) && this.isTitleClickable(item) && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      this.onTitleClick(item);
+    }
+  }
+
+  protected onTitleKeyDown(item: any, event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.onTitleClick(item);
+    }
+  }
+
+  private updateTitleFocusableElements(): void {
+    try {
+      const root: HTMLElement = (this.elementRef && this.elementRef.nativeElement) as HTMLElement;
+      if (!root || !this.items) {
+        return;
+      }
+
+      const wrappers = Array.from(root.querySelectorAll('.po-list-view-item-wrapper'));
+
+      wrappers.forEach((wrapper, index) => {
+        const titleEl = wrapper.querySelector('.po-widget-title-action');
+        const alreadyBound = wrapper.getAttribute('data-po-list-view-bound');
+
+        if (titleEl && this.isTitleClickable(this.items[index])) {
+          if (titleEl.getAttribute('tabindex') !== '0') {
+            this.renderer.setAttribute(titleEl, 'tabindex', '0');
+          }
+
+          const container = wrapper.querySelector('.po-widget-container');
+          if (container) {
+            this.renderer.setAttribute(container, 'tabindex', '-1');
+          }
+
+          if (!alreadyBound) {
+            const handler = (ev: KeyboardEvent) => {
+              if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.onTitleClick(this.items[index]);
+              }
+            };
+            titleEl.addEventListener('keydown', handler);
+            wrapper.setAttribute('data-po-list-view-bound', '1');
+          }
+        } else if (titleEl) {
+          if (titleEl.getAttribute('tabindex')) {
+            this.renderer.removeAttribute(titleEl, 'tabindex');
+          }
+          if (wrapper.hasAttribute('data-po-list-view-bound')) {
+            wrapper.removeAttribute('data-po-list-view-bound');
+          }
+        }
+        try {
+          const checkboxEl = wrapper.querySelector('po-checkbox');
+          const checkboxBound = wrapper.getAttribute('data-po-list-view-checkbox-bound');
+
+          if (checkboxEl && this.select && !this.isSingleSelection) {
+            if (!checkboxBound) {
+              const captureHandler = (ev: KeyboardEvent) => {
+                const isEnter = ev.key === 'Enter' || ev.keyCode === 13;
+                const isSpace = ev.key === ' ' || ev.key === 'Spacebar' || ev.code === 'Space' || ev.keyCode === 32;
+
+                if (isEnter || isSpace) {
+                  try {
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                  } catch (e) {}
+
+                  const item = this.items ? this.items[index] : undefined;
+                  if (item) {
+                    this.onMultipleSelectionChange(item, !item.$selected);
+                  }
+                }
+              };
+
+              (checkboxEl as any).__po_list_view_space_capture = captureHandler;
+              checkboxEl.addEventListener('keydown', captureHandler, true);
+              wrapper.setAttribute('data-po-list-view-checkbox-bound', '1');
+            }
+          } else if (checkboxEl && checkboxBound) {
+            const existingHandler = (checkboxEl as any).__po_list_view_space_capture;
+            if (existingHandler) {
+              try {
+                checkboxEl.removeEventListener('keydown', existingHandler, true);
+              } catch (e) {}
+              delete (checkboxEl as any).__po_list_view_space_capture;
+            }
+            wrapper.removeAttribute('data-po-list-view-checkbox-bound');
+          }
+        } catch (e) {}
+      });
+    } catch (e) {
+      // falha ao atualizar elementos focáveis do título, não é crítico, apenas logar o erro
+    }
+  }
+
+  protected stopPropagation(event?: Event | null): void {
+    event?.stopPropagation?.();
   }
 
   protected onAdvancedArrowClick(item: any): void {
@@ -149,6 +267,10 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
     this.checkItemsChange();
   }
 
+  ngAfterViewChecked(): void {
+    this.updateTitleFocusableElements();
+  }
+
   checkTitleType(item: any) {
     if (this.resolvedPropertyLink && item[this.resolvedPropertyLink]) {
       return item[this.resolvedPropertyLink].startsWith('http') ? 'externalLink' : 'internalLink';
@@ -180,6 +302,23 @@ export class PoListViewComponent extends PoListViewBaseComponent implements Afte
   override selectListItem(row: any) {
     super.selectListItem(row);
     this.changeDetector.detectChanges();
+  }
+
+  protected onMultipleSelectionChange(item: any, value: boolean): void {
+    item.$selected = value;
+    this.selectAll = this['checkIfItemsAreSelected'](this.items);
+    this.changeDetector.detectChanges();
+  }
+
+  protected onMultipleSelectionKeydown(item: any, event: KeyboardEvent): void {
+    const isEnter = event.key === 'Enter' || event.keyCode === 13;
+    const isSpace = event.key === ' ' || event.key === 'Spacebar' || event.code === 'Space' || event.keyCode === 32;
+
+    if (isEnter || isSpace) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.onMultipleSelectionChange(item, !item.$selected);
+    }
   }
 
   override onClickAction(listViewAction: PoListViewAction, item: any) {

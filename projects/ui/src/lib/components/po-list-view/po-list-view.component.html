@@ -36,8 +36,16 @@
         [class.po-list-view-selected]="item.$selected"
         [class.po-list-view-clickable]="isItemClickable(item)"
         [class.po-list-view-no-title]="!getItemTitle(item)"
-        [attr.tabindex]="isItemClickable(item) ? 0 : null"
-        [attr.role]="isItemClickable(item) ? 'button' : null"
+        [attr.tabindex]="(isItemClickable(item) || isTitleClickable(item)) && !(select && isSingleSelection) ? 0 : null"
+        [attr.role]="
+          (isItemClickable(item) || isTitleClickable(item)) && !(select && isSingleSelection) ? 'button' : null
+        "
+        [attr.aria-setsize]="
+          (isItemClickable(item) || isTitleClickable(item)) && !(select && isSingleSelection) ? items.length : null
+        "
+        [attr.aria-posinset]="
+          (isItemClickable(item) || isTitleClickable(item)) && !(select && isSingleSelection) ? index + 1 : null
+        "
         (click)="onItemClick(item, $event)"
         (keydown)="onItemKeyDown(item, $event)"
       >
@@ -50,14 +58,15 @@
                   [p-checked]="item.$selected"
                   [p-size]="componentsSize"
                   (p-change)="selectListItem(item)"
+                  [attr.tabindex]="isSingleSelection ? 0 : null"
                 ></po-radio>
               } @else {
                 <po-checkbox
                   [(ngModel)]="item.$selected"
                   name="checkbox"
                   [p-size]="componentsSize"
-                  (p-change)="selectListItem(item)"
-                  (click)="selectListItem(item)"
+                  (ngModelChange)="onMultipleSelectionChange(item, $event)"
+                  (click)="$event.stopPropagation()"
                 ></po-checkbox>
               }
             </div>
@@ -153,6 +162,8 @@
                 [p-no-shadow]="true"
                 [p-size]="componentsSize"
                 (p-title-action)="onTitleClick(item)"
+                [attr.data-po-list-view-title]="isTitleClickable(item) ? '1' : null"
+                (click)="$event.stopPropagation()"
               >
                 <ng-template [ngTemplateOutlet]="itemContent"></ng-template>
               </po-widget>
@@ -177,7 +188,8 @@
               p-kind="tertiary"
               [p-icon]="getVisibleActions(item)[0]?.icon || 'ICON_ARROW_RIGHT'"
               [p-size]="componentsSize"
-              (p-click)="isItemClickable(item) ? null : onAdvancedArrowClick(item)"
+              [p-aria-label]="getVisibleActions(item)[0]?.label || getItemTitle(item)"
+              (p-click)="stopPropagation($event); isItemClickable(item) ? null : onAdvancedArrowClick(item)"
             >
             </po-button>
           } @else if (getItemActionType(item) === 'multiple') {
@@ -187,7 +199,7 @@
               p-kind="tertiary"
               p-icon="ICON_MORE_OUT_VERT_FILL"
               [p-size]="componentsSize"
-              (p-click)="togglePopup(item, multipleActionsButton.buttonElement.nativeElement)"
+              (p-click)="stopPropagation($event); togglePopup(item, multipleActionsButton.buttonElement.nativeElement)"
             >
             </po-button>
           }
@@ -214,7 +226,7 @@
                 p-kind="tertiary"
                 [p-label]="literals.detailModalTitle"
                 [p-size]="componentsSize"
-                (p-click)="openDetailModal(item, index)"
+                (p-click)="stopPropagation($event); openDetailModal(item, index)"
               >
               </po-button>
             } @else {
@@ -222,7 +234,8 @@
                 p-kind="tertiary"
                 [p-label]="item.$showDetail ? literals.hideDetails : literals.showDetails"
                 [p-size]="componentsSize"
-                (p-click)="item.$showDetail = !item.$showDetail"
+                [p-aria-expanded]="!!item.$showDetail"
+                (p-click)="stopPropagation($event); item.$showDetail = !item.$showDetail"
               >
               </po-button>
             }

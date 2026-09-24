@@ -1,12 +1,13 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 
 import fc from 'fast-check';
 
 import { PoUtils as UtilsFunctions } from '../../utils/util';
-import { PoButtonModule } from '../po-button';
+import { PoButtonComponent, PoButtonModule } from '../po-button';
 import { PoModalModule } from '../po-modal';
 import { PoPopupModule } from '../po-popup';
 import { PoWidgetModule } from '../po-widget';
@@ -212,11 +213,9 @@ describe('PoListViewComponent:', () => {
 
       expect(debugElement.querySelector('po-widget')).toBeTruthy();
 
-      // O botão de múltiplas ações fica na row (irmão do po-widget), com a mesma base do ícone único.
       const kebabButton = debugElement.querySelector('.po-list-view-action-advanced');
       expect(kebabButton).toBeTruthy('multiple actions button should be in the row (.po-list-view-action-advanced)');
 
-      // Não deve renderizar o botão interno do widget (p-actions não é mais repassado ao widget).
       expect(debugElement.querySelector('.po-widget-button-wrapper')).toBeFalsy();
     });
 
@@ -875,6 +874,83 @@ describe('PoListViewComponent:', () => {
       expect(component.itemClick.emit).not.toHaveBeenCalled();
     });
 
+    it('onItemClick: should call `selectListItem` when `select` and `isSingleSelection` are true', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(true);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(selectSpy).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('onItemClick: should not call `selectListItem` when `select` is true but `isSingleSelection` is false', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(selectSpy).not.toHaveBeenCalled();
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('onItemClick: should not call `selectListItem` when `isSingleSelection` is true but `select` is false', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = false;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(true);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemClick'](testItem, {} as MouseEvent);
+
+      expect(selectSpy).not.toHaveBeenCalled();
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('should stop propagation and keep selection when checkbox is clicked', () => {
+      component.select = true;
+      component.items = [{ id: 1, name: 'test', $selected: false }];
+      fixture.detectChanges();
+
+      const stopPropagationSpy = spyOn(MouseEvent.prototype, 'stopPropagation').and.callThrough();
+      const selectListItemSpy = spyOn(component, 'selectListItem').and.callThrough();
+      const checkbox = debugElement.querySelector('.po-list-view-select po-checkbox');
+
+      checkbox.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+
+      expect(stopPropagationSpy).toHaveBeenCalled();
+      expect(selectListItemSpy).not.toHaveBeenCalled();
+      expect(component.items[0].$selected).toBeFalse();
+    });
+
+    it('should stop propagation when a multiple-actions button is clicked', () => {
+      component.actions = [{ label: 'a' }, { label: 'b' }];
+      component.items = [{ id: 1, name: 'test' }];
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const togglePopupSpy = spyOn(component, 'togglePopup').and.callThrough();
+      const button = debugElement.querySelector('.po-list-view-action-advanced');
+
+      button.querySelector('button').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+
+      expect(togglePopupSpy).toHaveBeenCalled();
+    });
+
     it('onItemKeyDown: should emit `itemClick` with clean item when key is Enter and `isItemClickable` returns true', () => {
       const testItem = { id: 1, name: 'test', $selected: true };
       const expectedItem = { id: 1, name: 'test' };
@@ -915,6 +991,46 @@ describe('PoListViewComponent:', () => {
       expect(keyEvent.preventDefault).toHaveBeenCalled();
       expect(component['deleteInternalAttrs']).toHaveBeenCalledWith(testItem);
       expect(component.itemClick.emit).toHaveBeenCalledWith(expectedItem);
+    });
+
+    it('onItemKeyDown: should call `selectListItem` when key is Enter and `select` with `isSingleSelection` are true', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(true);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(selectSpy).toHaveBeenCalledWith(testItem);
+      expect(component.itemClick.emit).toHaveBeenCalled();
+    });
+
+    it('onItemKeyDown: should not call `selectListItem` when key is Enter, `select` is true but `isSingleSelection` is false', () => {
+      const testItem = { id: 1, name: 'test' };
+      component.select = true;
+
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(true);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      const selectSpy = spyOn(component, 'selectListItem');
+      spyOn(component.itemClick, 'emit');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(selectSpy).not.toHaveBeenCalled();
+      expect(component.itemClick.emit).toHaveBeenCalled();
     });
 
     describe('onAdvancedArrowClick:', () => {
@@ -964,6 +1080,59 @@ describe('PoListViewComponent:', () => {
       });
     });
 
+    describe('onTitleKeyDown:', () => {
+      it('should call `preventDefault`, `stopPropagation` and `onTitleClick` when key is Enter', () => {
+        const testItem = { id: 1, name: 'test' };
+        const keyEvent = {
+          key: 'Enter',
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as any;
+
+        spyOn(component, <any>'onTitleClick');
+
+        component['onTitleKeyDown'](testItem, keyEvent);
+
+        expect(keyEvent.preventDefault).toHaveBeenCalled();
+        expect(keyEvent.stopPropagation).toHaveBeenCalled();
+        expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+      });
+
+      it('should call `preventDefault`, `stopPropagation` and `onTitleClick` when key is Space', () => {
+        const testItem = { id: 1, name: 'test' };
+        const keyEvent = {
+          key: ' ',
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as any;
+
+        spyOn(component, <any>'onTitleClick');
+
+        component['onTitleKeyDown'](testItem, keyEvent);
+
+        expect(keyEvent.preventDefault).toHaveBeenCalled();
+        expect(keyEvent.stopPropagation).toHaveBeenCalled();
+        expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+      });
+
+      it('should not call `onTitleClick` when key is neither Enter nor Space', () => {
+        const testItem = { id: 1, name: 'test' };
+        const keyEvent = {
+          key: 'Tab',
+          preventDefault: jasmine.createSpy('preventDefault'),
+          stopPropagation: jasmine.createSpy('stopPropagation')
+        } as any;
+
+        spyOn(component, <any>'onTitleClick');
+
+        component['onTitleKeyDown'](testItem, keyEvent);
+
+        expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+        expect(keyEvent.stopPropagation).not.toHaveBeenCalled();
+        expect(component['onTitleClick']).not.toHaveBeenCalled();
+      });
+    });
+
     it('onItemKeyDown: should not emit `itemClick` when `isItemClickable` is false', () => {
       const keyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
 
@@ -983,6 +1152,48 @@ describe('PoListViewComponent:', () => {
 
       component['onItemKeyDown'](item, keyEvent);
 
+      expect(component.itemClick.emit).not.toHaveBeenCalled();
+    });
+
+    it('title: should make internal title element focusable and respond to Enter/Space', () => {
+      component.items = [{ id: 1, name: 'title-item' }];
+      component.titleAction.subscribe(() => {});
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const titleEl: HTMLElement = debugElement.querySelector('.po-widget-title-action');
+      expect(titleEl).toBeTruthy('expected to find internal widget title element');
+      expect(titleEl.getAttribute('tabindex')).toBe('0', 'title should be focusable (tabindex=0)');
+
+      const titleSpy = spyOn<any>(component, 'onTitleClick');
+
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+      expect(titleSpy).toHaveBeenCalledWith(component.items[0]);
+
+      titleSpy.calls.reset();
+
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      fixture.detectChanges();
+      expect(titleSpy).toHaveBeenCalledWith(component.items[0]);
+    });
+
+    it('title click should not bubble to item wrapper (stopPropagation)', () => {
+      component.items = [{ id: 1, name: 'title-item' }];
+      component.titleAction.subscribe(() => {});
+      fixture.componentRef.setInput('p-property-title', 'name');
+      fixture.detectChanges();
+
+      const stopPropagationSpy = spyOn(MouseEvent.prototype, 'stopPropagation').and.callThrough();
+      spyOn(component.itemClick, 'emit');
+
+      const titleEl: HTMLElement = debugElement.querySelector('.po-widget-title-action');
+      expect(titleEl).toBeTruthy();
+
+      titleEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+
+      expect(stopPropagationSpy).toHaveBeenCalled();
       expect(component.itemClick.emit).not.toHaveBeenCalled();
     });
 
@@ -1672,6 +1883,601 @@ describe('PoListViewComponent:', () => {
 
       popup.actions = [{ label: 'A', visible: () => false }];
       expect(popup['checkAllActionIsInvisible']()).toBeFalsy();
+    });
+  });
+
+  describe('Accessibility attributes:', () => {
+    it('should set `p-aria-label` on the single (advanced) action button using the action label', () => {
+      component.items = [{ id: 1, name: 'register' }];
+      component.actions = [{ label: 'Editar', action: () => {} }];
+      fixture.detectChanges();
+
+      const button = debugElement.querySelector('po-button.po-list-view-action-advanced');
+      const buttonInstance = fixture.debugElement.query(By.css('po-button.po-list-view-action-advanced'))
+        .componentInstance as PoButtonComponent;
+
+      expect(button).toBeTruthy();
+      expect(buttonInstance.ariaLabel()).toBe('Editar');
+    });
+
+    it('should fallback `p-aria-label` to the item title when the single action has no label', () => {
+      component['propertyTitle'] = 'name';
+      component.items = [{ id: 1, name: 'register' }];
+      component.actions = [{ action: () => {} } as any];
+      fixture.detectChanges();
+
+      const buttonInstance = fixture.debugElement.query(By.css('po-button.po-list-view-action-advanced'))
+        .componentInstance as PoButtonComponent;
+
+      expect(buttonInstance.ariaLabel()).toBe('register');
+    });
+
+    it('should set `p-aria-expanded` to `false` on the inline detail button when detail is hidden', () => {
+      component.items = [{ id: 1, name: 'register', $showDetail: false }];
+      component.listViewDetailTemplate = { showDetail: () => true, templateRef: null };
+      fixture.detectChanges();
+
+      const buttonInstance = fixture.debugElement.query(By.css('.po-list-view-detail-button po-button'))
+        .componentInstance as PoButtonComponent;
+
+      expect(buttonInstance.ariaExpanded).toBe(false);
+    });
+
+    it('should set `p-aria-expanded` to `true` on the inline detail button when detail is shown', () => {
+      component.items = [{ id: 1, name: 'register', $showDetail: true }];
+      component.listViewDetailTemplate = { showDetail: () => true, templateRef: null };
+      fixture.detectChanges();
+
+      const buttonInstance = fixture.debugElement.query(By.css('.po-list-view-detail-button po-button'))
+        .componentInstance as PoButtonComponent;
+
+      expect(buttonInstance.ariaExpanded).toBe(true);
+    });
+
+    it('should expose `aria-setsize` and `aria-posinset` on clickable item cards', () => {
+      component.items = [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' }
+      ];
+      component.itemClick.subscribe(() => {});
+      fixture.detectChanges();
+
+      const wrappers = debugElement.querySelectorAll('.po-list-view-item-wrapper');
+
+      expect(wrappers[0].getAttribute('aria-setsize')).toBe('2');
+      expect(wrappers[0].getAttribute('aria-posinset')).toBe('1');
+      expect(wrappers[1].getAttribute('aria-setsize')).toBe('2');
+      expect(wrappers[1].getAttribute('aria-posinset')).toBe('2');
+    });
+
+    it('should not expose `aria-setsize`/`aria-posinset` when the card is not clickable', () => {
+      component.items = [{ id: 1, name: 'Item 1' }];
+      fixture.detectChanges();
+
+      const wrapper = debugElement.querySelector('.po-list-view-item-wrapper');
+
+      expect(wrapper.getAttribute('aria-setsize')).toBeNull();
+      expect(wrapper.getAttribute('aria-posinset')).toBeNull();
+    });
+
+    it('should not expose `aria-setsize`/`aria-posinset` on single-selection clickable cards', () => {
+      component.items = [{ id: 1, name: 'Item 1' }];
+      component.select = true;
+      component.singleSelect = true;
+      component.itemClick.subscribe(() => {});
+      fixture.detectChanges();
+
+      const wrapper = debugElement.querySelector('.po-list-view-item-wrapper');
+
+      expect(wrapper.getAttribute('aria-setsize')).toBeNull();
+      expect(wrapper.getAttribute('aria-posinset')).toBeNull();
+    });
+  });
+
+  describe('Keyboard accessibility for title actions:', () => {
+    it('should render focusable wrapper when title action is available and item click is inactive', () => {
+      component.titleAction.subscribe(() => {});
+      component.items = [{ id: 1, name: 'test' }];
+      fixture.detectChanges();
+
+      const itemWrapper = debugElement.querySelector('.po-list-view-item-wrapper');
+
+      expect(itemWrapper.getAttribute('tabindex')).toBe('0');
+      expect(itemWrapper.getAttribute('role')).toBe('button');
+    });
+
+    it('onItemKeyDown: should call `onTitleClick` when title is clickable and item click is not active', () => {
+      const testItem = { id: 1, name: 'test' };
+      const keyEvent = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      spyOn(component, <any>'onTitleClick');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).toHaveBeenCalled();
+      expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+    });
+
+    it('onItemKeyDown: should call `onTitleClick` when key is Space, title is clickable and item click is not active', () => {
+      const testItem = { id: 1, name: 'test' };
+      const keyEvent = {
+        key: ' ',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      spyOn(component, <any>'onTitleClick');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).toHaveBeenCalled();
+      expect(component['onTitleClick']).toHaveBeenCalledWith(testItem);
+    });
+
+    it('onItemKeyDown: should not call `onTitleClick` when title is clickable but key is neither Enter nor Space', () => {
+      const testItem = { id: 1, name: 'test' };
+      const keyEvent = {
+        key: 'Tab',
+        preventDefault: jasmine.createSpy('preventDefault')
+      } as any;
+
+      spyOn(component, <any>'isItemClickable').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      spyOn(component, <any>'onTitleClick');
+
+      component['onItemKeyDown'](testItem, keyEvent);
+
+      expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+      expect(component['onTitleClick']).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should toggle selection when Enter is pressed on a multiple checkbox item', () => {
+    component.select = true;
+    component.items = [{ id: 1, name: 'test', $selected: false }];
+    fixture.detectChanges();
+
+    const checkbox = debugElement.querySelector('.po-list-view-select po-checkbox');
+    const keydownEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+
+    checkbox.dispatchEvent(keydownEvent);
+    fixture.detectChanges();
+
+    expect(component.items[0].$selected).toBeTrue();
+  });
+
+  it('should toggle selection when Space is pressed on a multiple checkbox item', () => {
+    component.select = true;
+    component.items = [{ id: 1, name: 'test', $selected: false }];
+    fixture.detectChanges();
+
+    const checkbox = debugElement.querySelector('.po-list-view-select po-checkbox');
+    const keydownEvent = new KeyboardEvent('keydown', { key: ' ', code: 'Space', bubbles: true, cancelable: true });
+
+    checkbox.dispatchEvent(keydownEvent);
+    fixture.detectChanges();
+
+    expect(component.items[0].$selected).toBeTrue();
+  });
+
+  describe('onMultipleSelectionKeydown:', () => {
+    it('should toggle selection when key is `Enter`', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: 'Enter',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should toggle selection when `keyCode` is 13 (Enter)', () => {
+      const testItem = { id: 1, name: 'test', $selected: true };
+      const event = {
+        key: '',
+        keyCode: 13,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, false);
+    });
+
+    it('should toggle selection when key is `Spacebar`', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: 'Spacebar',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should toggle selection when `code` is `Space`', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: '',
+        code: 'Space',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should toggle selection when `keyCode` is 32 (Space)', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: '',
+        keyCode: 32,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(changeSpy).toHaveBeenCalledWith(testItem, true);
+    });
+
+    it('should not toggle selection when key is neither Enter nor Space', () => {
+      const testItem = { id: 1, name: 'test', $selected: false };
+      const event = {
+        key: 'Tab',
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation')
+      } as any;
+      const changeSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['onMultipleSelectionKeydown'](testItem, event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(event.stopPropagation).not.toHaveBeenCalled();
+      expect(changeSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updateTitleFocusableElements:', () => {
+    function buildRoot(
+      options: {
+        withTitle?: boolean;
+        withContainer?: boolean;
+        withCheckbox?: boolean;
+        titleTabindex?: string;
+        bound?: boolean;
+        checkboxBound?: boolean;
+      } = {}
+    ): { root: HTMLElement; wrapper: HTMLElement; titleEl: HTMLElement | null; checkboxEl: HTMLElement | null } {
+      const root = document.createElement('div');
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('po-list-view-item-wrapper');
+
+      let titleEl: HTMLElement | null = null;
+      if (options.withTitle) {
+        titleEl = document.createElement('span');
+        titleEl.classList.add('po-widget-title-action');
+        if (options.titleTabindex !== undefined) {
+          titleEl.setAttribute('tabindex', options.titleTabindex);
+        }
+        wrapper.appendChild(titleEl);
+      }
+
+      if (options.withContainer) {
+        const container = document.createElement('div');
+        container.classList.add('po-widget-container');
+        wrapper.appendChild(container);
+      }
+
+      let checkboxEl: HTMLElement | null = null;
+      if (options.withCheckbox) {
+        checkboxEl = document.createElement('po-checkbox');
+        wrapper.appendChild(checkboxEl);
+      }
+
+      if (options.bound) {
+        wrapper.setAttribute('data-po-list-view-bound', '1');
+      }
+      if (options.checkboxBound) {
+        wrapper.setAttribute('data-po-list-view-checkbox-bound', '1');
+      }
+
+      root.appendChild(wrapper);
+      return { root, wrapper, titleEl, checkboxEl };
+    }
+
+    function mockRoot(root: HTMLElement): void {
+      Object.defineProperty(component['elementRef'], 'nativeElement', {
+        get: () => root,
+        configurable: true
+      });
+    }
+
+    it('should return early when there are no items', () => {
+      component.items = undefined;
+      const { root } = buildRoot({ withTitle: true });
+      mockRoot(root);
+      const setAttrSpy = spyOn(component['renderer'], 'setAttribute');
+
+      component['updateTitleFocusableElements']();
+
+      expect(setAttrSpy).not.toHaveBeenCalled();
+    });
+
+    it('should return early when the root element is not available', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      mockRoot(null);
+      const setAttrSpy = spyOn(component['renderer'], 'setAttribute');
+
+      expect(() => component['updateTitleFocusableElements']()).not.toThrow();
+      expect(setAttrSpy).not.toHaveBeenCalled();
+    });
+
+    it('should set tabindex=0 on title and tabindex=-1 on container when title is clickable and not yet focusable', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, withContainer: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBe('0');
+      expect(wrapper.querySelector('.po-widget-container').getAttribute('tabindex')).toBe('-1');
+      expect(wrapper.getAttribute('data-po-list-view-bound')).toBe('1');
+    });
+
+    it('should not set tabindex again when title already has tabindex=0', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true, titleTabindex: '0' });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      const setAttrSpy = spyOn(component['renderer'], 'setAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      const titleTabindexCalls = setAttrSpy.calls
+        .allArgs()
+        .filter(args => args[0] === titleEl && args[1] === 'tabindex');
+      expect(titleTabindexCalls.length).toBe(0);
+    });
+
+    it('should not bind the keydown handler again when the wrapper is already bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true, bound: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      const addListenerSpy = spyOn(titleEl, 'addEventListener');
+
+      component['updateTitleFocusableElements']();
+
+      expect(addListenerSpy).not.toHaveBeenCalled();
+    });
+
+    it('should call `onTitleClick` when the bound title handler receives Enter/Space and ignore other keys', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(true);
+      const onTitleClickSpy = spyOn(component, <any>'onTitleClick');
+
+      component['updateTitleFocusableElements']();
+
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(onTitleClickSpy).toHaveBeenCalledWith(component.items[0]);
+
+      onTitleClickSpy.calls.reset();
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      expect(onTitleClickSpy).toHaveBeenCalledWith(component.items[0]);
+
+      onTitleClickSpy.calls.reset();
+      titleEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+      expect(onTitleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('should remove tabindex and bound attribute when title is present but not clickable', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, titleTabindex: '0', bound: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBeNull();
+      expect(wrapper.hasAttribute('data-po-list-view-bound')).toBe(false);
+    });
+
+    it('should not remove attributes when title is not clickable and has no tabindex nor bound flag', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, titleEl } = buildRoot({ withTitle: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeAttrSpy = spyOn(component['renderer'], 'removeAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBeNull();
+      expect(removeAttrSpy).not.toHaveBeenCalled();
+    });
+
+    it('should remove only the tabindex when title is not clickable, has tabindex but is not bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, titleTabindex: '0' });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeAttrSpy = spyOn(component['renderer'], 'removeAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(titleEl.getAttribute('tabindex')).toBeNull();
+      expect(removeAttrSpy).toHaveBeenCalledWith(titleEl, 'tabindex');
+      expect(wrapper.hasAttribute('data-po-list-view-bound')).toBe(false);
+    });
+
+    it('should remove only the bound attribute when title is not clickable, is bound but has no tabindex', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, titleEl } = buildRoot({ withTitle: true, bound: true });
+      mockRoot(root);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeAttrSpy = spyOn(component['renderer'], 'removeAttribute').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(removeAttrSpy).not.toHaveBeenCalledWith(titleEl, 'tabindex');
+      expect(wrapper.hasAttribute('data-po-list-view-bound')).toBe(false);
+    });
+
+    it('should bind the checkbox capture handler when select is on and single selection is off', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      component.select = true;
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+
+      component['updateTitleFocusableElements']();
+
+      expect(wrapper.getAttribute('data-po-list-view-checkbox-bound')).toBe('1');
+      expect((checkboxEl as any).__po_list_view_space_capture).toBeDefined();
+    });
+
+    it('should call `onMultipleSelectionChange` when the checkbox handler receives Enter/Space and ignore other keys', () => {
+      component.items = [{ id: 1, name: 'test', $selected: false }];
+      component.select = true;
+      const { root, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const multiSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['updateTitleFocusableElements']();
+
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(multiSpy).toHaveBeenCalledWith(component.items[0], true);
+
+      multiSpy.calls.reset();
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', code: 'Space' }));
+      expect(multiSpy).toHaveBeenCalledWith(component.items[0], true);
+
+      multiSpy.calls.reset();
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+      expect(multiSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not call `onMultipleSelectionChange` from checkbox handler when there is no item at the index', () => {
+      component.items = [{ id: 1, name: 'test', $selected: false }];
+      component.select = true;
+      const { root, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const multiSpy = spyOn(component, <any>'onMultipleSelectionChange');
+
+      component['updateTitleFocusableElements']();
+
+      // O setter de `items` normaliza valores não-array para `[]` (truthy), então o campo privado
+      // é zerado diretamente para tornar `this.items` falsy e exercitar o ramo `: undefined`
+      // do ternário `this.items ? this.items[index] : undefined` ao disparar o handler.
+      component['_items'] = undefined;
+      checkboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(multiSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not bind the checkbox handler again when the wrapper is already checkbox-bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      component.select = true;
+      const { root, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      mockRoot(root);
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const addListenerSpy = spyOn(checkboxEl, 'addEventListener');
+
+      component['updateTitleFocusableElements']();
+
+      expect(addListenerSpy).not.toHaveBeenCalled();
+    });
+
+    it('should unbind the checkbox handler when select/single-selection no longer allow multiple selection', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      const existingHandler = () => {};
+      (checkboxEl as any).__po_list_view_space_capture = existingHandler;
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeListenerSpy = spyOn(checkboxEl, 'removeEventListener').and.callThrough();
+
+      component['updateTitleFocusableElements']();
+
+      expect(removeListenerSpy).toHaveBeenCalledWith('keydown', existingHandler, true);
+      expect((checkboxEl as any).__po_list_view_space_capture).toBeUndefined();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
+    });
+
+    it('should not throw when checkbox is bound but there is no stored handler to remove', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+
+      expect(() => component['updateTitleFocusableElements']()).not.toThrow();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
+      void checkboxEl;
+    });
+
+    it('should swallow errors thrown by `removeEventListener` and still clean up handler and attribute', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true, checkboxBound: true });
+      const existingHandler = () => {};
+      (checkboxEl as any).__po_list_view_space_capture = existingHandler;
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      spyOn(checkboxEl, 'removeEventListener').and.throwError('remove error');
+
+      expect(() => component['updateTitleFocusableElements']()).not.toThrow();
+      expect((checkboxEl as any).__po_list_view_space_capture).toBeUndefined();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
+    });
+
+    it('should not enter the unbind branch when checkbox exists but the wrapper is not checkbox-bound', () => {
+      component.items = [{ id: 1, name: 'test' }];
+      const { root, wrapper, checkboxEl } = buildRoot({ withCheckbox: true });
+      mockRoot(root);
+      component.select = false;
+      spyOnProperty(component, 'isSingleSelection').and.returnValue(false);
+      spyOn(component, <any>'isTitleClickable').and.returnValue(false);
+      const removeListenerSpy = spyOn(checkboxEl, 'removeEventListener');
+
+      component['updateTitleFocusableElements']();
+
+      expect(removeListenerSpy).not.toHaveBeenCalled();
+      expect(wrapper.hasAttribute('data-po-list-view-checkbox-bound')).toBe(false);
     });
   });
 });
