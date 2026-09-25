@@ -1,5 +1,4 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { DecimalPipe } from '@angular/common';
 import {
@@ -11,6 +10,7 @@ import {
   DoCheck,
   ElementRef,
   IterableDiffers,
+  NgZone,
   OnDestroy,
   OnInit,
   QueryList,
@@ -135,7 +135,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild('filterInput') filterInput: ElementRef;
   @ViewChild('poSearchInput', { read: ElementRef, static: true }) poSearchInput: ElementRef;
   @ViewChild(PoSearchAiComponent) searchAiComponent: PoSearchAiComponent;
-  @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
+  @ViewChild('virtualScrollViewport', { read: ElementRef, static: false }) virtualScrollViewport: ElementRef;
 
   poNotification = inject(PoNotificationService);
 
@@ -154,6 +154,24 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   sizeLoading: string = 'sm';
   headerWidth: number;
 
+  /** Cache de offsets left para colunas fixas (evita a diretiva pFrozenColumn imperativa) */
+  private readonly _frozenColumnOffsets: Map<string, number> = new Map();
+  private _frozenColumnOffsetsKey: string = '';
+  private _lastFrozenColumnProperty: string = '';
+
+  /** Virtual scroll state */
+  vsFirst: number = 0;
+  vsLast: number = 0;
+  vsVisibleItems: Array<any> = [];
+  vsContentTransform: string = 'translateY(0px)';
+  vsSpacerHeight: number = 0;
+  vsBottomSpacerHeight: number = 0;
+  private vsNumToleratedItems: number = 0;
+  private vsScrolling: boolean = false;
+  private vsRafId: number = 0;
+  private vsPendingScrollTop: number = -1;
+  private vsScrollUnlisten: (() => void) | null = null;
+
   close: PoModalAction = {
     action: () => {
       this.modalDelete.close();
@@ -171,6 +189,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
+  private _displayedColumnsCache: Array<string> = [];
+  private _displayedColumnsCacheKey: string = '';
   private readonly differ;
   private footerHeight;
   private timeoutResize;
@@ -206,11 +226,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
-    renderer: Renderer2,
+    private readonly renderer: Renderer2,
     poLanguageService: PoLanguageService,
     private readonly changeDetector: ChangeDetectorRef,
     private readonly decimalPipe: DecimalPipe,
-    private readonly defaultService: PoTableService
+    private readonly defaultService: PoTableService,
+    private readonly ngZone: NgZone
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
@@ -293,14 +314,65 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.draggable;
   }
 
-  public get inverseOfTranslation(): string {
-    if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
-      return '-0px';
+  get displayedColumns(): Array<string> {
+    const columns: Array<string> = [];
+
+    if (this.hasSelectableColumn) {
+      columns.push('po-select');
     }
 
-    const offset = this.viewPort['_renderedContentOffset'];
+    if (
+      (this.hasMasterDetailColumn || this.hasRowTemplate) &&
+      this.hasMainColumns &&
+      !this.hasRowTemplateWithArrowDirectionRight
+    ) {
+      columns.push('po-master-detail-left');
+    }
 
-    return `-${offset}px`;
+    if (
+      !this.actionRight &&
+      this.hasItems &&
+      this.hasMainColumns &&
+      (this.visibleActions.length > 1 || this.isSingleAction)
+    ) {
+      columns.push('po-actions-left');
+    }
+
+    if (this.hasMainColumns) {
+      for (const col of this.mainColumns) {
+        columns.push(col.property);
+      }
+    }
+
+    if (
+      this.hasRowTemplateWithArrowDirectionRight &&
+      this.hasMainColumns &&
+      (this.hasVisibleActions || this.hideColumnsManager)
+    ) {
+      columns.push('po-master-detail-right');
+    }
+
+    if (
+      this.hasVisibleActions &&
+      this.actionRight &&
+      this.hasItems &&
+      this.hasMainColumns &&
+      (this.visibleActions.length > 1 || this.isSingleAction)
+    ) {
+      columns.push('po-actions-right');
+    }
+
+    const key = columns.join(',');
+    if (key !== this._displayedColumnsCacheKey) {
+      this._displayedColumnsCacheKey = key;
+      this._displayedColumnsCache = columns;
+    }
+
+    return this._displayedColumnsCache;
+  }
+
+  public get inverseOfTranslation(): string {
+    return '-0px';
   }
 
   ngOnInit() {
@@ -320,6 +392,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.changeSizeLoading();
     this.applyFixedColumns();
     this.initializeVisibleElement();
+    this.setupVirtualScrollListener();
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -330,6 +403,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   ngDoCheck() {
+    // Skip expensive checks during virtual scroll update (vsScrolling flag is true)
+    if (this.vsScrolling) {
+      return;
+    }
+
     this.applyFixedColumns();
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
@@ -344,6 +422,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+
+    if (this.vsRafId) {
+      cancelAnimationFrame(this.vsRafId);
+    }
+
+    if (this.vsScrollUnlisten) {
+      this.vsScrollUnlisten();
+    }
   }
 
   /**
@@ -666,6 +752,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return index;
   }
 
+  /**
+   * TrackBy para virtual scroll — usa a referência do item para estabilidade.
+   * Evita re-criação de DOM quando os mesmos itens aparecem em posições diferentes.
+   */
+  vsTrackBy(index: number, item: any): any {
+    return item;
+  }
+
+  getRowIndex(row: any): number {
+    return this.filteredItems.indexOf(row);
+  }
+
   validateTableAction(row: any, tableAction: any) {
     if (typeof tableAction.disabled === 'function') {
       return tableAction.disabled(row);
@@ -683,6 +781,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       this.sortArray(this.sortedColumn.property, this.sortedColumn.ascending, items);
     } else {
       this.filteredItems = items;
+    }
+
+    if (this.virtualScroll) {
+      this.vsCalculateOptions();
     }
   }
 
@@ -843,8 +945,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   drop(event: CdkDragDrop<Array<string>>) {
-    if (!this.mainColumns[event.currentIndex].fixed) {
-      moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
+    const previousIndex = event.previousIndex;
+    const currentIndex = event.currentIndex;
+
+    if (
+      previousIndex >= 0 &&
+      currentIndex >= 0 &&
+      currentIndex < this.mainColumns.length &&
+      !this.mainColumns[currentIndex].fixed
+    ) {
+      moveItemInArray(this.mainColumns, previousIndex, currentIndex);
 
       if (this.hideColumnsManager === false) {
         this.newOrderColumns = this.mainColumns;
@@ -894,13 +1004,171 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.columns.some(item => item.fixed === true);
   }
 
+  /**
+   * Retorna o offset left (em px) para uma coluna fixa no virtual scroll.
+   * Calcula a soma acumulada das larguras das colunas fixas anteriores.
+   * Usa cache para evitar recálculos desnecessários a cada CD.
+   */
+  getFrozenColumnLeft(column: PoTableColumn): string | null {
+    if (!column.fixed) {
+      return null;
+    }
+
+    // Recalcula apenas se as colunas mudaram
+    const key = this.mainColumns.map(c => `${c.property}:${c.fixed}:${c.width}`).join('|');
+    if (key !== this._frozenColumnOffsetsKey) {
+      this._frozenColumnOffsetsKey = key;
+      this._frozenColumnOffsets.clear();
+
+      let accumulatedLeft = 0;
+      for (const col of this.mainColumns) {
+        if (col.fixed) {
+          this._frozenColumnOffsets.set(col.property, accumulatedLeft);
+          const width = Number.parseInt(col.width, 10) || 0;
+          accumulatedLeft += width;
+        }
+      }
+
+      // Determina qual é a última coluna fixa
+      const fixedCols = this.mainColumns.filter(c => c.fixed);
+      this._lastFrozenColumnProperty = fixedCols.length ? fixedCols.at(-1).property : '';
+    }
+
+    const offset = this._frozenColumnOffsets.get(column.property);
+    return offset === undefined ? null : `${offset}px`;
+  }
+
+  /** Retorna true se a coluna é a última coluna fixa (para aplicar box-shadow de borda). */
+  isLastFrozenColumn(column: PoTableColumn): boolean {
+    if (!column.fixed) {
+      return false;
+    }
+    // Garante que o cache está atualizado
+    this.getFrozenColumnLeft(column);
+    return column.property === this._lastFrozenColumnProperty;
+  }
+
   protected calculateHeightTableContainer(height: number) {
     this.itemSize =
       PO_TABLE_ROW_HEIGHT_BY_SPACING[this.spacing] ?? PO_TABLE_ROW_HEIGHT_BY_SPACING[PoTableColumnSpacing.Medium];
     this.heightTableContainer = height ? height - this.getHeightTableFooter() : undefined;
     this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - this.itemSize : undefined;
     this.setTableOpacity(1);
+
+    if (this.virtualScroll && this.heightTableContainer) {
+      this.vsCalculateOptions();
+    }
+
     this.changeDetector.markForCheck();
+  }
+
+  /**
+   * Calcula quantos itens cabem no viewport e define o buffer (tolerância).
+   * Usa buffer equivalente ao cdk-virtual-scroll-viewport com minBufferPx = heightTableContainer.
+   */
+  vsCalculateOptions(): void {
+    if (!this.itemSize || !this.heightTableContainer) {
+      return;
+    }
+
+    const numItemsInViewport = Math.ceil(this.heightTableContainer / this.itemSize);
+    // Buffer = 1 viewport inteiro em cada direção (equivalente ao minBufferPx/maxBufferPx do CDK no master)
+    this.vsNumToleratedItems = numItemsInViewport;
+
+    const totalItems = this.filteredItems?.length || 0;
+    this.vsLast = Math.min(numItemsInViewport + 2 * this.vsNumToleratedItems, totalItems);
+    this.vsFirst = 0;
+
+    this.vsUpdateVisibleItems();
+  }
+
+  /**
+   * Configura o listener de scroll fora do NgZone para evitar que cada evento de scroll
+   * dispare change detection no Angular.
+   */
+  private setupVirtualScrollListener(): void {
+    if (!this.virtualScroll || !this.virtualScrollViewport) {
+      return;
+    }
+
+    const viewportEl = this.virtualScrollViewport.nativeElement;
+
+    this.ngZone.runOutsideAngular(() => {
+      this.vsScrollUnlisten = this.renderer.listen(viewportEl, 'scroll', () => {
+        this.vsPendingScrollTop = viewportEl.scrollTop;
+
+        if (!this.vsRafId) {
+          this.vsRafId = requestAnimationFrame(() => {
+            this.vsRafId = 0;
+            this.vsProcessScroll(viewportEl);
+          });
+        }
+      });
+    });
+
+    // Configura infinite scroll no virtual viewport (se habilitado)
+    if (this.infiniteScroll && !this.subscriptionScrollEvent) {
+      this.includeInfiniteScrollForVirtualViewport(viewportEl);
+    }
+  }
+
+  /**
+   * Handler do evento de scroll no viewport virtual (DEPRECATED — mantido para compatibilidade do template).
+   */
+  onVirtualScroll(event: Event): void {
+    // No-op: scroll é agora gerenciado via listener fora do NgZone em setupVirtualScrollListener
+  }
+
+  private vsProcessScroll(target: HTMLElement): void {
+    if (this.vsScrolling) {
+      return;
+    }
+
+    const scrollTop = this.vsPendingScrollTop;
+    const totalItems = this.filteredItems?.length || 0;
+    const numItemsInViewport = Math.ceil(this.heightTableContainer / this.itemSize);
+
+    const currentIndex = Math.floor(scrollTop / this.itemSize);
+
+    const newFirst = Math.max(0, currentIndex - this.vsNumToleratedItems);
+    const newLast = Math.min(totalItems, currentIndex + numItemsInViewport + this.vsNumToleratedItems);
+
+    // Hysteresis: só atualiza se o shift for significativo (> 25% do buffer)
+    const threshold = Math.max(1, Math.floor(this.vsNumToleratedItems / 4));
+    const firstDiff = Math.abs(newFirst - this.vsFirst);
+    const lastDiff = Math.abs(newLast - this.vsLast);
+
+    if (firstDiff >= threshold || lastDiff >= threshold) {
+      this.vsScrolling = true;
+      this.vsFirst = newFirst;
+      this.vsLast = newLast;
+      this.vsUpdateVisibleItems();
+
+      // Roda detectChanges dentro do NgZone para atualizar o DOM
+      this.ngZone.run(() => {
+        this.changeDetector.detectChanges();
+      });
+
+      // Restaura o scrollTop correto após o DOM ser atualizado
+      target.scrollTop = scrollTop;
+
+      requestAnimationFrame(() => {
+        this.vsScrolling = false;
+      });
+    }
+  }
+
+  /**
+   * Atualiza os items visíveis, o transform e o spacer.
+   */
+  private vsUpdateVisibleItems(): void {
+    const items = this.filteredItems || [];
+    const totalItems = items.length;
+
+    this.vsVisibleItems = items.slice(this.vsFirst, this.vsLast);
+    this.vsContentTransform = `translateY(${this.vsFirst * this.itemSize}px)`;
+    this.vsSpacerHeight = totalItems * this.itemSize;
+    this.vsBottomSpacerHeight = Math.max(0, (totalItems - this.vsLast) * this.itemSize);
   }
 
   protected verifyCalculateHeightTableContainer() {
@@ -913,18 +1181,20 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
-      let scrollHeight = 0;
-
       if (this.virtualScroll) {
-        scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
+        // No virtual scroll, o viewport é o container de scroll
+        const viewportEl = this.virtualScrollViewport?.nativeElement;
+        if (viewportEl) {
+          this.includeInfiniteScrollForVirtualViewport(viewportEl);
+        }
       } else {
-        scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
-      }
+        const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
 
-      if (scrollHeight >= this.height) {
-        this.includeInfiniteScroll();
-      } else {
-        this.infiniteScroll = false;
+        if (scrollHeight >= this.height) {
+          this.includeInfiniteScroll();
+        } else {
+          this.infiniteScroll = false;
+        }
       }
     }
     this.changeDetector.detectChanges();
@@ -968,6 +1238,16 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
   }
 
+  /** Override para sincronizar o virtual scroll após ordenação */
+  sortArray(column: PoTableColumn, ascending: boolean, item?: Array<any>) {
+    super.sortArray(column, ascending, item);
+
+    if (this.virtualScroll) {
+      // Mantém a posição de scroll atual e apenas recalcula os itens visíveis
+      this.vsUpdateVisibleItems();
+    }
+  }
+
   private checkChangesItems() {
     const changesItems = this.differ.diff(this.items);
 
@@ -977,6 +1257,11 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
     if (changesItems && !this.hasColumns && this.hasItems) {
       this.columns = this.getDefaultColumns(this.items[0]);
+    }
+
+    // Quando itens mudam (ex: infinite scroll), atualiza o virtual scroll mantendo a posição
+    if (changesItems && this.virtualScroll && this.hasItems) {
+      this.vsUpdateVisibleItems();
     }
   }
 
@@ -1081,26 +1366,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   private hasInfiniteScroll(): boolean {
-    let scrollHeight = 0;
+    if (this.virtualScroll) {
+      // No virtual scroll, o scroll height é virtual (vsSpacerHeight), sempre > height
+      return this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height > 0;
+    }
 
-    if (this.virtualScroll && this.tableVirtualScroll) {
-      scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
-    }
-    if (!this.virtualScroll && this.tableScrollable) {
-      scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
-    }
+    const scrollHeight = this.tableScrollable?.nativeElement?.scrollHeight || 0;
 
     return this.infiniteScroll && this.hasItems && !this.subscriptionScrollEvent && this.height > 0 && scrollHeight > 0;
   }
 
   private includeInfiniteScroll(): void {
-    let element: HTMLElement | null = null;
-
-    if (this.virtualScroll) {
-      element = this.tableVirtualScroll?.nativeElement;
-    } else {
-      element = this.tableScrollable.nativeElement.closest('.po-table-container-overflow');
-    }
+    const element = this.tableScrollable?.nativeElement?.closest('.po-table-container-overflow');
 
     if (element) {
       this.scrollEvent$ = this.defaultService.scrollListener(element);
@@ -1108,6 +1385,15 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     }
 
     this.changeDetector.detectChanges();
+  }
+
+  private includeInfiniteScrollForVirtualViewport(viewportEl: HTMLElement): void {
+    if (this.subscriptionScrollEvent) {
+      return;
+    }
+
+    this.scrollEvent$ = this.defaultService.scrollListener(viewportEl);
+    this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => this.showMoreInfiniteScroll(event));
   }
 
   private mergeCustomIcons(rowIcons: Array<string>, customIcons: Array<any>) {
