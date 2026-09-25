@@ -151,7 +151,8 @@ export class PoTagComponent extends PoTagBaseComponent implements OnInit {
   };
 
   getWidthTag() {
-    return this.tagContainer.nativeElement.offsetWidth > 155;
+    const span = this.tagContainer.nativeElement.firstElementChild;
+    return span ? span.scrollWidth > this.tagContainer.nativeElement.offsetWidth : false;
   }
 
   setAriaLabel() {
