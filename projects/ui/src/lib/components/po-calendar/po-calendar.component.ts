@@ -339,11 +339,9 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     this.displayMonths = this.poCalendarLangService.getMonthsArray();
 
     const currentYear = new Date().getFullYear();
+    const rangeLimit = this.yearRangeLimit ?? 150;
 
-    this.displayYears = Array.from(
-      { length: this.yearRangeLimit * 2 + 1 },
-      (_, i) => currentYear - this.yearRangeLimit + i
-    );
+    this.displayYears = Array.from({ length: rangeLimit * 2 + 1 }, (_, i) => currentYear - rangeLimit + i);
   }
 
   getActivateDate(partType) {

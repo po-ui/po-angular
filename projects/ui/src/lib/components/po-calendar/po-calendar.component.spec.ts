@@ -2071,6 +2071,51 @@ describe('PoCalendarComponent:', () => {
 
         expect(component.displayYears.length).toBe(0);
       });
+
+      it('should initialize displayYears with 301 items when yearRangeLimit is undefined', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component.yearRangeLimit = undefined;
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should initialize displayYears with 301 items when yearRangeLimit is null', () => {
+        component.mode = PoCalendarMode.Year;
+        component.yearRangeLimit = null;
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should fallback to 150 when internal _yearRangeLimit is bypassed as undefined', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component['_yearRangeLimit'] = undefined;
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should fallback to 150 when internal _yearRangeLimit is bypassed as null', () => {
+        component.mode = PoCalendarMode.Year;
+        component['_yearRangeLimit'] = null;
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should initialize displayYears respecting custom yearRangeLimit', () => {
+        component.mode = PoCalendarMode.Year;
+        component.yearRangeLimit = 10;
+
+        component.ngOnInit();
+
+        expect(component.displayYears.length).toBe(21);
+      });
     });
   });
 
