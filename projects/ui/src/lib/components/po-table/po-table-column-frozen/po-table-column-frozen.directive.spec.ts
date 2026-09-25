@@ -1,5 +1,5 @@
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
-import { Component, DebugElement, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, DebugElement, ElementRef, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { PoTableColumnFrozenDirective } from './po-table-column-frozen.directive';
@@ -10,6 +10,7 @@ import { PoTableColumnFrozenDirective } from './po-table-column-frozen.directive
       <div pFrozenColumn [pFrozenColumn]="frozen" [alignFrozen]="alignFrozen"></div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestHostComponent {

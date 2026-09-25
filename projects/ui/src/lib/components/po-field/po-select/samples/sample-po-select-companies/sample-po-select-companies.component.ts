@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoSelectOption, PoSelectOptionGroup } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-select-companies',
   templateUrl: './sample-po-select-companies.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSelectCompaniesComponent {

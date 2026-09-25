@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoImageBaseComponent } from './po-image-base.component';
 
 /**
@@ -26,6 +26,7 @@ import { PoImageBaseComponent } from './po-image-base.component';
 @Component({
   selector: 'po-image',
   templateUrl: './po-image.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoImageComponent extends PoImageBaseComponent {}

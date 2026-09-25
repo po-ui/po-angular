@@ -1,7 +1,7 @@
 import { SimpleChange } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoSlideCirclesComponent } from './po-slide-circles/po-slide-circles.component';
 import { PoSlideComponent } from './po-slide.component';
@@ -16,8 +16,9 @@ describe('PoSlideComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), BrowserAnimationsModule],
-      declarations: [PoSlideCirclesComponent, PoSlideComponent, PoSlideControlComponent, PoSlideItemComponent]
+      imports: [RouterModule.forRoot([])],
+      declarations: [PoSlideCirclesComponent, PoSlideComponent, PoSlideControlComponent, PoSlideItemComponent],
+      providers: [provideLocationMocks()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoSlideComponent);
@@ -323,36 +324,53 @@ describe('PoSlideComponent:', () => {
       expect(component['setHeight']).toHaveBeenCalledWith(slideHeight);
     });
 
-    it(`animate: should call 'buildTransitionAnimation' with offset if has elements`, () => {
+    it(`animate: should call element.animate with offset if has elements`, () => {
       const offset = 400;
 
       spyOnProperty(component, <any>'hasElements').and.returnValue(true);
-      spyOn(component, <any>'buildTransitionAnimation').and.callThrough();
+      spyOn(component['slide'].nativeElement, 'animate').and.returnValue({ cancel: () => {} });
 
       component['animate'](offset);
 
-      expect(component['buildTransitionAnimation']).toHaveBeenCalledWith(offset);
+      expect(component['slide'].nativeElement.animate).toHaveBeenCalledWith(
+        [{ transform: 'translateX(-0px)' }, { transform: 'translateX(-400px)' }],
+        { duration: 250, easing: 'ease', fill: 'forwards' }
+      );
     });
 
-    it(`animate: shouldn't call 'buildTransitionAnimation' with offset if doesn't have elements`, () => {
+    it(`animate: shouldn't call element.animate if doesn't have elements`, () => {
       const offset = 400;
 
       spyOnProperty(component, <any>'hasElements').and.returnValue(false);
-      spyOn(component, <any>'buildTransitionAnimation');
+      spyOn(component['slide'].nativeElement, 'animate');
 
       component['animate'](offset);
 
-      expect(component['buildTransitionAnimation']).not.toHaveBeenCalled();
+      expect(component['slide'].nativeElement.animate).not.toHaveBeenCalled();
     });
 
-    it(`buildTransitionAnimation: should call builder`, () => {
-      const offset = 400;
+    it(`animate: should cancel previous animation before starting new one`, () => {
+      spyOnProperty(component, <any>'hasElements').and.returnValue(true);
+      const cancelSpy = jasmine.createSpy('cancel');
+      component['currentAnimation'] = { cancel: cancelSpy } as any;
+      spyOn(component['slide'].nativeElement, 'animate').and.returnValue({ cancel: () => {} });
 
-      spyOn(component['builder'], 'build').and.callThrough();
+      component['animate'](200);
 
-      component['buildTransitionAnimation'](offset);
+      expect(cancelSpy).toHaveBeenCalled();
+    });
 
-      expect(component['builder'].build).toHaveBeenCalled();
+    it(`animate: should track previousOffset for smooth transitions`, () => {
+      spyOnProperty(component, <any>'hasElements').and.returnValue(true);
+      spyOn(component['slide'].nativeElement, 'animate').and.returnValue({ cancel: () => {} });
+
+      component['animate'](400);
+      component['animate'](0);
+
+      expect(component['slide'].nativeElement.animate).toHaveBeenCalledWith(
+        [{ transform: 'translateX(-400px)' }, { transform: 'translateX(-0px)' }],
+        { duration: 250, easing: 'ease', fill: 'forwards' }
+      );
     });
 
     it(`createArrayForTemplate: should update 'slideItems' with array of any.`, () => {
@@ -581,10 +599,12 @@ describe('PoSlideComponent:', () => {
         component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
         fixture.detectChanges();
 
-        const interval = 1000;
         spyOn(component, 'next');
+        spyOnProperty(component, <any>'hasElements').and.returnValue(true);
+        spyOnProperty(component, 'hasSlides').and.returnValue(true);
 
-        component.interval = interval;
+        component.interval = 1000;
+        component['startInterval']();
         tick(2000);
         component['cancelInterval']();
 
@@ -597,6 +617,9 @@ describe('PoSlideComponent:', () => {
     it(`hasElements: should return true if has 'slides' to create 'itemsElements'`, () => {
       component.slides = [{ alt: '1' }, { alt: '2' }, { alt: '3' }, { alt: '4' }];
       fixture.detectChanges();
+
+      // Simular que o elemento tem dimensões visíveis no DOM
+      Object.defineProperty(component['slide'].nativeElement, 'offsetWidth', { value: 800, configurable: true });
 
       expect(component['hasElements']).toBe(true);
     });

@@ -10,7 +10,8 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
@@ -121,6 +122,7 @@ const poMenuRootLevel = 1;
   selector: 'po-menu',
   templateUrl: './po-menu.component.html',
   providers: [PoMenuItemsService, PoMenuService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoMenuComponent

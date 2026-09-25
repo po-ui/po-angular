@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import {
@@ -15,6 +15,7 @@ import {
   selector: 'sample-po-progress-labs',
   templateUrl: './sample-po-progress-labs.component.html',
   styleUrls: ['./sample-po-progress-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoProgressLabsComponent implements OnInit {

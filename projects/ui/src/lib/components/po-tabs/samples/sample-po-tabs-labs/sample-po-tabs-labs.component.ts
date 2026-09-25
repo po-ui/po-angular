@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoDynamicFormField,
@@ -11,6 +11,7 @@ import {
 @Component({
   selector: 'sample-po-tabs-labs',
   templateUrl: './sample-po-tabs-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTabsLabsComponent implements OnInit {

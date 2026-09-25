@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoDynamicViewField, PoInfoOrientation } from '@po-ui/ng-components';
 
@@ -8,6 +8,7 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
 @Component({
   selector: 'po-page-job-scheduler-summary',
   templateUrl: 'po-page-job-scheduler-summary.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {

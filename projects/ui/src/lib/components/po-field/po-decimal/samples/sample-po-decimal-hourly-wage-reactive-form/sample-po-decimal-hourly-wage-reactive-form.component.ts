@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'sample-po-decimal-hourly-wage-reactive-form',
   templateUrl: './sample-po-decimal-hourly-wage-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDecimalHourlyWageReactiveFormComponent implements OnInit {

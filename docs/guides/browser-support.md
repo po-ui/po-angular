@@ -15,11 +15,11 @@ Atualmente o PO está homologado para os seguintes navegadores:
     <tbody>
       <tr class="po-table-row">
         <th class="po-table-column">Chrome</th>
-        <td class="po-table-column">versões mais recentes (latest)</td>
+        <td class="po-table-column">2 versões mais recentes</td>
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">Firefox</th>
-        <td class="po-table-column">versões mais recentes (latest)</td>
+        <td class="po-table-column">versão mais recente e versão de suporte estendido (ESR)</td>
       </tr>
       <tr class="po-table-row">
         <th class="po-table-column">Edge</th>
@@ -43,10 +43,10 @@ Atualmente o PO está homologado para os seguintes navegadores:
 </div>
 
 > Nossa homologação tem como base os navegadores que o Angular suporta nativamente. Para saber mais, acesse o guia
-[*Browser support*](https://angular.io/guide/browser-support) do Angular.
+[*Browser support*](https://angular.dev/reference/versions#browser-support) do Angular.
 
 > Caso precise de algum *polyfill* em sua aplicação ou precisa de mais informação sobre como funciona um *polyfill* 
-acesse a documentação [*Browser support*](https://angular.io/guide/browser-support) do Angular.
+acesse a documentação [*Browser support*](https://angular.dev/reference/versions#browser-support) do Angular.
 
 ## Executando a aplicação localmente
 

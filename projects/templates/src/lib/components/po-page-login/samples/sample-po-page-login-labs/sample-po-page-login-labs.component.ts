@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoDialogService, PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 
@@ -7,6 +7,7 @@ import { PoPageLogin, PoPageLoginCustomField, PoPageLoginLiterals } from '@po-ui
 @Component({
   selector: 'sample-po-page-login-labs',
   templateUrl: './sample-po-page-login-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageLoginLabsComponent implements OnInit {

@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'po-grid-head',
   templateUrl: './po-grid-head.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoGridHeadComponent {

@@ -5,7 +5,8 @@ import {
   ElementRef,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -35,6 +36,7 @@ import {
   templateUrl: './theme-builder.component.html',
   styleUrls: ['theme-builder.component.css'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ThemeBuilderComponent implements AfterViewInit, OnInit {

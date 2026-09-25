@@ -1,6 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
 
@@ -13,6 +13,7 @@ import { of, Subscription } from 'rxjs';
     <input type="text" #inp />
     <span #clean></span>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class ContentProjectionComponent extends PoInputGeneric {

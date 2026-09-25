@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoRadioGroupOption } from '@po-ui/ng-components';
 import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@po-ui/ng-templates';
@@ -6,6 +6,7 @@ import { PoPageBlockedUserReason, PoPageBlockedUserReasonParams } from '@po-ui/n
 @Component({
   selector: 'sample-po-page-blocked-user-labs',
   templateUrl: './sample-po-page-blocked-user-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageBlockedUserLabsComponent implements OnInit {

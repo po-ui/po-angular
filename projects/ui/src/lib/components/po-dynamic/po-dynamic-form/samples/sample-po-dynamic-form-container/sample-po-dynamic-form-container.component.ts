@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   ForceBooleanComponentEnum,
@@ -15,6 +15,7 @@ import { PoDynamicFormContainerService } from './sample-po-dynamic-form-containe
   selector: 'sample-po-dynamic-form-container',
   templateUrl: './sample-po-dynamic-form-container.component.html',
   providers: [PoDynamicFormContainerService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDynamicFormContainerComponent implements OnInit {

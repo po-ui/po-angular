@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
 import { PoPageDynamicDetailActions, PoPageDynamicDetailField } from '@po-ui/ng-templates';
@@ -6,6 +6,7 @@ import { PoPageDynamicDetailActions, PoPageDynamicDetailField } from '@po-ui/ng-
 @Component({
   selector: 'sample-po-page-dynamic-detail-user',
   templateUrl: './sample-po-page-dynamic-detail-user.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDynamicDetailUserComponent {

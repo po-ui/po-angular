@@ -18,7 +18,6 @@ import { PoDynamicModule } from './po-dynamic/po-dynamic.module';
 import { PoFieldModule } from './po-field/po-field.module';
 import { PoFilterChipModule } from './po-filter-chip/po-filter-chip.module';
 import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
-import { PoGaugeModule } from './po-gauge/po-gauge.module';
 import { PoGridModule } from './po-grid/po-grid.module';
 import { PoIconModule } from './po-icon/po-icon.module';
 import { PoImageModule } from './po-image/po-image.module';
@@ -72,7 +71,6 @@ const PO_MODULES = [
   PoDynamicModule,
   PoFieldModule,
   PoFilterChipModule,
-  PoGaugeModule,
   PoGridModule,
   PoIconModule,
   PoInfoModule,

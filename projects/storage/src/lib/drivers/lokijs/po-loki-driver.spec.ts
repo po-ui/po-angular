@@ -170,7 +170,7 @@ describe('PoLokiDriver', () => {
 
     it('initStorage: should call `configureLokiStorage` and `databaseInitialize.bind`', () => {
       spyOn(poLokiDriver, <any>'configureLokiStorage');
-      spyOn(poLokiDriver['databaseInitialize'], <never>'bind');
+      spyOn(poLokiDriver['databaseInitialize'] as any, 'bind');
 
       poLokiDriver['initStorage'](getConfigMock());
 

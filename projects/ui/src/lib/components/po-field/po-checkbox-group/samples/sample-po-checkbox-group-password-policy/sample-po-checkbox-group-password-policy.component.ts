@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCheckboxGroupOption } from '@po-ui/ng-components';
 
@@ -7,6 +7,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-checkbox-group-password-policy',
   templateUrl: './sample-po-checkbox-group-password-policy.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoCheckboxGroupPasswordPolicyComponent {

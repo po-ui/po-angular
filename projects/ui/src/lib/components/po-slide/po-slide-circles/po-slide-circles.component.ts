@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -10,6 +10,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'po-slide-circles',
   templateUrl: './po-slide-circles.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoSlideCirclesComponent {

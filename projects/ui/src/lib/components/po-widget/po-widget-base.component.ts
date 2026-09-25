@@ -48,7 +48,6 @@ const PO_WIDGET_TAG_POSITION_DEFAULT = 'right';
  * | `--font-size`                                | Tamanho da fonte                                                 | `var(--font-size-sm)`                                                       |
  * | `--font-weight`                              | Peso da fonte                                                    | `var(--font-weight-bold)`                                                   |
  * | `--font-color`                               | Cor da fonte                                                     | `var(--color-neutral-dark-95)`                                              |
- * | `--padding` - `@deprecated 21.x.x`           | Preenchimento do componente                                      | `1rem`                                                                      |
  * | `--padding-header`                           | Preenchimento do header                                          | `var(--spacing-sm) var(--spacing-sm) var(--spacing-xs) var(--spacing-sm)`   |
  * | `--padding-body`                             | Preenchimento do body                                            | `var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-sm)`   |
  * | `--padding-avatar`                           | Preenchimento do avatar                                          | `var(--spacing-sm) 0 var(--spacing-xs) var(--spacing-sm)`                   |

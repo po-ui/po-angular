@@ -7,7 +7,8 @@ import {
   Input,
   Output,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
@@ -25,6 +26,7 @@ const poRichTextDefaultColor = '#000000';
 @Component({
   selector: 'po-rich-text-toolbar',
   templateUrl: './po-rich-text-toolbar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoRichTextToolbarComponent implements AfterViewInit {

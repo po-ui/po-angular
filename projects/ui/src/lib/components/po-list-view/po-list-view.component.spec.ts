@@ -1,7 +1,7 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -18,20 +18,15 @@ describe('PoListViewComponent:', () => {
   let component: PoListViewComponent;
   let fixture: ComponentFixture<PoListViewComponent>;
   let debugElement;
-  let event: AnimationEvent;
-  let detail: any;
 
   const item = { id: 1, name: 'register' };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
-      imports: [BrowserAnimationsModule, RouterTestingModule.withRoutes([]), PoButtonModule, PoPopupModule],
-      providers: [provideNgReflectAttributes()]
+      imports: [RouterModule.forRoot([]), PoButtonModule, PoPopupModule],
+      providers: [provideLocationMocks(), provideNgReflectAttributes()]
     }).compileComponents();
-
-    detail = { test: 'test' };
-    event = new AnimationEvent('animationstart', { animationName: 'test', elapsedTime: 100 });
 
     fixture = TestBed.createComponent(PoListViewComponent);
 
@@ -160,12 +155,43 @@ describe('PoListViewComponent:', () => {
       expect(component.popupTarget).toEqual(targetRef);
     });
 
-    it(`onAnimationEvent: should emit detail on showDetail`, () => {
+    it('animateDetailEnter: should emit showDetail and animate height from 0 to scrollHeight', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 60 });
+      spyOn(element, 'animate').and.returnValue(animation);
       spyOn(component.showDetail, 'emit');
 
-      component.onAnimationEvent(event, detail);
+      const item = { name: 'test' };
+      component.animateDetailEnter({ target: element, animationComplete }, item);
 
-      expect(component.showDetail.emit).toHaveBeenCalledWith(detail);
+      expect(component.showDetail.emit).toHaveBeenCalledWith(item);
+      expect(element.animate).toHaveBeenCalledWith([{ height: '0px' }, { height: '60px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
+    });
+
+    it('animateDetailLeave: should animate height from scrollHeight to 0 and call animationComplete', () => {
+      const animationComplete = jasmine.createSpy('animationComplete');
+      const animation: any = {};
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'scrollHeight', { value: 40 });
+      spyOn(element, 'animate').and.returnValue(animation);
+
+      component.animateDetailLeave({ target: element, animationComplete });
+
+      expect(element.animate).toHaveBeenCalledWith([{ height: '40px' }, { height: '0px' }], {
+        duration: 100,
+        easing: 'linear'
+      });
+
+      animation.onfinish();
+      expect(animationComplete).toHaveBeenCalled();
     });
 
     it('trackBy: should return `index`', () => {

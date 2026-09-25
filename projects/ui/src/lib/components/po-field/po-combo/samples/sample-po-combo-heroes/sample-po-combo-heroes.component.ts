@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'sample-po-combo-heroes',
   templateUrl: './sample-po-combo-heroes.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoComboHeroesComponent {

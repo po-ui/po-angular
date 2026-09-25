@@ -1,5 +1,5 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule, UntypedFormControl } from '@angular/forms';
 
@@ -19,6 +19,7 @@ import { PoUploadService } from './po-upload.service';
 @Component({
   selector: 'po-upload',
   template: ` <input type="file" class="po-upload" name="upload" /> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoUploadComponent extends PoUploadBaseComponent {
