@@ -287,4 +287,28 @@ export interface PoChartOptions {
    * @default `false`
    */
   showContainerGauge?: boolean;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Habilita o preenchimento das séries por cor combinada com padrão/textura,
+   * melhorando a acessibilidade ao não transmitir a informação apenas por cor
+   * (atende à diretriz de não depender exclusivamente de cor).
+   *
+   * Cada série suportada recebe automaticamente um dos 8 padrões disponíveis, podendo o padrão
+   * ser customizado por série através da propriedade `patternIndex` da interface `PoChartSerie`.
+   *
+   * > Aplica-se aos gráficos dos tipos `Pie`, `Donut`, `Bar` e `Column` quando o renderizador
+   * for `canvas` (propriedade `rendererOption`). Nos demais tipos e no renderizador `svg`,
+   * as séries são exibidas com cor sólida.
+   *
+   * > Quando esta propriedade não for informada, o modo de padrões é habilitado automaticamente
+   * caso o nível de acessibilidade do tema ativo seja `AAA`. Ao informar `true` ou `false`
+   * explicitamente, o valor definido pelo desenvolvedor é respeitado independentemente do tema.
+   *
+   * @default `false` (ou `true` automaticamente quando o tema ativo estiver no nível `AAA`)
+   */
+  usePatterns?: boolean;
 }
