@@ -199,7 +199,7 @@ Após ter o seu primeiro *schema* criado, configure o seu aplicativo utilizando 
 Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -213,8 +213,11 @@ import { conferenceSchema } from './home/conference-schema.constants';
   styleUrls: ['app.component.scss'],
   standalone: false
 })
-export class AppComponent {
-  constructor(private platform: Platform, private poSync: PoSyncService) {
+export class AppComponent implements OnInit {
+  private readonly platform = inject(Platform);
+  private readonly poSync = inject(PoSyncService);
+
+  ngOnInit() {
     this.initializeApp();
   }
 
@@ -247,7 +250,7 @@ Após utilizar o método `PoSyncService.prepare()`, a aplicação estará pronta
 Substitua o conteúdo do arquivo pelo conteúdo abaixo:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
@@ -262,10 +265,11 @@ import { conferenceSchema } from './home/conference-schema.constants';
   templateUrl: 'app.component.html',
   imports: [IonApp, IonRouterOutlet],
 })
-export class AppComponent {
-  constructor(
-    private platform: Platform, private poSync: PoSyncService
-  ) {
+export class AppComponent implements OnInit {
+  private readonly platform = inject(Platform);
+  private readonly poSync = inject(PoSyncService);
+
+  ngOnInit() {
     this.initializeApp();
   }
 
