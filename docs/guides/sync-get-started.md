@@ -107,7 +107,7 @@ ng add @po-ui/ng-sync
 
 #### Passo 4.1 (NgModule) - Importando o `po-sync` e o `po-storage`
 
-No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
+No arquivo `src/app/app.module.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`:
 
 ```typescript
 import { NgModule } from '@angular/core';
@@ -299,6 +299,31 @@ export class AppComponent implements OnInit {
 
 ### Passo 6 (NgModule) - Acessando os dados
 
+No arquivo `po-sync-getting-started/src/app/home/home.module.ts`, atualize a importação do `IonicModule` para utilizar o caminho `import { IonicModule } from '@ionic/angular';`:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { HomePage } from './home.page';
+
+import { HomePageRoutingModule } from './home-routing.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    HomePageRoutingModule
+  ],
+  declarations: [HomePage]
+})
+export class HomePageModule {}
+```
+
+> **Nota sobre importação do `IonicModule`**: As versões anteriores à 9.x do `@ionic/angular` não possuem o export `lazy`, devendo ser feito o import de `@ionic/angular`. A partir da versão 9.x, o import de `@ionic/angular/lazy` funciona normalmente (sendo o padrão da CLI do ionic para projetos standalone).
+
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
@@ -334,6 +359,8 @@ export class HomePage {
 No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`, para quando ocorrer uma sincronização, o método `loadHomePage()` busque um registro do *schema* "Conference".
 
 ### Passo 6 (Standalone) - Acessando os dados
+
+> **Nota sobre importação do `IonicModule`**: Para projetos standalone com `@ionic/angular` 9+, o import do `IonicModule` pode usar o caminho `@ionic/angular/lazy` sem necessidade de alteração.
 
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
