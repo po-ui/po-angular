@@ -143,7 +143,7 @@ export class AppModule {}
 
 #### Passo 4.1 (Standalone) - Importando o `po-sync` e o `po-storage`
 
-No arquivo `src/main.ts`, adicione a importação dos módulos do `po-storage` e do `po-sync`: 
+No arquivo `src/main.ts`, avalie se foi feita a importação dos módulos do `po-storage` e do `po-sync`: 
 
 ```typescript
 import { bootstrapApplication } from '@angular/platform-browser';
