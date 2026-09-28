@@ -326,7 +326,8 @@
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true,
-            "browser": "projects/portal/src/main.ts"
+            "browser": "projects/portal/src/main.ts",
+            "externalDependencies": ["marked-katex-extension", "katex"]
           },
           "configurations": {
             "production": {
