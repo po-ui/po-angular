@@ -13,9 +13,9 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
   - ```shell
     npm install -g @angular/cli@22
     ```
-- [Ionic](https://ionicframework.com/docs/cli/) (^7.2.0):
+- [Ionic](https://ionicframework.com/docs/cli/):
   - ```shell
-    npm install -g @ionic/cli@7
+    npm install -g @ionic/cli
     ```
 
 
