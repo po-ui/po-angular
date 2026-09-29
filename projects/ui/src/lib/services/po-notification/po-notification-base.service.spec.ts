@@ -170,6 +170,52 @@ describe('PoNotificationService ', () => {
       expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, duration: 5000 }));
     });
 
+    it('should use empty message when `message` is undefined', () => {
+      spyOn(service, 'createToaster');
+      service.success({ message: undefined });
+
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, message: '' }));
+    });
+
+    it('should use empty message when `message` is empty', () => {
+      spyOn(service, 'createToaster');
+      service.error({ message: '' });
+
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Error, message: '' }));
+    });
+
+    it('should use empty message when `message` is not informed', () => {
+      spyOn(service, 'createToaster');
+      service.warning(<any>{ orientation: PoToasterOrientation.Top });
+
+      expect(service.createToaster).toHaveBeenCalledWith(
+        mockToaster({ type: PoToasterType.Warning, orientation: PoToasterOrientation.Top, message: '' })
+      );
+    });
+
+    it('should use empty message and not throw error when notification is undefined', () => {
+      spyOn(service, 'createToaster');
+
+      expect(() => service.success(undefined)).not.toThrow();
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Success, message: '' }));
+    });
+
+    it('should use empty message and not throw error when notification is null', () => {
+      spyOn(service, 'createToaster');
+
+      expect(() => service.error(null)).not.toThrow();
+      expect(service.createToaster).toHaveBeenCalledWith(mockToaster({ type: PoToasterType.Error, message: '' }));
+    });
+
+    it('should use the string as message when notification is a string', () => {
+      spyOn(service, 'createToaster');
+      service.information('teste string');
+
+      expect(service.createToaster).toHaveBeenCalledWith(
+        mockToaster({ type: PoToasterType.Information, message: 'teste string' })
+      );
+    });
+
     it('should change default duration to 3 seconds', () => {
       spyOn(service, 'setDefaultDuration').and.callThrough();
       service.setDefaultDuration(3000);
