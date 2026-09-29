@@ -327,7 +327,7 @@ export class HomePageModule {}
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { PoSyncService } from '@po-ui/ng-sync';
 
@@ -338,21 +338,21 @@ import { PoSyncService } from '@po-ui/ng-sync';
   standalone: false
 })
 export class HomePage {
+  private readonly poSync = inject(PoSyncService);
 
-  conference: any;
+  readonly conference = signal<any>(null);
 
-  constructor(private poSync: PoSyncService) {
+  constructor() {
     this.poSync.onSync().subscribe(() => this.loadHomePage());
   }
 
   async loadHomePage() {
-    this.conference = await this.poSync.getModel('conference').findOne().exec();
+    this.conference.set(await this.poSync.getModel('conference').findOne().exec());
   }
 
   clear() {
-    this.conference = null;
+    this.conference.set(null);
   }
-
 }
 ```
 
@@ -365,8 +365,7 @@ No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
-import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 
 import { IonicModule } from '@ionic/angular';
 import { PoSyncService } from '@po-ui/ng-sync';
@@ -375,21 +374,23 @@ import { PoSyncService } from '@po-ui/ng-sync';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonicModule, NgIf],
+  imports: [IonicModule],
 })
 export class HomePage {
-  conference: any;
+  private readonly poSync = inject(PoSyncService);
 
-  constructor(private poSync: PoSyncService) {
+  readonly conference = signal<any>(null);
+
+  constructor() {
     this.poSync.onSync().subscribe(() => this.loadHomePage());
   }
 
   async loadHomePage() {
-    this.conference = await this.poSync.getModel('conference').findOne().exec();
+    this.conference.set(await this.poSync.getModel('conference').findOne().exec());
   }
 
   clear() {
-    this.conference = null;
+    this.conference.set(null);
   }
 }
 
@@ -400,18 +401,20 @@ export class HomePage {
 No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 ```html
 <ion-content class="ion-padding">
-  <ion-button expand="full" (click)="loadHomePage()">Buscar informações</ion-button>
-  <ion-button expand="full" color="danger" (click)="clear()">Apagar informações</ion-button>
+  <ion-button expand="full" (click)="loadHomePage()" (keyup.enter)="loadHomePage()">Buscar informações</ion-button>  
+  <ion-button expand="full" color="danger" (click)="clear()" (keyup.enter)="clear()">Apagar informações</ion-button>
 
-  <ion-card *ngIf="conference">
-    <ion-card-content>
-      <ion-card-title>
-        {{ conference.title }}
-      </ion-card-title>
-      <p>{{ conference.description }}</p>
-      <p>{{ conference.location }}</p>
-    </ion-card-content>
-  </ion-card>
+  @if (conference(); as conference) {
+    <ion-card>
+      <ion-card-content>
+        <ion-card-title>
+          {{ conference.title }}
+        </ion-card-title>
+        <p>{{ conference.description }}</p>
+        <p>{{ conference.location }}</p>
+      </ion-card-content>
+    </ion-card>
+  }
 </ion-content>
 ```
 
