@@ -33,7 +33,7 @@ Caso surja a questão relacionada ao framework desejado, opte por `Angular`.
 
 ### Passo 2 - Instalando as dependências
 
-É necessário realizar alguns ajustes de compatibilidade do PO para o projeto criado.
+É necessário realizar alguns ajustes de compatibilidade do PO UI para o projeto criado.
 
 Navegue até a pasta do aplicativo:
 ```shell
