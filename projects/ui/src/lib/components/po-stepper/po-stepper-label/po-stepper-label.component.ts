@@ -9,7 +9,8 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 /**
@@ -22,6 +23,7 @@ import {
 @Component({
   selector: 'po-stepper-label',
   templateUrl: './po-stepper-label.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoStepperLabelComponent implements AfterViewInit, OnChanges {

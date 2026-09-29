@@ -1,11 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "../../",
     "lib": ["es2022", "dom"],
     "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
@@ -22,5 +21,9 @@
     "types": ["jasmine", "node"]
   },
   "include": ["schematics/**/*"],
-  "exclude": ["schematics/**/*/files/**/*", "schematics/**/*/*.spec.ts"]
+  "exclude": [
+    "schematics/**/*/files/**/*",
+    "schematics/**/*/*.spec.ts",
+    "schematics/ng-update/v22/gauge-manual-test/**/*"
+  ]
 }

@@ -1,6 +1,7 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { PoSlideItemComponent } from './po-slide-item.component';
 
@@ -11,9 +12,9 @@ describe('PoSlideItemComponent:', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterModule.forRoot([])],
       declarations: [PoSlideItemComponent],
-      providers: [provideNgReflectAttributes()]
+      providers: [provideLocationMocks(), provideNgReflectAttributes()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoSlideItemComponent);

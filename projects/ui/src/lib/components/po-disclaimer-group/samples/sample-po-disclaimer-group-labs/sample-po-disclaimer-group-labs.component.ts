@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoDisclaimer } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-disclaimer-group-labs',
   templateUrl: './sample-po-disclaimer-group-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDisclaimerGroupLabsComponent implements OnInit {

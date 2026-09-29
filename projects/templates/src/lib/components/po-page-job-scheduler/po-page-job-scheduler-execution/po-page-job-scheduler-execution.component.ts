@@ -7,7 +7,8 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
@@ -21,6 +22,7 @@ import { PoPageJobSchedulerService } from '../po-page-job-scheduler.service';
 @Component({
   selector: 'po-page-job-scheduler-execution',
   templateUrl: 'po-page-job-scheduler-execution.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewInit {

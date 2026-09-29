@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoUserGuidePosition, PoUserGuideService, PoUserGuideStep } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-user-guide-basic',
   templateUrl: './sample-po-user-guide-basic.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUserGuideBasicComponent {

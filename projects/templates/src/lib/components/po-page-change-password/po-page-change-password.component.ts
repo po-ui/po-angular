@@ -6,7 +6,8 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -65,6 +66,7 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
 @Component({
   selector: 'po-page-change-password',
   templateUrl: './po-page-change-password.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageChangePasswordComponent

@@ -9,7 +9,7 @@ import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoJobScheduler } from './interfaces/po-job-scheduler.interface';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
 import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoPageJobSchedulerService:', () => {
   let poPageJobSchedulerService: PoPageJobSchedulerService;
@@ -18,7 +18,11 @@ describe('PoPageJobSchedulerService:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoPageJobSchedulerService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoPageJobSchedulerService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     poPageJobSchedulerService = TestBed.inject(PoPageJobSchedulerService);

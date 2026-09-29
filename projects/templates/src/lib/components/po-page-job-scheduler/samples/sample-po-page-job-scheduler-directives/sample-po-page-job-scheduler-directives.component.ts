@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PoDynamicFormField, PoDynamicViewField } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-page-job-scheduler-directives',
   templateUrl: './sample-po-page-job-scheduler-directives.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageJobSchedulerDirectivesComponent {

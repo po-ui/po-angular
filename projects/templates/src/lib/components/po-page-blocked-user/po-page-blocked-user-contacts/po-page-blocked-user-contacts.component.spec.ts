@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { PoPageBlockedUserContactsComponent } from './po-page-blocked-user-contacts.component';
 
@@ -13,9 +14,9 @@ describe('PoPageBlockedUserContactsComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule.withRoutes([])],
+      imports: [FormsModule, RouterModule.forRoot([])],
       declarations: [PoPageBlockedUserContactsComponent],
-      providers: [HttpClient, HttpHandler],
+      providers: [provideLocationMocks(), HttpClient, HttpHandler],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 

@@ -13,7 +13,7 @@
   @if (hasSubItems) {
     <ul class="po-tree-view-item-group">
       @if (item.expanded) {
-        <div @toggleBody>
+        <div (animate.enter)="animateEnter($event)" (animate.leave)="animateLeave($event)">
           @for (subItem of item.subItems; track trackByFunction($index)) {
             <po-tree-view-item
               [p-components-size]="componentsSize"
