@@ -77,7 +77,7 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
   ...
 ```
 
-> **Nota para projetos com módulos (NgModule)**: A CLI do Ionic gera projetos com o arquivo `src/main.ts` utilizando o `platformBrowserDynamic`. Para esse padrão funcionar, é necessário adicionar o pacote `@angular/platform-browser-dynamic` no arquivo `package.json` (dentro de `dependencies`), juntamente com as outras dependências listadas acima:
+> **Nota para projetos com módulos (NgModule)**: A CLI do Ionic pode gerar projetos com o arquivo `src/main.ts` utilizando o `platformBrowserDynamic`. Caso isso aconteça, será necessário adicionar o pacote `@angular/platform-browser-dynamic` no arquivo `package.json` (dentro de `dependencies`), juntamente com as outras dependências listadas acima:
 > ```json
 > "dependencies": {
 >   ...
@@ -359,21 +359,25 @@ No construtor, foi realizado uma inscrição no método `PoSyncService.onSync()`
 
 ### Passo 6 (Standalone) - Acessando os dados
 
-> **Nota sobre importação do `IonicModule`**: Para projetos standalone com `@ionic/angular` 9+, o import do `IonicModule` pode usar o caminho `@ionic/angular/lazy` sem necessidade de alteração.
-
 Localize o arquivo `src/app/home/home.page.ts` e faça as seguintes alterações:
 
 ```typescript
 import { Component, inject, signal } from '@angular/core';
 
-import { IonicModule } from '@ionic/angular';
+import {
+  IonContent,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardTitle
+} from '@ionic/angular/standalone';
 import { PoSyncService } from '@po-ui/ng-sync';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonicModule],
+  imports: [IonContent, IonButton, IonCard, IonCardContent, IonCardTitle],
 })
 export class HomePage {
   private readonly poSync = inject(PoSyncService);
