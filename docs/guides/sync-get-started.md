@@ -298,7 +298,7 @@ export class AppComponent implements OnInit {
 
 ### Passo 6 (NgModule) - Acessando os dados
 
-No arquivo `po-sync-getting-started/src/app/home/home.module.ts`, atualize a importação do `IonicModule` para utilizar o caminho `import { IonicModule } from '@ionic/angular';`:
+Caso o projeto tenha sido gerado em uma versão anterior a 9.x do `@ionic/angular`, no arquivo `po-sync-getting-started/src/app/home/home.module.ts`, atualize a importação do `IonicModule` para utilizar o caminho `import { IonicModule } from '@ionic/angular';`:
 
 ```typescript
 import { NgModule } from '@angular/core';
