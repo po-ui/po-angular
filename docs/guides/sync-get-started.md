@@ -87,6 +87,15 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
   ...
 ```
 
+> **Nota para projetos com módulos (NgModule)**: A CLI do Ionic gera projetos com o arquivo `src/main.ts` utilizando o `platformBrowserDynamic`. Para esse padrão funcionar, é necessário adicionar o pacote `@angular/platform-browser-dynamic` no arquivo `package.json` (dentro de `dependencies`), juntamente com as outras dependências listadas acima:
+> ```json
+> "dependencies": {
+>   ...
+>   "@angular/platform-browser-dynamic": "~22.0.1",
+>   ...
+> }
+> ```
+
 > Após configurar seu arquivo, certifique-se de salvar as alterações realizadas.
 
 Execute o seguinte comando para instalar as dependências:
