@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.32.0](https://github.com/po-ui/po-angular/compare/v21.31.0...v21.32.0) (2026-09-29)
+
+
+### Bug Fixes
+
+* **calendar:** corrige exibição de anos nos modos month-year/year ([0478072](https://github.com/po-ui/po-angular/commit/047807241c4fb4d69e4d1c68d5ee085bcb82bb55))
+* **chart:** compatibiliza exibição da legenda em diferentes navegadores ([94f85ac](https://github.com/po-ui/po-angular/commit/94f85ac21c54b98c2fb1561fd03a65665f42f0ac))
+* **datetimepicker:** impede invalidação do campo durante seleção ([3e0b7d1](https://github.com/po-ui/po-angular/commit/3e0b7d193c7bb5b09ba4b6b178724d5dbdefd8d1))
+* **decimal:** dispara p-change no clear independente de foco ([210e9f4](https://github.com/po-ui/po-angular/commit/210e9f4978131bbbaf27dbf9fa96a6e70a769a6c))
+
 ## [21.31.0](https://github.com/po-ui/po-angular/compare/v21.30.1...v21.31.0) (2026-09-15)
 
 
