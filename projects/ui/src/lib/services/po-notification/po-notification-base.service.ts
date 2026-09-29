@@ -94,6 +94,8 @@ export abstract class PoNotificationBaseService {
     let index = 0;
     let orientation;
 
+    notification = notification ?? '';
+
     if (
       (<PoNotification>notification).orientation === undefined ||
       (<PoNotification>notification).orientation === PoToasterOrientation.Bottom
@@ -108,7 +110,7 @@ export abstract class PoNotificationBaseService {
     const sizeActions = validateSizeFn((<PoNotification>notification).sizeActions, PoFieldSize);
     const toaster: PoToaster = {
       componentRef: undefined,
-      message: (<PoNotification>notification).message || <string>notification,
+      message: this.getMessage(notification),
       type: type,
       orientation: orientation,
       action: (<PoNotification>notification).action,
@@ -129,6 +131,14 @@ export abstract class PoNotificationBaseService {
     }
 
     return toaster;
+  }
+
+  private getMessage(notification: PoNotification | string): string {
+    if (typeof notification === 'string') {
+      return notification;
+    }
+
+    return notification?.message ?? '';
   }
 
   /**
