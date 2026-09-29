@@ -23,8 +23,6 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 
 ### Passo 1 - Criando o aplicativo
 
-> Atualmente, a Ionic CLI cria novos projetos utilizando Angular 20 como versão base, independentemente da versão final desejada do Angular.
-
 Para a aplicação de exemplo usaremos o template *blank* do Ionic. Para isso, execute o seguinte comando:
 
 ```shell
@@ -41,14 +39,6 @@ Navegue até a pasta do aplicativo:
 ```shell
 cd po-sync-getting-started
 ```
-
-Antes de instalar o po-sync, é necessário atualizar o projeto para o Angular 22, garantindo compatibilidade com o PO UI.
-
-```shell
-ng update @angular/core@22 @angular/cli@22
-```
-
-> Esse passo é necessário porque o projeto foi inicialmente criado com Angular 20, e o upgrade garante compatibilidade com as versões utilizadas pelo PO UI.
 
 Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser conferidas e se necessário, ajustadas no seu projeto.
 
