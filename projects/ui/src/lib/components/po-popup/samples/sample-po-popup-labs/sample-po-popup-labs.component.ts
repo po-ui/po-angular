@@ -22,6 +22,8 @@ export class SamplePoPopupLabsComponent implements OnInit {
   action: PoPopupAction & { parent?: string };
   actions: Array<PoPopupAction>;
   customPositions: Array<string>;
+  event: string;
+  infoValue: any;
   parentList: Array<PoSelectOption>;
   position: string;
   positions: string;
@@ -99,9 +101,16 @@ export class SamplePoPopupLabsComponent implements OnInit {
     this.customPositions = this.positions && this.positions.length ? JSON.parse(this.positions) : undefined;
   }
 
+  changeEvent(type: string, event?: any) {
+    this.event = type;
+    this.infoValue = event;
+  }
+
   restore() {
     this.actions = [];
     this.customPositions = [];
+    this.event = '';
+    this.infoValue = '';
     this.parentList = [];
     this.position = undefined;
     this.positions = '';

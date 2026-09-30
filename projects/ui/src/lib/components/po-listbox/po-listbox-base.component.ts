@@ -15,19 +15,31 @@ import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.
 export const poListBoxLiteralsDefault = {
   en: <PoListBoxLiterals>{
     backToPreviousGroup: 'Go back to the previous list',
-    noItems: 'No items found'
+    noItems: 'No items found',
+    subItemsErrorMessage: 'Unable to load the items.',
+    subItemsLoading: 'Loading items.',
+    retry: 'Retry'
   },
   es: <PoListBoxLiterals>{
     backToPreviousGroup: 'Volver a la lista anterior',
-    noItems: 'No se encontraron artículos'
+    noItems: 'No se encontraron artículos',
+    subItemsErrorMessage: 'No se pudieron cargar los elementos.',
+    subItemsLoading: 'Cargando elementos.',
+    retry: 'Reintentar'
   },
   pt: <PoListBoxLiterals>{
     backToPreviousGroup: 'Voltar para a lista anterior',
-    noItems: 'Nenhum item encontrado'
+    noItems: 'Nenhum item encontrado',
+    subItemsErrorMessage: 'Não foi possível carregar os itens.',
+    subItemsLoading: 'Carregando itens.',
+    retry: 'Tentar novamente'
   },
   ru: <PoListBoxLiterals>{
     backToPreviousGroup: 'Вернуться к предыдущему списку',
-    noItems: 'ничего не найдено'
+    noItems: 'ничего не найдено',
+    subItemsErrorMessage: 'Не удалось загрузить элементы.',
+    subItemsLoading: 'Загрузка элементов.',
+    retry: 'Повторить попытку'
   }
 };
 
@@ -196,6 +208,8 @@ export class PoListBoxBaseComponent {
   @Output('p-change-state-tabs') changeStateTabs = new EventEmitter();
 
   @Output('p-click-item') clickItem = new EventEmitter();
+
+  @Output('p-sub-items-load') subItemsLoad = new EventEmitter();
 
   // Evento disparado ao clicar na ação do rodapé do listbox
   @Output('p-footer-action-listbox-event') footerActionListboxEvent = new EventEmitter();
