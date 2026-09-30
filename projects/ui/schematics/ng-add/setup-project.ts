@@ -25,6 +25,7 @@ const httpClientModuleSourcePath = '@angular/common/http';
  *  - Add PO Module to app root module
  *  - Adds themes to styles
  *  - Run sidemenu schematic
+ *  - Add provideZoneChangeDetection: standalone via app.config.ts, module-based via main.ts
  */
 export default function (options: any): Rule {
   return chain([
@@ -33,6 +34,7 @@ export default function (options: any): Rule {
     addProviderToAppModule(options, 'provideHttpClient(withInterceptorsFromDi())'),
     addThemeToAppStyles(options),
     addPolyfillsZoneJS(options),
+    addZoneChangeDetection(options),
     updateAppConfigFileRule(options),
     configureSideMenu(options)
   ]);
@@ -242,4 +244,121 @@ function addPolyfillsZoneJS(options: any): (tree: Tree) => Tree {
 
     return tree;
   };
+}
+
+/**
+ * Adiciona provideZoneChangeDetection ao main.ts de apps module-based.
+ *
+ * Para apps standalone, o provider já é adicionado no app.config.ts por
+ * `updateAppConfigFileRule`, então esta rule ignora esse caso para evitar
+ * a duplicação de providers (NG0408).
+ */
+function addZoneChangeDetection(options: any): (tree: Tree) => Tree {
+  return function (tree: Tree): Tree {
+    const workspace = getWorkspaceConfigGracefully(tree) ?? ({} as WorkspaceSchema);
+    const project: any = getProjectFromWorkspace(workspace, options.project);
+    const browserEntryPoint = getProjectMainFile(project);
+
+    // Apps standalone são tratados por updateAppConfigFileRule (app.config.ts)
+    if (isStandaloneApp(tree, browserEntryPoint)) {
+      return tree;
+    }
+
+    // O browserEntryPoint já vem como caminho relativo ao workspace root
+    // Exemplo: "projects/test-app/src/main.ts"
+    const mainFilePath = browserEntryPoint;
+
+    if (!tree.exists(mainFilePath)) {
+      return tree;
+    }
+
+    const content = tree.read(mainFilePath)?.toString('utf-8') || '';
+
+    // Verifica se já tem provideZoneChangeDetection
+    if (content.includes('provideZoneChangeDetection')) {
+      return tree;
+    }
+
+    const modifiedContent = updateMainFile(content);
+
+    // Se nada mudou (padrão de bootstrap não reconhecido), não sobrescreve
+    if (modifiedContent === content) {
+      return tree;
+    }
+
+    tree.overwrite(mainFilePath, modifiedContent);
+
+    return tree;
+  };
+}
+
+/**
+ * Atualiza o main.ts de um app module-based para incluir provideZoneChangeDetection
+ * via `applicationProviders` (opção correta para platformBrowser().bootstrapModule).
+ *
+ * Também garante o import de `provideZoneChangeDetection` a partir de '@angular/core'.
+ */
+function updateMainFile(content: string): string {
+  if (!content.includes('platformBrowser()') || !content.includes('bootstrapModule')) {
+    return content;
+  }
+
+  // Já configurado; evita duplicar o provider (NG0408)
+  if (content.includes('provideZoneChangeDetection')) {
+    return content;
+  }
+
+  let updated = content;
+
+  const provider = 'provideZoneChangeDetection({ eventCoalescing: true })';
+
+  // bootstrapModule(AppModule, { ... }) -> injeta applicationProviders no objeto existente
+  const regexWithOptions = /(bootstrapModule\([^,]+,\s*\{)/;
+  // bootstrapModule(AppModule) -> reconstrói a chamada adicionando o objeto de opções
+  // Captura o argumento do módulo (grupo 1) para reinserir dentro dos parênteses.
+  const regexNoOptions = /bootstrapModule\(\s*([^,)]+?)\s*\)/;
+
+  if (regexWithOptions.test(updated)) {
+    updated = updated.replace(regexWithOptions, `$1\n    applicationProviders: [${provider}],`);
+  } else if (regexNoOptions.test(updated)) {
+    updated = updated.replace(
+      regexNoOptions,
+      `bootstrapModule($1, { applicationProviders: [${provider}] })`
+    );
+  } else {
+    return content;
+  }
+
+  updated = ensureCoreImport(updated);
+
+  return updated;
+}
+
+/**
+ * Garante que `provideZoneChangeDetection` esteja importado de '@angular/core'.
+ * - Se já existe um import de '@angular/core', adiciona o símbolo à lista.
+ * - Caso contrário, insere uma nova linha de import no topo do arquivo.
+ */
+function ensureCoreImport(content: string): string {
+  if (content.includes('provideZoneChangeDetection')) {
+    // símbolo já usado; verifica se está de fato importado
+    const alreadyImported = /import\s*\{[^}]*\bprovideZoneChangeDetection\b[^}]*\}\s*from\s*['"]@angular\/core['"]/.test(
+      content
+    );
+    if (alreadyImported) {
+      return content;
+    }
+  }
+
+  const coreImportRegex = /import\s*\{([^}]*)\}\s*from\s*['"]@angular\/core['"];?/;
+
+  if (coreImportRegex.test(content)) {
+    return content.replace(coreImportRegex, (_match, symbols) => {
+      const trimmed = symbols.trim().replace(/,\s*$/, '');
+      return `import { ${trimmed}, provideZoneChangeDetection } from '@angular/core';`;
+    });
+  }
+
+  // Não há import de @angular/core; adiciona no topo
+  return `import { provideZoneChangeDetection } from '@angular/core';\n${content}`;
 }
