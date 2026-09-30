@@ -100,7 +100,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
  *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.ts"> </file>
  * </example>
  *
- * <example name="po-table-search-ai" title="PO Table - Search A.I. (EXPERIMENTAL)">
+ * <example name="po-table-search-ai" title="PO Table - Search A.I.">
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.html"> </file>
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.ts"> </file>
  * </example>
