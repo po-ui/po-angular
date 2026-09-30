@@ -8,6 +8,28 @@ import { PoListBoxComponent } from '../po-listbox';
 import { PoPopupAction } from './po-popup-action.interface';
 import { PoPopupBaseComponent } from './po-popup-base.component';
 
+const PO_POPUP_ARROW_TO_CORNER_POSITION: Record<string, string> = {
+  'bottom-left': 'top-left',
+  'bottom-right': 'top-right',
+  'top-right': 'bottom-right',
+  'top-left': 'bottom-left'
+};
+
+const PO_POPUP_ARROW_TO_POSITION: Record<string, string> = {
+  bottom: 'top',
+  'bottom-right': 'top-left',
+  'bottom-left': 'top-right',
+  left: 'right',
+  'left-bottom': 'right-top',
+  'left-top': 'right-bottom',
+  top: 'bottom',
+  'top-left': 'bottom-right',
+  'top-right': 'bottom-left',
+  right: 'left',
+  'right-top': 'left-bottom',
+  'right-bottom': 'left-top'
+};
+
 /**
  *
  * @docsExtends PoPopupBaseComponent
@@ -48,6 +70,9 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
   @ViewChild('popupRef', { read: ElementRef }) popupRef: ElementRef;
   @ViewChild('listbox', { read: ElementRef }) listbox: ElementRef;
 
+  private readonly popupOffset = 8;
+  private readonly viewportMargin = 8;
+
   //utilizado apenas no theme builder
   @ViewChild('poListBoxRef') poListBoxRef: PoListBoxComponent;
 
@@ -62,11 +87,15 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
    *
    * > Por padrão, este comportamento é acionado somente ao clicar fora do componente ou em determinada ação / url.
    */
-  close() {
+  close(closeEvent?: { reason?: string; origin?: string }) {
     this.removeListeners();
 
     this.showPopup = false;
     this.closeEvent.emit();
+
+    if (closeEvent?.reason === 'escape') {
+      this.focusTarget();
+    }
   }
 
   onActionClick(popupAction: PoPopupAction) {
@@ -93,9 +122,8 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     this.param = param;
     this.showPopup = true;
     this.changeDetector.detectChanges();
-
-    this.validateInitialContent();
     this.openEvent.emit();
+    this.validateInitialContent();
   }
 
   returnBooleanValue(popupAction: any, property: string) {
@@ -126,7 +154,23 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     }
   }
 
+  onContentChange() {
+    if (!this.showPopup) {
+      return;
+    }
+
+    this.changeDetector.detectChanges();
+
+    if (this.hasContentToShow()) {
+      this.setPosition(this.getStickyPositions());
+    }
+  }
+
   protected checkAllActionIsInvisible() {
+    if (this.rootLazyLoad && !this.actions.length) {
+      return false;
+    }
+
     if (this.actions.every(item => item.visible === false)) {
       return true;
     }
@@ -146,12 +190,31 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     return !(popupHeaderTemplate && popupHeaderTemplate.contains(event.target));
   }
 
+  private isEventInsideElement(event: MouseEvent, element?: HTMLElement): boolean {
+    if (!element) {
+      return false;
+    }
+
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+
+    return path.length ? path.includes(element) : element.contains(event.target as Node);
+  }
+
   private clickedOutTarget(event) {
-    return this.target && !this.target.contains(event.target);
+    return this.target && !this.isEventInsideElement(event, this.target);
+  }
+
+  private clickedOutPopup(event) {
+    return this.popupRef?.nativeElement && !this.isEventInsideElement(event, this.popupRef.nativeElement);
   }
 
   private closePopupOnClickout(event: MouseEvent) {
-    if (this.clickedOutTarget(event) && this.clickedOutDisabledItem(event) && this.clickedOutHeaderTemplate(event)) {
+    if (
+      this.clickedOutTarget(event) &&
+      this.clickedOutPopup(event) &&
+      this.clickedOutDisabledItem(event) &&
+      this.clickedOutHeaderTemplate(event)
+    ) {
       this.close();
     }
   }
@@ -206,27 +269,107 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     window.removeEventListener('scroll', this.onScroll, true);
   }
 
-  private setPosition() {
+  private setPosition(preferredPositions?: Array<string>) {
     if (this.listbox.nativeElement.querySelector('.po-listbox')) {
+      const customPositions = preferredPositions?.length ? preferredPositions : this.customPositions;
+
       this.poControlPosition.setElements(
         this.popupRef.nativeElement,
-        8,
+        this.popupOffset,
         this.target,
-        this.customPositions,
+        customPositions,
         false,
         this.isCornerAlign
       );
       this.poControlPosition.adjustPosition(this.position);
       this.arrowDirection = this.poControlPosition.getArrowDirection();
+      this.clampHeightToViewport();
     }
+  }
+
+  private clampHeightToViewport(): void {
+    const popupElement: HTMLElement = this.popupRef?.nativeElement;
+    const targetElement: HTMLElement = this.target;
+    const scrollElement = this.getScrollableListboxElement();
+
+    if (!popupElement || !targetElement || !scrollElement) {
+      return;
+    }
+
+    if (!this.isOpeningUp()) {
+      this.renderer.removeStyle(scrollElement, 'maxHeight');
+      return;
+    }
+
+    const targetRect = targetElement.getBoundingClientRect();
+    const spaceAbove = targetRect.top - this.popupOffset - this.viewportMargin;
+
+    if (spaceAbove <= 0) {
+      return;
+    }
+
+    if (popupElement.offsetHeight > spaceAbove) {
+      const nonScrollableHeight = popupElement.offsetHeight - scrollElement.offsetHeight;
+      const maxScrollHeight = Math.max(spaceAbove - nonScrollableHeight, 0);
+
+      this.renderer.setStyle(scrollElement, 'maxHeight', `${maxScrollHeight}px`);
+      this.poControlPosition.adjustPosition(this.position);
+      this.arrowDirection = this.poControlPosition.getArrowDirection();
+    }
+  }
+
+  private getScrollableListboxElement(): HTMLElement | null {
+    const listboxElement: HTMLElement = this.listbox?.nativeElement;
+
+    if (!listboxElement) {
+      return null;
+    }
+
+    return listboxElement.querySelector<HTMLElement>('ul[role=listbox]') ?? listboxElement;
+  }
+
+  private isOpeningUp(): boolean {
+    const currentPosition = this.isCornerAlign
+      ? PO_POPUP_ARROW_TO_CORNER_POSITION[this.arrowDirection]
+      : PO_POPUP_ARROW_TO_POSITION[this.arrowDirection];
+
+    return !!currentPosition && currentPosition.startsWith('top');
+  }
+
+  private getStickyPositions(): Array<string> | undefined {
+    const positions = this.customPositions;
+
+    if (!positions?.length) {
+      return undefined;
+    }
+
+    const currentPosition = this.isCornerAlign
+      ? PO_POPUP_ARROW_TO_CORNER_POSITION[this.arrowDirection]
+      : PO_POPUP_ARROW_TO_POSITION[this.arrowDirection];
+
+    const currentIndex = currentPosition ? positions.indexOf(currentPosition) : -1;
+
+    if (currentIndex <= 0) {
+      return positions;
+    }
+
+    return [...positions.slice(currentIndex), ...positions.slice(0, currentIndex)];
   }
 
   private validateInitialContent() {
     if (this.hasContentToShow()) {
       this.setPosition();
       this.initializeListeners();
-    } else {
+    } else if (!this.rootLazyLoad) {
       this.close();
+    }
+  }
+
+  private focusTarget(): void {
+    const focusableTarget = this.target as HTMLElement;
+
+    if (focusableTarget && typeof focusableTarget.focus === 'function') {
+      focusableTarget.focus();
     }
   }
 }
