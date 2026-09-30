@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -90,24 +91,43 @@ export class PoPopupBaseComponent {
   private _size?: string = undefined;
   private _target: any;
 
+  rootLazyLoad?: () => Observable<Array<PoPopupAction>>;
+
   // Determina se o modo de subníveis deve ser ativado.
-  // Retorna true se alguma ação possuir subItems não vazio ou $subItemTemplate.
   get computedListboxSubitems(): boolean {
+    if (this.rootLazyLoad) {
+      return true;
+    }
+
     if (!this._actions || this._actions.length === 0) {
       return false;
     }
-    return this._actions.some(action => (action.subItems && action.subItems.length > 0) || !!action.$subItemTemplate);
+    return this._actions.some(
+      action =>
+        typeof action.subItemsLazy === 'function' ||
+        (Array.isArray(action.subItems) && action.subItems.length > 0) ||
+        !!action.$subItemTemplate
+    );
   }
 
   // template-icon
   @Input('p-template-icon') templateIcon = false;
 
-  /** Lista de ações que serão exibidas no componente. */
-  @Input('p-actions') set actions(value: Array<PoPopupAction>) {
-    this._actions = Array.isArray(value) ? value : [];
+  /**
+   * Lista de ações que serão exibidas no componente.
+   * Aceita um *array* de `PoPopupAction`.
+   */
+  @Input('p-actions') set actions(value: Array<PoPopupAction> | (() => Observable<Array<PoPopupAction>>)) {
+    if (typeof value === 'function') {
+      this.rootLazyLoad = value;
+      this._actions = [];
+    } else {
+      this.rootLazyLoad = undefined;
+      this._actions = Array.isArray(value) ? value : [];
+    }
   }
 
-  get actions() {
+  get actions(): Array<PoPopupAction> {
     return this._actions;
   }
 
@@ -275,7 +295,40 @@ export class PoPopupBaseComponent {
 
   @Output('p-close') closeEvent: EventEmitter<any> = new EventEmitter();
 
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado a cada clique em um item do menu.
+   * Retorna o item clicado (`PoDropdownAction`).
+   *
+   * > Não é disparado para a ação interna de voltar (`goBack`).
+   */
   @Output('p-click-item') clickItem: EventEmitter<any> = new EventEmitter();
 
   @Output('p-open') openEvent: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado no momento em que a requisição assíncrona de um subnível é iniciada.
+   * Retorna o item agrupador (`PoPopupAction`) que originou o carregamento.
+   *
+   * > Compatível com a propriedade PoPopupAction.subItemsLazy
+   */
+  @Output('p-sub-items-load') subItemsLoad: EventEmitter<PoPopupAction> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado no momento em que a requisição assíncrona do nível raiz é iniciada
+   *
+   * > Compatível com a propriedade PoPopupAction.subItemsLazy
+   */
+  @Output('p-root-items-load') rootItemsLoad: EventEmitter<void> = new EventEmitter();
 }

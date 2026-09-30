@@ -6,6 +6,7 @@
   [p-position]="position"
   [p-size]="size"
   [p-target]="targetRef"
+  (p-click-item)="changeEvent('p-click-item', $event)"
 >
 </po-popup>
 
@@ -13,6 +14,13 @@
   <div class="po-offset-xl-5 po-offset-lg-5 po-md-2 po-lg-2">
     <po-button #target p-label="Popup" (p-click)="popup.toggle()"> </po-button>
   </div>
+</div>
+
+<po-divider />
+
+<div class="po-row">
+  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
+  <po-info class="po-md-6" p-label="Clicked item" [p-value]="infoValue | json"> </po-info>
 </div>
 
 <po-divider />
