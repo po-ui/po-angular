@@ -1,4 +1,6 @@
 import { ElementRef } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { of } from 'rxjs';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
@@ -17,6 +19,10 @@ describe('PoPopupBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('subItemsLoad: should be an EventEmitter', () => {
+      expect(component.subItemsLoad instanceof EventEmitter).toBeTrue();
+    });
+
     it('actions: should set actions to `[]` when pass invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
@@ -121,6 +127,12 @@ describe('PoPopupBaseComponent:', () => {
       it('should return true when at least one action has $subItemTemplate', () => {
         const templateRef = {} as any;
         component.actions = [{ label: 'Action 1', $subItemTemplate: templateRef }];
+
+        expect(component.computedListboxSubitems).toBeTrue();
+      });
+
+      it('should return true when subItems is a function (lazy loading)', () => {
+        component.actions = [{ label: 'Group', subItems: () => of([{ label: 'Sub 1' }]) }];
 
         expect(component.computedListboxSubitems).toBeTrue();
       });

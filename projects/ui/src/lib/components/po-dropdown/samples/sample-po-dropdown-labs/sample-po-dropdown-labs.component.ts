@@ -62,7 +62,8 @@ export class SamplePoDropdownLabsComponent implements OnInit {
     } else {
       const parentNode = this.getActionNode(this.actions, action.parent);
       if (parentNode) {
-        parentNode.subItems = [...(parentNode.subItems || []), newAction];
+        const currentSubItems = Array.isArray(parentNode.subItems) ? parentNode.subItems : [];
+        parentNode.subItems = [...currentSubItems, newAction];
       } else {
         this.actions = [...this.actions, newAction];
       }

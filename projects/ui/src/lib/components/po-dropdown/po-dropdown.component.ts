@@ -27,6 +27,11 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
  *  <file name="sample-po-dropdown-subitems/sample-po-dropdown-subitems.component.ts"> </file>
  * </example>
  *
+ * <example name="po-dropdown-lazy-subitems" title="PO Dropdown Lazy Subitems" >
+ *  <file name="sample-po-dropdown-lazy-subitems/sample-po-dropdown-lazy-subitems.component.html"> </file>
+ *  <file name="sample-po-dropdown-lazy-subitems/sample-po-dropdown-lazy-subitems.component.ts"> </file>
+ * </example>
+ *
  * <example name="po-dropdown-labs" title="PO Dropdown Labs" >
  *  <file name="sample-po-dropdown-labs/sample-po-dropdown-labs.component.html"> </file>
  *  <file name="sample-po-dropdown-labs/sample-po-dropdown-labs.component.ts"> </file>
@@ -63,16 +68,40 @@ export class PoDropdownComponent extends PoDropdownBaseComponent {
     this.dropdownRef && !this.open && !this.disabled ? this.showDropdown() : this.hideDropdown();
   }
 
-  private checkClickArea(event: MouseEvent) {
-    return this.dropdownRef?.nativeElement.contains(event.target);
+  onPopupClose(): void {
+    if (!this.open) {
+      return;
+    }
+
+    this.hideDropdown(false);
   }
 
-  private hideDropdown() {
+  private isEventInsideElement(event: MouseEvent, element?: HTMLElement): boolean {
+    if (!element) {
+      return false;
+    }
+
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+
+    return path.length ? path.includes(element) : element.contains(event.target as Node);
+  }
+
+  private checkClickArea(event: MouseEvent) {
+    const clickedOnTrigger = this.isEventInsideElement(event, this.dropdownRef?.nativeElement);
+    const clickedOnPopup = this.isEventInsideElement(event, this.popupRef?.popupRef?.nativeElement);
+
+    return clickedOnTrigger || clickedOnPopup;
+  }
+
+  private hideDropdown(shouldClosePopup = true) {
     this.icon = 'ICON_ARROW_DOWN';
     this.removeListeners();
-    this.popupRef.close();
     this.open = false;
     this.changeDetector.detectChanges();
+
+    if (shouldClosePopup) {
+      this.popupRef.close();
+    }
   }
 
   private initializeListeners() {

@@ -145,10 +145,11 @@
             [cdkOption]="item[fieldLabel]"
             [cdkOptionDisabled]="returnBooleanValue(item, 'disabled') || returnBooleanValue(item, 'visible') === false"
             [attr.aria-selected]="isSelectedItem(item) || item.selected"
+            [attr.aria-expanded]="isGroupItem(item) ? (currentGroup === item) : null"
             (click)="onSelectItem(item, $event)"
             (keydown)="onKeyDown(item, $event)"
           >
-            @if (item.subItems?.length || item.$subItemTemplate) {
+            @if (item.subItems?.length || isFunction(item.subItems) || item.$subItemTemplate) {
               <po-item-list
                 [p-label]="item.label"
                 [p-item]="item"
@@ -182,6 +183,7 @@
           class="po-listbox-group-header"
           [cdkOption]="'back-option'"
           [attr.aria-label]="literals?.backToPreviousGroup"
+          [attr.aria-busy]="isSubItemsLoading(currentGroup) ? 'true' : null"
           (click)="goBack($event)"
           (keydown)="onKeydownGoBack($event, currentGroup)"
         >
@@ -199,9 +201,44 @@
               *ngTemplateOutlet="currentGroup.$subItemTemplate; context: { $implicit: currentGroup }"
             ></ng-container>
           </div>
+        } @else if (isSubItemsLoading(currentGroup)) {
+          <div
+            class="po-listbox-subitems-loading"
+            role="status"
+            aria-live="polite"
+            [attr.aria-busy]="true"
+            [attr.aria-label]="literals.subItemsLoading"
+          >
+            @for (skeletonItem of subItemsSkeletonPlaceholders; track skeletonItem) {
+              <po-skeleton
+                class="po-listbox-subitems-skeleton"
+                p-variant="text"
+                p-width="100%"
+              ></po-skeleton>
+            }
+          </div>
+        } @else if (isSubItemsError(currentGroup)) {
+          <div
+            class="po-listbox-subitems-error"
+            role="alert"
+            aria-live="assertive"
+            (pointerdown)="$event.stopPropagation()"
+            (mousedown)="$event.stopPropagation()"
+            (click)="$event.stopPropagation()"
+          >
+            <span class="po-listbox-subitems-error-message">{{ literals.subItemsErrorMessage }}</span>
+            <po-button
+              class="po-listbox-subitems-retry"
+              [p-label]="literals.retry"
+              p-kind="secondary"
+              [p-size]="size"
+              (click)="$event.stopPropagation()"
+              (p-click)="retrySubItems($event)"
+            ></po-button>
+          </div>
         } @else {
           @for (subItem of currentItems; track subItem.label) {
-            @if (subItem.subItems?.length) {
+            @if (subItem.subItems?.length || isFunction(subItem.subItems)) {
               <li
                 [cdkOption]="subItem[fieldLabel]"
                 (click)="onSelectItem(subItem, $event)"

@@ -1,4 +1,4 @@
-import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -165,6 +165,29 @@ export class PoDropdownBaseComponent {
   get position(): string {
     return this._position;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado a qualquer clique em um item do menu do dropdown.
+   *
+   * Recebe o item clicado (`PoDropdownAction`).
+   */
+  @Output('p-click-item') clickItem: EventEmitter<PoDropdownAction> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado no momento em que a requisição assíncrona de um subnível é iniciada
+   * (quando `subItems` é definido como função que retorna um `Observable`).
+   *
+   * Recebe o item agrupador (`PoDropdownAction`) que originou o carregamento.
+   */
+  @Output('p-sub-items-load') subItemsLoad: EventEmitter<PoDropdownAction> = new EventEmitter();
 
   get popupCustomPositions(): Array<string> {
     if (this._position === 'bottom-right') {

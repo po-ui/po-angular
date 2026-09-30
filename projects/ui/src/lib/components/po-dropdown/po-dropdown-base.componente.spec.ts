@@ -1,5 +1,6 @@
 import { PoThemeA11yEnum } from '../../services';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
+import { EventEmitter } from '@angular/core';
 
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
@@ -15,6 +16,10 @@ describe('PoDropdownBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('subItemsLoad: should be an EventEmitter', () => {
+      expect(component.subItemsLoad instanceof EventEmitter).toBeTrue();
+    });
+
     it('actions: should set actions to `[]` if pass invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string'];
 

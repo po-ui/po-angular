@@ -62,11 +62,15 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
    *
    * > Por padrão, este comportamento é acionado somente ao clicar fora do componente ou em determinada ação / url.
    */
-  close() {
+  close(closeEvent?: { reason?: string; origin?: string }) {
     this.removeListeners();
 
     this.showPopup = false;
     this.closeEvent.emit();
+
+    if (closeEvent?.reason === 'escape') {
+      this.focusTarget();
+    }
   }
 
   onActionClick(popupAction: PoPopupAction) {
@@ -146,12 +150,31 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
     return !(popupHeaderTemplate && popupHeaderTemplate.contains(event.target));
   }
 
+  private isEventInsideElement(event: MouseEvent, element?: HTMLElement): boolean {
+    if (!element) {
+      return false;
+    }
+
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+
+    return path.length ? path.includes(element) : element.contains(event.target as Node);
+  }
+
   private clickedOutTarget(event) {
-    return this.target && !this.target.contains(event.target);
+    return this.target && !this.isEventInsideElement(event, this.target);
+  }
+
+  private clickedOutPopup(event) {
+    return this.popupRef?.nativeElement && !this.isEventInsideElement(event, this.popupRef.nativeElement);
   }
 
   private closePopupOnClickout(event: MouseEvent) {
-    if (this.clickedOutTarget(event) && this.clickedOutDisabledItem(event) && this.clickedOutHeaderTemplate(event)) {
+    if (
+      this.clickedOutTarget(event) &&
+      this.clickedOutPopup(event) &&
+      this.clickedOutDisabledItem(event) &&
+      this.clickedOutHeaderTemplate(event)
+    ) {
       this.close();
     }
   }
@@ -227,6 +250,14 @@ export class PoPopupComponent extends PoPopupBaseComponent implements AfterViewI
       this.initializeListeners();
     } else {
       this.close();
+    }
+  }
+
+  private focusTarget(): void {
+    const focusableTarget = this.target as HTMLElement;
+
+    if (focusableTarget && typeof focusableTarget.focus === 'function') {
+      focusableTarget.focus();
     }
   }
 }

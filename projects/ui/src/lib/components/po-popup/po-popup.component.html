@@ -12,8 +12,9 @@
         [p-param]="param"
         [p-size]="size"
         [p-listbox-subitems]="computedListboxSubitems"
-        (p-close)="close()"
+        (p-close)="close($event)"
         (p-click-item)="onClickItem($event)"
+        (p-sub-items-load)="subItemsLoad.emit($event)"
       >
         <ng-content p-popup-header-template select="[p-popup-header-template]"></ng-content>
       </po-listbox>

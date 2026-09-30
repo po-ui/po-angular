@@ -4,7 +4,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { PoListBoxComponent } from './po-listbox.component';
 import { PoDropdownAction } from '../po-dropdown';
 import { PoUtils as UtilFunctions } from './../../utils/util';
-import { Subscription, debounceTime, fromEvent, of } from 'rxjs';
+import { Subject, Subscription, debounceTime, delay, fromEvent, of, throwError, timeout } from 'rxjs';
 
 describe('PoListBoxComponent', () => {
   let component: PoListBoxComponent;
@@ -462,7 +462,7 @@ describe('PoListBoxComponent', () => {
         component.openGroup(group, new MouseEvent('click'));
 
         expect(component.currentGroup).toBe(group);
-        expect(component.currentItems).toEqual(group.subItems);
+        expect(component.currentItems).toEqual(group.subItems as Array<PoDropdownAction>);
 
         setTimeout(() => {
           expect(component.listboxGroupHeader.nativeElement.focus).toHaveBeenCalled();
@@ -497,19 +497,19 @@ describe('PoListBoxComponent', () => {
         component.openGroup(group1);
 
         expect(component.currentGroup).toEqual(group1);
-        expect(component.currentItems).toEqual(group1.subItems);
+        expect(component.currentItems).toEqual(group1.subItems as Array<PoDropdownAction>);
         expect((component as any).navigationStack.length).toBe(1);
 
         const group2 = { label: 'Group2', subItems: [{ label: 'Sub2' }] } as PoDropdownAction;
         component.openGroup(group2);
 
         expect(component.currentGroup).toEqual(group2);
-        expect(component.currentItems).toEqual(group2.subItems);
+        expect(component.currentItems).toEqual(group2.subItems as Array<PoDropdownAction>);
         expect((component as any).navigationStack.length).toBe(2);
 
         component.goBack(new KeyboardEvent('keydown', { key: 'Enter' }));
         expect(component.currentGroup).toEqual(group1);
-        expect(component.currentItems).toEqual(group1.subItems);
+        expect(component.currentItems).toEqual(group1.subItems as Array<PoDropdownAction>);
         expect((component as any).navigationStack.length).toBe(1);
 
         const groupWithoutSubItems = { label: 'EmptyGroup' } as PoDropdownAction;
@@ -586,6 +586,16 @@ describe('PoListBoxComponent', () => {
 
         component.onKeydownGoBack(eventTab);
         expect(component.closeEvent.emit).toHaveBeenCalledTimes(2);
+      });
+
+      it('onKeydownGoBack: should call goBack on ArrowLeft', () => {
+        const eventArrowLeft = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
+
+        spyOn(component, 'goBack');
+
+        component.onKeydownGoBack(eventArrowLeft);
+
+        expect(component.goBack).toHaveBeenCalledWith(eventArrowLeft);
       });
     });
     it('ngOnInit should set currentItems to items if listboxSubitems is true', () => {
@@ -1039,6 +1049,43 @@ describe('PoListBoxComponent', () => {
         component.onKeyDown(item, eventEnterKey);
 
         expect(component.closeEvent.emit).toHaveBeenCalled();
+      });
+
+      it('should call onSelectItem on ArrowRight when item has subItems array', () => {
+        const item = { label: 'Parent', subItems: [{ label: 'Child' }] };
+        const eventArrowRight = new KeyboardEvent('keydown', { code: 'ArrowRight' });
+
+        spyOn(component, 'onSelectItem');
+
+        component.onKeyDown(item, eventArrowRight);
+
+        expect(component.onSelectItem).toHaveBeenCalledWith(item, eventArrowRight);
+      });
+
+      it('should call goBack on ArrowLeft when in subitems context', () => {
+        const item = { label: 'Child' };
+        const eventArrowLeft = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
+
+        component.listboxSubitems = true;
+        component.currentGroup = { label: 'Parent' } as any;
+        spyOn(component, 'goBack');
+
+        component.onKeyDown(item, eventArrowLeft);
+
+        expect(component.goBack).toHaveBeenCalledWith(eventArrowLeft);
+      });
+
+      it('should not call goBack on ArrowLeft when not in subitems context', () => {
+        const item = { label: 'Child' };
+        const eventArrowLeft = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
+
+        component.listboxSubitems = false;
+        component.currentGroup = null;
+        spyOn(component, 'goBack');
+
+        component.onKeyDown(item, eventArrowLeft);
+
+        expect(component.goBack).not.toHaveBeenCalled();
       });
 
       it('should emit closeEvent on Tab keydown', () => {
@@ -1562,6 +1609,211 @@ describe('PoListBoxComponent', () => {
 
       expect(selectValueSpy).not.toHaveBeenCalled();
       expect(component.selectCombo.emit).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Subitems lazy loading:', () => {
+    beforeEach(() => {
+      spyOn(component as any, 'focusGroupHeader');
+    });
+
+    it('openGroup: should load static array subItems synchronously', () => {
+      const group: PoDropdownAction = { label: 'G', subItems: [{ label: 'A' }, { label: 'B' }] };
+
+      component.openGroup(group);
+
+      expect(component.currentGroup).toBe(group);
+      expect(component.currentItems.length).toBe(2);
+    });
+
+    it('subItemsSkeletonPlaceholders: should expose placeholder list for skeleton rendering', () => {
+      expect(Array.isArray(component.subItemsSkeletonPlaceholders)).toBeTrue();
+      expect(component.subItemsSkeletonPlaceholders.length).toBeGreaterThan(0);
+    });
+
+    it('openGroup: should render skeleton elements while loading the subitems', fakeAsync(() => {
+      const source = new Subject<Array<PoDropdownAction>>();
+      const group: PoDropdownAction = { label: 'G', subItems: () => source.asObservable() };
+      component.listboxSubitems = true;
+
+      component.openGroup(group);
+      fixture.detectChanges();
+
+      const loadingContainer = nativeElement.querySelector('.po-listbox-subitems-loading');
+      expect(loadingContainer).toBeTruthy();
+      expect(loadingContainer.querySelectorAll('po-skeleton').length).toBe(
+        component.subItemsSkeletonPlaceholders.length
+      );
+
+      source.next([{ label: 'ok' }]);
+      source.complete();
+      tick();
+      fixture.detectChanges();
+
+      expect(nativeElement.querySelector('.po-listbox-subitems-loading')).toBeNull();
+    }));
+
+    it('openGroup: should call the function and populate items on success', fakeAsync(() => {
+      const items = [{ label: 'X' }, { label: 'Y' }];
+      const group: PoDropdownAction = { label: 'G', subItems: () => of(items) };
+      spyOn(component.subItemsLoad, 'emit');
+
+      component.openGroup(group);
+      tick();
+
+      expect(component.subItemsLoad.emit).toHaveBeenCalledWith(group);
+      expect(component.currentItems).toEqual(items);
+      expect(component.isSubItemsLoading(group)).toBeFalse();
+      expect(component.isSubItemsError(group)).toBeFalse();
+    }));
+
+    it('openGroup: should fallback to empty list when subItems response is not an array', fakeAsync(() => {
+      const group: PoDropdownAction = {
+        label: 'G',
+        subItems: () => of(null as unknown as Array<PoDropdownAction>)
+      };
+
+      component.openGroup(group);
+      tick();
+
+      expect(component.currentItems).toEqual([]);
+      expect(component.isSubItemsError(group)).toBeFalse();
+    }));
+
+    it('openGroup: should set error state when the observable fails', fakeAsync(() => {
+      const group: PoDropdownAction = { label: 'G', subItems: () => throwError(() => new Error('fail')) };
+
+      component.openGroup(group);
+      tick();
+
+      expect(component.isSubItemsError(group)).toBeTrue();
+      expect(component.isSubItemsLoading(group)).toBeFalse();
+      expect((component as any).focusGroupHeader).toHaveBeenCalled();
+    }));
+
+    it('openGroup: should set error state when the observable times out', fakeAsync(() => {
+      const group: PoDropdownAction = {
+        label: 'G',
+        subItems: () => of([{ label: 'Z' }]).pipe(delay(2000), timeout(1000))
+      };
+
+      component.openGroup(group);
+      tick(1000);
+
+      expect(component.isSubItemsError(group)).toBeTrue();
+      expect((component as any).focusGroupHeader).toHaveBeenCalled();
+    }));
+
+    it('openGroup: should ignore concurrent expansions while loading', fakeAsync(() => {
+      const source = new Subject<Array<PoDropdownAction>>();
+      const fn = jasmine.createSpy('subItems').and.returnValue(source.asObservable());
+      const group: PoDropdownAction = { label: 'G', subItems: fn };
+
+      component.openGroup(group);
+      component.openGroup(group);
+
+      expect(fn).toHaveBeenCalledTimes(1);
+
+      source.next([{ label: 'ok' }]);
+      source.complete();
+      tick();
+    }));
+
+    it('openGroup: should reuse cache on reopen and not refetch', fakeAsync(() => {
+      const items = [{ label: 'Cached' }];
+      const fn = jasmine.createSpy('subItems').and.returnValue(of(items));
+      const group: PoDropdownAction = { label: 'G', subItems: fn };
+
+      component.openGroup(group);
+      tick();
+      component.goBack({ stopPropagation: () => {} } as any);
+      component.openGroup(group);
+      tick();
+
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(component.currentItems).toEqual(items);
+    }));
+
+    it('retrySubItems: should reexecute the fetch after an error', fakeAsync(() => {
+      let shouldFail = true;
+      const fn = jasmine.createSpy('subItems').and.callFake(() =>
+        shouldFail ? throwError(() => new Error('fail')) : of([{ label: 'OK' }])
+      );
+      const group: PoDropdownAction = { label: 'G', subItems: fn };
+
+      component.openGroup(group);
+      tick();
+      expect(component.isSubItemsError(group)).toBeTrue();
+
+      shouldFail = false;
+      component.retrySubItems({ stopPropagation: () => {} } as any);
+      tick();
+
+      expect(component.isSubItemsError(group)).toBeFalse();
+      expect(component.currentItems).toEqual([{ label: 'OK' }]);
+    }));
+
+    it('retrySubItems: should do nothing when there is no pending group', () => {
+      component['lastLoadedGroup'] = null;
+      expect(() => component.retrySubItems()).not.toThrow();
+    });
+
+    it('should ignore a late response after navigating away', fakeAsync(() => {
+      const source = new Subject<Array<PoDropdownAction>>();
+      const group: PoDropdownAction = { label: 'G', subItems: () => source.asObservable() };
+
+      component.openGroup(group);
+      component.goBack({ stopPropagation: () => {} } as any);
+
+      source.next([{ label: 'late' }]);
+      source.complete();
+      tick();
+
+      expect(component.currentItems).not.toEqual([{ label: 'late' }]);
+    }));
+
+    it('should ignore a late error after navigating away', fakeAsync(() => {
+      const source = new Subject<Array<PoDropdownAction>>();
+      const group: PoDropdownAction = { label: 'G', subItems: () => source.asObservable() };
+
+      component.openGroup(group);
+      component.goBack({ stopPropagation: () => {} } as any);
+
+      source.error(new Error('late-fail'));
+      tick();
+
+      expect(component.isSubItemsError(group)).toBeFalse();
+    }));
+
+    it('should ignore next payload when currentGroup changes before response', fakeAsync(() => {
+      const source = new Subject<Array<PoDropdownAction>>();
+      const group: PoDropdownAction = { label: 'G', subItems: () => source.asObservable() };
+
+      component.openGroup(group);
+      component.currentGroup = { label: 'other' } as PoDropdownAction;
+
+      source.next([{ label: 'late' }]);
+      source.complete();
+      tick();
+
+      expect(component.currentItems).toEqual([]);
+      expect(component.isSubItemsError(group)).toBeFalse();
+    }));
+
+    it('isFunction: should detect functions', () => {
+      expect(component.isFunction(() => {})).toBeTrue();
+      expect(component.isFunction([])).toBeFalse();
+    });
+
+    it('isGroupItem: should detect array and function groups', () => {
+      expect(component.isGroupItem({ label: 'a', subItems: [{ label: 'x' }] })).toBeTrue();
+      expect(component.isGroupItem({ label: 'a', subItems: () => of([]) })).toBeTrue();
+      expect(component.isGroupItem({ label: 'a' })).toBeFalse();
+    });
+
+    it('isSubItemsLoading/isSubItemsError: should return false for null group', () => {
+      expect(component.isSubItemsLoading(null)).toBeFalse();
+      expect(component.isSubItemsError(null)).toBeFalse();
     });
   });
 });

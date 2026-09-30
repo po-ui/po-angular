@@ -1,4 +1,5 @@
 import { TemplateRef } from '@angular/core';
+import { Observable } from 'rxjs';
 
 /**
  * @usedBy PoPopupComponent, PoWidgetComponent
@@ -121,7 +122,29 @@ export interface PoPopupAction {
    *
    * @description
    *
-   * Define uma lista de subitens para criação de menus aninhados.
+   * Define os subitens de um agrupador, criando menus aninhados.
+   *
+   * Aceita dois formatos:
+   *
+   * **Estático** – um *array* de `PoPopupAction` carregado imediatamente:
+   *
+   * ```
+   * { label: 'Relatórios', subItems: [{ label: 'Mensal' }, { label: 'Anual' }] }
+   * ```
+   *
+   * **Assíncrono (lazy loading)** – uma função que recebe o item agrupador e retorna um
+   * `Observable<Array<PoPopupAction>>`. A requisição é disparada **apenas** no momento da expansão
+  * (clique ou atalho de teclado), exibindo placeholders com `po-skeleton` enquanto os dados são carregados:
+   *
+   * ```
+   * {
+   *   label: 'Relatórios',
+   *   subItems: (item) => this.reportService.getReports(item)
+   * }
+   * ```
+   *
+   * > No formato assíncrono, o resultado é armazenado em cache após o primeiro carregamento bem-sucedido.
+   * Em caso de falha, é exibida uma mensagem com a opção de tentar novamente.
    *
    * Ao definir esta propriedade, o item exibirá um ícone indicador de subnível.
    * Recomenda-se utilizar no máximo três níveis hierárquicos para garantir a usabilidade.
@@ -132,7 +155,7 @@ export interface PoPopupAction {
    *
    * > Em subníveis aninhados, o `icon` do agrupador é substituído pelo indicador de navegação (seta).
    */
-  subItems?: Array<PoPopupAction>;
+  subItems?: Array<PoPopupAction> | ((item: PoPopupAction) => Observable<Array<PoPopupAction>>);
 
   // template interno
   $subItemTemplate?: TemplateRef<any>;
