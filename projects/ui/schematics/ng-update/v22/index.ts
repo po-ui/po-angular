@@ -18,58 +18,73 @@ import { migrateHtmlContent } from './gauge-html-migration';
 import { migrateTypeScriptContent } from './gauge-ts-migration';
 import { createMigrationReport, MigrationReport, MigrationWarning, printMigrationSummary } from './migration-report';
 
-import * as readline from 'readline';
+/** Versão mínima do Angular exigida pela v22 do `@po-ui/ng-components`. */
+const MINIMUM_ANGULAR_MAJOR = 22;
 
-function askQuestion(query: string): Promise<string> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+/**
+ * Extrai o `major` declarado para o `@angular/core` no `package.json` do
+ * `Projeto_Consumidor`.
+ *
+ * Retorna `null` quando o `package.json` não existe, não é um JSON válido, a
+ * dependência não está declarada ou o range não permite inferir um `major`
+ * (por exemplo `*`, `latest` ou um caminho `file:`). Nesses casos a migração
+ * prossegue, para não bloquear cenários legítimos como monorepos que resolvem
+ * o Angular por outro meio.
+ */
+export function getAngularMajor(tree: Tree): number | null {
+  const buffer = tree.read('package.json');
 
-  return new Promise(resolve =>
-    rl.question(query, (answer: string) => {
-      rl.close();
-      resolve(answer);
-    })
-  );
-}
-
-async function main(): Promise<Rule> {
-  const message =
-    '\n⚠️  Antes de atualizar o PO UI para a versão 22, é necessário que o Angular do seu projeto ' +
-    'já esteja na versão 22.\n' +
-    'Siga o guia oficial de atualização do Angular: https://angular.dev/update-guide\n\n' +
-    'Você já executou "ng update @angular/core@22 @angular/cli@22" e as migrações necessárias do Angular 22? (yes/no) ';
-
-  let answer = 'yes';
-
-  if (process.stdin.isTTY) {
-    answer = await askQuestion(message);
-  } else {
-    console.log(message);
-    console.log('Execução em modo não-interativo detectada. Assumindo "yes" como padrão.\n');
+  if (!buffer) {
+    return null;
   }
 
-  const confirmed = ['yes', 'y', 'sim', 's', ''].includes(answer.trim().toLowerCase());
+  try {
+    const json = JSON.parse(buffer.toString('utf-8'));
+    const range: string | undefined = json?.dependencies?.['@angular/core'] ?? json?.devDependencies?.['@angular/core'];
 
-  if (!confirmed) {
-    console.log(
-      '\n❌ Atualização cancelada. Execute primeiro as migrações do Angular 22:\n' +
-        '   ng update @angular/core@22 @angular/cli@22\n' +
-        '   Consulte: https://angular.dev/update-guide\n'
-    );
-    return chain([]);
+    if (!range) {
+      return null;
+    }
+
+    const match = /(\d+)\./.exec(range);
+
+    return match ? Number(match[1]) : null;
+  } catch {
+    return null;
   }
-
-  return chain([
-    updatePackageJson('0.0.0-PLACEHOLDER', updateDepedenciesVersion), // Req 8.1
-    gaugeMigrationRule(), // Req 8.2 (após versões, antes da instalação)
-    postUpdate() // Req 8.3 (NodePackageInstallTask)
-  ]);
 }
 
+/**
+ * Ponto de entrada da `migration-v22`.
+ *
+ * Não realiza perguntas interativas: `readline` dentro do `ng update` provoca
+ * deadlock quando o `stdin` é um TTY. Em vez de perguntar, a checagem do
+ * pré-requisito do Angular é feita de forma determinística a partir do
+ * `package.json` do `Projeto_Consumidor`.
+ */
 export default function (): Rule {
-  return (_tree: Tree, _context: SchematicContext) => main();
+  return (tree: Tree, context: SchematicContext) => {
+    const logger = context.logger;
+    const angularMajor = getAngularMajor(tree);
+
+    if (angularMajor !== null && angularMajor < MINIMUM_ANGULAR_MAJOR) {
+      logger.error(
+        `A v22 do @po-ui/ng-components exige o Angular ${MINIMUM_ANGULAR_MAJOR}, mas o projeto declara ` +
+          `o Angular ${angularMajor}. Nenhum arquivo foi alterado.\n` +
+          `Atualize o Angular primeiro:\n` +
+          `  ng update @angular/core@${MINIMUM_ANGULAR_MAJOR} @angular/cli@${MINIMUM_ANGULAR_MAJOR}\n` +
+          `Consulte o guia oficial: https://angular.dev/update-guide`
+      );
+
+      return tree;
+    }
+
+    return chain([
+      updatePackageJson('0.0.0-PLACEHOLDER', updateDepedenciesVersion), // Req 8.1
+      gaugeMigrationRule(), // Req 8.2 (após versões, antes da instalação)
+      postUpdate() // Req 8.3 (NodePackageInstallTask)
+    ]);
+  };
 }
 
 /**

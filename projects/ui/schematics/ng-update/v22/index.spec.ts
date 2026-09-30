@@ -7,7 +7,7 @@ import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 
 import { migrateHtmlContent } from './gauge-html-migration';
 import { migrateTypeScriptContent } from './gauge-ts-migration';
-import { gaugeMigrationRule } from './index';
+import { gaugeMigrationRule, getAngularMajor } from './index';
 
 /**
  * Testes de propriedade para a **escrita condicional** (`Propriedade 3`) da regra
@@ -248,11 +248,6 @@ describe('v22 gaugeMigrationRule — escrita condicional (property-based):', () 
  * - O `Tree` em memória (mesmo `angular.json`/`main.ts` já usados nos testes de
  *   propriedade acima) permite montar um `package.json` com versão antiga e
  *   arquivos de projeto com `po-gauge`, verificando as transformações aplicadas.
- *
- * O modo de confirmação do Angular 22 é controlado por `process.stdin.isTTY`:
- * em modo não-TTY o factory assume "yes" (caminho de sucesso); para o teste de
- * cancelamento (Req 8.7) força-se `isTTY = true` e faz-se stub de
- * `readline.createInterface` para responder "no".
  */
 describe('v22 migration-v22 chain — integração (SchematicTestRunner.callRule):', () => {
   /** Caminho do `migrations.json` (relativo ao diretório compilado deste spec). */
@@ -316,19 +311,6 @@ describe('v22 migration-v22 chain — integração (SchematicTestRunner.callRule
     return runner.tasks.filter(task => task.name === 'node-package').length;
   }
 
-  /** Salva/restaura `process.stdin.isTTY` para não vazar estado entre testes. */
-  let originalIsTTY: boolean | undefined;
-
-  beforeEach(() => {
-    originalIsTTY = process.stdin.isTTY;
-    // Caminho de sucesso/falha: modo não-TTY faz o factory assumir "yes".
-    (process.stdin as unknown as { isTTY?: boolean }).isTTY = false;
-  });
-
-  afterEach(() => {
-    (process.stdin as unknown as { isTTY?: boolean }).isTTY = originalIsTTY;
-  });
-
   /**
    * Ordem e efeitos da `chain` no caminho de sucesso (Req 8.1, 8.2, 8.3).
    *
@@ -390,49 +372,6 @@ describe('v22 migration-v22 chain — integração (SchematicTestRunner.callRule
   });
 
   /**
-   * Cancelamento (Req 8.7): se a confirmação do Angular 22 NÃO é confirmada, a
-   * `chain` retornada é vazia — nenhuma transformação ocorre e nenhuma tarefa de
-   * instalação é agendada.
-   *
-   * Força-se o caminho interativo com `process.stdin.isTTY = true` e stub de
-   * `readline.createInterface`, respondendo "no".
-   *
-   * **Validates: Requirement 8.7**
-   */
-  it('should not transform files nor schedule install when Angular 22 confirmation is declined (Req 8.7)', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
-    const readline = require('readline');
-    const fakeInterface = {
-      question: (_query: string, callback: (answer: string) => void) => callback('no'),
-      close: () => undefined
-    };
-    const readlineSpy = spyOn(readline, 'createInterface').and.returnValue(fakeInterface);
-
-    // Força o caminho interativo (askQuestion) em vez do modo não-TTY.
-    (process.stdin as unknown as { isTTY?: boolean }).isTTY = true;
-
-    const originalHtml = APP_COMPONENT_HTML;
-    const originalTs = APP_COMPONENT_TS;
-    const tree = buildIntegrationTree();
-
-    const runner = await runChain(tree);
-
-    // Confirmação recusada foi solicitada via readline.
-    expect(readlineSpy).toHaveBeenCalled();
-
-    // Nenhuma transformação: conteúdo idêntico byte a byte ao original.
-    expect(tree.read('/src/app/app.component.html')!.toString('utf-8')).toBe(originalHtml);
-    expect(tree.read('/src/app/app.component.ts')!.toString('utf-8')).toBe(originalTs);
-
-    // package.json inalterado (versão antiga preservada).
-    const pkg = JSON.parse(tree.read('/package.json')!.toString('utf-8'));
-    expect(pkg.dependencies['@po-ui/ng-components']).toBe(OLD_PO_VERSION);
-
-    // Nenhuma tarefa de instalação agendada (Req 8.7).
-    expect(countInstallTasks(runner)).toBe(0);
-  });
-
-  /**
    * Falha de regra na cadeia (Req 8.4): se qualquer regra da `chain` falhar, a
    * execução é interrompida e a tarefa `NodePackageInstallTask` NÃO é agendada.
    *
@@ -457,6 +396,46 @@ describe('v22 migration-v22 chain — integração (SchematicTestRunner.callRule
     expect(rejected).toBe(true);
 
     // Req 8.4 — nenhuma tarefa de instalação foi agendada.
+    expect(countInstallTasks(runner)).toBe(0);
+  });
+
+  /**
+   * Pré-requisito de versão do Angular: quando o `package.json` do projeto
+   * declara um Angular anterior ao mínimo exigido (major < 22), a migração
+   * aborta de forma determinística — sem transformar arquivos, sem alterar
+   * versões e sem agendar tarefa de instalação.
+   *
+   * Substitui a antiga confirmação interativa (prompt via readline) por uma
+   * checagem baseada no `@angular/core` declarado no `package.json`.
+   */
+  it('should abort without changes when the declared Angular is older than the required major', async () => {
+    const outdatedPackageJson = JSON.stringify(
+      {
+        name: 'consumer-app',
+        version: '0.0.0',
+        dependencies: {
+          '@angular/core': '^21.0.0',
+          '@po-ui/ng-components': OLD_PO_VERSION
+        },
+        devDependencies: { typescript: '~5.9.0' }
+      },
+      null,
+      2
+    );
+
+    const tree = buildIntegrationTree(outdatedPackageJson);
+
+    const runner = await runChain(tree);
+
+    // Nenhuma transformação: arquivos idênticos ao original.
+    expect(tree.read('/src/app/app.component.html')!.toString('utf-8')).toBe(APP_COMPONENT_HTML);
+    expect(tree.read('/src/app/app.component.ts')!.toString('utf-8')).toBe(APP_COMPONENT_TS);
+
+    // package.json inalterado (versão antiga do PO UI preservada).
+    const pkg = JSON.parse(tree.read('/package.json')!.toString('utf-8'));
+    expect(pkg.dependencies['@po-ui/ng-components']).toBe(OLD_PO_VERSION);
+
+    // Nenhuma tarefa de instalação agendada.
     expect(countInstallTasks(runner)).toBe(0);
   });
 });
@@ -621,5 +600,61 @@ describe('v22 migration-v22 chain — idempotência multi-execução (property-b
       msg.includes('Nenhuma ocorrência do po-gauge foi encontrada no workspace')
     );
     expect(noOccurrenceMessage).toBeDefined();
+  });
+});
+
+/**
+ * Testes unitários de `getAngularMajor`.
+ *
+ * A função extrai o `major` do range declarado para `@angular/core` no
+ * `package.json`, priorizando `dependencies` sobre `devDependencies`, e devolve
+ * `null` em todos os cenários que impedem inferir o major com segurança
+ * (arquivo ausente, JSON inválido, dependência ausente ou range sem número).
+ */
+describe('v22 getAngularMajor:', () => {
+  /** Monta um `Tree` com um `package.json` de conteúdo arbitrário. */
+  function treeWithPackageJson(content: string): Tree {
+    const tree = Tree.empty();
+    tree.create('/package.json', content);
+    return tree;
+  }
+
+  it('should extract the major from a caret range in dependencies', () => {
+    const tree = treeWithPackageJson(JSON.stringify({ dependencies: { '@angular/core': '^22.1.3' } }));
+    expect(getAngularMajor(tree)).toBe(22);
+  });
+
+  it('should extract the major from a tilde range', () => {
+    const tree = treeWithPackageJson(JSON.stringify({ dependencies: { '@angular/core': '~21.0.0' } }));
+    expect(getAngularMajor(tree)).toBe(21);
+  });
+
+  it('should extract the major from an exact version', () => {
+    const tree = treeWithPackageJson(JSON.stringify({ dependencies: { '@angular/core': '20.2.0' } }));
+    expect(getAngularMajor(tree)).toBe(20);
+  });
+
+  it('should fall back to devDependencies when not present in dependencies', () => {
+    const tree = treeWithPackageJson(JSON.stringify({ devDependencies: { '@angular/core': '^22.0.0' } }));
+    expect(getAngularMajor(tree)).toBe(22);
+  });
+
+  it('should return null when package.json does not exist', () => {
+    expect(getAngularMajor(Tree.empty())).toBeNull();
+  });
+
+  it('should return null when the JSON is invalid', () => {
+    const tree = treeWithPackageJson('{ not valid json');
+    expect(getAngularMajor(tree)).toBeNull();
+  });
+
+  it('should return null when @angular/core is not declared', () => {
+    const tree = treeWithPackageJson(JSON.stringify({ dependencies: { '@po-ui/ng-components': '^22.0.0' } }));
+    expect(getAngularMajor(tree)).toBeNull();
+  });
+
+  it('should return null when the range has no inferable major (e.g. "latest")', () => {
+    const tree = treeWithPackageJson(JSON.stringify({ dependencies: { '@angular/core': 'latest' } }));
+    expect(getAngularMajor(tree)).toBeNull();
   });
 });
