@@ -26,10 +26,6 @@ Atualmente o PO está homologado para os seguintes navegadores:
         <td class="po-table-column">2 últimas versões principais</td>
       </tr>
       <tr class="po-table-row">
-        <th class="po-table-column">Safari</th>
-        <td class="po-table-column">2 últimas versões principais</td>
-      </tr>
-      <tr class="po-table-row">
         <th class="po-table-column">IOS</th>
         <td class="po-table-column">2 últimas versões principais</td>
       </tr>
