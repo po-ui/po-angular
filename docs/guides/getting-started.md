@@ -48,12 +48,13 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     ...
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~22.0.1",
     "@angular-devkit/schematics": "~22.0.1",
+    "@angular/build": "~22.0.1",
     "@angular/cli": "~22.0.1",
     "@angular/compiler-cli": "~22.0.1",
     ...
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "^4.0.0"
   }
 ```
 
@@ -71,25 +72,9 @@ yarn install
 
 ### Observação para Angular 19+
 
-Em versões mais recentes do Angular, o projeto pode utilizar o novo build system baseado em **@angular/build**. Caso ocorra o erro:
+Em versões mais recentes do Angular, o projeto utiliza, por padrão, novo build system baseado em **@angular/build**. 
 
-```
-Could not find the @angular/build:dev-server builder's package
-```
-
-Verifique se o pacote está declarado em **devDependencies**:
-
-```
-npm install -D @angular/build
-```
-
-ou
-
-```
-pnpm install -D @angular/build
-```
-
-Além disso, valide no arquivo angular.json se o builder está configurado para **@angular/build:***:
+Verifique se o pacote está declarado em **devDependencies**. Além disso, valide no arquivo angular.json se o builder está configurado para **@angular/build:***:
 
 ```
 "projects": {
@@ -106,10 +91,9 @@ Além disso, valide no arquivo angular.json se o builder está configurado para 
 }
 ```
 
-Se o **builder** for **@angular/build:***, o pacote **@angular/build** deve estar instalado. Caso esteja utilizando **@angular-devkit/build-angular**, o comportamento será o modelo tradicional.
 Para maiores informações veja na documentação oficial do [Angular](https://angular.dev/tools/cli/build-system-migration).
 
-### Passo 2 - Adiconando o pacote @po-ui/ng-components
+### Passo 2 - Adicionando o pacote @po-ui/ng-components
 
 Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos adicionar o **Po** em seu projeto e o mesmo se encarregará de configurar o tema, instalar o pacote e importar o módulo do **Po**. Além de importar também o modulo **HttpClientModule**.
 
