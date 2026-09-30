@@ -1,5 +1,7 @@
 import { PoThemeA11yEnum } from '../../services';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
+import { EventEmitter } from '@angular/core';
+import { of } from 'rxjs';
 
 import { PoDropdownBaseComponent } from './po-dropdown-base.component';
 
@@ -15,6 +17,10 @@ describe('PoDropdownBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('subItemsLoad: should be an EventEmitter', () => {
+      expect(component.subItemsLoad instanceof EventEmitter).toBeTrue();
+    });
+
     it('actions: should set actions to `[]` if pass invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string'];
 
@@ -135,6 +141,24 @@ describe('PoDropdownBaseComponent:', () => {
       it('should return bottom-left and top-left as default', () => {
         component.position = 'bottom-left';
         expect(component.popupCustomPositions).toEqual(['bottom-left', 'top-left']);
+      });
+    });
+
+    describe('Lazy load (actions as function):', () => {
+      it('actions setter: should store the function in popupActions and keep actions as an empty array', () => {
+        const fn = () => of([{ label: 'a' }]);
+        component.actions = fn;
+
+        expect(component.actions).toEqual([]);
+        expect(component.popupActions).toBe(fn);
+      });
+
+      it('actions setter: should expose the array in both actions and popupActions when an array is passed', () => {
+        const list = [{ label: 'a' }];
+        component.actions = list;
+
+        expect(component.actions).toBe(list);
+        expect(component.popupActions).toBe(list);
       });
     });
   });

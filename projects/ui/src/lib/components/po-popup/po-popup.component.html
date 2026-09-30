@@ -1,4 +1,4 @@
-@if (showPopup && actions.length && !checkAllActionIsInvisible()) {
+@if (showPopup && (actions.length || rootLazyLoad) && !checkAllActionIsInvisible()) {
   <div #popupRef class="po-popup">
     @if (!hideArrow) {
       <div class="po-popup-arrow po-arrow-{{ arrowDirection }}"></div>
@@ -12,8 +12,12 @@
         [p-param]="param"
         [p-size]="size"
         [p-listbox-subitems]="computedListboxSubitems"
-        (p-close)="close()"
+        [p-root-lazy-load]="rootLazyLoad"
+        (p-close)="close($event)"
         (p-click-item)="onClickItem($event)"
+        (p-content-change)="onContentChange()"
+        (p-sub-items-load)="subItemsLoad.emit($event)"
+        (p-root-items-load)="rootItemsLoad.emit()"
       >
         <ng-content p-popup-header-template select="[p-popup-header-template]"></ng-content>
       </po-listbox>

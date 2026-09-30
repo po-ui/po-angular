@@ -20,4 +20,13 @@ export interface PoListBoxLiterals {
 
   // Texto exibido na ação do rodapé da lista de resultados.
   footerActionListbox?: string;
+
+  /** Mensagem exibida quando o carregamento assíncrono de um subnível falha. */
+  subItemsErrorMessage?: string;
+
+  /** Texto acessível anunciado durante o carregamento assíncrono de um subnível. */
+  subItemsLoading?: string;
+
+  /** Texto do botão para tentar novamente o carregamento de um subnível. */
+  retry?: string;
 }
