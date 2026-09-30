@@ -3,29 +3,34 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
+  Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   Renderer2,
   SimpleChanges,
   ViewChild,
   ViewChildren,
+  WritableSignal,
   effect,
-  inject
+  inject,
+  signal
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
 
 import { PoListBoxBaseComponent } from './po-listbox-base.component';
-import { PoItemListOptionGroup } from './po-item-list/interfaces/po-item-list-option-group.interface';
-import { PoItemListOption } from './po-item-list/interfaces/po-item-list-option.interface';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
-import { isTypeof, PoUtils } from '../../utils/util';
+import { isTypeof, PoUtils, uuid } from '../../utils/util';
 import { PoSearchListComponent } from './po-search-list/po-search-list.component';
 import { PoDropdownAction } from '../po-dropdown/po-dropdown-action.interface';
-import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
+import { Observable, Subscription, Subject, debounceTime, finalize, fromEvent, takeUntil } from 'rxjs';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
+
+const PO_LISTBOX_ROOT_KEY = 'ROOT';
 
 @Component({
   selector: 'po-listbox',
@@ -36,6 +41,18 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
   element = inject(ElementRef);
   public currentItems: Array<PoDropdownAction> = [];
   public currentGroup: PoDropdownAction | null = null;
+  public readonly subItemsLoading: WritableSignal<Record<string, boolean>> = signal({});
+  public readonly subItemsError: WritableSignal<Record<string, boolean>> = signal({});
+  public readonly subItemsSkeletonPlaceholders = Array.from({ length: 3 }, (_, index) => index);
+
+  @Input('p-root-lazy-load') rootLazyLoad?: () => Observable<Array<PoDropdownAction>>;
+
+  @Output('p-root-items-load') rootItemsLoad = new EventEmitter<void>();
+
+  private readonly loadedSubItems: Record<string, Array<PoDropdownAction>> = {};
+  private lastLoadedGroup: PoDropdownAction | null = null;
+  private rootLoaded = false;
+  private readonly destroySubItems$ = new Subject<void>();
 
   private readonly navigationStack: Array<{ group: PoDropdownAction | null; items: Array<PoDropdownAction> }> = [];
   private readonly renderer = inject(Renderer2);
@@ -71,6 +88,10 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
   ngOnInit(): void {
     if (this.listboxSubitems) {
       this.currentItems = this.items;
+
+      if (this.rootLazyLoad && !this.rootLoaded) {
+        this.loadRootItemsAsync();
+      }
     }
   }
 
@@ -80,7 +101,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     this.listboxItemList?.nativeElement.focus();
     if (this.listboxSubitems) {
       requestAnimationFrame(() => {
-        const firstItem = this.listboxItems?.first.nativeElement;
+        const firstItem = this.listboxItems?.first?.nativeElement;
         if (firstItem) {
           firstItem.focus();
 
@@ -108,10 +129,19 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     if (this.subscriptionScrollEvent?.unsubscribe) {
       this.subscriptionScrollEvent.unsubscribe();
     }
+
+    this.destroySubItems$.next();
+    this.destroySubItems$.complete();
   }
 
   public openGroup(group: PoDropdownAction, event?: MouseEvent | KeyboardEvent): void {
     event?.stopPropagation();
+
+    const key = this.getGroupKey(group);
+
+    if (this.subItemsLoading()[key]) {
+      return;
+    }
 
     this.navigationStack.push({
       group: this.currentGroup,
@@ -119,8 +149,172 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     });
 
     this.currentGroup = group;
-    this.currentItems = group.subItems || [];
 
+    if (typeof group.subItems === 'function') {
+      this.loadSubItemsAsync(group, key);
+    } else {
+      this.currentItems = group.subItems || [];
+      this.focusGroupHeader();
+    }
+  }
+
+  private loadSubItemsAsync(group: PoDropdownAction, key: string): void {
+    if (this.loadedSubItems[key]) {
+      this.currentItems = this.loadedSubItems[key];
+      this.clearSubItemsState(key);
+      this.focusGroupHeader();
+      return;
+    }
+
+    this.currentItems = [];
+    this.setSubItemsState(this.subItemsLoading, key, true);
+    this.setSubItemsState(this.subItemsError, key, false);
+    this.lastLoadedGroup = group;
+    this.subItemsLoad.emit(group);
+    this.focusGroupHeader();
+
+    const request$ = (group.subItems as (item: PoDropdownAction) => Observable<Array<PoDropdownAction>>)(group);
+
+    request$
+      .pipe(
+        takeUntil(this.destroySubItems$),
+        finalize(() => {
+          this.setSubItemsState(this.subItemsLoading, key, false);
+          this.changeDetector.detectChanges();
+        })
+      )
+      .subscribe({
+        next: subItems => {
+          if (this.currentGroup !== group) {
+            return;
+          }
+          const items = Array.isArray(subItems) ? subItems : [];
+          this.loadedSubItems[key] = items;
+          this.currentItems = items;
+          this.setSubItemsState(this.subItemsError, key, false);
+          this.focusGroupHeader();
+        },
+        error: () => {
+          if (this.currentGroup !== group) {
+            return;
+          }
+          this.setSubItemsState(this.subItemsError, key, true);
+          this.focusGroupHeader();
+        }
+      });
+  }
+
+  public retrySubItems(event?: MouseEvent | KeyboardEvent): void {
+    event?.stopPropagation();
+
+    if (!this.currentGroup) {
+      this.retryRootItems(event);
+      return;
+    }
+
+    const group = this.lastLoadedGroup;
+    if (!group || typeof group.subItems !== 'function') {
+      return;
+    }
+
+    const key = this.getGroupKey(group);
+    delete this.loadedSubItems[key];
+    this.loadSubItemsAsync(group, key);
+  }
+
+  public loadRootItemsAsync(): void {
+    if (!this.rootLazyLoad) {
+      return;
+    }
+
+    const key = PO_LISTBOX_ROOT_KEY;
+
+    if (this.subItemsLoading()[key]) {
+      return;
+    }
+
+    if (this.rootLoaded && this.loadedSubItems[key]) {
+      this.currentItems = this.loadedSubItems[key];
+      this.clearSubItemsState(key);
+      return;
+    }
+
+    this.currentItems = [];
+    this.setSubItemsState(this.subItemsLoading, key, true);
+    this.setSubItemsState(this.subItemsError, key, false);
+    this.rootItemsLoad.emit();
+
+    this.rootLazyLoad()
+      .pipe(
+        takeUntil(this.destroySubItems$),
+        finalize(() => {
+          this.setSubItemsState(this.subItemsLoading, key, false);
+          this.changeDetector.detectChanges();
+        })
+      )
+      .subscribe({
+        next: items => {
+          const resolved = Array.isArray(items) ? items : [];
+          this.loadedSubItems[key] = resolved;
+          this.currentItems = resolved;
+          this.rootLoaded = true;
+          this.setSubItemsState(this.subItemsError, key, false);
+        },
+        error: () => {
+          this.setSubItemsState(this.subItemsError, key, true);
+        }
+      });
+  }
+
+  public retryRootItems(event?: MouseEvent | KeyboardEvent): void {
+    event?.stopPropagation();
+
+    this.rootLoaded = false;
+    delete this.loadedSubItems[PO_LISTBOX_ROOT_KEY];
+    this.loadRootItemsAsync();
+  }
+
+  public isRootLoading(): boolean {
+    return !!this.subItemsLoading()[PO_LISTBOX_ROOT_KEY];
+  }
+
+  public isRootError(): boolean {
+    return !!this.subItemsError()[PO_LISTBOX_ROOT_KEY];
+  }
+
+  public isSubItemsLoading(group: PoDropdownAction | null): boolean {
+    return !!group && !!this.subItemsLoading()[this.getGroupKey(group)];
+  }
+
+  public isSubItemsError(group: PoDropdownAction | null): boolean {
+    return !!group && !!this.subItemsError()[this.getGroupKey(group)];
+  }
+
+  public isFunction(value: unknown): boolean {
+    return typeof value === 'function';
+  }
+
+  public isGroupItem(item: PoDropdownAction): boolean {
+    return !!item && (!!(item.subItems as Array<PoDropdownAction>)?.length || typeof item.subItems === 'function');
+  }
+
+  private getGroupKey(group: PoDropdownAction): string {
+    if (!group.$id) {
+      group.$id = uuid();
+    }
+    return group.$id;
+  }
+
+  private setSubItemsState(state: WritableSignal<Record<string, boolean>>, key: string, value: boolean): void {
+    state.update(current => ({ ...current, [key]: value }));
+  }
+
+  private clearSubItemsState(key: string): void {
+    this.setSubItemsState(this.subItemsLoading, key, false);
+    this.setSubItemsState(this.subItemsError, key, false);
+  }
+
+  private focusGroupHeader(): void {
     requestAnimationFrame(() => {
       const firstItem = this.listboxGroupHeader?.nativeElement;
       if (firstItem) {
@@ -161,11 +355,16 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
   }
 
   public onKeydownGoBack(event: KeyboardEvent, currentGroup?: PoDropdownAction): void {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' || event.code === 'ArrowLeft') {
       this.goBack(event);
     }
 
-    if (event?.code === 'Escape' || event.code === 'Tab') {
+    if (event?.code === 'Escape') {
+      this.closeEvent.emit({ reason: 'escape', origin: 'keyboard' });
+      return;
+    }
+
+    if (event.code === 'Tab') {
       if (event.code === 'Tab' && !event.shiftKey && currentGroup?.$subItemTemplate) {
         return;
       }
@@ -183,7 +382,7 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     }
   }
 
-  onSelectItem(itemListAction: PoItemListOption | PoItemListOptionGroup | any, event?: MouseEvent | KeyboardEvent) {
+  onSelectItem(itemListAction: any, event?: MouseEvent | KeyboardEvent) {
     const isDisabled =
       itemListAction.hasOwnProperty('disabled') &&
       itemListAction.disabled !== null &&
@@ -209,7 +408,11 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
       return this.openUrl(itemListAction.url);
     }
 
-    if (itemListAction?.subItems?.length || itemListAction?.$subItemTemplate) {
+    if (
+      itemListAction?.subItems?.length ||
+      typeof itemListAction?.subItems === 'function' ||
+      itemListAction?.$subItemTemplate
+    ) {
       this.openGroup(itemListAction, event);
     } else if (this.listboxSubitems) {
       this.closeEvent.emit();
@@ -226,37 +429,68 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     }
   }
 
-  onKeyDown(itemListAction: PoItemListOption | PoItemListOptionGroup | any, event?: KeyboardEvent) {
+  onKeyDown(itemListAction: any, event?: KeyboardEvent) {
     event?.preventDefault();
 
-    if ((event && event.code === 'Enter') || event.code === 'Space') {
-      if (itemListAction.type === 'footerAction') {
-        this.handleFooterActionListbox();
-        return;
-      }
-
-      // Cenário em que o `Po-Search` (com listbox) tem nos items ação ou url
-      if (this.type === 'option' && (itemListAction?.action || itemListAction?.url)) {
-        this.onSelectItem(itemListAction);
-        this.optionClicked(itemListAction);
-        return;
-      }
-
-      switch (this.type) {
-        case 'check':
-          this.onSelectCheckBoxItem(itemListAction);
-          break;
-        case 'option':
-          this.optionClicked(itemListAction);
-          break;
-        case 'action':
-          this.onSelectItem(itemListAction);
-          break;
-      }
+    if (event?.code === 'ArrowRight') {
+      this.handleArrowRightKey(itemListAction, event);
+      return;
     }
 
-    if ((event && event.code === 'Escape') || event.code === 'Tab') {
+    if (event?.code === 'ArrowLeft' && this.listboxSubitems && this.currentGroup) {
+      this.goBack(event);
+      return;
+    }
+
+    if ((event && event.code === 'Enter') || event.code === 'Space') {
+      this.handleEnterOrSpaceKey(itemListAction);
+      return;
+    }
+
+    if (event?.code === 'Escape') {
+      this.closeEvent.emit({ reason: 'escape', origin: 'keyboard' });
+      return;
+    }
+
+    if (event.code === 'Tab') {
       this.closeEvent.emit();
+    }
+  }
+
+  private handleArrowRightKey(itemListAction: any, event: KeyboardEvent): void {
+    const hasSubItems =
+      !!itemListAction?.subItems?.length ||
+      typeof itemListAction?.subItems === 'function' ||
+      !!itemListAction?.$subItemTemplate;
+
+    if (hasSubItems) {
+      this.onSelectItem(itemListAction, event);
+    }
+  }
+
+  private handleEnterOrSpaceKey(itemListAction: any): void {
+    if (itemListAction.type === 'footerAction') {
+      this.handleFooterActionListbox();
+      return;
+    }
+
+    // Cenário em que o `Po-Search` (com listbox) tem nos items ação ou url
+    if (this.type === 'option' && (itemListAction?.action || itemListAction?.url)) {
+      this.onSelectItem(itemListAction);
+      this.optionClicked(itemListAction);
+      return;
+    }
+
+    switch (this.type) {
+      case 'check':
+        this.onSelectCheckBoxItem(itemListAction);
+        break;
+      case 'option':
+        this.optionClicked(itemListAction);
+        break;
+      case 'action':
+        this.onSelectItem(itemListAction);
+        break;
     }
   }
 

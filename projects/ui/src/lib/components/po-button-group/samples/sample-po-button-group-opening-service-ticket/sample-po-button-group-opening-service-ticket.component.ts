@@ -26,10 +26,10 @@ export class SamplePoButtonGroupOpeningServiceTicketComponent {
   ];
 
   selectWeekDay(button: PoButtonGroupItem): void {
-    this.selectedWeekDay = button.selected ? button.label! : '';
+    this.selectedWeekDay = button.selected ? button.label : '';
   }
 
   selectPeriod(button: PoButtonGroupItem): void {
-    this.selectedPeriod = button.selected ? button.label! : '';
+    this.selectedPeriod = button.selected ? button.label : '';
   }
 }

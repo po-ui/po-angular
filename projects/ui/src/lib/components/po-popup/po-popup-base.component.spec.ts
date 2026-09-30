@@ -1,4 +1,6 @@
 import { ElementRef } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { of } from 'rxjs';
 
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 
@@ -17,6 +19,10 @@ describe('PoPopupBaseComponent:', () => {
   });
 
   describe('Properties:', () => {
+    it('subItemsLoad: should be an EventEmitter', () => {
+      expect(component.subItemsLoad instanceof EventEmitter).toBeTrue();
+    });
+
     it('actions: should set actions to `[]` when pass invalid values', () => {
       const invalidValues = [undefined, null, '', true, false, 0, 1, 'string', {}];
 
@@ -125,6 +131,12 @@ describe('PoPopupBaseComponent:', () => {
         expect(component.computedListboxSubitems).toBeTrue();
       });
 
+      it('should return true when subItems is a function (lazy loading)', () => {
+        component.actions = [{ label: 'Group', subItems: () => of([{ label: 'Sub 1' }]) }];
+
+        expect(component.computedListboxSubitems).toBeTrue();
+      });
+
       it('should return false when actions is empty', () => {
         component.actions = [];
 
@@ -199,6 +211,30 @@ describe('PoPopupBaseComponent:', () => {
         document.documentElement.setAttribute('data-a11y', PoThemeA11yEnum.AAA);
         component['_size'] = undefined;
         expect(component.size).toBe('medium');
+      });
+    });
+
+    describe('Lazy load (rootLazyLoad):', () => {
+      it('computedListboxSubitems: should return true when rootLazyLoad is set', () => {
+        component.actions = () => of([{ label: 'a' }]);
+
+        expect(component.computedListboxSubitems).toBeTrue();
+      });
+
+      it('actions setter: should set rootLazyLoad and empty actions when a function is passed', () => {
+        const fn = () => of([{ label: 'a' }]);
+        component.actions = fn;
+
+        expect(component.rootLazyLoad).toBe(fn);
+        expect(component.actions).toEqual([]);
+      });
+
+      it('actions setter: should clear rootLazyLoad when an array is passed', () => {
+        component.actions = () => of([{ label: 'a' }]);
+        component.actions = [{ label: 'b' }];
+
+        expect(component.rootLazyLoad).toBeUndefined();
+        expect(component.actions).toEqual([{ label: 'b' }]);
       });
     });
   });

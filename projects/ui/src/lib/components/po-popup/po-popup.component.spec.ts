@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
 
 import { configureTestSuite, expectPropertiesValues } from './../../util-test/util-expect.spec';
 
@@ -19,15 +20,6 @@ describe('PoPopupComponent:', () => {
 
   const eventResize = document.createEvent('Event');
   eventResize.initEvent('resize', false, true);
-
-  const fakeThis = {
-    target: {
-      contains: value => {
-        const target = ['a', 'b'];
-        return target.includes(value);
-      }
-    }
-  };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -284,19 +276,27 @@ describe('PoPopupComponent:', () => {
     });
 
     it('clickedOutTarget: should return true if doesn`t click in event target', () => {
+      component.target = document.createElement('div');
+      spyOn(component as any, 'isEventInsideElement').and.returnValue(false);
+
       event = {
         target: 'c'
       };
 
-      expect(component['clickedOutTarget'].call(fakeThis, event)).toBeTruthy();
+      expect(component['clickedOutTarget'](event)).toBeTruthy();
+      expect((component as any).isEventInsideElement).toHaveBeenCalled();
     });
 
     it('clickedOutTarget: should return false if click is in event target', () => {
+      component.target = document.createElement('div');
+      spyOn(component as any, 'isEventInsideElement').and.returnValue(true);
+
       event = {
         target: 'a'
       };
 
-      expect(component['clickedOutTarget'].call(fakeThis, event)).toBeFalsy();
+      expect(component['clickedOutTarget'](event)).toBeFalsy();
+      expect((component as any).isEventInsideElement).toHaveBeenCalled();
     });
 
     it('clickedOutTarget: should return false if doesn`t have target', () => {
@@ -359,6 +359,26 @@ describe('PoPopupComponent:', () => {
       expect(component.closeEvent.emit).toHaveBeenCalled();
     });
 
+    it('close: should focus target when close reason is escape', () => {
+      const target = document.createElement('button');
+      const focusSpy = spyOn(target, 'focus');
+      component.target = target;
+
+      component.close({ reason: 'escape', origin: 'keyboard' });
+
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
+    it('close: should not focus target when close reason is not escape', () => {
+      const target = document.createElement('button');
+      const focusSpy = spyOn(target, 'focus');
+      component.target = target;
+
+      component.close();
+
+      expect(focusSpy).not.toHaveBeenCalled();
+    });
+
     it('checkAllActionIsInvisible: should return true is all itens are invisible', () => {
       component.actions = [
         { 'label': 'PO Popup', 'visible': false },
@@ -379,10 +399,19 @@ describe('PoPopupComponent:', () => {
       expect(allInvisible).toBeFalsy();
     });
 
+    it('checkAllActionIsInvisible: should return false when rootLazyLoad is set and no actions', () => {
+      component.actions = () => of([{ label: 'a' }]);
+
+      const allInvisible = component['checkAllActionIsInvisible']();
+
+      expect(allInvisible).toBeFalse();
+    });
+
     it(`closePopupOnClickout: should call 'close' if clickedOutDisabledItem, clickedOutTarget and
       clickedOutHeaderTemplate return true`, () => {
       spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
       spyOn(component, <any>'clickedOutTarget').and.returnValue(true);
+      spyOn(component, <any>'clickedOutPopup').and.returnValue(true);
       spyOn(component, <any>'clickedOutHeaderTemplate').and.returnValue(true);
       spyOn(component, <any>'close');
 
@@ -391,6 +420,7 @@ describe('PoPopupComponent:', () => {
       expect(component['close']).toHaveBeenCalled();
       expect(component['clickedOutHeaderTemplate']).toHaveBeenCalled();
       expect(component['clickedOutTarget']).toHaveBeenCalled();
+      expect(component['clickedOutPopup']).toHaveBeenCalled();
       expect(component['clickedOutDisabledItem']).toHaveBeenCalled();
     });
 
@@ -398,6 +428,7 @@ describe('PoPopupComponent:', () => {
       clickedOutHeaderTemplate returns false`, () => {
       spyOn(component, <any>'clickedOutDisabledItem').and.returnValue(true);
       spyOn(component, <any>'clickedOutTarget').and.returnValue(true);
+      spyOn(component, <any>'clickedOutPopup').and.returnValue(true);
       spyOn(component, <any>'clickedOutHeaderTemplate').and.returnValue(false);
       spyOn(component, 'close');
 
@@ -407,7 +438,50 @@ describe('PoPopupComponent:', () => {
 
       expect(component['clickedOutDisabledItem']).toHaveBeenCalled();
       expect(component['clickedOutTarget']).toHaveBeenCalled();
+      expect(component['clickedOutPopup']).toHaveBeenCalled();
       expect(component['clickedOutHeaderTemplate']).toHaveBeenCalled();
+    });
+
+    it('isEventInsideElement: should return true when composedPath contains the element', () => {
+      const element = document.createElement('div');
+      const event = {
+        target: document.createElement('span'),
+        composedPath: () => [document.createElement('a'), element]
+      } as unknown as MouseEvent;
+
+      expect(component['isEventInsideElement'](event, element)).toBeTrue();
+    });
+
+    it('isEventInsideElement: should fallback to contains when composedPath is unavailable', () => {
+      const element = document.createElement('div');
+      const target = document.createElement('button');
+      element.appendChild(target);
+      const event = { target, composedPath: undefined } as unknown as MouseEvent;
+
+      expect(component['isEventInsideElement'](event, element)).toBeTrue();
+    });
+
+    it('isEventInsideElement: should return false when element is undefined', () => {
+      const event = { target: document.createElement('button') } as unknown as MouseEvent;
+
+      expect(component['isEventInsideElement'](event, undefined)).toBeFalse();
+    });
+
+    it('clickedOutPopup: should return true when click is outside popup', () => {
+      const popupElement = document.createElement('div');
+      const externalElement = document.createElement('span');
+      component.popupRef = { nativeElement: popupElement } as any;
+
+      const event = { target: externalElement, composedPath: undefined } as unknown as MouseEvent;
+
+      expect(component['clickedOutPopup'](event)).toBeTrue();
+    });
+
+    it('clickedOutPopup: should return false when popupRef is undefined', () => {
+      component.popupRef = undefined;
+      const event = { target: document.createElement('span') } as unknown as MouseEvent;
+
+      expect(component['clickedOutPopup'](event)).toBeFalsy();
     });
 
     it('hasContentToShow: should return true if has actions', () => {
@@ -503,7 +577,7 @@ describe('PoPopupComponent:', () => {
       const spyDetect = spyOn(component['changeDetector'], 'detectChanges');
       const spyValidate = spyOn(component as any, 'validateInitialContent');
 
-      const item = { subItems: [{ label: 'child' }] };
+      const item = { label: 'parent', subItems: [{ label: 'child' }] };
       component.onClickItem(item);
 
       expect(spyEmit).toHaveBeenCalledWith(item);

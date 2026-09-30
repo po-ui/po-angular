@@ -1,4 +1,5 @@
-import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from './../../utils/util';
 import { PO_CONTROL_POSITIONS } from './../../services/po-control-position/po-control-position.constants';
@@ -76,18 +77,27 @@ export class PoDropdownBaseComponent {
   icon: string = 'ICON_ARROW_DOWN';
   open: boolean = false;
 
-  private _actions: Array<PoDropdownAction>;
+  private _actions: Array<PoDropdownAction> | (() => Observable<Array<PoDropdownAction>>);
   private _disabled: boolean = false;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
   private _position: string = poDropdownDefaultPosition;
 
-  /** Lista de ações que serão exibidas no componente. */
-  @Input('p-actions') set actions(value: Array<PoDropdownAction>) {
-    this._actions = Array.isArray(value) ? value : [];
+  /**
+   * Lista de ações que serão exibidas no componente.
+   *
+   * Aceita um *array* de `PoDropdownAction` (carregado imediatamente) ou uma função que retorna um
+   * `Observable<Array<PoDropdownAction>>`, carregando o nível raiz de forma assíncrona na abertura.
+   */
+  @Input('p-actions') set actions(value: Array<PoDropdownAction> | (() => Observable<Array<PoDropdownAction>>)) {
+    if (typeof value === 'function') {
+      this._actions = value;
+    } else {
+      this._actions = Array.isArray(value) ? value : [];
+    }
   }
 
-  get actions() {
+  get actions(): Array<PoDropdownAction> | (() => Observable<Array<PoDropdownAction>>) {
     return this._actions;
   }
 
@@ -165,6 +175,39 @@ export class PoDropdownBaseComponent {
   get position(): string {
     return this._position;
   }
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado a qualquer clique em um item do menu do dropdown.
+   *
+   * Recebe o item clicado (`PoDropdownAction`).
+   */
+  @Output('p-click-item') clickItem: EventEmitter<PoDropdownAction> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado no momento em que a requisição assíncrona de um subnível é iniciada
+   * (quando `subItems` é definido como função que retorna um `Observable`).
+   *
+   * Recebe o item agrupador (`PoDropdownAction`) que originou o carregamento.
+   */
+  @Output('p-sub-items-load') subItemsLoad: EventEmitter<PoDropdownAction> = new EventEmitter();
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Evento disparado no momento em que a requisição assíncrona do nível raiz é iniciada
+   * (quando `p-actions` é definido como função que retorna um `Observable`).
+   */
+  @Output('p-root-items-load') rootItemsLoad: EventEmitter<void> = new EventEmitter();
 
   get popupCustomPositions(): Array<string> {
     if (this._position === 'bottom-right') {
