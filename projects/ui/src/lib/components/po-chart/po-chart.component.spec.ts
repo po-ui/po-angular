@@ -1590,14 +1590,93 @@ describe('PoChartComponent', () => {
       const result = component['setSeries']();
 
       expect(spySetListTypeRadar).toHaveBeenCalled();
-      expect(spyFinalizeRadar).toHaveBeenCalledWith(component.series);
+      expect(spyFinalizeRadar).toHaveBeenCalled();
+      expect(component.series[0]).toEqual({
+        label: 'Serie Radar',
+        data: [10, 20, 30],
+        type: PoChartType.Radar,
+        color: '#ff0000'
+      });
+      const processedSerie = spyFinalizeRadar.calls.mostRecent().args[0][0];
+      expect(processedSerie.label).toBe('Serie Radar');
+      expect(processedSerie.type).toBe('radar');
       expect(result).toEqual([
         {
           type: 'radar',
-          data: component.series,
+          data: spyFinalizeRadar.calls.mostRecent().args[0],
           _testFlag: true
-        }
+        } as any
       ]);
+    });
+
+    it('should not mutate the original series type when setSeries runs twice (theme change) for a column serie with color', () => {
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' }];
+      component.options = {};
+
+      const firstRun = component['setSeries']();
+      expect(firstRun[0].type).toBe('bar');
+      expect(firstRun[0].isTypeColumn).toBeTrue();
+      expect(component.series[0].type).toBe(PoChartType.Column);
+
+      const secondRun = component['setSeries']();
+      expect(secondRun[0].type).toBe('bar');
+      expect(secondRun[0].isTypeColumn).toBeTrue();
+      expect(component.series[0].type).toBe(PoChartType.Column);
+    });
+
+    it('should keep isTypeColumn and not set isTypeBar after theme change for a column serie with color', () => {
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' }];
+      component.options = {};
+
+      component['setSeries']();
+      component['setSeries']();
+
+      expect(component['isTypeBar']).toBeFalsy();
+    });
+
+    it('should not keep datalabel fixed on a colored stacked serie when dataLabel is not fixed', () => {
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' }];
+      component.options = { stacked: true };
+      component.dataLabel = { fixed: false };
+
+      const result = component['setSeries']();
+
+      expect(result[0].label).not.toEqual({ show: true });
+      expect(component.dataLabel).toEqual({ fixed: false });
+    });
+
+    it('should show datalabel on a colored stacked serie when dataLabel.fixed is true', () => {
+      component.series = [{ label: 'Serie 1', data: [1, 2, 3], type: PoChartType.Column, color: 'po-color-01' }];
+      component.options = { stacked: true };
+      component.dataLabel = { fixed: true };
+
+      const result = component['setSeries']();
+
+      expect(result[0].label).toEqual({ show: true });
+    });
+
+    it('should not keep datalabel fixed on a colored line serie when dataLabel is not fixed', () => {
+      component.series = [
+        { label: 'sem cor', data: [10, 20, 30], type: PoChartType.Line },
+        { label: 'com cor', data: [5, 15, 25], type: PoChartType.Line, color: 'po-color-01' }
+      ];
+      component.options = {};
+      component.dataLabel = { fixed: false };
+
+      const result = component['setSeries']();
+
+      expect(result[1].label).not.toEqual({ show: true });
+      expect(component.series[1]['label']).toBe('com cor');
+    });
+
+    it('should show datalabel on a colored line serie when dataLabel.fixed is true', () => {
+      component.series = [{ label: 'com cor', data: [5, 15, 25], type: PoChartType.Line, color: 'po-color-01' }];
+      component.options = {};
+      component.dataLabel = { fixed: true };
+
+      const result = component['setSeries']();
+
+      expect(result[0].label).toEqual({ show: true });
     });
   });
 
