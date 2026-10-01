@@ -20,7 +20,7 @@ Biblioteca de componentes de UI para Angular.
 
 ### Pré-requisitos
 
-Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 22.22.3 ou 24.15.0 e acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
+Para começar a utilizar o **PO UI** é pré-requisito ter o `Node.js` instalado (versão 24.15.0 e acima) e o seu gerenciador de pacote favorito na versão mais atual. Caso você ainda não tenha instalado o pacote `@angular/cli`, instale-o via `npm` ou `yarn`.
 
 Instalando com npm:
 ```
