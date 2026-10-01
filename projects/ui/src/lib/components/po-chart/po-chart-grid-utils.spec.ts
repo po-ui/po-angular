@@ -103,6 +103,38 @@ describe('PoChartGridUtils', () => {
       expect(serie.stack).toBe('group1');
       expect(mockCtx.boundaryGap).toBe(true);
     });
+
+    it('should set serie label as shown when stacked and dataLabel.fixed is true', () => {
+      const serie: any = { type: 'bar', data: [200] };
+      mockCtx.options.stacked = true;
+      mockCtx.dataLabel = { fixed: true };
+
+      utils.setSerieTypeBarColumn(serie, '#f00');
+
+      expect(serie.label).toEqual({ show: true });
+    });
+
+    it('should not set serie label and must keep dataLabel untouched when stacked and dataLabel.fixed is false', () => {
+      const serie: any = { type: 'bar', data: [200] };
+      mockCtx.options.stacked = true;
+      mockCtx.dataLabel = { fixed: false };
+
+      utils.setSerieTypeBarColumn(serie, '#f00');
+
+      expect(serie.label).toBeUndefined();
+      expect(mockCtx.dataLabel).toEqual({ fixed: false });
+    });
+
+    it('should not set serie label when stacked and dataLabel is undefined', () => {
+      const serie: any = { type: 'bar', data: [200] };
+      mockCtx.options.stacked = true;
+      mockCtx.dataLabel = undefined;
+
+      utils.setSerieTypeBarColumn(serie, '#f00');
+
+      expect(serie.label).toBeUndefined();
+      expect(mockCtx.dataLabel).toBeUndefined();
+    });
   });
 
   describe('setOptionsAxis', () => {

@@ -592,7 +592,9 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
       this.series.some(serie => serie.type === 'area') ||
       this.options?.areaStyle ||
       this.series.some(serie => serie.areaStyle === true);
-    const newSeries: Array<any> = [...this.colorService.getColors<PoChartSerie>(this.series, true, hasArea)];
+    const newSeries: Array<any> = this.colorService
+      .getColors<PoChartSerie>(this.series, true, hasArea)
+      .map(serie => ({ ...serie }));
     const tokenBorderWidthMd = this.chartGridUtils.resolvePx('--border-width-md');
     const findType = this.series.find(serie => serie.type)?.type;
     let serieGauge = {};
