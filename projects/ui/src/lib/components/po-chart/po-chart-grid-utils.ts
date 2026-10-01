@@ -180,8 +180,7 @@ export class PoChartGridUtils {
 
       if (this.component.options?.stacked || serie.stackGroupName) {
         serie.stack = this.component.options?.stacked ? 'total' : serie.stackGroupName;
-        if (this.component.dataLabel?.fixed !== false) {
-          this.component.dataLabel = { fixed: true };
+        if (this.component.dataLabel?.fixed === true) {
           serie.label = { show: true };
         }
       }
