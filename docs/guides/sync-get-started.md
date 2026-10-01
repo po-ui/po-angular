@@ -66,6 +66,7 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
   "devDependencies": {
     "@angular-devkit/schematics": "~22.0.1",
     ...
+    "@angular/build": "~22.0.1",
     "@angular/cli": "~22.0.1",
     "@angular/compiler-cli": "~22.0.1",
     "@angular/language-service": "~22.0.1",
