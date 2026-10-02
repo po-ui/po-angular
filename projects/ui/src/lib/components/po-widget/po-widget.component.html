@@ -10,6 +10,26 @@
   (keydown)="onKeyDown($event)"
   [tabindex]="disabled || !click.observers.length ? -1 : 0"
 >
+  @if (selection()) {
+    <div class="po-list-view-selection" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+      @if (selection().type === 'single') {
+        <po-radio
+          name="po-widget-selection-{{ id }}"
+          [p-checked]="selection().selected"
+          [p-size]="size"
+          (p-change)="onSelectionChange(true)"
+        ></po-radio>
+      } @else {
+        <po-checkbox
+          name="po-widget-selection-{{ id }}"
+          [ngModel]="selection().selected"
+          [p-size]="size"
+          (ngModelChange)="onSelectionChange($event)"
+        ></po-checkbox>
+      }
+    </div>
+  }
+
   @if (avatarCustomTemplate() || avatarSrc()) {
     <div
       class="po-widget-container__avatar"
@@ -25,7 +45,10 @@
 
       @if (avatarCustomTemplate()) {
         <div class="po-widget-container__avatar__template">
-          <ng-template [ngTemplateOutlet]="avatarCustomTemplate()"></ng-template>
+          <ng-template
+            [ngTemplateOutlet]="avatarCustomTemplate()"
+            [ngTemplateOutletContext]="{ $implicit: avatar() }"
+          ></ng-template>
         </div>
       }
     </div>
@@ -84,6 +107,10 @@
           }
         </div>
 
+        @if (subtitle()) {
+          <span class="po-list-view-widget-subtitle">{{ subtitle() }}</span>
+        }
+
         @if (tagLabel && tagPosition() === 'bottom') {
           <div class="po-widget-header__tag-bottom">
             <ng-template [ngTemplateOutlet]="tag"></ng-template>
@@ -133,6 +160,12 @@
       </div>
     }
   </div>
+
+  @if (actionTemplate()) {
+    <div class="po-list-view-action" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+      <ng-template [ngTemplateOutlet]="actionTemplate()"></ng-template>
+    </div>
+  }
 </div>
 
 <po-popup #popup [p-actions]="actions" [p-size]="size" [p-target]="popupTarget" (p-close)="closePopUp()"> </po-popup>

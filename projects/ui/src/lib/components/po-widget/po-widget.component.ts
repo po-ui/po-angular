@@ -130,7 +130,14 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
   }
 
   hasTitleHelpOrSetting(): boolean {
-    return !!this.title || !!this.help || !!this.setting.observers[0] || !!this.tagLabel || !!this?.actions.length;
+    return (
+      !!this.title ||
+      !!this.help ||
+      !!this.setting.observers[0] ||
+      !!this.tagLabel ||
+      !!this?.actions.length ||
+      !!this.subtitle()
+    );
   }
 
   onClick(event: MouseEvent) {
@@ -149,6 +156,15 @@ export class PoWidgetComponent extends PoWidgetBaseComponent implements OnInit, 
 
       event.preventDefault();
     }
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Uso interno (po-list-view): propaga a mudança da coluna de seleção.
+   */
+  protected onSelectionChange(selected: boolean): void {
+    this.selection()?.change?.(selected);
   }
 
   openHelp() {

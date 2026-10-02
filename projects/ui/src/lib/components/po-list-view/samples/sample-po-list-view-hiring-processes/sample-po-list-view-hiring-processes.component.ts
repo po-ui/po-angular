@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, inject } from '@angular/core';
 
 import {
   PoListViewAction,
+  PoListViewFieldProperties,
   PoModalComponent,
   PoNotificationService,
   PoPageAction,
@@ -20,14 +21,22 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
   private poNotification = inject(PoNotificationService);
   private hiringProcessesService = inject(SamplePoListViewHiringProcessesService);
 
-  @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent;
+  @ViewChild('detailsModal', { static: true }) detailsModalElement!: PoModalComponent;
 
-  hiringProcesses: Array<any>;
-  hiringProcessesFiltered: Array<object>;
+  hiringProcesses!: Array<any>;
+  hiringProcessesFiltered!: Array<object>;
   labelFilter: string = '';
   modalDetail: boolean = false;
-  selectedActionItem = {};
+  selectedActionItem: any = {};
   titleDetailsModal: string = 'User Detail';
+
+  readonly fieldProperties: PoListViewFieldProperties = {
+    title: 'name',
+    subtitle: 'jobDescription',
+    link: 'url',
+    avatar: 'avatar',
+    tag: { value: 'hireStatus', type: 'hireTagType' }
+  };
 
   readonly actions: Array<PoListViewAction> = [
     {
@@ -70,29 +79,29 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
     this.hiringProcessesFiltered = [...this.hiringProcesses];
   }
 
-  formatTitle(item) {
+  formatTitle(item: any) {
     return `${item.idCard} - ${item.name}`;
   }
 
-  showDetail(item) {
+  showDetail(item: any) {
     return item.url;
   }
 
-  showDetailModal(item) {
+  showDetailModal(item: any) {
     this.setModalItem(item);
     this.detailsModalElement.open();
   }
 
-  private cancelCandidate(selectedCandidate) {
+  private cancelCandidate(selectedCandidate: any) {
     selectedCandidate['hireStatus'] = 'canceled';
     this.poNotification.error('Canceled candidate!');
   }
 
   private disableHireButton() {
-    return !this.hiringProcesses.find(candidate => candidate['$selected']);
+    return !this.hiringProcesses.find((candidate: any) => candidate['$selected']);
   }
 
-  private hireCandidate(selectedCandidate) {
+  private hireCandidate(selectedCandidate: any) {
     selectedCandidate['hireStatus'] = 'hired';
     this.poNotification.success('Hired candidate!');
   }
@@ -100,20 +109,20 @@ export class SamplePoListViewHiringProcessesComponent implements OnInit {
   private hiringProcessesFilter(labelFilter: string | Array<string>) {
     const filters = typeof labelFilter === 'string' ? [labelFilter] : [...labelFilter];
 
-    this.hiringProcessesFiltered = this.hiringProcesses.filter(item =>
+    this.hiringProcessesFiltered = this.hiringProcesses.filter((item: any) =>
       Object.keys(item).some(key => !(item[key] instanceof Object) && this.includeFilter(item[key], filters))
     );
   }
 
-  private includeFilter(item, filters) {
+  private includeFilter(item: any, filters: Array<string>) {
     return filters.some(filter => String(item).toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
   }
 
-  private isHiredOrCanceled(candidate): boolean {
+  private isHiredOrCanceled(candidate: any): boolean {
     return candidate['hireStatus'] === 'hired' || candidate['hireStatus'] === 'canceled';
   }
 
-  private setModalItem(listItem) {
+  private setModalItem(listItem: any) {
     this.selectedActionItem = listItem;
     this.titleDetailsModal = `Get in touch with ${this.selectedActionItem['name']}`;
   }

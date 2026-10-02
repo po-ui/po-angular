@@ -49,6 +49,11 @@ module.exports = function componentGrouper() {
             group.fileInfo = doc.fileInfo;
             group.description = doc.description;
             group.fileType = groupNamePath[3]; // components | services ...
+
+            if (isPureDirective(doc)) {
+              group.fileType = 'directives';
+            }
+
             group.componentName = capitalizedNameArray.join('');
             group.title = capitalizedNameArray.join(' ');
 
@@ -122,3 +127,11 @@ module.exports = function componentGrouper() {
     }
   };
 };
+
+function isPureDirective(doc) {
+  const decorators = doc.decorators || [];
+  const hasDirective = decorators.some(decorator => decorator.name === 'Directive');
+  const hasComponent = decorators.some(decorator => decorator.name === 'Component');
+
+  return hasDirective && !hasComponent;
+}
