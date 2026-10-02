@@ -123,11 +123,12 @@ export class PoListBoxBaseComponent {
 
   @Input('p-search-value') searchValue: string;
 
-  @Input({ alias: 'p-is-searching', transform: convertToBoolean }) isServerSearching: boolean = false;
+  @Input({ alias: 'p-server-searching', transform: convertToBoolean }) isServerSearching: boolean = false;
 
   @Input({ alias: 'p-infinite-loading', transform: convertToBoolean }) infiniteLoading: boolean = false;
 
   @Input({ alias: 'p-infinite-scroll', transform: convertToBoolean }) infiniteScroll: boolean = false;
+  /** Teste spike: nova propriedade. */  @Input({ alias: 'p-spike-test', transform: convertToBoolean }) spikeTest: boolean = false;
 
   @Input({ alias: 'p-cache', transform: convertToBoolean }) cache: boolean = false;
 
