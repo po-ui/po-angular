@@ -1,70 +1,86 @@
-import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { AnimationCallbackEvent, ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 
-import { PoTreeViewService } from '../services/po-tree-view.service';
 import { PoTreeViewItem } from './po-tree-view-item.interface';
+import { PoTreeViewService } from '../services/po-tree-view.service';
 
 @Component({
-  selector: 'po-tree-view-item',
+  selector: '[po-tree-view-item]',
   templateUrl: './po-tree-view-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('toggleBody', [
-      transition(':enter', [
-        style({
-          'overflow-y': 'hidden',
-          visibility: 'hidden',
-          opacity: 0,
-          height: '0'
-        }),
-        animate(200, style({ height: '*' })),
-        animate(100, style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({
-          'overflow-y': 'hidden',
-          visibility: 'visible',
-          opacity: 1,
-          height: '*'
-        }),
-        animate(200, style({ height: 0 })),
-        animate(100, style({ opacity: 0 }))
-      ])
-    ])
-  ],
   standalone: false
 })
 export class PoTreeViewItemComponent {
   private readonly treeViewService = inject(PoTreeViewService);
 
-  @Input('p-components-size') componentsSize: string;
+  readonly componentsSize = input<string>(undefined, { alias: 'p-components-size' });
 
-  @Input('p-item') item: PoTreeViewItem;
+  readonly item = input<PoTreeViewItem>(undefined, { alias: 'p-item' });
 
-  @Input('p-selectable') selectable: boolean;
+  readonly level = input<number>(0, { alias: 'p-level' });
 
-  @Input('p-single-select') singleSelect: boolean;
+  readonly selectable = input<boolean>(false, { alias: 'p-selectable' });
 
-  @Input('p-selected-value') selectedValue: string | number;
+  readonly selectedValue = input<string | number>(undefined, { alias: 'p-selected-value' });
 
-  get hasSubItems() {
-    return !!(this.item.subItems && this.item.subItems.length);
+  readonly singleSelect = input<boolean>(false, { alias: 'p-single-select' });
+
+  protected animateEnter(event: AnimationCallbackEvent): void {
+    const height = `${(event.target as HTMLElement).scrollHeight}px`;
+
+    this.animateToggle(event, [
+      { height: '0px', opacity: 0, offset: 0 },
+      { height, opacity: 0, offset: 0.66 },
+      { height, opacity: 1, offset: 1 }
+    ]);
   }
 
-  onClick(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
+  protected animateLeave(event: AnimationCallbackEvent): void {
+    const height = `${(event.target as HTMLElement).scrollHeight}px`;
 
-    this.item.expanded = !this.item.expanded;
-
-    this.treeViewService.emitExpandedEvent({ ...this.item });
+    this.animateToggle(event, [
+      { height, opacity: 1, offset: 0 },
+      { height, opacity: 0, offset: 0.33 },
+      { height: '0px', opacity: 0, offset: 1 }
+    ]);
   }
 
-  onSelect(selectedItem: PoTreeViewItem) {
+  protected get hasSubItems() {
+    const item = this.item();
+    return !!item?.subItems?.length;
+  }
+
+  protected onClick() {
+    const item = this.item();
+    item.expanded = !item.expanded;
+
+    this.treeViewService.emitExpandedEvent({ ...item });
+  }
+
+  protected onSelect(selectedItem: PoTreeViewItem) {
     this.treeViewService.emitSelectedEvent({ ...selectedItem });
   }
 
-  trackByFunction(index: number) {
+  protected onActivate(activatedItem: PoTreeViewItem) {
+    this.treeViewService.emitActivatedEvent({ ...activatedItem });
+  }
+
+  protected trackByFunction(index: number) {
     return index;
+  }
+
+  private animateToggle(event: AnimationCallbackEvent, keyframes: Array<Keyframe>): void {
+    const element = event.target as HTMLElement;
+    const previousOverflow = element.style.overflow;
+    element.style.overflow = 'hidden';
+
+    const animation = element.animate(keyframes, {
+      duration: 300,
+      easing: 'ease-in-out'
+    });
+
+    animation.onfinish = () => {
+      element.style.overflow = previousOverflow;
+      event.animationComplete();
+    };
   }
 }
