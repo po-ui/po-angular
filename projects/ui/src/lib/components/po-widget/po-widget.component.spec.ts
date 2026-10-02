@@ -261,6 +261,23 @@ describe('PoWidgetComponent with title and actions', () => {
     expect(component.click.emit).toHaveBeenCalled();
   });
 
+  it('onSelectionChange: should call selection change callback with selected value', () => {
+    const changeSpy = jasmine.createSpy('changeSpy');
+    fixture.componentRef.setInput('p-selection', { type: 'single', selected: false, change: changeSpy });
+    fixture.detectChanges();
+
+    component['onSelectionChange'](true);
+
+    expect(changeSpy).toHaveBeenCalledWith(true);
+  });
+
+  it('onSelectionChange: should not throw when selection is undefined', () => {
+    fixture.componentRef.setInput('p-selection', undefined);
+    fixture.detectChanges();
+
+    expect(() => component['onSelectionChange'](true)).not.toThrow();
+  });
+
   it('should`t emit click with keyboard if widget is not clickable', () => {
     component.click.unsubscribe();
     const fakeEvent: any = {

@@ -1,10 +1,10 @@
 <po-page-list p-title="Hiring processes" [p-actions]="pageActions" [p-filter]="filterSettings">
   <po-list-view
     p-hide-select-all
-    p-property-link="url"
-    p-property-title="name"
     p-select
+    p-tag-position="bottom"
     [p-actions]="actions"
+    [p-field-properties]="fieldProperties"
     [p-items]="hiringProcessesFiltered"
     (p-title-action)="showDetailModal($event)"
   >

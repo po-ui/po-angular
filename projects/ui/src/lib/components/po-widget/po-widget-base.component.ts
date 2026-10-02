@@ -4,6 +4,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
 import { PoPopupAction } from '../po-popup';
 import { PoTagType } from '../po-tag';
 import { PoWidgetAvatar } from './interfaces/po-widget-avatar.interface';
+import { PoWidgetSelection } from './interfaces/po-widget-selection.interface';
 import { convertToBoolean, getDefaultSizeFn, isTypeof, uuid, validateSizeFn } from '../../utils/util';
 import { validateAvatarSize } from '../po-avatar/po-avatar-base.component';
 
@@ -247,6 +248,36 @@ export class PoWidgetBaseComponent {
     alias: 'p-avatar',
     transform: this.transformAvatar
   });
+
+  /**
+   * @docsPrivate
+   *
+   * @description
+   *
+   * Uso **interno** do `po-list-view`. Define um subtítulo exibido no header,
+   * abaixo do título.
+   */
+  subtitle = input<string>(undefined, { alias: 'p-subtitle' });
+
+  /**
+   * @docsPrivate
+   *
+   * @description
+   *
+   * Uso **interno** do `po-list-view`. Habilita e configura a coluna de seleção
+   * (checkbox/radio) à esquerda do conteúdo.
+   */
+  selection = input<PoWidgetSelection>(undefined, { alias: 'p-selection' });
+
+  /**
+   * @docsPrivate
+   *
+   * @description
+   *
+   * Uso **interno** do `po-list-view`. Template renderizado como coluna de ação à
+   * direita do conteúdo, centralizado verticalmente (em vez do header).
+   */
+  actionTemplate = input<TemplateRef<any>>(undefined, { alias: 'p-action-template' });
 
   /**
    * @optional
