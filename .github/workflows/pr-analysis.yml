@@ -1,0 +1,64 @@
+name: Análise de PR
+
+# pull_request_target dá acesso ao webhook e permite comentar também em PRs de fork.
+# Por segurança, não faça checkout nem execute código da PR aqui: o diff vem pela API.
+on:
+  pull_request_target:
+    types: [opened]
+    branches: [ master, development, '[0-9]+.x.x' ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  impact_analysis:
+    name: Análise de impacto
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Listar arquivos alterados
+        run: |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files" --jq '.[]' | jq -s '.' > "$RUNNER_TEMP/files.json"
+
+      - name: Gerar análise de impacto
+        id: analysis
+        continue-on-error: true
+        run: node .github/scripts/pr-impact/pr-impact.js --files "$RUNNER_TEMP/files.json" --out-dir "$RUNNER_TEMP/pr-impact"
+
+      - name: Comentar relatório na PR
+        if: steps.analysis.outcome == 'success'
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/pr-impact/report.md"
+
+      - name: Notificar Discord
+        if: always()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          PAYLOAD_FILE="$RUNNER_TEMP/pr-impact/discord.json"
+
+          # Se a análise falhar, envia a notificação simples.
+          if [ ! -f "$PAYLOAD_FILE" ]; then
+            mkdir -p "$(dirname "$PAYLOAD_FILE")"
+            jq -n --arg author "$PR_AUTHOR" --arg title "$PR_TITLE" --arg url "$PR_URL" \
+              '{content: "🚀 **PR Criada com Sucesso 🚀**\n- Autor: \($author)\n- Título: \($title)\n- Link: \($url)"}' \
+              > "$PAYLOAD_FILE"
+          fi
+
+          curl -fsS -X POST -H "Content-Type: application/json" --data @"$PAYLOAD_FILE" "$DISCORD_WEBHOOK_URL"
+        shell: bash

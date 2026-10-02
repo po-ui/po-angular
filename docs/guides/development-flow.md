@@ -196,6 +196,7 @@ ng serve portal</code></pre>
         <h3 class="po-font-subtitle po-pb-1">Criando Pull Request</h3>
         <p>Crie uma nova pull request com a master branch como base. Confira <a href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork">como criar pull request a partir de um fork</a>.</p>
         <p>É importante que siga guia contendo as <a href="https://github.com/po-ui/po-angular/blob/master/CONTRIBUTING.md#pull-requests">regras para geração de Pull Requests</a>.</p>
+        <p>Ao abrir a <em>pull request</em>, uma análise automática comenta na PR os componentes alterados, os componentes que os consomem, o risco estimado e onde testar. Use esse relatório como ponto de partida para o teste integrado.</p>
       </div>
     </div>
   </div>
