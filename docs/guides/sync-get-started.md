@@ -65,7 +65,6 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
   },
   "devDependencies": {
     "@angular-devkit/schematics": "~22.0.1",
-    ...
     "@angular/build": "~22.0.1",
     "@angular/cli": "~22.0.1",
     "@angular/compiler-cli": "~22.0.1",
@@ -89,7 +88,7 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 > Após configurar seu arquivo, certifique-se de salvar as alterações realizadas.
 
-Execute o seguinte comando para instalar as dependências:
+Realize a limpeza do arquivo `package-lock.json` e da pasta `node_modules/`, para então executar o seguinte comando para instalar as dependências:
 
 ```shell
 npm install
@@ -426,7 +425,38 @@ No arquivo `src/app/home/home.page.html` crie a seguinte estrutura:
 
 Execute o comando `ionic serve` e verifique o funcionamento do aplicativo Ionic com `po-sync`.
 
-> Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript (5.2.x) conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
+> Pode ocorrer o seguinte erro `TypeError: Failed to fetch dynamically imported module...`, sendo necessário adicionar ao arquivo `angular.json` as seguintes configurações:
+> ```json
+> {
+>   "projects": {
+>     "app": {
+>       ...
+>       "architect": {
+>         ...
+>         "build": {
+>           ...
+>           "options": {
+>             ...
+>             "polyfills": ["zone.js"],
+>           },
+>         },
+>         "serve": {
+>           ...
+>           "builder": "@angular/build:dev-server",
+>           "options": {
+>             ...
+>             "prebundle": {
+>               "exclude": ["@ionic/angular", "@ionic/core", "ionicons"]
+>             }
+>           }
+>         },
+>       }
+>     }
+>   },
+> }
+> ```
+
+> Pode ocorrer o seguinte erro `TS2320: Interface 'HTMLIonIconElement' cannot simultaneously extend types 'IonIcon' and 'HTMLStencilElement'` por conta da versão do TypeScript conforme esta [issue](https://github.com/ionic-team/ionicons/issues/1011), neste caso adicione no arquivo **tsconfig.json** `"skipLibCheck": true`.
 
 > Ao executar um projeto standalone, pode ocorrer o seguinte erro: `[ERROR] Invalid project type: angular-standalone (project config: ./ionic.config.json).`. Para corrigir, edite o arquivo `ionic.config.json` e ajuste a propriedade `type` para o valor `angular`.
 
