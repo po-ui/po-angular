@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.33.0](https://github.com/po-ui/po-angular/compare/v21.32.0...v21.33.0) (2026-10-05)
+
+
+### Features
+
+* **list-view:** implementa definições do AnimaliaDS ([f949427](https://github.com/po-ui/po-angular/commit/f9494272856bfa6944de09d0ef5d208ddd7d4c80))
+* **lookup:** adiciona a propriedade initValue em p-advanced-filters ([6506419](https://github.com/po-ui/po-angular/commit/65064194eb388518d87778bf3a6ce78b9d567a14))
+* **notification:** exibe mensagem vazia quando não informada ([3089923](https://github.com/po-ui/po-angular/commit/3089923c2fa26e29fd2cf1f364c18ff97df05752))
+* **tree-view:** implementa animaliaDS ([517c402](https://github.com/po-ui/po-angular/commit/517c402583aa9f59b9818db4cc776c57604c0b74))
+
 ### [21.32.0](https://github.com/po-ui/po-angular/compare/v21.31.0...v21.32.0) (2026-09-29)
 
 
