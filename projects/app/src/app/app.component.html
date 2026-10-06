@@ -1,0 +1,63 @@
+<po-page-default p-title="POC - Alternância de Temas (Animalia x Default)">
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-4"
+      p-label="Tema"
+      [p-options]="themeOptions"
+      [ngModel]="selectedTheme"
+      (ngModelChange)="onThemeChange($event)"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-4"
+      p-label="Tipo"
+      [p-options]="typeOptions"
+      [ngModel]="type"
+      (ngModelChange)="onTypeChange($event)"
+    >
+    </po-radio-group>
+
+    <po-radio-group
+      class="po-md-4"
+      p-label="Acessibilidade"
+      [p-options]="a11yOptions"
+      [ngModel]="a11y"
+      (ngModelChange)="onA11yChange($event)"
+    >
+    </po-radio-group>
+  </div>
+
+  <div class="po-row po-mt-2">
+    <po-info class="po-md-12" p-label="Tema ativo" [p-value]="selectedTheme"></po-info>
+  </div>
+
+  <div class="po-row po-mt-2">
+    <po-button class="po-md-3" p-label="Primário" p-kind="primary"></po-button>
+    <po-button class="po-md-3" p-label="Secundário" p-kind="secondary"></po-button>
+    <po-button class="po-md-3" p-label="Terciário" p-kind="tertiary"></po-button>
+    <po-button class="po-md-3" p-label="Desabilitado" [p-disabled]="true"></po-button>
+  </div>
+
+  <div class="po-row po-mt-2">
+    <po-input class="po-md-6" p-label="Campo de texto" p-placeholder="Digite algo"></po-input>
+    <po-select class="po-md-6" p-label="Seleção" [p-options]="themeOptions"></po-select>
+  </div>
+
+  <div class="po-row po-mt-2">
+    <po-tag class="po-md-3" p-value="Negativo" p-type="danger"></po-tag>
+    <po-tag class="po-md-3" p-value="Informativo" p-type="info"></po-tag>
+    <po-tag class="po-md-3" p-value="Positivo" p-type="success"></po-tag>
+    <po-tag class="po-md-3" p-value="Aviso" p-type="warning"></po-tag>
+  </div>
+
+  <div class="po-row po-mt-2">
+    <po-widget class="po-md-12" p-title="Prévia de cores">
+      <p>
+        Alterne entre o tema atual (default) e o novo tema (Animalia) para ver as cores dos tokens
+        globais (brand, action, neutral, feedback, categorical) mudarem. Troque também entre Light/Dark e
+        AA/AAA.
+      </p>
+    </po-widget>
+  </div>
+</po-page-default>

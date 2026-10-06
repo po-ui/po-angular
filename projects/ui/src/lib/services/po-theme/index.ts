@@ -9,9 +9,14 @@ export * from './helpers/types/po-theme-light-defaults.constant';
 export * from './helpers/types/po-theme-light-defaults-AA.constant';
 export * from './helpers/types/po-theme-dark-defaults.constant';
 export * from './helpers/types/po-theme-dark-defaults-AA.constant';
+export * from './helpers/types/po-theme-animalia-light-defaults.constant';
+export * from './helpers/types/po-theme-animalia-light-defaults-AA.constant';
+export * from './helpers/types/po-theme-animalia-dark-defaults.constant';
+export * from './helpers/types/po-theme-animalia-dark-defaults-AA.constant';
 export * from './helpers/accessibilities/po-theme-default-aaa.constant';
 export * from './helpers/accessibilities/po-theme-default-aa.constant';
 export * from './helpers/po-theme-poui.constant';
+export * from './helpers/po-theme-animalia.constant';
 
 export * from './po-theme.service';
 export * from './po-theme.module';
