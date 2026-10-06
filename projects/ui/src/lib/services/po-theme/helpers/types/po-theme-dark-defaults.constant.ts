@@ -96,19 +96,19 @@ const poThemeDefaultFeedbackDark: PoThemeColorFeedback = {
 
 const poThemeDefaultBrandsDark: poThemeColorBrand = {
   '01': {
-    lightest: '#260538',
-    lighter: '#400e58',
-    light: '#5b1c7d',
-    base: '#753399',
-    dark: '#bd94d1',
-    darker: '#d9c2e5',
-    darkest: '#f2eaf6'
+    lightest: '#082a4d',
+    lighter: '#0d3c6b',
+    light: '#145089',
+    base: '#1a73c7',
+    dark: '#5fa3e0',
+    darker: '#9cc6ef',
+    darkest: '#e3eefb'
   },
   '02': {
-    base: '#b92f72'
+    base: '#0a66c2'
   },
   '03': {
-    base: '#ffd464'
+    base: '#64b5f6'
   }
 };
 
