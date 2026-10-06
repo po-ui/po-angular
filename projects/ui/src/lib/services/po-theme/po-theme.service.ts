@@ -9,6 +9,7 @@ import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
 import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
+import { poThemeDefaultDeprecated } from './helpers/po-theme-poui-deprecated.constant';
 import { poThemeDefaultDarkValuesAA } from './helpers/types/po-theme-dark-defaults-AA.constant';
 import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
 import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
@@ -51,6 +52,13 @@ import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
 export class PoThemeService {
   private readonly renderer: Renderer2;
   private theme: PoTheme;
+
+  /**
+   * Temas embutidos conhecidos pelo serviço. Ao reidratar a preferência salva no
+   * `localStorage`, as cores são sempre resolvidas a partir destas constantes (código atual),
+   * evitando que valores de cor antigos persistidos sejam reaplicados.
+   */
+  private readonly builtInThemes: Array<PoTheme> = [poThemeDefault, poThemeDefaultDeprecated];
 
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
@@ -414,12 +422,23 @@ export class PoThemeService {
   }
 
   private formatTheme(themeConfig, themeType, a11yLevel) {
-    themeConfig.name = themeConfig.name
+    themeConfig.name = this.normalizeThemeName(themeConfig.name);
+    themeConfig.active = { type: themeType, a11y: a11yLevel };
+    this.theme = themeConfig;
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Normaliza o nome do tema para a forma utilizada na classe/seletor aplicado ao `<html>`:
+   * minúsculas, sem caracteres não alfabéticos e com espaços trocados por hífen.
+   * Ex.: `'po-theme'` -> `'potheme'`.
+   */
+  private normalizeThemeName(name: string): string {
+    return name
       .toLowerCase()
       .replace(/[^a-zA-Z ]/g, '')
       .replace(/\s+/g, '-');
-    themeConfig.active = { type: themeType, a11y: a11yLevel };
-    this.theme = themeConfig;
   }
 
   applyTheme(theme?: any): any {
@@ -517,13 +536,42 @@ export class PoThemeService {
   getThemeActive(): PoTheme {
     try {
       const themeData = JSON.parse(localStorage.getItem('totvs-theme'));
-      if (themeData && JSON.stringify(themeData) !== JSON.stringify(this.theme)) {
-        this.theme = themeData;
+      // Reidrata a preferência salva resolvendo as cores a partir da constante atual
+      // (código), preservando apenas o estado ativo (type/a11y). Evita reaplicar
+      // valores de cor antigos que ficaram no cache do localStorage.
+      const resolvedTheme = this.resolveBuiltInTheme(themeData);
+      if (resolvedTheme && JSON.stringify(resolvedTheme) !== JSON.stringify(this.theme)) {
+        this.theme = resolvedTheme;
       }
     } catch (error) {
       console.error('Erro ao obter o tema do armazenamento local:', error);
     }
     return this.theme;
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Dado o tema persistido no `localStorage`, retorna a constante de tema embutida
+   * correspondente (pelo `name`) com os valores de cor atuais do código, preservando o
+   * estado ativo (`type`/`a11y`) salvo. Caso não seja um tema embutido conhecido (ex.: tema
+   * customizado do consumidor), retorna o próprio objeto persistido inalterado.
+   *
+   * @param persistedTheme Tema lido do `localStorage`.
+   * @returns {PoTheme} Tema resolvido para aplicação.
+   */
+  private resolveBuiltInTheme(persistedTheme: PoTheme): PoTheme {
+    if (!persistedTheme?.name) {
+      return persistedTheme;
+    }
+
+    const persistedName = this.normalizeThemeName(persistedTheme.name);
+    const knownTheme = this.builtInThemes.find(theme => this.normalizeThemeName(theme.name) === persistedName);
+    if (!knownTheme) {
+      return persistedTheme;
+    }
+
+    return { ...knownTheme, active: persistedTheme.active ?? knownTheme.active };
   }
 
   /**

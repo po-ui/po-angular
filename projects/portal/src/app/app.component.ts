@@ -1,11 +1,20 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild
+} from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoMenuItem, PoNavbarIconAction, PoNavbarItem, PoThemeA11yEnum } from '@po-ui/ng-components';
+import { PoHeaderActionTool, PoMenuItem, PoNavbarItem, PoThemeA11yEnum } from '@po-ui/ng-components';
 
 import { PoDensityMode } from '../../../ui/src/lib/enums/po-density-mode.enum';
 import { firstValueFrom } from 'rxjs';
-import { PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
+import { poThemeDefault, PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
+import { AppearancePopoverComponent } from './shared/appearance-popover/appearance-popover.component';
 import { poThemeConstant } from './shared/po-theme.constant';
 import { VersionService } from './shared/version.service';
 
@@ -15,10 +24,12 @@ import { VersionService } from './shared/version.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(AppearancePopoverComponent) appearancePopover!: AppearancePopoverComponent;
+
   menus: Array<PoMenuItem> = [];
   items: Array<PoNavbarItem> = [];
-  iconActions: Array<PoNavbarIconAction> = [];
+  iconActions: Array<PoHeaderActionTool> = [];
   themeStorage = 'po-theme-default';
   a11yStorage = 'po-a11y-AAA';
   logoPoUI = './assets/po-logos/po_black.png';
@@ -45,17 +56,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (!_poTheme) {
       this.theme = poThemeConstant.active.type;
-      this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
+      this.poTheme.setTheme(poThemeDefault, this.theme, this.a11yLevel);
     } else {
       this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
     }
   }
 
   ngOnInit() {
-    if (localStorage.getItem('po-ui-theme')) {
-      this.themeStorage = localStorage.getItem('po-ui-theme');
-    }
-
     if (localStorage.getItem('po-ui-a11y')) {
       this.a11yStorage = localStorage.getItem('po-ui-a11y');
     }
@@ -75,9 +82,9 @@ export class AppComponent implements OnInit, OnDestroy {
       ];
     });
 
-    this.iconActions = this.actions;
-    this.logoPoUI =
-      this.themeStorage === 'po-theme-default' ? './assets/po-logos/po_black.png' : './assets/po-logos/po_white.png';
+    // Sincroniza logo e estado a partir do tema realmente ativo (fonte da verdade),
+    // cobrindo tanto o fluxo do ícone quanto o do popover de aparência.
+    this.updateLogoFromActiveTheme();
 
     this.themeChangeListener = () => {
       this.changeTheme(false);
@@ -95,13 +102,35 @@ export class AppComponent implements OnInit, OnDestroy {
     window.open(url, '_blank');
   }
 
+  @HostListener('window:PoUiThemeChange')
+  onPoUiThemeChange(): void {
+    this.updateLogoFromActiveTheme();
+  }
+
+  /**
+   * Sincroniza o logo e o estado interno de tema a partir do tema atualmente ativo
+   * no `PoThemeService`. Garante que o logo adapte a cor independentemente da via de
+   * troca de tema (ícone do header ou popover de aparência).
+   */
+  private updateLogoFromActiveTheme(): void {
+    const activeTheme = this.poTheme.getThemeActive();
+    const activeType =
+      activeTheme && typeof activeTheme.active === 'object' ? activeTheme.active.type : activeTheme?.active;
+    const isDark = activeType === PoThemeTypeEnum.dark;
+
+    this.theme = isDark ? PoThemeTypeEnum.dark : PoThemeTypeEnum.light;
+    this.themeStorage = isDark ? 'po-theme-dark' : 'po-theme-default';
+    this.logoPoUI = isDark ? './assets/po-logos/po_white.png' : './assets/po-logos/po_black.png';
+    this.iconActions = this.buildIconActions();
+  }
+
   changeTheme(dispatchEvent = true) {
     this.themeStorage = this.themeStorage === 'po-theme-default' ? 'po-theme-dark' : 'po-theme-default';
     localStorage.setItem('po-ui-theme', this.themeStorage);
     this.theme = this.themeStorage === 'po-theme-default' ? 0 : 1;
     this.logoPoUI =
       this.themeStorage === 'po-theme-default' ? './assets/po-logos/po_black.png' : './assets/po-logos/po_white.png';
-    this.iconActions = this.actions;
+    this.iconActions = this.buildIconActions();
 
     this.a11yLevel = this.poTheme.getA11yLevel();
 
@@ -120,7 +149,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.a11yStorage = this.a11yStorage === 'po-a11y-AAA' ? 'po-a11y-AA' : 'po-a11y-AAA';
     localStorage.setItem('po-ui-a11y', this.a11yStorage);
     this.a11yLevel = this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
-    this.iconActions = this.actions;
+    this.iconActions = this.buildIconActions();
 
     this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
 
@@ -146,18 +175,23 @@ export class AppComponent implements OnInit, OnDestroy {
         tooltip: 'Instagram'
       },
       {
-        icon: `${this.themeStorage === 'po-theme-dark' ? 'an an-sun' : 'an an-moon'}`,
-        label: `Theme ${this.themeStorage === 'po-theme-dark' ? 'Light' : 'Dark'}`,
-        tooltip: `Theme ${this.themeStorage === 'po-theme-dark' ? 'Dark' : 'Light'}`,
-        action: this.changeTheme.bind(this)
-      },
-      {
-        icon: `${this.a11yStorage === 'po-a11y-AAA' ? 'an-fill an-text-aa' : 'an an-text-aa'}`,
-        label: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA}`,
-        tooltip: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA}`,
-        action: this.changeA11yLevel.bind(this)
+        icon: 'an an-palette',
+        label: 'Aparência',
+        tooltip: 'Aparência'
       }
     ];
+  }
+
+  ngAfterViewInit(): void {
+    this.iconActions = this.buildIconActions();
+  }
+
+  private buildIconActions(): Array<PoHeaderActionTool> {
+    return this.actions.map(action =>
+      action.label === 'Aparência' && this.appearancePopover
+        ? { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 320 } }
+        : action
+    );
   }
 
   ngOnDestroy(): void {
