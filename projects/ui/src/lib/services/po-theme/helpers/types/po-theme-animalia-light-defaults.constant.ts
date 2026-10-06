@@ -25,20 +25,20 @@ const poAnimaliaActions: PoThemeColorAction = {
 const poAnimaliaNeutrals: PoThemeColorNeutral = {
   light: {
     '00': '#ffffff',
-    '05': '#fbfbfb',
-    '10': '#eceeee',
-    '20': '#dadedf',
-    '30': '#b6bdbf'
+    '05': '#F9F9FA',
+    '10': '#ECECEE',
+    '20': '#D0D0D7',
+    '30': '#B4B4C0'
   },
   mid: {
-    '40': '#9da7a9',
-    '60': '#6e7c7f'
+    '40': '#9191A1',
+    '60': '#69697C'
   },
   dark: {
-    '70': '#4a5c60',
-    '80': '#2c3739',
-    '90': '#1d2426',
-    '95': '#0b0e0e'
+    '70': '#515162',
+    '80': '#36364A',
+    '90': '#1D1D30',
+    '95': '#060613'
   }
 };
 
@@ -91,13 +91,13 @@ const poAnimaliaFeedback: PoThemeColorFeedback = {
  */
 const poAnimaliaBrands: poThemeColorBrand = {
   '01': {
-    lightest: '#e3eefb',
-    lighter: '#9cc6ef',
-    light: '#5fa3e0',
-    base: '#1a73c7',
-    dark: '#145089',
-    darker: '#0d3c6b',
-    darkest: '#082a4d'
+    lightest: '#EBEBF5',
+    lighter: '#C2C2E5',
+    light: '#9898CD',
+    base: '#4545A1',
+    dark: '#1F1F7A',
+    darker: '#0D0D59',
+    darkest: '#030330'
   },
   '02': {
     base: '#0a66c2'
