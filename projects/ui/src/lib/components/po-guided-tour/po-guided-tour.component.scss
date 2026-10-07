@@ -1,0 +1,19 @@
+.po-guided-tour-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.po-guided-tour-spotlight {
+  position: absolute;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+  pointer-events: auto;
+}
