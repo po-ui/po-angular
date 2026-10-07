@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/visual-app",
+    "types": [],
+    "paths": {
+      "@po-ui/ng-components": ["./projects/ui/src/public-api"],
+      "@po-ui/ng-components/*": ["./projects/ui/src/*"]
+    }
+  },
+  "files": ["app/main.ts", "app/polyfills.ts"],
+  "include": ["**/*.d.ts"],
+  "exclude": ["**/*.spec.ts", "__snapshots__/**", "test-results/**", "playwright-report/**"]
+}
