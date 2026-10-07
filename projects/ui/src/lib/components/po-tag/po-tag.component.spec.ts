@@ -191,6 +191,31 @@ describe('PoTagComponent:', () => {
       component.value = 'Label';
       expect(component.setAriaLabel()).toContain('Label Remove');
     });
+
+    describe('getWidthTag:', () => {
+      it('should return true when span scrollWidth is greater than container offsetWidth', () => {
+        const mockSpan = { scrollWidth: 200 };
+        const mockContainer = { firstElementChild: mockSpan, offsetWidth: 100 };
+        component.tagContainer = { nativeElement: mockContainer } as any;
+
+        expect(component.getWidthTag()).toBe(true);
+      });
+
+      it('should return false when span scrollWidth is less than or equal to container offsetWidth', () => {
+        const mockSpan = { scrollWidth: 50 };
+        const mockContainer = { firstElementChild: mockSpan, offsetWidth: 100 };
+        component.tagContainer = { nativeElement: mockContainer } as any;
+
+        expect(component.getWidthTag()).toBe(false);
+      });
+
+      it('should return false when firstElementChild is null', () => {
+        const mockContainer = { firstElementChild: null, offsetWidth: 100 };
+        component.tagContainer = { nativeElement: mockContainer } as any;
+
+        expect(component.getWidthTag()).toBe(false);
+      });
+    });
   });
 
   describe('Templates:', () => {
