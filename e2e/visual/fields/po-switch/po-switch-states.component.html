@@ -1,0 +1,36 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
+  <!-- State: basic -->
+  <div data-testid="state-basic">
+    <po-switch name="basic" p-label="Switch basico"></po-switch>
+  </div>
+
+  <!-- State: label-on / label-off -->
+  <div data-testid="state-labels">
+    <po-switch name="labels" p-label="Switch com labels" p-label-on="Ativo" p-label-off="Inativo"></po-switch>
+  </div>
+
+  <!-- State: label + helper -->
+  <div data-testid="state-label-helper">
+    <po-switch name="label-helper" p-label="Switch com helper" p-helper="Texto de ajuda do helper"></po-switch>
+  </div>
+
+  <!-- State: disabled -->
+  <div data-testid="state-disabled">
+    <po-switch name="disabled" p-label="Switch desabilitado" p-disabled></po-switch>
+  </div>
+
+  <!-- State: disabled + checked -->
+  <div data-testid="state-disabled-checked">
+    <po-switch
+      name="disabled-checked"
+      p-label="Switch desabilitado ativo"
+      p-disabled
+      [(ngModel)]="checkedValue"
+    ></po-switch>
+  </div>
+
+  <!-- State: loading -->
+  <div data-testid="state-loading">
+    <po-switch name="loading" p-label="Switch com loading" p-loading></po-switch>
+  </div>
+</div>
