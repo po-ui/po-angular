@@ -165,7 +165,7 @@ export abstract class PoChartBaseComponent implements OnInit {
    * - Os marcadores (*bullets*) terão seu estilo ajustado.
    * - As outras séries ficarão com opacidade reduzida ao passar o mouse sobre a série ativa.
    *
-   * > Disponível para gráficos do tipo `line` e `radar`.
+   * > Disponível para gráficos do tipo `line`, `area`, `column`, `bar` e `radar`.
    *
    * #### Exemplo de utilização:
    * ```typescript
