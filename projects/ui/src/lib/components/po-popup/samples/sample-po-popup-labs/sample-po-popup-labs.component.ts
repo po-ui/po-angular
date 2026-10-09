@@ -83,7 +83,12 @@ export class SamplePoPopupLabsComponent implements OnInit {
     } else {
       const parentNode = this.getActionNode(this.actions, action.parent);
       if (parentNode) {
-        parentNode.subItems = [...(parentNode.subItems || []), newAction];
+        if (typeof parentNode.subItems === 'function') {
+          parentNode.subItems = [newAction];
+        } else {
+          const currentSubItems = Array.isArray(parentNode.subItems) ? parentNode.subItems : [];
+          parentNode.subItems = [...currentSubItems, newAction];
+        }
       } else {
         this.actions = [...this.actions, newAction];
       }
@@ -115,7 +120,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
       label: undefined,
       visible: null,
       parent: undefined
-    } as any;
+    };
   }
 
   private getActionNode(items: Array<PoPopupAction>, value: string): PoPopupAction | undefined {

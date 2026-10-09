@@ -24,5 +24,9 @@
   [p-custom-positions]="popupCustomPositions"
   [p-size]="size"
   [p-target]="dropdownRef"
+  (p-close)="onPopupClose()"
+  (p-click-item)="clickItem.emit($event)"
+  (p-sub-items-load)="subItemsLoad.emit($event)"
+  (p-root-items-load)="rootItemsLoad.emit()"
 >
 </po-popup>

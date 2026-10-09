@@ -123,6 +123,24 @@ describe('PoDropdownComponent: ', () => {
       expect(component['hideDropdown']).toHaveBeenCalled();
     });
 
+    it('onPopupClose: should call hideDropdown without closing popup again when dropdown is open', () => {
+      component['open'] = true;
+      const hideSpy = spyOn(component as any, 'hideDropdown');
+
+      component.onPopupClose();
+
+      expect(hideSpy).toHaveBeenCalledWith(false);
+    });
+
+    it('onPopupClose: should not call hideDropdown when dropdown is already closed', () => {
+      component['open'] = false;
+      const hideSpy = spyOn(component as any, 'hideDropdown');
+
+      component.onPopupClose();
+
+      expect(hideSpy).not.toHaveBeenCalled();
+    });
+
     it(`hideDropdown: should set icon with 'ICON_ARROW_DOWN', call 'removeListeners', set 'open' to 'false'
     and call 'popupRef.close'.`, () => {
       const fakeThis = {
@@ -182,15 +200,32 @@ describe('PoDropdownComponent: ', () => {
       expect(component['hideDropdown']).not.toHaveBeenCalled();
     });
 
-    it('onScroll: shouldn`t call `hideDropdown` if `open` is true and target.className is `po-popup-container`', () => {
-      const fakeEvent = { target: { className: 'po-popup-container' } };
+    it('onScroll: shouldn`t call `hideDropdown` when the scroll happens inside the popup (internal list)', () => {
+      const popupEl = document.createElement('div');
+      const innerList = document.createElement('ul');
+      popupEl.appendChild(innerList);
+      component.popupRef = { popupRef: { nativeElement: popupEl } } as any;
       component['open'] = true;
 
       spyOn(component, <any>'hideDropdown');
 
-      component['onScroll'](fakeEvent);
+      component['onScroll']({ target: innerList });
 
       expect(component['hideDropdown']).not.toHaveBeenCalled();
+    });
+
+    it('onScroll: should call `hideDropdown` when scrolling outside the popup and dropdown is not fully visible', () => {
+      const popupEl = document.createElement('div');
+      component.popupRef = { popupRef: { nativeElement: popupEl } } as any;
+      component['open'] = true;
+
+      spyOn(component, <any>'isDropdownClosed').and.returnValue(false);
+      spyOn(component, <any>'hideDropdown');
+
+      // target fora do popup (ex.: body/página)
+      component['onScroll']({ target: document.createElement('section') });
+
+      expect(component['hideDropdown']).toHaveBeenCalled();
     });
 
     it('isDropdownClosed: check dropdown menu visibility correctly', () => {
@@ -301,6 +336,58 @@ describe('PoDropdownComponent: ', () => {
       component['wasClickedOnDropdown'](fakeEvent);
 
       expect(component['hideDropdown']).not.toHaveBeenCalled();
+    });
+
+    it('isEventInsideElement: should return true when composedPath contains the element', () => {
+      const element = document.createElement('div');
+      const event = {
+        target: document.createElement('span'),
+        composedPath: () => [document.createElement('a'), element]
+      } as unknown as MouseEvent;
+
+      expect(component['isEventInsideElement'](event, element)).toBeTrue();
+    });
+
+    it('isEventInsideElement: should fallback to contains when composedPath is unavailable', () => {
+      const target = document.createElement('span');
+      const element = document.createElement('div');
+      element.appendChild(target);
+
+      const event = {
+        target,
+        composedPath: undefined
+      } as unknown as MouseEvent;
+
+      expect(component['isEventInsideElement'](event, element)).toBeTrue();
+    });
+
+    it('checkClickArea: should return true when click is inside popup content', () => {
+      const trigger = document.createElement('div');
+      const popup = document.createElement('div');
+      const insidePopup = document.createElement('button');
+      popup.appendChild(insidePopup);
+
+      component.dropdownRef = { nativeElement: trigger } as any;
+      component.popupRef = { popupRef: { nativeElement: popup } } as any;
+
+      const event = { target: insidePopup, composedPath: undefined } as unknown as MouseEvent;
+
+      expect(component['checkClickArea'](event)).toBeTrue();
+    });
+
+    it('checkClickArea: should return false when click is outside trigger and popup', () => {
+      const trigger = document.createElement('div');
+      const popup = document.createElement('div');
+
+      component.dropdownRef = { nativeElement: trigger } as any;
+      component.popupRef = { popupRef: { nativeElement: popup } } as any;
+
+      const event = {
+        target: document.createElement('span'),
+        composedPath: () => [document.createElement('span')]
+      } as unknown as MouseEvent;
+
+      expect(component['checkClickArea'](event)).toBeFalse();
     });
   });
 

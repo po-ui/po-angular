@@ -12,7 +12,7 @@ export class SamplePoStepperLabsComponent implements OnInit {
 
   event: any;
   properties: any = {};
-  stepItem: PoStepperItem = <any>{};
+  stepItem: PoStepperItem = {};
   steps: Array<PoStepperItem> = [];
 
   readonly propertiesFields: Array<PoDynamicFormField> = [
