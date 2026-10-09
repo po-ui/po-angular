@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [22.0.0-next.0](https://github.com/po-ui/po-angular/compare/v21.33.0...v22.0.0-next.0) (2026-10-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **schematics:** removidos os schematics de ng generate de páginas
+
+Os comandos "ng generate @po-ui/ng-templates:po-page-*" e
+"ng generate @po-ui/ng-components:po-page-*" para geração de páginas
+deixam de existir. A alternativa recomendada passa a ser o uso do
+MCP do PO UI para geração de páginas e componentes, conforme a
+documentação em https://po-ui.io/documentation/ia-tools-mcp.
+
+* **gauge:** removido componente po-gauge
+
+O componente po-gauge foi removido por completo da biblioteca.
+Utilize o po-chart com type=gauge como alternativa. A migração pode
+ser aplicada automaticamente via ng update do PO UI para a v22.
+
+Antes:
+<po-gauge [p-value]="72" [p-ranges]="ranges"></po-gauge>
+
+Depois:
+<po-chart
+  p-type="gauge"
+  [p-options]="gaugeOptions"
+  [p-series]="gaugeSeries"
+></po-chart>
+
+### Features
+
+* **angular:** atualiza projeto para o Angular 22 ([cd1917c](https://github.com/po-ui/po-angular/commit/cd1917c47c9d42a3f38cee3da891282d52746c2e))
+* **gauge:** remove componente po-gauge depreciado ([8166802](https://github.com/po-ui/po-angular/commit/8166802a6571f7631d5aa3e7ad5b96a41a2c7fba))
+* **schematics:** remove ng generate de páginas e templates ([2900b06](https://github.com/po-ui/po-angular/commit/2900b06370dcd9485f0b53ae05d460383b00b563))
+
 ## [21.33.0](https://github.com/po-ui/po-angular/compare/v21.32.0...v21.33.0) (2026-10-05)
 
 
