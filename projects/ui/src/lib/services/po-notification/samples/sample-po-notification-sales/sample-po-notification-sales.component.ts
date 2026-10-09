@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoComboOption, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoComboOption, PoNotificationService, PoTableColumn } from '@po-ui/ng-c
   selector: 'sample-po-notification-sales',
   templateUrl: './sample-po-notification-sales.component.html',
   providers: [PoNotificationService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoNotificationSalesComponent {

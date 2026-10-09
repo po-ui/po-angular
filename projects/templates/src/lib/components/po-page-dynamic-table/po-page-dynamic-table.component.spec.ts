@@ -1,8 +1,9 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { EMPTY, of } from 'rxjs';
 
@@ -19,7 +20,7 @@ import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoUtils as utilsFunctions } from '../../utils/util';
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoPageDynamicTableBeforeRemoveAll } from './interfaces/po-page-dynamic-table-before-remove-all.interface';
 import { PoPageDynamicTableBeforeRemove } from './interfaces/po-page-dynamic-table-before-remove.interface';
 import { PoPageDynamicTableComponent } from './po-page-dynamic-table.component';
@@ -32,8 +33,12 @@ describe('PoPageDynamicTableComponent:', () => {
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicTableComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoNotificationModule, PoDialogModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      imports: [FormsModule, RouterModule.forRoot([]), PoNotificationModule, PoDialogModule],
+      providers: [
+        provideLocationMocks(),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 
@@ -831,7 +836,7 @@ describe('PoPageDynamicTableComponent:', () => {
         component.items = [{ name: 'Anne', id: 2, seqItem: 9 }];
 
         spyOn(component['poPageDynamicService'], 'getResources').and.returnValue(of(response));
-        spyOn(utilsFunctions, 'removeDuplicateItemsWithArrayKey');
+        spyOn(utilsFunctions, 'removeDuplicateItemsWithArrayKey').and.returnValue(undefined);
 
         component['loadData']({ page: 2 }).subscribe();
 

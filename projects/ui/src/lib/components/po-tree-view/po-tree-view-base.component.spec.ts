@@ -496,12 +496,14 @@ describe('PoTreeViewBaseComponent:', () => {
         { label: 'B', value: 2, selected: false, disabled: true }
       ];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(component['everyItemSelected'](items as any)).toBe(true);
     });
 
     it('everyItemSelected: should return false when there are no selectable items', () => {
       const items = [{ label: 'A', value: 1, selected: false, disabled: true }];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(component['everyItemSelected'](items as any)).toBe(false);
     });
 
@@ -756,18 +758,21 @@ describe('PoTreeViewBaseComponent:', () => {
         { label: 'C', value: 3, selected: true }
       ];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(component['getLastSelectedFinalItemValue'](items as any)).toBe(3);
     });
 
     it('should return a nested final value when only a child is selected', () => {
       const items = [{ label: 'A', value: 1, subItems: [{ label: 'B', value: 2, selected: true }] }];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(component['getLastSelectedFinalItemValue'](items as any)).toBe(2);
     });
 
     it('should return undefined when no final item is selected', () => {
       const items = [{ label: 'A', value: 1, subItems: [{ label: 'B', value: 2, selected: false }] }];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(component['getLastSelectedFinalItemValue'](items as any)).toBeUndefined();
     });
 

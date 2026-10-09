@@ -6,7 +6,8 @@ import {
   HostListener,
   input,
   Input,
-  Output
+  Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
@@ -60,6 +61,7 @@ import { PoHelperOptions } from '../../po-helper';
 @Component({
   selector: 'po-checkbox-base',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export abstract class PoCheckboxBaseComponent implements ControlValueAccessor {

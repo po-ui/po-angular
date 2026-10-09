@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoPageHeaderBaseComponent } from './po-page-header-base.component';
 
@@ -9,6 +9,7 @@ import { PoPageHeaderBaseComponent } from './po-page-header-base.component';
 @Component({
   selector: 'po-page-header',
   templateUrl: './po-page-header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageHeaderComponent extends PoPageHeaderBaseComponent {}

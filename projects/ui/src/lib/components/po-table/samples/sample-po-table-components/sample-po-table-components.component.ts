@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoModalComponent, PoTableColumn, PoTableColumnLabel, PoTableColumnSort } from '@po-ui/ng-components';
@@ -11,6 +11,7 @@ import { SamplePoTableComponentsService } from './sample-po-table-components.ser
   templateUrl: './sample-po-table-components.component.html',
   styleUrls: ['./sample-po-table-components.component.css'],
   providers: [SamplePoTableComponentsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTableComponentsComponent implements OnInit {

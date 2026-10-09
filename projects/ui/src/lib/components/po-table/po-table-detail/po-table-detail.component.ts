@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 import { getDefaultSizeFn, isTypeof, validateSizeFn, PoUtils } from '../../../utils/util';
 
@@ -17,6 +17,7 @@ import { PoTableDetail } from './po-table-detail.interface';
 @Component({
   selector: 'po-table-detail',
   templateUrl: './po-table-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableDetailComponent {

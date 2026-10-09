@@ -1,9 +1,7 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ElementRef, NO_ERRORS_SCHEMA, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import type { EChartsType } from 'echarts/core';
 import { PoTooltipModule } from '../../directives';
@@ -66,7 +64,7 @@ describe('PoChartComponent', () => {
     mockVcr = jasmine.createSpyObj('ViewContainerRef', ['clear', 'createComponent']);
 
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, PoTooltipModule],
+      imports: [PoTooltipModule],
       declarations: [PoChartComponent],
       providers: [
         CurrencyPipe,
@@ -76,7 +74,7 @@ describe('PoChartComponent', () => {
         { provide: PoChartBaseComponent, useValue: {} },
         { provide: ElementRef, useValue: createMockElementRef },
         { provide: ViewContainerRef, useValue: mockVcr },
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting()
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -1110,6 +1108,7 @@ describe('PoChartComponent', () => {
     it('should return an empty string when element is not found or CSS variable is not set', () => {
       spyOn(document, 'querySelector').and.returnValue(null);
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(window, 'getComputedStyle').and.returnValue({
         getPropertyValue: () => ''
       } as unknown as CSSStyleDeclaration);
@@ -1395,6 +1394,7 @@ describe('PoChartComponent', () => {
     });
 
     it('should call getComputedStyle with document.documentElement and use its value for var(...) color', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const spyGetComputed = spyOn(window, 'getComputedStyle').and.returnValue({
         getPropertyValue: (prop: string) => '#112233'
       } as unknown as CSSStyleDeclaration);
@@ -2343,6 +2343,7 @@ describe('PoChartComponent', () => {
     it('should use default font size of 16px if parent font size is undefined', () => {
       spyOn<any>(component, 'getCSSVariable').and.returnValue('2em');
       spyOn(document, 'querySelector').and.returnValue(null);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '16px' } as CSSStyleDeclaration);
 
       const result = (component as any)['chartGridUtils'].resolvePx('2em');
@@ -2356,6 +2357,7 @@ describe('PoChartComponent', () => {
 
       spyOn<any>(component, 'getCSSVariable').and.returnValue('1.5em');
       spyOn(document, 'querySelector').and.returnValue(mockParentElement);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(window, 'getComputedStyle').and.returnValue({ fontSize: '18px' } as CSSStyleDeclaration);
 
       const result = (component as any)['chartGridUtils'].resolvePx('--some-size', '.some-selector');

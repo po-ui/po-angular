@@ -12,7 +12,8 @@ import {
   SimpleChanges,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
@@ -107,6 +108,7 @@ use([
 @Component({
   selector: 'po-chart',
   templateUrl: './po-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoChartComponent extends PoChartBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {

@@ -4,7 +4,7 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 
 import { of } from 'rxjs';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { PoDynamicModule } from '../../po-dynamic.module';
 import { PoDynamicFormField } from '../interfaces/po-dynamic-form-field.interface';
@@ -22,7 +22,7 @@ describe('PoDynamicFormFieldsComponent: ', () => {
       imports: [FormsModule, ReactiveFormsModule, PoDynamicModule],
       providers: [
         { provide: NgForm, useValue: new NgForm(null, null) },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

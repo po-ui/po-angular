@@ -1,7 +1,8 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { throwError } from 'rxjs';
 
@@ -16,7 +17,7 @@ import { PoModalPasswordRecoveryModalContent } from './enums/po-modal-password-r
 import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.service';
 import { PoModalPasswordRecoveryType } from './enums/po-modal-password-recovery-type.enum';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoModalPasswordRecoveryComponent:', () => {
   let component: PoModalPasswordRecoveryComponent;
@@ -27,11 +28,12 @@ describe('PoModalPasswordRecoveryComponent:', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PoModalPasswordRecoveryErrorMessageComponent, PoModalPasswordRecoveryComponent],
-      imports: [FormsModule, RouterTestingModule.withRoutes([]), PoFieldModule, PoModalModule],
+      imports: [FormsModule, RouterModule.forRoot([]), PoFieldModule, PoModalModule],
       providers: [
+        provideLocationMocks(),
         PoI18nPipe,
         PoModalPasswordRecoveryService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();

@@ -1,6 +1,8 @@
 import { provideNgReflectAttributes } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -26,7 +28,7 @@ describe('PoListViewComponent:', () => {
     await TestBed.configureTestingModule({
       declarations: [PoListViewComponent],
       imports: [PoButtonModule, PoPopupModule, PoModalModule, PoWidgetModule],
-      providers: [provideNgReflectAttributes(), provideRouter([])]
+      providers: [provideLocationMocks(), provideNgReflectAttributes(), provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoListViewComponent);
@@ -768,6 +770,7 @@ describe('PoListViewComponent:', () => {
         const getStyleSpy = spyOn(window, 'getComputedStyle');
 
         ['none', 'normal', '""', "''", ''].forEach(content => {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           getStyleSpy.and.returnValue({ content } as unknown as CSSStyleDeclaration);
           expect(component['isIconGlyphEmpty'](el)).withContext(`content=${content}`).toBeTrue();
         });
@@ -775,6 +778,7 @@ describe('PoListViewComponent:', () => {
 
       it('isIconGlyphEmpty: should return false when `::before` has a glyph content', () => {
         const el = document.createElement('i');
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({ content: '"\\e900"' } as CSSStyleDeclaration);
 
         expect(component['isIconGlyphEmpty'](el)).toBeFalse();
@@ -786,6 +790,7 @@ describe('PoListViewComponent:', () => {
         root.appendChild(avatarContainer);
 
         Object.defineProperty(component['elementRef'], 'nativeElement', { get: () => root, configurable: true });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({ content: 'none' } as CSSStyleDeclaration);
         const setStyleSpy = spyOn(component['renderer'], 'setStyle');
 
@@ -802,6 +807,7 @@ describe('PoListViewComponent:', () => {
         root.appendChild(avatarContainer);
 
         Object.defineProperty(component['elementRef'], 'nativeElement', { get: () => root, configurable: true });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         spyOn(window, 'getComputedStyle').and.returnValue({ content: '"\\e900"' } as CSSStyleDeclaration);
         const removeStyleSpy = spyOn(component['renderer'], 'removeStyle');
 
@@ -1317,6 +1323,7 @@ describe('PoListViewComponent:', () => {
       const selectSpy = spyOn(component, 'selectListItem');
       spyOn(component.itemClick, 'emit');
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       expect(() => component['onItemClick'](testItem, null as any)).not.toThrow();
       expect(selectSpy).toHaveBeenCalledWith(testItem);
       expect(component.itemClick.emit).toHaveBeenCalled();

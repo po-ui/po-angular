@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -12,6 +12,7 @@ import {
   selector: 'sample-po-popup-labs',
   templateUrl: './sample-po-popup-labs.component.html',
   styleUrls: ['./sample-po-popup-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPopupLabsComponent implements OnInit {
@@ -115,7 +116,7 @@ export class SamplePoPopupLabsComponent implements OnInit {
       label: undefined,
       visible: null,
       parent: undefined
-    } as any;
+    };
   }
 
   private getActionNode(items: Array<PoPopupAction>, value: string): PoPopupAction | undefined {

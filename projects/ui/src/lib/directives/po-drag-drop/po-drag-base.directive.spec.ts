@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -24,8 +24,10 @@ interface TestItem {
   standalone: false
 })
 class TestHostComponent {
-  item: TestItem = { id: '1', name: 'test' };
-  disabled = false;
+  // Inputs do host para permitir atualização via fixture.componentRef.setInput,
+  // que é o mecanismo suportado para refletir mudanças de binding no ambiente de teste (Angular 22).
+  @Input() item: TestItem = { id: '1', name: 'test' };
+  @Input() disabled = false;
   startedItem: TestItem | null = null;
   endedItem: TestItem | null = null;
   movedEvent: any = null;
@@ -84,19 +86,19 @@ describe('PoDragBaseDirective (via PoDragDirective)', () => {
     });
 
     it('should reflect changes when input item is updated', () => {
-      component.item = { id: '99', name: 'changed' };
+      fixture.componentRef.setInput('item', { id: '99', name: 'changed' });
       fixture.detectChanges();
       expect(directive.data()).toEqual(jasmine.objectContaining({ id: '99', name: 'changed' }));
     });
 
     it('should accept undefined as data value', () => {
-      component.item = undefined;
+      fixture.componentRef.setInput('item', undefined);
       fixture.detectChanges();
       expect(directive.data()).toBeUndefined();
     });
 
     it('should accept null as data value', () => {
-      component.item = null;
+      fixture.componentRef.setInput('item', null);
       fixture.detectChanges();
       expect(directive.data()).toBeNull();
     });
@@ -108,15 +110,15 @@ describe('PoDragBaseDirective (via PoDragDirective)', () => {
     });
 
     it('should read `dragDisabled` signal as true when bound to true', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       expect(directive.dragDisabled()).toBeTrue();
     });
 
     it('should toggle dragDisabled back to false', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
-      component.disabled = false;
+      fixture.componentRef.setInput('disabled', false);
       fixture.detectChanges();
       expect(directive.dragDisabled()).toBeFalse();
     });
@@ -137,7 +139,7 @@ describe('PoDragBaseDirective (via PoDragDirective)', () => {
 
     it('should emit updated item data after input change', () => {
       const newItem: TestItem = { id: '5', name: 'new item' };
-      component.item = newItem;
+      fixture.componentRef.setInput('item', newItem);
       fixture.detectChanges();
       directive.dragStarted.emit(directive.data());
       expect(component.startedItem).toEqual(newItem);

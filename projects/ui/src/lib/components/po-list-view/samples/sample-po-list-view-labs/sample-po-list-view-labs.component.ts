@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -13,6 +13,7 @@ import {
 @Component({
   selector: 'sample-po-list-view-labs',
   templateUrl: './sample-po-list-view-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoListViewLabsComponent implements OnInit {
