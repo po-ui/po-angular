@@ -91,19 +91,36 @@ export abstract class PoInputGeneric extends PoInputBaseComponent implements Aft
 
   eventOnInput(e: any) {
     let value = '';
+
+    const inputElement = this.inputEl.nativeElement;
+    const selectionStart = inputElement.selectionStart;
+    const selectionEnd = inputElement.selectionEnd;
+
     if (!this.mask) {
       value = this.validMaxLength(this.maxlength, e.target.value);
-      this.inputEl.nativeElement.value = value;
+      inputElement.value = value;
     } else {
       this.objMask.blur(e);
-      this.inputEl.nativeElement.value = this.objMask.valueToInput;
+      inputElement.value = this.objMask.valueToInput;
       value = this.objMask.valueToModel;
     }
-    this.inputEl.nativeElement.value = this.upperCase
-      ? String(this.inputEl.nativeElement.value).toUpperCase()
-      : this.inputEl.nativeElement.value;
+
+    inputElement.value = this.upperCase ? String(inputElement.value).toUpperCase() : inputElement.value;
+
+    const shouldSetSelectionRange =
+      this.upperCase && typeof selectionStart === 'number' && typeof selectionEnd === 'number';
+
+    if (shouldSetSelectionRange) {
+      const cursorStart = Math.min(selectionStart, inputElement.value.length);
+      const cursorEnd = Math.min(selectionEnd, inputElement.value.length);
+
+      inputElement.setSelectionRange(cursorStart, cursorEnd);
+    }
+
     value = this.upperCase ? value.toUpperCase() : value;
+
     this.callOnChange(value);
+
     if (this.errorAsyncProperties?.triggerMode === 'changeModel') {
       this.verifyErrorAsync();
     }
