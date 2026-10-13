@@ -1,115 +1,114 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChangeDetectorRef, ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { configureTestSuite, expectPropertiesValues } from '../../../util-test/util-expect.spec';
+import { Component, viewChild } from '@angular/core';
+import { ElementRef, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 import { PoPopupComponent } from '../../po-popup//po-popup.component';
 
 import { PoToolbarNotificationComponent } from './po-toolbar-notification.component';
 
-describe('PoToolbarNotificationComponent: ', () => {
-  let component: PoToolbarNotificationComponent;
-  let fixture: ComponentFixture<PoToolbarNotificationComponent>;
-  let nativeElement;
+@Component({
+  template: `<po-toolbar-notification
+    [p-notification-number]="notificationNumber"
+    [p-notification-actions]="notificationActions"
+  ></po-toolbar-notification>`,
+  standalone: false
+})
+class HostComponent {
+  notificationNumber: any = 0;
+  notificationActions = undefined;
 
-  configureTestSuite(() => {
-    const elementRef = {};
-    const renderer2 = {
-      listen: () => ({})
-    };
+  notification = viewChild(PoToolbarNotificationComponent);
+}
+
+describe('PoToolbarNotificationComponent: ', () => {
+  let hostComponent: HostComponent;
+  let component: PoToolbarNotificationComponent;
+  let fixture: ComponentFixture<HostComponent>;
+  let nativeElement: HTMLElement;
+
+  beforeEach(async () => {
+    const renderer2 = { listen: () => ({}) };
     const poControlPositionService = {
       setElements: () => ({}),
       setElementPosition: () => ({})
     };
 
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [PoToolbarNotificationComponent, PoPopupComponent],
+    await TestBed.configureTestingModule({
+      declarations: [HostComponent, PoToolbarNotificationComponent, PoPopupComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: ElementRef, useValue: { elementRef } },
         { provide: Renderer2, useValue: renderer2 },
         { provide: PoControlPositionService, useValue: poControlPositionService }
       ]
-    });
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PoToolbarNotificationComponent);
-    component = fixture.componentInstance;
-    nativeElement = fixture.debugElement.nativeElement;
-
-    component['_notificationNumber'] = 0;
-
+    fixture = TestBed.createComponent(HostComponent);
+    hostComponent = fixture.componentInstance;
     fixture.detectChanges();
+    component = hostComponent.notification();
+    nativeElement = fixture.debugElement.nativeElement;
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call detectChanges after view init', async () => {
-    const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
-
-    component.ngAfterViewInit();
-
-    expect(detectChangesSpy).toHaveBeenCalled();
-  });
-
   it('should correctly reference the ViewChild notification element', () => {
-    fixture.detectChanges(); // Garante que o ViewChild foi inicializado após a renderização
-
-    const notificationElement = fixture.nativeElement.querySelector('po-icon');
-    expect(component.notificationRef.nativeElement).toBe(notificationElement);
+    const notificationElement = nativeElement.querySelector('po-icon');
+    expect(component.notificationRef().nativeElement).toBe(notificationElement);
   });
 
   describe('Properties: ', () => {
-    it('notificationNumber: should update property `p-notification-number` with `0` when invalid values', () => {
+    it('notificationNumber: should return `0` when invalid values', () => {
       const invalidValues = [undefined, null, {}, NaN, 'string', 0.1, false, true];
 
-      expectPropertiesValues(component, 'notificationNumber', invalidValues, 0);
+      invalidValues.forEach(val => {
+        hostComponent.notificationNumber = val;
+        fixture.detectChanges();
+        expect(component.notificationNumber()).toBe(0);
+      });
     });
 
-    it('notificationNumber: should update property `p-notification-number` with valid values', () => {
-      const validValues = [2, 3];
+    it('notificationNumber: should return valid integer values', () => {
+      hostComponent.notificationNumber = 2;
+      fixture.detectChanges();
+      expect(component.notificationNumber()).toBe(2);
 
-      expectPropertiesValues(component, 'notificationNumber', validValues, validValues);
+      hostComponent.notificationNumber = 3;
+      fixture.detectChanges();
+      expect(component.notificationNumber()).toBe(3);
     });
   });
 
   describe('Templates: ', () => {
     it('should not show count badge when notificationNumber is 0', () => {
-      component['_notificationNumber'] = 0;
-
+      hostComponent.notificationNumber = 0;
       fixture.detectChanges();
 
       expect(nativeElement.querySelector('.po-toolbar-notification-badge')).toBeFalsy();
     });
 
-    it('should not show count badge when notificationNumber is undefined', () => {
-      component['_notificationNumber'] = undefined;
+    it('should show count badge when notificationNumber transitions from 0 to positive', () => {
+      hostComponent.notificationNumber = 0;
+      fixture.detectChanges();
+      expect(nativeElement.querySelector('.po-toolbar-notification-badge')).toBeFalsy();
 
+      hostComponent.notificationNumber = 1;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-toolbar-notification-badge')).toBeFalsy();
-    });
-
-    it('should not show count badge when notificationNumber is null', () => {
-      component['_notificationNumber'] = null;
-
-      fixture.detectChanges();
-
-      expect(nativeElement.querySelector('.po-toolbar-notification-badge')).toBeFalsy();
+      const badge = nativeElement.querySelector('.po-toolbar-notification-badge');
+      expect(badge).toBeTruthy();
+      expect(badge.textContent.trim()).toBe('1');
     });
 
     it('should show count badge when have notificationNumber', () => {
-      component['_notificationNumber'] = 10;
-
+      hostComponent.notificationNumber = 10;
       fixture.detectChanges();
 
-      expect(nativeElement.querySelector('.po-toolbar-notification-badge')).toBeTruthy();
+      const badge = nativeElement.querySelector('.po-toolbar-notification-badge');
+      expect(badge).toBeTruthy();
+      expect(badge.textContent.trim()).toBe('10');
     });
   });
 });
