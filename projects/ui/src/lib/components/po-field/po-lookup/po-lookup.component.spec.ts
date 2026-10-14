@@ -1,4 +1,4 @@
-import { ComponentRef, EventEmitter, Injector } from '@angular/core';
+import { ComponentRef, EventEmitter, Injector, SimpleChange } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, inject, TestBed, tick } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -27,6 +27,8 @@ class LookupFilterService implements PoLookupFilter {
   getObjectByValue(id: string): Observable<any> {
     return of({});
   }
+
+  setConfig(url: string, fieldValue: string, multiple: boolean): void {}
 }
 
 const closeModalInstance = (modalInstance: ComponentRef<any>) => {
@@ -216,6 +218,42 @@ describe('PoLookupComponent:', () => {
 
   describe('Methods:', () => {
     const objectSelected = { label: 'teste', value: 123 };
+
+    describe('ngOnChanges:', () => {
+      it(`should call 'super.ngOnChanges' and reconfigure the service with 'setConfig' when 'multiple' changes
+        and 'filterService' is a string (regression: multiple lookup must build query param, not path param)`, () => {
+        const url = 'https://po.com/api/heroes';
+
+        component.filterService = url;
+        component.fieldValue = 'value';
+        component.multiple = true;
+
+        const setConfigSpy = spyOn(component.service, 'setConfig');
+
+        component.ngOnChanges({ multiple: new SimpleChange(false, true, false) });
+
+        expect(setConfigSpy).toHaveBeenCalledWith(url, 'value', true);
+      });
+
+      it(`should not call 'setConfig' on 'multiple' change when 'filterService' is an object (custom PoLookupFilter)`, () => {
+        component.filterService = new LookupFilterService();
+        component.multiple = true;
+
+        const setConfigSpy = spyOn(component.service, 'setConfig' as any);
+
+        component.ngOnChanges({ multiple: new SimpleChange(false, true, false) });
+
+        expect(setConfigSpy).not.toHaveBeenCalled();
+      });
+
+      it(`should keep its own behavior and set 'displayAdditionalHelp' to false when 'label' changes`, () => {
+        component.displayAdditionalHelp = true;
+
+        component.ngOnChanges({ label: new SimpleChange(undefined, 'Novo label', false) });
+
+        expect(component.displayAdditionalHelp).toBeFalse();
+      });
+    });
 
     describe('ngAfterViewInit:', () => {
       let inputFocus: jasmine.Spy;
