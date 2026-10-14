@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.34.0](https://github.com/po-ui/po-angular/compare/v21.33.0...v21.34.0) (2026-10-14)
+
+
+### Features
+
+* **popup, dropdown:** adiciona suporte a lazy loading ([7c6b13f](https://github.com/po-ui/po-angular/commit/7c6b13f33c78e80f831fad606ae463831c74e7fa))
+
+
+### Bug Fixes
+
+* **chart:** mantem tipo column após troca de tema com series coloridas ([c77ca9d](https://github.com/po-ui/po-angular/commit/c77ca9d42ef4ec651eebf661bdffd7aaa4c01c1a))
+
 ## [21.33.0](https://github.com/po-ui/po-angular/compare/v21.32.0...v21.33.0) (2026-10-05)
 
 
