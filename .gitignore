@@ -64,3 +64,9 @@ projects/portal/src/assets/json/icons-regular.json
 projects/portal/src/assets/json/version.json
 projects/portal/src/app/documentation/documentation-routing.module.ts
 
+# LLMS generated files
+projects/portal/src/llms-generated/
+projects/portal/src/llms.txt
+projects/portal/src/llms-full.txt
+
+projects/mcp/node_modules
