@@ -6,6 +6,7 @@ import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
+import { poThemeDefaultDeprecated } from './helpers/po-theme-poui-deprecated.constant';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { PoThemeService } from './po-theme.service';
 import { PoUtils as UtilFunctions } from '../../utils/util';
@@ -602,6 +603,60 @@ describe('PoThemeService:', () => {
         service.getThemeActive();
 
         expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', jasmine.any(Error));
+      });
+
+      it('getThemeActive: should resolve colors from the current built-in constant, keeping persisted active state', () => {
+        // Simula um tema embutido persistido com cores ANTIGAS no cache.
+        const stalePersisted: PoTheme = {
+          name: poThemeDefault.name,
+          type: [{ light: { color: { brand: { '01': { base: '#000000' } } } }, a11y: PoThemeA11yEnum.AAA }] as any,
+          active: { type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA }
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(stalePersisted));
+
+        const result = service.getThemeActive();
+
+        // As cores (type) devem vir da constante atual, não do cache antigo.
+        expect(result.type).toEqual(poThemeDefault.type);
+        // O estado ativo (type/a11y) salvo deve ser preservado.
+        expect(result.active).toEqual({ type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA });
+      });
+
+      it('getThemeActive: should resolve the deprecated built-in theme by name', () => {
+        const persisted: PoTheme = {
+          name: poThemeDefaultDeprecated.name,
+          type: [] as any,
+          active: { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA }
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(persisted));
+
+        const result = service.getThemeActive();
+
+        expect(result.name).toBe(poThemeDefaultDeprecated.name);
+        expect(result.type).toEqual(poThemeDefaultDeprecated.type);
+      });
+
+      it('getThemeActive: should resolve built-in theme when persisted name is in normalized form (po-theme -> potheme)', () => {
+        // O nome persistido no localStorage vem normalizado (sem hífen), como o formatTheme grava.
+        const persistedNormalized: PoTheme = {
+          name: 'potheme',
+          type: [{ light: { color: { brand: { '01': { base: '#000000' } } } }, a11y: PoThemeA11yEnum.AAA }] as any,
+          active: { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA }
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(persistedNormalized));
+
+        const result = service.getThemeActive();
+
+        // Mesmo com o nome na forma normalizada, deve resolver as cores da constante atual.
+        expect(result.type).toEqual(poThemeDefault.type);
+      });
+
+      it('getThemeActive: should return the persisted theme unchanged for a non built-in (custom) theme', () => {
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(poThemeTest));
+
+        const result = service.getThemeActive();
+
+        expect(result).toEqual(poThemeTest);
       });
     });
 

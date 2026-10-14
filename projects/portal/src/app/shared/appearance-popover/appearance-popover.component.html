@@ -1,0 +1,63 @@
+<ng-template #popoverContent>
+  <div class="appearance-popover">
+    <!-- Tema -->
+    <span class="po-font-text-bold">Tema</span>
+    <div class="po-mt-1 po-mb-2">
+      <po-radio-group
+        name="themePopover"
+        [p-options]="themeOptions"
+        [ngModel]="selectedTheme"
+        (ngModelChange)="onThemeChange($event)"
+        p-columns="2"
+      ></po-radio-group>
+    </div>
+
+    <po-divider></po-divider>
+
+    <!-- Modo -->
+    <div class="po-mt-2 po-mb-2">
+      <span class="po-font-text-bold">Modo</span>
+      <div class="po-row po-mt-1">
+        <po-button
+          class="po-mr-1"
+          p-label="Light"
+          p-icon="an an-sun"
+          [p-kind]="selectedMode === 'light' ? 'primary' : 'secondary'"
+          (p-click)="onModeChange('light')"
+        ></po-button>
+        <po-button
+          p-label="Dark"
+          p-icon="an an-moon"
+          [p-kind]="selectedMode === 'dark' ? 'primary' : 'secondary'"
+          (p-click)="onModeChange('dark')"
+        ></po-button>
+      </div>
+    </div>
+
+    <po-divider></po-divider>
+
+    <!-- Densidade / Acessibilidade -->
+    <div class="po-mt-2 po-mb-2">
+      <span class="po-font-text-bold">Densidade</span>
+      <div class="po-row po-mt-1">
+        <po-button
+          class="po-mr-1"
+          p-label="Compacto (AA)"
+          [p-kind]="selectedA11y === 'AA' ? 'primary' : 'secondary'"
+          (p-click)="onA11yChange('AA')"
+        ></po-button>
+        <po-button
+          p-label="Espaçoso (AAA)"
+          [p-kind]="selectedA11y === 'AAA' ? 'primary' : 'secondary'"
+          (p-click)="onA11yChange('AAA')"
+        ></po-button>
+      </div>
+    </div>
+
+    <po-divider></po-divider>
+
+    <div class="po-mt-2">
+      <po-button p-label="Restaurar padrão" p-kind="tertiary" (p-click)="resetAll()"></po-button>
+    </div>
+  </div>
+</ng-template>

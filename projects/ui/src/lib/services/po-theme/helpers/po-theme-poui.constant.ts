@@ -81,7 +81,7 @@ const poThemeDefaultDarkAA: PoThemeTokens = {
  * Tema padrão.
  */
 const poThemeDefault: PoTheme = {
-  name: 'default',
+  name: 'po-theme',
   type: [
     {
       light: poThemeDefaultLight,

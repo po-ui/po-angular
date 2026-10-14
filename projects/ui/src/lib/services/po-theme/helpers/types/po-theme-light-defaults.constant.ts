@@ -29,22 +29,22 @@ const poThemeDefaultNeutrals: PoThemeColorNeutral = {
   /** Tons de cinza claro. */
   light: {
     '00': '#ffffff',
-    '05': '#fbfbfb',
-    '10': '#eceeee',
-    '20': '#dadedf',
-    '30': '#b6bdbf'
+    '05': '#F9F9FA',
+    '10': '#ECECEE',
+    '20': '#D0D0D7',
+    '30': '#B4B4C0'
   },
   /** Tons de cinza intermediários. */
   mid: {
-    '40': '#9da7a9',
-    '60': '#6e7c7f'
+    '40': '#9191A1',
+    '60': '#69697C'
   },
   /** Tons de cinza escuro. */
   dark: {
-    '70': '#4a5c60',
-    '80': '#2c3739',
-    '90': '#1d2426',
-    '95': '#0b0e0e'
+    '70': '#515162',
+    '80': '#36364A',
+    '90': '#1D1D30',
+    '95': '#060613'
   }
 };
 
@@ -99,19 +99,19 @@ const poThemeDefaultFeedback: PoThemeColorFeedback = {
  */
 const poThemeDefaultBrands: poThemeColorBrand = {
   '01': {
-    lightest: '#f2eaf6',
-    lighter: '#d9c2e5',
-    light: '#bd94d1',
-    base: '#753399',
-    dark: '#5b1c7d',
-    darker: '#400e58',
-    darkest: '#260538'
+    lightest: '#EBEBF5',
+    lighter: '#C2C2E5',
+    light: '#9898CD',
+    base: '#4545A1',
+    dark: '#1F1F7A',
+    darker: '#0D0D59',
+    darkest: '#030330'
   },
   '02': {
-    base: '#b92f72'
+    base: '#0a66c2'
   },
   '03': {
-    base: '#ffd464'
+    base: '#64b5f6'
   }
 };
 
