@@ -58,13 +58,13 @@ jobs:
               ;;
             next)
               echo "npm_tag=next"                          >> "$GITHUB_OUTPUT"
-              echo "required_branch=refs/heads/master"     >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/22.x.x"     >> "$GITHUB_OUTPUT"
               echo "with_mcp=true"                         >> "$GITHUB_OUTPUT"
               ;;
             latest)
-              echo "npm_tag=latest"                        >> "$GITHUB_OUTPUT"
-              echo "required_branch=refs/heads/master"     >> "$GITHUB_OUTPUT"
-              echo "with_mcp=true"                         >> "$GITHUB_OUTPUT"
+              echo "npm_tag=latest"                                            >> "$GITHUB_OUTPUT"
+              echo "required_branch=refs/heads/master refs/heads/21.32.x"      >> "$GITHUB_OUTPUT"
+              echo "with_mcp=true"                                             >> "$GITHUB_OUTPUT"
               ;;
           esac
 
@@ -72,9 +72,18 @@ jobs:
       - name: Verificar branch obrigatória
         if: ${{ steps.cfg.outputs.required_branch != '' }}
         run: |
-          if [ "${{ github.ref }}" != "${{ steps.cfg.outputs.required_branch }}" ]; then
-            echo "❌ Canal '${{ github.event.inputs.release_channel }}' só pode ser publicado a partir de '${{ steps.cfg.outputs.required_branch }}'."
-            echo "   Branch atual: ${{ github.ref }}"
+          ALLOWED="${{ steps.cfg.outputs.required_branch }}"
+          CURRENT="${{ github.ref }}"
+          MATCH=no
+          for branch in $ALLOWED; do
+            if [ "$CURRENT" = "$branch" ]; then
+              MATCH=yes
+              break
+            fi
+          done
+          if [ "$MATCH" != "yes" ]; then
+            echo "❌ Canal '${{ github.event.inputs.release_channel }}' só pode ser publicado a partir de: $ALLOWED."
+            echo "   Branch atual: $CURRENT"
             exit 1
           fi
 

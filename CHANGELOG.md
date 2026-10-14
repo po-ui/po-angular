@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.32.1](https://github.com/po-ui/po-angular/compare/v21.32.0...v21.32.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* **chart:** mantem tipo column após troca de tema com series coloridas ([4c7ea8d](https://github.com/po-ui/po-angular/commit/4c7ea8ddd68965407d59c5af08c1fc6187650d3b))
+
 ### [21.32.0](https://github.com/po-ui/po-angular/compare/v21.31.0...v21.32.0) (2026-09-29)
 
 
