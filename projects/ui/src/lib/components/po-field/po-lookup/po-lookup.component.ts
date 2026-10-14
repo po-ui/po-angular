@@ -214,6 +214,8 @@ export class PoLookupComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    super.ngOnChanges(changes);
+
     if (changes.label) {
       this.displayAdditionalHelp = false;
     }
