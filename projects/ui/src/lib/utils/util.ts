@@ -419,8 +419,17 @@ export function getFormattedLink(link: string): string {
  * @param ascending Determina se será em ordem ascendente ou descendente.
  */
 export function sortValues(leftSide: string | Date, rightSide: string | Date, ascending: boolean = true): number {
-  const left = isTypeof(leftSide, 'string') ? (leftSide as string).toLowerCase() : leftSide;
-  const right = isTypeof(rightSide, 'string') ? (rightSide as string).toLowerCase() : rightSide;
+
+   const leftNumeric = isTypeof(leftSide, 'string') && !isNaN(Number(leftSide)) && leftSide.toString().trim() !== ''
+    ? Number(leftSide)
+    : leftSide;
+
+  const rightNumeric = isTypeof(rightSide, 'string') && !isNaN(Number(rightSide)) && rightSide.toString().trim() !== ''
+    ? Number(rightSide)
+    : rightSide;
+
+  const left = isTypeof(leftNumeric, 'string') ? (leftNumeric as string).toLowerCase() : leftNumeric;
+  const right = isTypeof(rightNumeric, 'string') ? (rightNumeric as string).toLowerCase() : rightNumeric;
 
   const leftIsInvalid = left === null || left === undefined || Number.isNaN(left);
   const rightIsInvalid = right === null || right === undefined || Number.isNaN(right);
