@@ -48,6 +48,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Input('p-hide-today-button') hideTodayButton: boolean = false;
   @Input('p-presets') hasPresets: boolean = false;
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+  @Input('p-allow-any-year') allowAnyYear: boolean = false;
   private _locale: string;
   @Input('p-locale') set locale(value: string) {
     this._locale = value;
@@ -92,7 +93,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     year: 0,
     yearsOptions: [],
     updateDate: (year: number, month: number, comboComponent?: any) => this.updateDate(year, month, comboComponent),
-    onComboBlur: () => this.onComboBlur()
+    onComboBlur: () => this.onComboBlur(),
+    onYearInputChange: (search: string, comboComponent?: any) => this.onYearInputChange(search, comboComponent)
   };
 
   protected currentMonthNumber: number;
@@ -163,20 +165,31 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       const dateOnlyRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
       if (dateOnlyRegex.test(dateValue)) {
         const [, year, month, day] = dateOnlyRegex.exec(dateValue).map(Number);
-        return new Date(year, month - 1, day);
+        return this.createDate(year, month - 1, day);
       }
       dateValue = new Date(dateValue);
     }
 
     if (dateValue instanceof Date && !Number.isNaN(dateValue.getTime())) {
       if (dateValue.getUTCHours() === 0 && dateValue.getUTCMinutes() === 0) {
-        return new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
+        return this.createDate(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
       }
 
-      return new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
+      return this.createDate(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
     }
 
     return new Date();
+  }
+
+  // `new Date` converte anos entre 0 e 99 para 1900-1999, por isso é utilizado o `setFullYear`.
+  private createDate(year: number, month: number, day: number): Date {
+    const date = new Date(year, month, day);
+
+    if (year >= 0 && year < 100) {
+      date.setFullYear(year, month, day);
+    }
+
+    return date;
   }
 
   private initializeData() {
@@ -225,7 +238,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     const yearsOptions = [...this.comboYearsOptions];
 
     if (this.displayYear !== undefined && !yearsOptions.some(option => option.value === this.displayYear)) {
-      yearsOptions.push({ label: this.displayYear.toString(), value: this.displayYear });
+      yearsOptions.push({ label: this.formatYearLabel(this.displayYear), value: this.displayYear });
       yearsOptions.sort((a, b) => a.value - b.value);
     }
 
@@ -235,9 +248,55 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       year: this.displayYear,
       yearsOptions,
       updateDate: (year: number, month: number, comboComponent?: any) => this.updateDate(year, month, comboComponent),
-      onComboBlur: (comboComponent?: any) => this.onComboBlur(comboComponent)
+      onComboBlur: (comboComponent?: any) => this.onComboBlur(comboComponent),
+      onYearInputChange: (search: string, comboComponent?: any) => this.onYearInputChange(search, comboComponent)
     };
     this.cdr.markForCheck();
+  }
+
+  /**
+   * Quando `allowAnyYear` estiver habilitado, adiciona temporariamente nas opções do combo de ano
+   * o ano digitado (4 dígitos) que não esteja na lista, permitindo selecioná-lo sem gerar uma lista extensa.
+   */
+  onYearInputChange(search: string, comboComponent?: any) {
+    if (!this.allowAnyYear || !comboComponent) {
+      return;
+    }
+
+    const yearsOptions = this.templateContext.yearsOptions || [];
+    const typedYear = this.getTypedYear(search);
+    const shouldAddTypedYear = typedYear !== undefined && !yearsOptions.some(option => option.value === typedYear);
+
+    const options = shouldAddTypedYear
+      ? [...yearsOptions, { label: this.formatYearLabel(typedYear), value: typedYear }]
+      : yearsOptions;
+
+    if (comboComponent.options !== options) {
+      comboComponent.options = options;
+      comboComponent.searchForLabel(search, comboComponent.options, comboComponent.filterMode);
+    }
+  }
+
+  private getTypedYear(search: string): number | undefined {
+    const value = (search || '').trim();
+
+    if (!/^\d{4}$/.test(value)) {
+      return undefined;
+    }
+
+    const year = Number(value);
+    const minYear = this.minDate ? this.getDateToUse(this.minDate).getFullYear() : undefined;
+    const maxYear = this.maxDate ? this.getDateToUse(this.maxDate).getFullYear() : undefined;
+
+    if ((minYear !== undefined && year < minYear) || (maxYear !== undefined && year > maxYear)) {
+      return undefined;
+    }
+
+    return year;
+  }
+
+  private formatYearLabel(year: number): string {
+    return year.toString().padStart(4, '0');
   }
 
   updateDate(year: number, month: number, comboComponent?: any) {
@@ -332,7 +391,9 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   private isYearInvalid(year: any): boolean {
-    return typeof year === 'string' || Number.isNaN(year) || (year && year < 1900) || (year && year > 2100);
+    const [minYear, maxYear] = this.allowAnyYear ? [0, 9999] : [1900, 2100];
+
+    return typeof year === 'string' || Number.isNaN(year) || (year && year < minYear) || (year && year > maxYear);
   }
 
   private updateDisplay(year: number, month: number) {

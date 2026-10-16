@@ -3,7 +3,7 @@ import { EventEmitter, Input, Output, Directive, TemplateRef, HostBinding, HostL
 import { PoDateService } from '../../services/po-date';
 import { PoCalendarMode } from './po-calendar-mode.enum';
 import { PoFieldSize } from '../../enums/po-field-size.enum';
-import { getDefaultSizeFn, validateSizeFn } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/util';
 import { PoTimerFormat } from '../po-timer/enums/po-timer-format.enum';
 import { poLocales } from '../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
@@ -127,6 +127,9 @@ export class PoCalendarBaseComponent {
 
   // Propriedade que permite integrar o po-combo no componente de calendar. Implementa o template de header com `PoCombo`.
   @Input('p-header-template') headerTemplate?: TemplateRef<any>;
+
+  // Permite pesquisar e selecionar no seletor de ano qualquer ano com 4 dígitos, mesmo fora da lista de opções.
+  @Input({ alias: 'p-allow-any-year', transform: convertToBoolean }) allowAnyYear: boolean = false;
 
   /**
    * @optional

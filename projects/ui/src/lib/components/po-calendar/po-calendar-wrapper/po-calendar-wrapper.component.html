@@ -158,6 +158,7 @@
     [p-remove-initial-filter]="true"
     [ngModel]="combo.year"
     [p-options]="combo.yearsOptions"
+    (p-input-change)="combo.onYearInputChange($event, yearCombo)"
     (p-change)="combo.updateDate($event, combo.monthIndex)"
     (p-blur)="combo.onComboBlur(yearCombo)"
     [p-size]="size"

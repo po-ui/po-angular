@@ -121,6 +121,7 @@
           [p-size]="size"
           [p-mode]="mode"
           [p-year-range-limit]="yearRangeLimit"
+          [p-allow-any-year]="allowAnyYear"
           (p-change)="dateSelected($event)"
           (p-change-month-year)="adjustCalendarPosition()"
           (keydown)="onCalendarKeyDown($event)"

@@ -147,6 +147,24 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
   private _yearRangeLimit: number = 150;
 
   /**
+   * @optional
+   *
+   * @description
+   *
+   * Permite pesquisar e selecionar, no seletor de ano do calendário, qualquer ano com 4 dígitos (de `0000` a `9999`),
+   * mesmo que ele não esteja disponível na lista de opções.
+   *
+   * Ao digitar o ano no campo de seleção, o valor informado é exibido como opção e, ao selecioná-lo, o calendário
+   * navega para o ano correspondente. Útil para informar datas futuras utilizadas como limite de períodos, por exemplo,
+   * `31/12/2999` ou `31/12/9999`, sem a necessidade de carregar uma lista extensa de anos.
+   *
+   * > Os limites definidos em `p-min-date` e `p-max-date` são respeitados.
+   *
+   * @default `false`
+   */
+  @Input({ alias: 'p-allow-any-year', transform: convertToBoolean }) allowAnyYear: boolean = false;
+
+  /**
    *
    * @deprecated v23.x.x use `p-helper`
    *
