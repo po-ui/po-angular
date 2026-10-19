@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideLocationMocks } from '@angular/common/testing';
 import { RouterModule } from '@angular/router';
+import { of } from 'rxjs';
 
 import { configureTestSuite, expectPropertiesValues } from './../../util-test/util-expect.spec';
 
@@ -847,12 +848,14 @@ describe('PoPopupComponent:', () => {
     it('clampHeightToViewport: should remove dynamic maxHeight from the listbox scroller when content fits', () => {
       const popupEl = document.createElement('div');
       Object.defineProperty(popupEl, 'offsetHeight', { value: 1, configurable: true });
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(popupEl, 'getBoundingClientRect').and.returnValue({ top: 0, bottom: 1 } as DOMRect);
       const scrollEl = document.createElement('ul');
       component.popupRef = { nativeElement: popupEl } as any;
 
       const targetEl = document.createElement('button');
       // target no topo: spaceBelow ~= innerHeight (cabe qualquer altura mínima); não abre para cima
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 0, bottom: 0 } as DOMRect);
       component.target = targetEl;
 
@@ -874,6 +877,7 @@ describe('PoPopupComponent:', () => {
       component.popupRef = { nativeElement: popupEl } as any;
 
       const targetEl = document.createElement('button');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 266 } as DOMRect);
       component.target = targetEl;
 
@@ -897,6 +901,7 @@ describe('PoPopupComponent:', () => {
       component.popupRef = { nativeElement: popupEl } as any;
 
       const targetEl = document.createElement('button');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 266 } as DOMRect);
       component.target = targetEl;
 
@@ -919,6 +924,7 @@ describe('PoPopupComponent:', () => {
       component.popupRef = { nativeElement: popupEl } as any;
 
       const targetEl = document.createElement('button');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 400 } as DOMRect);
       component.target = targetEl;
 
@@ -934,12 +940,14 @@ describe('PoPopupComponent:', () => {
     it(`clampHeightToViewport: should anchor the popup by its bottom edge when opening up`, () => {
       const popupEl = document.createElement('div');
       Object.defineProperty(popupEl, 'offsetHeight', { value: 300, configurable: true });
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(popupEl, 'getBoundingClientRect').and.returnValue({ top: 110, bottom: 410 } as DOMRect);
       const scrollEl = document.createElement('ul');
       Object.defineProperty(scrollEl, 'offsetHeight', { value: 300, configurable: true });
       component.popupRef = { nativeElement: popupEl } as any;
 
       const targetEl = document.createElement('button');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 518, bottom: 562 } as DOMRect);
       component.target = targetEl;
 
@@ -968,6 +976,7 @@ describe('PoPopupComponent:', () => {
       const targetTop = window.innerHeight - 40;
       const targetBottom = window.innerHeight - 4;
       const targetEl = document.createElement('button');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: targetTop, bottom: targetBottom } as DOMRect);
       component.target = targetEl;
 
@@ -991,6 +1000,7 @@ describe('PoPopupComponent:', () => {
 
       const targetEl = document.createElement('button');
       // target no topo: cabe abaixo (spaceBelow ~= innerHeight) => não abre para cima
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 0, bottom: 0 } as DOMRect);
       component.target = targetEl;
 
@@ -1042,6 +1052,7 @@ describe('PoPopupComponent:', () => {
       component.popupRef = { nativeElement: popupEl } as any;
 
       const targetEl = document.createElement('button');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       spyOn(targetEl, 'getBoundingClientRect').and.returnValue({ top: 10 } as DOMRect);
       component.target = targetEl;
 

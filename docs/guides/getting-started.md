@@ -36,25 +36,24 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 
 ```json
   "dependencies": {
-    "@angular/common": "~22.0.1",
-    "@angular/compiler": "~22.0.1",
-    "@angular/core": "~22.0.1",
-    "@angular/forms": "~22.0.1",
-    "@angular/platform-browser": "~22.0.1",
-    "@angular/router": "~22.0.1",
+    "@angular/common": "~22.2.1",
+    "@angular/compiler": "~22.2.1",
+    "@angular/core": "~22.2.1",
+    "@angular/forms": "~22.2.1",
+    "@angular/platform-browser": "~22.2.1",
+    "@angular/router": "~22.2.1",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.15.0"
     ...
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "~22.0.1",
+    "@angular-devkit/schematics": "~22.2.1",
     "@angular/build": "~22.2.1",
-    "@angular/cli": "~22.0.1",
-    "@angular/compiler-cli": "~22.0.1",
+    "@angular/cli": "~22.2.1",
+    "@angular/compiler-cli": "~22.2.1",
     ...
-    "typescript": "~6.0.3",
-    "vitest": "^4.0.0"
+    "typescript": "~6.0.3"
   }
 ```
 
