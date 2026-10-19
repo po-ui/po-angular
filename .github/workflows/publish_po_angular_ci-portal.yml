@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '24.x'
+        registry-url: 'https://registry.npmjs.org'
+
     - name: Check out po-angular
       uses: actions/checkout@v4
       with:
