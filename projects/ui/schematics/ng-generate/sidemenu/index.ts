@@ -26,6 +26,7 @@ import {
 } from '@po-ui/ng-schematics/project';
 import {
   detectFileNameStyleGuide,
+  detectRootComponentClassName,
   FileNameStyleGuide,
   getFileNameSuffixes,
   supportedCssExtensions
@@ -64,7 +65,12 @@ function createAppComponent(options: ComponentOptions): Rule {
       options.fileNameStyleGuide ?? detectFileNameStyleGuide(tree, browserEntryPoint);
     const { componentSuffix } = getFileNameSuffixes(styleGuide);
     const appFileName = `app${componentSuffix}`;
-    const appClassName = styleGuide === '2016' ? 'AppComponent' : 'App';
+
+    // Preserve the root component class name already used by the project (e.g. `App` or
+    // `AppComponent`) so the overwritten component keeps matching the existing imports in
+    // main.ts / app.module.ts. Fall back to the style guide convention when undetectable.
+    const appClassName =
+      detectRootComponentClassName(tree, browserEntryPoint) ?? (styleGuide === '2016' ? 'AppComponent' : 'App');
 
     const templateOptions = { ...options, appFileName, appClassName };
 
