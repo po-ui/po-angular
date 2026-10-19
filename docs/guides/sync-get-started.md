@@ -9,7 +9,7 @@ Para maiores detalhes sobre os serviços e métodos utilizados neste tutorial, c
 ### Pré-requisitos
 
 - [Node.js e NPM](https://nodejs.org/en/)
-- [Angular CLI](https://cli.angular.io/) (~22.0.1):
+- [Angular CLI](https://cli.angular.io/) (~22.2.1):
   - ```shell
     npm install -g @angular/cli@22
     ```
@@ -45,12 +45,12 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 ```json
   ...
   "dependencies": {
-    "@angular/common": "~22.0.1",
-    "@angular/compiler": "~22.0.1",
-    "@angular/core": "~22.0.1",
-    "@angular/forms": "~22.0.1",
-    "@angular/platform-browser": "~22.0.1",
-    "@angular/router": "~22.0.1",
+    "@angular/common": "~22.2.1",
+    "@angular/compiler": "~22.2.1",
+    "@angular/core": "~22.2.1",
+    "@angular/forms": "~22.2.1",
+    "@angular/platform-browser": "~22.2.1",
+    "@angular/router": "~22.2.1",
     "@capacitor/app": "8.0.0",
     "@capacitor/core": "8.0.1",
     "@capacitor/haptics": "8.0.0",
@@ -64,11 +64,11 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "~22.0.1",
+    "@angular-devkit/schematics": "~22.2.1",
     "@angular/build": "~22.2.1",
-    "@angular/cli": "~22.0.1",
-    "@angular/compiler-cli": "~22.0.1",
-    "@angular/language-service": "~22.0.1",
+    "@angular/cli": "~22.2.1",
+    "@angular/compiler-cli": "~22.2.1",
+    "@angular/language-service": "~22.2.1",
     "@capacitor/cli": "8.0.1",
     "@ionic/angular-toolkit": "^12.0.0",
     ...
@@ -81,7 +81,7 @@ Veja abaixo a lista de dependências e as versões compatíveis, elas devem ser 
 > ```json
 > "dependencies": {
 >   ...
->   "@angular/platform-browser-dynamic": "~22.0.1",
+>   "@angular/platform-browser-dynamic": "~22.2.1",
 >   ...
 > }
 > ```

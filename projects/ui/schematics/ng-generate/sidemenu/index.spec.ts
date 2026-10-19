@@ -58,7 +58,7 @@ describe('sidemenu:', () => {
   });
 
   describe('fileNameStyleGuide 2016 (classic suffixes):', () => {
-    it('should create the app files with the `.component` suffix and use the `AppComponent` class', async () => {
+    it('should create the app files with the `.component` suffix while preserving the bootstrapped class', async () => {
       const options = { ...sidemenuOptions, fileNameStyleGuide: '2016' };
       const tree = await runner.runSchematic('sidemenu', options, appTree);
 
@@ -67,7 +67,10 @@ describe('sidemenu:', () => {
       expect(tree.files).toContain(`${appDir}/app.component.ts`);
       expect(tree.files).toContain(`${appDir}/app.component.html`);
       expect(tree.files).toContain(`${appDir}/app.component.${sidemenuOptions.style}`);
-      expect(getFileContent(tree, `${appDir}/app.component.ts`)).toContain('export class AppComponent {');
+      // The option only controls the file-name suffix. The class name still follows the
+      // component bootstrapped by the base app (the CLI's standalone `App`) so the
+      // overwritten component keeps matching the existing import.
+      expect(getFileContent(tree, `${appDir}/app.component.ts`)).toContain('export class App {');
     });
   });
 
@@ -90,6 +93,92 @@ describe('sidemenu:', () => {
       const tree = await runner.runSchematic('sidemenu', sidemenuOptions, appTree);
 
       expect(tree.files).toContain(`/projects/${sidemenuOptions.project}/src/app/app.component.ts`);
+    });
+  });
+
+  describe('auto-detected style on an NgModule project with a chained bootstrapModule call:', () => {
+    beforeEach(() => {
+      // Mirrors the CLI v22 NgModule main.ts, where the bootstrap call is chained off
+      // `platformBrowser()` (a property-access callee) rather than a bare identifier.
+      appTree.overwrite(
+        '/projects/po/src/main.ts',
+        `import { platformBrowser } from '@angular/platform-browser';\n` +
+          `import { AppModule } from './app/app.module';\n` +
+          `platformBrowser().bootstrapModule(AppModule).catch(err => console.error(err));\n`
+      );
+      appTree.create(
+        '/projects/po/src/app/app.component.ts',
+        `import { Component } from '@angular/core';\n@Component({ selector: 'app-root', template: '' })\nexport class App {}\n`
+      );
+      appTree.create(
+        '/projects/po/src/app/app.module.ts',
+        `import { NgModule } from '@angular/core';\n` +
+          `import { BrowserModule } from '@angular/platform-browser';\n` +
+          `import { App } from './app.component';\n` +
+          `@NgModule({\n` +
+          `  declarations: [App],\n` +
+          `  imports: [BrowserModule],\n` +
+          `  bootstrap: [App]\n` +
+          `})\n` +
+          `export class AppModule {}\n`
+      );
+    });
+
+    it('should overwrite the existing `.component` file with the PO layout', async () => {
+      const appDir = `/projects/${sidemenuOptions.project}/src/app`;
+      const originalComponent = getFileContent(appTree, `${appDir}/app.component.ts`);
+
+      const tree = await runner.runSchematic('sidemenu', sidemenuOptions, appTree);
+
+      const generatedComponent = getFileContent(tree, `${appDir}/app.component.ts`);
+
+      // The chained `bootstrapModule(AppModule)` import resolves to `./app/app.module`
+      // (a `.module` suffix), so the classic 2016 style must be detected and the PO layout
+      // written to the existing `app.component.ts` (suffix `.component`), not to a new
+      // suffix-less `app.ts`.
+      expect(generatedComponent).not.toEqual(originalComponent);
+      expect(generatedComponent).toContain('PoMenuItem');
+      expect(generatedComponent).toContain(`templateUrl: './app.component.html'`);
+      // The class name is read from the module's `bootstrap: [App]`, not from the
+      // bootstrapped module symbol (`AppModule`), so it stays `App` and keeps matching
+      // the module's `declarations`/`bootstrap` references.
+      expect(generatedComponent).toContain('export class App {');
+      expect(generatedComponent).not.toContain('export class AppModule');
+    });
+  });
+
+  describe('auto-detected class name on an NgModule project bootstrapping `AppComponent`:', () => {
+    beforeEach(() => {
+      appTree.overwrite(
+        '/projects/po/src/main.ts',
+        `import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';\n` +
+          `import { AppModule } from './app/app.module';\n` +
+          `platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err));\n`
+      );
+      appTree.create(
+        '/projects/po/src/app/app.component.ts',
+        `import { Component } from '@angular/core';\n@Component({ selector: 'app-root', template: '' })\nexport class AppComponent {}\n`
+      );
+      appTree.create(
+        '/projects/po/src/app/app.module.ts',
+        `import { NgModule } from '@angular/core';\n` +
+          `import { BrowserModule } from '@angular/platform-browser';\n` +
+          `import { AppComponent } from './app.component';\n` +
+          `@NgModule({\n` +
+          `  declarations: [AppComponent],\n` +
+          `  imports: [BrowserModule],\n` +
+          `  bootstrap: [AppComponent]\n` +
+          `})\n` +
+          `export class AppModule {}\n`
+      );
+    });
+
+    it('should preserve the `AppComponent` class name read from the module bootstrap array', async () => {
+      const tree = await runner.runSchematic('sidemenu', sidemenuOptions, appTree);
+
+      const content = getFileContent(tree, `/projects/${sidemenuOptions.project}/src/app/app.component.ts`);
+
+      expect(content).toContain('export class AppComponent {');
     });
   });
 });

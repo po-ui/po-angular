@@ -1,4 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
+import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
 import * as ts from 'typescript';
 
 /**
@@ -56,21 +57,64 @@ export function detectFileNameStyleGuide(host: Tree, mainPath: string): FileName
 }
 
 /**
+ * Detects the name of the root component class already used by the project, so a schematic
+ * that overwrites the root component keeps the class name expected by the existing imports.
+ *
+ * - Standalone apps bootstrap the component directly (`bootstrapApplication(App)`), so the
+ *   bootstrapped symbol is the component name (e.g. `App` or `AppComponent`).
+ * - NgModule apps bootstrap the module (`bootstrapModule(AppModule)`), so the component is
+ *   read from the `bootstrap: [...]` array of the module's `@NgModule` decorator.
+ *
+ * Returns `undefined` when the name can not be resolved, so callers can fall back to their
+ * own convention.
+ */
+export function detectRootComponentClassName(host: Tree, mainPath: string): string | undefined {
+  const mainSource = readSourceFile(host, mainPath);
+
+  if (!mainSource) {
+    return undefined;
+  }
+
+  const bootstrapCall = getBootstrapCall(mainSource);
+
+  if (!bootstrapCall) {
+    return undefined;
+  }
+
+  // Standalone: the bootstrapped symbol is the root component itself.
+  if (bootstrapCall.callName === 'bootstrapApplication') {
+    return bootstrapCall.symbolName;
+  }
+
+  // NgModule: resolve the module file and read the bootstrap component from its decorator.
+  let appModulePath: string;
+
+  try {
+    appModulePath = getAppModulePath(host, mainPath);
+  } catch {
+    return undefined;
+  }
+
+  const moduleSource = readSourceFile(host, appModulePath);
+
+  if (!moduleSource) {
+    return undefined;
+  }
+
+  return getNgModuleBootstrapComponent(moduleSource);
+}
+
+/**
  * Reads the main file and returns the module specifier of the imported symbol that is passed
  * to `bootstrapApplication(...)` (standalone) or `bootstrapModule(...)` (NgModule).
  */
 function getBootstrapImportPath(host: Tree, mainPath: string): string | undefined {
-  if (!host.exists(mainPath)) {
+  const source = readSourceFile(host, mainPath);
+
+  if (!source) {
     return undefined;
   }
 
-  const content = host.read(mainPath)?.toString('utf-8');
-
-  if (!content) {
-    return undefined;
-  }
-
-  const source = ts.createSourceFile(mainPath, content, ts.ScriptTarget.Latest, true);
   const bootstrapSymbol = getBootstrappedSymbolName(source);
 
   if (!bootstrapSymbol) {
@@ -80,28 +124,44 @@ function getBootstrapImportPath(host: Tree, mainPath: string): string | undefine
   return getImportSpecifierForSymbol(source, bootstrapSymbol);
 }
 
+/** Describes the bootstrap call found in a main file. */
+interface BootstrapCall {
+  /** The bootstrap function name: `bootstrapApplication` (standalone) or `bootstrapModule` (NgModule). */
+  callName: 'bootstrapApplication' | 'bootstrapModule';
+  /** The identifier passed as the first argument (the root component or the root module). */
+  symbolName: string;
+}
+
 /**
- * Finds the name of the symbol passed as the first argument to a `bootstrapApplication` or
- * `bootstrapModule` call.
+ * Finds the bootstrap call in the source and returns the function name along with the
+ * symbol passed as its first argument.
  */
-function getBootstrappedSymbolName(source: ts.SourceFile): string | undefined {
-  let symbolName: string | undefined;
+function getBootstrapCall(source: ts.SourceFile): BootstrapCall | undefined {
+  let result: BootstrapCall | undefined;
 
   const visit = (node: ts.Node): void => {
-    if (symbolName) {
+    if (result) {
       return;
     }
 
-    if (
-      ts.isCallExpression(node) &&
-      ts.isIdentifier(node.expression) &&
-      (node.expression.text === 'bootstrapApplication' || node.expression.text === 'bootstrapModule')
-    ) {
-      const firstArgument = node.arguments[0];
+    if (ts.isCallExpression(node)) {
+      // The bootstrap call may be a direct identifier (`bootstrapApplication(...)`) or a
+      // chained method (`platformBrowser().bootstrapModule(...)`), where the callee is a
+      // property access expression. Resolve the called name from either shape.
+      const callee = node.expression;
+      const calledName = ts.isIdentifier(callee)
+        ? callee.text
+        : ts.isPropertyAccessExpression(callee)
+          ? callee.name.text
+          : undefined;
 
-      if (firstArgument && ts.isIdentifier(firstArgument)) {
-        symbolName = firstArgument.text;
-        return;
+      if (calledName === 'bootstrapApplication' || calledName === 'bootstrapModule') {
+        const firstArgument = node.arguments[0];
+
+        if (firstArgument && ts.isIdentifier(firstArgument)) {
+          result = { callName: calledName, symbolName: firstArgument.text };
+          return;
+        }
       }
     }
 
@@ -110,7 +170,58 @@ function getBootstrappedSymbolName(source: ts.SourceFile): string | undefined {
 
   ts.forEachChild(source, visit);
 
-  return symbolName;
+  return result;
+}
+
+/** Finds the name of the symbol bootstrapped in the given source (component or module). */
+function getBootstrappedSymbolName(source: ts.SourceFile): string | undefined {
+  return getBootstrapCall(source)?.symbolName;
+}
+
+/**
+ * Extracts the first component name listed in the `bootstrap: [...]` array of an `@NgModule`
+ * decorator found in the given module source.
+ */
+function getNgModuleBootstrapComponent(source: ts.SourceFile): string | undefined {
+  let componentName: string | undefined;
+
+  const visit = (node: ts.Node): void => {
+    if (componentName) {
+      return;
+    }
+
+    if (ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) && node.name.text === 'bootstrap') {
+      if (ts.isArrayLiteralExpression(node.initializer)) {
+        const firstElement = node.initializer.elements[0];
+
+        if (firstElement && ts.isIdentifier(firstElement)) {
+          componentName = firstElement.text;
+          return;
+        }
+      }
+    }
+
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(source, visit);
+
+  return componentName;
+}
+
+/** Reads a file from the tree and parses it into a TypeScript source file. */
+function readSourceFile(host: Tree, filePath: string): ts.SourceFile | undefined {
+  if (!host.exists(filePath)) {
+    return undefined;
+  }
+
+  const content = host.read(filePath)?.toString('utf-8');
+
+  if (!content) {
+    return undefined;
+  }
+
+  return ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
 }
 
 /**
