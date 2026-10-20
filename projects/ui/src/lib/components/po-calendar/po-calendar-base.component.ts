@@ -29,6 +29,8 @@ import { PoCalendarRangePreset } from './interfaces/po-calendar-range-preset.int
  *
  * **Importante:**
  * - Datas fora do intervalo (`p-min-date` / `p-max-date`) aparecem desabilitadas sem alterar o *model*.
+ * - São aceitos anos entre 0000 e 9999. No seletor de ano do cabeçalho é possível digitar qualquer ano com
+ * 4 dígitos, mesmo que não esteja listado, e a navegação é bloqueada nos limites desse intervalo.
  *
  * #### Boas práticas
  *
@@ -343,7 +345,9 @@ export class PoCalendarBaseComponent {
   //  O valor informado determina o intervalo de anos anterior e posterior
   //  à data corrente que será disponibilizado para seleção.
   @Input('p-year-range-limit') set yearRangeLimit(value: number) {
-    this._yearRangeLimit = value ?? 150;
+    const rangeLimit = value === null || value === undefined ? Number.NaN : Number(value);
+
+    this._yearRangeLimit = Number.isFinite(rangeLimit) && rangeLimit >= 0 ? Math.floor(rangeLimit) : 150;
   }
 
   get yearRangeLimit(): number {

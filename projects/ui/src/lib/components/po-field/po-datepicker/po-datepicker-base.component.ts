@@ -15,8 +15,10 @@ import { AbstractControl, ControlValueAccessor, Validator, Validators } from '@a
 import {
   convertIsoToDate,
   convertToBoolean,
+  createDate,
   getDefaultSizeFn,
   isTypeof,
+  isValidYear,
   replaceFormatSeparator,
   validateSizeFn,
   PoUtils,
@@ -59,8 +61,11 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  *
  * **Importante:**
  *
- * - Para utilizar datas com ano inferior a 100, verificar o comportamento do [`new Date`](https://www.w3schools.com/js/js_dates.asp)
- * e utilizar o método [`setFullYear`](https://www.w3schools.com/jsref/jsref_setfullyear.asp).
+ * - São aceitas datas com ano entre 0000 e 9999. No calendário, além dos anos listados no seletor, é possível
+ * digitar qualquer ano com 4 dígitos.
+ * - Datas no formato ISO (ex.: `'0050-05-10'`) com ano inferior a 100 são mantidas. Ao informar um objeto `Date`
+ * com ano inferior a 100, utilize o método [`setFullYear`](https://www.w3schools.com/jsref/jsref_setfullyear.asp),
+ * pois o [`new Date`](https://www.w3schools.com/js/js_dates.asp) converte esses anos para 19XX.
  * - Caso a data esteja inválida, o `model` receberá **'Data inválida'**.
  * - Caso o `input` esteja passando um `[(ngModel)]`, mas não tenha um `name`, então irá ocorrer um erro
  * do próprio Angular (`[ngModelOptions]="{standalone: true}"`).
@@ -122,8 +127,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * Define o modo de operação do datepicker.
    *
    * Permite configurar o componente para seleção de:
-   * - Mês e ano (`month-year`);
-   * - Apenas ano (`year`).
+   * - Mês e ano (`month-year`), com o *model* no formato `mm/yyyy` (ex.: `'03/2025'`);
+   * - Apenas ano (`year`), com o *model* no formato `yyyy` (ex.: `'2025'`).
+   *
+   * > O ano é sempre representado com 4 dígitos, inclusive para anos inferiores a 1000 (ex.: `'03/0050'`).
    */
   @Input('p-mode') mode?: 'month-year' | 'year' = undefined;
 
@@ -133,6 +140,9 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * O valor informado determina o intervalo de anos anterior e posterior
    * à data corrente que será disponibilizado para seleção.
+   *
+   * > Caso o ano selecionado esteja fora desse intervalo, ele também é exibido na lista. Esta propriedade
+   * não se aplica ao seletor de ano do calendário padrão (sem `p-mode`).
    *
    * @default 150
    */
@@ -678,18 +688,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       return;
     }
 
-    if (typeof value === 'string') {
-      if (this.mode === 'month-year') {
-        const [month, year] = value.split('/').map(Number);
-        this._date = new Date(year, month - 1, 1);
-      } else if (this.mode === 'year') {
-        this._date = new Date(Number(value), 0, 1);
-      } else {
-        this._date = convertIsoToDate(value, false, false);
-      }
-    } else {
-      this._date = value;
-    }
+    this._date = typeof value === 'string' ? this.convertStringToDate(value) : value;
   }
 
   get date() {
@@ -883,20 +882,48 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
 
     if (this.mode === 'month-year') {
       const parts = value.split('/');
-      if (parts.length !== 2) {
+      if (parts.length !== 2 || !/^\d{1,2}$/.test(parts[0])) {
         return true;
       }
-      const month = parseInt(parts[0], 10);
-      const year = parseInt(parts[1], 10);
-      return isNaN(month) || isNaN(year) || month < 1 || month > 12 || year <= 0;
+      const month = Number(parts[0]);
+      return month < 1 || month > 12 || this.parseYearToken(parts[1]) === null;
     }
 
     if (this.mode === 'year') {
-      const year = parseInt(value, 10);
-      return isNaN(year) || year <= 0;
+      return this.parseYearToken(value) === null;
     }
 
     return false;
+  }
+
+  protected parseYearToken(value: string): number | null {
+    if (!/^\d{1,4}$/.test(value)) {
+      return null;
+    }
+
+    const year = Number(value);
+    return isValidYear(year) ? year : null;
+  }
+
+  private convertStringToDate(value: string): Date {
+    if (this.mode === 'month-year') {
+      return this.convertMonthYearToDate(value);
+    }
+
+    if (this.mode === 'year') {
+      const year = this.parseYearToken(value);
+      return year === null ? undefined : createDate(year, 0, 1);
+    }
+
+    return convertIsoToDate(value, false, false);
+  }
+
+  private convertMonthYearToDate(value: string): Date {
+    const parts = value.split('/');
+    const month = /^\d{1,2}$/.test(parts[0]) ? Number(parts[0]) : Number.NaN;
+    const year = parts.length === 2 ? this.parseYearToken(parts[1]) : null;
+
+    return month >= 1 && month <= 12 && year !== null ? createDate(year, month - 1, 1) : undefined;
   }
 
   // Valida range de data considerando o modo

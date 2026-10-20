@@ -5,6 +5,8 @@
         <po-calendar-header
           (p-previous)="onPreviousMonth()"
           (p-next)="onNextMonth()"
+          [p-disable-previous]="isPreviousMonthDisabled"
+          [p-disable-next]="isNextMonthDisabled"
           [p-display-month]="displayMonth"
           [p-display-year]="displayYear"
           [p-template-context]="templateContext"
@@ -53,6 +55,8 @@
       <po-calendar-header
         (p-previous)="updateYear(-1)"
         (p-next)="updateYear(1)"
+        [p-disable-previous]="isPreviousYearDisabled(1)"
+        [p-disable-next]="isNextYearDisabled(1)"
         [p-template-context]="templateContext"
         [p-header-template]="headerTemplate || internalComboTemplate"
         [p-size]="size"
@@ -89,6 +93,8 @@
       <po-calendar-header
         (p-previous)="updateYear(-10)"
         (p-next)="updateYear(10)"
+        [p-disable-previous]="isPreviousYearDisabled(10)"
+        [p-disable-next]="isNextYearDisabled(10)"
         [p-template-context]="templateContext"
         [p-header-template]="headerTemplate || internalComboTemplate"
         [p-size]="size"
@@ -158,6 +164,7 @@
     [p-remove-initial-filter]="true"
     [ngModel]="combo.year"
     [p-options]="combo.yearsOptions"
+    (p-input-change)="combo.onYearInputChange($event, yearCombo)"
     (p-change)="combo.updateDate($event, combo.monthIndex)"
     (p-blur)="combo.onComboBlur(yearCombo)"
     [p-size]="size"

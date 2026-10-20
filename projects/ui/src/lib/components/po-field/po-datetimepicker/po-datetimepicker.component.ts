@@ -94,6 +94,9 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
 
   private clickListener: () => void;
   private eventResizeListener: () => void;
+  private mouseDownListener: () => void;
+  // Ao pressionar o mouse dentro do calendário e soltar fora dele, o navegador dispara o `click` fora do calendário.
+  private isMouseDownOnPicker = false;
   private valueBeforeChange: string = '';
   private hadValueOnOpen: boolean = false;
   private isTodayPresetInProgress: boolean = false;
@@ -179,6 +182,14 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     if (!this.dialogPicker || !this.iconDatepicker) {
       return;
     }
+
+    const isMouseDownOnPicker = this.isMouseDownOnPicker;
+    this.isMouseDownOnPicker = false;
+
+    if (isMouseDownOnPicker) {
+      return;
+    }
+
     if (
       (!this.dialogPicker.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
       !this.iconDatepicker.buttonElement.nativeElement.contains(event.target) &&
@@ -863,6 +874,10 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
   }
 
   private initializeListeners(): void {
+    this.mouseDownListener = this.renderer.listen('document', 'mousedown', (event: MouseEvent) => {
+      this.wasMouseDownOnPicker(event);
+    });
+
     this.clickListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnPicker(event);
     });
@@ -874,7 +889,19 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     window.addEventListener('scroll', this.onScroll, true);
   }
 
+  private wasMouseDownOnPicker(event: MouseEvent): void {
+    const dialogElement = this.dialogPicker?.nativeElement;
+
+    this.isMouseDownOnPicker =
+      !!dialogElement && dialogElement.contains(event.target) && !this.hasOverlayClass(event.target);
+  }
+
   private removeListeners(): void {
+    if (this.mouseDownListener) {
+      this.mouseDownListener();
+      this.mouseDownListener = undefined;
+    }
+
     if (this.clickListener) {
       this.clickListener();
       this.clickListener = undefined;
