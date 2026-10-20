@@ -547,6 +547,36 @@ describe('PoCalendarComponent:', () => {
       expect(component.activateDate.end.getFullYear()).toEqual(2024);
     });
 
+    it(`onHeaderChange: should keep year between 0 and 99 when changing the start header`, () => {
+      const start = new Date('Tue Jan 31 2023 00:00:00');
+      const end = new Date('Wed Feb 01 2023 00:00:00');
+
+      component.activateDate = { start, end };
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+
+      component.onHeaderChange({ month: 2, year: 0 }, 'start');
+
+      expect(component.activateDate.start.getFullYear()).toEqual(0);
+      expect(component.activateDate.start.getMonth()).toEqual(1);
+      expect(component.activateDate.start.getDate()).toEqual(29);
+    });
+
+    it(`onHeaderChange: should keep year between 0 and 99 when changing the end header`, () => {
+      const start = new Date('Fri Nov 03 2023 00:00:00');
+      const end = new Date('Fri Dec 01 2023 00:00:00');
+
+      component.activateDate = { start, end };
+
+      spyOnProperty(component, <any>'isRange').and.returnValue(true);
+
+      component.onHeaderChange({ month: 6, year: 50 }, 'end');
+
+      expect(component.activateDate.end.getFullYear()).toEqual(50);
+      expect(component.activateDate.end.getMonth()).toEqual(5);
+      expect(component.activateDate.end.getDate()).toEqual(1);
+    });
+
     it(`onHeaderChange: `, () => {
       const start = new Date(2011, 0, 10);
       const end = new Date(2011, 1, 10);
@@ -1364,6 +1394,20 @@ describe('PoCalendarComponent:', () => {
 
         expect(component.isMonthDisabled(0)).toBeTrue();
       });
+
+      it('should validate months when selectedYear is 0', () => {
+        component.minDate = new Date(2025, 0, 1);
+        component['selectedYear'] = 0;
+
+        expect(component.isMonthDisabled(0)).toBeTrue();
+      });
+
+      it('should return false when selectedYear is null', () => {
+        component.minDate = new Date(2025, 0, 1);
+        component['selectedYear'] = null;
+
+        expect(component.isMonthDisabled(0)).toBeFalse();
+      });
     });
 
     describe('isYearDisabled:', () => {
@@ -1428,6 +1472,23 @@ describe('PoCalendarComponent:', () => {
         component['selectedMonth'] = 6;
 
         expect(component.isYearDisabled(2025)).toBeFalse();
+      });
+
+      it('should return true when selectedMonth is set and year+month is before minDate in year 0', () => {
+        const minDate = new Date(2025, 5, 1);
+        minDate.setFullYear(0);
+        component.minDate = minDate;
+        component['selectedMonth'] = 3;
+
+        expect(component.isYearDisabled(0)).toBeTrue();
+      });
+
+      it('should return false when selectedMonth is set and there is no minDate or maxDate', () => {
+        component.minDate = undefined;
+        component.maxDate = undefined;
+        component['selectedMonth'] = 3;
+
+        expect(component.isYearDisabled(0)).toBeFalse();
       });
     });
 
@@ -1538,6 +1599,39 @@ describe('PoCalendarComponent:', () => {
 
         expect(component['updateModel']).not.toHaveBeenCalled();
       });
+
+      [-1, 10000, 2025.5, NaN, Infinity].forEach(year => {
+        it(`should ignore invalid selected year ${String(year)} without changing state or emitting`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component['selectedIndexYear'] = 5;
+          component['selectedYear'] = 2025;
+          component.registerOnChange(onChange);
+          spyOn(component.change, 'emit');
+
+          component.selectYear(0, undefined, true, year);
+
+          expect(component['selectedIndexYear']).toBe(5);
+          expect(component['selectedYear']).toBe(2025);
+          expect(component.change.emit).not.toHaveBeenCalled();
+          expect(onChange).not.toHaveBeenCalled();
+        });
+      });
+
+      [0, 9999].forEach(year => {
+        it(`should select and emit the valid year boundary ${year}`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component.registerOnChange(onChange);
+          spyOn(component.change, 'emit');
+
+          component.selectYear(0, undefined, true, year);
+
+          const emittedDate = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0] as Date;
+          expect(component['selectedIndexYear']).toBe(0);
+          expect(component['selectedYear']).toBe(year);
+          expect(emittedDate.getFullYear()).toBe(year);
+          expect(onChange).toHaveBeenCalledOnceWith(emittedDate);
+        });
+      });
     });
 
     describe('onKeydownMonth:', () => {
@@ -1645,6 +1739,38 @@ describe('PoCalendarComponent:', () => {
         component.onKeydownMonth(event, 0);
 
         expect(mockYearBtn.focus).toHaveBeenCalled();
+      });
+
+      it('should focus current year option on Tab when no selected year', () => {
+        const currentYear = new Date().getFullYear();
+        const firstYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
+        const currentYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
+        component.displayYears = [currentYear - 1, currentYear];
+        spyOn<any>(component, 'getYearOptions').and.returnValue([firstYearBtn, currentYearBtn]);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        component['selectedIndexYear'] = null;
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.onKeydownMonth(event, 0);
+
+        expect(currentYearBtn.focus).toHaveBeenCalled();
+        expect(firstYearBtn.focus).not.toHaveBeenCalled();
+      });
+
+      it('should focus first enabled year option on Tab when current year is disabled', () => {
+        const currentYear = new Date().getFullYear();
+        const firstYearBtn = { focus: jasmine.createSpy('focus'), disabled: false } as any;
+        const currentYearBtn = { focus: jasmine.createSpy('focus'), disabled: true } as any;
+        component.displayYears = [currentYear - 1, currentYear];
+        spyOn<any>(component, 'getYearOptions').and.returnValue([firstYearBtn, currentYearBtn]);
+        spyOn<any>(component, 'getMonthOptions').and.returnValue([]);
+        component['selectedIndexYear'] = null;
+
+        const event = new KeyboardEvent('keydown', { key: 'Tab' });
+        component.onKeydownMonth(event, 0);
+
+        expect(firstYearBtn.focus).toHaveBeenCalled();
+        expect(currentYearBtn.focus).not.toHaveBeenCalled();
       });
     });
 
@@ -1754,6 +1880,34 @@ describe('PoCalendarComponent:', () => {
         expect(mockMonthBtn.focus).toHaveBeenCalled();
       });
 
+      describe('Shift+Tab to the current month:', () => {
+        let monthButtons: Array<any>;
+        let currentMonthBtn: any;
+
+        beforeEach(() => {
+          component.mode = PoCalendarMode.MonthYear;
+          monthButtons = Array.from({ length: 12 }, () => ({ focus: jasmine.createSpy('focus'), disabled: false }));
+          currentMonthBtn = monthButtons[new Date().getMonth()];
+          spyOn<any>(component, 'getMonthOptions').and.returnValue(monthButtons);
+          spyOn<any>(component, 'getYearOptions').and.returnValue([]);
+          component['selectedIndexMonth'] = null;
+        });
+
+        it('should focus the current month when no month is selected', () => {
+          component.onKeydownYear(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }), 0);
+
+          expect(currentMonthBtn.focus).toHaveBeenCalled();
+        });
+
+        it('should focus the first month when the current month is disabled', () => {
+          currentMonthBtn.disabled = true;
+
+          component.onKeydownYear(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }), 0);
+
+          monthButtons.forEach((btn, index) => expect(btn.focus).toHaveBeenCalledTimes(index === 0 ? 1 : 0));
+        });
+      });
+
       it('should not exceed max index on ArrowDown key', () => {
         spyOn(component, 'selectYear');
         spyOn<any>(component, 'getYearOptions').and.returnValue(new Array(301));
@@ -1830,6 +1984,33 @@ describe('PoCalendarComponent:', () => {
 
         expect(component['propagateChange']).toHaveBeenCalled();
       });
+
+      it('should emit Date with year 0 when selectedYear is 0 in month-year mode', () => {
+        component.mode = PoCalendarMode.MonthYear;
+        component['selectedMonth'] = 3;
+        component['selectedYear'] = 0;
+
+        spyOn(component.change, 'emit');
+
+        component['updateModel'](3);
+
+        const emittedValue = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0];
+        expect(emittedValue.getFullYear()).toBe(0);
+        expect(emittedValue.getMonth()).toBe(2);
+      });
+
+      it('should emit Date with year 0 when selectedYear is 0 in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        component['selectedYear'] = 0;
+
+        spyOn(component.change, 'emit');
+
+        component['updateModel'](0);
+
+        const emittedValue = (component.change.emit as jasmine.Spy).calls.mostRecent().args[0];
+        expect(emittedValue.getFullYear()).toBe(0);
+        expect(emittedValue.getMonth()).toBe(0);
+      });
     });
 
     describe('writeDate for month-year/year modes:', () => {
@@ -1890,6 +2071,247 @@ describe('PoCalendarComponent:', () => {
         const expectedIndex = component.displayYears.indexOf(targetYear);
         expect(component['selectedIndexYear']).toBe(expectedIndex);
       });
+
+      it('should include and select the year outside the yearRangeLimit in month-year mode', () => {
+        const date = new Date(2025, 5, 1);
+        date.setFullYear(50);
+
+        component['writeDate'](date);
+
+        expect(component.displayYears.length).toBe(302);
+        expect(component.displayYears[0]).toBe(50);
+        expect(component['selectedYear']).toBe(50);
+        expect(component['selectedIndexYear']).toBe(0);
+      });
+
+      it('should include and select the year outside the yearRangeLimit in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        component.ngOnInit();
+        fixture.detectChanges();
+        const date = new Date(2025, 0, 1);
+        date.setFullYear(9999);
+
+        component['writeDate'](date);
+
+        expect(component.displayYears.length).toBe(302);
+        expect(component.displayYears[component.displayYears.length - 1]).toBe(9999);
+        expect(component['selectedYear']).toBe(9999);
+        expect(component['selectedIndexYear']).toBe(301);
+      });
+
+      [-1, 10000, 2025.5, NaN, Infinity].forEach(year => {
+        it(`should clear an invalid direct month-year year ${String(year)} without emitting`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component['selectedIndexYear'] = 10;
+          component['selectedYear'] = 2025;
+          component.registerOnChange(onChange);
+          spyOn(component.change, 'emit');
+
+          component['writeDate'](year);
+
+          expect(component['selectedIndexYear']).toBeNull();
+          expect(component['selectedYear']).toBeNull();
+          expect(component.change.emit).not.toHaveBeenCalled();
+          expect(onChange).not.toHaveBeenCalled();
+        });
+      });
+
+      [0, 9999].forEach(year => {
+        it(`should preserve the valid month-year boundary ${year} without emitting`, () => {
+          const date = new Date(2025, 5, 1);
+          const onChange = jasmine.createSpy('onChange');
+          date.setFullYear(year);
+          component.registerOnChange(onChange);
+          spyOn(component.change, 'emit');
+
+          component['writeDate'](date);
+
+          expect(component['selectedYear']).toBe(year);
+          expect(component['selectedIndexYear']).toBe(component.displayYears.indexOf(year));
+          expect(component.displayYears).toContain(year);
+          expect(component.change.emit).not.toHaveBeenCalled();
+          expect(onChange).not.toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('updateDisplayYears:', () => {
+      it('should not duplicate the year when it is inside the yearRangeLimit', () => {
+        const currentYear = new Date().getFullYear();
+
+        component['updateDisplayYears'](currentYear);
+
+        expect(component.displayYears.length).toBe(301);
+        expect(component.displayYears.filter(year => year === currentYear).length).toBe(1);
+      });
+
+      it('should not include the year when it is not a finite number', () => {
+        component['updateDisplayYears'](NaN);
+
+        expect(component.displayYears.length).toBe(301);
+      });
+
+      it('should not include the year when it is greater than 9999', () => {
+        component['updateDisplayYears'](10000);
+
+        expect(component.displayYears.length).toBe(301);
+        expect(component.displayYears).not.toContain(10000);
+      });
+
+      it('should include the year 9999 when it is outside the yearRangeLimit', () => {
+        component['updateDisplayYears'](9999);
+
+        expect(component.displayYears.length).toBe(302);
+        expect(component.displayYears[component.displayYears.length - 1]).toBe(9999);
+      });
+
+      it('should keep displayYears sorted when including a year outside the yearRangeLimit', () => {
+        component['updateDisplayYears'](0);
+
+        const sortedYears = [...component.displayYears].sort((a, b) => a - b);
+        expect(component.displayYears).toEqual(sortedYears);
+        expect(component.displayYears[0]).toBe(0);
+      });
+
+      it('should clamp the lower end at year 0', () => {
+        const currentYear = new Date().getFullYear();
+        component.yearRangeLimit = currentYear + 1;
+
+        component['updateDisplayYears']();
+
+        expect(component.displayYears[0]).toBe(0);
+        expect(component.displayYears).toEqual([...component.displayYears].sort((a, b) => a - b));
+        expect(component.displayYears.every(year => year >= 0)).toBeTrue();
+      });
+
+      it('should clamp an extremely large finite range to exactly years 0 through 9999', () => {
+        component.yearRangeLimit = Number.MAX_SAFE_INTEGER;
+
+        component['updateDisplayYears']();
+
+        expect(component.displayYears.length).toBe(10000);
+        expect(component.displayYears[0]).toBe(0);
+        expect(component.displayYears[9999]).toBe(9999);
+      });
+
+      it('should preserve a common range limit', () => {
+        const currentYear = new Date().getFullYear();
+        component.yearRangeLimit = 10;
+
+        component['updateDisplayYears']();
+
+        expect(component.displayYears.length).toBe(21);
+        expect(component.displayYears[0]).toBe(currentYear - 10);
+        expect(component.displayYears[20]).toBe(currentYear + 10);
+      });
+
+      [
+        { limit: -1, expectedLength: 301 },
+        { limit: 25.9, expectedLength: 51 },
+        { limit: NaN, expectedLength: 301 },
+        { limit: Infinity, expectedLength: 301 }
+      ].forEach(({ limit, expectedLength }) => {
+        it(`should normalize range limit ${String(limit)} before building display years`, () => {
+          component.yearRangeLimit = limit;
+
+          component['updateDisplayYears']();
+
+          expect(component.displayYears.length).toBe(expectedLength);
+          expect(component.displayYears.every(year => Number.isInteger(year) && year >= 0 && year <= 9999)).toBeTrue();
+        });
+      });
+
+      it('should never append invalid selected years', () => {
+        [NaN, Infinity, 10000, 2025.5].forEach(year => {
+          component['updateDisplayYears'](year);
+
+          expect(component.displayYears).not.toContain(year);
+          expect(
+            component.displayYears.every(
+              displayYear => Number.isInteger(displayYear) && displayYear >= 0 && displayYear <= 9999
+            )
+          ).toBeTrue();
+        });
+      });
+    });
+
+    describe('formatYearLabel:', () => {
+      it('should return year formatted with 4 digits when year is less than 1000', () => {
+        expect(component.formatYearLabel(0)).toBe('0000');
+        expect(component.formatYearLabel(50)).toBe('0050');
+      });
+
+      it('should return year without changes when year has 4 digits', () => {
+        expect(component.formatYearLabel(2025)).toBe('2025');
+      });
+
+      it('should return year as string when it is not supported by formatYear', () => {
+        expect(component.formatYearLabel(-1)).toBe('-1');
+      });
+    });
+
+    describe('scrollToSelectedYear:', () => {
+      let list: any;
+
+      const createItem = (top: number) => ({ offsetHeight: 40, getBoundingClientRect: () => ({ top }) });
+
+      beforeEach(() => {
+        component.mode = PoCalendarMode.Year;
+        component.displayYears = [2000, 2001, 2002];
+        list = {
+          scrollTop: 0,
+          clientHeight: 200,
+          children: [createItem(0), createItem(500), createItem(100)],
+          getBoundingClientRect: () => ({ top: 0 })
+        };
+
+        spyOn(window, 'requestAnimationFrame').and.callFake((callback: FrameRequestCallback) => {
+          callback(0);
+          return 0;
+        });
+        spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(list);
+      });
+
+      it('should not schedule the scroll when mode is not year or month-year', () => {
+        component.mode = PoCalendarMode.Range;
+
+        component.scrollToSelectedYear();
+
+        expect(window.requestAnimationFrame).not.toHaveBeenCalled();
+      });
+
+      it('should center the selected year when it is not visible', () => {
+        component.selectedYear = 2001;
+
+        component.scrollToSelectedYear();
+
+        expect(list.scrollTop).toBe(420);
+      });
+
+      it('should center the current year when there is no selected year', () => {
+        const currentYear = new Date().getFullYear();
+        component.displayYears = [currentYear - 1, currentYear, currentYear + 1];
+        component.selectedYear = null;
+
+        component.scrollToSelectedYear();
+
+        expect(list.scrollTop).toBe(420);
+      });
+
+      it('should keep the scroll when the selected year is already visible', () => {
+        component.selectedYear = 2002;
+
+        component.scrollToSelectedYear();
+
+        expect(list.scrollTop).toBe(0);
+      });
+
+      it('should not throw when the year is not in the list', () => {
+        component.selectedYear = 1999;
+
+        expect(() => component.scrollToSelectedYear()).not.toThrow();
+        expect(list.scrollTop).toBe(0);
+      });
     });
 
     describe('writeValue for month-year/year modes:', () => {
@@ -1905,6 +2327,44 @@ describe('PoCalendarComponent:', () => {
         expect(component['selectedYear']).toBeNull();
         expect(component['selectedIndexMonth']).toBeNull();
         expect(component['selectedIndexYear']).toBeNull();
+      });
+
+      [-1, 10000, 2025.5, NaN, Infinity].forEach(year => {
+        it(`should not retain or propagate invalid year ${String(year)} from writeValue`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component.mode = PoCalendarMode.Year;
+          component.ngOnInit();
+          component['selectedIndexYear'] = 10;
+          component['selectedYear'] = 2025;
+          component.registerOnChange(onChange);
+          spyOn(component.change, 'emit');
+
+          component.writeValue(year);
+
+          expect(component['selectedIndexYear']).toBeNull();
+          expect(component['selectedYear']).toBeNull();
+          expect(component.change.emit).not.toHaveBeenCalled();
+          expect(onChange).not.toHaveBeenCalled();
+        });
+      });
+
+      ['0000', '9999'].forEach(value => {
+        it(`should preserve valid year boundary ${value} from writeValue without emitting`, () => {
+          const year = Number(value);
+          const onChange = jasmine.createSpy('onChange');
+          component.mode = PoCalendarMode.Year;
+          component.ngOnInit();
+          component.registerOnChange(onChange);
+          spyOn(component.change, 'emit');
+
+          component.writeValue(value);
+
+          expect(component['selectedYear']).toBe(year);
+          expect(component['selectedIndexYear']).toBe(component.displayYears.indexOf(year));
+          expect(component.displayYears).toContain(year);
+          expect(component.change.emit).not.toHaveBeenCalled();
+          expect(onChange).not.toHaveBeenCalled();
+        });
       });
     });
 

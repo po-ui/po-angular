@@ -159,9 +159,36 @@ export function convertIsoToDate(value: string, start: boolean, end: boolean) {
 
       return date;
     } else {
-      return new Date(year, month - 1, day);
+      return createDate(year, month - 1, day);
     }
   }
+}
+
+/**
+ * Cria uma data local considerando os anos entre 0 e 99, pois o `new Date` do javascript
+ * transforma esses anos para 19XX.
+ *
+ * @param year Ano
+ * @param month Mês (0 a 11)
+ * @param day Dia
+ */
+export function createDate(year: number, month: number, day: number): Date {
+  const date = new Date(year, month, day);
+
+  if (year >= 0 && year < 100) {
+    date.setFullYear(year, month, day);
+  }
+
+  return date;
+}
+
+/**
+ * Verifica se o ano é um número inteiro entre 0 e 9999, intervalo suportado pelo formato `yyyy`.
+ *
+ * @param year Ano
+ */
+export function isValidYear(year: number): boolean {
+  return Number.isInteger(year) && year >= 0 && year <= 9999;
 }
 
 export function convertDateToISODate(date: Date) {
@@ -916,6 +943,7 @@ export const PoUtils = {
   convertImageToBase64,
   convertToBoolean,
   convertToInt,
+  createDate,
   formatYear,
   getA11yLevel,
   getBrowserLanguage,

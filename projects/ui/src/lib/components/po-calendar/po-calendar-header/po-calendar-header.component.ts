@@ -8,6 +8,7 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  input,
   ChangeDetectorRef,
   OnInit
 } from '@angular/core';
@@ -26,6 +27,8 @@ export class PoCalendarHeaderComponent implements OnInit, OnChanges {
 
   @Input('p-hide-previous') hidePrevious = false;
   @Input('p-hide-next') hideNext = false;
+  disablePrevious = input<boolean>(false, { alias: 'p-disable-previous' });
+  disableNext = input<boolean>(false, { alias: 'p-disable-next' });
   @Input('p-display-month') displayMonth!: number;
   @Input('p-display-year') displayYear!: number;
   @Input('p-display-month-label') displayMonthLabel: string;

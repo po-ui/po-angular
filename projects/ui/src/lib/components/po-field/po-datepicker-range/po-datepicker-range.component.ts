@@ -21,6 +21,7 @@ import { PoControlPositionService } from './../../../services/po-control-positio
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
 import { PoDateService } from './../../../services/po-date/po-date.service';
 import { isMobile, replaceFormatSeparator, setHelperSettings, uuid } from './../../../utils/util';
+import { PoPickerMouseDownGuard } from './../../../utils/po-picker-mouse-down-guard';
 import { PoDatepickerRange } from './interfaces/po-datepicker-range.interface';
 import { PoDatepickerRangeBaseComponent } from './po-datepicker-range-base.component';
 import { PoHelperComponent } from '../../po-helper';
@@ -112,6 +113,7 @@ export class PoDatepickerRangeComponent
 
   private clickListener;
   private eventResizeListener;
+  private readonly mouseDownGuard = new PoPickerMouseDownGuard(target => this.isInsidePicker(target));
   private readonly poDatepickerRangeElement: ElementRef<any>;
   private readonly MIN_CALENDAR_WIDTH_WITH_PRESETS = {
     medium: 624,
@@ -722,6 +724,9 @@ export class PoDatepickerRangeComponent
   }
 
   private initializeListeners() {
+    this.removeListeners();
+    this.mouseDownGuard.listen(this.renderer);
+
     this.clickListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnPicker(event);
     });
@@ -799,6 +804,8 @@ export class PoDatepickerRangeComponent
   }
 
   private removeListeners() {
+    this.mouseDownGuard.destroy();
+
     if (this.clickListener) {
       this.clickListener();
     }
@@ -908,6 +915,10 @@ export class PoDatepickerRangeComponent
       return;
     }
 
+    if (this.mouseDownGuard.consume()) {
+      return;
+    }
+
     const calendarEl = this.calendarPicker?.nativeElement;
     const iconEl = this.iconCalendar?.buttonElement?.nativeElement;
     const target = event.target as Node;
@@ -923,6 +934,12 @@ export class PoDatepickerRangeComponent
     }
 
     this.cd.markForCheck();
+  }
+
+  private isInsidePicker(target: EventTarget): boolean {
+    const calendarEl = this.calendarPicker?.nativeElement;
+
+    return !!calendarEl && calendarEl.contains(target);
   }
 
   closeCalendar() {
