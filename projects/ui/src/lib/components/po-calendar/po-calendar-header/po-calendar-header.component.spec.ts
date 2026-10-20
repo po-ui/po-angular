@@ -22,6 +22,20 @@ describe('PoCalendarHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should initialize disablePrevious and disableNext with false', () => {
+    expect(component.disablePrevious()).toBeFalse();
+    expect(component.disableNext()).toBeFalse();
+  });
+
+  it('should update disablePrevious and disableNext from `p-disable-previous` and `p-disable-next`', () => {
+    fixture.componentRef.setInput('p-disable-previous', true);
+    fixture.componentRef.setInput('p-disable-next', true);
+    fixture.detectChanges();
+
+    expect(component.disablePrevious()).toBeTrue();
+    expect(component.disableNext()).toBeTrue();
+  });
+
   it('should call markForCheck and detectChanges when templateContext changes', () => {
     const cdr = (component as any).cdr;
 

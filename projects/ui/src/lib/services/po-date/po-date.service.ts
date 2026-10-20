@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { sortValues } from '../../utils/util';
+import { createDate } from '../../utils/util';
 
 /**
  * @docsPrivate
@@ -45,6 +45,9 @@ export class PoDateService {
         const date = new Date(year, month - 1, day, 23, 59, 59);
         this.setYearFrom0To100(date, year);
         return date;
+      } else if (this.dateRegex.test(dateString)) {
+        // Somar o fuso atual não funciona para datas cujo fuso histórico é diferente do atual (ex.: anos inferiores a 100).
+        return createDate(year, month - 1, day);
       } else {
         const miliseconds = Date.parse(dateString);
         const timezone = new Date().getTimezoneOffset() * 60000;

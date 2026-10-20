@@ -2107,7 +2107,8 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['hasAttrCalendar'](fakeElement)).toBeFalsy();
     });
 
-    it('initializeListeners: should initialize listeners and call `wasClickedOnPicker` and `addEventListener`.', () => {
+    it('initializeListeners: should initialize listeners and call `listen` of mouseDownGuard, `wasClickedOnPicker` and `addEventListener`.', () => {
+      const mouseDownGuardListen = spyOn(component['mouseDownGuard'], 'listen');
       const wasClickedOnPicker = spyOn(component, <any>'wasClickedOnPicker');
       const addEventListener = spyOn(window, 'addEventListener');
       const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
@@ -2116,9 +2117,22 @@ describe('PoDatepickerRangeComponent:', () => {
 
       component['initializeListeners']();
 
+      expect(mouseDownGuardListen).toHaveBeenCalledWith(component['renderer']);
       expect(wasClickedOnPicker).toHaveBeenCalled();
       expect(addEventListener).toHaveBeenCalled();
       expect(listen).toHaveBeenCalled();
+    });
+
+    it('initializeListeners: should remove the previous listeners to not duplicate the `click` listener', () => {
+      const removeClickListener = jasmine.createSpy('removeClickListener');
+      spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName) =>
+        eventName === 'click' ? removeClickListener : () => {}
+      );
+
+      component['initializeListeners']();
+      component['initializeListeners']();
+
+      expect(removeClickListener).toHaveBeenCalledTimes(1);
     });
 
     it('onScroll: should call `controlPosition.adjustPosition()`', () => {
@@ -2324,18 +2338,66 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component.isCalendarVisible).toBeFalse();
       });
+
+      it('should not set isCalendarVisible with false if the mouse was pressed on calendar and released outside', () => {
+        component.isCalendarVisible = true;
+        spyOn(component as any, 'isInsidePicker').and.returnValue(true);
+        component['mouseDownGuard'].register(document.createElement('div'));
+
+        spyOn(component as any, 'hasAttrCalendar').and.returnValue(false);
+
+        component['wasClickedOnPicker'](event);
+
+        expect(component.isCalendarVisible).toBeTrue();
+        expect(component['mouseDownGuard'].consume()).toBeFalse();
+      });
+
+      it('should set isCalendarVisible with false on the next click outside after ignoring the mouse released outside', () => {
+        component.isCalendarVisible = true;
+        spyOn(component as any, 'isInsidePicker').and.returnValue(true);
+        component['mouseDownGuard'].register(document.createElement('div'));
+
+        spyOn(component as any, 'hasAttrCalendar').and.returnValue(false);
+
+        component['wasClickedOnPicker'](event);
+        component['wasClickedOnPicker'](event);
+
+        expect(component.isCalendarVisible).toBeFalse();
+      });
     });
 
-    it('removeListeners: should remove click, resize and scroll listeners', () => {
+    describe('isInsidePicker:', () => {
+      it('should return true when the target is inside calendar', () => {
+        component.calendarPicker = { nativeElement: { contains: () => true } } as any;
+
+        expect(component['isInsidePicker'](document.createElement('div'))).toBeTrue();
+      });
+
+      it('should return false when the target is outside calendar', () => {
+        component.calendarPicker = { nativeElement: { contains: () => false } } as any;
+
+        expect(component['isInsidePicker'](document.createElement('div'))).toBeFalse();
+      });
+
+      it('should return false when not have a `calendarPicker`', () => {
+        component.calendarPicker = undefined;
+
+        expect(component['isInsidePicker'](document.createElement('div'))).toBeFalse();
+      });
+    });
+
+    it('removeListeners: should remove mousedown, click, resize and scroll listeners', () => {
       component['clickListener'] = () => {};
       component['eventResizeListener'] = () => {};
 
+      spyOn(component['mouseDownGuard'], 'destroy');
       spyOn(component, <any>'clickListener');
       spyOn(component, <any>'eventResizeListener');
       spyOn(window, 'removeEventListener');
 
       component['removeListeners']();
 
+      expect(component['mouseDownGuard'].destroy).toHaveBeenCalled();
       expect(component['clickListener']).toHaveBeenCalled();
       expect(component['eventResizeListener']).toHaveBeenCalled();
       expect(window.removeEventListener).toHaveBeenCalled();

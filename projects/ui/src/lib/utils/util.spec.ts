@@ -15,6 +15,7 @@ import {
   convertNumberToDecimal,
   convertToBoolean,
   convertToInt,
+  createDate,
   formatYear,
   getDensityMode,
   getFormattedLink,
@@ -22,6 +23,7 @@ import {
   isExternalLink,
   isKeyCodeEnter,
   isKeyCodeSpace,
+  isValidYear,
   isTypeof,
   isValidImageBase64,
   isValidUrl,
@@ -342,6 +344,61 @@ describe('Function convertIsoToDate:', () => {
     const date = new Date(1, 1, 1);
     date.setFullYear(1);
     expect(convertIsoToDate(date.toISOString(), false, true).getFullYear()).toBe(1);
+  });
+
+  it('should set date with year 50 when start and end are false', () => {
+    expect(convertIsoToDate('0050-05-10', false, false).getFullYear()).toBe(50);
+  });
+});
+
+describe('Function createDate:', () => {
+  it('should create a date with the given year, month and day', () => {
+    const date = createDate(2025, 4, 10);
+
+    expect(date.getFullYear()).toBe(2025);
+    expect(date.getMonth()).toBe(4);
+    expect(date.getDate()).toBe(10);
+  });
+
+  it('should keep year 0 instead of converting it to 1900', () => {
+    const date = createDate(0, 0, 1);
+
+    expect(date.getFullYear()).toBe(0);
+    expect(date.getMonth()).toBe(0);
+    expect(date.getDate()).toBe(1);
+  });
+
+  it('should keep year 99 instead of converting it to 1999', () => {
+    const date = createDate(99, 11, 31);
+
+    expect(date.getFullYear()).toBe(99);
+    expect(date.getMonth()).toBe(11);
+    expect(date.getDate()).toBe(31);
+  });
+
+  it('should create a date with year 100 without changes', () => {
+    expect(createDate(100, 0, 1).getFullYear()).toBe(100);
+  });
+});
+
+describe('Function isValidYear:', () => {
+  it('should return true for years between 0 and 9999', () => {
+    expect(isValidYear(0)).toBeTrue();
+    expect(isValidYear(2025)).toBeTrue();
+    expect(isValidYear(9999)).toBeTrue();
+  });
+
+  it('should return false for years out of the range', () => {
+    expect(isValidYear(-1)).toBeFalse();
+    expect(isValidYear(10000)).toBeFalse();
+  });
+
+  it('should return false for values that are not integer numbers', () => {
+    expect(isValidYear(2025.5)).toBeFalse();
+    expect(isValidYear(NaN)).toBeFalse();
+    expect(isValidYear(Infinity)).toBeFalse();
+    expect(isValidYear(null)).toBeFalse();
+    expect(isValidYear(undefined)).toBeFalse();
   });
 });
 
