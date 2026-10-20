@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { configureTestSuite } from '../../../util-test/util-expect.spec';
-
 import { PoButtonModule } from '../../po-button/po-button.module';
 import { PoCalendarPresetListComponent } from './po-calendar-preset-list.component';
 import { PoCalendarRangePreset } from '../interfaces/po-calendar-range-preset.interface';
@@ -12,7 +10,7 @@ describe('PoCalendarPresetListComponent:', () => {
   let fixture: ComponentFixture<PoCalendarPresetListComponent>;
   let nativeElement: HTMLElement;
 
-  configureTestSuite(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [PoButtonModule],
       declarations: [PoCalendarPresetListComponent]

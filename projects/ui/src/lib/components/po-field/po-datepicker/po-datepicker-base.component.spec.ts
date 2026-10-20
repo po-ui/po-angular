@@ -506,7 +506,39 @@ describe('PoDatepickerBaseComponent:', () => {
 
       it('should NOT return error for null value when mode is month-year', () => {
         component.mode = 'month-year';
-        expect(component.validate(new UntypedFormControl(null))).toEqual(null);
+        expect(component.validate(new FormControl<string | null>(null))).toEqual(null);
+      });
+
+      ['2025.5', '9999x'].forEach(value => {
+        it(`should return date error for strictly invalid year "${value}" and request change detection`, () => {
+          component.mode = 'year';
+          component.errorPattern = '';
+          component['cd'] = { markForCheck: () => {} } as any;
+          spyOn(component['cd'], 'markForCheck');
+
+          expect(component.validate(new FormControl<string | null>(value))).toEqual(invalidDateError);
+          expect(component.errorPattern).toBe('Data inválida');
+          expect(component['cd'].markForCheck).toHaveBeenCalled();
+        });
+      });
+
+      it('should return date error for a month-year with trailing year characters and request change detection', () => {
+        component.mode = 'month-year';
+        component.errorPattern = '';
+        component['cd'] = { markForCheck: () => {} } as any;
+        spyOn(component['cd'], 'markForCheck');
+
+        expect(component.validate(new FormControl<string | null>('01/9999x'))).toEqual(invalidDateError);
+        expect(component.errorPattern).toBe('Data inválida');
+        expect(component['cd'].markForCheck).toHaveBeenCalled();
+      });
+
+      ['01/0000', '12/9999'].forEach(value => {
+        it(`should accept month-year boundary "${value}"`, () => {
+          component.mode = 'month-year';
+
+          expect(component.validate(new FormControl<string | null>(value))).toBeNull();
+        });
       });
 
       // Tests for year mode validation
@@ -515,12 +547,15 @@ describe('PoDatepickerBaseComponent:', () => {
         expect(component.validate(new UntypedFormControl('2025'))).toEqual(null);
       });
 
-      it('should return date error for invalid year "0000" when mode is year', () => {
+      it('should NOT return error for year "0000" when mode is year', () => {
         component.mode = 'year';
-        component['cd'] = { markForCheck: () => {} } as any;
-        spyOn(component['cd'], 'markForCheck');
-        const result = component.validate(new UntypedFormControl('0000'));
-        expect(result).toEqual({ date: { valid: false } });
+        expect(component.validate(new UntypedFormControl('0000'))).toEqual(null);
+      });
+
+      it('should NOT return error for year "9999" when mode is year', () => {
+        component.mode = 'year';
+
+        expect(component.validate(new FormControl<string | null>('9999'))).toBeNull();
       });
 
       it('should return date error for non-numeric year "abcd" when mode is year', () => {
@@ -534,6 +569,21 @@ describe('PoDatepickerBaseComponent:', () => {
       it('should NOT return error for empty value when mode is year', () => {
         component.mode = 'year';
         expect(component.validate(new UntypedFormControl(''))).toEqual(null);
+      });
+
+      ['month-year', 'year'].forEach(mode => {
+        it(`should return only required error for an empty required value in ${mode} mode`, () => {
+          component.mode = mode as 'month-year' | 'year';
+          component.required = true;
+
+          expect(component.validate(new FormControl<string | null>(''))).toEqual({ required: { valid: false } });
+        });
+
+        it(`should accept a null optional value in ${mode} mode`, () => {
+          component.mode = mode as 'month-year' | 'year';
+
+          expect(component.validate(new FormControl<string | null>(null))).toBeNull();
+        });
       });
 
       // Tests for month-year date range validation
@@ -989,6 +1039,36 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component.date.getFullYear()).toBe(2025);
       expect(component.date.getMonth()).toBe(0);
     });
+
+    it('should parse month-year string with year between 0 and 99 without converting it to 19XX', () => {
+      component['mode'] = 'month-year';
+      component.date = '04/0050';
+      expect(component.date.getFullYear()).toBe(50);
+      expect(component.date.getMonth()).toBe(3);
+    });
+
+    it('should parse year string with year 0 without converting it to 1900', () => {
+      component['mode'] = 'year';
+      component.date = '0000';
+      expect(component.date.getFullYear()).toBe(0);
+      expect(component.date.getMonth()).toBe(0);
+    });
+
+    ['ab/2025', '04/2025/01', '13/2025', '04/20255'].forEach(value => {
+      it(`should set date as undefined for invalid month-year string "${value}"`, () => {
+        component['mode'] = 'month-year';
+        component.date = value;
+        expect(component.date).toBeUndefined();
+      });
+    });
+
+    ['2025x', '20255'].forEach(value => {
+      it(`should set date as undefined for invalid year string "${value}"`, () => {
+        component['mode'] = 'year';
+        component.date = value;
+        expect(component.date).toBeUndefined();
+      });
+    });
   });
 
   describe('ngOnInit for month-year/year modes:', () => {
@@ -1036,9 +1116,9 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component['isMonthYearOrYearInvalid']('2025')).toBeFalse();
     });
 
-    it('should return true for year 0 in year mode', () => {
+    it('should return false for year 0 in year mode', () => {
       component['mode'] = 'year';
-      expect(component['isMonthYearOrYearInvalid']('0')).toBeTrue();
+      expect(component['isMonthYearOrYearInvalid']('0000')).toBeFalse();
     });
 
     it('should return false for empty string', () => {
@@ -1076,9 +1156,9 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(component['isMonthYearOrYearInvalid']('xx/2025')).toBeTrue();
     });
 
-    it('should return true when month-year year is zero', () => {
+    it('should return false when month-year year is zero', () => {
       component['mode'] = 'month-year';
-      expect(component['isMonthYearOrYearInvalid']('04/0')).toBeTrue();
+      expect(component['isMonthYearOrYearInvalid']('04/0000')).toBeFalse();
     });
 
     it('should return true when month-year year is negative', () => {
@@ -1089,6 +1169,21 @@ describe('PoDatepickerBaseComponent:', () => {
     it('should return true for negative year in year mode', () => {
       component['mode'] = 'year';
       expect(component['isMonthYearOrYearInvalid']('-1')).toBeTrue();
+    });
+
+    it('should return false for year 9999 in year mode', () => {
+      component['mode'] = 'year';
+      expect(component['isMonthYearOrYearInvalid']('9999')).toBeFalse();
+    });
+
+    it('should return true for year greater than 9999 in year mode', () => {
+      component['mode'] = 'year';
+      expect(component['isMonthYearOrYearInvalid']('10000')).toBeTrue();
+    });
+
+    it('should return true when month-year year is greater than 9999', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('04/10000')).toBeTrue();
     });
 
     it('should return false for valid boundary month 1 in month-year mode', () => {

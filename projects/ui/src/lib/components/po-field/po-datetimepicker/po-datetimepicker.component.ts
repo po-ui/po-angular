@@ -18,6 +18,7 @@ import { PoLanguageService } from '../../../services';
 import { PoDatetimepickerLiterals } from './po-datetimepicker.literals';
 import { PoCalendarComponent } from '../../po-calendar/po-calendar.component';
 import { isMobile, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
+import { PoPickerMouseDownGuard } from '../../../utils/po-picker-mouse-down-guard';
 import { PoDatetimepickerBaseComponent } from './po-datetimepicker-base.component';
 import { PoControlPositionService } from '../../../services/po-control-position/po-control-position.service';
 
@@ -94,9 +95,12 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
 
   private clickListener: () => void;
   private eventResizeListener: () => void;
+  private readonly mouseDownGuard = new PoPickerMouseDownGuard(target => this.isInsidePicker(target));
   private valueBeforeChange: string = '';
   private hadValueOnOpen: boolean = false;
   private isTodayPresetInProgress: boolean = false;
+  private lastSyncedCalendar: PoCalendarComponent;
+  private lastSyncedValue: string;
 
   constructor() {
     const languageService = inject(PoLanguageService);
@@ -138,7 +142,10 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
       this.syncDateFromInput();
       this.setCalendarPosition();
       this.initializeListeners();
-      this.syncCalendarAndTimer();
+
+      if (this.calendarComponent !== this.lastSyncedCalendar || this.getSyncedValue() !== this.lastSyncedValue) {
+        this.syncCalendarAndTimer();
+      }
 
       requestAnimationFrame(() => {
         this.calendarComponent?.timerComponent?.initAllColumnOffsets();
@@ -179,6 +186,11 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     if (!this.dialogPicker || !this.iconDatepicker) {
       return;
     }
+
+    if (this.mouseDownGuard.consume()) {
+      return;
+    }
+
     if (
       (!this.dialogPicker.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
       !this.iconDatepicker.buttonElement.nativeElement.contains(event.target) &&
@@ -805,6 +817,9 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
       return;
     }
 
+    this.lastSyncedCalendar = this.calendarComponent;
+    this.lastSyncedValue = this.getSyncedValue();
+
     if (this.date) {
       this.calendarComponent.writeValue(this.date);
 
@@ -819,6 +834,10 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
         this.calendarComponent.timerComponent.writeValue(null);
       }
     }
+  }
+
+  private getSyncedValue(): string {
+    return `${this.date?.getTime()}|${this.timeValue}`;
   }
 
   private getExpectedInputLength(): number {
@@ -863,6 +882,8 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
   }
 
   private initializeListeners(): void {
+    this.mouseDownGuard.listen(this.renderer);
+
     this.clickListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnPicker(event);
     });
@@ -874,7 +895,15 @@ export class PoDatetimepickerComponent extends PoDatetimepickerBaseComponent imp
     window.addEventListener('scroll', this.onScroll, true);
   }
 
+  private isInsidePicker(target: EventTarget): boolean {
+    const dialogElement = this.dialogPicker?.nativeElement;
+
+    return !!dialogElement && dialogElement.contains(target) && !this.hasOverlayClass(target);
+  }
+
   private removeListeners(): void {
+    this.mouseDownGuard.destroy();
+
     if (this.clickListener) {
       this.clickListener();
       this.clickListener = undefined;

@@ -42,6 +42,27 @@ describe('PoCalendarService:', () => {
       expect(result).toEqual(new Date(2024, 5, 10));
     });
 
+    it('should parse yyyy-mm-dd string with year between 0 and 99 without converting it to 19XX', () => {
+      const result = (service as any).parseDate('0050-01-01');
+      expect(result.getFullYear()).toBe(50);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(1);
+    });
+
+    it('should parse ISO string with year between 0 and 99 without converting it to 19XX', () => {
+      const result = (service as any).parseDate('0060-12-31T12:00:00');
+      expect(result.getFullYear()).toBe(60);
+      expect(result.getMonth()).toBe(11);
+      expect(result.getDate()).toBe(31);
+    });
+
+    it('should parse Date object with year between 0 and 99 without converting it to 19XX', () => {
+      const date = new Date(2024, 5, 10);
+      date.setFullYear(50);
+      const result = (service as any).parseDate(date);
+      expect(result.getFullYear()).toBe(50);
+    });
+
     it('should return undefined for non-Date, non-string values', () => {
       expect((service as any).parseDate({})).toBeUndefined();
       expect((service as any).parseDate(123)).toBeUndefined();
@@ -78,6 +99,22 @@ describe('PoCalendarService:', () => {
   });
 
   describe('Methods:', () => {
+    describe('getYearOptions:', () => {
+      it('should return years between minDate and maxDate when year is between 0 and 99', () => {
+        const options = service.getYearOptions('0050-01-01', '0060-12-31');
+
+        expect(options.length).toBe(11);
+        expect(options[0]).toEqual({ label: '0050', value: 50 });
+        expect(options[options.length - 1]).toEqual({ label: '0060', value: 60 });
+      });
+
+      it('should return labels formatted with 4 digits', () => {
+        const options = service.getYearOptions('0998-01-01', '1001-12-31');
+
+        expect(options.map(option => option.label)).toEqual(['0998', '0999', '1000', '1001']);
+      });
+    });
+
     it('monthDates: should get month days with year is less than 100', () => {
       expect(service.monthDays(25, 7).length).toBe(6);
     });

@@ -48,6 +48,21 @@ describe('PoDateTimeService:', () => {
 
         expect(result).toEqual('2017-10-30T23:59:59');
       });
+
+      it('should return local date at midnight if value is a date-only ISO and minDate and maxDate are false', () => {
+        const result = dateService.convertIsoToDate('2017-10-30', false, false);
+
+        expect(result).toEqual(new Date(2017, 9, 30, 0, 0, 0));
+      });
+
+      it('should keep the year and day of a date-only ISO with year below 100', () => {
+        const result = dateService.convertIsoToDate('0050-01-01', false, false);
+
+        expect(result.getFullYear()).toBe(50);
+        expect(result.getMonth()).toBe(0);
+        expect(result.getDate()).toBe(1);
+        expect(result.getHours()).toBe(0);
+      });
     });
 
     describe('convertDateToISO:', () => {

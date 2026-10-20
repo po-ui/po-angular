@@ -70,6 +70,9 @@ import { PoCalendarRangePreset } from '../../po-calendar/interfaces/po-calendar-
  *
  * - Quando preenchidas a data inicial e final, a data inicial deve ser sempre menor ou igual a data final;
  * - Ao passar uma data inválida via codificação, o valor será mantido no *model* e o `input` da tela aparecerá vazio;
+ * - Datas no formato ISO (ex.: `'0050-05-10'`) com ano inferior a 100 são mantidas. Ao informar um objeto `Date`
+ * com ano inferior a 100, utilize o método [`setFullYear`](https://www.w3schools.com/jsref/jsref_setfullyear.asp),
+ * pois o [`new Date`](https://www.w3schools.com/js/js_dates.asp) converte esses anos para 19XX;
  * - Permite trabalhar com as duas datas separadamente através das propriedades `p-start-date` e `p-end-date` no lugar do
  * `[(ngModel)]`, no entanto sem a validação do formulário;
  * - Para a validação do formulário, utilize o `[(ngModel)]`.
