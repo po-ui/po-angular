@@ -746,6 +746,60 @@ describe('PoDatetimepickerComponent:', () => {
       expect(component.closeCalendar).toHaveBeenCalled();
       component['removeListeners']();
     });
+
+    it('should not close when the mouse is pressed on picker and released outside', () => {
+      component.visible = true;
+      fixture.detectChanges();
+
+      const dialogEl = document.createElement('div');
+      const insideEl = document.createElement('input');
+      dialogEl.appendChild(insideEl);
+      document.body.appendChild(dialogEl);
+      component['dialogPicker'] = { nativeElement: dialogEl } as any;
+      component['initializeListeners']();
+
+      spyOn(component, 'closeCalendar');
+
+      insideEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(component.closeCalendar).not.toHaveBeenCalled();
+
+      document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(component.closeCalendar).toHaveBeenCalledTimes(1);
+      component['removeListeners']();
+      dialogEl.remove();
+    });
+
+    it('should close when the mouse is pressed on overlay and released outside', () => {
+      component.visible = true;
+      fixture.detectChanges();
+
+      const dialogEl = document.createElement('div');
+      const overlayEl = document.createElement('div');
+      overlayEl.classList.add('po-datetimepicker-calendar-overlay');
+      dialogEl.appendChild(overlayEl);
+      document.body.appendChild(dialogEl);
+      component['dialogPicker'] = { nativeElement: dialogEl } as any;
+      component['initializeListeners']();
+
+      spyOn(component, 'closeCalendar');
+
+      overlayEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(component.closeCalendar).toHaveBeenCalled();
+      component['removeListeners']();
+      dialogEl.remove();
+    });
+
+    it('should not consider the target inside picker when dialogPicker is undefined', () => {
+      component['dialogPicker'] = undefined;
+
+      expect(component['isInsidePicker'](document.createElement('div'))).toBeFalse();
+    });
   });
 
   describe('onKeyup:', () => {
@@ -1530,6 +1584,28 @@ describe('PoDatetimepickerComponent:', () => {
       component['removeListeners']();
     });
 
+    it('should register mousedown listener that calls isInsidePicker', () => {
+      spyOn(component as any, 'isInsidePicker').and.returnValue(true);
+      component['initializeListeners']();
+
+      document.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(component['isInsidePicker']).toHaveBeenCalled();
+      expect(component['mouseDownGuard'].consume()).toBeTrue();
+      component['removeListeners']();
+    });
+
+    it('should remove mousedown listener on removeListeners', () => {
+      spyOn(component as any, 'isInsidePicker').and.returnValue(true);
+      component['initializeListeners']();
+      component['removeListeners']();
+
+      document.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(component['isInsidePicker']).not.toHaveBeenCalled();
+      expect(component['mouseDownGuard'].consume()).toBeFalse();
+    });
+
     it('should register resize listener that calls closeCalendar', () => {
       spyOn(component, 'closeCalendar');
       component['initializeListeners']();
@@ -1982,6 +2058,47 @@ describe('PoDatetimepickerComponent:', () => {
     it('should return early when calendarComponent is undefined', () => {
       component['calendarComponent'] = undefined;
       expect(() => component['syncCalendarAndTimer']()).not.toThrow();
+    });
+  });
+
+  describe('togglePicker - keep navigated month/year:', () => {
+    const reopen = () => {
+      component.togglePicker();
+      component.togglePicker();
+      spyOn<any>(component, 'syncCalendarAndTimer').and.callThrough();
+      component.togglePicker();
+    };
+
+    it('should not sync calendar when reopening with the same value', () => {
+      component['date'] = undefined;
+      component['timeValue'] = '';
+
+      reopen();
+
+      expect(component['syncCalendarAndTimer']).not.toHaveBeenCalled();
+    });
+
+    it('should sync calendar when value changed since last sync', () => {
+      component.togglePicker();
+      component.togglePicker();
+      component['date'] = new Date(2026, 4, 12);
+      component['timeValue'] = '14:30';
+      spyOn<any>(component, 'syncCalendarAndTimer').and.callThrough();
+
+      component.togglePicker();
+
+      expect(component['syncCalendarAndTimer']).toHaveBeenCalled();
+    });
+
+    it('should sync calendar when calendar instance changed since last sync', () => {
+      component.togglePicker();
+      component.togglePicker();
+      component['lastSyncedCalendar'] = {} as any;
+      spyOn<any>(component, 'syncCalendarAndTimer').and.callThrough();
+
+      component.togglePicker();
+
+      expect(component['syncCalendarAndTimer']).toHaveBeenCalled();
     });
   });
 

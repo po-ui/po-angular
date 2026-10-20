@@ -117,7 +117,7 @@
           [class.po-button-selected]="i === selectedIndexYear"
           role="option"
           p-kind="tertiary"
-          p-label="{{ year }}"
+          p-label="{{ formatYearLabel(year) }}"
           [attr.aria-selected]="i === selectedIndexYear"
           [p-tabindex]="i === focusedIndex ? 0 : -1"
           [p-size]="size"

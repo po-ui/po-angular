@@ -101,6 +101,41 @@ describe('PoDatetimepickerBaseComponent:', () => {
       expect(onChangeSpy).toHaveBeenCalledTimes(2);
       expect(onChangeSpy.calls.mostRecent().args[0]).toContain('2026-05-12T14:30');
     });
+
+    it('should keep the year when Date object has year below 100', () => {
+      spyOn(component, 'refreshValue');
+      const date = new Date(2000, 3, 15, 10, 30);
+      date.setFullYear(50);
+
+      component.writeValue(date);
+
+      expect(component['date'].getFullYear()).toBe(50);
+      expect(component['date'].getMonth()).toBe(3);
+      expect(component['date'].getDate()).toBe(15);
+      expect(component['date'].getHours()).toBe(0);
+      expect(component['timeValue']).toBe('10:30');
+      expect(component.getModelValue()).toContain('0050-04-15T10:30');
+    });
+
+    it('should keep the year when ISO string with time has year below 100', () => {
+      spyOn(component, 'refreshValue');
+
+      component.writeValue('0050-04-15T10:30:00');
+
+      expect(component['date'].getFullYear()).toBe(50);
+      expect(component['date'].getMonth()).toBe(3);
+      expect(component['date'].getDate()).toBe(15);
+      expect(component['timeValue']).toBe('10:30');
+    });
+
+    it('should keep the year when date-only ISO string has year below 100', () => {
+      spyOn(component, 'refreshValue');
+
+      component.writeValue('0050-04-15');
+
+      expect(component['date'].getFullYear()).toBe(50);
+      expect(component['timeValue']).toBe('00:00');
+    });
   });
 
   describe('registerOnChange:', () => {
@@ -230,6 +265,13 @@ describe('PoDatetimepickerBaseComponent:', () => {
       spyOn(date, 'getTimezoneOffset').and.returnValue(0);
       const result = component.getTimezoneOffset(date);
       expect(result).toBe('+00:00');
+    });
+
+    it('should round the offset when it has seconds (local mean time of old dates)', () => {
+      const date = new Date();
+      spyOn(date, 'getTimezoneOffset').and.returnValue(186.4666);
+      const result = component.getTimezoneOffset(date);
+      expect(result).toBe('-03:06');
     });
   });
 
@@ -571,6 +613,24 @@ describe('PoDatetimepickerBaseComponent:', () => {
       expect(component['date']).toBeDefined();
       expect(component['timeValue']).toBe('00:00');
     });
+
+    it('should keep date and time as informed when local offset has seconds and value has the rounded local offset', () => {
+      spyOn(Date.prototype, 'getTimezoneOffset').and.returnValue(186.4666);
+      component['processStringValue']('1876-10-05T23:00-03:06');
+
+      expect(component['date'].getFullYear()).toBe(1876);
+      expect(component['date'].getMonth()).toBe(9);
+      expect(component['date'].getDate()).toBe(5);
+      expect(component['timeValue']).toBe('23:00');
+    });
+
+    it('should convert to local time when local offset has seconds and value has another offset', () => {
+      spyOn(Date.prototype, 'getTimezoneOffset').and.returnValue(186.4666);
+      const value = '1876-10-05T23:00+02:00';
+      component['processStringValue'](value);
+
+      expect(component['timeValue']).toBe(component['extractTimeFromDate'](new Date(value)));
+    });
   });
 
   describe('normalizeTimePart:', () => {
@@ -850,6 +910,34 @@ describe('PoDatetimepickerBaseComponent - Effects (with fixture):', () => {
       fixture.componentRef.setInput('p-max-date', null);
       fixture.detectChanges();
       expect(component.resolvedMaxDate).toBeUndefined();
+    });
+  });
+
+  describe('years below 100:', () => {
+    const createLowYearDate = (year: number, month: number, day: number, hours = 0, minutes = 0) => {
+      const date = new Date(2000, month, day, hours, minutes);
+      date.setFullYear(year);
+      return date;
+    };
+
+    it('should keep the year of p-min-date when Date object has year below 100', () => {
+      fixture.componentRef.setInput('p-min-date', createLowYearDate(50, 3, 15, 10));
+      fixture.detectChanges();
+
+      expect(component.resolvedMinDate.getFullYear()).toBe(50);
+      expect(component.resolvedMinDate.getMonth()).toBe(3);
+      expect(component.resolvedMinDate.getDate()).toBe(15);
+      expect(component.resolvedMinDate.getHours()).toBe(0);
+    });
+
+    it('should keep the year of p-max-date when Date object has year below 100', () => {
+      fixture.componentRef.setInput('p-max-date', createLowYearDate(50, 3, 15, 10));
+      fixture.detectChanges();
+
+      expect(component.resolvedMaxDate.getFullYear()).toBe(50);
+      expect(component.resolvedMaxDate.getHours()).toBe(23);
+      expect(component.resolvedMaxDate.getMinutes()).toBe(59);
+      expect(component.resolvedMaxDate.getSeconds()).toBe(59);
     });
   });
 });
