@@ -12,14 +12,14 @@ Biblioteca de componentes de UI para Angular.
 
 ---
 
-### Adiconando o pacote @po-ui/ng-components
+### Adicionando o pacote @po-ui/ng-components
 
 Utilizando o comando `ng add` do [Angular CLI](https://cli.angular.io/), vamos adicionar o **Po** em seu projeto e o mesmo se encarregará de configurar o tema, instalar o pacote e importar o módulo do **Po**. Além de importar também o modulo **HttpClientModule**.
 
 Execute o comando abaixo na pasta raiz do seu projeto:
 
 ```
-ng add @po-ui/ng-components
+ng add @po-ui/ng-components@next
 ```
 
 

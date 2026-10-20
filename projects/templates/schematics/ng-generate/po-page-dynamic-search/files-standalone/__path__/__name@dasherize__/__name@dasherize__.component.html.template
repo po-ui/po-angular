@@ -1,5 +1,0 @@
-<po-page-dynamic-search
-  p-title="<%= classify(name) %>"
-  [p-actions]="actions"
-  [p-filters]="filter">
-</po-page-dynamic-search>

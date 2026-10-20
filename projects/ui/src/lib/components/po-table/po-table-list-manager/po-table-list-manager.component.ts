@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Optional, Output, forwardRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  forwardRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
@@ -47,6 +55,7 @@ type Direction = 'up' | 'down';
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableListManagerComponent extends PoCheckboxGroupComponent {

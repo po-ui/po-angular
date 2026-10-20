@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { MenuGuidesService } from './menu-guides.service';
@@ -6,6 +6,7 @@ import { MenuGuidesService } from './menu-guides.service';
 @Component({
   templateUrl: './guides.component.html',
   providers: [MenuGuidesService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GuidesComponent implements OnInit {

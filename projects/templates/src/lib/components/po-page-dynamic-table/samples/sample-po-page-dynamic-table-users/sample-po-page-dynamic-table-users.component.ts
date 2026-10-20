@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoBreadcrumb, PoDynamicViewField, PoModalComponent } from '@po-ui/ng-components';
 
@@ -15,6 +15,7 @@ import { SamplePoPageDynamicTableUsersService } from './sample-po-page-dynamic-t
   selector: 'sample-po-page-dynamic-table-users',
   templateUrl: './sample-po-page-dynamic-table-users.component.html',
   providers: [SamplePoPageDynamicTableUsersService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDynamicTableUsersComponent implements OnInit {

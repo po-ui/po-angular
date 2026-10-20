@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoRadioGroupOption, PoCalendarMode, PoCalendarRangePreset } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-calendar-labs',
   templateUrl: './sample-po-calendar-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoCalendarLabsComponent implements OnInit {

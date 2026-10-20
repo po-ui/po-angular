@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoNotificationService } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-upload-resume',
   templateUrl: 'sample-po-upload-resume.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUploadResumeComponent implements OnInit {

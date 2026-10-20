@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoUserGuidePosition, PoUserGuideService, PoUserGuideStep } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoUserGuidePosition, PoUserGuideService, PoUserGuideStep } from '@po-ui
   selector: 'sample-po-user-guide-onboarding',
   templateUrl: './sample-po-user-guide-onboarding.component.html',
   providers: [PoUserGuideService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUserGuideOnboardingComponent implements AfterViewInit {

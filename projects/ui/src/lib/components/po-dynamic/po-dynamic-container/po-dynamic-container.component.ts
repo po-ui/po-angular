@@ -1,8 +1,9 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'po-dynamic-container',
   templateUrl: './po-dynamic-container.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDynamicContainerComponent {

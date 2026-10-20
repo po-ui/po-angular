@@ -6,7 +6,7 @@ import { throwError } from 'rxjs';
 
 import { getObservable } from '../../util-test/util-expect.spec';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoStepperOrientation, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { expectPropertiesValues } from './../../util-test/util-expect.spec';
 import { PoJobSchedulerInternal } from './interfaces/po-job-scheduler-internal.interface';
@@ -21,7 +21,11 @@ describe('PoPageJobSchedulerBaseComponent:', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [PoPageJobSchedulerService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [
+        PoPageJobSchedulerService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     serviceJobScheduler = TestBed.inject(PoPageJobSchedulerService);

@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService, PoTabsComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-tabs-business-conf',
   templateUrl: './sample-po-tabs-business-conf.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTabsBusinessConfComponent implements OnInit {

@@ -50,7 +50,7 @@
 
           @if (optionWithoutGroup.length > 0) {
             @for (item of optionWithoutGroup; track item) {
-              <option [disabled]="readonly" [value]="item?.[this.fieldValue]">
+              <option [disabled]="readonly" [value]="$safeNavigationMigration(item?.[this.fieldValue])">
                 {{ item?.[this.fieldLabel] }}
               </option>
             }
@@ -60,7 +60,7 @@
               @if (item?.options.length > 0) {
                 <optgroup label="{{ item?.label }}" [disabled]="readonly">
                   @for (subItem of item.options; track subItem) {
-                    <option [value]="subItem?.[this.fieldValue]" [disabled]="readonly">
+                    <option [value]="$safeNavigationMigration(subItem?.[this.fieldValue])" [disabled]="readonly">
                       {{ subItem?.[this.fieldLabel] }}
                     </option>
                   }

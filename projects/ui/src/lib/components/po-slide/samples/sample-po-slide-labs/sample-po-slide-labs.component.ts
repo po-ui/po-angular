@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService, PoSlideItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-slide-labs',
   templateUrl: './sample-po-slide-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSlideLabsComponent implements OnInit {

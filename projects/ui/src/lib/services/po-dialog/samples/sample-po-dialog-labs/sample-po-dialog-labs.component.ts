@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption } from '@po-ui/ng-components';
 
@@ -7,6 +7,7 @@ import { PoDialogAlertLiterals, PoDialogConfirmLiterals, PoDialogService } from 
 @Component({
   selector: 'sample-po-dialog-labs',
   templateUrl: './sample-po-dialog-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDialogLabsComponent implements OnInit {

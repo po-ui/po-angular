@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoLookupColumn, PoSelectOption } from '@po-ui/ng-components';
@@ -11,6 +11,7 @@ import { SamplePoLookupService } from '../sample-po-lookup.service';
   selector: 'sample-po-lookup-hero-reactive-form',
   templateUrl: './sample-po-lookup-hero-reactive-form.component.html',
   providers: [SamplePoLookupService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLookupHeroReactiveFormComponent implements OnInit {

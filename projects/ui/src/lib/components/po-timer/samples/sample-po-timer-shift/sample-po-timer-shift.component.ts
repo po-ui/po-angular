@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoNotificationService, PoRadioGroupOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-timer-shift',
   templateUrl: './sample-po-timer-shift.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTimerShiftComponent {

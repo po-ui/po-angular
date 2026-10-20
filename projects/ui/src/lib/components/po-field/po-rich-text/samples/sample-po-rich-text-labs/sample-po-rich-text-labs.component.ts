@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoCheckboxGroupOption,
@@ -10,6 +10,7 @@ import {
 @Component({
   selector: 'sample-po-rich-text-labs',
   templateUrl: './sample-po-rich-text-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoRichTextLabsComponent implements OnInit {
