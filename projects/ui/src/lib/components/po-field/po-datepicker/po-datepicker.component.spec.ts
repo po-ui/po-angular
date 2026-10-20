@@ -1163,6 +1163,89 @@ describe('PoDatepickerComponent:', () => {
 
         expect(fakeThis.closeCalendar).not.toHaveBeenCalled();
       });
+
+      it('shouldn`t call `closeCalendar` when the clicked element was removed from DOM but `composedPath` contains `dialogPicker`', () => {
+        const fakeThis = getFakeThis(false, false, false, false);
+        const eventWithComposedPath = { ...fakeEvent, composedPath: () => [fakeThis.dialogPicker.nativeElement] };
+
+        spyOn(fakeThis, 'closeCalendar');
+
+        component.wasClickedOnPicker.call(fakeThis, eventWithComposedPath);
+
+        expect(fakeThis.closeCalendar).not.toHaveBeenCalled();
+      });
+
+      it('should call `closeCalendar` when click outside and `composedPath` doesn`t contain `dialogPicker`', () => {
+        const fakeThis = getFakeThis(false, false, false, false);
+        const eventWithComposedPath = { ...fakeEvent, composedPath: () => [] };
+
+        spyOn(fakeThis, 'closeCalendar');
+
+        component.wasClickedOnPicker.call(fakeThis, eventWithComposedPath);
+
+        expect(fakeThis.closeCalendar).toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `closeCalendar` when the mouse was pressed on picker and released outside', () => {
+        const fakeThis: any = { ...getFakeThis(false, false, false, false), isMouseDownOnPicker: true };
+
+        spyOn(fakeThis, 'closeCalendar');
+
+        component.wasClickedOnPicker.call(fakeThis, fakeEvent);
+
+        expect(fakeThis.closeCalendar).not.toHaveBeenCalled();
+        expect(fakeThis.isMouseDownOnPicker).toBeFalse();
+      });
+
+      it('should call `closeCalendar` on the next click outside after ignoring the mouse released outside', () => {
+        const fakeThis: any = { ...getFakeThis(false, false, false, false), isMouseDownOnPicker: true };
+
+        spyOn(fakeThis, 'closeCalendar');
+
+        component.wasClickedOnPicker.call(fakeThis, fakeEvent);
+        component.wasClickedOnPicker.call(fakeThis, fakeEvent);
+
+        expect(fakeThis.closeCalendar).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('wasMouseDownOnPicker:', () => {
+      it('should set `isMouseDownOnPicker` to true when the mouse is pressed on picker', () => {
+        const target = document.createElement('div');
+        component.dialogPicker = { nativeElement: { contains: () => true } } as any;
+        spyOn(component, 'hasOverlayClass').and.returnValue(false);
+
+        component['wasMouseDownOnPicker']({ target } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeTrue();
+      });
+
+      it('should set `isMouseDownOnPicker` to false when the mouse is pressed on overlay', () => {
+        const target = document.createElement('div');
+        component.dialogPicker = { nativeElement: { contains: () => true } } as any;
+        spyOn(component, 'hasOverlayClass').and.returnValue(true);
+
+        component['wasMouseDownOnPicker']({ target } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeFalse();
+      });
+
+      it('should set `isMouseDownOnPicker` to false when the mouse is pressed outside picker', () => {
+        const target = document.createElement('div');
+        component.dialogPicker = { nativeElement: { contains: () => false } } as any;
+
+        component['wasMouseDownOnPicker']({ target } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeFalse();
+      });
+
+      it('should set `isMouseDownOnPicker` to false when not have a `dialogPicker`', () => {
+        component.dialogPicker = undefined;
+
+        component['wasMouseDownOnPicker']({ target: document.createElement('div') } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeFalse();
+      });
     });
 
     it('hasAttrCalendar: should return true when element contain `attr-calendar` atribute', () => {
@@ -1274,7 +1357,8 @@ describe('PoDatepickerComponent:', () => {
       expect(component.isValidExtendedIso(isoDate)).toBe(expectedValue);
     });
 
-    it('initializeListeners: should initialize listeners and call `wasClickedOnPicker`, `closeCalendar` and `addEventListener`.', () => {
+    it('initializeListeners: should initialize listeners and call `wasMouseDownOnPicker`, `wasClickedOnPicker`, `closeCalendar` and `addEventListener`.', () => {
+      const wasMouseDownOnPicker = spyOn(component, <any>'wasMouseDownOnPicker');
       const wasClickedOnPicker = spyOn(component, 'wasClickedOnPicker');
       const closeCalendar = spyOn(component, <any>'closeCalendar');
       const addEventListener = spyOn(window, 'addEventListener');
@@ -1284,6 +1368,7 @@ describe('PoDatepickerComponent:', () => {
 
       component['initializeListeners']();
 
+      expect(wasMouseDownOnPicker).toHaveBeenCalled();
       expect(wasClickedOnPicker).toHaveBeenCalled();
       expect(closeCalendar).toHaveBeenCalled();
       expect(addEventListener).toHaveBeenCalled();
@@ -1950,6 +2035,15 @@ describe('PoDatepickerComponent:', () => {
           expect(clickListenerSpy).toHaveBeenCalledTimes(1);
         });
 
+        it('should call mouseDownListener when it exists', () => {
+          const mouseDownListenerSpy = jasmine.createSpy('mouseDownListener');
+          component['mouseDownListener'] = mouseDownListenerSpy;
+
+          component['closeCalendar']();
+
+          expect(mouseDownListenerSpy).toHaveBeenCalledTimes(1);
+        });
+
         it('should focus iconDatepicker buttonElement via requestAnimationFrame', () => {
           const focusSpy = jasmine.createSpy('focus');
 
@@ -2096,6 +2190,81 @@ describe('PoDatepickerComponent:', () => {
       clearTimeout(component['timeoutChange']);
     });
 
+    describe('writeValue:', () => {
+      [
+        { mode: 'year' as const, value: '2025.5' },
+        { mode: 'year' as const, value: '9999x' },
+        { mode: 'month-year' as const, value: '01/9999x' }
+      ].forEach(({ mode, value }) => {
+        it(`should reject the strictly invalid ${mode} value "${value}" without propagating it`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component.mode = mode;
+          component.date = undefined;
+          fixture.detectChanges();
+          component.registerOnChange(onChange);
+
+          component.writeValue(value);
+
+          expect(component.inputEl.nativeElement.value).toBe('');
+          expect(component.date).toBeUndefined();
+          expect(onChange).not.toHaveBeenCalled();
+        });
+      });
+
+      [
+        { value: '0000', year: 0 },
+        { value: '9999', year: 9999 }
+      ].forEach(({ value, year }) => {
+        it(`should preserve and propagate the year boundary "${value}"`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component.mode = 'year';
+          fixture.detectChanges();
+          component.registerOnChange(onChange);
+
+          component.writeValue(value);
+
+          expect(component.inputEl.nativeElement.value).toBe(value);
+          expect(component.date.getFullYear()).toBe(year);
+          expect(onChange).toHaveBeenCalledOnceWith(value);
+        });
+      });
+
+      [
+        { value: '01/0000', month: 0, year: 0 },
+        { value: '12/9999', month: 11, year: 9999 }
+      ].forEach(({ value, month, year }) => {
+        it(`should preserve and propagate the month-year boundary "${value}"`, () => {
+          const onChange = jasmine.createSpy('onChange');
+          component.mode = 'month-year';
+          fixture.detectChanges();
+          component.registerOnChange(onChange);
+
+          component.writeValue(value);
+
+          expect(component.inputEl.nativeElement.value).toBe(value);
+          expect(component.date.getMonth()).toBe(month);
+          expect(component.date.getFullYear()).toBe(year);
+          expect(onChange).toHaveBeenCalledOnceWith(value);
+        });
+      });
+
+      [null, undefined, ''].forEach(value => {
+        it(`should reset state and call callOnChange for empty value ${String(value)}`, () => {
+          component.mode = 'year';
+          component.date = new Date(2025, 0, 1);
+          component.inputEl.nativeElement.value = '2025';
+          spyOn(component, 'callOnChange').and.callThrough();
+          fixture.detectChanges();
+
+          component.writeValue(value);
+
+          expect(component.inputEl.nativeElement.value).toBe('');
+          expect(component.date).toBeUndefined();
+          expect(component.callOnChange).toHaveBeenCalledWith(undefined, false);
+        });
+      });
+    });
+
     describe('handleMonthYearKeyup:', () => {
       it('should call callOnChange with parsed value when input is complete MM/YYYY', () => {
         component.mode = 'month-year';
@@ -2169,7 +2338,7 @@ describe('PoDatepickerComponent:', () => {
         expect(component.callOnChange).toHaveBeenCalledWith('');
       });
 
-      it('should call callOnChange with invalid date message for year 0', () => {
+      it('should call callOnChange with year 0 formatted with 4 digits', () => {
         component.mode = 'year';
         component.ngOnInit();
         fixture.detectChanges();
@@ -2177,6 +2346,20 @@ describe('PoDatepickerComponent:', () => {
         spyOn(component, 'callOnChange');
         component.inputEl.nativeElement.value = '0000';
         component['objMask'] = { valueToModel: '0000', keyup: () => {}, blur: () => {} } as any;
+
+        component['handleYearKeyup']();
+
+        expect(component.callOnChange).toHaveBeenCalledWith('0000');
+      });
+
+      it('should call callOnChange with invalid date message for non-numeric year', () => {
+        component.mode = 'year';
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        component.inputEl.nativeElement.value = 'abcd';
+        component['objMask'] = { valueToModel: 'abcd', keyup: () => {}, blur: () => {} } as any;
 
         component['handleYearKeyup']();
 
@@ -2282,8 +2465,28 @@ describe('PoDatepickerComponent:', () => {
         expect(result).toBeNull();
       });
 
-      it('should return null for year 0', () => {
+      it('should return formatted MM/YYYY for year 0', () => {
         const result = component['parseMonthYearInput']('01/0000', '/');
+        expect(result).toBe('01/0000');
+      });
+
+      it('should return null for year greater than 9999', () => {
+        const result = component['parseMonthYearInput']('01/10000', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return year formatted with 4 digits for year between 1 and 999', () => {
+        const result = component['parseMonthYearInput']('01/50', '/');
+        expect(result).toBe('01/0050');
+      });
+
+      it('should return null for incomplete year that results in 0', () => {
+        const result = component['parseMonthYearInput']('01/00', '/');
+        expect(result).toBeNull();
+      });
+
+      it('should return null for negative year', () => {
+        const result = component['parseMonthYearInput']('01/-1', '/');
         expect(result).toBeNull();
       });
 
@@ -2324,6 +2527,16 @@ describe('PoDatepickerComponent:', () => {
       it('should not throw when value has wrong format', () => {
         expect(() => component['syncCalendarMonthYear']('2025')).not.toThrow();
       });
+
+      it('should set date with year between 0 and 99 without converting it to 19XX', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        component['syncCalendarMonthYear']('06/0050');
+
+        expect(component.date.getMonth()).toBe(5);
+        expect(component.date.getFullYear()).toBe(50);
+      });
     });
 
     describe('syncCalendarYear:', () => {
@@ -2332,6 +2545,13 @@ describe('PoDatepickerComponent:', () => {
 
         expect(component.date instanceof Date).toBeTrue();
         expect(component.date.getFullYear()).toBe(2025);
+        expect(component.date.getMonth()).toBe(0);
+      });
+
+      it('should set date with year 0 without converting it to 1900', () => {
+        component['syncCalendarYear'](0);
+
+        expect(component.date.getFullYear()).toBe(0);
         expect(component.date.getMonth()).toBe(0);
       });
     });
@@ -2406,6 +2626,32 @@ describe('PoDatepickerComponent:', () => {
 
         expect(component.inputEl.nativeElement.value).toBe('');
       });
+
+      it('should set input value and call callOnChange with year formatted with 4 digits', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        component['writeMonthYearValue']('03/0000');
+
+        expect(component.inputEl.nativeElement.value).toBe('03/0000');
+        expect(component.callOnChange).toHaveBeenCalledWith('03/0000', false);
+      });
+
+      it('should clear input for year greater than 9999', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+
+        component['writeMonthYearValue']('03/10000');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+        expect(component.callOnChange).not.toHaveBeenCalled();
+      });
     });
 
     describe('writeYearValue:', () => {
@@ -2442,11 +2688,50 @@ describe('PoDatepickerComponent:', () => {
         expect(component.inputEl.nativeElement.value).toBe('');
       });
 
-      it('should clear input for year 0', () => {
+      it('should set input value and call callOnChange with year 0 formatted with 4 digits', () => {
         component.mode = 'year';
         fixture.detectChanges();
 
+        spyOn(component, 'callOnChange');
+
         component['writeYearValue']('0');
+
+        expect(component.inputEl.nativeElement.value).toBe('0000');
+        expect(component.callOnChange).toHaveBeenCalledWith('0000', false);
+      });
+
+      it('should clear input for negative year', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['writeYearValue'](-1);
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should clear input for year greater than 9999', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['writeYearValue']('10000');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should clear input for year that is not an integer', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['writeYearValue'](2025.5);
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+      });
+
+      it('should clear input for infinite year', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        component['writeYearValue'](Infinity);
 
         expect(component.inputEl.nativeElement.value).toBe('');
       });
@@ -2597,6 +2882,39 @@ describe('PoDatepickerComponent:', () => {
         expect(component['controlChangeEmitter']).toHaveBeenCalled();
         expect(component.togglePicker).toHaveBeenCalled();
       });
+
+      it('should format year with 4 digits for month-year mode with Date event', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        spyOn<any>(component, 'controlChangeEmitter');
+        spyOn(component, 'togglePicker');
+
+        const dateEvent = new Date(2025, 2, 1);
+        dateEvent.setFullYear(50);
+        component.dateSelected(dateEvent);
+
+        expect(component.inputEl.nativeElement.value).toBe('03/0050');
+        expect(component.callOnChange).toHaveBeenCalledWith('03/0050');
+      });
+
+      it('should format year with 4 digits for year mode with Date event', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+
+        spyOn(component, 'callOnChange');
+        spyOn<any>(component, 'controlChangeEmitter');
+        spyOn(component, 'togglePicker');
+
+        const dateEvent = new Date(2025, 0, 1);
+        dateEvent.setFullYear(0);
+        component.dateSelected(dateEvent);
+
+        expect(component.inputEl.nativeElement.value).toBe('0000');
+        expect(component.callOnChange).toHaveBeenCalledWith('0000');
+      });
     });
 
     describe('isValidInputForMode:', () => {
@@ -2631,9 +2949,35 @@ describe('PoDatepickerComponent:', () => {
         expect(component['isValidInputForMode']('2025')).toBeTrue();
       });
 
+      it('should return true for year 0 input', () => {
+        component.mode = 'year';
+        expect(component['isValidInputForMode']('0000')).toBeTrue();
+      });
+
       it('should return false for invalid year input', () => {
         component.mode = 'year';
-        expect(component['isValidInputForMode']('0000')).toBeFalse();
+        expect(component['isValidInputForMode']('abcd')).toBeFalse();
+      });
+
+      it('should return false for month-year input with year greater than 9999', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+        expect(component['isValidInputForMode']('06/10000')).toBeFalse();
+      });
+
+      it('should return true for month-year input with year 0', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+        expect(component['isValidInputForMode']('06/0000')).toBeTrue();
+      });
+
+      it('should return false for month-year input with incomplete year that results in 0', () => {
+        component.mode = 'month-year';
+        component.locale = 'pt';
+        fixture.detectChanges();
+        expect(component['isValidInputForMode']('06/00')).toBeFalse();
       });
 
       it('should return false for year input with wrong length', () => {

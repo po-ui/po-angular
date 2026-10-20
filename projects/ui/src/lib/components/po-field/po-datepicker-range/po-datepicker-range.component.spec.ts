@@ -2107,7 +2107,8 @@ describe('PoDatepickerRangeComponent:', () => {
       expect(component['hasAttrCalendar'](fakeElement)).toBeFalsy();
     });
 
-    it('initializeListeners: should initialize listeners and call `wasClickedOnPicker` and `addEventListener`.', () => {
+    it('initializeListeners: should initialize listeners and call `wasMouseDownOnPicker`, `wasClickedOnPicker` and `addEventListener`.', () => {
+      const wasMouseDownOnPicker = spyOn(component, <any>'wasMouseDownOnPicker');
       const wasClickedOnPicker = spyOn(component, <any>'wasClickedOnPicker');
       const addEventListener = spyOn(window, 'addEventListener');
       const listen = spyOn(component['renderer'], <any>'listen').and.callFake((target, eventName, callback) =>
@@ -2116,6 +2117,7 @@ describe('PoDatepickerRangeComponent:', () => {
 
       component['initializeListeners']();
 
+      expect(wasMouseDownOnPicker).toHaveBeenCalled();
       expect(wasClickedOnPicker).toHaveBeenCalled();
       expect(addEventListener).toHaveBeenCalled();
       expect(listen).toHaveBeenCalled();
@@ -2324,18 +2326,71 @@ describe('PoDatepickerRangeComponent:', () => {
 
         expect(component.isCalendarVisible).toBeFalse();
       });
+
+      it('should not set isCalendarVisible with false if the mouse was pressed on calendar and released outside', () => {
+        component.isCalendarVisible = true;
+        component['isMouseDownOnPicker'] = true;
+
+        spyOn(component as any, 'hasAttrCalendar').and.returnValue(false);
+
+        component['wasClickedOnPicker'](event);
+
+        expect(component.isCalendarVisible).toBeTrue();
+        expect(component['isMouseDownOnPicker']).toBeFalse();
+      });
+
+      it('should set isCalendarVisible with false on the next click outside after ignoring the mouse released outside', () => {
+        component.isCalendarVisible = true;
+        component['isMouseDownOnPicker'] = true;
+
+        spyOn(component as any, 'hasAttrCalendar').and.returnValue(false);
+
+        component['wasClickedOnPicker'](event);
+        component['wasClickedOnPicker'](event);
+
+        expect(component.isCalendarVisible).toBeFalse();
+      });
     });
 
-    it('removeListeners: should remove click, resize and scroll listeners', () => {
+    describe('wasMouseDownOnPicker:', () => {
+      it('should set `isMouseDownOnPicker` to true when the mouse is pressed on calendar', () => {
+        component.calendarPicker = { nativeElement: { contains: () => true } } as any;
+
+        component['wasMouseDownOnPicker']({ target: document.createElement('div') } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeTrue();
+      });
+
+      it('should set `isMouseDownOnPicker` to false when the mouse is pressed outside calendar', () => {
+        component.calendarPicker = { nativeElement: { contains: () => false } } as any;
+
+        component['wasMouseDownOnPicker']({ target: document.createElement('div') } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeFalse();
+      });
+
+      it('should set `isMouseDownOnPicker` to false when not have a `calendarPicker`', () => {
+        component.calendarPicker = undefined;
+
+        component['wasMouseDownOnPicker']({ target: document.createElement('div') } as any);
+
+        expect(component['isMouseDownOnPicker']).toBeFalse();
+      });
+    });
+
+    it('removeListeners: should remove mousedown, click, resize and scroll listeners', () => {
+      component['mouseDownListener'] = () => {};
       component['clickListener'] = () => {};
       component['eventResizeListener'] = () => {};
 
+      spyOn(component, <any>'mouseDownListener');
       spyOn(component, <any>'clickListener');
       spyOn(component, <any>'eventResizeListener');
       spyOn(window, 'removeEventListener');
 
       component['removeListeners']();
 
+      expect(component['mouseDownListener']).toHaveBeenCalled();
       expect(component['clickListener']).toHaveBeenCalled();
       expect(component['eventResizeListener']).toHaveBeenCalled();
       expect(window.removeEventListener).toHaveBeenCalled();

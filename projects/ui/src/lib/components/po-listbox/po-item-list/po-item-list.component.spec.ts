@@ -180,6 +180,21 @@ describe('PoItemListComponent', () => {
       expect(html['changingThisBreaksApplicationSecurity']).toBe('<b>values</b>');
     });
 
+    it('safeHtml: should return the same instance when called again with the same value', () => {
+      const firstHtml = component.safeHtml('<b>values</b>');
+      const secondHtml = component.safeHtml('<b>values</b>');
+
+      expect(secondHtml).toBe(firstHtml);
+    });
+
+    it('safeHtml: should return a new instance when called with a different value', () => {
+      const firstHtml = component.safeHtml('<b>values</b>');
+      const secondHtml = component.safeHtml('<b>other values</b>');
+
+      expect(secondHtml).not.toBe(firstHtml);
+      expect(secondHtml['changingThisBreaksApplicationSecurity']).toBe('<b>other values</b>');
+    });
+
     it('sanitizeTagHTML: should replace < and > with &lt; and &gt; respectively', () => {
       const expectedValue = '&lt;input&gt; Testando';
       const value = '<input> Testando';
