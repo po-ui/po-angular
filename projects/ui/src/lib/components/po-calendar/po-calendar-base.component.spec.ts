@@ -72,6 +72,18 @@ describe('PoCalendarBaseComponent:', () => {
       expect(component.yearRangeLimit).toBe(50);
     });
 
+    it('p-year-range-limit: should truncate a positive fractional number', () => {
+      component.yearRangeLimit = 25.9;
+
+      expect(component.yearRangeLimit).toBe(25);
+    });
+
+    it('p-year-range-limit: should fallback to 150 for invalid numbers', () => {
+      const invalidValues = [-1, NaN, Infinity, -Infinity];
+
+      expectPropertiesValues(component, 'yearRangeLimit', invalidValues, 150);
+    });
+
     it('p-year-range-limit: should fallback to 150 when value is null', () => {
       component.yearRangeLimit = null;
 

@@ -1532,6 +1532,112 @@ describe('PoListBoxComponent', () => {
       expect(() => component['onListboxFocusIn']({ target: document.createElement('li') } as any)).not.toThrow();
       expect(setActiveOptionSpy).not.toHaveBeenCalled();
     });
+
+    it('should focus the first option when the listbox element is focused and no option is active', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const listboxElement = document.createElement('ul');
+      const firstOption = { element: document.createElement('li'), focus: jasmine.createSpy('focus') } as any;
+      component.listboxItemList = { nativeElement: listboxElement } as any;
+      component.cdkOptions = {
+        find: (cb: any) => [firstOption].find(cb),
+        some: (cb: any) => [firstOption].some(cb),
+        first: firstOption
+      } as any;
+
+      component['onListboxFocusIn']({ target: listboxElement } as any);
+
+      expect(firstOption.focus).toHaveBeenCalled();
+    });
+
+    it('should focus the first enabled option when the first option is disabled and no option is active', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const listboxElement = document.createElement('ul');
+      const disabledOption = {
+        element: document.createElement('li'),
+        disabled: true,
+        focus: jasmine.createSpy('focus')
+      } as any;
+      const enabledOption = { element: document.createElement('li'), focus: jasmine.createSpy('focus') } as any;
+      const options = [disabledOption, enabledOption];
+      component.listboxItemList = { nativeElement: listboxElement } as any;
+      component.cdkOptions = {
+        find: (cb: any) => options.find(cb),
+        some: (cb: any) => options.some(cb),
+        first: disabledOption
+      } as any;
+
+      component['onListboxFocusIn']({ target: listboxElement } as any);
+
+      expect(disabledOption.focus).not.toHaveBeenCalled();
+      expect(enabledOption.focus).toHaveBeenCalled();
+    });
+
+    it('should not focus any option when all options are disabled and no option is active', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const listboxElement = document.createElement('ul');
+      const disabledOption = {
+        element: document.createElement('li'),
+        disabled: true,
+        focus: jasmine.createSpy('focus')
+      } as any;
+      component.listboxItemList = { nativeElement: listboxElement } as any;
+      component.cdkOptions = {
+        find: (cb: any) => [disabledOption].find(cb),
+        some: (cb: any) => [disabledOption].some(cb),
+        first: disabledOption
+      } as any;
+
+      component['onListboxFocusIn']({ target: listboxElement } as any);
+
+      expect(disabledOption.focus).not.toHaveBeenCalled();
+    });
+
+    it('should not focus the first option when the listbox element is focused and an option is active', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      isActiveSpy.and.returnValue(true);
+      const listboxElement = document.createElement('ul');
+      const firstOption = { element: document.createElement('li'), focus: jasmine.createSpy('focus') } as any;
+      component.listboxItemList = { nativeElement: listboxElement } as any;
+      component.cdkOptions = {
+        find: () => undefined,
+        some: (cb: any) => [firstOption].some(cb),
+        first: firstOption
+      } as any;
+
+      component['onListboxFocusIn']({ target: listboxElement } as any);
+
+      expect(firstOption.focus).not.toHaveBeenCalled();
+    });
+
+    it('should not focus the first option when the focused element is not the listbox element', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const firstOption = { element: document.createElement('li'), focus: jasmine.createSpy('focus') } as any;
+      component.listboxItemList = { nativeElement: document.createElement('ul') } as any;
+      component.cdkOptions = {
+        find: () => undefined,
+        some: (cb: any) => [firstOption].some(cb),
+        first: firstOption
+      } as any;
+
+      component['onListboxFocusIn']({ target: document.createElement('li') } as any);
+
+      expect(firstOption.focus).not.toHaveBeenCalled();
+    });
+
+    it('should not throw when the listbox element is focused and `cdkOptions` is undefined', () => {
+      component.type = 'option';
+      component.listboxSubitems = false;
+      const listboxElement = document.createElement('ul');
+      component.listboxItemList = { nativeElement: listboxElement } as any;
+      component.cdkOptions = undefined;
+
+      expect(() => component['onListboxFocusIn']({ target: listboxElement } as any)).not.toThrow();
+    });
   });
 
   describe('optionClicked:', () => {

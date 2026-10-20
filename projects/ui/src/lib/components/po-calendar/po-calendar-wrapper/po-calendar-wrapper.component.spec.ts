@@ -168,6 +168,14 @@ describe('PoCalendarWrapperComponent', () => {
       expect(result.getDate()).toBe(13);
     });
 
+    it('getDateToUse: should keep year between 0 and 99 when parsing YYYY-MM-DD string', () => {
+      const result = (component as any).getDateToUse('0050-03-10');
+
+      expect(result.getFullYear()).toBe(50);
+      expect(result.getMonth()).toBe(2);
+      expect(result.getDate()).toBe(10);
+    });
+
     it('getDateToUse: should return new Date when value is invalid', () => {
       const result = (component as any).getDateToUse({ start: 'invalid' });
 
@@ -357,6 +365,283 @@ describe('PoCalendarWrapperComponent', () => {
       component.updateYear(-1);
 
       expect(component['updateDisplay']).toHaveBeenCalledWith(2023, 6);
+    });
+
+    it('updateYear: shouldn`t call updateDisplay when new year is less than 0', () => {
+      component.displayYear = 5;
+      component.displayMonthNumber = 6;
+
+      spyOn(component, <any>'updateDisplay');
+
+      component.updateYear(-10);
+
+      expect(component['updateDisplay']).not.toHaveBeenCalled();
+    });
+
+    it('updateYear: shouldn`t call updateDisplay when new year is greater than 9999', () => {
+      component.displayYear = 9995;
+      component.displayMonthNumber = 6;
+
+      spyOn(component, <any>'updateDisplay');
+
+      component.updateYear(10);
+
+      expect(component['updateDisplay']).not.toHaveBeenCalled();
+    });
+
+    it('onPreviousMonth: shouldn`t call updateDisplay when display is January of year 0', () => {
+      component.displayYear = 0;
+      component.displayMonthNumber = 0;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component.onPreviousMonth();
+
+      expect(component['updateDisplay']).not.toHaveBeenCalled();
+      expect(component.headerChange.emit).not.toHaveBeenCalled();
+    });
+
+    it('onNextMonth: shouldn`t call updateDisplay when display is December of year 9999', () => {
+      component.displayYear = 9999;
+      component.displayMonthNumber = 11;
+
+      spyOn(component, <any>'updateDisplay');
+      spyOn(component.headerChange, 'emit');
+
+      component.onNextMonth();
+
+      expect(component['updateDisplay']).not.toHaveBeenCalled();
+      expect(component.headerChange.emit).not.toHaveBeenCalled();
+    });
+
+    it('isPreviousMonthDisabled: should return true only when display is January of year 0', () => {
+      component.displayYear = 0;
+      component.displayMonthNumber = 0;
+      expect(component.isPreviousMonthDisabled).toBeTrue();
+
+      component.displayMonthNumber = 1;
+      expect(component.isPreviousMonthDisabled).toBeFalse();
+
+      component.displayYear = 1;
+      component.displayMonthNumber = 0;
+      expect(component.isPreviousMonthDisabled).toBeFalse();
+    });
+
+    it('isNextMonthDisabled: should return true only when display is December of year 9999', () => {
+      component.displayYear = 9999;
+      component.displayMonthNumber = 11;
+      expect(component.isNextMonthDisabled).toBeTrue();
+
+      component.displayMonthNumber = 10;
+      expect(component.isNextMonthDisabled).toBeFalse();
+
+      component.displayYear = 9998;
+      component.displayMonthNumber = 11;
+      expect(component.isNextMonthDisabled).toBeFalse();
+    });
+
+    it('isPreviousYearDisabled: should return true when displayYear minus step is less than 0', () => {
+      component.displayYear = 5;
+
+      expect(component.isPreviousYearDisabled(10)).toBeTrue();
+      expect(component.isPreviousYearDisabled(5)).toBeFalse();
+    });
+
+    it('isNextYearDisabled: should return true when displayYear plus step is greater than 9999', () => {
+      component.displayYear = 9995;
+
+      expect(component.isNextYearDisabled(10)).toBeTrue();
+      expect(component.isNextYearDisabled(4)).toBeFalse();
+    });
+
+    it('updateTemplateContext: should format displayYear label with 4 digits when it is missing', () => {
+      component.displayYear = 50;
+      component.displayMonthNumber = 5;
+      component.comboYearsOptions = [{ label: '2020', value: 2020 }];
+
+      (component as any).updateTemplateContext();
+
+      expect(component.templateContext.yearsOptions[0]).toEqual({ label: '0050', value: 50 });
+    });
+
+    it('updateTemplateContext: should keep the same displayYear option reference between updates', () => {
+      component.displayYear = 2035;
+      component.displayMonthNumber = 5;
+      component.comboYearsOptions = [{ label: '2020', value: 2020 }];
+
+      (component as any).updateTemplateContext();
+      const firstOption = component.templateContext.yearsOptions.find(option => option.value === 2035);
+
+      (component as any).updateTemplateContext();
+      const secondOption = component.templateContext.yearsOptions.find(option => option.value === 2035);
+
+      expect(secondOption).toBe(firstOption);
+    });
+
+    it('updateTemplateContext: should add typedYearOption to yearsOptions sorted by value', () => {
+      component.displayYear = 2020;
+      component.displayMonthNumber = 5;
+      component.comboYearsOptions = [
+        { label: '2020', value: 2020 },
+        { label: '2021', value: 2021 }
+      ];
+      component['typedYearOption'] = { label: '1500', value: 1500 };
+
+      (component as any).updateTemplateContext();
+
+      expect(component.templateContext.yearsOptions.map(option => option.value)).toEqual([1500, 2020, 2021]);
+    });
+
+    it('updateTemplateContext: should use typedYearOption as displayYearOption when it is the displayYear', () => {
+      const typedYearOption = { label: '1500', value: 1500 };
+      component.displayYear = 1500;
+      component.displayMonthNumber = 5;
+      component.comboYearsOptions = [{ label: '2020', value: 2020 }];
+      component['typedYearOption'] = typedYearOption;
+
+      (component as any).updateTemplateContext();
+
+      expect(component['typedYearOption']).toBeUndefined();
+      expect(component['displayYearOption']).toBe(typedYearOption);
+      expect(component.templateContext.yearsOptions.filter(option => option.value === 1500).length).toBe(1);
+    });
+
+    it('templateContext: should call onYearInputChange when templateContext.onYearInputChange is invoked', () => {
+      const comboComponent = {};
+      spyOn(component, 'onYearInputChange');
+
+      component.templateContext.onYearInputChange('2999', comboComponent);
+      (component as any).updateTemplateContext();
+      component.templateContext.onYearInputChange('2999', comboComponent);
+
+      expect(component.onYearInputChange).toHaveBeenCalledTimes(2);
+      expect(component.onYearInputChange).toHaveBeenCalledWith('2999', comboComponent);
+    });
+
+    describe('onYearInputChange:', () => {
+      let comboComponent;
+
+      beforeEach(() => {
+        comboComponent = {
+          options: [],
+          filterMode: 'startsWith',
+          searchForLabel: jasmine.createSpy('searchForLabel')
+        };
+        component.displayYear = 2026;
+        component.displayMonthNumber = 5;
+        component.comboYearsOptions = [
+          { label: '2025', value: 2025 },
+          { label: '2026', value: 2026 }
+        ];
+      });
+
+      it('should return early when comboComponent is undefined', () => {
+        spyOn(component as any, 'updateTemplateContext');
+
+        component.onYearInputChange('2999');
+
+        expect(component['updateTemplateContext']).not.toHaveBeenCalled();
+      });
+
+      it('should add typed year to yearsOptions and filter combo when year is not listed', () => {
+        component.onYearInputChange('2999', comboComponent);
+
+        expect(component['typedYearOption']).toEqual({ label: '2999', value: 2999 });
+        expect(component.templateContext.yearsOptions.some(option => option.value === 2999)).toBeTrue();
+        expect(component.cdr.detectChanges).toHaveBeenCalled();
+        expect(comboComponent.searchForLabel).toHaveBeenCalledWith('2999', comboComponent.options, 'startsWith');
+      });
+
+      it('should format typed year label with 4 digits', () => {
+        component.onYearInputChange('0050', comboComponent);
+
+        expect(component['typedYearOption']).toEqual({ label: '0050', value: 50 });
+      });
+
+      it('shouldn`t update templateContext when typed year is listed and there is no typed year option', () => {
+        spyOn(component as any, 'updateTemplateContext');
+
+        component.onYearInputChange('2025', comboComponent);
+
+        expect(component['updateTemplateContext']).not.toHaveBeenCalled();
+        expect(comboComponent.searchForLabel).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t update templateContext when typed year is the same of typed year option', () => {
+        component['typedYearOption'] = { label: '2999', value: 2999 };
+        spyOn(component as any, 'updateTemplateContext');
+
+        component.onYearInputChange('2999', comboComponent);
+
+        expect(component['updateTemplateContext']).not.toHaveBeenCalled();
+      });
+
+      it('should remove typed year option when typed text is not a valid year', () => {
+        component['typedYearOption'] = { label: '2999', value: 2999 };
+
+        component.onYearInputChange('29', comboComponent);
+
+        expect(component['typedYearOption']).toBeUndefined();
+        expect(component.templateContext.yearsOptions.some(option => option.value === 2999)).toBeFalse();
+        expect(comboComponent.searchForLabel).toHaveBeenCalledWith('29', comboComponent.options, 'startsWith');
+      });
+
+      it('should remove typed year option when typed year is the displayYear', () => {
+        component['typedYearOption'] = { label: '2999', value: 2999 };
+
+        component.onYearInputChange('2026', comboComponent);
+
+        expect(component['typedYearOption']).toBeUndefined();
+      });
+
+      it('should keep the cleared year and month of the combo when typed year is added', () => {
+        component.templateContext = { ...component.templateContext, year: null, monthIndex: 5 };
+
+        component.onYearInputChange('9999', comboComponent);
+
+        expect(component.templateContext.year).toBeNull();
+        expect(component.templateContext.monthIndex).toBe(5);
+        expect(component.templateContext.yearsOptions.some(option => option.value === 9999)).toBeTrue();
+      });
+
+      it('should keep the cleared year of the combo when typed year option is removed', () => {
+        component['typedYearOption'] = { label: '9999', value: 9999 };
+        component.templateContext = { ...component.templateContext, year: null, monthIndex: 5 };
+
+        component.onYearInputChange('99999', comboComponent);
+
+        expect(component.templateContext.year).toBeNull();
+        expect(component['typedYearOption']).toBeUndefined();
+      });
+    });
+
+    describe('getTypedYear:', () => {
+      it('should return undefined when value doesn`t have 4 digits', () => {
+        expect(component['getTypedYear']('299')).toBeUndefined();
+        expect(component['getTypedYear']('29999')).toBeUndefined();
+        expect(component['getTypedYear']('abcd')).toBeUndefined();
+        expect(component['getTypedYear'](undefined)).toBeUndefined();
+      });
+
+      it('should return the year when value has 4 digits', () => {
+        expect(component['getTypedYear'](' 0050 ')).toBe(50);
+        expect(component['getTypedYear']('2999')).toBe(2999);
+      });
+
+      it('should return undefined when year is less than minDate year', () => {
+        component.minDate = new Date(2020, 0, 1);
+
+        expect(component['getTypedYear']('2019')).toBeUndefined();
+        expect(component['getTypedYear']('2020')).toBe(2020);
+      });
+
+      it('should return undefined when year is greater than maxDate year', () => {
+        component.maxDate = new Date(2030, 11, 31);
+
+        expect(component['getTypedYear']('2031')).toBeUndefined();
+        expect(component['getTypedYear']('2030')).toBe(2030);
+      });
     });
 
     it(`updateDisplay: should return early when year is undefined`, () => {
@@ -733,6 +1018,35 @@ describe('PoCalendarWrapperComponent', () => {
 
       expect(component.isDayDisabled(date)).toBeTrue();
       expect(component['poDate'].validateDateRange).toHaveBeenCalledWith(date, component.minDate, component.maxDate);
+    });
+
+    it('isDayDisabled: should return `true` when date year is less than 0', () => {
+      const date = new Date(2024, 11, 31);
+      date.setFullYear(-1);
+
+      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+
+      expect(component.isDayDisabled(date)).toBeTrue();
+      expect(component['poDate'].validateDateRange).not.toHaveBeenCalled();
+    });
+
+    it('isDayDisabled: should return `true` when date year is greater than 9999', () => {
+      const date = new Date(10000, 0, 1);
+
+      spyOn(component['poDate'], 'validateDateRange').and.returnValue(true);
+
+      expect(component.isDayDisabled(date)).toBeTrue();
+      expect(component['poDate'].validateDateRange).not.toHaveBeenCalled();
+    });
+
+    it('onSelectDate: shouldn`t emit when date year is out of range', () => {
+      const date = new Date(10000, 0, 1);
+
+      spyOn(component.selectDate, 'emit');
+
+      component.onSelectDate(date);
+
+      expect(component.selectDate.emit).not.toHaveBeenCalled();
     });
 
     it(`monthLabel: should call 'poCalendarLangService.getMonthLabel'`, () => {
@@ -3332,6 +3646,145 @@ describe('PoCalendarWrapperComponent', () => {
       expect(component.updateDate).toHaveBeenCalledWith(2026, 5, null);
     });
 
+    it('should restore options and close combo on blur when there are no visible options', fakeAsync(() => {
+      component.templateContext.year = 2026;
+      component.templateContext.monthIndex = 5;
+
+      const mockComboComponent = {
+        visibleOptions: [],
+        verifyValidOption: jasmine.createSpy('verifyValidOption'),
+        controlComboVisibility: jasmine.createSpy('controlComboVisibility')
+      };
+
+      component.onComboBlur(mockComboComponent);
+      tick(0);
+
+      expect(mockComboComponent.verifyValidOption).toHaveBeenCalled();
+      expect(mockComboComponent.controlComboVisibility).toHaveBeenCalledWith(false);
+    }));
+
+    it('shouldn`t restore options or close combo on blur when there are visible options', fakeAsync(() => {
+      component.templateContext.year = 2026;
+      component.templateContext.monthIndex = 5;
+
+      const mockComboComponent = {
+        visibleOptions: [{ label: '2026', value: 2026 }],
+        verifyValidOption: jasmine.createSpy('verifyValidOption'),
+        controlComboVisibility: jasmine.createSpy('controlComboVisibility')
+      };
+
+      component.onComboBlur(mockComboComponent);
+      tick(0);
+
+      expect(mockComboComponent.verifyValidOption).not.toHaveBeenCalled();
+      expect(mockComboComponent.controlComboVisibility).not.toHaveBeenCalled();
+    }));
+
+    describe('when focus moves to the combo listbox:', () => {
+      let comboElement: HTMLElement;
+      let inputElement: HTMLInputElement;
+      let optionElement: HTMLElement;
+      let outsideElement: HTMLButtonElement;
+      let mockComboComponent: any;
+      let updateDisplaySpy: jasmine.Spy;
+      let focusedElement: Element;
+
+      beforeEach(() => {
+        comboElement = document.createElement('div');
+        inputElement = document.createElement('input');
+        optionElement = document.createElement('li');
+        optionElement.tabIndex = -1;
+        outsideElement = document.createElement('button');
+        comboElement.append(inputElement, optionElement);
+        document.body.append(comboElement, outsideElement);
+
+        mockComboComponent = {
+          element: { nativeElement: comboElement },
+          visibleOptions: [{ label: 'Maio', value: 4 }],
+          verifyValidOption: jasmine.createSpy('verifyValidOption'),
+          controlComboVisibility: jasmine.createSpy('controlComboVisibility')
+        };
+
+        component.templateContext.year = 2026;
+        component.templateContext.monthIndex = null;
+        component.displayMonthNumber = 9;
+        updateDisplaySpy = spyOn(component, 'updateDisplay');
+
+        // O `document.activeElement` real depende do foco da janela do runner; simulado para o teste ser determinístico.
+        focusedElement = document.body;
+        spyOnProperty(document, 'activeElement', 'get').and.callFake(() => focusedElement);
+      });
+
+      afterEach(() => {
+        comboElement.remove();
+        outsideElement.remove();
+      });
+
+      // O foco é simulado: o `focusout` é disparado manualmente e `activeElement` é atualizado.
+      const moveFocus = (from: HTMLElement, to: HTMLElement) => {
+        focusedElement = to;
+        from.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: to }));
+      };
+
+      it('shouldn`t restore the display while focus stays inside the combo', fakeAsync(() => {
+        focusedElement = optionElement;
+
+        component.onComboBlur(mockComboComponent);
+        tick(0);
+
+        expect(updateDisplaySpy).not.toHaveBeenCalled();
+      }));
+
+      it('should restore the display when focus leaves the combo', fakeAsync(() => {
+        focusedElement = optionElement;
+        component.onComboBlur(mockComboComponent);
+        tick(0);
+
+        moveFocus(optionElement, outsideElement);
+        tick(0);
+
+        expect(updateDisplaySpy).toHaveBeenCalledOnceWith(2026, 9);
+      }));
+
+      it('shouldn`t restore the display when focus moves between elements of the combo', fakeAsync(() => {
+        focusedElement = optionElement;
+        component.onComboBlur(mockComboComponent);
+        tick(0);
+
+        moveFocus(optionElement, inputElement);
+        tick(0);
+
+        expect(updateDisplaySpy).not.toHaveBeenCalled();
+      }));
+
+      it('shouldn`t restore the display when an option is selected before focus leaves the combo', fakeAsync(() => {
+        focusedElement = optionElement;
+        component.onComboBlur(mockComboComponent);
+        tick(0);
+
+        component.templateContext.monthIndex = 4;
+        moveFocus(optionElement, outsideElement);
+        tick(0);
+
+        expect(updateDisplaySpy).not.toHaveBeenCalled();
+      }));
+
+      it('should register a single focusout listener per combo', fakeAsync(() => {
+        const addEventListenerSpy = spyOn(comboElement, 'addEventListener').and.callThrough();
+        focusedElement = optionElement;
+
+        component.onComboBlur(mockComboComponent);
+        component.onComboBlur(mockComboComponent);
+        tick(0);
+
+        expect(addEventListenerSpy).toHaveBeenCalledTimes(1);
+      }));
+    });
+
+    it('resetComboWithoutOptions: shouldn`t throw when comboComponent is undefined', () => {
+      expect(() => component['resetComboWithoutOptions'](undefined)).not.toThrow();
+    });
+
     it('should handle invalid month value (string) and restore from selectedOption', fakeAsync(() => {
       const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
@@ -3408,16 +3861,16 @@ describe('PoCalendarWrapperComponent', () => {
       expect(updateDisplaySpy).not.toHaveBeenCalled();
     }));
 
-    it('should handle out-of-range year (below 1900) and restore from selectedOption', fakeAsync(() => {
+    it('should handle out-of-range year (below 0) and restore from selectedOption', fakeAsync(() => {
       const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
-      component.templateContext.year = 1800;
+      component.templateContext.year = -1;
       component.templateContext.monthIndex = 5;
 
       const mockComboComponent = {
         selectedOption: { value: 2020, label: '2020' },
-        inputEl: { nativeElement: { value: '1800' } }
+        inputEl: { nativeElement: { value: '-1' } }
       };
 
       component.onComboBlur(mockComboComponent);
@@ -3427,16 +3880,16 @@ describe('PoCalendarWrapperComponent', () => {
       expect(updateDisplaySpy).not.toHaveBeenCalled();
     }));
 
-    it('should handle out-of-range year (above 2100) and restore from selectedOption', fakeAsync(() => {
+    it('should handle out-of-range year (above 9999) and restore from selectedOption', fakeAsync(() => {
       const updateDisplaySpy = spyOn(component as any, 'updateDisplay');
       component.displayYear = 2026;
       component.displayMonthNumber = 5;
-      component.templateContext.year = 2150;
+      component.templateContext.year = 10000;
       component.templateContext.monthIndex = 5;
 
       const mockComboComponent = {
         selectedOption: { value: 2030, label: '2030' },
-        inputEl: { nativeElement: { value: '2150' } }
+        inputEl: { nativeElement: { value: '10000' } }
       };
 
       component.onComboBlur(mockComboComponent);

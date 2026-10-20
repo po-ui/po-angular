@@ -19,6 +19,10 @@ import { debounceTime } from 'rxjs/operators';
 import { PoCalendarLangService } from '../services/po-calendar.lang.service';
 import { PoCalendarService } from '../services/po-calendar.service';
 import { PoDateService } from '../../../services/po-date/po-date.service';
+import { createDate } from '../../../utils/util';
+
+const MIN_YEAR = 0;
+const MAX_YEAR = 9999;
 
 @Component({
   selector: 'po-calendar-wrapper',
@@ -92,11 +96,17 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     year: 0,
     yearsOptions: [],
     updateDate: (year: number, month: number, comboComponent?: any) => this.updateDate(year, month, comboComponent),
-    onComboBlur: () => this.onComboBlur()
+    onComboBlur: () => this.onComboBlur(),
+    onYearInputChange: (search: string, comboComponent?: any) => this.onYearInputChange(search, comboComponent)
   };
 
   protected currentMonthNumber: number;
   protected lastDisplay: string;
+
+  // Referências mantidas para que o listbox não recrie o item clicado e o calendário não feche.
+  private displayYearOption: { label: string; value: number };
+  private typedYearOption: { label: string; value: number };
+  private readonly combosAwaitingFocusOut = new WeakSet<HTMLElement>();
 
   get monthLabel() {
     return this.poCalendarLangService.getMonthLabel();
@@ -163,17 +173,17 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
       const dateOnlyRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
       if (dateOnlyRegex.test(dateValue)) {
         const [, year, month, day] = dateOnlyRegex.exec(dateValue).map(Number);
-        return new Date(year, month - 1, day);
+        return createDate(year, month - 1, day);
       }
       dateValue = new Date(dateValue);
     }
 
     if (dateValue instanceof Date && !Number.isNaN(dateValue.getTime())) {
       if (dateValue.getUTCHours() === 0 && dateValue.getUTCMinutes() === 0) {
-        return new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
+        return createDate(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
       }
 
-      return new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
+      return createDate(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
     }
 
     return new Date();
@@ -221,23 +231,84 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     this.updateDisplay(event.year, event.month);
   }
 
-  private updateTemplateContext() {
+  private updateTemplateContext(keepComboSelection: boolean = false) {
     const yearsOptions = [...this.comboYearsOptions];
 
+    if (this.typedYearOption?.value === this.displayYear) {
+      this.displayYearOption = this.typedYearOption;
+      this.typedYearOption = undefined;
+    }
+
     if (this.displayYear !== undefined && !yearsOptions.some(option => option.value === this.displayYear)) {
-      yearsOptions.push({ label: this.displayYear.toString(), value: this.displayYear });
+      if (this.displayYearOption?.value !== this.displayYear) {
+        this.displayYearOption = { label: this.formatYearLabel(this.displayYear), value: this.displayYear };
+      }
+      yearsOptions.push(this.displayYearOption);
+    }
+
+    if (this.typedYearOption && !yearsOptions.some(option => option.value === this.typedYearOption.value)) {
+      yearsOptions.push(this.typedYearOption);
+    }
+
+    if (yearsOptions.length > this.comboYearsOptions.length) {
       yearsOptions.sort((a, b) => a.value - b.value);
     }
 
     this.templateContext = {
-      monthIndex: this.displayMonthNumber,
+      monthIndex: keepComboSelection ? this.templateContext.monthIndex : this.displayMonthNumber,
       monthsOptions: [...this.comboMonthsOptions],
-      year: this.displayYear,
+      year: keepComboSelection ? this.templateContext.year : this.displayYear,
       yearsOptions,
       updateDate: (year: number, month: number, comboComponent?: any) => this.updateDate(year, month, comboComponent),
-      onComboBlur: (comboComponent?: any) => this.onComboBlur(comboComponent)
+      onComboBlur: (comboComponent?: any) => this.onComboBlur(comboComponent),
+      onYearInputChange: (search: string, comboComponent?: any) => this.onYearInputChange(search, comboComponent)
     };
     this.cdr.markForCheck();
+  }
+
+  onYearInputChange(search: string, comboComponent?: any) {
+    if (!comboComponent) {
+      return;
+    }
+
+    const typedYear = this.getTypedYear(search);
+    const isListedYear =
+      typedYear === undefined ||
+      typedYear === this.displayYear ||
+      this.comboYearsOptions.some(option => option.value === typedYear);
+
+    if (isListedYear ? !this.typedYearOption : this.typedYearOption?.value === typedYear) {
+      return;
+    }
+
+    this.typedYearOption = isListedYear ? undefined : { label: this.formatYearLabel(typedYear), value: typedYear };
+    // Só as opções mudam: regravar o ano exibido trocaria o texto digitado num combo que foi esvaziado.
+    this.updateTemplateContext(true);
+
+    this.cdr.detectChanges();
+    comboComponent.searchForLabel(search, comboComponent.options, comboComponent.filterMode);
+  }
+
+  private getTypedYear(search: string): number | undefined {
+    const value = (search || '').trim();
+
+    if (!/^\d{4}$/.test(value)) {
+      return undefined;
+    }
+
+    const year = Number(value);
+    const minYear = this.minDate ? this.getDateToUse(this.minDate).getFullYear() : undefined;
+    const maxYear = this.maxDate ? this.getDateToUse(this.maxDate).getFullYear() : undefined;
+
+    if ((minYear !== undefined && year < minYear) || (maxYear !== undefined && year > maxYear)) {
+      return undefined;
+    }
+
+    return year;
+  }
+
+  private formatYearLabel(year: number): string {
+    return year.toString().padStart(4, '0');
   }
 
   updateDate(year: number, month: number, comboComponent?: any) {
@@ -271,7 +342,27 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
   }
 
+  // Sem itens, o combo manteria a lista "Nenhum item encontrado" aberta após perder o foco.
+  private resetComboWithoutOptions(comboComponent: any) {
+    if (!comboComponent || comboComponent.visibleOptions?.length) {
+      return;
+    }
+
+    comboComponent.verifyValidOption?.();
+    comboComponent.controlComboVisibility?.(false);
+  }
+
   private handleComboBlur(comboComponent: any) {
+    const comboElement: HTMLElement = comboComponent?.element?.nativeElement;
+
+    // A seta para baixo leva o foco à lista do próprio combo; validar agora descartaria o texto filtrado.
+    if (comboElement?.contains(document.activeElement)) {
+      this.validateOnComboFocusOut(comboComponent, comboElement);
+      return;
+    }
+
+    this.resetComboWithoutOptions(comboComponent);
+
     let currentYear = this.templateContext.year;
     let currentMonth = this.templateContext.monthIndex;
 
@@ -291,6 +382,25 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     }
 
     this.ensureValidDisplay(currentYear, currentMonth);
+  }
+
+  private validateOnComboFocusOut(comboComponent: any, comboElement: HTMLElement) {
+    if (this.combosAwaitingFocusOut.has(comboElement)) {
+      return;
+    }
+
+    const onFocusOut = (event: FocusEvent) => {
+      if (comboElement.contains(event.relatedTarget as Node)) {
+        return;
+      }
+
+      comboElement.removeEventListener('focusout', onFocusOut);
+      this.combosAwaitingFocusOut.delete(comboElement);
+      this.onComboBlur(comboComponent);
+    };
+
+    this.combosAwaitingFocusOut.add(comboElement);
+    comboElement.addEventListener('focusout', onFocusOut);
   }
 
   private syncInputValue(comboComponent: any) {
@@ -332,7 +442,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   private isYearInvalid(year: any): boolean {
-    return typeof year === 'string' || Number.isNaN(year) || (year && year < 1900) || (year && year > 2100);
+    return typeof year === 'string' || Number.isNaN(year) || (year && year < MIN_YEAR) || (year && year > MAX_YEAR);
   }
 
   private updateDisplay(year: number, month: number) {
@@ -418,7 +528,27 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     return index === this.focusedDayIndex ? 0 : -1;
   }
 
+  get isPreviousMonthDisabled(): boolean {
+    return this.displayYear <= MIN_YEAR && this.displayMonthNumber === 0;
+  }
+
+  get isNextMonthDisabled(): boolean {
+    return this.displayYear >= MAX_YEAR && this.displayMonthNumber === 11;
+  }
+
+  isPreviousYearDisabled(step: number): boolean {
+    return this.displayYear - step < MIN_YEAR;
+  }
+
+  isNextYearDisabled(step: number): boolean {
+    return this.displayYear + step > MAX_YEAR;
+  }
+
   onNextMonth() {
+    if (this.isNextMonthDisabled) {
+      return;
+    }
+
     const newMonth = this.displayMonthNumber < 11 ? this.displayMonthNumber + 1 : 0;
     const newYear = this.displayMonthNumber < 11 ? this.displayYear : this.displayYear + 1;
     this.updateDisplay(newYear, newMonth);
@@ -426,6 +556,10 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   onPreviousMonth() {
+    if (this.isPreviousMonthDisabled) {
+      return;
+    }
+
     const newMonth = this.displayMonthNumber > 0 ? this.displayMonthNumber - 1 : 11;
     const newYear = this.displayMonthNumber > 0 ? this.displayYear : this.displayYear - 1;
     this.updateDisplay(newYear, newMonth);
@@ -434,6 +568,10 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   updateYear(value: number) {
     const newYear = this.displayYear + value;
+    if (newYear < MIN_YEAR || newYear > MAX_YEAR) {
+      return;
+    }
+
     this.updateDisplay(newYear, this.displayMonthNumber);
   }
 
@@ -455,7 +593,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   onSelectDate(date: Date) {
-    if (!this.poDate.validateDateRange(date, this.minDate, this.maxDate)) {
+    if (this.isDayDisabled(date)) {
       return;
     }
     this.selectDate.emit(date);
@@ -819,6 +957,11 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   }
 
   isDayDisabled(date: Date): boolean {
+    const year = date?.getFullYear();
+    if (year < MIN_YEAR || year > MAX_YEAR) {
+      return true;
+    }
+
     return !this.poDate.validateDateRange(date, this.minDate, this.maxDate);
   }
 
@@ -827,7 +970,7 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
     const prefix = `po-calendar-box-${type}`;
 
     if (date.getMonth() !== this.displayMonthNumber) {
-      const isDisabled = !this.poDate.validateDateRange(date, this.minDate, this.maxDate);
+      const isDisabled = this.isDayDisabled(date);
       return isDisabled ? `${prefix}-other-month-disabled` : `${prefix}-other-month`;
     }
 
@@ -871,32 +1014,26 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
   getColorForDate(date: Date, type: 'background' | 'foreground') {
     const prefix = `po-calendar-box-${type}`;
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
-      ? `${prefix}-selected`
-      : `${prefix}-selected-disabled`;
+    return this.isDayDisabled(date) ? `${prefix}-selected-disabled` : `${prefix}-selected`;
   }
 
   getColorForDefaultDate(date: Date, type: 'background' | 'foreground') {
     const prefix = `po-calendar-box-${type}`;
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate) ? prefix : `${prefix}-disabled`;
+    return this.isDayDisabled(date) ? `${prefix}-disabled` : prefix;
   }
 
   getColorForToday(date: Date, type: 'background' | 'foreground') {
     const prefix = `po-calendar-box-${type}`;
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
-      ? `${prefix}-today`
-      : `${prefix}-today-disabled`;
+    return this.isDayDisabled(date) ? `${prefix}-today-disabled` : `${prefix}-today`;
   }
 
   getColorForDateRange(date: Date, type: 'background' | 'foreground') {
     const prefix = `po-calendar-box-${type}`;
-    return this.poDate.validateDateRange(date, this.minDate, this.maxDate)
-      ? `${prefix}-in-range`
-      : `${prefix}-in-range-disabled`;
+    return this.isDayDisabled(date) ? `${prefix}-in-range-disabled` : `${prefix}-in-range`;
   }
 
   getColorState(date: Date, prefix: string, state: string) {
-    const isValid = this.poDate.validateDateRange(date, this.minDate, this.maxDate);
+    const isValid = !this.isDayDisabled(date);
     return isValid ? `${prefix}-${state}` : `${prefix}-${state}-disabled`;
   }
 

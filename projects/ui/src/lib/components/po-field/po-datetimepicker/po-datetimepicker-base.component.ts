@@ -63,6 +63,9 @@ const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
  * - O valor emitido no model inclui o offset do timezone local do navegador.
  * - Ao receber um valor com timezone, o componente converte automaticamente para horário local.
  * - Caso a data/hora esteja inválida, o `model` receberá a mensagem de erro localizada.
+ * - Datas no formato ISO (ex.: `'0050-05-10'`) com ano inferior a 100 são mantidas. Ao informar um objeto `Date`
+ * com ano inferior a 100, utilize o método [`setFullYear`](https://www.w3schools.com/jsref/jsref_setfullyear.asp),
+ * pois o [`new Date`](https://www.w3schools.com/js/js_dates.asp) converte esses anos para 19XX.
  * - Caso o `input` esteja passando um `[(ngModel)]`, mas não tenha um `name`, então irá ocorrer um erro
  * do próprio Angular (`[ngModelOptions]="{standalone: true}"`).
  *
@@ -630,7 +633,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       if (!value) {
         this._resolvedMinDate = undefined;
       } else if (value instanceof Date) {
-        this._resolvedMinDate = new Date(value.getFullYear(), value.getMonth(), value.getDate(), 0, 0, 0);
+        this._resolvedMinDate = this.copyDateWithTime(value, 0, 0, 0);
       } else {
         this._resolvedMinDate = convertIsoToDate(value, true, false);
       }
@@ -642,7 +645,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       if (!value) {
         this._resolvedMaxDate = undefined;
       } else if (value instanceof Date) {
-        this._resolvedMaxDate = new Date(value.getFullYear(), value.getMonth(), value.getDate(), 23, 59, 59);
+        this._resolvedMaxDate = this.copyDateWithTime(value, 23, 59, 59);
       } else {
         this._resolvedMaxDate = convertIsoToDate(value, false, true);
       }
@@ -660,7 +663,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
     }
 
     if (value instanceof Date) {
-      this._date = new Date(value.getFullYear(), value.getMonth(), value.getDate());
+      this._date = this.copyDateWithTime(value);
       this._timeValue = this.extractTimeFromDate(value);
     } else if (typeof value === 'string') {
       this.processStringValue(value);
@@ -817,7 +820,7 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
 
   getTimezoneOffset(date?: Date): string {
     const referenceDate = date || new Date();
-    const offset = referenceDate.getTimezoneOffset();
+    const offset = Math.round(referenceDate.getTimezoneOffset());
     const offsetAbsolute = Math.abs(offset);
     const sign = offset <= 0 ? '+' : '-';
     const hours = ('00' + Math.floor(offsetAbsolute / 60)).slice(-2);
@@ -968,8 +971,8 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
 
       const fullDate = new Date(value);
 
-      if (!isNaN(fullDate.getTime())) {
-        this._date = new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate());
+      if (!isNaN(fullDate.getTime()) && !this.hasLocalOffsetWithSeconds(fullDate, timeAndTz)) {
+        this._date = this.copyDateWithTime(fullDate);
         this._timeValue = this.extractTimeFromDate(fullDate);
       } else {
         const parsedDate = convertIsoToDate(datePart, false, false);
@@ -981,6 +984,18 @@ export abstract class PoDatetimepickerBaseComponent implements ControlValueAcces
       this._date = parsedDate;
       this._timeValue = '00:00';
     }
+  }
+
+  private hasLocalOffsetWithSeconds(date: Date, timeAndTz: string): boolean {
+    return date.getTimezoneOffset() % 1 !== 0 && timeAndTz.endsWith(this.getTimezoneOffset(date));
+  }
+
+  // Copia a partir do timestamp, pois o `new Date(ano, mês, dia)` transforma os anos entre 0 e 99 para 19XX.
+  private copyDateWithTime(value: Date, hours = 0, minutes = 0, seconds = 0): Date {
+    const date = new Date(value);
+    date.setHours(hours, minutes, seconds, 0);
+
+    return date;
   }
 
   private normalizeTimePart(timePart: string): string {

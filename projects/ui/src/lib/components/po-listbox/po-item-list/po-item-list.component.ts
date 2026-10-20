@@ -21,6 +21,8 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
   protected param;
   protected clickListener: () => void;
 
+  private lastSafeHtml: { value: string; result: SafeHtml };
+
   private shouldUpdateSelected(changes: SimpleChanges): boolean {
     return !!(changes.searchValue && changes.label && changes.searchValue.currentValue === changes.label.currentValue);
   }
@@ -114,7 +116,12 @@ export class PoItemListComponent extends PoItemListBaseComponent implements OnCh
   }
 
   safeHtml(value): SafeHtml {
-    return this.sanitized.bypassSecurityTrustHtml(value);
+    // Um novo SafeHtml a cada change detection recria o elemento e faz o `click` se perder.
+    if (this.lastSafeHtml?.value !== value) {
+      this.lastSafeHtml = { value, result: this.sanitized.bypassSecurityTrustHtml(value) };
+    }
+
+    return this.lastSafeHtml.result;
   }
 
   private sanitizeTagHTML(value: string = '') {
