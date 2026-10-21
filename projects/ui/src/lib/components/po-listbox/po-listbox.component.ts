@@ -604,6 +604,21 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
     if (focusedOption && !this.cdkListbox.isActive(focusedOption)) {
       this.cdkListbox._setActiveOption(focusedOption);
     }
+
+    this.focusFirstOptionWhenNoneActive(focusedElement);
+  }
+
+  // Com a seleção fora da lista filtrada, o cdkListbox não ativa nenhuma opção e o foco ficaria no `ul`.
+  private focusFirstOptionWhenNoneActive(focusedElement: HTMLElement): void {
+    if (focusedElement !== this.listboxItemList?.nativeElement) {
+      return;
+    }
+
+    const hasActiveOption = this.cdkOptions?.some(option => this.cdkListbox.isActive(option));
+
+    if (!hasActiveOption) {
+      this.cdkOptions?.find(option => !option.disabled)?.focus();
+    }
   }
 
   protected checkInfiniteScroll(): void {

@@ -112,6 +112,9 @@ export class PoDatepickerRangeComponent
 
   private clickListener;
   private eventResizeListener;
+  private mouseDownListener: () => void;
+  // Ao pressionar o mouse dentro do calendário e soltar fora dele, o navegador dispara o `click` fora do calendário.
+  private isMouseDownOnPicker = false;
   private readonly poDatepickerRangeElement: ElementRef<any>;
   private readonly MIN_CALENDAR_WIDTH_WITH_PRESETS = {
     medium: 624,
@@ -722,6 +725,10 @@ export class PoDatepickerRangeComponent
   }
 
   private initializeListeners() {
+    this.mouseDownListener = this.renderer.listen('document', 'mousedown', (event: MouseEvent) => {
+      this.wasMouseDownOnPicker(event);
+    });
+
     this.clickListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnPicker(event);
     });
@@ -799,6 +806,10 @@ export class PoDatepickerRangeComponent
   }
 
   private removeListeners() {
+    if (this.mouseDownListener) {
+      this.mouseDownListener();
+    }
+
     if (this.clickListener) {
       this.clickListener();
     }
@@ -908,6 +919,13 @@ export class PoDatepickerRangeComponent
       return;
     }
 
+    const isMouseDownOnPicker = this.isMouseDownOnPicker;
+    this.isMouseDownOnPicker = false;
+
+    if (isMouseDownOnPicker) {
+      return;
+    }
+
     const calendarEl = this.calendarPicker?.nativeElement;
     const iconEl = this.iconCalendar?.buttonElement?.nativeElement;
     const target = event.target as Node;
@@ -923,6 +941,12 @@ export class PoDatepickerRangeComponent
     }
 
     this.cd.markForCheck();
+  }
+
+  private wasMouseDownOnPicker(event: MouseEvent): void {
+    const calendarEl = this.calendarPicker?.nativeElement;
+
+    this.isMouseDownOnPicker = !!calendarEl && calendarEl.contains(event.target);
   }
 
   closeCalendar() {

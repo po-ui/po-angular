@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { createDate, formatYear } from '../../../utils/util';
+
 const poCalendarServiceFirstWeekDayDefault: number = 0;
 
 @Injectable({
@@ -13,7 +15,7 @@ export class PoCalendarService {
       const dateOnlyRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
       if (dateOnlyRegex.test(dateValue)) {
         const [, year, month, day] = dateValue.match(dateOnlyRegex).map(Number);
-        return new Date(year, month - 1, day);
+        return createDate(year, month - 1, day);
       }
 
       const parsed = new Date(dateValue);
@@ -26,9 +28,9 @@ export class PoCalendarService {
 
     if (dateValue instanceof Date) {
       if (dateValue.getHours() !== 0 && dateValue.getUTCHours() === 0 && dateValue.getUTCMinutes() === 0) {
-        return new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
+        return createDate(dateValue.getUTCFullYear(), dateValue.getUTCMonth(), dateValue.getUTCDate());
       }
-      return new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
+      return createDate(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
     }
 
     return undefined;
@@ -52,7 +54,7 @@ export class PoCalendarService {
 
     const options = [];
     for (let i = minYear; i <= maxYear; i++) {
-      options.push({ label: i.toString(), value: i });
+      options.push({ label: formatYear(i), value: i });
     }
 
     return options;

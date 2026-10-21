@@ -746,6 +746,62 @@ describe('PoDatetimepickerComponent:', () => {
       expect(component.closeCalendar).toHaveBeenCalled();
       component['removeListeners']();
     });
+
+    it('should not close when the mouse is pressed on picker and released outside', () => {
+      component.visible = true;
+      fixture.detectChanges();
+
+      const dialogEl = document.createElement('div');
+      const insideEl = document.createElement('input');
+      dialogEl.appendChild(insideEl);
+      document.body.appendChild(dialogEl);
+      component['dialogPicker'] = { nativeElement: dialogEl } as any;
+      component['initializeListeners']();
+
+      spyOn(component, 'closeCalendar');
+
+      insideEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(component.closeCalendar).not.toHaveBeenCalled();
+
+      document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(component.closeCalendar).toHaveBeenCalledTimes(1);
+      component['removeListeners']();
+      dialogEl.remove();
+    });
+
+    it('should close when the mouse is pressed on overlay and released outside', () => {
+      component.visible = true;
+      fixture.detectChanges();
+
+      const dialogEl = document.createElement('div');
+      const overlayEl = document.createElement('div');
+      overlayEl.classList.add('po-datetimepicker-calendar-overlay');
+      dialogEl.appendChild(overlayEl);
+      document.body.appendChild(dialogEl);
+      component['dialogPicker'] = { nativeElement: dialogEl } as any;
+      component['initializeListeners']();
+
+      spyOn(component, 'closeCalendar');
+
+      overlayEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(component.closeCalendar).toHaveBeenCalled();
+      component['removeListeners']();
+      dialogEl.remove();
+    });
+
+    it('should not mark the mouse as pressed on picker when dialogPicker is undefined', () => {
+      component['dialogPicker'] = undefined;
+
+      component['wasMouseDownOnPicker']({ target: document.createElement('div') } as any);
+
+      expect(component['isMouseDownOnPicker']).toBeFalse();
+    });
   });
 
   describe('onKeyup:', () => {
@@ -1528,6 +1584,27 @@ describe('PoDatetimepickerComponent:', () => {
 
       expect(component.wasClickedOnPicker).toHaveBeenCalled();
       component['removeListeners']();
+    });
+
+    it('should register mousedown listener that calls wasMouseDownOnPicker', () => {
+      spyOn(component as any, 'wasMouseDownOnPicker');
+      component['initializeListeners']();
+
+      document.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(component['wasMouseDownOnPicker']).toHaveBeenCalled();
+      component['removeListeners']();
+    });
+
+    it('should remove mousedown listener on removeListeners', () => {
+      spyOn(component as any, 'wasMouseDownOnPicker');
+      component['initializeListeners']();
+      component['removeListeners']();
+
+      document.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(component['wasMouseDownOnPicker']).not.toHaveBeenCalled();
+      expect(component['mouseDownListener']).toBeUndefined();
     });
 
     it('should register resize listener that calls closeCalendar', () => {

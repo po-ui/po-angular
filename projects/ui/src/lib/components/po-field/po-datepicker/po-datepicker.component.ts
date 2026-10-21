@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { isMobile, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
+import { createDate, formatYear, isMobile, isValidYear, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
@@ -106,6 +106,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   eventResizeListener: () => void;
 
   private clickListener;
+  private mouseDownListener: () => void;
+  // Ao pressionar o mouse dentro do calendário e soltar fora dele, o navegador dispara o `click` fora do calendário.
+  private isMouseDownOnPicker = false;
   private readonly dateRegex = new RegExp(
     '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' + '(?:0[1-9]|1[0-2])-' + '(?:0[1-9]|[12]\\d|3[01])$'
   );
@@ -312,9 +315,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (this.mode === 'month-year' && event instanceof Date) {
       this.date = event;
       const separator = this.languageService.getDateSeparator(this.locale);
-      const displayValue = ('0' + (event.getMonth() + 1)).slice(-2) + separator + event.getFullYear();
+      const displayValue = ('0' + (event.getMonth() + 1)).slice(-2) + separator + formatYear(event.getFullYear());
       this.inputEl.nativeElement.value = displayValue;
-      const emitString = ('0' + (event.getMonth() + 1)).slice(-2) + '/' + event.getFullYear();
+      const emitString = ('0' + (event.getMonth() + 1)).slice(-2) + '/' + formatYear(event.getFullYear());
       this.callOnChange(emitString);
       this.controlChangeEmitter();
       this.togglePicker();
@@ -323,8 +326,8 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
     if (this.mode === 'year' && event instanceof Date) {
       this.date = event;
-      this.inputEl.nativeElement.value = `${event.getFullYear()}`;
-      this.callOnChange(`${event.getFullYear()}`);
+      this.inputEl.nativeElement.value = formatYear(event.getFullYear());
+      this.callOnChange(formatYear(event.getFullYear()));
       this.controlChangeEmitter();
       this.togglePicker();
       return;
@@ -342,8 +345,20 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (!this.dialogPicker || !this.iconDatepicker) {
       return;
     }
+
+    const isMouseDownOnPicker = this.isMouseDownOnPicker;
+    this.isMouseDownOnPicker = false;
+
+    if (isMouseDownOnPicker) {
+      return;
+    }
+
+    // O alvo pode ter sido removido do DOM durante o clique; o `composedPath` preserva o caminho original.
+    const dialogElement = this.dialogPicker.nativeElement;
+    const isInsideDialog = dialogElement.contains(event.target) || !!event.composedPath?.().includes(dialogElement);
+
     if (
-      (!this.dialogPicker.nativeElement.contains(event.target) || this.hasOverlayClass(event.target)) &&
+      (!isInsideDialog || this.hasOverlayClass(event.target)) &&
       !this.iconDatepicker.buttonElement.nativeElement.contains(event.target) &&
       !this.hasAttrCalendar(event.target)
     ) {
@@ -730,10 +745,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private applyYearValue(value: string, requireFullLength: boolean = false): void {
-    const year = parseInt(value, 10);
-    if (!isNaN(year) && year > 0 && (!requireFullLength || value.length === 4)) {
+    const year = this.parseYearToken(value);
+    if (year !== null && (!requireFullLength || value.length === 4)) {
       this.syncCalendarYear(year);
-      this.callOnChange(`${year}`);
+      this.callOnChange(formatYear(year));
     } else {
       this.callOnChange('Data inválida');
     }
@@ -741,15 +756,22 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private parseMonthYearInput(value: string, separator: string): string | null {
     const parts = value.split(separator);
-    if (parts.length !== 2) {
+    if (parts.length !== 2 || !/^\d{1,2}$/.test(parts[0])) {
       return null;
     }
-    const month = parseInt(parts[0], 10);
-    const year = parseInt(parts[1], 10);
-    if (isNaN(month) || isNaN(year) || month < 1 || month > 12 || year <= 0) {
+    const month = Number(parts[0]);
+    const year = this.parseYearToken(parts[1]);
+    if (month < 1 || month > 12 || year === null) {
       return null;
     }
-    return ('0' + month).slice(-2) + '/' + year;
+    if (this.isIncompleteZeroYear(parts[1], year)) {
+      return null;
+    }
+    return ('0' + month).slice(-2) + '/' + formatYear(year);
+  }
+
+  private isIncompleteZeroYear(yearText: string, year: number): boolean {
+    return year === 0 && yearText.length < 4;
   }
 
   private syncCalendarMonthYear(modelValue: string): void {
@@ -757,12 +779,12 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (parts.length === 2) {
       const month = parseInt(parts[0], 10);
       const year = parseInt(parts[1], 10);
-      this.date = new Date(year, month - 1, 1);
+      this.date = createDate(year, month - 1, 1);
     }
   }
 
   private syncCalendarYear(year: number): void {
-    this.date = new Date(year, 0, 1);
+    this.date = createDate(year, 0, 1);
   }
 
   private writeMonthYearValue(value: any): void {
@@ -777,16 +799,16 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     } else if (typeof value === 'string') {
       const normalizedValue = value.replace('-', '/');
       const parts = normalizedValue.split('/');
-      if (parts.length === 2) {
-        month = parseInt(parts[0], 10);
-        year = parseInt(parts[1], 10);
+      if (parts.length === 2 && /^\d{1,2}$/.test(parts[0])) {
+        month = Number(parts[0]);
+        year = this.parseYearToken(parts[1]) ?? Number.NaN;
       }
     }
 
-    if (!isNaN(month) && !isNaN(year) && month >= 1 && month <= 12 && year > 0) {
-      const displayValue = ('0' + month).slice(-2) + separator + year;
+    if (!Number.isNaN(month) && month >= 1 && month <= 12 && isValidYear(year)) {
+      const displayValue = ('0' + month).slice(-2) + separator + formatYear(year);
       this.inputEl.nativeElement.value = displayValue;
-      const modelValue = ('0' + month).slice(-2) + '/' + year;
+      const modelValue = ('0' + month).slice(-2) + '/' + formatYear(year);
       this.syncCalendarMonthYear(modelValue);
       this.callOnChange(modelValue, false);
     } else {
@@ -796,11 +818,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private writeYearValue(value: any): void {
-    const year = typeof value === 'string' ? Number.parseInt(value, 10) : value;
-    if (!Number.isNaN(year) && year > 0) {
-      this.inputEl.nativeElement.value = `${year}`;
+    const year = typeof value === 'string' ? this.parseYearToken(value) : value;
+    if (isValidYear(year)) {
+      this.inputEl.nativeElement.value = formatYear(year);
       this.syncCalendarYear(year);
-      this.callOnChange(`${year}`, false);
+      this.callOnChange(formatYear(year), false);
     } else {
       this.inputEl.nativeElement.value = '';
     }
@@ -842,17 +864,16 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     if (this.mode === 'month-year') {
       const separator = this.languageService.getDateSeparator(this.locale);
       const parts = value.split(separator);
-      if (parts.length !== 2) {
+      if (parts.length !== 2 || !/^\d{1,2}$/.test(parts[0])) {
         return false;
       }
-      const month = parseInt(parts[0], 10);
-      const year = parseInt(parts[1], 10);
-      return !isNaN(month) && !isNaN(year) && month >= 1 && month <= 12 && year > 0;
+      const month = Number(parts[0]);
+      const year = this.parseYearToken(parts[1]);
+      return month >= 1 && month <= 12 && year !== null && !this.isIncompleteZeroYear(parts[1], year);
     }
 
     if (this.mode === 'year') {
-      const year = parseInt(value, 10);
-      return !isNaN(year) && year > 0 && value.length === 4;
+      return this.parseYearToken(value) !== null && value.length === 4;
     }
 
     return true;
@@ -868,6 +889,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private initializeListeners() {
+    this.mouseDownListener = this.renderer.listen('document', 'mousedown', (event: MouseEvent) => {
+      this.wasMouseDownOnPicker(event);
+    });
+
     this.clickListener = this.renderer.listen('document', 'click', (event: MouseEvent) => {
       this.wasClickedOnPicker(event);
     });
@@ -877,6 +902,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     });
 
     window.addEventListener('scroll', this.onScroll, true);
+  }
+
+  private wasMouseDownOnPicker(event: MouseEvent): void {
+    const dialogElement = this.dialogPicker?.nativeElement;
+
+    this.isMouseDownOnPicker =
+      !!dialogElement && dialogElement.contains(event.target) && !this.hasOverlayClass(event.target);
   }
 
   private isAdditionalHelpEventTriggered(): boolean {
@@ -901,6 +933,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   };
 
   private removeListeners() {
+    if (this.mouseDownListener) {
+      this.mouseDownListener();
+    }
+
     if (this.clickListener) {
       this.clickListener();
     }

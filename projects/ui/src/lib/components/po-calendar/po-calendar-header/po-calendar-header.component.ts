@@ -26,6 +26,8 @@ export class PoCalendarHeaderComponent implements OnInit, OnChanges {
 
   @Input('p-hide-previous') hidePrevious = false;
   @Input('p-hide-next') hideNext = false;
+  @Input('p-disable-previous') disablePrevious = false;
+  @Input('p-disable-next') disableNext = false;
   @Input('p-display-month') displayMonth!: number;
   @Input('p-display-year') displayYear!: number;
   @Input('p-display-month-label') displayMonthLabel: string;

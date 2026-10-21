@@ -11,6 +11,7 @@
       (keydown.enter)="previous.emit(); $event.preventDefault()"
       [p-aria-label]="previousMonthLabel"
       p-icon="ICON_ARROW_LEFT"
+      [p-disabled]="disablePrevious"
       [p-size]="size"
     ></po-button>
   }
@@ -22,6 +23,7 @@
       (keydown.enter)="next.emit(); $event.preventDefault()"
       [p-aria-label]="nextMonthLabel"
       p-icon="ICON_ARROW_RIGHT"
+      [p-disabled]="disableNext"
       [p-size]="size"
     ></po-button>
   }

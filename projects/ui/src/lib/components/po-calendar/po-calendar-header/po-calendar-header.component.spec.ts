@@ -22,6 +22,11 @@ describe('PoCalendarHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should initialize disablePrevious and disableNext with false', () => {
+    expect(component.disablePrevious).toBeFalse();
+    expect(component.disableNext).toBeFalse();
+  });
+
   it('should call markForCheck and detectChanges when templateContext changes', () => {
     const cdr = (component as any).cdr;
 
