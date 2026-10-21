@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { isMobile } from '../../utils/util';
+import { createDate, formatYear, isMobile, isValidYear } from '../../utils/util';
 import { PoButtonComponent } from '../po-button';
 import { PoTimerComponent } from '../po-timer/po-timer.component';
 import { PoCalendarLangService, PoCalendarService } from './services';
@@ -180,7 +180,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   isMonthDisabled(monthIndex: number): boolean {
-    if (!this.selectedYear) return false;
+    if (this.selectedYear === null || this.selectedYear === undefined) return false;
 
     const year = this.selectedYear;
     const month = monthIndex + 1;
@@ -218,7 +218,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     if (selectedMonth !== undefined && selectedMonth !== null) {
       const month = selectedMonth;
 
-      if (minYear && (year < minYear || (year === minYear && month < minMonth))) {
+      if (minYear !== undefined && (year < minYear || (year === minYear && month < minMonth))) {
         return true;
       }
 
@@ -315,10 +315,14 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     const isSelectAction = event?.key === 'Enter' || event?.code === 'Space' || selected;
 
     if (isSelectAction) {
-      this.selectedIndexYear = index;
-      this.selectedYear = year;
+      const selectedYear = year ?? this.displayYears[index];
 
-      this.updateModel(this.selectedYear);
+      if (isValidYear(selectedYear)) {
+        this.selectedIndexYear = index;
+        this.selectedYear = selectedYear;
+
+        this.updateModel(this.selectedYear);
+      }
     }
 
     if (yearOptions[index]) {
@@ -338,10 +342,32 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   private initializeYearAndMonthMode(): void {
     this.displayMonths = this.poCalendarLangService.getMonthsArray();
 
+    this.updateDisplayYears();
+  }
+
+  formatYearLabel(year: number): string {
+    return formatYear(year) ?? `${year}`;
+  }
+
+  // O ano 0 é válido, por isso não pode ser verificado como booleano.
+  private hasSelectedYear(): boolean {
+    return isValidYear(this.selectedYear);
+  }
+
+  private updateDisplayYears(selectedYear?: number | null): void {
     const currentYear = new Date().getFullYear();
     const rangeLimit = this.yearRangeLimit ?? 150;
+    const startYear = Math.max(0, currentYear - rangeLimit);
+    const endYear = Math.min(9999, currentYear + rangeLimit);
 
-    this.displayYears = Array.from({ length: rangeLimit * 2 + 1 }, (_, i) => currentYear - rangeLimit + i);
+    const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+
+    if (isValidYear(selectedYear) && !years.includes(selectedYear)) {
+      years.push(selectedYear);
+      years.sort((a, b) => a - b);
+    }
+
+    this.displayYears = years;
   }
 
   getActivateDate(partType) {
@@ -616,8 +642,8 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
 
   private buildDateWithMonthYear(baseDate: Date, month: number, year: number): Date {
     const day = baseDate instanceof Date ? baseDate.getDate() : 1;
-    const daysInTargetMonth = new Date(year, month + 1, 0).getDate();
-    return new Date(year, month, Math.min(day, daysInTargetMonth));
+    const daysInTargetMonth = createDate(year, month + 1, 0).getDate();
+    return createDate(year, month, Math.min(day, daysInTargetMonth));
   }
 
   private convertDateToISO(date) {
@@ -650,15 +676,15 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     let finalValue = value;
 
     if (MODE_MONTH_YEAR) {
-      if (this.selectedMonth && this.selectedYear) {
-        finalValue = new Date(this.selectedYear, this.selectedMonth - 1, 1);
+      if (this.selectedMonth && this.hasSelectedYear()) {
+        finalValue = createDate(this.selectedYear, this.selectedMonth - 1, 1);
         this.change.emit(finalValue);
       } else {
         return;
       }
     } else if (MODE_YEAR) {
-      if (this.selectedYear) {
-        finalValue = new Date(this.selectedYear, 0, 1);
+      if (this.hasSelectedYear()) {
+        finalValue = createDate(this.selectedYear, 0, 1);
         this.change.emit(finalValue);
       } else {
         return;
@@ -676,28 +702,20 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
   }
 
   private setYear(index: number, year: number) {
-    this.selectedIndexYear = index;
-    this.selectedYear = year;
+    if (isValidYear(year)) {
+      this.selectedIndexYear = index;
+      this.selectedYear = year;
+    } else {
+      this.selectedIndexYear = null;
+      this.selectedYear = null;
+    }
   }
 
   private writeDate(value: any) {
     if (this.mode === 'month-year') {
-      const date = new Date(value);
-      const monthIndex = date.getMonth();
-      const year = date.getFullYear();
-      const yearOptions = this.getYearOptions();
-
-      const yearIndex = yearOptions.findIndex(btn => Number(btn.label()) === year);
-
-      this.setMonth(monthIndex);
-      this.setYear(yearIndex, year);
+      this.writeMonthYearDate(value);
     } else if (this.mode === 'year') {
-      const year = new Date(value).getFullYear();
-      const yearOptions = this.getYearOptions();
-
-      const yearIndex = yearOptions.findIndex(btn => Number(btn.label()) === year);
-
-      this.setYear(yearIndex, year);
+      this.writeYearDate(value);
     } else if (this.isRange) {
       const start = value?.start;
       const end = value?.end;
@@ -709,5 +727,48 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     } else {
       this.value = value instanceof Date ? new Date(value) : this.convertDateFromIso(value);
     }
+  }
+
+  private writeMonthYearDate(value: any) {
+    const isNumericValue = typeof value === 'number' || (typeof value === 'string' && Number.isFinite(Number(value)));
+    const date = isNumericValue ? null : new Date(value);
+    const year = date?.getFullYear();
+
+    if (!isValidYear(year)) {
+      this.setYear(null, year);
+      return;
+    }
+
+    const monthIndex = date.getMonth();
+
+    this.updateDisplayYears(year);
+    const yearIndex = this.displayYears.indexOf(year);
+
+    this.setMonth(monthIndex);
+    this.setYear(yearIndex, year);
+  }
+
+  private writeYearDate(value: any) {
+    const year = this.parseYearValue(value);
+
+    if (!isValidYear(year)) {
+      this.setYear(null, year);
+      return;
+    }
+
+    this.updateDisplayYears(year);
+    const yearIndex = this.displayYears.indexOf(year);
+
+    this.setYear(yearIndex, year);
+  }
+
+  private parseYearValue(value: any): number {
+    const isNumericString = typeof value === 'string' && Number.isFinite(Number(value));
+
+    if (typeof value === 'number' || isNumericString) {
+      return /^\d{1,4}$/.test(String(value)) ? Number(value) : Number.NaN;
+    }
+
+    return new Date(value).getFullYear();
   }
 }
