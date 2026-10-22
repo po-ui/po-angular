@@ -112,13 +112,11 @@ p {
   color: var(--color-neutral-dark-70);
   margin: auto;
   font-size: 34px;
-  font-family: var(--font-family-po-ui-light);
 }
 
 .constructor-subtitle {
   color: #000;
   font-size: 16px;
-  font-family: var(--font-family-po-ui-light);
 }
 
 .description-widget {
