@@ -13,5 +13,12 @@ export enum PoButtonKind {
   secondary = 'secondary',
 
   /** Estilo terciário, ideal para ações menos importantes, sem fundo preenchido. */
-  tertiary = 'tertiary'
+  tertiary = 'tertiary',
+
+  /**
+   * Estilo com brilho animado que percorre a borda do botão, usado para destacar uma chamada para ação.
+   *
+   * > Incompatível com a propriedade `p-danger`.
+   */
+  glow = 'glow'
 }

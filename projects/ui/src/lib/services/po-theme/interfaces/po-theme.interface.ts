@@ -20,6 +20,22 @@ export interface PoTheme {
 
   /** Tipo e nível de acessibilidade de tema ativo */
   active?: PoThemeTypeEnum | PoThemeActive;
+
+  /**
+   * Define se o tema herda a identidade visual do tema padrão do PO UI.
+   *
+   * A identidade visual corresponde aos arredondamentos dos componentes e à cor de fundo da página definidos
+   * pelo tema padrão. Os estilos estruturais (ex.: espessura de outline, adensamento e ajustes de light/dark)
+   * são aplicados em qualquer caso.
+   *
+   * As famílias de fonte do tema padrão não são controladas por esta propriedade: elas são definidas pelo CSS
+   * do `@po-ui/style`. Um tema com fontes próprias deve declará-las nos seus tokens.
+   *
+   * Utilize `false` quando o tema define a própria identidade visual e não deve receber a do tema padrão.
+   *
+   * @default `true`
+   */
+  inheritDefaultStyle?: boolean;
 }
 
 /**

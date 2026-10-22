@@ -25,4 +25,17 @@
       <span class="po-button-label">{{ label() }}</span>
     }
   </div>
+
+  @if (isGlow()) {
+    <span class="po-button-glow-halo" aria-hidden="true">
+      @for (dot of glowTrail; track dot) {
+        <i class="po-button-glow-dot"></i>
+      }
+    </span>
+    <span class="po-button-glow-ring" aria-hidden="true">
+      @for (dot of glowTrail; track dot) {
+        <i class="po-button-glow-dot"></i>
+      }
+    </span>
+  }
 </button>

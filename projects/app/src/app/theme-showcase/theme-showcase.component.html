@@ -1,0 +1,175 @@
+<!--
+  Showcase dos componentes afetados pela nova definição de tema (border-radius do poThemeSharedBase).
+  Agrupado por categoria. Todos os valores são de exemplo e autocontidos no componente.
+-->
+<div class="po-row">
+  <h2 class="po-md-12">Componentes afetados pela nova definição de tema</h2>
+</div>
+
+<!-- ============================= BOTÕES ============================= -->
+<po-container p-title="Botões" class="po-md-12">
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Primário" p-kind="primary"></po-button>
+    <po-button class="po-md-3" p-label="Secundário" p-kind="secondary"></po-button>
+    <po-button class="po-md-3" p-label="Terciário" p-kind="tertiary"></po-button>
+    <po-button class="po-md-3" p-label="Desabilitado" [p-disabled]="true"></po-button>
+  </div>
+  <div class="po-row">
+    <po-button-group class="po-md-6" [p-buttons]="buttonGroupItems"></po-button-group>
+    <po-dropdown class="po-md-3" p-label="Dropdown" [p-actions]="dropdownActions"></po-dropdown>
+  </div>
+</po-container>
+
+<!-- ============================= CAMPOS (FIELDS) ============================= -->
+<po-container p-title="Campos de formulário" class="po-md-12">
+  <div class="po-row">
+    <po-input class="po-md-4" name="input" p-label="Input" [(ngModel)]="inputValue"></po-input>
+    <po-textarea class="po-md-4" name="textarea" p-label="Textarea" [(ngModel)]="textareaValue"></po-textarea>
+    <po-select class="po-md-4" name="select" p-label="Select" [p-options]="options"></po-select>
+  </div>
+  <div class="po-row">
+    <po-combo class="po-md-4" name="combo" p-label="Combo" [p-options]="options"></po-combo>
+    <po-multiselect
+      class="po-md-4"
+      name="multiselect"
+      p-label="Multiselect"
+      [p-options]="options"
+      [(ngModel)]="multiselectValue"
+    ></po-multiselect>
+    <po-search class="po-md-4" name="search" p-label="Search" [(ngModel)]="searchValue"></po-search>
+  </div>
+  <div class="po-row">
+    <po-lookup
+      class="po-md-4"
+      name="lookup"
+      p-label="Lookup"
+      [p-columns]="[{ property: 'label', label: 'Label' }, { property: 'value', label: 'Valor' }]"
+      [p-field-label]="'label'"
+      [p-field-value]="'value'"
+      [(ngModel)]="lookupValue"
+    ></po-lookup>
+    <po-datepicker class="po-md-4" name="datepicker" p-label="Datepicker" [(ngModel)]="datepickerValue"></po-datepicker>
+    <po-timepicker class="po-md-4" name="timepicker" p-label="Timepicker" [(ngModel)]="timepickerValue"></po-timepicker>
+  </div>
+  <div class="po-row">
+    <po-datetimepicker
+      class="po-md-6"
+      name="datetimepicker"
+      p-label="Datetimepicker"
+      [(ngModel)]="datetimepickerValue"
+    ></po-datetimepicker>
+  </div>
+</po-container>
+
+<!-- ============================= SELEÇÃO ============================= -->
+<po-container p-title="Seleção" class="po-md-12">
+  <div class="po-row">
+    <po-checkbox-group class="po-md-4" name="checkbox" p-label="Checkbox group" [p-options]="options"></po-checkbox-group>
+    <po-radio-group
+      class="po-md-4"
+      name="radio"
+      p-label="Radio group"
+      [p-options]="options"
+      [(ngModel)]="radioValue"
+    ></po-radio-group>
+    <po-switch class="po-md-4" name="switch" p-label="Switch"></po-switch>
+  </div>
+</po-container>
+
+<!-- ============================= RICH TEXT ============================= -->
+<po-container p-title="Rich text" class="po-md-12">
+  <po-rich-text name="richText" p-label="Editor" [(ngModel)]="richTextValue"></po-rich-text>
+</po-container>
+
+<!-- ============================= UPLOAD ============================= -->
+<po-container p-title="Upload" class="po-md-12">
+  <po-upload name="upload" p-label="Arquivos" p-url="/"></po-upload>
+</po-container>
+
+<!-- ============================= LIST VIEW ============================= -->
+<po-container p-title="List view" class="po-md-12">
+  <po-list-view [p-items]="listItems" [p-actions]="listActions" p-property-title="title">
+    <ng-template p-list-view-content let-item>
+      <div class="po-font-text">{{ item.description }}</div>
+    </ng-template>
+  </po-list-view>
+</po-container>
+
+<!-- ============================= TREE VIEW ============================= -->
+<po-container p-title="Tree view" class="po-md-12">
+  <po-tree-view [p-items]="treeItems"></po-tree-view>
+</po-container>
+
+<!-- ============================= ACCORDION ============================= -->
+<po-container p-title="Accordion" class="po-md-12">
+  <po-accordion>
+    <po-accordion-item p-label="Seção 1">
+      <div class="po-font-text">Conteúdo da primeira seção.</div>
+    </po-accordion-item>
+    <po-accordion-item p-label="Seção 2">
+      <div class="po-font-text">Conteúdo da segunda seção.</div>
+    </po-accordion-item>
+  </po-accordion>
+</po-container>
+
+<!-- ============================= STEPPER ============================= -->
+<po-container p-title="Stepper" class="po-md-12">
+  <po-stepper [p-steps]="steps"></po-stepper>
+</po-container>
+
+<!-- ============================= BREADCRUMB ============================= -->
+<po-container p-title="Breadcrumb" class="po-md-12">
+  <po-breadcrumb [p-items]="breadcrumbItems"></po-breadcrumb>
+</po-container>
+
+<!-- ============================= DISCLAIMER GROUP ============================= -->
+<po-container p-title="Disclaimer group" class="po-md-12">
+  <po-disclaimer-group p-title="Filtros aplicados" [p-disclaimers]="disclaimers"></po-disclaimer-group>
+</po-container>
+
+<!-- ============================= WIDGET ============================= -->
+<div class="po-row">
+  <po-widget class="po-md-6" p-title="Widget" [p-primary]="true">
+    <div class="po-font-text">Agrupador widget, afetado pelo border-radius do tema.</div>
+  </po-widget>
+  <po-widget class="po-md-6" p-title="Widget com ação">
+    <div class="po-font-text">Widget padrão.</div>
+    <po-button p-label="Ação" p-kind="tertiary"></po-button>
+  </po-widget>
+</div>
+
+<!-- ============================= SKELETON (LOADING) ============================= -->
+<po-container p-title="Skeleton (loading)" class="po-md-12">
+  <div class="po-row">
+    <po-skeleton class="po-md-6"></po-skeleton>
+    <po-skeleton class="po-md-6"></po-skeleton>
+  </div>
+</po-container>
+
+<!-- ============================= CHART (GAUGE) ============================= -->
+<po-container p-title="Chart (gauge)" class="po-md-12">
+  <po-chart [p-type]="chartGaugeType" [p-series]="gaugeSeries" [p-height]="200"></po-chart>
+</po-container>
+
+<!-- ============================= OVERLAYS (POPOVER / MODAL) ============================= -->
+<po-container p-title="Overlays" class="po-md-12">
+  <div class="po-row">
+    <div #popoverTarget class="po-md-3">
+      <po-button p-label="Abrir popover" (p-click)="openPopover(popover)"></po-button>
+    </div>
+    <po-button class="po-md-3" p-label="Abrir modal" (p-click)="openModal(modal)"></po-button>
+  </div>
+
+  <po-popover #popover [p-target]="popoverTarget" p-title="Popover">
+    <div class="po-font-text">Conteúdo do popover, com cantos arredondados pelo tema.</div>
+  </po-popover>
+
+  <po-modal
+    #modal
+    p-title="Modal"
+    [p-primary-action]="modalPrimaryAction"
+    [p-secondary-action]="modalSecondaryAction"
+  >
+    <div class="po-font-text">Conteúdo do modal, agrupador afetado pelo border-radius do tema.</div>
+  </po-modal>
+</po-container>

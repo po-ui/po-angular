@@ -1,0 +1,8 @@
+.appearance-popover-trigger {
+  display: inline-block;
+}
+
+.appearance-popover {
+  padding: var(--spacing-sm);
+  min-width: 260px;
+}

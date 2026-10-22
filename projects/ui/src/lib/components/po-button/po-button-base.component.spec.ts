@@ -47,7 +47,7 @@ describe('PoButtonBaseComponent', () => {
 
   it('should update property `p-kind` with valid values', () => {
     component.danger = false;
-    const validValues = ['primary', 'secondary', 'tertiary'];
+    const validValues = ['primary', 'secondary', 'tertiary', 'glow'];
 
     expectPropertiesValues(component, 'kind', validValues, validValues);
   });
@@ -68,6 +68,50 @@ describe('PoButtonBaseComponent', () => {
     component.kind = PoButtonKind.primary;
     component.danger = true;
     expect(component.danger).toBe(true);
+  });
+
+  it('should set `p-danger` with false if `p-kind` is glow', () => {
+    component.kind = PoButtonKind.glow;
+    component.danger = true;
+    expect(component.danger).toBe(false);
+  });
+
+  it('should set `p-danger` with false if `p-danger` is set before `p-kind` tertiary', () => {
+    component.danger = true;
+    component.kind = PoButtonKind.tertiary;
+    expect(component.danger).toBe(false);
+  });
+
+  it('should set `p-danger` with false if `p-danger` is set before `p-kind` glow', () => {
+    component.danger = true;
+    component.kind = PoButtonKind.glow;
+    expect(component.danger).toBe(false);
+  });
+
+  it('should restore `p-danger` when `p-kind` changes from glow to primary', () => {
+    component.kind = PoButtonKind.glow;
+    component.danger = true;
+    expect(component.danger).toBe(false);
+
+    component.kind = PoButtonKind.primary;
+    expect(component.danger).toBe(true);
+  });
+
+  describe('isGlow:', () => {
+    it('should return false by default', () => {
+      expect(component.isGlow()).toBe(false);
+    });
+
+    it('should return true if `p-kind` is glow', () => {
+      component.kind = PoButtonKind.glow;
+      expect(component.isGlow()).toBe(true);
+    });
+
+    it('should return false if `p-kind` changes from glow to another kind', () => {
+      component.kind = PoButtonKind.glow;
+      component.kind = PoButtonKind.primary;
+      expect(component.isGlow()).toBe(false);
+    });
   });
 
   describe('p-size', () => {

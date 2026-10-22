@@ -70,6 +70,13 @@
       "version": "22",
       "description": "Atualiza @po-ui/ng-components para v22",
       "factory": "./ng-update/v22/index"
+    },
+    "migration-v22-theme-deprecated": {
+      "version": "22",
+      "optional": true,
+      "recommended": false,
+      "description": "Retornar ao tema padrão anterior do PO UI (depreciado). A v22 traz uma nova experiência visual padrão e recomendamos utilizá-la. O tema anterior continua disponível como depreciado até sua remoção na v24",
+      "factory": "./ng-update/v22/theme-deprecated/index"
     }
   }
 }

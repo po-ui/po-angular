@@ -1,0 +1,48 @@
+<po-page-default>
+  <div class="po-row">
+    <po-button class="po-md-3" p-label="Reload" (p-click)="reload()" />
+    <app-appearance-popover class="po-md-3"></app-appearance-popover>
+  </div>
+  <div class="po-row">
+    <po-widget class="po-md-4" [p-drag]="widget" p-title="Arraste-me">
+      <div class="po-font-text">Este widget pode ser arrastado livremente. Segure o handle e mova-o.</div>
+    </po-widget>
+  </div>
+  <div class="po-row">
+    <po-radio-group
+      [(ngModel)]="theme"
+      name="theme"
+      p-label="Tema"
+      [p-options]="[
+        { label: 'EVO', value: 'default' },
+        { label: 'Depreciado', value: 'defaultdeprecated' }
+      ]"
+      (p-change)="onChangeThemePreferences()"
+    >
+    </po-radio-group>
+    <po-radio-group
+      [(ngModel)]="a11y"
+      name="a11y"
+      p-label="Nível de Acessibilidade"
+      [p-options]="[
+        { label: 'AA', value: 'AA' },
+        { label: 'AAA', value: 'AAA' }
+      ]"
+      (p-change)="onChangeThemePreferences()"
+    >
+    </po-radio-group>
+    <po-radio-group
+      [(ngModel)]="type"
+      name="type"
+      p-label="Tipo"
+      [p-options]="[
+        { label: 'Claro', value: 'light' },
+        { label: 'Escuro', value: 'dark' }
+      ]"
+      (p-change)="onChangeThemePreferences()"
+    >
+    </po-radio-group>
+  </div>
+
+  <app-theme-showcase></app-theme-showcase>
+</po-page-default>

@@ -7,6 +7,8 @@ import {
   Output,
   TemplateRef,
   input,
+  computed,
+  signal,
   ChangeDetectionStrategy
 } from '@angular/core';
 
@@ -15,6 +17,10 @@ import { convertToBoolean, getDefaultSizeFn, validateSizeFn } from '../../utils/
 import { PoButtonKind } from './enums/po-button-kind.enum';
 import { PoButtonSize } from './enums/po-button-size.enum';
 import { PoButtonType } from './enums/po-button-type.enum';
+
+// Estilos do botão que não suportam a propriedade `p-danger`.
+const PO_BUTTON_KINDS_WITHOUT_DANGER: ReadonlyArray<string> = [PoButtonKind.tertiary, PoButtonKind.glow];
+
 /**
  * @description
  *
@@ -78,6 +84,41 @@ import { PoButtonType } from './enums/po-button-type.enum';
  * | `--text-color-disabled`                  | Cor do texto no estado disabled                       | `var(--color-neutral-dark-70)`                    |
  * | `--color-disabled`                       | Cor principal no estado disabled                      | `var(--color-action-disabled)`                    |
  * | `--background-color-disabled`            | Cor de background no estado disabled                  | `var(--color-transparent)`                        |
+ * | **Glow** (`p-kind="glow"`)               |                                                       |                                                   |
+ * | `--color-glow`                           | Cor de background do botão                            | `var(--color-action-default)`                     |
+ * | `--text-color-glow`                      | Cor do texto                                          | `var(--color-neutral-light-00)`                   |
+ * | `--color-glow-hover-start`               | Cor inicial do gradiente no estado hover              | `var(--color-brand-01-base)`                      |
+ * | `--color-glow-hover-end`                 | Cor final do gradiente no estado hover                | `var(--color-brand-01-dark)`                      |
+ * | `--color-glow-highlight`                 | Cor do reflexo no estado hover                        | `var(--color-brand-01-light)`                     |
+ * | `--color-glow-pressed`                   | Cor de background no estado pressionado               | `var(--color-action-pressed)`                     |
+ * | `--color-glow-ring`                      | Cor do brilho que percorre a borda                    | `var(--color-neutral-light-00)`                   |
+ * | `--color-glow-inner`                     | Cor do brilho interno no estado hover                 | `var(--color-neutral-light-00)`                   |
+ * | `--color-glow-halo`                      | Cor do halo externo e da sombra no estado hover       | `var(--color-action-default)`                     |
+ * | `--border-width-glow`                    | Espessura do brilho que percorre a borda              | `var(--border-width-md)`                          |
+ * | `--size-glow-ring-dot`                   | Diâmetro de cada ponto do brilho da borda             | `var(--spacing-xl)`                               |
+ * | `--size-glow-halo-dot`                   | Diâmetro de cada ponto do halo externo                | `var(--spacing-2xl)`                              |
+ * | `--spacing-glow-path`                    | Distância entre a borda e o caminho do brilho         | `var(--border-width-sm)`                          |
+ * | `--blur-glow-halo`                       | Intensidade do desfoque do halo externo               | `var(--spacing-sm)`                               |
+ * | `--opacity-glow-halo`                    | Opacidade do halo externo                             | `0.3`                                             |
+ * | `--opacity-glow-halo-hover`              | Opacidade do halo externo no estado hover             | `0.5`                                             |
+ * | `--opacity-glow-inner`                   | Opacidade do brilho interno no estado hover           | `0.55`                                            |
+ * | `--duration-glow-lap`                    | Duração de uma volta completa do brilho               | `3200ms`                                          |
+ * | `--duration-glow-step`                   | Intervalo entre os pontos da cauda do brilho          | `30ms`                                            |
+ * | `--duration-glow-state`                  | Duração da transição entre estados                    | `var(--duration-extra-slow)`                      |
+ * | `--timing-glow`                          | Curva de aceleração da transição entre estados        | `var(--timing-exiting)`                           |
+ * | `--scale-glow-pressed`                   | Escala do botão no estado pressionado                 | `0.98`                                            |
+ * | `--glow-trail-start`                     | Ângulo inicial da cauda (apenas no fallback\*)        | `252deg`                                          |
+ * | `--spacing-glow-halo`                    | Expansão do halo externo (apenas no fallback\*)       | `var(--spacing-xxs)`                              |
+ *
+ * > \* O brilho percorre a borda com velocidade constante via `offset-path`. Em navegadores sem suporte a
+ * `offset-path` com formas básicas (Chrome < 116, Firefox < 122 e Safari < 18), é exibido um gradiente
+ * girando no centro do botão.
+ *
+ * > No estilo `glow`, a animação é interrompida quando o botão está desabilitado ou em carregamento,
+ * e também quando o sistema operacional do usuário solicita redução de movimento (`prefers-reduced-motion`).
+ *
+ * > No tema escuro, `--color-glow-ring` e `--color-glow-inner` usam `var(--color-neutral-dark-95)`, para que o brilho
+ * continue claro apesar da inversão da escala neutra.
  *
  */
 @Component({
@@ -139,13 +180,21 @@ export class PoButtonBaseComponent {
   /** Ação que será executada quando o usuário clicar sobre o `po-button`. */
   @Output('p-click') click = new EventEmitter<null>();
 
-  private _danger?: boolean = false;
   private _disabled?: boolean = false;
   private _loading?: boolean = false;
-  private _kind?: string = PoButtonKind.secondary;
   private _size?: string = undefined;
   private _initialSize?: string = undefined;
   protected hasSize?: boolean = false;
+
+  private readonly kindState = signal<string>(PoButtonKind.secondary);
+  private readonly dangerState = signal<boolean>(false);
+
+  /** @docsPrivate */
+  readonly isGlow = computed(() => this.kindState() === PoButtonKind.glow);
+
+  private readonly isDanger = computed(
+    () => this.dangerState() && !PO_BUTTON_KINDS_WITHOUT_DANGER.includes(this.kindState())
+  );
 
   /**
    * @optional
@@ -173,17 +222,17 @@ export class PoButtonBaseComponent {
    *
    * Deve ser usado em ações irreversíveis que o usuário precisa ter cuidado ao executá-la, como a exclusão de um registro.
    *
-   * > A propriedade `p-kind="tertiary"` será inativada ao utilizar esta propriedade.
+   * > A propriedade será inativada ao utilizar `p-kind="tertiary"` ou `p-kind="glow"`.
    */
 
   @HostBinding('attr.p-danger')
   @Input({ alias: 'p-danger', transform: convertToBoolean })
   set danger(value: boolean) {
-    this._danger = this.kind !== PoButtonKind.tertiary ? value : false;
+    this.dangerState.set(value);
   }
 
   get danger(): boolean {
-    return this._danger;
+    return this.isDanger();
   }
 
   /**
@@ -195,17 +244,21 @@ export class PoButtonBaseComponent {
    *  - `primary`: destaca o botão, sendo recomendado para ações principais.
    *  - `secondary`: estilo padrão, ideal para ações secundárias.
    *  - `tertiary`: exibe o botão sem preenchimento no fundo, indicado para ações opcionais.
+   *  - `glow`: exibe o botão em formato de pílula com um brilho animado percorrendo a borda, indicado para destacar
+   * uma chamada para ação. Deve ser usado com moderação, preferencialmente em apenas um botão por página.
+   *
+   * > O estilo `glow` é incompatível com a propriedade `p-danger`.
    *
    * @default `secondary`
    */
   @HostBinding('attr.p-kind')
   @Input('p-kind')
   set kind(value: string) {
-    this._kind = PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary;
+    this.kindState.set(PoButtonKind[value] ? PoButtonKind[value] : PoButtonKind.secondary);
   }
 
   get kind(): string {
-    return this._kind;
+    return this.kindState();
   }
 
   /**
