@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, QueryList, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Routes } from '@angular/router';
@@ -22,6 +22,7 @@ import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableBaseComponent } from './po-table-base.component';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
+import { PoTableHeaderTemplateDirective } from './po-table-header-template/po-table-header-template.directive';
 import { PoTableComponent } from './po-table.component';
 import { PoTableModule } from './po-table.module';
 import { PoTableService } from './services/po-table.service';
@@ -3355,6 +3356,56 @@ describe('PoTableComponent:', () => {
       const res = component.getTemplate(column);
 
       expect(res).toBeNull();
+    });
+
+    describe('getHeaderTemplate:', () => {
+      const createHeaderTemplate = (targetProperty?: string) =>
+        ({
+          targetProperty: () => targetProperty,
+          templateRef: { elementRef: new ElementRef(document.createElement('div')) }
+        }) as unknown as PoTableHeaderTemplateDirective;
+
+      let originalHeaderTemplates: PoTableComponent['tableHeaderTemplates'];
+
+      beforeEach(() => {
+        originalHeaderTemplates = component.tableHeaderTemplates;
+        component.tableHeaderTemplates = new QueryList<PoTableHeaderTemplateDirective>();
+      });
+
+      // Os templates simulados não podem ser renderizados pelo po-table real.
+      afterEach(() => {
+        component.tableHeaderTemplates = originalHeaderTemplates;
+      });
+
+      it('should return the template whose target property matches the column property', () => {
+        const generic = createHeaderTemplate();
+        const specific = createHeaderTemplate('status');
+
+        component.tableHeaderTemplates.reset([generic, specific]);
+
+        expect(component.getHeaderTemplate({ property: 'status' })).toBe(specific.templateRef);
+      });
+
+      it('should return the generic template when there is no specific template for the column', () => {
+        const generic = createHeaderTemplate();
+        const specific = createHeaderTemplate('status');
+
+        component.tableHeaderTemplates.reset([specific, generic]);
+
+        expect(component.getHeaderTemplate({ property: 'code' })).toBe(generic.templateRef);
+      });
+
+      it('should return null when no template applies to the column', () => {
+        component.tableHeaderTemplates.reset([createHeaderTemplate('status')]);
+
+        expect(component.getHeaderTemplate({ property: 'code' })).toBeNull();
+      });
+
+      it('should return null when there are no header templates', () => {
+        component.tableHeaderTemplates = undefined;
+
+        expect(component.getHeaderTemplate({ property: 'code' })).toBeNull();
+      });
     });
   });
 

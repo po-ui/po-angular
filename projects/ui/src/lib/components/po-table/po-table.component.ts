@@ -41,6 +41,10 @@ import { PoTableColumn } from './interfaces/po-table-column.interface';
 import { PoTableBaseComponent, QueryParamsType } from './po-table-base.component';
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
+import {
+  PoTableHeaderTemplateContext,
+  PoTableHeaderTemplateDirective
+} from './po-table-header-template/po-table-header-template.directive';
 import { PoTableRowTemplateDirective } from './po-table-row-template/po-table-row-template.directive';
 import { PoTableSubtitleColumn } from './po-table-subtitle-footer/po-table-subtitle-column.interface';
 import { PoTableService } from './services/po-table.service';
@@ -103,6 +107,11 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.html"> </file>
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.ts"> </file>
  * </example>
+ *
+ * <example name="po-table-header-template" title="PO Table - Header Template">
+ *  <file name="sample-po-table-header-template/sample-po-table-header-template.component.html"> </file>
+ *  <file name="sample-po-table-header-template/sample-po-table-header-template.component.ts"> </file>
+ * </example>
  */
 @Component({
   selector: 'po-table',
@@ -115,6 +124,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
 
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
+  @ContentChildren(PoTableHeaderTemplateDirective) tableHeaderTemplates: QueryList<PoTableHeaderTemplateDirective>;
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
@@ -880,6 +890,18 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
       );
       return null;
     }
+  }
+
+  /**
+   * Retorna o template de cabeçalho da coluna: prioriza o template com `p-property` igual à coluna e,
+   * na ausência dele, utiliza o template genérico (sem `p-property`).
+   */
+  public getHeaderTemplate(column: PoTableColumn): TemplateRef<PoTableHeaderTemplateContext> | null {
+    const templates = this.tableHeaderTemplates?.toArray() ?? [];
+    const specific = templates.find(template => template.targetProperty() === column.property);
+    const generic = templates.find(template => !template.targetProperty());
+
+    return (specific ?? generic)?.templateRef ?? null;
   }
 
   public getWidthColumnManager() {

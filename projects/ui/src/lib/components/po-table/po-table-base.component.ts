@@ -138,6 +138,9 @@ export const poTableLiteralsDefault = {
  * > As colunas podem ser customizadas através dos templates [`p-table-column-template`](/documentation/po-table-column-template)
  * e [`p-table-cell-template`](/documentation/po-table-cell-template).
  *
+ * > O cabeçalho das colunas pode receber conteúdo adicional, exibido abaixo do título, através do template
+ * [`p-table-header-template`](/documentation/po-table-header-template).
+ *
  * O componente permite gerenciar a exibição das colunas dinamicamente. Esta funcionalidade pode ser acessada através do ícone de engrenagem
  * no canto superior direito do cabeçalho da tabela.
  *
