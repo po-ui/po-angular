@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [22.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v22.0.0-next.0...v22.0.0-rc.0) (2026-10-28)
+
+### Features
+
+* **schematics:** detecta e preserva o nome da classe do App ([155530f](https://github.com/po-ui/po-angular/commit/155530fe7baa7db5fe958900c98582487979d72c))
+
 ## [22.0.0-next.0](https://github.com/po-ui/po-angular/compare/v21.33.0...v22.0.0-next.0) (2026-10-09)
 
 
