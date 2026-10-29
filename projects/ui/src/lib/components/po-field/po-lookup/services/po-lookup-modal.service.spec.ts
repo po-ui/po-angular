@@ -138,4 +138,33 @@ describe('PoLookupModalService:', () => {
 
     expect(poLookupModalService['componentRef'].instance.columns).toEqual(columns);
   });
+
+  it(`should update the columns using 'setInput' with the 'p-columns' alias and call 'detectChanges'`, () => {
+    const columns = [{ label: 'apelido', property: 'nickname' }];
+    params.service = lookupFilterService;
+
+    poLookupModalService.openModal(params);
+
+    const componentRef = poLookupModalService['componentRef'];
+    const setInputSpy = spyOn(componentRef, 'setInput').and.callThrough();
+    const detectChangesSpy = spyOn(componentRef.changeDetectorRef, 'detectChanges').and.callThrough();
+
+    poLookupModalService.setChangeColumns(columns);
+
+    expect(setInputSpy).toHaveBeenCalledWith('p-columns', columns);
+    expect(detectChangesSpy).toHaveBeenCalled();
+    expect(componentRef.instance.columns).toEqual(columns);
+  });
+
+  it(`should render the new columns in the OnPush modal immediately, without any user interaction`, () => {
+    const columns = [{ label: 'Apelido QA', property: 'nickname' }];
+    params.service = lookupFilterService;
+
+    poLookupModalService.openModal(params);
+    poLookupModalService.setChangeColumns(columns);
+
+    const headers = Array.from(document.querySelectorAll('po-lookup-modal th')).map(th => th.textContent.trim());
+
+    expect(headers).toContain('Apelido QA');
+  });
 });
