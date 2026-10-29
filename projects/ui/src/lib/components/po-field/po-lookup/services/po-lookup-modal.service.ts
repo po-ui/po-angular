@@ -106,7 +106,7 @@ export class PoLookupModalService {
 
   setChangeColumns(columns) {
     if (this.componentRef !== null) {
-      this.componentRef.instance.columns = columns;
+      this.componentRef.setInput('p-columns', columns);
       this.componentRef.changeDetectorRef.detectChanges();
     }
   }
