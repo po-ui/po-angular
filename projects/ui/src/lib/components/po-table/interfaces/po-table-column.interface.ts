@@ -277,6 +277,9 @@ export interface PoTableColumn {
    * - para colunas com 2 das propriedades (property, [p-draggable] e [p-sort]) : 96px
    * - para colunas com 3 propriedades (property, [p-draggable] e [p-sort]) : 144px
    *
+   * Colunas do `type: 'label'` com `width` definido respeitam o tamanho natural do componente `po-tag`
+   * (máximo de 240px), evitando truncamento do conteúdo. O `width` especificado funciona como
+   * largura mínima, mas a coluna pode expandir até o limite do `po-tag` se o texto precisar de mais espaço.
    */
   width?: string;
 
