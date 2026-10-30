@@ -1,0 +1,69 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 24px">
+  <!-- State: basic -->
+  <div data-testid="state-basic">
+    <po-combo name="basic" p-placeholder="Selecione uma opcao" [p-options]="options"></po-combo>
+  </div>
+
+  <!-- State: label -->
+  <div data-testid="state-label">
+    <po-combo name="label" p-label="Label do campo" p-placeholder="Campo com label" [p-options]="options"></po-combo>
+  </div>
+
+  <!-- State: label + helper -->
+  <div data-testid="state-label-helper">
+    <po-combo
+      name="label-helper"
+      p-label="Label do campo"
+      p-helper="Texto de ajuda do helper"
+      p-placeholder="Campo com label e helper"
+      [p-options]="options"
+    ></po-combo>
+  </div>
+
+  <!-- State: label + help-text -->
+  <div data-testid="state-label-help">
+    <po-combo
+      name="label-help"
+      p-label="Label do campo"
+      p-help="Texto de apoio do campo"
+      p-placeholder="Campo com label e help"
+      [p-options]="options"
+    ></po-combo>
+  </div>
+
+  <!-- State: disabled -->
+  <div data-testid="state-disabled">
+    <po-combo
+      name="disabled"
+      p-label="Campo desabilitado"
+      p-disabled
+      p-placeholder="Campo desabilitado"
+      [p-options]="options"
+    ></po-combo>
+  </div>
+
+  <!-- State: required -->
+  <div data-testid="state-required">
+    <po-combo
+      name="required"
+      p-label="Campo obrigatorio"
+      p-required
+      [p-show-required]="true"
+      p-placeholder="Campo obrigatorio"
+      [p-options]="options"
+    ></po-combo>
+  </div>
+
+  <!-- State: required + errorMessage -->
+  <div data-testid="state-required-error">
+    <po-combo
+      name="required-error"
+      p-label="Campo obrigatorio com erro"
+      p-required
+      [p-show-required]="true"
+      p-field-error-message="Este campo e obrigatorio"
+      p-placeholder="Campo obrigatorio com mensagem de erro"
+      [p-options]="options"
+    ></po-combo>
+  </div>
+</div>

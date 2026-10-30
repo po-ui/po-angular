@@ -181,3 +181,114 @@ jobs:
     - run: npm run build:storage:lite
     - run: npm run test:sync
     - run: npm run test:sync:schematics
+
+  test-visual:
+    name: Test visual regression
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 24
+
+    # Detecta o nome da branch atual
+    - name: Get branch name
+      id: branch
+      env:
+        HEAD_REF: ${{ github.head_ref }}
+        REF_NAME: ${{ github.ref_name }}
+        EVENT_NAME: ${{ github.event_name }}
+      run: |
+        if [ "$EVENT_NAME" = "pull_request" ]; then
+          BRANCH_NAME="$HEAD_REF"
+        else
+          BRANCH_NAME="$REF_NAME"
+        fi
+        echo "name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+        echo "Branch name: $BRANCH_NAME"
+
+    # Verifica se existe uma branch de mesmo nome no po-style
+    - name: Check for matching po-style branch
+      id: po_style
+      env:
+        BRANCH_NAME: ${{ steps.branch.outputs.name }}
+      run: |
+        ENCODED_BRANCH=$(echo "$BRANCH_NAME" | sed 's|/|%2F|g')
+        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+          "https://api.github.com/repos/po-ui/po-style/branches/$ENCODED_BRANCH")
+        if [ "$HTTP_STATUS" = "200" ]; then
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "Branch '$BRANCH_NAME' encontrada no po-style"
+        else
+          echo "found=false" >> $GITHUB_OUTPUT
+          echo "Branch '$BRANCH_NAME' nao encontrada no po-style (HTTP $HTTP_STATUS), usando @po-ui/style do npm"
+        fi
+
+    # Se encontrou a branch, clona po-style, builda e gera o tgz
+    - name: Build po-style from matching branch
+      if: steps.po_style.outputs.found == 'true'
+      env:
+        BRANCH_NAME: ${{ steps.branch.outputs.name }}
+      run: |
+        git clone --branch "$BRANCH_NAME" --depth 1 https://github.com/po-ui/po-style.git /tmp/po-style
+        cd /tmp/po-style
+        npm ci
+        npm run build
+        npm run pack:style
+        echo "TGZ gerado:"
+        ls -la dist/style/*.tgz
+
+    # Instala dependencias do po-angular
+    - run: npm i
+
+    # Se tiver o tgz do po-style, instala por cima da versao do npm
+    - name: Install po-style from tgz
+      if: steps.po_style.outputs.found == 'true'
+      run: |
+        TGZ_PATH=$(ls /tmp/po-style/dist/style/*.tgz)
+        echo "Instalando @po-ui/style a partir de: $TGZ_PATH"
+        npm install "$TGZ_PATH"
+
+    - run: npm run build:ui:lite
+    - run: npx playwright install --with-deps chromium
+
+    # Restaura baselines do cache (geradas em execucoes anteriores no CI)
+    - name: Restore visual regression baselines from cache
+      id: baselines-cache
+      uses: actions/cache@v4
+      with:
+        path: e2e/visual/__snapshots__
+        key: visual-baselines-${{ runner.os }}-${{ hashFiles('e2e/visual/**/*.visual.spec.ts', 'e2e/visual/**/*.component.html') }}
+        restore-keys: |
+          visual-baselines-${{ runner.os }}-
+
+    # Se nao encontrou baselines no cache, gera novas para o ambiente CI
+    - name: Generate baselines for CI environment
+      if: steps.baselines-cache.outputs.cache-hit != 'true'
+      run: npx playwright test --update-snapshots --reporter=list
+
+    # Executa os testes visuais comparando com as baselines
+    - name: Run visual regression tests
+      run: npx playwright test
+
+    # Disponibiliza o relatorio HTML do Playwright como artefato
+    - name: Upload visual regression report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: visual-regression-report
+        path: e2e/visual/playwright-report/
+        retention-days: 30
+
+    # Disponibiliza os resultados de teste (diffs, screenshots) como artefato
+    - name: Upload visual regression test results
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: visual-regression-test-results
+        path: e2e/visual/test-results/
+        retention-days: 30
