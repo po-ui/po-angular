@@ -1319,6 +1319,77 @@ describe('PoPageDynamicSearchComponent:', () => {
       expect(component.onChangeFilters).not.toHaveBeenCalled();
       expect(component.previousFilters).toEqual([]);
     });
+
+    it('should call `onChangeFilters` and update `previousFilters` when `filters` change asynchronously and differ from `previousFilters`', () => {
+      const filters = [{ property: 'status', label: 'Status', initValue: 'active' }];
+      const changes: SimpleChanges = {
+        filters: {
+          currentValue: filters,
+          previousValue: [],
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      spyOn(component, 'onChangeFilters');
+
+      component.filters = filters;
+      component.previousFilters = [];
+
+      component.ngOnChanges(changes);
+
+      expect(component.onChangeFilters).toHaveBeenCalledWith(filters);
+      expect(component.previousFilters).toEqual(filters);
+    });
+
+    it('should not call `onChangeFilters` when `filters` change but are equal to `previousFilters`', () => {
+      const filters = [{ property: 'status', label: 'Status', initValue: 'active' }];
+      const changes: SimpleChanges = {
+        filters: {
+          currentValue: filters,
+          previousValue: filters,
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      spyOn(component, 'onChangeFilters');
+
+      component.filters = filters;
+      component.previousFilters = [...filters];
+
+      component.ngOnChanges(changes);
+
+      expect(component.onChangeFilters).not.toHaveBeenCalled();
+    });
+
+    it('should not evaluate the `filters` change when `visibleFixedFilters` change already handled it', () => {
+      const changes: SimpleChanges = {
+        visibleFixedFilters: {
+          currentValue: true,
+          previousValue: false,
+          firstChange: false,
+          isFirstChange: () => false
+        },
+        filters: {
+          currentValue: [{ property: 'status', fixed: true }],
+          previousValue: [],
+          firstChange: false,
+          isFirstChange: () => false
+        }
+      };
+
+      spyOn(component, 'onChangeFilters');
+
+      component.filters = [{ property: 'status', fixed: true }];
+      component.previousFilters = [];
+
+      component.ngOnChanges(changes);
+
+      expect(component.onChangeFilters).toHaveBeenCalledTimes(1);
+      expect(component.onChangeFilters).toHaveBeenCalledWith(component.filters);
+      expect(component.previousFilters).toEqual(component.filters);
+    });
   });
 
   describe('Integration:', () => {
