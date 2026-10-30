@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoSkeletonBaseComponent } from './po-skeleton-base.component';
@@ -10,6 +10,7 @@ import { PoSkeletonVariant } from './enums/po-skeleton-variant.enum';
 @Component({
   selector: 'po-test-skeleton',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestSkeletonComponent extends PoSkeletonBaseComponent {}

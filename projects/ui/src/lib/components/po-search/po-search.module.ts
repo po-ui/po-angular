@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { PoCleanModule } from '../po-field';
+import { PoCleanModule } from '../po-field/po-clean/po-clean.module';
 import { PoIconModule } from '../po-icon';
 import { PoLoadingModule } from '../po-loading';
 import { PoSearchComponent } from './po-search.component';

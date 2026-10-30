@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoPageDynamicSearchLiterals, PoPageDynamicSearchFilters } from '@po-ui/ng-templates';
@@ -18,6 +18,7 @@ import { SamplePoPageDynamicSearchHiringProcessesService } from './sample-po-pag
   selector: 'sample-po-page-dynamic-search-hiring-processes',
   templateUrl: './sample-po-page-dynamic-search-hiring-processes.component.html',
   providers: [SamplePoPageDynamicSearchHiringProcessesService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageDynamicSearchHiringProcessesComponent implements OnInit {

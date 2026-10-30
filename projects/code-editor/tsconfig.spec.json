@@ -6,5 +6,8 @@
     "skipLibCheck": true
   },
   "files": ["src/test.ts"],
-  "include": ["**/*.spec.ts", "**/*.d.ts"]
+  "include": ["**/*.spec.ts", "**/*.d.ts"],
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  }
 }

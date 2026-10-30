@@ -7,12 +7,13 @@ import { expectPropertiesValues } from './../../../util-test/util-expect.spec';
 import { PoThemeA11yEnum } from '../../../services';
 import { PoCheckboxGroupOption } from './interfaces/po-checkbox-group-option.interface';
 import { PoCheckboxGroupBaseComponent } from './po-checkbox-group-base.component';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 @Component({
   selector: 'po-checkbox-group-base-host',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoCheckboxGroupBaseHostComponent extends PoCheckboxGroupBaseComponent {}

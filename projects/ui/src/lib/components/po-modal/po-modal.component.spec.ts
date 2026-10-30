@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, ViewChild } from '@angular/core';
+import { Component, DebugElement, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
@@ -25,6 +25,7 @@ import { PoModalFooterComponent } from '.';
       </form>
     </po-modal>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class ContentProjectionComponent {

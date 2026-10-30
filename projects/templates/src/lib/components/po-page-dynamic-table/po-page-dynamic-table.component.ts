@@ -1,4 +1,13 @@
-import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { EMPTY, Observable, Subscription, of } from 'rxjs';
@@ -17,12 +26,11 @@ import {
   poLocaleDefault
 } from '@po-ui/ng-components';
 
-import { convertToBoolean, getDefaultSizeFn, validateSizeFn, PoUtils as util } from '../../utils/util';
+import { convertToBoolean, getDefaultSizeFn, validateSizeFn, PoUtils as util, isExternalLink } from '../../utils/util';
 
 import { PoPageDynamicDetailComponent } from '../po-page-dynamic-detail/po-page-dynamic-detail.component';
 
 import { PoPageDynamicService } from '../../services/po-page-dynamic/po-page-dynamic.service';
-import { isExternalLink, removeDuplicateItemsWithArrayKey, PoUtils } from '../../utils/util';
 import { PoPageDynamicSearchLiterals } from '../po-page-dynamic-search/interfaces/po-page-dynamic-search-literals.interface';
 import { PoPageCustomizationService } from './../../services/po-page-customization/po-page-customization.service';
 import { PoPageDynamicOptionsSchema } from './../../services/po-page-customization/po-page-dynamic-options.interface';
@@ -160,6 +168,7 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
   selector: 'po-page-dynamic-table',
   templateUrl: './po-page-dynamic-table.component.html',
   providers: [PoPageDynamicService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent implements OnInit, OnDestroy {
@@ -869,9 +878,9 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       tap(response => {
         let newArray;
         if (fullParams.page === 1) {
-          newArray = removeDuplicateItemsWithArrayKey(response.items, response.items, this.keys);
+          newArray = util.removeDuplicateItemsWithArrayKey(response.items, response.items, this.keys);
         } else {
-          newArray = removeDuplicateItemsWithArrayKey(this.items, response.items, this.keys);
+          newArray = util.removeDuplicateItemsWithArrayKey(this.items, response.items, this.keys);
         }
         this.items = newArray ? [...newArray] : this.items;
         this.page = fullParams.page;
@@ -913,7 +922,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
     forceStopAutoRouter: boolean = false
   ) {
     if (isExternalLink(route.path)) {
-      return PoUtils.openExternalLink(route.path);
+      return util.openExternalLink(route.path);
     }
 
     this.router.navigate([route.url || route.path], { queryParams: route.params }).catch(() => {
@@ -1281,7 +1290,7 @@ export class PoPageDynamicTableComponent extends PoPageDynamicListBaseComponent 
       this.subscriptions.add(sendCustomActionSubscription);
     } else if (customAction.url) {
       if (isExternalLink(customAction.url)) {
-        PoUtils.openExternalLink(this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem));
+        util.openExternalLink(this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem));
       } else {
         this.navigateTo({
           path: this.createConcatenatedUrl(customAction.concatKeys, customAction.url, selectedItem)

@@ -462,6 +462,7 @@ describe('PoListBoxComponent', () => {
         component.openGroup(group, new MouseEvent('click'));
 
         expect(component.currentGroup).toBe(group);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(component.currentItems).toEqual(group.subItems as Array<PoDropdownAction>);
 
         setTimeout(() => {
@@ -497,6 +498,7 @@ describe('PoListBoxComponent', () => {
         component.openGroup(group1);
 
         expect(component.currentGroup).toEqual(group1);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(component.currentItems).toEqual(group1.subItems as Array<PoDropdownAction>);
         expect((component as any).navigationStack.length).toBe(1);
 
@@ -504,11 +506,13 @@ describe('PoListBoxComponent', () => {
         component.openGroup(group2);
 
         expect(component.currentGroup).toEqual(group2);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(component.currentItems).toEqual(group2.subItems as Array<PoDropdownAction>);
         expect((component as any).navigationStack.length).toBe(2);
 
         component.goBack(new KeyboardEvent('keydown', { key: 'Enter' }));
         expect(component.currentGroup).toEqual(group1);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(component.currentItems).toEqual(group1.subItems as Array<PoDropdownAction>);
         expect((component as any).navigationStack.length).toBe(1);
 

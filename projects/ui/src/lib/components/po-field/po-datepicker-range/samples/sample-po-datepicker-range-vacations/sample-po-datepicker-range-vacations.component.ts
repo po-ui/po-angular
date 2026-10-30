@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoDatepickerRange, PoModalAction, PoModalComponent, PoNotificationServi
 @Component({
   selector: 'sample-po-datepicker-range-vacations',
   templateUrl: './sample-po-datepicker-range-vacations.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDatepickerRangeVacationsComponent {

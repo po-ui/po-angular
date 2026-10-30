@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoCheckboxGroupOption, PoNotificationService, PoPopupAction, PoSelectOption } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoCheckboxGroupOption, PoNotificationService, PoPopupAction, PoSelectOp
   selector: 'sample-po-widget-labs',
   templateUrl: './sample-po-widget-labs.component.html',
   styleUrls: ['./sample-po-widget-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoWidgetLabsComponent implements OnInit {

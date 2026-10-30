@@ -1,4 +1,4 @@
-import { Component, input, Input, ViewChild } from '@angular/core';
+import { Component, input, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { PoPopoverComponent } from '../../po-popover';
 import { PoPopupComponent } from '../../po-popup';
 import { PoHeaderUser } from '../interfaces/po-header-user.interface';
@@ -21,6 +21,7 @@ export const poHeaderCustomerLiteralsDefault = {
 @Component({
   selector: 'po-header-customer',
   templateUrl: './po-header-customer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHeaderCustomerComponent {

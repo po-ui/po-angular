@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import {
@@ -12,6 +12,7 @@ import {
 @Component({
   selector: 'sample-po-toolbar-labs',
   templateUrl: './sample-po-toolbar-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoToolbarLabsComponent implements OnInit {

@@ -102,52 +102,80 @@ describe('PoHeaderComponent', () => {
     expect(component['currentWidth']).toBeDefined();
   });
 
-  it('should call detectChanges when receiveApplicationMenu emits', () => {
+  it('should update applicationMenu, updateMenu, combineItemsExternal and handleSmallSreen when receiveApplicationMenu emits a new id on small screen', fakeAsync(() => {
     spyOn(component['cd'], 'detectChanges');
+    spyOn(component, 'updateMenu');
+    spyOn(component, <any>'combineItemsExternal');
+    spyOn(component, 'handleSmallSreen');
     component.applicationMenu = {} as any;
     component.previousMenuComponentId = '1';
-    component.ngOnInit();
-
-    receiveApplicationMenu$.next({ id: '2' });
-
-    expect(component['cd'].detectChanges).toHaveBeenCalled();
-  });
-
-  it('should call detectChanges when receiveApplicationMenu emits and id is the same', () => {
-    spyOn(component['cd'], 'detectChanges');
-    component.applicationMenu = {} as any;
-    component.previousMenuComponentId = '2';
     Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
     component.ngOnInit();
 
-    receiveApplicationMenu$.next({ id: '2' });
+    const newMenu = { id: '2' } as any;
+    receiveApplicationMenu$.next(newMenu);
+    tick(100);
 
+    expect(component.applicationMenu).toBe(newMenu);
+    expect(component.updateMenu).toHaveBeenCalled();
+    expect(component['combineItemsExternal']).toHaveBeenCalled();
+    expect(component.handleSmallSreen).toHaveBeenCalled();
     expect(component['cd'].detectChanges).toHaveBeenCalled();
-  });
+  }));
 
-  it('should not call detectChanges when receiveApplicationMenu has the same id and notChangeContext is true', () => {
+  it('should not call handleSmallSreen when receiveApplicationMenu emits a new id on large screen', fakeAsync(() => {
+    spyOn(component['cd'], 'detectChanges');
+    spyOn(component, 'updateMenu');
+    spyOn(component, <any>'combineItemsExternal');
+    spyOn(component, 'handleSmallSreen');
+    component.applicationMenu = {} as any;
+    component.previousMenuComponentId = '1';
+    Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true, configurable: true });
+    component.ngOnInit();
+
+    receiveApplicationMenu$.next({ id: '2' } as any);
+    tick(100);
+
+    expect(component.updateMenu).toHaveBeenCalled();
+    expect(component['combineItemsExternal']).toHaveBeenCalled();
+    expect(component.handleSmallSreen).not.toHaveBeenCalled();
+    expect(component['cd'].detectChanges).toHaveBeenCalled();
+  }));
+
+  it('should set applicationMenu to undefined when receiveApplicationMenu emits the same id', fakeAsync(() => {
+    spyOn(component['cd'], 'detectChanges');
     spyOn(component, 'updateMenu');
     component.applicationMenu = {} as any;
+    component.previousMenuComponentId = '2';
+    component.ngOnInit();
+
+    receiveApplicationMenu$.next({ id: '2' } as any);
+    tick(100);
+
+    expect(component.applicationMenu).toBeUndefined();
+    expect(component.updateMenu).not.toHaveBeenCalled();
+    expect(component['cd'].detectChanges).toHaveBeenCalled();
+  }));
+
+  it('should return early and not change applicationMenu when notChangeContext is true and id differs', fakeAsync(() => {
+    spyOn(component, 'updateMenu');
+    spyOn(component, <any>'combineItemsExternal');
+    const currentMenu = {} as any;
+    component.applicationMenu = currentMenu;
     component.previousMenuComponentId = '2';
     component.notChangeContext = true;
     component.ngOnInit();
 
-    receiveApplicationMenu$.next({ id: '1' });
+    receiveApplicationMenu$.next({ id: '1' } as any);
+    tick(100);
 
+    // O callback executa o early return: o menu permanece o mesmo e nenhum
+    // recálculo de itens acontece. Não é assertado detectChanges porque outras
+    // subscriptions do ngOnInit (ex.: resize com startWith) também o disparam.
+    expect(component.applicationMenu).toBe(currentMenu);
     expect(component.updateMenu).not.toHaveBeenCalled();
-  });
-
-  it('should not call handleSmallSreen when receiveApplicationMenu emits', () => {
-    spyOn(component, 'updateMenu');
-    component.applicationMenu = {} as any;
-    component.previousMenuComponentId = '2';
-    Object.defineProperty(window, 'innerWidth', { value: 800, writable: true, configurable: true });
-    component.ngOnInit();
-
-    receiveApplicationMenu$.next({ id: '1' });
-
-    expect(component.updateMenu).not.toHaveBeenCalled();
-  });
+    expect(component['combineItemsExternal']).not.toHaveBeenCalled();
+  }));
 
   it('should call detectChanges and handleSmallSreen when receiveRemovedApplicationMenu emits', fakeAsync(() => {
     spyOn(component['cd'], 'detectChanges');
