@@ -7,11 +7,19 @@ import { RouterModule } from '@angular/router';
 import { PoModule } from '../../../ui/src/public-api';
 
 import { AppComponent } from './app.component';
-
+import { PoGuidedTourModule } from '@po-ui/ng-components';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [  
+    AppComponent,
+  ],
   bootstrap: [AppComponent],
-  imports: [BrowserModule, FormsModule, RouterModule.forRoot([], {}), PoModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    RouterModule.forRoot([], {}),
+    PoModule,
+    PoGuidedTourModule
+  ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class AppModule {}
