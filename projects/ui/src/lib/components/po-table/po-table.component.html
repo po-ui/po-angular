@@ -295,6 +295,7 @@
                 }
                 <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
               </div>
+              <ng-container *ngTemplateOutlet="headerTemplateArea; context: { $implicit: column }"> </ng-container>
             </th>
           }
         } @else {
@@ -328,6 +329,7 @@
               >
                 <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }"> </ng-container>
               </div>
+              <ng-container *ngTemplateOutlet="headerTemplateArea; context: { $implicit: column }"> </ng-container>
             </th>
           }
         }
@@ -658,6 +660,7 @@
                   <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }">
                   </ng-container>
                 </div>
+                <ng-container *ngTemplateOutlet="headerTemplateArea; context: { $implicit: column }"> </ng-container>
               </th>
             }
           } @else {
@@ -689,6 +692,7 @@
                   <ng-container *ngTemplateOutlet="contentHeaderTemplate; context: { $implicit: column }">
                   </ng-container>
                 </div>
+                <ng-container *ngTemplateOutlet="headerTemplateArea; context: { $implicit: column }"> </ng-container>
               </th>
             }
           }
@@ -938,6 +942,19 @@
     [p-checkboxValue]="row.$selected === null ? 'mixed' : row.$selected"
     [p-size]="componentsSize"
   ></po-checkbox>
+</ng-template>
+
+<ng-template #headerTemplateArea let-column>
+  @if (getHeaderTemplate(column); as headerTemplate) {
+    <div
+      class="po-table-header-template"
+      (click)="$event.stopPropagation()"
+      (mousedown)="$event.stopPropagation()"
+      (touchstart)="$event.stopPropagation()"
+    >
+      <ng-container *ngTemplateOutlet="headerTemplate; context: { $implicit: column }"></ng-container>
+    </div>
+  }
 </ng-template>
 
 <ng-template #contentHeaderTemplate let-column>
