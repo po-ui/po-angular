@@ -156,4 +156,23 @@ export interface PoChartSerie {
    * > Essa propriedade habilita a propriedade `p-data-label` por padrão, podendo ser desabilitada passando `[p-data-label]={ fixed: false }`.
    */
   stackGroupName?: string;
+
+  /**
+   * @optional
+   *
+   * @description
+   *
+   * Define explicitamente o padrão/textura aplicado à série, no intervalo de `0` a `7`,
+   * correspondendo respectivamente a: `0` linhas diagonais, `1` grid/xadrez, `2` pontos/círculos,
+   * `3` onda senoidal, `4` triângulos, `5` linhas horizontais, `6` linhas verticais e `7` zigue-zague.
+   *
+   * > Só tem efeito quando a propriedade `usePatterns` da interface `PoChartOptions` estiver como `true`
+   * e a série for de um tipo suportado (`Pie`, `Donut`, `Bar` ou `Column`) no renderizador `canvas`.
+   *
+   * > Quando não informado, o padrão é atribuído automaticamente conforme a ordem da série entre as séries de tipo suportado.
+   *
+   * Valores fora do intervalo `0` a `7` são normalizados por módulo 8 (por exemplo, `8` → `0`, `9` → `1`, `-1` → `7`).
+   * Valores nulos ou não inteiros são ignorados, aplicando-se a atribuição automática do padrão.
+   */
+  patternIndex?: number;
 }
