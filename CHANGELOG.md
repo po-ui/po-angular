@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [21.32.4](https://github.com/po-ui/po-angular/compare/v21.32.3...v21.32.4) (2026-11-03)
+
+
+### Bug Fixes
+
+* **datepicker:** permite selecionar qualquer ano entre 0000 e 9999 ([8c7b0d4](https://github.com/po-ui/po-angular/commit/8c7b0d41e9e44832cd553d54d6dc090b5a9090de))
+* **lookup:** atualiza colunas do modal aberto sem depender de interação ([1db6d03](https://github.com/po-ui/po-angular/commit/1db6d0380e311afc3a0a48cda83b14d53771f3da))
+* **lookup:** corrige busca múltipla para usar query param ([f954921](https://github.com/po-ui/po-angular/commit/f9549219bff9134b85fe911ff4314bfa4bd602cd))
+
 ### [21.32.3](https://github.com/po-ui/po-angular/compare/v21.32.2...v21.32.3) (2026-10-27)
 
 Compatibilidade com @totvs/thf-components@21.32.3
