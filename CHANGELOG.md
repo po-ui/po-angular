@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.26](https://github.com/po-ui/po-angular/compare/v19.39.25...v19.39.26) (2026-11-03)
+
+
+### Bug Fixes
+
+* **lookup:** atualiza colunas do modal aberto sem depender de interação ([6db30f9](https://github.com/po-ui/po-angular/commit/6db30f9313cce3546081dc4b67e78780b7eea645))
+* **lookup:** corrige busca múltipla para usar query param ([51bc2b0](https://github.com/po-ui/po-angular/commit/51bc2b044ec5d46f4f9a9c7fb22b13d2e7b788cc))
+
 ### [19.39.25](https://github.com/po-ui/po-angular/compare/v19.39.24...v19.39.25) (2026-10-27)
 
 Compatibilidade com @totvs/thf-components@19.39.25
