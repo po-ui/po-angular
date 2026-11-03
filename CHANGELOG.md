@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.36.0](https://github.com/po-ui/po-angular/compare/v21.35.0...v21.36.0) (2026-11-03)
+
+
+### Features
+
+* **icons:** atualiza AnimaliaIcons para v1.2.0 ([c1d5e4c](https://github.com/po-ui/po-angular/commit/c1d5e4c8c46d89c1f4a8f83036c3d523464819df))
+
+
+### Bug Fixes
+
+* **datepicker:** permite selecionar qualquer ano entre 0000 e 9999 ([470e4ff](https://github.com/po-ui/po-angular/commit/470e4ff8e69e6f1a819d4c49965c9d993689f963))
+* **lookup:** atualiza colunas do modal aberto sem depender de interação ([ee84a4c](https://github.com/po-ui/po-angular/commit/ee84a4c4bd7e933e05049ea3cae4dd418b287a1d))
+* **lookup:** corrige busca múltipla para usar query param ([34350f1](https://github.com/po-ui/po-angular/commit/34350f16ea311a5c1ad6a330f57260f2a7c8c4e4))
+
 ### [21.35.0](https://github.com/po-ui/po-angular/compare/v21.34.1...v21.35.0) (2026-10-27)
 
 Compatibilidade com @totvs/thf-components@21.35.0
