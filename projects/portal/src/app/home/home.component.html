@@ -33,40 +33,44 @@
           >
           </po-button>
         </div>
-        <p class="po-mt-1 po-mt-sm-4 po-text-color-neutral-dark-60">Últimos componentes homologados.</p>
-        <div class="box-widget">
+        <p class="po-mt-1 po-mt-sm-4 po-text-color-neutral-dark-60">
+          Conheça os componentes mais recentes, prontos para deixar suas aplicações mais rápidas, inteligentes e
+          agradáveis de usar.
+        </p>
+        <div class="box-widget-new po-row">
           <po-widget
-            class="app-home-widget-components po-md-4 home-widget-components-left"
+            class="app-home-widget-components po-lg-4 po-md-4 home-widget-components-left"
             p-no-shadow
-            p-height="220"
-            p-primary-label="Inputs"
-            (p-primary-action)="openInternalLink('/documentation/po-input')"
+            p-height="430"
+            p-primary-label="Visualização em Lista"
+            (p-primary-action)="openInternalLink('/documentation/po-list-view')"
           >
             <div class="home-widget-components-container">
-              <div class="home-widget-components-content">
-                <po-input p-placeholder="Placeholder"></po-input>
-                <po-input></po-input>
+              <div class="home-widget-components-content home-widget-components-list">
+                <po-list-view
+                  p-tag-position="top"
+                  p-avatar-size="md"
+                  [p-select]="false"
+                  [p-field-properties]="notificationFieldProperties"
+                  [p-items]="notificationList"
+                  [p-literals]="listViewLiterals"
+                  (p-show-more)="showMore()"
+                >
+                </po-list-view>
               </div>
             </div>
           </po-widget>
 
           <po-widget
-            class="app-home-widget-components po-md-4 po-md-4 home-widget-components-medium"
+            class="app-home-widget-components po-md-4 home-widget-components-medium"
             p-no-shadow
-            p-height="220"
-            p-primary-label="Tabelas"
-            (p-primary-action)="openInternalLink('/documentation/po-table')"
+            p-height="430"
+            p-primary-label="Visualização em Árvore"
+            (p-primary-action)="openInternalLink('/documentation/po-tree-view')"
           >
             <div class="home-widget-components-container">
               <div class="home-widget-components-content">
-                <po-table
-                  p-hide-columns-manager
-                  p-checkbox
-                  p-container
-                  p-no-shadow
-                  [p-items]="[{ Content: 'content', content: 'content' }]"
-                >
-                </po-table>
+                <po-tree-view [p-items]="folderItems"></po-tree-view>
               </div>
             </div>
           </po-widget>
@@ -74,16 +78,16 @@
           <po-widget
             class="app-home-widget-components po-md-4 home-widget-components-right po-mb-sm-3"
             p-no-shadow
-            p-height="220"
-            p-primary-label="Botões"
-            (p-primary-action)="openInternalLink('/documentation/po-button')"
+            p-height="430"
+            p-primary-label="Data e hora"
+            (p-primary-action)="openInternalLink('/documentation/po-datetimepicker')"
+            p-secondary-label="Horário"
+            (p-secondary-action)="openInternalLink('/documentation/po-timepicker')"
           >
             <div class="home-widget-components-container">
-              <div class="home-widget-components-content">
-                <p class="po-mb-2">
-                  <po-button p-kind="primary" p-label="Primário"></po-button>
-                </p>
-                <p><po-button p-label="Default" p-size="large"></po-button></p>
+              <div class="home-widget-components-content home-widget-components-datetime">
+                <po-datetimepicker name="datetimepicker" p-label="Data e hora"></po-datetimepicker>
+                <po-timepicker name="timepicker" p-label="Horário"></po-timepicker>
               </div>
             </div>
           </po-widget>
