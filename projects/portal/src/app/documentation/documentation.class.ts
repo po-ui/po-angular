@@ -5,4 +5,14 @@ export class Documentation {
   type: string;
   title: string;
   path?: string;
+
+  // Indica se o componente possui exemplos (aba "Exemplos"). Vem do api-list.json.
+  hasSamples?: boolean;
+
+  // Campos derivados montados em DocumentationListComponent para os cards.
+  description?: string;
+  previewText?: string;
+  preview?: string;
+  tagLabel?: string;
+  tagType?: string;
 }

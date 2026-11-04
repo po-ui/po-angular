@@ -1,0 +1,159 @@
+.documentation-list-viewport {
+  display: block;
+  width: 100%;
+  /* Sem virtualizacao: todos os itens renderizam de uma vez e a pagina cresce
+     com scroll natural (teste de performance). */
+}
+
+/* Cada linha: 3 cards lado a lado. Altura = p-height do card (320px). */
+.documentation-list-row {
+  display: flex;
+  gap: 16px;
+  height: 320px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  padding: 0 8px;
+}
+
+/* Item do grid real: a largura vem das classes po-sm/md/lg do grid system;
+   aqui só o espaçamento vertical entre as linhas. */
+.documentation-list-item {
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+/* Container padrão dos samples (classe global docs-sample-container).
+   Aqui dentro do card limitamos a altura para não estourar os 320px fixos. */
+.docs-sample-container {
+  margin: 0;
+  max-height: 180px;
+  overflow: auto;
+}
+
+/* Área interna onde o exemplo é renderizado pela diretiva. */
+.documentation-list-item-preview {
+  width: 100%;
+}
+
+/* Alternador de modo de visualização (grid / lista). */
+.documentation-list-view-switch {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+/* Container do conteúdo. */
+.documentation-list-content {
+  position: relative;
+  min-height: 200px;
+}
+
+/* ---- Skeleton: modo grade ---- */
+.documentation-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  flex: 1 1 calc((100% - 32px) / 3);
+  min-width: 0;
+  max-width: calc((100% - 32px) / 3);
+  height: 100%;
+  padding: 16px;
+  background: var(--color-neutral-light-00);
+  border: var(--border-width-sm, 1px) solid var(--color-neutral-light-20, #dadada);
+  border-radius: var(--border-radius-md, 8px);
+}
+
+.documentation-skeleton-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.documentation-skeleton-card__footer {
+  display: flex;
+  margin-top: auto;
+}
+
+/* Cada ação ocupa metade do footer (50/50), com o placeholder centralizado
+   na sua metade — replicando o layout dos botões do po-widget. */
+.documentation-skeleton-card__action {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+/* ---- Skeleton: modo lista ---- */
+/* Lista de itens com gap de 1rem (--spacing-sm) e padding de 0.5rem
+   (--spacing-xs) em volta, como o container do po-list-view. */
+.documentation-skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 1rem);
+  padding: var(--spacing-xs, 0.5rem);
+}
+
+/* Cada item replica o po-widget do po-list-view: 159px no total, dividido em
+   item-row (96px) + detail-button (60px + border-top de 1px). */
+.documentation-skeleton-list-item {
+  box-sizing: border-box;
+  background: var(--color-neutral-light-00);
+  border: var(--border-width-sm, 1px) solid var(--color-neutral-light-20, #dadada);
+  border-radius: var(--border-radius-md, 8px);
+  overflow: hidden;
+}
+
+/* item-row: info (título + subtítulo) à esquerda, tag + opções à direita. */
+.documentation-skeleton-list-item__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 96px;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+.documentation-skeleton-list-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.documentation-skeleton-list-item__row-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* detail-button: 60px, border-top, botão centralizado. */
+.documentation-skeleton-list-item__detail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  border-top: var(--border-width-sm, 1px) solid var(--color-neutral-light-20, #dadada);
+}
+
+/* Placeholder (@defer) exibido na área de preview enquanto o componente carrega. */
+.documentation-preview-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+/* Estado vazio do grid (sem resultados na pesquisa). */
+.documentation-list-empty {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-lg, 2rem);
+  font-size: 14px;
+  color: var(--color-neutral-dark-80);
+  font-family: var(--font-family-bold);
+}

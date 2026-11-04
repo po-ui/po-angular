@@ -118,7 +118,7 @@
             "open": true,
             "host": "0.0.0.0",
             "buildTarget": "app:build:es5",
-            "disableHostCheck": true
+            "allowedHosts": true
           },
           "configurations": {
             "production": {

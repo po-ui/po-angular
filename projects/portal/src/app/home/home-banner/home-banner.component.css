@@ -1,0 +1,32 @@
+.home-banner-content {
+  padding-top: 4.5rem;
+  margin-bottom: 72px;
+}
+
+.title {
+  color: var(--color-neutral-dark-80);
+  font-size: 50px;
+  margin: 0px;
+  padding-top: 100px;
+}
+
+.library {
+  color: var(--color-neutral-dark-70);
+  font-size: 34px;
+}
+
+.star {
+  padding-top: 28px;
+  display: block;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 46px;
+  }
+
+  .library {
+    font-size: 20px;
+  }
+}

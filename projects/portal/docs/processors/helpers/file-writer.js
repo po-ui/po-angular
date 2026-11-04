@@ -229,10 +229,12 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
     this.sub = this.route.queryParams.subscribe(params => {
       const view = params['view'];
 
-      // Defines active tab
-      this.activeTab = view || 'doc';
-
       this.hidePoWebSample = this.samplesLength === 0;
+
+      // Defines active tab: prioriza "Exemplos" (web) quando houver exemplos;
+      // caso contrário, cai para "Documentação" (doc). Quando não há exemplos,
+      // ignora o view=web da URL para não deixar a tela sem aba ativa.
+      this.activeTab = this.hidePoWebSample ? 'doc' : view || 'web';
     });
   }
 
@@ -329,13 +331,15 @@ export class Doc{{component}}Module { }
     const htmlSource = `
 <po-page-default p-title="{{title}}" [p-actions]="actions">
   <po-tabs p-size="1">
-    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
-      <sample-{{docName}}-doc></sample-{{docName}}-doc>
-    </po-tab>
-    <po-tab p-label="Exemplos" [p-hide]="hidePoWebSample" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
+    @if (!hidePoWebSample) {
+    <po-tab p-label="Exemplos" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
     {{#each samples}}
       <sample-{{name}}-view></sample-{{name}}-view>
     {{/each}}
+    </po-tab>
+    }
+    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
+      <sample-{{docName}}-doc></sample-{{docName}}-doc>
     </po-tab>
   </po-tabs>
 </po-page-default>

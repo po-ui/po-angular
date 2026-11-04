@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   HostListener,
   OnInit,
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     protected versionService: VersionService,
     protected poTheme: PoThemeService,
-    public router: Router
+    public router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.initTheme();
   }
@@ -129,6 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.iconActions = this.buildIconActions();
+    this.cdr.detectChanges();
   }
 
   private buildIconActions(): Array<PoHeaderActionTool> {
