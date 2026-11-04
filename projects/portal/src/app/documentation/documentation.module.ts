@@ -8,6 +8,7 @@ import { DocumentationRoutingModule } from './documentation-routing.module';
 import { DocumentationComponent } from './documentation.component';
 import { DocumentationService } from './documentation.service';
 import { DocumentationListComponent } from './documentation-list.component';
+import { PreviewSampleHostDirective } from './documentation-preview/preview-sample-host.directive';
 import { IaToolsLlmsComponent } from './ia-tools-llms/ia-tools-llms.component';
 import { IaToolsMcpComponent } from './ia-tools-mcp/ia-tools-mcp.component';
 
@@ -22,7 +23,13 @@ import { IaToolsMcpComponent } from './ia-tools-mcp/ia-tools-mcp.component';
     }),
     DocumentationRoutingModule
   ],
-  declarations: [DocumentationComponent, DocumentationListComponent, IaToolsLlmsComponent, IaToolsMcpComponent],
+  declarations: [
+    DocumentationComponent,
+    DocumentationListComponent,
+    PreviewSampleHostDirective,
+    IaToolsLlmsComponent,
+    IaToolsMcpComponent
+  ],
   exports: [],
   providers: [DocumentationService]
 })

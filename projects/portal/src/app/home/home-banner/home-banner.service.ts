@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class HomeColorfulService {
+export class HomeBannerService {
   private url = 'https://api.github.com/repos/po-ui/po-angular';
 
   constructor(private http: HttpClient) {}
