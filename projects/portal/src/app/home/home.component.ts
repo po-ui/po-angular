@@ -31,8 +31,8 @@ export class HomeComponent {
       avatar: { icon: 'an an-check-circle', color: '#ffffff', backgroundColor: '#0c9b4b' }
     },
     {
-      title: 'Nova versão TOTVS 2.1',
-      content: 'Atualize seu sistema para a versão mais recente',
+      title: 'Nova versão 22',
+      content: 'Atualize seu projeto para a versão mais recente',
       tag: 'Novidade',
       tagType: 'neutral',
       avatar: { icon: 'an an-arrow-circle-up', color: '#ffffff', backgroundColor: '#000000' }
