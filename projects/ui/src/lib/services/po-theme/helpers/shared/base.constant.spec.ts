@@ -44,6 +44,12 @@ describe('poThemeSharedBase: ', () => {
           'border-radius': 'var(--border-radius)'
         });
       });
+
+      it('should define light-05 background for po-container', () => {
+        expect(poThemeSharedBase.perComponent['po-container']).toEqual({
+          '--background': 'var(--color-neutral-light-05)'
+        });
+      });
     });
 
     describe('SKELETON:', () => {

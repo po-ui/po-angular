@@ -193,10 +193,6 @@ const poThemeDefaultDarkValues = {
         'outline-style': 'solid;',
         'outline-offset': '2px;'
       },
-    // background container
-    'po-container': {
-      '--background': 'var(--color-neutral-light-00);'
-    },
     // Background input disabled
     'div.po-lookup-filter-content input.po-input, input.po-input, po-datepicker, po-datepicker-range, po-decimal, po-email, po-input, po-login, po-lookup, po-number, po-password, po-url, po-combo, po-search, po-select, po-multiselect, po-timepicker':
       {

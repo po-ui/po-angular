@@ -106,6 +106,9 @@ export const poThemeSharedBase = {
     '.po-user-guide-popover': {
       '--button-border-radius': 'var(--border-radius-lg)'
     },
+    'po-container': {
+      '--background': 'var(--color-neutral-light-05)'
+    },
   },
   onRoot: {
     '--color-page-background-color-page': 'var(--color-neutral-light-05)'
