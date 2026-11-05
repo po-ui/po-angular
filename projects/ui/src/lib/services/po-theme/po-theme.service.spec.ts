@@ -543,6 +543,69 @@ describe('PoThemeService:', () => {
         expect(setDefaultBaseStyleSpy).toHaveBeenCalledWith(true);
       });
 
+      describe('without an active theme (static CSS token `--po-theme-name`):', () => {
+        let styleElement: HTMLStyleElement;
+
+        const setStaticThemeName = (name: string) => {
+          styleElement = document.createElement('style');
+          styleElement.textContent = `:root { --po-theme-name: ${name}; }`;
+          document.head.appendChild(styleElement);
+        };
+
+        afterEach(() => styleElement?.remove());
+
+        it('should apply the deprecated base when the static CSS declares `defaultdeprecated`', () => {
+          setStaticThemeName('defaultdeprecated');
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(deprecatedSpy).toHaveBeenCalled();
+          expect(defaultSpy).not.toHaveBeenCalled();
+        });
+
+        it('should apply the default base when the static CSS declares `default`', () => {
+          setStaticThemeName('default');
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(defaultSpy).toHaveBeenCalledWith(true);
+          expect(deprecatedSpy).not.toHaveBeenCalled();
+        });
+
+        it('should apply the default base when the static CSS does not declare the token', () => {
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(defaultSpy).toHaveBeenCalledWith(true);
+        });
+
+        it('should ignore the static CSS token when there is an active theme', () => {
+          setStaticThemeName('defaultdeprecated');
+          spyOn(service, 'getThemeActive').and.returnValue({ name: 'default', type: {} });
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(defaultSpy).toHaveBeenCalled();
+          expect(deprecatedSpy).not.toHaveBeenCalled();
+        });
+
+        it('getStaticThemeName: should return an empty string when there is no window', () => {
+          spyOnProperty(document, 'defaultView').and.returnValue(null);
+
+          expect((service as any).getStaticThemeName()).toBe('');
+        });
+      });
+
       it('setTheme: should not reset the base style for a custom theme that does not inherit the default style', () => {
         const resetBaseThemeSpy = spyOn(service, 'resetBaseTheme');
 

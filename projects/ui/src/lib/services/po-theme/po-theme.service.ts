@@ -770,7 +770,7 @@ export class PoThemeService {
 
   private setDefaultBaseStyleForCurrentTheme() {
     const themeActive = this.getThemeActive();
-    const currentThemeName = this.normalizeThemeName(themeActive?.name ?? '');
+    const currentThemeName = themeActive ? this.normalizeThemeName(themeActive.name ?? '') : this.getStaticThemeName();
     const normalizedDeprecatedThemeName = this.normalizeThemeName(poThemeDefaultDeprecated.name);
 
     if (currentThemeName === normalizedDeprecatedThemeName) {
@@ -778,6 +778,24 @@ export class PoThemeService {
     } else {
       this.setDefaultBaseStyle(this.inheritsDefaultStyle(themeActive));
     }
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Retorna o nome do tema declarado pelo CSS estático do `@po-ui/style` carregado na aplicação, lido do token
+   * `--po-theme-name`. É usado quando não há tema ativo (nenhuma chamada a `setTheme` e nada salvo no
+   * `localStorage`), para que a base de estilos corresponda ao CSS que a aplicação carrega.
+   *
+   * Retorna string vazia quando o token não está disponível (ex.: CSS sem o token ou ambiente sem `window`).
+   */
+  private getStaticThemeName(): string {
+    const view = this.document.defaultView;
+    if (!view?.getComputedStyle) {
+      return '';
+    }
+
+    return view.getComputedStyle(this.document.documentElement).getPropertyValue('--po-theme-name').trim();
   }
 
   /**
