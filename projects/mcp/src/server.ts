@@ -198,8 +198,9 @@ export function createServer(): McpServer {
     'list_components',
     {
       description:
-        'Lista todos os componentes, diretivas, serviços, interfaces e enums do PO UI com descrições resumidas. ' +
-        'Use para descobrir quais APIs existem antes de buscar detalhes.',
+        'Lista todos os componentes, diretivas, serviços, interfaces, enums e guias do PO UI com descrições resumidas e slugs. ' +
+        'Use quando não souber o slug exato de um componente ou o nome de um guia. ' +
+        'Com o slug em mãos, use get_component_docs, get_component_examples ou get_guide.',
       inputSchema: {
         section: z
           .enum(['components', 'services', 'interfaces', 'enums', 'guides', 'all'])
@@ -285,7 +286,8 @@ export function createServer(): McpServer {
     {
       description:
         'Retorna a documentação completa em Markdown para um componente, serviço, interface ou enum do PO UI. ' +
-        'Inclui descrição, tabelas de inputs/outputs/propriedades, tipos e exemplos de uso.',
+        'Inclui descrição, tabelas de inputs/outputs/propriedades, tipos e exemplos de uso. ' +
+        'Prefira esta tool a search_docs sempre que o componente já for conhecido ou citado pelo usuário (ex: po-button, po-table).',
       inputSchema: {
         slug: z
           .string()
@@ -366,7 +368,8 @@ export function createServer(): McpServer {
     {
       description:
         'Retorna exemplos oficiais de um componente PO UI diretamente do repositório. ' +
-        'Inclui os arquivos TypeScript, HTML e estilos necessários para compreender cada exemplo.',
+        'Inclui os arquivos TypeScript, HTML e estilos necessários para compreender cada exemplo. ' +
+        'Use quando o usuário pedir código de exemplo, uso prático ou implementação de um componente conhecido.',
       inputSchema: {
         slug: z.string().describe('Slug do componente. Exemplos: "po-button", "po-table" ou "PoButtonComponent".'),
         example: z
@@ -489,8 +492,10 @@ export function createServer(): McpServer {
     'search_docs',
     {
       description:
-        'Busca texto em toda a documentação do PO UI. Útil para encontrar componentes que suportem ' +
-        'uma propriedade específica, um comportamento ou um padrão de uso.',
+        'Busca texto em toda a documentação do PO UI. Use apenas quando o componente NÃO for conhecido: ' +
+        'para descobrir qual componente suporta uma propriedade, um comportamento ou um padrão de uso. ' +
+        'Se o componente ou guia já for conhecido, use get_component_docs, get_component_examples ou get_guide. ' +
+        'Após a busca, aprofunde nos slugs retornados com get_component_docs.',
       inputSchema: {
         query: z
           .string()
@@ -544,9 +549,16 @@ export function createServer(): McpServer {
         };
       }
 
+      const nextStep = [
+        'Próximo passo: para detalhes completos, use get_component_docs com um destes slugs; ' +
+          'para código de exemplo, use get_component_examples:',
+        ...Array.from(new Set(structuredResults.map(r => r.slug))).map(slug => `- ${slug}`)
+      ].join('\n');
+
       const output = [
         `Encontrados ${results.length} resultado(s) para "${query}":\n`,
-        ...results.map((r, i) => `### Resultado ${i + 1}: ${r.componentName}\n\`\`\`\n${r.context}\n\`\`\``)
+        ...results.map((r, i) => `### Resultado ${i + 1}: ${r.componentName}\n\`\`\`\n${r.context}\n\`\`\``),
+        nextStep
       ].join('\n\n');
 
       return {
@@ -561,8 +573,10 @@ export function createServer(): McpServer {
     'get_guide',
     {
       description:
-        'Retorna o conteúdo completo de um guia de documentação do PO UI (ex: getting-started, schematics, theme-service). ' +
-        'Use list_components com section="guides" para ver os guias disponíveis.',
+        'Retorna o conteúdo completo de um guia de documentação do PO UI (ex: getting-started, schematics, theme-service, ' +
+        'accessibility, browser-support). Use para temas transversais (instalação, temas, acessibilidade, layout). ' +
+        'O nome deve ser exato: se não souber, chame list_components com section="guides" antes. ' +
+        'Se o guia não existir, o erro lista os guias disponíveis.',
       inputSchema: {
         guide: z
           .string()

@@ -220,6 +220,23 @@ Exemplo:
 { "guide": "getting-started" }
 ```
 
+Guias de layout disponíveis:
+
+| Guia | Conteúdo |
+| --- | --- |
+| `grid-system` | Grid System do PO UI: divisão da tela em 12 colunas com `po-row` e as classes de coluna responsivas. |
+| `spacing` | Classes utilitárias de espaçamento (`margin` e `padding`) entre elementos, de 0.5rem a 2.5rem. |
+
+Exemplos:
+
+```json
+{ "guide": "grid-system" }
+```
+
+```json
+{ "guide": "spacing" }
+```
+
 ## Exemplos de prompts
 
 - “Quais componentes do PO UI permitem upload de arquivos?”
@@ -229,6 +246,10 @@ Exemplo:
 - “Liste os guias disponíveis e traga o guia de schematics.”
 - “Mostre exemplos oficiais do `po-table`.”
 - “Quais são as boas práticas de customização de tema do PO UI?”
+- “Como usar o grid system do PO UI para dividir a tela em colunas responsivas?”
+- “Traga o guia `grid-system` e monte um layout com três colunas iguais.”
+- “Como aplicar margem e padding entre elementos com as classes de espaçamento do PO UI?”
+- “Mostre o guia `spacing` e ajuste o espaçamento entre os `po-widget` desta tela.”
 
 ## Fontes de dados
 
