@@ -42,6 +42,17 @@ export const poThemeSharedBase = {
       'border-radius': 'calc(var(--target-size-aa) / 2)'
     },
 
+    'po-toaster': {
+      '--border-radius': 'calc(var(--target-size-aaa) / 2)'
+    },
+    'po-toaster[p-size-actions="small"]': {
+      '--border-radius': 'calc(var(--target-size-aa) / 2)'
+    },
+
+    '.po-tooltip': {
+      'border-radius': 'calc(var(--target-size-aaa) / 2)'
+    },
+
     'po-upload': {
       '--border-radius-content': 'var(--border-radius-xl)'
     },
