@@ -22,6 +22,33 @@ const { unescapeHtml, stripHtml, getFirstSentence, normalizeDescription } = requ
 const PORTAL_URL = 'https://po-ui.io';
 const PORTAL_SRC = path.resolve(__dirname, '../../src');
 const DOCS_OUTPUT_DIR = path.resolve(PORTAL_SRC, 'llms-generated');
+const GUIDES_DIR = path.resolve(__dirname, '../../../../docs/guides');
+
+/**
+ * Guias de documentação expostos no índice (llms.txt) e no conteúdo completo
+ * (llms-full.txt). O `file` deve corresponder ao nome do arquivo em `docs/guides`,
+ * que também é o slug usado pela ferramenta `get_guide` do MCP.
+ */
+const GUIDES = [
+  {
+    slug: 'getting-started',
+    file: 'getting-started.md',
+    title: 'Instalação e configuração',
+    description: 'Como instalar e configurar o PO UI em um projeto Angular',
+  },
+  {
+    slug: 'grid-system',
+    file: 'grid-system.md',
+    title: 'Grid System',
+    description: 'Sistema de grid responsivo de 12 colunas com classes po-sm/md/lg/xl, offsets e breakpoints',
+  },
+  {
+    slug: 'spacing',
+    file: 'spacing.md',
+    title: 'Espaçamento',
+    description: 'Classes utilitárias de margin e padding (po-m/po-p) por lado e tamanho de tela, com dimensões em REM',
+  },
+];
 
 module.exports = function llmsGenerator() {
   return {
@@ -331,9 +358,9 @@ function generateLlmsTxt({ components, services, interfaces, enums }) {
 
   lines.push('## Guias');
   lines.push('');
-  lines.push(`- [Instalação e configuração](${PORTAL_URL}/guides/getting-started): Como instalar e configurar o PO UI em um projeto Angular`);
-  lines.push(`- [Personalização de tema com tokens CSS](${PORTAL_URL}/guides/theme-customization): Como customizar cores, espaçamentos e estilos via tokens CSS`);
-  lines.push(`- [Acessibilidade](${PORTAL_URL}/guides/accessibility): Diretrizes de acessibilidade WCAG aplicadas nos componentes`);
+  GUIDES.forEach(guide => {
+    lines.push(`- [${guide.title}](${PORTAL_URL}/guides/${guide.slug}): ${guide.description}`);
+  });
   lines.push('');
 
   return lines.join('\n');
@@ -373,7 +400,44 @@ function generateLlmsFullTxt(allEntries, docs) {
     })
     .filter(Boolean); // Remove nulls antes de fazer join
 
-  return header + sections.join('\n\n---\n\n') + '\n';
+  const guideSections = generateGuideSections();
+
+  return header + [...sections, ...guideSections].join('\n\n---\n\n') + '\n';
+}
+
+/**
+ * Lê os guias de `docs/guides` e os transforma em seções de markdown para o
+ * `llms-full.txt`, permitindo que a busca (`search_docs` do MCP) alcance o
+ * conteúdo dos guias — não apenas as APIs extraídas via Dgeni.
+ */
+function generateGuideSections() {
+  return GUIDES.map(guide => {
+    const guidePath = path.join(GUIDES_DIR, guide.file);
+
+    if (!fs.existsSync(guidePath)) {
+      console.warn(`[llms-generator] ⚠️  Guia não encontrado em disco: ${guidePath}`);
+      return null;
+    }
+
+    const raw = fs.readFileSync(guidePath, 'utf-8');
+
+    // Remove os marcadores de metadados do portal (ex.: [comment]: # (@label ...))
+    const content = raw
+      .split('\n')
+      .filter(line => !/^\[comment\]:\s*#/.test(line.trim()))
+      .join('\n')
+      .trim();
+
+    const lines = [];
+    lines.push(`# Guia: ${guide.title}`);
+    lines.push('');
+    lines.push(`**Tipo:** Guia`);
+    lines.push(`**Referência:** ${PORTAL_URL}/guides/${guide.slug}`);
+    lines.push('');
+    lines.push(content);
+
+    return lines.join('\n');
+  }).filter(Boolean);
 }
 
 // ---------------------------------------------------------------------------
