@@ -574,17 +574,31 @@ describe('PoThemeService:', () => {
 
           (service as any).setDefaultBaseStyleForCurrentTheme();
 
-          expect(defaultSpy).toHaveBeenCalledWith(true);
+          expect(defaultSpy).toHaveBeenCalled();
           expect(deprecatedSpy).not.toHaveBeenCalled();
         });
 
-        it('should apply the default base when the static CSS does not declare the token', () => {
+        it('should apply the deprecated base when the static CSS does not declare the token (ex.: @totvs/po-theme)', () => {
           spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
           const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
 
           (service as any).setDefaultBaseStyleForCurrentTheme();
 
-          expect(defaultSpy).toHaveBeenCalledWith(true);
+          expect(deprecatedSpy).toHaveBeenCalled();
+          expect(defaultSpy).not.toHaveBeenCalled();
+        });
+
+        it('should apply the deprecated base when the static CSS declares an unknown theme name', () => {
+          setStaticThemeName('custom');
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(deprecatedSpy).toHaveBeenCalled();
+          expect(defaultSpy).not.toHaveBeenCalled();
         });
 
         it('should ignore the static CSS token when there is an active theme', () => {

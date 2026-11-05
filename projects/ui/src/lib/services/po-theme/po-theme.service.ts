@@ -770,22 +770,35 @@ export class PoThemeService {
 
   private setDefaultBaseStyleForCurrentTheme() {
     const themeActive = this.getThemeActive();
-    const currentThemeName = themeActive ? this.normalizeThemeName(themeActive.name ?? '') : this.getStaticThemeName();
-    const normalizedDeprecatedThemeName = this.normalizeThemeName(poThemeDefaultDeprecated.name);
 
-    if (currentThemeName === normalizedDeprecatedThemeName) {
-      this.setDefaultBaseStyleDeprecated();
+    if (themeActive) {
+      const currentThemeName = this.normalizeThemeName(themeActive.name ?? '');
+      const normalizedDeprecatedThemeName = this.normalizeThemeName(poThemeDefaultDeprecated.name);
+
+      if (currentThemeName === normalizedDeprecatedThemeName) {
+        this.setDefaultBaseStyleDeprecated();
+      } else {
+        this.setDefaultBaseStyle(this.inheritsDefaultStyle(themeActive));
+      }
+      return;
+    }
+
+    // Sem tema ativo, a base segue o CSS estático carregado pela aplicação. Só o CSS do tema padrão atual
+    // declara `--po-theme-name: default`; qualquer outro CSS (tema legado, `@totvs/po-theme` ou temas
+    // customizados gerados antes do token) recebe a base legada.
+    if (this.getStaticThemeName() === this.normalizeThemeName(poThemeDefault.name)) {
+      this.setDefaultBaseStyle();
     } else {
-      this.setDefaultBaseStyle(this.inheritsDefaultStyle(themeActive));
+      this.setDefaultBaseStyleDeprecated();
     }
   }
 
   /**
    * @docsPrivate
    *
-   * Retorna o nome do tema declarado pelo CSS estático do `@po-ui/style` carregado na aplicação, lido do token
-   * `--po-theme-name`. É usado quando não há tema ativo (nenhuma chamada a `setTheme` e nada salvo no
-   * `localStorage`), para que a base de estilos corresponda ao CSS que a aplicação carrega.
+   * Retorna o nome do tema declarado pelo CSS estático carregado na aplicação, lido do token `--po-theme-name`.
+   * É usado quando não há tema ativo (nenhuma chamada a `setTheme` e nada salvo no `localStorage`), para que a
+   * base de estilos corresponda ao CSS que a aplicação carrega.
    *
    * Retorna string vazia quando o token não está disponível (ex.: CSS sem o token ou ambiente sem `window`).
    */
