@@ -20,9 +20,6 @@ const VIEW_MODE_STORAGE_KEY = `${PORTAL_STORAGE_PREFIX}documentation-list-view-m
   standalone: false
 })
 export class DocumentationListComponent implements OnInit {
-  // Itens agrupados em linhas de 3 para o modo grid (po-widget).
-  public filteredRows: Array<Array<Documentation>> = [];
-
   // Modo de visualização: 'grid' (po-widget, padrão) ou 'list' (po-list-view).
   // Inicializado a partir da preferência salva no localStorage.
   public viewMode: DocViewMode = this.loadViewMode();
@@ -61,11 +58,8 @@ export class DocumentationListComponent implements OnInit {
     { label: 'Documentação', action: this.viewDocumentation.bind(this), icon: 'ICON_DOCUMENT_DOUBLE' }
   ];
 
-  // Mantém `filteredItems` e `filteredRows` em sincronia: ao filtrar,
-  // reconstrói as linhas de 3.
   set filteredItems(items: Array<Documentation>) {
     this._filteredItems = items ?? [];
-    this.filteredRows = this.chunk(this._filteredItems, this.columnsPerRow);
   }
 
   get filteredItems(): Array<Documentation> {
@@ -134,14 +128,6 @@ export class DocumentationListComponent implements OnInit {
     });
   }
 
-  private chunk<T>(list: Array<T>, size: number): Array<Array<T>> {
-    const rows: Array<Array<T>> = [];
-    for (let i = 0; i < list.length; i += size) {
-      rows.push(list.slice(i, i + size));
-    }
-    return rows;
-  }
-
   constructor(
     private docService: DocumentationService,
     private router: Router
@@ -182,11 +168,6 @@ export class DocumentationListComponent implements OnInit {
 
   public trackByName(_index: number, item: Documentation): string {
     return item.name;
-  }
-
-  // trackBy da linha: usa o nome do primeiro item como chave estável.
-  public trackByRow(index: number, row: Array<Documentation>): string {
-    return row[0]?.name ?? String(index);
   }
 
   public hasPreviewSample(item: Documentation): boolean {

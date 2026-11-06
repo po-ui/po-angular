@@ -53,35 +53,43 @@
         </div>
       }
     } @else if (viewMode === 'grid') {
-    <div class="documentation-list-viewport">
-      @for (row of filteredRows; track trackByRow($index, row)) {
-        <div class="documentation-list-row">
-          @for (item of row; track item.name) {
-            <po-widget
-              class="documentation-list-item"
-              [p-height]="320"
-              [p-title]="item.title"
-              [p-tag]="item.tagLabel"
-              [p-tag-type]="item.tagType"
-              [p-primary-label]="item.hasSamples ? 'Exemplos' : 'Documentação'"
-              [p-secondary-label]="item.hasSamples ? 'Documentação' : ''"
-              (p-title-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
-              (p-primary-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
-              (p-secondary-action)="viewDocumentation(item)"
-            >
-              <!-- @if (item.description) {
-                <p class="po-font-text-smaller po-text-color-neutral-dark-70 po-mb-1">{{ item.description }}</p>
-              } -->
-              @if (hasPreviewSample(item)) {
-                <div class="docs-sample-container">
+    <div class="documentation-list-viewport po-row">
+      @for (item of filteredItems; track item.name) {
+        <div class="documentation-list-item po-sm-12 po-md-6 po-lg-4">
+          <po-widget
+            [p-height]="320"
+            [p-title]="item.title"
+            [p-tag]="item.tagLabel"
+            [p-tag-type]="item.tagType"
+            [p-primary-label]="item.hasSamples ? 'Exemplos' : 'Documentação'"
+            [p-secondary-label]="item.hasSamples ? 'Documentação' : ''"
+            (p-title-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
+            (p-primary-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
+            (p-secondary-action)="viewDocumentation(item)"
+          >
+            @if (hasPreviewSample(item)) {
+              <div class="docs-sample-container">
+                @defer (on viewport; prefetch on idle) {
                   <div class="documentation-list-item-preview" [appPreviewSampleHost]="item.name"></div>
-                </div>
-              } @else if (item.previewText) {
-                <p class="po-font-text">{{ item.previewText }}</p>
-              }
-            </po-widget>
-          }
+                } @placeholder {
+                  <div class="documentation-preview-skeleton">
+                    <po-skeleton p-width="60%" p-height="20px"></po-skeleton>
+                    <po-skeleton p-width="100%" p-height="80px"></po-skeleton>
+                    <po-skeleton p-width="40%" p-height="20px"></po-skeleton>
+                  </div>
+                }
+              </div>
+            } @else if (item.previewText) {
+              <p class="po-font-text">{{ item.previewText }}</p>
+            } @else {
+              <p class="po-font-text po-text-color-neutral-dark-70">
+                Consulte a documentação de {{ item.title }} para mais detalhes.
+              </p>
+            }
+          </po-widget>
         </div>
+      } @empty {
+        <po-container class="documentation-list-empty">Nenhum dado encontrado</po-container>
       }
     </div>
   } @else {

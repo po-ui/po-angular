@@ -15,23 +15,17 @@
   padding: 0 8px;
 }
 
+/* Item do grid real: a largura vem das classes po-sm/md/lg do grid system;
+   aqui só o espaçamento vertical entre as linhas. */
 .documentation-list-item {
-  display: block;
   box-sizing: border-box;
-  /* 3 por linha, descontando os 2 gaps de 16px. */
-  flex: 1 1 calc((100% - 32px) / 3);
-  min-width: 0;
-  max-width: calc((100% - 32px) / 3);
-}
-
-.documentation-list-row .docs-sample-container {
-  margin: 0px;
-  max-height: fit-content;
+  margin-bottom: 16px;
 }
 
 /* Container padrão dos samples (classe global docs-sample-container).
    Aqui dentro do card limitamos a altura para não estourar os 320px fixos. */
 .docs-sample-container {
+  margin: 0;
   max-height: 180px;
   overflow: auto;
 }
@@ -143,4 +137,23 @@
   justify-content: center;
   height: 60px;
   border-top: var(--border-width-sm, 1px) solid var(--color-neutral-light-20, #dadada);
+}
+
+/* Placeholder (@defer) exibido na área de preview enquanto o componente carrega. */
+.documentation-preview-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+/* Estado vazio do grid (sem resultados na pesquisa). */
+.documentation-list-empty {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-lg, 2rem);
+  font-size: 14px;
+  color: var(--color-neutral-dark-80);
+  font-family: var(--font-family-bold);
 }
