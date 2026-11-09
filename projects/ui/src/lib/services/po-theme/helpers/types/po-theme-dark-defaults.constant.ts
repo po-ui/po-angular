@@ -175,6 +175,10 @@ const poThemeDefaultDarkValues = {
     'po-badge[p-status=warning]': {
       '--color': 'var(--color-neutral-light-00)'
     },
+    /** BUTTON: brilho do estilo glow permanece claro no tema escuro */
+    'po-button': {
+      '--color-glow-ring': 'var(--color-neutral-dark-95)'
+    },
     // LINK: item visitado
     'po-link': {
       '--text-color-visited': 'var(--color-action-default)'

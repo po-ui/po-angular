@@ -19,6 +19,11 @@ describe('poThemeSharedBase: ', () => {
         });
       });
 
+      it('should define pill border-radius for po-button with glow kind', () => {
+        expect(poThemeSharedBase.perComponent['po-button[p-kind="glow"]']).toEqual({
+          '--border-radius': 'var(--border-radius-pill)'
+        });
+      });
       it('should define pill border-radius for po-button-group .po-button', () => {
         expect(poThemeSharedBase.perComponent['po-button-group .po-button']).toEqual({
           '--border-radius': 'var(--border-radius-pill)'
