@@ -17,10 +17,9 @@ export const poThemeSharedBase = {
     'po-button-group .po-button': {
       '--border-radius': 'var(--border-radius-pill)'
     },
-    '.po-input, .po-combo-input, .po-select, .po-search .po-search-input, .po-dropdown-button':
-      {
-        'border-radius': 'var(--border-radius-pill)'
-      },
+    '.po-input, .po-combo-input, .po-select, .po-search .po-search-input, .po-dropdown-button': {
+      'border-radius': 'var(--border-radius-pill)'
+    },
     'po-combo, po-dropdown, po-search': {
       '--border-radius': 'var(--border-radius-pill)'
     },
@@ -100,10 +99,9 @@ export const poThemeSharedBase = {
     '.po-rich-text-toolbar': {
       'border-radius': '0 0 var(--border-radius-lg) var(--border-radius-lg)'
     },
-    '.po-combo-clean:focus, .po-search:not([p-search-type=locate]) .po-search-button.po-search-button-clean:focus':
-      {
-        'border-radius': '0.625rem'
-      },
+    '.po-combo-clean:focus, .po-search:not([p-search-type=locate]) .po-search-button.po-search-button-clean:focus': {
+      'border-radius': '0.625rem'
+    },
     '.po-checkbox-outline:is(:focus), .po-checkbox-outline:is(:focus-visible), .po-radio-focus > label, .po-switch-container:focus-visible, .po-accordion-manager-button:focus, .po-accordion-manager-button:focus-visible, .po-accordion-item-header-button:focus, .po-accordion-item-header-button:focus-visible, .po-stepper-step:not(.po-stepper-step-disabled):focus-visible':
       {
         'border-radius': 'var(--border-radius-md)'
@@ -145,7 +143,7 @@ export const poThemeSharedBase = {
     },
     'po-container': {
       '--background': 'var(--color-neutral-light-05)'
-    },
+    }
   },
   onRoot: {
     '--color-page-background-color-page': 'var(--color-neutral-light-05)'

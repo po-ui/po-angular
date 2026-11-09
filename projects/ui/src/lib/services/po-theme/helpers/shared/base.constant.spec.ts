@@ -28,8 +28,7 @@ describe('poThemeSharedBase: ', () => {
 
     describe('INPUT:', () => {
       it('should define pill border-radius for input selectors', () => {
-        const selector =
-          '.po-input, .po-combo-input, .po-select, .po-search .po-search-input, .po-dropdown-button';
+        const selector = '.po-input, .po-combo-input, .po-select, .po-search .po-search-input, .po-dropdown-button';
 
         expect(poThemeSharedBase.perComponent[selector]).toEqual({
           'border-radius': 'var(--border-radius-pill)'

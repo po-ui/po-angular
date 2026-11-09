@@ -17,6 +17,8 @@ import { updateDepedenciesVersion } from './changes';
 import { migrateHtmlContent } from './gauge-html-migration';
 import { migrateTypeScriptContent } from './gauge-ts-migration';
 import { createMigrationReport, MigrationReport, MigrationWarning, printMigrationSummary } from './migration-report';
+import { askReturnToDeprecatedTheme } from './theme-deprecated/prompt';
+import { themeDeprecatedRule } from './theme-deprecated';
 
 /** Versão mínima do Angular exigida pela v22 do `@po-ui/ng-components`. */
 const MINIMUM_ANGULAR_MAJOR = 22;
@@ -57,13 +59,19 @@ export function getAngularMajor(tree: Tree): number | null {
 /**
  * Ponto de entrada da `migration-v22`.
  *
- * Não realiza perguntas interativas: `readline` dentro do `ng update` provoca
- * deadlock quando o `stdin` é um TTY. Em vez de perguntar, a checagem do
- * pré-requisito do Angular é feita de forma determinística a partir do
- * `package.json` do `Projeto_Consumidor`.
+ * Não realiza perguntas interativas de forma que bloqueie o `ng update`: o
+ * `readline` provoca deadlock quando o `stdin` não é um TTY (por exemplo em CI).
+ * A checagem do pré-requisito do Angular é feita de forma determinística a partir
+ * do `package.json` do `Projeto_Consumidor`.
+ *
+ * Ao final, pergunta (apenas quando há terminal interativo) se o desenvolvedor
+ * deseja retornar ao tema padrão anterior (depreciado). A pergunta usa uma guarda
+ * de TTY (`askReturnToDeprecatedTheme`): sem terminal interativo, a resposta
+ * padrão é "Não" e a migração do tema não é aplicada, preservando a experiência
+ * padrão recomendada da v22 em execuções em lote.
  */
 export default function (): Rule {
-  return (tree: Tree, context: SchematicContext) => {
+  return async (tree: Tree, context: SchematicContext) => {
     const logger = context.logger;
     const angularMajor = getAngularMajor(tree);
 
@@ -79,12 +87,30 @@ export default function (): Rule {
       return tree;
     }
 
-    return chain([
-      updatePackageJson('0.0.0-PLACEHOLDER', updateDepedenciesVersion), // Req 8.1
-      gaugeMigrationRule(), // Req 8.2 (após versões, antes da instalação)
-      postUpdate() // Req 8.3 (NodePackageInstallTask)
-    ]);
+    // Pergunta opcional (default "Não", segura em lote). A migração do tema só
+    // entra na cadeia quando o desenvolvedor confirma explicitamente no terminal.
+    const returnToDeprecatedTheme = await askReturnToDeprecatedTheme();
+
+    return buildMigrationChain(returnToDeprecatedTheme);
   };
+}
+
+/**
+ * Monta a `chain` da `migration-v22`. A migração do tema anterior
+ * (`themeDeprecatedRule`) só é incluída quando `returnToDeprecatedTheme` é
+ * verdadeiro — ou seja, quando o desenvolvedor confirmou no terminal. A ordem é:
+ * atualização de versões (Req 8.1) → migração do po-gauge (Req 8.2) → migração
+ * opcional do tema → instalação de pacotes (Req 8.3).
+ *
+ * Exportada para teste determinístico da composição, sem depender do prompt.
+ */
+export function buildMigrationChain(returnToDeprecatedTheme: boolean): Rule {
+  return chain([
+    updatePackageJson('0.0.0-PLACEHOLDER', updateDepedenciesVersion), // Req 8.1
+    gaugeMigrationRule(), // Req 8.2 (após versões, antes da instalação)
+    ...(returnToDeprecatedTheme ? [themeDeprecatedRule()] : []),
+    postUpdate() // Req 8.3 (NodePackageInstallTask)
+  ]);
 }
 
 /**

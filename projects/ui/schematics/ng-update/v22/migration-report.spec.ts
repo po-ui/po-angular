@@ -1,6 +1,11 @@
 import { logging } from '@angular-devkit/core';
 
-import { createMigrationReport, MigrationReport, printMigrationSummary } from './migration-report';
+import {
+  createMigrationReport,
+  MigrationReport,
+  MigrationSummaryLabels,
+  printMigrationSummary
+} from './migration-report';
 
 describe('v22 migration-report:', () => {
   let logger: jasmine.SpyObj<logging.LoggerApi>;
@@ -147,6 +152,47 @@ describe('v22 migration-report:', () => {
 
         expect(logger.warn).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('printMigrationSummary with custom labels:', () => {
+    const labels: MigrationSummaryLabels = {
+      summaryLine: (scanned, changed) => `[custom] ${scanned} analisado(s), ${changed} alterado(s).`,
+      successLine: '[custom] tudo migrado com sucesso.',
+      emptyLine: '[custom] nada encontrado.',
+      warningsIntro: count => `[custom] ${count} aviso(s):`
+    };
+
+    it('should use the provided summary line instead of the gauge default', () => {
+      printMigrationSummary({ filesScanned: 5, filesChanged: 2, warnings: [] }, logger, labels);
+
+      expect(logger.info).toHaveBeenCalledWith('[custom] 5 analisado(s), 2 alterado(s).');
+      expect(logger.info).not.toHaveBeenCalledWith(
+        'Resumo da migração po-gauge → po-chart: 5 arquivo(s) analisado(s), 2 arquivo(s) alterado(s).'
+      );
+    });
+
+    it('should use the provided success line', () => {
+      printMigrationSummary({ filesScanned: 4, filesChanged: 4, warnings: [] }, logger, labels);
+
+      expect(logger.info).toHaveBeenCalledWith('[custom] tudo migrado com sucesso.');
+    });
+
+    it('should use the provided empty line', () => {
+      printMigrationSummary({ filesScanned: 7, filesChanged: 0, warnings: [] }, logger, labels);
+
+      expect(logger.info).toHaveBeenCalledWith('[custom] nada encontrado.');
+    });
+
+    it('should use the provided warnings intro while keeping the per-warning format', () => {
+      printMigrationSummary(
+        { filesScanned: 3, filesChanged: 1, warnings: [{ filePath: 'src/a.ts', line: 9, reason: 'motivo' }] },
+        logger,
+        labels
+      );
+
+      expect(logger.warn).toHaveBeenCalledWith('[custom] 1 aviso(s):');
+      expect(logger.warn).toHaveBeenCalledWith('  - src/a.ts:9 — motivo');
     });
   });
 });

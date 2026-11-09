@@ -1,4 +1,5 @@
 import * as fc from 'fast-check';
+import * as fs from 'fs';
 import * as path from 'path';
 
 import { logging } from '@angular-devkit/core';
@@ -7,7 +8,7 @@ import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 
 import { migrateHtmlContent } from './gauge-html-migration';
 import { migrateTypeScriptContent } from './gauge-ts-migration';
-import { gaugeMigrationRule, getAngularMajor } from './index';
+import { buildMigrationChain, gaugeMigrationRule, getAngularMajor } from './index';
 
 /**
  * Testes de propriedade para a **escrita condicional** (`Propriedade 3`) da regra
@@ -252,6 +253,20 @@ describe('v22 gaugeMigrationRule — escrita condicional (property-based):', () 
 describe('v22 migration-v22 chain — integração (SchematicTestRunner.callRule):', () => {
   /** Caminho do `migrations.json` (relativo ao diretório compilado deste spec). */
   const collectionPath = path.join(__dirname, '../../migrations.json');
+
+  let originalIsTTY: boolean | undefined;
+
+  // A factory pergunta sobre o retorno ao tema depreciado quando há TTY. Sem este
+  // stub, rodar os testes em um terminal interativo deixa o prompt aguardando
+  // resposta e os casos estouram o timeout do jasmine.
+  beforeEach(() => {
+    originalIsTTY = process.stdin.isTTY;
+    (process.stdin as unknown as { isTTY?: boolean }).isTTY = false;
+  });
+
+  afterEach(() => {
+    (process.stdin as unknown as { isTTY?: boolean }).isTTY = originalIsTTY;
+  });
 
   /** Versão "antiga" do `@po-ui/ng-components` antes da migração de versões. */
   const OLD_PO_VERSION = '19.16.0';
@@ -656,5 +671,88 @@ describe('v22 getAngularMajor:', () => {
   it('should return null when the range has no inferable major (e.g. "latest")', () => {
     const tree = treeWithPackageJson(JSON.stringify({ dependencies: { '@angular/core': 'latest' } }));
     expect(getAngularMajor(tree)).toBeNull();
+  });
+});
+
+/**
+ * Composição da `chain` conforme a resposta do prompt do tema anterior (Task 4).
+ *
+ * `buildMigrationChain(returnToDeprecatedTheme)` inclui `themeDeprecatedRule`
+ * apenas quando o desenvolvedor confirma ("sim" no terminal). O comportamento do
+ * prompt em si (incl. a guarda de TTY que resolve "Não" em lote) é coberto por
+ * `theme-deprecated/prompt.spec.ts`; aqui validamos o efeito observável sobre
+ * arquivos com referências de tema.
+ */
+describe('v22 migration-v22 chain — gatilho do tema anterior (buildMigrationChain):', () => {
+  const THEME_FILE = [
+    `import { poThemeDefaultActions } from '@po-ui/ng-components';`,
+    `export const actions = { ...poThemeDefaultActions };`,
+    ``
+  ].join('\n');
+
+  const GAUGE_HTML = `<po-gauge [p-value]="72" p-description="Faturamento"></po-gauge>\n`;
+  const GAUGE_TS = [
+    `import { Component } from '@angular/core';`,
+    `import { PoGaugeModule } from '@po-ui/ng-components';`,
+    ``,
+    `@Component({ selector: 'app-root', standalone: true, imports: [PoGaugeModule], template: '' })`,
+    `export class AppComponent {}`,
+    ``
+  ].join('\n');
+
+  function buildThemeTree(): Tree {
+    const tree = Tree.empty();
+    tree.create('/angular.json', JSON.stringify(ANGULAR_JSON, null, 2));
+    tree.create('/src/main.ts', MAIN_TS);
+    tree.create('/src/app/app.component.ts', GAUGE_TS);
+    tree.create('/src/app/app.component.html', GAUGE_HTML);
+    tree.create('/src/app/theme.ts', THEME_FILE);
+    return tree;
+  }
+
+  async function runBuiltChain(tree: Tree, returnToDeprecatedTheme: boolean): Promise<void> {
+    const runner = new SchematicTestRunner('schematics', path.join(__dirname, '../../migrations.json'));
+    await runner.callRule(buildMigrationChain(returnToDeprecatedTheme), tree).toPromise();
+  }
+
+  it('should apply the deprecated theme migration when the developer confirms (returnToDeprecatedTheme = true)', async () => {
+    const tree = buildThemeTree();
+
+    await runBuiltChain(tree, true);
+
+    // Constantes de tema reapontadas para as versões *Deprecated.
+    expect(tree.read('/src/app/theme.ts')!.toString('utf-8')).toContain('poThemeDefaultActionsDeprecated');
+    // A migração do po-gauge continua sendo aplicada normalmente.
+    expect(tree.read('/src/app/app.component.html')!.toString('utf-8')).toContain('<po-chart');
+  });
+
+  it('should NOT apply the deprecated theme migration when not confirmed (returnToDeprecatedTheme = false)', async () => {
+    const tree = buildThemeTree();
+
+    await runBuiltChain(tree, false);
+
+    // Tema preservado (nenhuma constante reapontada).
+    expect(tree.read('/src/app/theme.ts')!.toString('utf-8')).toBe(THEME_FILE);
+    // A migração do po-gauge continua sendo aplicada normalmente.
+    expect(tree.read('/src/app/app.component.html')!.toString('utf-8')).toContain('<po-chart');
+  });
+});
+
+/**
+ * Registro no `migrations.json` (Task 5): a migração do tema anterior deixou de
+ * ser uma migração opcional registrada no CLI; passou a ser disparada pela
+ * `migration-v22` obrigatória via prompt interativo.
+ */
+describe('v22 migrations.json — registro do tema anterior:', () => {
+  const migrations = JSON.parse(fs.readFileSync(path.join(__dirname, '../../migrations.json'), 'utf-8')).schematics;
+
+  it('should no longer register the optional "migration-v22-theme-deprecated" entry', () => {
+    expect(migrations['migration-v22-theme-deprecated']).toBeUndefined();
+  });
+
+  it('should keep the mandatory "migration-v22" entry pointing to the v22 factory', () => {
+    expect(migrations['migration-v22']).toBeDefined();
+    expect(migrations['migration-v22'].factory).toBe('./ng-update/v22/index');
+    expect(migrations['migration-v22'].optional).toBeUndefined();
   });
 });
