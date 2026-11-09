@@ -1,9 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, TemplateRef, ViewChild } from '@angular/core';
 
-import { PoThemeA11yEnum, PoThemeTypeEnum } from '@po-ui/ng-components';
+import { PoRadioGroupOption, PoTheme, PoThemeA11yEnum, PoThemeTypeEnum } from '@po-ui/ng-components';
 
 import { PoDensityMode } from '../../../../../ui/src/lib/enums/po-density-mode.enum';
-import { poThemeDefault, PoThemeService } from '../../../../../ui/src/lib';
+import { poThemeDefault, poThemeDefaultDeprecated, PoThemeService } from '../../../../../ui/src/lib';
+
+type ThemeKey = 'default' | 'deprecated';
 
 @Component({
   selector: 'app-appearance-popover',
@@ -15,13 +17,29 @@ import { poThemeDefault, PoThemeService } from '../../../../../ui/src/lib';
 export class AppearancePopoverComponent implements AfterViewInit {
   @ViewChild('popoverContent', { static: true }) popoverContentRef!: TemplateRef<any>;
 
+  selectedTheme: ThemeKey = 'default';
   selectedMode: 'light' | 'dark' = 'light';
   selectedA11y: 'AA' | 'AAA' = 'AAA';
+
+  readonly themeOptions: Array<PoRadioGroupOption> = [
+    { label: 'Padrão', value: 'default' },
+    { label: 'Padrão (legado)', value: 'deprecated' }
+  ];
+
+  private readonly themes: Record<ThemeKey, PoTheme> = {
+    default: poThemeDefault,
+    deprecated: poThemeDefaultDeprecated
+  };
 
   constructor(private readonly poTheme: PoThemeService) {}
 
   ngAfterViewInit(): void {
     this.loadCurrentSettings();
+  }
+
+  onThemeChange(value: ThemeKey): void {
+    this.selectedTheme = value;
+    this.applyTheme();
   }
 
   onModeChange(value: 'light' | 'dark'): void {
@@ -35,6 +53,7 @@ export class AppearancePopoverComponent implements AfterViewInit {
   }
 
   resetAll(): void {
+    this.selectedTheme = 'default';
     this.selectedMode = 'light';
     this.selectedA11y = 'AAA';
     this.applyTheme();
@@ -46,16 +65,17 @@ export class AppearancePopoverComponent implements AfterViewInit {
       return;
     }
 
+    this.selectedTheme = theme.name === poThemeDefaultDeprecated.name ? 'deprecated' : 'default';
+
     const active =
-      typeof theme.active === 'object'
-        ? theme.active
-        : { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA };
+      typeof theme.active === 'object' ? theme.active : { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA };
 
     this.selectedMode = active.type === PoThemeTypeEnum.dark ? 'dark' : 'light';
     this.selectedA11y = active.a11y === PoThemeA11yEnum.AA ? 'AA' : 'AAA';
   }
 
   private applyTheme(): void {
+    const themeConfig = this.themes[this.selectedTheme];
     const mode = this.selectedMode === 'dark' ? PoThemeTypeEnum.dark : PoThemeTypeEnum.light;
     const a11y = this.selectedA11y === 'AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
 
@@ -66,6 +86,6 @@ export class AppearancePopoverComponent implements AfterViewInit {
       this.poTheme.setDensityMode(PoDensityMode.Medium);
     }
 
-    this.poTheme.setTheme(poThemeDefault, mode, a11y);
+    this.poTheme.setTheme(themeConfig, mode, a11y);
   }
 }
