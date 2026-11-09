@@ -2,6 +2,12 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 
 import { PoButtonBaseComponent } from './po-button-base.component';
 
+/*
+ * Quantidade de pontos da cauda do brilho do estilo `glow`, em cada camada (halo e anel).
+ * Deve ser igual à quantidade de regras `.po-button-glow-dot:nth-child()` do `po-button.css` (@po-ui/style).
+ */
+const PO_BUTTON_GLOW_TRAIL_SIZE = 22;
+
 /**
  * @docsExtends PoButtonBaseComponent
  *
@@ -29,6 +35,9 @@ import { PoButtonBaseComponent } from './po-button-base.component';
   standalone: false
 })
 export class PoButtonComponent extends PoButtonBaseComponent {
+  /** @docsPrivate */
+  readonly glowTrail: ReadonlyArray<number> = Array.from({ length: PO_BUTTON_GLOW_TRAIL_SIZE }, (_, index) => index);
+
   @ViewChild('button', { static: true }) buttonElement: ElementRef;
 
   constructor(public elementRef: ElementRef) {

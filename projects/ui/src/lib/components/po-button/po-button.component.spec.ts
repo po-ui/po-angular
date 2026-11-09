@@ -218,5 +218,93 @@ describe('PoButtonComponent: ', () => {
         expect(button.getAttribute('disabled')).not.toBeNull();
       });
     });
+
+    describe('Glow: ', () => {
+      const getGlowLayers = () => nativeElement.querySelectorAll('.po-button-glow-halo, .po-button-glow-ring');
+
+      it('shouldn`t render glow layers by default', () => {
+        fixture.detectChanges();
+
+        expect(getGlowLayers().length).toBe(0);
+      });
+
+      it('should render halo and ring layers as the last children of the button if `p-kind` is glow', () => {
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+
+        const button = nativeElement.querySelector('button');
+        const halo = nativeElement.querySelector('.po-button-glow-halo');
+        const ring = nativeElement.querySelector('.po-button-glow-ring');
+
+        expect(halo.parentElement).toBe(button);
+        expect(ring.parentElement).toBe(button);
+        expect(halo.nextElementSibling).toBe(ring);
+        expect(button.lastElementChild).toBe(ring);
+      });
+
+      it('should hide glow layers from assistive technologies', () => {
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+
+        getGlowLayers().forEach(layer => expect(layer.getAttribute('aria-hidden')).toBe('true'));
+      });
+
+      it('should render 22 trail dots in each glow layer', () => {
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+
+        expect(component.glowTrail.length).toBe(22);
+        getGlowLayers().forEach(layer =>
+          expect(layer.querySelectorAll(':scope > i.po-button-glow-dot').length).toBe(22)
+        );
+      });
+
+      it('should set `p-kind` attribute with glow on host and button', () => {
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+
+        expect(nativeElement.getAttribute('p-kind')).toBe('glow');
+        expect(nativeElement.querySelector('button').getAttribute('p-kind')).toBe('glow');
+      });
+
+      it('should remove glow layers if `p-kind` changes from glow to another kind', () => {
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+        expect(getGlowLayers().length).toBe(2);
+
+        fixture.componentRef.setInput('p-kind', 'primary');
+        fixture.detectChanges();
+        expect(getGlowLayers().length).toBe(0);
+      });
+
+      it('should set `p-danger` attribute with false on host and button if `p-kind` is glow', () => {
+        fixture.componentRef.setInput('p-danger', true);
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+
+        expect(nativeElement.getAttribute('p-danger')).toBe('false');
+        expect(nativeElement.querySelector('button').getAttribute('p-danger')).toBe('false');
+      });
+
+      it('should keep glow layers and disable the button if `p-loading` is true', () => {
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.componentRef.setInput('p-loading', true);
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('button').disabled).toBeTrue();
+        expect(nativeElement.querySelector('.po-button-loading-icon')).toBeTruthy();
+        expect(getGlowLayers().length).toBe(2);
+      });
+
+      it('should emit `p-click` when the glow button is clicked', () => {
+        spyOn(component.click, 'emit');
+        fixture.componentRef.setInput('p-kind', 'glow');
+        fixture.detectChanges();
+
+        nativeElement.querySelector('button').click();
+
+        expect(component.click.emit).toHaveBeenCalled();
+      });
+    });
   });
 });

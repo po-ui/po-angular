@@ -34,8 +34,12 @@ export class SamplePoButtonLabsComponent implements OnInit {
   kindsOptions: Array<PoRadioGroupOption> = [
     { label: 'primary', value: 'primary' },
     { label: 'secondary', value: 'secondary' },
-    { label: 'tertiary', value: 'tertiary' }
+    { label: 'tertiary', value: 'tertiary' },
+    { label: 'glow', value: 'glow' }
   ];
+
+  // Estilos que não suportam a propriedade danger.
+  private readonly kindsWithoutDanger: Array<string> = ['tertiary', 'glow'];
 
   sizesOptions: Array<PoRadioGroupOption> = [
     { label: 'small', value: 'small' },
@@ -58,23 +62,17 @@ export class SamplePoButtonLabsComponent implements OnInit {
   }
 
   propertiesChange(event) {
-    this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
+    const hasDanger = !!event && this.properties.includes('danger');
+
+    this.setKindsWithoutDangerDisabled(hasDanger);
     this.sizesOptions[0] = { ...this.sizesOptions[0], disabled: false };
     this.sizesOptions[1] = { ...this.sizesOptions[1], disabled: false };
-
-    if (event) {
-      event.forEach(property => {
-        if (property === 'danger' && this.properties.includes('danger')) {
-          this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: true };
-        }
-      });
-    }
   }
 
   verifyDisabled(event) {
     const value = [...this.propertiesOptions];
 
-    if (event === 'tertiary') {
+    if (this.kindsWithoutDanger.includes(event)) {
       value[2] = { value: 'danger', label: 'Danger', disabled: true };
       this.propertiesOptions = value;
     } else {
@@ -90,8 +88,14 @@ export class SamplePoButtonLabsComponent implements OnInit {
     this.icon = undefined;
     this.type = PoButtonType.Button;
     this.properties = [];
-    this.kindsOptions[2] = { ...this.kindsOptions[2], disabled: false };
+    this.setKindsWithoutDangerDisabled(false);
     this.sizesOptions[0] = { ...this.sizesOptions[0], disabled: false };
     this.sizesOptions[1] = { ...this.sizesOptions[1], disabled: false };
+  }
+
+  private setKindsWithoutDangerDisabled(disabled: boolean) {
+    this.kindsOptions = this.kindsOptions.map(option =>
+      this.kindsWithoutDanger.includes(option.value as string) ? { ...option, disabled } : option
+    );
   }
 }

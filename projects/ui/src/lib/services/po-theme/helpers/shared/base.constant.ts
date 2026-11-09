@@ -59,6 +59,9 @@ export const poThemeSharedBase = {
     'po-button[p-size="small"]': {
       '--border-radius': 'var(--border-radius-xl)'
     },
+    'po-button[p-kind="glow"]': {
+      '--border-radius': 'var(--border-radius-pill)'
+    },
 
     'po-textarea .po-textarea': {
       'border-radius': 'var(--border-radius-xxl)'
