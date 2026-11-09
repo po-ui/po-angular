@@ -29,13 +29,11 @@
   font-size: 50px;
   margin: 0px;
   padding-top: 100px;
-  font-family: var(--font-family-po-ui-light);
 }
 
 .library {
   color: var(--color-neutral-dark-70);
   font-size: 34px;
-  font-family: var(--font-family-po-ui-light);
 }
 
 .star {

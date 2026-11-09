@@ -28,23 +28,23 @@ const poThemeDefaultActionsDark: PoThemeColorAction = {
 const poThemeDefaultNeutralsDark: PoThemeColorNeutral = {
   /** Tons de cinza claro. */
   light: {
-    '00': '#1c1c1c',
-    '05': '#202020',
-    '10': '#2b2b2b',
-    '20': '#3b3b3b',
-    '30': '#5a5a5a'
+    '00': '#060613',
+    '05': '#1D1D30',
+    '10': '#36364A',
+    '20': '#515162',
+    '30': '#69697C'
   },
   /** Tons de cinza intermediários. */
   mid: {
-    '40': '#7c7c7c',
-    '60': '#a1a1a1'
+    '40': '#9191A1',
+    '60': '#B4B4C0'
   },
   /** Tons de cinza escuro. */
   dark: {
-    '70': '#c1c1c1',
-    '80': '#d9d9d9',
-    '90': '#eeeeee',
-    '95': '#fbfbfb'
+    '70': '#E7E5E4',
+    '80': '#ECECEE',
+    '90': '#F9F9FA',
+    '95': '#ffffff'
   }
 };
 
@@ -96,19 +96,31 @@ const poThemeDefaultFeedbackDark: PoThemeColorFeedback = {
 
 const poThemeDefaultBrandsDark: poThemeColorBrand = {
   '01': {
-    lightest: '#260538',
-    lighter: '#400e58',
-    light: '#5b1c7d',
-    base: '#753399',
-    dark: '#bd94d1',
-    darker: '#d9c2e5',
-    darkest: '#f2eaf6'
+    lightest: '#262A45',
+    lighter: '#39416F',
+    light: '#434C8C',
+    base: '#576BB9',
+    dark: '#87A1D3',
+    darker: '#CFD9EE',
+    darkest: '#F3F6FB'
   },
   '02': {
-    base: '#b92f72'
+    lightest: '#560117',
+    lighter: '#8B1031',
+    light: '#BE1243',
+    base: '#F94485',
+    dark: '#FE68A2',
+    darker: '#FECCE2',
+    darkest: '#FEF1F6'
   },
   '03': {
-    base: '#ffd464'
+    lightest: '#0E303E',
+    lighter: '#1F596B',
+    light: '#1B6C83',
+    base: '#187E97',
+    dark: '#37C3D9',
+    darker: '#AEECF3',
+    darkest: '#EEFCFD'
   }
 };
 
@@ -176,10 +188,6 @@ const poThemeDefaultDarkValues = {
         'outline-style': 'solid;',
         'outline-offset': '2px;'
       },
-    // background container
-    'po-container': {
-      '--background': 'var(--color-neutral-light-00);'
-    },
     // Background input disabled
     'div.po-lookup-filter-content input.po-input, input.po-input, po-datepicker, po-datepicker-range, po-decimal, po-email, po-input, po-login, po-lookup, po-number, po-password, po-url, po-combo, po-search, po-select, po-multiselect, po-timepicker':
       {
@@ -227,8 +235,6 @@ const poThemeDefaultDarkValues = {
     '--color-secondary-dark-60-alpha-70': 'color-mix(in srgb, var(--color-neutral-mid-60) 70%, white)',
     '--color-tertiary-light-90': 'color-mix(in srgb, var(--color-brand-03-base) 90%, black)',
     '--color-tertiary-dark-5': 'color-mix(in srgb, var(--color-brand-03-base) 5%, white)',
-    /* PAGE  */
-    '--color-page-background-color-page': 'var(--color-neutral-light-05)',
     /* TOOLBAR BADGE */
     '--color-toolbar-color-badge-text': 'var(--color-neutral-dark-95)',
     /* POPOVER */

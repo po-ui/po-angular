@@ -940,7 +940,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     const title = titleElement?.innerText ?? 'Gráfico';
 
     ctx.fillStyle = this.getCSSVariable('--color-neutral-dark-70');
-    ctx.font = 'bold 16px Roboto-Bold';
+    const fontFamilyBold = this.getCSSVariable('--font-family-theme-bold') || 'MonaSans-Bold';
+    ctx.font = `bold 16px ${fontFamilyBold}`;
     ctx.textAlign = 'left';
     ctx.fillText(title, 20, headerHeight / 2 + 5);
   }
