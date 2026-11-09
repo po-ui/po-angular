@@ -1,12 +1,19 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild
+} from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoMenuItem, PoNavbarIconAction, PoNavbarItem, PoThemeA11yEnum } from '@po-ui/ng-components';
+import { PoHeaderActionTool, PoMenuItem, PoNavbarItem, PoTheme, PoThemeA11yEnum } from '@po-ui/ng-components';
 
 import { PoDensityMode } from '../../../ui/src/lib/enums/po-density-mode.enum';
 import { firstValueFrom } from 'rxjs';
-import { PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
-import { poThemeConstant } from './shared/po-theme.constant';
+import { poThemeDefault, PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
+import { AppearancePopoverComponent } from './shared/appearance-popover/appearance-popover.component';
 import { VersionService } from './shared/version.service';
 
 @Component({
@@ -15,51 +22,25 @@ import { VersionService } from './shared/version.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild(AppearancePopoverComponent) appearancePopover!: AppearancePopoverComponent;
+
   menus: Array<PoMenuItem> = [];
   items: Array<PoNavbarItem> = [];
-  iconActions: Array<PoNavbarIconAction> = [];
-  themeStorage = 'po-theme-default';
-  a11yStorage = 'po-a11y-AAA';
+  iconActions: Array<PoHeaderActionTool> = [];
   logoPoUI = './assets/po-logos/po_black.png';
-  theme: PoThemeTypeEnum = 0;
+  theme: PoThemeTypeEnum = PoThemeTypeEnum.light;
   a11yLevel: PoThemeA11yEnum;
-
-  private themeChangeListener: any;
-  private a11yChangeListener: any;
 
   constructor(
     protected versionService: VersionService,
     protected poTheme: PoThemeService,
     public router: Router
   ) {
-    const _poTheme = this.poTheme.applyTheme();
-    this.a11yLevel = this.poTheme.getA11yLevel();
-    this.poTheme.setA11yDefaultSizeSmall(true);
-
-    if (this.a11yLevel === PoThemeA11yEnum.AA) {
-      this.poTheme.setDensityMode(PoDensityMode.Small);
-    } else {
-      this.poTheme.setDensityMode(PoDensityMode.Medium);
-    }
-
-    if (!_poTheme) {
-      this.theme = poThemeConstant.active.type;
-      this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
-    } else {
-      this.theme = typeof _poTheme.active === 'object' ? _poTheme.active.type : _poTheme.active;
-    }
+    this.initTheme();
   }
 
   ngOnInit() {
-    if (localStorage.getItem('po-ui-theme')) {
-      this.themeStorage = localStorage.getItem('po-ui-theme');
-    }
-
-    if (localStorage.getItem('po-ui-a11y')) {
-      this.a11yStorage = localStorage.getItem('po-ui-a11y');
-    }
-
     firstValueFrom(this.versionService.getCurrentVersion()).then(version => {
       this.items = [
         { label: 'Iniciar', link: '/' },
@@ -75,65 +56,58 @@ export class AppComponent implements OnInit, OnDestroy {
       ];
     });
 
-    this.iconActions = this.actions;
-    this.logoPoUI =
-      this.themeStorage === 'po-theme-default' ? './assets/po-logos/po_black.png' : './assets/po-logos/po_white.png';
-
-    this.themeChangeListener = () => {
-      this.changeTheme(false);
-    };
-
-    this.a11yChangeListener = () => {
-      this.changeA11yLevel(false);
-    };
-
-    window.addEventListener('po-sample-change-theme', this.themeChangeListener);
-    window.addEventListener('po-sample-change-a11y', this.a11yChangeListener);
+    this.updateLogoFromActiveTheme();
   }
 
   openExternalLink(url) {
     window.open(url, '_blank');
   }
 
-  changeTheme(dispatchEvent = true) {
-    this.themeStorage = this.themeStorage === 'po-theme-default' ? 'po-theme-dark' : 'po-theme-default';
-    localStorage.setItem('po-ui-theme', this.themeStorage);
-    this.theme = this.themeStorage === 'po-theme-default' ? 0 : 1;
-    this.logoPoUI =
-      this.themeStorage === 'po-theme-default' ? './assets/po-logos/po_black.png' : './assets/po-logos/po_white.png';
-    this.iconActions = this.actions;
-
-    this.a11yLevel = this.poTheme.getA11yLevel();
-
-    this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
-
-    if (this.a11yLevel === PoThemeA11yEnum.AA) {
-      this.poTheme.setA11yDefaultSizeSmall(true);
-    }
-
-    if (dispatchEvent) {
-      window.dispatchEvent(new Event(this.themeStorage));
-    }
+  @HostListener('window:PoUiThemeChange')
+  onPoUiThemeChange(): void {
+    this.updateLogoFromActiveTheme();
   }
 
-  changeA11yLevel(dispatchEvent = true) {
-    this.a11yStorage = this.a11yStorage === 'po-a11y-AAA' ? 'po-a11y-AA' : 'po-a11y-AAA';
-    localStorage.setItem('po-ui-a11y', this.a11yStorage);
-    this.a11yLevel = this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA;
-    this.iconActions = this.actions;
+  /**
+   * Reidrata o tema no boot a partir da preferência salva no `localStorage` (via `getThemeActive`,
+   * que já re-resolve a constante embutida pelo `name`). Sem preferência salva, aplica o
+   * `poThemeDefault` (light/AAA). Em seguida, ajusta a densidade conforme o nível de acessibilidade.
+   */
+  private initTheme(): void {
+    this.poTheme.setA11yDefaultSizeSmall(true);
 
-    this.poTheme.setTheme(poThemeConstant, this.theme, this.a11yLevel);
+    const activeTheme = this.poTheme.getThemeActive();
 
-    if (this.a11yLevel === PoThemeA11yEnum.AA) {
-      this.poTheme.setA11yDefaultSizeSmall(true);
-      this.poTheme.setDensityMode(PoDensityMode.Small);
+    if (!activeTheme) {
+      this.theme = PoThemeTypeEnum.light;
+      this.a11yLevel = PoThemeA11yEnum.AAA;
+      this.poTheme.setTheme(poThemeDefault, this.theme, this.a11yLevel);
     } else {
-      this.poTheme.setDensityMode(PoDensityMode.Medium);
+      this.theme = this.getActiveType(activeTheme);
+      this.a11yLevel = this.getActiveA11y(activeTheme);
+      this.poTheme.setTheme(activeTheme, this.theme, this.a11yLevel);
     }
 
-    if (dispatchEvent) {
-      window.dispatchEvent(new Event(this.a11yStorage));
-    }
+    this.poTheme.setDensityMode(this.a11yLevel === PoThemeA11yEnum.AA ? PoDensityMode.Small : PoDensityMode.Medium);
+  }
+
+  /**
+   * Sincroniza o logo a partir do tipo (light/dark) do tema atualmente ativo no `PoThemeService`.
+   * Garante que o logo adapte a cor independentemente da via de troca de tema (boot ou popover).
+   */
+  private updateLogoFromActiveTheme(): void {
+    const activeTheme = this.poTheme.getThemeActive();
+    const isDark = activeTheme ? this.getActiveType(activeTheme) === PoThemeTypeEnum.dark : false;
+
+    this.logoPoUI = isDark ? './assets/po-logos/po_white.png' : './assets/po-logos/po_black.png';
+  }
+
+  private getActiveType(theme: PoTheme): PoThemeTypeEnum {
+    return typeof theme.active === 'object' ? theme.active.type : theme.active;
+  }
+
+  private getActiveA11y(theme: PoTheme): PoThemeA11yEnum {
+    return typeof theme.active === 'object' ? theme.active.a11y : PoThemeA11yEnum.AAA;
   }
 
   get actions() {
@@ -146,22 +120,22 @@ export class AppComponent implements OnInit, OnDestroy {
         tooltip: 'Instagram'
       },
       {
-        icon: `${this.themeStorage === 'po-theme-dark' ? 'an an-sun' : 'an an-moon'}`,
-        label: `Theme ${this.themeStorage === 'po-theme-dark' ? 'Light' : 'Dark'}`,
-        tooltip: `Theme ${this.themeStorage === 'po-theme-dark' ? 'Dark' : 'Light'}`,
-        action: this.changeTheme.bind(this)
-      },
-      {
-        icon: `${this.a11yStorage === 'po-a11y-AAA' ? 'an-fill an-text-aa' : 'an an-text-aa'}`,
-        label: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AA : PoThemeA11yEnum.AAA}`,
-        tooltip: `Accessibility level ${this.a11yStorage === 'po-a11y-AAA' ? PoThemeA11yEnum.AAA : PoThemeA11yEnum.AA}`,
-        action: this.changeA11yLevel.bind(this)
+        icon: 'an an-palette',
+        label: 'Aparência',
+        tooltip: 'Aparência'
       }
     ];
   }
 
-  ngOnDestroy(): void {
-    window.removeEventListener('po-sample-change-theme', this.themeChangeListener);
-    window.removeEventListener('po-sample-change-a11y', this.a11yChangeListener);
+  ngAfterViewInit(): void {
+    this.iconActions = this.buildIconActions();
+  }
+
+  private buildIconActions(): Array<PoHeaderActionTool> {
+    return this.actions.map(action =>
+      action.label === 'Aparência' && this.appearancePopover
+        ? { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 320 } }
+        : action
+    );
   }
 }

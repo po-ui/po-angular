@@ -1,58 +1,83 @@
-<po-widget p-title="Example">
-  <form [formGroup]="reactiveForm">
-    <po-input class="po-lg-6" formControlName="name" p-clean p-icon="an an-user" p-label="Customer name"> </po-input>
+<po-widget p-title="Theme settings">
+  <div class="po-row">
+    <po-radio-group
+      class="po-md-4"
+      name="themeType"
+      p-label="Theme type"
+      [(ngModel)]="themeType"
+      [p-options]="themeTypeOptions"
+      (p-change)="onThemeTypeChange($event)"
+    >
+    </po-radio-group>
 
-    <po-email class="po-lg-6" formControlName="email" p-label="Email" p-clean> </po-email>
+    <po-radio-group
+      class="po-md-4"
+      name="a11yLevel"
+      p-label="Accessibility level"
+      p-helper="AA allows the small size as default for components."
+      [(ngModel)]="a11yLevel"
+      [p-options]="a11yLevelOptions"
+      (p-change)="onA11yLevelChange($event)"
+    >
+    </po-radio-group>
 
-    <po-input class="po-lg-4 po-md-8" formControlName="address" p-clean p-icon="an an-map-pin" p-label="Address">
-    </po-input>
-
-    <po-number class="po-lg-2 po-md-4" formControlName="number" p-label="Number" p-clean> </po-number>
-
-    <po-url class="po-lg-6" formControlName="website" p-label="Website" p-clean> </po-url>
-
-    <div class="po-row">
-      <po-button class="po-md-3" p-label="Save" [p-disabled]="!reactiveForm.valid" (p-click)="saveForm()"> </po-button>
-    </div>
-  </form>
-
-  <po-modal #reactiveFormData p-title="Save successful" [p-primary-action]="modalPrimaryAction">
-    <div class="po-row">
-      <po-info class="po-md-12" p-label="Name" [p-value]="reactiveForm.controls.name.value"> </po-info>
-    </div>
-
-    <div class="po-row">
-      <po-info class="po-md-6" p-label="Address" [p-value]="reactiveForm.controls.address.value"> </po-info>
-
-      <po-info class="po-md-6" p-label="Number" [p-value]="reactiveForm.controls.number.value"> </po-info>
-    </div>
-
-    <div class="po-row">
-      <po-info class="po-md-6" p-label="Email" [p-value]="reactiveForm.controls.email.value"> </po-info>
-
-      <po-info class="po-md-6" p-label="Website" [p-value]="reactiveForm.controls.website.value"> </po-info>
-    </div>
-  </po-modal>
+    <po-radio-group
+      class="po-md-4"
+      name="densityMode"
+      p-label="Density"
+      p-helper="Spacing of grouping components, such as pages, containers and modals."
+      [(ngModel)]="densityMode"
+      [p-options]="densityModeOptions"
+      (p-change)="onDensityModeChange($event)"
+    >
+    </po-radio-group>
+  </div>
 </po-widget>
 
-<div class="po-row po-mt-3">
-  <po-radio-group
-    class="po-md-6"
-    name="theme"
-    p-label="Theme Type"
-    [(ngModel)]="theme"
-    [p-options]="themeOptions"
-    (p-change)="changeTheme($event)"
-  >
-  </po-radio-group>
+<po-widget class="po-mt-3" p-title="Example">
+  <form [formGroup]="reactiveForm">
+    <div class="po-row">
+      <po-input class="po-lg-6" formControlName="name" p-clean p-icon="an an-user" p-label="Customer name"> </po-input>
 
-  <po-radio-group
-    class="po-md-6"
-    name="a11ylevel"
-    p-label="Acessibility Level"
-    [(ngModel)]="a11yLevel"
-    [p-options]="a11yLevelOptions"
-    (p-change)="changeA11yLevel($event)"
-  >
-  </po-radio-group>
-</div>
+      <po-email class="po-lg-6" formControlName="email" p-label="Email" p-clean> </po-email>
+    </div>
+
+    <div class="po-row">
+      <po-input class="po-lg-4 po-md-8" formControlName="address" p-clean p-icon="an an-map-pin" p-label="Address">
+      </po-input>
+
+      <po-number class="po-lg-2 po-md-4" formControlName="number" p-label="Number" p-clean> </po-number>
+
+      <po-url class="po-lg-6" formControlName="website" p-label="Website" p-clean> </po-url>
+    </div>
+
+    <div class="po-row">
+      <po-button
+        class="po-md-3"
+        p-label="Save"
+        p-kind="primary"
+        [p-disabled]="reactiveForm.invalid"
+        (p-click)="saveForm()"
+      >
+      </po-button>
+    </div>
+  </form>
+</po-widget>
+
+<po-modal #reactiveFormData p-title="Save successful" [p-primary-action]="modalPrimaryAction">
+  <div class="po-row">
+    <po-info class="po-md-12" p-label="Name" [p-value]="reactiveForm.controls.name.value"> </po-info>
+  </div>
+
+  <div class="po-row">
+    <po-info class="po-md-6" p-label="Address" [p-value]="reactiveForm.controls.address.value"> </po-info>
+
+    <po-info class="po-md-6" p-label="Number" [p-value]="reactiveForm.controls.number.value"> </po-info>
+  </div>
+
+  <div class="po-row">
+    <po-info class="po-md-6" p-label="Email" [p-value]="reactiveForm.controls.email.value"> </po-info>
+
+    <po-info class="po-md-6" p-label="Website" [p-value]="reactiveForm.controls.website.value"> </po-info>
+  </div>
+</po-modal>

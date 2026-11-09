@@ -68,14 +68,12 @@
 
 .section-title {
   font-size: 24px;
-  font-family: var(--font-family-po-ui);
   margin-top: 0px;
 }
 
 .section-title-primary {
-  color: #c9357d;
+  color: var(--color-brand-02-base);
   font-size: 24px;
-  font-family: var(--font-family-po-ui);
   margin-top: 0px;
 }
 
