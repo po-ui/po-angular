@@ -1,4 +1,4 @@
-import { TemplateRef } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PoIconComponent } from './po-icon.component';
@@ -11,6 +11,19 @@ class TemplateA extends TemplateRef<void> {
   }
 }
 
+@Component({
+  template: `
+    <ng-template #customIcon><span class="custom-icon"></span></ng-template>
+    <po-icon [p-icon]="icon"></po-icon>
+  `,
+  standalone: false
+})
+class PoIconHostComponent {
+  @ViewChild('customIcon', { static: true }) customIcon!: TemplateRef<void>;
+
+  icon: string | TemplateRef<void> = 'ICON_NOTIFICATION';
+}
+
 describe('PoIconComponent: ', () => {
   let component: PoIconComponent;
   let fixture: ComponentFixture<PoIconComponent>;
@@ -19,7 +32,7 @@ describe('PoIconComponent: ', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PoIconComponent],
+      declarations: [PoIconComponent, PoIconHostComponent],
       providers: [{ provide: ICONS_DICTIONARY, useValue: PoIconDictionary }]
     }).compileComponents();
   }));
@@ -54,6 +67,17 @@ describe('PoIconComponent: ', () => {
 
         expect(component['addClasses']).not.toHaveBeenCalled();
         expect(component.icon).toEqual(expectedResult);
+      });
+
+      it('should clear `class` if value is a TemplateRef after a string.', () => {
+        component.icon = 'ICON_NOTIFICATION';
+
+        expect(component.class).toBeTruthy();
+
+        component.icon = new TemplateA();
+
+        expect(component.class).toBe('');
+        expect(component.hostPIcon).toBeNull();
       });
 
       it('shouldn`t update `icon` value if value isn`t a TemplateRef or string.', () => {
@@ -153,6 +177,33 @@ describe('PoIconComponent: ', () => {
       const icon = nativeElement.querySelector('i.po-icon');
 
       expect(icon).toBeTruthy();
+    });
+
+    it('should render the template when `p-icon` changes from a string to a TemplateRef', () => {
+      const hostFixture = TestBed.createComponent(PoIconHostComponent);
+      hostFixture.detectChanges();
+
+      expect(hostFixture.nativeElement.querySelector('i.po-icon-notification')).toBeTruthy();
+      expect(hostFixture.nativeElement.querySelector('.custom-icon')).toBeNull();
+
+      hostFixture.componentInstance.icon = hostFixture.componentInstance.customIcon;
+      hostFixture.detectChanges();
+
+      expect(hostFixture.nativeElement.querySelector('.custom-icon')).toBeTruthy();
+      expect(hostFixture.nativeElement.querySelector('i.po-icon-notification')).toBeNull();
+    });
+
+    it('should render the string icon when `p-icon` changes from a TemplateRef to a string', () => {
+      const hostFixture = TestBed.createComponent(PoIconHostComponent);
+      hostFixture.componentInstance.icon = hostFixture.componentInstance.customIcon;
+      hostFixture.detectChanges();
+
+      expect(hostFixture.nativeElement.querySelector('.custom-icon')).toBeTruthy();
+
+      hostFixture.componentInstance.icon = 'ICON_NOTIFICATION';
+      hostFixture.detectChanges();
+
+      expect(hostFixture.nativeElement.querySelector('i.po-icon-notification')).toBeTruthy();
     });
 
     it('shouldn`t contain the `po-icon` selector.', () => {

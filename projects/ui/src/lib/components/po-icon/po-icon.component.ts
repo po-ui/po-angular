@@ -64,6 +64,7 @@ export class PoIconComponent {
       this.processIcon(value);
     } else if (value instanceof TemplateRef) {
       this._icon = value;
+      this.class = '';
       this.hostPIcon = null;
     }
   }
