@@ -1,9 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { PoTooltipModule } from '../../../directives';
 import { PoUtils as util } from '../../../utils/util';
-import { PoPopoverComponent } from '../../po-popover';
-import { PoPopupComponent } from '../../po-popup';
+import { PoBadgeModule } from '../../po-badge';
+import { PoButtonModule } from '../../po-button';
+import { PoIconModule } from '../../po-icon';
+import { PoPopoverComponent, PoPopoverModule } from '../../po-popover';
+import { PoPopupComponent, PoPopupModule } from '../../po-popup';
 import { PoHeaderActionTool } from '../interfaces/po-header-action-tool.interface';
 import { PoHeaderToolsComponent } from './po-header-tools.component';
 
@@ -262,5 +267,63 @@ describe('PoHeaderToolsComponent', () => {
 
       expect(onOpenSpy).toHaveBeenCalledWith(undefined);
     });
+  });
+});
+
+describe('PoHeaderToolsComponent - badge rendering', () => {
+  let component: PoHeaderToolsComponent;
+  let fixture: ComponentFixture<PoHeaderToolsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PoHeaderToolsComponent],
+      imports: [
+        CommonModule,
+        PoBadgeModule,
+        PoButtonModule,
+        PoIconModule,
+        PoPopoverModule,
+        PoPopupModule,
+        PoTooltipModule
+      ],
+      providers: [provideRouter([])]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoHeaderToolsComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should render the badge when action badge changes from undefined to 1', () => {
+    component.actionTools = [{ icon: 'ICON_NOTIFICATION', label: 'Notifications', tooltip: 'Notifications' }];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('po-badge')).toBeNull();
+    expect(fixture.nativeElement.querySelector('i.an-bell')).toBeTruthy();
+
+    component.actionTools = [{ icon: 'ICON_NOTIFICATION', label: 'Notifications', tooltip: 'Notifications', badge: 1 }];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.po-header-badge po-badge')).toBeTruthy();
+  });
+
+  it('should render the badge when action badge changes from 1 to 2', () => {
+    component.actionTools = [{ icon: 'ICON_NOTIFICATION', label: 'Notifications', tooltip: 'Notifications', badge: 1 }];
+    fixture.detectChanges();
+
+    component.actionTools = [{ icon: 'ICON_NOTIFICATION', label: 'Notifications', tooltip: 'Notifications', badge: 2 }];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.po-header-badge po-badge')).toBeTruthy();
+  });
+
+  it('should remove the badge when action badge changes from 1 to undefined', () => {
+    component.actionTools = [{ icon: 'ICON_NOTIFICATION', label: 'Notifications', tooltip: 'Notifications', badge: 1 }];
+    fixture.detectChanges();
+
+    component.actionTools = [{ icon: 'ICON_NOTIFICATION', label: 'Notifications', tooltip: 'Notifications' }];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('po-badge')).toBeNull();
+    expect(fixture.nativeElement.querySelector('i.an-bell')).toBeTruthy();
   });
 });
