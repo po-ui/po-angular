@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [22.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v22.0.0-rc.0...v22.0.0-rc.1) (2026-11-11)
+
+### Code Refactoring
+
+* **theme:** deprecia o tema padrão anterior do PO UI ([935388d](https://github.com/po-ui/po-angular/commit/935388dbffc825274752b7e7c3b7c0b5be514ba4))
+
+### Features
+
+* **button:** adiciona kind glow ([f47a57e](https://github.com/po-ui/po-angular/commit/f47a57ec0a1e8ee9a492f2e4689ee155113a973a))
+* **theme:** implementa novo tema Evo ([e34be74](https://github.com/po-ui/po-angular/commit/e34be7412743d83fa4b80e82c86244da32ae19bd))
+
 ## [22.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v22.0.0-next.0...v22.0.0-rc.0) (2026-10-28)
 
 ### Features
