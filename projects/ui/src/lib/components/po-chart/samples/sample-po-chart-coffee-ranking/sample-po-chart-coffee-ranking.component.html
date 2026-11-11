@@ -1,78 +1,84 @@
 <div class="po-row">
   <div class="po-md-12 po-lg-6">
     <div class="po-row">
-      <po-chart
-        class="po-md-12 po-mt-2"
-        p-title="Participation by country in world exports - %"
-        [p-options]="options"
-        [p-categories]="categories"
-        [p-series]="participationByCountryInWorldExports"
-        [p-type]="participationByCountryInWorldExportsType"
-      >
-      </po-chart>
+      <po-widget class="po-md-12 po-mt-2">
+        <po-chart
+          p-title="Participation by country in world exports - %"
+          [p-options]="options"
+          [p-categories]="categories"
+          [p-series]="participationByCountryInWorldExports"
+          [p-type]="participationByCountryInWorldExportsType"
+        >
+        </po-chart>
+      </po-widget>
 
-      <po-chart
-        class="po-md-12 po-mt-2"
-        p-title="Evolution of coffee and some competitors - %"
-        [p-options]="optionsColumn"
-        [p-categories]="categoriesColumn"
-        [p-series]="evolutionOfCoffeeAndSomeCompetitors"
-      >
-      </po-chart>
+      <po-widget class="po-md-12 po-mt-2">
+        <po-chart
+          p-title="Evolution of coffee and some competitors - %"
+          [p-options]="optionsColumn"
+          [p-categories]="categoriesColumn"
+          [p-series]="evolutionOfCoffeeAndSomeCompetitors"
+        >
+        </po-chart>
+      </po-widget>
     </div>
   </div>
 
   <div class="po-md-12 po-lg-6">
-    <po-chart
-      class="po-md-12 po-mt-2"
-      p-title="Ranking of the most purchased and consumed beverages in Germany between 2018 and 2020 - in %"
-      [p-height]="816"
-      [p-categories]="consumptionPerCapitaItems"
-      [p-series]="consumptionPerCapita"
-      [p-type]="consumptionPerCapitaType"
-      [p-options]="consumptionPerCapitaOptions"
-    >
-    </po-chart>
+    <po-widget class="po-md-12 po-mt-2">
+      <po-chart
+        p-title="Ranking of the most purchased and consumed beverages in Germany between 2018 and 2020 - in %"
+        [p-height]="834"
+        [p-categories]="consumptionPerCapitaItems"
+        [p-series]="consumptionPerCapita"
+        [p-type]="consumptionPerCapitaType"
+        [p-options]="consumptionPerCapitaOptions"
+      >
+      </po-chart>
+    </po-widget>
   </div>
 
   <div class="po-md-12">
-    <po-chart
-      class="po-lg-6 po-mt-2"
-      p-title="Top 5 coffee producing countries (in tons)"
-      [p-options]="coffeeProductionOptions"
-      [p-series]="coffeeProduction"
-      (p-series-click)="searchMore($event)"
-    >
-    </po-chart>
+    <po-widget class="po-lg-6 po-mt-2">
+      <po-chart
+        p-title="Top 5 coffee producing countries (in tons)"
+        [p-options]="coffeeProductionOptions"
+        [p-series]="coffeeProduction"
+        (p-series-click)="searchMore($event)"
+      >
+      </po-chart>
+    </po-widget>
 
-    <po-chart
-      class="po-lg-6 po-mt-2"
-      p-title="Top 15 Coffee Consuming Countries (in kg per capita)"
-      [p-series]="coffeeConsumption"
-      [p-options]="coffeeConsumptionOptions"
-      [p-type]="coffeConsumingChartType"
-      (p-series-click)="showMeTheDates($event)"
-    >
-    </po-chart>
+    <po-widget class="po-lg-6 po-mt-2">
+      <po-chart
+        p-title="Top 15 Coffee Consuming Countries (in kg per capita)"
+        [p-series]="coffeeConsumption"
+        [p-options]="coffeeConsumptionOptions"
+        [p-type]="coffeConsumingChartType"
+        (p-series-click)="showMeTheDates($event)"
+      >
+      </po-chart>
+    </po-widget>
   </div>
 
   <div class="po-row">
-    <po-chart
-      class="po-md-6 po-mt-2"
-      p-title="While the coffee price falls, all three of these companies profit margins have risen  - (US$ millions)"
-      [p-options]="chartAreaOptions"
-      [p-categories]="chartAreaCategories"
-      [p-series]="chartAreaSeries"
-    >
-    </po-chart>
+    <po-widget class="po-md-6 po-mt-2">
+      <po-chart
+        p-title="While the coffee price falls, all three of these companies profit margins have risen  - (US$ millions)"
+        [p-options]="chartAreaOptions"
+        [p-categories]="chartAreaCategories"
+        [p-series]="chartAreaSeries"
+      >
+      </po-chart>
+    </po-widget>
 
     <div class="po-md-6 po-mt-2">
-      <po-widget p-height="198">
+      <po-widget p-height="201">
         <div class="po-font-title po-text-center po-pt-5">66 billion</div>
         <div class="po-text-center">cups of coffee are consumed per year in U.S.</div>
       </po-widget>
 
-      <po-widget p-height="198">
+      <po-widget class="po-mt-2" style="display: block" p-height="201">
         <div class="po-font-title po-text-center po-pt-5">2nd most</div>
         <div class="po-text-center">traded commodity in the world second to Oil.</div>
       </po-widget>

@@ -1,16 +1,18 @@
-<po-chart
-  [p-categories]="isTypeRadar ? radarConfig : allCategories"
-  [p-height]="height"
-  [p-data-label]="dataLabel"
-  [p-options]="options"
-  [p-series]="series"
-  [p-title]="title"
-  [p-type]="type"
-  [p-value-gauge-multiple]="valueGauge"
-  (p-series-click)="changeEvent('p-series-click', $event)"
-  (p-series-hover)="changeEvent('p-series-hover', $event)"
->
-</po-chart>
+<po-widget>
+  <po-chart
+    [p-categories]="isTypeRadar ? radarConfig : allCategories"
+    [p-height]="height"
+    [p-data-label]="dataLabel"
+    [p-options]="options"
+    [p-series]="series"
+    [p-title]="title"
+    [p-type]="type"
+    [p-value-gauge-multiple]="valueGauge"
+    (p-series-click)="changeEvent('p-series-click', $event)"
+    (p-series-hover)="changeEvent('p-series-hover', $event)"
+  >
+  </po-chart>
+</po-widget>
 
 <po-divider class="po-md-12" p-label="Events"></po-divider>
 
