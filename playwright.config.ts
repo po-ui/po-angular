@@ -31,7 +31,10 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 500, height: 300 } } }
   ],
   webServer: {
-    command: 'npx ng serve visual-harness',
+    // PW_STATIC=1: serve o build já pronto (`ng build visual-harness`) em vez do dev-server; mais leve e rápido.
+    command: process.env.PW_STATIC
+      ? `python3 -m http.server ${PORT} --bind 127.0.0.1 --directory dist/visual-harness/browser`
+      : 'npx ng serve visual-harness',
     url: `http://127.0.0.1:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000

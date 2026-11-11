@@ -35,10 +35,15 @@ jobs:
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
 
+      # Servidor estático (PW_STATIC) é mais leve e ~20% mais rápido que o `ng serve`.
+      - name: Build do harness
+        run: npx ng build visual-harness
+
       - name: Rodar testes visuais
         run: npx playwright test
         env:
           CI: 'true'
+          PW_STATIC: '1'
 
       - name: Subir relatório e diffs
         if: always()
