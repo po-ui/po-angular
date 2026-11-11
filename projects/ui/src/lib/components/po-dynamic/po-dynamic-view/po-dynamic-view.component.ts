@@ -34,6 +34,8 @@ import { PoMultiselectFilterService } from '../../po-field/po-multiselect/po-mul
  *  <file name="sample-po-dynamic-view-container/sample-po-dynamic-view-container.component.html"> </file>
  *  <file name="sample-po-dynamic-view-container/sample-po-dynamic-view-container.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory dynamic
  */
 @Component({
   selector: 'po-dynamic-view',

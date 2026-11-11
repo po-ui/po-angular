@@ -33,6 +33,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * ...
  * ```
  *
+ * @docsParent po-page-job-scheduler
  */
 @Directive({
   selector: '[p-job-scheduler-parameters-template]',

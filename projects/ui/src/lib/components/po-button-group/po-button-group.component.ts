@@ -32,6 +32,8 @@ import { PoButtonGroupBaseComponent } from './po-button-group-base.component';
  *  <file name="sample-po-button-group-post/sample-po-button-group-post.component.html"> </file>
  *  <file name="sample-po-button-group-post/sample-po-button-group-post.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory actions
  */
 @Component({
   selector: 'po-button-group',

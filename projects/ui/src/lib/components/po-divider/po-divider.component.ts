@@ -21,6 +21,8 @@ import { PoDividerBaseComponent } from './po-divider-base.component';
  *  <file name="sample-po-divider-user-detail/sample-po-divider-user-detail.component.html"> </file>
  *  <file name="sample-po-divider-user-detail/sample-po-divider-user-detail.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory containers
  */
 @Component({
   selector: 'po-divider',

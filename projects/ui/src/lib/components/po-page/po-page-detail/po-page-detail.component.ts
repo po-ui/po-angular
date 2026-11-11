@@ -21,6 +21,8 @@ import { PoPageDetailBaseComponent } from './po-page-detail-base.component';
  *  <file name="sample-po-page-detail-user/sample-po-page-detail-user.component.html"> </file>
  *  <file name="sample-po-page-detail-user/sample-po-page-detail-user.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory pages
  */
 @Component({
   selector: 'po-page-detail',

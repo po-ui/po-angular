@@ -163,6 +163,8 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicTableOptions);
  *  <file name="sample-po-page-dynamic-table-drag-and-drop/sample-po-page-dynamic-table-drag-and-drop.component.html"> </file>
  *  <file name="sample-po-page-dynamic-table-drag-and-drop/sample-po-page-dynamic-table-drag-and-drop.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory dynamic
  */
 @Component({
   selector: 'po-page-dynamic-table',

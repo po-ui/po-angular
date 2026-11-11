@@ -1,7 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { MenuGuidesService } from './menu-guides.service';
+import { GuideMenuCategory, MenuGuidesService } from './menu-guides.service';
+import { MenuFilterClear } from '../shared/menu-filter-clear';
+import { MenuShortcutFilter } from '../shared/menu-shortcut-filter';
 
 @Component({
   templateUrl: './guides.component.html',
@@ -9,8 +11,12 @@ import { MenuGuidesService } from './menu-guides.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class GuidesComponent implements OnInit {
+export class GuidesComponent implements OnInit, OnDestroy {
   menus = [];
+  /** Busca do menu sem os atalhos (só o guia na categoria de origem aparece). */
+  readonly menuFilter = new MenuShortcutFilter(() => this.menus);
+  /** Recalcula a altura dos grupos do menu quando o filtro é limpo. */
+  readonly menuFilterClear = new MenuFilterClear();
 
   constructor(
     private menuGuidesService: MenuGuidesService,
@@ -18,15 +24,13 @@ export class GuidesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.http.get('./assets/json/api-list.json').subscribe(
-      result => {
-        this.menus = this.menuGuidesService.getMenus(result).map(menu => {
-          menu.link = menu.link.replace('guides/', '');
-
-          return menu;
-        });
-      },
+    this.http.get<Array<GuideMenuCategory>>('./assets/json/guides-menu.json').subscribe(
+      result => (this.menus = this.menuGuidesService.getMenus(result)),
       error => console.error(error)
     );
+  }
+
+  ngOnDestroy() {
+    this.menuFilterClear.disconnect();
   }
 }

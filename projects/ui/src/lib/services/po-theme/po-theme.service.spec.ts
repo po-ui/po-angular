@@ -471,6 +471,19 @@ describe('PoThemeService:', () => {
         expect(localStorage.setItem).toHaveBeenCalledWith('po-density-mode', 'medium');
         expect((service as any).setDefaultBaseStyle).toHaveBeenCalled();
       });
+
+      it('should keep `getDensityMode` in sync with the mode set', () => {
+        // o `beforeEach` geral troca o `setAttribute` por um spy sem efeito
+        (document.documentElement.setAttribute as jasmine.Spy).and.callThrough();
+
+        service.setDensityMode('small');
+        expect(service.getDensityMode()).toBe(PoDensityMode.Small);
+
+        service.setDensityMode('medium');
+        expect(service.getDensityMode()).toBe(PoDensityMode.Medium);
+
+        document.documentElement.removeAttribute('po-density-mode');
+      });
     });
 
     describe('Default style inheritance (inheritDefaultStyle):', () => {

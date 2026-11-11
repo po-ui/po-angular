@@ -1,0 +1,62 @@
+<section class="home-statement">
+  <div class="home-statement-stage">
+    <p class="home-statement-text">
+      O <strong class="home-statement-highlight">PO UI</strong> reúne o que você precisa para criar interfaces —
+      conectando componentes, templates e documentação em uma biblioteca flexível para desenvolver aplicações Angular.
+    </p>
+
+    <!-- Everyday examples of the components, in the four corners (positions follow the Figma frame of 1280 px). -->
+
+    <!-- Top left: reimbursement requests (po-table with label and subtitle columns) -->
+    <div class="home-statement-slot home-statement-card home-statement-requests">
+      <po-table
+        [p-columns]="requestColumns"
+        [p-items]="requests"
+        p-hide-columns-manager="true"
+        p-hide-table-search="true"
+        p-striped="true"
+        p-spacing="small"
+      >
+      </po-table>
+    </div>
+
+    <!-- Bottom left: po-widget with the orders of the day -->
+    <po-widget
+      class="home-statement-slot home-statement-widget"
+      p-tag="+8%"
+      p-tag-type="success"
+      p-title="Pedidos de hoje"
+      p-primary-label="Ver exemplos"
+      [p-help]="widgetSamplesUrl"
+      (p-primary-action)="openWidgetSamples()"
+    >
+      <p class="home-statement-widget-body">
+        <span class="home-statement-widget-number">128</span>
+        pedidos
+      </p>
+      <po-progress p-text="Meta 72%" [p-value]="72"></po-progress>
+    </po-widget>
+
+    <!-- Top right: order tracking (visual only) -->
+    <div class="home-statement-slot home-statement-card home-statement-order">
+      <span class="home-statement-card-title">Pedido</span>
+      <po-stepper p-orientation="horizontal" [p-step-icons]="true" [p-disable-click]="true">
+        <po-step p-label="Carrinho" p-status="done" p-icon-default="an an-shopping-cart"></po-step>
+        <po-step p-label="Entrega" p-status="active" p-icon-default="an an-truck"></po-step>
+        <po-step p-label="Pagamento" p-icon-default="an an-credit-card"></po-step>
+        <po-step p-label="Confirmação" p-icon-default="an an-check"></po-step>
+      </po-stepper>
+    </div>
+
+    <!-- Bottom right: po-chart donut -->
+    <div class="home-statement-slot home-statement-card home-statement-chart">
+      <po-chart
+        p-type="donut"
+        p-title="Status das entregas"
+        [p-height]="340"
+        [p-series]="chartSeries"
+        [p-options]="chartOptions"
+      ></po-chart>
+    </div>
+  </div>
+</section>

@@ -52,6 +52,8 @@ import { PoListViewDetailTemplateDirective } from './po-list-view-detail-templat
  *  <file name="sample-po-list-view-hiring-processes/sample-po-list-view-hiring-processes.component.ts"> </file>
  *  <file name="sample-po-list-view-hiring-processes/sample-po-list-view-hiring-processes.service.ts"> </file>
  * </example>
+ *
+ * @docsCategory tables-lists
  */
 @Component({
   selector: 'po-list-view',

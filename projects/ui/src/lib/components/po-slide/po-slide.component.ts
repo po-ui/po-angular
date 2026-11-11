@@ -54,6 +54,8 @@ const poSlideMinHeight = 192;
  *  <file name="sample-po-slide-external-controls/sample-po-slide-external-controls.component.html"> </file>
  *  <file name="sample-po-slide-external-controls/sample-po-slide-external-controls.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory visual
  */
 @Component({
   selector: 'po-slide',

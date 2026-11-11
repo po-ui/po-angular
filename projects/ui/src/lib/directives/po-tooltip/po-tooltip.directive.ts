@@ -26,6 +26,8 @@ const nativeElements = ['input', 'button'];
  *  <file name="sample-po-tooltip-new-user/sample-po-tooltip-new-user.component.ts"> </file>
  * </example>
  *
+ * @docsCategory directives
+ * @docsShortcut overlay
  */
 @Directive({
   selector: '[p-tooltip]',

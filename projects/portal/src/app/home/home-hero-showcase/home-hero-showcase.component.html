@@ -1,0 +1,13 @@
+<div class="home-showcase-stage">
+  <div class="home-showcase-track">
+    @for (copy of copies; track copy) {
+      <div class="home-showcase-grid">
+        @for (sample of samples; track sample) {
+          <div class="home-showcase-card">
+            <app-home-hero-showcase-samples [name]="sample"></app-home-hero-showcase-samples>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

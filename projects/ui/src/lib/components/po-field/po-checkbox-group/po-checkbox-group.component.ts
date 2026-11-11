@@ -40,6 +40,8 @@ import { PoHelperComponent } from '../../po-helper';
  *  <file name="sample-po-checkbox-group-password-policy/sample-po-checkbox-group-password-policy.component.html"> </file>
  *  <file name="sample-po-checkbox-group-password-policy/sample-po-checkbox-group-password-policy.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-checkbox-group',

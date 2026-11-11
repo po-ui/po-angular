@@ -1,0 +1,53 @@
+<section class="home-hero">
+  <div class="home-hero-content">
+    <!-- Owner request: the tag shows the GitHub stars and links to the repository.
+         It replaces the Figma text "Novo Componete de Tree-view" (FIGMA C1). -->
+    <a class="home-hero-tag-link" [href]="repositoryUrl" target="_blank" rel="noopener noreferrer">
+      <po-tag
+        class="home-hero-tag"
+        p-icon="an an-star"
+        [p-value]="tagLabel"
+        p-color="var(--home-hero-tag-bg)"
+        p-text-color="var(--home-hero-tag-text)"
+      >
+      </po-tag>
+    </a>
+
+    <h1 class="home-hero-title">Menos repetição.<br />Mais aplicação.</h1>
+
+    <p class="home-hero-description">
+      Crie interfaces incríveis e escaláveis com a nossa biblioteca open-source de componentes para Angular. Focada em
+      produtividade, padronização e usabilidade para você entregar valor mais rápido.
+    </p>
+
+    <div class="home-hero-actions">
+      <po-button
+        class="home-hero-primary button-brand-02"
+        [p-label]="startLabel"
+        p-kind="glow"
+        p-size="large"
+        (p-click)="openInternalLink('guides/getting-started')"
+      >
+      </po-button>
+      <po-button
+        class="home-hero-explore"
+        p-label="Explore os componentes"
+        p-kind="secondary"
+        p-size="large"
+        (p-click)="openInternalLink('documentation')"
+      >
+      </po-button>
+    </div>
+
+    <div class="home-hero-proof">
+      @if (showDevLibraryBadge) {
+        <span class="home-hero-badge">
+          Indicada como Dev Library pela
+          <img src="./assets/home/google-dev-library.svg" alt="Google" />
+        </span>
+      }
+    </div>
+  </div>
+
+  <app-home-hero-showcase class="home-hero-preview"></app-home-hero-showcase>
+</section>

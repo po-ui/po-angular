@@ -1,5 +1,13 @@
 <div class="po-wrapper">
-  <po-menu #userMenu [p-menus]="menus" p-filter></po-menu>
+  <po-menu
+    #userMenu
+    data-tour="guides-menu"
+    [p-menus]="menus"
+    p-filter
+    [p-service]="menuFilter"
+    (keyup)="menuFilterClear.onMenuEvent($event, userMenu)"
+    (click)="menuFilterClear.onMenuEvent($event, userMenu)"
+  ></po-menu>
 
   <router-outlet></router-outlet>
 </div>

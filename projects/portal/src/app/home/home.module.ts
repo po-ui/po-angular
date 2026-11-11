@@ -4,12 +4,28 @@ import { SharedModule } from './../shared/shared.module';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
-import { HomeBannerComponent } from './home-banner/home-banner.component';
+import { HomeHeroComponent } from './home-hero/home-hero.component';
+import { HomeHeroShowcaseSamplesComponent } from './home-hero-showcase/generated/home-hero-showcase-samples.component';
+import { HomeHeroShowcaseComponent } from './home-hero-showcase/home-hero-showcase.component';
+import { HomeBenefitsComponent } from './home-benefits/home-benefits.component';
+import { HomeStatementComponent } from './home-statement/home-statement.component';
+import { HomeFeaturesComponent } from './home-features/home-features.component';
+import { HomeOpenSourceComponent } from './home-open-source/home-open-source.component';
+import { HomeFooterComponent } from './home-footer/home-footer.component';
 import { HomeBannerService } from './home-banner/home-banner.service';
 
 @NgModule({
-  imports: [SharedModule, HomeRoutingModule],
-  declarations: [HomeComponent, HomeBannerComponent],
+  imports: [SharedModule, HomeRoutingModule, HomeHeroShowcaseSamplesComponent],
+  declarations: [
+    HomeComponent,
+    HomeHeroComponent,
+    HomeHeroShowcaseComponent,
+    HomeBenefitsComponent,
+    HomeStatementComponent,
+    HomeFeaturesComponent,
+    HomeOpenSourceComponent,
+    HomeFooterComponent
+  ],
   providers: [HomeBannerService],
   bootstrap: []
 })

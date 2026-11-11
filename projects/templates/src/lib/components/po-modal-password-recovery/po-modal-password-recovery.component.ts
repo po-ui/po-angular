@@ -38,6 +38,8 @@ import { PoModalPasswordRecoveryService } from './po-modal-password-recovery.ser
  *  <file name="sample-po-modal-password-recovery-request/sample-po-modal-password-recovery-request.component.html"> </file>
  *  <file name="sample-po-modal-password-recovery-request/sample-po-modal-password-recovery-request.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory auth
  */
 
 @Component({

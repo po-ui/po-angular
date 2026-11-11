@@ -8,6 +8,8 @@ import { PoValidators } from './validators';
 
 /**
  * @docsExtends PoFieldModel
+ *
+ * @docsCategory form
  */
 @Directive()
 export abstract class PoFieldValidateModel<T> extends PoFieldModel<T> implements Validator {

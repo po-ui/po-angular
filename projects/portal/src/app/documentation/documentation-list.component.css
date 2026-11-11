@@ -5,16 +5,6 @@
      com scroll natural (teste de performance). */
 }
 
-/* Cada linha: 3 cards lado a lado. Altura = p-height do card (320px). */
-.documentation-list-row {
-  display: flex;
-  gap: 16px;
-  height: 320px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
-  padding: 0 8px;
-}
-
 /* Item do grid real: a largura vem das classes po-sm/md/lg do grid system;
    aqui só o espaçamento vertical entre as linhas. */
 .documentation-list-item {
@@ -49,15 +39,14 @@
 }
 
 /* ---- Skeleton: modo grade ---- */
+/* A largura vem das mesmas classes do grid dos cards reais (.documentation-list-item po-sm-12 po-md-6 po-lg-4);
+   a altura é a do po-widget real (p-height 320). */
 .documentation-skeleton-card {
   display: flex;
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
-  flex: 1 1 calc((100% - 32px) / 3);
-  min-width: 0;
-  max-width: calc((100% - 32px) / 3);
-  height: 100%;
+  height: 320px;
   padding: 16px;
   background: var(--color-neutral-light-00);
   border: var(--border-width-sm, 1px) solid var(--color-neutral-light-20, #dadada);
@@ -156,4 +145,67 @@
   font-size: 14px;
   color: var(--color-neutral-dark-80);
   font-family: var(--font-family-bold);
+}
+
+/* Agrupamento por seção e categoria (mesmas categorias do menu). */
+.documentation-list-section {
+  margin-bottom: var(--spacing-md, 1.5rem);
+}
+
+/* os cards da grade flutuam (po-row/po-lg-4): cada categoria fecha a própria linha */
+.documentation-list-section,
+.documentation-list-category {
+  display: flow-root;
+}
+
+/* espaçamento vem das classes do po-ui (po-sm-12 = padding lateral, po-pb-2 = padding inferior) */
+.documentation-list-section-title {
+  font-size: 1.25rem;
+}
+
+/* sem gap entre o header e o corpo só no po-page da API Reference */
+:host ::ng-deep po-page-list .po-page {
+  --po-density-gap-header-content: 0;
+}
+
+/* contagem por seção no fim da página */
+.documentation-list-summary {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl, 3rem) 8px;
+}
+
+.documentation-list-summary-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-xs, 0.5rem) var(--spacing-md, 1.5rem);
+  margin: 0;
+}
+
+.documentation-list-summary-item {
+  display: flex;
+  gap: 4px;
+  font-size: 0.875rem;
+}
+
+.documentation-list-summary-item dt {
+  font-family: var(--font-family-bold);
+  color: var(--color-neutral-dark-80);
+}
+
+.documentation-list-summary-item dd {
+  margin: 0;
+  color: var(--color-neutral-dark-70);
+}
+
+.documentation-list-category-title {
+  margin: var(--spacing-xs, 0.5rem) 8px;
+  font-size: 1rem;
+  color: var(--color-neutral-dark-80);
+}
+
+.documentation-list-count {
+  font-weight: normal;
+  color: var(--color-neutral-dark-70);
 }

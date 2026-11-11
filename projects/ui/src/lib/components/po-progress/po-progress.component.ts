@@ -42,6 +42,7 @@ import { PoProgressBaseComponent } from './po-progress-base.component';
  *  <file name="sample-po-progress-circle/sample-po-progress-circle.component.css"> </file>
  * </example>
  *
+ * @docsCategory feedback
  */
 @Component({
   selector: 'po-progress',

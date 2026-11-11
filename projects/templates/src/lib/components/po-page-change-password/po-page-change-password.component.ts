@@ -62,6 +62,8 @@ import { PoPageChangePasswordService } from './po-page-change-password.service';
  *  <file name="sample-po-page-change-password-request/sample-po-page-change-password-request.component.html"> </file>
  *  <file name="sample-po-page-change-password-request/sample-po-page-change-password-request.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory auth
  */
 @Component({
   selector: 'po-page-change-password',

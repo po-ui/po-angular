@@ -81,6 +81,8 @@ const poDecimalTotalLengthLimit = 16;
  *  <file name="sample-po-decimal-display-format/sample-po-decimal-display-format.component.html"> </file>
  *  <file name="sample-po-decimal-display-format/sample-po-decimal-display-format.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-decimal',

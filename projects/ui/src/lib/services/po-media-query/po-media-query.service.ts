@@ -51,6 +51,7 @@ import { PoMediaQueryTokens } from './po-media-query.interface';
  * }
  * ```
  *
+ * @docsCategory services
  */
 
 @Injectable({

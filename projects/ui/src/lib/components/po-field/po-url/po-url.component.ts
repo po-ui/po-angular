@@ -39,6 +39,7 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *   <file name="sample-po-url-shortener/sample-po-url-shortener.component.ts"> </file>
  * </example>
  *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-url',

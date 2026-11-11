@@ -104,6 +104,8 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.html"> </file>
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory tables-lists
  */
 @Component({
   selector: 'po-table',

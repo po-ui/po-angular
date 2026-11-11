@@ -27,6 +27,8 @@ const PO_BUTTON_GLOW_TRAIL_SIZE = 22;
  *  <file name="sample-po-button-social-network/sample-po-button-social-network.component.html"> </file>
  *  <file name="sample-po-button-social-network/sample-po-button-social-network.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory actions
  */
 @Component({
   selector: 'po-button',

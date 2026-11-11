@@ -1,0 +1,86 @@
+/* Variáveis locais da Home (decisões D3 e D6). Valores fixos têm comentário com os tokens próximos do tema. */
+:host {
+  /* ===== Hero: SEMPRE ESCURO (D1), independe do tema ===== */
+  --home-hero-bg: #262a45;
+  /* Idêntico ao Figma. Tokens próximos: --color-brand-01-darkest (#262a45 no claro). ATENÇÃO: no tema escuro os tons
+     brand-01 e brand-02-light/lightest INVERTEM (darkest vira #f3f6fb), então não servem para áreas sempre escuras */
+  --home-hero-text: #fafaf9;
+  /* Tokens próximos: --color-neutral-light-05 (claro #f9f9fa) e --color-neutral-dark-90 (escuro #f9f9fa).
+     Usar `--color-neutral-light-05` quebraria no tema escuro (vira #1d1d30). */
+  --home-hero-text-muted: #e7e5e4;
+  /* Tokens próximos: --color-neutral-light-20 (claro #e7e5e4) e --color-neutral-dark-70 (escuro #e7e5e4) */
+  --home-hero-text-subtle: #d6d3d1;
+  /* Tokens próximos: --color-neutral-light-30 (claro #b4b4c0) e --color-neutral-mid-60 (escuro #b4b4c0) */
+  --home-hero-on-primary: #000000;
+  /* Texto do botão primário rosa. Tokens próximos: --color-neutral-dark-95 (claro #060613), sem preto puro */
+  --home-hero-tag-bg: #39416f; /* Idêntico ao Figma. Token próximo: --color-brand-01-darker (inverte no escuro) */
+  --home-hero-tag-text: #ecf1f8;
+  /* Tokens próximos: --color-brand-01-lightest (#f3f6fb) */
+  --home-hero-secondary-border: #e7e5e4;
+  /* Tokens próximos: --color-neutral-light-20 (claro) */
+  --home-hero-secondary-text: #fef1f6; /* Idêntico ao Figma. Token próximo: --color-brand-02-lightest (inverte no escuro) */
+  --home-hero-primary-hover: #fe68a2; /* Token próximo: --color-brand-02-light (inverte no escuro) */
+  --home-hero-primary-pressed: color-mix(in srgb, var(--color-brand-02-base) 85%, black);
+  --home-hero-primary: var(--color-brand-02-base); /* #f94485, idêntico ao Figma */
+
+  /* ===== Tamanhos sem token (D6) ===== */
+  --home-font-size-hero: 4.5rem; /* 72px. Token próximo: --font-size-3xl (3rem / 48px) */
+  --home-font-size-statement: 1.75rem; /* 28px. Tokens próximos: --font-size-lg (1.5rem), --font-size-xl (2rem) */
+  --home-radius-panel: 0.75rem; /* 12px. Tokens próximos: --border-radius-lg (8px), --border-radius-xl (16px) */
+  --home-spacing-section: 5rem; /* 80px. Token próximo: --spacing-4xl (4rem / 64px) */
+  --home-spacing-xs-plus: 0.75rem; /* 12px. Tokens próximos: --spacing-xs (0.5rem), --spacing-sm (1rem) */
+  --home-letter-spacing-title: -0.03em; /* -1.44px sobre 48px. Sem token de letter-spacing */
+  --home-blur-card: 0.5rem; /* blur 16px aplicado como 8px. Sem token de blur */
+
+  /* ===== Superfícies que SEGUEM o tema (apontam para token) ===== */
+  --home-surface: var(--color-neutral-light-00); /* Figma: #fff (claro) / #0c0a09 (escuro). Escuro no PO UI = #060613 */
+  --home-surface-raised: var(--color-neutral-light-05);
+  /* Figma card: #fff (claro) / #1c1917 (escuro). Escolhido light-05 porque um único token serve aos dois temas
+     (claro #f9f9fa, escuro #1d1d30). Alternativa no claro: --color-neutral-light-00 (branco exato) */
+  --home-surface-muted: var(--color-neutral-light-10); /* Figma claro #f5f5f4. PO UI claro #ececee */
+  --home-border: var(--color-neutral-light-20); /* Figma: #e7e5e4 (claro) / #44403b (escuro). PO UI escuro #515162 */
+  --home-title: var(--color-neutral-dark-90); /* Figma: #1c1917 (claro) / #fafaf9 (escuro) */
+  --home-text: var(--color-neutral-dark-80);
+  /* Tokens próximos: --color-neutral-dark-90 (mais escuro), --color-neutral-dark-70 (mais claro) */
+  --home-text-secondary: var(--color-neutral-mid-60); /* Figma claro: #57534d. PO UI claro #69697c */
+  --home-text-secondary-muted: #8c8c8c;
+  /* Figma hardcoded (B1) nos dois temas. Tokens próximos: --color-neutral-mid-40 (#9191a1), --color-neutral-mid-60 (#69697c).
+     Sugestão para avaliar: --color-neutral-mid-40 (contraste, ver A1) */
+  --home-tag-bg: var(--color-neutral-light-10);
+  /* Figma: #f5f5f4 (claro), #292524 (escuro). Tokens próximos: --color-neutral-light-05, --color-neutral-light-20 */
+  --home-tag-text: var(--color-neutral-dark-90);
+  --home-divider: var(--color-neutral-light-10); /* Figma #ededed (B2). PO UI claro #ececee */
+
+  /* Pontilhado do Statement (handoff): quadrados de 5x5px com 20px de distância entre eles (passo de 25px) */
+  --home-dot-size: 5px;
+  --home-dot-gap: 20px;
+  --home-dot-color: var(--color-neutral-light-20);
+  /* Figma claro: cinza ~#dcdcdc. Token próximo: --color-neutral-light-20 (#e7e5e4), --color-neutral-light-30 (#b4b4c0) */
+
+  /* Seção Feature: gradiente muda por tema */
+  --home-feature-gradient-start: var(--color-brand-01-lighter); /* claro: #cfd9ee, idêntico ao Figma */
+  --home-feature-gradient-end: var(--color-neutral-light-00); /* claro: branco */
+
+  /* Seção Open Source: sempre escura nos dois temas (Figma) */
+  --home-open-source-bg: #262a45; /* Token próximo: --color-brand-01-darkest (inverte no escuro) */
+  --home-open-source-title: #fbfcfe;
+  /* Tokens próximos: --color-neutral-light-00 (claro #fff), --color-brand-01-lightest (#f3f6fb) */
+  --home-open-source-accent: #fe68a2; /* Idêntico ao Figma. Token próximo: --color-brand-02-light (inverte no escuro) */
+  --home-open-source-text: #d6d3d1;
+  /* Tokens próximos: --color-neutral-light-30 (claro #b4b4c0), --color-neutral-light-20 (claro #e7e5e4) */
+
+  /* Footer segue a versão clara (D2) */
+  --home-footer-cta: var(--color-brand-01-base); /* #576bb9 (= --color-action-default no claro) */
+  --home-footer-cta-text: #ffffff;
+  /* Tokens próximos: --color-neutral-light-00 (claro). No escuro vira #060613, por isso não usado */
+}
+
+/* Gradiente da seção Feature no tema escuro (Figma: #262a45 -> #0c0a09) */
+:host-context(html[class*='-dark-']) {
+  /* Figma escuro: pontos ~#333 sobre #0c0a09. Token próximo: --color-neutral-light-10 (#36364a no escuro) */
+  --home-dot-color: var(--color-neutral-light-10);
+  --home-feature-gradient-start: var(
+    --color-brand-01-lightest
+  ); /* #262a45 no tema escuro (os tons brand-01 invertem), idêntico ao Figma */
+  --home-feature-gradient-end: var(--color-neutral-light-00); /* Figma #0c0a09. PO UI escuro #060613 */
+}

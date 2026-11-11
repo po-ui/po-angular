@@ -54,6 +54,8 @@ import { PoDragHandleButtonComponent } from './po-drag-handle-button/po-drag-han
  *  <file name="sample-po-drop-list-mixed/sample-po-drop-list-mixed.component.ts"> </file>
  * </example>
  *
+ * @docsCategory directives
+ * @docsShortcut tables-lists
  */
 @Directive({
   selector: '[p-drag]',

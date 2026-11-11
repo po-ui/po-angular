@@ -1,24 +1,36 @@
+{#- Código de um arquivo do sample. `{{` e `}}` vão em `<span ngNonBindable>` (como os guias, `replaceBrackets` no
+    gulpfile): o Angular não interpola e o texto da tela fica igual ao arquivo, então o botão "Copiar código"
+    (CopyLinkService, chunk lazy) copia o `textContent` do `<pre>`. As outras chaves e o `@` viram entidades. -#}
+{% macro code(file, language) -%}
+<div class="docs-code-block" data-file="{$ file.path $}"><pre appCodeHighlight class="{$ language $}">{$ file.fileContents | escape | replace('{{', '<span ngNonBindable>{{</span>') | replace('}}', '<span ngNonBindable>}}</span>') | replace('{', "&#123;") | replace('}', "&#125;") | replace("@", "&#64;") $}</pre></div>
+{%- endmacro -%}
 <br> {% for file in doc.files %}
-<blockquote class="sample-blockquote">
+<blockquote class="sample-blockquote"{% if loop.first %} id="{$ doc.id $}"{% endif %}>
   <label class="sample-title po-font-text-large-bold" >{$ doc.title or doc.id | replace('example-','') $}</label>
-  <a (click)="toggleSampleCodeTabs()" class="show-me-the-code"><span [class]="'po-icon ' + sampleCodeButtonIcon"></span> {{ sampleCodeButtonLabel }}</a>
 </blockquote>
 
-<div [ngClass]="{ 'docs-sample-code-tabs': hideSampleCodeTabs }">
+{#- Preview (o exemplo) é a 1ª aba. O po-tab só esconde a aba com display:none: o exemplo não é recriado ao trocar. -#}
+<div data-tour="sample-tabs">
   <po-tabs p-size="2">
-    <po-tab p-label="HTML" p-active>
+    <po-tab p-label="Preview" p-active>
+      <div class="docs-sample-container">
+        <{$ doc.id | replace( 'example-', '') $}>
+        </{$ doc.id | replace( 'example-', '')$}>
+      </div>
+    </po-tab>
+    <po-tab p-label="HTML">
       <div>
         {% for file in doc.files %}
         <label class="doc-label-path">{$ file.path $}</label>
-        <pre appCodeHighlight class="html">{$ file.fileContents | escape | replace('{{', "&#123; &#123;") | replace('{', "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> 
+        {$ code(file, 'html') $}
         {% endfor %}
-      </div>      
+      </div>
     </po-tab>
     <po-tab p-label="TS">
       <div>
         {% for script in doc.scripts %}
         <label class="doc-label-path">{$ script.path $}</label>
-        <pre appCodeHighlight class="typescript">{$ script.fileContents | escape | replace('{{', "&#123; &#123;") | replace('}}', "&#125; &#125;") | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre>
+        {$ code(script, 'typescript') $}
         {% endfor %}
       </div>
     </po-tab>
@@ -27,7 +39,7 @@
       <div>
         {% for stylesheet in doc.stylesheets %}
         <label class="doc-label-path">{$ stylesheet.path $}</label>
-        <pre appCodeHighlight class="css">{$ stylesheet.fileContents | escape | replace('{{', "&#123; &#123;") | replace('}}', "&#125; &#125;") | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
+        {$ code(stylesheet, 'css') $} {% endfor %}
       </div>
     </po-tab>
     {%- endif -%}
@@ -36,16 +48,11 @@
       <div>
         {% for test in doc.tests %}
         <label class="doc-label-path">{$ test.path $}</label>
-        <pre appCodeHighlight class="test">{$ test.fileContents | escape | replace('{{', "&#123; &#123;") | replace('}}', "&#125; &#125;") | replace("{", "&#123;") | replace("@", "&#64;") | replace('}', "&#125;") $}</pre> {% endfor %}
+        {$ code(test, 'test') $} {% endfor %}
       </div>
     </po-tab>
     {%- endif -%}
   </po-tabs>
-</div>
-
-<div class="docs-sample-container">
-  <{$ doc.id | replace( 'example-', '') $}>
-  </{$ doc.id | replace( 'example-', '')$}>
 </div>
 {% endfor %}
 

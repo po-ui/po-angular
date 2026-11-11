@@ -48,6 +48,7 @@ import { PoHelperComponent } from '../../po-helper';
  *  <file name="sample-po-radio-group-translator-reactive-form/sample-po-radio-group-translator-reactive-form.component.ts"> </file>
  * </example>
  *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-radio-group',

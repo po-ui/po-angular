@@ -54,6 +54,8 @@ const providers = [
  *  <file name="sample-po-email-newsletter/sample-po-email-newsletter.component.html"> </file>
  *  <file name="sample-po-email-newsletter/sample-po-email-newsletter.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-email',

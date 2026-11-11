@@ -50,6 +50,8 @@ import { Directive, TemplateRef, Input } from '@angular/core';
  * enum `PoListViewDetailDisplay`:
  *  - `inline`: expande o conteúdo do detalhe abaixo do item (padrão);
  *  - `modal`: exibe o conteúdo do detalhe no corpo de um `po-modal`.
+ *
+ * @docsParent po-list-view
  */
 @Directive({
   selector: '[p-list-view-detail-template]',

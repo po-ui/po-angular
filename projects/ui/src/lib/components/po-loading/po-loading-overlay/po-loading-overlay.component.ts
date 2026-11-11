@@ -26,6 +26,8 @@ import { PoLoadingOverlayBaseComponent } from './po-loading-overlay-base.compone
  *  <file name="sample-po-loading-overlay-connection-test/sample-po-loading-overlay-connection-test.component.html"> </file>
  *  <file name="sample-po-loading-overlay-connection-test/sample-po-loading-overlay-connection-test.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory feedback
  */
 @Component({
   selector: 'po-loading-overlay',

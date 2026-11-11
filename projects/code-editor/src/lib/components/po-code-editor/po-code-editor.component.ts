@@ -65,6 +65,8 @@ const providers: Array<Provider> = [
  *  <file name="sample-po-code-editor-suggestion/sample-po-code-editor-suggestion.component.html"> </file>
  *  <file name="sample-po-code-editor-suggestion/sample-po-code-editor-suggestion.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-code-editor',

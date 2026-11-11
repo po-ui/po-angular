@@ -1,0 +1,96 @@
+<div
+  class="search-results"
+  [id]="listId()"
+  [attr.aria-busy]="state() === 'loading'"
+  (keydown)="onKeydown($event)"
+  (click)="onClick()"
+>
+  <div class="search-results-live" role="status" aria-live="polite">{{ liveMessage() }}</div>
+
+  @switch (state()) {
+    @case ('short') {
+      <p class="search-results-message">Digite ao menos 2 caracteres para buscar em todo o portal.</p>
+    }
+    @case ('loading') {
+      <div class="search-skeleton">
+        @for (row of skeletonRows; track row) {
+          <div class="search-skeleton-item">
+            <div class="search-skeleton-head">
+              <po-skeleton p-width="45%" p-height="18px" [p-animation]="skeletonAnimation"></po-skeleton>
+              <po-skeleton
+                p-width="72px"
+                p-height="18px"
+                p-border-radius="12px"
+                [p-animation]="skeletonAnimation"
+              ></po-skeleton>
+            </div>
+            <po-skeleton p-width="30%" p-height="12px" [p-animation]="skeletonAnimation"></po-skeleton>
+            <po-skeleton p-width="100%" p-height="12px" [p-animation]="skeletonAnimation"></po-skeleton>
+            <po-skeleton p-width="75%" p-height="12px" [p-animation]="skeletonAnimation"></po-skeleton>
+          </div>
+        }
+      </div>
+    }
+    @case ('error') {
+      <div class="search-results-message">
+        <p>Não foi possível carregar a busca.</p>
+        <po-button p-label="Tentar de novo" p-kind="secondary" p-size="small" (p-click)="retry()"></po-button>
+      </div>
+    }
+    @case ('empty') {
+      <p class="search-results-message">
+        Nenhum resultado para "{{ trimmed() }}"{{ types().length ? ' nos tipos escolhidos' : '' }}.
+      </p>
+    }
+    @case ('results') {
+      <po-list-view
+        [p-items]="results()"
+        [p-field-properties]="fieldProperties"
+        p-components-size="small"
+        (p-item-click)="select($event)"
+      >
+        <ng-template p-list-view-content-template let-item>
+          <div class="search-hit">
+            <div class="search-hit-page">
+              <span class="search-hit-page-name">{{ item.page }}</span>
+              @if (item.section) {
+                <span aria-hidden="true"> › </span><span>{{ item.section }}</span>
+              }
+            </div>
+            <p class="search-hit-excerpt">
+              @for (part of item.excerpt; track $index) {
+                @if (part.mark) {
+                  <mark>{{ part.text }}</mark>
+                } @else {
+                  <span>{{ part.text }}</span>
+                }
+              }
+            </p>
+          </div>
+        </ng-template>
+      </po-list-view>
+      @if (hidden() > 0) {
+        <div class="search-results-footer">
+          @if (variant() === 'popover') {
+            <po-button
+              p-kind="tertiary"
+              p-size="small"
+              [p-label]="'Ver todos os ' + total() + ' resultados'"
+              (p-click)="viewAll.emit()"
+            ></po-button>
+          } @else {
+            <po-button
+              p-kind="secondary"
+              p-size="small"
+              [p-label]="'Mostrar mais (' + hidden() + ' restantes)'"
+              (p-click)="showMore()"
+            ></po-button>
+          }
+        </div>
+      }
+      @if (service.pending()) {
+        <p class="search-results-more">Carregando mais resultados…</p>
+      }
+    }
+  }
+</div>

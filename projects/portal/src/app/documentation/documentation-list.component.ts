@@ -3,11 +3,29 @@ import { Router } from '@angular/router';
 
 import { PoButtonGroupItem, PoListViewAction, PoListViewFieldProperties } from '@po-ui/ng-components';
 
+import { cardSummary } from './card-summary';
 import { Documentation } from './documentation.class';
+import { DocsSectionGroup, groupDocs } from './docs-groups';
 import { DocumentationService } from '../documentation/documentation.service';
 import { PREVIEW_SAMPLE_NAMES } from './documentation-preview/preview-sample-names';
 
 type DocViewMode = 'grid' | 'list';
+
+/** Categoria da listagem: só os itens canônicos (atalhos ficam só no menu). */
+export interface DocsListCategory {
+  key: string;
+  label: string;
+  items: Array<Documentation>;
+}
+
+export interface DocsListSection {
+  key: string;
+  label: string;
+  flat: boolean;
+  /** Total da seção: cards das categorias + subcomponentes deles (`@docsParent`), que não têm card. */
+  count: number;
+  categories: Array<DocsListCategory>;
+}
 
 // Prefixo para as chaves do portal no localStorage.
 const PORTAL_STORAGE_PREFIX = '@po-ui/portal/';
@@ -49,14 +67,15 @@ export class DocumentationListComponent implements OnInit {
     action: this.filterAction.bind(this)
   };
 
-  public readonly columnsPerRow = 3;
-
-  // Placeholders do skeleton (quantidade fixa enquanto carrega).
-  public readonly skeletonRows = Array.from({ length: 1 }, () => Array.from({ length: this.columnsPerRow }));
+  // Placeholders do skeleton (quantidade fixa enquanto carrega): 3 cards = uma linha no desktop (po-lg-4).
+  public readonly skeletonCards = Array.from({ length: 3 });
   public readonly skeletonListItems = Array.from({ length: 3 });
 
   private _items: Array<Documentation> = [];
   private _filteredItems: Array<Documentation> = [];
+  /** Com filtro ativo, as contagens somem (só fazem sentido com tudo exibido). */
+  public isFiltered = false;
+  private _sections: Array<DocsListSection> = [];
 
   private readonly _listActions: Array<PoListViewAction> = [
     { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'ICON_LIGHT' },
@@ -65,6 +84,12 @@ export class DocumentationListComponent implements OnInit {
 
   set filteredItems(items: Array<Documentation>) {
     this._filteredItems = items ?? [];
+    this._sections = this.buildSections(this._filteredItems);
+  }
+
+  /** Seções e categorias da listagem, com o mesmo agrupamento e ordem do menu (`groupDocs`). */
+  get sections(): Array<DocsListSection> {
+    return this._sections;
   }
 
   get filteredItems(): Array<Documentation> {
@@ -146,7 +171,8 @@ export class DocumentationListComponent implements OnInit {
         ...item,
         title: item.title.replace('Po ', ''),
         description: item.module ? `Módulo: ${item.module}` : '',
-        previewText: this.getFirstSentence(item.preview),
+        // 1ª frase do 1º parágrafo, em texto simples (até 160 caracteres): cabe no card de altura fixa
+        previewText: cardSummary(item.preview),
         tagLabel: this.getTypeLabel(item.type),
         tagType: this.getTypeColor(item.type)
       }));
@@ -154,19 +180,6 @@ export class DocumentationListComponent implements OnInit {
     });
 
     this.filterAction();
-  }
-
-  // Extrai apenas a primeira frase do preview (texto markdown), ignorando
-  // blocos de código e múltiplas linhas, para manter os cards com altura fixa.
-  private getFirstSentence(preview?: string): string {
-    if (!preview) {
-      return '';
-    }
-
-    const firstParagraph = preview.split('\n').find(line => line.trim().length > 0) ?? '';
-    const match = firstParagraph.match(/.*?[.!?](\s|$)/);
-
-    return (match ? match[0] : firstParagraph).trim();
   }
 
   get items() {
@@ -189,19 +202,51 @@ export class DocumentationListComponent implements OnInit {
     this.router.navigate(['/documentation', item.name], { queryParams: { view: 'web' } });
   }
 
+  /**
+   * Filtra por `name` ou título. Subcomponentes não têm card: se o filtro achar um, mostra o card do pai
+   * (com o sub destacado). Grupos que ficarem sem card somem.
+   */
   public filterAction(searchTextTerm = '') {
     const searchText = searchTextTerm.toLocaleLowerCase();
+    const matches = (item: Documentation) =>
+      item.name.toLocaleLowerCase().includes(searchText) || item.title.toLocaleLowerCase().includes(searchText);
 
+    // subcomponentes (`@docsParent`) não aparecem na listagem, então o filtro também não os acha
+    this.isFiltered = !!searchText;
     if (searchText) {
-      this.filteredItems = [
-        ...this._items.filter(
-          item =>
-            item.name.toLocaleLowerCase().includes(searchText) || item.title.toLocaleLowerCase().includes(searchText)
-        )
-      ];
+      this.filteredItems = this._items.filter(item => !item.parent && matches(item));
     } else {
       this.filteredItems = [...this._items];
     }
+  }
+
+  private buildSections(items: Array<Documentation>): Array<DocsListSection> {
+    return groupDocs(items)
+      .map((section: DocsSectionGroup) => {
+        const categories = section.categories
+          .map(category => ({
+            key: category.key,
+            label: category.label,
+            // atalhos só aparecem no menu
+            items: category.entries.filter(entry => !entry.shortcut).map(entry => entry.doc)
+          }))
+          // categoria que só teria atalhos (o card está em outra) não aparece
+          .filter(category => category.items.length);
+
+        return {
+          key: section.key,
+          label: section.label,
+          flat: section.flat,
+          // cada card conta 1 + os subcomponentes dele, que não aparecem na listagem
+          count: categories.reduce(
+            (total, category) =>
+              total + category.items.reduce((sum, item) => sum + 1 + (item.children?.length ?? 0), 0),
+            0
+          ),
+          categories
+        };
+      })
+      .filter(section => section.categories.length);
   }
 
   private sortDocs(docs) {

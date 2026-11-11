@@ -82,6 +82,8 @@ const providers = [
  *  <file name="sample-po-datepicker-range-vacations-reactive-form/sample-po-datepicker-range-vacations-reactive-form.component.ts">
  *  </file>
  * </example>
+ *
+ * @docsCategory date-time
  */
 @Component({
   selector: 'po-datepicker-range',

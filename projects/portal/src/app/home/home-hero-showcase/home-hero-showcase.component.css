@@ -1,0 +1,133 @@
+:host {
+  /* responsive knobs (see the media queries at the end) */
+  --home-showcase-columns: 4;
+  --home-showcase-card-height: 14rem;
+  --home-showcase-zoom: 0.85;
+  --home-showcase-tilt: rotateX(30deg) rotateZ(-8deg);
+  --home-showcase-overhang: -15%;
+
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 543px;
+  max-width: 1243px;
+  perspective: 1200px;
+  /* fade on the four edges ("black" only drives the mask alpha); the bottom fade ends at 82% so the cards are gone before the hero ends (the host overlaps the next section by 64px, about 12% of its height) */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent, black 18%, black 58%, transparent 82%),
+    linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image:
+    linear-gradient(to bottom, transparent, black 18%, black 58%, transparent 82%),
+    linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* tilted plane: perspective on the host, rotation on the stage */
+.home-showcase-stage {
+  position: absolute;
+  top: 0;
+  right: var(--home-showcase-overhang);
+  bottom: 0;
+  left: var(--home-showcase-overhang);
+  transform-origin: 50% 30%;
+  transform: var(--home-showcase-tilt);
+  transform-style: preserve-3d;
+}
+
+.home-showcase-track {
+  animation: home-showcase-scroll 60s linear infinite;
+  will-change: transform;
+}
+
+:host(.is-paused) .home-showcase-track {
+  animation-play-state: paused;
+}
+
+.home-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--home-showcase-columns), minmax(0, 1fr));
+  gap: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+}
+
+.home-showcase-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* uniform cards (and so, equal copies): the samples keep the look of the components list and are clipped when taller than the card */
+  height: var(--home-showcase-card-height);
+  overflow: hidden;
+  padding: var(--spacing-md);
+  border: var(--border-width-sm) solid var(--home-border);
+  border-radius: var(--border-radius-xl);
+  background: var(--home-surface-raised);
+  /* the hero sets a fixed light text color that the samples would inherit: use the text color of the theme */
+  color: var(--home-text);
+  position: relative;
+  /* Cards outside the visible area (most of the 36) are not laid out or painted until they get close, which keeps the
+     first render cheap. The size is fixed, so size containment is safe. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--home-showcase-card-height);
+}
+
+/* the sample fills the card and is scaled down so the tallest ones fit without clipping (zoom keeps the layout box in sync) */
+.home-showcase-card > app-home-hero-showcase-samples {
+  display: block;
+  width: 100%;
+  zoom: var(--home-showcase-zoom);
+}
+
+/* 3 copies: it moves exactly one copy (1/3 of the track), from the 2nd position to the 3rd, so there is always a copy above
+   and below the visible area. With 2 copies the area above the first one is empty right after the wrap and the cards
+   that were crossing the top-left of the tilted plane vanished. */
+@keyframes home-showcase-scroll {
+  from {
+    transform: translateY(calc(-100% / 3));
+  }
+
+  to {
+    transform: translateY(calc(-200% / 3));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-showcase-track {
+    animation: none;
+    transform: translateY(calc(-100% / 3));
+  }
+}
+
+/* Tablet: 3 columns (the plane is 30% wider than the host, so each card keeps about 300 px) */
+@media (max-width: 1199px) {
+  :host {
+    --home-showcase-columns: 3;
+  }
+}
+
+/* Mobile: 2 columns, the plane has no overhang (it already fits the screen) and the samples are scaled down:
+   the card is narrow, and zoom gives the sample the room it needs to keep its layout instead of being squeezed */
+@media (max-width: 767px) {
+  :host {
+    --home-showcase-columns: 2;
+    --home-showcase-card-height: 11rem;
+    --home-showcase-zoom: 0.6;
+    --home-showcase-tilt: rotateX(25deg) rotateZ(-6deg);
+    --home-showcase-overhang: 0%;
+
+    height: 20rem;
+  }
+
+  .home-showcase-grid {
+    gap: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+  }
+
+  .home-showcase-card {
+    padding: var(--spacing-xs);
+  }
+}

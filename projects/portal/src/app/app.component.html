@@ -1,5 +1,15 @@
-<po-header [p-force-actions-tools]="true" [p-brand]="logoPoUI" [p-menu-items]="items" [p-actions-tools]="iconActions">
+<ng-template #searchTemplate><app-search-box></app-search-box></ng-template>
+
+<po-header
+  [p-force-actions-tools]="true"
+  [p-brand]="logoPoUI"
+  [p-menu-items]="items"
+  [p-actions-tools]="iconActions"
+  [p-header-template]="searchTemplate"
+>
 </po-header>
+
+<app-search-modal></app-search-modal>
 
 <app-appearance-popover></app-appearance-popover>
 <!-- <po-menu #userMenu [p-menus]="menus" p-filter></po-menu> -->

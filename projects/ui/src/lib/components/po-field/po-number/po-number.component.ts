@@ -43,6 +43,8 @@ import { uuid } from '../../../utils/util';
  *  <file name="sample-po-number-calculate/sample-po-number-calculate.component.html"> </file>
  *  <file name="sample-po-number-calculate/sample-po-number-calculate.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-number',

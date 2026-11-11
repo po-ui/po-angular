@@ -1,0 +1,48 @@
+<po-modal #modal p-title="Buscar no portal" p-size="lg" (p-close)="onClose()">
+  <div class="search-modal-body" role="search">
+    <div class="search-modal-filters">
+      <po-search
+        #poSearch
+        class="search-modal-input"
+        p-search-type="action"
+        p-aria-label="Buscar no portal"
+        [p-literals]="literals"
+        (p-change-model)="onChange($event)"
+        (p-keydown)="onKeydown($event)"
+      ></po-search>
+
+      <div #typesBox class="search-modal-types" (keydown.escape)="onTypesEscape($event)">
+        <po-multiselect
+          #typesFilter
+          name="types"
+          class="portal-field-remove-padding-bottom"
+          [p-placeholder]="typesLabel"
+          p-size="small"
+          p-hide-search
+          [p-options]="typeOptions"
+          [ngModel]="types()"
+          (ngModelChange)="types.set($event ?? [])"
+        ></po-multiselect>
+      </div>
+    </div>
+
+    @if (countsSummary()) {
+      <p class="search-modal-counts" aria-live="polite">Por tipo: {{ countsSummary() }}</p>
+    }
+
+    <app-search-results
+      [query]="service.query()"
+      [typing]="service.typing()"
+      [types]="types()"
+      (countsChange)="counts.set($event)"
+      variant="modal"
+      [listId]="listId"
+      (resultSelected)="onSelect($event)"
+      (focusInput)="focusInput()"
+    ></app-search-results>
+  </div>
+
+  <po-modal-footer>
+    <span class="search-modal-hints">↑ ↓ navegar · Enter abrir · Esc fechar · {{ hint }} abre a busca</span>
+  </po-modal-footer>
+</po-modal>

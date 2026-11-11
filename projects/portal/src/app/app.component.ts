@@ -3,9 +3,13 @@ import {
   ChangeDetectorRef,
   Component,
   HostListener,
+  Injector,
+  NgZone,
+  OnDestroy,
   OnInit,
   ChangeDetectionStrategy,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -14,8 +18,14 @@ import { PoHeaderActionTool, PoMenuItem, PoNavbarItem, PoTheme, PoThemeA11yEnum 
 import { PoDensityMode } from '../../../ui/src/lib/enums/po-density-mode.enum';
 import { firstValueFrom } from 'rxjs';
 import { poThemeDefault, PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
-import { AppearancePopoverComponent } from './shared/appearance-popover/appearance-popover.component';
+import {
+  APPEARANCE_MODAL_QUERY,
+  AppearancePopoverComponent
+} from './shared/appearance-popover/appearance-popover.component';
 import { VersionService } from './shared/version.service';
+import { DeepLinkScrollService } from './shared/deep-link-scroll.service';
+import { SearchLauncherService } from './search/search-launcher.service';
+import { listenSearchShortcut } from './search/search-shortcut';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +33,15 @@ import { VersionService } from './shared/version.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly zone = inject(NgZone);
+  private readonly searchLauncher = inject(SearchLauncherService);
+  private readonly deepLinkScroll = inject(DeepLinkScrollService);
+  private readonly injector = inject(Injector);
+  private removeSearchShortcut?: () => void;
+  /** Para de ouvir a largura do celular (a "Aparência" troca entre popover e modal). */
+  private removeAppearanceQuery?: () => void;
+
   @ViewChild(AppearancePopoverComponent) appearancePopover!: AppearancePopoverComponent;
 
   menus: Array<PoMenuItem> = [];
@@ -43,6 +61,17 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    // Links com #id (busca, guias, samples): rola só a área de conteúdo, sem esconder o título da página.
+    this.deepLinkScroll.start();
+    // Tours (PoUserGuideService): abre sozinho na 1ª visita; a ação "Fazer tour" do header reabre.
+    void this.loadTour().then(tour => tour.start());
+    // Botão "Copiar link" ao lado de cada propriedade, interface, sample e título de guia.
+    // Em chunk lazy: o main não carrega o serviço, o botão nem o LiveAnnouncer do CDK.
+    void import('./shared/copy-link.service').then(m => this.injector.get(m.CopyLinkService).start());
+
+    // Ctrl+K / Cmd+K abre a busca (ignora o editor Monaco).
+    this.removeSearchShortcut = listenSearchShortcut(this.zone, request => this.searchLauncher.open(request));
+
     firstValueFrom(this.versionService.getCurrentVersion()).then(version => {
       this.items = [
         { label: 'Iniciar', link: '/' },
@@ -59,6 +88,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.updateLogoFromActiveTheme();
+  }
+
+  ngOnDestroy(): void {
+    this.removeSearchShortcut?.();
+    this.removeAppearanceQuery?.();
   }
 
   openExternalLink(url) {
@@ -122,6 +156,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         tooltip: 'Instagram'
       },
       {
+        icon: 'an an-signpost',
+        label: 'Fazer tour',
+        tooltip: 'Fazer tour',
+        action: () => void this.loadTour().then(tour => tour.startForCurrentPage())
+      },
+      {
         icon: 'an an-palette',
         label: 'Aparência',
         tooltip: 'Aparência'
@@ -132,13 +172,35 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.iconActions = this.buildIconActions();
     this.cdr.detectChanges();
+
+    // Mesmo breakpoint da busca: ao cruzar a largura, a "Aparência" troca entre popover e modal.
+    const query = window.matchMedia?.(APPEARANCE_MODAL_QUERY);
+    const onChange = () => {
+      this.iconActions = this.buildIconActions();
+      this.cdr.detectChanges();
+    };
+
+    query?.addEventListener('change', onChange);
+    this.removeAppearanceQuery = () => query?.removeEventListener('change', onChange);
   }
 
   private buildIconActions(): Array<PoHeaderActionTool> {
-    return this.actions.map(action =>
-      action.label === 'Aparência' && this.appearancePopover
-        ? { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 320 } }
-        : action
-    );
+    const mobile = !!window.matchMedia?.(APPEARANCE_MODAL_QUERY).matches;
+
+    return this.actions.map(action => {
+      if (action.label !== 'Aparência' || !this.appearancePopover) {
+        return action;
+      }
+
+      // Celular: um modal, como a busca (Ctrl+K). Desktop: o popover do header.
+      return mobile
+        ? { ...action, action: () => this.appearancePopover.openModal() }
+        : { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 450 } };
+    });
+  }
+
+  /** Tours em chunk lazy (como o Copiar link): o main não carrega o serviço nem os passos. */
+  private loadTour() {
+    return import('./shared/portal-tour/portal-tour.service').then(m => this.injector.get(m.PortalTourService));
   }
 }

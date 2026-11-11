@@ -117,6 +117,8 @@ const poMenuRootLevel = 1;
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.component.css"> </file>
  *   <file name="sample-po-menu-human-resources/sample-po-menu-human-resources.service.ts"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-menu',

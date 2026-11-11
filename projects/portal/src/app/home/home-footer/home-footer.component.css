@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.home-footer {
+  padding: 0 var(--spacing-xl) var(--spacing-xl);
+  background: var(--home-open-source-bg);
+  font-family: var(--font-family-theme);
+}
+
+.home-footer-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--home-radius-panel);
+  background: var(--home-surface);
+}
+
+.home-footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl) calc(var(--spacing-4xl) * 3);
+}
+
+.home-footer-nav {
+  display: flex;
+  gap: var(--spacing-4xl);
+}
+
+.home-footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+}
+
+.home-footer-heading {
+  font-family: var(--font-family-theme);
+  margin: 0 0 var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--home-title);
+}
+
+.home-footer-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--home-title);
+  text-decoration: none;
+}
+
+.home-footer-link:hover {
+  text-decoration: underline;
+}
+
+.home-footer-divider {
+  margin: var(--spacing-lg) 0;
+  border: 0;
+  border-top: var(--border-width-sm) solid var(--home-divider);
+}
+
+.home-footer-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+.home-footer-slogan {
+  max-width: 400px;
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extra-light);
+  line-height: 46px;
+  color: var(--home-title);
+}
+
+.home-footer-cta {
+  --color: var(--home-footer-cta);
+  --text-color: var(--home-footer-cta-text);
+  --border-color: transparent;
+  --border-radius: var(--border-radius-pill);
+}
+
+@media (max-width: 767px) {
+  .home-footer {
+    padding: 0 var(--spacing-sm) var(--spacing-sm);
+  }
+
+  .home-footer-card {
+    padding: var(--spacing-md);
+  }
+
+  .home-footer-nav {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .home-footer-slogan {
+    font-size: var(--font-size-lg);
+    line-height: 1.2;
+  }
+}

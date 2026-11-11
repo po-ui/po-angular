@@ -39,6 +39,7 @@ const PO_HELPER_ALLOWED_TAGS: Array<PoFormattingTag> = ['b', 'i', 'u', 'strong',
  *  <file name="sample-po-helper-sales-performance/sample-po-helper-sales-performance.component.ts"> </file>
  * </example>
  *
+ * @docsCategory form
  */
 
 @Component({

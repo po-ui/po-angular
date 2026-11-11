@@ -45,6 +45,8 @@ export const poBreadcrumbLiterals: object = {
  *  <file name="sample-po-breadcrumb-labs/sample-po-breadcrumb-labs.component.html"> </file>
  *  <file name="sample-po-breadcrumb-labs/sample-po-breadcrumb-labs.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-breadcrumb',

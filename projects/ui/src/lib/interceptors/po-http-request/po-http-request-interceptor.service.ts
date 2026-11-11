@@ -148,6 +148,8 @@ const screenLock = 'X-PO-Screen-Lock';
  *  <file name='sample-po-http-request-interceptor-labs.component.ts'> </file>
  *  <file name='sample-po-http-request-interceptor-labs.component.html'> </file>
  * </example>
+ *
+ * @docsCategory interceptors
  */
 @Injectable({
   providedIn: 'root'

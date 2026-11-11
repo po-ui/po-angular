@@ -1,0 +1,133 @@
+:host {
+  display: block;
+}
+
+.home-features {
+  box-sizing: border-box;
+  max-width: 1172px;
+  margin: 0 auto;
+  padding: var(--spacing-4xl) var(--spacing-lg) var(--home-spacing-section);
+  background: var(--home-surface);
+  font-family: var(--font-family-theme);
+}
+
+.home-features-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.home-features-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.home-features-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-normal);
+  line-height: 55px;
+  letter-spacing: var(--home-letter-spacing-title);
+  color: var(--home-title);
+}
+
+.home-features-intro {
+  max-width: 420px;
+  margin: 0;
+  font-size: var(--font-size-default);
+  line-height: 22.4px;
+  color: var(--home-title);
+  /* FIGMA A2: 60% opacity, contrast to be checked (D4) */
+  opacity: 0.6;
+}
+
+.home-features-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-xs) var(--spacing-md);
+}
+
+/* each column spans three rows (example, title, text) of the grid: with subgrid the two examples always have the same
+   height (the taller one wins) and the titles start on the same line */
+.home-features-column {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: var(--spacing-xs);
+}
+
+.home-features-example {
+  display: flex;
+  box-sizing: border-box;
+  /* the slot of the design had 611 x 480: the widget fills this area and the content stays at the top */
+  min-height: 24rem;
+  /* the row of the subgrid is as tall as the taller example: this one fills it */
+  flex: 1 1 auto;
+  padding: var(--spacing-md);
+  border-radius: var(--home-radius-panel);
+  background: var(--home-surface-muted);
+}
+
+.home-features-widget {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+.home-features-widget-content {
+  padding: var(--spacing-xs) var(--spacing-xxs);
+  font-family: var(--font-family-theme);
+}
+
+.home-features-list ::ng-deep po-list-view {
+  --po-density-content-padding: 0px;
+}
+
+.home-features-column-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  color: var(--home-title);
+}
+
+.home-features-column-text {
+  max-width: 500px;
+  margin: 0;
+  font-size: var(--font-size-default);
+  line-height: 1.4;
+  /* FIGMA A1: low contrast (about 3.1:1 in the light theme), kept as designed (D4) */
+  color: var(--home-text-secondary-muted);
+}
+
+@media (max-width: 1279px) {
+  .home-features-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-features-title {
+    font-size: var(--font-size-2xl);
+    line-height: 1.2;
+  }
+
+  .home-features-example {
+    min-height: 0;
+    padding: var(--spacing-xs);
+  }
+}
+
+/* inline link in the text: underlined so it does not rely on color alone (WCAG 1.4.1) */
+.home-features-link {
+  text-decoration: underline;
+}

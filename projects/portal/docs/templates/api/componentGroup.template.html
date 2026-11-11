@@ -59,6 +59,23 @@ property.name | dashCase | replace("'","") $}{$ join $}{$ property.type | escape
     {$ doc.ngModule.description | marked | replace('{', '&#123;') | replace('}', '&#125;') | replace("@", "&#64;") $}
   </div>
 
+  {#- relação pai/subcomponente (@docsParent) em destaque, depois do import e da descrição do módulo.
+      po-tag + roteador (openDoc), e não <a href="/...">: funciona com qualquer base href (ex.: GitHub Pages). #}
+  {%- if doc.menuParent -%}
+  <blockquote class="docs-api-related" data-tour="api-related">
+    <strong>Faz parte de:</strong>
+    <po-tag p-value="{$ doc.menuParent.title | replace('Po ', '') $}" (p-click)="openDoc('{$ doc.menuParent.name $}')"></po-tag>
+  </blockquote>
+  {%- endif -%}
+  {%- if doc.menuChildren.length -%}
+  <blockquote class="docs-api-related" data-tour="api-related">
+    <strong>Subcomponentes:</strong>
+    {% for child in doc.menuChildren -%}
+    <po-tag p-value="{$ child.title | replace('Po ', '') $}" (p-click)="openDoc('{$ child.name $}')"></po-tag>
+    {%- endfor %}
+  </blockquote>
+  {%- endif -%}
+
   {%- if doc.services.length -%}
     <h3 class="docs-api-h3">Services</h3>
     {% for service in doc.services %}

@@ -62,6 +62,8 @@ const providers = [
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe.component.html"> </file>
  *   <file name="sample-po-rich-text-recipe/sample-po-rich-text-recipe.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-rich-text',

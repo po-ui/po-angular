@@ -1,3 +1,7 @@
+---
+category: themes
+order: 1
+---
 [comment]: # (@label Customização de Temas usando o serviço PO-UI)
 [comment]: # (@link guides/theme-service)
 
@@ -68,6 +72,24 @@ Principais Recursos:
 
 O PO UI oferece um sistema robusto e flexível para personalização visual de componentes, permitindo que desenvolvedores e designers criem experiências únicas e alinhadas às necessidades específicas de cada projeto. A customização vai além da simples alteração de cores - é um sistema completo que abrange desde variáveis CSS globais até a criação de temas dinâmicos com suporte a light/dark mode, acessibilidade avançada e controle granular sobre cada componente.
 
+> **Importante:** o novo tema padrão do PO UI (EVO, `poThemeDefault`) tem duas partes:
+>
+> - **Cores:** vêm do CSS `po-theme-default.min.css` do `@po-ui/style`.
+> - **Ajustes de cada componente:** raios de borda, botão `glow`, campos e outros. Eles são aplicados pelo `PoThemeService`.
+>
+> Para ter o tema EVO completo, basta importar o `PoModule` na aplicação e carregar o CSS `po-theme-default.min.css`.
+> O `PoModule` já inicia o `PoThemeService`, que aplica os ajustes sozinho. Não é preciso chamar nenhum método.
+>
+> Chame o `setTheme` quando quiser escolher o modo claro ou escuro, o nível de acessibilidade (AA ou AAA) ou o tema
+> depreciado:
+>
+> ```typescript
+> this.poThemeService.setTheme(poThemeDefault, PoThemeTypeEnum.dark, PoThemeA11yEnum.AAA);
+> ```
+>
+> Se a aplicação importar só módulos de componentes (como o `PoButtonModule`), sem o `PoModule` e sem injetar o
+> `PoThemeService`, ela recebe apenas as cores do EVO, sem os ajustes dos componentes.
+
 <a id="whyUse"></a>
 ### Por Que Usar o PoThemeService?
 
@@ -137,6 +159,9 @@ Configurar o arquivo angular.json da seguinte maneira:
   "src/styles.css"
 ]
 ```
+
+> O arquivo `po-theme-default.min.css` traz só as cores do tema EVO. Os ajustes de cada componente vêm do
+> `PoThemeService`, que o `PoModule` já inicia (veja o aviso em [Introdução](guides/theme-service#introduction)).
 
 <a id="configService"></a>
 #### Injeção do Serviço

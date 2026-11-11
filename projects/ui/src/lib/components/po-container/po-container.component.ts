@@ -23,6 +23,8 @@ import { PoContainerBaseComponent } from './po-container-base.component';
  *  <file name="sample-po-container-dashboard/sample-po-container-dashboard.component.css"> </file>
  *  <file name="sample-po-container-dashboard/sample-po-container-dashboard.service.ts"> </file>
  * </example>
+ *
+ * @docsCategory containers
  */
 @Component({
   selector: 'po-container',

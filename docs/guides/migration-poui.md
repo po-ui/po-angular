@@ -1,3 +1,7 @@
+---
+category: migration
+order: 1
+---
 [comment]: # (@label Migração do PO UI)
 [comment]: # (@link guides/migration-poui)
 

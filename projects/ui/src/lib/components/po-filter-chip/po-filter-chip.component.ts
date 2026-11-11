@@ -22,6 +22,8 @@ import { PoFilterChipBaseComponent } from './po-filter-chip-base.component';
  *  <file name="sample-po-filter-chip-filter-list/sample-po-filter-chip-filter-list.component.html"> </file>
  *  <file name="sample-po-filter-chip-filter-list/sample-po-filter-chip-filter-list.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory search-filters
  */
 @Component({
   selector: 'po-filter-chip',

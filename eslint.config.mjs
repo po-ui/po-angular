@@ -218,9 +218,13 @@ export default tseslint.config(
     }
   },
 
-  // projects/portal: selectors com prefixo "app"; pastas de docs/samples ignoradas.
+  // projects/portal: selectors com prefixo "app"; pastas de docs/samples e o componente gerado do showcase ignoradas.
   {
-    ignores: ['projects/portal/docs/**/*', 'projects/portal/src/app/documentation/samples/**/*']
+    ignores: [
+      'projects/portal/docs/**/*',
+      'projects/portal/src/app/documentation/samples/**/*',
+      'projects/portal/src/app/home/home-hero-showcase/generated/**/*'
+    ]
   },
   {
     files: ['projects/portal/**/*.ts'],

@@ -24,6 +24,13 @@ html.potheme-dark-AAA .po-header-nav {
   --stroke-color: var(--color-brand-01-dark);
 }
 
+.button-brand-02 {
+  --color: var(--color-brand-02-base);
+  --color-glow-highlight: var(--color-brand-02-light);
+  --color-hover: var(--color-brand-02-dark);
+  --color-pressed: var(--color-brand-02-darker);
+}
+
 .dot {
   border-radius: 50%;
   display: inline-block;
@@ -428,10 +435,6 @@ sample-po-menu-human-resources-view .docs-sample-container .po-menu {
   }
 }
 
-.docs-sample-code-tabs {
-  display: none;
-}
-
 .doc-sample-link {
   cursor: pointer;
   text-decoration: none;
@@ -451,25 +454,14 @@ sample-po-menu-human-resources-view .docs-sample-container .po-menu {
   text-decoration: none;
 }
 
-a,
-.show-me-the-code {
+a {
   color: var(--color-portal-highlight);
   cursor: pointer;
   text-decoration: none;
 }
 
-.show-me-the-code {
-  float: right;
-}
-
-.show-me-the-code,
-.show-me-the-code .po-icon {
-  font-size: 16px;
-}
-
 .app-portal a:hover,
-.docs-api a:hover,
-.show-me-the-code:hover {
+.docs-api a:hover {
   color: var(--color-brand-01-dark);
   text-decoration: underline;
 }
@@ -801,4 +793,85 @@ sample-po-context-menu-user-view po-context-tabs .po-tabs-container {
 
 sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-content {
   height: 384px !important;
+}
+
+/* Alvo de um deep link vindo da busca: destaque curto para o olho achar o item. */
+.search-target-highlight {
+  outline: 2px solid var(--color-action-default);
+  outline-offset: 2px;
+}
+
+/* Botão "Copiar link" ao lado de títulos/itens com id (CopyLinkService): aparece no hover/foco. */
+.copy-link {
+  display: inline-flex;
+  margin-left: 8px;
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity 120ms ease-in;
+  user-select: none;
+}
+
+[data-copy-link-target]:hover .copy-link,
+.copy-link:focus-within,
+.copy-link.copy-link-copied {
+  opacity: 1;
+}
+
+/* Tela de toque: não há hover, então fica sempre visível. */
+@media (hover: none) and (pointer: coarse) {
+  .copy-link {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-link {
+    transition: none;
+  }
+}
+
+/* Código dos arquivos de cada sample: altura máxima com rolagem só no <pre>; o "Copiar código"
+   (CopyLinkService) fica no canto do bloco, fora do <pre>, então não rola junto. */
+:root {
+  --docs-code-max-height: 480px;
+}
+
+.docs-code-block {
+  position: relative;
+}
+
+.docs-code-block > pre {
+  max-height: var(--docs-code-max-height);
+  /* altura mínima acompanha o tamanho do botão de copiar: 56px no AAA (medium), 40px no AA small */
+  min-height: 56px;
+  overflow: auto;
+  /* espaço para o botão não cobrir o fim da 1ª linha */
+  padding-right: 48px;
+}
+
+html[data-a11y='AA'][data-default-size='small'] .docs-code-block > pre {
+  min-height: 40px;
+}
+
+.copy-code {
+  position: absolute;
+  top: 4px;
+  /* livre da barra de rolagem vertical do <pre> */
+  right: 20px;
+  background-color: var(--color-neutral-light-10);
+  border-radius: 4px;
+  user-select: none;
+}
+
+/* "Subcomponentes" / "Faz parte de" na aba Documentação: rótulo e po-tags na mesma linha. */
+.docs-api .docs-api-related {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+}
+
+.portal-field-remove-padding-bottom po-field-container-bottom .po-field-container-bottom,
+.portal-field-remove-padding-bottom po-field-container-bottom[p-size='small'] .po-field-container-bottom:empty {
+  padding-bottom: 0px;
 }

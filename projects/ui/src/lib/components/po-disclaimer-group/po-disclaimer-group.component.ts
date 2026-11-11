@@ -37,6 +37,7 @@ import { PoDisclaimer } from '../po-disclaimer/po-disclaimer.interface';
  *   <file name="sample-po-disclaimer-group-sw-planets/sample-po-disclaimer-group-sw-planets.service.ts"> </file>
  * </example>
  *
+ * @docsCategory search-filters
  */
 @Component({
   selector: 'po-disclaimer-group',

@@ -1,0 +1,161 @@
+:host {
+  display: block;
+}
+
+.home-statement {
+  padding: var(--spacing-4xl) var(--spacing-lg);
+  /* dotted texture of the handoff: 5x5px squares, 20px apart on every side, drawn in CSS without an image.
+     The conic gradient paints only the top-left square of each tile; the tile is square + gap. */
+  background-color: var(--home-surface);
+  background-image: conic-gradient(
+    at var(--home-dot-size) var(--home-dot-size),
+    transparent 75%,
+    var(--home-dot-color) 0
+  );
+  background-size: calc(var(--home-dot-size) + var(--home-dot-gap)) calc(var(--home-dot-size) + var(--home-dot-gap));
+  font-family: var(--font-family-heading);
+}
+
+.home-statement-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.home-statement-text {
+  max-width: 1034px;
+  margin: 0;
+  font-size: var(--home-font-size-statement);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.2;
+  text-align: center;
+  color: var(--home-title);
+}
+
+/* FIGMA D-h: Aleo has no SemiBold, so the highlight uses Bold */
+.home-statement-highlight {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-brand-02-base);
+}
+
+/* po-widget of the bottom-left corner: left-aligned, body in the theme font (the section uses the heading font) */
+.home-statement-widget {
+  text-align: left;
+}
+
+.home-statement-widget-body {
+  margin: 0;
+  font-family: var(--font-family-theme);
+  font-size: var(--font-size-default);
+  line-height: 1.4;
+}
+
+/* Cards around the real components (requests, order and chart); the po-widget has its own card */
+.home-statement-card {
+  box-sizing: border-box;
+  padding: var(--spacing-md);
+  border: var(--border-width-sm) solid var(--home-border);
+  border-radius: var(--home-radius-panel);
+  background-color: var(--home-surface);
+  color: var(--home-text);
+  font-family: var(--font-family-theme);
+  box-shadow: var(--shadow-card);
+  text-align: left;
+}
+
+.home-statement-requests {
+  width: 500px;
+  padding: var(--spacing-xs);
+}
+
+.home-statement-card-title {
+  font-size: var(--font-size-default);
+  font-weight: var(--font-weight-bold);
+  color: var(--home-title);
+}
+
+.home-statement-order {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  /* horizontal po-stepper with 4 steps needs room for the labels */
+  width: 600px;
+}
+
+.home-statement-widget-number {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  line-height: 1;
+  color: var(--home-title);
+}
+
+.home-statement-chart {
+  width: 380px;
+  padding: var(--spacing-xs);
+}
+
+/* Small screens: the side components are hidden (section 8 of the plan) */
+.home-statement-slot {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .home-statement-requests,
+  .home-statement-widget {
+    display: block;
+  }
+
+  .home-statement-stage {
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .home-statement-text {
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .home-statement {
+    padding: calc(var(--home-spacing-section) * 3.5) var(--spacing-lg) var(--home-spacing-section);
+  }
+
+  .home-statement-stage {
+    position: relative;
+    min-height: 466px;
+  }
+
+  .home-statement-slot {
+    display: block;
+    position: absolute;
+  }
+
+  /* left edges aligned (table and stepper) and right edges aligned (widget and chart) */
+  .home-statement-requests {
+    left: 0;
+    bottom: calc(100% + var(--spacing-lg));
+  }
+
+  /* owner request: widget at the top right and stepper at the bottom left (swapped) */
+  .home-statement-widget {
+    /* right-anchored: it never leaves the screen at 1280 px */
+    right: 0;
+    /* anchored by the bottom: always 24px above the text, whatever the height of the widget */
+    bottom: calc(100% + var(--spacing-lg));
+    width: 310px;
+  }
+
+  /* vertically centered next to the chart: chart top (110px) + (chart 358px - stepper 133px) / 2 */
+  .home-statement-order {
+    left: 0;
+    top: 222px;
+  }
+
+  .home-statement-chart {
+    right: 0;
+    top: 110px;
+  }
+}

@@ -44,6 +44,8 @@ import { PoTabComponent, PoTabsComponent } from '../po-tabs';
  *  <file name="sample-po-context-tabs-business-conf/sample-po-context-tabs-business-conf.component.html"> </file>
  *  <file name="sample-po-context-tabs-business-conf/sample-po-context-tabs-business-conf.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-context-tabs',

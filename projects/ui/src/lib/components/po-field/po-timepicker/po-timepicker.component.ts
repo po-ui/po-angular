@@ -56,6 +56,8 @@ type PoTimepickerSegment = 'hour' | 'minute' | 'second';
  *  <file name="sample-po-timepicker-business-hours/sample-po-timepicker-business-hours.component.html"> </file>
  *  <file name="sample-po-timepicker-business-hours/sample-po-timepicker-business-hours.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory date-time
  */
 @Component({
   selector: 'po-timepicker',

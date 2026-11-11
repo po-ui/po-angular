@@ -165,6 +165,8 @@ export const poPageDynamicDetailLiteralsDefault = {
  *  <file name="sample-po-page-dynamic-detail-user/sample-po-page-dynamic-detail-user.component.html"> </file>
  *  <file name="sample-po-page-dynamic-detail-user/sample-po-page-dynamic-detail-user.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory dynamic
  */
 @Component({
   selector: 'po-page-dynamic-detail',

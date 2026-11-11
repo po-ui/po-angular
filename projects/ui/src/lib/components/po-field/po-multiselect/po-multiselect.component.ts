@@ -110,6 +110,7 @@ const providers = [
  *   <file name="sample-po-multiselect-any-array/sample-po-multiselect-any-array.component.ts"> </file>
  * </example>
  *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-multiselect',

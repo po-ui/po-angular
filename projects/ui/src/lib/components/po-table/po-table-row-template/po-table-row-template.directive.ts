@@ -88,6 +88,8 @@ import { PoTableRowTemplateArrowDirection } from '../enums/po-table-row-template
  * ```
  * > No exemplo acima, somente será disponibilizado os detalhes de informações nas linhas cujo o valor de `status`
  * não correspondam à *delivered*.
+ *
+ * @docsParent po-table
  */
 @Directive({
   selector: '[p-table-row-template]',

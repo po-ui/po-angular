@@ -64,6 +64,8 @@ const poCalendarPositionDefault = 'bottom-left';
  *  <file name="sample-po-datepicker-airfare-reactive-form/sample-po-datepicker-airfare-reactive-form.component.html"> </file>
  *  <file name="sample-po-datepicker-airfare-reactive-form/sample-po-datepicker-airfare-reactive-form.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory date-time
  */
 @Component({
   selector: 'po-datepicker',

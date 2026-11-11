@@ -54,6 +54,7 @@ const providers = [
  *  <file name="sample-po-login-confirm/sample-po-login-confirm.component.ts"> </file>
  * </example>
  *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-login',

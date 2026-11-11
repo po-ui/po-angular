@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-4xl) var(--spacing-lg) 0;
+  background: var(--home-hero-bg);
+  color: var(--home-hero-text);
+  font-family: var(--font-family-theme);
+}
+
+.home-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: 819px;
+  text-align: center;
+}
+
+.home-hero-tag-link {
+  display: inline-flex;
+  border-radius: var(--border-radius-pill);
+  text-decoration: none;
+}
+
+.home-hero-tag {
+  --border-radius: var(--border-radius-pill);
+  cursor: pointer;
+}
+
+.home-hero-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: clamp(2.5rem, 8vw, var(--home-font-size-hero));
+  font-weight: var(--font-weight-normal);
+  line-height: 1.1;
+  color: var(--home-hero-text);
+}
+
+.home-hero-description {
+  max-width: 665px;
+  margin: 0;
+  font-size: var(--font-size-default);
+  line-height: 1.4;
+  color: var(--home-hero-text-muted);
+}
+
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.home-hero-primary {
+  --border-radius: var(--border-radius-pill);
+}
+
+/* glow: same override as the old Star button (global .button-brand-02), with the fixed colors of the dark hero */
+.home-hero-primary {
+  --color: var(--home-hero-primary);
+  --color-glow-highlight: var(--home-hero-primary-hover);
+  --color-hover: var(--home-hero-primary-hover);
+  --color-pressed: var(--home-hero-primary-pressed);
+  --text-color: var(--home-hero-on-primary);
+}
+
+/* handoff: secondary, pill, 2px border --home-hero-secondary-border, text --home-hero-secondary-text */
+.home-hero-explore {
+  --border-radius: var(--border-radius-pill);
+  --border-width: var(--border-width-md);
+  --color: var(--home-hero-secondary-text);
+  --border-color-hover: var(--home-hero-secondary-text);
+  --background-color: transparent;
+  --background-hover: color-mix(in srgb, var(--home-hero-secondary-text) 10%, transparent);
+  --background-pressed: color-mix(in srgb, var(--home-hero-secondary-text) 20%, transparent);
+}
+
+/* po-button secondary paints border and text with --color; the handoff uses a different border color */
+.home-hero-explore ::ng-deep .po-button {
+  border-color: var(--home-hero-secondary-border);
+}
+
+.home-hero-proof {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  letter-spacing: -0.01em;
+  color: var(--home-hero-text-subtle);
+}
+
+.home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.home-hero-preview {
+  width: 100%;
+  max-width: 1243px;
+  margin-top: var(--spacing-xl);
+  /* overlaps the next section, as in the design */
+  margin-bottom: calc(-1 * var(--spacing-4xl));
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .home-hero {
+    padding-top: var(--spacing-2xl);
+  }
+
+  .home-hero-preview {
+    margin-bottom: 0;
+  }
+}

@@ -56,6 +56,8 @@ export const poPageSlideLiteralsDefault = {
  *  <file name="sample-po-page-slide-configuration/sample-po-page-slide-configuration.component.html"> </file>
  *  <file name="sample-po-page-slide-configuration/sample-po-page-slide-configuration.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory overlay
  */
 @Component({
   selector: 'po-page-slide',

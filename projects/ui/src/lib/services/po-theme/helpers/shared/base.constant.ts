@@ -96,11 +96,18 @@ export const poThemeSharedBase = {
       '--border-radius': 'var(--border-radius-xl)'
     },
 
+    /* rich text com a mesma borda do textarea: xxl (small: xl), body em cima e toolbar embaixo */
     '.po-rich-text-body': {
-      'border-radius': 'var(--border-radius-lg) var(--border-radius-lg) 0 0'
+      'border-radius': 'var(--border-radius-xxl) var(--border-radius-xxl) 0 0'
     },
     '.po-rich-text-toolbar': {
-      'border-radius': '0 0 var(--border-radius-lg) var(--border-radius-lg)'
+      'border-radius': '0 0 var(--border-radius-xxl) var(--border-radius-xxl)'
+    },
+    'po-rich-text[p-size="small"] .po-rich-text-body': {
+      'border-radius': 'var(--border-radius-xl) var(--border-radius-xl) 0 0'
+    },
+    'po-rich-text[p-size="small"] .po-rich-text-toolbar': {
+      'border-radius': '0 0 var(--border-radius-xl) var(--border-radius-xl)'
     },
     '.po-combo-clean:focus, .po-search:not([p-search-type=locate]) .po-search-button.po-search-button-clean:focus': {
       'border-radius': '0.625rem'
@@ -146,6 +153,13 @@ export const poThemeSharedBase = {
     },
     'po-container': {
       '--background': 'var(--color-neutral-light-05)'
+    },
+    /*
+     * A MonaSans declara `underlineThickness` 320/1000 na tabela `post`. O Firefox usa esse valor no
+     * sublinhado `auto` (0.32em, 5px em 16px); o Chrome desenha 1px. Espessura fixa igual nos dois.
+     */
+    '.po-link': {
+      'text-decoration-thickness': 'max(1px, 0.0625em)'
     }
   },
   onRoot: {

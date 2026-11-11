@@ -4,6 +4,8 @@ import { PoNetworkType } from './po-network-type.enum';
  * @description
  *
  * Classe responsável por identificar a conexão de rede disponível no dispositivo.
+ *
+ * @docsCategory models
  */
 export class PoNetworkStatus {
   private _type: PoNetworkType;

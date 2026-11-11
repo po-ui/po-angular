@@ -1,3 +1,6 @@
+---
+category: releases
+---
 [comment]: # (@label Releases)
 [comment]: # (@link guides/releases)
 

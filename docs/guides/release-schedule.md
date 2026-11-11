@@ -1,3 +1,6 @@
+---
+category: releases
+---
 [comment]: # (@label Lançamentos e suporte)
 [comment]: # (@link guides/release-schedule)
 

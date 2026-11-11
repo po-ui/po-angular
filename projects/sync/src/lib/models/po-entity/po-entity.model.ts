@@ -16,6 +16,8 @@ import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.i
  * como por exemplo: buscar, criar e remover.
  *
  * Esta instância pode ser obtida a partir do retorno do método `PoSyncService.getModel('schema name')`.
+ *
+ * @docsCategory models
  */
 export class PoEntity {
   constructor(

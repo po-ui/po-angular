@@ -2,3 +2,8 @@
   padding: var(--spacing-sm);
   border-radius: var(--border-radius-xl);
 }
+
+/* No modal o po-modal já tem o próprio espaçamento. */
+.appearance-popover.appearance-popover-modal {
+  padding: 0;
+}

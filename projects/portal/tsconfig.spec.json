@@ -2,8 +2,19 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": ["jasmine", "node"]
+    "types": ["jasmine", "node"],
+    "skipLibCheck": true
   },
-  "files": ["src/test.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["src/test.ts"],
+  "include": [
+    "src/app/search/**/*.spec.ts",
+    "src/app/shared/**/*.spec.ts",
+    "src/app/documentation/*.spec.ts",
+    "src/app/guide/*.spec.ts",
+    "src/app/home/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  }
 }

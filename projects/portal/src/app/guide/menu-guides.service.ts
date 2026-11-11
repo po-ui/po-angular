@@ -1,36 +1,58 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
+import { menuShortcut } from '../shared/menu-shortcut-filter';
+
+/** Nó do `assets/json/guides-menu.json`, gravado pelo `gulp build:guides` a partir do frontmatter dos guias. */
+export interface GuideMenuNode {
+  name: string;
+  label: string;
+  /** `@link` do guia (`guides/<arquivo>`). */
+  link: string;
+  /** Atalho: o guia é de outra categoria (`origin`). */
+  shortcut?: boolean;
+  origin?: string;
+  /** Subguias (`parent` no frontmatter). */
+  children?: Array<GuideMenuNode>;
+}
+
+export interface GuideMenuCategory {
+  key: string;
+  label: string;
+  items: Array<GuideMenuNode>;
+}
+
+// Gerado a partir de projects/portal/docs/templates/menu-guides.service.template.ts (gulp build:menus).
 @Injectable({
   providedIn: 'root'
 })
 export class MenuGuidesService {
-  constructor() {}
+  private readonly router = inject(Router);
 
-  getMenus(documentationItems) {
-    return new Array<PoMenuItem>(
-      { label: 'Guia de implementação de APIs', link: 'guides/api' },
-      { label: 'Compatibilidade com os navegadores', link: 'guides/browser-support' },
-      { label: 'Depreciações', link: 'guides/deprecations' },
-      { label: 'Contribuindo para o PO UI', link: 'guides/development-flow' },
-      { label: 'Primeiros passos', link: 'guides/getting-started' },
-      { label: 'Guia de uso para Gráficos', link: 'guides/guide-charts' },
-      { label: 'Migração do PO UI para V2', link: 'guides/migration-poui-v2' },
-      { label: 'Migração do PO UI', link: 'guides/migration-poui' },
-      { label: 'Migração do THF para o PO UI v1.x', link: 'guides/migration-thf-to-po-ui' },
-      { label: 'Press Kit', link: 'guides/press-kit' },
-      { label: 'Lançamentos e suporte', link: 'guides/release-schedule' },
-      { label: 'Releases', link: 'guides/releases' },
-      { label: 'Schematics', link: 'guides/schematics' },
-      { label: 'Fundamentos do PO Sync', link: 'guides/sync-fundamentals' },
-      { label: 'Começando com o PO Sync', link: 'guides/sync-get-started' },
-      { label: 'Customização de Temas usando o serviço PO-UI', link: 'guides/theme-service' },
-      { label: 'Criando um tema para o PO UI', link: 'guides/create-theme-customization' },
-      { label: 'Grid System', link: 'guides/grid-system' },
-      { label: 'Espaçamento', link: 'guides/spacing' },
-      { label: 'Personalizando o Tema Padrão com Tokens CSS', link: 'guides/theme-customization' },
-      { label: 'Tipografia', link: 'guides/typography' }
-    );
+  /**
+   * Menu de Guias em Categoria › Guia › Subguia.
+   * - Link absoluto (`/` + `@link`): o po-menu só marca o item pela URL se o link for igual à rota inteira.
+   * - Guia com subguias vira grupo; o 1º item, "Visão geral", é a página do próprio guia.
+   * - Atalho: `action` sem `link`, para o po-menu marcar só o item principal pela URL.
+   */
+  getMenus(categories: Array<GuideMenuCategory>): Array<PoMenuItem> {
+    return categories.map(category => ({ label: category.label, subItems: category.items.map(node => this.item(node)) }));
+  }
+
+  private item(node: GuideMenuNode): PoMenuItem {
+    if (node.shortcut) {
+      return menuShortcut({
+        label: node.label + ' (' + node.origin + ')',
+        action: () => this.router.navigateByUrl('/' + node.link)
+      });
+    }
+
+    const link = '/' + node.link;
+
+    return node.children?.length
+      ? { label: node.label, subItems: [{ label: 'Visão geral', link }, ...node.children.map(child => this.item(child))] }
+      : { label: node.label, link };
   }
 }

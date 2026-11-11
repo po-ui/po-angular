@@ -1,0 +1,66 @@
+<section class="home-features">
+  <header class="home-features-header">
+    <div class="home-features-heading">
+      <po-tag p-value="Novidades" p-color="var(--home-tag-bg)" p-text-color="var(--home-tag-text)"></po-tag>
+      <h2 class="home-features-title">Funciona melhor quando<br />tudo permanece conectado</h2>
+    </div>
+    <p class="home-features-intro">
+      Uma suíte completa onde design e código falam a mesma língua. Nossas ferramentas são projetadas para trabalhar em
+      harmonia, do protótipo ao deploy.
+    </p>
+  </header>
+
+  <div class="home-features-columns">
+    <article class="home-features-column">
+      <div class="home-features-example">
+        <po-widget
+          class="home-features-widget"
+          [p-height]="widgetHeight"
+          p-primary-label="Visualização em Árvore"
+          (p-primary-action)="openInternalLink('documentation/po-tree-view')"
+        >
+          <div class="home-features-widget-content">
+            <po-tree-view [p-items]="folderItems"></po-tree-view>
+          </div>
+        </po-widget>
+      </div>
+      <h3 class="home-features-column-title">Desenvolvimento Padronizado</h3>
+      <!-- FIGMA C3: "referencia" is a typo in the design, kept on purpose (D5) -->
+      <p class="home-features-column-text">
+        Nossos componentes seguem as melhores práticas de acessibilidade e usabilidade, usando como referencia o
+        <a class="home-features-link" href="https://doc.animaliads.io/" target="_blank" rel="noopener noreferrer"
+          >Animalia DS</a
+        >, garantindo que sua aplicação seja moderna, responsiva e fácil de dar manutenção.
+      </p>
+    </article>
+
+    <article class="home-features-column">
+      <div class="home-features-example">
+        <po-widget
+          class="home-features-widget"
+          [p-height]="widgetHeight"
+          p-primary-label="Visualização em Lista"
+          (p-primary-action)="openInternalLink('documentation/po-list-view')"
+        >
+          <div class="home-features-widget-content home-features-list">
+            <po-list-view
+              p-tag-position="top"
+              p-avatar-size="md"
+              [p-select]="false"
+              [p-field-properties]="notificationFieldProperties"
+              [p-items]="notificationList"
+              [p-literals]="listViewLiterals"
+              (p-show-more)="showMore()"
+            >
+            </po-list-view>
+          </div>
+        </po-widget>
+      </div>
+      <h3 class="home-features-column-title">Foco no negócio</h3>
+      <p class="home-features-column-text">
+        Não perca tempo reinventando a roda. Com formulários, tabelas e modais prontos, seu time de engenharia foca
+        exclusivamente em resolver os problemas do seu usuário final.
+      </p>
+    </article>
+  </div>
+</section>

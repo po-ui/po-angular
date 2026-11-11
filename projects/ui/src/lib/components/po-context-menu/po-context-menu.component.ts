@@ -52,6 +52,8 @@ interface PoInternalContextMenuItem extends PoContextMenuItem {
  *  <file name="sample-po-context-menu-user/sample-po-context-menu-user.component.ts"> </file>
  *  <file name="sample-po-context-menu-user/sample-po-context-menu-user.component.css"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-context-menu',

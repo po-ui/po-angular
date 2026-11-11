@@ -64,6 +64,8 @@ import { Directive, TemplateRef } from '@angular/core';
  * ...
  *
  * ```
+ *
+ * @docsParent po-combo
  */
 @Directive({
   selector: '[p-combo-option-template]',

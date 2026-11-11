@@ -40,6 +40,8 @@ import { PoGridRowActions } from './po-grid-row-actions.interface';
  *  <file name="sample-po-grid-basic/sample-po-grid-basic.component.html"> </file>
  *  <file name="sample-po-grid-basic/sample-po-grid-basic.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory tables-lists
  */
 @Component({
   selector: 'po-grid',

@@ -43,6 +43,7 @@ import { PoHelperComponent } from '../../po-helper';
  *  <file name="sample-po-textarea-email-reactive-form/sample-po-textarea-email-reactive-form.component.ts"> </file>
  * </example>
  *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-textarea',

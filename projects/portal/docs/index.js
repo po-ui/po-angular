@@ -46,6 +46,8 @@ let poDocsPackage = new DgeniPackage('po-api-docs', [
   // Processor to group components into top-level groups such as "Tabs", "Sidenav", etc.
   .processor(require('./processors/docs-grouper'))
   .processor(require('./processors/llms-generator'))
+  // Processor that generates the global search index (chunks + manifest)
+  .processor(require('./processors/search/search-index-generator'))
   // Processor to generate samples
   .processor(require('./processors/samples/samples-parse'))
   .processor(require('./processors/samples/samples-generate'))

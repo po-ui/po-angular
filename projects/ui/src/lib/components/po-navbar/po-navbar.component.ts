@@ -32,6 +32,8 @@ const poNavbarMatchMedia = `(max-width: ${poNavbarMenuMedia}px)`;
  * @deprecated v23.x.x use `po-header`
  *
  * @docsExtends PoNavbarBaseComponent
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-navbar',

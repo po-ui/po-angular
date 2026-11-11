@@ -1,0 +1,32 @@
+.search-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 240px;
+}
+
+.search-modal-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 280px);
+  gap: 12px;
+  /* o filtro não tem mais label em cima: campo e filtro centralizados na mesma linha */
+  align-items: center;
+}
+
+/* Mobile: o filtro vai abaixo do campo. */
+@media (max-width: 767px) {
+  .search-modal-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.search-modal-counts {
+  margin: 0;
+  color: var(--color-neutral-dark-70);
+  font-size: 0.875rem;
+}
+
+.search-modal-hints {
+  color: var(--color-neutral-dark-70);
+  font-size: 0.875rem;
+}

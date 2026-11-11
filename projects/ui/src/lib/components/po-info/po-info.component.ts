@@ -23,6 +23,8 @@ import { PoInfoBaseComponent } from './po-info-base.component';
  *  <file name="sample-po-info-labs/sample-po-info-labs.component.html"> </file>
  *  <file name="sample-po-info-labs/sample-po-info-labs.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory visual
  */
 @Component({
   selector: 'po-info',

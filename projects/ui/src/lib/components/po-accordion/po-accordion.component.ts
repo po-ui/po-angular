@@ -35,6 +35,8 @@ import { PoAccordionService } from './services/po-accordion.service';
  *  <file name="sample-po-accordion-faq/sample-po-accordion-faq.component.html"> </file>
  *  <file name="sample-po-accordion-faq/sample-po-accordion-faq.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory containers
  */
 @Component({
   selector: 'po-accordion',

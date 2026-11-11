@@ -1,11 +1,24 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, TemplateRef, ViewChild } from '@angular/core';
 
-import { PoRadioGroupOption, PoTheme, PoThemeA11yEnum, PoThemeTypeEnum } from '@po-ui/ng-components';
+import {
+  PoModalAction,
+  PoModalComponent,
+  PoRadioGroupOption,
+  PoTheme,
+  PoThemeA11yEnum,
+  PoThemeTypeEnum
+} from '@po-ui/ng-components';
 
 import { PoDensityMode } from '../../../../../ui/src/lib/enums/po-density-mode.enum';
 import { poThemeDefault, poThemeDefaultDeprecated, PoThemeService } from '../../../../../ui/src/lib';
 
 type ThemeKey = 'default' | 'deprecated';
+
+/**
+ * Até onde a aparência abre num modal em vez do popover: o mesmo breakpoint da busca
+ * (`search-box.component.css`, onde o campo vira um ícone que abre o modal).
+ */
+export const APPEARANCE_MODAL_QUERY = '(max-width: 767px)';
 
 @Component({
   selector: 'app-appearance-popover',
@@ -16,14 +29,20 @@ type ThemeKey = 'default' | 'deprecated';
 })
 export class AppearancePopoverComponent implements AfterViewInit {
   @ViewChild('popoverContent', { static: true }) popoverContentRef!: TemplateRef<any>;
+  @ViewChild('modal', { static: true }) modal!: PoModalComponent;
+
+  /** O conteúdo só entra no modal enquanto ele está aberto (o popover usa o mesmo template). */
+  modalOpen = false;
+
+  readonly closeAction: PoModalAction = { label: 'Fechar', action: () => this.modal.close() };
 
   selectedTheme: ThemeKey = 'default';
   selectedMode: 'light' | 'dark' = 'light';
   selectedA11y: 'AA' | 'AAA' = 'AAA';
 
   readonly themeOptions: Array<PoRadioGroupOption> = [
-    { label: 'Padrão', value: 'default' },
-    { label: 'Padrão (legado)', value: 'deprecated' }
+    { label: 'EVO', value: 'default' },
+    { label: 'PO UI Depreciado', value: 'deprecated' }
   ];
 
   private readonly themes: Record<ThemeKey, PoTheme> = {
@@ -35,6 +54,13 @@ export class AppearancePopoverComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadCurrentSettings();
+  }
+
+  /** Celular: abre a aparência no modal (o desktop usa o popover do header). */
+  openModal(): void {
+    this.loadCurrentSettings();
+    this.modalOpen = true;
+    this.modal.open();
   }
 
   onThemeChange(value: ThemeKey): void {
@@ -65,6 +91,23 @@ export class AppearancePopoverComponent implements AfterViewInit {
       return;
     }
 
+    let shouldForceUpdate = false;
+
+    switch (theme?.name) {
+      case poThemeDefault.name:
+        this.selectedTheme = 'default';
+        break;
+
+      case poThemeDefaultDeprecated.name:
+        this.selectedTheme = 'deprecated';
+        break;
+
+      default:
+        this.selectedTheme = 'default';
+        shouldForceUpdate = true;
+        break;
+    }
+
     this.selectedTheme = theme.name === poThemeDefaultDeprecated.name ? 'deprecated' : 'default';
 
     const active =
@@ -72,6 +115,10 @@ export class AppearancePopoverComponent implements AfterViewInit {
 
     this.selectedMode = active.type === PoThemeTypeEnum.dark ? 'dark' : 'light';
     this.selectedA11y = active.a11y === PoThemeA11yEnum.AA ? 'AA' : 'AAA';
+
+    if (shouldForceUpdate) {
+      this.applyTheme();
+    }
   }
 
   private applyTheme(): void {

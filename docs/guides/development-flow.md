@@ -1,3 +1,6 @@
+---
+category: community
+---
 [comment]: # (@label Contribuindo para o PO UI)
 [comment]: # (@link guides/development-flow)
 

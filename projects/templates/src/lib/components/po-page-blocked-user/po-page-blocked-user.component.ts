@@ -46,6 +46,8 @@ export const poPageBlockedUserButtonLiterals: object = {
  *  <file name="sample-po-page-blocked-user-expired-password/sample-po-page-blocked-user-expired-password.component.html"> </file>
  *  <file name="sample-po-page-blocked-user-expired-password/sample-po-page-blocked-user-expired-password.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory auth
  */
 
 @Component({

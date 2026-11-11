@@ -1,3 +1,6 @@
+---
+category: components
+---
 [comment]: # (@label Guia de uso para Gráficos)
 [comment]: # (@link guides/guide-charts)
 

@@ -1,3 +1,7 @@
+---
+category: getting-started
+shortcut: [releases]
+---
 [comment]: # (@label Compatibilidade com os navegadores)
 [comment]: # (@link guides/browser-support)
 
