@@ -8,7 +8,26 @@ export async function open(page: Page, href: string): Promise<Locator> {
   await page.goto(href);
   await page.locator('#stage button').first().waitFor();
   await page.evaluate(() => document.fonts.ready);
+  await freezeAnimations(page);
   return page.locator('#stage');
+}
+
+/**
+ * Deixa o quadro determinístico: animações infinitas (pontos do glow do po-button) param em t=0 e as finitas
+ * (transições de hover etc.) vão direto ao fim. `animations: 'disabled'` do Playwright sozinho deixava o glow
+ * variar alguns pixels por execução. Chamar de novo depois de mudar o estado (hover/active/focus).
+ */
+export async function freezeAnimations(page: Page): Promise<void> {
+  await page.evaluate(() =>
+    document.getAnimations().forEach(a => {
+      if (a.effect?.getComputedTiming().iterations === Infinity) {
+        a.pause();
+        a.currentTime = 0;
+      } else {
+        a.finish();
+      }
+    })
+  );
 }
 
 export type PointerState = 'hover' | 'active' | 'focus';
@@ -26,6 +45,7 @@ export async function applyPointerState(page: Page, state: PointerState, target:
     );
     for (let i = 0; i <= index; i++) await page.keyboard.press('Tab');
   }
+  await freezeAnimations(page);
 }
 
 /**
@@ -49,4 +69,5 @@ export async function forcePseudoStates(page: Page): Promise<void> {
     });
     for (const nodeId of nodeIds) await cdp.send('CSS.forcePseudoState', { nodeId, forcedPseudoClasses });
   }
+  await freezeAnimations(page);
 }
