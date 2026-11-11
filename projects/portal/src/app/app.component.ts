@@ -137,7 +137,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private buildIconActions(): Array<PoHeaderActionTool> {
     return this.actions.map(action =>
       action.label === 'Aparência' && this.appearancePopover
-        ? { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 320 } }
+        ? { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 450 } }
         : action
     );
   }
