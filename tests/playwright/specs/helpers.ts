@@ -27,3 +27,26 @@ export async function applyPointerState(page: Page, state: PointerState, target:
     for (let i = 0; i <= index; i++) await page.keyboard.press('Tab');
   }
 }
+
+/**
+ * Força :hover / :focus(-visible) / :active em vários elementos de uma vez (CDP CSS.forcePseudoState),
+ * para fotografar muitos estados na mesma página. Elementos marcados com data-force="hover|focus|active".
+ */
+export async function forcePseudoStates(page: Page): Promise<void> {
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('DOM.enable');
+  await cdp.send('CSS.enable');
+  const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+  const classes: Record<string, string[]> = {
+    hover: ['hover'],
+    focus: ['focus', 'focus-visible'],
+    active: ['hover', 'active']
+  };
+  for (const [force, forcedPseudoClasses] of Object.entries(classes)) {
+    const { nodeIds } = await cdp.send('DOM.querySelectorAll', {
+      nodeId: root.nodeId,
+      selector: `[data-force="${force}"] button`
+    });
+    for (const nodeId of nodeIds) await cdp.send('CSS.forcePseudoState', { nodeId, forcedPseudoClasses });
+  }
+}

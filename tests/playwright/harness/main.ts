@@ -10,6 +10,8 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
 /**
  * Renderiza UM componente configurado por query string, dentro de #stage.
  * ?theme=light|dark (padrão) | deprecated-light|deprecated-dark (poThemeDefaultDeprecated).
+ * ?c=grid&rows=[[{kind,danger,size,icon,label,aria,disabled,loading,force}]] (JSON): várias células numa página só;
+ * `force` = hover|focus|active, aplicado depois pelo teste via CDP (CSS.forcePseudoState).
  * ?c=button (padrão) | button-group (&toggle=none|single|multiple&items=[{label,icon,selected,disabled}] em JSON).
  * Ex.: /?kind=primary&danger=1&size=large&icon=an%20an-plus&label=Salvar&loading=1&theme=dark
  */
@@ -17,8 +19,27 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
   selector: 'harness-root',
   imports: [PoButtonModule, PoButtonGroupModule],
   template: `
-    <div id="stage" [style.width.px]="component === 'button-group' ? 480 : 320">
-      @if (component === 'button-group') {
+    <div id="stage" [style.width]="width">
+      @if (component === 'grid') {
+        @for (row of rows; track $index) {
+          <div class="row">
+            @for (cell of row; track $index) {
+              <div class="cell" [attr.data-force]="cell.force">
+                <po-button
+                  [p-kind]="cell.kind"
+                  [p-danger]="cell.danger"
+                  [p-size]="cell.size"
+                  [p-icon]="cell.icon"
+                  [p-label]="cell.label"
+                  [p-disabled]="cell.disabled"
+                  [p-loading]="cell.loading"
+                  [p-aria-label]="cell.aria"
+                ></po-button>
+              </div>
+            }
+          </div>
+        }
+      } @else if (component === 'button-group') {
         <po-button-group [p-buttons]="items" [p-toggle]="toggle" [p-size]="q.size"></po-button-group>
       } @else {
         <po-button
@@ -40,6 +61,14 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
       padding: 24px;
       background: var(--color-neutral-light-00, #fff);
     }
+    .row {
+      display: flex;
+    }
+    .cell {
+      box-sizing: border-box;
+      width: 300px;
+      padding: 8px;
+    }
   `
 })
 class HarnessComponent {
@@ -48,6 +77,8 @@ class HarnessComponent {
   private readonly theme = this.params.get('theme') ?? 'light';
 
   readonly component = this.params.get('c') ?? 'button';
+  readonly rows = JSON.parse(this.params.get('rows') ?? '[]');
+  readonly width = { 'button-group': '480px', grid: 'max-content' }[this.component] ?? '320px';
   readonly toggle = this.params.get('toggle') ?? 'none';
   readonly items = JSON.parse(this.params.get('items') ?? '[]').map((i: object) => ({ action: () => {}, ...i }));
 
