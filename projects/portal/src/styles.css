@@ -243,14 +243,15 @@ pre code {
 
 .docs-sample-container {
   background: var(--color-neutral-light-05);
-  box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.2);
   margin: 40px auto;
   margin-top: 5px;
+  padding: var(--padding, var(--po-density-content-padding, var(--default-spacing-xs, var(--spacing-sm))));
   min-height: 100px;
   padding: 15px;
   position: relative;
+  border-radius: var(--border-radius-xl);
+  border: solid var(--border-width-sm) var(--color-neutral-light-20);
+  box-shadow: none;
 }
 
 .docs-sample-container .po-wrapper {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoDynamicFormField,
@@ -14,6 +14,7 @@ import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.
   selector: 'sample-po-dynamic-form-register',
   templateUrl: './sample-po-dynamic-form-register.component.html',
   providers: [PoDynamicFormRegisterService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDynamicFormRegisterComponent implements OnInit {

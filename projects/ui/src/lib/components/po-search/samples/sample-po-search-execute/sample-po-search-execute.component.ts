@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalComponent, PoSearchFilterMode } from '@po-ui/ng-components';
 
@@ -6,6 +6,7 @@ import { PoModalComponent, PoSearchFilterMode } from '@po-ui/ng-components';
   selector: 'sample-po-search-execute',
   templateUrl: './sample-po-search-execute.component.html',
   styleUrls: ['./sample-po-search-execute.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoSearchExecuteComponent {

@@ -6,7 +6,8 @@ import {
   Input,
   QueryList,
   TemplateRef,
-  ViewChildren
+  ViewChildren,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoUtils } from '../../../utils/util';
@@ -19,6 +20,7 @@ import { PoHeaderLiterals } from '../interfaces/po-header-literals.interface';
 @Component({
   selector: 'po-header-tools',
   templateUrl: './po-header-tools.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoHeaderToolsComponent {

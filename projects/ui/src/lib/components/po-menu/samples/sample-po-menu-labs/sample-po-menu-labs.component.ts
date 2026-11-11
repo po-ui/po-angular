@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoButtonGroupItem,
@@ -12,6 +12,7 @@ import {
   selector: 'sample-po-menu-labs',
   templateUrl: './sample-po-menu-labs.component.html',
   styleUrls: ['./sample-po-menu-labs.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoMenuLabsComponent implements OnInit {
@@ -193,15 +194,15 @@ export class SamplePoMenuLabsComponent implements OnInit {
     this.parentList = [];
 
     this.menuItems.forEach(item => {
-      this.parentList.push(<PoSelectOption>{ label: item.label, value: item['id'] });
+      this.parentList.push({ label: item.label, value: item['id'] });
 
       if (item.subItems) {
         item.subItems.forEach(secondItem => {
-          this.parentList.push(<PoSelectOption>{ label: `- ${secondItem.label}`, value: secondItem['id'] });
+          this.parentList.push({ label: `- ${secondItem.label}`, value: secondItem['id'] });
 
           if (secondItem.subItems) {
             secondItem.subItems.forEach(thirdItem => {
-              this.parentList.push(<PoSelectOption>{ label: `-- ${thirdItem.label}`, value: thirdItem['id'] });
+              this.parentList.push({ label: `-- ${thirdItem.label}`, value: thirdItem['id'] });
             });
           }
         });

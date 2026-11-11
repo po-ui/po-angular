@@ -13,8 +13,7 @@ Antes de atualizar a versão do PO UI, é importante que você tenha atualizado 
 o Angular que o PO UI está homologado, veja nossa
 [tabela de compatibilidade](https://github.com/po-ui/po-angular/wiki#vers%C3%B5es-angular-x-po-ui) em nosso Github Wiki.
 
-> Caso o seu projeto esteja na versão Angular@20:
-Realize a instalação do pacote Schematics do Angular para o nosso script de atualização funcionar corretamente: 
+> Caso o seu projeto não possua a dependência `@angular-devkit/schematics`, realize a instalação do pacote para o nosso script de atualização funcionar corretamente:
 
 ```
 npm install @angular-devkit/schematics --save-dev
@@ -29,7 +28,7 @@ ng update @angular/cli@<version> @angular/core@<version> --force
 Por exemplo:
 
 ```
-ng update @angular/cli@21 @angular/core@21 --force
+ng update @angular/cli@22 @angular/core@22 --force
 ```
 
 > Para realizar a migração completa e avaliar se não precisa fazer alguma alteração veja o [**Guia de Upgrade do Angular**](https://update.angular.io/).
@@ -60,20 +59,10 @@ ng update @po-ui/ng-components@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-components --allow-dirty --force
+ng update @po-ui/ng-components@next --allow-dirty --force
 ```
 
 > Caso ocorra um erro ao concluir o comando acima pode ser necessário fazer uma instalação limpa no projeto apagando a pasta `node_modules` e o arquivo `package-lock.json` e executando o comando `npm i --legacy-peer-deps` antes de realizar o `ng update`.
-
-> Caso sua aplicação seja configurada com módulos, pode ser necessária a inclusão da seguinte `devDependencies`:
-
-```json
-  "devDependencies": {
-    ...,
-    "@angular-devkit/schematics": "~21.2.17",
-    ...
-  }
-```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto seguir atualizado, que são elas:
   - Caso houver *breaking changes*, serão realizados as alterações possíveis, mas fique atento ao
@@ -103,12 +92,43 @@ ng update @po-ui/ng-sync@<version> --allow-dirty --force
 Por exemplo:
 
 ```
-ng update @po-ui/ng-sync --allow-dirty --force
+ng update @po-ui/ng-sync@next --allow-dirty --force
 ```
 
 O `ng update` ajudará nas alterações necessárias para seu projeto, que será atualizar as versões dos pacotes:
   - `@po-ui/ng-sync`;
   - `@po-ui/ng-storage`;
+
+> Pode ocorrer o seguinte erro `TypeError: Failed to fetch dynamically imported module...`, sendo necessário adicionar ao arquivo `angular.json` as seguintes configurações:
+> ```json
+> {
+>   "projects": {
+>     "app": {
+>       ...
+>       "architect": {
+>         ...
+>         "build": {
+>           ...
+>           "options": {
+>             ...
+>             "polyfills": ["zone.js"],
+>           },
+>         },
+>         "serve": {
+>           ...
+>           "builder": "@angular/build:dev-server",
+>           "options": {
+>             ...
+>             "prebundle": {
+>               "exclude": ["@ionic/angular", "@ionic/core", "ionicons"]
+>             }
+>           }
+>         },
+>       }
+>     }
+>   },
+> }
+> ```
 
 ## Depreciações e Breaking Changes
 

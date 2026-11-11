@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoButtonGroupItem,
@@ -11,6 +11,7 @@ import {
 @Component({
   selector: 'sample-po-button-group-labs',
   templateUrl: './sample-po-button-group-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoButtonGroupLabsComponent implements OnInit {

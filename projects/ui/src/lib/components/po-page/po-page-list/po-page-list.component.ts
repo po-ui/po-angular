@@ -10,7 +10,8 @@ import {
   SimpleChange,
   ViewChild,
   ViewContainerRef,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -47,6 +48,7 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
 @Component({
   selector: 'po-page-list',
   templateUrl: './po-page-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageListComponent

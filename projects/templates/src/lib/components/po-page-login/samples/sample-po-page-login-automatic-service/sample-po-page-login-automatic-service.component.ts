@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoLanguage } from '@po-ui/ng-components';
 import { PoPageLoginLiterals } from '@po-ui/ng-templates';
 
 @Component({
   selector: 'sample-po-page-login-automatic-service',
   templateUrl: './sample-po-page-login-automatic-service.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageLoginAutomaticServiceComponent {

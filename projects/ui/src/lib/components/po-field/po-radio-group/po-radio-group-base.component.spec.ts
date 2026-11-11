@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { expectPropertiesValues } from '../../../util-test/util-expect.spec';
@@ -12,6 +12,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 @Component({
   selector: 'po-radio-group-base-host',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoRadioHostGroupComponent extends PoRadioGroupBaseComponent {

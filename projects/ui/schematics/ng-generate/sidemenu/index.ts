@@ -24,7 +24,13 @@ import {
   getProjectMainFile,
   getWorkspaceConfigGracefully
 } from '@po-ui/ng-schematics/project';
-import { supportedCssExtensions } from '@po-ui/ng-schematics/utils';
+import {
+  detectFileNameStyleGuide,
+  detectRootComponentClassName,
+  FileNameStyleGuide,
+  getFileNameSuffixes,
+  supportedCssExtensions
+} from '@po-ui/ng-schematics/utils';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 import { Schema as ComponentOptions } from './schema';
@@ -54,12 +60,26 @@ function createAppComponent(options: ComponentOptions): Rule {
       options.style = 'css';
     }
 
+    // Use the explicit option when provided, otherwise auto-detect the style already used by the project.
+    const styleGuide: FileNameStyleGuide =
+      options.fileNameStyleGuide ?? detectFileNameStyleGuide(tree, browserEntryPoint);
+    const { componentSuffix } = getFileNameSuffixes(styleGuide);
+    const appFileName = `app${componentSuffix}`;
+
+    // Preserve the root component class name already used by the project (e.g. `App` or
+    // `AppComponent`) so the overwritten component keeps matching the existing imports in
+    // main.ts / app.module.ts. Fall back to the style guide convention when undetectable.
+    const appClassName =
+      detectRootComponentClassName(tree, browserEntryPoint) ?? (styleGuide === '2016' ? 'AppComponent' : 'App');
+
+    const templateOptions = { ...options, appFileName, appClassName };
+
     const templateSource = applyWithOverwrite(url(urlFile), [
       options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
-      pathTemplate({ ...options }),
+      pathTemplate({ ...templateOptions }),
       applyTemplates({
         ...strings,
-        ...options
+        ...templateOptions
       }),
       move(normalize(sourceDir))
     ]);

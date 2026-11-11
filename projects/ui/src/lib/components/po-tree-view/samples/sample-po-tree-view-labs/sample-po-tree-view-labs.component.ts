@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoTreeViewItem } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoCheckboxGroupOption, PoRadioGroupOption, PoSelectOption, PoTreeViewIt
 @Component({
   selector: 'sample-po-tree-view-labs',
   templateUrl: 'sample-po-tree-view-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoTreeViewLabsComponent implements OnInit {

@@ -4,7 +4,8 @@ import {
   HTTP_INTERCEPTORS,
   HttpRequest,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
@@ -37,7 +38,7 @@ describe('PoHttpRequestInterceptorService: ', () => {
           useClass: PoHttpRequestInterceptorService,
           multi: true
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

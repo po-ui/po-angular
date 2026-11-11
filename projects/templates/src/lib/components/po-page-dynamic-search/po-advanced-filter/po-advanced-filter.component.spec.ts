@@ -7,7 +7,7 @@ import { PoDynamicModule, PoFieldModule, PoModalModule } from '@po-ui/ng-compone
 import { PoAdvancedFilterBaseComponent } from './po-advanced-filter-base.component';
 import { PoAdvancedFilterComponent } from './po-advanced-filter.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 describe('PoAdvancedFilterComponent', () => {
   let component: PoAdvancedFilterComponent;
@@ -18,7 +18,7 @@ describe('PoAdvancedFilterComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PoAdvancedFilterComponent],
       imports: [FormsModule, PoDynamicModule, PoFieldModule, PoModalModule],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
     }).compileComponents();
   }));
 

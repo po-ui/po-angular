@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoCheckboxGroupOption, PoComboOption } from '@po-ui/ng-components';
@@ -10,6 +10,7 @@ import { PoModalComponent } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-modal-fruits-salad',
   templateUrl: './sample-po-modal-fruits-salad.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoModalFruitsSaladComponent {

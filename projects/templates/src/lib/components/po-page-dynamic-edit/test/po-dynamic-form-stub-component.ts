@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PoDynamicFormComponent } from '@po-ui/ng-components';
 
@@ -11,6 +11,7 @@ import { PoDynamicFormComponent } from '@po-ui/ng-components';
       useClass: PoDynamicFormStubComponent
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoDynamicFormStubComponent {

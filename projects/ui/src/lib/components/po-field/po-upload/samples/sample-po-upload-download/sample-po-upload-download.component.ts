@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoProgressAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-upload-download',
   templateUrl: 'sample-po-upload-download.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoUploadDownloadComponent {

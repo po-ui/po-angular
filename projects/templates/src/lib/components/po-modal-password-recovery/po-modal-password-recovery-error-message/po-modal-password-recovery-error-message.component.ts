@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * @docsPrivate
@@ -10,6 +10,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'po-modal-password-recovery-error-message',
   templateUrl: './po-modal-password-recovery-error-message.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoModalPasswordRecoveryErrorMessageComponent {

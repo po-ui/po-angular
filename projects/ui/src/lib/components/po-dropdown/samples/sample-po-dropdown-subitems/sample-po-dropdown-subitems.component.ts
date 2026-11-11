@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoDropdownAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-dropdown-subitems',
   templateUrl: './sample-po-dropdown-subitems.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoDropdownSubitemsComponent {

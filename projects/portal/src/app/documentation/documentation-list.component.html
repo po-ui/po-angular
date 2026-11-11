@@ -1,16 +1,112 @@
 <po-page-list p-title="API Reference" [p-filter]="filter">
-  <po-list-view
-    p-tag-position="right"
-    p-detail-display="inline"
-    [p-field-properties]="fieldProperties"
-    [p-actions]="listActions"
-    [p-items]="filteredItems"
-    (p-title-action)="viewSample($event)"
-  >
-    <ng-template p-list-view-detail-template let-item>
-      @if (item.preview) {
-        <div [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
+  <div class="documentation-list-view-switch">
+    <po-button-group p-toggle="single" [p-buttons]="viewModeButtons"></po-button-group>
+  </div>
+
+  <div class="documentation-list-content">
+    @if (isRendering) {
+      @if (viewMode === 'grid') {
+        <div class="documentation-list-viewport" aria-busy="true" aria-label="Carregando componentes">
+          @for (row of skeletonRows; track $index) {
+            <div class="documentation-list-row">
+              @for (col of row; track $index) {
+                <div class="documentation-skeleton-card">
+                  <div class="documentation-skeleton-card__header">
+                    <po-skeleton p-width="80px" p-height="20px"></po-skeleton>
+                    <po-skeleton p-width="96px" p-height="20px"></po-skeleton>
+                  </div>
+                  <po-skeleton p-width="100%" p-height="150px"></po-skeleton>
+                  <div class="documentation-skeleton-card__footer">
+                    <div class="documentation-skeleton-card__action">
+                      <po-skeleton p-width="96px" p-height="32px"></po-skeleton>
+                    </div>
+                    <div class="documentation-skeleton-card__action">
+                      <po-skeleton p-width="96px" p-height="32px"></po-skeleton>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="documentation-skeleton-list" aria-busy="true" aria-label="Carregando componentes">
+          @for (row of skeletonListItems; track $index) {
+            <div class="documentation-skeleton-list-item">
+              <!-- item-row: título + subtítulo à esquerda, tag + botão de opções à direita -->
+              <div class="documentation-skeleton-list-item__row">
+                <div class="documentation-skeleton-list-item__info">
+                  <po-skeleton p-width="80px" p-height="20px"></po-skeleton>
+                  <po-skeleton p-width="160px" p-height="14px"></po-skeleton>
+                </div>
+                <div class="documentation-skeleton-list-item__row-actions">
+                  <po-skeleton p-width="91px" p-height="20px" p-border-radius="12px"></po-skeleton>
+                  <po-skeleton p-width="24px" p-height="24px" p-border-radius="50%"></po-skeleton>
+                </div>
+              </div>
+              <!-- detail-button: botão centralizado -->
+              <div class="documentation-skeleton-list-item__detail">
+                <po-skeleton p-width="120px" p-height="24px"></po-skeleton>
+              </div>
+            </div>
+          }
+        </div>
       }
-    </ng-template>
-  </po-list-view>
+    } @else if (viewMode === 'grid') {
+      <div class="documentation-list-viewport po-row">
+        @for (item of filteredItems; track item.name) {
+          <div class="documentation-list-item po-sm-12 po-md-6 po-lg-4">
+            <po-widget
+              [p-height]="320"
+              [p-title]="item.title"
+              [p-tag]="item.tagLabel"
+              [p-tag-type]="item.tagType"
+              [p-primary-label]="item.hasSamples ? 'Exemplos' : 'Documentação'"
+              [p-secondary-label]="item.hasSamples ? 'Documentação' : ''"
+              (p-title-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
+              (p-primary-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
+              (p-secondary-action)="viewDocumentation(item)"
+            >
+              @if (hasPreviewSample(item)) {
+                <div class="docs-sample-container">
+                  @defer (on viewport; prefetch on idle) {
+                    <div class="documentation-list-item-preview" [appPreviewSampleHost]="item.name"></div>
+                  } @placeholder {
+                    <div class="documentation-preview-skeleton">
+                      <po-skeleton p-width="60%" p-height="20px"></po-skeleton>
+                      <po-skeleton p-width="100%" p-height="80px"></po-skeleton>
+                      <po-skeleton p-width="40%" p-height="20px"></po-skeleton>
+                    </div>
+                  }
+                </div>
+              } @else if (item.previewText) {
+                <p class="po-font-text">{{ item.previewText }}</p>
+              } @else {
+                <p class="po-font-text po-text-color-neutral-dark-70">
+                  Consulte a documentação de {{ item.title }} para mais detalhes.
+                </p>
+              }
+            </po-widget>
+          </div>
+        } @empty {
+          <po-container class="documentation-list-empty">Nenhum dado encontrado</po-container>
+        }
+      </div>
+    } @else {
+      <po-list-view
+        p-tag-position="right"
+        p-detail-display="inline"
+        [p-field-properties]="fieldProperties"
+        [p-actions]="listActions"
+        [p-items]="filteredItems"
+        (p-title-action)="viewSample($event)"
+      >
+        <ng-template p-list-view-detail-template let-item>
+          @if (item.preview) {
+            <div [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
+          }
+        </ng-template>
+      </po-list-view>
+    }
+  </div>
 </po-page-list>

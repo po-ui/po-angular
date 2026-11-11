@@ -1,8 +1,0 @@
-<po-page-detail
-  p-title="<%= classify(name) %>"
-  (p-back)="back()"
-  (p-edit)="edit()"
-  (p-remove)="remove()">
-
-  <!-- BUILD YOUR DATA VIEW HERE -->
-</po-page-detail>

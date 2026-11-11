@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoModalComponent,
@@ -13,6 +13,7 @@ import {
   selector: 'sample-po-notification-labs',
   templateUrl: './sample-po-notification-labs.component.html',
   providers: [PoNotificationService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoNotificationLabsComponent implements OnInit {

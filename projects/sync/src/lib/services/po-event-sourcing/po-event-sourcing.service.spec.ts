@@ -1,5 +1,5 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -70,7 +70,7 @@ describe('PoEventSourcingService:', () => {
         { provide: PoSchemaService, useClass: PoSchemaService },
         { provide: PoSchemaDefinitionService, useClass: PoSchemaDefinitionService },
         { provide: PoHttpClientService, useClass: PoHttpClientService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

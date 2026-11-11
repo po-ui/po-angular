@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoRadioGroupOption, PoSelectOption } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-radio-group-translator-reactive-form',
   templateUrl: './sample-po-radio-group-translator-reactive-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoRadioGroupTranslatorReactiveFormComponent implements OnInit {

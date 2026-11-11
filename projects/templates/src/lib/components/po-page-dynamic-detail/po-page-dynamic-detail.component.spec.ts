@@ -1,8 +1,9 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, throwError } from 'rxjs';
 
@@ -11,7 +12,7 @@ import { PoDialogService, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { expectPropertiesValues } from '../../util-test/util-expect.spec';
 import { PoUtils as util } from '../../utils/util';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { PoPageDynamicDetailActions } from './interfaces/po-page-dynamic-detail-actions.interface';
 import { PoPageDynamicDetailBeforeRemove } from './interfaces/po-page-dynamic-detail-before-remove.interface';
 import { PoPageDynamicDetailComponent } from './po-page-dynamic-detail.component';
@@ -24,8 +25,13 @@ describe('PoPageDynamicDetailComponent:', () => {
     TestBed.configureTestingModule({
       declarations: [PoPageDynamicDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [FormsModule, RouterTestingModule.withRoutes([])],
-      providers: [PoDialogService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+      imports: [FormsModule, RouterModule.forRoot([])],
+      providers: [
+        provideLocationMocks(),
+        PoDialogService,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
   }));
 
