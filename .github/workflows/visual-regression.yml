@@ -1,0 +1,51 @@
+name: Visual Regression (Playwright)
+
+on:
+  pull_request:
+    branches: [master, development, '[0-9]+.x.x']
+  workflow_dispatch:
+
+concurrency:
+  group: visual-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    runs-on: ubuntu-24.04 # baselines são geradas em Linux; manter o SO fixo evita diff de fonte
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Instalar dependências
+        run: npm install --ignore-scripts --legacy-peer-deps
+
+      # Builda o po-style na mesma branch do PR (ou na base, se não existir branch homônima),
+      # empacota com `npm pack` e instala no lugar do @po-ui/style do npm.
+      # Assim, mudanças só no style não geram falso positivo.
+      # Para PRs vindos de fork, só a branch base é usada (a branch homônima só vale no org po-ui).
+      - name: Build e instalação do po-style
+        run: >
+          tests/playwright/scripts/install-po-style.sh
+          "${{ github.head_ref }}" "${{ github.base_ref }}"
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Rodar testes visuais
+        run: npx playwright test
+        env:
+          CI: 'true'
+
+      - name: Subir relatório e diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
