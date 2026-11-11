@@ -11,7 +11,35 @@ export interface PoChartSerie {
   /**
    * @description
    *
-   * Determina a cor da série. As maneiras de customizar o *preset* padrão de cores são:
+   * Determina a cor da série.
+   *
+   * As cores atribuídas por padrão às séries dos gráficos são representadas pelos tokens abaixo,
+   * aplicados conforme a posição da série na lista:
+   *
+   * - `color-caption-categorical-01`
+   * - `color-caption-categorical-02`
+   * - `color-caption-categorical-03`
+   * - `color-caption-categorical-04`
+   * - `color-caption-categorical-05`
+   * - `color-caption-categorical-06`
+   * - `color-caption-categorical-07`
+   * - `color-caption-categorical-08`
+   *
+   * As cores atribuídas por padrão ao preenchimento das séries do gráfico do tipo `area` são representadas
+   * pelos tokens abaixo, na mesma ordem. A linha da série utiliza os tokens listados anteriormente.
+   * - `color-caption-categorical-overlay-01`
+   * - `color-caption-categorical-overlay-02`
+   * - `color-caption-categorical-overlay-03`
+   * - `color-caption-categorical-overlay-04`
+   * - `color-caption-categorical-overlay-05`
+   * - `color-caption-categorical-overlay-06`
+   * - `color-caption-categorical-overlay-07`
+   * - `color-caption-categorical-overlay-08`
+   *
+   * > A partir da 9ª série sem cor informada, a cor é gerada aleatoriamente a cada renderização do gráfico.
+   * Para manter as cores estáveis, informe a propriedade `color` nessas séries.
+   *
+   * As maneiras de customizar o *preset* padrão de cores são:
    * * Hexadecimal, por exemplo `#c64840`;
    * * RGB, por exemplo `rgb(0, 0, 165)`
    * * O nome da cor, por exemplo `blue`;
@@ -30,7 +58,6 @@ export interface PoChartSerie {
    *     - <span class="dot po-color-10"></span> `color-10`
    *     - <span class="dot po-color-11"></span> `color-11`
    *     - <span class="dot po-color-12"></span> `color-12`
-   * - A partir da 13° série o valor da cor será preta caso não seja enviada uma cor customizada.
    */
   color?: string;
 
