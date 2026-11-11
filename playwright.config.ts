@@ -12,7 +12,8 @@ export default defineConfig({
   workers: process.env.CI ? 2 : 4,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   expect: {
-    toHaveScreenshot: { animations: 'disabled', caret: 'hide', scale: 'css', maxDiffPixels: 0 }
+    // threshold: 0 = tolerância zero de cor por pixel (o padrão 0.2 deixava passar opacity .9 no hover).
+    toHaveScreenshot: { animations: 'disabled', caret: 'hide', scale: 'css', threshold: 0, maxDiffPixels: 0 }
   },
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
