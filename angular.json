@@ -38,6 +38,49 @@
         }
       }
     },
+    "visual-harness": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "tests/playwright/harness",
+      "sourceRoot": "tests/playwright/harness",
+      "prefix": "harness",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": { "base": "dist/visual-harness" },
+            "index": "tests/playwright/harness/index.html",
+            "browser": "tests/playwright/harness/main.ts",
+            "tsConfig": "tests/playwright/harness/tsconfig.json",
+            "assets": [{ "glob": "**/*", "input": "node_modules/@po-ui/style/images", "output": "/assets/images" }],
+            "styles": [
+              {
+                "input": "./node_modules/@po-ui/style/css/po-theme-default.min.css",
+                "bundleName": "po-theme-default",
+                "inject": false
+              },
+              {
+                "input": "./node_modules/@po-ui/style/css/po-theme-default-deprecated.min.css",
+                "bundleName": "po-theme-default-deprecated",
+                "inject": false
+              }
+            ],
+            "optimization": false,
+            "sourceMap": false
+          }
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "visual-harness:build",
+            "host": "127.0.0.1",
+            "port": 4300,
+            "liveReload": false,
+            "hmr": false
+          }
+        }
+      }
+    },
     "app": {
       "projectType": "application",
       "schematics": {},

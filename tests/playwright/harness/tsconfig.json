@@ -1,0 +1,6 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": { "outDir": "../../../out-tsc/visual-harness", "types": [] },
+  "files": ["main.ts"],
+  "angularCompilerOptions": { "strictTemplates": false }
+}
