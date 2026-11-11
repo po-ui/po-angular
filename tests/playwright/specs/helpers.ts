@@ -18,7 +18,9 @@ export async function open(page: Page, href: string): Promise<Locator> {
  * variar alguns pixels por execução. Chamar de novo depois de mudar o estado (hover/active/focus).
  */
 export async function freezeAnimations(page: Page): Promise<void> {
-  await page.evaluate(() =>
+  await page.evaluate(async () => {
+    // 2 quadros: a transição disparada pelo hover/active só nasce no próximo recálculo de estilo.
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     document.getAnimations().forEach(a => {
       if (a.effect?.getComputedTiming().iterations === Infinity) {
         a.pause();
@@ -26,8 +28,8 @@ export async function freezeAnimations(page: Page): Promise<void> {
       } else {
         a.finish();
       }
-    })
-  );
+    });
+  });
 }
 
 export type PointerState = 'hover' | 'active' | 'focus';

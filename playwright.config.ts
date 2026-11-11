@@ -8,7 +8,9 @@ export default defineConfig({
   snapshotPathTemplate: '{testDir}/../__snapshots__/{testFileName}/{arg}{ext}',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 0, // retry mascara flakiness; queremos ver instabilidade
+  // Local: sem retry (queremos ver instabilidade). CI: 1 retry; o Playwright marca o teste como "flaky" no relatório,
+  // então não some. Medido: ~1 falha em ~2000 execuções por timeout de estabilidade do screenshot no glow.
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : 4,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   expect: {
