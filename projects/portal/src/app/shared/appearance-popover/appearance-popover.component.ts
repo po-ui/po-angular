@@ -22,8 +22,8 @@ export class AppearancePopoverComponent implements AfterViewInit {
   selectedA11y: 'AA' | 'AAA' = 'AAA';
 
   readonly themeOptions: Array<PoRadioGroupOption> = [
-    { label: 'Padrão', value: 'default' },
-    { label: 'Padrão (legado)', value: 'deprecated' }
+    { label: 'EVO', value: 'default' },
+    { label: 'PO UI Depreciado', value: 'deprecated' }
   ];
 
   private readonly themes: Record<ThemeKey, PoTheme> = {
