@@ -1,0 +1,24 @@
+<po-modal #modal p-title="Buscar no portal" p-size="lg" (p-close)="onClose()">
+  <div class="search-modal-body" role="search">
+    <po-search
+      #poSearch
+      p-search-type="action"
+      p-aria-label="Buscar no portal"
+      [p-literals]="literals"
+      (p-change-model)="onChange($event)"
+      (p-keydown)="onKeydown($event)"
+    ></po-search>
+
+    <app-search-results
+      [query]="query()"
+      variant="modal"
+      [listId]="listId"
+      (resultSelected)="onSelect($event)"
+      (focusInput)="focusInput()"
+    ></app-search-results>
+  </div>
+
+  <po-modal-footer>
+    <span class="search-modal-hints">↑ ↓ navegar · Enter abrir · Esc fechar · {{ hint }} abre a busca</span>
+  </po-modal-footer>
+</po-modal>

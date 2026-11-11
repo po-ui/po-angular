@@ -3,9 +3,12 @@ import {
   ChangeDetectorRef,
   Component,
   HostListener,
+  NgZone,
+  OnDestroy,
   OnInit,
   ChangeDetectionStrategy,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -16,6 +19,8 @@ import { firstValueFrom } from 'rxjs';
 import { poThemeDefault, PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
 import { AppearancePopoverComponent } from './shared/appearance-popover/appearance-popover.component';
 import { VersionService } from './shared/version.service';
+import { SearchLauncherService } from './search/search-launcher.service';
+import { listenSearchShortcut } from './search/search-shortcut';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +28,11 @@ import { VersionService } from './shared/version.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly zone = inject(NgZone);
+  private readonly searchLauncher = inject(SearchLauncherService);
+  private removeSearchShortcut?: () => void;
+
   @ViewChild(AppearancePopoverComponent) appearancePopover!: AppearancePopoverComponent;
 
   menus: Array<PoMenuItem> = [];
@@ -43,6 +52,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    // Ctrl+K / Cmd+K abre a busca (ignora o editor Monaco).
+    this.removeSearchShortcut = listenSearchShortcut(this.zone, request => this.searchLauncher.open(request));
+
     firstValueFrom(this.versionService.getCurrentVersion()).then(version => {
       this.items = [
         { label: 'Iniciar', link: '/' },
@@ -59,6 +71,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.updateLogoFromActiveTheme();
+  }
+
+  ngOnDestroy(): void {
+    this.removeSearchShortcut?.();
   }
 
   openExternalLink(url) {
