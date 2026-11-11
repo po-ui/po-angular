@@ -24,6 +24,13 @@ html.potheme-dark-AAA .po-header-nav {
   --stroke-color: var(--color-brand-01-dark);
 }
 
+.button-brand-02 {
+  --color: var(--color-brand-02-base);
+  --color-glow-highlight: var(--color-brand-02-light);
+  --color-hover: var(--color-brand-02-dark);
+  --color-pressed: var(--color-brand-02-darker);
+}
+
 .dot {
   border-radius: 50%;
   display: inline-block;
