@@ -55,7 +55,7 @@ export class HomeComponent {
         {
           label: 'src',
           value: 13,
-          expanded: true,
+          expanded: false,
           subItems: [{ label: 'main.ts', value: 131 }]
         }
       ]

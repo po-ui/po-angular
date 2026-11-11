@@ -22,17 +22,23 @@
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
+  gap: 16px;
 }
 
 .box-widget-new .app-home-widget-components {
   display: flex;
   flex-direction: column;
+  flex: 1 1 360px;
+  min-width: min(360px, 100%);
+  max-width: 100%;
+  max-height: 368px;
 }
 
 .box-widget-new .home-widget-components-container {
   height: auto;
   display: flex;
   flex: 1;
+  min-height: 0;
 }
 
 .box-widget-new .home-widget-components-content {
@@ -40,8 +46,33 @@
   top: auto;
   transform: none;
   width: 100%;
+  min-height: 0;
+  overflow-y: auto;
   text-align: left;
   padding: 8px 4px;
+}
+
+.box-widget-new .app-home-widget-components ::ng-deep .po-widget-container {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.box-widget-new .app-home-widget-components ::ng-deep .po-widget-container__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.box-widget-new .app-home-widget-components ::ng-deep .po-widget-container__content > po-container {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.box-widget-new .app-home-widget-components ::ng-deep .po-widget-container__content > po-container > .po-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .home-widget-components-datetime {
@@ -52,12 +83,6 @@
 
 .home-widget-components-list ::ng-deep po-list-view {
   --po-density-content-padding: 0px;
-}
-
-@media (max-width: 768px) {
-  .box-widget-new {
-    display: block;
-  }
 }
 
 .section-open-source-icon {
