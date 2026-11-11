@@ -63,6 +63,7 @@ projects/portal/src/assets/json/api-list.json
 projects/portal/src/assets/json/icons-fill.json
 projects/portal/src/assets/json/icons-regular.json
 projects/portal/src/assets/json/version.json
+projects/portal/src/assets/json/search-*.json
 projects/portal/src/app/documentation/documentation-routing.module.ts
 
 # LLMS generated files
