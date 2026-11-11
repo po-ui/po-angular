@@ -661,6 +661,9 @@ export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit
   }
 
   private includeInfiniteScroll(): void {
+    // evita acumular listeners de scroll a cada ngOnChanges, o que duplicaria as emissões do evento.
+    this.subscriptionScrollEvent?.unsubscribe();
+
     this.scrollEvent$ = this.scrollListener(this.listboxItemList?.nativeElement);
 
     this.subscriptionScrollEvent = this.scrollEvent$.subscribe(event => {

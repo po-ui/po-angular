@@ -1308,24 +1308,80 @@ describe('PoComboComponent:', () => {
       );
     });
 
-    it('showMoreInfiniteScroll: should call `onShowMore` if `offsetHeight` + `scrollTop` is greater than `scrollHeight`', () => {
-      const spyOnShowMore = spyOn(component, <any>'applyFilter');
+    describe('showMoreInfiniteScroll:', () => {
+      beforeEach(() => {
+        component.infiniteLoading = false;
+        component.isServerSearching = false;
+        component.defaultService.hasNext = true;
+        component.page = 1;
+      });
 
-      component.infiniteScrollDistance = 10;
+      it('should increment page, set infiniteLoading and call `applyFilter` if has next page and no pending request', () => {
+        const spyApplyFilter = spyOn(component, 'applyFilter');
 
-      component.showMoreInfiniteScroll();
+        component.showMoreInfiniteScroll();
 
-      expect(spyOnShowMore).toHaveBeenCalled();
+        expect(component.page).toBe(2);
+        expect(component.infiniteLoading).toBeTrue();
+        expect(spyApplyFilter).toHaveBeenCalledWith('', true);
+      });
+
+      it('shouldn`t call `applyFilter` nor increment page if `infiniteLoading` is true', () => {
+        const spyApplyFilter = spyOn(component, 'applyFilter');
+        component.infiniteLoading = true;
+
+        component.showMoreInfiniteScroll();
+
+        expect(component.page).toBe(1);
+        expect(spyApplyFilter).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `applyFilter` nor increment page if `isServerSearching` is true', () => {
+        const spyApplyFilter = spyOn(component, 'applyFilter');
+        component.isServerSearching = true;
+
+        component.showMoreInfiniteScroll();
+
+        expect(component.page).toBe(1);
+        expect(spyApplyFilter).not.toHaveBeenCalled();
+      });
+
+      it('shouldn`t call `applyFilter`, increment page nor set `infiniteLoading` if `hasNext` is false', () => {
+        const spyApplyFilter = spyOn(component, 'applyFilter');
+        component.defaultService.hasNext = false;
+
+        component.showMoreInfiniteScroll();
+
+        expect(component.page).toBe(1);
+        expect(component.infiniteLoading).toBeFalse();
+        expect(spyApplyFilter).not.toHaveBeenCalled();
+      });
     });
 
-    it('showMoreInfiniteScroll: shouldn`t call `onShowMore` if `offsetHeight` + `scrollTop` is less  than `scrollHeight`', () => {
-      const spyOnShowMore = spyOn(component, <any>'applyFilter');
+    it('applyFilter: should unsubscribe the previous `filterSubscription` before a new request', () => {
+      const previousSubscription = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+      component['filterSubscription'] = previousSubscription;
+      component.service = component.defaultService;
+      component.defaultService.hasNext = true;
+      spyOn(component.service, 'getFilteredData').and.returnValue(of([{ value: 'test' }]));
+      spyOn(component, 'setOptionsByApplyFilter');
 
-      component.infiniteScrollDistance = 110;
+      component.applyFilter('test');
 
-      component.showMoreInfiniteScroll();
+      expect(previousSubscription.unsubscribe).toHaveBeenCalled();
+      expect(component['filterSubscription']).not.toBe(previousSubscription);
+    });
 
-      expect(spyOnShowMore).toHaveBeenCalled();
+    it('onErrorFilteredData: should reset `isServerSearching` and `infiniteLoading`', () => {
+      component.isServerSearching = true;
+      component.infiniteLoading = true;
+      spyOn(component, <any>'updateComboList');
+      spyOn(component, 'controlComboVisibility');
+
+      component['onErrorFilteredData']();
+
+      expect(component.isServerSearching).toBeFalse();
+      expect(component.infiniteLoading).toBeFalse();
     });
 
     it('initializeListeners: should call removeListeners and initialize click, resize and scroll listeners', () => {

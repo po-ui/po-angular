@@ -150,6 +150,19 @@ describe('PoListBoxComponent', () => {
       expect(component.scrollListener).toHaveBeenCalledWith(component.listboxItemList?.nativeElement);
     });
 
+    it('includeInfiniteScroll: should unsubscribe the previous subscription before creating a new one', () => {
+      const previousSubscription = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+      component['subscriptionScrollEvent'] = previousSubscription;
+      component.listboxItemList = { nativeElement: document.createElement('div') };
+      spyOn(component, 'scrollListener').and.returnValue(of({}));
+      spyOn(component, 'showMoreInfiniteScroll');
+
+      component['includeInfiniteScroll']();
+
+      expect(previousSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+      expect(component['subscriptionScrollEvent']).not.toBe(previousSubscription);
+    });
+
     it('should not unsubscribe if there is no previous subscription', () => {
       spyOn(component, 'scrollListener').and.returnValue(of({}));
       spyOn(component, 'showMoreInfiniteScroll');

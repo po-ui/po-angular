@@ -416,6 +416,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
         ? { property: this.fieldLabel, value, page: this.page, pageSize: this.pageSize }
         : { property: this.fieldLabel, value };
 
+      this.filterSubscription?.unsubscribe();
       this.filterSubscription = this.service.getFilteredData(param, this.filterParams).subscribe(
         items => {
           this.setOptionsByApplyFilter(value, items, reset);
@@ -663,9 +664,12 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   showMoreInfiniteScroll(): void {
-    if (this.defaultService.hasNext) {
-      this.infiniteLoading = true;
+    // aguarda a requisição anterior finalizar e só avança de página se houver próxima.
+    if (this.infiniteLoading || this.isServerSearching || !this.defaultService.hasNext) {
+      return;
     }
+
+    this.infiniteLoading = true;
     this.page++;
     this.applyFilter('', true);
   }
@@ -765,6 +769,7 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
 
   private onErrorFilteredData() {
     this.isServerSearching = false;
+    this.infiniteLoading = false;
 
     this.updateComboList([]);
 
