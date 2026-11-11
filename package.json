@@ -48,6 +48,7 @@
     "build:portal:prod": "ng build portal --configuration production",
     "build:portal": "npm run build:ui && npm run build:templates && npm run build:code-editor && npm run build:portal:docs",
     "build:portal:docs": "cd projects/portal && gulp build && npm run script:copy-icons",
+    "test:portal:docs": "jasmine \"projects/portal/docs/**/*.spec.js\"",
     "build:portal:llms": "cd projects/portal && gulp build:api && gulp build:llms",
     "build:mcp": "cd projects/mcp && npm install --prefer-offline && npm run build",
     "test:mcp": "cd projects/mcp && npm install --prefer-offline && npm test",

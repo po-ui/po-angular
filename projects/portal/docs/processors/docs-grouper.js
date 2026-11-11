@@ -5,6 +5,7 @@
 const path = require('path');
 const grouper = require('./helpers/grouper');
 const fileWriter = require('./helpers/file-writer');
+const { assignGroupAnchors } = require('./helpers/anchors');
 
 var filesInfo = [];
 
@@ -117,6 +118,9 @@ module.exports = function componentGrouper() {
           !group.name.includes('enum')
         );
       });
+
+      // `id` estável (âncora) de cada classe, propriedade, método, interface e enum; usado no HTML e no índice de busca.
+      filteredGroups.forEach(assignGroupAnchors);
 
       // Gera um arquivo json com dados da lista de componentes
       fileWriter.generateDocsJsonFile(JSON.stringify(filesInfo));

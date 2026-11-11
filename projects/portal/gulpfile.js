@@ -7,7 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const configuration = require('./docs/configuration');
 const util = require('./docs/util');
-const { marked } = require('marked');
+const { Marked } = require('marked');
+const { slugify, headingText, uniqueId } = require('./docs/processors/helpers/anchors');
 const _ = require('lodash');
 
 const APP_DIR = './src/app';
@@ -26,9 +27,20 @@ const replaceBrackets = str =>
     .replace(/\}/g, '&#125;')
     .replace(/@/g, '&#64;');
 
-const markdownToHtml = markdown =>
-  replaceBrackets(
-    marked.parse(markdown, {
+// Cada título ganha um `id` estável (slug do texto; repetidos recebem -2, -3...) para deep link e busca.
+const markdownToHtml = markdown => {
+  const seen = new Set();
+  const md = new Marked({
+    renderer: {
+      heading({ tokens, text, depth }) {
+        const id = uniqueId(slugify(headingText(text)), seen);
+        return `<h${depth} id="${id}">${this.parser.parseInline(tokens)}</h${depth}>\n`;
+      }
+    }
+  });
+
+  return replaceBrackets(
+    md.parse(markdown, {
       highlight: (code, language) => {
         if (language) {
           return hljs.highlight(code, { language: language.toLowerCase() === 'ts' ? 'typescript' : language }).value;
@@ -37,6 +49,7 @@ const markdownToHtml = markdown =>
       }
     })
   );
+};
 
 const markdownCommentsToObject = markdown =>
   markdown.match(/\[comment\]\:\s\#\s\(@(.+)\)/g).reduce((comments, currentComment) => {

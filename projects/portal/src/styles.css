@@ -809,3 +809,8 @@ sample-po-context-menu-user-view po-context-tabs .po-tabs-container {
 sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-content {
   height: 384px !important;
 }
+
+/* Deep link (busca global): o header é fixo, então o alvo da âncora não pode ficar embaixo dele. */
+[id] {
+  scroll-margin-top: 80px;
+}
