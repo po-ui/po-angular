@@ -1,0 +1,44 @@
+<div #host class="search-box" (keydown)="onHostKeydown($event)" (focusout)="onFocusOut($event, host)">
+  <div #field class="search-box-field">
+    <po-search
+      #poSearch
+      class="search-box-input"
+      p-search-type="action"
+      p-size="small"
+      p-aria-label="Buscar no portal"
+      [p-literals]="literals"
+      (p-change-model)="onChange($event)"
+      (p-focus)="onFocus()"
+      (p-keydown)="onKeydown($event)"
+    ></po-search>
+    @if (!raw() && !focused()) {
+      <kbd class="search-box-hint" aria-hidden="true">{{ hint }}</kbd>
+    }
+  </div>
+
+  <po-button
+    class="search-box-mobile"
+    p-kind="tertiary"
+    p-icon="an an-magnifying-glass"
+    p-aria-label="Buscar no portal"
+    (p-click)="openModal()"
+  ></po-button>
+
+  <po-popover
+    #popover
+    p-trigger="function"
+    p-position="bottom-right"
+    [p-target]="field"
+    [p-width]="520"
+    [p-hide-arrow]="true"
+    (p-close)="onPopoverClosed()"
+  >
+    <app-search-results
+      [query]="query()"
+      variant="popover"
+      [listId]="listId"
+      (resultSelected)="onSelect($event)"
+      (focusInput)="focusInput()"
+    ></app-search-results>
+  </po-popover>
+</div>

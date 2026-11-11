@@ -1,0 +1,59 @@
+.search-results {
+  max-height: min(60vh, 460px);
+  overflow-y: auto;
+}
+
+.search-results-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.search-results-message,
+.search-results-more {
+  margin: 0;
+  padding: var(--spacing-sm, 12px);
+  color: var(--color-neutral-dark-70);
+  text-align: center;
+}
+
+.search-results-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--spacing-sm, 12px);
+}
+
+.search-hit {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.search-hit-page {
+  color: var(--color-neutral-dark-70);
+  font-size: 0.875rem;
+}
+
+.search-hit-page-name {
+  font-weight: 600;
+}
+
+.search-hit-excerpt {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-neutral-dark-90);
+}
+
+/* Cores do tema (claro/escuro): nunca fixas. */
+.search-hit-excerpt mark {
+  padding: 0 2px;
+  border-radius: 2px;
+  background-color: var(--color-action-background-pressed, var(--color-portal-background-color-highlight));
+  color: var(--color-neutral-dark-95, inherit);
+  font-weight: 600;
+}

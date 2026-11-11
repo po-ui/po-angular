@@ -1,4 +1,12 @@
-<po-header [p-force-actions-tools]="true" [p-brand]="logoPoUI" [p-menu-items]="items" [p-actions-tools]="iconActions">
+<ng-template #searchTemplate><app-search-box></app-search-box></ng-template>
+
+<po-header
+  [p-force-actions-tools]="true"
+  [p-brand]="logoPoUI"
+  [p-menu-items]="items"
+  [p-actions-tools]="iconActions"
+  [p-header-template]="searchTemplate"
+>
 </po-header>
 
 <app-appearance-popover></app-appearance-popover>

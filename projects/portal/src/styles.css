@@ -814,3 +814,9 @@ sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-conten
 [id] {
   scroll-margin-top: 80px;
 }
+
+/* Alvo de um deep link vindo da busca: destaque curto para o olho achar o item. */
+.search-target-highlight {
+  outline: 2px solid var(--color-action-default);
+  outline-offset: 2px;
+}
