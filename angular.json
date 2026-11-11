@@ -380,6 +380,15 @@
           "options": {
             "lintFilePatterns": ["projects/portal/**/*.ts", "projects/portal/**/*.html"]
           }
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "main": "projects/portal/src/test.ts",
+            "tsConfig": "projects/portal/tsconfig.spec.json",
+            "karmaConfig": "projects/portal/karma.conf.js",
+            "include": ["projects/portal/src/app/search/**/*.spec.ts"]
+          }
         }
       }
     }
