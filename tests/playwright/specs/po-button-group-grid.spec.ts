@@ -6,7 +6,7 @@ import { buildItems, CONTENTS, pointerTarget, SIZES, STATES_BY_TOGGLE, TOGGLES }
 /**
  * COBERTURA ATIVA do po-button-group: a mesma matriz do po-button-group.spec.ts, com UM snapshot por
  * tema × tamanho × toggle (colunas = conteúdos; linhas = estados). hover/focus/active são forçados via CDP no
- * item certo (`forceItem`). Cada célula leva uma legenda (parte do snapshot):
+ * item certo (`forceSelector`). Cada célula leva uma legenda (parte do snapshot):
  * "tema · tamanho · toggle" / "conteúdo · estado".
  */
 for (const theme of THEMES) {
@@ -25,7 +25,7 @@ for (const theme of THEMES) {
                 toggle,
                 items: buildItems(c, toggle, state),
                 force: target?.force,
-                forceItem: target?.item
+                forceSelector: target && `po-button:nth-child(${target.item + 1}) button`
               };
             })
           );

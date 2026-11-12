@@ -1,45 +1,70 @@
 import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 import { PoButtonModule } from '../../../projects/ui/src/lib/components/po-button';
 import { PoButtonGroupModule } from '../../../projects/ui/src/lib/components/po-button-group';
+import { PoCheckboxModule } from '../../../projects/ui/src/lib/components/po-field/po-checkbox/po-checkbox.module';
 import { PoThemeService } from '../../../projects/ui/src/lib/services/po-theme/po-theme.service';
 import { poThemeDefaultDeprecated } from '../../../projects/ui/src/lib/services/po-theme/index';
 import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/enum/po-theme-type.enum';
 
 /**
- * Renderiza UM componente configurado por query string, dentro de #stage.
- * ?theme=light|dark (padrão) | deprecated-light|deprecated-dark (poThemeDefaultDeprecated).
- * ?c=grid&rows=[[célula]] (JSON): várias células numa página só. Célula de po-button:
- * {kind,danger,size,icon,label,aria,disabled,loading}; de po-button-group: {component:'button-group',size,toggle,items}.
- * Comuns: `caption` (legenda visível, parte do snapshot), `width` (px), `force` = hover|focus|active e `forceItem`
- * (índice do item do grupo), aplicados depois pelo teste via CDP (CSS.forcePseudoState).
- * ?c=button (padrão) | button-group (&toggle=none|single|multiple&items=[{label,icon,selected,disabled}] em JSON).
- * Ex.: /?kind=primary&danger=1&size=large&icon=an%20an-plus&label=Salvar&loading=1&theme=dark
+ * Harness de regressão visual: renderiza uma GRADE de células (um componente por célula) dentro de #stage.
+ *
+ * /?theme=light|dark|deprecated-light|deprecated-dark&rows=[[célula, ...], ...]   (rows em JSON)
+ *
+ * Células por `component`:
+ *  - (omitido) po-button:       {kind, danger, size, icon, label, aria, disabled, loading}
+ *  - 'button-group':            {size, toggle, items: [{label, icon, selected, disabled}]}
+ *  - 'checkbox' (disabled vai em p-disabled E em [disabled]: o NgModel zera o p-disabled sozinho):
+ *                               {size, value: true|false|null (null = indeterminate), label, labelWrap, help, helper,
+ *                                required, disabled}
+ * Comuns a todas:
+ *  - caption:       legenda visível (2 linhas, "\n"); faz parte do snapshot.
+ *  - width:         largura fixa em px. Sem ela a célula cresce com o conteúdo.
+ *  - force:         'hover' | 'focus' | 'active' — estado forçado pelo teste via CDP (CSS.forcePseudoState).
+ *  - forceSelector: seletor CSS (dentro da célula) dos elementos que recebem o estado forçado. Padrão: 'button'.
+ * Para um componente novo: importe o módulo, acrescente um bloco no @switch e documente a célula acima.
  */
 @Component({
   selector: 'harness-root',
-  imports: [PoButtonModule, PoButtonGroupModule],
+  imports: [FormsModule, PoButtonModule, PoButtonGroupModule, PoCheckboxModule],
   template: `
-    <div id="stage" [style.width]="width">
-      @if (component === 'grid') {
-        <div class="grid" [style.gridTemplateColumns]="columns">
-          @for (row of rows; track $index) {
-            @for (cell of row; track $index) {
-              <div
-                class="cell"
-                [style.width.px]="cell.width"
-                [attr.data-force]="cell.force"
-                [attr.data-force-item]="cell.forceItem"
-              >
-                <div class="caption">{{ cell.caption }}</div>
-                @if (cell.component === 'button-group') {
+    <div id="stage">
+      <div class="grid" [style.gridTemplateColumns]="columns">
+        @for (row of rows; track $index) {
+          @for (cell of row; track $index) {
+            <div
+              class="cell"
+              [style.width.px]="cell.width"
+              [attr.data-force]="cell.force"
+              [attr.data-force-selector]="cell.forceSelector"
+            >
+              <div class="caption">{{ cell.caption }}</div>
+              @switch (cell.component) {
+                @case ('button-group') {
                   <po-button-group
                     [p-buttons]="cell.items"
                     [p-toggle]="cell.toggle"
                     [p-size]="cell.size"
                   ></po-button-group>
-                } @else {
+                }
+                @case ('checkbox') {
+                  <po-checkbox
+                    [ngModel]="cell.value"
+                    [ngModelOptions]="{ standalone: true }"
+                    [p-size]="cell.size"
+                    [p-label]="cell.label"
+                    [p-label-text-wrap]="cell.labelWrap"
+                    [p-help]="cell.help"
+                    [p-helper]="cell.helper"
+                    [p-required]="cell.required"
+                    [p-disabled]="cell.disabled"
+                    [disabled]="cell.disabled"
+                  ></po-checkbox>
+                }
+                @default {
                   <po-button
                     [p-kind]="cell.kind"
                     [p-danger]="cell.danger"
@@ -51,29 +76,17 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
                     [p-aria-label]="cell.aria"
                   ></po-button>
                 }
-              </div>
-            }
+              }
+            </div>
           }
-        </div>
-      } @else if (component === 'button-group') {
-        <po-button-group [p-buttons]="items" [p-toggle]="toggle" [p-size]="q.size"></po-button-group>
-      } @else {
-        <po-button
-          [p-kind]="q.kind"
-          [p-danger]="q.danger"
-          [p-size]="q.size"
-          [p-icon]="q.icon"
-          [p-label]="q.label"
-          [p-disabled]="q.disabled"
-          [p-loading]="q.loading"
-          [p-aria-label]="q.ariaLabel"
-        ></po-button>
-      }
+        }
+      </div>
     </div>
   `,
   styles: `
     #stage {
       box-sizing: border-box;
+      width: max-content;
       padding: 24px;
       background: var(--color-neutral-light-00, #fff);
     }
@@ -97,36 +110,18 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
   `
 })
 class HarnessComponent {
-  private readonly params = new URLSearchParams(location.search);
   private readonly themeService = inject(PoThemeService);
+  private readonly params = new URLSearchParams(location.search);
   private readonly theme = this.params.get('theme') ?? 'light';
 
-  readonly component = this.params.get('c') ?? 'button';
   // itens de grupo ganham `action` uma única vez (array novo a cada ciclo quebraria o p-buttons)
   readonly rows = JSON.parse(this.params.get('rows') ?? '[]').map((row: Array<any>) =>
-    row.map(cell => (cell.items ? { ...cell, items: this.withActions(cell.items) } : cell))
+    row.map(cell =>
+      cell.items ? { ...cell, items: cell.items.map((i: object) => ({ action: () => {}, ...i })) } : cell
+    )
   );
   // colunas = nº de células da 1ª linha
   readonly columns = `repeat(${this.rows[0]?.length ?? 1}, max-content)`;
-  readonly width = { 'button-group': '480px', grid: 'max-content' }[this.component] ?? '320px';
-  readonly toggle = this.params.get('toggle') ?? 'none';
-  readonly items = this.withActions(JSON.parse(this.params.get('items') ?? '[]'));
-
-  /** po-button-group exige `action` em cada item. */
-  withActions(items: Array<object>): Array<any> {
-    return items.map(i => ({ action: () => {}, ...i }));
-  }
-
-  readonly q = {
-    kind: this.params.get('kind') ?? 'secondary',
-    danger: this.params.get('danger') === '1',
-    size: this.params.get('size') ?? 'medium',
-    icon: this.params.get('icon') || undefined,
-    label: this.params.get('label') || undefined,
-    ariaLabel: this.params.get('aria') || undefined,
-    disabled: this.params.get('disabled') === '1',
-    loading: this.params.get('loading') === '1'
-  };
 
   constructor() {
     const dark = this.theme.endsWith('dark');
