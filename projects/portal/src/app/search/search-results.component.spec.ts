@@ -17,20 +17,20 @@ const core: SearchChunk = {
   docs: [
     { id: 'po-button', type: 'componente', title: 'PoButton', page: 0, text: 'Botão com vários estilos.' },
     {
-      id: 'po-button#p-kind',
+      id: 'po-button#prop-p-kind',
       type: 'propriedade',
       title: 'po-button › p-kind',
       page: 0,
       section: 'PoButtonComponent',
-      fragment: 'p-kind',
+      fragment: 'prop-p-kind',
       text: 'Estilo visual do botão.'
     },
     ...Array.from({ length: 60 }, (_, i) => ({
-      id: `comp-${i}#p-helper`,
+      id: `comp-${i}#prop-p-helper`,
       type: 'propriedade' as const,
       title: `comp-${i} › p-helper`,
       page: 0,
-      fragment: 'p-helper',
+      fragment: 'prop-p-helper',
       text: 'Ajuda.'
     }))
   ]

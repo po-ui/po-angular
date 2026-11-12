@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import type MiniSearch from 'minisearch';
 
+import { ANCHOR_PREFIXES } from '../shared/deep-link-scroll.service';
 import { SearchAnalyticsService } from './search-analytics.service';
 import { buildExcerpt, normalizeText, queryTerms, tokenize } from './search-text';
 import {
@@ -15,6 +16,9 @@ import {
   SearchResult,
   SearchStatus
 } from './search.model';
+
+/** `prop-p-kind` -> `p-kind`: o nome que a pessoa digita. */
+const ANCHOR_PREFIX_RE = new RegExp(`^(${ANCHOR_PREFIXES.join('|')})`);
 
 export type SearchVariant = 'popover' | 'modal';
 
@@ -171,7 +175,7 @@ export class SearchService {
       !!doc &&
       (normalizeText(doc.title) === normalizedQuery ||
         (!doc.fragment && doc.id === normalizedQuery) ||
-        (!!doc.fragment && normalizeText(doc.fragment) === normalizedQuery))
+        (!!doc.fragment && normalizeText(doc.fragment.replace(ANCHOR_PREFIX_RE, '')) === normalizedQuery))
     );
   }
 

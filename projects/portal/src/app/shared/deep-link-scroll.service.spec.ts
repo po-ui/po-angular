@@ -62,6 +62,23 @@ describe('DeepLinkScrollService', () => {
     expect(scroller.scrollTop).toBeGreaterThan(800);
   });
 
+  it('link antigo sem prefixo (#p-kind) abre o id com prefixo; o id exato tem prioridade', () => {
+    target.id = 'prop-p-kind';
+    service.scrollTo('p-kind');
+    expect(scroller.scrollTop).toBeGreaterThan(800);
+
+    scroller.scrollTop = 0;
+    target.classList.remove('search-target-highlight');
+    const exact = document.createElement('p');
+
+    exact.id = 'p-kind';
+    exact.textContent = 'exato';
+    outer.querySelector('div > div > div').prepend(exact);
+    service.scrollTo('p-kind');
+    expect(exact.classList.contains('search-target-highlight')).toBeTrue();
+    expect(target.classList.contains('search-target-highlight')).toBeFalse();
+  });
+
   it('navegação terminada com fragmento dispara a rolagem; sem fragmento não faz nada', () => {
     service.start();
     currentUrl = '/documentation/po-button?view=doc#p-kind';

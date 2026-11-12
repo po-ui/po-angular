@@ -5,6 +5,12 @@ import { filter } from 'rxjs';
 
 const HIGHLIGHT_CLASS = 'search-target-highlight';
 const HIGHLIGHT_MS = 2500;
+/**
+ * Prefixos dos ids por tipo de alvo (gerados por `docs/processors/helpers/anchors.js`; `sample-` vem do template de samples).
+ * Links antigos sem prefixo (`#p-kind`) ainda abrem: se o id exato não existe, tenta com cada prefixo.
+ */
+export const ANCHOR_PREFIXES = ['prop-', 'event-', 'method-', 'interface-', 'enum-', 'class-'];
+
 /** A página e a aba do alvo são lazy: espera o `id` aparecer por até este tempo. */
 const WAIT_TIMEOUT_MS = 6000;
 const WAIT_STEP_MS = 100;
@@ -45,9 +51,9 @@ export class DeepLinkScrollService {
     const attempt = () => {
       if (current !== this.run) return;
 
-      const element = this.doc.getElementById(fragment);
+      const element = this.findElement(fragment);
 
-      if (element?.getClientRects().length) {
+      if (element) {
         this.scrollNearest(element);
         element.classList.add(HIGHLIGHT_CLASS);
         setTimeout(() => element.classList.remove(HIGHLIGHT_CLASS), HIGHLIGHT_MS);
@@ -57,6 +63,18 @@ export class DeepLinkScrollService {
     };
 
     attempt();
+  }
+
+  private findElement(fragment: string): HTMLElement | null {
+    const candidates = [fragment, ...ANCHOR_PREFIXES.map(prefix => `${prefix}${fragment}`)];
+
+    for (const id of candidates) {
+      const element = this.doc.getElementById(id);
+
+      if (element?.getClientRects().length) return element;
+    }
+
+    return null;
   }
 
   private scrollNearest(element: HTMLElement): void {

@@ -42,20 +42,20 @@ const api: SearchChunk = {
   pages: [core.pages[0]],
   docs: [
     {
-      id: 'po-button#p-kind',
+      id: 'po-button#prop-p-kind',
       type: 'propriedade',
       title: 'po-button › p-kind',
       page: 0,
       section: 'PoButtonComponent',
-      fragment: 'p-kind',
+      fragment: 'prop-p-kind',
       text: 'Define o estilo visual do botão.'
     },
     {
-      id: 'po-button#p-label',
+      id: 'po-button#prop-p-label',
       type: 'propriedade',
       title: 'po-button › p-label',
       page: 0,
-      fragment: 'p-label',
+      fragment: 'prop-p-label',
       text: 'Label do botão.'
     }
   ]
@@ -82,19 +82,19 @@ const helperApi: SearchChunk = {
   pages: helperComponents.map(name => ({ name, url: `/documentation/${name}?view=doc`, component: name })),
   docs: [
     ...helperComponents.map((name, page) => ({
-      id: `${name}#p-helper`,
+      id: `${name}#prop-p-helper`,
       type: 'propriedade' as const,
       title: `${name} › p-helper`,
       page,
-      fragment: 'p-helper',
+      fragment: 'prop-p-helper',
       text: 'Exibe um ícone de ajuda adicional com o texto do po-helper.'
     })),
     {
-      id: 'po-helper#p-title',
+      id: 'po-helper#prop-p-title',
       type: 'propriedade' as const,
       title: 'po-helper › p-title',
       page: 0,
-      fragment: 'p-title',
+      fragment: 'prop-p-title',
       text: 'Título do helper.'
     }
   ]
@@ -168,7 +168,7 @@ describe('SearchService', () => {
 
     expect(results[0].id).toBe('po-button');
     expect(results[0].page).toBe('PoButton');
-    expect(results.find(r => r.id === 'po-button#p-kind')?.section).toBe('PoButtonComponent');
+    expect(results.find(r => r.id === 'po-button#prop-p-kind')?.section).toBe('PoButtonComponent');
     expect(results[0].excerpt.some(p => p.mark)).toBeTrue();
   });
 
@@ -176,8 +176,8 @@ describe('SearchService', () => {
     await service.load();
     const [first] = service.search('p-kind').results;
 
-    expect(first.id).toBe('po-button#p-kind');
-    expect(first.fragment).toBe('p-kind');
+    expect(first.id).toBe('po-button#prop-p-kind');
+    expect(first.fragment).toBe('prop-p-kind');
     expect(first.url).toBe('/documentation/po-button?view=doc');
   });
 
@@ -248,12 +248,12 @@ describe('SearchService', () => {
     it('o modal devolve TODAS as ocorrências, cada uma com seu componente e id', async () => {
       await service.load();
       const { results, total } = service.search('p-helper', 'modal');
-      const occurrences = results.filter(r => r.fragment === 'p-helper');
+      const occurrences = results.filter(r => r.fragment === 'prop-p-helper');
 
-      expect(occurrences.map(r => r.id).sort()).toEqual(helperComponents.map(name => `${name}#p-helper`).sort());
+      expect(occurrences.map(r => r.id).sort()).toEqual(helperComponents.map(name => `${name}#prop-p-helper`).sort());
       expect(total).toBeGreaterThanOrEqual(helperComponents.length);
       // as ocorrências exatas vêm antes de qualquer outro resultado
-      expect(results.slice(0, helperComponents.length).every(r => r.fragment === 'p-helper')).toBeTrue();
+      expect(results.slice(0, helperComponents.length).every(r => r.fragment === 'prop-p-helper')).toBeTrue();
     });
 
     it('o popover mostra só a prévia, mas informa o total para "Ver todos"', async () => {
