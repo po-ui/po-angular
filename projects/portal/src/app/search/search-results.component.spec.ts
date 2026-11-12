@@ -184,6 +184,37 @@ describe('SearchResultsComponent', () => {
     expect(fixture.componentInstance.shown()).toBe(50);
   });
 
+  it('"Mostrar mais" mantém a posição: mesmos objetos/DOM para os itens antigos, foco no primeiro novo e anúncio', async () => {
+    fixture.componentRef.setInput('variant', 'modal');
+    document.body.appendChild(root());
+    await service.load();
+    await setQuery('p-helper');
+
+    const firstBefore = fixture.componentInstance.results()[0];
+    const domBefore = root().querySelectorAll<HTMLElement>('.po-list-view-item-wrapper')[49];
+    const scroller = root().querySelector<HTMLElement>('.search-results');
+
+    scroller.scrollTop = 400;
+    const top = scroller.scrollTop;
+    const offset = () => domBefore.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+    const offsetBefore = offset();
+
+    root().querySelector<HTMLElement>('.search-results-footer po-button button').click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    const items = root().querySelectorAll<HTMLElement>('.po-list-view-item-wrapper');
+
+    expect(fixture.componentInstance.results()[0]).toBe(firstBefore);
+    expect(items[49]).toBe(domBefore); // não recriou a lista
+    // não pulou para o fim: o item visível antes continua no mesmo lugar (o navegador pode ajustar alguns px)
+    expect(Math.abs(scroller.scrollTop - top)).toBeLessThan(40);
+    expect(Math.abs(offset() - offsetBefore)).toBeLessThan(40);
+    expect(document.activeElement).toBe(items[50]);
+    expect(root().querySelector('[aria-live="polite"]').textContent).toContain('resultados carregados');
+    root().remove();
+  });
+
   it('filtro de tipos: restringe a lista e o total na hora, e emite a contagem por tipo', async () => {
     await service.load();
     const counts: Array<Partial<Record<string, number>>> = [];

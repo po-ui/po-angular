@@ -67,6 +67,12 @@ export class SearchResultsComponent {
 
   readonly trimmed = computed(() => this.query().trim());
 
+  /** Anúncio do "Mostrar mais" ("50 resultados carregados..."); some a cada consulta nova. */
+  private readonly loadedMessage = linkedSignal<string, string>({
+    source: () => this.trimmed(),
+    computation: () => ''
+  });
+
   /** Quantos resultados o modal mostra agora; volta ao tamanho de página a cada consulta nova. */
   readonly shown = linkedSignal(() => {
     this.trimmed();
@@ -80,7 +86,31 @@ export class SearchResultsComponent {
     return this.service.search(this.trimmed(), this.variant(), this.shown(), this.types());
   });
 
-  readonly results = computed(() => this.outcome().results);
+  /**
+   * Mesmo objeto para o mesmo resultado enquanto a consulta não muda. O `po-list-view` rastreia os itens
+   * por identidade: objetos novos a cada busca recriavam a lista inteira ao "Mostrar mais", o navegador
+   * perdia o item de referência da rolagem e prendia a tela no botão, que desce junto com a lista.
+   */
+  private readonly stable = new Map<string, SearchResult>();
+  private stableKey = '';
+
+  readonly results = computed(() => {
+    const key = `${this.trimmed()}|${this.types().join(',')}`;
+
+    if (key !== this.stableKey) {
+      this.stable.clear();
+      this.stableKey = key;
+    }
+
+    return this.outcome().results.map(result => {
+      const kept = this.stable.get(result.id);
+
+      if (kept) return kept;
+      this.stable.set(result.id, result);
+
+      return result;
+    });
+  });
   readonly total = computed(() => this.outcome().total);
   /** Resultados que casaram mas não estão na lista (popover: prévia; modal: ainda não mostrados). */
   readonly hidden = computed(() => this.total() - this.results().length);
@@ -98,6 +128,10 @@ export class SearchResultsComponent {
 
   /** Texto para leitor de tela (aria-live). */
   readonly liveMessage = computed(() => {
+    const loaded = this.loadedMessage();
+
+    if (loaded && this.state() === 'results') return loaded;
+
     switch (this.state()) {
       case 'results':
         return this.hidden() > 0
@@ -180,8 +214,19 @@ export class SearchResultsComponent {
     this.resultSelected.emit(result);
   }
 
+  /**
+   * Mostra a próxima página sem mexer na rolagem (os novos itens entram abaixo) e põe o foco no primeiro
+   * item novo sem rolar, para quem usa teclado continuar dali.
+   */
   showMore(): void {
+    const before = this.results().length;
+
     this.shown.update(value => value + SEARCH_MODAL_PAGE_SIZE);
+
+    const loaded = this.results().length - before;
+
+    this.loadedMessage.set(`${loaded} resultados carregados, ${this.results().length} de ${this.total()}`);
+    setTimeout(() => this.items()[before]?.focus({ preventScroll: true }));
   }
 
   retry(): void {
