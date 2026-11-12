@@ -222,6 +222,38 @@ describe('PoUserGuideService:', () => {
     });
   });
 
+  describe('injectStyles - CSP nonce:', () => {
+    const removeStyles = () =>
+      document.head.querySelectorAll('style[data-po-user-guide-styles="true"]').forEach(element => element.remove());
+
+    afterEach(() => {
+      removeStyles();
+      (PoUserGuideService as any).stylesInjected = false;
+    });
+
+    it('should set the nonce on the injected <style> when CSP_NONCE is provided', () => {
+      removeStyles();
+      (PoUserGuideService as any).stylesInjected = false;
+      (service as any).cspNonce = 'test-nonce';
+
+      (service as any).injectStyles();
+
+      const style = document.head.querySelector<HTMLStyleElement>('style[data-po-user-guide-styles="true"]');
+      expect(style.nonce).toBe('test-nonce');
+    });
+
+    it('should not set the nonce attribute when CSP_NONCE is not provided', () => {
+      removeStyles();
+      (PoUserGuideService as any).stylesInjected = false;
+      (service as any).cspNonce = null;
+
+      (service as any).injectStyles();
+
+      const style = document.head.querySelector('style[data-po-user-guide-styles="true"]');
+      expect(style.hasAttribute('nonce')).toBeFalse();
+    });
+  });
+
   describe('injectStyles - SSR:', () => {
     it('should be a no-op and not flip stylesInjected when running outside a browser', () => {
       document.head.querySelectorAll('style[data-po-user-guide-styles="true"]').forEach(element => element.remove());
