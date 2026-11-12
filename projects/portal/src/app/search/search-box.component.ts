@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnDestroy,
-  ViewChild,
-  computed,
-  inject,
-  signal
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, effect, inject, signal } from '@angular/core';
 
 import { PoPopoverComponent, PoSearchComponent } from '@po-ui/ng-components';
 
@@ -17,12 +8,12 @@ import { SearchNavigationService } from './search-navigation.service';
 import { SearchResultsComponent } from './search-results.component';
 import { SearchResult } from './search.model';
 import { shortcutLabel } from './search-shortcut';
-import { SEARCH_DEBOUNCE_MS } from './search.model';
 import { SearchService } from './search.service';
+import { syncSearchInput } from './sync-search-input';
 
 /**
  * Campo de busca do header (à esquerda do botão Github) com popover de resultados.
- * Em telas pequenas vira um ícone que abre o modal.
+ * Em telas pequenas vira um ícone que abre o modal. O texto é o mesmo do modal (`SearchService.text`).
  */
 @Component({
   selector: 'app-search-box',
@@ -31,11 +22,11 @@ import { SearchService } from './search.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class SearchBoxComponent implements OnDestroy {
+export class SearchBoxComponent {
+  readonly service = inject(SearchService);
   private readonly navigation = inject(SearchNavigationService);
   private readonly analytics = inject(SearchAnalyticsService);
   private readonly launcher = inject(SearchLauncherService);
-  private readonly service = inject(SearchService);
 
   @ViewChild('field', { static: true }) field!: ElementRef<HTMLElement>;
   @ViewChild('poSearch', { static: true }) poSearch!: PoSearchComponent;
@@ -44,30 +35,26 @@ export class SearchBoxComponent implements OnDestroy {
 
   readonly hint = shortcutLabel();
   readonly listId = 'app-search-box-results';
-
-  /** Consulta com debounce, enviada ao painel de resultados. */
-  readonly query = signal('');
-  readonly raw = signal('');
-  readonly focused = signal(false);
-  /** Digitou algo novo e a busca ainda não rodou (debounce): o painel mostra o skeleton. */
-  readonly typing = computed(() => this.raw().trim().length >= 2 && this.raw().trim() !== this.query().trim());
-
-  private popoverOpen = false;
-  private timer?: ReturnType<typeof setTimeout>;
-  private selected = false;
-
   readonly literals = { search: 'Buscar no portal' };
 
-  ngOnDestroy(): void {
-    clearTimeout(this.timer);
+  readonly focused = signal(false);
+  /** O popover só busca quando está aberto (com o modal aberto, só o modal busca). */
+  readonly popoverOpen = signal(false);
+
+  private selected = false;
+
+  constructor() {
+    // O texto pode ter mudado no modal: o campo do header mostra o mesmo.
+    effect(() => syncSearchInput(this.poSearch, this.service.text()));
   }
 
   onChange(value: string): void {
     const text = value ?? '';
 
-    this.raw.set(text);
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.query.set(text), SEARCH_DEBOUNCE_MS);
+    // eco da sincronização (o texto veio do modal): nada a fazer
+    if (text === this.service.text()) return;
+
+    this.service.setText(text);
 
     if (text.trim().length >= 2) {
       this.selected = false;
@@ -82,16 +69,16 @@ export class SearchBoxComponent implements OnDestroy {
     void this.service.load();
     this.analytics.track({ name: 'search_open', via: 'header', surface: 'popover' });
 
-    if (this.raw().trim().length >= 2) {
+    if (this.service.text().trim().length >= 2 && !this.launcher.isFocusReturning) {
       this.open();
     }
   }
 
   onKeydown(event: KeyboardEvent): void {
-    if (event.key === 'ArrowDown' && this.popoverOpen) {
+    if (event.key === 'ArrowDown' && this.popoverOpen()) {
       event.preventDefault();
       this.results?.focusFirst();
-    } else if (event.key === 'Escape' && this.popoverOpen) {
+    } else if (event.key === 'Escape' && this.popoverOpen()) {
       event.stopPropagation();
       this.close('esc');
     }
@@ -99,7 +86,7 @@ export class SearchBoxComponent implements OnDestroy {
 
   /** Esc com o foco em um item da lista. */
   onHostKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.popoverOpen) {
+    if (event.key === 'Escape' && this.popoverOpen()) {
       this.close('esc');
       this.focusInput();
     }
@@ -117,13 +104,11 @@ export class SearchBoxComponent implements OnDestroy {
     }
   }
 
-  /** "Ver todos" do popover: abre o modal já com a consulta. */
+  /** "Ver todos" do popover: abre o modal, que já começa com o mesmo texto. */
   viewAll(): void {
-    const query = this.raw().trim();
-
     this.selected = true;
     this.close();
-    this.launcher.open({ via: 'header', query });
+    this.launcher.open({ via: 'header' });
   }
 
   focusInput(): void {
@@ -142,29 +127,29 @@ export class SearchBoxComponent implements OnDestroy {
 
   /** Clique fora: o popover fecha sozinho, aqui só registramos a desistência. */
   onPopoverClosed(): void {
-    if (this.popoverOpen) {
-      this.popoverOpen = false;
+    if (this.popoverOpen()) {
+      this.popoverOpen.set(false);
       this.trackAbandon('outside');
     }
   }
 
   private open(): void {
-    if (this.popoverOpen) return;
+    if (this.popoverOpen()) return;
 
-    this.popoverOpen = true;
+    this.popoverOpen.set(true);
     this.popover.open();
   }
 
   private close(reason: 'esc' | 'outside' | null = null): void {
-    if (!this.popoverOpen) return;
+    if (!this.popoverOpen()) return;
 
-    this.popoverOpen = false;
+    this.popoverOpen.set(false);
     this.popover.close();
     if (reason) this.trackAbandon(reason);
   }
 
   private trackAbandon(reason: 'esc' | 'outside'): void {
-    const term = this.raw().trim();
+    const term = this.service.text().trim();
 
     if (!this.selected && term.length >= 2) {
       this.analytics.track({

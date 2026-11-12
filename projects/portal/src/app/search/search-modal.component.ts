@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  DestroyRef,
   ElementRef,
   ViewChild,
   computed,
@@ -19,8 +18,9 @@ import { SearchNavigationService } from './search-navigation.service';
 import { SearchResultsComponent } from './search-results.component';
 import { SearchResult } from './search.model';
 import { shortcutLabel } from './search-shortcut';
-import { SEARCH_DEBOUNCE_MS, SEARCH_TYPES, SEARCH_TYPE_LABEL, SearchDocType } from './search.model';
+import { SEARCH_TYPES, SEARCH_TYPE_LABEL, SearchDocType } from './search.model';
 import { SearchService } from './search.service';
+import { syncSearchInput } from './sync-search-input';
 
 /** Modal de busca (Ctrl/Cmd+K e ícone no mobile). Esc fecha; o `po-modal` devolve o foco a quem o tinha. */
 @Component({
@@ -33,9 +33,9 @@ import { SearchService } from './search.service';
 export class SearchModalComponent {
   private readonly navigation = inject(SearchNavigationService);
   private readonly analytics = inject(SearchAnalyticsService);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly service = inject(SearchService);
+  readonly service = inject(SearchService);
+  private readonly launcher = inject(SearchLauncherService);
 
   @ViewChild('modal', { static: true }) modal!: PoModalComponent;
   @ViewChild('poSearch') poSearch?: PoSearchComponent;
@@ -46,8 +46,8 @@ export class SearchModalComponent {
   readonly hint = shortcutLabel();
   readonly listId = 'app-search-modal-results';
   readonly literals = { search: 'Buscar no portal' };
-  readonly query = signal('');
-  readonly raw = signal('');
+  /** Nome acessível do filtro: a label visual saiu, o placeholder sozinho não basta. */
+  readonly typesLabel = 'Filtrar por tipos';
   /** Tipos escolhidos no filtro (vazio = todos). Não persiste ao reabrir: cada abertura é uma busca nova. */
   readonly types = signal<Array<SearchDocType>>([]);
   /** Resultados por tipo para a consulta atual, mostrados nas opções do filtro. */
@@ -66,19 +66,14 @@ export class SearchModalComponent {
       .map(type => `${SEARCH_TYPE_LABEL[type]} ${this.counts()[type]}`)
       .join(' · ')
   );
-  readonly typing = computed(() => this.raw().trim().length >= 2 && this.raw().trim() !== this.query().trim());
 
   isOpen = false;
   private selected = false;
   private typesOpenOnEscape = false;
   private typesBoxBound?: HTMLElement;
-  private timer?: ReturnType<typeof setTimeout>;
 
   constructor() {
-    inject(SearchLauncherService)
-      .requests$.pipe(takeUntilDestroyed())
-      .subscribe(request => this.open(request));
-    this.destroyRef.onDestroy(() => clearTimeout(this.timer));
+    this.launcher.requests$.pipe(takeUntilDestroyed()).subscribe(request => this.open(request));
   }
 
   open(request: SearchOpenRequest): void {
@@ -91,12 +86,9 @@ export class SearchModalComponent {
 
     this.isOpen = true;
     this.selected = false;
-    const initial = request.query?.trim() ?? '';
-
-    this.raw.set(initial);
+    // O texto vem do header (fonte única no serviço); o filtro de tipos começa vazio.
     this.types.set([]);
     this.counts.set({});
-    this.query.set(initial);
     void this.service.load();
     this.analytics.track({
       name: 'search_open',
@@ -109,9 +101,7 @@ export class SearchModalComponent {
     this.cdr.detectChanges();
     // O `po-modal` renderiza o conteúdo depois do open(): foca o campo no próximo ciclo.
     setTimeout(() => {
-      if (initial && this.poSearch) {
-        this.poSearch.poSearchInput.nativeElement.value = initial;
-      }
+      syncSearchInput(this.poSearch, this.service.text());
       this.focusInput();
       this.cdr.detectChanges();
     });
@@ -120,9 +110,8 @@ export class SearchModalComponent {
   onChange(value: string): void {
     const text = value ?? '';
 
-    this.raw.set(text);
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.query.set(text), SEARCH_DEBOUNCE_MS);
+    // eco da sincronização (o texto veio do header): nada a fazer
+    if (text !== this.service.text()) this.service.setText(text);
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -144,8 +133,13 @@ export class SearchModalComponent {
   /** O conteúdo do `po-modal` só existe depois do open(): liga o listener de captura quando o elemento aparece. */
   @ViewChild('typesBox') set typesBox(ref: ElementRef<HTMLElement> | undefined) {
     if (ref && ref.nativeElement !== this.typesBoxBound) {
-      this.typesBoxBound = ref.nativeElement;
-      ref.nativeElement.addEventListener('keydown', this.onTypesKeydownCapture, true);
+      const box = ref.nativeElement;
+
+      this.typesBoxBound = box;
+      box.addEventListener('keydown', this.onTypesKeydownCapture, true);
+      // shortcut: o po-multiselect só põe aria-label a partir do p-label; sem a label visual, nomeia o
+      // elemento focável depois que ele existir. Trocar por um p-aria-label se o componente ganhar um.
+      setTimeout(() => box.querySelector('.po-multiselect-input')?.setAttribute('aria-label', this.typesLabel));
     }
   }
 
@@ -168,7 +162,7 @@ export class SearchModalComponent {
 
   /** Fecha por Esc, X ou clique fora. */
   onClose(): void {
-    const term = this.raw().trim();
+    const term = this.service.text().trim();
 
     if (this.isOpen && !this.selected && term.length >= 2) {
       this.analytics.track({
@@ -179,5 +173,6 @@ export class SearchModalComponent {
       });
     }
     this.isOpen = false;
+    this.launcher.modalClosed();
   }
 }

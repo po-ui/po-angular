@@ -6,6 +6,7 @@ import { ANCHOR_PREFIXES } from '../shared/deep-link-scroll.service';
 import { SearchAnalyticsService } from './search-analytics.service';
 import { buildExcerpt, normalizeText, queryTerms, tokenize } from './search-text';
 import {
+  SEARCH_DEBOUNCE_MS,
   SEARCH_TYPE_COLOR,
   SEARCH_TYPE_LABEL,
   SearchChunk,
@@ -110,11 +111,41 @@ export class SearchService {
   /** Incrementa a cada chunk indexado, para quem exibe resultados recalcular. */
   readonly revision = signal(0);
 
+  /**
+   * Texto digitado: uma fonte só para o campo do header e o do modal (um mostra o que o outro digitou).
+   * Abrir o modal (Ctrl/Cmd+K, "Ver todos", ícone) começa com este texto; fechar o modal mantém o texto;
+   * limpar em qualquer um dos campos limpa os dois. O filtro de tipos do modal não é afetado.
+   */
+  readonly text = signal('');
+  /** `text` depois do debounce: é o que a busca de fato consulta. Vazio passa na hora. */
+  readonly query = signal('');
+  /** Digitou algo novo e a busca ainda não rodou: os painéis mostram o skeleton. */
+  readonly typing = computed(() => {
+    const text = this.text().trim();
+
+    return text.length >= 2 && text !== this.query().trim();
+  });
+  private textTimer?: ReturnType<typeof setTimeout>;
+
   private miniSearch?: MiniSearch<SearchDoc>;
   private manifest?: SearchManifest;
   private readonly docs = new Map<string, SearchDoc>();
   private readonly chunks = new Map<SearchChunkName, Promise<void>>();
   private starting?: Promise<void>;
+
+  /** Atualiza o texto compartilhado; a consulta segue depois de `SEARCH_DEBOUNCE_MS` (limpar é imediato). */
+  setText(value: string): void {
+    const text = value ?? '';
+
+    this.text.set(text);
+    clearTimeout(this.textTimer);
+
+    if (!text.trim()) {
+      this.query.set(text);
+    } else {
+      this.textTimer = setTimeout(() => this.query.set(text), SEARCH_DEBOUNCE_MS);
+    }
+  }
 
   /** Começa o carregamento (idempotente). Falhas ficam em `status = 'error'`; `retry()` tenta de novo. */
   load(): Promise<void> {

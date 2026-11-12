@@ -5,9 +5,11 @@ import { Router } from '@angular/router';
 import { PoModule } from '@po-ui/ng-components';
 
 import { SearchAnalyticsService } from './search-analytics.service';
+import { SearchLauncherService } from './search-launcher.service';
 import { SearchModalComponent } from './search-modal.component';
 import { SearchResultsComponent } from './search-results.component';
 import { SearchChunk, SearchManifest } from './search.model';
+import { SearchService } from './search.service';
 
 const manifest: SearchManifest = {
   version: 1,
@@ -66,7 +68,9 @@ describe('SearchModalComponent (filtro por tipo)', () => {
     fixture = TestBed.createComponent(SearchModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.open({ via: 'shortcut', query: 'botao' });
+    TestBed.inject(SearchService).setText('botao'); // texto que já estava no header
+    TestBed.inject(SearchService).query.set('botao');
+    component.open({ via: 'shortcut' });
     await new Promise(resolve => setTimeout(resolve, 50));
     await settle();
   });
@@ -113,5 +117,42 @@ describe('SearchModalComponent (filtro por tipo)', () => {
 
     component.onTypesEscape(event);
     expect(stop).toHaveBeenCalledTimes(1);
+  });
+
+  it('abre com o texto que já estava no header e o filtro sem label visual, mas com nome acessível', async () => {
+    await new Promise(resolve => setTimeout(resolve, 20));
+
+    expect(root().querySelector<HTMLInputElement>('po-search input').value).toBe('botao');
+    expect(root().querySelector('po-multiselect po-label')).toBeNull();
+    expect(root().querySelector('.po-multiselect-input').getAttribute('aria-label')).toBe('Filtrar por tipos');
+  });
+
+  it('digitar no modal muda o texto compartilhado; o eco da sincronização é ignorado', () => {
+    const service = TestBed.inject(SearchService);
+    const setText = spyOn(service, 'setText').and.callThrough();
+
+    component.onChange('po-input');
+    expect(service.text()).toBe('po-input');
+
+    component.onChange('po-input'); // eco do input sincronizado
+    expect(setText).toHaveBeenCalledTimes(1);
+  });
+
+  it('limpar o texto não limpa o filtro de tipos', () => {
+    component.types.set(['propriedade']);
+    component.onChange('');
+
+    expect(TestBed.inject(SearchService).text()).toBe('');
+    expect(component.types()).toEqual(['propriedade']);
+  });
+
+  it('fechar mantém o texto e avisa que o foco está voltando (não reabrir o popover)', () => {
+    const launcher = TestBed.inject(SearchLauncherService);
+
+    component.onChange('popover');
+    component.modal.close();
+
+    expect(TestBed.inject(SearchService).text()).toBe('popover');
+    expect(launcher.isFocusReturning).toBeTrue();
   });
 });

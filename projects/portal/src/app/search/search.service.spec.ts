@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { SearchAnalyticsService, SearchEvent } from './search-analytics.service';
-import { SearchChunk, SearchManifest } from './search.model';
+import { SEARCH_DEBOUNCE_MS, SearchChunk, SearchManifest } from './search.model';
 import { SearchService } from './search.service';
 
 const manifest: SearchManifest = {
@@ -273,6 +273,34 @@ describe('SearchService', () => {
       expect(first.total).toBe(all.total);
       expect(all.results.length).toBe(all.total);
     });
+  });
+
+  describe('texto compartilhado (header e modal)', () => {
+    it('setText atualiza o texto na hora e a consulta só depois do debounce', fakeAsync(() => {
+      service.setText('po-but');
+
+      expect(service.text()).toBe('po-but');
+      expect(service.query()).toBe('');
+      expect(service.typing()).toBeTrue();
+
+      tick(SEARCH_DEBOUNCE_MS - 1);
+      service.setText('po-butt'); // digitou de novo: reinicia a espera
+      tick(SEARCH_DEBOUNCE_MS - 1);
+      expect(service.query()).toBe('');
+
+      tick(1);
+      expect(service.query()).toBe('po-butt');
+      expect(service.typing()).toBeFalse();
+    }));
+
+    it('limpar zera texto e consulta na hora e cancela a consulta pendente', fakeAsync(() => {
+      service.setText('po-input');
+      service.setText('');
+
+      expect(service.query()).toBe('');
+      tick(SEARCH_DEBOUNCE_MS);
+      expect(service.query()).toBe('');
+    }));
   });
 
   describe('filtro por tipo', () => {

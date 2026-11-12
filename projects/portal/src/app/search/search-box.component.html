@@ -11,7 +11,7 @@
       (p-focus)="onFocus()"
       (p-keydown)="onKeydown($event)"
     ></po-search>
-    @if (!raw() && !focused()) {
+    @if (!service.text() && !focused()) {
       <kbd class="search-box-hint" aria-hidden="true">{{ hint }}</kbd>
     }
   </div>
@@ -34,8 +34,8 @@
     (p-close)="onPopoverClosed()"
   >
     <app-search-results
-      [query]="query()"
-      [typing]="typing()"
+      [query]="popoverOpen() ? service.query() : ''"
+      [typing]="popoverOpen() && service.typing()"
       variant="popover"
       [listId]="listId"
       (resultSelected)="onSelect($event)"

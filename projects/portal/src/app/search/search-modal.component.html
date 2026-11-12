@@ -15,8 +15,7 @@
         <po-multiselect
           #typesFilter
           name="types"
-          p-label="Tipos"
-          p-placeholder="Todos os tipos"
+          [p-placeholder]="typesLabel"
           p-size="small"
           p-hide-search
           [p-options]="typeOptions"
@@ -31,8 +30,8 @@
     }
 
     <app-search-results
-      [query]="query()"
-      [typing]="typing()"
+      [query]="service.query()"
+      [typing]="service.typing()"
       [types]="types()"
       (countsChange)="counts.set($event)"
       variant="modal"
