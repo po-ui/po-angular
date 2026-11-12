@@ -136,7 +136,7 @@ servidor estático (`PW_STATIC=1`).
 |---|---:|---:|
 | Testes rodados | 2160 | 48 (24 `po-button` + 24 `po-button-group`) |
 | Snapshots ativos | 2160 | 48 |
-| PNGs ativos (bytes) | 14,75 MB (button 5,66 + group 3,25 + grid antigo 5,84) | 8,82 MB (button 5,67 + group 3,15) |
+| PNGs ativos (bytes) | 14,75 MB (button 5,66 + group 3,25 + grid antigo 5,84) | 10,79 MB (button 7,64 + group 3,15) |
 | PNGs parados no repo (reativáveis) | 0 | 8,91 MB (2136 arquivos) |
 | Tempo da suíte, 4 workers | 294 s (2 execuções: 294 s e 294 s) | 41 s e 41 s (outras 2 execuções: 42 s e 43 s) |
 | Tempo da suíte, 2 workers | 676 s | 39 s a 60 s (6 execuções: 59, 52, 60, 39, 43 e 47 s) |
@@ -147,7 +147,7 @@ servidor estático (`PW_STATIC=1`).
 
 - **Ganho**: ≈ 7× mais rápido com 4 workers (294 s → 41 s) e ≈ 13× com 2 workers (676 s → ≈ 50 s).
 - Com 2 workers o tempo quase não difere do de 4: são só 48 testes e os maiores (glow, 72 botões) dominam.
-- Sem mudar a cobertura, o custo de PNG ativo cai 40 %, mas o repo não encolhe enquanto os antigos ficarem versionados.
+- Sem mudar a cobertura, o PNG ativo cai 27 % (os grids de `glow` são grandes, ≈ 0,5 MB cada), mas o repo não encolhe enquanto os antigos ficarem versionados.
 - Startup separado (não entra nos tempos): `ng build visual-harness` ≈ 3 a 5 s; servidor estático 0,1 s.
 
 ### Medidas anteriores (matrizes completas, `ng serve`)
