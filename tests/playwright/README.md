@@ -110,6 +110,7 @@ Obs.: o host é compartilhado (outro processo rodava builds); os tempos têm ru�
   servidor estático 0,1 s. `npm install` no repo ≈ 2 min; build do po-style ≈ 11 s.
 - **Custo fixo por teste isolado** (sem concorrência): contexto 32 ms + `goto` e fontes prontas 141 ms + screenshot 72 ms ≈ 245 ms.
 - **Servidor estático** em vez do `ng serve` (group, 4 workers): 130 s → 101 s (−22 %). Com 8 workers: 124 s → 91 s.
+  Suíte inteira (2160 testes, 4 workers): 360 s com `ng serve` → 294 s estático (−18 %), 2 execuções seguidas 2160/2160, 0 flaky.
   Mais workers quase não ajudam (4 → 8: −10 %), então o gargalo não é só CPU.
 
 ### Projeção (hipótese explícita: ~90 componentes públicos, cada um com ~1000 testes no mesmo rigor)
