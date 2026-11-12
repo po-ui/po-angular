@@ -42,6 +42,13 @@ function headingText(rawMarkdown) {
     .trim();
 }
 
+/**
+ * Prefixo do `id` por tipo de alvo (mesmo padrão de `sample-`): evita colisão entre tipos
+ * (ex.: propriedade `p-label` x título) e deixa claro o que o link aponta.
+ * Se mudar, atualize `ANCHOR_PREFIXES` em `projects/portal/src/app/shared/deep-link-scroll.service.ts`.
+ */
+const PREFIX = { prop: 'prop-', event: 'event-', method: 'method-', interface: 'interface-', enum: 'enum-', class: 'class-' };
+
 const cleanAlias = alias => (alias ? String(alias).replace(/['"]/g, '').trim() : '');
 
 /** Nome usado na documentação (igual ao exibido na coluna "Nome" da tabela). */
@@ -57,8 +64,8 @@ function propertyAlias(property) {
 
 /**
  * Atribui `anchorId` a classes, propriedades, métodos, interfaces e enums de um grupo de componente.
- * - classes (diretiva/serviço/outras): alias da propriedade (`p-label`), `method-<nome>`;
- * - interfaces/models/enums: `<tipo-em-kebab>-<membro>` (únicos por construção; objetos podem ser
+ * - classes (diretiva/serviço/outras): `class-<nome>`, `prop-<alias>` (`prop-p-label`), `event-<alias>`, `method-<nome>`;
+ * - interfaces/models/enums: `interface-<tipo>` / `enum-<tipo>` e membros `<id-do-tipo>-<membro>` (únicos por construção; objetos podem ser
  *   compartilhados entre grupos, então só são atribuídos uma vez).
  */
 function assignGroupAnchors(group) {
@@ -66,19 +73,22 @@ function assignGroupAnchors(group) {
   const classes = [...group.services, ...group.directives, ...group.additionalClasses];
 
   classes.forEach(cls => {
-    cls.anchorId = cls.anchorId || uniqueId(slugify(cls.name), seen);
+    cls.anchorId = cls.anchorId || uniqueId(`${PREFIX.class}${slugify(cls.name)}`, seen);
     (cls.properties || []).forEach(p => {
-      p.anchorId = p.anchorId || uniqueId(propertyAlias(p), seen);
+      const prefix = p.isDirectiveOutput ? PREFIX.event : PREFIX.prop;
+
+      p.anchorId = p.anchorId || uniqueId(`${prefix}${propertyAlias(p)}`, seen);
     });
     (cls.methods || []).forEach(m => {
-      m.anchorId = m.anchorId || uniqueId(`method-${m.name}`, seen);
+      m.anchorId = m.anchorId || uniqueId(`${PREFIX.method}${m.name}`, seen);
     });
   });
 
   [...group.interfaces, ...group.models, ...group.enums].forEach(type => {
     if (type.anchorId) return;
 
-    const prefix = slugify(type.name);
+    const kind = type.docType === 'enum' ? PREFIX.enum : PREFIX.interface;
+    const prefix = `${kind}${slugify(type.name)}`;
     const local = new Set();
 
     type.anchorId = uniqueId(prefix, seen);
@@ -87,7 +97,7 @@ function assignGroupAnchors(group) {
       p.anchorId = uniqueId(`${prefix}-${slugify(p.name)}`, local);
     });
     (type.methods || []).forEach(m => {
-      m.anchorId = uniqueId(`${prefix}-method-${m.name}`, local);
+      m.anchorId = uniqueId(`${prefix}-${PREFIX.method}${m.name}`, local);
     });
     (type.enums || []).forEach(e => {
       e.anchorId = uniqueId(`${prefix}-${slugify(e.name)}`, local);
@@ -95,4 +105,4 @@ function assignGroupAnchors(group) {
   });
 }
 
-module.exports = { slugify, headingText, uniqueId, propertyAlias, assignGroupAnchors };
+module.exports = { PREFIX, slugify, headingText, uniqueId, propertyAlias, assignGroupAnchors };

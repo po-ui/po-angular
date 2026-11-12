@@ -46,16 +46,44 @@ describe('anchors', () => {
     assignGroupAnchors(group);
     const dir = group.directives[0];
 
-    expect(dir.anchorId).toBe('po-button-component');
-    expect(dir.properties.map(p => p.anchorId)).toEqual(['p-label', 'p-label-2']);
+    expect(dir.anchorId).toBe('class-po-button-component');
+    expect(dir.properties.map(p => p.anchorId)).toEqual(['prop-p-label', 'prop-p-label-2']);
     expect(dir.methods[0].anchorId).toBe('method-focus');
-    expect(group.interfaces[0].properties[0].anchorId).toBe('po-button-kind-primary');
-    expect(group.enums[0].enums[0].anchorId).toBe('po-type-submit');
+    expect(dir.properties.every(p => p.anchorId.startsWith('prop-'))).toBe(true);
+    expect(group.interfaces[0].properties[0].anchorId).toBe('interface-po-button-kind-primary');
+    expect(group.enums[0].enums[0].anchorId).toBe('enum-po-type-submit');
 
     // ordem trocada nas propriedades de interface não muda o id
     const again = makeGroup();
     again.interfaces[0].properties.unshift({ name: 'secondary' });
     assignGroupAnchors(again);
-    expect(again.interfaces[0].properties[1].anchorId).toBe('po-button-kind-primary');
+    expect(again.interfaces[0].properties[1].anchorId).toBe('interface-po-button-kind-primary');
+  });
+
+  it('evento recebe event- e não colide com propriedade de mesmo nome', () => {
+    const group = {
+      directives: [
+        {
+          name: 'X',
+          properties: [
+            { name: 'a', isDirectiveInput: true, directiveInputAlias: 'p-change' },
+            { name: 'b', isDirectiveOutput: true, directiveOutputAlias: 'p-change' }
+          ],
+          methods: []
+        }
+      ],
+      services: [],
+      additionalClasses: [],
+      interfaces: [{ name: 'Foo', properties: [], methods: [{ name: 'run' }] }],
+      models: [],
+      enums: [{ name: 'Foo', docType: 'enum', enums: [{ name: 'A' }] }]
+    };
+
+    assignGroupAnchors(group);
+
+    expect(group.directives[0].properties.map(p => p.anchorId)).toEqual(['prop-p-change', 'event-p-change']);
+    expect(group.interfaces[0].anchorId).toBe('interface-foo');
+    expect(group.interfaces[0].methods[0].anchorId).toBe('interface-foo-method-run');
+    expect(group.enums[0].anchorId).toBe('enum-foo');
   });
 });

@@ -128,10 +128,10 @@ describe('search-index-builder', () => {
     expect(ids).toEqual(run().map(d => d.id));
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids).toEqual(
-      jasmine.arrayContaining(['po-button', 'po-button#p-label', 'po-button#p-click', 'po-button#method-focus', 'po-button#po-button-kind-primary'])
+      jasmine.arrayContaining(['po-button', 'po-button#prop-p-label', 'po-button#event-p-click', 'po-button#method-focus', 'po-button#interface-po-button-kind-primary'])
     );
     expect(ids).not.toContain('po-button#sem-doc');
-    expect(docs.find(d => d.id === 'po-button#p-click').type).toBe('evento');
+    expect(docs.find(d => d.id === 'po-button#event-p-click').type).toBe('evento');
     expect(docs.find(d => d.id === 'po-button#method-focus').type).toBe('metodo');
     expect(docs.find(d => d.id === 'po-button').text).toBe('Botão com vários estilos.');
     docs.forEach(d => expect(d.text).not.toMatch(/&#\d+;|<[a-z]/i));
