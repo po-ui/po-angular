@@ -11,11 +11,17 @@ const HIGHLIGHT_MS = 2500;
  */
 export const ANCHOR_PREFIXES = ['prop-', 'event-', 'method-', 'interface-', 'enum-', 'class-'];
 
-/** A página e a aba do alvo são lazy: espera o `id` aparecer por até este tempo. */
-const WAIT_TIMEOUT_MS = 6000;
+/** A página e a aba do alvo são lazy: tenta alinhar por até este tempo. */
+const WAIT_TIMEOUT_MS = 8000;
 const WAIT_STEP_MS = 100;
+/** Alinhado e sem mexer por este tempo = layout estabilizado, pode parar. */
+const STABLE_MS = 700;
 /** Folga entre o topo da área de rolagem e o alvo. */
 const TOP_GAP_PX = 16;
+/** Diferença aceita (px) entre a posição atual e a ideal. */
+const TOLERANCE_PX = 2;
+/** Gestos do usuário que cancelam o alinhamento automático (ele assumiu o scroll). */
+const USER_SCROLL_EVENTS = ['wheel', 'touchstart', 'keydown', 'mousedown'];
 
 /**
  * Leva até o `id` do fragmento da URL (`...#p-kind`, `...#sample-po-button-labs`).
@@ -43,22 +49,59 @@ export class DeepLinkScrollService {
     });
   }
 
-  /** Espera o elemento existir e estar visível; uma chamada nova cancela a anterior. */
+  /**
+   * Alinha o alvo no topo da área de rolagem e CONTINUA alinhando até o layout estabilizar.
+   *
+   * Um único `scrollTop` não basta: ao vir de outra página o `id` já existe, mas a área de rolagem ainda não está
+   * limitada em altura (nada a rolar) ou o conteúdo muda de altura depois (abas, realce de código). Por isso repete
+   * a cada passo, corrige o desvio e só termina após `STABLE_MS` parado. Uma chamada nova cancela a anterior, e um
+   * gesto do usuário (roda do mouse, toque, teclado) também.
+   */
   scrollTo(fragment: string): void {
     const current = ++this.run;
     const started = Date.now();
+    let stableSince = 0;
+    let highlighted: HTMLElement | null = null;
+
+    const stop = () => USER_SCROLL_EVENTS.forEach(name => this.doc.removeEventListener(name, cancel, true));
+    const cancel = () => {
+      this.run++;
+      stop();
+    };
+
+    USER_SCROLL_EVENTS.forEach(name => this.doc.addEventListener(name, cancel, { capture: true, passive: true }));
 
     const attempt = () => {
-      if (current !== this.run) return;
+      if (current !== this.run) return stop();
 
       const element = this.findElement(fragment);
+      const scroller = element && this.nearestScroller(element);
 
-      if (element) {
-        this.scrollNearest(element);
-        element.classList.add(HIGHLIGHT_CLASS);
-        setTimeout(() => element.classList.remove(HIGHLIGHT_CLASS), HIGHLIGHT_MS);
-      } else if (Date.now() - started < WAIT_TIMEOUT_MS) {
+      if (element && scroller) {
+        const delta = element.getBoundingClientRect().top - scroller.getBoundingClientRect().top - TOP_GAP_PX;
+        const before = scroller.scrollTop;
+
+        if (Math.abs(delta) > TOLERANCE_PX) scroller.scrollTop += delta;
+
+        // Moveu = ainda assentando; não moveu (alinhado, ou no limite da rolagem) = conta como estável.
+        if (scroller.scrollTop !== before) {
+          stableSince = 0;
+        } else {
+          stableSince ||= Date.now();
+        }
+
+        if (!highlighted) {
+          highlighted = element;
+          element.classList.add(HIGHLIGHT_CLASS);
+          setTimeout(() => element.classList.remove(HIGHLIGHT_CLASS), HIGHLIGHT_MS);
+        }
+        if (stableSince && Date.now() - stableSince >= STABLE_MS) return stop();
+      }
+
+      if (Date.now() - started < WAIT_TIMEOUT_MS) {
         setTimeout(attempt, WAIT_STEP_MS);
+      } else {
+        stop();
       }
     };
 

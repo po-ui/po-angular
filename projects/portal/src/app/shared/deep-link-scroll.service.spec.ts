@@ -90,4 +90,52 @@ describe('DeepLinkScrollService', () => {
     events.next(new NavigationEnd(2, currentUrl, currentUrl));
     expect(scroller.scrollTop).toBe(0);
   });
+
+  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const offset = () => target.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+
+  it('área de rolagem ainda sem altura limitada: alinha assim que ela passa a rolar (vindo de outra página)', async () => {
+    scroller.style.height = 'auto'; // sem limite de altura: nada a rolar
+    scroller.style.overflowY = 'visible';
+    service.scrollTo('p-kind');
+    expect(scroller.scrollTop).toBe(0);
+
+    scroller.style.height = '200px'; // o layout assenta
+    scroller.style.overflowY = 'auto';
+    await wait(250);
+
+    expect(scroller.scrollTop).toBeGreaterThan(800);
+    expect(offset()).toBeCloseTo(16, 0);
+  });
+
+  it('conteúdo que muda de altura depois do primeiro alinhamento é realinhado', async () => {
+    service.scrollTo('p-kind');
+    expect(offset()).toBeCloseTo(16, 0);
+
+    const spacer = document.createElement('div');
+
+    spacer.style.height = '300px';
+    scroller.firstElementChild.prepend(spacer); // algo acima cresce e empurra o alvo
+    await wait(250);
+
+    expect(offset()).toBeCloseTo(16, 0);
+  });
+
+  it('gesto do usuário (roda do mouse) cancela o alinhamento automático', async () => {
+    service.scrollTo('p-kind');
+    document.dispatchEvent(new WheelEvent('wheel', { bubbles: true }));
+    scroller.scrollTop = 100;
+    await wait(250);
+
+    expect(scroller.scrollTop).toBe(100);
+  });
+
+  it('para depois de estabilizar (não segura timers indefinidamente)', async () => {
+    service.scrollTo('p-kind');
+    await wait(900);
+    scroller.scrollTop = 100; // mexer depois de estável não é mais corrigido
+    await wait(250);
+
+    expect(scroller.scrollTop).toBe(100);
+  });
 });
