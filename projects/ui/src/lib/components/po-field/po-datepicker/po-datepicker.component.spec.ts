@@ -45,6 +45,19 @@ describe('PoDatepickerComponent:', () => {
     component.date = new Date();
   });
 
+  it('should make an open calendar inert while disabled', () => {
+    fixture.detectChanges();
+    component.visible = true;
+    fixture.detectChanges();
+    const calendar = fixture.nativeElement.querySelector('po-calendar');
+    expect(calendar.closest('[inert]')).toBeNull();
+
+    component.setDisabledState(true);
+    fixture.detectChanges();
+
+    expect(calendar.closest('[inert]')).not.toBeNull();
+  });
+
   describe('Properties:', () => {
     it('autocomplete: should return `off` if `noAutocomplete` is true', () => {
       component.noAutocomplete = true;

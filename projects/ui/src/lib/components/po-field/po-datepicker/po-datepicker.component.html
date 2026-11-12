@@ -107,7 +107,13 @@
     }
 
     <ng-template #sharedCalendarContent>
-      <div #dialogPicker [class.po-datepicker-popup-calendar]="!verifyMobile()" tabindex="-1" [hidden]="!visible">
+      <div
+        #dialogPicker
+        [class.po-datepicker-popup-calendar]="!verifyMobile()"
+        [attr.inert]="isDisabled ? '' : null"
+        tabindex="-1"
+        [hidden]="!visible"
+      >
         @if (verifyMobile()) {
           <div class="po-datepicker-calendar-overlay"></div>
         }
