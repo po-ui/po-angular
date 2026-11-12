@@ -1,5 +1,5 @@
 <br> {% for file in doc.files %}
-<blockquote class="sample-blockquote">
+<blockquote class="sample-blockquote"{% if loop.first %} id="{$ doc.id $}"{% endif %}>
   <label class="sample-title po-font-text-large-bold" >{$ doc.title or doc.id | replace('example-','') $}</label>
   <a (click)="toggleSampleCodeTabs()" class="show-me-the-code"><span [class]="'po-icon ' + sampleCodeButtonIcon"></span> {{ sampleCodeButtonLabel }}</a>
 </blockquote>

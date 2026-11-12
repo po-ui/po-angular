@@ -70,6 +70,51 @@ describe('search-text', () => {
   });
 });
 
+describe('search-index-builder: samples', () => {
+  const groups = [{ name: 'po-list-view', componentName: 'PoListView', package: 'components' }];
+  const example = (name, title, file = 'ui/src/lib/components/po-list-view/po-list-view.component.ts') => ({
+    id: `sample-${name}`,
+    name,
+    title,
+    doc: { fileInfo: { relativePath: file } }
+  });
+
+  it('gera uma entrada por sample apontando para a aba Exemplos e o id do sample', () => {
+    const docs = builder.buildSampleDocs(groups, [example('po-list-view-labs', 'PO List View Labs')]);
+
+    expect(docs).toEqual([
+      jasmine.objectContaining({
+        id: 'po-list-view#sample-po-list-view-labs',
+        type: 'sample',
+        title: 'PO List View Labs',
+        fragment: 'sample-po-list-view-labs',
+        section: 'Exemplos'
+      })
+    ]);
+    expect(docs[0].page).toEqual({
+      name: 'PoListView',
+      url: '/documentation/po-list-view?view=web',
+      component: 'po-list-view',
+      package: 'components'
+    });
+  });
+
+  it('usa o name quando falta title e ignora sample de componente sem página', () => {
+    const docs = builder.buildSampleDocs(groups, [
+      { ...example('po-list-view-basic'), title: undefined },
+      example('po-nada-basic', 'Sem página', 'ui/src/lib/components/po-nada/po-nada.component.ts')
+    ]);
+
+    expect(docs.map(d => d.title)).toEqual(['po-list-view-basic']);
+  });
+
+  it('vai para um chunk lazy próprio (fora do core)', () => {
+    const chunks = builder.buildChunks(builder.buildSampleDocs(groups, [example('po-list-view-labs', 'Labs')]));
+
+    expect(Object.keys(chunks)).toEqual(['samples']);
+  });
+});
+
 describe('search-index-builder', () => {
   it('gera documentos de API com ids únicos, estáveis e sem HTML/entidades', () => {
     const run = () => {

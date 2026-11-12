@@ -7,6 +7,7 @@
  * - core:  componentes, serviços, interfaces/enums, guias e páginas
  * - api:   propriedades, eventos e métodos
  * - icons: ícones
+ * - samples: títulos dos exemplos (link direto para o exemplo)
  *
  * Cada chunk guarda uma tabela `pages` compartilhada (nome da página, rota, componente, pacote);
  * o documento só aponta para ela pelo índice em `page`.
@@ -32,7 +33,8 @@ const CHUNK_OF_TYPE = {
   propriedade: 'api',
   evento: 'api',
   metodo: 'api',
-  icone: 'icons'
+  icone: 'icons',
+  sample: 'samples'
 };
 
 const LIMITS = { component: 500, member: 240, guide: 1500 };
@@ -143,6 +145,45 @@ function addMethod(add, group, owner, method) {
     section: owner,
     fragment: method.anchorId
   });
+}
+
+/**
+ * Samples (`<example name title>` do JSDoc). O `id` do sample (`sample-<name>`) é o mesmo `id` que o
+ * template de samples grava no HTML; a rota abre a aba "Exemplos" (`view=web`) e rola até ele.
+ * @param {Array} groups grupos de componentes (para nome e pacote da página)
+ * @param {Iterable} examples exemplos do Dgeni (`exampleMap.values()`)
+ */
+function buildSampleDocs(groups, examples) {
+  const byName = new Map(groups.map(g => [g.name, g]));
+  const docs = [];
+
+  Array.from(examples).forEach(example => {
+    const filePath = example.doc && example.doc.fileInfo && example.doc.fileInfo.relativePath;
+    const base = filePath && String(filePath).replace(/\\/g, '/').split('/').pop();
+    const groupName = base && base.match(/^(.+?)\.?(component|service|directive|interceptor|model)?(\.(ts))?$/)[1];
+    const group = byName.get(groupName);
+
+    if (!group || !example.id) return;
+
+    const title = String(example.title || example.name || example.id).trim();
+
+    docs.push({
+      id: `${group.name}#${example.id}`,
+      type: 'sample',
+      title,
+      page: {
+        name: group.componentName,
+        url: `/documentation/${group.name}?view=web`,
+        component: group.name,
+        package: group.package
+      },
+      section: 'Exemplos',
+      fragment: example.id,
+      text: `Exemplo de uso do ${group.componentName}: ${title}.`
+    });
+  });
+
+  return docs;
 }
 
 function buildApiDocs(groups) {
@@ -321,6 +362,7 @@ function writeIndex(outDir, chunks) {
 module.exports = {
   CHUNK_OF_TYPE,
   buildApiDocs,
+  buildSampleDocs,
   buildGroupDocs,
   buildGuideDocs,
   buildIconDocs,

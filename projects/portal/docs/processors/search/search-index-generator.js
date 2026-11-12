@@ -33,7 +33,7 @@ function guideFiles() {
   });
 }
 
-module.exports = function searchIndexGenerator() {
+module.exports = function searchIndexGenerator(exampleMap) {
   return {
     $runAfter: ['componentGrouper'],
     $runBefore: ['docs-processed'],
@@ -41,6 +41,7 @@ module.exports = function searchIndexGenerator() {
     $process(groups) {
       const docs = [
         ...builder.buildApiDocs(groups),
+        ...builder.buildSampleDocs(groups, exampleMap.values()),
         ...guideFiles().flatMap(({ name, file }) => builder.buildGuideDocs(name, fs.readFileSync(file, 'utf-8'))),
         ...(fs.existsSync(ICON_SELECTION) ? builder.buildIconDocs(JSON.parse(fs.readFileSync(ICON_SELECTION, 'utf-8'))) : []),
         ...builder.buildPageDocs()
