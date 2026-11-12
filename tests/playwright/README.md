@@ -7,22 +7,44 @@ Tira screenshots de componentes isolados e compara com as imagens base (`__snaps
 - **Harness**: projeto Angular mínimo `visual-harness` (`angular.json`, código em `harness/`).
   Importa os módulos direto do código-fonte e renderiza um componente configurado por query string.
   Escolhido por não exigir nenhuma dependência nova (o repo não tem Storybook).
-  - `?c=button` (padrão): `kind`, `danger`, `size`, `icon`, `label`, `aria`, `disabled`, `loading`.
-  - `?c=button-group`: `size`, `toggle=none|single|multiple`, `items=[{label,icon,selected,disabled}]` (JSON).
-  - `?c=grid&rows=[[{...célula de po-button, force}]]`: várias células numa página só (ver "Escala").
+  - `?c=button` (padrão) e `?c=button-group`: um componente só (usados pelas matrizes completas, hoje desligadas).
+  - `?c=grid&rows=[[célula]]`: várias células numa página só (**é o modo ativo**). Célula de `po-button`:
+    `{kind,danger,size,icon,label,aria,disabled,loading}`; de `po-button-group`:
+    `{component:'button-group',size,toggle,items}`. Comuns: `caption`, `width`, `force`, `forceItem`.
 - **Tema**: `?theme=light|dark|deprecated-light|deprecated-dark`. O harness carrega o CSS base do
   `@po-ui/style` correspondente (`po-theme-default` ou `po-theme-default-deprecated`) e aplica o tema via
   `PoThemeService` (`setDefaultTheme` ou `setTheme(poThemeDefaultDeprecated, ...)`). O nome do snapshot começa
   com o tema (`deprecated-dark--primary--medium--label--default.png`). O tema depreciado sai na v24: basta
   apagar o `deprecated-*` do `THEMES` (`specs/helpers.ts`) e o laço no fim de `po-button.spec.ts`, e os snapshots.
-- **Specs** (`specs/`): `helpers.ts` (abrir página, estados de ponteiro, congelar animação, forçar pseudo-estados)
-  é compartilhado; cada componente tem o seu `*.spec.ts` com a matriz.
+- **Grid e legendas**: cada célula do grid mostra uma legenda de 2 linhas, que **faz parte do snapshot**
+  (para saber qual estado é cada item ao abrir o PNG): `tema · variação` / `tamanho · conteúdo · estado` no
+  `po-button`, e `tema · tamanho · toggle` / `conteúdo · estado` no `po-button-group`. Mudar o texto de uma legenda
+  muda o snapshot. hover/focus/active são forçados via CDP (`CSS.forcePseudoState`, `forcePseudoStates` em
+  `helpers.ts`); no grupo, `data-force-item` escolhe o item (2º nos estados comuns, 1º nos `selected-*`).
+- **Specs** (`specs/`): `helpers.ts` é compartilhado (abrir página, estados de ponteiro, congelar animação,
+  forçar pseudo-estados, `gridUrl`). A matriz de cada componente fica em `*.matrix.ts` e é usada pelos dois specs
+  do componente (completo e grid), então nunca divergem.
 
-| Spec | Testes = snapshots | Matriz |
-|---|---:|---|
-| `po-button.spec.ts` | 1368 | claro e depreciado-claro/escuro: 6 variações × 3 tamanhos × 4 conteúdos × 6 estados (432 cada); escuro: recorte de 72 |
-| `po-button-group.spec.ts` | 768 | 4 temas × 2 tamanhos × 3 `p-toggle` × 4 conteúdos × 6 a 9 estados (192 por tema) |
-| `po-button-grid.spec.ts` | 24 | experimento de escala: mesma matriz do `po-button` (432 por tema) em 1 snapshot por tema × variação |
+| Spec | Roda por padrão? | Testes = snapshots | Matriz |
+|---|---|---:|---|
+| `po-button-grid.spec.ts` | **sim** | 24 | 4 temas × 6 variações; 72 células por snapshot (3 tamanhos × 4 conteúdos × 6 estados) |
+| `po-button-group-grid.spec.ts` | **sim** | 24 | 4 temas × 2 tamanhos × 3 `p-toggle`; 4 conteúdos × 6 a 9 estados por snapshot |
+| `po-button.spec.ts` | não (`PW_FULL=1`) | 1368 | 1 teste por combinação |
+| `po-button-group.spec.ts` | não (`PW_FULL=1`) | 768 | 1 teste por combinação |
+
+## Reativar as matrizes completas (1 teste por combinação)
+
+O código continua nos specs; só não é registrado sem a variável. Os 2136 snapshots antigos continuam em
+`__snapshots__/po-button.spec.ts/` e `__snapshots__/po-button-group.spec.ts/`. O Playwright não reclama de snapshot
+sem teste (verificado), então o CI não quebra com eles parados.
+
+```bash
+PW_FULL=1 npx playwright test                    # tudo (grids + completas, ~5 a 11 min)
+PW_FULL=1 npx playwright test po-button.spec     # só a completa do po-button
+```
+
+Útil para investigar um diff do grid (rodar a combinação isolada, com hover/Tab reais) e como rede de segurança
+ocasional (ex.: noturno). Se os grids forem alterados (legenda, estados), as completas não mudam.
 
 - **Estabilidade**: viewport fixo, `reducedMotion`, animações desligadas, fontes locais do `@po-ui/style`
   (esperamos `document.fonts.ready`), `threshold: 0` e `maxDiffPixels: 0`. Só Chromium.
@@ -87,11 +109,48 @@ TODO / evolução:
 3. **Grid com pseudo-estados forçados via CDP** (`CSS.forcePseudoState`) cobre hover/focus/active sem mouse real.
    Não substitui 1 ou 2 testes de interação real por componente (Tab de verdade, clique).
 4. Servidor estático (`PW_STATIC=1`) é mais leve que o `ng serve`.
+5. **Grids de `glow` são pesados** (72 botões animados): com 4 workers, 4 grids de glow ao mesmo tempo estouravam
+   o timeout de 30 s do teste (4 de 48 testes falharam em 1 de 2 execuções). Corrigido com `timeout: 90_000`
+   no teste e `timeout: 30_000` no `toHaveScreenshot`; depois disso 4 execuções seguidas sem falha.
+
+## Validação do grid: mutações (o grid detecta regressão?)
+
+Feitas editando o CSS servido (`dist/visual-harness/browser/po-theme-default.css`, que não é versionado) e
+revertidas com a cópia original (mesmo md5); nada foi commitado. As mutações só afetam o tema padrão
+(claro e escuro): os grids `deprecated-*` continuam passando, como esperado.
+
+| Mutação | Grids que falharam | Depois de reverter |
+|---|---|---|
+| `.po-button:hover:not(:disabled){opacity:.95}` (cor no hover) | 24 de 48: todos os 12 do `po-button` e todos os 12 do `po-button-group` dos temas claro/escuro (177 mil a 413 mil pixels de diferença) | 48/48 |
+| `.po-button-group-disabled button{padding-left:23px !important}` (padding no disabled do grupo) | 12 de 48: só os do `po-button-group` claro/escuro (≈ 9,3 mil pixels cada); os do `po-button` não mudam | 48/48 |
 
 ## Escala: medidas (host: 12 núcleos, memória livre ≥ 10 GB; sem sobrecarga de memória, então 4 e 2 workers)
 
-Obs.: o host é compartilhado (outro processo rodava builds); os tempos têm ruído de alguns %. O CI do GitHub
-(2 vCPU) não foi medido e deve ser mais lento que este host.
+Obs.: o host é compartilhado (outro processo rodava builds; load médio ≈ 6 durante as medidas), então há ruído.
+O CI do GitHub (2 vCPU) não foi medido e deve ser mais lento que este host. Todas as medidas abaixo usam o
+servidor estático (`PW_STATIC=1`).
+
+### Antes (matrizes completas + grid) × depois (só grids)
+
+| Medida | Antes | Depois |
+|---|---:|---:|
+| Testes rodados | 2160 | 48 (24 `po-button` + 24 `po-button-group`) |
+| Snapshots ativos | 2160 | 48 |
+| PNGs ativos (bytes) | 14,75 MB (button 5,66 + group 3,25 + grid antigo 5,84) | 8,82 MB (button 5,67 + group 3,15) |
+| PNGs parados no repo (reativáveis) | 0 | 8,91 MB (2136 arquivos) |
+| Tempo da suíte, 4 workers | 294 s (2 execuções: 294 s e 294 s) | 41 s e 41 s (outras 2 execuções: 42 s e 43 s) |
+| Tempo da suíte, 2 workers | 676 s | 39 s a 60 s (6 execuções: 59, 52, 60, 39, 43 e 47 s) |
+| Tempo médio de parede por teste (4 workers) | 0,14 s | 0,86 s |
+| Combinações cobertas | 2136 | 2136 (as mesmas) |
+| Tempo por combinação (4 workers) | 0,14 s | 0,019 s |
+| Estabilidade | 2 execuções 2160/2160, 0 flaky | 4 execuções com 4 workers 48/48 e 4 com 2 workers 48/48, 0 flaky |
+
+- **Ganho**: ≈ 7× mais rápido com 4 workers (294 s → 41 s) e ≈ 13× com 2 workers (676 s → ≈ 50 s).
+- Com 2 workers o tempo quase não difere do de 4: são só 48 testes e os maiores (glow, 72 botões) dominam.
+- Sem mudar a cobertura, o custo de PNG ativo cai 40 %, mas o repo não encolhe enquanto os antigos ficarem versionados.
+- Startup separado (não entra nos tempos): `ng build visual-harness` ≈ 3 a 5 s; servidor estático 0,1 s.
+
+### Medidas anteriores (matrizes completas, `ng serve`)
 
 | Medida | po-button | po-button-group | Os dois | Grid (button) |
 |---|---:|---:|---:|---:|
@@ -112,6 +171,11 @@ Obs.: o host é compartilhado (outro processo rodava builds); os tempos têm ru�
 - **Servidor estático** em vez do `ng serve` (group, 4 workers): 130 s → 101 s (−22 %). Com 8 workers: 124 s → 91 s.
   Suíte inteira (2160 testes, 4 workers): 360 s com `ng serve` → 294 s estático (−18 %), 2 execuções seguidas 2160/2160, 0 flaky.
   Mais workers quase não ajudam (4 → 8: −10 %), então o gargalo não é só CPU.
+
+
+Com a medição real dos grids (≈ 41 s para 2 componentes com 4 workers, ≈ 20 s por componente de ~1000 combinações),
+90 componentes ficam em ≈ 30 min com 4 workers e ≈ 40 min com 2 workers (extrapolação linear, não medida), contra
+≈ 4 h a 5,6 h no formato de 1 teste por combinação. A tabela abaixo é a projeção feita antes dessa medição.
 
 ### Projeção (hipótese explícita: ~90 componentes públicos, cada um com ~1000 testes no mesmo rigor)
 
