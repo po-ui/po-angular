@@ -1014,6 +1014,20 @@ describe('PoComboComponent:', () => {
       expect(component.clear).toHaveBeenCalled();
     });
 
+    it('onOptionClick: should ignore a user choice when an open combo becomes disabled', () => {
+      const onChange = jasmine.createSpy('onChange');
+      component.selectedValue = 'apple';
+      component.selectedView = { value: 'apple', label: 'Apple' };
+      component.registerOnChange(onChange);
+      component.comboOpen = true;
+      component.disabled = true;
+
+      component.onOptionClick({ value: 'orange', label: 'Orange' }, new MouseEvent('click'));
+
+      expect(component.selectedValue).toBe('apple');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
     it('onOptionClick: should call `stopPropagation` if has an event parameter', () => {
       const option: PoComboOption = { value: 'value', label: 'label' };
 

@@ -141,7 +141,12 @@
   </po-field-container>
 
   <ng-template #dropdownListbox>
-    <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
+    <div
+      #containerElement
+      class="po-combo-container"
+      [hidden]="!comboOpen && !isServerSearching"
+      [attr.inert]="disabled ? '' : null"
+    >
       <po-listbox
         #poListbox
         #contentElement

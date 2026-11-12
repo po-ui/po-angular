@@ -519,14 +519,17 @@ export class PoComboComponent extends PoComboBaseComponent implements AfterViewI
   }
 
   onOptionClick(option: PoComboOption | PoComboGroup, event?: any) {
+    if (event) {
+      event.stopPropagation();
+      if (this.disabled) {
+        return;
+      }
+    }
+
     const inputValue = this.getInputValue();
     const isUpdateModel =
       option[this.dynamicValue] !== this.selectedValue ||
       !!(this.selectedView && inputValue !== this.selectedView[this.dynamicLabel]);
-
-    if (event) {
-      event.stopPropagation();
-    }
 
     this.updateSelectedValue(option, isUpdateModel);
     this.controlComboVisibility(false);
