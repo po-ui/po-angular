@@ -13,7 +13,7 @@ import {
 import { PoListViewFieldProperties, PoSkeletonAnimation } from '@po-ui/ng-components';
 
 import { SearchAnalyticsService } from './search-analytics.service';
-import { SearchResult } from './search.model';
+import { SearchDocType, SearchResult } from './search.model';
 import { SEARCH_MODAL_PAGE_SIZE, SearchService, SearchVariant } from './search.service';
 
 const ITEM_SELECTOR = '.po-list-view-item-wrapper[tabindex="0"]';
@@ -41,6 +41,8 @@ export class SearchResultsComponent {
   readonly variant = input<SearchVariant>('popover');
   /** O usuário ainda está digitando: a consulta acima está atrasada (debounce) e o skeleton aparece. */
   readonly typing = input(false);
+  /** Filtro de tipos do modal (vazio = todos). Muda a lista na hora, sem esperar o debounce. */
+  readonly types = input<ReadonlyArray<SearchDocType>>([]);
   /** `id` da lista, para `aria-controls` do campo. */
   readonly listId = input('search-results');
 
@@ -49,6 +51,8 @@ export class SearchResultsComponent {
   readonly focusInput = output<void>();
   /** "Ver todos" no rodapé do popover: abrir o modal com a mesma consulta. */
   readonly viewAll = output<void>();
+  /** Quantos resultados há por tipo para a consulta atual (alimenta o filtro do modal). */
+  readonly countsChange = output<Partial<Record<SearchDocType, number>>>();
 
   /** Sem animação para quem pediu menos movimento no sistema. */
   readonly skeletonAnimation = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -73,7 +77,7 @@ export class SearchResultsComponent {
   private readonly outcome = computed(() => {
     this.service.revision();
 
-    return this.service.search(this.trimmed(), this.variant(), this.shown());
+    return this.service.search(this.trimmed(), this.variant(), this.shown(), this.types());
   });
 
   readonly results = computed(() => this.outcome().results);
@@ -100,7 +104,7 @@ export class SearchResultsComponent {
           ? `${this.results().length} de ${this.total()} resultados`
           : `${this.results().length} resultados`;
       case 'empty':
-        return `Nenhum resultado para ${this.trimmed()}`;
+        return `Nenhum resultado para ${this.trimmed()}${this.types().length ? ' nos tipos escolhidos' : ''}`;
       case 'loading':
         return 'Buscando';
       case 'error':
@@ -119,6 +123,15 @@ export class SearchResultsComponent {
       if (this.trimmed().length >= 1) {
         void this.service.load();
       }
+    });
+
+    // Tipos escolhidos podem morar em chunks lazy (ícones, API, samples): carrega e a lista se atualiza sozinha.
+    effect(() => {
+      void this.service.ensureTypes(this.types());
+    });
+
+    effect(() => {
+      this.countsChange.emit(this.outcome().counts);
     });
 
     effect(onCleanup => {

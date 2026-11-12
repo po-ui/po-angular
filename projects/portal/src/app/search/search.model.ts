@@ -90,14 +90,17 @@ export const SEARCH_TYPE_LABEL: Record<SearchDocType, string> = {
   servico: 'Serviço',
   interface: 'Interface',
   enum: 'Enum',
-  guia: 'Guia',
-  pagina: 'Página',
   propriedade: 'Propriedade',
   evento: 'Evento',
   metodo: 'Método',
-  icone: 'Ícone',
-  sample: 'Exemplo'
+  guia: 'Guia',
+  pagina: 'Página',
+  sample: 'Exemplo',
+  icone: 'Ícone'
 };
+
+/** Todos os tipos do índice, na ordem em que o filtro os lista. */
+export const SEARCH_TYPES = Object.keys(SEARCH_TYPE_LABEL) as Array<SearchDocType>;
 
 export const SEARCH_TYPE_COLOR: Record<SearchDocType, string> = {
   componente: 'success',

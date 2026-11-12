@@ -38,7 +38,9 @@
       </div>
     }
     @case ('empty') {
-      <p class="search-results-message">Nenhum resultado para "{{ trimmed() }}".</p>
+      <p class="search-results-message">
+        Nenhum resultado para "{{ trimmed() }}"{{ types().length ? ' nos tipos escolhidos' : '' }}.
+      </p>
     }
     @case ('results') {
       <po-list-view

@@ -157,9 +157,9 @@ describe('SearchService', () => {
   });
 
   it('devolve vazio para consulta curta ou antes de carregar', async () => {
-    expect(service.search('button')).toEqual({ results: [], total: 0 });
+    expect(service.search('button')).toEqual({ results: [], total: 0, counts: {} });
     await service.load();
-    expect(service.search('b')).toEqual({ results: [], total: 0 });
+    expect(service.search('b')).toEqual({ results: [], total: 0, counts: {} });
   });
 
   it('componente vence propriedade para o mesmo termo e traz página e trecho com destaque', async () => {
@@ -272,6 +272,73 @@ describe('SearchService', () => {
       expect(first.results.length).toBe(5);
       expect(first.total).toBe(all.total);
       expect(all.results.length).toBe(all.total);
+    });
+  });
+
+  describe('filtro por tipo', () => {
+    it('sem tipos escolhidos devolve todos e informa a contagem por tipo', async () => {
+      await service.load();
+      const { results, counts, total } = service.search('button', 'modal');
+
+      expect(new Set(results.map(r => r.type)).size).toBeGreaterThan(1);
+      expect(total).toBe(Object.values(counts).reduce((sum, n) => sum + n, 0));
+      expect(counts.componente).toBe(1);
+      expect(counts.propriedade).toBe(2);
+    });
+
+    it('só propriedade / só componente restringem a lista e o total, sem mexer na contagem', async () => {
+      await service.load();
+      const all = service.search('button', 'modal');
+      const props = service.search('button', 'modal', 50, ['propriedade']);
+      const comp = service.search('button', 'modal', 50, ['componente']);
+
+      expect(props.results.every(r => r.type === 'propriedade')).toBeTrue();
+      expect(props.total).toBe(2);
+      expect(comp.results.map(r => r.id)).toEqual(['po-button']);
+      expect(props.counts).toEqual(all.counts);
+    });
+
+    it('vários tipos somam; tipo sem resultado dá lista vazia', async () => {
+      await service.load();
+
+      expect(
+        service
+          .search('botao', 'modal', 50, ['guia', 'propriedade'])
+          .results.map(r => r.type)
+          .sort()
+      ).toEqual(['guia', 'propriedade', 'propriedade']);
+      expect(service.search('button', 'modal', 50, ['enum']).results).toEqual([]);
+    });
+
+    it('"mostrar mais" respeita o filtro (limite recorta a lista filtrada)', async () => {
+      apiChunk = helperApi;
+      await service.load();
+      const filtered = service.search('p-helper', 'modal', 5, ['propriedade']);
+
+      expect(filtered.results.length).toBe(5);
+      expect(filtered.total).toBeGreaterThanOrEqual(helperComponents.length);
+      expect(filtered.results.every(r => r.type === 'propriedade')).toBeTrue();
+    });
+
+    it('ícone escolhido no filtro aparece mesmo com 2 caracteres, depois de carregar o chunk', async () => {
+      await service.load();
+      expect(service.search('ar', 'modal', 50, ['icone']).results).toEqual([]);
+
+      await service.ensureTypes(['icone']);
+
+      expect(service.search('ar', 'modal', 50, ['icone']).results.map(r => r.id)).toEqual(['icone:arrow-left']);
+      expect(service.search('ar', 'modal').results.some(r => r.type === 'icone')).toBeFalse();
+    });
+
+    it('ensureTypes carrega só os chunks dos tipos escolhidos', async () => {
+      await service.load();
+      fetchSpy.calls.reset();
+
+      await service.ensureTypes(['guia']);
+      expect(fetchSpy).not.toHaveBeenCalled();
+
+      await service.ensureTypes(['icone', 'sample']);
+      expect(fetchSpy.calls.allArgs().map(a => a[0])).toEqual(['assets/json/search-icons.cccc3333.json']);
     });
   });
 });

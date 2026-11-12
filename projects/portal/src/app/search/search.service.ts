@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 import type MiniSearch from 'minisearch';
 
@@ -23,6 +23,8 @@ const ANCHOR_PREFIX_RE = new RegExp(`^(${ANCHOR_PREFIXES.join('|')})`);
 export type SearchVariant = 'popover' | 'modal';
 
 export interface SearchOutcome {
+  /** Quantos resultados há por tipo para a consulta (sem aplicar o filtro de tipos), para o filtro do modal. */
+  counts: Partial<Record<SearchDocType, number>>;
   /** Resultados prontos para exibir (limitados pela variante). */
   results: Array<SearchResult>;
   /** Quantos documentos casaram, contando os que não cabem em `results`. */
@@ -43,6 +45,21 @@ const CATEGORY: Record<SearchDocType, SearchCategory> = {
   metodo: 'api',
   icone: 'icone',
   sample: 'sample'
+};
+
+/** Chunk onde cada tipo mora (espelha `CHUNK_OF_TYPE` do gerador do índice). */
+const SEARCH_CHUNK_OF_TYPE: Record<SearchDocType, SearchChunkName> = {
+  componente: 'core',
+  servico: 'core',
+  interface: 'core',
+  enum: 'core',
+  guia: 'core',
+  pagina: 'core',
+  propriedade: 'api',
+  evento: 'api',
+  metodo: 'api',
+  icone: 'icons',
+  sample: 'samples'
 };
 
 /** Boost por tipo: componente/página/guia vencem propriedade ("kind" existe em dezenas de componentes). */
@@ -88,7 +105,8 @@ export class SearchService {
   /** `ready` já permite buscar (resultados parciais enquanto `pending`). */
   readonly status = signal<SearchStatus>('idle');
   /** Ainda há chunks carregando; os resultados podem estar incompletos. */
-  readonly pending = signal(false);
+  readonly pending = computed(() => this.inflight() > 0);
+  private readonly inflight = signal(0);
   /** Incrementa a cada chunk indexado, para quem exibe resultados recalcular. */
   readonly revision = signal(0);
 
@@ -114,22 +132,45 @@ export class SearchService {
     return this.load();
   }
 
+  /** Garante que os chunks lazy dos tipos escolhidos estão carregados (ícones, API, samples). */
+  async ensureTypes(types: ReadonlyArray<SearchDocType>): Promise<void> {
+    if (!types.length) return;
+
+    await this.load();
+    await Promise.all(
+      Array.from(new Set(types.map(type => SEARCH_CHUNK_OF_TYPE[type])))
+        .filter(name => name !== 'core')
+        .map(name => this.loadChunk(name).catch(() => undefined))
+    );
+  }
+
   /** Ícones são carregados só quando a consulta pede (3+ caracteres). */
   loadIcons(): Promise<void> {
     return this.miniSearch ? this.loadChunk('icons').catch(() => undefined) : Promise.resolve();
   }
 
-  search(query: string, variant: SearchVariant = 'popover', limit = SEARCH_MODAL_PAGE_SIZE): SearchOutcome {
+  /**
+   * @param types restringe aos tipos escolhidos (vazio = todos). Uma passada só no MiniSearch: o filtro entra depois
+   *   do ranking, e assim `counts` já sai gratuito para todos os tipos.
+   */
+  search(
+    query: string,
+    variant: SearchVariant = 'popover',
+    limit = SEARCH_MODAL_PAGE_SIZE,
+    types: ReadonlyArray<SearchDocType> = []
+  ): SearchOutcome {
     const text = (query || '').trim();
 
-    if (!this.miniSearch || text.length < MIN_QUERY) return { results: [], total: 0 };
+    if (!this.miniSearch || text.length < MIN_QUERY) return { results: [], total: 0, counts: {} };
 
     const normalizedQuery = normalizeText(text);
-    const withIcons = text.length >= MIN_ICON_QUERY;
+    // ícones só com 3+ caracteres, a não ser que a pessoa os tenha escolhido no filtro
+    const withIcons = text.length >= MIN_ICON_QUERY || types.includes('icone');
     const terms = queryTerms(text);
 
     if (withIcons && this.manifest?.chunks.icons && !this.chunks.has('icons')) {
-      void this.loadIcons();
+      // fora da leitura: `search` roda dentro de `computed`, que não pode gravar sinais (`inflight`)
+      queueMicrotask(() => void this.loadIcons());
     }
 
     const hits = this.miniSearch.search(text, {
@@ -149,7 +190,12 @@ export class SearchService {
       .filter((item): item is { doc: SearchDoc; score: number } => !!item.doc)
       .sort((a, b) => b.score - a.score);
 
-    const visible = variant === 'popover' ? this.balance(ranked) : ranked.slice(0, limit);
+    const counts: SearchOutcome['counts'] = {};
+
+    ranked.forEach(({ doc }) => (counts[doc.type] = (counts[doc.type] ?? 0) + 1));
+
+    const filtered = types.length ? ranked.filter(({ doc }) => types.includes(doc.type)) : ranked;
+    const visible = variant === 'popover' ? this.balance(filtered) : filtered.slice(0, limit);
     const results = visible.map(({ doc, score }) => ({
       id: doc.id,
       type: doc.type,
@@ -164,7 +210,7 @@ export class SearchService {
       score
     }));
 
-    return { results, total: ranked.length };
+    return { results, total: filtered.length, counts };
   }
 
   /** Consulta igual ao nome do componente (`po-button`, `PoButton`) sobe o componente ao topo. */
@@ -222,11 +268,9 @@ export class SearchService {
       return;
     }
 
-    this.pending.set(true);
     await this.loadChunk('api').catch(() => undefined);
     // samples vêm num chunk próprio, depois da API
     await this.loadChunk('samples').catch(() => undefined);
-    this.pending.set(false);
   }
 
   private loadChunk(name: SearchChunkName): Promise<void> {
@@ -239,13 +283,16 @@ export class SearchService {
       ? this.fetchJson<SearchChunk>(`assets/json/${entry.file}`).then(chunk => this.index(chunk))
       : Promise.resolve();
 
+    this.inflight.update(count => count + 1);
     this.chunks.set(
       name,
-      promise.catch(error => {
-        this.chunks.delete(name);
-        this.fail(name, error, name === 'core');
-        throw error;
-      })
+      promise
+        .catch(error => {
+          this.chunks.delete(name);
+          this.fail(name, error, name === 'core');
+          throw error;
+        })
+        .finally(() => this.inflight.update(count => count - 1))
     );
 
     return this.chunks.get(name);
@@ -287,7 +334,6 @@ export class SearchService {
     this.analytics.track({ name: 'search_index_error', chunk, status: (error as { status?: number })?.status });
     if (fatal) {
       this.status.set('error');
-      this.pending.set(false);
     }
   }
 }

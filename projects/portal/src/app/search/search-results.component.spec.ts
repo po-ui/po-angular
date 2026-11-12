@@ -183,4 +183,35 @@ describe('SearchResultsComponent', () => {
     await setQuery('p-helpe');
     expect(fixture.componentInstance.shown()).toBe(50);
   });
+
+  it('filtro de tipos: restringe a lista e o total na hora, e emite a contagem por tipo', async () => {
+    await service.load();
+    const counts: Array<Partial<Record<string, number>>> = [];
+
+    fixture.componentInstance.countsChange.subscribe(c => counts.push(c));
+    await setQuery('botao');
+    expect(root().querySelectorAll('.po-list-view-item-wrapper').length).toBe(2);
+
+    fixture.componentRef.setInput('types', ['componente']);
+    fixture.detectChanges();
+    expect(root().querySelectorAll('.po-list-view-item-wrapper').length).toBe(1);
+    expect(fixture.componentInstance.total()).toBe(1);
+
+    fixture.componentRef.setInput('types', ['enum']);
+    fixture.detectChanges();
+    expect(root().textContent).toContain('nos tipos escolhidos');
+    expect(counts[counts.length - 1]).toEqual({ componente: 1, propriedade: 1 });
+  });
+
+  it('consulta com 3+ letras que pede o chunk de ícones não quebra a lista (sem gravar sinal dentro de computed)', async () => {
+    await service.load();
+    const errors = spyOn(console, 'error');
+
+    await setQuery('estilo');
+    await new Promise(resolve => setTimeout(resolve, 20));
+    fixture.detectChanges();
+
+    expect(errors).not.toHaveBeenCalled();
+    expect(fixture.componentInstance.state()).toBe('results');
+  });
 });
