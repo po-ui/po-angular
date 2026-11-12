@@ -3,6 +3,14 @@ import { Locator, Page } from '@playwright/test';
 export type Theme = 'light' | 'dark' | 'deprecated-light' | 'deprecated-dark';
 export const THEMES: Theme[] = ['light', 'dark', 'deprecated-light', 'deprecated-dark'];
 
+/** PW_FULL=1 reativa as matrizes completas (1 teste por combinação); por padrão só rodam os grids. */
+export const FULL_MATRIX = process.env.PW_FULL === '1';
+
+/** URL do harness em modo grid: `rows` é uma lista de linhas de células (ver harness/main.ts). */
+export function gridUrl(theme: Theme, rows: object[][]): string {
+  return `/?${new URLSearchParams({ c: 'grid', theme, rows: JSON.stringify(rows) })}`;
+}
+
 /** Abre o harness, espera fontes e o primeiro botão e devolve o #stage (alvo do screenshot). */
 export async function open(page: Page, href: string): Promise<Locator> {
   await page.goto(href);
@@ -52,7 +60,7 @@ export async function applyPointerState(page: Page, state: PointerState, target:
 
 /**
  * Força :hover / :focus(-visible) / :active em vários elementos de uma vez (CDP CSS.forcePseudoState),
- * para fotografar muitos estados na mesma página. Elementos marcados com data-force="hover|focus|active".
+ * para fotografar muitos estados na mesma página. Elementos marcados com data-force="hover|focus|active" (e data-force-item="N" para o N-ésimo item de um po-button-group).
  */
 export async function forcePseudoStates(page: Page): Promise<void> {
   const cdp = await page.context().newCDPSession(page);
@@ -65,11 +73,15 @@ export async function forcePseudoStates(page: Page): Promise<void> {
     active: ['hover', 'active']
   };
   for (const [force, forcedPseudoClasses] of Object.entries(classes)) {
-    const { nodeIds } = await cdp.send('DOM.querySelectorAll', {
-      nodeId: root.nodeId,
-      selector: `[data-force="${force}"] button`
-    });
-    for (const nodeId of nodeIds) await cdp.send('CSS.forcePseudoState', { nodeId, forcedPseudoClasses });
+    // po-button: data-force na célula -> o botão dentro. po-button-group: data-force + data-force-item -> o N-ésimo item.
+    const selectors = [
+      `[data-force="${force}"]:not([data-force-item]) button`,
+      ...[0, 1, 2].map(i => `[data-force="${force}"][data-force-item="${i}"] po-button:nth-child(${i + 1}) button`)
+    ];
+    for (const selector of selectors) {
+      const { nodeIds } = await cdp.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector });
+      for (const nodeId of nodeIds) await cdp.send('CSS.forcePseudoState', { nodeId, forcedPseudoClasses });
+    }
   }
   await freezeAnimations(page);
 }

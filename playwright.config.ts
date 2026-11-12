@@ -15,7 +15,15 @@ export default defineConfig({
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   expect: {
     // threshold: 0 = tolerância zero de cor por pixel (o padrão 0.2 deixava passar opacity .9 no hover).
-    toHaveScreenshot: { animations: 'disabled', caret: 'hide', scale: 'css', threshold: 0, maxDiffPixels: 0 }
+    // timeout 15 s: os grids com glow (72 botões animados) levam mais de 5 s para estabilizar.
+    toHaveScreenshot: {
+      timeout: 15_000,
+      animations: 'disabled',
+      caret: 'hide',
+      scale: 'css',
+      threshold: 0,
+      maxDiffPixels: 0
+    }
   },
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,

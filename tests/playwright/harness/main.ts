@@ -10,8 +10,10 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
 /**
  * Renderiza UM componente configurado por query string, dentro de #stage.
  * ?theme=light|dark (padrão) | deprecated-light|deprecated-dark (poThemeDefaultDeprecated).
- * ?c=grid&rows=[[{kind,danger,size,icon,label,aria,disabled,loading,force}]] (JSON): várias células numa página só;
- * `force` = hover|focus|active, aplicado depois pelo teste via CDP (CSS.forcePseudoState).
+ * ?c=grid&rows=[[célula]] (JSON): várias células numa página só. Célula de po-button:
+ * {kind,danger,size,icon,label,aria,disabled,loading}; de po-button-group: {component:'button-group',size,toggle,items}.
+ * Comuns: `caption` (legenda visível, parte do snapshot), `width` (px), `force` = hover|focus|active e `forceItem`
+ * (índice do item do grupo), aplicados depois pelo teste via CDP (CSS.forcePseudoState).
  * ?c=button (padrão) | button-group (&toggle=none|single|multiple&items=[{label,icon,selected,disabled}] em JSON).
  * Ex.: /?kind=primary&danger=1&size=large&icon=an%20an-plus&label=Salvar&loading=1&theme=dark
  */
@@ -24,17 +26,31 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
         @for (row of rows; track $index) {
           <div class="row">
             @for (cell of row; track $index) {
-              <div class="cell" [attr.data-force]="cell.force">
-                <po-button
-                  [p-kind]="cell.kind"
-                  [p-danger]="cell.danger"
-                  [p-size]="cell.size"
-                  [p-icon]="cell.icon"
-                  [p-label]="cell.label"
-                  [p-disabled]="cell.disabled"
-                  [p-loading]="cell.loading"
-                  [p-aria-label]="cell.aria"
-                ></po-button>
+              <div
+                class="cell"
+                [style.width.px]="cell.width ?? 300"
+                [attr.data-force]="cell.force"
+                [attr.data-force-item]="cell.forceItem"
+              >
+                <div class="caption">{{ cell.caption }}</div>
+                @if (cell.component === 'button-group') {
+                  <po-button-group
+                    [p-buttons]="cell.items"
+                    [p-toggle]="cell.toggle"
+                    [p-size]="cell.size"
+                  ></po-button-group>
+                } @else {
+                  <po-button
+                    [p-kind]="cell.kind"
+                    [p-danger]="cell.danger"
+                    [p-size]="cell.size"
+                    [p-icon]="cell.icon"
+                    [p-label]="cell.label"
+                    [p-disabled]="cell.disabled"
+                    [p-loading]="cell.loading"
+                    [p-aria-label]="cell.aria"
+                  ></po-button>
+                }
               </div>
             }
           </div>
@@ -66,8 +82,14 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
     }
     .cell {
       box-sizing: border-box;
-      width: 300px;
       padding: 8px;
+    }
+    /* Legenda da célula (faz parte do snapshot): duas linhas, quebra de linha do caption preservada. */
+    .caption {
+      margin-bottom: 6px;
+      font: 10px/12px monospace;
+      white-space: pre-line;
+      color: #6b6b6b;
     }
   `
 })
@@ -77,10 +99,18 @@ class HarnessComponent {
   private readonly theme = this.params.get('theme') ?? 'light';
 
   readonly component = this.params.get('c') ?? 'button';
-  readonly rows = JSON.parse(this.params.get('rows') ?? '[]');
+  // itens de grupo ganham `action` uma única vez (array novo a cada ciclo quebraria o p-buttons)
+  readonly rows = JSON.parse(this.params.get('rows') ?? '[]').map((row: Array<any>) =>
+    row.map(cell => (cell.items ? { ...cell, items: this.withActions(cell.items) } : cell))
+  );
   readonly width = { 'button-group': '480px', grid: 'max-content' }[this.component] ?? '320px';
   readonly toggle = this.params.get('toggle') ?? 'none';
-  readonly items = JSON.parse(this.params.get('items') ?? '[]').map((i: object) => ({ action: () => {}, ...i }));
+  readonly items = this.withActions(JSON.parse(this.params.get('items') ?? '[]'));
+
+  /** po-button-group exige `action` em cada item. */
+  withActions(items: Array<object>): Array<any> {
+    return items.map(i => ({ action: () => {}, ...i }));
+  }
 
   readonly q = {
     kind: this.params.get('kind') ?? 'secondary',
