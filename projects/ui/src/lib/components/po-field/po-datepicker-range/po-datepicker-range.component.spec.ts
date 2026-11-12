@@ -38,6 +38,18 @@ describe('PoDatepickerRangeComponent:', () => {
     nativeElement = fixture.debugElement.nativeElement;
   });
 
+  it('should make an open range calendar inert while disabled', () => {
+    component.isCalendarVisible = true;
+    fixture.detectChanges();
+    const calendar = nativeElement.querySelector('po-calendar');
+    expect(calendar.closest('[inert]')).toBeNull();
+
+    component.setDisabledState(true);
+    fixture.detectChanges();
+
+    expect(calendar.closest('[inert]')).not.toBeNull();
+  });
+
   it('should be created', () => {
     expect(component).toBeTruthy();
     expect(component instanceof PoDatepickerRangeBaseComponent).toBeTruthy();

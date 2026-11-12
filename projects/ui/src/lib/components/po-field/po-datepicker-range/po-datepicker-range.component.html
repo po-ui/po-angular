@@ -151,6 +151,7 @@
 <ng-template #sharedCalendarContent>
   <div
     #calendarPicker
+    [attr.inert]="isDisabled ? '' : null"
     [class.po-calendar-range-picker]="!verifyMobile()"
     [class.po-datepicker-range-calendar-mobile-container]="verifyMobile() && isCalendarVisible"
     [hidden]="!isCalendarVisible"
