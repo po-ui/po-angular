@@ -1,4 +1,3 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TestBed, fakeAsync, flushMicrotasks, tick } from '@angular/core/testing';
 import { Router, UrlSerializer, DefaultUrlSerializer } from '@angular/router';
 
@@ -159,14 +158,9 @@ describe('CopyLinkService', () => {
 
 describe('CopyLinkButtonComponent', () => {
   it('copia a URL canônica, mostra "copiado" por 2 s e anuncia', fakeAsync(() => {
-    const announce = jasmine.createSpy('announce').and.returnValue(Promise.resolve());
-
     TestBed.configureTestingModule({
       imports: [CopyLinkButtonComponent],
-      providers: [
-        { provide: Router, useValue: routerAt('/documentation/po-button?view=doc') },
-        { provide: LiveAnnouncer, useValue: { announce } }
-      ]
+      providers: [{ provide: Router, useValue: routerAt('/documentation/po-button?view=doc') }]
     });
     const write = spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.resolve());
     const fixture = TestBed.createComponent(CopyLinkButtonComponent);
@@ -182,10 +176,48 @@ describe('CopyLinkButtonComponent', () => {
     expect(write.calls.mostRecent().args[0]).toMatch(/\/documentation\/po-button\?view=doc#prop-p-kind$/);
     expect(fixture.componentInstance.ariaLabel()).toBe('Link para p-kind copiado');
     expect(fixture.nativeElement.querySelector('.an-check')).not.toBeNull();
-    expect(announce).toHaveBeenCalledWith('Link copiado', 'polite');
+    tick(50);
+    expect(document.getElementById('app-live-announcer').textContent).toBe('Link copiado');
+
+    tick(COPIED_FEEDBACK_MS - 50);
+    expect(fixture.componentInstance.ariaLabel()).toBe('Copiar link para p-kind');
+    fixture.destroy();
+  }));
+
+  it('clicar não mexe na rolagem nem na URL e o anúncio não ocupa espaço na página', fakeAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [CopyLinkButtonComponent],
+      providers: [
+        { provide: Router, useValue: routerAt('/documentation/po-accordion?view=web#sample-po-accordion-basic') }
+      ]
+    });
+    spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.resolve());
+
+    const fixture = TestBed.createComponent(CopyLinkButtonComponent);
+    const doc = document.documentElement;
+    const url = location.href;
+
+    fixture.componentRef.setInput('anchor', 'sample-po-accordion-basic');
+    fixture.componentRef.setInput('target', 'PO Accordion Basic');
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    const before = { x: scrollX, y: scrollY, overflow: doc.scrollHeight - doc.clientHeight };
+
+    fixture.nativeElement.querySelector('button').click();
+    flushMicrotasks();
+    tick(100);
+    fixture.detectChanges();
+
+    const region = document.getElementById('app-live-announcer');
+
+    expect(region.textContent).toBe('Link copiado');
+    expect(getComputedStyle(region).position).toBe('fixed');
+    expect({ x: scrollX, y: scrollY, overflow: doc.scrollHeight - doc.clientHeight }).toEqual(before);
+    expect(location.href).toBe(url);
 
     tick(COPIED_FEEDBACK_MS);
-    expect(fixture.componentInstance.ariaLabel()).toBe('Copiar link para p-kind');
+    fixture.nativeElement.remove();
     fixture.destroy();
   }));
 });

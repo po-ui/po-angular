@@ -1,10 +1,10 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PoButtonModule, PoTooltipModule } from '@po-ui/ng-components';
 
+import { announce } from './announce';
 import { copyText } from './copy-text';
 
 /** Tempo que o botão mostra "Link copiado" antes de voltar ao normal. */
@@ -52,7 +52,6 @@ export function deepLinkUrl(router: Router, id: string, doc: Document = document
 export class CopyLinkButtonComponent implements OnDestroy {
   private readonly router = inject(Router);
   private readonly doc = inject(DOCUMENT);
-  private readonly announcer = inject(LiveAnnouncer);
 
   /** `id` do alvo (`prop-p-kind`, `sample-po-button-labs`, `pre-requisitos`...). */
   readonly anchor = input('');
@@ -72,7 +71,7 @@ export class CopyLinkButtonComponent implements OnDestroy {
 
     clearTimeout(this.timer);
     this.copied.set(ok);
-    void this.announcer.announce(ok ? 'Link copiado' : 'Não foi possível copiar o link', 'polite');
+    announce(ok ? 'Link copiado' : 'Não foi possível copiar o link', this.doc);
     this.timer = setTimeout(() => this.copied.set(false), COPIED_FEEDBACK_MS);
   }
 
