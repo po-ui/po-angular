@@ -1,4 +1,5 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
+import { applyCspNonce } from '../../utils/csp-nonce';
 import { PoMediaQueryTokens } from './po-media-query.interface';
 
 /**
@@ -59,7 +60,10 @@ import { PoMediaQueryTokens } from './po-media-query.interface';
 export class PoMediaQueryService {
   private readonly renderer: Renderer2;
 
-  constructor(rendererFactory: RendererFactory2) {
+  constructor(
+    rendererFactory: RendererFactory2,
+    @Optional() @Inject(CSP_NONCE) private readonly cspNonce?: string | null
+  ) {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
@@ -85,6 +89,7 @@ export class PoMediaQueryService {
 
   private createStyleElement(): HTMLStyleElement {
     const styleElement = this.renderer.createElement('style');
+    applyCspNonce(styleElement, this.cspNonce, this.renderer);
     this.renderer.appendChild(document.head, styleElement);
     return styleElement;
   }

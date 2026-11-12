@@ -1,4 +1,4 @@
-import { Renderer2, RendererFactory2 } from '@angular/core';
+import { CSP_NONCE, Renderer2, RendererFactory2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { PoMediaQueryTokens } from './po-media-query.interface';
@@ -221,5 +221,46 @@ describe('PoMediaQueryService:', () => {
 
       expect(spyConsoleError).toHaveBeenCalledWith('dynamicSheet is null or undefined. Cannot insert rule.');
     });
+  });
+});
+
+describe('PoMediaQueryService - CSP nonce:', () => {
+  const realRendererProviders = [
+    {
+      provide: RendererFactory2,
+      useValue: {
+        createRenderer: () => ({
+          createElement: (name: string) => document.createElement(name),
+          appendChild: (parent: HTMLElement, child: HTMLElement) => parent.appendChild(child),
+          setAttribute: (el: HTMLElement, name: string, value: string) => el.setAttribute(name, value)
+        })
+      }
+    }
+  ];
+
+  beforeEach(() => TestBed.resetTestingModule());
+
+  it('should set the nonce on the created <style> when CSP_NONCE is provided', () => {
+    TestBed.configureTestingModule({
+      providers: [PoMediaQueryService, ...realRendererProviders, { provide: CSP_NONCE, useValue: 'test-nonce' }]
+    });
+    const service = TestBed.inject(PoMediaQueryService);
+
+    const styleElement: HTMLStyleElement = (service as any).createStyleElement();
+
+    expect(styleElement.nonce).toBe('test-nonce');
+    styleElement.remove();
+  });
+
+  it('should not set the nonce attribute when CSP_NONCE is not provided', () => {
+    TestBed.configureTestingModule({
+      providers: [PoMediaQueryService, ...realRendererProviders, { provide: CSP_NONCE, useValue: null }]
+    });
+    const service = TestBed.inject(PoMediaQueryService);
+
+    const styleElement: HTMLStyleElement = (service as any).createStyleElement();
+
+    expect(styleElement.hasAttribute('nonce')).toBeFalse();
+    styleElement.remove();
   });
 });
