@@ -1,4 +1,4 @@
-import { Injectable, SecurityContext } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, Optional, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { AnimaliaIconDictionary } from '../../components/po-icon/po-icon-dictionary';
@@ -48,7 +48,8 @@ export class PoUserGuideService extends PoUserGuideBaseService {
 
   constructor(
     languageService: PoLanguageService,
-    private readonly sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    @Optional() @Inject(CSP_NONCE) private readonly cspNonce?: string | null
   ) {
     super(languageService);
   }
@@ -94,6 +95,9 @@ export class PoUserGuideService extends PoUserGuideBaseService {
     }
 
     const style = document.createElement('style');
+    if (this.cspNonce) {
+      style.setAttribute('nonce', this.cspNonce);
+    }
     style.dataset['poUserGuideStyles'] = 'true';
     style.textContent = `.po-user-guide-popover { font-family: var(--font-family-theme, system-ui, -apple-system, sans-serif); }`;
     document.head.appendChild(style);
