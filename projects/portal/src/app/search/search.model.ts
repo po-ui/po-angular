@@ -1,8 +1,18 @@
 /** Tipos de documento do índice (ver `projects/portal/docs/processors/search`). */
 export type SearchDocType =
-  'componente' | 'servico' | 'interface' | 'enum' | 'guia' | 'pagina' | 'propriedade' | 'evento' | 'metodo' | 'icone';
+  | 'componente'
+  | 'servico'
+  | 'interface'
+  | 'enum'
+  | 'guia'
+  | 'pagina'
+  | 'propriedade'
+  | 'evento'
+  | 'metodo'
+  | 'icone'
+  | 'sample';
 
-export type SearchChunkName = 'core' | 'api' | 'icons';
+export type SearchChunkName = 'core' | 'api' | 'icons' | 'samples';
 
 export interface SearchManifest {
   version: number;
@@ -67,6 +77,12 @@ export interface SearchResult {
   score: number;
 }
 
+/**
+ * Tempo parado de digitação antes de a busca executar (ms). Enquanto isso o painel mostra o skeleton.
+ * Ajuste aqui: mais alto = menos buscas no meio da digitação; mais baixo = resposta mais rápida.
+ */
+export const SEARCH_DEBOUNCE_MS = 350;
+
 export type SearchStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export const SEARCH_TYPE_LABEL: Record<SearchDocType, string> = {
@@ -79,7 +95,8 @@ export const SEARCH_TYPE_LABEL: Record<SearchDocType, string> = {
   propriedade: 'Propriedade',
   evento: 'Evento',
   metodo: 'Método',
-  icone: 'Ícone'
+  icone: 'Ícone',
+  sample: 'Exemplo'
 };
 
 export const SEARCH_TYPE_COLOR: Record<SearchDocType, string> = {
@@ -92,5 +109,6 @@ export const SEARCH_TYPE_COLOR: Record<SearchDocType, string> = {
   propriedade: 'neutral',
   evento: 'neutral',
   metodo: 'neutral',
-  icone: 'neutral'
+  icone: 'neutral',
+  sample: 'info'
 };

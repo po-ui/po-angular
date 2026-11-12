@@ -18,7 +18,14 @@ import {
 
 export type SearchVariant = 'popover' | 'modal';
 
-type SearchCategory = 'componente' | 'guia' | 'api' | 'outros' | 'icone';
+export interface SearchOutcome {
+  /** Resultados prontos para exibir (limitados pela variante). */
+  results: Array<SearchResult>;
+  /** Quantos documentos casaram, contando os que não cabem em `results`. */
+  total: number;
+}
+
+type SearchCategory = 'componente' | 'guia' | 'api' | 'sample' | 'outros' | 'icone';
 
 const CATEGORY: Record<SearchDocType, SearchCategory> = {
   componente: 'componente',
@@ -30,7 +37,8 @@ const CATEGORY: Record<SearchDocType, SearchCategory> = {
   propriedade: 'api',
   evento: 'api',
   metodo: 'api',
-  icone: 'icone'
+  icone: 'icone',
+  sample: 'sample'
 };
 
 /** Boost por tipo: componente/página/guia vencem propriedade ("kind" existe em dezenas de componentes). */
@@ -44,14 +52,21 @@ const TYPE_BOOST: Record<SearchDocType, number> = {
   metodo: 1.2,
   evento: 1.2,
   propriedade: 1,
+  sample: 1.4,
   icone: 0.8
 };
 
-/** Limites do resultado: total e por categoria (evita que as propriedades afoguem o resto). */
-const LIMITS: Record<SearchVariant, { max: number; perCategory: Record<SearchCategory, number> }> = {
-  popover: { max: 8, perCategory: { componente: 3, guia: 3, api: 4, outros: 2, icone: 2 } },
-  modal: { max: 20, perCategory: { componente: 6, guia: 6, api: 8, outros: 4, icone: 4 } }
+/**
+ * Popover: prévia curta, equilibrada por categoria (propriedades não afogam o resto) e com o total para
+ * "Ver todos". Modal: todos os resultados em ordem de relevância, mostrados aos poucos.
+ */
+const POPOVER_LIMITS: { max: number; perCategory: Record<SearchCategory, number> } = {
+  max: 8,
+  perCategory: { componente: 3, guia: 3, api: 4, sample: 2, outros: 2, icone: 2 }
 };
+
+/** Quantos resultados o modal mostra de cada vez ("Mostrar mais" acrescenta o mesmo tanto). */
+export const SEARCH_MODAL_PAGE_SIZE = 50;
 
 /** Ícones só aparecem com 3+ caracteres: "a" ou "ar" casariam centenas deles. */
 const MIN_ICON_QUERY = 3;
@@ -100,10 +115,10 @@ export class SearchService {
     return this.miniSearch ? this.loadChunk('icons').catch(() => undefined) : Promise.resolve();
   }
 
-  search(query: string, variant: SearchVariant = 'popover'): Array<SearchResult> {
+  search(query: string, variant: SearchVariant = 'popover', limit = SEARCH_MODAL_PAGE_SIZE): SearchOutcome {
     const text = (query || '').trim();
 
-    if (!this.miniSearch || text.length < MIN_QUERY) return [];
+    if (!this.miniSearch || text.length < MIN_QUERY) return { results: [], total: 0 };
 
     const normalizedQuery = normalizeText(text);
     const withIcons = text.length >= MIN_ICON_QUERY;
@@ -130,7 +145,8 @@ export class SearchService {
       .filter((item): item is { doc: SearchDoc; score: number } => !!item.doc)
       .sort((a, b) => b.score - a.score);
 
-    return this.limit(ranked, variant).map(({ doc, score }) => ({
+    const visible = variant === 'popover' ? this.balance(ranked) : ranked.slice(0, limit);
+    const results = visible.map(({ doc, score }) => ({
       id: doc.id,
       type: doc.type,
       typeLabel: SEARCH_TYPE_LABEL[doc.type],
@@ -143,6 +159,8 @@ export class SearchService {
       excerpt: buildExcerpt(doc.text, terms),
       score
     }));
+
+    return { results, total: ranked.length };
   }
 
   /** Consulta igual ao nome do componente (`po-button`, `PoButton`) sobe o componente ao topo. */
@@ -157,18 +175,18 @@ export class SearchService {
     );
   }
 
-  private limit(items: Array<{ doc: SearchDoc; score: number }>, variant: SearchVariant) {
-    const { max, perCategory } = LIMITS[variant];
+  /** Prévia do popover: respeita o limite por categoria e o total. */
+  private balance(items: Array<{ doc: SearchDoc; score: number }>) {
     const used: Partial<Record<SearchCategory, number>> = {};
     const result: Array<{ doc: SearchDoc; score: number }> = [];
 
     for (const item of items) {
       const category = CATEGORY[item.doc.type];
 
-      if ((used[category] ?? 0) >= perCategory[category]) continue;
+      if ((used[category] ?? 0) >= POPOVER_LIMITS.perCategory[category]) continue;
       used[category] = (used[category] ?? 0) + 1;
       result.push(item);
-      if (result.length >= max) break;
+      if (result.length >= POPOVER_LIMITS.max) break;
     }
 
     return result;
@@ -202,6 +220,8 @@ export class SearchService {
 
     this.pending.set(true);
     await this.loadChunk('api').catch(() => undefined);
+    // samples vêm num chunk próprio, depois da API
+    await this.loadChunk('samples').catch(() => undefined);
     this.pending.set(false);
   }
 

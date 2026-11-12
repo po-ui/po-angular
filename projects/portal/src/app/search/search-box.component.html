@@ -35,10 +35,12 @@
   >
     <app-search-results
       [query]="query()"
+      [typing]="typing()"
       variant="popover"
       [listId]="listId"
       (resultSelected)="onSelect($event)"
       (focusInput)="focusInput()"
+      (viewAll)="viewAll()"
     ></app-search-results>
   </po-popover>
 </div>

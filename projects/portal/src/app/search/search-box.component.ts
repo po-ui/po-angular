@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
 
 import { PoPopoverComponent, PoSearchComponent } from '@po-ui/ng-components';
 
@@ -8,8 +17,8 @@ import { SearchNavigationService } from './search-navigation.service';
 import { SearchResultsComponent } from './search-results.component';
 import { SearchResult } from './search.model';
 import { shortcutLabel } from './search-shortcut';
-
-export const SEARCH_DEBOUNCE_MS = 150;
+import { SEARCH_DEBOUNCE_MS } from './search.model';
+import { SearchService } from './search.service';
 
 /**
  * Campo de busca do header (à esquerda do botão Github) com popover de resultados.
@@ -26,6 +35,7 @@ export class SearchBoxComponent implements OnDestroy {
   private readonly navigation = inject(SearchNavigationService);
   private readonly analytics = inject(SearchAnalyticsService);
   private readonly launcher = inject(SearchLauncherService);
+  private readonly service = inject(SearchService);
 
   @ViewChild('field', { static: true }) field!: ElementRef<HTMLElement>;
   @ViewChild('poSearch', { static: true }) poSearch!: PoSearchComponent;
@@ -39,6 +49,8 @@ export class SearchBoxComponent implements OnDestroy {
   readonly query = signal('');
   readonly raw = signal('');
   readonly focused = signal(false);
+  /** Digitou algo novo e a busca ainda não rodou (debounce): o painel mostra o skeleton. */
+  readonly typing = computed(() => this.raw().trim().length >= 2 && this.raw().trim() !== this.query().trim());
 
   private popoverOpen = false;
   private timer?: ReturnType<typeof setTimeout>;
@@ -67,6 +79,7 @@ export class SearchBoxComponent implements OnDestroy {
 
   onFocus(): void {
     this.focused.set(true);
+    void this.service.load();
     this.analytics.track({ name: 'search_open', via: 'header', surface: 'popover' });
 
     if (this.raw().trim().length >= 2) {
@@ -102,6 +115,15 @@ export class SearchBoxComponent implements OnDestroy {
     if (next) {
       this.close('outside');
     }
+  }
+
+  /** "Ver todos" do popover: abre o modal já com a consulta. */
+  viewAll(): void {
+    const query = this.raw().trim();
+
+    this.selected = true;
+    this.close();
+    this.launcher.open({ via: 'header', query });
   }
 
   focusInput(): void {

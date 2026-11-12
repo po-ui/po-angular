@@ -1,4 +1,10 @@
-<div class="search-results" [id]="listId()" (keydown)="onKeydown($event)" (click)="onClick()">
+<div
+  class="search-results"
+  [id]="listId()"
+  [attr.aria-busy]="state() === 'loading'"
+  (keydown)="onKeydown($event)"
+  (click)="onClick()"
+>
   <div class="search-results-live" role="status" aria-live="polite">{{ liveMessage() }}</div>
 
   @switch (state()) {
@@ -6,10 +12,23 @@
       <p class="search-results-message">Digite ao menos 2 caracteres para buscar em todo o portal.</p>
     }
     @case ('loading') {
-      <div class="search-results-loading" aria-busy="true">
-        <po-skeleton p-width="100%" p-height="20px"></po-skeleton>
-        <po-skeleton p-width="80%" p-height="14px"></po-skeleton>
-        <po-skeleton p-width="100%" p-height="20px"></po-skeleton>
+      <div class="search-skeleton">
+        @for (row of skeletonRows; track row) {
+          <div class="search-skeleton-item">
+            <div class="search-skeleton-head">
+              <po-skeleton p-width="45%" p-height="18px" [p-animation]="skeletonAnimation"></po-skeleton>
+              <po-skeleton
+                p-width="72px"
+                p-height="18px"
+                p-border-radius="12px"
+                [p-animation]="skeletonAnimation"
+              ></po-skeleton>
+            </div>
+            <po-skeleton p-width="30%" p-height="12px" [p-animation]="skeletonAnimation"></po-skeleton>
+            <po-skeleton p-width="100%" p-height="12px" [p-animation]="skeletonAnimation"></po-skeleton>
+            <po-skeleton p-width="75%" p-height="12px" [p-animation]="skeletonAnimation"></po-skeleton>
+          </div>
+        }
       </div>
     }
     @case ('error') {
@@ -48,6 +67,25 @@
           </div>
         </ng-template>
       </po-list-view>
+      @if (hidden() > 0) {
+        <div class="search-results-footer">
+          @if (variant() === 'popover') {
+            <po-button
+              p-kind="tertiary"
+              p-size="small"
+              [p-label]="'Ver todos os ' + total() + ' resultados'"
+              (p-click)="viewAll.emit()"
+            ></po-button>
+          } @else {
+            <po-button
+              p-kind="secondary"
+              p-size="small"
+              [p-label]="'Mostrar mais (' + hidden() + ' restantes)'"
+              (p-click)="showMore()"
+            ></po-button>
+          }
+        </div>
+      }
       @if (service.pending()) {
         <p class="search-results-more">Carregando mais resultados…</p>
       }

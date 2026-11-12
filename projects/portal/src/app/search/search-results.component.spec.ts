@@ -24,7 +24,15 @@ const core: SearchChunk = {
       section: 'PoButtonComponent',
       fragment: 'p-kind',
       text: 'Estilo visual do botão.'
-    }
+    },
+    ...Array.from({ length: 60 }, (_, i) => ({
+      id: `comp-${i}#p-helper`,
+      type: 'propriedade' as const,
+      title: `comp-${i} › p-helper`,
+      page: 0,
+      fragment: 'p-helper',
+      text: 'Ajuda.'
+    }))
   ]
 };
 
@@ -119,5 +127,60 @@ describe('SearchResultsComponent', () => {
     const click = events.find(e => e.name === 'search_result_click');
 
     expect(click).toEqual(jasmine.objectContaining({ term: 'botao', position: 2, input: 'mouse' }));
+  });
+
+  it('enquanto digita mostra o skeleton (aria-busy) no lugar da lista e anuncia "Buscando"', async () => {
+    await service.load();
+    await setQuery('botao');
+    expect(root().querySelector('po-list-view')).not.toBeNull();
+
+    fixture.componentRef.setInput('typing', true);
+    fixture.detectChanges();
+
+    expect(root().querySelector('po-list-view')).toBeNull();
+    expect(root().querySelectorAll('.search-skeleton-item').length).toBe(3);
+    expect(root().querySelector('.search-results').getAttribute('aria-busy')).toBe('true');
+    expect(root().querySelector('[aria-live="polite"]').textContent).toContain('Buscando');
+
+    fixture.componentRef.setInput('typing', false);
+    fixture.detectChanges();
+
+    expect(root().querySelector('.search-skeleton')).toBeNull();
+    expect(root().querySelector('.search-results').getAttribute('aria-busy')).toBe('false');
+  });
+
+  it('popover com muitos resultados mostra a prévia e "Ver todos os N resultados"', async () => {
+    await service.load();
+    await setQuery('p-helper');
+
+    const viewAll = jasmine.createSpy('viewAll');
+
+    fixture.componentInstance.viewAll.subscribe(viewAll);
+    const footer = root().querySelector<HTMLElement>('.search-results-footer po-button button');
+
+    expect(root().querySelectorAll('.po-list-view-item-wrapper').length).toBeLessThan(10);
+    expect(footer.textContent).toContain(`Ver todos os ${fixture.componentInstance.total()} resultados`);
+    footer.click();
+    expect(viewAll).toHaveBeenCalledTimes(1);
+  });
+
+  it('modal mostra de 50 em 50 e "Mostrar mais" revela o resto', async () => {
+    fixture.componentRef.setInput('variant', 'modal');
+    await service.load();
+    await setQuery('p-helper');
+
+    const total = fixture.componentInstance.total();
+
+    expect(total).toBeGreaterThanOrEqual(60);
+    expect(root().querySelectorAll('.po-list-view-item-wrapper').length).toBe(50);
+
+    root().querySelector<HTMLElement>('.search-results-footer po-button button').click();
+    fixture.detectChanges();
+
+    expect(root().querySelectorAll('.po-list-view-item-wrapper').length).toBe(Math.min(100, total));
+
+    // consulta nova volta a 50
+    await setQuery('p-helpe');
+    expect(fixture.componentInstance.shown()).toBe(50);
   });
 });

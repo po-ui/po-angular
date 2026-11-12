@@ -1,10 +1,20 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, inject, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  computed,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+  output
+} from '@angular/core';
 
-import { PoListViewFieldProperties } from '@po-ui/ng-components';
+import { PoListViewFieldProperties, PoSkeletonAnimation } from '@po-ui/ng-components';
 
 import { SearchAnalyticsService } from './search-analytics.service';
 import { SearchResult } from './search.model';
-import { SearchService, SearchVariant } from './search.service';
+import { SEARCH_MODAL_PAGE_SIZE, SearchService, SearchVariant } from './search.service';
 
 const ITEM_SELECTOR = '.po-list-view-item-wrapper[tabindex="0"]';
 /** Consulta "estável" para analytics: sem digitar por este tempo. */
@@ -29,12 +39,22 @@ export class SearchResultsComponent {
   /** Consulta já com debounce (quem digita controla). */
   readonly query = input('');
   readonly variant = input<SearchVariant>('popover');
+  /** O usuário ainda está digitando: a consulta acima está atrasada (debounce) e o skeleton aparece. */
+  readonly typing = input(false);
   /** `id` da lista, para `aria-controls` do campo. */
   readonly listId = input('search-results');
 
   readonly resultSelected = output<SearchResult>();
   /** ↑ no primeiro item: devolver o foco ao campo. */
   readonly focusInput = output<void>();
+  /** "Ver todos" no rodapé do popover: abrir o modal com a mesma consulta. */
+  readonly viewAll = output<void>();
+
+  /** Sem animação para quem pediu menos movimento no sistema. */
+  readonly skeletonAnimation = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    ? PoSkeletonAnimation.none
+    : PoSkeletonAnimation.shimmer;
+  readonly skeletonRows = [0, 1, 2];
 
   readonly fieldProperties: PoListViewFieldProperties = {
     title: 'title',
@@ -43,16 +63,29 @@ export class SearchResultsComponent {
 
   readonly trimmed = computed(() => this.query().trim());
 
-  readonly results = computed(() => {
+  /** Quantos resultados o modal mostra agora; volta ao tamanho de página a cada consulta nova. */
+  readonly shown = linkedSignal(() => {
+    this.trimmed();
+
+    return SEARCH_MODAL_PAGE_SIZE;
+  });
+
+  private readonly outcome = computed(() => {
     this.service.revision();
 
-    return this.service.search(this.trimmed(), this.variant());
+    return this.service.search(this.trimmed(), this.variant(), this.shown());
   });
+
+  readonly results = computed(() => this.outcome().results);
+  readonly total = computed(() => this.outcome().total);
+  /** Resultados que casaram mas não estão na lista (popover: prévia; modal: ainda não mostrados). */
+  readonly hidden = computed(() => this.total() - this.results().length);
 
   readonly state = computed<'short' | 'loading' | 'error' | 'empty' | 'results'>(() => {
     const status = this.service.status();
 
     if (status === 'error') return 'error';
+    if (this.typing()) return 'loading';
     if (this.trimmed().length < 2) return 'short';
     if (status !== 'ready') return 'loading';
 
@@ -63,11 +96,13 @@ export class SearchResultsComponent {
   readonly liveMessage = computed(() => {
     switch (this.state()) {
       case 'results':
-        return `${this.results().length} resultados`;
+        return this.hidden() > 0
+          ? `${this.results().length} de ${this.total()} resultados`
+          : `${this.results().length} resultados`;
       case 'empty':
         return `Nenhum resultado para ${this.trimmed()}`;
       case 'loading':
-        return 'Carregando a busca';
+        return 'Buscando';
       case 'error':
         return 'Não foi possível carregar a busca';
       default:
@@ -130,6 +165,10 @@ export class SearchResultsComponent {
       msToClick: this.queryStartedAt ? Date.now() - this.queryStartedAt : 0
     });
     this.resultSelected.emit(result);
+  }
+
+  showMore(): void {
+    this.shown.update(value => value + SEARCH_MODAL_PAGE_SIZE);
   }
 
   retry(): void {

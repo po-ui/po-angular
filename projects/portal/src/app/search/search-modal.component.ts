@@ -5,6 +5,7 @@ import {
   DestroyRef,
   ElementRef,
   ViewChild,
+  computed,
   inject,
   signal
 } from '@angular/core';
@@ -18,8 +19,8 @@ import { SearchNavigationService } from './search-navigation.service';
 import { SearchResultsComponent } from './search-results.component';
 import { SearchResult } from './search.model';
 import { shortcutLabel } from './search-shortcut';
-
-const DEBOUNCE_MS = 150;
+import { SEARCH_DEBOUNCE_MS } from './search.model';
+import { SearchService } from './search.service';
 
 /** Modal de busca (Ctrl/Cmd+K e ícone no mobile). Esc fecha; o `po-modal` devolve o foco a quem o tinha. */
 @Component({
@@ -34,6 +35,7 @@ export class SearchModalComponent {
   private readonly analytics = inject(SearchAnalyticsService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly service = inject(SearchService);
 
   @ViewChild('modal', { static: true }) modal!: PoModalComponent;
   @ViewChild('poSearch') poSearch?: PoSearchComponent;
@@ -45,6 +47,7 @@ export class SearchModalComponent {
   readonly literals = { search: 'Buscar no portal' };
   readonly query = signal('');
   readonly raw = signal('');
+  readonly typing = computed(() => this.raw().trim().length >= 2 && this.raw().trim() !== this.query().trim());
 
   isOpen = false;
   private selected = false;
@@ -67,8 +70,11 @@ export class SearchModalComponent {
 
     this.isOpen = true;
     this.selected = false;
-    this.raw.set('');
-    this.query.set('');
+    const initial = request.query?.trim() ?? '';
+
+    this.raw.set(initial);
+    this.query.set(initial);
+    void this.service.load();
     this.analytics.track({
       name: 'search_open',
       via: request.via,
@@ -79,7 +85,13 @@ export class SearchModalComponent {
     // A abertura vem do teclado (fora do template): o OnPush precisa ser avisado.
     this.cdr.detectChanges();
     // O `po-modal` renderiza o conteúdo depois do open(): foca o campo no próximo ciclo.
-    setTimeout(() => this.focusInput());
+    setTimeout(() => {
+      if (initial && this.poSearch) {
+        this.poSearch.poSearchInput.nativeElement.value = initial;
+      }
+      this.focusInput();
+      this.cdr.detectChanges();
+    });
   }
 
   onChange(value: string): void {
@@ -87,7 +99,7 @@ export class SearchModalComponent {
 
     this.raw.set(text);
     clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.query.set(text), DEBOUNCE_MS);
+    this.timer = setTimeout(() => this.query.set(text), SEARCH_DEBOUNCE_MS);
   }
 
   onKeydown(event: KeyboardEvent): void {

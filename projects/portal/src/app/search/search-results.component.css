@@ -57,3 +57,42 @@
   color: var(--color-neutral-dark-95, inherit);
   font-weight: 600;
 }
+
+.search-results-footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xs, 8px);
+}
+
+/* Skeleton com a mesma estrutura dos itens do list-view: título + tag, página e trecho. */
+.search-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px;
+}
+
+.search-skeleton-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 24px;
+  border: 1px solid var(--color-neutral-light-20);
+  border-radius: var(--border-radius-lg, 8px);
+  background-color: var(--color-neutral-light-00, transparent);
+}
+
+.search-skeleton-item po-skeleton {
+  display: block;
+}
+
+.search-skeleton-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.search-skeleton-head po-skeleton:first-child {
+  flex: 1 1 45%;
+}
