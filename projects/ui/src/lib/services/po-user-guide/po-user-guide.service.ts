@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { AnimaliaIconDictionary } from '../../components/po-icon/po-icon-dictionary';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { applyCspNonce } from '../../utils/csp-nonce';
 
 import { PoUserGuideBaseService } from './po-user-guide-base.service';
 import { PoUserGuideScrollLock, resolveScrollLockMode } from './po-user-guide-scroll-lock';
@@ -95,9 +96,7 @@ export class PoUserGuideService extends PoUserGuideBaseService {
     }
 
     const style = document.createElement('style');
-    if (this.cspNonce) {
-      style.setAttribute('nonce', this.cspNonce);
-    }
+    applyCspNonce(style, this.cspNonce);
     style.dataset['poUserGuideStyles'] = 'true';
     style.textContent = `.po-user-guide-popover { font-family: var(--font-family-theme, system-ui, -apple-system, sans-serif); }`;
     document.head.appendChild(style);

@@ -3,6 +3,7 @@ import { CSP_NONCE, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { PoCodeEditorComponent } from './po-code-editor.component';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
+import { disposeMonacoCspCompat } from './po-code-editor-csp-compat';
 
 describe('PoCodeEditorComponent', () => {
   let component: PoCodeEditorComponent;
@@ -368,6 +369,36 @@ describe('PoCodeEditorComponent - CSP nonce:', () => {
 
     it('should not include cspNonce when CSP_NONCE is null', () => {
       expect('cspNonce' in createComponent(null).getLoaderConfig()).toBeFalse();
+    });
+  });
+
+  describe('installCspCompat:', () => {
+    const isInstalled = () => !!(window as any).__poCodeEditorCspCompat;
+    let previousEnvironment: any;
+
+    beforeEach(() => {
+      previousEnvironment = (window as any).MonacoEnvironment;
+      disposeMonacoCspCompat();
+    });
+
+    afterEach(() => {
+      disposeMonacoCspCompat();
+      (window as any).MonacoEnvironment = previousEnvironment;
+    });
+
+    it('should install the Monaco CSP compatibility layer when CSP_NONCE is provided', () => {
+      createComponent('test-nonce').installCspCompat();
+
+      expect(isInstalled()).toBeTrue();
+      expect(typeof (window as any).MonacoEnvironment.createTrustedTypesPolicy).toBe('function');
+    });
+
+    it('should not install the Monaco CSP compatibility layer when CSP_NONCE is not provided', () => {
+      createComponent().installCspCompat();
+      createComponent(null).installCspCompat();
+      createComponent('').installCspCompat();
+
+      expect(isInstalled()).toBeFalse();
     });
   });
 });

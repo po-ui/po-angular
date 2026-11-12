@@ -12,10 +12,11 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
+import { installMonacoCspCompat } from './po-code-editor-csp-compat';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
-import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
+import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 import { PoCodeEditorSuggestionService } from './po-code-editor-suggestion.service';
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
 
 // variáveis relacionadas ao Monaco
 let loadedMonaco: boolean = false;
@@ -106,29 +107,31 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     } else {
       loadedMonaco = true;
       loadPromise = new Promise<void>((resolve: any) => {
-        /* istanbul ignore next */
-        const onGotAmdLoader: any = () => {
-          (<any>window).require.config(this.getLoaderConfig());
-          (<any>window).require(['vs/editor/editor.main'], () => {
-            setTimeout(() => {
-              if (this.el.nativeElement.offsetWidth) {
-                this.registerCustomLanguage();
-                this.initMonaco(this.getOptions());
-              } else {
-                this.canLoad = true;
-              }
-              resolve();
-            });
-          });
-        };
+        if (!(<any>globalThis).require) {
+          this.installCspCompat();
 
-        if (!(<any>window).require) {
           const loaderScript: HTMLScriptElement = this.createLoaderScript();
-          loaderScript.addEventListener('load', onGotAmdLoader);
+          loaderScript.addEventListener('load', () => this.onGotAmdLoader(resolve));
           document.body.appendChild(loaderScript);
         }
       });
     }
+  }
+
+  /* istanbul ignore next */
+  private onGotAmdLoader(resolve: () => void): void {
+    (<any>globalThis).require.config(this.getLoaderConfig());
+    (<any>globalThis).require(['vs/editor/editor.main'], () => {
+      setTimeout(() => {
+        if (this.el.nativeElement.offsetWidth) {
+          this.registerCustomLanguage();
+          this.initMonaco(this.getOptions());
+        } else {
+          this.canLoad = true;
+        }
+        resolve();
+      });
+    });
   }
 
   ngDoCheck() {
@@ -249,6 +252,15 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
           this.codeEditorRegister.language
         );
       }
+    }
+  }
+
+  private installCspCompat(): void {
+    if (this.cspNonce) {
+      installMonacoCspCompat({
+        nonce: this.cspNonce,
+        monacoBaseUrl: new URL('./assets/monaco/vs/', document.baseURI).href
+      });
     }
   }
 
