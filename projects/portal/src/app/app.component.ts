@@ -19,6 +19,7 @@ import { firstValueFrom } from 'rxjs';
 import { poThemeDefault, PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
 import { AppearancePopoverComponent } from './shared/appearance-popover/appearance-popover.component';
 import { VersionService } from './shared/version.service';
+import { CopyLinkService } from './shared/copy-link.service';
 import { DeepLinkScrollService } from './shared/deep-link-scroll.service';
 import { SearchLauncherService } from './search/search-launcher.service';
 import { listenSearchShortcut } from './search/search-shortcut';
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly zone = inject(NgZone);
   private readonly searchLauncher = inject(SearchLauncherService);
   private readonly deepLinkScroll = inject(DeepLinkScrollService);
+  private readonly copyLink = inject(CopyLinkService);
   private removeSearchShortcut?: () => void;
 
   @ViewChild(AppearancePopoverComponent) appearancePopover!: AppearancePopoverComponent;
@@ -56,6 +58,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     // Links com #id (busca, guias, samples): rola só a área de conteúdo, sem esconder o título da página.
     this.deepLinkScroll.start();
+    // Botão "Copiar link" ao lado de cada propriedade, interface, sample e título de guia.
+    this.copyLink.start();
 
     // Ctrl+K / Cmd+K abre a busca (ignora o editor Monaco).
     this.removeSearchShortcut = listenSearchShortcut(this.zone, request => this.searchLauncher.open(request));

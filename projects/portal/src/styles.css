@@ -815,3 +815,32 @@ sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-conten
   outline: 2px solid var(--color-action-default);
   outline-offset: 2px;
 }
+
+/* Botão "Copiar link" ao lado de títulos/itens com id (CopyLinkService): aparece no hover/foco. */
+.copy-link {
+  display: inline-flex;
+  margin-left: 8px;
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity 120ms ease-in;
+  user-select: none;
+}
+
+[data-copy-link-target]:hover .copy-link,
+.copy-link:focus-within,
+.copy-link.copy-link-copied {
+  opacity: 1;
+}
+
+/* Tela de toque: não há hover, então fica sempre visível. */
+@media (hover: none) and (pointer: coarse) {
+  .copy-link {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-link {
+    transition: none;
+  }
+}
