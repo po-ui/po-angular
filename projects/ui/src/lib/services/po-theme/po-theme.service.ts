@@ -1,7 +1,8 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, Optional, Renderer2, RendererFactory2 } from '@angular/core';
 
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
+import { applyCspNonce } from '../../utils/csp-nonce';
 import { getA11yDefaultSize, getA11yLevel, PoUtils } from '../../utils/util';
 import { PoThemeA11yEnum } from './enum/po-theme-a11y.enum';
 import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
@@ -54,7 +55,8 @@ export class PoThemeService {
 
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
-    rendererFactory: RendererFactory2
+    rendererFactory: RendererFactory2,
+    @Optional() @Inject(CSP_NONCE) private readonly cspNonce?: string | null
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
@@ -332,6 +334,7 @@ export class PoThemeService {
     let styleElement = this.document.head.querySelector('#baseStyle');
     if (!styleElement) {
       styleElement = this.renderer.createElement('style');
+      applyCspNonce(styleElement, this.cspNonce, this.renderer);
       styleElement.id = 'baseStyle';
       this.renderer.appendChild(styleElement, this.renderer.createText(styleCss));
       this.renderer.insertBefore(this.document.head, styleElement, this.document.head.firstChild);
@@ -536,6 +539,7 @@ export class PoThemeService {
    */
   private createStyleElement(css: string, id: string): HTMLStyleElement {
     const styleElement = this.renderer.createElement('style');
+    applyCspNonce(styleElement, this.cspNonce, this.renderer);
     styleElement.id = id;
     this.renderer.appendChild(styleElement, this.renderer.createText(css));
     return styleElement;
