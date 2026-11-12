@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export type Theme = 'light' | 'dark' | 'deprecated-light' | 'deprecated-dark';
 export const THEMES: Theme[] = ['light', 'dark', 'deprecated-light', 'deprecated-dark'];
@@ -84,4 +84,44 @@ export async function forcePseudoStates(page: Page): Promise<void> {
     }
   }
   await freezeAnimations(page);
+}
+
+/**
+ * Falha se algum grid cortar conteúdo: (1) algum elemento dentro de uma célula passa da borda da célula,
+ * (2) a célula passa da borda do #stage (que é o que o screenshot captura), (3) há rolagem em #stage ou nas células.
+ * Tolerância de 1 px (arredondamento). Roda em todo grid, então pega o problema em componentes novos.
+ */
+export async function assertGridNotClipped(page: Page): Promise<void> {
+  const problems = await page.evaluate(() => {
+    const out: string[] = [];
+    const stage = document.querySelector('#stage') as HTMLElement;
+    const sr = stage.getBoundingClientRect();
+    if (stage.scrollWidth > stage.clientWidth + 1 || stage.scrollHeight > stage.clientHeight + 1) {
+      out.push(`#stage rola: ${stage.scrollWidth}x${stage.scrollHeight} > ${stage.clientWidth}x${stage.clientHeight}`);
+    }
+    document.querySelectorAll<HTMLElement>('#stage .cell').forEach(cell => {
+      const caption = cell.querySelector('.caption')?.textContent?.split('\n').join(' | ') ?? '?';
+      const cr = cell.getBoundingClientRect();
+      if (cr.right > sr.right + 1 || cr.bottom > sr.bottom + 1) out.push(`célula fora do #stage: ${caption}`);
+      if (cell.scrollWidth > cell.clientWidth + 1) out.push(`célula rola na horizontal: ${caption}`);
+      for (const el of Array.from(cell.querySelectorAll<HTMLElement>('*'))) {
+        const r = el.getBoundingClientRect();
+        // decorativos (aria-hidden, ex.: pontos do glow, posicionados por offset-path) não contam
+        if (r.width === 0 || r.height === 0 || el.closest('[aria-hidden="true"]')) continue;
+        if (r.right > cr.right + 1 || r.bottom > cr.bottom + 1 || r.left < cr.left - 1) {
+          out.push(`<${el.tagName.toLowerCase()} class="${el.className}"> passa da célula: ${caption}`);
+          break;
+        }
+      }
+    });
+    return out;
+  });
+  expect(problems, `conteúdo cortado no grid:\n${problems.join('\n')}`).toEqual([]);
+}
+
+/** Fim comum de todo teste de grid: força estados, confere cortes e compara o snapshot do #stage. */
+export async function expectGridScreenshot(page: Page, name: string): Promise<void> {
+  await forcePseudoStates(page);
+  await assertGridNotClipped(page);
+  await expect(page.locator('#stage')).toHaveScreenshot(name);
 }

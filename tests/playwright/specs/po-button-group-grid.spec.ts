@@ -1,6 +1,6 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 
-import { forcePseudoStates, gridUrl, open, THEMES } from './helpers';
+import { expectGridScreenshot, gridUrl, open, THEMES } from './helpers';
 import { buildItems, CONTENTS, pointerTarget, SIZES, STATES_BY_TOGGLE, TOGGLES } from './po-button-group.matrix';
 
 /**
@@ -25,14 +25,12 @@ for (const theme of THEMES) {
                 toggle,
                 items: buildItems(c, toggle, state),
                 force: target?.force,
-                forceItem: target?.item,
-                width: 480
+                forceItem: target?.item
               };
             })
           );
-          const stage = await open(page, gridUrl(theme, rows));
-          await forcePseudoStates(page);
-          await expect(stage).toHaveScreenshot(`${id}.png`);
+          await open(page, gridUrl(theme, rows));
+          await expectGridScreenshot(page, `${id}.png`);
         });
       }
   });

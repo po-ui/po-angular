@@ -23,12 +23,12 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
   template: `
     <div id="stage" [style.width]="width">
       @if (component === 'grid') {
-        @for (row of rows; track $index) {
-          <div class="row">
+        <div class="grid" [style.gridTemplateColumns]="columns">
+          @for (row of rows; track $index) {
             @for (cell of row; track $index) {
               <div
                 class="cell"
-                [style.width.px]="cell.width ?? 300"
+                [style.width.px]="cell.width"
                 [attr.data-force]="cell.force"
                 [attr.data-force-item]="cell.forceItem"
               >
@@ -53,8 +53,8 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
                 }
               </div>
             }
-          </div>
-        }
+          }
+        </div>
       } @else if (component === 'button-group') {
         <po-button-group [p-buttons]="items" [p-toggle]="toggle" [p-size]="q.size"></po-button-group>
       } @else {
@@ -77,9 +77,12 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
       padding: 24px;
       background: var(--color-neutral-light-00, #fff);
     }
-    .row {
-      display: flex;
+    /* Colunas alinhadas e do tamanho do conteúdo mais largo de cada coluna (max-content): nada é cortado. */
+    .grid {
+      display: grid;
     }
+    /* Sem \`width\` a célula cresce com o conteúdo. Com \`width\` (px) a largura é fixa (ex.: testar quebra de
+       linha); se o conteúdo não couber, o assertGridNotClipped do teste falha em vez de cortar em silêncio. */
     .cell {
       box-sizing: border-box;
       padding: 8px;
@@ -103,6 +106,8 @@ class HarnessComponent {
   readonly rows = JSON.parse(this.params.get('rows') ?? '[]').map((row: Array<any>) =>
     row.map(cell => (cell.items ? { ...cell, items: this.withActions(cell.items) } : cell))
   );
+  // colunas = nº de células da 1ª linha
+  readonly columns = `repeat(${this.rows[0]?.length ?? 1}, max-content)`;
   readonly width = { 'button-group': '480px', grid: 'max-content' }[this.component] ?? '320px';
   readonly toggle = this.params.get('toggle') ?? 'none';
   readonly items = this.withActions(JSON.parse(this.params.get('items') ?? '[]'));

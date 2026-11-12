@@ -1,6 +1,6 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 
-import { forcePseudoStates, gridUrl, open, THEMES } from './helpers';
+import { expectGridScreenshot, gridUrl, open, THEMES } from './helpers';
 import { CONTENTS, SIZES, STATES, stateProps, VARIANTS } from './po-button.matrix';
 
 /**
@@ -20,6 +20,7 @@ for (const theme of THEMES) {
               kind: v.kind,
               danger: v.danger,
               size,
+              width: 300, // fixa: o label longo precisa QUEBRAR linha (parte do que se testa)
               icon: c.icon,
               label: c.label,
               aria: c.aria,
@@ -27,9 +28,8 @@ for (const theme of THEMES) {
             }))
           )
         );
-        const stage = await open(page, gridUrl(theme, rows));
-        await forcePseudoStates(page);
-        await expect(stage).toHaveScreenshot(`${theme}--${v.name}.png`);
+        await open(page, gridUrl(theme, rows));
+        await expectGridScreenshot(page, `${theme}--${v.name}.png`);
       });
     }
   });
