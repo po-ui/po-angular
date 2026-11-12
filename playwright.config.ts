@@ -6,6 +6,8 @@ export default defineConfig({
   testDir: './tests/playwright/specs',
   // Baselines sem sufixo de plataforma: a referência é SEMPRE a gerada em Linux (CI / Docker).
   snapshotPathTemplate: '{testDir}/../__snapshots__/{testFileName}/{arg}{ext}',
+  // Grids são pesados (um snapshot de até 2000 × 1200 px com 72 botões): 90 s por teste em vez dos 30 s padrão.
+  timeout: 90_000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   // Local: sem retry (queremos ver instabilidade). CI: 1 retry; o Playwright marca o teste como "flaky" no relatório,
@@ -15,9 +17,9 @@ export default defineConfig({
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   expect: {
     // threshold: 0 = tolerância zero de cor por pixel (o padrão 0.2 deixava passar opacity .9 no hover).
-    // timeout 15 s: os grids com glow (72 botões animados) levam mais de 5 s para estabilizar.
+    // timeout 30 s: os grids com glow (72 botões animados) levam mais de 5 s para estabilizar, e mais ainda com 4 grids em paralelo.
     toHaveScreenshot: {
-      timeout: 15_000,
+      timeout: 30_000,
       animations: 'disabled',
       caret: 'hide',
       scale: 'css',
