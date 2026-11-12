@@ -810,11 +810,6 @@ sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-conten
   height: 384px !important;
 }
 
-/* Deep link (busca global): o header é fixo, então o alvo da âncora não pode ficar embaixo dele. */
-[id] {
-  scroll-margin-top: 80px;
-}
-
 /* Alvo de um deep link vindo da busca: destaque curto para o olho achar o item. */
 .search-target-highlight {
   outline: 2px solid var(--color-action-default);
