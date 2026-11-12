@@ -63,6 +63,53 @@ const PO_CODE_EDITOR_THEME_DEFAULT = 'vs';
  * ]
  * ...
  * </pre>
+ *
+ * #### Content Security Policy (CSP)
+ *
+ * O `po-code-editor` é compatível com políticas de segurança restritivas (CSP) baseadas em *nonce*, sem a necessidade
+ * de `'unsafe-inline'` em `script-src`, `style-src`, `style-src-elem` ou `style-src-attr`.
+ *
+ * O *nonce* é obtido do token `CSP_NONCE` do Angular, ou do atributo `ngCspNonce` em um elemento do `body`
+ * (normalmente o `<app-root>`). Não existe configuração específica do PO UI para isso e não é necessário chamar
+ * nenhum método ou informar nenhuma propriedade no componente.
+ *
+ * ```
+ * <!-- index.html -->
+ * <app-root ngCspNonce="NONCE_DA_REQUISICAO"></app-root>
+ * ```
+ *
+ * ou
+ *
+ * ```
+ * import { CSP_NONCE } from '@angular/core';
+ *
+ * providers: [{ provide: CSP_NONCE, useValue: nonceDaRequisicao }]
+ * ```
+ *
+ * Quando o *nonce* é informado, o `po-code-editor`:
+ *
+ * - aplica o *nonce* no `<script>` do `loader.js` do Monaco e o repassa à configuração do *loader* (`cspNonce`), que
+ * o aplica nos scripts que ele mesmo carrega;
+ * - aplica o *nonce* nos elementos `<style>` criados pelo Monaco, inclusive no *shadow DOM* do menu de contexto;
+ * - aplica, via CSSOM (`element.style`), os estilos que o Monaco define no atributo `style` dos elementos (posição das
+ * linhas, números de linha, seleção, decorações e indicadores do modo de comparação), pois o *nonce* não se aplica a
+ * atributos.
+ *
+ * Esses ajustes valem apenas para os elementos criados pelo Monaco e não alteram o restante da aplicação.
+ *
+ * **Pontos de atenção**
+ *
+ * - O valor informado deve ser o mesmo *nonce* enviado na política (`'nonce-...'`) da requisição atual.
+ * - O Monaco é carregado apenas uma vez por carregamento da página, quando o primeiro `po-code-editor` é exibido.
+ * Por isso, o *nonce* deve estar disponível antes disso.
+ * - O Monaco deve ser servido a partir de `assets/monaco/vs`, como configurado pelo `ng add @po-ui/ng-code-editor`.
+ * - Quando o *nonce* não é informado, o componente se comporta como antes: nenhum ajuste é aplicado.
+ * - A política também precisa permitir os demais recursos do Monaco (por exemplo, `worker-src` e `font-src`). Valide
+ * a política utilizada em um ambiente de teste antes de aplicá-la em produção.
+ *
+ * > **Atenção:** não utilize `'unsafe-inline'` em `style-src`, `style-src-elem` ou `style-src-attr` para contornar
+ * > bloqueios do editor. Quando a diretiva possui um *nonce*, o navegador ignora o `'unsafe-inline'`; e, caso o *nonce*
+ * > seja removido para que ele valha, qualquer estilo injetado passa a ser aceito, o que enfraquece a política.
  */
 @Directive()
 export abstract class PoCodeEditorBaseComponent implements ControlValueAccessor {
