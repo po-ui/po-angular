@@ -14,6 +14,8 @@ import { PoHttpInterceptorBaseService } from './po-http-interceptor-base.service
  *  <file name='sample-po-http-interceptor-labs.component.ts'> </file>
  *  <file name='sample-po-http-interceptor-labs.component.html'> </file>
  * </example>
+ *
+ * @docsCategory interceptors
  */
 @Injectable({
   providedIn: 'root'

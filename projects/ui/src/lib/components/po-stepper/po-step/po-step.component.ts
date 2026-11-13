@@ -49,6 +49,8 @@ import { PoStepperStatus } from '../enums/po-stepper-status.enum';
  *
  * Acesse a [documentação do `po-stepper`](/documentation/po-stepper) para ter mais informações sobre o seu funcionamento
  * e exemplos de uso.
+ *
+ * @docsParent po-stepper
  */
 @Component({
   selector: 'po-step',

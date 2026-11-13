@@ -62,6 +62,7 @@ const PO_POPUP_ARROW_TO_POSITION: Record<string, string> = {
  *   <file name="sample-po-popup-email/sample-po-popup-email.component.css"> </file>
  * </example>
  *
+ * @docsCategory overlay
  */
 @Component({
   selector: 'po-popup',

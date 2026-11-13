@@ -55,6 +55,7 @@ import { PoPageJobSchedulerService } from './po-page-job-scheduler.service';
  *  <file name="sample-po-page-job-scheduler-flexible-navigation/sample-po-page-job-scheduler-flexible-navigation.component.ts"> </file>
  * </example>
  *
+ * @docsCategory pages
  */
 @Component({
   selector: 'po-page-job-scheduler',

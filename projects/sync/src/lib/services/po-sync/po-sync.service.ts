@@ -23,6 +23,8 @@ import { PoSyncSchema } from './interfaces/po-sync-schema.interface';
  * O `PoSyncService` é utilizado para configurar toda a base de dados que receberá as informações que serão
  * armazenadas *offline* vindas do servidor. Nele ocorre toda a preparação dos modelos de dados retornados por
  * cada consulta.
+ *
+ * @docsCategory services
  */
 @Injectable({
   providedIn: 'root'

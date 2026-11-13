@@ -109,6 +109,7 @@ const PO_SELECT_FIELD_VALUE_DEFAULT = 'value';
  * | `--color-disabled`                     | Cor principal no estado disabled                      | `var(--color-neutral-light-30)`                 |
  * | `--background-color-disabled`&nbsp;    | Cor de background no estado disabled                  | `var(--color-neutral-light-20)`                 |
  *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-select',

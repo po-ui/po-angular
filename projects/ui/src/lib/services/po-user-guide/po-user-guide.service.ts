@@ -29,6 +29,8 @@ type DriverFactory = (config: any) => any;
  *  <file name="sample-po-user-guide-onboarding/sample-po-user-guide-onboarding.component.html"> </file>
  *  <file name="sample-po-user-guide-onboarding/sample-po-user-guide-onboarding.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory services
  */
 @Injectable({
   providedIn: 'root'

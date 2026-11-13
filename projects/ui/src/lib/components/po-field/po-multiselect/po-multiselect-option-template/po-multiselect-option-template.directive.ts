@@ -30,6 +30,7 @@ import { Directive, TemplateRef, inject } from '@angular/core';
  * ...
  * ```
  *
+ * @docsParent po-multiselect
  */
 @Directive({
   selector: '[p-multiselect-option-template]',

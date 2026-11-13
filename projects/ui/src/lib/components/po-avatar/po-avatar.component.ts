@@ -22,6 +22,8 @@ import { PoAvatarBaseComponent } from './po-avatar-base.component';
  *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.ts"> </file>
  *  <file name="sample-po-avatar-business-card/sample-po-avatar-business-card.component.css"> </file>
  * </example>
+ *
+ * @docsCategory visual
  */
 @Component({
   selector: 'po-avatar',

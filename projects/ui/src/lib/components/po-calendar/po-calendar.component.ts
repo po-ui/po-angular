@@ -67,6 +67,8 @@ const providers = [
  *  <file name="sample-po-calendar-ticket-sales/sample-po-calendar-ticket-sales.component.html"> </file>
  *  <file name="sample-po-calendar-ticket-sales/sample-po-calendar-ticket-sales.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory date-time
  */
 @Component({
   selector: 'po-calendar',

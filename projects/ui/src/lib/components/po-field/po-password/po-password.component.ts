@@ -36,6 +36,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *   <file name="sample-po-password-reset/sample-po-password-reset.component.html"> </file>
  *   <file name="sample-po-password-reset/sample-po-password-reset.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-password',

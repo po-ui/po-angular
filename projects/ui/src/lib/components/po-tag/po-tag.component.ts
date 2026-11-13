@@ -33,6 +33,8 @@ const poTagTypeDefault = 'po-tag-' + PoTagType.Info;
  *  <file name="sample-po-tag-caption-tag-colors/sample-po-tag-caption-tag-colors.component.html"> </file>
  *  <file name="sample-po-tag-caption-tag-colors/sample-po-tag-caption-tag-colors.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory visual
  */
 @Component({
   selector: 'po-tag',

@@ -41,6 +41,7 @@ import { PoHeaderMenuItemComponent } from './po-header-menu-item/po-header-menu-
  *  <file name="sample-po-header-apps/sample-po-header-apps.component.ts"> </file>
  * </example>
  *
+ * @docsCategory navigation
  */
 
 @Component({

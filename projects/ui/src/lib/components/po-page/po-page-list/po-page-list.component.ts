@@ -44,6 +44,8 @@ import { PoPageListBaseComponent } from './po-page-list-base.component';
  *  <file name="sample-po-page-list-hiring-processes/sample-po-page-list-hiring-processes.component.ts"> </file>
  *  <file name="sample-po-page-list-hiring-processes/sample-po-page-list-hiring-processes.service.ts"> </file>
  * </example>
+ *
+ * @docsCategory pages
  */
 @Component({
   selector: 'po-page-list',

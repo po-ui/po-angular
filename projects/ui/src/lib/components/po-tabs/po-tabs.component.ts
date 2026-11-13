@@ -86,6 +86,8 @@ const poTabsMaxNumberOfTabs = 5;
  *  <file name="sample-po-tabs-business-conf/sample-po-tabs-business-conf.component.html"> </file>
  *  <file name="sample-po-tabs-business-conf/sample-po-tabs-business-conf.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory containers
  */
 @Component({
   selector: 'po-tabs',

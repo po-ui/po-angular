@@ -22,6 +22,8 @@ import { PoToolbarBaseComponent } from './po-toolbar-base.component';
  *  <file name="sample-po-toolbar-logged/sample-po-toolbar-logged.component.html"> </file>
  *  <file name="sample-po-toolbar-logged/sample-po-toolbar-logged.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-toolbar',

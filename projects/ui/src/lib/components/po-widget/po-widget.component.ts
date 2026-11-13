@@ -54,6 +54,7 @@ import {
  *  <file name="sample-po-widget-card/sample-po-widget-card.component.ts"> </file>
  * </example>
  *
+ * @docsCategory containers
  */
 @Component({
   selector: 'po-widget',

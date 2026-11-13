@@ -53,6 +53,8 @@ import { PoPageLoginService } from './po-page-login.service';
  *  <file name="sample-po-page-login-automatic-service/sample-po-page-login-automatic-service.component.html"> </file>
  *  <file name="sample-po-page-login-automatic-service/sample-po-page-login-automatic-service.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory auth
  */
 
 @Component({

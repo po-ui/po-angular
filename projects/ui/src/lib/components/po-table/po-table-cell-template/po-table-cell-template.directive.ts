@@ -64,6 +64,8 @@ import { Directive, TemplateRef } from '@angular/core';
  * ...
  * ```
  * > Observação: Sempre adicionar o **type** da coluna que deseja manipular com a directiva como `cellTemplate`
+ *
+ * @docsParent po-table
  */
 @Directive({
   selector: '[p-table-cell-template]',

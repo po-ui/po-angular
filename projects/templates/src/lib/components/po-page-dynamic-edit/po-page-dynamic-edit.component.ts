@@ -209,6 +209,8 @@ export const poPageDynamicEditLiteralsDefault = {
  *  <file name="sample-po-page-dynamic-edit-user/sample-po-page-dynamic-edit-user.component.html"> </file>
  *  <file name="sample-po-page-dynamic-edit-user/sample-po-page-dynamic-edit-user.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory dynamic
  */
 @Component({
   selector: 'po-page-dynamic-edit',

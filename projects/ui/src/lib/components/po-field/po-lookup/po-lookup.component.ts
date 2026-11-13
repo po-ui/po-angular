@@ -166,6 +166,8 @@ const providers = [
  *  <file name="sample-po-lookup-mask/sample-po-lookup-mask.component.ts"> </file>
  *  <file name="sample-po-lookup-mask/sample-po-lookup-mask.service.ts"> </file>
  * </example>
+ *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-lookup',

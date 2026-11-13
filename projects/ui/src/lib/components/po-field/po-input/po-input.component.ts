@@ -40,6 +40,8 @@ import { PoInputGeneric } from '../po-input-generic/po-input-generic';
  *  <file name="sample-po-input-mask-dynamic/sample-po-input-mask-dynamic.component.ts"> </file>
  *  <file name="sample-po-input-mask-dynamic/document-mask.ts"> </file>
  * </example>
+ *
+ * @docsCategory form
  */
 @Component({
   selector: 'po-input',

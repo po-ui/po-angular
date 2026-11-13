@@ -9,6 +9,8 @@ import { I18N_CONFIG } from './po-i18n-config-injection-token';
 
 /**
  * @docsExtends PoI18nBaseService
+ *
+ * @docsCategory services
  */
 
 @Injectable()

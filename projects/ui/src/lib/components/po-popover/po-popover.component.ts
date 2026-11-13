@@ -35,6 +35,8 @@ import { PoPopoverBaseComponent } from './po-popover-base.component';
  *   <file name="sample-po-popover-credit-card/sample-po-popover-credit-card.component.html"> </file>
  *   <file name="sample-po-popover-credit-card/sample-po-popover-credit-card.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory overlay
  */
 @Component({
   selector: 'po-popover',

@@ -6,6 +6,8 @@
  *
  * Essa classe deve ser estendida por uma classe que implemente cada um de seus métodos, adaptando os parâmetros de
  * acordo com a API do *backend* existente que se deseja comunicar.
+ *
+ * @docsCategory models
  */
 
 export abstract class PoDataTransform {

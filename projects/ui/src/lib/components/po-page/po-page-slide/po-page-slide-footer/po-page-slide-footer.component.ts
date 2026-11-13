@@ -15,6 +15,8 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
  *  </po-page-slide-footer>
  * </po-page-slide>
  * ```
+ *
+ * @docsParent po-page-slide
  */
 @Component({
   selector: 'po-page-slide-footer',

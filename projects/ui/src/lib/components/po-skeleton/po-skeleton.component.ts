@@ -48,6 +48,8 @@ import { PoSkeletonVariant } from './enums/po-skeleton-variant.enum';
  *  <file name="sample-po-skeleton-article/sample-po-skeleton-article.component.ts"> </file>
  *  <file name="sample-po-skeleton-article/sample-po-skeleton-article.component.css"> </file>
  * </example>
+ *
+ * @docsCategory feedback
  */
 @Component({
   selector: 'po-skeleton',

@@ -103,6 +103,8 @@ use([
  *  <file name="sample-po-chart-technology-skill/sample-po-chart-technology-skill.component.html"> </file>
  *  <file name="sample-po-chart-technology-skill/sample-po-chart-technology-skill.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory charts
  */
 
 @Component({

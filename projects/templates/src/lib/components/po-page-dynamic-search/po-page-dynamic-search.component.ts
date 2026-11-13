@@ -53,6 +53,8 @@ type UrlOrPoCustomizationFunction = string | (() => PoPageDynamicSearchOptions);
  *  <file name="sample-po-page-dynamic-search-hiring-processes/sample-po-page-dynamic-search-hiring-processes.component.ts"> </file>
  *  <file name="sample-po-page-dynamic-search-hiring-processes/sample-po-page-dynamic-search-hiring-processes.service.ts"> </file>
  * </example>
+ *
+ * @docsCategory dynamic
  */
 @Component({
   selector: 'po-page-dynamic-search',

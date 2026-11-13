@@ -27,6 +27,8 @@ const PO_BADGE_MAX_NOTIFICATIONS = 9;
  *  <file name="sample-po-badge-message/sample-po-badge-message.component.css"> </file>
  *  <file name="sample-po-badge-message/sample-po-badge-message.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory visual
  */
 @Component({
   selector: 'po-badge',

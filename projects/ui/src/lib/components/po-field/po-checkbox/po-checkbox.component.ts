@@ -38,6 +38,8 @@ import { PoHelperComponent } from '../../po-helper';
  *   <file name="sample-po-checkbox-acceptance-term/sample-po-checkbox-acceptance-term.component.html"> </file>
  *   <file name="sample-po-checkbox-acceptance-term/sample-po-checkbox-acceptance-term.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-checkbox',

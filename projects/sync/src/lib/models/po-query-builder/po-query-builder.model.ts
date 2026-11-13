@@ -29,6 +29,8 @@ import { PoSyncSchema } from '../../services/po-sync/interfaces/po-sync-schema.i
  *   .sort()
  *   .exec();
  * ```
+ *
+ * @docsCategory models
  */
 export class PoQueryBuilder {
   private fields: string;

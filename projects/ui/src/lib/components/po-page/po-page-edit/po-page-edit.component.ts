@@ -21,6 +21,8 @@ import { PoPageEditBaseComponent } from './po-page-edit-base.component';
  *  <file name="sample-po-page-edit-user/sample-po-page-edit-user.component.html"> </file>
  *  <file name="sample-po-page-edit-user/sample-po-page-edit-user.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory pages
  */
 @Component({
   selector: 'po-page-edit',

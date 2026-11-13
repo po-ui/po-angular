@@ -28,6 +28,9 @@ const PoNotificationFadeTime = 200;
  *  <file name="sample-po-notification-sales/sample-po-notification-sales.component.html"> </file>
  *  <file name="sample-po-notification-sales/sample-po-notification-sales.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory services
+ * @docsShortcut feedback
  */
 
 @Injectable({

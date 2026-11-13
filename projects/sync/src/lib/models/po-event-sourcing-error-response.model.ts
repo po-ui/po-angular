@@ -8,6 +8,8 @@ import { PoEventSourcingOperation } from './../services/po-event-sourcing/enums/
  *
  * > Pode ser utilizada em casos onde um item da fila é enviado ao servidor com inconsistência nos dados, por exemplo
  * uma operação de *delete* ou *update* sem o `id` do objeto.
+ *
+ * @docsCategory models
  */
 export class PoEventSourcingErrorResponse {
   /** Mensagem de erro. */

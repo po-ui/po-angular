@@ -15,6 +15,8 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
  *  </po-modal-footer>
  * </po-modal>
  * ```
+ *
+ * @docsParent po-modal
  */
 @Component({
   selector: 'po-modal-footer',

@@ -81,6 +81,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  *    }
  * }
  * ```
+ *
+ * @docsParent po-list-view
  */
 @Directive({
   selector: '[p-list-view-content-template]',

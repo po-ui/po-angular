@@ -23,6 +23,9 @@ import { PoDropListBaseDirective } from './po-drop-list-base.directive';
  *
  * > A diretiva não impõe nenhum estilo de layout (flex, grid etc.). O layout
  * > é responsabilidade do consumidor.
+ *
+ * @docsCategory directives
+ * @docsShortcut tables-lists
  */
 @Directive({
   selector: '[p-drop-list]',

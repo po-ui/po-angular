@@ -56,6 +56,7 @@ import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
  *  <file name="sample-po-theme-labs/sample-po-theme-labs.constant.ts"> </file>
  * </example>
  *
+ * @docsCategory services
  */
 @Injectable({
   providedIn: 'root'

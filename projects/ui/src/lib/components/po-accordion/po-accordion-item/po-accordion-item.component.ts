@@ -45,6 +45,8 @@ import { PoAccordionService } from '../services/po-accordion.service';
  *    this.item1.expand();
  *  }
  * ```
+ *
+ * @docsParent po-accordion
  */
 @Component({
   selector: 'po-accordion-item',

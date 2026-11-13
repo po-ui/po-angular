@@ -21,6 +21,7 @@ import { PoImageBaseComponent } from './po-image-base.component';
  *  <file name="sample-po-image-travel/sample-po-image-travel.component.ts"> </file>
  * </example>
  *
+ * @docsCategory visual
  */
 
 @Component({

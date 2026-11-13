@@ -81,6 +81,8 @@ export const PO_STORAGE_CONFIG_TOKEN = new InjectionToken('PO_STORAGE_CONFIG_TOK
  * })
  * export class AppModule {}
  * ```
+ *
+ * @docsCategory services
  */
 @Injectable({
   providedIn: 'root'

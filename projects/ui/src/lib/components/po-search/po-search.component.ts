@@ -71,6 +71,7 @@ const ID_SEARCH_BUTTON_CLEAN = 'search-button-clean';
  *  <file name="sample-po-search-fields-locate/sample-po-search-fields-locate.component.ts"> </file>
  * </example>
  *
+ * @docsCategory search-filters
  */
 @Component({
   selector: 'po-search',

@@ -38,6 +38,8 @@ const SPACE_BETWEEN_TOASTERS = 8;
  *  <file name="sample-po-toaster-labs/sample-po-toaster-labs.component.html"> </file>
  *  <file name="sample-po-toaster-labs/sample-po-toaster-labs.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory feedback
  */
 @Component({
   selector: 'po-toaster',

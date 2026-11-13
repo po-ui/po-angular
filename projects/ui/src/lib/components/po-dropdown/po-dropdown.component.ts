@@ -41,6 +41,8 @@ import { PoDropdownBaseComponent } from './po-dropdown-base.component';
  *  <file name="sample-po-dropdown-lazy-subitems/sample-po-dropdown-lazy-subitems.component.html"> </file>
  *  <file name="sample-po-dropdown-lazy-subitems/sample-po-dropdown-lazy-subitems.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory actions
  */
 @Component({
   selector: 'po-dropdown',

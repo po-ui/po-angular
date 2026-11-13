@@ -44,6 +44,8 @@ import { backNavigationAriaLabels, PoPageDefaultBaseComponent } from './po-page-
  *  <file name="sample-po-page-default-refresh/sample-po-page-default-refresh.component.html"> </file>
  *  <file name="sample-po-page-default-refresh/sample-po-page-default-refresh.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory pages
  */
 @Component({
   selector: 'po-page-default',

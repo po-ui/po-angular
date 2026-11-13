@@ -25,6 +25,9 @@ import { PoDialogType } from './enums/po-dialog.enum';
  *  <file name="sample-po-dialog-cancel-credit-card/sample-po-dialog-cancel-credit-card.component.html"> </file>
  *  <file name="sample-po-dialog-cancel-credit-card/sample-po-dialog-cancel-credit-card.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory services
+ * @docsShortcut feedback
  */
 @Injectable({
   providedIn: 'root'

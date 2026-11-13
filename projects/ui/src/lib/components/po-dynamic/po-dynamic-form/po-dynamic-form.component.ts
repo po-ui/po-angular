@@ -32,6 +32,7 @@ import { PoDynamicFormValidationService } from './po-dynamic-form-validation/po-
  *  <file name="sample-po-dynamic-form-container/sample-po-dynamic-form-container.service.ts"> </file>
  * </example>
  *
+ * @docsCategory dynamic
  */
 
 @Component({

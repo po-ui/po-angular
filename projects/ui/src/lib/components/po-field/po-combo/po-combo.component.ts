@@ -82,6 +82,8 @@ const poComboContainerOffset = 8;
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.html"> </file>
  *   <file name="sample-po-combo-hotels/sample-po-combo-hotels.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-combo',

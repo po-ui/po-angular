@@ -117,6 +117,8 @@ import { PoHelperComponent, PoHelperOptions } from '../../po-helper';
  *   <file name="sample-po-switch-order-reactive-form/sample-po-switch-order-reactive-form.component.html"> </file>
  *   <file name="sample-po-switch-order-reactive-form/sample-po-switch-order-reactive-form.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory selection
  */
 @Component({
   selector: 'po-switch',

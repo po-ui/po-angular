@@ -13,6 +13,8 @@ import { PoTabsService } from '../po-tabs.service';
 
 /**
  * @docsExtends PoTabBaseComponent
+ *
+ * @docsParent po-tabs
  */
 @Component({
   selector: 'po-tab',

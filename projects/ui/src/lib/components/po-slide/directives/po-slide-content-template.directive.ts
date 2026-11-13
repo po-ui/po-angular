@@ -42,6 +42,8 @@ import { Directive, TemplateRef } from '@angular/core';
  * ...
  *
  * ```
+ *
+ * @docsParent po-slide
  */
 @Directive({
   selector: '[p-slide-content-template]',

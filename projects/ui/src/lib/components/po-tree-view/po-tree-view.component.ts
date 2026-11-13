@@ -42,6 +42,8 @@ import { PoTreeViewKeyboardService } from './services/po-tree-view-keyboard.serv
  *  <file name="sample-po-tree-view-supermarket/sample-po-tree-view-supermarket.component.html"> </file>
  *  <file name="sample-po-tree-view-supermarket/sample-po-tree-view-supermarket.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory tables-lists
  */
 @Component({
   selector: 'po-tree-view',

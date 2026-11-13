@@ -21,6 +21,8 @@ import { PoLinkBaseComponent } from './po-link-base.component';
  *  <file name="sample-po-link-heroes/sample-po-link-heroes.component.html"> </file>
  *  <file name="sample-po-link-heroes/sample-po-link-heroes.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory actions
  */
 @Component({
   selector: 'po-link',

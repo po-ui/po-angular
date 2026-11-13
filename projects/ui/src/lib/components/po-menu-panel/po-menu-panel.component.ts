@@ -77,6 +77,8 @@ import { PoMenuPanelItemsService } from './services/po-menu-panel-items.service'
  *   <file name="sample-po-menu-panel-customer/sample-po-menu-panel-customer.component.html"> </file>
  *   <file name="sample-po-menu-panel-customer/sample-po-menu-panel-customer.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 
 @Component({

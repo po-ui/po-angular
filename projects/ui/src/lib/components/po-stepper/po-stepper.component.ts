@@ -47,6 +47,8 @@ import { PoStepperItem } from './po-stepper-item.interface';
  *  <file name="sample-po-stepper-steps/sample-po-stepper-steps.component.html"> </file>
  *  <file name="sample-po-stepper-steps/sample-po-stepper-steps.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory navigation
  */
 @Component({
   selector: 'po-stepper',

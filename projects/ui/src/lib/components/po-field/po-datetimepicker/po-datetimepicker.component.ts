@@ -67,6 +67,8 @@ const providers = [
  *  <file name="sample-po-datetimepicker-scheduling/sample-po-datetimepicker-scheduling.component.html"> </file>
  *  <file name="sample-po-datetimepicker-scheduling/sample-po-datetimepicker-scheduling.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory date-time
  */
 @Component({
   selector: 'po-datetimepicker',

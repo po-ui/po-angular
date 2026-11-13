@@ -70,6 +70,8 @@ import { Directive, Input, TemplateRef } from '@angular/core';
  * ...
  * ```
  * > Observação: Sempre adicionar o **type** da coluna que deseja manipular com a directiva como `columnTemplate`
+ *
+ * @docsParent po-table
  */
 
 @Directive({

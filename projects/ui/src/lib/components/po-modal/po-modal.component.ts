@@ -26,6 +26,8 @@ import { PoLanguageService } from '../../services/po-language/po-language.servic
  *  <file name="sample-po-modal-fruits-salad/sample-po-modal-fruits-salad.component.html"> </file>
  *  <file name="sample-po-modal-fruits-salad/sample-po-modal-fruits-salad.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory overlay
  */
 
 @Component({

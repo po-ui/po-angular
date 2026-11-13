@@ -59,6 +59,8 @@ import { PoCodeEditorRegisterableSuggestionType } from './interfaces/po-code-edi
  *
  * > As configurações para o registro de uma nova sintaxe no Monaco code editor podem ser encontradas em
  * > [**Monaco Editor**](https://microsoft.github.io/monaco-editor/playground.html#extending-language-services-custom-languages).
+ *
+ * @docsParent po-code-editor
  */
 @Injectable({
   providedIn: 'root'

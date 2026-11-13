@@ -41,6 +41,8 @@ const FOCUS_DELAY_MS = 200;
  *  <file name="sample-po-search-ai-filter/sample-po-search-ai-filter.component.html"> </file>
  *  <file name="sample-po-search-ai-filter/sample-po-search-ai-filter.component.ts"> </file>
  * </example>
+ *
+ * @docsCategory search-filters
  */
 @Component({
   selector: 'po-search-ai',
