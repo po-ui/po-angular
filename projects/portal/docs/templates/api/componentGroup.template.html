@@ -46,6 +46,11 @@ property.name | dashCase | replace("'","") $}{$ join $}{$ property.type | escape
 {% endmacro %}
 
 <div class="docs-api">
+  {%- if doc.menuParent -%}
+  <p class="docs-api-part-of">
+    Faz parte de <a href="/documentation/{$ doc.menuParent.name $}?view=doc">{$ doc.menuParent.title | replace('Po ', '') $}</a>.
+  </p>
+  {%- endif -%}
   <p class="docs-api-module-import">
     <code>
       {%- if doc.ngModule.name -%}
@@ -100,4 +105,13 @@ property.name | dashCase | replace("'","") $}{$ join $}{$ property.type | escape
       {$ interface(m) $}
     {% endfor %}
 {%- endif -%}
+
+  {%- if doc.menuChildren.length -%}
+  <h3 class="docs-api-h3 docs-api-subcomponents-title">Subcomponentes</h3>
+  <ul class="docs-api-subcomponents">
+    {% for child in doc.menuChildren %}
+    <li><a href="/documentation/{$ child.name $}?view=doc">{$ child.title | replace('Po ', '') $}</a></li>
+    {% endfor %}
+  </ul>
+  {%- endif -%}
 </div>
