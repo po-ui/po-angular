@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Renderer2, RendererFactory2, RendererStyleFlags2 } from '@angular/core';
+import { CSP_NONCE, Renderer2, RendererFactory2, RendererStyleFlags2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ICONS_DICTIONARY, PoIconDictionary } from '../../components/po-icon';
 import { PoDensityMode } from '../../enums/po-density-mode.enum';
@@ -985,5 +985,56 @@ describe('PoThemeService private setDataDefaultSizeHTML:', () => {
   it('should not set data-default-size when a11yLevel is not AA', () => {
     (service as any).setDataDefaultSizeHTML('small', PoThemeA11yEnum.AAA);
     expect(document.documentElement.getAttribute('data-default-size')).toBeNull();
+  });
+});
+
+describe('PoThemeService - CSP nonce:', () => {
+  const cleanHead = () => {
+    document.head.querySelectorAll('#baseStyle, #theme').forEach(element => element.remove());
+  };
+
+  beforeEach(() => {
+    cleanHead();
+    TestBed.resetTestingModule();
+  });
+
+  afterEach(() => cleanHead());
+
+  it('should set the nonce on #baseStyle and #theme when CSP_NONCE is provided', () => {
+    TestBed.configureTestingModule({ providers: [{ provide: CSP_NONCE, useValue: 'test-nonce' }] });
+    const service = TestBed.inject(PoThemeService);
+
+    service.setTheme(poThemeDefault, PoThemeTypeEnum.light);
+
+    const baseStyle = document.head.querySelector<HTMLStyleElement>('#baseStyle');
+    const themeStyle = document.head.querySelector<HTMLStyleElement>('#theme');
+
+    expect(baseStyle).not.toBeNull();
+    expect(themeStyle).not.toBeNull();
+    expect(baseStyle.nonce).toBe('test-nonce');
+    expect(themeStyle.nonce).toBe('test-nonce');
+  });
+
+  it('should keep the nonce when #theme is recreated on a theme change', () => {
+    TestBed.configureTestingModule({ providers: [{ provide: CSP_NONCE, useValue: 'test-nonce' }] });
+    const service = TestBed.inject(PoThemeService);
+
+    service.setTheme(poThemeDefault, PoThemeTypeEnum.light);
+    service.setTheme(poThemeDefault, PoThemeTypeEnum.dark);
+
+    const themeStyles = document.head.querySelectorAll<HTMLStyleElement>('#theme');
+
+    expect(themeStyles).toHaveSize(1);
+    expect(themeStyles[0].nonce).toBe('test-nonce');
+  });
+
+  it('should not set the nonce attribute when CSP_NONCE is not provided', () => {
+    TestBed.configureTestingModule({ providers: [{ provide: CSP_NONCE, useValue: null }] });
+    const service = TestBed.inject(PoThemeService);
+
+    service.setTheme(poThemeDefault, PoThemeTypeEnum.light);
+
+    expect(document.head.querySelector('#baseStyle').hasAttribute('nonce')).toBeFalse();
+    expect(document.head.querySelector('#theme').hasAttribute('nonce')).toBeFalse();
   });
 });
