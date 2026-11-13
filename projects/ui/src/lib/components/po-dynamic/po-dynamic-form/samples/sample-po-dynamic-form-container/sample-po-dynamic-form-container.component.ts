@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, inject, signal, viewChild } from '@angular/core';
 
 import {
   ForceBooleanComponentEnum,
   PoDynamicFormComponent,
+  PoDatepickerIsoFormat,
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
+  PoDynamicFormLoad,
   PoDynamicFormValidation,
   PoNotificationService,
   PoUploadFile
@@ -17,15 +19,24 @@ import { PoDynamicFormContainerService } from './sample-po-dynamic-form-containe
   providers: [PoDynamicFormContainerService],
   standalone: false
 })
-export class SamplePoDynamicFormContainerComponent implements OnInit {
-  poNotification = inject(PoNotificationService);
-  private registerService = inject(PoDynamicFormContainerService);
+export class SamplePoDynamicFormContainerComponent {
+  private readonly poNotification = inject(PoNotificationService);
+  private readonly registerService = inject(PoDynamicFormContainerService);
 
-  @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
-  person = {};
-  validateFields: Array<string> = ['state'];
+  readonly dynamicForm = viewChild.required<PoDynamicFormComponent>('dynamicForm');
+  readonly person: Record<string, unknown> = {
+    name: 'Tony Stark',
+    birthday: '1970-05-29',
+    graduationYear: '1991-01-01',
+    hiringMonth: '2008-05-01',
+    isJuridicPerson: false,
+    videogame: ['PS4', 'NSW', 'XSSX'],
+    rememberSecretKey: 'no',
+    status: 'active'
+  };
+  readonly validateFields: Array<string> = ['state'];
 
-  fields: Array<PoDynamicFormField> = [
+  readonly fields = signal<Array<PoDynamicFormField>>([
     {
       property: 'name',
       container: 'PERSONAL DATA',
@@ -54,6 +65,15 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'], order: 2 },
+    {
+      property: 'graduationYear',
+      label: 'Graduation year',
+      type: 'date',
+      mode: 'year',
+      isoFormat: PoDatepickerIsoFormat.Basic,
+      gridColumns: 6,
+      gridSmColumns: 12
+    },
     {
       property: 'shortDescription',
       label: 'Short Description',
@@ -135,6 +155,15 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       gridSmColumns: 6
     },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 2, gridSmColumns: 6 },
+    {
+      property: 'hiringMonth',
+      label: 'Hiring month',
+      type: 'date',
+      mode: 'month-year',
+      isoFormat: PoDatepickerIsoFormat.Basic,
+      gridColumns: 3,
+      gridSmColumns: 12
+    },
     {
       property: 'wage',
       type: 'currency',
@@ -234,43 +263,34 @@ export class SamplePoDynamicFormContainerComponent implements OnInit {
       url: 'https://po-sample-api.onrender.com/v1/uploads/addFile',
       customAction: { icon: 'an an-download', visible: true },
       customActionClick: (file: PoUploadFile) => {
-        console.log('Iniciar download para o arquivo:', file.name);
+        console.log('Starting download for file:', file.name);
       }
     }
-  ];
+  ]);
 
-  ngOnInit() {
-    this.person = {
-      name: 'Tony Stark',
-      birthday: '1970-05-29',
-      isJuridicPerson: false,
-      videogame: ['PS4', 'NSW', 'XSSX'],
-      rememberSecretKey: 'no',
-      status: 'active'
-    };
-  }
-
-  onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
-    return {
-      value: { city: undefined },
-      fields: [
-        {
-          property: 'city',
-          gridColumns: 6,
-          options: this.registerService.getCity(changedValue.value.state),
-          disabled: false
-        }
-      ]
-    };
-  }
+  readonly onChangeFields = (changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation => ({
+    value: { city: undefined },
+    fields: [
+      {
+        property: 'city',
+        gridColumns: 6,
+        options: this.registerService.getCity(changedValue.value.state),
+        disabled: false
+      }
+    ]
+  });
 
   onKeyDown(property: string, event: KeyboardEvent): void {
     if (event.code === 'F9') {
-      this.dynamicForm.showAdditionalHelp(property);
+      this.dynamicForm().showAdditionalHelp(property);
     }
   }
 
-  onLoadFields(value: any) {
-    return this.registerService.getUserDocument(value);
+  readonly onLoadFields = (value: { isJuridicPerson?: boolean }): PoDynamicFormLoad =>
+    this.registerService.getUserDocument(value);
+
+  save(): void {
+    this.poNotification.success('Data saved successfully!');
+    this.dynamicForm().form.reset();
   }
 }
