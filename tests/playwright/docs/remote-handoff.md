@@ -12,7 +12,7 @@ escolhido é a **grade** (muitos estados numa imagem só): ver [decisions.md](de
 ## Estado atual (já feito)
 
 - Branch: `tests/playwright-poc`, saída de `22.x.x`, repo `git@github.com:po-ui/po-angular.git`.
-- Componentes cobertos: `po-button`, `po-button-group`, `po-checkbox` (60 testes = 60 snapshots, 14,7 MB).
+- Componentes cobertos: `po-button`, `po-button-group`, `po-checkbox`, `po-checkbox-group` (72 testes = 72 snapshots).
 - Quatro temas por componente: `light`, `dark`, `deprecated-light`, `deprecated-dark`.
 - Harness: projeto Angular `visual-harness` (`angular.json`), código em `tests/playwright/harness/`.
 - CI: `.github/workflows/visual-regression.yml` (faz build do po-style na mesma branch do PR, instala o pacote e roda

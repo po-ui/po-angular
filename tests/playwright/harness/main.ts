@@ -5,6 +5,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { PoButtonModule } from '../../../projects/ui/src/lib/components/po-button';
 import { PoButtonGroupModule } from '../../../projects/ui/src/lib/components/po-button-group';
 import { PoCheckboxModule } from '../../../projects/ui/src/lib/components/po-field/po-checkbox/po-checkbox.module';
+import { PoCheckboxGroupModule } from '../../../projects/ui/src/lib/components/po-field/po-checkbox-group/po-checkbox-group.module';
 import { PoThemeService } from '../../../projects/ui/src/lib/services/po-theme/po-theme.service';
 import { poThemeDefaultDeprecated } from '../../../projects/ui/src/lib/services/po-theme/index';
 import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/enum/po-theme-type.enum';
@@ -20,6 +21,10 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
  *  - 'checkbox' (disabled vai em p-disabled E em [disabled]: o NgModel zera o p-disabled sozinho):
  *                               {size, value: true|false|null (null = indeterminate), label, labelWrap, help, helper,
  *                                required, disabled}
+ *  - 'checkbox-group' (disabled vai em p-disabled E em [disabled], como no checkbox):
+ *                               {size, options: [{label, value, disabled}], value: array de values marcados (ou, com
+ *                                indeterminate, objeto {value: true|false|null}), indeterminate, columns, label,
+ *                                labelWrap, compactLabel, help, helper, required, showRequired, optional, disabled}
  * Comuns a todas:
  *  - caption:       legenda visível (2 linhas, "\n"); faz parte do snapshot.
  *  - width:         largura fixa em px. Sem ela a célula cresce com o conteúdo.
@@ -29,7 +34,7 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
  */
 @Component({
   selector: 'harness-root',
-  imports: [FormsModule, PoButtonModule, PoButtonGroupModule, PoCheckboxModule],
+  imports: [FormsModule, PoButtonModule, PoButtonGroupModule, PoCheckboxModule, PoCheckboxGroupModule],
   template: `
     <div id="stage">
       <div class="grid" [style.gridTemplateColumns]="columns">
@@ -63,6 +68,26 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
                     [p-disabled]="cell.disabled"
                     [disabled]="cell.disabled"
                   ></po-checkbox>
+                }
+                @case ('checkbox-group') {
+                  <po-checkbox-group
+                    [ngModel]="cell.value"
+                    [ngModelOptions]="{ standalone: true }"
+                    [p-options]="cell.options"
+                    [p-indeterminate]="cell.indeterminate"
+                    [p-columns]="cell.columns"
+                    [p-size]="cell.size"
+                    [p-label]="cell.label"
+                    [p-label-text-wrap]="cell.labelWrap"
+                    [p-compact-label]="cell.compactLabel"
+                    [p-help]="cell.help"
+                    [p-helper]="cell.helper"
+                    [p-required]="cell.required"
+                    [p-show-required]="cell.showRequired"
+                    [p-optional]="cell.optional"
+                    [p-disabled]="cell.disabled"
+                    [disabled]="cell.disabled"
+                  ></po-checkbox-group>
                 }
                 @default {
                   <po-button

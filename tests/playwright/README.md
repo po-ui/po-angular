@@ -1,7 +1,7 @@
 # Testes de regressão visual (Playwright)
 
 Tira screenshots de componentes do PO UI **em grade** (muitos estados numa imagem só) e compara com as
-imagens base em `__snapshots__/`. Componentes cobertos: `po-button`, `po-button-group`, `po-checkbox`.
+imagens base em `__snapshots__/`. Componentes cobertos: `po-button`, `po-button-group`, `po-checkbox`, `po-checkbox-group`.
 Por que grade, e não um teste por combinação: [docs/decisions.md](docs/decisions.md).
 
 ## Como funciona
@@ -26,6 +26,7 @@ Por que grade, e não um teste por combinação: [docs/decisions.md](docs/decisi
 | `po-button-grid.spec.ts` | 24 | tema × variação; 72 células = 3 tamanhos × 4 conteúdos × 6 estados | 1728 |
 | `po-button-group-grid.spec.ts` | 24 | tema × tamanho × `p-toggle`; 4 conteúdos × 6 a 9 estados | 768 |
 | `po-checkbox-grid.spec.ts` | 12 | tema × tamanho; 90 células = 3 valores × 6 conteúdos × 5 estados | 1080 |
+| `po-checkbox-group-grid.spec.ts` | 12 | 8 = tema × tamanho (90 células = 3 valores × 6 conteúdos × 5 estados) + 4 = tema × layout (9 linhas: colunas 1 a 4, textos longos, opção desabilitada, título compacto, label com quebra) | 810 |
 
 ## Rodar localmente
 
@@ -140,7 +141,7 @@ TODO / evolução:
 
 | Medida | Valor |
 |---|---|
-| Testes = snapshots (button + group + checkbox) | 60 |
+| Testes = snapshots (button + group + checkbox + checkbox-group) | 72 |
 | PNGs no repo | 14,69 MB (button 7,64 + group 3,59 + checkbox 3,45) |
 | Suíte inteira, 4 workers | 53 s, 56 s, 53 s (3 execuções, 0 flaky) |
 | Suíte inteira, 2 workers (o do CI) | 67 s, 64 s, 69 s (3 execuções, 0 flaky) |
