@@ -6,6 +6,10 @@ const path = require('path');
 const grouper = require('./helpers/grouper');
 const fileWriter = require('./helpers/file-writer');
 const { assignGroupAnchors } = require('./helpers/anchors');
+const { resolveDocsMenu } = require('./helpers/docs-menu');
+const docsCategories = require('../docs-categories');
+
+const MENU_TAGS = ['docsCategory', 'docsParent', 'docsShortcut', 'docsOrder'];
 
 var filesInfo = [];
 
@@ -75,6 +79,8 @@ module.exports = function componentGrouper() {
             grouper.resolveEnumDocs(doc, docs, groups);
           }
 
+          collectMenuTags(doc, group, groupName);
+
           //Seta package
           const packageName = group.fileInfo.projectRelativePath.substring(0, group.fileInfo.projectRelativePath.indexOf('/'));
           group.package = packageName === 'ui' ? 'components' : packageName;
@@ -122,6 +128,9 @@ module.exports = function componentGrouper() {
       // `id` estável (âncora) de cada classe, propriedade, método, interface e enum; usado no HTML e no índice de busca.
       filteredGroups.forEach(assignGroupAnchors);
 
+      // Categorias do menu e da listagem (tags @docsCategory/@docsParent/@docsShortcut/@docsOrder)
+      applyMenuCategories(filesInfo, groups);
+
       // Gera um arquivo json com dados da lista de componentes
       fileWriter.generateDocsJsonFile(JSON.stringify(filesInfo));
 
@@ -132,6 +141,79 @@ module.exports = function componentGrouper() {
     }
   };
 };
+
+function isListedGroup(groupName) {
+  return !['module', 'interface', 'enum', 'base'].some(part => groupName.includes(part));
+}
+
+/** Guarda no grupo as tags de menu do doc (a primeira de cada tag vale; atalhos somam). */
+function collectMenuTags(doc, group, groupName) {
+  const tagged = MENU_TAGS.filter(tag => doc[tag] !== undefined && doc[tag] !== null);
+
+  if (!tagged.length) return;
+
+  if (!isListedGroup(groupName) || doc.isInterface || doc.isEnum) {
+    console.warn(`[docs-menu] aviso: ${doc.fileInfo.projectRelativePath}: tags ${tagged.join(', ')} ignoradas em ${doc.name} (não é item do menu)`);
+    return;
+  }
+
+  group.menuTags = group.menuTags || { file: doc.fileInfo.projectRelativePath };
+  tagged.forEach(tag => {
+    if (tag === 'docsShortcut') {
+      group.menuTags.docsShortcut = [].concat(group.menuTags.docsShortcut || [], doc.docsShortcut);
+    } else if (group.menuTags[tag] === undefined) {
+      group.menuTags[tag] = doc[tag];
+    }
+  });
+}
+
+/** Resolve as categorias, mostra avisos, para o build em erro e grava os campos no api-list.json. */
+function applyMenuCategories(files, groups) {
+  const items = files.map(file => {
+    const group = groups.get(file.name) || {};
+
+    return { name: file.name, title: file.title, file: group.menuTags?.file || group.fileInfo?.projectRelativePath, ...group.menuTags };
+  });
+  const { entries, errors, warnings } = resolveDocsMenu(items, docsCategories);
+
+  warnings.forEach(w => console.warn(`[docs-menu] aviso: ${w.message}`));
+
+  if (errors.length) {
+    throw new Error(`[docs-menu] ${errors.length} erro(s) nas tags de categoria:\n${errors.map(e => `  - ${e.message}`).join('\n')}`);
+  }
+
+  entries.forEach(entry => {
+    const file = files.find(f => f.name === entry.name);
+    const group = groups.get(entry.name);
+
+    Object.assign(file, {
+      section: entry.section,
+      sectionLabel: entry.sectionLabel,
+      sectionOrder: entry.sectionOrder,
+      category: entry.category,
+      categoryLabel: entry.categoryLabel,
+      categoryOrder: entry.categoryOrder,
+      flat: entry.flat || undefined,
+      order: entry.order,
+      parent: entry.parent,
+      children: entry.children.length ? entry.children : undefined,
+      shortcuts: entry.shortcuts.length
+        ? entry.shortcuts.map(({ category, categoryLabel, section, sectionLabel }) => ({ category, categoryLabel, section, sectionLabel }))
+        : undefined
+    });
+
+    // para o template da página (bloco "Subcomponentes" / "Faz parte de")
+    if (group) {
+      group.menuParent = entry.parent ? files.find(f => f.name === entry.parent) : undefined;
+      group.menuChildren = entry.children.map(name => files.find(f => f.name === name));
+    }
+  });
+
+  const inMenu = entries.filter(e => !e.parent).length;
+
+  console.log(`[docs-menu] ${inMenu} itens no menu, ${entries.length - inMenu} subcomponentes, ` +
+    `${entries.reduce((n, e) => n + e.shortcuts.length, 0)} atalhos, ${warnings.length} aviso(s)`);
+}
 
 function isPureDirective(doc) {
   const decorators = doc.decorators || [];

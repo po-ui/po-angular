@@ -56,7 +56,12 @@ module.exports = {
     { name: 'usedBy' },
     { name: 'optional' },
     { name: 'default' },
-    { name: 'override' }
+    { name: 'override' },
+    // Categorias do menu e da listagem "API Reference" (ver docs/docs-categories.js)
+    { name: 'docsCategory' },
+    { name: 'docsParent' },
+    { name: 'docsShortcut', multi: true },
+    { name: 'docsOrder' }
   ],
 
   protractorWebBaseUrl: `browser.baseUrl + '/documentation/{component}?view=web'`
