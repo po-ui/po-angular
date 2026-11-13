@@ -2470,291 +2470,292 @@ describe('PoDatepickerComponent:', () => {
       });
     });
 
-    describe('parseMonthYearInput:', () => {
-      it('should return formatted MM/YYYY for valid input', () => {
-        const result = component['parseMonthYearInput']('3/2025', '/');
-        expect(result).toBe('03/2025');
+    describe('getDateFromMonthYearValue:', () => {
+      [
+        { value: '03/2025', month: 2, year: 2025 },
+        { value: '03-2025', month: 2, year: 2025 },
+        { value: '03/0000', month: 2, year: 0 },
+        { value: new Date(2025, 3, 15), month: 3, year: 2025 }
+      ].forEach(({ value, month, year }) => {
+        it(`should return the first day of the month for ${String(value)}`, () => {
+          const date = component['getDateFromMonthYearValue'](value);
+
+          expect(date.getFullYear()).toBe(year);
+          expect(date.getMonth()).toBe(month);
+          expect(date.getDate()).toBe(1);
+        });
       });
 
-      it('should return null for invalid month > 12', () => {
-        const result = component['parseMonthYearInput']('13/2025', '/');
-        expect(result).toBeNull();
-      });
-
-      it('should return null for month 0', () => {
-        const result = component['parseMonthYearInput']('00/2025', '/');
-        expect(result).toBeNull();
-      });
-
-      it('should return formatted MM/YYYY for year 0', () => {
-        const result = component['parseMonthYearInput']('01/0000', '/');
-        expect(result).toBe('01/0000');
-      });
-
-      it('should return null for year greater than 9999', () => {
-        const result = component['parseMonthYearInput']('01/10000', '/');
-        expect(result).toBeNull();
-      });
-
-      it('should return year formatted with 4 digits for year between 1 and 999', () => {
-        const result = component['parseMonthYearInput']('01/50', '/');
-        expect(result).toBe('01/0050');
-      });
-
-      it('should return null for incomplete year that results in 0', () => {
-        const result = component['parseMonthYearInput']('01/00', '/');
-        expect(result).toBeNull();
-      });
-
-      it('should return null for negative year', () => {
-        const result = component['parseMonthYearInput']('01/-1', '/');
-        expect(result).toBeNull();
-      });
-
-      it('should return null for input with wrong number of parts', () => {
-        const result = component['parseMonthYearInput']('2025', '/');
-        expect(result).toBeNull();
-      });
-
-      it('should return null for non-numeric input', () => {
-        const result = component['parseMonthYearInput']('ab/cdef', '/');
-        expect(result).toBeNull();
+      ['13/2025', '2025', '03/10000', 12345, new Date(10000, 0, 1)].forEach(value => {
+        it(`should return undefined for ${String(value)}`, () => {
+          expect(component['getDateFromMonthYearValue'](value)).toBeUndefined();
+        });
       });
     });
 
-    describe('syncCalendarMonthYear:', () => {
-      it('should set date from MM/YYYY string', () => {
-        component.mode = 'month-year';
-        fixture.detectChanges();
+    describe('getDateFromYearValue:', () => {
+      [
+        { value: '2025', year: 2025 },
+        { value: 2025, year: 2025 },
+        { value: '0', year: 0 },
+        { value: new Date(2025, 5, 15), year: 2025 }
+      ].forEach(({ value, year }) => {
+        it(`should return January 1st for ${String(value)}`, () => {
+          const date = component['getDateFromYearValue'](value);
 
-        component['syncCalendarMonthYear']('06/2025');
-
-        expect(component.date instanceof Date).toBeTrue();
-        expect(component.date.getMonth()).toBe(5);
-        expect(component.date.getFullYear()).toBe(2025);
+          expect(date.getFullYear()).toBe(year);
+          expect(date.getMonth()).toBe(0);
+          expect(date.getDate()).toBe(1);
+        });
       });
 
-      it('should set date for different month/year', () => {
-        component.mode = 'month-year';
-        fixture.detectChanges();
-
-        component['syncCalendarMonthYear']('01/2030');
-
-        expect(component.date instanceof Date).toBeTrue();
-        expect(component.date.getMonth()).toBe(0);
-        expect(component.date.getFullYear()).toBe(2030);
-      });
-
-      it('should not throw when value has wrong format', () => {
-        expect(() => component['syncCalendarMonthYear']('2025')).not.toThrow();
-      });
-
-      it('should set date with year between 0 and 99 without converting it to 19XX', () => {
-        component.mode = 'month-year';
-        fixture.detectChanges();
-
-        component['syncCalendarMonthYear']('06/0050');
-
-        expect(component.date.getMonth()).toBe(5);
-        expect(component.date.getFullYear()).toBe(50);
+      ['abc', '10000', -1, 2025.5, Infinity, null, {}].forEach(value => {
+        it(`should return undefined for ${String(value)}`, () => {
+          expect(component['getDateFromYearValue'](value)).toBeUndefined();
+        });
       });
     });
 
-    describe('syncCalendarYear:', () => {
-      it('should set date with January (month 0) from year number', () => {
-        component['syncCalendarYear'](2025);
-
-        expect(component.date instanceof Date).toBeTrue();
-        expect(component.date.getFullYear()).toBe(2025);
-        expect(component.date.getMonth()).toBe(0);
-      });
-
-      it('should set date with year 0 without converting it to 1900', () => {
-        component['syncCalendarYear'](0);
-
-        expect(component.date.getFullYear()).toBe(0);
-        expect(component.date.getMonth()).toBe(0);
-      });
-    });
-
-    describe('writeMonthYearValue:', () => {
-      it('should set input value and call callOnChange for valid MM/YYYY', () => {
-        component.mode = 'month-year';
+    describe('writeValueForMode:', () => {
+      beforeEach(() => {
         component.locale = 'pt';
-        fixture.detectChanges();
+      });
 
+      it('should write MM/YYYY and propagate the model without retry in month-year mode', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
         spyOn(component, 'callOnChange');
 
-        component['writeMonthYearValue']('03/2025');
+        component['writeValueForMode']('03/2025');
 
         expect(component.inputEl.nativeElement.value).toBe('03/2025');
+        expect(component['valueBeforeChange']).toBe('03/2025');
         expect(component.callOnChange).toHaveBeenCalledWith('03/2025', false);
       });
 
-      it('should accept dash separator and normalize to locale separator', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        spyOn(component, 'callOnChange');
-
-        component['writeMonthYearValue']('03-2025');
-
-        expect(component.inputEl.nativeElement.value).toBe('03/2025');
-        expect(component.callOnChange).toHaveBeenCalledWith('03/2025', false);
-      });
-
-      it('should clear input for invalid month', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        component['writeMonthYearValue']('13/2025');
-
-        expect(component.inputEl.nativeElement.value).toBe('');
-      });
-
-      it('should clear input for value with wrong format', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        component['writeMonthYearValue']('2025');
-
-        expect(component.inputEl.nativeElement.value).toBe('');
-      });
-
-      it('should accept Date object and extract month/year', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        spyOn(component, 'callOnChange');
-
-        const dateValue = new Date(2025, 3, 1);
-        component['writeMonthYearValue'](dateValue);
-
-        expect(component.inputEl.nativeElement.value).toBe('04/2025');
-        expect(component.callOnChange).toHaveBeenCalledWith('04/2025', false);
-      });
-
-      it('should clear input for non-string non-Date value', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        component['writeMonthYearValue'](12345);
-
-        expect(component.inputEl.nativeElement.value).toBe('');
-      });
-
-      it('should set input value and call callOnChange with year formatted with 4 digits', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        spyOn(component, 'callOnChange');
-
-        component['writeMonthYearValue']('03/0000');
-
-        expect(component.inputEl.nativeElement.value).toBe('03/0000');
-        expect(component.callOnChange).toHaveBeenCalledWith('03/0000', false);
-      });
-
-      it('should clear input for year greater than 9999', () => {
-        component.mode = 'month-year';
-        component.locale = 'pt';
-        fixture.detectChanges();
-
-        spyOn(component, 'callOnChange');
-
-        component['writeMonthYearValue']('03/10000');
-
-        expect(component.inputEl.nativeElement.value).toBe('');
-        expect(component.callOnChange).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('writeYearValue:', () => {
-      it('should set input value and call callOnChange for valid year string', () => {
+      it('should write YYYY with 4 digits in year mode', () => {
         component.mode = 'year';
         fixture.detectChanges();
-
         spyOn(component, 'callOnChange');
 
-        component['writeYearValue']('2025');
-
-        expect(component.inputEl.nativeElement.value).toBe('2025');
-        expect(component.callOnChange).toHaveBeenCalledWith('2025', false);
-      });
-
-      it('should set input value and call callOnChange for valid year number', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
-
-        spyOn(component, 'callOnChange');
-
-        component['writeYearValue'](2025);
-
-        expect(component.inputEl.nativeElement.value).toBe('2025');
-        expect(component.callOnChange).toHaveBeenCalledWith('2025', false);
-      });
-
-      it('should clear input for NaN year', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
-
-        component['writeYearValue']('abc');
-
-        expect(component.inputEl.nativeElement.value).toBe('');
-      });
-
-      it('should set input value and call callOnChange with year 0 formatted with 4 digits', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
-
-        spyOn(component, 'callOnChange');
-
-        component['writeYearValue']('0');
+        component['writeValueForMode']('0');
 
         expect(component.inputEl.nativeElement.value).toBe('0000');
         expect(component.callOnChange).toHaveBeenCalledWith('0000', false);
       });
 
-      it('should clear input for negative year', () => {
+      it('should clear the input and not propagate an invalid value', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+        component.inputEl.nativeElement.value = '01/2020';
+        spyOn(component, 'callOnChange');
+
+        component['writeValueForMode']('13/2025');
+
+        expect(component.inputEl.nativeElement.value).toBe('');
+        expect(component['valueBeforeChange']).toBe('');
+        expect(component.callOnChange).not.toHaveBeenCalled();
+      });
+
+      it('should write a Date in year mode without p-iso-format', () => {
         component.mode = 'year';
         fixture.detectChanges();
+        spyOn(component, 'callOnChange');
 
-        component['writeYearValue'](-1);
+        component['writeValueForMode'](new Date(2026, 5, 15));
+
+        expect(component.inputEl.nativeElement.value).toBe('2026');
+        expect(component.callOnChange).toHaveBeenCalledWith('2026', false);
+      });
+
+      describe('with p-iso-format:', () => {
+        [
+          { mode: 'month-year' as const, value: '2026-10-01', display: '10/2026', model: '2026-10-01' },
+          { mode: 'month-year' as const, value: '2026-10-15', display: '10/2026', model: '2026-10-15' },
+          { mode: 'month-year' as const, value: '10/2026', display: '10/2026', model: '2026-10-01' },
+          { mode: 'month-year' as const, value: new Date(2026, 9, 15), display: '10/2026', model: '2026-10-15' },
+          { mode: 'year' as const, value: '2026-06-15', display: '2026', model: '2026-06-15' },
+          { mode: 'year' as const, value: '2026', display: '2026', model: '2026-01-01' },
+          { mode: 'year' as const, value: 2026, display: '2026', model: '2026-01-01' }
+        ].forEach(({ mode, value, display, model }) => {
+          it(`should display ${display} and propagate ${model} for ${String(value)} in ${mode} with Basic`, () => {
+            component.mode = mode;
+            component.isoFormat = PoDatepickerIsoFormat.Basic;
+            fixture.detectChanges();
+            spyOn(component, 'callOnChange');
+
+            component['writeValueForMode'](value);
+
+            expect(component.inputEl.nativeElement.value).toBe(display);
+            expect(component.callOnChange).toHaveBeenCalledWith(model, false);
+          });
+        });
+
+        it('should keep the hour and timezone of an Extended value', () => {
+          component.mode = 'month-year';
+          component.isoFormat = PoDatepickerIsoFormat.Extended;
+          fixture.detectChanges();
+          spyOn(component, 'callOnChange');
+
+          component['writeValueForMode']('2026-10-01T00:00:00Z');
+
+          expect(component['hour']).toBe('T00:00:00Z');
+          expect(component.inputEl.nativeElement.value).toBe('10/2026');
+          expect(component.callOnChange).toHaveBeenCalledWith('2026-10-01T00:00:00Z', false);
+        });
+
+        it('should convert an ISO Basic value to Extended with the default hour', () => {
+          component.mode = 'month-year';
+          component.isoFormat = PoDatepickerIsoFormat.Extended;
+          fixture.detectChanges();
+          spyOn(component, 'callOnChange');
+
+          component['writeValueForMode']('2026-10-01');
+
+          expect(component.callOnChange).toHaveBeenCalledWith('2026-10-01' + component['hour'], false);
+        });
+
+        ['2026-13-01', '2026-10-01T10:00:00', 'abc', new Date(10000, 0, 1)].forEach(value => {
+          it(`should clear the input for the invalid value ${String(value)}`, () => {
+            component.mode = 'month-year';
+            component.isoFormat = PoDatepickerIsoFormat.Basic;
+            fixture.detectChanges();
+            spyOn(component, 'callOnChange');
+
+            component['writeValueForMode'](value);
+
+            expect(component.inputEl.nativeElement.value).toBe('');
+            expect(component.callOnChange).not.toHaveBeenCalled();
+          });
+        });
+      });
+
+      it('should not accept an ISO value without p-iso-format', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+
+        component['writeValueForMode']('2026-10-01');
 
         expect(component.inputEl.nativeElement.value).toBe('');
       });
+    });
 
-      it('should clear input for year greater than 9999', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
+    describe('getModelForMode:', () => {
+      it('should return MM/YYYY in month-year mode without p-iso-format', () => {
+        component.mode = 'month-year';
 
-        component['writeYearValue']('10000');
-
-        expect(component.inputEl.nativeElement.value).toBe('');
+        expect(component['getModelForMode'](new Date(2026, 9, 15))).toBe('10/2026');
       });
 
-      it('should clear input for year that is not an integer', () => {
+      it('should return YYYY in year mode without p-iso-format', () => {
         component.mode = 'year';
-        fixture.detectChanges();
 
-        component['writeYearValue'](2025.5);
-
-        expect(component.inputEl.nativeElement.value).toBe('');
+        expect(component['getModelForMode'](new Date(2026, 9, 15))).toBe('2026');
       });
 
-      it('should clear input for infinite year', () => {
+      it('should return ISO Basic with p-iso-format Basic', () => {
+        component.mode = 'year';
+        component.isoFormat = PoDatepickerIsoFormat.Basic;
+
+        expect(component['getModelForMode'](new Date(2026, 0, 1))).toBe('2026-01-01');
+      });
+
+      it('should return ISO Extended with the current hour with p-iso-format Extended', () => {
+        component.mode = 'month-year';
+        component.isoFormat = PoDatepickerIsoFormat.Extended;
+        component['hour'] = 'T00:00:00-03:00';
+
+        expect(component['getModelForMode'](new Date(2026, 9, 1))).toBe('2026-10-01T00:00:00-03:00');
+      });
+    });
+
+    describe('applyDateForMode:', () => {
+      beforeEach(() => {
+        component.locale = 'pt';
+      });
+
+      it('should propagate "Data inválida" for an invalid month-year value', () => {
+        component.mode = 'month-year';
+        fixture.detectChanges();
+        spyOn(component, 'callOnChange');
+
+        component['applyMonthYearValue']('13/2026');
+
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should propagate "Data inválida" for an incomplete year on blur', () => {
         component.mode = 'year';
         fixture.detectChanges();
+        spyOn(component, 'callOnChange');
 
-        component['writeYearValue'](Infinity);
+        component['applyYearValue']('20', true);
 
-        expect(component.inputEl.nativeElement.value).toBe('');
+        expect(component.callOnChange).toHaveBeenCalledWith('Data inválida');
+      });
+
+      it('should keep the loaded day when the period does not change', () => {
+        component.mode = 'month-year';
+        component.isoFormat = PoDatepickerIsoFormat.Basic;
+        fixture.detectChanges();
+        component.date = new Date(2026, 9, 15);
+        spyOn(component, 'callOnChange');
+
+        component['applyMonthYearValue']('10/2026');
+
+        expect(component.date.getDate()).toBe(15);
+        expect(component.callOnChange).toHaveBeenCalledWith('2026-10-15');
+      });
+
+      it('should use the first day when the period changes', () => {
+        component.mode = 'month-year';
+        component.isoFormat = PoDatepickerIsoFormat.Basic;
+        fixture.detectChanges();
+        component.date = new Date(2026, 9, 15);
+        spyOn(component, 'callOnChange');
+
+        component['applyMonthYearValue']('11/2026');
+
+        expect(component.date.getDate()).toBe(1);
+        expect(component.callOnChange).toHaveBeenCalledWith('2026-11-01');
+      });
+
+      it('should propagate the first day of the year with p-iso-format', () => {
+        component.mode = 'year';
+        component.isoFormat = PoDatepickerIsoFormat.Basic;
+        fixture.detectChanges();
+        component.date = undefined;
+        spyOn(component, 'callOnChange');
+
+        component['applyYearValue']('2027');
+
+        expect(component.callOnChange).toHaveBeenCalledWith('2027-01-01');
+      });
+    });
+
+    describe('isSamePeriod:', () => {
+      it('should return false when there is no current date', () => {
+        component.mode = 'month-year';
+        component.date = undefined;
+
+        expect(component['isSamePeriod'](new Date(2026, 9, 1))).toBeFalse();
+      });
+
+      it('should compare only the year in year mode', () => {
+        component.mode = 'year';
+        component.date = new Date(2026, 5, 15);
+
+        expect(component['isSamePeriod'](new Date(2026, 0, 1))).toBeTrue();
+      });
+    });
+
+    describe('setHourFromIsoValue:', () => {
+      it('should not change the hour for an ISO Basic value', () => {
+        component['hour'] = 'T00:00:00-03:00';
+
+        component['setHourFromIsoValue']('2026-10-01');
+
+        expect(component['hour']).toBe('T00:00:00-03:00');
       });
     });
 
@@ -2815,56 +2816,47 @@ describe('PoDatepickerComponent:', () => {
     });
 
     describe('writeValue with month-year/year mode:', () => {
-      it('should call writeMonthYearValue for month-year mode with string value', () => {
+      [
+        { mode: 'month-year' as const, value: '03/2025' },
+        { mode: 'year' as const, value: '2025' },
+        { mode: 'year' as const, value: 2025 },
+        { mode: 'month-year' as const, value: new Date(2025, 3, 1) }
+      ].forEach(({ mode, value }) => {
+        it(`should call writeValueForMode in ${mode} mode with ${String(value)}`, () => {
+          component.mode = mode;
+          fixture.detectChanges();
+          spyOn<any>(component, 'writeValueForMode');
+
+          component.writeValue(value);
+
+          expect(component['writeValueForMode']).toHaveBeenCalledWith(value);
+        });
+      });
+
+      it('should not call writeValueForMode without p-mode', () => {
+        fixture.detectChanges();
+        spyOn<any>(component, 'writeValueForMode');
+
+        component.writeValue('2026-10-01');
+
+        expect(component['writeValueForMode']).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('dateSelected with p-iso-format:', () => {
+      it('should propagate the first day of the selected month in ISO Basic', () => {
         component.mode = 'month-year';
+        component.isoFormat = PoDatepickerIsoFormat.Basic;
+        component.locale = 'pt';
         fixture.detectChanges();
+        spyOn(component, 'callOnChange');
+        spyOn<any>(component, 'controlChangeEmitter');
+        spyOn(component, 'togglePicker');
 
-        spyOn<any>(component, 'writeMonthYearValue');
-        component.writeValue('03/2025');
+        component.dateSelected(new Date(2026, 10, 1));
 
-        expect(component['writeMonthYearValue']).toHaveBeenCalledWith('03/2025');
-      });
-
-      it('should call writeYearValue for year mode', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
-
-        spyOn<any>(component, 'writeYearValue');
-        component.writeValue('2025');
-
-        expect(component['writeYearValue']).toHaveBeenCalledWith('2025');
-      });
-
-      it('should call writeYearValue for year mode with number value', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
-
-        spyOn<any>(component, 'writeYearValue');
-        component.writeValue(2025);
-
-        expect(component['writeYearValue']).toHaveBeenCalledWith(2025);
-      });
-
-      it('should call writeMonthYearValue for month-year mode with Date object', () => {
-        component.mode = 'month-year';
-        fixture.detectChanges();
-
-        spyOn<any>(component, 'writeMonthYearValue');
-        const dateValue = new Date(2025, 3, 1);
-        component.writeValue(dateValue);
-
-        expect(component['writeMonthYearValue']).toHaveBeenCalledWith(dateValue);
-      });
-
-      it('should call writeYearValue for year mode with Date object', () => {
-        component.mode = 'year';
-        fixture.detectChanges();
-
-        spyOn<any>(component, 'writeYearValue');
-        const dateValue = new Date(2025, 0, 1);
-        component.writeValue(dateValue);
-
-        expect(component['writeYearValue']).toHaveBeenCalledWith(dateValue);
+        expect(component.inputEl.nativeElement.value).toBe('11/2026');
+        expect(component.callOnChange).toHaveBeenCalledWith('2026-11-01');
       });
     });
 

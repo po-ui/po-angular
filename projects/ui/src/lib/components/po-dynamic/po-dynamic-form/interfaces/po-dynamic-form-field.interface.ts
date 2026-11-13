@@ -606,6 +606,8 @@ export interface PoDynamicFormField extends PoDynamicField {
    *
    * > Veja os valores válidos no `PoDatepickerIsoFormat`.
    *
+   * Nas variações `month-year` e `year`, veja o formato do *model* na propriedade `mode`.
+   *
    * **Componente compatível:** `po-datepicker`
    */
   isoFormat?: PoDatepickerIsoFormat;
@@ -1047,8 +1049,22 @@ export interface PoDynamicFormField extends PoDynamicField {
    * Define o modo de seleção do `po-datepicker`.
    *
    * Valores aceitos:
-   * - `'month-year'`: exibe seleção de mês e ano (formato `MM/YYYY`)
-   * - `'year'`: exibe seleção apenas de ano (formato `YYYY`)
+   * - `'month-year'`: exibe seleção de mês e ano, com o *model* no formato `MM/YYYY` (ex.: `'10/2026'`);
+   * - `'year'`: exibe seleção apenas de ano, com o *model* no formato `YYYY` (ex.: `'2026'`).
+   *
+   * Com `isoFormat`, o *model* segue o formato ISO, com o primeiro dia do período:
+   *
+   * | `mode`       | `isoFormat`                       | *Model* (ex.: Outubro/2026 ou 2026) |
+   * |--------------|-----------------------------------|-------------------------------------|
+   * | `month-year` | não definido                      | `'10/2026'`                         |
+   * | `month-year` | `PoDatepickerIsoFormat.Basic`     | `'2026-10-01'`                      |
+   * | `month-year` | `PoDatepickerIsoFormat.Extended`  | `'2026-10-01T00:00:00-03:00'`       |
+   * | `year`       | não definido                      | `'2026'`                            |
+   * | `year`       | `PoDatepickerIsoFormat.Basic`     | `'2026-01-01'`                      |
+   * | `year`       | `PoDatepickerIsoFormat.Extended`  | `'2026-01-01T00:00:00-03:00'`       |
+   *
+   * > Ao receber um valor ISO com outro dia no *model* (ex.: `'2026-10-15'`), o dia é mantido enquanto o período não
+   * for alterado. Ao selecionar no calendário ou digitar outro período, o *model* passa a usar o primeiro dia.
    *
    * **Componente compatível:** `po-datepicker`
    */

@@ -1,131 +1,130 @@
-<po-datepicker
-  class="po-sm-12"
-  name="datepicker"
-  [(ngModel)]="datepicker"
-  [p-helper]="helperText"
-  [p-clean]="properties.includes('clean')"
-  [p-disabled]="properties.includes('disabled')"
-  [p-max-date]="maxDate"
-  [p-error-pattern]="errorPattern"
-  [p-format]="format"
-  [p-help]="help"
-  [p-iso-format]="isoFormat"
-  [p-label]="label"
-  [p-locale]="locale"
-  [p-min-date]="minDate"
-  [p-no-autocomplete]="properties?.includes('noAutocomplete')"
-  [p-optional]="properties.includes('optional')"
-  [p-placeholder]="placeholder"
-  [p-readonly]="properties.includes('readonly')"
-  [p-required]="properties.includes('required')"
-  [p-required-field-error-message]="properties.includes('requiredFieldErrorMessage')"
-  [p-show-required]="properties.includes('showRequired')"
-  [p-label-text-wrap]="properties?.includes('labelTextWrap')"
-  [p-loading]="properties.includes('loading')"
-  [p-compact-label]="properties?.includes('compactLabel')"
-  [p-size]="size"
-  (p-blur)="changeEvent('p-blur')"
-  (p-change)="changeEvent('p-change')"
-  (p-change-model)="changeEvent('p-change-model')"
-  (p-keydown)="changeEvent('p-keydown')"
-  [p-error-limit]="properties?.includes('errorLimit')"
->
-</po-datepicker>
-
+@if (showDatepicker()) {
+  <po-datepicker
+    class="po-sm-12"
+    name="datepicker"
+    [(ngModel)]="model"
+    [p-helper]="helper()"
+    [p-clean]="hasProperty('clean')"
+    [p-disabled]="hasProperty('disabled')"
+    [p-max-date]="maxDate()"
+    [p-error-pattern]="errorPattern()"
+    [p-format]="format()"
+    [p-help]="help()"
+    [p-iso-format]="isoFormat()"
+    [p-label]="label()"
+    [p-locale]="locale()"
+    [p-min-date]="minDate()"
+    [p-mode]="mode()"
+    [p-no-autocomplete]="hasProperty('noAutocomplete')"
+    [p-optional]="hasProperty('optional')"
+    [p-placeholder]="placeholder()"
+    [p-readonly]="hasProperty('readonly')"
+    [p-required]="hasProperty('required')"
+    [p-required-field-error-message]="hasProperty('requiredFieldErrorMessage')"
+    [p-show-required]="hasProperty('showRequired')"
+    [p-label-text-wrap]="hasProperty('labelTextWrap')"
+    [p-loading]="hasProperty('loading')"
+    [p-compact-label]="hasProperty('compactLabel')"
+    [p-size]="size()"
+    [p-error-limit]="hasProperty('errorLimit')"
+    (p-blur)="changeEvent('p-blur')"
+    (p-change)="changeEvent('p-change')"
+    (p-change-model)="changeEvent('p-change-model')"
+    (p-keydown)="changeEvent('p-keydown')"
+  >
+  </po-datepicker>
+}
 <po-divider />
-
 <div class="po-row">
-  <po-info class="po-md-6" p-label="Model" [p-value]="datepicker"> </po-info>
-
-  <po-info class="po-md-6" p-label="Event" [p-value]="event"> </po-info>
+  <po-info class="po-md-6" p-label="Model" [p-value]="modelAsText()"> </po-info>
+  <po-info class="po-md-6" p-label="Event" [p-value]="event()"> </po-info>
 </div>
-
 <po-divider />
-
 <form #f="ngForm">
   <po-input class="po-md-6" name="label" [(ngModel)]="label" p-clean p-label="Label"> </po-input>
-
   <po-input class="po-md-6" name="help" [(ngModel)]="help" p-clean p-label="Help"> </po-input>
-
-  <po-input class="po-md-6" name="helperText" [(ngModel)]="helperText" p-clean p-label="Additional Help"> </po-input>
-
+  <po-input class="po-md-6" name="helper" [(ngModel)]="helper" p-clean p-label="Helper"> </po-input>
   <po-input class="po-md-6" name="placeholder" [(ngModel)]="placeholder" p-clean p-label="Placeholder"> </po-input>
-
   <po-input class="po-md-6" name="errorPattern" [(ngModel)]="errorPattern" p-clean p-label="Error Pattern"> </po-input>
-
   <po-datepicker
     class="po-md-6"
     name="minDate"
     [(ngModel)]="minDate"
     p-clean
     p-label="Min date"
-    [p-max-date]="maxDate"
-    [p-format]="format"
+    [p-max-date]="maxDate()"
+    [p-format]="format()"
   >
   </po-datepicker>
-
   <po-datepicker
     class="po-md-6"
     name="maxDate"
     [(ngModel)]="maxDate"
     p-clean
     p-label="Max date"
-    [p-format]="format"
-    [p-min-date]="minDate"
+    [p-format]="format()"
+    [p-min-date]="minDate()"
   >
   </po-datepicker>
-
   <po-checkbox-group
     class="po-md-12"
     name="properties"
-    [(ngModel)]="properties"
-    p-columns="4"
+    [ngModel]="properties()"
+    [p-columns]="4"
     p-label="Properties"
     [p-options]="propertiesOptions"
+    (ngModelChange)="properties.set($event)"
   >
   </po-checkbox-group>
-
   <po-radio-group
     class="po-md-12"
     name="locale"
-    [(ngModel)]="locale"
-    p-columns="4"
+    [ngModel]="locale()"
+    [p-columns]="4"
     p-label="Locale"
     [p-options]="localeOptions"
+    (ngModelChange)="changeLocale($event)"
   >
   </po-radio-group>
-
   <po-radio-group
     class="po-md-12"
     name="format"
-    [(ngModel)]="format"
-    p-columns="4"
+    [ngModel]="format()"
+    [p-columns]="4"
     p-label="Format"
     [p-options]="formatOptions"
+    (ngModelChange)="changeFormat($event)"
   >
   </po-radio-group>
-
   <po-radio-group
     class="po-md-12"
     name="isoFormat"
     [(ngModel)]="isoFormat"
-    p-columns="4"
+    [p-columns]="4"
     p-label="Iso Format"
     [p-options]="isoFormatOptions"
   >
   </po-radio-group>
-
+  <po-radio-group
+    class="po-md-12"
+    name="mode"
+    [ngModel]="mode()"
+    [p-columns]="4"
+    p-label="Mode"
+    [p-options]="modeOptions"
+    (ngModelChange)="changeMode($event)"
+  >
+  </po-radio-group>
   <po-radio-group
     class="po-md-12"
     name="size"
     [(ngModel)]="size"
-    p-columns="4"
+    [p-columns]="4"
     p-label="Size"
     p-help="Para aplicar o tamanho small, configure o nível de acessibilidade para AA, ajustável no navbar ou serviço de tema (https://po-ui.io/documentation/po-theme)."
     [p-options]="sizeOptions"
   >
   </po-radio-group>
-
   <div class="po-row">
     <po-button class="po-lg-3 po-md-6" name="restore" p-label="Sample Restore" (p-click)="restore()"> </po-button>
   </div>

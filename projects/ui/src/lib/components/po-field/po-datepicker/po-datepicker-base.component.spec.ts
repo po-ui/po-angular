@@ -1085,6 +1085,77 @@ describe('PoDatepickerBaseComponent:', () => {
     });
   });
 
+  describe('isMonthYearOrYearInvalid with Date and ISO:', () => {
+    it('should return false for a valid Date', () => {
+      component['mode'] = 'year';
+      expect(component['isMonthYearOrYearInvalid'](new Date(2026, 5, 15))).toBeFalse();
+    });
+
+    it('should return true for an invalid Date', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid'](new Date('invalid'))).toBeTrue();
+    });
+
+    it('should return false for a valid ISO value with p-iso-format', () => {
+      component['mode'] = 'month-year';
+      component.isoFormat = PoDatepickerIsoFormat.Extended;
+      expect(component['isMonthYearOrYearInvalid']('2026-10-01T00:00:00-03:00')).toBeFalse();
+    });
+
+    it('should return true for an ISO value without p-iso-format', () => {
+      component['mode'] = 'month-year';
+      expect(component['isMonthYearOrYearInvalid']('2026-10-01')).toBeTrue();
+    });
+
+    it('should return true for an ISO Extended value without timezone', () => {
+      component['mode'] = 'month-year';
+      component.isoFormat = PoDatepickerIsoFormat.Extended;
+      expect(component['isMonthYearOrYearInvalid']('2026-10-01T10:00:00')).toBeTrue();
+    });
+  });
+
+  describe('isIsoValueAllowed:', () => {
+    it('should return true only for a valid ISO value with p-iso-format', () => {
+      component.isoFormat = PoDatepickerIsoFormat.Basic;
+      expect(component['isIsoValueAllowed']('2026-10-01')).toBeTrue();
+      expect(component['isIsoValueAllowed']('10/2026')).toBeFalse();
+    });
+
+    it('should return false without p-iso-format', () => {
+      expect(component['isIsoValueAllowed']('2026-10-01')).toBeFalse();
+    });
+  });
+
+  describe('date setter with p-mode and p-iso-format:', () => {
+    it('should convert an ISO string to Date in month-year mode', () => {
+      component['mode'] = 'month-year';
+      component.isoFormat = PoDatepickerIsoFormat.Basic;
+
+      component.date = '2026-10-15';
+
+      expect(component.date.getFullYear()).toBe(2026);
+      expect(component.date.getMonth()).toBe(9);
+      expect(component.date.getDate()).toBe(15);
+    });
+
+    it('should convert MM/YYYY to the first day of the month', () => {
+      component['mode'] = 'month-year';
+
+      component.date = '10/2026';
+
+      expect(component.date.getMonth()).toBe(9);
+      expect(component.date.getDate()).toBe(1);
+    });
+
+    it('should set undefined for an invalid MM/YYYY', () => {
+      component['mode'] = 'month-year';
+
+      component.date = '13/2026';
+
+      expect(component.date).toBeUndefined();
+    });
+  });
+
   describe('isMonthYearOrYearInvalid:', () => {
     it('should return true for non-string value in month-year mode', () => {
       component['mode'] = 'month-year';
