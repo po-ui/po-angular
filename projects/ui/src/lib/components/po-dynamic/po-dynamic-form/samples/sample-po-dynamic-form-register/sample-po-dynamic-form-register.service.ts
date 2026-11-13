@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
 
+import { PoDynamicFormLoad } from '@po-ui/ng-components';
+
+interface City {
+  city: string;
+  code: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PoDynamicFormRegisterService {
-  getCity(state: number) {
+  getCity(state: number): Array<City> {
     switch (state) {
       case 1: {
         return [
@@ -42,7 +49,7 @@ export class PoDynamicFormRegisterService {
     return [];
   }
 
-  getUserDocument(value) {
+  getUserDocument(value: { isJuridicPerson?: boolean }): PoDynamicFormLoad {
     const cpfField = { property: 'cpf', visible: true };
     const cnpjField = { property: 'cnpj', visible: true };
     const document = value.isJuridicPerson ? cnpjField : cpfField;

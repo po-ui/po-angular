@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, inject, signal, viewChild } from '@angular/core';
 
 import {
+  PoDatepickerIsoFormat,
   PoDynamicFormField,
   PoDynamicFormFieldChanged,
+  PoDynamicFormLoad,
   PoDynamicFormValidation,
   PoNotificationService,
   ForceBooleanComponentEnum,
@@ -16,14 +18,23 @@ import { PoDynamicFormRegisterService } from './sample-po-dynamic-form-register.
   providers: [PoDynamicFormRegisterService],
   standalone: false
 })
-export class SamplePoDynamicFormRegisterComponent implements OnInit {
-  poNotification = inject(PoNotificationService);
-  private registerService = inject(PoDynamicFormRegisterService);
-  @ViewChild('dynamicForm', { static: true }) dynamicForm: PoDynamicFormComponent;
-  person = {};
-  validateFields: Array<string> = ['state'];
+export class SamplePoDynamicFormRegisterComponent {
+  private readonly poNotification = inject(PoNotificationService);
+  private readonly registerService = inject(PoDynamicFormRegisterService);
+  readonly dynamicForm = viewChild.required<PoDynamicFormComponent>('dynamicForm');
+  readonly person: Record<string, unknown> = {
+    name: 'Tony Stark',
+    birthday: '1970-05-29',
+    graduationYear: '1991-01-01',
+    hiringMonth: '2008-05-01',
+    isJuridicPerson: false,
+    videogame: ['PS4', 'NSW', 'XSSX'],
+    rememberSecretKey: 'no',
+    status: 'active'
+  };
+  readonly validateFields: Array<string> = ['state'];
 
-  fields: Array<PoDynamicFormField> = [
+  readonly fields = signal<Array<PoDynamicFormField>>([
     {
       property: 'name',
       divider: 'PERSONAL DATA',
@@ -49,6 +60,15 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
     { property: 'cpf', label: 'CPF', mask: '999.999.999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'cnpj', label: 'CNPJ', mask: '99.999.999/9999-99', gridColumns: 6, gridSmColumns: 12, visible: false },
     { property: 'genre', gridColumns: 6, gridSmColumns: 12, options: ['Male', 'Female', 'Other'], order: 2 },
+    {
+      property: 'graduationYear',
+      label: 'Graduation year',
+      type: 'date',
+      mode: 'year',
+      isoFormat: PoDatepickerIsoFormat.Basic,
+      gridColumns: 6,
+      gridSmColumns: 12
+    },
     {
       property: 'shortDescription',
       label: 'Short Description',
@@ -124,6 +144,15 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       gridSmColumns: 6
     },
     { property: 'exitTime', label: 'Exit time', type: 'time', gridColumns: 2, gridSmColumns: 6 },
+    {
+      property: 'hiringMonth',
+      label: 'Hiring month',
+      type: 'date',
+      mode: 'month-year',
+      isoFormat: PoDatepickerIsoFormat.Basic,
+      gridColumns: 3,
+      gridSmColumns: 12
+    },
     {
       property: 'wage',
       type: 'currency',
@@ -220,19 +249,9 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
       optional: true,
       url: 'https://po-sample-api.onrender.com/v1/uploads/addFile'
     }
-  ];
-  ngOnInit() {
-    this.person = {
-      name: 'Tony Stark',
-      birthday: '1970-05-29',
-      isJuridicPerson: false,
-      videogame: ['PS4', 'NSW', 'XSSX'],
-      rememberSecretKey: 'no',
-      status: 'active'
-    };
-  }
+  ]);
 
-  onChangeFields(changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation {
+  readonly onChangeFields = (changedValue: PoDynamicFormFieldChanged): PoDynamicFormValidation => {
     setTimeout(() => {
       const options = this.registerService.getCity(changedValue.value.state);
       this.updateDynamicFormField('city', { options, loading: false });
@@ -248,18 +267,22 @@ export class SamplePoDynamicFormRegisterComponent implements OnInit {
         }
       ]
     };
-  }
+  };
 
-  onLoadFields(value: any) {
-    return this.registerService.getUserDocument(value);
+  readonly onLoadFields = (value: { isJuridicPerson?: boolean }): PoDynamicFormLoad =>
+    this.registerService.getUserDocument(value);
+
+  save(): void {
+    this.poNotification.success('Data saved successfully!');
+    this.dynamicForm().form.reset();
   }
 
   private updateDynamicFormField(property: string, updates: Partial<PoDynamicFormField>): void {
-    const currentFields = this.dynamicForm?.fields ?? this.fields;
+    const currentFields = [...(this.dynamicForm().fields ?? this.fields())];
     const index = currentFields.findIndex(field => field.property === property);
     if (index >= 0) {
       currentFields[index] = { ...currentFields[index], ...updates };
-      this.fields = [...currentFields];
+      this.fields.set(currentFields);
     }
   }
 }
