@@ -4,10 +4,28 @@ import { Router } from '@angular/router';
 import { PoButtonGroupItem, PoListViewAction, PoListViewFieldProperties } from '@po-ui/ng-components';
 
 import { Documentation } from './documentation.class';
+import { DocsSectionGroup, groupDocs } from './docs-groups';
 import { DocumentationService } from '../documentation/documentation.service';
 import { PREVIEW_SAMPLE_NAMES } from './documentation-preview/preview-sample-names';
 
 type DocViewMode = 'grid' | 'list';
+
+/** Categoria da listagem: cards (itens canônicos) e "Ver também" (atalhos de outras categorias). */
+export interface DocsListCategory {
+  key: string;
+  label: string;
+  items: Array<Documentation>;
+  seeAlso: Array<Documentation>;
+}
+
+export interface DocsListSection {
+  key: string;
+  label: string;
+  flat: boolean;
+  /** Total de cards da seção (soma das categorias). */
+  count: number;
+  categories: Array<DocsListCategory>;
+}
 
 // Prefixo para as chaves do portal no localStorage.
 const PORTAL_STORAGE_PREFIX = '@po-ui/portal/';
@@ -57,6 +75,10 @@ export class DocumentationListComponent implements OnInit {
 
   private _items: Array<Documentation> = [];
   private _filteredItems: Array<Documentation> = [];
+  private _sections: Array<DocsListSection> = [];
+  private byName = new Map<string, Documentation>();
+  /** Subcomponentes achados pelo filtro: o card do pai aparece e o sub fica destacado. */
+  private matchedSubs = new Set<string>();
 
   private readonly _listActions: Array<PoListViewAction> = [
     { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'ICON_LIGHT' },
@@ -65,6 +87,12 @@ export class DocumentationListComponent implements OnInit {
 
   set filteredItems(items: Array<Documentation>) {
     this._filteredItems = items ?? [];
+    this._sections = this.buildSections(this._filteredItems);
+  }
+
+  /** Seções e categorias da listagem, com o mesmo agrupamento e ordem do menu (`groupDocs`). */
+  get sections(): Array<DocsListSection> {
+    return this._sections;
   }
 
   get filteredItems(): Array<Documentation> {
@@ -150,6 +178,7 @@ export class DocumentationListComponent implements OnInit {
         tagLabel: this.getTypeLabel(item.type),
         tagType: this.getTypeColor(item.type)
       }));
+      this.byName = new Map(this._items.map(item => [item.name, item]));
       this.renderWithLoading(() => (this.filteredItems = this._items));
     });
 
@@ -189,19 +218,59 @@ export class DocumentationListComponent implements OnInit {
     this.router.navigate(['/documentation', item.name], { queryParams: { view: 'web' } });
   }
 
+  /**
+   * Filtra por `name` ou título. Subcomponentes não têm card: se o filtro achar um, mostra o card do pai
+   * (com o sub destacado). Grupos que ficarem sem card somem.
+   */
   public filterAction(searchTextTerm = '') {
     const searchText = searchTextTerm.toLocaleLowerCase();
+    const matches = (item: Documentation) =>
+      item.name.toLocaleLowerCase().includes(searchText) || item.title.toLocaleLowerCase().includes(searchText);
+
+    this.matchedSubs = new Set(
+      searchText ? this._items.filter(item => item.parent && matches(item)).map(i => i.name) : []
+    );
 
     if (searchText) {
-      this.filteredItems = [
-        ...this._items.filter(
-          item =>
-            item.name.toLocaleLowerCase().includes(searchText) || item.title.toLocaleLowerCase().includes(searchText)
-        )
-      ];
+      this.filteredItems = this._items.filter(
+        item => !item.parent && (matches(item) || (item.children ?? []).some(child => this.matchedSubs.has(child)))
+      );
     } else {
       this.filteredItems = [...this._items];
     }
+  }
+
+  /** Subcomponentes do item (`@docsParent`), para os links dentro do card. */
+  public subcomponentsOf(item: Documentation): Array<Documentation> {
+    return (item.children ?? []).map(name => this.byName.get(name)).filter(Boolean);
+  }
+
+  public isMatchedSub(item: Documentation): boolean {
+    return this.matchedSubs.has(item.name);
+  }
+
+  private buildSections(items: Array<Documentation>): Array<DocsListSection> {
+    return groupDocs(items)
+      .map((section: DocsSectionGroup) => {
+        const categories = section.categories
+          .map(category => ({
+            key: category.key,
+            label: category.label,
+            items: category.entries.filter(entry => !entry.shortcut).map(entry => entry.doc),
+            seeAlso: category.entries.filter(entry => entry.shortcut).map(entry => entry.doc)
+          }))
+          // categoria só com "Ver também" (o card está em outra) não aparece
+          .filter(category => category.items.length);
+
+        return {
+          key: section.key,
+          label: section.label,
+          flat: section.flat,
+          count: categories.reduce((total, category) => total + category.items.length, 0),
+          categories
+        };
+      })
+      .filter(section => section.categories.length);
   }
 
   private sortDocs(docs) {

@@ -157,3 +157,53 @@
   color: var(--color-neutral-dark-80);
   font-family: var(--font-family-bold);
 }
+
+/* Agrupamento por seção e categoria (mesmas categorias do menu). */
+.documentation-list-section {
+  margin-bottom: var(--spacing-md, 1.5rem);
+}
+
+/* os cards da grade flutuam (po-row/po-lg-4): cada categoria fecha a própria linha */
+.documentation-list-section,
+.documentation-list-category {
+  display: flow-root;
+}
+
+.documentation-list-section-title {
+  margin: var(--spacing-sm, 1rem) 8px;
+  font-size: 1.25rem;
+}
+
+.documentation-list-category-title {
+  margin: var(--spacing-xs, 0.5rem) 8px;
+  font-size: 1rem;
+  color: var(--color-neutral-dark-80);
+}
+
+.documentation-list-count {
+  font-weight: normal;
+  color: var(--color-neutral-dark-70);
+}
+
+.documentation-list-see-also,
+.documentation-list-subcomponents {
+  margin: 0 8px var(--spacing-sm, 1rem);
+  font-size: 0.875rem;
+}
+
+.documentation-list-see-also-where {
+  color: var(--color-neutral-dark-70);
+}
+
+.documentation-list-subcomponents {
+  margin: 8px 0 0;
+}
+
+.documentation-list-subcomponent-match {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.documentation-skeleton-group-title {
+  margin: var(--spacing-sm, 1rem) 8px;
+}

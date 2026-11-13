@@ -7,6 +7,9 @@
     @if (isRendering) {
       @if (viewMode === 'grid') {
         <div class="documentation-list-viewport" aria-busy="true" aria-label="Carregando componentes">
+          <div class="documentation-skeleton-group-title">
+            <po-skeleton p-width="160px" p-height="24px"></po-skeleton>
+          </div>
           @for (row of skeletonRows; track $index) {
             <div class="documentation-list-row">
               @for (col of row; track $index) {
@@ -31,6 +34,7 @@
         </div>
       } @else {
         <div class="documentation-skeleton-list" aria-busy="true" aria-label="Carregando componentes">
+          <po-skeleton p-width="160px" p-height="24px"></po-skeleton>
           @for (row of skeletonListItems; track $index) {
             <div class="documentation-skeleton-list-item">
               <!-- item-row: título + subtítulo à esquerda, tag + botão de opções à direita -->
@@ -52,61 +56,120 @@
           }
         </div>
       }
-    } @else if (viewMode === 'grid') {
-      <div class="documentation-list-viewport po-row">
-        @for (item of filteredItems; track item.name) {
-          <div class="documentation-list-item po-sm-12 po-md-6 po-lg-4">
-            <po-widget
-              [p-height]="320"
-              [p-title]="item.title"
-              [p-tag]="item.tagLabel"
-              [p-tag-type]="item.tagType"
-              [p-primary-label]="item.hasSamples ? 'Exemplos' : 'Documentação'"
-              [p-secondary-label]="item.hasSamples ? 'Documentação' : ''"
-              (p-title-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
-              (p-primary-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
-              (p-secondary-action)="viewDocumentation(item)"
+    } @else {
+      @for (section of sections; track section.key) {
+        <section class="documentation-list-section" [attr.aria-labelledby]="'docs-section-' + section.key">
+          <h2 class="documentation-list-section-title" [id]="'docs-section-' + section.key">
+            {{ section.label }} <span class="documentation-list-count">· {{ section.count }}</span>
+          </h2>
+
+          @for (category of section.categories; track category.key) {
+            <section
+              class="documentation-list-category"
+              [attr.aria-labelledby]="section.flat ? null : 'docs-category-' + section.key + '-' + category.key"
             >
-              @if (hasPreviewSample(item)) {
-                <div class="docs-sample-container">
-                  @defer (on viewport; prefetch on idle) {
-                    <div class="documentation-list-item-preview" [appPreviewSampleHost]="item.name"></div>
-                  } @placeholder {
-                    <div class="documentation-preview-skeleton">
-                      <po-skeleton p-width="60%" p-height="20px"></po-skeleton>
-                      <po-skeleton p-width="100%" p-height="80px"></po-skeleton>
-                      <po-skeleton p-width="40%" p-height="20px"></po-skeleton>
+              @if (!section.flat) {
+                <h3
+                  class="documentation-list-category-title"
+                  [id]="'docs-category-' + section.key + '-' + category.key"
+                >
+                  {{ category.label }} <span class="documentation-list-count">· {{ category.items.length }}</span>
+                </h3>
+              }
+
+              @if (viewMode === 'grid') {
+                <div class="documentation-list-viewport po-row">
+                  @for (item of category.items; track item.name) {
+                    <div class="documentation-list-item po-sm-12 po-md-6 po-lg-4">
+                      <po-widget
+                        [p-height]="320"
+                        [p-title]="item.title"
+                        [p-tag]="item.tagLabel"
+                        [p-tag-type]="item.tagType"
+                        [p-primary-label]="item.hasSamples ? 'Exemplos' : 'Documentação'"
+                        [p-secondary-label]="item.hasSamples ? 'Documentação' : ''"
+                        (p-title-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
+                        (p-primary-action)="item.hasSamples ? viewSample(item) : viewDocumentation(item)"
+                        (p-secondary-action)="viewDocumentation(item)"
+                      >
+                        @if (hasPreviewSample(item)) {
+                          <div class="docs-sample-container">
+                            @defer (on viewport; prefetch on idle) {
+                              <div class="documentation-list-item-preview" [appPreviewSampleHost]="item.name"></div>
+                            } @placeholder {
+                              <div class="documentation-preview-skeleton">
+                                <po-skeleton p-width="60%" p-height="20px"></po-skeleton>
+                                <po-skeleton p-width="100%" p-height="80px"></po-skeleton>
+                                <po-skeleton p-width="40%" p-height="20px"></po-skeleton>
+                              </div>
+                            }
+                          </div>
+                        } @else if (item.previewText) {
+                          <p class="po-font-text">{{ item.previewText }}</p>
+                        } @else {
+                          <p class="po-font-text po-text-color-neutral-dark-70">
+                            Consulte a documentação de {{ item.title }} para mais detalhes.
+                          </p>
+                        }
+                        <ng-container *ngTemplateOutlet="subcomponents; context: { $implicit: item }"></ng-container>
+                      </po-widget>
                     </div>
                   }
                 </div>
-              } @else if (item.previewText) {
-                <p class="po-font-text">{{ item.previewText }}</p>
               } @else {
-                <p class="po-font-text po-text-color-neutral-dark-70">
-                  Consulte a documentação de {{ item.title }} para mais detalhes.
+                <po-list-view
+                  p-tag-position="right"
+                  p-detail-display="inline"
+                  [p-field-properties]="fieldProperties"
+                  [p-actions]="listActions"
+                  [p-items]="category.items"
+                  (p-title-action)="viewSample($event)"
+                >
+                  <ng-template p-list-view-detail-template let-item>
+                    @if (item.preview) {
+                      <div [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
+                    }
+                    <ng-container *ngTemplateOutlet="subcomponents; context: { $implicit: item }"></ng-container>
+                  </ng-template>
+                </po-list-view>
+              }
+
+              @if (category.seeAlso.length) {
+                <p class="documentation-list-see-also">
+                  Ver também:
+                  @for (shortcut of category.seeAlso; track shortcut.name; let last = $last) {
+                    <a
+                      [routerLink]="['/documentation', shortcut.name]"
+                      [attr.aria-label]="shortcut.title + ', ' + shortcut.sectionLabel + ' › ' + shortcut.categoryLabel"
+                      >{{ shortcut.title }}</a
+                    >
+                    <span class="documentation-list-see-also-where"
+                      >&nbsp;({{ shortcut.sectionLabel }} › {{ shortcut.categoryLabel }})</span
+                    >{{ last ? '' : ', ' }}
+                  }
                 </p>
               }
-            </po-widget>
-          </div>
-        } @empty {
-          <po-container class="documentation-list-empty">Nenhum dado encontrado</po-container>
-        }
-      </div>
-    } @else {
-      <po-list-view
-        p-tag-position="right"
-        p-detail-display="inline"
-        [p-field-properties]="fieldProperties"
-        [p-actions]="listActions"
-        [p-items]="filteredItems"
-        (p-title-action)="viewSample($event)"
-      >
-        <ng-template p-list-view-detail-template let-item>
-          @if (item.preview) {
-            <div [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
+            </section>
           }
-        </ng-template>
-      </po-list-view>
+        </section>
+      } @empty {
+        <po-container class="documentation-list-empty">Nenhum dado encontrado</po-container>
+      }
     }
+
+    <ng-template #subcomponents let-item>
+      @if (subcomponentsOf(item).length) {
+        <p class="documentation-list-subcomponents">
+          Subcomponentes:
+          @for (sub of subcomponentsOf(item); track sub.name; let last = $last) {
+            <a
+              [routerLink]="['/documentation', sub.name]"
+              [queryParams]="{ view: 'doc' }"
+              [class.documentation-list-subcomponent-match]="isMatchedSub(sub)"
+              >{{ sub.title }}</a>{{ last ? '' : ', ' }}
+          }
+        </p>
+      }
+    </ng-template>
   </div>
 </po-page-list>
