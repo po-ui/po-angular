@@ -103,7 +103,7 @@ import { PoThemeTypeEnum } from '../../../projects/ui/src/lib/services/po-theme/
     /* Legenda da célula (faz parte do snapshot): duas linhas, quebra de linha do caption preservada. */
     .caption {
       margin-bottom: 6px;
-      font: 10px/12px monospace;
+      font: 10px/12px var(--font-family, MonaSans); /* fonte do tema (@font-face empacotado), nunca fonte do sistema */
       white-space: pre-line;
       color: #6b6b6b;
     }
