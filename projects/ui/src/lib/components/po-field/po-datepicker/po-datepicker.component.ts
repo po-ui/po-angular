@@ -15,8 +15,24 @@ import {
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { createDate, formatYear, isMobile, isValidYear, setHelperSettings, uuid, PoUtils } from '../../../utils/util';
+import {
+  convertIsoToDate,
+  createDate,
+  isMobile,
+  isValidYear,
+  setHelperSettings,
+  uuid,
+  PoUtils
+} from '../../../utils/util';
 import { PoPickerMouseDownGuard } from '../../../utils/po-picker-mouse-down-guard';
+import {
+  formatDateForMode,
+  isMonthYearOrYearMode,
+  parseMonthYear,
+  parseYearToken,
+  isoBasicRegex,
+  isoExtendedRegex
+} from './utils/po-datepicker-mode.util';
 import { PoControlPositionService } from './../../../services/po-control-position/po-control-position.service';
 
 import { isObservable, of, Subscription, switchMap } from 'rxjs';
@@ -108,17 +124,6 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private clickListener;
   private readonly mouseDownGuard = new PoPickerMouseDownGuard(target => this.isInsidePicker(target));
-  private readonly dateRegex = new RegExp(
-    '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' + '(?:0[1-9]|1[0-2])-' + '(?:0[1-9]|[12]\\d|3[01])$'
-  );
-  private readonly isoRegex = new RegExp(
-    '^(?:[0-9])\\d{1}(?:[0-9])\\d{1}-' +
-      '(?:0[1-9]|1[0-2])-' +
-      '(?:0[1-9]|[12]\\d|3[01])' +
-      'T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|-0[1-9]|-1\\d|-2[0-3]|' +
-      '-00:?(?:0[1-9]|[0-5]\\d)|\\+[01]\\d|\\+2[0-3])' +
-      '(?:|:?[0-5]\\d)$'
-  );
   private timeoutChange: any;
   private valueBeforeChange: string;
   private subscriptionValidator: Subscription = new Subscription();
@@ -312,22 +317,10 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
       this.focus();
     }
 
-    if (this.mode === 'month-year' && event instanceof Date) {
+    if (isMonthYearOrYearMode(this.mode) && event instanceof Date) {
       this.date = event;
-      const separator = this.languageService.getDateSeparator(this.locale);
-      const displayValue = ('0' + (event.getMonth() + 1)).slice(-2) + separator + formatYear(event.getFullYear());
-      this.inputEl.nativeElement.value = displayValue;
-      const emitString = ('0' + (event.getMonth() + 1)).slice(-2) + '/' + formatYear(event.getFullYear());
-      this.callOnChange(emitString);
-      this.controlChangeEmitter();
-      this.togglePicker();
-      return;
-    }
-
-    if (this.mode === 'year' && event instanceof Date) {
-      this.date = event;
-      this.inputEl.nativeElement.value = formatYear(event.getFullYear());
-      this.callOnChange(formatYear(event.getFullYear()));
+      this.inputEl.nativeElement.value = this.formatToDateForMode(event);
+      this.callOnChange(this.getModelForMode(event));
       this.controlChangeEmitter();
       this.togglePicker();
       return;
@@ -544,18 +537,13 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     return this.displayAdditionalHelp;
   }
 
-  private handleSpecialModes(value: any): boolean {
-    if (this.mode === 'month-year') {
-      this.writeMonthYearValue(value);
-      return true;
+  private handleSpecialModes(value: unknown): boolean {
+    if (!isMonthYearOrYearMode(this.mode)) {
+      return false;
     }
 
-    if (this.mode === 'year') {
-      this.writeYearValue(value);
-      return true;
-    }
-
-    return false;
+    this.writeValueForMode(value);
+    return true;
   }
 
   private processValue(value: any) {
@@ -643,11 +631,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   isValidDateIso(value: string) {
-    return this.dateRegex.test(value);
+    return isoBasicRegex.test(value);
   }
 
   isValidExtendedIso(value) {
-    return this.isoRegex.test(value);
+    return isoExtendedRegex.test(value);
   }
 
   hasOverlayClass(element: any) {
@@ -732,102 +720,109 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
 
   private applyMonthYearValue(value: string): void {
     const separator = this.languageService.getDateSeparator(this.locale);
-    const parsed = this.parseMonthYearInput(value, separator);
-    if (parsed) {
-      this.syncCalendarMonthYear(parsed);
-      this.callOnChange(parsed);
-    } else {
-      this.callOnChange('Data inválida');
-    }
+    const monthYear = parseMonthYear(value, separator, true);
+
+    this.applyDateForMode(monthYear ? createDate(monthYear.year, monthYear.month - 1, 1) : undefined);
   }
 
   private applyYearValue(value: string, requireFullLength: boolean = false): void {
-    const year = this.parseYearToken(value);
-    if (year !== null && (!requireFullLength || value.length === 4)) {
-      this.syncCalendarYear(year);
-      this.callOnChange(formatYear(year));
-    } else {
+    const year = parseYearToken(value);
+    const isComplete = !requireFullLength || value.length === 4;
+
+    this.applyDateForMode(year !== null && isComplete ? createDate(year, 0, 1) : undefined);
+  }
+
+  // Mantém a data atual quando o período não muda, para preservar o dia carregado com `p-iso-format`.
+  private applyDateForMode(date: Date | undefined): void {
+    if (!date) {
       this.callOnChange('Data inválida');
+      return;
     }
+
+    if (!this.isSamePeriod(date)) {
+      this.date = date;
+    }
+
+    this.callOnChange(this.getModelForMode(this.date));
   }
 
-  private parseMonthYearInput(value: string, separator: string): string | null {
-    const parts = value.split(separator);
-    if (parts.length !== 2 || !/^\d{1,2}$/.test(parts[0])) {
-      return null;
+  private writeValueForMode(value: unknown): void {
+    const date = this.getDateFromValueForMode(value);
+
+    if (date) {
+      this.date = date;
+      this.inputEl.nativeElement.value = this.formatToDateForMode(date);
+      this.callOnChange(this.getModelForMode(date), false);
+    } else {
+      this.inputEl.nativeElement.value = '';
     }
-    const month = Number(parts[0]);
-    const year = this.parseYearToken(parts[1]);
-    if (month < 1 || month > 12 || year === null) {
-      return null;
-    }
-    if (this.isIncompleteZeroYear(parts[1], year)) {
-      return null;
-    }
-    return ('0' + month).slice(-2) + '/' + formatYear(year);
+
+    this.valueBeforeChange = this.inputEl.nativeElement.value;
   }
 
-  private isIncompleteZeroYear(yearText: string, year: number): boolean {
-    return year === 0 && yearText.length < 4;
-  }
-
-  private syncCalendarMonthYear(modelValue: string): void {
-    const parts = modelValue.split('/');
-    if (parts.length === 2) {
-      const month = parseInt(parts[0], 10);
-      const year = parseInt(parts[1], 10);
-      this.date = createDate(year, month - 1, 1);
+  private getDateFromValueForMode(value: unknown): Date | undefined {
+    if (this.isoFormat && value instanceof Date) {
+      return isValidYear(value.getFullYear()) ? value : undefined;
     }
+
+    if (this.isIsoValueAllowed(value)) {
+      this.setHourFromIsoValue(value);
+      return convertIsoToDate(value, false, false);
+    }
+
+    return this.mode === 'month-year' ? this.getDateFromMonthYearValue(value) : this.getDateFromYearValue(value);
   }
 
-  private syncCalendarYear(year: number): void {
-    this.date = createDate(year, 0, 1);
-  }
-
-  private writeMonthYearValue(value: any): void {
-    const separator = this.languageService.getDateSeparator(this.locale);
-
-    let month: number;
-    let year: number;
-
+  private getDateFromMonthYearValue(value: unknown): Date | undefined {
     if (value instanceof Date) {
-      month = value.getMonth() + 1;
-      year = value.getFullYear();
-    } else if (typeof value === 'string') {
-      const normalizedValue = value.replace('-', '/');
-      const parts = normalizedValue.split('/');
-      if (parts.length === 2 && /^\d{1,2}$/.test(parts[0])) {
-        month = Number(parts[0]);
-        year = this.parseYearToken(parts[1]) ?? Number.NaN;
-      }
+      return isValidYear(value.getFullYear()) ? createDate(value.getFullYear(), value.getMonth(), 1) : undefined;
     }
 
-    if (!Number.isNaN(month) && month >= 1 && month <= 12 && isValidYear(year)) {
-      const displayValue = ('0' + month).slice(-2) + separator + formatYear(year);
-      this.inputEl.nativeElement.value = displayValue;
-      const modelValue = ('0' + month).slice(-2) + '/' + formatYear(year);
-      this.syncCalendarMonthYear(modelValue);
-      this.callOnChange(modelValue, false);
-    } else {
-      this.inputEl.nativeElement.value = '';
-    }
-    this.valueBeforeChange = this.inputEl.nativeElement.value;
+    const monthYear = typeof value === 'string' ? parseMonthYear(value.replace('-', '/'), '/') : null;
+    return monthYear ? createDate(monthYear.year, monthYear.month - 1, 1) : undefined;
   }
 
-  private writeYearValue(value: any): void {
-    const year = typeof value === 'string' ? this.parseYearToken(value) : value;
-    if (isValidYear(year)) {
-      this.inputEl.nativeElement.value = formatYear(year);
-      this.syncCalendarYear(year);
-      this.callOnChange(formatYear(year), false);
-    } else {
-      this.inputEl.nativeElement.value = '';
+  private getDateFromYearValue(value: unknown): Date | undefined {
+    const year = this.getYearFromValue(value);
+    return year !== null && isValidYear(year) ? createDate(year, 0, 1) : undefined;
+  }
+
+  private getYearFromValue(value: unknown): number | null {
+    if (value instanceof Date) {
+      return value.getFullYear();
     }
-    this.valueBeforeChange = this.inputEl.nativeElement.value;
+
+    if (typeof value === 'string') {
+      return parseYearToken(value);
+    }
+
+    return typeof value === 'number' ? value : null;
+  }
+
+  private setHourFromIsoValue(value: string): void {
+    if (this.isValidExtendedIso(value)) {
+      this.hour = value.substring(10, 25);
+    }
+  }
+
+  private getModelForMode(date: Date): string | null {
+    return this.isoFormat ? this.convertDateToIsoFormat(date) : formatDateForMode(date, this.mode);
+  }
+
+  private convertDateToIsoFormat(date: Date): string | null {
+    return this.isExtendedISO ? PoUtils.convertDateToISOExtended(date, this.hour) : PoUtils.convertDateToISODate(date);
+  }
+
+  private formatToDateForMode(date: Date): string {
+    return formatDateForMode(date, this.mode, this.languageService.getDateSeparator(this.locale));
+  }
+
+  private isSamePeriod(date: Date): boolean {
+    return this.date instanceof Date && formatDateForMode(this.date, this.mode) === formatDateForMode(date, this.mode);
   }
 
   private controlChangeEmitter() {
-    if (this.mode === 'month-year' || this.mode === 'year') {
+    if (isMonthYearOrYearMode(this.mode)) {
       const currentInputValue = this.inputEl?.nativeElement?.value || '';
       if (currentInputValue !== this.valueBeforeChange && this.isValidInputForMode(currentInputValue)) {
         this.valueBeforeChange = currentInputValue;
@@ -859,18 +854,11 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
     }
 
     if (this.mode === 'month-year') {
-      const separator = this.languageService.getDateSeparator(this.locale);
-      const parts = value.split(separator);
-      if (parts.length !== 2 || !/^\d{1,2}$/.test(parts[0])) {
-        return false;
-      }
-      const month = Number(parts[0]);
-      const year = this.parseYearToken(parts[1]);
-      return month >= 1 && month <= 12 && year !== null && !this.isIncompleteZeroYear(parts[1], year);
+      return parseMonthYear(value, this.languageService.getDateSeparator(this.locale), true) !== null;
     }
 
     if (this.mode === 'year') {
-      return this.parseYearToken(value) !== null && value.length === 4;
+      return parseYearToken(value) !== null && value.length === 4;
     }
 
     return true;

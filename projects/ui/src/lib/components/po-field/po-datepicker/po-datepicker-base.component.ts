@@ -18,11 +18,10 @@ import {
   createDate,
   getDefaultSizeFn,
   isTypeof,
-  isValidYear,
-  replaceFormatSeparator,
-  validateSizeFn,
+  mapInputSizeToLoadingIcon,
   PoUtils,
-  mapInputSizeToLoadingIcon
+  replaceFormatSeparator,
+  validateSizeFn
 } from '../../../utils/util';
 import { PoMask } from '../po-input/po-mask';
 import { dateFailed, PoValidators } from './../validators';
@@ -31,8 +30,9 @@ import { Observable, Subscription, switchMap } from 'rxjs';
 import { PoFieldSize } from '../../../enums/po-field-size.enum';
 import { poLocaleDefault } from '../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../services/po-language/po-language.service';
-import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
 import { PoHelperOptions } from '../../po-helper';
+import { PoDatepickerIsoFormat } from './enums/po-datepicker-iso-format.enum';
+import { isValidIso, isMonthYearOrYearMode, parseMonthYear, parseYearToken } from './utils/po-datepicker-mode.util';
 
 const poDatepickerFormatDefault: string = 'dd/mm/yyyy';
 
@@ -129,6 +129,20 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    * Permite configurar o componente para seleção de:
    * - Mês e ano (`month-year`), com o *model* no formato `mm/yyyy` (ex.: `'03/2025'`);
    * - Apenas ano (`year`), com o *model* no formato `yyyy` (ex.: `'2025'`).
+   *
+   * Com `p-iso-format`, o *model* segue o formato ISO, com o primeiro dia do período:
+   *
+   * | `p-mode`     | `p-iso-format`                    | *Model* (ex.: Outubro/2026 ou 2026) |
+   * |--------------|-----------------------------------|-------------------------------------|
+   * | `month-year` | não definido                      | `'10/2026'`                         |
+   * | `month-year` | `PoDatepickerIsoFormat.Basic`     | `'2026-10-01'`                      |
+   * | `month-year` | `PoDatepickerIsoFormat.Extended`  | `'2026-10-01T00:00:00-03:00'`       |
+   * | `year`       | não definido                      | `'2026'`                            |
+   * | `year`       | `PoDatepickerIsoFormat.Basic`     | `'2026-01-01'`                      |
+   * | `year`       | `PoDatepickerIsoFormat.Extended`  | `'2026-01-01T00:00:00-03:00'`       |
+   *
+   * > Ao receber um valor ISO com outro dia no *model* (ex.: `'2026-10-15'`), o dia é mantido enquanto o período não
+   * for alterado. Ao selecionar no calendário ou digitar outro período, o *model* passa a usar o primeiro dia.
    *
    * > O ano é sempre representado com 4 dígitos, inclusive para anos inferiores a 1000 (ex.: `'03/0050'`).
    */
@@ -599,10 +613,10 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
    *
    * > Veja os valores válidos no *enum* `PoDatepickerIsoFormat`.
    *
-   * Propriedade incompatível com as variações month-year e year.
+   * Nas variações `month-year` e `year`, veja o formato do *model* na propriedade `p-mode`.
    */
-  @Input('p-iso-format') set isoFormat(value: PoDatepickerIsoFormat) {
-    if (Object.values(PoDatepickerIsoFormat).includes(value)) {
+  @Input('p-iso-format') set isoFormat(value: PoDatepickerIsoFormat | undefined) {
+    if (value && Object.values(PoDatepickerIsoFormat).includes(value)) {
       this._isoFormat = value;
       this.isExtendedISO = value === PoDatepickerIsoFormat.Extended;
     }
@@ -811,7 +825,7 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       this.hasValidatorRequired = true;
     }
 
-    if (this.mode === 'month-year' || this.mode === 'year') {
+    if (isMonthYearOrYearMode(this.mode)) {
       if (this.isMonthYearOrYearInvalid(c.value)) {
         this.errorPattern = this.errorPattern || 'Data inválida';
 
@@ -876,54 +890,54 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       return false;
     }
 
+    if (value instanceof Date) {
+      return Number.isNaN(value.getTime());
+    }
+
     if (typeof value !== 'string') {
       return true;
     }
 
+    if (this.isIsoValueAllowed(value)) {
+      return !!dateFailed(value);
+    }
+
     if (this.mode === 'month-year') {
-      const parts = value.split('/');
-      if (parts.length !== 2 || !/^\d{1,2}$/.test(parts[0])) {
-        return true;
-      }
-      const month = Number(parts[0]);
-      return month < 1 || month > 12 || this.parseYearToken(parts[1]) === null;
+      return parseMonthYear(value, '/') === null;
     }
 
     if (this.mode === 'year') {
-      return this.parseYearToken(value) === null;
+      return parseYearToken(value) === null;
     }
 
     return false;
   }
 
-  protected parseYearToken(value: string): number | null {
-    if (!/^\d{1,4}$/.test(value)) {
-      return null;
-    }
-
-    const year = Number(value);
-    return isValidYear(year) ? year : null;
+  protected isIsoValueAllowed(value: unknown): value is string {
+    return !!this.isoFormat && isValidIso(value);
   }
 
-  private convertStringToDate(value: string): Date {
+  private convertStringToDate(value: string): Date | undefined {
+    if (this.isIsoValueAllowed(value)) {
+      return convertIsoToDate(value, false, false);
+    }
+
     if (this.mode === 'month-year') {
       return this.convertMonthYearToDate(value);
     }
 
     if (this.mode === 'year') {
-      const year = this.parseYearToken(value);
+      const year = parseYearToken(value);
       return year === null ? undefined : createDate(year, 0, 1);
     }
 
     return convertIsoToDate(value, false, false);
   }
 
-  private convertMonthYearToDate(value: string): Date {
-    const parts = value.split('/');
-    const month = /^\d{1,2}$/.test(parts[0]) ? Number(parts[0]) : Number.NaN;
-    const year = parts.length === 2 ? this.parseYearToken(parts[1]) : null;
+  private convertMonthYearToDate(value: string): Date | undefined {
+    const monthYear = parseMonthYear(value, '/');
 
-    return month >= 1 && month <= 12 && year !== null ? createDate(year, month - 1, 1) : undefined;
+    return monthYear ? createDate(monthYear.year, monthYear.month - 1, 1) : undefined;
   }
 
   // Valida range de data considerando o modo
