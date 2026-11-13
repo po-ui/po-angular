@@ -1,38 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
+import { PoMenuItem } from '@po-ui/ng-components';
+
+import { Documentation } from './documentation.class';
+import { docLabel, groupDocs, shortcutTarget } from './docs-groups';
+
+// Gerado a partir de projects/portal/docs/templates/menu-components.service.template.ts (gulp build:menus).
 @Injectable({
   providedIn: 'root'
 })
 export class MenuComponentsService {
-  constructor() {}
+  private readonly router = inject(Router);
 
-  getMenus(documentationItems) {
-    const sortLabel = (prev, next) => (prev.label < next.label ? -1 : 1);
-    const items = [];
+  /**
+   * Menu da documentação em Seção › Categoria › Item, a partir das tags do JSDoc gravadas no api-list.json.
+   * - Ordem: @docsOrder primeiro, depois alfabética (helper `groupDocs`, o mesmo da listagem "API Reference").
+   * - Subcomponentes ficam fora do menu (a página deles marca o pai, ver DocumentationComponent).
+   * - Atalho: `action` sem `link`. Assim, pela URL, o po-menu marca só o item canônico (ele para no primeiro
+   *   link igual que encontra). O sufixo do rótulo é também o texto acessível (o po-menu usa o rótulo como aria-label).
+   */
+  getMenus(documentationItems: Array<Documentation>): Array<PoMenuItem> {
+    const link = (doc: Documentation) => '/documentation/' + doc.name;
 
-    documentationItems.forEach(item => {
-      items.push({
-        label: item.title.replace('Po ', ''),
-        link: '/documentation/' + item.name,
-        type: item.type
-      });
+    const sections = groupDocs(documentationItems).map(section => {
+      const categories = section.categories.map(category => ({
+        label: category.label,
+        subItems: category.entries.map(({ doc, shortcut }) =>
+          shortcut
+            ? {
+                label: docLabel(doc) + ' (' + shortcutTarget(doc) + ')',
+                action: () => this.router.navigateByUrl(link(doc))
+              }
+            : { label: docLabel(doc), link: link(doc) }
+        )
+      }));
+
+      return { label: section.label, subItems: section.flat ? categories.flatMap(c => c.subItems) : categories };
     });
 
-    items.sort(sortLabel);
-
     return [
-      { label: 'Componentes', subItems: items.filter(item => item.type === 'components') },
+      ...sections,
       {
-        label: 'Ferramentas para I.A.',
+        label: 'Ferramentas para IA',
         subItems: [
           { label: 'LLMS', link: '/documentation/ia-tools-llms' },
           { label: 'MCP PO-UI', link: '/documentation/ia-tools-mcp' }
         ]
-      },
-      { label: 'Diretivas', subItems: items.filter(item => item.type === 'directives') },
-      { label: 'Interceptors', subItems: items.filter(item => item.type === 'interceptors') },
-      { label: 'Serviços', subItems: items.filter(item => item.type === 'services') },
-      { label: 'Modelos de Dados', subItems: items.filter(item => item.type === 'models') }
+      }
     ];
   }
 }

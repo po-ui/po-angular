@@ -387,7 +387,11 @@
             "main": "projects/portal/src/test.ts",
             "tsConfig": "projects/portal/tsconfig.spec.json",
             "karmaConfig": "projects/portal/karma.conf.js",
-            "include": ["projects/portal/src/app/search/**/*.spec.ts", "projects/portal/src/app/shared/**/*.spec.ts"]
+            "include": [
+              "projects/portal/src/app/search/**/*.spec.ts",
+              "projects/portal/src/app/shared/**/*.spec.ts",
+              "projects/portal/src/app/documentation/*.spec.ts"
+            ]
           }
         }
       }

@@ -6,7 +6,12 @@
     "skipLibCheck": true
   },
   "files": ["src/test.ts"],
-  "include": ["src/app/search/**/*.spec.ts", "src/app/shared/**/*.spec.ts", "src/**/*.d.ts"],
+  "include": [
+    "src/app/search/**/*.spec.ts",
+    "src/app/shared/**/*.spec.ts",
+    "src/app/documentation/*.spec.ts",
+    "src/**/*.d.ts"
+  ],
   "angularCompilerOptions": {
     "strictTemplates": false
   }
