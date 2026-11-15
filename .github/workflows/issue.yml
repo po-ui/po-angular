@@ -22,19 +22,26 @@ jobs:
       - name: Notify Discord on Issue or Discussion
         env:
           DISCORD_WEBHOOK_URL_ISSUES: ${{ secrets.DISCORD_WEBHOOK_URL_ISSUES }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          DISCUSSION_AUTHOR: ${{ github.event.discussion.user.login }}
+          DISCUSSION_TITLE: ${{ github.event.discussion.title }}
+          DISCUSSION_URL: ${{ github.event.discussion.html_url }}
         run: |
           set -euo pipefail
 
-          if [ "${{ github.event_name }}" = "issues" ]; then
-            AUTHOR="${{ github.event.issue.user.login }}"
-            TITLE="${{ github.event.issue.title }}"
-            URL="${{ github.event.issue.html_url }}"
+          if [ "$EVENT_NAME" = "issues" ]; then
+            AUTHOR="$ISSUE_AUTHOR"
+            TITLE="$ISSUE_TITLE"
+            URL="$ISSUE_URL"
             TYPE="Issue"
             ICON="📋"
           else
-            AUTHOR="${{ github.event.discussion.user.login }}"
-            TITLE="${{ github.event.discussion.title }}"
-            URL="${{ github.event.discussion.html_url }}"
+            AUTHOR="$DISCUSSION_AUTHOR"
+            TITLE="$DISCUSSION_TITLE"
+            URL="$DISCUSSION_URL"
             TYPE="Discussão"
             ICON="💬"
           fi
