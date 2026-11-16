@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.39.28](https://github.com/po-ui/po-angular/compare/v19.39.27...v19.39.28) (2026-11-16)
+
+
+### Bug Fixes
+
+* **icon:** renderiza TemplateRef ao alternar o p-icon de string ([0918a9c](https://github.com/po-ui/po-angular/commit/0918a9c8ddb24be2b2d36c24698175531064797d))
+
 ### [19.39.27](https://github.com/po-ui/po-angular/compare/v19.39.26...v19.39.27) (2026-11-10)
 
 Compatibilidade com @totvs/thf-components@19.39.27
