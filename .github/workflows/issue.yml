@@ -1,47 +1,45 @@
 name: Notificar Discord ao Criar Issue ou Discussão
 
-# Define em quais situações esse workflow será executado
 on:
   issues:
-    types:
-      - opened
+    types: [opened]
   discussion:
-    types:
-      - created
+    types: [created]
 
-permissions:
-  issues: read
-  discussions: read
+permissions: {}
 
-# Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
-# É possível ter mais de um job e assim executar ações paralelamente.
 jobs:
   discord_notification_on_issue_or_discussion:
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     steps:
       - name: Notify Discord on Issue or Discussion
+        shell: bash
         env:
           DISCORD_WEBHOOK_URL_ISSUES: ${{ secrets.DISCORD_WEBHOOK_URL_ISSUES }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          DISC_AUTHOR: ${{ github.event.discussion.user.login }}
+          DISC_TITLE: ${{ github.event.discussion.title }}
+          DISC_URL: ${{ github.event.discussion.html_url }}
         run: |
           set -euo pipefail
 
-          if [ "${{ github.event_name }}" = "issues" ]; then
-            AUTHOR="${{ github.event.issue.user.login }}"
-            TITLE="${{ github.event.issue.title }}"
-            URL="${{ github.event.issue.html_url }}"
-            TYPE="Issue"
-            ICON="📋"
+          if [ "$EVENT_NAME" = "issues" ]; then
+            AUTHOR="$ISSUE_AUTHOR"; TITLE="$ISSUE_TITLE"; URL="$ISSUE_URL"
+            TYPE="Issue"; ICON="📋"
           else
-            AUTHOR="${{ github.event.discussion.user.login }}"
-            TITLE="${{ github.event.discussion.title }}"
-            URL="${{ github.event.discussion.html_url }}"
-            TYPE="Discussão"
-            ICON="💬"
+            AUTHOR="$DISC_AUTHOR"; TITLE="$DISC_TITLE"; URL="$DISC_URL"
+            TYPE="Discussão"; ICON="💬"
           fi
 
-          TITLE=$(echo "$TITLE" | tr -d '\n\r')
-          AUTHOR=$(echo "$AUTHOR" | tr -d '\n\r')
-          URL=$(echo "$URL" | tr -d '\n\r')
+          # O link deve apontar para o próprio GitHub; caso contrário, é descartado
+          case "$URL" in
+            https://github.com/*) ;;
+            *) URL="" ;;
+          esac
 
           PAYLOAD=$(jq -n \
             --arg icon "$ICON" \
@@ -49,10 +47,24 @@ jobs:
             --arg author "$AUTHOR" \
             --arg title "$TITLE" \
             --arg url "$URL" \
-            '{content: "\($icon) **Nova \($type) Criada \($icon)**\n- Autor: \($author)\n- Título: \($title)\n- Link: \($url)"}'
-          )
+            '
+            # Sanitiza texto controlado pelo usuário:
+            # - troca caracteres de controle e invisíveis/bidi por espaço
+            # - substitui qualquer URL (esquema://...) por "[link removido]"
+            # - troca crases para não escapar do bloco de código
+            # - colapsa espaços/quebras de linha e limita a 200 caracteres
+            def sanitize:
+              gsub("[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]"; " ")
+              | gsub("[A-Za-z][A-Za-z0-9+.-]*://[^\\s]*"; "[link removido]")
+              | gsub("`"; "'"'"'")
+              | gsub("\\s+"; " ")
+              | .[:200];
+            # Título e autor vão dentro de código inline: o Discord não renderiza markdown nem links ali
+            {
+              content: "\($icon) **Nova \($type) Criada \($icon)**\n- Autor: `\($author | sanitize)`\n- Título: `\($title | sanitize)`\n- Link: \(if $url == "" then "indisponível" else "<" + $url + ">" end)",
+              allowed_mentions: { parse: [] }
+            }')
 
           curl -X POST -H "Content-Type: application/json" \
             -d "$PAYLOAD" \
             "$DISCORD_WEBHOOK_URL_ISSUES"
-        shell: bash
