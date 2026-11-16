@@ -147,14 +147,18 @@
     "validate.js": "file:libs/validate.js-v0.13.2.tgz"
   },
   "overrides": {
-    "vite": "6.4.3",
+    "vite": "6.4.6",
     "serialize-javascript": "7.0.5",
-    "tar": "7.5.16",
+    "tar": "7.5.23",
     "picomatch": "4.0.4",
-    "piscina": "4.9.3",
+    "piscina": "4.9.4",
     "http-proxy-middleware": "3.0.7",
     "esbuild": "0.28.1",
-    "sigstore": "4.1.1"
+    "sigstore": "4.1.1",
+    "webpack-dev-middleware": "7.4.6",
+    "pacote": "21.5.1",
+    "postcss": "8.5.23",
+    "sockjs": { "uuid": "11.1.1" }
   },
   "standard-version": {
     "skip": {
