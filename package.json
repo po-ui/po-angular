@@ -79,7 +79,7 @@
     "@angular/router": "~22.2.1",
     "@capacitor/core": "5.7.2",
     "@capacitor/network": "^5.0.7",
-    "@po-ui/style": "22.0.0-rc.1",
+    "@po-ui/style": "file:po-ui-style-22.0.0-rc.0.tgz",
     "custom-idle-queue": "4.0.0",
     "driver.js": "~1.4.0",
     "echarts": "^6.1.0",
