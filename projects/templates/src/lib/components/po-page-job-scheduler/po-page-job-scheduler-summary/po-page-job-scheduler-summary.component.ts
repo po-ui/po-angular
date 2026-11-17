@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, inject } from '@angular/core';
 
-import { PoDynamicViewField, PoInfoOrientation } from '@po-ui/ng-components';
+import { PoDynamicFormField, PoDynamicViewField, PoInfoOrientation, PoLanguageService } from '@po-ui/ng-components';
 
 import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.interface';
 
@@ -12,12 +12,21 @@ import { PoJobSchedulerInternal } from '../interfaces/po-job-scheduler-internal.
 })
 export class PoPageJobSchedulerSummaryComponent implements OnInit {
   private readonly datePipe = inject(DatePipe);
+  private readonly languageService = inject(PoLanguageService);
+  private _parameters: Array<PoDynamicViewField> = [];
 
   @Input('p-components-size') componentsSize: string;
 
   @Input('p-literals') literals = <any>{};
 
-  @Input('p-parameters') parameters: Array<PoDynamicViewField> = [];
+  @Input('p-parameters') set parameters(value: Array<PoDynamicViewField>) {
+    this._parameters = value;
+    this.viewParameters = this.getViewParameters(value);
+  }
+
+  get parameters(): Array<PoDynamicViewField> {
+    return this._parameters;
+  }
 
   @Input('p-value') value: PoJobSchedulerInternal = <any>{};
 
@@ -25,6 +34,7 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
 
   @Input('p-summary-template') jobSchedulerSummaryTemplate;
 
+  viewParameters: Array<PoDynamicViewField> = [];
   executionValue = '';
   firstExecutionValue = '';
   infoOrientation = PoInfoOrientation.Horizontal;
@@ -179,6 +189,26 @@ export class PoPageJobSchedulerSummaryComponent implements OnInit {
       const nextDay = b.toLowerCase();
 
       return sorterWeekDays[currDay] > sorterWeekDays[nextDay] ? 1 : -1;
+    });
+  }
+
+  private getViewParameters(parameters: Array<PoDynamicViewField>): Array<PoDynamicViewField> {
+    if (!Array.isArray(parameters)) {
+      return parameters;
+    }
+
+    return parameters.map(parameter => {
+      const { mode, locale } = parameter as PoDynamicFormField;
+
+      if (mode === 'year') {
+        return { ...parameter, format: 'yyyy' };
+      }
+
+      if (mode === 'month-year') {
+        return { ...parameter, format: `MM${this.languageService.getDateSeparator(locale)}yyyy` };
+      }
+
+      return parameter;
     });
   }
 }

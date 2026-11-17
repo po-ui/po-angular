@@ -2,6 +2,7 @@ import { CurrencyPipe, DatePipe, DecimalPipe, TitleCasePipe } from '@angular/com
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 
 import { PoTimePipe } from '../../../pipes/po-time/po-time.pipe';
+import { convertValueToDate, getDateModeFromFormat } from '../../../utils/date.util';
 import { convertToBoolean, getDefaultSizeFn, isTypeof, sortFields, validateSizeFn } from '../../../utils/util';
 
 import { Observable, catchError, map, of } from 'rxjs';
@@ -423,6 +424,13 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
     return undefined;
   }
 
+  private transformDate(value: any, format: any) {
+    const mode = getDateModeFromFormat(format);
+    const date = mode ? convertValueToDate(value, mode) : undefined;
+
+    return this.datePipe.transform(date ?? value, format || 'dd/MM/yyyy');
+  }
+
   private transformValue(type: string, value, format) {
     let transformedValue = value;
 
@@ -431,7 +439,7 @@ export class PoDynamicViewBaseComponent extends PoDynamicSharedBase {
         transformedValue = this.currencyPipe.transform(value, format || 'BRL', 'symbol', '1.2-2');
         break;
       case 'date':
-        transformedValue = this.datePipe.transform(value, format || 'dd/MM/yyyy');
+        transformedValue = this.transformDate(value, format);
         break;
       case 'dateTime':
         transformedValue = this.datePipe.transform(value, format || 'dd/MM/yyyy HH:mm:ss');

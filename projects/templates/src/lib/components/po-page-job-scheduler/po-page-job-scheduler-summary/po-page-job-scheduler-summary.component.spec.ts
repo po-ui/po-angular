@@ -345,6 +345,31 @@ describe('PoPageJobSchedulerSummaryComponent:', () => {
       expect(widget).toBeTruthy();
     });
 
+    it('should send the parameters with `mode` to `po-dynamic-view` with the `format` of month and year', () => {
+      component.parameters = <any>[
+        { property: 'period', type: 'date', mode: 'month-year' },
+        { property: 'periodRu', type: 'date', mode: 'month-year', locale: 'ru' },
+        { property: 'year', type: 'date', mode: 'year', format: 'dd/mm/yyyy' },
+        { property: 'birth', type: 'date', format: 'dd/MM/yyyy' },
+        { property: 'name' }
+      ];
+      expect(component.viewParameters).toEqual(<any>[
+        { property: 'period', type: 'date', mode: 'month-year', format: 'MM/yyyy' },
+        { property: 'periodRu', type: 'date', mode: 'month-year', locale: 'ru', format: 'MM.yyyy' },
+        { property: 'year', type: 'date', mode: 'year', format: 'yyyy' },
+        { property: 'birth', type: 'date', format: 'dd/MM/yyyy' },
+        { property: 'name' }
+      ]);
+    });
+    it('should keep the parameters as they are if they are not an array', () => {
+      component.parameters = undefined;
+      expect(component.viewParameters).toBeUndefined();
+    });
+    it('should not change the original parameters', () => {
+      const original = <any>{ property: 'period', type: 'date', mode: 'month-year' };
+      component.parameters = [original];
+      expect(original.format).toBeUndefined();
+    });
     it('shouldn`t find `po-dynamic-view` and `po-widget` if parameters.length > 0', () => {
       component.parameters = [];
 
