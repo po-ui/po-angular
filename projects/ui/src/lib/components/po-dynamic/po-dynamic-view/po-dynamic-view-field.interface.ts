@@ -101,7 +101,7 @@ export interface PoDynamicViewField extends PoDynamicField {
    *     Exemplos: Use 'BRL' para Real Brasileiro e 'USD' para Dólar Americano.
    *   - `date`: Adota formatos de data especificados pelo [DatePipe](https://angular.io/api/common/DatePipe).
    *     Suporta formatos personalizados, como dia (dd), mês (MM) e ano (yyyy ou yy).
-   *     Formato padrão é 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy'.
+   *     Formato padrão é 'dd/MM/yyyy'. Exemplos: 'dd/MM/yyyy', 'dd-MM-yy', 'mm/dd/yyyy', 'MM/yyyy', 'yyyy'.
    *   - `time`: Aceita formatos de tempo, incluindo hora (HH), minutos (mm), segundos (ss) e opcionalmente
    *     milisegundos (f-ffffff). Formato padrão é 'HH:mm:ss'. Exemplos: 'HH:mm', 'HH:mm:ss.ffffff', 'HH:mm:ss.ff'.
    *   - `number`: Usa especificações do [DecimalPipe](https://angular.io/api/common/DecimalPipe) para formatação numérica.
