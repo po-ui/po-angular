@@ -24,7 +24,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 
 import { PoPageCustomizationService } from '../../services/po-page-customization/po-page-customization.service';
-import { capitalizeFirstLetter, getBrowserLanguage } from '../../utils/util';
+import { addZero, capitalizeFirstLetter, formatYear, getBrowserLanguage } from '../../utils/util';
 
 import { PoPageDynamicOptionsSchema } from '../../services';
 import { PoPageDynamicSearchFilters } from './interfaces/po-page-dynamic-search-filters.interface';
@@ -257,12 +257,47 @@ export class PoPageDynamicSearchComponent
     return labels.join(', ');
   }
 
-  private formatDate(date: string) {
+  private formatDate(date: string, mode?: 'month-year' | 'year', locale?: string) {
+    if (mode) {
+      return this.formatDateByMode(date, mode, locale);
+    }
+
     const year = parseInt(date.substr(0, 4), 10);
     const month = parseInt(date.substr(5, 2), 10);
     const day = parseInt(date.substr(8, 2), 10);
 
     return new Date(year, month - 1, day).toLocaleDateString(getBrowserLanguage());
+  }
+
+  private formatDateByMode(date: string, mode: 'month-year' | 'year', locale?: string) {
+    const monthYear = this.getMonthYear(date, mode);
+
+    if (!monthYear || monthYear.month < 1 || monthYear.month > 12) {
+      return date;
+    }
+
+    const year = formatYear(monthYear.year);
+
+    if (mode === 'year') {
+      return year;
+    }
+
+    const month = addZero(monthYear.month);
+    return `${month}${this.languageService.getDateSeparator(locale)}${year}`;
+  }
+
+  private getMonthYear(date: string, mode: 'month-year' | 'year') {
+    const monthYear = /^(\d{1,2})\/(\d{4})$/.exec(date);
+    if (mode === 'month-year' && monthYear) {
+      return { year: Number.parseInt(monthYear[2], 10), month: Number.parseInt(monthYear[1], 10) };
+    }
+
+    if (mode === 'year' && /^\d{4}$/.test(date)) {
+      return { year: Number.parseInt(date, 10), month: 1 };
+    }
+
+    const iso = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])/.exec(date);
+    return iso ? { year: Number.parseInt(iso[1], 10), month: Number.parseInt(iso[2], 10) } : undefined;
   }
 
   private formatArrayToObjectKeyValue(filters: Array<{ property: string; value?: any; initValue?: any }>): {
@@ -303,7 +338,11 @@ export class PoPageDynamicSearchComponent
     }
 
     if (field.type === PoDynamicFieldType.Date || field.type?.toLowerCase() === PoDynamicFieldType.DateTime) {
-      return field.range ? this.formatDate(value.start) + ' - ' + this.formatDate(value.end) : this.formatDate(value);
+      const mode = field.type === PoDynamicFieldType.Date ? field.mode : undefined;
+
+      return field.range
+        ? this.formatDate(value.start, mode, field.locale) + ' - ' + this.formatDate(value.end, mode, field.locale)
+        : this.formatDate(value, mode, field.locale);
     }
 
     if (field.type === PoDynamicFieldType.Boolean && typeof value === 'boolean') {
