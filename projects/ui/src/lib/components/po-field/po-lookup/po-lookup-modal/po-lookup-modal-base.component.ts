@@ -15,9 +15,16 @@ import { catchError } from 'rxjs/operators';
 
 import { PoModalAction } from '../../../../components/po-modal';
 import { PoModalComponent } from '../../../../components/po-modal/po-modal.component';
+import { convertValueToDate, formatDateForMode, isMonthYearOrYearMode } from '../../../../utils/date.util';
 import { poLocaleDefault } from '../../../../services/po-language/po-language.constant';
 import { PoLanguageService } from '../../../../services/po-language/po-language.service';
-import { capitalizeFirstLetter, convertToBoolean, isTypeof } from '../../../../utils/util';
+import {
+  capitalizeFirstLetter,
+  convertToBoolean,
+  formatYear,
+  isTypeof,
+  replaceFormatSeparator
+} from '../../../../utils/util';
 import { PoTableColumnSortType, PoTableColumnSpacing } from '../../../po-table';
 import { PoTableColumnSort } from '../../../po-table/interfaces/po-table-column-sort.interface';
 import { poTableLiteralsDefault } from '../../../po-table/po-table-base.component';
@@ -309,7 +316,7 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
   }
 
   constructor(
-    languageService: PoLanguageService,
+    private readonly languageService: PoLanguageService,
     protected changeDetector: ChangeDetectorRef
   ) {
     this.language = languageService.getShortLanguage();
@@ -362,6 +369,10 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
 
     if (fieldFilter.type === 'boolean' && (value === true || value === false)) {
       this.formatValueToBoolean(fieldFilter, value);
+    }
+
+    if (fieldFilter.type === 'date' && value) {
+      this.formatValueToDate(fieldFilter, value);
     }
 
     if (fieldFilter.options && value) {
@@ -482,6 +493,47 @@ export abstract class PoLookupModalBaseComponent implements OnDestroy, OnInit {
       minimumFractionDigits: 2
     }).format(filterValue);
     this.disclaimerLabel = currencyLabel;
+  }
+
+  private formatValueToDate(field: PoLookupAdvancedFilter, filterValue: any) {
+    if (field.range && typeof filterValue === 'object' && !(filterValue instanceof Date)) {
+      const { start, end } = filterValue;
+      if (start || end) {
+        const startLabel = start ? this.formatDateToDisclaimer(field, start) : '';
+        const endLabel = end ? this.formatDateToDisclaimer(field, end) : '';
+        this.disclaimerLabel = `${startLabel} - ${endLabel}`;
+      }
+      return;
+    }
+
+    this.disclaimerLabel = this.formatDateToDisclaimer(field, filterValue);
+  }
+
+  private formatDateToDisclaimer(field: PoLookupAdvancedFilter, value: string | number | Date): string {
+    const date = convertValueToDate(value, field.mode);
+    if (!date) {
+      return `${value}`;
+    }
+
+    const separator = this.languageService.getDateSeparator(field.locale || this.language);
+
+    if (isMonthYearOrYearMode(field.mode)) {
+      return formatDateForMode(date, field.mode, separator);
+    }
+
+    const day = `${date.getDate()}`.padStart(2, '0');
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    return this.getDateFormat(field, separator)
+      .replace('dd', day)
+      .replace('mm', month)
+      .replace('yyyy', formatYear(date.getFullYear()) ?? '');
+  }
+
+  private getDateFormat(field: PoLookupAdvancedFilter, separator: string): string {
+    const format = typeof field.format === 'string' ? field.format.toLowerCase() : '';
+    const isValid = format.includes('dd') && format.includes('mm') && format.includes('yyyy');
+
+    return replaceFormatSeparator(isValid ? format : 'dd/mm/yyyy', separator);
   }
 
   private formatValueToBoolean(field: PoLookupAdvancedFilter, filterValue: any) {
