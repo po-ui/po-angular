@@ -343,13 +343,35 @@ describe('PoSelectComponent:', () => {
       expect(fakeThis.selectedValue).toBe(undefined);
     });
 
-    it('onUpdateOptions: should call `onSelectChange` if model is truthy.', () => {
+    it('onUpdateOptions: should not call `onSelectChange` if model is truthy.', () => {
       component.modelValue = '1';
 
       spyOn(component, 'onSelectChange');
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
       component.onUpdateOptions();
 
-      expect(component.onSelectChange).toHaveBeenCalled();
+      expect(component.onSelectChange).not.toHaveBeenCalled();
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.selectedValue).toBe(1);
+      expect(component.displayValue).toBe('Teste2');
+    });
+
+    it('onUpdateOptions: should clear display when model value is not in options.', () => {
+      component.modelValue = '999';
+      component.selectedValue = 1;
+      component.displayValue = 'Teste2';
+
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+      component.onUpdateOptions();
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.selectedValue).toBeUndefined();
+      expect(component.displayValue).toBeUndefined();
+      expect(component.modelValue).toBe('999');
     });
 
     it('onUpdateOptions: shouldn´t call `onSelectChange` if model is falsy.', () => {
@@ -359,6 +381,28 @@ describe('PoSelectComponent:', () => {
       component.onUpdateOptions();
 
       expect(component.onSelectChange).not.toHaveBeenCalled();
+    });
+
+    it('p-options: should not emit p-change when p-options is reassigned with the same model value', () => {
+      component.options = [
+        { value: 'email', label: 'E-mail' },
+        { value: 'nomeFantasia', label: 'Nome Fantasia' }
+      ];
+      component.modelValue = 'email';
+
+      spyOn(component.change, 'emit');
+      spyOn(component.changeModel, 'emit');
+
+      component.options = [
+        { value: 'email', label: 'E-mail atualizado' },
+        { value: 'nomeFantasia', label: 'Nome Fantasia' }
+      ];
+
+      expect(component.change.emit).not.toHaveBeenCalled();
+      expect(component.changeModel.emit).not.toHaveBeenCalled();
+      expect(component.selectedValue).toBe('email');
+      expect(component.displayValue).toBe('E-mail atualizado');
+      expect(component.modelValue).toBe('email');
     });
 
     it('p-options: should call `removeDuplicatedOptions`, `removeUndefinedAndNullOptions` and `onUpdateOptions`.', () => {
