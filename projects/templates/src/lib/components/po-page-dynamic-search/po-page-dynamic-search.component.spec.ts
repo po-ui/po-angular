@@ -346,6 +346,103 @@ describe('PoPageDynamicSearchComponent:', () => {
       expectBrowserLanguageMethod('pt-BR', component, 'formatDate', '20/12/2018', date);
     });
 
+    describe('formatDate with mode:', () => {
+      const withMode = (mode?: 'month-year' | 'year', locale?: string) => ({
+        format: (value: string) => component['formatDate'](value, mode, locale)
+      });
+
+      it(`should return month and year if mode is 'month-year'`, () => {
+        const wrapper = withMode('month-year');
+        expectBrowserLanguageMethod('pt-BR', wrapper, 'format', '10/2026', '2026-10-01');
+        expectBrowserLanguageMethod('pt-BR', wrapper, 'format', '10/2026', '10/2026');
+        expectBrowserLanguageMethod('pt-BR', wrapper, 'format', '03/2026', '3/2026');
+        expectBrowserLanguageMethod('en-US', wrapper, 'format', '10/2026', '2026-10-01');
+      });
+
+      it(`should return only the year if mode is 'year'`, () => {
+        const wrapper = withMode('year');
+        expectBrowserLanguageMethod('pt-BR', wrapper, 'format', '2026', '2026-01-01');
+        expectBrowserLanguageMethod('pt-BR', wrapper, 'format', '2026', '2026');
+        expectBrowserLanguageMethod('en-US', wrapper, 'format', '2026', '2026-01-01');
+      });
+
+      it(`should use the date separator of the locale, as the po-datepicker (pt, en, es and ru)`, () => {
+        expect(withMode('month-year', 'pt').format('2026-10-01')).toBe('10/2026');
+        expect(withMode('month-year', 'en').format('2026-10-01')).toBe('10/2026');
+        expect(withMode('month-year', 'es').format('2026-10-01')).toBe('10/2026');
+        expect(withMode('month-year', 'ru').format('2026-10-01')).toBe('10.2026');
+        expect(withMode('month-year', 'ru').format('10/2026')).toBe('10.2026');
+        expect(withMode('year', 'ru').format('2026-01-01')).toBe('2026');
+      });
+
+      it(`should use the language of the application when the locale is not defined`, () => {
+        spyOn(component['languageService'], 'getDateSeparator').and.callFake((language?: string) =>
+          language === undefined ? '.' : '/'
+        );
+        expect(withMode('month-year').format('2026-10-01')).toBe('10.2026');
+      });
+
+      it(`should accept ISO extended with mode 'month-year' and 'year'`, () => {
+        expect(withMode('month-year', 'pt').format('2026-10-01T00:00:00-03:00')).toBe('10/2026');
+        expect(withMode('year').format('2026-01-01T00:00:00-03:00')).toBe('2026');
+        expect(withMode('year').format('2026-01-01T00:00:00Z')).toBe('2026');
+      });
+
+      it('should keep the day written in the ISO value for any offset', () => {
+        expect(withMode('month-year', 'pt').format('2024-12-31T23:00:00-03:00')).toBe('12/2024');
+        expect(withMode('year').format('2024-12-31T23:00:00-03:00')).toBe('2024');
+        expect(withMode('year').format('2025-01-01T00:00:00+14:00')).toBe('2025');
+        expect(withMode('month-year', 'pt').format('2025-01-01T00:00:00Z')).toBe('01/2025');
+      });
+
+      it('should pad the year with zeros', () => {
+        expect(withMode('year').format('0999-01-01')).toBe('0999');
+      });
+
+      it('should keep the full date without mode, even for ISO extended', () => {
+        expectBrowserLanguageMethod('pt-BR', withMode(), 'format', '01/10/2026', '2026-10-01T00:00:00-03:00');
+        expectBrowserLanguageMethod('en-US', withMode(), 'format', '10/1/2026', '2026-10-01T00:00:00-03:00');
+      });
+
+      it(`should return 'Invalid Date' for MM/YYYY and YYYY without mode (same as before)`, () => {
+        expectBrowserLanguageMethod('pt-BR', withMode(), 'format', 'Invalid Date', '10/2026');
+        expectBrowserLanguageMethod('pt-BR', withMode(), 'format', 'Invalid Date', '2026');
+      });
+
+      it(`should keep the value as informed when it does not match the mode`, () => {
+        expect(withMode('month-year').format('abc')).toBe('abc');
+        expect(withMode('year').format('abc')).toBe('abc');
+        expect(withMode('year').format('10/2026')).toBe('10/2026');
+        expect(withMode('month-year').format('2026')).toBe('2026');
+        expect(withMode('month-year').format('13/2026')).toBe('13/2026');
+        expect(withMode('month-year').format('2026-13-01')).toBe('2026-13-01');
+      });
+    });
+    it(`getFilterValueToDisclaimer: should call formatDate with field.mode and field.locale if field type is Date`, () => {
+      const field = {
+        type: PoDynamicFieldType.Date,
+        property: '1',
+        label: 'date',
+        mode: 'month-year',
+        locale: 'ru'
+      };
+      const spyFormatDate = spyOn(component, <any>'formatDate').and.returnValue('10.2026');
+      expect(component['getFilterValueToDisclaimer'](field, '10/2026')).toBe('10.2026');
+      expect(spyFormatDate).toHaveBeenCalledWith('10/2026', 'month-year', 'ru');
+    });
+    it(`getFilterValueToDisclaimer: should call formatDate with field.mode if range is true`, () => {
+      const field = { type: PoDynamicFieldType.Date, property: '1', label: 'date', range: true, mode: 'year' };
+      const spyFormatDate = spyOn(component, <any>'formatDate').and.returnValues('2025', '2026');
+      expect(component['getFilterValueToDisclaimer'](field, { start: '2025', end: '2026' })).toBe('2025 - 2026');
+      expect(spyFormatDate).toHaveBeenCalledWith('2025', 'year', undefined);
+      expect(spyFormatDate).toHaveBeenCalledWith('2026', 'year', undefined);
+    });
+    it(`getFilterValueToDisclaimer: should not apply field.mode if field type is dateTime`, () => {
+      const field = { type: PoDynamicFieldType.DateTime, property: '1', label: 'date', mode: 'month-year' };
+      const spyFormatDate = spyOn(component, <any>'formatDate').and.returnValue('01/10/2026');
+      expect(component['getFilterValueToDisclaimer'](field, '2026-10-01')).toBe('01/10/2026');
+      expect(spyFormatDate).toHaveBeenCalledWith('2026-10-01', undefined, undefined);
+    });
     it(`getFieldByProperty: should return field if 'field.property' is equal to 'fieldName'`, () => {
       const fields = [{ property: 'value1' }, { property: 'value2' }];
       const fieldName = 'value1';
