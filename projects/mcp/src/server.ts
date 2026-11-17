@@ -65,8 +65,8 @@ type ComponentSection = 'components' | 'services' | 'interfaces' | 'enums' | 'gu
 
 interface ToolRegistration {
   description: string;
-  inputSchema: Record<string, z.ZodTypeAny>;
-  outputSchema?: Record<string, z.ZodTypeAny>;
+  inputSchema: Record<string, z.ZodType>;
+  outputSchema?: Record<string, z.ZodType>;
 }
 
 type RegisterToolWithoutSdkInference = (name: string, registration: ToolRegistration, handler: unknown) => void;
