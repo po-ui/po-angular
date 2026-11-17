@@ -55,7 +55,11 @@
 </div>
 @if (parameters && parameters.length && !jobSchedulerSummaryTemplate) {
   <po-widget class="po-pt-1 po-pb-1 po-md-12" [p-size]="componentsSize" [p-title]="literals.parameters">
-    <po-dynamic-view [p-components-size]="componentsSize" [p-fields]="parameters" [p-value]="value.executionParameter">
+    <po-dynamic-view
+      [p-components-size]="componentsSize"
+      [p-fields]="viewParameters"
+      [p-value]="value.executionParameter"
+    >
     </po-dynamic-view>
   </po-widget>
 }

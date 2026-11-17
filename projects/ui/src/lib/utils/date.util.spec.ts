@@ -1,5 +1,6 @@
 import {
   convertValueToDate,
+  getDateModeFromFormat,
   formatDateForMode,
   isMonthYearOrYearMode,
   isValidIso,
@@ -164,6 +165,35 @@ describe('date.util:', () => {
     it('should keep the years from 0 to 99', () => {
       const date = convertValueToDate('0050-03-01');
       expect(date.getFullYear()).toBe(50);
+    });
+  });
+  describe('getDateModeFromFormat:', () => {
+    it('should return `year` for formats with only the year', () => {
+      expect(getDateModeFromFormat('yyyy')).toBe('year');
+      expect(getDateModeFromFormat('yy')).toBe('year');
+    });
+
+    it('should return `month-year` for formats with only month and year, in any order and separator', () => {
+      expect(getDateModeFromFormat('MM/yyyy')).toBe('month-year');
+      expect(getDateModeFromFormat('MM-yyyy')).toBe('month-year');
+      expect(getDateModeFromFormat('MM.yyyy')).toBe('month-year');
+      expect(getDateModeFromFormat('yyyy/MM')).toBe('month-year');
+      expect(getDateModeFromFormat('M/yyyy')).toBe('month-year');
+    });
+
+    it('should return `undefined` for any other format', () => {
+      expect(getDateModeFromFormat('dd/MM/yyyy')).toBeUndefined();
+      expect(getDateModeFromFormat('mm/yyyy')).toBeUndefined();
+      expect(getDateModeFromFormat('MM/dd')).toBeUndefined();
+      expect(getDateModeFromFormat('MMM yyyy')).toBeUndefined();
+      expect(getDateModeFromFormat('MM/yyyy HH:mm')).toBeUndefined();
+      expect(getDateModeFromFormat('')).toBeUndefined();
+    });
+
+    it('should return `undefined` when the format is not a string', () => {
+      expect(getDateModeFromFormat(undefined)).toBeUndefined();
+      expect(getDateModeFromFormat(['MM/yyyy'])).toBeUndefined();
+      expect(getDateModeFromFormat(10)).toBeUndefined();
     });
   });
 });
