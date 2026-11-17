@@ -304,8 +304,8 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
 
       this.optionsDefault = [];
       this.optionsDefault = [...this.optionWithoutGroup, ...this.transformInArray(this.listGroupOptions)];
-      this.onUpdateOptions();
       this._options = [...this.optionsDefault];
+      this.onUpdateOptions();
     }
   }
 
@@ -513,9 +513,22 @@ export class PoSelectComponent extends PoFieldValidateModel<any> implements OnCh
     }
   }
 
+  // Sincroniza apenas a exibição com as novas opções, sem emitir mudança.
+  // A troca de `p-options` não é uma ação do usuário, portanto não deve
+  // atualizar o model nem disparar `p-change` / `p-change-model`.
   onUpdateOptions() {
     if (this.modelValue) {
-      this.onSelectChange(this.modelValue);
+      const optionFound: any = this.findOptionValue(this.modelValue);
+
+      if (optionFound) {
+        this.selectedValue = optionFound[this.fieldValue];
+        this.selectElement.nativeElement.value = optionFound[this.fieldValue];
+        this.displayValue = optionFound[this.fieldLabel];
+      } else {
+        this.selectedValue = undefined;
+        this.selectElement.nativeElement.value = undefined;
+        this.displayValue = undefined;
+      }
     }
   }
 
