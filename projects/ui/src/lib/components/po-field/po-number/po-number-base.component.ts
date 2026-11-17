@@ -104,7 +104,27 @@ export abstract class PoNumberBaseComponent extends PoInputGeneric {
   }
 
   private isKeyAllowed(event): boolean {
+    if (this.isMisplacedSign(event)) {
+      return false;
+    }
+
     return this.isShortcut(event) || this.isControlKeys(event) || !this.isInvalidKey(event.key);
+  }
+
+  // Os sinais `-` e `+` só são válidos no início do número. Em um `input[type=number]`, o texto digitado com o sinal
+  // fora do início (ex.: `5-`) é inválido e o navegador retorna `value` vazio, o que faz o `p-maxlength` deixar de limitar.
+  private isMisplacedSign(event): boolean {
+    if (event.key !== '-' && event.key !== '+') {
+      return false;
+    }
+
+    if (event.ctrlKey || event.metaKey) {
+      return false;
+    }
+
+    const input = this.inputEl?.nativeElement;
+
+    return !!input && (input.value !== '' || !!input.validity?.badInput);
   }
 
   private isInvalidKey(key) {

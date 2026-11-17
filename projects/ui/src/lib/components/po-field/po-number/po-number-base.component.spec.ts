@@ -190,6 +190,82 @@ describe('PoNumberBaseComponent', () => {
     expect(component['isKeyAllowed']).toHaveBeenCalledWith(fakeKeyboardEvent);
   });
 
+  describe('onKeyDown: sinais `-` e `+`', () => {
+    const createEvent = (key: string) => ({
+      preventDefault: jasmine.createSpy('preventDefault'),
+      stopPropagation: jasmine.createSpy('stopPropagation'),
+      key
+    });
+
+    it('should call `preventDefault` if `-` is typed after a number', () => {
+      component.inputEl = { nativeElement: { value: '5', validity: { badInput: false } } };
+      const event = createEvent('-');
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should call `preventDefault` if `+` is typed after a number', () => {
+      component.inputEl = { nativeElement: { value: '5', validity: { badInput: false } } };
+      const event = createEvent('+');
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should call `preventDefault` if `-` is typed and the field has an invalid text (badInput)', () => {
+      component.inputEl = { nativeElement: { value: '', validity: { badInput: true } } };
+      const event = createEvent('-');
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('shouldn`t call `preventDefault` if `-` is typed with ctrl or meta key pressed', () => {
+      component.inputEl = { nativeElement: { value: '5', validity: { badInput: false } } };
+      const eventCtrl = { ...createEvent('-'), ctrlKey: true };
+      const eventMeta = { ...createEvent('-'), metaKey: true };
+
+      component.onKeyDown(eventCtrl);
+      component.onKeyDown(eventMeta);
+
+      expect(eventCtrl.preventDefault).not.toHaveBeenCalled();
+      expect(eventMeta.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('shouldn`t call `preventDefault` if `-` is typed and `nativeElement` is undefined', () => {
+      component.inputEl = { nativeElement: undefined };
+      const event = createEvent('-');
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('shouldn`t throw if `-` is typed in an empty field and `validity` is undefined', () => {
+      component.inputEl = { nativeElement: { value: '' } };
+      const event = createEvent('-');
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('shouldn`t call `preventDefault` if `-` is typed in an empty field', () => {
+      component.inputEl = { nativeElement: { value: '', validity: { badInput: false } } };
+      const event = createEvent('-');
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(event.stopPropagation).not.toHaveBeenCalled();
+    });
+  });
+
   it('onKeyDown: shouldn`t call `preventDefault`', () => {
     const fakeKeyboardEvent = {
       preventDefault: () => {},
