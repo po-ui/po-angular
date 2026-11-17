@@ -646,6 +646,149 @@ describe('PoLookupModalBaseComponent:', () => {
       expect(component.disclaimer.label).toBe('Is Active: false');
     });
 
+    describe('addDisclaimer with date fields:', () => {
+      const labelOf = (field: any, value: any, language = 'pt') => {
+        Object.defineProperty(component, 'language', { value: language, configurable: true });
+        component.advancedFilters = [{ property: 'dt', label: 'Date', type: 'date', ...field }];
+        component.disclaimerGroup.disclaimers = [];
+        component.addDisclaimer(value, 'dt');
+        return component.disclaimer.label;
+      };
+
+      it('should use the default format dd/mm/yyyy', () => {
+        expect(labelOf({}, '2026-10-01')).toBe('Date: 01/10/2026');
+      });
+
+      it('should accept ISO extended', () => {
+        expect(labelOf({}, '2026-10-01T00:00:00-03:00')).toBe('Date: 01/10/2026');
+      });
+
+      it('should use the formats mm/dd/yyyy and yyyy/mm/dd', () => {
+        expect(labelOf({ format: 'mm/dd/yyyy' }, '2026-10-01')).toBe('Date: 10/01/2026');
+        expect(labelOf({ format: 'yyyy/mm/dd' }, '2026-10-01')).toBe('Date: 2026/10/01');
+      });
+
+      it('should use the default format if format is invalid or array', () => {
+        expect(labelOf({ format: 'abc' }, '2026-10-01')).toBe('Date: 01/10/2026');
+        expect(labelOf({ format: ['dd/mm/yyyy'] }, '2026-10-01')).toBe('Date: 01/10/2026');
+      });
+
+      it('should use the separator of the locale', () => {
+        expect(labelOf({ locale: 'ru' }, '2026-10-01')).toBe('Date: 01.10.2026');
+      });
+
+      it('should format month-year', () => {
+        expect(labelOf({ mode: 'month-year' }, '2026-10-01')).toBe('Date: 10/2026');
+        expect(labelOf({ mode: 'month-year' }, '10/2026')).toBe('Date: 10/2026');
+        expect(labelOf({ mode: 'month-year', locale: 'ru' }, '10/2026')).toBe('Date: 10.2026');
+        expect(labelOf({ mode: 'month-year' }, '13/2026')).toBe('Date: 13/2026');
+      });
+
+      it('should format year', () => {
+        expect(labelOf({ mode: 'year' }, '2026-01-01')).toBe('Date: 2026');
+        expect(labelOf({ mode: 'year' }, '2026')).toBe('Date: 2026');
+        expect(labelOf({ mode: 'year' }, 'abc')).toBe('Date: abc');
+      });
+
+      it('should format a valid Date and keep the raw text for an invalid one', () => {
+        expect(labelOf({}, new Date(2026, 9, 1))).toBe('Date: 01/10/2026');
+        expect(labelOf({}, new Date('x'))).toBe('Date: Invalid Date');
+      });
+
+      it('should keep the raw text if the value is not interpretable', () => {
+        expect(labelOf({}, 123)).toBe('Date: 123');
+        expect(labelOf({}, 'Data inválida')).toBe('Date: Data inválida');
+        expect(labelOf({}, '2026-13-01')).toBe('Date: 2026-13-01');
+        expect(labelOf({ mode: 'month-year' }, '2026')).toBe('Date: 2026');
+      });
+
+      it('should format range', () => {
+        const field = { range: true, mode: 'month-year' };
+        expect(labelOf(field, { start: '2026-01-01', end: '2026-10-01' })).toBe('Date: 01/2026 - 10/2026');
+        expect(labelOf(field, { start: '2026-01-01' })).toBe('Date: 01/2026 - ');
+        expect(labelOf(field, { end: '2026-10-01' })).toBe('Date:  - 10/2026');
+        expect(labelOf(field, {})).toBe('Date: [object Object]');
+      });
+
+      it('should format a single value when range is true and the value is a Date', () => {
+        expect(labelOf({ range: true }, new Date(2026, 9, 1))).toBe('Date: 01/10/2026');
+      });
+
+      it('should format ISO extended with every mode', () => {
+        const extended = '2026-10-01T00:00:00-03:00';
+        expect(labelOf({}, extended)).toBe('Date: 01/10/2026');
+        expect(labelOf({ mode: 'month-year' }, extended)).toBe('Date: 10/2026');
+        expect(labelOf({ mode: 'year' }, '2026-01-01T00:00:00-03:00')).toBe('Date: 2026');
+        expect(labelOf({ mode: 'year' }, '2026-01-01T00:00:00Z')).toBe('Date: 2026');
+      });
+
+      it('should ignore format when mode is month-year or year', () => {
+        expect(labelOf({ mode: 'month-year', format: 'yyyy/mm/dd' }, '2026-10-01')).toBe('Date: 10/2026');
+        expect(labelOf({ mode: 'year', format: 'mm/dd/yyyy' }, '2026-10-01T00:00:00-03:00')).toBe('Date: 2026');
+      });
+
+      it('should combine format with ISO extended and locale', () => {
+        const extended = '2026-10-01T00:00:00-03:00';
+        expect(labelOf({ format: 'yyyy/mm/dd' }, extended)).toBe('Date: 2026/10/01');
+        expect(labelOf({ format: 'MM/DD/YYYY' }, extended)).toBe('Date: 10/01/2026');
+        expect(labelOf({ format: 'yyyy/mm/dd', locale: 'ru' }, extended)).toBe('Date: 2026.10.01');
+      });
+
+      it('should use the component language when field.locale is not defined', () => {
+        expect(labelOf({}, '2026-10-01', 'ru')).toBe('Date: 01.10.2026');
+        expect(labelOf({ mode: 'month-year' }, '2026-10-01', 'ru')).toBe('Date: 10.2026');
+      });
+
+      it('should keep the day written in the ISO value for any offset', () => {
+        expect(labelOf({}, '2024-01-01T23:00:00+09:00')).toBe('Date: 01/01/2024');
+        expect(labelOf({}, '2024-01-01T23:30:00Z')).toBe('Date: 01/01/2024');
+        expect(labelOf({}, '2024-01-01T00:00:00-12:00')).toBe('Date: 01/01/2024');
+        expect(labelOf({ mode: 'month-year' }, '2024-12-31T23:00:00-03:00')).toBe('Date: 12/2024');
+        expect(labelOf({ mode: 'year' }, '2024-12-31T23:00:00-03:00')).toBe('Date: 2024');
+        expect(labelOf({ mode: 'year' }, '2025-01-01T00:00:00+14:00')).toBe('Date: 2025');
+      });
+
+      it('should ignore the time and the time zone of ISO extended', () => {
+        expect(labelOf({}, '2026-10-01T23:59:59-03:00')).toBe('Date: 01/10/2026');
+      });
+
+      it('should keep the raw text for ISO with invalid month or day', () => {
+        expect(labelOf({ mode: 'month-year' }, '2026-13-01')).toBe('Date: 2026-13-01');
+        expect(labelOf({ mode: 'year' }, '2026-10-32')).toBe('Date: 2026-10-32');
+      });
+
+      it('should format months with one digit in MM/YYYY and years before 1000', () => {
+        expect(labelOf({ mode: 'month-year' }, '3/2026')).toBe('Date: 03/2026');
+        expect(labelOf({ mode: 'month-year' }, '2026-03-01')).toBe('Date: 03/2026');
+        expect(labelOf({}, '0999-03-04')).toBe('Date: 04/03/0999');
+      });
+
+      it('should not read MM/YYYY or YYYY when the mode does not match', () => {
+        expect(labelOf({}, '10/2026')).toBe('Date: 10/2026');
+        expect(labelOf({}, '2026')).toBe('Date: 2026');
+        expect(labelOf({ mode: 'year' }, '10/2026')).toBe('Date: 10/2026');
+      });
+
+      it('should leave the year empty when the year of the Date is negative', () => {
+        const date = new Date(2026, 9, 1);
+        date.setFullYear(-1, 9, 1);
+        expect(labelOf({}, date)).toBe('Date: 01/10/');
+      });
+
+      it('should keep the raw text for dateTime', () => {
+        expect(labelOf({ type: 'dateTime' }, '2026-10-01T10:00:00-03:00')).toBe('Date: 2026-10-01T10:00:00-03:00');
+      });
+
+      it('should keep disclaimer.value as the model', () => {
+        labelOf({ mode: 'month-year' }, '2026-10-01');
+        expect(component.disclaimer.value).toBe('2026-10-01');
+      });
+
+      it('should not format if value is falsy', () => {
+        expect(labelOf({}, '')).toBe('Date: ');
+      });
+    });
+
     it('formatValueToBoolean: should format value to boolean when filterValue is truthy', () => {
       const filterValue = true;
       const field = {

@@ -941,6 +941,65 @@ describe('PoDynamicViewBaseComponent:', () => {
         expect(component['datePipe'].transform).toHaveBeenCalledWith(value, format);
       });
 
+      it('should format only month and year case `type` is `date` and `format` is `MM/yyyy`', () => {
+        (component as any)['datePipe'] = datePipe;
+        expect(component['transformValue']('date', '2026-10-01', 'MM/yyyy')).toBe('10/2026');
+        expect(component['transformValue']('date', '2026-10-01T00:00:00-03:00', 'MM/yyyy')).toBe('10/2026');
+        expect(component['transformValue']('date', '10/2026', 'MM/yyyy')).toBe('10/2026');
+        expect(component['transformValue']('date', '3/2026', 'MM/yyyy')).toBe('03/2026');
+        expect(component['transformValue']('date', new Date(2026, 9, 1), 'MM/yyyy')).toBe('10/2026');
+        expect(component['transformValue']('date', '10/2026', 'yyyy/MM')).toBe('2026/10');
+        expect(component['transformValue']('date', '10/2026', 'MM.yyyy')).toBe('10.2026');
+      });
+      it('should format only the year case `type` is `date` and `format` is `yyyy`', () => {
+        (component as any)['datePipe'] = datePipe;
+        expect(component['transformValue']('date', '2026-01-01', 'yyyy')).toBe('2026');
+        expect(component['transformValue']('date', '2026-01-01T00:00:00-03:00', 'yyyy')).toBe('2026');
+        expect(component['transformValue']('date', '2026', 'yyyy')).toBe('2026');
+        expect(component['transformValue']('date', new Date(2026, 0, 1), 'yyyy')).toBe('2026');
+      });
+      it('should keep the day written in the ISO value for any offset case `format` is `MM/yyyy` or `yyyy`', () => {
+        (component as any)['datePipe'] = datePipe;
+        expect(component['transformValue']('date', '2024-12-31T23:00:00-03:00', 'MM/yyyy')).toBe('12/2024');
+        expect(component['transformValue']('date', '2024-12-31T23:00:00-03:00', 'yyyy')).toBe('2024');
+        expect(component['transformValue']('date', '2025-01-01T00:00:00+14:00', 'yyyy')).toBe('2025');
+        expect(component['transformValue']('date', '2025-01-01T00:00:00Z', 'MM/yyyy')).toBe('01/2025');
+      });
+      it('should not read `MM/YYYY` or `YYYY` case `format` has day', () => {
+        spyOn(component['datePipe'], 'transform');
+        component['transformValue']('date', '10/2026', 'dd/MM/yyyy');
+        expect(component['datePipe'].transform).toHaveBeenCalledWith('10/2026', 'dd/MM/yyyy');
+      });
+      it('should apply `datePipe.transform` with the value as informed case it is not a valid date for the `format`', () => {
+        spyOn(component['datePipe'], 'transform');
+        component['transformValue']('date', 'abc', 'MM/yyyy');
+        component['transformValue']('date', 1730000000000, 'yyyy');
+        expect(component['datePipe'].transform).toHaveBeenCalledWith('abc', 'MM/yyyy');
+        expect(component['datePipe'].transform).toHaveBeenCalledWith(1730000000000, 'yyyy');
+      });
+      it('should apply `format` to `fieldLabel` and to the array of objects case `type` is `date`', () => {
+        (component as any)['datePipe'] = datePipe;
+        component.value = { period: { code: 1, label: '2026-10-01' }, periodLabel: '10/2026', periodCode: 1 };
+        const arrayField = <any>{
+          property: 'period',
+          type: 'date',
+          format: 'MM/yyyy',
+          isArrayOrObject: true,
+          fieldLabel: 'label',
+          fieldValue: 'code',
+          concatLabelValue: true
+        };
+        const labelField = <any>{
+          property: 'periodLabel',
+          type: 'date',
+          format: 'MM/yyyy',
+          concatLabelValue: true,
+          fieldLabel: 'periodLabel',
+          fieldValue: 'periodCode'
+        };
+        expect(component['transformArrayValue'](component.value['period'], arrayField)).toBe('10/2026 - 1');
+        expect(component['transformFieldLabel']('periodLabel', labelField)).toBe('10/2026 - 1');
+      });
       it('should apply `datePipe.transform` with default format case `type` is `dateTime`', () => {
         const type = 'dateTime';
         const value = new Date();
