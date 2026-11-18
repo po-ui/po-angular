@@ -10,12 +10,11 @@ import { PREVIEW_SAMPLE_NAMES } from './documentation-preview/preview-sample-nam
 
 type DocViewMode = 'grid' | 'list';
 
-/** Categoria da listagem: cards (itens canônicos) e "Ver também" (atalhos de outras categorias). */
+/** Categoria da listagem: só os itens canônicos (atalhos ficam só no menu). */
 export interface DocsListCategory {
   key: string;
   label: string;
   items: Array<Documentation>;
-  seeAlso: Array<Documentation>;
 }
 
 export interface DocsListSection {
@@ -76,9 +75,6 @@ export class DocumentationListComponent implements OnInit {
   private _items: Array<Documentation> = [];
   private _filteredItems: Array<Documentation> = [];
   private _sections: Array<DocsListSection> = [];
-  private byName = new Map<string, Documentation>();
-  /** Subcomponentes achados pelo filtro: o card do pai aparece e o sub fica destacado. */
-  private matchedSubs = new Set<string>();
 
   private readonly _listActions: Array<PoListViewAction> = [
     { label: 'Exemplos', action: this.viewSample.bind(this), icon: 'ICON_LIGHT' },
@@ -178,7 +174,6 @@ export class DocumentationListComponent implements OnInit {
         tagLabel: this.getTypeLabel(item.type),
         tagType: this.getTypeColor(item.type)
       }));
-      this.byName = new Map(this._items.map(item => [item.name, item]));
       this.renderWithLoading(() => (this.filteredItems = this._items));
     });
 
@@ -227,26 +222,12 @@ export class DocumentationListComponent implements OnInit {
     const matches = (item: Documentation) =>
       item.name.toLocaleLowerCase().includes(searchText) || item.title.toLocaleLowerCase().includes(searchText);
 
-    this.matchedSubs = new Set(
-      searchText ? this._items.filter(item => item.parent && matches(item)).map(i => i.name) : []
-    );
-
+    // subcomponentes (`@docsParent`) não aparecem na listagem, então o filtro também não os acha
     if (searchText) {
-      this.filteredItems = this._items.filter(
-        item => !item.parent && (matches(item) || (item.children ?? []).some(child => this.matchedSubs.has(child)))
-      );
+      this.filteredItems = this._items.filter(item => !item.parent && matches(item));
     } else {
       this.filteredItems = [...this._items];
     }
-  }
-
-  /** Subcomponentes do item (`@docsParent`), para os links dentro do card. */
-  public subcomponentsOf(item: Documentation): Array<Documentation> {
-    return (item.children ?? []).map(name => this.byName.get(name)).filter(Boolean);
-  }
-
-  public isMatchedSub(item: Documentation): boolean {
-    return this.matchedSubs.has(item.name);
   }
 
   private buildSections(items: Array<Documentation>): Array<DocsListSection> {
@@ -256,10 +237,10 @@ export class DocumentationListComponent implements OnInit {
           .map(category => ({
             key: category.key,
             label: category.label,
-            items: category.entries.filter(entry => !entry.shortcut).map(entry => entry.doc),
-            seeAlso: category.entries.filter(entry => entry.shortcut).map(entry => entry.doc)
+            // atalhos só aparecem no menu
+            items: category.entries.filter(entry => !entry.shortcut).map(entry => entry.doc)
           }))
-          // categoria só com "Ver também" (o card está em outra) não aparece
+          // categoria que só teria atalhos (o card está em outra) não aparece
           .filter(category => category.items.length);
 
         return {

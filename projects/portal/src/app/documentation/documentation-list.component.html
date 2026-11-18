@@ -1,6 +1,5 @@
-<po-page-list [p-filter]="filter">
+<po-page-list p-title="API Reference" [p-filter]="filter">
   <div class="documentation-list-view-switch">
-    <po-search class="po-pr-1"></po-search>
     <po-button-group p-toggle="single" [p-buttons]="viewModeButtons"></po-button-group>
   </div>
 
@@ -59,24 +58,22 @@
       }
     } @else {
       @for (section of sections; track section.key) {
-        <section class="documentation-list-section" [attr.aria-labelledby]="'docs-section-' + section.key">
-          <h2 class="documentation-list-section-title" [id]="'docs-section-' + section.key">
-            {{ section.label }} <span class="documentation-list-count">· {{ section.count }}</span>
-          </h2>
-
+        <section class="documentation-list-section" [attr.aria-label]="section.label">
           @for (category of section.categories; track category.key) {
             <section
               class="documentation-list-category"
-              [attr.aria-labelledby]="section.flat ? null : 'docs-category-' + section.key + '-' + category.key"
+              [attr.aria-labelledby]="'docs-category-' + section.key + '-' + category.key"
             >
-              @if (!section.flat) {
-                <h3
-                  class="documentation-list-category-title"
+              <!-- seção sem categorias (ex.: Componentes dinâmicos) usa o nome da seção como título -->
+              <div class="po-row">
+                <h2
+                  class="documentation-list-section-title po-sm-12 po-pb-2 po-m-0"
                   [id]="'docs-category-' + section.key + '-' + category.key"
                 >
-                  {{ category.label }} <span class="documentation-list-count">· {{ category.items.length }}</span>
-                </h3>
-              }
+                  {{ section.flat ? section.label : category.label }}
+                  <span class="documentation-list-count">({{ category.items.length }})</span>
+                </h2>
+              </div>
 
               @if (viewMode === 'grid') {
                 <div class="documentation-list-viewport po-row">
@@ -112,7 +109,6 @@
                             Consulte a documentação de {{ item.title }} para mais detalhes.
                           </p>
                         }
-                        <ng-container *ngTemplateOutlet="subcomponents; context: { $implicit: item }"></ng-container>
                       </po-widget>
                     </div>
                   }
@@ -130,25 +126,8 @@
                     @if (item.preview) {
                       <div [innerHtml]="item.preview | markdown: { disableSanitizer: true } | async"></div>
                     }
-                    <ng-container *ngTemplateOutlet="subcomponents; context: { $implicit: item }"></ng-container>
                   </ng-template>
                 </po-list-view>
-              }
-
-              @if (category.seeAlso.length) {
-                <p class="documentation-list-see-also">
-                  Ver também:
-                  @for (shortcut of category.seeAlso; track shortcut.name; let last = $last) {
-                    <a
-                      [routerLink]="['/documentation', shortcut.name]"
-                      [attr.aria-label]="shortcut.title + ', ' + shortcut.sectionLabel + ' › ' + shortcut.categoryLabel"
-                      >{{ shortcut.title }}</a
-                    >
-                    <span class="documentation-list-see-also-where"
-                      >&nbsp;({{ shortcut.sectionLabel }} › {{ shortcut.categoryLabel }})</span
-                    >{{ last ? '' : ', ' }}
-                  }
-                </p>
               }
             </section>
           }
@@ -156,21 +135,20 @@
       } @empty {
         <po-container class="documentation-list-empty">Nenhum dado encontrado</po-container>
       }
-    }
 
-    <ng-template #subcomponents let-item>
-      @if (subcomponentsOf(item).length) {
-        <p class="documentation-list-subcomponents">
-          Subcomponentes:
-          @for (sub of subcomponentsOf(item); track sub.name; let last = $last) {
-            <a
-              [routerLink]="['/documentation', sub.name]"
-              [queryParams]="{ view: 'doc' }"
-              [class.documentation-list-subcomponent-match]="isMatchedSub(sub)"
-              >{{ sub.title }}</a>{{ last ? '' : ', ' }}
-          }
-        </p>
+      <!-- contagem no fim da página, uma entrada por seção: "Componentes (67)" -->
+      @if (sections.length) {
+        <div class="documentation-list-summary">
+          <dl class="documentation-list-summary-box">
+            @for (section of sections; track section.key) {
+              <div class="documentation-list-summary-item">
+                <dt>{{ section.label }}</dt>
+                <dd>({{ section.count }})</dd>
+              </div>
+            }
+          </dl>
+        </div>
       }
-    </ng-template>
+    }
   </div>
 </po-page-list>

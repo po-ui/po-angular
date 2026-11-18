@@ -57,8 +57,7 @@ describe('DocumentationListComponent', () => {
       count: section.count,
       categories: section.categories.map(category => ({
         label: category.label,
-        items: category.items.map(item => item.name),
-        seeAlso: category.seeAlso.map(item => item.name)
+        items: category.items.map(item => item.name)
       }))
     }));
 
@@ -77,53 +76,43 @@ describe('DocumentationListComponent', () => {
     flush();
   }));
 
-  it('agrupa como o menu: subs no pai e atalho só como "Ver também"', () => {
+  it('agrupa como o menu, sem subcomponentes e sem atalhos', () => {
     expect(summary()).toEqual([
       {
         section: 'Componentes',
         count: 3,
         categories: [
-          { label: 'Formulário', items: ['po-email', 'po-input'], seeAlso: [] },
-          { label: 'Tabelas e listas', items: ['po-table'], seeAlso: ['po-drag'] }
+          { label: 'Formulário', items: ['po-email', 'po-input'] },
+          { label: 'Tabelas e listas', items: ['po-table'] }
         ]
       },
       {
         section: 'Utilitários',
         count: 1,
-        categories: [{ label: 'Diretivas', items: ['po-drag'], seeAlso: [] }]
+        categories: [{ label: 'Diretivas', items: ['po-drag'] }]
       }
     ]);
-
-    const table = component.items.find(item => item.name === 'po-table');
-    expect(component.subcomponentsOf(table).map(sub => sub.name)).toEqual(['po-table-cell-template']);
   });
 
   it('filtro esconde grupos vazios', () => {
     component.filterAction('Email');
 
     expect(summary()).toEqual([
-      { section: 'Componentes', count: 1, categories: [{ label: 'Formulário', items: ['po-email'], seeAlso: [] }] }
+      { section: 'Componentes', count: 1, categories: [{ label: 'Formulário', items: ['po-email'] }] }
     ]);
   });
 
-  it('filtro que acha um sub mostra o card do pai com o sub destacado', () => {
+  it('filtro não acha subcomponentes', () => {
     component.filterAction('cell template');
 
-    expect(summary()).toEqual([
-      {
-        section: 'Componentes',
-        count: 1,
-        categories: [{ label: 'Tabelas e listas', items: ['po-table'], seeAlso: [] }]
-      }
-    ]);
-    expect(component.isMatchedSub(component.items.find(item => item.name === 'po-table-cell-template'))).toBeTrue();
+    expect(summary()).toEqual([]);
   });
 
-  it('categoria só com "Ver também" some', () => {
+  it('atalho não aparece na categoria do atalho, só na própria', () => {
     component.filterAction('drag');
 
     expect(summary()).toEqual([
-      { section: 'Utilitários', count: 1, categories: [{ label: 'Diretivas', items: ['po-drag'], seeAlso: [] }] }
+      { section: 'Utilitários', count: 1, categories: [{ label: 'Diretivas', items: ['po-drag'] }] }
     ]);
   });
 });
