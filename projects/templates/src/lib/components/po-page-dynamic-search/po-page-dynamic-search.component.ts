@@ -147,6 +147,12 @@ export class PoPageDynamicSearchComponent
     ) {
       this.onChangeFilters(this.filters);
       this.previousFilters = [...this.filters];
+      return;
+    }
+
+    if (changes.filters && this.stringify(this.filters) !== this.stringify(this.previousFilters)) {
+      this.onChangeFilters(this.filters);
+      this.previousFilters = [...this.filters];
     }
   }
 
