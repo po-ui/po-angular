@@ -845,13 +845,10 @@ sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-conten
   }
 }
 
-/* Página de subcomponente: "Faz parte de <pai>"; página do pai: lista "Subcomponentes" (tags @docsParent). */
-.docs-api .docs-api-part-of {
-  margin-bottom: 8px;
-  color: var(--color-neutral-dark-70);
-}
-
-.docs-api .docs-api-subcomponents {
-  margin: 0 0 16px 20px;
-  list-style: disc;
+/* "Subcomponentes" / "Faz parte de" na aba Documentação: rótulo e po-tags na mesma linha. */
+.docs-api .docs-api-related {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
 }

@@ -79,7 +79,8 @@ module.exports = {
 
   generateApiComponentFile: function (docName, component) {
     const componentSource = `
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sample-{{docName}}-doc',
@@ -87,7 +88,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class Sample{{component}}DocComponent { }
+export class Sample{{component}}DocComponent {
+  private readonly router = inject(Router);
+
+  /** Abre a aba Documentação de outro item (tags "Subcomponentes" / "Faz parte de"). */
+  openDoc(name: string): void {
+    this.router.navigate(['/documentation', name], { queryParams: { view: 'doc' } });
+  }
+}
 `;
     const componentTemplate = handlebars.compile(componentSource);
     let componentContent = componentTemplate({
