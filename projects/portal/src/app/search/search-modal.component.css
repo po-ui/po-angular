@@ -9,6 +9,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(200px, 280px);
   gap: 12px;
+  align-items: end;
 }
 
 .search-modal-filters po-search {
