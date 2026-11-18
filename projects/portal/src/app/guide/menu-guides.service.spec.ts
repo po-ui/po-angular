@@ -34,11 +34,11 @@ describe('MenuGuidesService', () => {
     service = TestBed.inject(MenuGuidesService);
   });
 
-  it('monta Categoria › Guia com o link relativo a /guides', () => {
+  it('monta Categoria › Guia com o link absoluto do @link', () => {
     const [start] = service.getMenus(CATEGORIES);
 
     expect(start.label).toBe('Começando');
-    expect(start.subItems[0]).toEqual({ label: 'Primeiros passos', link: 'getting-started' });
+    expect(start.subItems[0]).toEqual({ label: 'Primeiros passos', link: '/guides/getting-started' });
   });
 
   it('guia com subguias vira grupo com "Visão geral" primeiro', () => {
@@ -47,8 +47,8 @@ describe('MenuGuidesService', () => {
     expect(sync).toEqual({
       label: 'Fundamentos do PO Sync',
       subItems: [
-        { label: 'Visão geral', link: 'sync-fundamentals' },
-        { label: 'Começando com o PO Sync', link: 'sync-get-started' }
+        { label: 'Visão geral', link: '/guides/sync-fundamentals' },
+        { label: 'Começando com o PO Sync', link: '/guides/sync-get-started' }
       ]
     });
   });

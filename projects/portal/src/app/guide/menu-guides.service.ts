@@ -31,7 +31,7 @@ export class MenuGuidesService {
 
   /**
    * Menu de Guias em Categoria › Guia › Subguia.
-   * - O link do item continua relativo à rota `/guides` (o `@link` sem `guides/`).
+   * - Link absoluto (`/` + `@link`): o po-menu só marca o item pela URL se o link for igual à rota inteira.
    * - Guia com subguias vira grupo; o 1º item, "Visão geral", é a página do próprio guia.
    * - Atalho: `action` sem `link`, para o po-menu marcar só o item principal pela URL.
    */
@@ -44,7 +44,7 @@ export class MenuGuidesService {
       return { label: node.label + ' (' + node.origin + ')', action: () => this.router.navigateByUrl('/' + node.link) };
     }
 
-    const link = node.link.replace('guides/', '');
+    const link = '/' + node.link;
 
     return node.children?.length
       ? { label: node.label, subItems: [{ label: 'Visão geral', link }, ...node.children.map(child => this.item(child))] }
