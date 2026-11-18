@@ -118,10 +118,10 @@ describe('MenuComponentsService', () => {
     expect(find(menus, 'Outros').subItems.map(i => i.label)).toEqual(['Novo']);
   });
 
-  it('atalho: sem link, com action e rótulo "atalho para <seção> › <categoria>"', () => {
+  it('atalho: sem link, com action e rótulo "<item> (<categoria>)"', () => {
     const shortcut = find(menus, 'Tabelas e listas').subItems[0];
 
-    expect(shortcut.label).toBe('Drag (atalho para Utilitários › Diretivas)');
+    expect(shortcut.label).toBe('Drag (Diretivas)');
     expect(shortcut.link).toBeUndefined();
     shortcut.action();
     expect(navigate).toHaveBeenCalledWith('/documentation/po-drag');

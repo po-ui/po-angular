@@ -35,8 +35,8 @@ export function compareDocs(a: Documentation, b: Documentation): number {
   return order || docLabel(a).localeCompare(docLabel(b), 'pt-BR', { sensitivity: 'base' });
 }
 
-/** Texto acessível e sufixo do atalho: "atalho para Utilitários › Diretivas". */
-export const shortcutTarget = (doc: Documentation): string => `atalho para ${doc.sectionLabel} › ${doc.categoryLabel}`;
+/** Sufixo do atalho no menu: só a categoria de origem, ex.: "Diretivas". */
+export const shortcutTarget = (doc: Documentation): string => doc.categoryLabel;
 
 /**
  * Agrupa os docs do `api-list.json` em Seção › Categoria › Itens, para o menu e para a listagem "API Reference".
