@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { MenuGuidesService } from './menu-guides.service';
+import { GuideMenuCategory, MenuGuidesService } from './menu-guides.service';
 
 @Component({
   templateUrl: './guides.component.html',
@@ -18,14 +18,8 @@ export class GuidesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.http.get('./assets/json/api-list.json').subscribe(
-      result => {
-        this.menus = this.menuGuidesService.getMenus(result).map(menu => {
-          menu.link = menu.link.replace('guides/', '');
-
-          return menu;
-        });
-      },
+    this.http.get<Array<GuideMenuCategory>>('./assets/json/guides-menu.json').subscribe(
+      result => (this.menus = this.menuGuidesService.getMenus(result)),
       error => console.error(error)
     );
   }
