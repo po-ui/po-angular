@@ -9,11 +9,14 @@ const configuration = require('./docs/configuration');
 const util = require('./docs/util');
 const { Marked } = require('marked');
 const { slugify, headingText, uniqueId } = require('./docs/processors/helpers/anchors');
+const { readGuide, buildGuidesMenu } = require('./docs/processors/helpers/guide-meta');
+const guidesCategories = require('./docs/guides-categories');
 const _ = require('lodash');
 
 const APP_DIR = './src/app';
 
 const GUIDE_DIR = `${APP_DIR}/guide/guides`;
+const GUIDES_MENU_FILE = './src/assets/json/guides-menu.json';
 
 const MENU_SERVICE_TEMPLATE = './docs/templates/menu.service.template.ts';
 const MENU_GUIDES_SERVICE_TEMPLATE = './docs/templates/menu-guides.service.template.ts';
@@ -50,17 +53,6 @@ const markdownToHtml = markdown => {
     })
   );
 };
-
-const markdownCommentsToObject = markdown =>
-  markdown.match(/\[comment\]\:\s\#\s\(@(.+)\)/g).reduce((comments, currentComment) => {
-    const tag = currentComment.match(/^\[comment\]\:\s\#\s\(@(.+)\)$/)[1].split(' ');
-    const tagName = tag[0];
-    const tagValue = tag.splice(1, tag.length).join(' ');
-
-    Object.assign(comments, { [tagName]: tagValue });
-
-    return comments;
-  }, {});
 
 const upperCamelCase = str =>
   _.words(str)
@@ -99,17 +91,18 @@ const createDocs = (file, pathDir, moduleName) => {
   const DOC_COMPONENT_TEMPLATE = `./docs/templates/${moduleName}/${moduleName}.component.template.ts`;
 
   const fileName = path.basename(file.path, '.md');
-  const markdown = file.contents.toString();
-  const comments = markdownCommentsToObject(markdown);
+  // `body` já vem sem o frontmatter: o bloco `---` não chega ao marked
+  const meta = readGuide(fileName, file.contents.toString(), path.relative(process.cwd(), file.path));
 
   const doc = {
     fileName: fileName,
     name: upperCamelCase(fileName),
-    markdown: markdown,
-    html: markdownToHtml(markdown),
-    label: comments.label,
-    link: comments.link,
-    orderBy: comments.orderBy || 999
+    markdown: meta.body,
+    html: markdownToHtml(meta.body),
+    label: meta.label,
+    link: meta.link,
+    orderBy: meta.orderBy || 999,
+    meta
   };
 
   mkdirDocComponent(pathDir, doc.fileName, moduleName);
@@ -257,8 +250,28 @@ gulp.task('build:guides', () => {
     .src(sources, {})
     .pipe(tap(file => guides.push(createDocs(file, GUIDE_DIR, 'guide'))))
     .pipe(gulp.dest(file => file.base))
-    .on('end', () => createDocsModule(guides, 'guide'));
+    .on('end', () => {
+      createDocsModule(guides, 'guide');
+      writeGuidesMenu(guides.map(doc => doc.meta));
+    });
 });
+
+/** Valida as categorias do frontmatter e grava o menu de Guias (lido pelo GuidesComponent). */
+const writeGuidesMenu = guides => {
+  const { menu, errors, warnings, counts } = buildGuidesMenu(guides, guidesCategories);
+
+  warnings.forEach(w => console.warn(`[guides-menu] aviso: ${w.message}`));
+  if (errors.length) {
+    throw new Error(
+      `[guides-menu] ${errors.length} erro(s) no frontmatter dos guias:\n${errors.map(e => `  - ${e.message}`).join('\n')}`
+    );
+  }
+
+  writeFile(GUIDES_MENU_FILE, JSON.stringify(menu));
+  console.log(
+    `[guides-menu] ${counts.guides} guias, ${counts.categories} categorias, ${counts.subguides} subguias, ${counts.shortcuts} atalhos, ${warnings.length} aviso(s)`
+  );
+};
 
 /**
  * Gera guias em HTML para o portal a partir de arquivos markdown.

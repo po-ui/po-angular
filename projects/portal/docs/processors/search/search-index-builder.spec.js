@@ -151,6 +151,13 @@ describe('search-index-builder', () => {
     expect(docs[1].text).toBe('Node 20.');
   });
 
+  it('ignora o frontmatter do guia (sem título falso nem texto) e mantém os ids', () => {
+    const docs = builder.buildGuideDocs('getting-started', `---\ntitle: Outro\ncategory: getting-started\norder: 1\n---\n${guideMarkdown}`);
+
+    expect(docs.map(d => d.id)).toEqual(builder.buildGuideDocs('getting-started', guideMarkdown).map(d => d.id));
+    docs.forEach(d => expect(d.title + d.text).not.toMatch(/category|order: 1|---/));
+  });
+
   it('indexa ícones sem repetir a variante fill e não tem changelog', () => {
     const docs = builder.buildIconDocs({
       icons: [{ properties: { name: 'arrow-left' } }, { properties: { name: 'arrow-left-fill' } }, { properties: { name: 'x', ligatures: 'x' } }]

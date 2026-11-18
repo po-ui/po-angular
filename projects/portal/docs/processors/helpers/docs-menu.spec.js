@@ -99,6 +99,21 @@ describe('docs-menu: resolveDocsMenu', () => {
     expect(entries[2].order).toBeUndefined();
     expect(codes(warnings).sort()).toEqual(['duplicate-order', 'order-on-sub']);
   });
+
+  it('subsInMenu: @docsOrder vale no sub e o repetido conta por pai', () => {
+    const { entries, warnings } = resolveDocsMenu(
+      [
+        item('po-table', { docsCategory: 'tables-lists', docsOrder: '1' }),
+        item('po-table-cell-template', { docsParent: 'po-table', docsOrder: '1' }),
+        item('po-table-row-template', { docsParent: 'po-table', docsOrder: '1' })
+      ],
+      vocab,
+      { subsInMenu: true }
+    );
+
+    expect(entries[1].order).toBe(1);
+    expect(warnings.map(w => w.message)).toEqual([jasmine.stringMatching("repetido em 'po-table'")]);
+  });
 });
 
 describe('docs-menu: compareForMenu', () => {

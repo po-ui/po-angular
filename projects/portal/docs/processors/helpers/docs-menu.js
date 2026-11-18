@@ -40,9 +40,10 @@ function indexVocabulary(vocab) {
 /**
  * @param {Array<{name: string, title?: string, file?: string, docsCategory?, docsParent?, docsShortcut?, docsOrder?}>} items
  * @param {object} vocab vocabulário (`docs-categories.js`)
+ * @param {{ subsInMenu?: boolean }} [options] `subsInMenu`: o sub também é item do menu (guias), então `order` vale nele
  * @returns {{ entries: Array<object>, errors: Array<object>, warnings: Array<object> }}
  */
-function resolveDocsMenu(items, vocab) {
+function resolveDocsMenu(items, vocab, { subsInMenu = false } = {}) {
   const categories = indexVocabulary(vocab);
   const names = new Set(items.map(item => item.name));
   const errors = [];
@@ -97,7 +98,7 @@ function resolveDocsMenu(items, vocab) {
     if (orderText !== undefined) {
       if (!/^[1-9]\d*$/.test(orderText)) {
         error(item, 'invalid-order', `@docsOrder precisa ser inteiro >= 1 (recebido '${orderText}')`);
-      } else if (parent) {
+      } else if (parent && !subsInMenu) {
         warn(item, 'order-on-sub', '@docsOrder em subcomponente é ignorado (ele não aparece no menu)');
       } else {
         entry.order = Number(orderText);
@@ -129,10 +130,11 @@ function resolveDocsMenu(items, vocab) {
   entries.forEach(entry => {
     if (entry.order === undefined) return;
 
-    const key = `${entry.category}:${entry.order}`;
+    const group = entry.parent ?? entry.category;
+    const key = `${group}:${entry.order}`;
 
     if (seenOrder.has(key)) {
-      warn(items.find(i => i.name === entry.name), 'duplicate-order', `@docsOrder ${entry.order} repetido em '${entry.category}' (com ${seenOrder.get(key)})`);
+      warn(items.find(i => i.name === entry.name), 'duplicate-order', `@docsOrder ${entry.order} repetido em '${group}' (com ${seenOrder.get(key)})`);
     } else {
       seenOrder.set(key, entry.name);
     }

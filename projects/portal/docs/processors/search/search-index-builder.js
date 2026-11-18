@@ -22,6 +22,7 @@ const { Lexer } = require('marked');
 
 const { slugify, headingText, uniqueId, propertyAlias } = require('../helpers/anchors');
 const { plainText, truncate } = require('./search-text');
+const { readGuide } = require('../helpers/guide-meta');
 
 const CHUNK_OF_TYPE = {
   componente: 'core',
@@ -197,26 +198,14 @@ function buildApiDocs(groups) {
 // Guias (markdown)
 // ---------------------------------------------------------------------------
 
-/** Metadados `[comment]: # (@label Texto)` dos guias. */
-function guideMeta(markdown) {
-  const meta = {};
-
-  (markdown.match(/\[comment\]: # \(@(.+)\)/g) || []).forEach(line => {
-    const [, tag, value] = line.match(/\(@(\S+)\s*(.*)\)$/) || [];
-
-    if (tag) meta[tag] = value;
-  });
-
-  return meta;
-}
-
 /**
  * Uma entrada por seção (título). Os `id` seguem a mesma sequência do renderer do gulp
  * (`slugify(headingText)` + `uniqueId`, todos os títulos em ordem), então batem com o HTML.
  */
 function buildGuideDocs(fileName, markdown) {
-  const meta = guideMeta(markdown);
-  const pageName = meta.label || fileName;
+  // sem o bloco do frontmatter: ele não vira texto nem título falso
+  const { label, body } = readGuide(fileName, markdown);
+  const pageName = label || fileName;
   const url = `/guides/${fileName}`;
   const page = { name: pageName, url, component: undefined, package: undefined };
   const seen = new Set();
@@ -232,7 +221,7 @@ function buildGuideDocs(fileName, markdown) {
     }
   };
 
-  Lexer.lex(markdown).forEach(token => {
+  Lexer.lex(body).forEach(token => {
     if (token.type === 'heading') {
       flush();
       const title = headingText(token.text);
@@ -368,6 +357,5 @@ module.exports = {
   buildIconDocs,
   buildPageDocs,
   buildChunks,
-  writeIndex,
-  guideMeta
+  writeIndex
 };
