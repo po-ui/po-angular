@@ -1,3 +1,6 @@
+---
+category: migration
+---
 [comment]: # (@label Migração do THF para o PO UI v1.x)
 [comment]: # (@link guides/migration-thf-to-po-ui)
 

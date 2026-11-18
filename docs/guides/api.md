@@ -1,3 +1,6 @@
+---
+category: components
+---
 [comment]: # (@label Guia de implementação de APIs)
 [comment]: # (@link guides/api)
 

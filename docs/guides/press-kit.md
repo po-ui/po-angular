@@ -1,3 +1,6 @@
+---
+category: community
+---
 [comment]: # (@label Press Kit)
 [comment]: # (@link guides/press-kit)
 

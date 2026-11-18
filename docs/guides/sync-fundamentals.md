@@ -1,3 +1,6 @@
+---
+category: sync
+---
 [comment]: # (@label Fundamentos do PO Sync)
 [comment]: # (@link guides/sync-fundamentals)
 

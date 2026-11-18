@@ -1,3 +1,7 @@
+---
+category: getting-started
+order: 1
+---
 [comment]: # (@label Primeiros passos)
 [comment]: # (@link guides/getting-started)
 

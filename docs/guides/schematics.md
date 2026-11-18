@@ -1,3 +1,7 @@
+---
+category: getting-started
+shortcut: [migration]
+---
 [comment]: # (@label Schematics)
 [comment]: # (@link guides/schematics)
 

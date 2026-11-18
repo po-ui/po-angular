@@ -1,3 +1,7 @@
+---
+category: sync
+order: 1
+---
 [comment]: # (@label Começando com o PO Sync)
 [comment]: # (@link guides/sync-get-started)
 

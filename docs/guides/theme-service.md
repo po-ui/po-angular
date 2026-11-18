@@ -1,3 +1,7 @@
+---
+category: themes
+order: 1
+---
 [comment]: # (@label Customização de Temas usando o serviço PO-UI)
 [comment]: # (@link guides/theme-service)
 

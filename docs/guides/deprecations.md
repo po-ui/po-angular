@@ -1,3 +1,7 @@
+---
+category: migration
+shortcut: [releases]
+---
 
 [comment]: # (@label Depreciações)
 [comment]: # (@link guides/deprecations)
