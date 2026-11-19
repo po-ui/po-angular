@@ -773,8 +773,11 @@ export abstract class PoDatepickerBaseComponent implements ControlValueAccessor,
       this.onChangeModel(value);
       this.previousValue = value;
       this.controlChangeModelEmitter(value);
-    } else if (retry) {
+      } else if (retry) {
       setTimeout(() => this.callOnChange(value, false));
+      } else if (!this.onChangeModel) {
+        this.previousValue = value;
+      } 
     }
   }
 
