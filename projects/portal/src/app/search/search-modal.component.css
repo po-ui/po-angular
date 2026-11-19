@@ -16,7 +16,7 @@
   padding-top: 8px;
 }
 
-.search-modal-filters po-search[p-size="small"] {
+.search-modal-filters po-search[p-size='small'] {
   padding-top: 4px;
 }
 
@@ -36,13 +36,4 @@
 .search-modal-hints {
   color: var(--color-neutral-dark-70);
   font-size: 0.875rem;
-}
-
-/* Mobile: modal ocupa a tela toda. */
-@media (max-width: 767px) {
-  :host ::ng-deep .po-modal-content {
-    width: 100vw;
-    max-width: 100vw;
-    min-height: 100vh;
-  }
 }
