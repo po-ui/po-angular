@@ -80,7 +80,8 @@ describe('DocumentationListComponent', () => {
     expect(summary()).toEqual([
       {
         section: 'Componentes',
-        count: 3,
+        // 3 cards + 1 subcomponente do po-table (po-table-cell-template), que não tem card
+        count: 4,
         categories: [
           { label: 'Formulário', items: ['po-email', 'po-input'] },
           { label: 'Tabelas e listas', items: ['po-table'] }
@@ -100,6 +101,16 @@ describe('DocumentationListComponent', () => {
     expect(summary()).toEqual([
       { section: 'Componentes', count: 1, categories: [{ label: 'Formulário', items: ['po-email'] }] }
     ]);
+  });
+
+  it('contagens só aparecem sem filtro', () => {
+    expect(component.isFiltered).toBeFalse();
+
+    component.filterAction('Email');
+    expect(component.isFiltered).toBeTrue();
+
+    component.filterAction('');
+    expect(component.isFiltered).toBeFalse();
   });
 
   it('filtro não acha subcomponentes', () => {

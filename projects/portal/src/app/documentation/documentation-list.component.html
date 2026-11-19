@@ -71,7 +71,9 @@
                   [id]="'docs-category-' + section.key + '-' + category.key"
                 >
                   {{ section.flat ? section.label : category.label }}
-                  <span class="documentation-list-count">({{ category.items.length }})</span>
+                  @if (!isFiltered) {
+                    <span class="documentation-list-count">({{ category.items.length }})</span>
+                  }
                 </h2>
               </div>
 
@@ -136,17 +138,19 @@
         <po-container class="documentation-list-empty">Nenhum dado encontrado</po-container>
       }
 
-      <!-- contagem no fim da página, uma entrada por seção: "Componentes (67)" -->
-      @if (sections.length) {
+      <!-- contagem no fim da página, uma entrada por seção: "Componentes (67)"; só sem filtro -->
+      @if (sections.length && !isFiltered) {
         <div class="documentation-list-summary">
-          <dl class="documentation-list-summary-box">
-            @for (section of sections; track section.key) {
-              <div class="documentation-list-summary-item">
-                <dt>{{ section.label }}</dt>
-                <dd>({{ section.count }})</dd>
-              </div>
-            }
-          </dl>
+          <po-container>
+            <dl class="documentation-list-summary-box">
+              @for (section of sections; track section.key) {
+                <div class="documentation-list-summary-item">
+                  <dt>{{ section.label }}</dt>
+                  <dd>({{ section.count }})</dd>
+                </div>
+              }
+            </dl>
+          </po-container>
         </div>
       }
     }

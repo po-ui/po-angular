@@ -21,7 +21,7 @@ export interface DocsListSection {
   key: string;
   label: string;
   flat: boolean;
-  /** Total de cards da seção (soma das categorias). */
+  /** Total da seção: cards das categorias + subcomponentes deles (`@docsParent`), que não têm card. */
   count: number;
   categories: Array<DocsListCategory>;
 }
@@ -74,6 +74,8 @@ export class DocumentationListComponent implements OnInit {
 
   private _items: Array<Documentation> = [];
   private _filteredItems: Array<Documentation> = [];
+  /** Com filtro ativo, as contagens somem (só fazem sentido com tudo exibido). */
+  public isFiltered = false;
   private _sections: Array<DocsListSection> = [];
 
   private readonly _listActions: Array<PoListViewAction> = [
@@ -223,6 +225,7 @@ export class DocumentationListComponent implements OnInit {
       item.name.toLocaleLowerCase().includes(searchText) || item.title.toLocaleLowerCase().includes(searchText);
 
     // subcomponentes (`@docsParent`) não aparecem na listagem, então o filtro também não os acha
+    this.isFiltered = !!searchText;
     if (searchText) {
       this.filteredItems = this._items.filter(item => !item.parent && matches(item));
     } else {
@@ -247,7 +250,12 @@ export class DocumentationListComponent implements OnInit {
           key: section.key,
           label: section.label,
           flat: section.flat,
-          count: categories.reduce((total, category) => total + category.items.length, 0),
+          // cada card conta 1 + os subcomponentes dele, que não aparecem na listagem
+          count: categories.reduce(
+            (total, category) =>
+              total + category.items.reduce((sum, item) => sum + 1 + (item.children?.length ?? 0), 0),
+            0
+          ),
           categories
         };
       })
