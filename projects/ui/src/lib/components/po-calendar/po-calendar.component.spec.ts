@@ -1844,6 +1844,42 @@ describe('PoCalendarComponent:', () => {
         expect(component['focusedIndex']).toBe(0);
       });
 
+      it('should cancel native Tab when p-close has a subscriber', () => {
+        const closeSubscription = component.close.subscribe(() => {});
+        const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+        spyOn(event, 'preventDefault').and.callThrough();
+        spyOn(event, 'stopPropagation').and.callThrough();
+
+        component.onKeydownYear(event, 3);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        closeSubscription.unsubscribe();
+      });
+
+      it('should not cancel native Tab when p-close has no subscriber', () => {
+        const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+        spyOn(event, 'preventDefault').and.callThrough();
+        spyOn(event, 'stopPropagation').and.callThrough();
+
+        component.onKeydownYear(event, 3);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(event.stopPropagation).not.toHaveBeenCalled();
+      });
+
+      it('should not cancel native Tab on Shift+Tab in year mode', () => {
+        component.mode = PoCalendarMode.Year;
+        const closeSubscription = component.close.subscribe(() => {});
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
+        spyOn(event, 'preventDefault').and.callThrough();
+
+        component.onKeydownYear(event, 0);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        closeSubscription.unsubscribe();
+      });
+
       it('should emit close on Shift+Tab in year mode', () => {
         component.mode = PoCalendarMode.Year;
         spyOn(component.close, 'emit');
