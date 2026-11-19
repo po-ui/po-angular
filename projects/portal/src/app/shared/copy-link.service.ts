@@ -9,6 +9,7 @@ import {
   inject
 } from '@angular/core';
 
+import { CopyCodeButtonComponent } from './copy-code-button.component';
 import { CopyLinkButtonComponent } from './copy-link-button.component';
 
 /**
@@ -27,10 +28,14 @@ export const COPY_LINK_TARGETS = [
   '.guides :is(h1, h2, h3, h4, h5, h6)[id]'
 ].join(', ');
 
+/** Blocos de código dos samples (gerados por `docs/templates/samples/index.template.html`): ganham "Copiar código". */
+export const COPY_CODE_TARGETS = '.docs-code-block';
+
 const TARGET_ATTR = 'data-copy-link-target';
 
 /**
- * Anexa, em runtime, um `CopyLinkButtonComponent` ao lado de cada alvo com `id` da documentação.
+ * Anexa, em runtime, um `CopyLinkButtonComponent` ao lado de cada alvo com `id` da documentação e um
+ * `CopyCodeButtonComponent` no canto de cada bloco de código dos samples.
  *
  * Por que em runtime e não no template do Dgeni: o HTML da API, dos samples e dos guias é gerado por três
  * templates diferentes e compilado como template Angular estático; injetar lá exigiria repetir o botão em
@@ -45,7 +50,7 @@ export class CopyLinkService {
   private readonly zone = inject(NgZone);
   private readonly appRef = inject(ApplicationRef);
   private readonly injector = inject(EnvironmentInjector);
-  private readonly buttons = new Map<Element, ComponentRef<CopyLinkButtonComponent>>();
+  private readonly buttons = new Map<Element, ComponentRef<unknown>>();
   private observer?: MutationObserver;
   private frame = 0;
 
@@ -80,6 +85,10 @@ export class CopyLinkService {
     this.doc.querySelectorAll<HTMLElement>(COPY_LINK_TARGETS).forEach(target => {
       if (!this.buttons.has(target)) this.attach(target);
     });
+
+    this.doc.querySelectorAll<HTMLElement>(COPY_CODE_TARGETS).forEach(block => {
+      if (!this.buttons.has(block)) this.attachCode(block);
+    });
   }
 
   private schedule(): void {
@@ -101,7 +110,21 @@ export class CopyLinkService {
     this.buttons.set(target, ref);
   }
 
-  private destroy(ref: ComponentRef<CopyLinkButtonComponent>): void {
+  private attachCode(block: HTMLElement): void {
+    const host = this.doc.createElement('span');
+    const ref = createComponent(CopyCodeButtonComponent, { environmentInjector: this.injector, hostElement: host });
+
+    ref.setInput('block', block);
+    ref.setInput('file', (block.dataset['file'] ?? '').split('/').pop());
+    this.appRef.attachView(ref.hostView);
+    ref.changeDetectorRef.detectChanges();
+
+    // dentro do bloco e fora do `<pre>`: o `<pre>` rola e o botão fica no canto
+    block.appendChild(ref.location.nativeElement);
+    this.buttons.set(block, ref);
+  }
+
+  private destroy(ref: ComponentRef<unknown>): void {
     this.appRef.detachView(ref.hostView);
     ref.destroy();
   }

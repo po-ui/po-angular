@@ -845,6 +845,39 @@ sample-po-context-menu-user-view .docs-sample-container .po-page .po-page-conten
   }
 }
 
+/* Código dos arquivos de cada sample: altura máxima com rolagem só no <pre>; o "Copiar código"
+   (CopyLinkService) fica no canto do bloco, fora do <pre>, então não rola junto. */
+:root {
+  --docs-code-max-height: 480px;
+}
+
+.docs-code-block {
+  position: relative;
+}
+
+.docs-code-block > pre {
+  max-height: var(--docs-code-max-height);
+  /* altura mínima acompanha o tamanho do botão de copiar: 56px no AAA (medium), 40px no AA small */
+  min-height: 56px;
+  overflow: auto;
+  /* espaço para o botão não cobrir o fim da 1ª linha */
+  padding-right: 48px;
+}
+
+html[data-a11y='AA'][data-default-size='small'] .docs-code-block > pre {
+  min-height: 40px;
+}
+
+.copy-code {
+  position: absolute;
+  top: 4px;
+  /* livre da barra de rolagem vertical do <pre> */
+  right: 20px;
+  background-color: var(--color-neutral-light-10);
+  border-radius: 4px;
+  user-select: none;
+}
+
 /* "Subcomponentes" / "Faz parte de" na aba Documentação: rótulo e po-tags na mesma linha. */
 .docs-api .docs-api-related {
   display: flex;
