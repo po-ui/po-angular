@@ -1,6 +1,6 @@
 ---
 category: migration
-order: 1
+order: 2
 ---
 [comment]: # (@label Migração do PO UI para V2)
 [comment]: # (@link guides/migration-poui-v2)
