@@ -1,5 +1,3 @@
-import * as https from 'node:https';
-import * as http from 'node:http';
 import {
   clearRepositoryTreeCache,
   fetchBestPractices,
@@ -11,125 +9,58 @@ import {
   getLanguage
 } from './docs-client';
 
-jest.mock('node:https');
-jest.mock('node:http');
+let fetchMock: jest.SpiedFunction<typeof fetch>;
 
-/**
- * Builds a mock of IncomingMessage (the HTTP response).
- */
-function createMockResponse(statusCode: number, body: string, headers: Record<string, string> = {}): any {
-  const listeners: Record<string, Function[]> = {};
-  return {
-    statusCode,
-    headers,
-    on(event: string, cb: Function) {
-      if (!listeners[event]) listeners[event] = [];
-      listeners[event].push(cb);
-
-      if (event === 'data') {
-        process.nextTick(() => cb(Buffer.from(body)));
-      }
-      if (event === 'end') {
-        process.nextTick(() => cb());
-      }
-      return this;
-    }
-  };
+function mockFetch(statusCode: number, body: string): void {
+  fetchMock.mockImplementation(async () => new Response(body, { status: statusCode }));
 }
 
-/**
- * Builds a mock of ClientRequest.
- */
-function createMockRequest(): any {
-  const listeners: Record<string, Function[]> = {};
-  return {
-    on(event: string, cb: Function) {
-      if (!listeners[event]) listeners[event] = [];
-      listeners[event].push(cb);
-      return this;
-    },
-    destroy: jest.fn(),
-    _listeners: listeners
-  };
-}
-
-/**
- * Sets up the https.get mock to resolve with a single response.
- */
-function mockHttpsGet(statusCode: number, body: string, headers: Record<string, string> = {}): void {
-  const mockReq = createMockRequest();
-  const mockRes = createMockResponse(statusCode, body, headers);
-
-  (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-    process.nextTick(() => cb(mockRes));
-    return mockReq;
-  });
-}
-
-/**
- * Sets up a sequential https.get mock for multiple calls.
- */
-function mockHttpsGetSequence(
-  responses: Array<{ statusCode: number; body: string; headers?: Record<string, string> }>
-): void {
+function mockFetchSequence(responses: Array<{ statusCode: number; body: string }>): void {
   let callIndex = 0;
 
-  (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-    const mockReq = createMockRequest();
+  fetchMock.mockImplementation(async () => {
     const resp = responses[callIndex] ?? responses[responses.length - 1];
     callIndex++;
-    const mockRes = createMockResponse(resp.statusCode, resp.body, resp.headers ?? {});
-
-    process.nextTick(() => cb(mockRes));
-    return mockReq;
+    return new Response(resp.body, { status: resp.statusCode });
   });
 }
 
-function mockHttpsRequestError(message: string): void {
-  (https.get as jest.Mock).mockImplementation(() => {
-    const mockReq = createMockRequest();
-    process.nextTick(() => mockReq._listeners.error[0](new Error(message)));
-    return mockReq;
-  });
+function mockFetchError(error: unknown): void {
+  fetchMock.mockRejectedValue(error);
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  fetchMock = jest.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('fetch não mockado'));
   clearRepositoryTreeCache();
+});
+
+afterEach(() => {
+  fetchMock.mockRestore();
 });
 
 describe('fetchLlmsTxt', () => {
   it('should return the text when the response is 200', async () => {
-    mockHttpsGet(200, 'conteudo do llms.txt');
+    mockFetch(200, 'conteudo do llms.txt');
 
     const result = await fetchLlmsTxt();
     expect(result).toBe('conteudo do llms.txt');
   });
 
   it('should throw when the response is not ok', async () => {
-    mockHttpsGet(404, 'Not Found');
+    mockFetch(404, 'Not Found');
 
     await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt (HTTP 404)');
   });
 
   it('should call the correct URL', async () => {
-    mockHttpsGet(200, 'ok');
+    mockFetch(200, 'ok');
 
     await fetchLlmsTxt();
-    expect(https.get).toHaveBeenCalledWith('https://po-ui.io/llms.txt', expect.any(Object), expect.any(Function));
-  });
-
-  it('should follow redirects', async () => {
-    mockHttpsGetSequence([
-      { statusCode: 302, body: '', headers: { location: 'https://po-ui.io/llms-redirected.txt' } },
-      { statusCode: 200, body: 'conteudo redirecionado' }
-    ]);
-
-    await expect(fetchLlmsTxt()).resolves.toBe('conteudo redirecionado');
+    expect(fetchMock).toHaveBeenCalledWith('https://po-ui.io/llms.txt', expect.any(Object));
   });
 
   it('should report a transport failure', async () => {
-    mockHttpsRequestError('connection reset');
+    mockFetchError(new TypeError('fetch failed'));
 
     await expect(fetchLlmsTxt()).rejects.toThrow('HTTP desconhecido');
   });
@@ -137,58 +68,54 @@ describe('fetchLlmsTxt', () => {
 
 describe('fetchLlmsFullTxt', () => {
   it('should return the text when the response is 200', async () => {
-    mockHttpsGet(200, 'conteudo completo');
+    mockFetch(200, 'conteudo completo');
 
     const result = await fetchLlmsFullTxt();
     expect(result).toBe('conteudo completo');
   });
 
   it('should throw when the response is not ok', async () => {
-    mockHttpsGet(500, 'Internal Error');
+    mockFetch(500, 'Internal Error');
 
     await expect(fetchLlmsFullTxt()).rejects.toThrow('Falha ao buscar llms-full.txt (HTTP 500)');
   });
 
   it('should call the correct URL', async () => {
-    mockHttpsGet(200, 'ok');
+    mockFetch(200, 'ok');
 
     await fetchLlmsFullTxt();
-    expect(https.get).toHaveBeenCalledWith('https://po-ui.io/llms-full.txt', expect.any(Object), expect.any(Function));
+    expect(fetchMock).toHaveBeenCalledWith('https://po-ui.io/llms-full.txt', expect.any(Object));
   });
 });
 
 describe('fetchComponentDoc', () => {
   it('should return the doc from the primary URL when available', async () => {
-    mockHttpsGet(200, '# PoButton\nDocumentacao...');
+    mockFetch(200, '# PoButton\nDocumentacao...');
 
     const result = await fetchComponentDoc('po-button');
     expect(result).toBe('# PoButton\nDocumentacao...');
   });
 
   it('should call the correct primary URL', async () => {
-    mockHttpsGet(200, 'doc');
+    mockFetch(200, 'doc');
 
     await fetchComponentDoc('po-table');
-    expect(https.get).toHaveBeenCalledWith(
-      'https://po-ui.io/llms-generated/po-table.md',
-      expect.any(Object),
-      expect.any(Function)
-    );
+    expect(fetchMock).toHaveBeenCalledWith('https://po-ui.io/llms-generated/po-table.md', expect.any(Object));
   });
 
   it('should fall back to GitHub raw when the primary URL fails', async () => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 404, body: 'Not Found' },
       { statusCode: 200, body: '# PoButton via GitHub' }
     ]);
 
     const result = await fetchComponentDoc('po-button');
     expect(result).toBe('# PoButton via GitHub');
-    expect(https.get).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it('should throw when both URLs fail', async () => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 404, body: 'Not Found' },
       { statusCode: 404, body: 'Not Found' }
     ]);
@@ -199,7 +126,7 @@ describe('fetchComponentDoc', () => {
   });
 
   it('should list the attempted URLs in the error message', async () => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 404, body: '' },
       { statusCode: 404, body: '' }
     ]);
@@ -225,7 +152,7 @@ describe('fetchComponentExamples', () => {
   ]);
 
   it('should return official sample files with source URLs', async () => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: buttonTree },
       { statusCode: 200, body: '<po-button></po-button>' },
       { statusCode: 200, body: 'export class SamplePoButtonBasicComponent {}' }
@@ -244,7 +171,7 @@ describe('fetchComponentExamples', () => {
   });
 
   it('should filter samples by name', async () => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: buttonTree },
       { statusCode: 200, body: '.sample {}' },
       { statusCode: 200, body: '{}' }
@@ -271,7 +198,7 @@ describe('fetchComponentExamples', () => {
       'projects/code-editor/src/lib/components/po-code-editor/samples/sample-po-code-editor-basic/sample-po-code-editor-basic.component.html'
     ]
   ])('should find %s examples in any supported package depth', async (slug, samplePath) => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: repositoryTree([samplePath]) },
       { statusCode: 200, body: '<sample></sample>' }
     ]);
@@ -288,7 +215,7 @@ describe('fetchComponentExamples', () => {
       'projects/ui/src/lib/components/po-tabs/po-tab/po-tab.component.ts',
       'projects/ui/src/lib/components/po-tabs/samples/sample-po-tabs-basic/sample-po-tabs-basic.component.html'
     ]);
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: tree },
       { statusCode: 200, body: '<po-tabs><po-tab></po-tab></po-tabs>' }
     ]);
@@ -316,7 +243,7 @@ describe('fetchComponentExamples', () => {
     const paths = parentFallbacks.map(
       ([, parentSlug, root]) => `${root}/samples/sample-${parentSlug}-basic/sample-${parentSlug}-basic.component.html`
     );
-    mockHttpsGet(200, repositoryTree(paths));
+    mockFetch(200, repositoryTree(paths));
 
     for (const [slug, parentSlug] of parentFallbacks) {
       const result = await fetchComponentExamples(slug, 1, 'filter-without-match');
@@ -326,7 +253,7 @@ describe('fetchComponentExamples', () => {
   });
 
   it('should return an empty list when no sample matches the filter', async () => {
-    mockHttpsGet(200, buttonTree);
+    mockFetch(200, buttonTree);
 
     await expect(fetchComponentExamples('po-button', 3, 'inexistente')).resolves.toEqual({
       examples: [],
@@ -336,7 +263,7 @@ describe('fetchComponentExamples', () => {
   });
 
   it('should distinguish a component without official examples from an unknown component', async () => {
-    mockHttpsGet(200, repositoryTree(['projects/ui/src/lib/components/po-navbar/po-navbar.component.ts']));
+    mockFetch(200, repositoryTree(['projects/ui/src/lib/components/po-navbar/po-navbar.component.ts']));
 
     await expect(fetchComponentExamples('po-navbar', 3)).resolves.toEqual({
       examples: [],
@@ -346,7 +273,7 @@ describe('fetchComponentExamples', () => {
   });
 
   it('should throw when the component does not exist', async () => {
-    mockHttpsGet(200, repositoryTree(['projects/ui/src/lib/components/po-button/po-button.component.ts']));
+    mockFetch(200, repositoryTree(['projects/ui/src/lib/components/po-button/po-button.component.ts']));
 
     await expect(fetchComponentExamples('po-inexistente', 3)).rejects.toThrow(
       'Componente "po-inexistente" não encontrado'
@@ -354,13 +281,13 @@ describe('fetchComponentExamples', () => {
   });
 
   it('should preserve the GitHub status when the repository tree cannot be loaded', async () => {
-    mockHttpsGet(403, 'rate limit exceeded');
+    mockFetch(403, 'rate limit exceeded');
 
     await expect(fetchComponentExamples('po-button', 3)).rejects.toThrow('índice de exemplos (HTTP 403)');
   });
 
   it('should reject a truncated repository tree', async () => {
-    mockHttpsGet(200, repositoryTree([], true));
+    mockFetch(200, repositoryTree([], true));
 
     await expect(fetchComponentExamples('po-button', 3)).rejects.toThrow(
       'índice de exemplos retornado pelo GitHub está incompleto'
@@ -368,19 +295,19 @@ describe('fetchComponentExamples', () => {
   });
 
   it('should reject a repository response without a tree', async () => {
-    mockHttpsGet(200, JSON.stringify({ truncated: false }));
+    mockFetch(200, JSON.stringify({ truncated: false }));
 
     await expect(fetchComponentExamples('po-button', 3)).rejects.toThrow('campo "tree" ausente');
   });
 
   it('should throw when GitHub returns invalid JSON', async () => {
-    mockHttpsGet(200, 'invalid json');
+    mockFetch(200, 'invalid json');
 
     await expect(fetchComponentExamples('po-button', 3)).rejects.toThrow('Resposta JSON inválida');
   });
 
   it('should throw when a sample file cannot be loaded', async () => {
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: buttonTree },
       { statusCode: 500, body: 'Internal Error' },
       { statusCode: 200, body: 'export class Sample {}' }
@@ -394,7 +321,7 @@ describe('fetchComponentExamples', () => {
       'projects/ui/src/lib/components/po-button/samples/sample-po-button-basic/sample-po-button-basic.component.html',
       'projects/ui/src/lib/components/po-table/samples/sample-po-table-basic/sample-po-table-basic.component.html'
     ]);
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: tree },
       { statusCode: 200, body: '<po-button></po-button>' },
       { statusCode: 200, body: '<po-table></po-table>' }
@@ -403,7 +330,7 @@ describe('fetchComponentExamples', () => {
     await fetchComponentExamples('po-button', 1);
     await fetchComponentExamples('po-table', 1);
 
-    const treeRequests = (https.get as jest.Mock).mock.calls.filter(([url]) => url.includes('/git/trees/master'));
+    const treeRequests = fetchMock.mock.calls.filter(([url]) => String(url).includes('/git/trees/master'));
     expect(treeRequests).toHaveLength(1);
   });
 });
@@ -415,21 +342,20 @@ describe('fetchBestPractices', () => {
     ['getting-started', 'docs/guides/getting-started.md'],
     ['theme-service', 'docs/guides/theme-service.md']
   ] as const)('should fetch the %s official source', async (topic, expectedPath) => {
-    mockHttpsGet(200, '# Boas práticas');
+    mockFetch(200, '# Boas práticas');
 
     const result = await fetchBestPractices(topic);
 
     expect(result.content).toBe('# Boas práticas');
     expect(result.url).toContain(expectedPath);
-    expect(https.get).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining(`raw.githubusercontent.com/po-ui/po-angular/master/${expectedPath}`),
-      expect.any(Object),
-      expect.any(Function)
+      expect.any(Object)
     );
   });
 
   it('should throw when the official source cannot be loaded', async () => {
-    mockHttpsGet(503, 'Unavailable');
+    mockFetch(503, 'Unavailable');
 
     await expect(fetchBestPractices('contributing')).rejects.toThrow('Falha ao buscar boas práticas');
   });
@@ -437,195 +363,114 @@ describe('fetchBestPractices', () => {
 
 describe('fetchGuide', () => {
   it('should return the guide content when available', async () => {
-    mockHttpsGet(200, '# Getting Started\nConteudo...');
+    mockFetch(200, '# Getting Started\nConteudo...');
 
     const result = await fetchGuide('getting-started');
     expect(result).toBe('# Getting Started\nConteudo...');
   });
 
   it('should call the correct GitHub raw URL', async () => {
-    mockHttpsGet(200, 'ok');
+    mockFetch(200, 'ok');
 
     await fetchGuide('schematics');
-    expect(https.get).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       'https://raw.githubusercontent.com/po-ui/po-angular/master/docs/guides/schematics.md',
-      expect.any(Object),
-      expect.any(Function)
+      expect.any(Object)
     );
   });
 
   it('should strip the .md extension from the name before fetching', async () => {
-    mockHttpsGet(200, 'ok');
+    mockFetch(200, 'ok');
 
     await fetchGuide('getting-started.md');
-    expect(https.get).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       'https://raw.githubusercontent.com/po-ui/po-angular/master/docs/guides/getting-started.md',
-      expect.any(Object),
-      expect.any(Function)
+      expect.any(Object)
     );
   });
 
   it('should throw when the guide is not found', async () => {
-    mockHttpsGet(404, 'Not Found');
+    mockFetch(404, 'Not Found');
 
     await expect(fetchGuide('inexistente')).rejects.toThrow('Guia "inexistente" não encontrado');
   });
 
   it('should include the attempted URL in the error message', async () => {
-    mockHttpsGet(404, '');
+    mockFetch(404, '');
 
     await expect(fetchGuide('xyz')).rejects.toThrow('URL tentada:');
   });
 });
 
 describe('fetchUrl (internal behaviour)', () => {
-  it('should follow a 301 redirect', async () => {
-    let callCount = 0;
+  it('should pass a timeout signal to fetch', async () => {
+    mockFetch(200, 'ok');
 
-    (https.get as jest.Mock).mockImplementation((url: string, _opts: any, cb: Function) => {
-      const mockReq = createMockRequest();
+    await fetchLlmsTxt();
 
-      if (callCount === 0) {
-        callCount++;
-        const redirectRes = createMockResponse(301, '', { location: 'https://po-ui.io/redirected' });
-        redirectRes.on = (event: string, _cb: Function) => {
-          if (event === 'data' || event === 'end') return redirectRes;
-          return redirectRes;
-        };
-        process.nextTick(() => cb(redirectRes));
-      } else {
-        const finalRes = createMockResponse(200, 'conteudo redirecionado');
-        process.nextTick(() => cb(finalRes));
-      }
-
-      return mockReq;
-    });
-
-    const result = await fetchLlmsTxt();
-    expect(result).toBe('conteudo redirecionado');
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://po-ui.io/llms.txt',
+      expect.objectContaining({ signal: expect.any(AbortSignal) })
+    );
   });
 
   it('should resolve with ok=false on timeout', async () => {
-    (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, _cb: Function) => {
-      const mockReq = createMockRequest();
-      process.nextTick(() => {
-        if (mockReq._listeners['timeout']) {
-          mockReq._listeners['timeout'].forEach((fn: Function) => fn());
-        }
-      });
-      return mockReq;
-    });
+    mockFetchError(new DOMException('The operation was aborted due to timeout', 'TimeoutError'));
 
-    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt');
+    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt (HTTP desconhecido)');
   });
 
   it('should resolve with ok=false on a request error', async () => {
-    (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, _cb: Function) => {
-      const mockReq = createMockRequest();
-      process.nextTick(() => {
-        if (mockReq._listeners['error']) {
-          mockReq._listeners['error'].forEach((fn: Function) => fn(new Error('ECONNREFUSED')));
-        }
-      });
-      return mockReq;
-    });
+    mockFetchError(new TypeError('fetch failed'));
 
-    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt');
+    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt (HTTP desconhecido)');
   });
 
-  it('should follow a redirect to an http URL using the http client', async () => {
-    (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-      const mockReq = createMockRequest();
-      const redirectRes = {
-        statusCode: 302,
-        headers: { location: 'http://po-ui.io/llms.txt' },
-        on: (_event: string, _cb: Function) => redirectRes
-      };
-      process.nextTick(() => cb(redirectRes));
-      return mockReq;
-    });
+  it('should resolve with ok=false when the rejection is not an Error', async () => {
+    mockFetchError('falha sem Error');
 
-    (http.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-      const mockReq = createMockRequest();
-      const mockRes = createMockResponse(200, 'conteudo via http');
-      process.nextTick(() => cb(mockRes));
-      return mockReq;
-    });
-
-    const result = await fetchLlmsTxt();
-    expect(result).toBe('conteudo via http');
-    expect(http.get).toHaveBeenCalled();
+    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt (HTTP desconhecido)');
   });
 
-  it('should resolve with ok=false on a response error', async () => {
-    (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-      const mockReq = createMockRequest();
-      const mockRes = {
-        statusCode: 200,
-        headers: {},
-        on(event: string, handler: Function) {
-          if (event === 'error') {
-            process.nextTick(() => handler(new Error('response error')));
-          }
-          return this;
-        }
-      };
-      process.nextTick(() => cb(mockRes));
-      return mockReq;
-    });
+  it('should resolve with ok=false when the response body cannot be read', async () => {
+    const response = new Response('conteudo', { status: 200 });
+    jest.spyOn(response, 'text').mockRejectedValue(new Error('response error'));
+    fetchMock.mockResolvedValue(response);
 
-    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt');
+    await expect(fetchLlmsTxt()).rejects.toThrow('Falha ao buscar llms.txt (HTTP desconhecido)');
   });
 });
 
-describe('fetchUrl - statusCode undefined', () => {
-  function mockUndefinedStatusCode(): void {
-    (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-      const mockReq = createMockRequest();
-      const mockRes = {
-        statusCode: undefined,
-        headers: {},
-        on(event: string, handler: Function) {
-          if (event === 'data') process.nextTick(() => handler(Buffer.from('')));
-          if (event === 'end') process.nextTick(() => handler());
-          return this;
-        }
-      };
-      process.nextTick(() => cb(mockRes));
-      return mockReq;
-    });
-  }
+describe('fetchUrl - network failure without status code', () => {
+  beforeEach(() => {
+    mockFetchError(new TypeError('fetch failed'));
+  });
 
-  it('should include "desconhecido" in the fetchLlmsFullTxt error when statusCode is undefined', async () => {
-    mockUndefinedStatusCode();
+  it('should include "desconhecido" in the fetchLlmsFullTxt error when the request fails', async () => {
     await expect(fetchLlmsFullTxt()).rejects.toThrow('desconhecido');
   });
 
-  it('should include "erro" in the fetchComponentDoc error when statusCode is undefined', async () => {
-    mockUndefinedStatusCode();
+  it('should include "erro" in the fetchComponentDoc error when the request fails', async () => {
     await expect(fetchComponentDoc('xyz')).rejects.toThrow('erro');
   });
 
-  it('should include "desconhecido" in the fetchGuide error when statusCode is undefined', async () => {
-    mockUndefinedStatusCode();
+  it('should include "desconhecido" in the fetchGuide error when the request fails', async () => {
     await expect(fetchGuide('xyz')).rejects.toThrow('desconhecido');
   });
 
-  it('should include "desconhecido" when loading the examples index and statusCode is undefined', async () => {
-    mockUndefinedStatusCode();
+  it('should include "desconhecido" when loading the examples index and the request fails', async () => {
     await expect(fetchComponentExamples('po-button', 1)).rejects.toThrow(
       'Falha ao carregar o índice de exemplos (HTTP desconhecido).'
     );
   });
 
-  it('should include "desconhecido" in the fetchBestPractices error when statusCode is undefined', async () => {
-    mockUndefinedStatusCode();
+  it('should include "desconhecido" in the fetchBestPractices error when the request fails', async () => {
     await expect(fetchBestPractices('contributing')).rejects.toThrow(
       'Falha ao buscar boas práticas de "contributing" (HTTP desconhecido).'
     );
   });
 
-  it('should include "desconhecido" when downloading a sample file and statusCode is undefined', async () => {
+  it('should include "desconhecido" when downloading a sample file and the request fails', async () => {
     const tree = JSON.stringify({
       truncated: false,
       tree: [
@@ -635,24 +480,7 @@ describe('fetchUrl - statusCode undefined', () => {
         }
       ]
     });
-    let callIndex = 0;
-
-    (https.get as jest.Mock).mockImplementation((_url: string, _opts: any, cb: Function) => {
-      const mockReq = createMockRequest();
-      const isTreeRequest = callIndex === 0;
-      callIndex++;
-      const mockRes = {
-        statusCode: isTreeRequest ? 200 : undefined,
-        headers: {},
-        on(event: string, handler: Function) {
-          if (event === 'data') process.nextTick(() => handler(Buffer.from(isTreeRequest ? tree : '')));
-          if (event === 'end') process.nextTick(() => handler());
-          return this;
-        }
-      };
-      process.nextTick(() => cb(mockRes));
-      return mockReq;
-    });
+    fetchMock.mockResolvedValueOnce(new Response(tree, { status: 200 }));
 
     await expect(fetchComponentExamples('po-button', 1)).rejects.toThrow('(HTTP desconhecido)');
   });
@@ -691,7 +519,7 @@ describe('findSamplesLocation (internal behaviour)', () => {
         }
       ]
     });
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: tree },
       { statusCode: 200, body: '<po-button></po-button>' }
     ]);
@@ -718,7 +546,7 @@ describe('findSamplesLocation (internal behaviour)', () => {
         }
       ]
     });
-    mockHttpsGetSequence([
+    mockFetchSequence([
       { statusCode: 200, body: tree },
       { statusCode: 200, body: '<po-button></po-button>' }
     ]);
@@ -733,12 +561,11 @@ describe('findSamplesLocation (internal behaviour)', () => {
 
 describe('fetchUrl - request headers', () => {
   function getRequestOptions(): any {
-    const call = (https.get as jest.Mock).mock.calls[0];
-    return call[1];
+    return fetchMock.mock.calls[0][1];
   }
 
   it('should send the GitHub API Accept header only on api.github.com calls', async () => {
-    mockHttpsGet(200, JSON.stringify({ tree: [], truncated: false }));
+    mockFetch(200, JSON.stringify({ tree: [], truncated: false }));
 
     await fetchComponentExamples('po-navbar', 3).catch(() => undefined);
 
@@ -748,7 +575,7 @@ describe('fetchUrl - request headers', () => {
   });
 
   it('should not send the GitHub API Accept header to po-ui.io', async () => {
-    mockHttpsGet(200, 'ok');
+    mockFetch(200, 'ok');
 
     await fetchLlmsTxt();
 
@@ -758,7 +585,7 @@ describe('fetchUrl - request headers', () => {
   });
 
   it('should not send the GitHub API Accept header to raw.githubusercontent.com', async () => {
-    mockHttpsGet(200, '# Guia');
+    mockFetch(200, '# Guia');
 
     await fetchGuide('getting-started');
 

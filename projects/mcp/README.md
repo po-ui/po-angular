@@ -14,7 +14,7 @@ O conteúdo é consultado nas fontes oficiais do PO UI durante a execução. Ass
 
 ## Requisitos
 
-- Node.js 18 ou superior;
+- Node.js 22.12 ou superior;
 - acesso a `po-ui.io` e `raw.githubusercontent.com`.
 
 ## Uso com `npx`
@@ -248,11 +248,11 @@ O índice `llms.txt` é mantido em memória durante a execução do servidor. O 
 
 ### O cliente não inicia o servidor
 
-Confirme que o Node.js 18 ou superior está instalado e que `npx` está disponível no `PATH` do processo que executa o cliente. No Windows, alguns clientes podem exigir o caminho completo para `npx.cmd`.
+Confirme que o Node.js 22.12 ou superior está instalado e que `npx` está disponível no `PATH` do processo que executa o cliente. No Windows, alguns clientes podem exigir o caminho completo para `npx.cmd`.
 
 ### Erro ao carregar o índice ou a documentação
 
-Verifique se o ambiente permite acesso HTTPS a `po-ui.io`, `raw.githubusercontent.com` e `api.github.com`. Cada requisição possui timeout de 10 segundos.
+Verifique se o ambiente permite acesso HTTPS a `po-ui.io`, `raw.githubusercontent.com` e `api.github.com`. Cada requisição possui timeout total de 20 segundos, incluindo o download da resposta.
 
 ### Limitação de taxa da API do GitHub
 
