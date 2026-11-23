@@ -21,8 +21,15 @@
   text-align: center;
 }
 
+.home-hero-tag-link {
+  display: inline-flex;
+  border-radius: var(--border-radius-pill);
+  text-decoration: none;
+}
+
 .home-hero-tag {
   --border-radius: var(--border-radius-pill);
+  cursor: pointer;
 }
 
 .home-hero-title {
@@ -49,29 +56,32 @@
   gap: var(--spacing-sm);
 }
 
-.home-hero-primary,
-.home-hero-secondary {
+.home-hero-primary {
   --border-radius: var(--border-radius-pill);
 }
 
+/* glow: same override as the old Star button (global .button-brand-02), with the fixed colors of the dark hero */
 .home-hero-primary {
   --color: var(--home-hero-primary);
+  --color-glow-highlight: var(--home-hero-primary-hover);
   --color-hover: var(--home-hero-primary-hover);
   --color-pressed: var(--home-hero-primary-pressed);
   --text-color: var(--home-hero-on-primary);
-  --border-color: transparent;
 }
 
-.home-hero-secondary {
+/* handoff: secondary, pill, 2px border --home-hero-secondary-border, text --home-hero-secondary-text */
+.home-hero-explore {
+  --border-radius: var(--border-radius-pill);
+  --border-width: var(--border-width-md);
   --color: var(--home-hero-secondary-text);
   --border-color-hover: var(--home-hero-secondary-text);
-  --border-width: var(--border-width-md);
   --background-color: transparent;
-  --background-hover: transparent;
-  --background-pressed: transparent;
+  --background-hover: color-mix(in srgb, var(--home-hero-secondary-text) 10%, transparent);
+  --background-pressed: color-mix(in srgb, var(--home-hero-secondary-text) 20%, transparent);
 }
 
-.home-hero-secondary ::ng-deep .po-button[p-kind='secondary'] {
+/* po-button secondary paints border and text with --color; the handoff uses a different border color */
+.home-hero-explore ::ng-deep .po-button {
   border-color: var(--home-hero-secondary-border);
 }
 
@@ -79,24 +89,9 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  min-height: 1.25rem;
   font-size: var(--font-size-xs);
   letter-spacing: -0.01em;
   color: var(--home-hero-text-subtle);
-}
-
-.home-hero-stars {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xxs);
-  font-size: var(--font-size-default);
-  color: var(--home-hero-text);
-}
-
-.home-hero-proof-divider {
-  width: var(--border-width-sm);
-  height: var(--spacing-sm);
-  background: var(--home-hero-text-subtle);
 }
 
 .home-hero-badge {
@@ -121,8 +116,7 @@
   }
 
   .home-hero-preview {
-    /* !important: the slot sets its height inline from the Figma size */
-    height: 12rem !important;
+    height: 12rem;
     margin-bottom: 0;
   }
 }

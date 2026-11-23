@@ -1,14 +1,17 @@
 <section class="home-hero">
   <div class="home-hero-content">
-    <!-- FIGMA C1: "Componete" is a typo in the design, kept on purpose (D5) -->
-    <po-tag
-      class="home-hero-tag"
-      p-icon="an an-tree-structure"
-      p-value="Novo Componete de Tree-view"
-      p-color="var(--home-hero-tag-bg)"
-      p-text-color="var(--home-hero-tag-text)"
-    >
-    </po-tag>
+    <!-- Owner request: the tag shows the GitHub stars and links to the repository.
+         It replaces the Figma text "Novo Componete de Tree-view" (FIGMA C1). -->
+    <a class="home-hero-tag-link" [href]="repositoryUrl" target="_blank" rel="noopener noreferrer">
+      <po-tag
+        class="home-hero-tag"
+        p-icon="an an-star"
+        [p-value]="tagLabel"
+        p-color="var(--home-hero-tag-bg)"
+        p-text-color="var(--home-hero-tag-text)"
+      >
+      </po-tag>
+    </a>
 
     <h1 class="home-hero-title">Menos repetição.<br />Mais aplicação.</h1>
 
@@ -19,15 +22,15 @@
 
     <div class="home-hero-actions">
       <po-button
-        class="home-hero-primary"
-        p-label="Começar agora"
-        p-kind="primary"
+        class="home-hero-primary button-brand-02"
+        [p-label]="startLabel"
+        p-kind="glow"
         p-size="large"
         (p-click)="openInternalLink('guides/getting-started')"
       >
       </po-button>
       <po-button
-        class="home-hero-secondary"
+        class="home-hero-explore"
         p-label="Explore os componentes"
         p-kind="secondary"
         p-size="large"
@@ -37,13 +40,7 @@
     </div>
 
     <div class="home-hero-proof">
-      @if (stargazersCount !== undefined) {
-        <span class="home-hero-stars"><span class="an an-star" aria-hidden="true"></span>{{ stargazersCount }}</span>
-      }
       @if (showDevLibraryBadge) {
-        @if (stargazersCount !== undefined) {
-          <span class="home-hero-proof-divider" aria-hidden="true"></span>
-        }
         <span class="home-hero-badge">
           Indicada como Dev Library pela
           <img src="./assets/home/google-dev-library.svg" alt="Google" />
@@ -52,11 +49,5 @@
     </div>
   </div>
 
-  <app-home-illustration-slot
-    class="home-hero-preview"
-    label="hero-preview"
-    width="1243px"
-    height="543px"
-    radius="16px"
-  ></app-home-illustration-slot>
+  <app-home-hero-showcase class="home-hero-preview"></app-home-hero-showcase>
 </section>

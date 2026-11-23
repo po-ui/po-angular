@@ -1,0 +1,155 @@
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 543px;
+  max-width: 1243px;
+  perspective: 1200px;
+  /* fade on the four edges ("black" only drives the mask alpha); the bottom fade ends at 82% so the cards are gone before the hero ends (the host overlaps the next section by 64px, about 12% of its height) */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent, black 18%, black 58%, transparent 82%),
+    linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image:
+    linear-gradient(to bottom, transparent, black 18%, black 58%, transparent 82%),
+    linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* tilted plane: perspective on the host, rotation on the stage */
+.home-showcase-stage {
+  position: absolute;
+  top: 0;
+  right: -15%;
+  bottom: 0;
+  left: -15%;
+  transform-origin: 50% 30%;
+  transform: rotateX(30deg) rotateZ(-8deg);
+  transform-style: preserve-3d;
+}
+
+.home-showcase-track {
+  animation: home-showcase-scroll 60s linear infinite;
+  will-change: transform;
+}
+
+:host(.is-paused) .home-showcase-track {
+  animation-play-state: paused;
+}
+
+.home-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+}
+
+.home-showcase-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* uniform cards: the samples keep the look of the components list and are clipped when taller than the card */
+  height: 14rem;
+  overflow: hidden;
+  padding: var(--spacing-md);
+  border: var(--border-width-sm) solid var(--home-border);
+  border-radius: var(--border-radius-xl);
+  background: var(--home-surface-raised);
+  /* the hero sets a fixed light text color that the samples would inherit: use the text color of the theme */
+  color: var(--home-text);
+  position: relative;
+  /* Cards that are outside the visible area (most of the 36) are not laid out or painted until they get close. That is what
+     makes revealing them in a single step cheap. The size is fixed, so size containment is safe. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 14rem;
+}
+
+/* hidden area where the samples are created (laid out, never painted) before being revealed in the cards */
+.home-showcase-staging {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22rem;
+  visibility: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+:host ::ng-deep .home-showcase-card > :not(.home-showcase-skeleton) {
+  position: relative;
+  /* opaque, so the skeleton behind it never shows through (also where :has() is not supported) */
+  background: var(--home-surface-raised);
+  width: 100%;
+  zoom: 0.85;
+}
+
+/* Skeleton while the samples load. It is hidden by CSS alone (:has) when the sample is inserted in the card,
+   because the view of this component is detached and no change detection runs here. */
+.home-showcase-skeleton {
+  position: absolute;
+  inset: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+.home-showcase-card:has(> :not(.home-showcase-skeleton)) > .home-showcase-skeleton {
+  display: none;
+}
+
+.home-showcase-skeleton-bar {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-md);
+  background: var(--home-surface-muted);
+}
+
+.home-showcase-skeleton-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--home-border), transparent);
+  transform: translateX(-100%);
+  animation: home-showcase-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes home-showcase-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* 3 copies: it moves exactly one copy (1/3 of the track), from the 2nd position to the 3rd, so there is always a copy above
+   and below the visible area. With 2 copies the area above the first one is empty right after the wrap and the cards
+   that were crossing the top-left of the tilted plane vanished. */
+@keyframes home-showcase-scroll {
+  from {
+    transform: translateY(calc(-100% / 3));
+  }
+
+  to {
+    transform: translateY(calc(-200% / 3));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-showcase-track {
+    animation: none;
+    transform: translateY(calc(-100% / 3));
+  }
+
+  .home-showcase-skeleton-bar::after {
+    animation: none;
+  }
+}
+
+@media (max-width: 767px) {
+  :host {
+    height: 12rem;
+  }
+}

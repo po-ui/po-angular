@@ -391,6 +391,7 @@
               "projects/portal/src/app/search/**/*.spec.ts",
               "projects/portal/src/app/shared/**/*.spec.ts",
               "projects/portal/src/app/documentation/*.spec.ts",
+              "projects/portal/src/app/documentation/documentation-preview/*.spec.ts",
               "projects/portal/src/app/guide/*.spec.ts",
               "projects/portal/src/app/home/**/*.spec.ts"
             ]
