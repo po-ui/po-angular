@@ -1,7 +1,9 @@
 /* Variáveis locais da Home (decisões D3 e D6). Valores fixos têm comentário com os tokens próximos do tema. */
 :host {
   /* ===== Hero: SEMPRE ESCURO (D1), independe do tema ===== */
-  --home-hero-bg: var(--color-brand-01-darkest); /* #262a45, idêntico ao Figma. Marca não inverte entre temas */
+  --home-hero-bg: #262a45;
+  /* Idêntico ao Figma. Tokens próximos: --color-brand-01-darkest (#262a45 no claro). ATENÇÃO: no tema escuro os tons
+     brand-01 e brand-02-light/lightest INVERTEM (darkest vira #f3f6fb), então não servem para áreas sempre escuras */
   --home-hero-text: #fafaf9;
   /* Tokens próximos: --color-neutral-light-05 (claro #f9f9fa) e --color-neutral-dark-90 (escuro #f9f9fa).
      Usar `--color-neutral-light-05` quebraria no tema escuro (vira #1d1d30). */
@@ -11,12 +13,14 @@
   /* Tokens próximos: --color-neutral-light-30 (claro #b4b4c0) e --color-neutral-mid-60 (escuro #b4b4c0) */
   --home-hero-on-primary: #000000;
   /* Texto do botão primário rosa. Tokens próximos: --color-neutral-dark-95 (claro #060613), sem preto puro */
-  --home-hero-tag-bg: var(--color-brand-01-darker); /* #39416f, idêntico ao Figma */
+  --home-hero-tag-bg: #39416f; /* Idêntico ao Figma. Token próximo: --color-brand-01-darker (inverte no escuro) */
   --home-hero-tag-text: #ecf1f8;
   /* Tokens próximos: --color-brand-01-lightest (#f3f6fb) */
   --home-hero-secondary-border: #e7e5e4;
   /* Tokens próximos: --color-neutral-light-20 (claro) */
-  --home-hero-secondary-text: var(--color-brand-02-lightest); /* #fef1f6, idêntico ao Figma */
+  --home-hero-secondary-text: #fef1f6; /* Idêntico ao Figma. Token próximo: --color-brand-02-lightest (inverte no escuro) */
+  --home-hero-primary-hover: #fe68a2; /* Token próximo: --color-brand-02-light (inverte no escuro) */
+  --home-hero-primary-pressed: color-mix(in srgb, var(--color-brand-02-base) 85%, black);
   --home-hero-primary: var(--color-brand-02-base); /* #f94485, idêntico ao Figma */
 
   /* ===== Tamanhos sem token (D6) ===== */
@@ -52,10 +56,10 @@
   --home-feature-gradient-end: var(--color-neutral-light-00); /* claro: branco */
 
   /* Seção Open Source: sempre escura nos dois temas (Figma) */
-  --home-open-source-bg: var(--color-brand-01-darkest); /* #262a45 */
+  --home-open-source-bg: #262a45; /* Token próximo: --color-brand-01-darkest (inverte no escuro) */
   --home-open-source-title: #fbfcfe;
   /* Tokens próximos: --color-neutral-light-00 (claro #fff), --color-brand-01-lightest (#f3f6fb) */
-  --home-open-source-accent: var(--color-brand-02-light); /* #fe68a2, idêntico ao Figma */
+  --home-open-source-accent: #fe68a2; /* Idêntico ao Figma. Token próximo: --color-brand-02-light (inverte no escuro) */
   --home-open-source-text: #d6d3d1;
   /* Tokens próximos: --color-neutral-light-30 (claro #b4b4c0), --color-neutral-light-20 (claro #e7e5e4) */
 
@@ -67,6 +71,8 @@
 
 /* Gradiente da seção Feature no tema escuro (Figma: #262a45 -> #0c0a09) */
 :host-context(html[class*='-dark-']) {
-  --home-feature-gradient-start: var(--color-brand-01-darkest); /* idêntico ao Figma */
+  --home-feature-gradient-start: var(
+    --color-brand-01-lightest
+  ); /* #262a45 no tema escuro (os tons brand-01 invertem), idêntico ao Figma */
   --home-feature-gradient-end: var(--color-neutral-light-00); /* Figma #0c0a09. PO UI escuro #060613 */
 }
