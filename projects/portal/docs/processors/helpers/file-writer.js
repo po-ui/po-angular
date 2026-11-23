@@ -228,18 +228,13 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
   // A troca de modo é a 1ª ação: no celular o po-page-default só mostra 2 ações fora do menu "...".
   private readonly toWeb: PoPageAction = { label: '{{toWeb.label}}', icon: '{{toWeb.icon}}', action: () => this.changeTab('web') };
   private readonly toDoc: PoPageAction = { label: '{{toDoc.label}}', icon: '{{toDoc.icon}}', action: () => this.changeTab('doc') };
-  private readonly improve: PoPageAction = { label: 'Colabore', action: this.improveDocs.bind(this) };
+  private readonly back: PoPageAction = { label: 'Voltar', icon: 'an an-arrow-left', action: this.goBack.bind(this) };
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
-  // Voltar (botão de voltar do cabeçalho secundário)
+  // Voltar para a listagem de componentes
   goBack(): void {
     this.router.navigate(['documentation']);
-  }
-
-  // Aprimorar Docs
-  improveDocs(): void {
-    this.router.navigate(['guides/development-flow']);
   }
 
   ngOnInit() {
@@ -255,8 +250,8 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
 
       this.title = '{{title}}{{separator}}' + (this.activeTab === 'web' ? '{{webLabel}}' : '{{docLabel}}');
       this.actions = this.hidePoWebSample
-        ? [this.improve]
-        : [this.activeTab === 'web' ? this.toDoc : this.toWeb, this.improve];
+        ? [this.back]
+        : [this.activeTab === 'web' ? this.toDoc : this.toWeb, this.back];
     });
   }
 
@@ -356,7 +351,7 @@ export class Doc{{component}}Module { }
 
   generateDocTemplateFile: function (docName, samples) {
     const htmlSource = `
-<po-page-default [p-title]="title" [p-actions]="actions" p-page-header-type="secondary" (p-back)="goBack()">
+<po-page-default [p-title]="title" [p-actions]="actions">
   <!-- Um modo por vez (?view=web|doc). Os dois ficam montados e só se escondem, como as abas faziam:
        o exemplo não é recriado ao trocar de modo. -->
   @if (!hidePoWebSample) {
