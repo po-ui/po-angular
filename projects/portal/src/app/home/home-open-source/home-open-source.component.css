@@ -22,10 +22,6 @@
 }
 
 .home-open-source-title {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--spacing-xs);
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--font-size-3xl);
