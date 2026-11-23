@@ -5,6 +5,18 @@ const capitalize = require('capitalize'),
   handlebars = require('handlebars');
 configuration = require('./../../configuration');
 
+/**
+ * Título e troca de modo da página de cada componente: "Accordion · Exemplos" / "Accordion · Documentação".
+ * Para chamar a documentação de "API", troque `doc` (e o rótulo de `toDoc`, se quiser).
+ */
+const PAGE_MODES = {
+  separator: ' · ',
+  web: 'Exemplos',
+  doc: 'Documentação',
+  toWeb: { label: 'Ver exemplos', icon: 'an an-browsers' },
+  toDoc: { label: 'Ver documentação', icon: 'an an-file-text' }
+};
+
 module.exports = {
   //Samples array
   generateSamplesArray: function (doc, group) {
@@ -126,17 +138,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class Sample{{component}}ViewComponent {
-  hideSampleCodeTabs = true;
-  sampleCodeButtonLabel = 'Talk is cheap, show me the code!';
-  sampleCodeButtonIcon = 'an an-plus';
-
-  toggleSampleCodeTabs() {
-    this.hideSampleCodeTabs = !this.hideSampleCodeTabs;
-    this.sampleCodeButtonLabel = this.hideSampleCodeTabs ? 'Talk is cheap, show me the code!' : 'Okay, hide the code';
-    this.sampleCodeButtonIcon = this.hideSampleCodeTabs ? 'an an-plus' : 'an an-minus';
-  }
-}
+export class Sample{{component}}ViewComponent {}
 `;
     const componentTemplate = handlebars.compile(componentSource);
     let componentContent = componentTemplate({
@@ -203,6 +205,8 @@ export class Doc{{component}}RoutingModule { }
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 
+import { PoPageAction } from '@po-ui/ng-components';
+
 @Component({
   templateUrl: './doc-{{docName}}.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -214,16 +218,21 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
   hidePoWebSample = true;
   samplesLength = {{samplesLength}};
 
-  activeTab = 'doc';
+  /** Modo exibido, um por vez: 'web' (exemplos) ou 'doc' (documentação), vindo de ?view=. */
+  activeTab = 'doc';
 
-  actions: Array<{}> = [
-    { label: 'Documentação', action: this.goBack.bind(this), icon: 'an an-file-text' },
-    { label: 'Colabore', action: this.improveDocs.bind(this) },
-  ];
+  title = '{{title}}';
+
+  actions: Array<PoPageAction> = [];
+
+  // A troca de modo é a 1ª ação: no celular o po-page-default só mostra 2 ações fora do menu "...".
+  private readonly toWeb: PoPageAction = { label: '{{toWeb.label}}', icon: '{{toWeb.icon}}', action: () => this.changeTab('web') };
+  private readonly toDoc: PoPageAction = { label: '{{toDoc.label}}', icon: '{{toDoc.icon}}', action: () => this.changeTab('doc') };
+  private readonly improve: PoPageAction = { label: 'Colabore', action: this.improveDocs.bind(this) };
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
-  // Voltar
+  // Voltar (botão de voltar do cabeçalho secundário)
   goBack(): void {
     this.router.navigate(['documentation']);
   }
@@ -241,14 +250,18 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
 
       // Defines active tab: prioriza "Exemplos" (web) quando houver exemplos;
       // caso contrário, cai para "Documentação" (doc). Quando não há exemplos,
-      // ignora o view=web da URL para não deixar a tela sem aba ativa.
+      // ignora o view=web da URL para não deixar a tela vazia.
       this.activeTab = this.hidePoWebSample ? 'doc' : view || 'web';
+
+      this.title = '{{title}}{{separator}}' + (this.activeTab === 'web' ? '{{webLabel}}' : '{{docLabel}}');
+      this.actions = this.hidePoWebSample
+        ? [this.improve]
+        : [this.activeTab === 'web' ? this.toDoc : this.toWeb, this.improve];
     });
   }
 
   changeTab(tab: string) {
     this.router.navigate([], { queryParams: { view: tab }, queryParamsHandling: 'merge' });
-    this.activeTab = tab;
   }
 
   ngOnDestroy() {
@@ -262,7 +275,13 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
       component: group.componentName,
       path: path,
       type: type,
-      samplesLength: samplesLength
+      samplesLength: samplesLength,
+      title: this.capitalizeDocName(docName),
+      separator: PAGE_MODES.separator,
+      webLabel: PAGE_MODES.web,
+      docLabel: PAGE_MODES.doc,
+      toWeb: PAGE_MODES.toWeb,
+      toDoc: PAGE_MODES.toDoc
     });
 
     this.writeFile(
@@ -337,19 +356,19 @@ export class Doc{{component}}Module { }
 
   generateDocTemplateFile: function (docName, samples) {
     const htmlSource = `
-<po-page-default p-title="{{title}}" [p-actions]="actions">
-  <po-tabs p-size="1">
-    @if (!hidePoWebSample) {
-    <po-tab p-label="Exemplos" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
+<po-page-default [p-title]="title" [p-actions]="actions" p-page-header-type="secondary" (p-back)="goBack()">
+  <!-- Um modo por vez (?view=web|doc). Os dois ficam montados e só se escondem, como as abas faziam:
+       o exemplo não é recriado ao trocar de modo. -->
+  @if (!hidePoWebSample) {
+  <div [hidden]="activeTab !== 'web'">
     {{#each samples}}
-      <sample-{{name}}-view></sample-{{name}}-view>
+    <sample-{{name}}-view></sample-{{name}}-view>
     {{/each}}
-    </po-tab>
-    }
-    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
-      <sample-{{docName}}-doc></sample-{{docName}}-doc>
-    </po-tab>
-  </po-tabs>
+  </div>
+  }
+  <div [hidden]="activeTab !== 'doc'">
+    <sample-{{docName}}-doc></sample-{{docName}}-doc>
+  </div>
 </po-page-default>
 `;
 
