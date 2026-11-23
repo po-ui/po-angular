@@ -1,0 +1,40 @@
+<footer class="home-footer">
+  <div class="home-footer-card">
+    <div class="home-footer-top">
+      <img class="home-footer-logo" src="./assets/po-logos/po_color_solid.svg" alt="PO UI" width="108" height="68" />
+
+      <nav class="home-footer-nav">
+        <div class="home-footer-column">
+          <h2 class="home-footer-heading">Get Started</h2>
+          <a class="home-footer-link" routerLink="/">Home</a>
+          <a class="home-footer-link" routerLink="/guides/getting-started">Get Started</a>
+          <a class="home-footer-link" routerLink="/documentation">Components</a>
+          <a class="home-footer-link" [href]="githubUrl" target="_blank" rel="noopener noreferrer">Github</a>
+        </div>
+
+        <div class="home-footer-column">
+          <h2 class="home-footer-heading">Legal</h2>
+          <a class="home-footer-link" [href]="licenseUrl" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+          <a class="home-footer-link" [href]="licenseUrl" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+        </div>
+      </nav>
+    </div>
+
+    <hr class="home-footer-divider" />
+
+    <div class="home-footer-cta-row">
+      <!-- Text kept as in the Figma, with a lowercase "angular" -->
+      <p class="home-footer-slogan">Biblioteca em angular para soluções complexas</p>
+      <po-button
+        class="home-footer-cta"
+        p-label="Começar agora"
+        p-kind="primary"
+        p-size="large"
+        (p-click)="openInternalLink('guides/getting-started')"
+      >
+      </po-button>
+    </div>
+
+    <hr class="home-footer-divider" />
+  </div>
+</footer>

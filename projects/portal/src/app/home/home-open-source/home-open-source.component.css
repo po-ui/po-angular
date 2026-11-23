@@ -1,0 +1,88 @@
+:host {
+  display: block;
+}
+
+.home-open-source {
+  position: relative;
+  overflow: hidden;
+  padding: var(--home-spacing-section) var(--spacing-lg);
+  background: var(--home-open-source-bg);
+  font-family: var(--font-family-theme);
+}
+
+.home-open-source-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-open-source-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-normal);
+  line-height: 55px;
+  letter-spacing: var(--home-letter-spacing-title);
+  color: var(--home-open-source-title);
+}
+
+.home-open-source-accent {
+  color: var(--home-open-source-accent);
+}
+
+.home-open-source-text {
+  margin: 0;
+  font-size: var(--font-size-default);
+  line-height: 1.3;
+  color: var(--home-open-source-text);
+}
+
+.home-open-source-button {
+  --color: var(--home-open-source-accent);
+  --color-hover: var(--home-hero-primary-hover);
+  --color-pressed: var(--home-hero-primary-pressed);
+  --text-color: var(--home-hero-on-primary);
+  --border-color: transparent;
+  --border-radius: var(--border-radius-pill);
+}
+
+.home-open-source-logo {
+  position: absolute;
+  top: 50%;
+  height: auto;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.home-open-source-logo-left {
+  left: -150px;
+  width: 534px;
+  transform: translateY(-50%);
+}
+
+.home-open-source-logo-right {
+  right: -130px;
+  width: 460px;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 767px) {
+  .home-open-source-title {
+    font-size: var(--font-size-2xl);
+    line-height: 1.2;
+  }
+
+  .home-open-source-logo-left,
+  .home-open-source-logo-right {
+    width: 240px;
+  }
+}

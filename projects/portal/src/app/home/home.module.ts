@@ -10,6 +10,8 @@ import { HomeHeroComponent } from './home-hero/home-hero.component';
 import { HomeBenefitsComponent } from './home-benefits/home-benefits.component';
 import { HomeStatementComponent } from './home-statement/home-statement.component';
 import { HomeFeaturesComponent } from './home-features/home-features.component';
+import { HomeOpenSourceComponent } from './home-open-source/home-open-source.component';
+import { HomeFooterComponent } from './home-footer/home-footer.component';
 import { HomeBannerService } from './home-banner/home-banner.service';
 
 @NgModule({
@@ -21,7 +23,9 @@ import { HomeBannerService } from './home-banner/home-banner.service';
     HomeHeroComponent,
     HomeBenefitsComponent,
     HomeStatementComponent,
-    HomeFeaturesComponent
+    HomeFeaturesComponent,
+    HomeOpenSourceComponent,
+    HomeFooterComponent
   ],
   providers: [HomeBannerService],
   bootstrap: []
