@@ -1,0 +1,96 @@
+:host {
+  display: block;
+}
+
+.home-statement {
+  padding: var(--spacing-4xl) var(--spacing-lg);
+  background: var(--home-surface);
+  font-family: var(--font-family-heading);
+}
+
+.home-statement-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.home-statement-text {
+  max-width: 1034px;
+  margin: 0;
+  font-size: var(--home-font-size-statement);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.2;
+  text-align: center;
+  color: var(--home-title);
+}
+
+/* FIGMA D-h: Aleo has no SemiBold, so the highlight uses Bold */
+.home-statement-highlight {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-brand-02-base);
+}
+
+/* Small screens: slots are decorative and hidden (section 8 of the plan) */
+.home-statement-slot {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .home-statement-photo-team,
+  .home-statement-photo-document {
+    display: block;
+  }
+
+  .home-statement-stage {
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .home-statement-text {
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .home-statement {
+    padding: calc(var(--home-spacing-section) * 3.5) var(--spacing-lg) var(--home-spacing-section);
+  }
+
+  .home-statement-stage {
+    position: relative;
+    min-height: 466px;
+  }
+
+  .home-statement-slot {
+    display: block;
+    position: absolute;
+  }
+
+  .home-statement-photo-team {
+    left: 71px;
+    top: -258px;
+  }
+
+  .home-statement-card-metric {
+    left: 0;
+    top: 211px;
+  }
+
+  .home-statement-text-field {
+    left: 481px;
+    top: 395px;
+  }
+
+  .home-statement-photo-document {
+    left: 1060px;
+    top: 196px;
+  }
+
+  .home-statement-listbox {
+    left: 1016px;
+    top: 69px;
+  }
+}

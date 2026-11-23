@@ -1,0 +1,101 @@
+:host {
+  display: block;
+}
+
+.home-benefits {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  /* extra top space so the hero preview, which overlaps this section, does not cover the title */
+  padding: calc(var(--home-spacing-section) + var(--spacing-4xl)) var(--spacing-lg) var(--home-spacing-section);
+  background: linear-gradient(176deg, var(--home-feature-gradient-start) 5.3%, var(--home-feature-gradient-end) 88%);
+  font-family: var(--font-family-theme);
+}
+
+.home-benefits-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  max-width: 616px;
+  text-align: center;
+}
+
+.home-benefits-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-normal);
+  line-height: 49px;
+  color: var(--home-title);
+}
+
+.home-benefits-description {
+  margin: 0;
+  font-size: var(--font-size-default);
+  line-height: 1.5;
+  color: var(--home-text-secondary);
+}
+
+.home-benefits-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-benefits-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2xl);
+  box-sizing: border-box;
+  width: 282px;
+  min-height: 340px;
+  padding: var(--spacing-sm);
+  border: var(--border-width-sm) solid var(--home-border);
+  border-radius: var(--border-radius-xl);
+  background: var(--home-surface-raised);
+  backdrop-filter: blur(var(--home-blur-card));
+}
+
+.home-benefits-card-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+  color: var(--home-title);
+}
+
+.home-benefits-card-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.2;
+  color: var(--home-text);
+}
+
+@media (max-width: 1279px) {
+  .home-benefits-list {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-benefits {
+    padding-top: var(--home-spacing-section);
+  }
+
+  .home-benefits-title {
+    font-size: var(--font-size-2xl);
+    line-height: 1.2;
+  }
+
+  .home-benefits-card {
+    width: 100%;
+  }
+}
