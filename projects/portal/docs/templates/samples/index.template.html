@@ -7,18 +7,24 @@
 <br> {% for file in doc.files %}
 <blockquote class="sample-blockquote"{% if loop.first %} id="{$ doc.id $}"{% endif %}>
   <label class="sample-title po-font-text-large-bold" >{$ doc.title or doc.id | replace('example-','') $}</label>
-  <a (click)="toggleSampleCodeTabs()" class="show-me-the-code"><span [class]="'po-icon ' + sampleCodeButtonIcon"></span> {{ sampleCodeButtonLabel }}</a>
 </blockquote>
 
-<div [ngClass]="{ 'docs-sample-code-tabs': hideSampleCodeTabs }">
+{#- Preview (o exemplo) é a 1ª aba. O po-tab só esconde a aba com display:none: o exemplo não é recriado ao trocar. -#}
+<div>
   <po-tabs p-size="2">
-    <po-tab p-label="HTML" p-active>
+    <po-tab p-label="Preview" p-active>
+      <div class="docs-sample-container">
+        <{$ doc.id | replace( 'example-', '') $}>
+        </{$ doc.id | replace( 'example-', '')$}>
+      </div>
+    </po-tab>
+    <po-tab p-label="HTML">
       <div>
         {% for file in doc.files %}
         <label class="doc-label-path">{$ file.path $}</label>
         {$ code(file, 'html') $}
         {% endfor %}
-      </div>      
+      </div>
     </po-tab>
     <po-tab p-label="TS">
       <div>
@@ -47,11 +53,6 @@
     </po-tab>
     {%- endif -%}
   </po-tabs>
-</div>
-
-<div class="docs-sample-container">
-  <{$ doc.id | replace( 'example-', '') $}>
-  </{$ doc.id | replace( 'example-', '')$}>
 </div>
 {% endfor %}
 

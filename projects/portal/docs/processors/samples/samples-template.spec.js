@@ -62,4 +62,21 @@ describe('samples: index.template.html', () => {
       expect(outside).not.toMatch(/[{}@]/);
     });
   });
+
+  it('abas com texto: Preview (ativa, com o exemplo no container) e depois as de código', () => {
+    const tabs = [...out.matchAll(/<po-tab p-label="(\w+)"( p-active)?>/g)].map(t => t[1] + (t[2] ? '*' : ''));
+    const preview = out.match(/<po-tab p-label="Preview" p-active>([\s\S]*?)<\/po-tab>/)[1];
+
+    expect(tabs).toEqual(['Preview*', 'HTML', 'TS', 'CSS']);
+    expect(preview).toMatch(/<div class="docs-sample-container">\s*<sample-po-x>\s*<\/sample-po-x>\s*<\/div>/);
+    expect(out.match(/<sample-po-x>/g).length).toBe(1);
+    expect(out).not.toMatch(/po-button-group|viewButtons|\[hidden\]/);
+  });
+
+  it('título do sample só com o label (e o id do deep link), sem o link antigo', () => {
+    expect(out).toMatch(
+      /<blockquote class="sample-blockquote" id="sample-po-x">\s*<label class="sample-title[^>]*>X<\/label>\s*<\/blockquote>\s*<div>\s*<po-tabs/
+    );
+    expect(out).not.toMatch(/show-me-the-code|toggleSampleCodeTabs|sampleCodeButton|hideSampleCodeTabs/);
+  });
 });

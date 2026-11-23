@@ -435,10 +435,6 @@ sample-po-menu-human-resources-view .docs-sample-container .po-menu {
   }
 }
 
-.docs-sample-code-tabs {
-  display: none;
-}
-
 .doc-sample-link {
   cursor: pointer;
   text-decoration: none;
@@ -458,25 +454,14 @@ sample-po-menu-human-resources-view .docs-sample-container .po-menu {
   text-decoration: none;
 }
 
-a,
-.show-me-the-code {
+a {
   color: var(--color-portal-highlight);
   cursor: pointer;
   text-decoration: none;
 }
 
-.show-me-the-code {
-  float: right;
-}
-
-.show-me-the-code,
-.show-me-the-code .po-icon {
-  font-size: 16px;
-}
-
 .app-portal a:hover,
-.docs-api a:hover,
-.show-me-the-code:hover {
+.docs-api a:hover {
   color: var(--color-brand-01-dark);
   text-decoration: underline;
 }
