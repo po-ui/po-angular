@@ -11,6 +11,7 @@
     "src/app/shared/**/*.spec.ts",
     "src/app/documentation/*.spec.ts",
     "src/app/guide/*.spec.ts",
+    "src/app/home/**/*.spec.ts",
     "src/**/*.d.ts"
   ],
   "angularCompilerOptions": {
