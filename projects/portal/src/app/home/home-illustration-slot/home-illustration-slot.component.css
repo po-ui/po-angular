@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--home-surface-muted);
+  border: var(--border-width-sm) dashed var(--home-border);
+}

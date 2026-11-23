@@ -5,11 +5,12 @@ import { SharedModule } from './../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { HomeBannerComponent } from './home-banner/home-banner.component';
+import { HomeIllustrationSlotComponent } from './home-illustration-slot/home-illustration-slot.component';
 import { HomeBannerService } from './home-banner/home-banner.service';
 
 @NgModule({
   imports: [SharedModule, HomeRoutingModule],
-  declarations: [HomeComponent, HomeBannerComponent],
+  declarations: [HomeComponent, HomeBannerComponent, HomeIllustrationSlotComponent],
   providers: [HomeBannerService],
   bootstrap: []
 })

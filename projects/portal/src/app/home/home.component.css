@@ -1,3 +1,5 @@
+@import './home.tokens.css';
+
 .app-home-widget-components {
   text-align: center;
 }
