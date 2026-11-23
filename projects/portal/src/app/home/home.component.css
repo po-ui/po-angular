@@ -3,3 +3,16 @@
 :host {
   display: block;
 }
+
+/* O po-page-default só dá a rolagem: as seções da Home vão de borda a borda, sem o padding nem o gap do page. */
+.home-page ::ng-deep .po-page {
+  --po-density-gap-header-content: 0;
+  /* a Home não tem po-menu, mas fica dentro do .po-wrapper do app, que reserva --menu-width à esquerda */
+  margin-left: 0;
+  width: 100%;
+}
+
+.home-page ::ng-deep .po-page-content {
+  --padding-content: 0;
+  padding: 0;
+}

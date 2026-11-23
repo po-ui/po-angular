@@ -5,39 +5,49 @@
       conectando componentes, templates e documentação em uma biblioteca flexível para desenvolver aplicações Angular.
     </p>
 
-    <!-- Illustration slots (D8). Sizes and positions follow the Figma frame of 1280 px. -->
-    <app-home-illustration-slot
-      class="home-statement-slot home-statement-photo-team"
-      label="statement-photo-team"
-      width="220px"
-      height="180px"
-      radius="24px"
-    ></app-home-illustration-slot>
-    <app-home-illustration-slot
-      class="home-statement-slot home-statement-card-metric"
-      label="statement-card-metric"
-      width="310px"
-      height="204px"
-    ></app-home-illustration-slot>
-    <app-home-illustration-slot
-      class="home-statement-slot home-statement-text-field"
-      label="statement-text-field"
-      width="330px"
-      height="71px"
-    ></app-home-illustration-slot>
-    <app-home-illustration-slot
-      class="home-statement-slot home-statement-photo-document"
-      label="statement-photo-document"
-      width="220px"
-      height="220px"
-      radius="24px"
-    ></app-home-illustration-slot>
-    <app-home-illustration-slot
-      class="home-statement-slot home-statement-listbox"
-      label="statement-listbox"
-      width="251px"
-      height="189px"
-      radius="8px"
-    ></app-home-illustration-slot>
+    <!-- Owner request: real PO UI components replace the illustration slots (D8). Positions follow the
+         Figma frame of 1280 px. The "statement-text-field" slot was removed (not in the final version). -->
+
+    <!-- Top left (was "statement-photo-team"): po-avatar group + po-tag -->
+    <div class="home-statement-slot home-statement-card home-statement-team">
+      <div class="home-statement-avatars">
+        @for (avatar of avatars; track avatar) {
+          <po-avatar class="home-statement-avatar" p-size="md"></po-avatar>
+        }
+      </div>
+      <span class="home-statement-card-title">Time PO UI</span>
+      <po-tag p-value="Open source" p-type="success"></po-tag>
+    </div>
+
+    <!-- Bottom left (was "statement-card-metric"): po-widget -->
+    <po-widget
+      class="home-statement-slot home-statement-widget"
+      p-tag="Componente"
+      p-title="po-widget"
+      p-primary-label="Ver exemplos"
+      [p-help]="widgetSamplesUrl"
+      (p-primary-action)="openWidgetSamples()"
+    >
+      <p class="home-statement-widget-body">
+        Agrupe conteúdo, tag, ajuda e ações em um só card, pronto para dashboards.
+      </p>
+    </po-widget>
+
+    <!-- Top right (was "statement-listbox"): po-checkbox-group -->
+    <div class="home-statement-slot home-statement-card home-statement-checkbox">
+      <po-checkbox-group
+        name="homeStatementFavorites"
+        p-label="Componentes favoritos"
+        p-columns="1"
+        [p-options]="favoriteOptions"
+        [(ngModel)]="favorites"
+      >
+      </po-checkbox-group>
+    </div>
+
+    <!-- Bottom right (was "statement-photo-document"): po-chart donut -->
+    <div class="home-statement-slot home-statement-card home-statement-chart">
+      <po-chart p-type="donut" p-title="Tipos" [p-height]="340" [p-series]="chartSeries"></po-chart>
+    </div>
   </div>
 </section>

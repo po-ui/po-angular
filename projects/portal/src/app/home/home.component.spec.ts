@@ -15,8 +15,9 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should render the six sections in order', () => {
-    const tags = Array.from(fixture.nativeElement.children).map((el: Element) => el.tagName.toLowerCase());
+  it('should render the six sections in order inside the po-page-default', () => {
+    const page: Element = fixture.nativeElement.querySelector('po-page-default');
+    const tags = Array.from(page.children).map((el: Element) => el.tagName.toLowerCase());
     expect(tags).toEqual([
       'app-home-hero',
       'app-home-benefits',

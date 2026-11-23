@@ -4,7 +4,15 @@
 
 .home-statement {
   padding: var(--spacing-4xl) var(--spacing-lg);
-  background: var(--home-surface);
+  /* dotted texture of the handoff: 5x5px squares, 20px apart on every side, drawn in CSS without an image.
+     The conic gradient paints only the top-left square of each tile; the tile is square + gap. */
+  background-color: var(--home-surface);
+  background-image: conic-gradient(
+    at var(--home-dot-size) var(--home-dot-size),
+    transparent 75%,
+    var(--home-dot-color) 0
+  );
+  background-size: calc(var(--home-dot-size) + var(--home-dot-gap)) calc(var(--home-dot-size) + var(--home-dot-gap));
   font-family: var(--font-family-heading);
 }
 
@@ -33,15 +41,76 @@
   color: var(--color-brand-02-base);
 }
 
-/* Small screens: slots are decorative and hidden (section 8 of the plan) */
+/* po-widget of the bottom-left corner: left-aligned, body in the theme font (the section uses the heading font) */
+.home-statement-widget {
+  text-align: left;
+}
+
+.home-statement-widget-body {
+  margin: 0;
+  font-family: var(--font-family-theme);
+  font-size: var(--font-size-default);
+  line-height: 1.4;
+}
+
+/* Cards around the real components (team, checkbox and chart); the po-widget has its own card */
+.home-statement-card {
+  box-sizing: border-box;
+  padding: var(--spacing-md);
+  border: var(--border-width-sm) solid var(--home-border);
+  border-radius: var(--home-radius-panel);
+  background-color: var(--home-surface);
+  color: var(--home-text);
+  font-family: var(--font-family-theme);
+  box-shadow: var(--shadow-card);
+  text-align: left;
+}
+
+.home-statement-team {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  width: 220px;
+}
+
+.home-statement-avatars {
+  display: flex;
+}
+
+/* avatars overlap like a team group */
+.home-statement-avatar + .home-statement-avatar {
+  margin-left: calc(-1 * var(--spacing-sm));
+}
+
+.home-statement-card-title {
+  font-size: var(--font-size-default);
+  font-weight: var(--font-weight-bold);
+  color: var(--home-title);
+}
+
+.home-statement-checkbox {
+  width: 251px;
+}
+
+.home-statement-chart {
+  width: 300px;
+  padding: var(--spacing-xs);
+}
+
+/* Small screens: the side components are hidden (section 8 of the plan) */
 .home-statement-slot {
   display: none;
 }
 
 @media (min-width: 768px) and (max-width: 1279px) {
-  .home-statement-photo-team,
-  .home-statement-photo-document {
+  .home-statement-team,
+  .home-statement-widget {
     display: block;
+  }
+
+  .home-statement-team {
+    display: flex;
   }
 
   .home-statement-stage {
@@ -69,28 +138,25 @@
     position: absolute;
   }
 
-  .home-statement-photo-team {
+  .home-statement-team {
+    display: flex;
     left: 71px;
     top: -258px;
   }
 
-  .home-statement-card-metric {
+  .home-statement-widget {
     left: 0;
     top: 211px;
+    width: 310px;
   }
 
-  .home-statement-text-field {
-    left: 481px;
-    top: 395px;
-  }
-
-  .home-statement-photo-document {
-    left: 1060px;
-    top: 196px;
-  }
-
-  .home-statement-listbox {
+  .home-statement-checkbox {
     left: 1016px;
-    top: 69px;
+    top: -258px;
+  }
+
+  .home-statement-chart {
+    left: 980px;
+    top: 110px;
   }
 }

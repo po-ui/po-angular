@@ -43,11 +43,12 @@
 }
 
 .home-open-source-button {
-  --color: var(--home-open-source-accent);
+  /* glow, same as the hero main button: the section is always dark */
+  --color: var(--home-hero-primary);
+  --color-glow-highlight: var(--home-hero-primary-hover);
   --color-hover: var(--home-hero-primary-hover);
   --color-pressed: var(--home-hero-primary-pressed);
   --text-color: var(--home-hero-on-primary);
-  --border-color: transparent;
   --border-radius: var(--border-radius-pill);
 }
 

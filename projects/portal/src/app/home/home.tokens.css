@@ -51,6 +51,12 @@
   --home-tag-text: var(--color-neutral-dark-90);
   --home-divider: var(--color-neutral-light-10); /* Figma #ededed (B2). PO UI claro #ececee */
 
+  /* Pontilhado do Statement (handoff): quadrados de 5x5px com 20px de distância entre eles (passo de 25px) */
+  --home-dot-size: 5px;
+  --home-dot-gap: 20px;
+  --home-dot-color: var(--color-neutral-light-20);
+  /* Figma claro: cinza ~#dcdcdc. Token próximo: --color-neutral-light-20 (#e7e5e4), --color-neutral-light-30 (#b4b4c0) */
+
   /* Seção Feature: gradiente muda por tema */
   --home-feature-gradient-start: var(--color-brand-01-lighter); /* claro: #cfd9ee, idêntico ao Figma */
   --home-feature-gradient-end: var(--color-neutral-light-00); /* claro: branco */
@@ -71,6 +77,8 @@
 
 /* Gradiente da seção Feature no tema escuro (Figma: #262a45 -> #0c0a09) */
 :host-context(html[class*='-dark-']) {
+  /* Figma escuro: pontos ~#333 sobre #0c0a09. Token próximo: --color-neutral-light-10 (#36364a no escuro) */
+  --home-dot-color: var(--color-neutral-light-10);
   --home-feature-gradient-start: var(
     --color-brand-01-lightest
   ); /* #262a45 no tema escuro (os tons brand-01 invertem), idêntico ao Figma */

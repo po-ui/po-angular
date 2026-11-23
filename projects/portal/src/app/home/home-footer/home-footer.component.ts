@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class HomeFooterComponent {
   readonly githubUrl = 'https://github.com/po-ui';
 
-  // TODO: replace with the official Terms of Service and Privacy Policy pages when they exist (D10)
+  // Owner request: the "Legal" group shows only "License" (replaces Terms of Service / Privacy Policy, D10)
   readonly licenseUrl = 'https://github.com/po-ui/po-angular/blob/master/LICENSE';
 
   constructor(private router: Router) {}

@@ -26,9 +26,10 @@ describe('HomeFooterComponent', () => {
     );
   });
 
-  it('should point the legal links to the project license in a new tab', () => {
+  it('should show only the License link in the legal group, in a new tab', () => {
     const links: Array<HTMLAnchorElement> = Array.from(fixture.nativeElement.querySelectorAll('a[href*="LICENSE"]'));
-    expect(links.length).toBe(2);
+    expect(links.length).toBe(1);
+    expect(links[0].textContent.trim()).toBe('License');
     links.forEach(link => {
       expect(link.getAttribute('target')).toBe('_blank');
       expect(link.getAttribute('rel')).toBe('noopener noreferrer');

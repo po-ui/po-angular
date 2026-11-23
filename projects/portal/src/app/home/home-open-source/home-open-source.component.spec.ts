@@ -30,6 +30,11 @@ describe('HomeOpenSourceComponent', () => {
     logos.forEach((logo: HTMLElement) => expect(logo.getAttribute('aria-hidden')).toBe('true'));
   });
 
+  it('should render the contribute button as glow', () => {
+    const button: HTMLElement = fixture.nativeElement.querySelector('.home-open-source-button button');
+    expect(button.getAttribute('p-kind')).toBe('glow');
+  });
+
   it('should open the GitHub organization in a new tab', () => {
     spyOn(window, 'open');
     component.openExternalLink('https://github.com/po-ui');
