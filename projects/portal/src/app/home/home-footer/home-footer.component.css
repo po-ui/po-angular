@@ -17,8 +17,7 @@
 .home-footer-top {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-xl) calc(var(--spacing-4xl) * 3);
 }
 
 .home-footer-nav {

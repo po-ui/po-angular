@@ -28,6 +28,7 @@
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-normal);
   line-height: 49px;
+  text-align: center;
   color: var(--home-title);
 }
 
