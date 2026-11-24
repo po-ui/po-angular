@@ -6,13 +6,18 @@
   <div class="documentation-list-content">
     @if (isRendering) {
       @if (viewMode === 'grid') {
-        <div class="documentation-list-viewport" aria-busy="true" aria-label="Carregando componentes">
-          <div class="documentation-skeleton-group-title">
-            <po-skeleton p-width="160px" p-height="24px"></po-skeleton>
+        <!-- mesma estrutura e mesmas colunas da grade real (po-row + po-sm-12 po-md-6 po-lg-4):
+             no celular os cards ficam um embaixo do outro, e nada pula quando o conteúdo entra -->
+        <div class="documentation-list-category" aria-busy="true" aria-label="Carregando componentes">
+          <div class="po-row">
+            <!-- 20px + a margem de 8px do po-skeleton = altura do h2 real (sem salto quando o conteúdo entra) -->
+            <div class="documentation-list-section-title po-sm-12 po-pb-2">
+              <po-skeleton p-width="160px" p-height="20px"></po-skeleton>
+            </div>
           </div>
-          @for (row of skeletonRows; track $index) {
-            <div class="documentation-list-row">
-              @for (col of row; track $index) {
+          <div class="documentation-list-viewport po-row">
+            @for (card of skeletonCards; track $index) {
+              <div class="documentation-list-item po-sm-12 po-md-6 po-lg-4">
                 <div class="documentation-skeleton-card">
                   <div class="documentation-skeleton-card__header">
                     <po-skeleton p-width="80px" p-height="20px"></po-skeleton>
@@ -28,9 +33,9 @@
                     </div>
                   </div>
                 </div>
-              }
-            </div>
-          }
+              </div>
+            }
+          </div>
         </div>
       } @else {
         <div class="documentation-skeleton-list" aria-busy="true" aria-label="Carregando componentes">

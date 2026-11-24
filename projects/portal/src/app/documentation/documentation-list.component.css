@@ -5,16 +5,6 @@
      com scroll natural (teste de performance). */
 }
 
-/* Cada linha: 3 cards lado a lado. Altura = p-height do card (320px). */
-.documentation-list-row {
-  display: flex;
-  gap: 16px;
-  height: 320px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
-  padding: 0 8px;
-}
-
 /* Item do grid real: a largura vem das classes po-sm/md/lg do grid system;
    aqui só o espaçamento vertical entre as linhas. */
 .documentation-list-item {
@@ -49,15 +39,14 @@
 }
 
 /* ---- Skeleton: modo grade ---- */
+/* A largura vem das mesmas classes do grid dos cards reais (.documentation-list-item po-sm-12 po-md-6 po-lg-4);
+   a altura é a do po-widget real (p-height 320). */
 .documentation-skeleton-card {
   display: flex;
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
-  flex: 1 1 calc((100% - 32px) / 3);
-  min-width: 0;
-  max-width: calc((100% - 32px) / 3);
-  height: 100%;
+  height: 320px;
   padding: 16px;
   background: var(--color-neutral-light-00);
   border: var(--border-width-sm, 1px) solid var(--color-neutral-light-20, #dadada);
@@ -219,8 +208,4 @@
 .documentation-list-count {
   font-weight: normal;
   color: var(--color-neutral-dark-70);
-}
-
-.documentation-skeleton-group-title {
-  margin: var(--spacing-sm, 1rem) 8px;
 }

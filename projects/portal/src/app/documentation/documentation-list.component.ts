@@ -66,10 +66,8 @@ export class DocumentationListComponent implements OnInit {
     action: this.filterAction.bind(this)
   };
 
-  public readonly columnsPerRow = 3;
-
-  // Placeholders do skeleton (quantidade fixa enquanto carrega).
-  public readonly skeletonRows = Array.from({ length: 1 }, () => Array.from({ length: this.columnsPerRow }));
+  // Placeholders do skeleton (quantidade fixa enquanto carrega): 3 cards = uma linha no desktop (po-lg-4).
+  public readonly skeletonCards = Array.from({ length: 3 });
   public readonly skeletonListItems = Array.from({ length: 3 });
 
   private _items: Array<Documentation> = [];
