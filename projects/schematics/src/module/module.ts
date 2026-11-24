@@ -1,4 +1,4 @@
-import { SchematicsException, Tree } from '@angular-devkit/schematics';
+import { Rule, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { addDeclarationToModule, addExportToModule, addImportToModule } from '@schematics/angular/utility/ast-utils';
 import { Change, InsertChange } from '@schematics/angular/utility/change';
 import { getAppModulePath, isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
@@ -8,7 +8,7 @@ import * as ts from 'typescript';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { getProjectFromWorkspace, getProjectMainFile, getWorkspaceConfigGracefully } from '../project';
 
-export function addModuleImportToRootModule(options: any, moduleName: string, modulePath: string) {
+export function addModuleImportToRootModule(options: any, moduleName: string, modulePath: string): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);

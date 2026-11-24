@@ -41,7 +41,7 @@ export default function (options: any): Rule {
 }
 
 //insere um import no módulo sem adicionar na lista de importação
-export function addImportOnly(options: any, moduleNames: string | Array<string>, importPath: string) {
+export function addImportOnly(options: any, moduleNames: string | Array<string>, importPath: string): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
@@ -135,7 +135,7 @@ function updateAppConfigFileRule(options: any): Rule {
   };
 }
 
-export function addProviderToAppModule(options: any, provider: { provide: string; useValue: string } | string) {
+export function addProviderToAppModule(options: any, provider: { provide: string; useValue: string } | string): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const project: any = getProjectFromWorkspace(workspace, options.project);
