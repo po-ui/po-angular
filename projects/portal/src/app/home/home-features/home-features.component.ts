@@ -54,7 +54,7 @@ export class HomeFeaturesComponent {
   ];
 
   /** Same height on both widgets: po-widget itself keeps the action at the bottom (p-height). */
-  readonly widgetHeight = 492;
+  readonly widgetHeight = 410;
 
   readonly folderItems: Array<PoTreeViewItem> = [
     {

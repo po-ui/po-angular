@@ -19,7 +19,7 @@
           p-primary-label="Visualização em Árvore"
           (p-primary-action)="openInternalLink('documentation/po-tree-view')"
         >
-          <div class="home-features-widget-content home-features-tree">
+          <div class="home-features-widget-content">
             <po-tree-view [p-items]="folderItems"></po-tree-view>
           </div>
         </po-widget>
@@ -28,7 +28,9 @@
       <!-- FIGMA C3: "referencia" is a typo in the design, kept on purpose (D5) -->
       <p class="home-features-column-text">
         Nossos componentes seguem as melhores práticas de acessibilidade e usabilidade, usando como referencia o
-        Animalia DS, garantindo que sua aplicação seja moderna, responsiva e fácil de dar manutenção.
+        <a class="home-features-link" href="https://doc.animaliads.io/" target="_blank" rel="noopener noreferrer"
+          >Animalia DS</a
+        >, garantindo que sua aplicação seja moderna, responsiva e fácil de dar manutenção.
       </p>
     </article>
 

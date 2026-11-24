@@ -127,8 +127,7 @@
   }
 }
 
-/* tree: max height of the old Home (368px); the scroll is on this wrapper, not inside po-tree-view */
-.home-features-tree {
-  max-height: 368px;
-  overflow-y: auto;
+/* inline link in the text: underlined so it does not rely on color alone (WCAG 1.4.1) */
+.home-features-link {
+  text-decoration: underline;
 }
