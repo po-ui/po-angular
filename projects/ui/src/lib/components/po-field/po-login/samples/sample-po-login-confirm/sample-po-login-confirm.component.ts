@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { PoNotificationService } from '@po-ui/ng-components';
@@ -6,6 +6,7 @@ import { PoNotificationService } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-login-confirm',
   templateUrl: './sample-po-login-confirm.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLoginConfirmComponent {

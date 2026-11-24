@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.schematics.json",
+  "compilerOptions": {
+    "noEmitOnError": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["schematics/**/*.spec.ts"],
+  "exclude": ["schematics/**/*/files/**/*", "schematics/ng-update/v22/gauge-manual-test/**/*"]
+}

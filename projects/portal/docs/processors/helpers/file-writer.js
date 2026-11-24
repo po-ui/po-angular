@@ -79,11 +79,12 @@ module.exports = {
 
   generateApiComponentFile: function (docName, component) {
     const componentSource = `
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{docName}}-doc',
   templateUrl: './sample-{{docName}}-doc.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class Sample{{component}}DocComponent { }
@@ -109,11 +110,12 @@ export class Sample{{component}}DocComponent { }
   },
   generateSampleViewComponentFile: function (docName, name, component) {
     const componentSource = `
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'sample-{{name}}-view',
   templateUrl: './sample-{{name}}-view.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class Sample{{component}}ViewComponent {
@@ -191,10 +193,11 @@ export class Doc{{component}}RoutingModule { }
 
     const componentSource = `
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   templateUrl: './doc-{{docName}}.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class Doc{{component}}Component implements OnInit, OnDestroy {
@@ -226,10 +229,12 @@ export class Doc{{component}}Component implements OnInit, OnDestroy {
     this.sub = this.route.queryParams.subscribe(params => {
       const view = params['view'];
 
-      // Defines active tab
-      this.activeTab = view || 'doc';
-
       this.hidePoWebSample = this.samplesLength === 0;
+
+      // Defines active tab: prioriza "Exemplos" (web) quando houver exemplos;
+      // caso contrário, cai para "Documentação" (doc). Quando não há exemplos,
+      // ignora o view=web da URL para não deixar a tela sem aba ativa.
+      this.activeTab = this.hidePoWebSample ? 'doc' : view || 'web';
     });
   }
 
@@ -326,13 +331,15 @@ export class Doc{{component}}Module { }
     const htmlSource = `
 <po-page-default p-title="{{title}}" [p-actions]="actions">
   <po-tabs p-size="1">
-    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
-      <sample-{{docName}}-doc></sample-{{docName}}-doc>
-    </po-tab>
-    <po-tab p-label="Exemplos" [p-hide]="hidePoWebSample" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
+    @if (!hidePoWebSample) {
+    <po-tab p-label="Exemplos" [p-active]="activeTab === 'web'" (p-click)="changeTab('web')">
     {{#each samples}}
       <sample-{{name}}-view></sample-{{name}}-view>
     {{/each}}
+    </po-tab>
+    }
+    <po-tab p-label="Documentação" [p-active]="activeTab === 'doc'" (p-click)="changeTab('doc')">
+      <sample-{{docName}}-doc></sample-{{docName}}-doc>
     </po-tab>
   </po-tabs>
 </po-page-default>

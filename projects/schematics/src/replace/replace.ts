@@ -1,4 +1,4 @@
-import { Tree } from '@angular-devkit/schematics';
+import { Rule, Tree } from '@angular-devkit/schematics';
 
 /** Interface dos dados que serão substituidos. */
 export interface ReplaceChanges {
@@ -12,7 +12,7 @@ export interface ReplaceChanges {
  * @param file Arquivo que sofrerá a alteração
  * @param changes Lista de objetos que possuem
  */
-export function replaceInFile(file: string, changes: Array<ReplaceChanges> = []) {
+export function replaceInFile(file: string, changes: Array<ReplaceChanges> = []): Rule {
   return (tree: Tree) => {
     if (tree.exists(file)) {
       const sourceText = tree.read(file)!.toString('utf-8');

@@ -12,7 +12,8 @@ import {
   SimpleChanges,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
+  ViewContainerRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
@@ -107,6 +108,7 @@ use([
 @Component({
   selector: 'po-chart',
   templateUrl: './po-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoChartComponent extends PoChartBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
@@ -938,7 +940,8 @@ export class PoChartComponent extends PoChartBaseComponent implements OnInit, Af
     const title = titleElement?.innerText ?? 'Gráfico';
 
     ctx.fillStyle = this.getCSSVariable('--color-neutral-dark-70');
-    ctx.font = 'bold 16px Roboto-Bold';
+    const fontFamilyBold = this.getCSSVariable('--font-family-theme-bold') || 'MonaSans-Bold';
+    ctx.font = `bold 16px ${fontFamilyBold}`;
     ctx.textAlign = 'left';
     ctx.fillText(title, 20, headerHeight / 2 + 5);
   }

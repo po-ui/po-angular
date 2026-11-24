@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { PoModalComponent, PoStepComponent, PoStepperComponent } from '@po-ui/ng-components';
@@ -9,6 +9,7 @@ import { delay, finalize, map, tap } from 'rxjs/operators';
   selector: 'sample-po-stepper-sales',
   templateUrl: './sample-po-stepper-sales.component.html',
   styleUrls: ['./sample-po-stepper-sales.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoStepperSalesComponent {

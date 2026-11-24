@@ -18,7 +18,8 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  inject
+  inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
@@ -99,7 +100,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
  *  <file name="sample-po-table-draggable/sample-po-table-draggable.component.ts"> </file>
  * </example>
  *
- * <example name="po-table-search-ai" title="PO Table - Search A.I. (EXPERIMENTAL)">
+ * <example name="po-table-search-ai" title="PO Table - Search A.I.">
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.html"> </file>
  *  <file name="sample-po-table-search-ai/sample-po-table-search-ai.component.ts"> </file>
  * </example>
@@ -108,6 +109,7 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
   selector: 'po-table',
   templateUrl: './po-table.component.html',
   providers: [PoDateService, PoTableService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {

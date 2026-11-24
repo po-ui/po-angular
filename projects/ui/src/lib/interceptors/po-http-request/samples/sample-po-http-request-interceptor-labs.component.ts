@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { PoHttpRequestInterceptorService } from '@po-ui/ng-components';
 @Component({
   selector: 'sample-po-http-request-interceptor-labs',
   templateUrl: './sample-po-http-request-interceptor-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoHttpRequestInterceptorLabsComponent implements OnInit, OnDestroy {

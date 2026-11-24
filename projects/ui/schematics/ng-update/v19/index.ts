@@ -76,7 +76,7 @@ export default function (options: any): Rule {
   return (_tree: Tree, _context: SchematicContext) => main(options);
 }
 
-export function addImportOnly(_: any, moduleNames: string | Array<string>, importPath: string) {
+export function addImportOnly(_: any, moduleNames: string | Array<string>, importPath: string): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
 
@@ -108,7 +108,7 @@ export function addImportOnly(_: any, moduleNames: string | Array<string>, impor
   };
 }
 
-export function addProviderToAppModule(_: any, provider: { provide: string; useValue: string } | string) {
+export function addProviderToAppModule(_: any, provider: { provide: string; useValue: string } | string): Rule {
   return (host: Tree) => {
     const workspace = getWorkspaceConfigGracefully(host) ?? ({} as WorkspaceSchema);
     const projectNames = Object.keys(workspace.projects);
@@ -136,7 +136,7 @@ export function addProviderToModuleProvider(
 ) {
   const moduleSource = getSourceFile(tree, modulePath);
   const changes = addProviderToModule(
-    moduleSource as any,
+    moduleSource,
     modulePath,
     `
     ${provider}`,

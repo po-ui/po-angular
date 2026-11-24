@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoPageDetailBaseComponent } from './po-page-detail-base.component';
 
@@ -25,6 +25,7 @@ import { PoPageDetailBaseComponent } from './po-page-detail-base.component';
 @Component({
   selector: 'po-page-detail',
   templateUrl: './po-page-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoPageDetailComponent extends PoPageDetailBaseComponent {

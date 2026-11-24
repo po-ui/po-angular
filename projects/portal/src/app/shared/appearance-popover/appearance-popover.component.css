@@ -1,0 +1,4 @@
+.appearance-popover {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-xl);
+}

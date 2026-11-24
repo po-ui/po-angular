@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideLocationMocks } from '@angular/common/testing';
+import { RouterModule } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -19,9 +20,9 @@ describe('PoMenuPanelItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), PoTooltipModule],
+      imports: [RouterModule.forRoot([]), PoTooltipModule],
       declarations: [PoMenuPanelItemComponent],
-      providers: [PoMenuPanelItemsService]
+      providers: [provideLocationMocks(), PoMenuPanelItemsService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoMenuPanelItemComponent);

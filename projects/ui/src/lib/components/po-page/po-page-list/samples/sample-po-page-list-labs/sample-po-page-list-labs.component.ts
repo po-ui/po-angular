@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   PoBreadcrumb,
@@ -13,6 +13,7 @@ import { PoNotificationService, PoPageAction, PoPageFilter, PoPageListLiterals }
 @Component({
   selector: 'sample-po-page-list-labs',
   templateUrl: './sample-po-page-list-labs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoPageListLabsComponent implements OnInit {

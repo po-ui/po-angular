@@ -8,11 +8,22 @@ import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDefaultAAA } from './helpers/accessibilities/po-theme-default-aaa.constant';
 import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
+import { poThemeSharedBase } from './helpers/shared/base.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
 import { poThemeDefaultDarkValuesAA } from './helpers/types/po-theme-dark-defaults-AA.constant';
 import { poThemeDefaultDarkValues } from './helpers/types/po-theme-dark-defaults.constant';
 import { poThemeDefaultLightValuesAA } from './helpers/types/po-theme-light-defaults-AA.constant';
 import { poThemeDefaultLightValues } from './helpers/types/po-theme-light-defaults.constant';
+
+import { poThemeDefaultAA as poThemeDefaultAADeprecated } from './helpers/deprecated/accessibilities/po-theme-default-aa.constant';
+import { poThemeDefaultAAA as poThemeDefaultAAADeprecated } from './helpers/deprecated/accessibilities/po-theme-default-aaa.constant';
+// import { poThemeDensity as poThemeDensityDeprecated } from './helpers/deprecated/accessibilities/po-theme-density.constant';
+import { poThemeDefault as poThemeDefaultDeprecated } from './helpers/deprecated/po-theme-poui.constant';
+import { poThemeDefaultDarkValuesAA as poThemeDefaultDarkValuesAADeprecated } from './helpers/deprecated/types/po-theme-dark-defaults-AA.constant';
+import { poThemeDefaultDarkValues as poThemeDefaultDarkValuesDeprecated } from './helpers/deprecated/types/po-theme-dark-defaults.constant';
+import { poThemeDefaultLightValuesAA as poThemeDefaultLightValuesAADeprecated } from './helpers/deprecated/types/po-theme-light-defaults-AA.constant';
+import { poThemeDefaultLightValues as poThemeDefaultLightValuesDeprecated } from './helpers/deprecated/types/po-theme-light-defaults.constant';
+
 import { PoThemeColor } from './interfaces/po-theme-color.interface';
 import { PoThemeTokens } from './interfaces/po-theme-tokens.interface';
 import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
@@ -42,6 +53,7 @@ import { PoTheme, PoThemeActive } from './interfaces/po-theme.interface';
  * <example name="po-theme-labs" title="PO Theme Labs">
  *  <file name="sample-po-theme-labs/sample-po-theme-labs.component.html"> </file>
  *  <file name="sample-po-theme-labs/sample-po-theme-labs.component.ts"> </file>
+ *  <file name="sample-po-theme-labs/sample-po-theme-labs.constant.ts"> </file>
  * </example>
  *
  */
@@ -52,13 +64,24 @@ export class PoThemeService {
   private readonly renderer: Renderer2;
   private theme: PoTheme;
 
+  /**
+   * Temas embutidos conhecidos pelo serviço. Ao reidratar a preferência salva no
+   * `localStorage`, as cores são sempre resolvidas a partir destas constantes (código atual),
+   * evitando que valores de cor antigos persistidos sejam reaplicados.
+   */
+  private readonly builtInThemes: Array<PoTheme> = [poThemeDefault, poThemeDefaultDeprecated];
+
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
     rendererFactory: RendererFactory2
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
-    this.setDefaultBaseStyle();
+    const activeTheme = this.getThemeActive();
+    if (activeTheme?.name) {
+      this.persistThemeActive();
+    }
+    this.setDefaultBaseStyleForCurrentTheme();
   }
 
   /**
@@ -79,7 +102,9 @@ export class PoThemeService {
     a11yLevel: PoThemeA11yEnum = PoThemeA11yEnum.AAA,
     persistPreference: boolean = true
   ): Promise<void> {
-    if (themeConfig === poThemeDefault) {
+    // Temas customizados não resetam a base: o consumidor pode ter aplicado as próprias personalizações
+    // no `#baseStyle` antes desta chamada (ex.: o THF aplica a base e o header e depois chama `setTheme`).
+    if (this.builtInThemes.includes(themeConfig)) {
       this.resetBaseTheme();
     }
     // Change theme name, remove special characteres and number, replace space with dash
@@ -209,6 +234,10 @@ export class PoThemeService {
     const styleElement = document.head.querySelector('#baseStyle');
 
     if (mode === PoDensityMode.Small) {
+      // Repopula as regras base (ex.: border-radius) antes de aplicar os tokens de densidade,
+      // garantindo que o modo compacto tenha a mesma base visual do modo espaçoso.
+      this.setDefaultBaseStyleForCurrentTheme();
+
       const onRootTokens = {
         ...poThemeDefaultAA.onRoot,
         ...poThemeDensity.small
@@ -223,7 +252,7 @@ export class PoThemeService {
         });
         styleElement.textContent = css;
       }
-      this.setDefaultBaseStyle();
+      this.setDefaultBaseStyleForCurrentTheme();
     }
   }
 
@@ -414,12 +443,23 @@ export class PoThemeService {
   }
 
   private formatTheme(themeConfig, themeType, a11yLevel) {
-    themeConfig.name = themeConfig.name
+    themeConfig.name = this.normalizeThemeName(themeConfig.name);
+    themeConfig.active = { type: themeType, a11y: a11yLevel };
+    this.theme = themeConfig;
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Normaliza o nome do tema para a forma utilizada na classe/seletor aplicado ao `<html>`:
+   * minúsculas, sem caracteres não alfabéticos e com espaços trocados por hífen.
+   * Ex.: `'po-theme'` -> `'potheme'`.
+   */
+  private normalizeThemeName(name: string): string {
+    return name
       .toLowerCase()
       .replace(/[^a-zA-Z ]/g, '')
       .replace(/\s+/g, '-');
-    themeConfig.active = { type: themeType, a11y: a11yLevel };
-    this.theme = themeConfig;
   }
 
   applyTheme(theme?: any): any {
@@ -517,13 +557,42 @@ export class PoThemeService {
   getThemeActive(): PoTheme {
     try {
       const themeData = JSON.parse(localStorage.getItem('totvs-theme'));
-      if (themeData && JSON.stringify(themeData) !== JSON.stringify(this.theme)) {
-        this.theme = themeData;
+      // Reidrata a preferência salva resolvendo as cores a partir da constante atual
+      // (código), preservando apenas o estado ativo (type/a11y). Evita reaplicar
+      // valores de cor antigos que ficaram no cache do localStorage.
+      const resolvedTheme = this.resolveBuiltInTheme(themeData);
+      if (resolvedTheme && JSON.stringify(resolvedTheme) !== JSON.stringify(this.theme)) {
+        this.theme = resolvedTheme;
       }
     } catch (error) {
       console.error('Erro ao obter o tema do armazenamento local:', error);
     }
     return this.theme;
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Dado o tema persistido no `localStorage`, retorna a constante de tema embutida
+   * correspondente (pelo `name`) com os valores de cor atuais do código, preservando o
+   * estado ativo (`type`/`a11y`) salvo. Caso não seja um tema embutido conhecido (ex.: tema
+   * customizado do consumidor), retorna o próprio objeto persistido inalterado.
+   *
+   * @param persistedTheme Tema lido do `localStorage`.
+   * @returns {PoTheme} Tema resolvido para aplicação.
+   */
+  private resolveBuiltInTheme(persistedTheme: PoTheme): PoTheme {
+    if (!persistedTheme?.name) {
+      return persistedTheme;
+    }
+
+    const persistedName = this.normalizeThemeName(persistedTheme.name);
+    const knownTheme = this.builtInThemes.find(theme => this.normalizeThemeName(theme.name) === persistedName);
+    if (!knownTheme) {
+      return persistedTheme;
+    }
+
+    return { ...knownTheme, active: persistedTheme.active ?? knownTheme.active };
   }
 
   /**
@@ -699,13 +768,83 @@ export class PoThemeService {
     }
   }
 
-  private setDefaultBaseStyle() {
+  private setDefaultBaseStyleForCurrentTheme() {
+    const themeActive = this.getThemeActive();
+
+    if (themeActive) {
+      const currentThemeName = this.normalizeThemeName(themeActive.name ?? '');
+      const normalizedDeprecatedThemeName = this.normalizeThemeName(poThemeDefaultDeprecated.name);
+
+      if (currentThemeName === normalizedDeprecatedThemeName) {
+        this.setDefaultBaseStyleDeprecated();
+      } else {
+        this.setDefaultBaseStyle(this.inheritsDefaultStyle(themeActive));
+      }
+      return;
+    }
+
+    // Sem tema ativo, a base segue o CSS estático carregado pela aplicação. Só o CSS do tema padrão atual
+    // declara `--po-theme-name: default`; qualquer outro CSS (tema legado, `@totvs/po-theme` ou temas
+    // customizados gerados antes do token) recebe a base legada.
+    if (this.getStaticThemeName() === this.normalizeThemeName(poThemeDefault.name)) {
+      this.setDefaultBaseStyle();
+    } else {
+      this.setDefaultBaseStyleDeprecated();
+    }
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Retorna o nome do tema declarado pelo CSS estático carregado na aplicação, lido do token `--po-theme-name`.
+   * É usado quando não há tema ativo (nenhuma chamada a `setTheme` e nada salvo no `localStorage`), para que a
+   * base de estilos corresponda ao CSS que a aplicação carrega.
+   *
+   * Retorna string vazia quando o token não está disponível (ex.: CSS sem o token ou ambiente sem `window`).
+   */
+  private getStaticThemeName(): string {
+    const view = this.document.defaultView;
+    if (!view?.getComputedStyle) {
+      return '';
+    }
+
+    return view.getComputedStyle(this.document.documentElement).getPropertyValue('--po-theme-name').trim();
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Indica se o tema herda a identidade visual do tema padrão. Temas sem a propriedade
+   * `inheritDefaultStyle` herdam (comportamento padrão).
+   */
+  private inheritsDefaultStyle(theme: PoTheme): boolean {
+    return theme?.inheritDefaultStyle !== false;
+  }
+
+  /**
+   * @docsPrivate
+   *
+   * Aplica a base de estilos do tema padrão.
+   *
+   * A identidade visual (`poThemeSharedBase`) fica apenas no seletor `:root`, que tem a menor especificidade da
+   * base. Assim, qualquer personalização aplicada com `setPerComponentAndOnRoot`, em qualquer nível, prevalece
+   * sobre ela. As fontes do tema padrão não são aplicadas aqui: elas vêm do CSS do `@po-ui/style`.
+   *
+   * @param inheritIdentity Quando `false`, aplica apenas os estilos estruturais, sem a identidade visual.
+   */
+  private setDefaultBaseStyle(inheritIdentity: boolean = true) {
     // set triple A for all themes (its the base theme)
     // result: :root
-    this.setPerComponentAndOnRoot(undefined, poThemeDefaultAAA.perComponent, poThemeDefaultAAA.onRoot);
+    this.setPerComponentAndOnRoot(
+      undefined,
+      inheritIdentity
+        ? { ...poThemeSharedBase.perComponent, ...poThemeDefaultAAA.perComponent }
+        : poThemeDefaultAAA.perComponent,
+      inheritIdentity ? { ...poThemeSharedBase.onRoot, ...poThemeDefaultAAA.onRoot } : poThemeDefaultAAA.onRoot
+    );
 
     // set double A
-    // result: :root[class*="-AA"]
+    // result: :root[class$="-AA"]
     this.setPerComponentAndOnRoot({ a11y: PoThemeA11yEnum.AA }, poThemeDefaultAA.perComponent, poThemeDefaultAA.onRoot);
 
     // set Light mode values
@@ -732,12 +871,64 @@ export class PoThemeService {
       poThemeDefaultDarkValues.onRoot
     );
 
-    // set Dark mode values
-    // result: :root[class*="-dark-AA"]Add commentMore actions
+    // set Dark mode values AA
+    // result: :root[class*="-dark-AA"]
     this.setPerComponentAndOnRoot(
       { type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA },
       poThemeDefaultDarkValuesAA.perComponent,
       poThemeDefaultDarkValuesAA.onRoot
+    );
+  }
+
+  private setDefaultBaseStyleDeprecated() {
+    this.resetBaseTheme();
+
+    // set triple A for all themes (its the base theme)
+    // result: :root
+    this.setPerComponentAndOnRoot(
+      undefined,
+      poThemeDefaultAAADeprecated.perComponent,
+      poThemeDefaultAAADeprecated.onRoot
+    );
+
+    // set double A
+    // result: :root[class*="-AA"]
+    this.setPerComponentAndOnRoot(
+      { a11y: PoThemeA11yEnum.AA },
+      poThemeDefaultAADeprecated.perComponent,
+      poThemeDefaultAADeprecated.onRoot
+    );
+
+    // set Light mode values
+    // result: :root[class*="-light"]
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.light },
+      poThemeDefaultLightValuesDeprecated.perComponent,
+      poThemeDefaultLightValuesDeprecated.onRoot
+    );
+
+    // set Light mode values AA
+    // result: :root[class*="-light-AA"]
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AA },
+      poThemeDefaultLightValuesAADeprecated.perComponent,
+      poThemeDefaultLightValuesAADeprecated.onRoot
+    );
+
+    // set Dark mode values
+    // result: :root[class*="-dark"]
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.dark },
+      poThemeDefaultDarkValuesDeprecated.perComponent,
+      poThemeDefaultDarkValuesDeprecated.onRoot
+    );
+
+    // set Dark mode values
+    // result: :root[class*="-dark-AA"]Add commentMore actions
+    this.setPerComponentAndOnRoot(
+      { type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA },
+      poThemeDefaultDarkValuesAADeprecated.perComponent,
+      poThemeDefaultDarkValuesAADeprecated.onRoot
     );
   }
 }

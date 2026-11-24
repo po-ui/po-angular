@@ -25,10 +25,20 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
         </tr>
       </thead>
       <tbody>
-      <tr class="po-table-row">
-        <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-theme">PoTheme</a></th>
+          <td class="po-table-column">Tema padrão anterior (<code>poThemeDefaultDeprecated</code>)</td>
+          <td class="po-table-column" style="text-align: center;">v24</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
           <td class="po-table-column">Componente descontinuado</td>
           <td class="po-table-column" style="text-align: center;">v23</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></th>
+          <td class="po-table-column">Componente descontinuado</td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
         </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-tabs">PoTabs</a></th>
@@ -70,6 +80,106 @@ A tabela a seguir lista todos os recursos depreciados, organizados pelo release 
 ## Depreciações
 
 Esta seção contém uma lista completa de todos os recursos obsoletos com detalhes para ajudá-lo a planejar sua migração.
+
+### PoTheme
+
+<div class="po-row">
+  <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
+    <table class="po-table po-text-color-neutral-dark-40">
+      <thead>
+        <tr class="po-table-header">
+          <th class="po-table-header-ellipsis">Recurso</th>
+          <th class="po-table-header-ellipsis">Substituição</th>
+          <th class="po-table-header-ellipsis">Anúncio da Depreciação</th>
+          <th class="po-table-header-ellipsis">Removido em</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="po-table-row">
+          <th class="po-table-column"><code>poThemeDefaultDeprecated</code> e demais constantes <code>*Deprecated</code></th>
+          <td class="po-table-column"><a href="documentation/po-theme"><code>poThemeDefault</code> e constantes equivalentes</a></td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
+          <td class="po-table-column" style="text-align: center;">v24</td>
+        </tr>
+        <tr class="po-table-row">
+          <th class="po-table-column"><code>po-theme-default-deprecated*.css</code> (<code>@po-ui/style</code>)</th>
+          <td class="po-table-column"><code>po-theme-default*.css</code></td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
+          <td class="po-table-column" style="text-align: center;">v24</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+A partir da v22, o tema padrão do PO UI passa a ser o tema EVO, aplicado automaticamente ao atualizar a biblioteca. O tema padrão anterior continua disponível como depreciado, para quem precisar de mais tempo na transição, e será removido na v24.
+
+O tema anterior é composto pelas constantes `poThemeDefaultDeprecated` e demais constantes com o sufixo `Deprecated` (por exemplo, `poThemeDefaultLightDeprecated` e `poThemeDefaultAADeprecated`), exportadas pelo `@po-ui/ng-components`, e pelos arquivos `po-theme-default-deprecated.min.css`, `po-theme-default-deprecated-variables.css` e `po-theme-default-deprecated-variables.min.css` do `@po-ui/style`.
+
+Durante o `ng update` da v22 é feita uma pergunta opcional sobre o retorno ao tema anterior. A resposta padrão é "Não"; em ambientes sem terminal interativo (CI) a migração mantém o tema novo. Ao responder "sim", a migração troca os arquivos CSS do tema no `angular.json` e nas folhas de estilo, renomeia as constantes de tema importadas para as equivalentes `*Deprecated` e, quando a aplicação ainda não utiliza o `PoThemeService`, adiciona no componente principal a chamada `setTheme(poThemeDefaultDeprecated)`.
+
+Para migrar para o tema atual, substitua as constantes e os arquivos CSS depreciados pelos equivalentes sem o sufixo:
+
+Antes:
+```
+// app.component.ts
+import { poThemeDefaultDeprecated, PoThemeService } from '@po-ui/ng-components';
+...
+this.poThemeService.setTheme(poThemeDefaultDeprecated);
+
+// angular.json
+"styles": ["./node_modules/@po-ui/style/css/po-theme-default-deprecated.min.css"]
+```
+
+Depois:
+```
+// app.component.ts
+import { poThemeDefault, PoThemeService } from '@po-ui/ng-components';
+...
+this.poThemeService.setTheme(poThemeDefault);
+
+// angular.json
+"styles": ["./node_modules/@po-ui/style/css/po-theme-default.min.css"]
+```
+
+> Caso a aplicação não precise de nenhuma configuração específica de tema, a chamada a `setTheme` pode ser removida: o tema padrão é aplicado automaticamente.
+
+### PoGauge
+
+<div class="po-row">
+  <div class="po-xl-6 po-lg-8 po-md-10 po-sm-12">
+    <table class="po-table po-text-color-neutral-dark-40">
+      <thead>
+        <tr class="po-table-header">
+          <th class="po-table-header-ellipsis">Recurso</th>
+          <th class="po-table-header-ellipsis">Substituição</th>
+          <th class="po-table-header-ellipsis">Anúncio da Depreciação</th>
+          <th class="po-table-header-ellipsis">Removido em</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr class="po-table-row">
+          <th class="po-table-column">Componente po-gauge</th>
+          <td class="po-table-column"><a href="documentation/po-chart">po-chart (type=gauge)</a></td>
+          <td class="po-table-column" style="text-align: center;">v19</td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+O componente `po-gauge` foi removido. Utilize o `po-chart` com `p-type="gauge"` como alternativa.
+
+Antes:
+```
+<po-gauge [p-value]="72" [p-ranges]="ranges"></po-gauge>
+```
+
+Depois:
+```
+<po-chart p-type="gauge" [p-options]="gaugeOptions" [p-series]="gaugeSeries"></po-chart>
+```
 
 ### PoButton
 
@@ -222,6 +332,12 @@ Depois - Animalia Icons (atual)
         </tr>
       </thead>
       <tbody>
+        <tr class="po-table-row">
+          <th class="po-table-column"><a href="documentation/po-gauge">PoGauge</a></th>
+          <td class="po-table-column">Componente descontinuado</td>
+          <td class="po-table-column"><a href="documentation/po-chart">PoChart (type=gauge)</a></td>
+          <td class="po-table-column" style="text-align: center;">v22</td>
+        </tr>
         <tr class="po-table-row">
           <th class="po-table-column"><a href="documentation/po-navbar">PoNavbar</a></th>
           <td class="po-table-column">Componente descontinuado</td>

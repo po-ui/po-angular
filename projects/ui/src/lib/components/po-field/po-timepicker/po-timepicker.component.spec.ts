@@ -26,6 +26,18 @@ describe('PoTimepickerComponent:', () => {
     component.locale = 'pt';
   });
 
+  afterEach(() => {
+    // O ambiente roda com `teardown: { destroyAfterEach: false }`, então o
+    // `ngOnDestroy` não é chamado automaticamente entre os testes. Sem isso, o
+    // listener global de `scroll` (window.addEventListener('scroll', this.onScroll))
+    // registrado em `initializeListeners` (ao abrir o timepicker) permanece vivo
+    // apontando para uma instância órfã. Qualquer scroll posterior — inclusive no
+    // afterAll da suíte — dispara `onScroll` -> `adjustPosition`, que acessa `width`
+    // de um elemento já inexistente, lançando "Cannot read properties of undefined".
+    // Destruir o fixture executa o removeListeners e elimina o vazamento.
+    fixture?.destroy();
+  });
+
   it('should be created', () => {
     expect(component).toBeTruthy();
   });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CdkDropList } from '@angular/cdk/drag-drop';
@@ -33,15 +33,17 @@ interface TestItem {
   standalone: false
 })
 class TestHostComponent {
-  items: Array<TestItem> = [
+  // Inputs do host para permitir atualização via fixture.componentRef.setInput,
+  // que é o mecanismo suportado para refletir mudanças de binding no ambiente de teste (Angular 22).
+  @Input() items: Array<TestItem> = [
     { id: '1', name: 'Item 1' },
     { id: '2', name: 'Item 2' },
     { id: '3', name: 'Item 3' }
   ];
-  disabled = false;
-  orientation: 'horizontal' | 'vertical' | 'mixed' = 'vertical';
-  connectedTo: Array<string> = [];
-  sortingDisabled = false;
+  @Input() disabled = false;
+  @Input() orientation: 'horizontal' | 'vertical' | 'mixed' = 'vertical';
+  @Input() connectedTo: Array<string> = [];
+  @Input() sortingDisabled = false;
   droppedEvent: PoDropEvent | null = null;
   dragEnteredEvent: PoDragEnterEvent<TestItem> | null = null;
 
@@ -129,7 +131,7 @@ describe('PoDropListDirective', () => {
 
     it('should update `items` signal when input changes', () => {
       const newItems: Array<TestItem> = [{ id: '4', name: 'New Item' }];
-      component.items = newItems;
+      fixture.componentRef.setInput('items', newItems);
       fixture.detectChanges();
       expect(directive.items()).toEqual(newItems);
     });
@@ -143,7 +145,7 @@ describe('PoDropListDirective', () => {
     });
 
     it('should read `dropListDisabled` signal as true when input changes', () => {
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       expect(directive.dropListDisabled()).toBeTrue();
     });
@@ -153,7 +155,7 @@ describe('PoDropListDirective', () => {
     });
 
     it('should update `dropListConnectedTo` when input changes', () => {
-      component.connectedTo = ['list-b', 'list-c'];
+      fixture.componentRef.setInput('connectedTo', ['list-b', 'list-c']);
       fixture.detectChanges();
       expect(directive.dropListConnectedTo()).toEqual(['list-b', 'list-c']);
     });
@@ -163,13 +165,13 @@ describe('PoDropListDirective', () => {
     });
 
     it('should update `dropListOrientation` when input changes', () => {
-      component.orientation = 'horizontal';
+      fixture.componentRef.setInput('orientation', 'horizontal');
       fixture.detectChanges();
       expect(directive.dropListOrientation()).toBe('horizontal');
     });
 
     it('should accept "mixed" as orientation value', () => {
-      component.orientation = 'mixed';
+      fixture.componentRef.setInput('orientation', 'mixed');
       fixture.detectChanges();
       expect(directive.dropListOrientation()).toBe('mixed');
     });
@@ -179,7 +181,7 @@ describe('PoDropListDirective', () => {
     });
 
     it('should read `dropSortingDisabled` as true when input changes', () => {
-      component.sortingDisabled = true;
+      fixture.componentRef.setInput('sortingDisabled', true);
       fixture.detectChanges();
       expect(directive.dropSortingDisabled()).toBeTrue();
     });
@@ -194,7 +196,7 @@ describe('PoDropListDirective', () => {
 
     it('should sync disabled state to CdkDropList', () => {
       expect(cdkDropList.disabled).toBeFalse();
-      component.disabled = true;
+      fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
       expect(cdkDropList.disabled).toBeTrue();
     });
@@ -209,13 +211,13 @@ describe('PoDropListDirective', () => {
 
     it('should sync sortingDisabled to CdkDropList', () => {
       expect(cdkDropList.sortingDisabled).toBeFalse();
-      component.sortingDisabled = true;
+      fixture.componentRef.setInput('sortingDisabled', true);
       fixture.detectChanges();
       expect(cdkDropList.sortingDisabled).toBeTrue();
     });
 
     it('should sync connectedTo as string[] to CdkDropList', () => {
-      component.connectedTo = ['list-b'];
+      fixture.componentRef.setInput('connectedTo', ['list-b']);
       fixture.detectChanges();
       expect(cdkDropList.connectedTo).toEqual(['list-b']);
     });

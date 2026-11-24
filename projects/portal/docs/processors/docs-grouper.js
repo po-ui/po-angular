@@ -87,7 +87,7 @@ module.exports = function componentGrouper() {
           ) {
             fileWriter.generateApiComponentFile(groupName, group.componentName);
 
-            fileWriter.generateSamplesArray(doc, group);
+            const samples = fileWriter.generateSamplesArray(doc, group);
 
             var existsFile = filesInfo.some(file => file.name == groupName);
 
@@ -99,7 +99,8 @@ module.exports = function componentGrouper() {
                 title: group.title,
                 module: groupName,
                 path: group.fileInfo.filePath.split(group.types[0]).pop(),
-                preview: group.description
+                preview: group.description,
+                hasSamples: samples.length > 0
               });
             }
 

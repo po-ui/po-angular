@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoTableColumn, PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-link-heroes',
   templateUrl: './sample-po-link-heroes.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoLinkHeroesComponent {

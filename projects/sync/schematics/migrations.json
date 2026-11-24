@@ -65,6 +65,11 @@
       "version": "0.0.0-PLACEHOLDER",
       "description": "Atualiza @po-ui/ng-sync para v21",
       "factory": "./ng-update/v21/index"
+    },
+    "migration-v22": {
+      "version": "0.0.0-PLACEHOLDER",
+      "description": "Atualiza @po-ui/ng-sync para v22",
+      "factory": "./ng-update/v22/index"
     }
   }
 }

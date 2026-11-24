@@ -1,7 +1,6 @@
 import { EventEmitter, NO_ERRORS_SCHEMA, SimpleChange, SimpleChanges } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PoFieldContainerBottomComponent } from '../po-field-container/po-field-container-bottom/po-field-container-bottom.component';
 import { PoFieldContainerComponent } from '../po-field-container/po-field-container.component';
@@ -25,7 +24,7 @@ describe('PoRichTextComponent:', () => {
         PoRichTextToolbarComponent
       ],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [BrowserAnimationsModule, FormsModule]
+      imports: [FormsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PoRichTextComponent);

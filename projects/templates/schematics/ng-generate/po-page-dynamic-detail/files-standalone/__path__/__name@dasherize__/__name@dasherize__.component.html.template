@@ -1,5 +1,0 @@
-<po-page-dynamic-detail
-  p-title="<%= classify(name) %>"
-  [p-fields]="fields"
-  [p-service-api]="apiService">
-</po-page-dynamic-detail>

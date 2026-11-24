@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoThemeA11yEnum } from '../../services';
@@ -9,6 +9,7 @@ import { PoProgressBaseComponent } from './po-progress-base.component';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class TestHostComponent extends PoProgressBaseComponent {}

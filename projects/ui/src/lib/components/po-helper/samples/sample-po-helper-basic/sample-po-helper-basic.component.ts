@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PoHelperOptions } from '@po-ui/ng-components';
 
 @Component({
   selector: 'sample-po-helper-basic',
   templateUrl: './sample-po-helper-basic.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class SamplePoHelperBasicComponent {

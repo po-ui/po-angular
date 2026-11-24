@@ -17,7 +17,8 @@ import {
   WritableSignal,
   effect,
   inject,
-  signal
+  signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
@@ -35,6 +36,7 @@ const PO_LISTBOX_ROOT_KEY = 'ROOT';
 @Component({
   selector: 'po-listbox',
   templateUrl: './po-listbox.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PoListBoxComponent extends PoListBoxBaseComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {

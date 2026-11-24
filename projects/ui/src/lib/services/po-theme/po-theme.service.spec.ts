@@ -6,6 +6,8 @@ import { PoThemeTypeEnum } from './enum/po-theme-type.enum';
 import { poThemeDefaultAA } from './helpers/accessibilities/po-theme-default-aa.constant';
 import { poThemeDensity } from './helpers/accessibilities/po-theme-density.constant';
 import { poThemeDefault } from './helpers/po-theme-poui.constant';
+import { poThemeDefault as poThemeDefaultDeprecated } from './helpers/deprecated/po-theme-poui.constant';
+import { poThemeSharedBase } from './helpers/shared/base.constant';
 import { PoTheme } from './interfaces/po-theme.interface';
 import { PoThemeService } from './po-theme.service';
 import { PoUtils as UtilFunctions } from '../../utils/util';
@@ -448,7 +450,12 @@ describe('PoThemeService:', () => {
           poThemeDefaultAA.perComponent,
           jasmine.objectContaining(poThemeDensity.small)
         );
-        expect((service as any).setDefaultBaseStyle).not.toHaveBeenCalled();
+      });
+
+      it('should repopulate the base style when `small` is passed', () => {
+        service.setDensityMode('small');
+
+        expect((service as any).setDefaultBaseStyle).toHaveBeenCalled();
       });
 
       it('should apply medium mode when `medium` is passed', () => {
@@ -463,6 +470,227 @@ describe('PoThemeService:', () => {
 
         expect(localStorage.setItem).toHaveBeenCalledWith('po-density-mode', 'medium');
         expect((service as any).setDefaultBaseStyle).toHaveBeenCalled();
+      });
+    });
+
+    describe('Default style inheritance (inheritDefaultStyle):', () => {
+      const buttonSelector =
+        '.po-header-nav-submenu-more:focus, .po-header-nav-customer-container:focus, .po-header-nav-submenu:focus, .po-header-nav-submenu-button-more:hover .po-header-nav-submenu-more-icon, .po-header-nav-submenu-button-more:hover, .po-header-nav-submenu-button:hover, .po-header-nav-submenu-button, .po-header-nav-submenu-button-more';
+
+      const callsWith = (spy: jasmine.Spy, active: any) =>
+        spy.calls.allArgs().filter(args => JSON.stringify(args[0]) === JSON.stringify(active));
+
+      let setPerComponentAndOnRootSpy: jasmine.Spy;
+
+      beforeEach(() => {
+        setPerComponentAndOnRootSpy = spyOn(service, 'setPerComponentAndOnRoot');
+      });
+
+      it('setDefaultBaseStyle: should apply the identity only on `:root` when inheriting', () => {
+        (service as any).setDefaultBaseStyle(true);
+
+        const [rootCall] = callsWith(setPerComponentAndOnRootSpy, undefined);
+        expect(rootCall[1][buttonSelector]).toEqual({ '--border-radius': 'var(--border-radius-pill)' });
+        expect(rootCall[2]['--color-page-background-color-page']).toBe('var(--color-neutral-light-05)');
+
+        const otherCalls = setPerComponentAndOnRootSpy.calls.allArgs().filter(args => args[0] !== undefined);
+        expect(otherCalls.length).toBe(5);
+        otherCalls.forEach(args => expect(args[1]?.[buttonSelector]).toBeUndefined());
+      });
+
+      it('setDefaultBaseStyle: should not apply font tokens, since fonts come from the `@po-ui/style` CSS', () => {
+        (service as any).setDefaultBaseStyle(true);
+
+        setPerComponentAndOnRootSpy.calls.allArgs().forEach(args => {
+          expect(args[2]?.['--font-family-theme']).toBeUndefined();
+          expect(args[2]?.['--font-family-theme-bold']).toBeUndefined();
+          expect(args[2]?.['--font-family-theme-extra-light']).toBeUndefined();
+          expect(args[2]?.['--font-family-heading']).toBeUndefined();
+          expect(args[2]?.['--font-family-code']).toBeUndefined();
+        });
+      });
+
+      it('setDefaultBaseStyle: should apply only structural styles when not inheriting', () => {
+        (service as any).setDefaultBaseStyle(false);
+
+        setPerComponentAndOnRootSpy.calls.allArgs().forEach(args => {
+          expect(args[1]?.[buttonSelector]).toBeUndefined();
+          expect(args[2]?.['--color-page-background-color-page']).toBeUndefined();
+        });
+
+        const [aaCall] = callsWith(setPerComponentAndOnRootSpy, { a11y: PoThemeA11yEnum.AA });
+        expect(aaCall[2]['--outline-width']).toBe('var(--border-width-md)');
+
+        const [darkCall] = callsWith(setPerComponentAndOnRootSpy, { type: PoThemeTypeEnum.dark });
+        expect(darkCall[1]['po-badge']).toEqual({ '--color': 'var(--color-neutral-dark-95)' });
+        expect(darkCall[2]['--color-caption-categorical-01']).toBe('#003DCC');
+      });
+
+      it('setDefaultBaseStyleForCurrentTheme: should not inherit when the active theme sets `inheritDefaultStyle: false`', () => {
+        spyOn(service, 'getThemeActive').and.returnValue({ name: 'custom', type: {}, inheritDefaultStyle: false });
+        const setDefaultBaseStyleSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+        (service as any).setDefaultBaseStyleForCurrentTheme();
+
+        expect(setDefaultBaseStyleSpy).toHaveBeenCalledWith(false);
+      });
+
+      it('setDefaultBaseStyleForCurrentTheme: should inherit when the active theme does not set `inheritDefaultStyle`', () => {
+        spyOn(service, 'getThemeActive').and.returnValue({ name: 'custom', type: {} });
+        const setDefaultBaseStyleSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+        (service as any).setDefaultBaseStyleForCurrentTheme();
+
+        expect(setDefaultBaseStyleSpy).toHaveBeenCalledWith(true);
+      });
+
+      it('setDefaultBaseStyleForCurrentTheme: should apply the deprecated base when the active theme is the deprecated built-in', () => {
+        spyOn(service, 'getThemeActive').and.returnValue({ name: poThemeDefaultDeprecated.name, type: {} });
+        const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+        const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+        (service as any).setDefaultBaseStyleForCurrentTheme();
+
+        expect(deprecatedSpy).toHaveBeenCalled();
+        expect(defaultSpy).not.toHaveBeenCalled();
+      });
+
+      it('setDefaultBaseStyleForCurrentTheme: should treat an active theme without `name` as the default base', () => {
+        // Tema ativo sem `name`: o fallback `?? ''` normaliza para string vazia, que não corresponde
+        // ao nome do tema deprecated, aplicando a base padrão.
+        spyOn(service, 'getThemeActive').and.returnValue({ type: {} } as any);
+        const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+        const setDefaultBaseStyleSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+        (service as any).setDefaultBaseStyleForCurrentTheme();
+
+        expect(deprecatedSpy).not.toHaveBeenCalled();
+        expect(setDefaultBaseStyleSpy).toHaveBeenCalledWith(true);
+      });
+
+      describe('without an active theme (static CSS token `--po-theme-name`):', () => {
+        let styleElement: HTMLStyleElement;
+
+        const setStaticThemeName = (name: string) => {
+          styleElement = document.createElement('style');
+          styleElement.textContent = `:root { --po-theme-name: ${name}; }`;
+          document.head.appendChild(styleElement);
+        };
+
+        afterEach(() => styleElement?.remove());
+
+        it('should apply the deprecated base when the static CSS declares `defaultdeprecated`', () => {
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          spyOn(service as any, 'getStaticThemeName').and.returnValue('defaultdeprecated');
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(deprecatedSpy).toHaveBeenCalled();
+          expect(defaultSpy).not.toHaveBeenCalled();
+        });
+
+        it('should apply the default base when the static CSS declares `default`', () => {
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          spyOn(service as any, 'getStaticThemeName').and.returnValue('default');
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(defaultSpy).toHaveBeenCalled();
+          expect(deprecatedSpy).not.toHaveBeenCalled();
+        });
+
+        it('should apply the default base running the real implementation when static CSS declares `default`', () => {
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          spyOn(service as any, 'getStaticThemeName').and.returnValue('default');
+          // `setPerComponentAndOnRoot` já está espiado pelo describe pai, então `setDefaultBaseStyle`
+          // roda por completo (inclusive o parâmetro default `inheritIdentity = true`).
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(deprecatedSpy).not.toHaveBeenCalled();
+          expect(setPerComponentAndOnRootSpy).toHaveBeenCalledWith(
+            undefined,
+            jasmine.objectContaining({ ...poThemeSharedBase.perComponent }),
+            jasmine.objectContaining({ ...poThemeSharedBase.onRoot })
+          );
+        });
+
+        it('should apply the deprecated base when the static CSS does not declare the token (ex.: @totvs/po-theme)', () => {
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(deprecatedSpy).toHaveBeenCalled();
+          expect(defaultSpy).not.toHaveBeenCalled();
+        });
+
+        it('should apply the deprecated base when the static CSS declares an unknown theme name', () => {
+          spyOn(service, 'getThemeActive').and.returnValue(undefined);
+          spyOn(service as any, 'getStaticThemeName').and.returnValue('custom');
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(deprecatedSpy).toHaveBeenCalled();
+          expect(defaultSpy).not.toHaveBeenCalled();
+        });
+
+        it('should ignore the static CSS token when there is an active theme', () => {
+          setStaticThemeName('defaultdeprecated');
+          spyOn(service, 'getThemeActive').and.returnValue({ name: 'default', type: {} });
+          const deprecatedSpy = spyOn(service as any, 'setDefaultBaseStyleDeprecated');
+          const defaultSpy = spyOn(service as any, 'setDefaultBaseStyle');
+
+          (service as any).setDefaultBaseStyleForCurrentTheme();
+
+          expect(defaultSpy).toHaveBeenCalled();
+          expect(deprecatedSpy).not.toHaveBeenCalled();
+        });
+
+        it('getStaticThemeName: should return an empty string when there is no window', () => {
+          spyOnProperty(document, 'defaultView').and.returnValue(null);
+
+          expect((service as any).getStaticThemeName()).toBe('');
+        });
+      });
+
+      it('setTheme: should not reset the base style for a custom theme that does not inherit the default style', () => {
+        const resetBaseThemeSpy = spyOn(service, 'resetBaseTheme');
+
+        service.setTheme({ name: 'custom', type: { light: {} }, inheritDefaultStyle: false }, PoThemeTypeEnum.light);
+
+        expect(resetBaseThemeSpy).not.toHaveBeenCalled();
+      });
+
+      it('setTheme: should not reset the base style for a custom theme that inherits the default style', () => {
+        const resetBaseThemeSpy = spyOn(service, 'resetBaseTheme');
+
+        service.setTheme({ name: 'custom', type: { light: {} } }, PoThemeTypeEnum.light);
+
+        expect(resetBaseThemeSpy).not.toHaveBeenCalled();
+      });
+
+      it('setTheme: should keep consumer styles applied to `#baseStyle` before the call when not inheriting', () => {
+        setPerComponentAndOnRootSpy.and.callThrough();
+        service.resetBaseTheme();
+        service.setPerComponentAndOnRoot(
+          { type: PoThemeTypeEnum.light },
+          { 'po-header': { '--custom': 'red' } },
+          null,
+          ['custom']
+        );
+
+        service.setTheme({ name: 'custom', type: { light: {} }, inheritDefaultStyle: false }, PoThemeTypeEnum.light);
+
+        expect(document.head.querySelector('#baseStyle').textContent).toContain('--custom: red');
       });
     });
 
@@ -602,6 +830,74 @@ describe('PoThemeService:', () => {
         service.getThemeActive();
 
         expect(consoleSpy).toHaveBeenCalledWith('Erro ao obter o tema do armazenamento local:', jasmine.any(Error));
+      });
+
+      it('getThemeActive: should resolve colors from the current built-in constant, keeping persisted active state', () => {
+        // Simula um tema embutido persistido com cores ANTIGAS no cache.
+        const stalePersisted: PoTheme = {
+          name: poThemeDefault.name,
+          type: [{ light: { color: { brand: { '01': { base: '#000000' } } } }, a11y: PoThemeA11yEnum.AAA }],
+          active: { type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA }
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(stalePersisted));
+
+        const result = service.getThemeActive();
+
+        // As cores (type) devem vir da constante atual, não do cache antigo.
+        expect(result.type).toEqual(poThemeDefault.type);
+        // O estado ativo (type/a11y) salvo deve ser preservado.
+        expect(result.active).toEqual({ type: PoThemeTypeEnum.dark, a11y: PoThemeA11yEnum.AA });
+      });
+
+      it('getThemeActive: should resolve the deprecated built-in theme by name', () => {
+        const persisted: PoTheme = {
+          name: poThemeDefaultDeprecated.name,
+          type: [],
+          active: { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA }
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(persisted));
+
+        const result = service.getThemeActive();
+
+        expect(result.name).toBe(poThemeDefaultDeprecated.name);
+        expect(result.type).toEqual(poThemeDefaultDeprecated.type);
+      });
+
+      it('getThemeActive: should resolve built-in theme when persisted name only matches after normalization', () => {
+        // O nome persistido no localStorage é resolvido pela forma normalizada (minúsculas, sem
+        // caracteres especiais), batendo com o nome normalizado da constante embutida (`default`).
+        const persistedNormalized: PoTheme = {
+          name: 'Default!',
+          type: [{ light: { color: { brand: { '01': { base: '#000000' } } } }, a11y: PoThemeA11yEnum.AAA }],
+          active: { type: PoThemeTypeEnum.light, a11y: PoThemeA11yEnum.AAA }
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(persistedNormalized));
+
+        const result = service.getThemeActive();
+
+        // Mesmo com o nome persistido numa forma diferente, deve resolver as cores da constante atual.
+        expect(result.type).toEqual(poThemeDefault.type);
+      });
+
+      it('getThemeActive: should fall back to the built-in active state when the persisted theme has no active', () => {
+        // Tema embutido persistido sem `active` (ex.: cache legado): deve usar o `active` da constante.
+        const persistedWithoutActive: Partial<PoTheme> = {
+          name: poThemeDefault.name,
+          type: [{ light: { color: { brand: { '01': { base: '#000000' } } } }, a11y: PoThemeA11yEnum.AAA }]
+        };
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(persistedWithoutActive));
+
+        const result = service.getThemeActive();
+
+        expect(result.active).toEqual(poThemeDefault.active);
+      });
+
+      it('getThemeActive: should return the persisted theme unchanged for a non built-in (custom) theme', () => {
+        spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(poThemeTest));
+
+        const result = service.getThemeActive();
+
+        expect(result).toEqual(poThemeTest);
       });
     });
 

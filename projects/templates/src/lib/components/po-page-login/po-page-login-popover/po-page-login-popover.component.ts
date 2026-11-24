@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 import { isExternalLink, isTypeof } from '../../../utils/util';
 
@@ -8,6 +8,7 @@ import { PoPageLoginRecovery } from '../interfaces/po-page-login-recovery.interf
 @Component({
   selector: 'po-page-login-popover',
   templateUrl: './po-page-login-popover.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 
