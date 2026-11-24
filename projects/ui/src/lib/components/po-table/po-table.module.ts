@@ -2,6 +2,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CdkTableModule } from '@angular/cdk/table';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -48,6 +49,7 @@ import { PoSearchModule } from '../po-search/po-search.module';
   imports: [
     CommonModule,
     FormsModule,
+    CdkTableModule,
     ScrollingModule,
     DragDropModule,
     RouterModule,
