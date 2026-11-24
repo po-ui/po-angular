@@ -18,7 +18,10 @@ import { PoHeaderActionTool, PoMenuItem, PoNavbarItem, PoTheme, PoThemeA11yEnum 
 import { PoDensityMode } from '../../../ui/src/lib/enums/po-density-mode.enum';
 import { firstValueFrom } from 'rxjs';
 import { poThemeDefault, PoThemeService, PoThemeTypeEnum } from '../../../ui/src/lib';
-import { AppearancePopoverComponent } from './shared/appearance-popover/appearance-popover.component';
+import {
+  APPEARANCE_MODAL_QUERY,
+  AppearancePopoverComponent
+} from './shared/appearance-popover/appearance-popover.component';
 import { VersionService } from './shared/version.service';
 import { DeepLinkScrollService } from './shared/deep-link-scroll.service';
 import { SearchLauncherService } from './search/search-launcher.service';
@@ -36,6 +39,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly deepLinkScroll = inject(DeepLinkScrollService);
   private readonly injector = inject(Injector);
   private removeSearchShortcut?: () => void;
+  /** Para de ouvir a largura do celular (a "Aparência" troca entre popover e modal). */
+  private removeAppearanceQuery?: () => void;
 
   @ViewChild(AppearancePopoverComponent) appearancePopover!: AppearancePopoverComponent;
 
@@ -85,6 +90,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.removeSearchShortcut?.();
+    this.removeAppearanceQuery?.();
   }
 
   openExternalLink(url) {
@@ -158,13 +164,30 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.iconActions = this.buildIconActions();
     this.cdr.detectChanges();
+
+    // Mesmo breakpoint da busca: ao cruzar a largura, a "Aparência" troca entre popover e modal.
+    const query = window.matchMedia?.(APPEARANCE_MODAL_QUERY);
+    const onChange = () => {
+      this.iconActions = this.buildIconActions();
+      this.cdr.detectChanges();
+    };
+
+    query?.addEventListener('change', onChange);
+    this.removeAppearanceQuery = () => query?.removeEventListener('change', onChange);
   }
 
   private buildIconActions(): Array<PoHeaderActionTool> {
-    return this.actions.map(action =>
-      action.label === 'Aparência' && this.appearancePopover
-        ? { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 450 } }
-        : action
-    );
+    const mobile = !!window.matchMedia?.(APPEARANCE_MODAL_QUERY).matches;
+
+    return this.actions.map(action => {
+      if (action.label !== 'Aparência' || !this.appearancePopover) {
+        return action;
+      }
+
+      // Celular: um modal, como a busca (Ctrl+K). Desktop: o popover do header.
+      return mobile
+        ? { ...action, action: () => this.appearancePopover.openModal() }
+        : { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 450 } };
+    });
   }
 }

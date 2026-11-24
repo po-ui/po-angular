@@ -1,11 +1,24 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, TemplateRef, ViewChild } from '@angular/core';
 
-import { PoRadioGroupOption, PoTheme, PoThemeA11yEnum, PoThemeTypeEnum } from '@po-ui/ng-components';
+import {
+  PoModalAction,
+  PoModalComponent,
+  PoRadioGroupOption,
+  PoTheme,
+  PoThemeA11yEnum,
+  PoThemeTypeEnum
+} from '@po-ui/ng-components';
 
 import { PoDensityMode } from '../../../../../ui/src/lib/enums/po-density-mode.enum';
 import { poThemeDefault, poThemeDefaultDeprecated, PoThemeService } from '../../../../../ui/src/lib';
 
 type ThemeKey = 'default' | 'deprecated';
+
+/**
+ * Até onde a aparência abre num modal em vez do popover: o mesmo breakpoint da busca
+ * (`search-box.component.css`, onde o campo vira um ícone que abre o modal).
+ */
+export const APPEARANCE_MODAL_QUERY = '(max-width: 767px)';
 
 @Component({
   selector: 'app-appearance-popover',
@@ -16,6 +29,12 @@ type ThemeKey = 'default' | 'deprecated';
 })
 export class AppearancePopoverComponent implements AfterViewInit {
   @ViewChild('popoverContent', { static: true }) popoverContentRef!: TemplateRef<any>;
+  @ViewChild('modal', { static: true }) modal!: PoModalComponent;
+
+  /** O conteúdo só entra no modal enquanto ele está aberto (o popover usa o mesmo template). */
+  modalOpen = false;
+
+  readonly closeAction: PoModalAction = { label: 'Fechar', action: () => this.modal.close() };
 
   selectedTheme: ThemeKey = 'default';
   selectedMode: 'light' | 'dark' = 'light';
@@ -35,6 +54,13 @@ export class AppearancePopoverComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadCurrentSettings();
+  }
+
+  /** Celular: abre a aparência no modal (o desktop usa o popover do header). */
+  openModal(): void {
+    this.loadCurrentSettings();
+    this.modalOpen = true;
+    this.modal.open();
   }
 
   onThemeChange(value: ThemeKey): void {

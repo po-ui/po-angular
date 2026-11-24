@@ -1,10 +1,12 @@
-<ng-template #popoverContent>
-  <div class="appearance-popover">
+<!-- Conteúdo único da aparência: no desktop vai no popover do header (po-header usa o template sem contexto);
+     no celular, no po-modal abaixo, com o contexto 'modal' (nome próprio no radio-group). -->
+<ng-template #popoverContent let-where>
+  <div class="appearance-popover" [class.appearance-popover-modal]="where === 'modal'">
     <!-- Tema -->
     <span class="po-font-text-bold">Tema</span>
     <div class="po-mt-1 po-mb-2">
       <po-radio-group
-        name="themePopover"
+        [name]="where === 'modal' ? 'themeModal' : 'themePopover'"
         [p-options]="themeOptions"
         [ngModel]="selectedTheme"
         (ngModelChange)="onThemeChange($event)"
@@ -61,3 +63,10 @@
     </div>
   </div>
 </ng-template>
+
+<!-- Celular: mesmo padrão da busca (Ctrl+K abre um po-modal). Esc e o X fecham; o po-modal devolve o foco. -->
+<po-modal #modal p-title="Aparência" p-size="sm" [p-primary-action]="closeAction" (p-close)="modalOpen = false">
+  @if (modalOpen) {
+    <ng-container *ngTemplateOutlet="popoverContent; context: { $implicit: 'modal' }"></ng-container>
+  }
+</po-modal>
