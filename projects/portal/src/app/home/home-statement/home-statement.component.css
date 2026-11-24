@@ -53,7 +53,7 @@
   line-height: 1.4;
 }
 
-/* Cards around the real components (team, checkbox and chart); the po-widget has its own card */
+/* Cards around the real components (requests, order and chart); the po-widget has its own card */
 .home-statement-card {
   box-sizing: border-box;
   padding: var(--spacing-md);
@@ -66,21 +66,9 @@
   text-align: left;
 }
 
-.home-statement-team {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-xs);
-  width: 220px;
-}
-
-.home-statement-avatars {
-  display: flex;
-}
-
-/* avatars overlap like a team group */
-.home-statement-avatar + .home-statement-avatar {
-  margin-left: calc(-1 * var(--spacing-sm));
+.home-statement-requests {
+  width: 500px;
+  padding: var(--spacing-xs);
 }
 
 .home-statement-card-title {
@@ -89,12 +77,23 @@
   color: var(--home-title);
 }
 
-.home-statement-checkbox {
-  width: 251px;
+.home-statement-order {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  /* horizontal po-stepper with 4 steps needs room for the labels */
+  width: 600px;
+}
+
+.home-statement-widget-number {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  line-height: 1;
+  color: var(--home-title);
 }
 
 .home-statement-chart {
-  width: 300px;
+  width: 380px;
   padding: var(--spacing-xs);
 }
 
@@ -104,13 +103,9 @@
 }
 
 @media (min-width: 768px) and (max-width: 1279px) {
-  .home-statement-team,
+  .home-statement-requests,
   .home-statement-widget {
     display: block;
-  }
-
-  .home-statement-team {
-    display: flex;
   }
 
   .home-statement-stage {
@@ -138,25 +133,29 @@
     position: absolute;
   }
 
-  .home-statement-team {
-    display: flex;
-    left: 71px;
-    top: -258px;
+  /* left edges aligned (table and stepper) and right edges aligned (widget and chart) */
+  .home-statement-requests {
+    left: 0;
+    bottom: calc(100% + var(--spacing-lg));
   }
 
+  /* owner request: widget at the top right and stepper at the bottom left (swapped) */
   .home-statement-widget {
-    left: 0;
-    top: 211px;
+    /* right-anchored: it never leaves the screen at 1280 px */
+    right: 0;
+    /* anchored by the bottom: always 24px above the text, whatever the height of the widget */
+    bottom: calc(100% + var(--spacing-lg));
     width: 310px;
   }
 
-  .home-statement-checkbox {
-    left: 1016px;
-    top: -258px;
+  /* vertically centered next to the chart: chart top (110px) + (chart 358px - stepper 133px) / 2 */
+  .home-statement-order {
+    left: 0;
+    top: 222px;
   }
 
   .home-statement-chart {
-    left: 980px;
+    right: 0;
     top: 110px;
   }
 }

@@ -5,49 +5,52 @@
       conectando componentes, templates e documentação em uma biblioteca flexível para desenvolver aplicações Angular.
     </p>
 
-    <!-- Owner request: real PO UI components replace the illustration slots (D8). Positions follow the
-         Figma frame of 1280 px. The "statement-text-field" slot was removed (not in the final version). -->
+    <!-- Everyday examples of the components, in the four corners (positions follow the Figma frame of 1280 px). -->
 
-    <!-- Top left (was "statement-photo-team"): po-avatar group + po-tag -->
-    <div class="home-statement-slot home-statement-card home-statement-team">
-      <div class="home-statement-avatars">
-        @for (avatar of avatars; track avatar) {
-          <po-avatar class="home-statement-avatar" p-size="md"></po-avatar>
-        }
-      </div>
-      <span class="home-statement-card-title">Time PO UI</span>
-      <po-tag p-value="Open source" p-type="success"></po-tag>
+    <!-- Top left: reimbursement requests (po-table with label and subtitle columns) -->
+    <div class="home-statement-slot home-statement-card home-statement-requests">
+      <po-table
+        [p-columns]="requestColumns"
+        [p-items]="requests"
+        p-hide-columns-manager="true"
+        p-hide-table-search="true"
+        p-striped="true"
+        p-spacing="small"
+      >
+      </po-table>
     </div>
 
-    <!-- Bottom left (was "statement-card-metric"): po-widget -->
+    <!-- Bottom left: po-widget with the orders of the day -->
     <po-widget
       class="home-statement-slot home-statement-widget"
-      p-tag="Componente"
-      p-title="po-widget"
+      p-tag="+8%"
+      p-tag-type="success"
+      p-title="Pedidos de hoje"
       p-primary-label="Ver exemplos"
       [p-help]="widgetSamplesUrl"
       (p-primary-action)="openWidgetSamples()"
     >
       <p class="home-statement-widget-body">
-        Agrupe conteúdo, tag, ajuda e ações em um só card, pronto para dashboards.
+        <span class="home-statement-widget-number">128</span>
+        pedidos
       </p>
+      <po-progress p-text="Meta 72%" [p-value]="72"></po-progress>
     </po-widget>
 
-    <!-- Top right (was "statement-listbox"): po-checkbox-group -->
-    <div class="home-statement-slot home-statement-card home-statement-checkbox">
-      <po-checkbox-group
-        name="homeStatementFavorites"
-        p-label="Componentes favoritos"
-        p-columns="1"
-        [p-options]="favoriteOptions"
-        [(ngModel)]="favorites"
-      >
-      </po-checkbox-group>
+    <!-- Top right: order tracking (visual only) -->
+    <div class="home-statement-slot home-statement-card home-statement-order">
+      <span class="home-statement-card-title">Pedido</span>
+      <po-stepper p-orientation="horizontal" [p-step-icons]="true" [p-disable-click]="true">
+        <po-step p-label="Carrinho" p-status="done" p-icon-default="an an-shopping-cart"></po-step>
+        <po-step p-label="Entrega" p-status="active" p-icon-default="an an-truck"></po-step>
+        <po-step p-label="Pagamento" p-icon-default="an an-credit-card"></po-step>
+        <po-step p-label="Confirmação" p-icon-default="an an-check"></po-step>
+      </po-stepper>
     </div>
 
-    <!-- Bottom right (was "statement-photo-document"): po-chart donut -->
+    <!-- Bottom right: po-chart donut -->
     <div class="home-statement-slot home-statement-card home-statement-chart">
-      <po-chart p-type="donut" p-title="Tipos" [p-height]="340" [p-series]="chartSeries"></po-chart>
+      <po-chart p-type="donut" p-title="Status das entregas" [p-height]="340" [p-series]="chartSeries"></po-chart>
     </div>
   </div>
 </section>
