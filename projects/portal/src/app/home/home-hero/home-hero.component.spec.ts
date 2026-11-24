@@ -6,6 +6,7 @@ import { of, throwError } from 'rxjs';
 import { PoModule } from '@po-ui/ng-components';
 
 import { HomeBannerService } from '../home-banner/home-banner.service';
+import { HomeHeroShowcaseSamplesComponent } from '../home-hero-showcase/generated/home-hero-showcase-samples.component';
 import { HomeHeroShowcaseComponent } from '../home-hero-showcase/home-hero-showcase.component';
 import { HomeHeroComponent } from './home-hero.component';
 
@@ -21,7 +22,7 @@ describe('HomeHeroComponent', () => {
     service.getRepoData.and.returnValue(of({ stargazers_count: 1234 }));
 
     await TestBed.configureTestingModule({
-      imports: [PoModule],
+      imports: [PoModule, HomeHeroShowcaseSamplesComponent],
       declarations: [HomeHeroComponent, HomeHeroShowcaseComponent],
       providers: [
         { provide: HomeBannerService, useValue: service },

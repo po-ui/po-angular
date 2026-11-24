@@ -1,17 +1,10 @@
-<!-- hidden area where the samples are created, before being revealed in the cards -->
-<div class="home-showcase-staging" #staging></div>
-
 <div class="home-showcase-stage">
   <div class="home-showcase-track">
     @for (copy of copies; track copy) {
       <div class="home-showcase-grid">
         @for (sample of samples; track sample) {
           <div class="home-showcase-card">
-            <div class="home-showcase-skeleton">
-              <div class="home-showcase-skeleton-bar" style="width: 60%; height: 1rem"></div>
-              <div class="home-showcase-skeleton-bar" style="width: 100%; height: 3.5rem"></div>
-              <div class="home-showcase-skeleton-bar" style="width: 40%; height: 1rem"></div>
-            </div>
+            <app-home-hero-showcase-samples [name]="sample"></app-home-hero-showcase-samples>
           </div>
         }
       </div>

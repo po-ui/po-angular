@@ -66,6 +66,7 @@
     "publish:local": "npm run publish:schematics:local && npm run publish:ui:local && npm run publish:templates:local && npm run publish:code-editor:local && npm run publish:sync:local && npm run publish:storage:local",
     "prepare": "husky install",
     "script:copy-icons": "node scripts/copy-icons.js",
+    "portal:showcase:generate": "node scripts/generate-home-showcase-samples.js",
     "create-definitions-typescript": "tsc -p projects/ui/tsconfig.dts.json"
   },
   "private": true,

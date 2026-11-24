@@ -15,7 +15,6 @@ import { IaToolsMcpComponent } from './ia-tools-mcp/ia-tools-mcp.component';
 @NgModule({
   imports: [
     SharedModule,
-    PreviewSampleHostDirective,
     MarkdownModule.forRoot({
       sanitize: {
         provide: SANITIZE,
@@ -24,7 +23,13 @@ import { IaToolsMcpComponent } from './ia-tools-mcp/ia-tools-mcp.component';
     }),
     DocumentationRoutingModule
   ],
-  declarations: [DocumentationComponent, DocumentationListComponent, IaToolsLlmsComponent, IaToolsMcpComponent],
+  declarations: [
+    DocumentationComponent,
+    DocumentationListComponent,
+    PreviewSampleHostDirective,
+    IaToolsLlmsComponent,
+    IaToolsMcpComponent
+  ],
   exports: [],
   providers: [DocumentationService]
 })

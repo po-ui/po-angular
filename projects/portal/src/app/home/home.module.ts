@@ -6,6 +6,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { HomeIllustrationSlotComponent } from './home-illustration-slot/home-illustration-slot.component';
 import { HomeHeroComponent } from './home-hero/home-hero.component';
+import { HomeHeroShowcaseSamplesComponent } from './home-hero-showcase/generated/home-hero-showcase-samples.component';
 import { HomeHeroShowcaseComponent } from './home-hero-showcase/home-hero-showcase.component';
 import { HomeBenefitsComponent } from './home-benefits/home-benefits.component';
 import { HomeStatementComponent } from './home-statement/home-statement.component';
@@ -15,7 +16,7 @@ import { HomeFooterComponent } from './home-footer/home-footer.component';
 import { HomeBannerService } from './home-banner/home-banner.service';
 
 @NgModule({
-  imports: [SharedModule, HomeRoutingModule],
+  imports: [SharedModule, HomeRoutingModule, HomeHeroShowcaseSamplesComponent],
   declarations: [
     HomeComponent,
     HomeIllustrationSlotComponent,
