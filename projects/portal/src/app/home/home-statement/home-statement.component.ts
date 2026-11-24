@@ -3,7 +3,7 @@ import localePt from '@angular/common/locales/pt';
 import { ChangeDetectionStrategy, Component, LOCALE_ID } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PoChartSerie, PoTableColumn } from '@po-ui/ng-components';
+import { PoChartOptions, PoChartSerie, PoTableColumn } from '@po-ui/ng-components';
 
 const WIDGET_SAMPLES_ROUTE = 'documentation/po-widget';
 
@@ -57,10 +57,17 @@ export class HomeStatementComponent {
   ];
 
   readonly chartSeries: Array<PoChartSerie> = [
-    { label: 'Entregues', data: 68 },
+    { label: 'Recebidos', data: 40 },
+    { label: 'Em separação', data: 32 },
+    { label: 'Despachados', data: 12 },
     { label: 'Em trânsito', data: 24 },
+    { label: 'Entregues', data: 68 },
     { label: 'Atrasadas', data: 8 }
   ];
+
+  readonly chartOptions: PoChartOptions = {
+    legendType: 'scroll'
+  };
 
   constructor(private readonly router: Router) {}
 

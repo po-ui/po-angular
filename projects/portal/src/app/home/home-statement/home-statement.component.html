@@ -50,7 +50,13 @@
 
     <!-- Bottom right: po-chart donut -->
     <div class="home-statement-slot home-statement-card home-statement-chart">
-      <po-chart p-type="donut" p-title="Status das entregas" [p-height]="340" [p-series]="chartSeries"></po-chart>
+      <po-chart
+        p-type="donut"
+        p-title="Status das entregas"
+        [p-height]="340"
+        [p-series]="chartSeries"
+        [p-options]="chartOptions"
+      ></po-chart>
     </div>
   </div>
 </section>

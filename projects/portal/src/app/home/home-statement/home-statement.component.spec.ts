@@ -93,15 +93,19 @@ describe('HomeStatementComponent', () => {
     expect((fixture.componentInstance as any).favorites).toBeUndefined();
   });
 
-  it('should render the delivery status donut chart with three series', () => {
+  it('should render the delivery status donut chart with the order stages and a scroll legend', () => {
     const chart: HTMLElement = fixture.nativeElement.querySelector('.home-statement-chart po-chart');
     expect(chart.getAttribute('p-type')).toBe('donut');
     expect(chart.getAttribute('p-title')).toBe('Status das entregas');
     expect(fixture.componentInstance.chartSeries.map(serie => serie.label)).toEqual([
-      'Entregues',
+      'Recebidos',
+      'Em separação',
+      'Despachados',
       'Em trânsito',
+      'Entregues',
       'Atrasadas'
     ]);
+    expect(fixture.componentInstance.chartOptions).toEqual({ legendType: 'scroll' });
   });
 
   it('should render the po-widget with the orders of the day: tag, title, action, number and goal', () => {
