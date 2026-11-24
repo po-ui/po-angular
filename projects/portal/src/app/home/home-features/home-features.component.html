@@ -12,13 +12,18 @@
 
   <div class="home-features-columns">
     <article class="home-features-column">
-      <app-home-illustration-slot
-        class="home-features-illustration"
-        label="features-illustration-left"
-        width="611px"
-        height="480px"
-        radius="var(--home-radius-panel)"
-      ></app-home-illustration-slot>
+      <div class="home-features-example">
+        <po-widget
+          class="home-features-widget"
+          [p-height]="widgetHeight"
+          p-primary-label="Visualização em Árvore"
+          (p-primary-action)="openInternalLink('documentation/po-tree-view')"
+        >
+          <div class="home-features-widget-content home-features-tree">
+            <po-tree-view [p-items]="folderItems"></po-tree-view>
+          </div>
+        </po-widget>
+      </div>
       <h3 class="home-features-column-title">Desenvolvimento Padronizado</h3>
       <!-- FIGMA C3: "referencia" is a typo in the design, kept on purpose (D5) -->
       <p class="home-features-column-text">
@@ -28,13 +33,27 @@
     </article>
 
     <article class="home-features-column">
-      <app-home-illustration-slot
-        class="home-features-illustration"
-        label="features-illustration-right"
-        width="611px"
-        height="480px"
-        radius="var(--home-radius-panel)"
-      ></app-home-illustration-slot>
+      <div class="home-features-example">
+        <po-widget
+          class="home-features-widget"
+          [p-height]="widgetHeight"
+          p-primary-label="Visualização em Lista"
+          (p-primary-action)="openInternalLink('documentation/po-list-view')"
+        >
+          <div class="home-features-widget-content home-features-list">
+            <po-list-view
+              p-tag-position="top"
+              p-avatar-size="md"
+              [p-select]="false"
+              [p-field-properties]="notificationFieldProperties"
+              [p-items]="notificationList"
+              [p-literals]="listViewLiterals"
+              (p-show-more)="showMore()"
+            >
+            </po-list-view>
+          </div>
+        </po-widget>
+      </div>
       <h3 class="home-features-column-title">Foco no negócio</h3>
       <p class="home-features-column-text">
         Não perca tempo reinventando a roda. Com formulários, tabelas e modais prontos, seu time de engenharia foca

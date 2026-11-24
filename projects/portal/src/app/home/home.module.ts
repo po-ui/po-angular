@@ -4,7 +4,6 @@ import { SharedModule } from './../shared/shared.module';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
-import { HomeIllustrationSlotComponent } from './home-illustration-slot/home-illustration-slot.component';
 import { HomeHeroComponent } from './home-hero/home-hero.component';
 import { HomeHeroShowcaseSamplesComponent } from './home-hero-showcase/generated/home-hero-showcase-samples.component';
 import { HomeHeroShowcaseComponent } from './home-hero-showcase/home-hero-showcase.component';
@@ -19,7 +18,6 @@ import { HomeBannerService } from './home-banner/home-banner.service';
   imports: [SharedModule, HomeRoutingModule, HomeHeroShowcaseSamplesComponent],
   declarations: [
     HomeComponent,
-    HomeIllustrationSlotComponent,
     HomeHeroComponent,
     HomeHeroShowcaseComponent,
     HomeBenefitsComponent,

@@ -50,18 +50,44 @@
 .home-features-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--spacing-md);
+  gap: var(--spacing-xs) var(--spacing-md);
 }
 
+/* each column spans three rows (example, title, text) of the grid: with subgrid the two examples always have the same
+   height (the taller one wins) and the titles start on the same line */
 .home-features-column {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: var(--spacing-xs);
 }
 
-.home-features-illustration {
-  width: 100% !important; /* the slot sets its width inline from the Figma size */
-  margin-bottom: var(--spacing-xs);
+.home-features-example {
+  display: flex;
+  box-sizing: border-box;
+  /* the slot of the design had 611 x 480: the widget fills this area and the content stays at the top */
+  min-height: 24rem;
+  /* the row of the subgrid is as tall as the taller example: this one fills it */
+  flex: 1 1 auto;
+  padding: var(--spacing-md);
+  border-radius: var(--home-radius-panel);
+  background: var(--home-surface-muted);
+}
+
+.home-features-widget {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+.home-features-widget-content {
+  padding: var(--spacing-xs) var(--spacing-xxs);
+  font-family: var(--font-family-theme);
+}
+
+.home-features-list ::ng-deep po-list-view {
+  --po-density-content-padding: 0px;
 }
 
 .home-features-column-title {
@@ -95,7 +121,14 @@
     line-height: 1.2;
   }
 
-  .home-features-illustration {
-    height: 15rem !important;
+  .home-features-example {
+    min-height: 0;
+    padding: var(--spacing-xs);
   }
+}
+
+/* tree: max height of the old Home (368px); the scroll is on this wrapper, not inside po-tree-view */
+.home-features-tree {
+  max-height: 368px;
+  overflow-y: auto;
 }
