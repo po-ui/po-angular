@@ -153,6 +153,13 @@ export const poThemeSharedBase = {
     },
     'po-container': {
       '--background': 'var(--color-neutral-light-05)'
+    },
+    /*
+     * A MonaSans declara `underlineThickness` 320/1000 na tabela `post`. O Firefox usa esse valor no
+     * sublinhado `auto` (0.32em, 5px em 16px); o Chrome desenha 1px. Espessura fixa igual nos dois.
+     */
+    '.po-link': {
+      'text-decoration-thickness': 'max(1px, 0.0625em)'
     }
   },
   onRoot: {

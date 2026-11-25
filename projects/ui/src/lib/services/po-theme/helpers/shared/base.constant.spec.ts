@@ -100,6 +100,14 @@ describe('poThemeSharedBase: ', () => {
       });
     });
 
+    describe('LINK:', () => {
+      it('should define a fixed underline thickness for .po-link (Firefox uses the MonaSans font metric)', () => {
+        expect(poThemeSharedBase.perComponent['.po-link']).toEqual({
+          'text-decoration-thickness': 'max(1px, 0.0625em)'
+        });
+      });
+    });
+
     describe('USER GUIDE:', () => {
       it('should define lg button border-radius for po-user-guide-popover', () => {
         expect(poThemeSharedBase.perComponent['.po-user-guide-popover']).toEqual({
