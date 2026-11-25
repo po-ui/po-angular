@@ -787,6 +787,9 @@ export class PoDatepickerComponent extends PoDatepickerBaseComponent implements 
   }
 
   private getYearFromValue(value: unknown): number | undefined {
+    if (value instanceof Date) {
+      return value.getFullYear();
+    }
     if (typeof value === 'string') {
       return parseYearToken(value);
     }
