@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { PoMenuItem } from '@po-ui/ng-components';
 
+import { menuShortcut } from '../shared/menu-shortcut-filter';
+
 /** Nó do `assets/json/guides-menu.json`, gravado pelo `gulp build:guides` a partir do frontmatter dos guias. */
 export interface GuideMenuNode {
   name: string;
@@ -41,7 +43,10 @@ export class MenuGuidesService {
 
   private item(node: GuideMenuNode): PoMenuItem {
     if (node.shortcut) {
-      return { label: node.label + ' (' + node.origin + ')', action: () => this.router.navigateByUrl('/' + node.link) };
+      return menuShortcut({
+        label: node.label + ' (' + node.origin + ')',
+        action: () => this.router.navigateByUrl('/' + node.link)
+      });
     }
 
     const link = '/' + node.link;

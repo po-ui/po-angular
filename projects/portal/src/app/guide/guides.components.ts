@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { GuideMenuCategory, MenuGuidesService } from './menu-guides.service';
+import { MenuShortcutFilter } from '../shared/menu-shortcut-filter';
 
 @Component({
   templateUrl: './guides.component.html',
@@ -11,6 +12,8 @@ import { GuideMenuCategory, MenuGuidesService } from './menu-guides.service';
 })
 export class GuidesComponent implements OnInit {
   menus = [];
+  /** Busca do menu sem os atalhos (só o guia na categoria de origem aparece). */
+  readonly menuFilter = new MenuShortcutFilter(() => this.menus);
 
   constructor(
     private menuGuidesService: MenuGuidesService,

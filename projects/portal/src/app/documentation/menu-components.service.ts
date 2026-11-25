@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PoMenuItem } from '@po-ui/ng-components';
 
 import { Documentation } from './documentation.class';
+import { menuShortcut } from '../shared/menu-shortcut-filter';
 import { docLabel, groupDocs, shortcutTarget } from './docs-groups';
 
 // Gerado a partir de projects/portal/docs/templates/menu-components.service.template.ts (gulp build:menus).
@@ -28,10 +29,10 @@ export class MenuComponentsService {
         label: category.label,
         subItems: category.entries.map(({ doc, shortcut }) =>
           shortcut
-            ? {
+            ? menuShortcut({
                 label: docLabel(doc) + ' (' + shortcutTarget(doc) + ')',
                 action: () => this.router.navigateByUrl(link(doc))
-              }
+              })
             : { label: docLabel(doc), link: link(doc) }
         )
       }));

@@ -9,6 +9,7 @@ import { PoMenuComponent } from '@po-ui/ng-components';
 import { Documentation } from './documentation.class';
 import { parentsOf } from './docs-groups';
 import { MenuComponentsService } from './menu-components.service';
+import { MenuShortcutFilter } from '../shared/menu-shortcut-filter';
 
 @Component({
   templateUrl: './documentation.component.html',
@@ -20,6 +21,8 @@ export class DocumentationComponent implements OnInit {
   @ViewChild('userMenu') menu?: PoMenuComponent;
 
   menus = [];
+  /** Busca do menu sem os atalhos (só o item principal aparece). */
+  readonly menuFilter = new MenuShortcutFilter(() => this.menus);
 
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
