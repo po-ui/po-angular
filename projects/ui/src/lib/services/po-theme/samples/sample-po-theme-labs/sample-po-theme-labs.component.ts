@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import {
   PoModalAction,
   PoModalComponent,
   PoRadioGroupOption,
+  PoTheme,
   PoThemeA11yEnum,
+  poThemeDefault,
+  poThemeDefaultDeprecated,
   PoThemeService,
   PoThemeTypeEnum
 } from '@po-ui/ng-components';
 
-import { poThemeSample } from './sample-po-theme-labs.constant';
+type SampleTheme = 'evo' | 'deprecated';
 
 @Component({
   selector: 'sample-po-theme-labs',
@@ -23,12 +26,20 @@ export class SamplePoThemeLabsComponent implements OnInit {
 
   private readonly formBuilder = inject(UntypedFormBuilder);
   private readonly poTheme = inject(PoThemeService);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
+  theme: SampleTheme = 'evo';
   themeType: PoThemeTypeEnum = PoThemeTypeEnum.light;
   a11yLevel: PoThemeA11yEnum = PoThemeA11yEnum.AAA;
   densityMode: string = 'medium';
+  exampleVisible = true;
 
   reactiveForm: UntypedFormGroup = this.createReactiveForm();
+
+  readonly themeOptions: Array<PoRadioGroupOption> = [
+    { label: 'EVO (default)', value: 'evo' },
+    { label: 'PO UI (deprecated)', value: 'deprecated' }
+  ];
 
   readonly themeTypeOptions: Array<PoRadioGroupOption> = [
     { label: 'Light', value: PoThemeTypeEnum.light },
@@ -50,41 +61,43 @@ export class SamplePoThemeLabsComponent implements OnInit {
     label: 'Close'
   };
 
+  private readonly themes: Record<SampleTheme, PoTheme> = {
+    evo: poThemeDefault,
+    deprecated: poThemeDefaultDeprecated
+  };
+
   ngOnInit(): void {
-    // Reaproveita a preferência salva pelo serviço (chave `totvs-theme`), quando existir.
-    const active = this.poTheme.getThemeActive()?.active;
+    // Only reads the current preferences (saved by the service); nothing is applied when the sample opens.
+    const active = this.poTheme.getThemeActive();
 
-    if (typeof active === 'object') {
-      this.themeType = active.type ?? PoThemeTypeEnum.light;
-      this.a11yLevel = active.a11y ?? PoThemeA11yEnum.AAA;
+    if (active) {
+      this.theme = active.name === poThemeDefaultDeprecated.name ? 'deprecated' : 'evo';
+
+      if (typeof active.active === 'object') {
+        this.themeType = active.active.type ?? PoThemeTypeEnum.light;
+        this.a11yLevel = active.active.a11y ?? PoThemeA11yEnum.AAA;
+      }
     }
+
     this.densityMode = this.poTheme.getDensityMode();
+  }
 
-    this.poTheme.setTheme(poThemeSample, this.themeType, this.a11yLevel);
-    this.applyA11yDefaultSize();
+  applyTheme(): void {
+    // 1. the theme, with its type (light/dark) and accessibility level
+    this.poTheme.setTheme(this.themes[this.theme], this.themeType, this.a11yLevel);
+    // 2. the `small` default size, only for AA; it reads the level set above
+    this.poTheme.setA11yDefaultSizeSmall(this.a11yLevel === PoThemeA11yEnum.AA);
+    // 3. the density of grouping components (pages, containers, modals), for any level
     this.poTheme.setDensityMode(this.densityMode);
-  }
 
-  onThemeTypeChange(type: PoThemeTypeEnum): void {
-    this.poTheme.setCurrentThemeType(type);
-  }
-
-  onA11yLevelChange(a11yLevel: PoThemeA11yEnum): void {
-    this.poTheme.setCurrentThemeA11y(a11yLevel);
-    this.applyA11yDefaultSize();
-  }
-
-  onDensityModeChange(mode: string): void {
-    this.poTheme.setDensityMode(mode);
+    // components read the default size when they are created: render the example again
+    this.exampleVisible = false;
+    this.changeDetector.detectChanges();
+    this.exampleVisible = true;
   }
 
   saveForm(): void {
     this.reactiveFormModal.open();
-  }
-
-  // O tamanho `small` só se aplica no nível AA e deve ser definido depois do nível de acessibilidade.
-  private applyA11yDefaultSize(): void {
-    this.poTheme.setA11yDefaultSizeSmall(this.a11yLevel === PoThemeA11yEnum.AA);
   }
 
   private createReactiveForm(): UntypedFormGroup {
