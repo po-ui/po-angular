@@ -28,6 +28,7 @@ import { PoDialogType } from './enums/po-dialog.enum';
  *
  * @docsCategory services
  * @docsShortcut feedback
+ * @docsShortcut overlay
  */
 @Injectable({
   providedIn: 'root'

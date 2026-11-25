@@ -41,12 +41,12 @@ describe('apply-docs-tags: tabela aplicada (api-list.json gerado)', () => {
     if (!generated) pending('api-list.json não gerado: rode `cd projects/portal && npx gulp build:api` antes');
   });
 
-  it('101 no menu, 17 subcomponentes, 5 atalhos e nenhum em "Outros"', () => {
+  it('101 no menu, 17 subcomponentes, 7 atalhos e nenhum em "Outros"', () => {
     const inMenu = generated.filter(i => !i.parent);
 
     expect(inMenu.length).toBe(101);
     expect(generated.length - inMenu.length).toBe(17);
-    expect(generated.reduce((n, i) => n + (i.shortcuts || []).length, 0)).toBe(5);
+    expect(generated.reduce((n, i) => n + (i.shortcuts || []).length, 0)).toBe(7);
     expect(generated.filter(i => i.category === 'others').map(i => i.name)).toEqual([]);
     expect(byName.has('po-gauge')).toBe(false);
   });

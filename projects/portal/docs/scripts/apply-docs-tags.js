@@ -37,10 +37,10 @@ const CATEGORIES = {
   'tables-lists': ['po-table', 'po-grid', 'po-list-view', 'po-tree-view'],
   'visual': ['po-avatar', 'po-badge', 'po-tag', 'po-info', 'po-image', 'po-slide'],
   'charts': ['po-chart'],
-  'containers': ['po-container', 'po-widget', 'po-accordion', 'po-tabs', 'po-divider'],
+  'containers': ['po-container', 'po-widget', 'po-accordion', 'po-divider'],
   'navigation': [
     'po-menu', 'po-menu-panel', 'po-navbar', 'po-header', 'po-toolbar', 'po-breadcrumb', 'po-context-menu',
-    'po-context-tabs', 'po-stepper'
+    'po-context-tabs', 'po-stepper', 'po-tabs'
   ],
   'feedback': ['po-toaster', 'po-progress', 'po-loading-overlay', 'po-skeleton'],
   'overlay': ['po-modal', 'po-page-slide', 'po-popover', 'po-popup'],
@@ -81,7 +81,8 @@ const SHORTCUTS = {
   'po-drag': ['tables-lists'],
   'po-drop-list': ['tables-lists'],
   'po-notification': ['feedback'],
-  'po-dialog': ['feedback'],
+  'po-dialog': ['feedback', 'overlay'],
+  'po-tabs': ['containers'],
   'po-tooltip': ['overlay']
 };
 
