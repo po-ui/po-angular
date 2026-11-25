@@ -96,11 +96,18 @@ export const poThemeSharedBase = {
       '--border-radius': 'var(--border-radius-xl)'
     },
 
+    /* rich text com a mesma borda do textarea: xxl (small: xl), body em cima e toolbar embaixo */
     '.po-rich-text-body': {
-      'border-radius': 'var(--border-radius-lg) var(--border-radius-lg) 0 0'
+      'border-radius': 'var(--border-radius-xxl) var(--border-radius-xxl) 0 0'
     },
     '.po-rich-text-toolbar': {
-      'border-radius': '0 0 var(--border-radius-lg) var(--border-radius-lg)'
+      'border-radius': '0 0 var(--border-radius-xxl) var(--border-radius-xxl)'
+    },
+    'po-rich-text[p-size="small"] .po-rich-text-body': {
+      'border-radius': 'var(--border-radius-xl) var(--border-radius-xl) 0 0'
+    },
+    'po-rich-text[p-size="small"] .po-rich-text-toolbar': {
+      'border-radius': '0 0 var(--border-radius-xl) var(--border-radius-xl)'
     },
     '.po-combo-clean:focus, .po-search:not([p-search-type=locate]) .po-search-button.po-search-button-clean:focus': {
       'border-radius': '0.625rem'

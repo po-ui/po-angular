@@ -68,6 +68,28 @@ describe('poThemeSharedBase: ', () => {
       });
     });
 
+    describe('RICH TEXT:', () => {
+      it('should use the same border-radius as po-textarea (xxl; small: xl)', () => {
+        const base = poThemeSharedBase.perComponent;
+        expect(base['po-textarea .po-textarea']).toEqual({ 'border-radius': 'var(--border-radius-xxl)' });
+        expect(base['.po-rich-text-body']).toEqual({
+          'border-radius': 'var(--border-radius-xxl) var(--border-radius-xxl) 0 0'
+        });
+        expect(base['.po-rich-text-toolbar']).toEqual({
+          'border-radius': '0 0 var(--border-radius-xxl) var(--border-radius-xxl)'
+        });
+        expect(base['po-textarea[p-size="small"] .po-textarea']).toEqual({
+          'border-radius': 'var(--border-radius-xl)'
+        });
+        expect(base['po-rich-text[p-size="small"] .po-rich-text-body']).toEqual({
+          'border-radius': 'var(--border-radius-xl) var(--border-radius-xl) 0 0'
+        });
+        expect(base['po-rich-text[p-size="small"] .po-rich-text-toolbar']).toEqual({
+          'border-radius': '0 0 var(--border-radius-xl) var(--border-radius-xl)'
+        });
+      });
+    });
+
     describe('SKELETON:', () => {
       it('should define lg border-radius tokens for po-skeleton', () => {
         expect(poThemeSharedBase.perComponent['po-skeleton']).toEqual({
