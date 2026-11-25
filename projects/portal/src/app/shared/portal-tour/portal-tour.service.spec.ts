@@ -407,6 +407,60 @@ describe('PortalTourService', () => {
       ]);
     });
 
+    it('pelo menu (sem ?view): a página monta com a documentação visível e passa para exemplos; vale o padrão (web)', fakeAsync(() => {
+      // 1º ciclo da página nova: a área doc aparece antes de o componente trocar para exemplos
+      mountComponent('doc');
+      setup(true).start();
+      navigate('/documentation/po-list-view');
+      tick(100);
+      showMode('web');
+      settle();
+      tick(500);
+      flushMicrotasks();
+
+      expect(lastTitles()).toEqual([
+        'Exemplos ou documentação',
+        'Voltar à lista',
+        'Veja e copie o código',
+        'Copie o código'
+      ]);
+      expect(lastTitles()).not.toContain('Componentes relacionados');
+    }));
+
+    it('sem ?view e sem exemplos na página: o padrão é a documentação', fakeAsync(() => {
+      mountComponent('doc');
+      // página sem exemplos: sem a área web e sem a ação de troca de modo
+      root.querySelector('[data-tour-mode="web"]').remove();
+      root.querySelector('button[aria-label="Ver exemplos"]').remove();
+      setup(true).start();
+      navigate('/documentation/po-accordion-item');
+      settle();
+
+      expect(lastTitles()).toEqual(['Voltar à lista', 'Componentes relacionados']);
+    }));
+
+    it('passo de um modo só entra com o alvo visível DENTRO da área daquele modo', () => {
+      mountComponent('web');
+      // "Componentes relacionados" visível, mas fora da área doc (ex.: sobra da página anterior)
+      root.insertAdjacentHTML('beforeend', '<blockquote data-tour="api-related" style="height:20px">x</blockquote>');
+      root.querySelector('[data-tour-mode="doc"] [data-tour="api-related"]').remove();
+      const service = setup(false);
+
+      expect(service.resolveSteps(service.componentTour('doc', false))).toEqual([]);
+
+      showMode('doc');
+      root
+        .querySelector('[data-tour-mode="doc"]')
+        .insertAdjacentHTML(
+          'beforeend',
+          '<blockquote data-tour="api-related" style="height:20px">Subcomponentes</blockquote>'
+        );
+
+      expect(service.resolveSteps(service.componentTour('doc', false)).map(s => s.title)).toEqual([
+        'Componentes relacionados'
+      ]);
+    });
+
     it('encadeamento: tour 1 concluído abre o do modo atual', fakeAsync(() => {
       localStorage.clear();
       mountComponent('doc');

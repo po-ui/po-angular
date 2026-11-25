@@ -135,7 +135,7 @@ export class PortalTourService {
     const steps: Array<PoUserGuideStep> = [];
 
     for (const step of this.plannedSteps(tour)) {
-      const element = this.resolve(step.target);
+      const element = this.resolve(step.target, step.mode);
 
       if (step.target !== undefined && !element) {
         if (step.optional) continue;
@@ -238,24 +238,32 @@ export class PortalTourService {
   }
 
   /**
-   * Espera o modo da página do componente aparecer na tela. Se a URL pede um modo (`?view=`), espera ele:
-   * logo depois da navegação o modo anterior ainda está visível. Sem `view`, ou se o modo pedido não existe
-   * na página (componente sem exemplos e `view=web`), vale o que está na tela (o padrão do gerador).
+   * Espera o modo da página do componente. O modo vem do `?view=` da URL ou, sem ele, do padrão da página:
+   * `web` quando a página tem exemplos (a área `data-tour-mode="web"` existe), senão `doc`. Só resolve quando a
+   * área desse modo é a que está visível e a página parou de mudar por uma checagem (na navegação pelo menu a
+   * página nova ainda está montando: as áreas aparecem e trocam de [hidden] nos primeiros ciclos).
+   * Com `?view=web` numa página sem exemplos, vale `doc` (o gerador ignora o pedido).
    */
   private whenMode(waitId?: number): Promise<ComponentMode | null> {
     const deadline = Date.now() + READY_TIMEOUT_MS;
     const view = this.router.parseUrl(this.router.url).queryParams['view'];
     const wanted = view === 'web' || view === 'doc' ? (view as ComponentMode) : null;
+    let last = '';
 
     return new Promise(resolve =>
       this.zone.runOutsideAngular(() => {
         const check = () => {
           if (waitId !== undefined && waitId !== this.waitId) return resolve(null);
 
-          const mode = this.currentMode();
-          const wantedExists = !!wanted && !!this.doc.querySelector(`[data-tour-mode="${wanted}"]`);
+          const hasWeb = !!this.doc.querySelector('[data-tour="component-page"] [data-tour-mode="web"]');
+          const hasDoc = !!this.doc.querySelector('[data-tour="component-page"] [data-tour-mode="doc"]');
+          const expected: ComponentMode = wanted === 'doc' || !hasWeb ? 'doc' : 'web';
+          const visible = this.currentMode();
+          const state = `${hasWeb}|${hasDoc}|${visible}`;
+          const stable = state === last;
 
-          if (mode && (!wantedExists || mode === wanted)) return this.zone.run(() => resolve(mode));
+          last = state;
+          if (hasDoc && visible === expected && stable) return this.zone.run(() => resolve(expected));
           if (Date.now() > deadline) return resolve(null);
           setTimeout(check, READY_POLL_MS);
         };
@@ -289,11 +297,20 @@ export class PortalTourService {
     );
   }
 
-  private resolve(target: PortalTourStep['target']): HTMLElement | null {
+  /**
+   * Alvo visível do passo. Passo com `mode`: o alvo também precisa estar dentro da área `data-tour-mode`
+   * daquele modo (a área do outro modo fica montada, só escondida).
+   */
+  private resolve(target: PortalTourStep['target'], mode?: ComponentMode): HTMLElement | null {
     if (target === undefined) return null;
 
-    const element = typeof target === 'string' ? firstVisible(this.doc, target) : target(this.doc);
+    const element =
+      typeof target !== 'string'
+        ? target(this.doc)
+        : firstVisible(this.doc, mode ? `[data-tour-mode="${mode}"] ${target}` : target);
 
-    return isVisible(element) ? element : null;
+    if (!isVisible(element)) return null;
+
+    return !mode || element.closest<HTMLElement>('[data-tour-mode]')?.dataset['tourMode'] === mode ? element : null;
   }
 }
