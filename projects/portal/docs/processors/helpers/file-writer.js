@@ -351,17 +351,17 @@ export class Doc{{component}}Module { }
 
   generateDocTemplateFile: function (docName, samples) {
     const htmlSource = `
-<po-page-default [p-title]="title" [p-actions]="actions">
+<po-page-default data-tour="component-page" [p-title]="title" [p-actions]="actions">
   <!-- Um modo por vez (?view=web|doc). Os dois ficam montados e só se escondem, como as abas faziam:
        o exemplo não é recriado ao trocar de modo. -->
   @if (!hidePoWebSample) {
-  <div [hidden]="activeTab !== 'web'">
+  <div data-tour-mode="web" [hidden]="activeTab !== 'web'">
     {{#each samples}}
     <sample-{{name}}-view></sample-{{name}}-view>
     {{/each}}
   </div>
   }
-  <div [hidden]="activeTab !== 'doc'">
+  <div data-tour-mode="doc" [hidden]="activeTab !== 'doc'">
     <sample-{{docName}}-doc></sample-{{docName}}-doc>
   </div>
 </po-page-default>

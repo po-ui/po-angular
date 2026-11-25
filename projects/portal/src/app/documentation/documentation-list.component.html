@@ -1,5 +1,5 @@
-<po-page-list p-title="API Reference" [p-filter]="filter">
-  <div class="documentation-list-view-switch">
+<po-page-list data-tour="api-page" p-title="API Reference" [p-filter]="filter">
+  <div class="documentation-list-view-switch" data-tour="api-view">
     <po-button-group p-toggle="single" [p-buttons]="viewModeButtons"></po-button-group>
   </div>
 
@@ -72,6 +72,7 @@
               <!-- seção sem categorias (ex.: Componentes dinâmicos) usa o nome da seção como título -->
               <div class="po-row">
                 <h2
+                  data-tour="api-category"
                   class="documentation-list-section-title po-sm-12 po-pb-2 po-m-0"
                   [id]="'docs-category-' + section.key + '-' + category.key"
                 >
@@ -98,7 +99,7 @@
                         (p-secondary-action)="viewDocumentation(item)"
                       >
                         @if (hasPreviewSample(item)) {
-                          <div class="docs-sample-container">
+                          <div class="docs-sample-container" data-tour="api-preview">
                             @defer (on viewport; prefetch on idle) {
                               <div class="documentation-list-item-preview" [appPreviewSampleHost]="item.name"></div>
                             } @placeholder {

@@ -24,14 +24,15 @@ describe('file-writer: página do componente', () => {
       { name: 'po-accordion-labs' }
     ]);
 
-    expect(html).toContain('<po-page-default [p-title]="title" [p-actions]="actions">');
+    // data-tour: alvo do tour da página do componente (PortalTourService)
+    expect(html).toContain('<po-page-default data-tour="component-page" [p-title]="title" [p-actions]="actions">');
     expect(html).not.toMatch(/p-page-header-type|p-back/);
     expect(html).not.toMatch(/<po-tabs|<po-tab /);
     expect(html).toMatch(
-      /<div \[hidden\]="activeTab !== 'web'">\s*<sample-po-accordion-basic-view><\/sample-po-accordion-basic-view>\s*<sample-po-accordion-labs-view>/
+      /<div data-tour-mode="web" \[hidden\]="activeTab !== 'web'">\s*<sample-po-accordion-basic-view><\/sample-po-accordion-basic-view>\s*<sample-po-accordion-labs-view>/
     );
     expect(html).toMatch(
-      /<div \[hidden\]="activeTab !== 'doc'">\s*<sample-po-accordion-doc><\/sample-po-accordion-doc>/
+      /<div data-tour-mode="doc" \[hidden\]="activeTab !== 'doc'">\s*<sample-po-accordion-doc><\/sample-po-accordion-doc>/
     );
   });
 

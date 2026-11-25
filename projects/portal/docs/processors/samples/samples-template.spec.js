@@ -75,7 +75,7 @@ describe('samples: index.template.html', () => {
 
   it('título do sample só com o label (e o id do deep link), sem o link antigo', () => {
     expect(out).toMatch(
-      /<blockquote class="sample-blockquote" id="sample-po-x">\s*<label class="sample-title[^>]*>X<\/label>\s*<\/blockquote>\s*<div>\s*<po-tabs/
+      /<blockquote class="sample-blockquote" id="sample-po-x">\s*<label class="sample-title[^>]*>X<\/label>\s*<\/blockquote>\s*<div data-tour="sample-tabs">\s*<po-tabs/
     );
     expect(out).not.toMatch(/show-me-the-code|toggleSampleCodeTabs|sampleCodeButton|hideSampleCodeTabs/);
   });

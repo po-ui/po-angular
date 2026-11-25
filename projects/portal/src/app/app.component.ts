@@ -63,6 +63,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     // Links com #id (busca, guias, samples): rola só a área de conteúdo, sem esconder o título da página.
     this.deepLinkScroll.start();
+    // Tours (PoUserGuideService): abre sozinho na 1ª visita; a ação "Fazer tour" do header reabre.
+    void this.loadTour().then(tour => tour.start());
     // Botão "Copiar link" ao lado de cada propriedade, interface, sample e título de guia.
     // Em chunk lazy: o main não carrega o serviço, o botão nem o LiveAnnouncer do CDK.
     void import('./shared/copy-link.service').then(m => this.injector.get(m.CopyLinkService).start());
@@ -154,6 +156,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         tooltip: 'Instagram'
       },
       {
+        icon: 'an an-signpost',
+        label: 'Fazer tour',
+        tooltip: 'Fazer tour',
+        action: () => void this.loadTour().then(tour => tour.startForCurrentPage())
+      },
+      {
         icon: 'an an-palette',
         label: 'Aparência',
         tooltip: 'Aparência'
@@ -189,5 +197,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         ? { ...action, action: () => this.appearancePopover.openModal() }
         : { ...action, popover: { content: this.appearancePopover.popoverContentRef, width: 450 } };
     });
+  }
+
+  /** Tours em chunk lazy (como o Copiar link): o main não carrega o serviço nem os passos. */
+  private loadTour() {
+    return import('./shared/portal-tour/portal-tour.service').then(m => this.injector.get(m.PortalTourService));
   }
 }
