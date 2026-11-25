@@ -240,18 +240,30 @@ describe('PoInputGeneric:', () => {
   });
 
   it('should call "callOnChange" on eventInput with uppercase', () => {
+    const fakeInputElement = {
+      value: '',
+      selectionStart: 1,
+      selectionEnd: 3,
+      setSelectionRange: (start: number, end: number) => {}
+    };
+
     const fakeThis = {
       upperCase: true,
       callOnChange: (v: any) => {},
       validMaxLength: component.validMaxLength,
-      inputEl: component.inputEl
+      inputEl: {
+        nativeElement: fakeInputElement
+      }
     };
     fakeEvent.target.value = 'teste';
+
+    spyOn(fakeInputElement, 'setSelectionRange');
 
     spyOn(fakeThis, 'callOnChange');
     component.eventOnInput.call(fakeThis, fakeEvent);
     expect(fakeThis.callOnChange).toHaveBeenCalledWith('TESTE');
-    expect(fakeThis.inputEl.nativeElement.value).toBe('TESTE');
+    expect(fakeInputElement.value).toBe('TESTE');
+    expect(fakeInputElement.setSelectionRange).toHaveBeenCalledWith(1, 3);
   });
 
   it('should call mask.blur on eventInput with mask', () => {
