@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, DestroyRef, ViewChild, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { PoMenuComponent } from '@po-ui/ng-components';
 import { Documentation } from './documentation.class';
 import { parentsOf } from './docs-groups';
 import { MenuComponentsService } from './menu-components.service';
+import { MenuFilterClear } from '../shared/menu-filter-clear';
 import { MenuShortcutFilter } from '../shared/menu-shortcut-filter';
 
 @Component({
@@ -17,12 +18,14 @@ import { MenuShortcutFilter } from '../shared/menu-shortcut-filter';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class DocumentationComponent implements OnInit {
+export class DocumentationComponent implements OnInit, OnDestroy {
   @ViewChild('userMenu') menu?: PoMenuComponent;
 
   menus = [];
   /** Busca do menu sem os atalhos (só o item principal aparece). */
   readonly menuFilter = new MenuShortcutFilter(() => this.menus);
+  /** Recalcula a altura dos grupos do menu quando o filtro é limpo. */
+  readonly menuFilterClear = new MenuFilterClear();
 
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
@@ -51,6 +54,10 @@ export class DocumentationComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => this.markParentOfSubcomponent());
+  }
+
+  ngOnDestroy() {
+    this.menuFilterClear.disconnect();
   }
 
   /**
