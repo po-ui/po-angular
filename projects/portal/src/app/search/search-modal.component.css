@@ -9,15 +9,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(200px, 280px);
   gap: 12px;
-  align-items: end;
-}
-
-.search-modal-filters po-search {
-  padding-top: 8px;
-}
-
-.search-modal-filters po-search[p-size='small'] {
-  padding-top: 4px;
+  /* o filtro não tem mais label em cima: campo e filtro centralizados na mesma linha */
+  align-items: center;
 }
 
 /* Mobile: o filtro vai abaixo do campo. */
