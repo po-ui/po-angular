@@ -8,7 +8,7 @@ import { PoModule } from '@po-ui/ng-components';
 import { HomeBannerService } from '../home-banner/home-banner.service';
 import { HomeHeroShowcaseSamplesComponent } from '../home-hero-showcase/generated/home-hero-showcase-samples.component';
 import { HomeHeroShowcaseComponent } from '../home-hero-showcase/home-hero-showcase.component';
-import { HomeHeroComponent } from './home-hero.component';
+import { formatStarCount, HomeHeroComponent } from './home-hero.component';
 
 describe('HomeHeroComponent', () => {
   let fixture: ComponentFixture<HomeHeroComponent>;
@@ -34,9 +34,16 @@ describe('HomeHeroComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should render the stargazers count from the service', () => {
+  it('should render the stargazers count from the service in thousands (1234 → +1k)', () => {
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.home-hero-tag-link').textContent).toContain('Star 1234');
+    expect(fixture.nativeElement.querySelector('.home-hero-tag-link').textContent.trim()).toBe('Star +1k');
+  });
+
+  it('formatStarCount: thousands rounded down with "+", below 1000 the number itself', () => {
+    expect(formatStarCount(1017)).toBe('+1k');
+    expect(formatStarCount(2999)).toBe('+2k');
+    expect(formatStarCount(1000)).toBe('+1k');
+    expect(formatStarCount(850)).toBe('850');
   });
 
   it('should keep the tag as a link with the fallback text when the request fails', () => {

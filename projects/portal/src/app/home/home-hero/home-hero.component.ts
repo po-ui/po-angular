@@ -5,6 +5,11 @@ import { catchError, of } from 'rxjs';
 
 import { HomeBannerService } from '../home-banner/home-banner.service';
 
+/** 1017 → "+1k", 2350 → "+2k"; below 1000 the number itself (e.g. "850"). */
+export function formatStarCount(count: number): string {
+  return count >= 1000 ? `+${Math.floor(count / 1000)}k` : `${count}`;
+}
+
 @Component({
   selector: 'app-home-hero',
   templateUrl: './home-hero.component.html',
@@ -26,9 +31,9 @@ export class HomeHeroComponent implements OnInit {
 
   stargazersCount: number;
 
-  /** "Star 1017", as the old Star button of the banner showed it. */
+  /** "Star +1k": the GitHub count rounded down to thousands (below 1000, the number itself). */
   get tagLabel(): string {
-    return this.stargazersCount === undefined ? this.tagFallbackLabel : `Star ${this.stargazersCount}`;
+    return this.stargazersCount === undefined ? this.tagFallbackLabel : `Star ${formatStarCount(this.stargazersCount)}`;
   }
 
   constructor(
