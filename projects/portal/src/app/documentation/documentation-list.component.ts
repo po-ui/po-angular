@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { PoButtonGroupItem, PoListViewAction, PoListViewFieldProperties } from '@po-ui/ng-components';
 
+import { cardSummary } from './card-summary';
 import { Documentation } from './documentation.class';
 import { DocsSectionGroup, groupDocs } from './docs-groups';
 import { DocumentationService } from '../documentation/documentation.service';
@@ -170,7 +171,8 @@ export class DocumentationListComponent implements OnInit {
         ...item,
         title: item.title.replace('Po ', ''),
         description: item.module ? `Módulo: ${item.module}` : '',
-        previewText: this.getFirstSentence(item.preview),
+        // 1ª frase do 1º parágrafo, em texto simples (até 160 caracteres): cabe no card de altura fixa
+        previewText: cardSummary(item.preview),
         tagLabel: this.getTypeLabel(item.type),
         tagType: this.getTypeColor(item.type)
       }));
@@ -178,19 +180,6 @@ export class DocumentationListComponent implements OnInit {
     });
 
     this.filterAction();
-  }
-
-  // Extrai apenas a primeira frase do preview (texto markdown), ignorando
-  // blocos de código e múltiplas linhas, para manter os cards com altura fixa.
-  private getFirstSentence(preview?: string): string {
-    if (!preview) {
-      return '';
-    }
-
-    const firstParagraph = preview.split('\n').find(line => line.trim().length > 0) ?? '';
-    const match = firstParagraph.match(/.*?[.!?](\s|$)/);
-
-    return (match ? match[0] : firstParagraph).trim();
   }
 
   get items() {
