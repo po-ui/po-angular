@@ -20,6 +20,7 @@ import { PoFilterChipModule } from './po-filter-chip/po-filter-chip.module';
 import { PoSwitchModule } from './po-field/po-switch/po-switch.module';
 import { PoGaugeModule } from './po-gauge/po-gauge.module';
 import { PoGridModule } from './po-grid/po-grid.module';
+import { PoGuidedTourModule } from './po-guided-tour/po-guided-tour.module';
 import { PoIconModule } from './po-icon/po-icon.module';
 import { PoImageModule } from './po-image/po-image.module';
 import { PoInfoModule } from './po-info/po-info.module';
@@ -74,6 +75,7 @@ const PO_MODULES = [
   PoFilterChipModule,
   PoGaugeModule,
   PoGridModule,
+    PoGuidedTourModule,
   PoIconModule,
   PoInfoModule,
   PoListViewModule,
