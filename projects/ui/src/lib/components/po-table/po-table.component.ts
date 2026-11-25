@@ -1,8 +1,9 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { DecimalPipe } from '@angular/common';
 import {
+  AfterViewChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -12,6 +13,7 @@ import {
   ElementRef,
   Inject,
   IterableDiffers,
+  NgZone,
   OnDestroy,
   OnInit,
   Optional,
@@ -28,11 +30,11 @@ import { PoDateService } from '../../services/po-date/po-date.service';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
 import { PoNotificationService } from '../../services/po-notification/po-notification.service';
 import { convertToBoolean, getDefaultSizeFn, PO_TABLE_ROW_HEIGHT_BY_SPACING, uuid } from '../../utils/util';
+import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoModalAction, PoModalComponent } from '../po-modal';
 import { PoPopupComponent } from '../po-popup/po-popup.component';
 import { PoTableColumnLabel } from './po-table-column-label/po-table-column-label.interface';
 
-import { AnimaliaIconDictionary, ICONS_DICTIONARY } from '../po-icon';
 import { PoTableRowTemplateArrowDirection } from './enums/po-table-row-template-arrow-direction.enum';
 import { PoTableAction } from './interfaces/po-table-action.interface';
 import { PoTableColumn } from './interfaces/po-table-column.interface';
@@ -103,11 +105,19 @@ import { PoFieldSize } from '../../enums/po-field-size.enum';
   providers: [PoDateService, PoTableService],
   standalone: false
 })
-export class PoTableComponent extends PoTableBaseComponent implements AfterViewInit, DoCheck, OnDestroy, OnInit {
+export class PoTableComponent
+  extends PoTableBaseComponent
+  implements AfterViewChecked, AfterViewInit, DoCheck, OnDestroy, OnInit
+{
   @ContentChild(PoTableRowTemplateDirective, { static: true }) tableRowTemplate: PoTableRowTemplateDirective;
   @ContentChild(PoTableCellTemplateDirective) tableCellTemplate: PoTableCellTemplateDirective;
 
   @ContentChildren(PoTableColumnTemplateDirective) tableColumnTemplates: QueryList<PoTableColumnTemplateDirective>;
+
+  @ViewChild('virtualScrollWrapper', { read: ElementRef, static: false }) virtualScrollWrapper: ElementRef;
+  @ViewChild('headerScrollContainer', { read: ElementRef, static: false }) headerScrollContainer: ElementRef;
+  @ViewChild('headerTable', { read: ElementRef, static: false }) headerTableElement: ElementRef;
+  @ViewChild('bodyTable', { read: ElementRef, static: false }) bodyTableElement: ElementRef;
 
   @ViewChild('noColumnsHeader', { read: ElementRef }) noColumnsHeader;
   @ViewChild('popup') poPopupComponent: PoPopupComponent;
@@ -130,6 +140,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   @ViewChild(CdkVirtualScrollViewport, { static: false }) public viewPort: CdkVirtualScrollViewport;
 
   poNotification = inject(PoNotificationService);
+  private readonly ngZone = inject(NgZone);
 
   heightTableContainer: number;
   heightTableVirtual: number;
@@ -142,9 +153,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   idRadio: string;
   inputFieldValue = '';
   JSON: JSON;
-  newOrderColumns: Array<PoTableColumn>;
   sizeLoading: string = 'sm';
   headerWidth: number;
+  headerTableScrollWidth: number;
+  computedColumnWidths: Array<string> = [];
 
   close: PoModalAction = {
     action: () => {
@@ -163,17 +175,38 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   private _columnManagerTarget: ElementRef;
   private _columnManagerTargetFixed: ElementRef;
-  private _iconToken: { [key: string]: string };
-  private differ;
+  private readonly differ;
   private footerHeight;
   private timeoutResize;
   private visibleElement = false;
   private scrollEvent$: Observable<any>;
   private subscriptionScrollEvent: Subscription;
-  private subscriptionService: Subscription = new Subscription();
+  private readonly subscriptionService: Subscription = new Subscription();
+  private resizeObserver: ResizeObserver;
+  private scrollSyncListener: (() => void) | null = null;
+  private containerScrollSyncListener: (() => void) | null = null;
+  private dragAutoScrollFrame: number | null = null;
+  private dragAutoScrollDirection = 0;
+  private virtualScrollOverflowConfigured = false;
+  private syncScheduled = false;
+  private columnWidthsSynced = false;
+  private partialColumnsRendered = false;
+  private elasticNaturalMaxWidths: Array<number> = [];
+  private measureCanvasContext?: CanvasRenderingContext2D;
+  private readonly datasetTextCache = new Map<string, number>();
+  private datasetTextCacheToken: Array<any> | null = null;
+  private requestedInfiniteScroll = false;
+  private lastHeaderHeight = 0;
+  private previousVirtualScroll: boolean | undefined = undefined;
+
+  private readonly SELECTOR_HEADER_ROW = 'thead > tr';
+  private readonly SELECTOR_BODY_DATA_ROW = 'tbody tr.po-table-row:not(.po-table-row-no-data)';
+  private readonly SELECTOR_CDK_CONTENT_WRAPPER = '.cdk-virtual-scroll-content-wrapper';
+  private readonly SELECTOR_FIXED_INNER_CONTAINER = '.po-table-container-fixed-inner';
 
   private clickListener: () => void;
   private resizeListener: () => void;
+  private _iconToken: { [key: string]: string };
 
   @ViewChild('columnManagerTarget') set columnManagerTarget(value: ElementRef) {
     this._columnManagerTarget = value;
@@ -193,25 +226,23 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this._columnManagerTargetFixed;
   }
 
-  get iconNameLib() {
-    return this._iconToken.NAME_LIB;
-  }
-
   /* eslint-disable max-params */
 
   constructor(
     poDate: PoDateService,
     differs: IterableDiffers,
-    renderer: Renderer2,
+    private readonly renderer: Renderer2,
     poLanguageService: PoLanguageService,
-    private changeDetector: ChangeDetectorRef,
-    private decimalPipe: DecimalPipe,
-    private defaultService: PoTableService,
-    @Optional() @Inject(ICONS_DICTIONARY) value: { [key: string]: string }
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly decimalPipe: DecimalPipe,
+    private readonly defaultService: PoTableService,
+    @Optional() @Inject(ICONS_DICTIONARY) iconToken?: { [key: string]: string }
   ) {
     super(poDate, poLanguageService, defaultService);
     this.JSON = JSON;
     this.differ = differs.find([]).create(null);
+
+    this._iconToken = iconToken ?? AnimaliaIconDictionary;
 
     // TODO: #5550 ao remover este listener, no portal, quando as colunas forem fixas não sofrem
     // alteração de largura, pois o ngDoCheck não é executado.
@@ -220,10 +251,12 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     this.resizeListener = renderer.listen('window', 'resize', (event: any) => {
       this.debounceResize();
     });
-
-    this._iconToken = value ?? AnimaliaIconDictionary;
   }
   /* eslint-enable max-params */
+
+  get iconNameLib() {
+    return this._iconToken.NAME_LIB;
+  }
 
   get hasRowTemplateWithArrowDirectionRight() {
     return this.tableRowTemplate?.tableRowTemplateArrowDirection === PoTableRowTemplateArrowDirection.Right;
@@ -247,7 +280,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   get detailHideSelect() {
     const masterDetail = this.columnMasterDetail;
-    return masterDetail && masterDetail.detail ? masterDetail.detail.hideSelect : false;
+    return masterDetail?.detail ? masterDetail.detail.hideSelect : false;
   }
 
   get hasVisibleActions() {
@@ -292,16 +325,6 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.draggable;
   }
 
-  public get inverseOfTranslation(): string {
-    if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
-      return '-0px';
-    }
-
-    const offset = this.viewPort['_renderedContentOffset'];
-
-    return `-${offset}px`;
-  }
-
   ngOnInit() {
     this.idRadio = `po-radio-${uuid()}`;
   }
@@ -315,9 +338,56 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   ngAfterViewInit() {
     this.initialized = true;
+    // Captura a intenção original de infinite scroll antes que checkInfiniteScroll possa desligá-la
+    // prematuramente (no virtual scroll, quando o scrollHeight do viewport ainda é 0).
+    this.requestedInfiniteScroll = this.infiniteScroll;
     this.changeHeaderWidth();
     this.changeSizeLoading();
     this.applyFixedColumns();
+    this.initializeVisibleElement();
+    this.syncHeaderTableWidth();
+    this.setupColumnWidthSync();
+    this.configureVirtualScrollOverflow();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.virtualScroll && !this.virtualScrollOverflowConfigured && this.tableVirtualScroll?.nativeElement) {
+      this.configureVirtualScrollOverflow();
+    }
+
+    if (this.virtualScroll && !this.resizeObserver && this.tableVirtualScroll?.nativeElement) {
+      this.setupColumnWidthSync();
+    }
+
+    if (this.virtualScroll && this.heightTableContainer) {
+      const currentHeaderHeight = this.headerScrollContainer?.nativeElement?.offsetHeight;
+      if (currentHeaderHeight && currentHeaderHeight !== this.lastHeaderHeight) {
+        this.lastHeaderHeight = currentHeaderHeight;
+        requestAnimationFrame(() => {
+          this.heightTableVirtual = this.heightTableContainer - currentHeaderHeight;
+          this.changeDetector.markForCheck();
+        });
+      }
+    }
+
+    if (this.shouldScheduleVirtualScrollColumnSyncWithoutWidths()) {
+      this.syncScheduled = true;
+      requestAnimationFrame(() => {
+        this.syncColumnWidths();
+        this.syncScheduled = false;
+      });
+    }
+  }
+
+  private shouldScheduleVirtualScrollColumnSyncWithoutWidths(): boolean {
+    return (
+      this.virtualScroll &&
+      this.hasItems &&
+      !this.columnWidthsSynced &&
+      !this.syncScheduled &&
+      !this.partialColumnsRendered &&
+      (this.viewPort?.getRenderedRange().end ?? 0) > 0
+    );
   }
 
   showMoreInfiniteScroll({ target }): void {
@@ -329,21 +399,42 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   ngDoCheck() {
     this.applyFixedColumns();
+
+    // Detect virtualScroll toggle transition
+    if (this.previousVirtualScroll !== undefined && this.virtualScroll !== this.previousVirtualScroll) {
+      this.resetVirtualScrollState();
+    }
+    this.previousVirtualScroll = this.virtualScroll;
+
     this.checkChangesItems();
     this.verifyCalculateHeightTableContainer();
 
     // Permite que os cabeçalhos sejam calculados na primeira vez que o componente torna-se visível,
     // evitando com isso, problemas com Tabs ou Divs que iniciem escondidas.
-    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement && this.initialized) {
-      this.debounceResize();
-      this.checkInfiniteScroll();
-      this.visibleElement = true;
+    if (this.initialized) {
+      this.initializeVisibleElement();
+    }
+
+    if (this.virtualScroll && this.hasItems) {
+      this.syncHeaderTableWidth();
     }
   }
 
   ngOnDestroy() {
     this.removeListeners();
     this.subscriptionService?.unsubscribe();
+    if (this.resizeObserver && typeof this.resizeObserver.disconnect === 'function') {
+      this.resizeObserver.disconnect();
+    }
+    if (this.scrollSyncListener) {
+      this.scrollSyncListener();
+      this.scrollSyncListener = null;
+    }
+    if (this.containerScrollSyncListener) {
+      this.containerScrollSyncListener();
+      this.containerScrollSyncListener = null;
+    }
+    this.stopDragAutoScroll();
   }
 
   /**
@@ -369,10 +460,29 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   /**
-   * Verifica se columns possuem a propriedade width.
+   * Verifica se todas as colunas de dados (mainColumns) possuem a propriedade width.
+   * Colunas estruturais (selectable, actions, master-detail) são ignoradas pois
+   * nunca têm width definido e não participam do cálculo de layout.
    */
   applyFixedColumns(): boolean {
-    return !this.columns.some(column => !column.width);
+    return !this.mainColumns.some(column => !column.width);
+  }
+
+  /**
+   * Retorna o valor de `width` inline para a célula. Colunas com largura declarada em `%` recebem
+   * `auto` (como o auto-layout nativo do master), permitindo que o browser dimensione pelo conteúdo
+   * e use o `%` apenas como `max-width`/`min-width`. Colunas com `px` ou `computedColumnWidths`
+   * recebem o valor literal. Colunas sem `width` (elásticas) também recebem `auto` para que o
+   * navegador dimensione pelo conteúdo, idêntico à master.
+   */
+  getColumnWidth(column: any, index: number): string | undefined {
+    if (typeof column.width === 'string') {
+      if (column.width.trim().endsWith('%')) {
+        return 'auto';
+      }
+      return column.width;
+    }
+    return this.computedColumnWidths?.[index] || 'auto';
   }
 
   /**
@@ -589,8 +699,13 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   }
 
   onVisibleColumnsChange(columns: Array<PoTableColumn>) {
+    this.clearColumnWidths();
     this.columns = columns;
-    this.changeDetector.detectChanges();
+    this.changeDetector.markForCheck();
+
+    if (this.virtualScroll) {
+      setTimeout(() => this.syncColumnWidths());
+    }
   }
 
   tooltipMouseEnter(event: any, column?: PoTableColumn, row?: any) {
@@ -673,26 +788,62 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
 
   drop(event: CdkDragDrop<Array<string>>) {
     if (!this.mainColumns[event.currentIndex].fixed) {
+      this.clearColumnWidths();
       moveItemInArray(this.mainColumns, event.previousIndex, event.currentIndex);
 
       if (this.hideColumnsManager === false) {
-        this.newOrderColumns = this.mainColumns;
+        const newOrderColumns = this.mainColumns;
         const detail = this.columns.filter(item => item.property === 'detail')[0];
 
         if (detail !== undefined) {
-          this.newOrderColumns.push(detail);
+          newOrderColumns.push(detail);
         }
 
-        this.columns.map((item, index) => {
+        this.columns.forEach((item, index) => {
           if (!item.visible) {
-            this.newOrderColumns.splice(index, 0, item);
+            newOrderColumns.splice(index, 0, item);
           }
         });
-        this.columns = this.newOrderColumns;
+        this.columns = newOrderColumns;
 
-        this.onVisibleColumnsChange(this.newOrderColumns);
+        this.onVisibleColumnsChange(newOrderColumns);
+      } else if (this.virtualScroll) {
+        // Re-sincroniza larguras após Angular renderizar a nova ordem
+        setTimeout(() => this.syncColumnWidths());
       }
     }
+  }
+
+  /**
+   * Durante o arraste de uma coluna, faz o autoscroll horizontal do **body** (viewport do CDK) quando o
+   * ponteiro se aproxima das bordas esquerda/direita. O header permanece com `overflow: hidden` e acompanha
+   * o body pelo listener de scroll já existente, sem exibir scrollbar próprio.
+   */
+  onColumnDragMoved(event: CdkDragMove): void {
+    const viewportEl = this.tableVirtualScroll?.nativeElement as HTMLElement | undefined;
+    if (!viewportEl) {
+      return;
+    }
+
+    const rect = viewportEl.getBoundingClientRect();
+    const edgeThreshold = 48;
+    const pointerX = event.pointerPosition.x;
+
+    if (pointerX < rect.left + edgeThreshold) {
+      this.startDragAutoScroll(-1);
+    } else if (pointerX > rect.right - edgeThreshold) {
+      this.startDragAutoScroll(1);
+    } else {
+      this.stopDragAutoScroll();
+    }
+  }
+
+  /**
+   * Finaliza o arraste: interrompe o autoscroll e re-espelha a posição do header a partir do viewport.
+   */
+  onColumnDragEnded(): void {
+    this.stopDragAutoScroll();
+    this.syncHeaderScrollFromViewport();
   }
 
   public getTemplate(column: PoTableColumn): TemplateRef<any> {
@@ -723,11 +874,42 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return this.columns.some(item => item.fixed === true);
   }
 
+  private startDragAutoScroll(direction: number): void {
+    this.dragAutoScrollDirection = direction;
+    if (this.dragAutoScrollFrame !== null) {
+      return;
+    }
+
+    const speed = 12;
+    const step = () => {
+      const viewportEl = this.tableVirtualScroll?.nativeElement as HTMLElement | undefined;
+      if (!viewportEl || this.dragAutoScrollDirection === 0) {
+        this.dragAutoScrollFrame = null;
+        return;
+      }
+      viewportEl.scrollLeft += this.dragAutoScrollDirection * speed;
+      // Garante o alinhamento do header mesmo se o evento de scroll programático atrasar.
+      this.syncHeaderScrollLeft(viewportEl.scrollLeft);
+      this.dragAutoScrollFrame = requestAnimationFrame(step);
+    };
+
+    this.dragAutoScrollFrame = requestAnimationFrame(step);
+  }
+
+  private stopDragAutoScroll(): void {
+    this.dragAutoScrollDirection = 0;
+    if (this.dragAutoScrollFrame !== null) {
+      cancelAnimationFrame(this.dragAutoScrollFrame);
+      this.dragAutoScrollFrame = null;
+    }
+  }
+
   protected calculateHeightTableContainer(height: number) {
     this.itemSize =
       PO_TABLE_ROW_HEIGHT_BY_SPACING[this.spacing] ?? PO_TABLE_ROW_HEIGHT_BY_SPACING[PoTableColumnSpacing.Medium];
     this.heightTableContainer = height ? height - this.getHeightTableFooter() : undefined;
-    this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - this.itemSize : undefined;
+    const headerHeight = this.headerScrollContainer?.nativeElement?.offsetHeight || this.itemSize;
+    this.heightTableVirtual = this.heightTableContainer ? this.heightTableContainer - headerHeight : undefined;
     this.setTableOpacity(1);
     this.changeDetector.detectChanges();
   }
@@ -743,14 +925,19 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   protected checkInfiniteScroll(): void {
     if (this.hasInfiniteScroll()) {
       let scrollHeight = 0;
+      // Altura de referência para detectar overflow. No virtual scroll, o header fica FORA do viewport,
+      // então o scrollHeight do viewport não inclui o header — comparamos com a altura visível do próprio
+      // viewport (clientHeight) e não com this.height (que reserva espaço para o header).
+      let availableHeight = this.height;
 
       if (this.virtualScroll) {
         scrollHeight = this.tableVirtualScroll.nativeElement.scrollHeight;
+        availableHeight = this.tableVirtualScroll.nativeElement.clientHeight || this.heightTableVirtual || this.height;
       } else {
         scrollHeight = this.tableScrollable.nativeElement.scrollHeight;
       }
 
-      if (scrollHeight >= this.height) {
+      if (scrollHeight >= availableHeight) {
         this.includeInfiniteScroll();
       } else {
         this.infiniteScroll = false;
@@ -807,6 +994,10 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     if (changesItems && !this.hasColumns && this.hasItems) {
       this.columns = this.getDefaultColumns(this.items[0]);
     }
+
+    if (changesItems && this.virtualScroll) {
+      this.columnWidthsSynced = false;
+    }
   }
 
   private checkingIfColumnHasTooltip(column, row) {
@@ -846,8 +1037,8 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private debounceResize() {
     clearTimeout(this.timeoutResize);
     this.timeoutResize = setTimeout(() => {
-      // show the table
       this.setTableOpacity(1);
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -873,7 +1064,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
   private deleteItemsService(newItemsFiltered: Array<any>) {
     this.subscriptionService.add(
       this.defaultService.deleteItem(this.paramDeleteApi, this.itemsSelected[0][this.paramDeleteApi]).subscribe({
-        next: value => {
+        next: () => {
           if (this.hasService) {
             const filteredParams = {
               ...this.paramsFilter,
@@ -890,7 +1081,7 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
           this.items = newItemsFiltered;
           this.changesAfterDelete(newItemsFiltered);
         },
-        error: error => {
+        error: () => {
           this.poNotification.error(this.literals.deleteApiError);
           this.modalDelete.close();
           this.eventDelete.emit(this.items);
@@ -951,6 +1142,14 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
     return mergedIcons;
   }
 
+  private initializeVisibleElement(): void {
+    if (this.tableWrapperElement?.nativeElement.offsetWidth && !this.visibleElement) {
+      this.debounceResize();
+      this.checkInfiniteScroll();
+      this.visibleElement = true;
+    }
+  }
+
   private removeListeners() {
     if (this.resizeListener) {
       this.resizeListener();
@@ -986,6 +1185,601 @@ export class PoTableComponent extends PoTableBaseComponent implements AfterViewI
           item.$selected = selectValue;
         }
       });
+    }
+  }
+
+  private configureVirtualScrollOverflow(): void {
+    if (!this.tableVirtualScroll?.nativeElement) return;
+
+    const viewportEl = this.tableVirtualScroll.nativeElement;
+
+    this.applyVirtualScrollStyles(viewportEl);
+    this.registerScrollSyncListeners(viewportEl);
+
+    this.virtualScrollOverflowConfigured = true;
+  }
+
+  private applyVirtualScrollStyles(viewportEl: HTMLElement): void {
+    const contentWrapper = viewportEl.querySelector(this.SELECTOR_CDK_CONTENT_WRAPPER);
+    if (contentWrapper) this.renderer.setStyle(contentWrapper, 'contain', 'layout style');
+
+    if (this.headerScrollContainer?.nativeElement) {
+      this.renderer.setStyle(this.headerScrollContainer.nativeElement, 'overflow', 'hidden');
+      // Otimiza o repaint do header durante a sincronização de scroll horizontal.
+      // `scroll-position` não cria containing block, então não afeta o `position: sticky`.
+      this.renderer.setStyle(this.headerScrollContainer.nativeElement, 'will-change', 'scroll-position');
+    }
+  }
+
+  private registerScrollSyncListeners(viewportEl: HTMLElement): void {
+    const fixedInnerContainer = viewportEl.closest<HTMLElement>(this.SELECTOR_FIXED_INNER_CONTAINER);
+
+    // Registra os listeners de scroll FORA da zona do Angular para evitar change detection a cada evento
+    // de scroll. O scroll do header é atualizado de forma síncrona, eliminando o delay em relação ao body.
+    this.ngZone.runOutsideAngular(() => {
+      if (!this.scrollSyncListener) {
+        const handler = () => this.syncHeaderScrollLeft(viewportEl.scrollLeft);
+        viewportEl.addEventListener('scroll', handler, { passive: true });
+        this.scrollSyncListener = () => viewportEl.removeEventListener('scroll', handler);
+      }
+
+      if (fixedInnerContainer && !this.containerScrollSyncListener) {
+        const handler = () => this.syncHeaderScrollLeft(fixedInnerContainer.scrollLeft);
+        fixedInnerContainer.addEventListener('scroll', handler, { passive: true });
+        this.containerScrollSyncListener = () => fixedInnerContainer.removeEventListener('scroll', handler);
+      }
+    });
+  }
+
+  private syncHeaderScrollLeft(scrollLeft: number): void {
+    if (this.headerScrollContainer?.nativeElement) this.headerScrollContainer.nativeElement.scrollLeft = scrollLeft;
+  }
+
+  /**
+   * Reserva (ou remove) o espaço da scrollbar vertical de forma consistente entre o body e o header,
+   * para que a scrollbar não cubra a última coluna e o scroll horizontal permaneça alinhado.
+   *
+   * Condições: só atua no modo virtual scroll e apenas quando o body realmente tem overflow vertical
+   * (scrollbar presente). Caso contrário, remove a reserva para não criar uma faixa vazia à direita.
+   *
+   * O gutter é reservado no viewport via `scrollbar-gutter: stable` e replicado no header por uma borda
+   * direita transparente de mesma largura (com `box-sizing: border-box`), igualando as `clientWidth`.
+   */
+  private updateScrollbarGutter(): void {
+    const viewportEl = this.tableVirtualScroll?.nativeElement as HTMLElement | undefined;
+    const headerEl = this.headerScrollContainer?.nativeElement as HTMLElement | undefined;
+    if (!viewportEl || !headerEl) {
+      return;
+    }
+
+    const hasVerticalScroll = viewportEl.scrollHeight > viewportEl.clientHeight;
+
+    if (!hasVerticalScroll) {
+      this.renderer.removeStyle(viewportEl, 'scrollbar-gutter');
+      this.renderer.removeStyle(headerEl, 'border-right');
+      this.renderer.removeStyle(headerEl, 'box-sizing');
+      return;
+    }
+
+    this.renderer.setStyle(viewportEl, 'scrollbar-gutter', 'stable');
+    // Força reflow para medir o espaço efetivamente reservado pela scrollbar.
+    const forceReflow = viewportEl.offsetWidth;
+    const gutter = forceReflow - viewportEl.clientWidth;
+
+    this.renderer.setStyle(headerEl, 'box-sizing', 'border-box');
+    this.renderer.setStyle(headerEl, 'border-right', `${gutter}px solid transparent`);
+  }
+
+  private setupColumnWidthSync(): void {
+    if (!this.virtualScroll || this.resizeObserver) return;
+
+    const viewportEl = this.tableVirtualScroll?.nativeElement;
+    if (!viewportEl) return;
+
+    this.resizeObserver = new ResizeObserver(this.syncColumnWidths.bind(this));
+    this.resizeObserver.observe(viewportEl);
+  }
+
+  /**
+   * Reseta o estado interno do virtual scroll ao detectar uma transição
+   * (ex.: alternância `false` → `true`). Garante que o novo viewport será
+   * reconfigurado do zero, sem resíduos do ciclo anterior.
+   */
+  private resetVirtualScrollState(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = undefined;
+    }
+
+    if (this.scrollSyncListener) {
+      this.scrollSyncListener();
+      this.scrollSyncListener = null;
+    }
+
+    if (this.containerScrollSyncListener) {
+      this.containerScrollSyncListener();
+      this.containerScrollSyncListener = null;
+    }
+
+    this.virtualScrollOverflowConfigured = false;
+    this.syncScheduled = false;
+    // Remove colgroup e layout fixo das tabelas para que a re-medição parta do zero
+    this.clearColumnWidths();
+  }
+
+  private clearColumnWidths(): void {
+    const headerTable = this.headerTableElement?.nativeElement as HTMLElement | undefined;
+    const bodyTable = this.bodyTableElement?.nativeElement as HTMLElement | undefined;
+
+    if (headerTable) this.resetTableLayout(headerTable);
+
+    if (bodyTable) this.resetTableLayout(bodyTable);
+
+    this.columnWidthsSynced = false;
+    this.partialColumnsRendered = false;
+    this.elasticNaturalMaxWidths = [];
+    this.datasetTextCache.clear();
+    this.datasetTextCacheToken = null;
+    this.computedColumnWidths = [];
+  }
+
+  private resetTableLayout(table: HTMLElement): void {
+    this.removeColgroup(table);
+    this.renderer.removeStyle(table, 'table-layout');
+    this.renderer.removeStyle(table, 'width');
+    this.renderer.removeStyle(table, 'min-width');
+  }
+
+  private removeColgroup(table: HTMLElement): void {
+    const existingColgroup = table.querySelector(':scope > colgroup[data-po-sync="true"]');
+    if (existingColgroup) {
+      existingColgroup.remove();
+    }
+  }
+
+  private applyColgroup(table: HTMLElement, widths: Array<number>): void {
+    this.removeColgroup(table);
+    const colgroup = this.renderer.createElement('colgroup');
+    this.renderer.setAttribute(colgroup, 'data-po-sync', 'true');
+    widths.forEach(width => {
+      const col = this.renderer.createElement('col');
+      this.renderer.setStyle(col, 'width', `${width}px`);
+      this.renderer.appendChild(colgroup, col);
+    });
+    this.renderer.insertBefore(table, colgroup, table.firstChild);
+  }
+
+  private syncColumnWidths(): void {
+    const headerTable = this.headerTableElement?.nativeElement as HTMLElement | undefined;
+    const bodyTable = this.bodyTableElement?.nativeElement as HTMLElement | undefined;
+
+    if (!headerTable || !bodyTable) return;
+
+    const headerRow = headerTable.querySelector<HTMLElement>(this.SELECTOR_HEADER_ROW);
+    const bodyRow = bodyTable.querySelector<HTMLElement>(this.SELECTOR_BODY_DATA_ROW);
+
+    if (!headerRow || !bodyRow) return;
+
+    const headerCells = Array.from(headerRow.children) as Array<HTMLElement>;
+    const bodyCells = Array.from(bodyRow.children) as Array<HTMLElement>;
+    const count = Math.min(headerCells.length, bodyCells.length);
+
+    if (!count) return;
+
+    // Verifica se todas as colunas de dados estão presentes no DOM.
+    // No virtual scroll horizontal, o CDK pode renderizar apenas as células visíveis.
+    // Quando faltam colunas no DOM, NÃO podemos forçar table-layout: fixed + colgroup,
+    // pois isso colapsaria as colunas não medidas para largura zero.
+    // Nesse caso mantém-se o layout natural (max-content) e o overflow-x do viewport
+    // cuida do scroll horizontal — comportamento idêntico à master.
+    const dataIndexes = headerCells.reduce((acc, cell, i) => {
+      if (cell.classList.contains('po-table-header-ellipsis')) acc.push(i);
+      return acc;
+    }, [] as Array<number>);
+    const allDataColumnsRendered = dataIndexes.length === this.mainColumns.length;
+
+    // Ajusta a reserva da scrollbar vertical antes de medir, para que a largura do container já reflita o gutter.
+    this.updateScrollbarGutter();
+
+    const naturalWidths = this.measureNaturalColumnWidths(headerTable, bodyTable, headerCells, bodyCells, count);
+
+    if (!allDataColumnsRendered) {
+      // Nem todas as colunas estão no DOM → mantém layout natural (max-content).
+      // Isso permite scroll horizontal legítimo sem truncar conteúdo.
+      // Reseta qualquer colgroup/layout fixo pré-existente para não interferir.
+      this.resetTableLayout(headerTable);
+      this.resetTableLayout(bodyTable);
+      this.renderer.setStyle(headerTable, 'width', 'max-content');
+      this.renderer.setStyle(bodyTable, 'width', 'max-content');
+      this.columnWidthsSynced = false;
+      this.syncScheduled = false;
+      this.partialColumnsRendered = true;
+      this.syncHeaderTableWidth();
+      this.syncHeaderScrollFromViewport();
+      this.changeDetector.markForCheck();
+      return;
+    }
+
+    // No virtual scroll só existem no DOM as linhas renderizadas no momento. Para que as colunas
+    // elásticas e percentuais já nasçam com a largura FINAL (sem depender de rolar até o conteúdo
+    // mais largo), mede-se o texto do dataset (`filteredItems`) fora do DOM via Canvas e
+    // usa-se esse valor como piso de conteúdo. Em seguida o crescimento monotônico garante que a
+    // coluna elástica nunca encolha entre re-sincronizações.
+    this.expandDataColumnWidthsForFullDataset(headerCells, bodyCells, naturalWidths);
+    this.applyMonotonicElasticWidths(headerCells, naturalWidths);
+
+    // SEMPRE aplica colgroup + table-layout: fixed para garantir que header e body
+    // tenham exatamente as mesmas larguras. resolvePercentWidths decide como preencher
+    // o espaço: com colgroup forçando px fixos, as % são respeitadas e a elástica
+    // recebe a largura calculada (não é colapsada).
+    this.resolvePercentWidths(headerCells, naturalWidths, this.getViewportContentWidth());
+
+    const finalWidths = this.distributeColumnWidths(headerCells, naturalWidths);
+    const totalWidth = finalWidths.reduce((total, width) => total + width, 0);
+
+    this.applySharedColumnLayout(headerTable, finalWidths, totalWidth);
+    this.applySharedColumnLayout(bodyTable, finalWidths, totalWidth);
+
+    this.columnWidthsSynced = true;
+    this.syncHeaderTableWidth();
+    // Re-espelha o scroll horizontal do header a partir do viewport, para que a posição seja preservada
+    // após qualquer re-sincronização (ex.: reordenação de colunas, resize), sem voltar para a posição zero.
+    this.syncHeaderScrollFromViewport();
+
+    // Reavalia o infinite scroll após o layout estar restaurado. Durante a medição, o scrollHeight pode
+    // ter sido temporariamente 0 (tabelas em max-content), fazendo checkInfiniteScroll setar
+    // infiniteScroll = false prematuramente. Aqui o layout fixo já está aplicado e o scrollHeight é real.
+    this.reevaluateInfiniteScroll();
+
+    this.changeDetector.markForCheck();
+  }
+
+  /**
+   * Mantém, por coluna elástica (sem `width`), a maior largura natural já medida. No virtual scroll
+   * só existem no DOM as linhas renderizadas no momento; conforme novas linhas entram no buffer (na
+   * carga inicial ou ao rolar), a coluna cresce para caber o conteúdo mais largo e nunca encolhe,
+   * evitando o truncamento causado por medir apenas um subconjunto das linhas.
+   */
+  private applyMonotonicElasticWidths(headerCells: Array<HTMLElement>, naturalWidths: Array<number>): void {
+    const { elasticIndexes } = this.getColumnIndexes(headerCells);
+    if (!elasticIndexes.length) return;
+
+    if (this.elasticNaturalMaxWidths.length !== naturalWidths.length) {
+      this.elasticNaturalMaxWidths = new Array(naturalWidths.length).fill(0);
+    }
+
+    elasticIndexes.forEach(index => {
+      if (naturalWidths[index] > this.elasticNaturalMaxWidths[index]) {
+        this.elasticNaturalMaxWidths[index] = naturalWidths[index];
+      } else {
+        naturalWidths[index] = this.elasticNaturalMaxWidths[index];
+      }
+    });
+  }
+
+  /**
+   * Calcula, por coluna elástica (sem `width`) e percentual (`%`), a maior largura de conteúdo
+   * considerando o dataset (`filteredItems`) — e não apenas as linhas renderizadas no virtual
+   * scroll — gravando-a em `naturalWidths` como piso de conteúdo. O texto é medido fora do DOM com
+   * Canvas `measureText`, usando a mesma fonte da célula; o espaço não-textual (padding/borda) é
+   * calibrado a partir de uma célula real já renderizada (largura do `td` em `max-content` menos a
+   * largura do seu texto no canvas). Assim a coluna já nasce na largura final, sem depender de rolar
+   * até o conteúdo mais largo — o que o auto-layout de tabela única da master faz de graça, mas o
+   * layout de tabelas separadas + colgroup fixo desta branch não permite. Colunas com px explícito
+   * são ignoradas (a largura fixa definida pelo usuário é respeitada).
+   */
+  private expandDataColumnWidthsForFullDataset(
+    headerCells: Array<HTMLElement>,
+    bodyCells: Array<HTMLElement>,
+    naturalWidths: Array<number>
+  ): void {
+    const items = this.filteredItems;
+    if (!items?.length) return;
+
+    const { dataIndexes } = this.getColumnIndexes(headerCells);
+    if (!dataIndexes.length) return;
+
+    const context = this.getMeasureContext();
+    if (!context) return;
+
+    // Cache do maior texto por coluna, invalidado quando a lista (referência) muda.
+    if (this.datasetTextCacheToken !== items) {
+      this.datasetTextCache.clear();
+      this.datasetTextCacheToken = items;
+    }
+
+    dataIndexes.forEach((cellIndex, dataColumnIndex) => {
+      const column = this.mainColumns[dataColumnIndex];
+      const cell = bodyCells[cellIndex];
+      if (!column || !cell) return;
+
+      // Apenas colunas elásticas (sem width) e percentuais recebem o piso de conteúdo do dataset
+      // completo. Colunas com px explícito mantêm a largura definida pelo usuário (podem truncar
+      // intencionalmente), então são ignoradas aqui.
+      const measuredWidth = typeof column.width === 'string' ? column.width.trim() : column.width;
+      const isPercent = typeof measuredWidth === 'string' && measuredWidth.endsWith('%');
+      const isElastic = !column.width;
+      if (!isElastic && !isPercent) return;
+
+      const contentEl = cell.querySelector('.po-table-column-cell') ?? cell;
+      const style = getComputedStyle(contentEl);
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+
+      // Calibra padding + borda + eventuais ícones a partir da célula renderizada (em max-content).
+      const sampleText = (contentEl.textContent ?? '').trim();
+      const sampleTextWidth = context.measureText(sampleText).width;
+      const chrome = Math.max(0, cell.getBoundingClientRect().width - sampleTextWidth);
+
+      const cacheKey = `${column.property}|${context.font}`;
+      let maxTextWidth = this.datasetTextCache.get(cacheKey);
+      if (maxTextWidth === undefined) {
+        maxTextWidth = 0;
+
+        for (const item of items) {
+          const value = this.getCellData(item, column);
+          const text = value === null || value === undefined ? '' : String(value);
+          const width = context.measureText(text).width;
+          if (width > maxTextWidth) {
+            maxTextWidth = width;
+          }
+        }
+
+        this.datasetTextCache.set(cacheKey, maxTextWidth);
+      }
+
+      const needed = Math.ceil(Math.max(maxTextWidth, sampleTextWidth) + chrome);
+      if (needed > naturalWidths[cellIndex]) {
+        naturalWidths[cellIndex] = needed;
+      }
+    });
+  }
+
+  private getMeasureContext(): CanvasRenderingContext2D | undefined {
+    this.measureCanvasContext ??= document.createElement('canvas').getContext('2d') ?? undefined;
+    return this.measureCanvasContext;
+  }
+
+  private syncHeaderScrollFromViewport(): void {
+    const viewportEl = this.tableVirtualScroll?.nativeElement as HTMLElement | undefined;
+    if (viewportEl) this.syncHeaderScrollLeft(viewportEl.scrollLeft);
+  }
+
+  /**
+   * Reavalia o infinite scroll após o layout do virtual scroll estar pronto. O `checkInfiniteScroll`
+   * pode ter desligado `infiniteScroll` prematuramente quando o `scrollHeight` do viewport ainda era 0
+   * (antes da renderização). Aqui restaura a intenção original do usuário e reavalia com o layout real,
+   * registrando o listener de scroll (e ocultando o botão "carregar mais") quando há conteúdo rolável.
+   */
+  private reevaluateInfiniteScroll(): void {
+    if (this.requestedInfiniteScroll && !this.subscriptionScrollEvent && this.height > 0) {
+      this.infiniteScroll = true;
+      this.checkInfiniteScroll();
+    }
+  }
+
+  private measureNaturalColumnWidths(
+    headerTable: HTMLElement,
+    bodyTable: HTMLElement,
+    headerCells: Array<HTMLElement>,
+    bodyCells: Array<HTMLElement>,
+    count: number
+  ): Array<number> {
+    this.resetTableLayout(headerTable);
+    this.resetTableLayout(bodyTable);
+    this.renderer.setStyle(headerTable, 'width', 'max-content');
+    this.renderer.setStyle(bodyTable, 'width', 'max-content');
+
+    // Força reflow para que as medições reflitam o layout natural já recalculado.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    bodyTable.offsetWidth;
+
+    // Mede o header (uma row).
+    const widths: Array<number> = [];
+    for (let i = 0; i < count; i++) {
+      widths.push(headerCells[i].getBoundingClientRect().width);
+    }
+
+    // Mede TODAS as rows renderizadas do body e pega o máximo por coluna. Isso garante que colunas
+    // com conteúdo largo em rows fora da 1ª (ex.: emails longos, nomes completos) definam a largura
+    // mínima — reproduzindo o comportamento do `table-layout: auto` da master, onde o browser
+    // considerava todas as linhas simultaneamente.
+    const bodyRows = bodyTable.querySelectorAll(this.SELECTOR_BODY_DATA_ROW);
+    bodyRows.forEach(row => {
+      const cells = row.children;
+      const cellCount = Math.min(cells.length, count);
+      for (let i = 0; i < cellCount; i++) {
+        const cellWidth = (cells[i] as HTMLElement).getBoundingClientRect().width;
+        if (cellWidth > widths[i]) {
+          widths[i] = cellWidth;
+        }
+      }
+    });
+
+    return widths;
+  }
+
+  /**
+   * Aplica a política de distribuição de largura sobre as larguras naturais medidas:
+   * - Quando há colunas elásticas (sem `width`), elas absorvem toda a diferença em relação ao container
+   *   (crescem quando sobra espaço, encolhem quando falta), fazendo a tabela caber exatamente no viewport.
+   * - Quando não há elásticas (todas com `width` px ou %) e sobra espaço, o restante é distribuído
+   *   proporcionalmente entre as colunas de dados, preenchendo o viewport (equivalente à master).
+   * - Quando não há elásticas e as larguras excedem o container, a tabela mantém a largura natural
+   *   (scroll horizontal legítimo).
+   *
+   * As larguras medidas já refletem o `width` explícito (px ou %), pois a medição ocorre com as células
+   * carregando o `width` definido; por isso não há nova resolução de valores aqui.
+   */
+  private distributeColumnWidths(headerCells: Array<HTMLElement>, naturalWidths: Array<number>): Array<number> {
+    const widths = naturalWidths.slice();
+    const containerWidth = this.getViewportContentWidth();
+
+    // Resolve colunas com width em `%` contra o espaço disponível (container menos colunas não-%),
+    // reproduzindo o comportamento do `table-layout: fixed` da master. Sem isso, a medição em max-content
+    // dimensionaria as colunas `%` pelo conteúdo, gerando overflow indevido.
+    this.resolvePercentWidths(headerCells, widths, containerWidth);
+
+    const { dataIndexes, elasticIndexes } = this.getColumnIndexes(headerCells);
+    const naturalTotal = widths.reduce((total, width) => total + width, 0);
+    const extraWidth = containerWidth - naturalTotal;
+
+    let target = Math.round(naturalTotal);
+    let shouldFill = false;
+
+    if (containerWidth > 0 && extraWidth > 0) {
+      shouldFill = true;
+      if (elasticIndexes.length) {
+        this.distributeAmong(widths, elasticIndexes, extraWidth);
+        target = containerWidth;
+      } else if (dataIndexes.length) {
+        this.distributeProportionally(widths, dataIndexes, extraWidth);
+        target = containerWidth;
+      }
+    }
+
+    if (!shouldFill) return widths;
+
+    const adjustIndexes = elasticIndexes.length ? elasticIndexes : dataIndexes;
+    return this.roundWidthsToTarget(widths, target, adjustIndexes);
+  }
+
+  /**
+   * Mapeia as células do header em índices de colunas de dados (`po-table-header-ellipsis`) e, dentre elas,
+   * as elásticas (sem `width` definido em `mainColumns`).
+   */
+  private getColumnIndexes(headerCells: Array<HTMLElement>): {
+    dataIndexes: Array<number>;
+    elasticIndexes: Array<number>;
+  } {
+    const dataIndexes: Array<number> = [];
+    const elasticIndexes: Array<number> = [];
+    let dataColumnIndex = 0;
+
+    headerCells.forEach((cell, index) => {
+      if (cell.classList.contains('po-table-header-ellipsis')) {
+        dataIndexes.push(index);
+        const column = this.mainColumns[dataColumnIndex];
+        if (column && !column.width) {
+          elasticIndexes.push(index);
+        }
+        dataColumnIndex++;
+      }
+    });
+
+    return { dataIndexes, elasticIndexes };
+  }
+
+  /**
+   * Resolve as larguras das colunas de dados com `width` em porcentagem. O `%` é resolvido contra o
+   * espaço disponível (container menos a soma das demais colunas: estruturais, elásticas e px),
+   * reproduzindo o `table-layout: fixed` + `width: 100%` da master. Quando a soma dos percentuais excede
+   * 100, normaliza para caber; quando não há colunas `%`, é no-op.
+   */
+  private resolvePercentWidths(headerCells: Array<HTMLElement>, widths: Array<number>, containerWidth: number): void {
+    if (containerWidth <= 0) return;
+
+    const percentColumns: Array<{ index: number; percent: number }> = [];
+    let dataColumnIndex = 0;
+
+    headerCells.forEach((cell, index) => {
+      if (cell.classList.contains('po-table-header-ellipsis')) {
+        const width = this.mainColumns[dataColumnIndex]?.width;
+        if (typeof width === 'string' && width.trim().endsWith('%')) {
+          const percent = Number.parseFloat(width);
+          if (!Number.isNaN(percent) && percent > 0) {
+            percentColumns.push({ index, percent });
+          }
+        }
+        dataColumnIndex++;
+      }
+    });
+
+    if (!percentColumns.length) return;
+
+    const totalPercent = percentColumns.reduce((total, column) => total + column.percent, 0);
+    const divisor = Math.max(totalPercent, 100);
+
+    if (this.applyFixedColumns()) {
+      // TODAS as colunas tem width → resolve % contra espaço disponível.
+      const percentIndexes = new Set(percentColumns.map(column => column.index));
+      const nonPercentTotal = widths.reduce(
+        (total, width, index) => (percentIndexes.has(index) ? total : total + width),
+        0
+      );
+      const available = containerWidth - nonPercentTotal;
+      if (available <= 0) return;
+
+      // TODAS as colunas têm width (nenhuma elástica): a tabela fica presa ao container e as colunas
+      // `%` dividem o espaço disponível — o conteúdo pode truncar (idêntico à master, que também não
+      // cresce a tabela nesse cenário). Por isso aqui NÃO se aplica piso de conteúdo.
+      percentColumns.forEach(column => {
+        widths[column.index] = (column.percent / divisor) * available;
+      });
+    } else {
+      // Ha colunas elasticas → resolve % contra o container TOTAL, respeitando o conteúdo como piso.
+      percentColumns.forEach(column => {
+        widths[column.index] = Math.max((column.percent / divisor) * containerWidth, widths[column.index]);
+      });
+    }
+  }
+
+  /**
+   * Divide `extraWidth` igualmente entre as colunas informadas (pode ser negativo para encolher).
+   */
+  private distributeAmong(widths: Array<number>, indexes: Array<number>, extraWidth: number): void {
+    if (!indexes.length) return;
+
+    const share = extraWidth / indexes.length;
+    indexes.forEach(index => (widths[index] += share));
+  }
+
+  /**
+   * Distribui `extraWidth` proporcionalmente entre as colunas de dados, preservando suas proporções.
+   */
+  private distributeProportionally(widths: Array<number>, dataIndexes: Array<number>, extraWidth: number): void {
+    const dataTotal = dataIndexes.reduce((total, index) => total + widths[index], 0);
+    if (dataTotal > 0) {
+      dataIndexes.forEach(index => (widths[index] += extraWidth * (widths[index] / dataTotal)));
+    }
+  }
+
+  /**
+   * Converte larguras fracionárias em inteiros cuja soma é exatamente `target`, evitando que a soma
+   * ultrapasse o alvo (o que provocaria scroll horizontal por sub-pixel). O resto é somado 1px por vez,
+   * do fim para o início, priorizando as colunas indicadas em `adjustIndexes`.
+   */
+  private roundWidthsToTarget(widths: Array<number>, target: number, adjustIndexes: Array<number>): Array<number> {
+    const rounded = widths.map(width => Math.max(0, Math.floor(width)));
+    const currentTotal = rounded.reduce((total, width) => total + width, 0);
+    let remainder = Math.round(target) - currentTotal;
+
+    const fillIndexes = adjustIndexes.length ? adjustIndexes : rounded.map((_, index) => index);
+    for (let position = fillIndexes.length - 1; remainder > 0 && position >= 0; position--, remainder--) {
+      rounded[fillIndexes[position]] += 1;
+    }
+
+    return rounded;
+  }
+
+  private getViewportContentWidth(): number {
+    const viewportEl = this.tableVirtualScroll?.nativeElement as HTMLElement | undefined;
+    return viewportEl ? viewportEl.clientWidth : 0;
+  }
+
+  private applySharedColumnLayout(table: HTMLElement, widths: Array<number>, totalWidth: number): void {
+    this.applyColgroup(table, widths);
+    this.renderer.setStyle(table, 'table-layout', 'fixed');
+    this.renderer.setStyle(table, 'width', `${totalWidth}px`);
+    this.renderer.setStyle(table, 'min-width', `${totalWidth}px`);
+  }
+
+  private syncHeaderTableWidth(): void {
+    if (this.headerTableElement?.nativeElement) {
+      const newWidth = this.headerTableElement.nativeElement.scrollWidth;
+      if (newWidth !== this.headerTableScrollWidth) {
+        this.headerTableScrollWidth = newWidth;
+        this.changeDetector.markForCheck();
+      }
     }
   }
 }
