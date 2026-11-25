@@ -9,5 +9,7 @@ export * from './interfaces/po-chart-literals.interface';
 export * from './interfaces/po-chart-options.interface';
 export * from './interfaces/po-chart-serie.interface';
 
+export * from './services/po-chart-pattern.service';
+
 export * from './po-chart.component';
 export * from './po-chart.module';
