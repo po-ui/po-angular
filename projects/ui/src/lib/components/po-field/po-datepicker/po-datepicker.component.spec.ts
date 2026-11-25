@@ -2497,7 +2497,8 @@ describe('PoDatepickerComponent:', () => {
       [
         { value: '2025', year: 2025 },
         { value: 2025, year: 2025 },
-        { value: '0', year: 0 }
+        { value: '0', year: 0 },
+        { value: new Date(2025, 5, 15), year: 2025 }
       ].forEach(({ value, year }) => {
         it(`should return January 1st for ${String(value)}`, () => {
           const date = component['getDateFromYearValue'](value);
@@ -2508,7 +2509,7 @@ describe('PoDatepickerComponent:', () => {
         });
       });
 
-      ['abc', '10000', -1, 2025.5, Infinity, null, {}, new Date(2025, 5, 15)].forEach(value => {
+      ['abc', '10000', -1, 2025.5, Infinity, null, {}].forEach(value => {
         it(`should return undefined for ${String(value)}`, () => {
           expect(component['getDateFromYearValue'](value)).toBeUndefined();
         });
@@ -2556,17 +2557,36 @@ describe('PoDatepickerComponent:', () => {
         expect(component.callOnChange).not.toHaveBeenCalled();
       });
 
-      it('should not accept a Date in year mode without p-iso-format', () => {
+      it('should accept a Date in year mode without p-iso-format and propagate the year', () => {
         component.mode = 'year';
         fixture.detectChanges();
         spyOn(component, 'callOnChange');
-
         component['writeValueForMode'](new Date(2026, 5, 15));
-
+        expect(component.inputEl.nativeElement.value).toBe('2026');
+        expect(component['valueBeforeChange']).toBe('2026');
+        expect(component.callOnChange).toHaveBeenCalledWith('2026', false);
+      });
+      it('should clear the input in year mode when the Date year is invalid', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+        spyOn(component, 'callOnChange');
+        component['writeValueForMode'](new Date(20000, 0, 1));
         expect(component.inputEl.nativeElement.value).toBe('');
         expect(component.callOnChange).not.toHaveBeenCalled();
       });
-
+      it('getYearFromValue: should return the full year of a Date', () => {
+        expect(component['getYearFromValue'](new Date(2031, 3, 2))).toBe(2031);
+      });
+      it('writeValue: should select the year and update the model when initialized with a Date in year mode', () => {
+        component.mode = 'year';
+        fixture.detectChanges();
+        const onChange = jasmine.createSpy('onChange');
+        component.registerOnChange(onChange);
+        component.writeValue(new Date(2026, 5, 15));
+        expect(component.inputEl.nativeElement.value).toBe('2026');
+        expect(component.date.getFullYear()).toBe(2026);
+        expect(onChange).toHaveBeenCalledWith('2026');
+      });
       describe('with p-iso-format:', () => {
         [
           { mode: 'month-year' as const, value: '2026-10-01', display: '10/2026', model: '2026-10-01' },
