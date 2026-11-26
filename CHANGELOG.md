@@ -2,24 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [22.0.0-rc.1](https://github.com/po-ui/po-angular/compare/v22.0.0-rc.0...v22.0.0-rc.1) (2026-11-11)
-
-### Code Refactoring
-
-* **theme:** deprecia o tema padrão anterior do PO UI ([935388d](https://github.com/po-ui/po-angular/commit/935388dbffc825274752b7e7c3b7c0b5be514ba4))
-
-### Features
-
-* **button:** adiciona kind glow ([f47a57e](https://github.com/po-ui/po-angular/commit/f47a57ec0a1e8ee9a492f2e4689ee155113a973a))
-* **theme:** implementa novo tema Evo ([e34be74](https://github.com/po-ui/po-angular/commit/e34be7412743d83fa4b80e82c86244da32ae19bd))
-
-## [22.0.0-rc.0](https://github.com/po-ui/po-angular/compare/v22.0.0-next.0...v22.0.0-rc.0) (2026-10-28)
-
-### Features
-
-* **schematics:** detecta e preserva o nome da classe do App ([155530f](https://github.com/po-ui/po-angular/commit/155530fe7baa7db5fe958900c98582487979d72c))
-
-## [22.0.0-next.0](https://github.com/po-ui/po-angular/compare/v21.33.0...v22.0.0-next.0) (2026-10-09)
+## [22.0.0](https://github.com/po-ui/po-angular/compare/v21.38.0...v22.0.0) (2026-11-26)
 
 
 ### ⚠ BREAKING CHANGES
@@ -50,9 +33,18 @@ Depois:
 
 ### Features
 
-* **angular:** atualiza projeto para o Angular 22 ([cd1917c](https://github.com/po-ui/po-angular/commit/cd1917c47c9d42a3f38cee3da891282d52746c2e))
-* **gauge:** remove componente po-gauge depreciado ([8166802](https://github.com/po-ui/po-angular/commit/8166802a6571f7631d5aa3e7ad5b96a41a2c7fba))
-* **schematics:** remove ng generate de páginas e templates ([2900b06](https://github.com/po-ui/po-angular/commit/2900b06370dcd9485f0b53ae05d460383b00b563))
+* **angular:** atualiza projeto para o Angular 22 ([8b19e41](https://github.com/po-ui/po-angular/commit/8b19e41ff40361f90cf98ce7204e96e8610a4750))
+* **button:** adiciona kind glow ([def8e8f](https://github.com/po-ui/po-angular/commit/def8e8f6e02bf07a40b323ff626de40d1a3a63de))
+* **portal:** aprimora experiência do portal com busca, menu e nova home ([450fcc8](https://github.com/po-ui/po-angular/commit/450fcc8429b76f8cc512ed538caf26c8988f8c05))
+* **portal:** aprimora listagem de componentes com previews ao vivo ([e5ef5b5](https://github.com/po-ui/po-angular/commit/e5ef5b5a889a360c666a2021257b8b9865567664))
+* **schematics:** detecta e preserva o nome da classe do App no sidemenu ([fbf4baf](https://github.com/po-ui/po-angular/commit/fbf4bafe8d7764f21c2220461bad0a55691dd6dd))
+* **theme:** implementa novo tema Evo ([409c3e7](https://github.com/po-ui/po-angular/commit/409c3e7afc117af93f86f4c5eafa6ee0bc11355b))
+
+### Code Refactoring
+
+* **theme:** deprecia o tema padrão anterior do PO UI ([935388d](https://github.com/po-ui/po-angular/commit/935388dbffc825274752b7e7c3b7c0b5be514ba4))
+* **gauge:** remove componente po-gauge depreciado ([2add4d7](https://github.com/po-ui/po-angular/commit/2add4d7bbe85a70dc15fd604b66432ab326d4f5c))
+* **schematics:** remove ng generate de páginas e templates ([f6c3fb4](https://github.com/po-ui/po-angular/commit/f6c3fb4cbce7fddca709a9d45cd6c8174f4090aa))
 
 ### [21.38.0](https://github.com/po-ui/po-angular/compare/v21.37.0...v21.38.0) (2026-11-16)
 
