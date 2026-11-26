@@ -1,10 +1,22 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, forwardRef, NgZone, ViewChild, Provider } from '@angular/core';
+import {
+  inject,
+  NgZone,
+  DoCheck,
+  Provider,
+  ViewChild,
+  Component,
+  CSP_NONCE,
+  ElementRef,
+  forwardRef,
+  AfterViewInit
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
+import { installMonacoCspCompat } from './po-code-editor-csp-compat';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
-import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
+import { PoCodeEditorBaseComponent } from './po-code-editor-base.component';
 import { PoCodeEditorSuggestionService } from './po-code-editor-suggestion.service';
+import { PoCodeEditorRegisterableSuggestion } from './interfaces/po-code-editor-registerable-suggestion.interface';
 
 // variáveis relacionadas ao Monaco
 let loadedMonaco: boolean = false;
@@ -67,6 +79,8 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
 
   canLoad = false;
 
+  private readonly cspNonce: string | null = inject(CSP_NONCE, { optional: true });
+
   constructor(
     private readonly zone: NgZone,
     private readonly el: ElementRef,
@@ -93,31 +107,31 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
     } else {
       loadedMonaco = true;
       loadPromise = new Promise<void>((resolve: any) => {
-        /* istanbul ignore next */
-        const onGotAmdLoader: any = () => {
-          (<any>window).require.config({ paths: { 'vs': './assets/monaco/vs' } });
-          (<any>window).require(['vs/editor/editor.main'], () => {
-            setTimeout(() => {
-              if (this.el.nativeElement.offsetWidth) {
-                this.registerCustomLanguage();
-                this.initMonaco(this.getOptions());
-              } else {
-                this.canLoad = true;
-              }
-              resolve();
-            });
-          });
-        };
+        if (!(<any>globalThis).require) {
+          this.installCspCompat();
 
-        if (!(<any>window).require) {
-          const loaderScript: HTMLScriptElement = document.createElement('script');
-          loaderScript.type = 'text/javascript';
-          loaderScript.src = './assets/monaco/vs/loader.js';
-          loaderScript.addEventListener('load', onGotAmdLoader);
+          const loaderScript: HTMLScriptElement = this.createLoaderScript();
+          loaderScript.addEventListener('load', () => this.onGotAmdLoader(resolve));
           document.body.appendChild(loaderScript);
         }
       });
     }
+  }
+
+  /* istanbul ignore next */
+  private onGotAmdLoader(resolve: () => void): void {
+    (<any>globalThis).require.config(this.getLoaderConfig());
+    (<any>globalThis).require(['vs/editor/editor.main'], () => {
+      setTimeout(() => {
+        if (this.el.nativeElement.offsetWidth) {
+          this.registerCustomLanguage();
+          this.initMonaco(this.getOptions());
+        } else {
+          this.canLoad = true;
+        }
+        resolve();
+      });
+    });
   }
 
   ngDoCheck() {
@@ -239,5 +253,45 @@ export class PoCodeEditorComponent extends PoCodeEditorBaseComponent implements 
         );
       }
     }
+  }
+
+  private installCspCompat(): void {
+    if (this.cspNonce) {
+      installMonacoCspCompat({
+        nonce: this.cspNonce,
+        monacoBaseUrl: new URL('./assets/monaco/vs/', document.baseURI).href
+      });
+    }
+  }
+
+  /**
+   * Cria o `<script>` do loader do Monaco, aplicando o nonce da CSP quando configurado.
+   */
+  private createLoaderScript(): HTMLScriptElement {
+    const loaderScript: HTMLScriptElement = document.createElement('script');
+    loaderScript.type = 'text/javascript';
+    loaderScript.src = './assets/monaco/vs/loader.js';
+
+    if (this.cspNonce) {
+      loaderScript.nonce = this.cspNonce;
+    }
+
+    return loaderScript;
+  }
+
+  /**
+   * Retorna a configuração do loader AMD do Monaco. O loader aplica `cspNonce` nos scripts que carrega
+   * (ex.: editor.main.js).
+   */
+  private getLoaderConfig(): { paths: { [key: string]: string }; cspNonce?: string } {
+    const requireConfig: { paths: { [key: string]: string }; cspNonce?: string } = {
+      paths: { 'vs': './assets/monaco/vs' }
+    };
+
+    if (this.cspNonce) {
+      requireConfig.cspNonce = this.cspNonce;
+    }
+
+    return requireConfig;
   }
 }
