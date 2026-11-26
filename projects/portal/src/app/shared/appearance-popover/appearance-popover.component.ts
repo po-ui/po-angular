@@ -91,6 +91,23 @@ export class AppearancePopoverComponent implements AfterViewInit {
       return;
     }
 
+    let shouldForceUpdate = false;
+
+    switch (theme?.name) {
+      case poThemeDefault.name:
+        this.selectedTheme = 'default';
+        break;
+
+      case poThemeDefaultDeprecated.name:
+        this.selectedTheme = 'deprecated';
+        break;
+    
+      default:
+        this.selectedTheme = 'default';
+        shouldForceUpdate = true;
+        break;
+    }
+
     this.selectedTheme = theme.name === poThemeDefaultDeprecated.name ? 'deprecated' : 'default';
 
     const active =
@@ -98,6 +115,10 @@ export class AppearancePopoverComponent implements AfterViewInit {
 
     this.selectedMode = active.type === PoThemeTypeEnum.dark ? 'dark' : 'light';
     this.selectedA11y = active.a11y === PoThemeA11yEnum.AA ? 'AA' : 'AAA';
+
+    if (shouldForceUpdate) {
+      this.applyTheme();
+    }
   }
 
   private applyTheme(): void {
