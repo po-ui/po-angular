@@ -1,9 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { catchError, of } from 'rxjs';
-
-import { HomeBannerService } from '../home-banner/home-banner.service';
 
 /** 1017 → "+1k", 2350 → "+2k"; below 1000 the number itself (e.g. "850"). */
 export function formatStarCount(count: number): string {
@@ -17,7 +13,7 @@ export function formatStarCount(count: number): string {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
-export class HomeHeroComponent implements OnInit {
+export class HomeHeroComponent {
   /** FIGMA C4 / D12: the "Dev Library" badge is not confirmed yet, keep it hidden until it is. */
   showDevLibraryBadge = false;
 
@@ -29,7 +25,7 @@ export class HomeHeroComponent implements OnInit {
   /** Tag text when the GitHub API fails (no number). */
   readonly tagFallbackLabel = 'Star';
 
-  stargazersCount: number;
+  stargazersCount: number = 1018;
 
   /** "Star +1k": the GitHub count rounded down to thousands (below 1000, the number itself). */
   get tagLabel(): string {
@@ -37,16 +33,8 @@ export class HomeHeroComponent implements OnInit {
   }
 
   constructor(
-    private router: Router,
-    private service: HomeBannerService
+    private router: Router
   ) {}
-
-  ngOnInit() {
-    this.service
-      .getRepoData()
-      .pipe(catchError(() => of(undefined)))
-      .subscribe(data => (this.stargazersCount = data?.stargazers_count));
-  }
 
   openInternalLink(route: string) {
     this.router.navigate([`/${route}`]);

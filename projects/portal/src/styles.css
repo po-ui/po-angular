@@ -870,3 +870,8 @@ html[data-a11y='AA'][data-default-size='small'] .docs-code-block > pre {
   align-items: center;
   gap: var(--spacing-xs, 8px);
 }
+
+.portal-field-remove-padding-bottom po-field-container-bottom .po-field-container-bottom,
+.portal-field-remove-padding-bottom po-field-container-bottom[p-size=small] .po-field-container-bottom:empty {
+  padding-bottom: 0px;
+}
