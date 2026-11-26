@@ -1,11 +1,8 @@
-import * as https from 'node:https';
-import * as http from 'node:http';
-
 const BASE_URL = 'https://po-ui.io';
 const GITHUB_RAW = 'https://raw.githubusercontent.com/po-ui/po-angular/master';
 const GITHUB_REPOSITORY = 'https://github.com/po-ui/po-angular';
 const GITHUB_API = 'https://api.github.com/repos/po-ui/po-angular';
-const FETCH_TIMEOUT_MS = 10_000;
+const FETCH_TIMEOUT_MS = 20_000;
 
 const COMPONENT_SOURCE_ROOTS = [
   'projects/ui/src/lib/components',
@@ -111,44 +108,17 @@ function buildRequestHeaders(url: string): Record<string, string> {
   return headers;
 }
 
-function fetchUrl(url: string): Promise<FetchResult> {
-  return new Promise(resolve => {
-    const client = url.startsWith('https') ? https : http;
-
-    const req = (client as typeof https).get(
-      url,
-      {
-        headers: buildRequestHeaders(url),
-        timeout: FETCH_TIMEOUT_MS
-      },
-      res => {
-        // Follow redirects (301/302)
-        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          resolve(fetchUrl(res.headers.location));
-          return;
-        }
-
-        const chunks: Buffer[] = [];
-        res.on('data', (chunk: Buffer) => chunks.push(chunk));
-        res.on('end', () => {
-          const text = Buffer.concat(chunks).toString('utf-8');
-          resolve({
-            ok: res.statusCode !== undefined && res.statusCode >= 200 && res.statusCode < 300,
-            statusCode: res.statusCode,
-            text
-          });
-        });
-        res.on('error', () => resolve({ ok: false, text: '' }));
-      }
-    );
-
-    req.on('timeout', () => {
-      req.destroy();
-      resolve({ ok: false, text: 'Request timed out' });
+async function fetchUrl(url: string): Promise<FetchResult> {
+  try {
+    const response = await fetch(url, {
+      headers: buildRequestHeaders(url),
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
     });
 
-    req.on('error', (err: Error) => resolve({ ok: false, text: err.message }));
-  });
+    return { ok: response.ok, statusCode: response.status, text: await response.text() };
+  } catch (error) {
+    return { ok: false, text: error instanceof Error ? error.message : String(error) };
+  }
 }
 
 function parseJson<T>(result: FetchResult, url: string): T {

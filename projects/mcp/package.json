@@ -59,7 +59,7 @@
     "url": "https://github.com/po-ui/po-angular"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.11.0",
+    "@types/node": "^22.0.0",
     "jest": "^30.3.0",
     "ts-jest": "^29.4.6",
     "typescript": "~5.9.3"
