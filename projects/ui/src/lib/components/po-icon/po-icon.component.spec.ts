@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PoIconComponent } from './po-icon.component';
@@ -15,6 +15,7 @@ class TemplateA extends TemplateRef<void> {
     <ng-template #customIcon><span class="custom-icon"></span></ng-template>
     <po-icon [p-icon]="icon"></po-icon>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 class PoIconHostComponent {
