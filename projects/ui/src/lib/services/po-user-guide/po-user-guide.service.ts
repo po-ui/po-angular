@@ -1,8 +1,9 @@
-import { Injectable, SecurityContext } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, Optional, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { AnimaliaIconDictionary } from '../../components/po-icon/po-icon-dictionary';
 import { PoLanguageService } from '../../services/po-language/po-language.service';
+import { applyCspNonce } from '../../utils/csp-nonce';
 
 import { PoUserGuideBaseService } from './po-user-guide-base.service';
 import { PoUserGuideScrollLock, resolveScrollLockMode } from './po-user-guide-scroll-lock';
@@ -48,7 +49,8 @@ export class PoUserGuideService extends PoUserGuideBaseService {
 
   constructor(
     languageService: PoLanguageService,
-    private readonly sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    @Optional() @Inject(CSP_NONCE) private readonly cspNonce?: string | null
   ) {
     super(languageService);
   }
@@ -94,6 +96,7 @@ export class PoUserGuideService extends PoUserGuideBaseService {
     }
 
     const style = document.createElement('style');
+    applyCspNonce(style, this.cspNonce);
     style.dataset['poUserGuideStyles'] = 'true';
     style.textContent = `.po-user-guide-popover { font-family: var(--font-family-theme, system-ui, -apple-system, sans-serif); }`;
     document.head.appendChild(style);

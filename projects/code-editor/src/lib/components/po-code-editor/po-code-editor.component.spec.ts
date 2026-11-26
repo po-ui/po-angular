@@ -1,8 +1,9 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, inject } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CSP_NONCE, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { PoCodeEditorComponent } from './po-code-editor.component';
 import { PoCodeEditorRegister } from './po-code-editor-register.service';
+import { disposeMonacoCspCompat } from './po-code-editor-csp-compat';
 
 describe('PoCodeEditorComponent', () => {
   let component: PoCodeEditorComponent;
@@ -309,5 +310,95 @@ describe('PoCodeEditorComponent', () => {
     spyOn(fakeThis.editor, 'updateOptions');
     component.setReadOnly.call(fakeThis, true);
     expect(fakeThis.editor.updateOptions).toHaveBeenCalledWith({ readOnly: true });
+  });
+});
+
+describe('PoCodeEditorComponent - CSP nonce:', () => {
+  const loaderPath = './assets/monaco/vs/loader.js';
+
+  const createComponent = (nonce?: string | null): any => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      declarations: [PoCodeEditorComponent],
+      providers: [PoCodeEditorRegister, ...(nonce === undefined ? [] : [{ provide: CSP_NONCE, useValue: nonce }])],
+      schemas: [NO_ERRORS_SCHEMA]
+    });
+
+    return TestBed.createComponent(PoCodeEditorComponent).componentInstance;
+  };
+
+  describe('createLoaderScript:', () => {
+    it('should set the nonce on the loader script when CSP_NONCE is provided', () => {
+      const script = createComponent('test-nonce').createLoaderScript();
+
+      expect(script.nonce).toBe('test-nonce');
+      expect(script.getAttribute('src')).toBe(loaderPath);
+      expect(script.type).toBe('text/javascript');
+    });
+
+    it('should not set the nonce when CSP_NONCE is not provided', () => {
+      const script = createComponent().createLoaderScript();
+
+      expect(script.nonce).toBe('');
+      expect(script.getAttribute('src')).toBe(loaderPath);
+    });
+
+    it('should not set the nonce when CSP_NONCE is null', () => {
+      expect(createComponent(null).createLoaderScript().nonce).toBe('');
+    });
+
+    it('should not set the nonce when CSP_NONCE is an empty string', () => {
+      expect(createComponent('').createLoaderScript().nonce).toBe('');
+    });
+  });
+
+  describe('getLoaderConfig:', () => {
+    it('should include cspNonce when CSP_NONCE is provided', () => {
+      expect(createComponent('test-nonce').getLoaderConfig()).toEqual({
+        paths: { 'vs': './assets/monaco/vs' },
+        cspNonce: 'test-nonce'
+      });
+    });
+
+    it('should keep the previous config when CSP_NONCE is not provided', () => {
+      const config = createComponent().getLoaderConfig();
+
+      expect(config).toEqual({ paths: { 'vs': './assets/monaco/vs' } });
+      expect('cspNonce' in config).toBeFalse();
+    });
+
+    it('should not include cspNonce when CSP_NONCE is null', () => {
+      expect('cspNonce' in createComponent(null).getLoaderConfig()).toBeFalse();
+    });
+  });
+
+  describe('installCspCompat:', () => {
+    const isInstalled = () => !!(window as any).__poCodeEditorCspCompat;
+    let previousEnvironment: any;
+
+    beforeEach(() => {
+      previousEnvironment = (window as any).MonacoEnvironment;
+      disposeMonacoCspCompat();
+    });
+
+    afterEach(() => {
+      disposeMonacoCspCompat();
+      (window as any).MonacoEnvironment = previousEnvironment;
+    });
+
+    it('should install the Monaco CSP compatibility layer when CSP_NONCE is provided', () => {
+      createComponent('test-nonce').installCspCompat();
+
+      expect(isInstalled()).toBeTrue();
+      expect(typeof (window as any).MonacoEnvironment.createTrustedTypesPolicy).toBe('function');
+    });
+
+    it('should not install the Monaco CSP compatibility layer when CSP_NONCE is not provided', () => {
+      createComponent().installCspCompat();
+      createComponent(null).installCspCompat();
+      createComponent('').installCspCompat();
+
+      expect(isInstalled()).toBeFalse();
+    });
   });
 });
