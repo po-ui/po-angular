@@ -1,0 +1,16 @@
+<po-table [p-columns]="columns" [p-items]="items" [p-sort]="true" [p-hide-columns-manager]="true">
+  <ng-template p-table-header-template p-property="status">
+    <span class="po-font-text-small">Use the advanced filter</span>
+  </ng-template>
+
+  <ng-template p-table-header-template let-column>
+    <input
+      class="po-input po-input-sm"
+      type="text"
+      placeholder="Search..."
+      [attr.aria-label]="'Search by ' + column.label"
+      [value]="filters[column.property] ?? ''"
+      (input)="onFilter(column.property, $event)"
+    />
+  </ng-template>
+</po-table>

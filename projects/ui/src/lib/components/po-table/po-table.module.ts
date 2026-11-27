@@ -34,6 +34,7 @@ import { PoTableSubtitleCircleComponent } from './po-table-subtitle-circle/po-ta
 import { PoTableSubtitleFooterComponent } from './po-table-subtitle-footer/po-table-subtitle-footer.component';
 import { PoTableCellTemplateDirective } from './po-table-cell-template/po-table-cell-template.directive';
 import { PoTableColumnTemplateDirective } from './po-table-column-template/po-table-column-template.directive';
+import { PoTableHeaderTemplateDirective } from './po-table-header-template/po-table-header-template.directive';
 import { PoTableListManagerComponent } from './po-table-list-manager/po-table-list-manager.component';
 import { PoSwitchModule } from './../po-field/po-switch/po-switch.module';
 import { PoTableColumnFrozenDirective } from './po-table-column-frozen/po-table-column-frozen.directive';
@@ -85,13 +86,15 @@ import { PoSearchModule } from '../po-search/po-search.module';
     PoTableSubtitleFooterComponent,
     PoTableCellTemplateDirective,
     PoTableColumnTemplateDirective,
-    PoTableColumnFrozenDirective
+    PoTableColumnFrozenDirective,
+    PoTableHeaderTemplateDirective
   ],
   exports: [
     PoTableComponent,
     PoTableRowTemplateDirective,
     PoTableCellTemplateDirective,
-    PoTableColumnTemplateDirective
+    PoTableColumnTemplateDirective,
+    PoTableHeaderTemplateDirective
   ],
   providers: [DecimalPipe]
 })
