@@ -753,6 +753,46 @@ describe('PoDatepickerBaseComponent:', () => {
       expect(spyCallOnChange).toHaveBeenCalledTimes(1);
     }));
 
+    it('callOnChange: should keep `value` as `previousValue` if `retry` param is false and `onChangeModel` is falsy', () => {
+      const value = '2026-10-01';
+      component['onChangeModel'] = undefined;
+
+      component.callOnChange(value, false);
+
+      const spyOnChangeModel = jasmine.createSpy('onChangeModel');
+      component['onChangeModel'] = spyOnChangeModel;
+      component.callOnChange(value);
+
+      expect(spyOnChangeModel).not.toHaveBeenCalled();
+    });
+
+    it('callOnChange: shouldn`t schedule a retry if `onChangeModel` is truthy and `value` is equal to the `previousValue`', fakeAsync(() => {
+      const value = '2026-10-01';
+      component['previousValue'] = value;
+      const spyOnChangeModel = spyOn(component, <any>'onChangeModel');
+      const spyCallOnChange = spyOn(component, 'callOnChange').and.callThrough();
+
+      component.callOnChange(value);
+
+      tick(50);
+
+      expect(spyCallOnChange).toHaveBeenCalledTimes(1);
+      expect(spyOnChangeModel).not.toHaveBeenCalled();
+    }));
+
+    it('callOnChange: should call `onChangeModel` on retry when it is registered before the retry runs', fakeAsync(() => {
+      const value = '2026-10-15';
+      component['onChangeModel'] = undefined;
+
+      component.callOnChange(value);
+
+      const spyOnChangeModel = jasmine.createSpy('onChangeModel');
+      component['onChangeModel'] = spyOnChangeModel;
+      tick(50);
+
+      expect(spyOnChangeModel).toHaveBeenCalledOnceWith(value);
+    }));
+
     it('formatTimeAndHour: should call `formatTimeAndHour` with timezone negative', () => {
       component.formatTimezoneAndHour(180);
       expect(component['hour']).toBe('T00:00:00-03:00');

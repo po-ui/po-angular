@@ -284,6 +284,7 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       this.selectYear(prevIndex, event);
     } else if (event.key === 'Tab' && !event.shiftKey) {
       this.focusedIndex = 0;
+      this.cancelTabWhenCloseIsHandled(event);
       this.close.emit();
     } else if (event.key === 'Tab' && event.shiftKey && this.mode === 'month-year') {
       event.preventDefault();
@@ -293,6 +294,13 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
       (selected || (currentMonth && !currentMonth.disabled ? currentMonth : monthOptions[0])).focus();
     } else if (event.key === 'Tab' && event.shiftKey && this.mode === 'year') {
       this.close.emit();
+    }
+  }
+
+  private cancelTabWhenCloseIsHandled(event: KeyboardEvent): void {
+    if (this.close.observed) {
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 

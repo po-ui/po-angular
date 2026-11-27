@@ -1,5 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ElementRef, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { PoUtils as UtilsFunctions } from '../../../utils/util';
 import { PoPickerMouseDownGuard } from '../../../utils/po-picker-mouse-down-guard';
@@ -3382,6 +3383,86 @@ describe('PoDatepickerComponent:', () => {
           done();
         }, 300);
       });
+    });
+  });
+});
+
+@Component({
+  template: `
+    <po-datepicker
+      [formControl]="control"
+      [p-mode]="mode"
+      [p-iso-format]="isoFormat"
+      p-clean
+      (p-change-model)="changeModelValues.push($event)"
+    ></po-datepicker>
+  `,
+  standalone: false
+})
+class PoDatepickerReactiveHostComponent {
+  @ViewChild(PoDatepickerComponent, { static: true }) datepicker!: PoDatepickerComponent;
+
+  changeModelValues: Array<string> = [];
+  control: FormControl<string | null> = new FormControl<string | null>(null);
+  isoFormat: PoDatepickerIsoFormat = PoDatepickerIsoFormat.Basic;
+  mode: 'month-year' | 'year' | undefined = undefined;
+}
+
+describe('PoDatepickerComponent with Reactive Forms:', () => {
+  let fixture: ComponentFixture<PoDatepickerReactiveHostComponent>;
+  let host: PoDatepickerReactiveHostComponent;
+
+  const cases: Array<{ description: string; mode: 'month-year' | 'year' | undefined; initialValue: string }> = [
+    { description: 'without p-mode', mode: undefined, initialValue: '2026-10-15' },
+    { description: 'with p-mode month-year', mode: 'month-year', initialValue: '2026-10-01' },
+    { description: 'with p-mode year', mode: 'year', initialValue: '2026-01-01' }
+  ];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PoDatepickerReactiveHostComponent],
+      imports: [PoDatepickerModule, ReactiveFormsModule],
+      providers: [PoCalendarService, PoCalendarLangService]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PoDatepickerReactiveHostComponent);
+    host = fixture.componentInstance;
+  });
+
+  function loadValue(mode: 'month-year' | 'year' | undefined, initialValue: string): void {
+    host.mode = mode;
+    host.control = new FormControl<string | null>(initialValue);
+    fixture.detectChanges();
+    tick(300);
+    host.changeModelValues = [];
+  }
+
+  function blurInput(): void {
+    host.datepicker.inputEl.nativeElement.dispatchEvent(new Event('blur'));
+    tick(300);
+  }
+
+  cases.forEach(({ description, mode, initialValue }) => {
+    describe(description, () => {
+      it('should not emit p-change-model when the field loses focus without changes', fakeAsync(() => {
+        loadValue(mode, initialValue);
+
+        blurInput();
+
+        expect(host.changeModelValues).toEqual([]);
+        expect(host.control.value).toBe(initialValue);
+      }));
+
+      it('should keep the field empty when it is cleared right after losing focus', fakeAsync(() => {
+        loadValue(mode, initialValue);
+
+        blurInput();
+        host.datepicker.clear();
+        tick(300);
+
+        expect(host.control.value).toBe('');
+        expect(host.changeModelValues).toEqual(['']);
+      }));
     });
   });
 });
